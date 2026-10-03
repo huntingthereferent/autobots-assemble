@@ -1,5 +1,22 @@
-# Binary / generated artifact policy
+# Large / Binary Artifact Policy
 
-This GitHub repository is the source-controlled mirror of the A/B Language Network task/work repository. Job records, generated views, acceptance reports, submission text, and task-manager source are tracked here.
+Git is the canonical source for protocols, state contracts, job records, code, tests, and lightweight evidence.
 
-The packaged ChatGPT Library snapshot (`ab_language_network_v0_17.zip`) also contains generated binary evidence such as Excel workbooks, preview images, PDFs, SQLite databases, and large benchmark fixtures. Those outputs are intentionally omitted from normal Git source control so this repository stays lightweight and diffable.
+The frozen v0.17 package also contains Excel workbooks, PDFs, preview images, SQLite databases, bytecode, and large generated fixtures. The current GitHub write path is text-oriented, so those artifacts are not all duplicated into ordinary Git.
+
+They are **not treated as nonexistent**.
+
+## Frozen evidence bundle
+
+- archive: \`ab_language_network_v0_17.zip\`
+- files: 185
+- binary files: 33
+- SHA-256: \`21dda01da3c932d7ad32ab92e90ea4414669df296bac5af6fdced05c67189040\`
+
+See \`evidence/archive/v0.17-summary.json\` and \`MIGRATION.md\`.
+
+## Rule
+
+If a current movement needs a binary artifact, retrieve that artifact from the frozen evidence bundle, verify it against the archive/provenance boundary, and then use it as evidence for the current referent.
+
+Do not upgrade a job claim merely because an artifact filename is listed.

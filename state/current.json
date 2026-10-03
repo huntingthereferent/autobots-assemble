@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "preferred_referent": "📍 user-supplied current referent",
+  "protocol": "ai.session",
+  "goal": "Use language-network as a persistent external operating layer for AI while preserving A/B witness/evidence boundaries across protocols and work.",
+  "status": "ready",
+  "result_state": "MOVE",
+  "next_movement": "On the next user task, admit the explicit referent, route only to the required protocol/work layer, and record any durable movement back into the repository.",
+  "walls": [],
+  "evidence": [
+    "AB_CONTRACT.md",
+    "ENTRY.md",
+    "protocols/index.json",
+    "MIGRATION.md"
+  ]
+}

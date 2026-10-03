@@ -1,26 +1,44 @@
 # Language Network
 
-Task/work reference repository for bounded external jobs and technical experiments.
+A persistent external operating environment for using AI across work, research, tools, and domains.
 
-## Review the jobs
+The repository is **not A/B itself**. A/B remains the recursively reusable mathematical operation and witness/evidence contract. This repository is an operational environment whose protocols are constrained by that shape: preserve the current referent, require admissible evidence for movement, expose walls instead of inventing continuity, preserve provenance, and make each output reusable as the next valid input under the same contract.
 
-**[Start with the Job Index →](JOBS.md)**
+## Start here
 
-The job index is meant to be browsed. Click any job title to open its human-readable record. Each job record has **Previous / Job Index / Next** navigation so you can move through the queue in order.
+For an AI session, read in this order:
 
-- [Current task view](TASKS.md)
-- [Full job ledger](JOBS.md)
-- [Evidence/output index](OUTPUTS.md)
-- [Scope rules](SCOPE.md)
+1. [\`ENTRY.md\`](ENTRY.md) — how to enter the network.
+2. [\`AB_CONTRACT.md\`](AB_CONTRACT.md) — what “using A/B” means here and what it does **not** mean.
+3. [\`state/current.json\`](state/current.json) — the current preferred referent and next movement.
+4. [\`protocols/README.md\`](protocols/README.md) — protocol routing.
+5. The active work record or domain protocol reached from the current referent.
 
-## Canonical records
+For a human review:
 
-Each job is stored under `jobs/JOB-###_slug/` with a `job.json` record and a human-readable `JOB.md` summary. The JSON record tracks status, scope, acceptance conditions, evidence, submission state, payment state, and next action.
+- [\`JOBS.md\`](JOBS.md) — browsable external-work ledger.
+- [\`TASKS.md\`](TASKS.md) — current work view.
+- [\`SCOPE.md\`](SCOPE.md) — compatibility scope notes from the earlier task environment.
+- [\`evidence/archive/v0.17-summary.json\`](evidence/archive/v0.17-summary.json) — provenance summary for the packaged v0.17 archive.
 
-## Generated views
+## Layers
 
-Run `python generate_outputs.py` to regenerate job, task, resume, portfolio, summary, and JSON snapshot views from the current `job.json` records.
+The layers are separate **referents**, not separate theories:
 
-## Repository snapshot
+- **A/B boundary** — mathematical invariant and witness/evidence constraint.
+- **Network** — append-only relations, snapshots, and movement records.
+- **Protocols** — reusable contracts for entering, moving, hitting a wall, handing off, and returning.
+- **Domain/work adapters** — job hunting, OSINT, coding, spreadsheets, sports, research, and future domains.
+- **Work/evidence** — actual jobs, experiments, artifacts, tests, and historical snapshots.
 
-This import corresponds to the packaged v0.17 task-manager snapshot. Large generated binary artifacts are kept out of normal Git source control; see [BINARY_ARTIFACTS.md](BINARY_ARTIFACTS.md).
+A lower layer may be evidence for a higher layer. It does not automatically become the current referent.
+
+## Core rule
+
+**Current referent → admissible evidence → witnessed movement or explicit wall → preserved provenance → next referent.**
+
+If the current evidence does not support movement, retain \`UNKNOWN\`/\`PARTIAL\` or emit a \`WALL\`. Do not manufacture the missing edge.
+
+## Compatibility
+
+The existing \`jobs/\` records remain valid work records. Older source and evidence from the packaged v0.17 environment are preserved as provenance rather than silently rewritten into the new architecture.

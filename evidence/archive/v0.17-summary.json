@@ -1,0 +1,8 @@
+{
+  "snapshot": "ab_language_network_v0_17.zip",
+  "file_count": 185,
+  "text_or_source_files": 152,
+  "binary_files": 33,
+  "archive_sha256": "21dda01da3c932d7ad32ab92e90ea4414669df296bac5af6fdced05c67189040",
+  "provenance_note": "Frozen package retained in ChatGPT Library; exact per-file manifest can be regenerated from this immutable archive."
+}
