@@ -1,5 +1,9 @@
 # JOB-014 — Data Engineer — Python / SQL / AWS
 
+<!-- REVIEW_NAV_START -->
+[← JOB-013 — Automate Monthly Report Scraping](../JOB-013_monthly-report-scraping/JOB.md) · [Job Index](../../JOBS.md) · [JOB-015 — Python Data Cleaning & Reporting →](../JOB-015_python-data-cleaning-reporting/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -51,3 +55,7 @@ The real acceptance requires an end-to-end AWS run using the client's test data,
 ## Next movement
 
 Run the same contract against the client's MySQL/AWS environment: profile schema/query plans, map existing views/procedures, deploy to Lambda/ECS as appropriate, connect monitoring/alerts, and verify the one-command end-to-end run.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-013 — Automate Monthly Report Scraping](../JOB-013_monthly-report-scraping/JOB.md) · [Job Index](../../JOBS.md) · [JOB-015 — Python Data Cleaning & Reporting →](../JOB-015_python-data-cleaning-reporting/JOB.md)
+<!-- REVIEW_NAV_END -->
