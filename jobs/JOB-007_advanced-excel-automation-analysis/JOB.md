@@ -1,5 +1,9 @@
 # JOB-007 — Advanced Excel Automation & Analysis
 
+<!-- REVIEW_NAV_START -->
+[← JOB-006 — One-Click Counter and Comparison Tool](../JOB-006_one-click-counter-comparison/JOB.md) · [Job Index](../../JOBS.md) · [JOB-008 — Customer Data Cleaning & Excel Automation →](../JOB-008_customer-data-cleaning-excel-automation/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -34,3 +38,7 @@ PROTOTYPE PASS — demo replay cleaned 245 raw rows to 233 usable rows, removed 
 ## Next movement
 
 In desktop Microsoft Excel, import RegressionAutomation.bas into the demo workbook, save as .xlsm, run the 20,000-row benchmark fixture, verify elapsed time under 30 seconds, inspect the residual/dashboard output, then test against client unseen datasets when supplied.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-006 — One-Click Counter and Comparison Tool](../JOB-006_one-click-counter-comparison/JOB.md) · [Job Index](../../JOBS.md) · [JOB-008 — Customer Data Cleaning & Excel Automation →](../JOB-008_customer-data-cleaning-excel-automation/JOB.md)
+<!-- REVIEW_NAV_END -->
