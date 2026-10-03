@@ -1,5 +1,9 @@
 # JOB-013 — Automate Monthly Report Scraping
 
+<!-- REVIEW_NAV_START -->
+[← JOB-012 — PDF Form Data to Excel](../JOB-012_pdf-form-data-to-excel/JOB.md) · [Job Index](../../JOBS.md) · [JOB-014 — Data Engineer — Python / SQL / AWS →](../JOB-014_python-sql-aws-data-engineer/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -45,3 +49,7 @@ Working Excel automation, reproducible report-population logic, scraper behavior
 ## Next movement
 
 Replace synthetic mappings with client data/schema, run a live source retrieval, populate the actual forms, and validate all totals before any filing use.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-012 — PDF Form Data to Excel](../JOB-012_pdf-form-data-to-excel/JOB.md) · [Job Index](../../JOBS.md) · [JOB-014 — Data Engineer — Python / SQL / AWS →](../JOB-014_python-sql-aws-data-engineer/JOB.md)
+<!-- REVIEW_NAV_END -->
