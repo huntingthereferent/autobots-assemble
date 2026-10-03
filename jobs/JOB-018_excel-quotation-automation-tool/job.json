@@ -1,0 +1,26 @@
+{
+  "id": "JOB-018",
+  "title": "Excel Quotation Automation Tool",
+  "source_url": "https://www.dk.freelancer.com/projects/data-management/excel-quotation-automation-tool",
+  "source_project_id": "40748108",
+  "reward_observed": "$2–8 USD / hour",
+  "status": "queued",
+  "preferred_referent": "📍 External Excel quotation-automation specification",
+  "boundary": "Create a single-entry Excel workflow that pulls linked customer data from multiple sheets, automatically populates a printable/PDF-ready quotation template, and exposes a nontechnical front end.",
+  "acceptance": "Automated workbook pulls linked customer data accurately, fills the quotation without copy/paste, supports print/PDF output, and includes brief usage/maintenance notes.",
+  "result": "Queued — public spec is sufficient for a synthetic customer/master-data prototype.",
+  "next_movement": "Build a self-contained Excel prototype with customer/code lookup, product lines, quotation template, validation, PDF/print path and maintenance notes; adapt sheet mappings after receiving the client workbook.",
+  "blockers": [
+    "Client workbook and actual customer-data sheet layout are not public."
+  ],
+  "evidence": [],
+  "resume_bullets": [],
+  "notes": [
+    "Freelancer listing was open when checked on 2026-10-03."
+  ],
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "date_added": "2026-10-03",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid"
+}
