@@ -1,5 +1,9 @@
 # JOB-008 — Customer Data Cleaning & Excel Automation
 
+<!-- REVIEW_NAV_START -->
+[← JOB-007 — Advanced Excel Automation & Analysis](../JOB-007_advanced-excel-automation-analysis/JOB.md) · [Job Index](../../JOBS.md) · [JOB-009 — Excel Financial Tracker →](../JOB-009_excel-financial-tracker/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -32,3 +36,7 @@ PROTOTYPE PASS — specification-faithful dummy workbook reduced 33 rows to 30, 
 ## Next movement
 
 Obtain the client workbook, inspect its actual headers and ambiguous city/name variants, apply the demonstrated cleaning rules, audit the result, and return the final cleaned workbook.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-007 — Advanced Excel Automation & Analysis](../JOB-007_advanced-excel-automation-analysis/JOB.md) · [Job Index](../../JOBS.md) · [JOB-009 — Excel Financial Tracker →](../JOB-009_excel-financial-tracker/JOB.md)
+<!-- REVIEW_NAV_END -->
