@@ -1,5 +1,9 @@
 # JOB-006 — One-Click Counter and Comparison Tool
 
+<!-- REVIEW_NAV_START -->
+[← JOB-005 — Excel IF/SUMIF CSV Setup](../JOB-005_excel-if-sumif-csv-setup/JOB.md) · [Job Index](../../JOBS.md) · [JOB-007 — Advanced Excel Automation & Analysis →](../JOB-007_advanced-excel-automation-analysis/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -35,3 +39,7 @@ BLOCKED — insufficient public specification to construct a falsifiable impleme
 ## Next movement
 
 Ask the client what is being counted, what is being compared, where inputs come from, what one click should trigger, and what exact output counts as correct.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-005 — Excel IF/SUMIF CSV Setup](../JOB-005_excel-if-sumif-csv-setup/JOB.md) · [Job Index](../../JOBS.md) · [JOB-007 — Advanced Excel Automation & Analysis →](../JOB-007_advanced-excel-automation-analysis/JOB.md)
+<!-- REVIEW_NAV_END -->
