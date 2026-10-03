@@ -69,10 +69,10 @@ def render_jobs(jobs):
     rows = []
     for j in jobs:
         rows.append(
-            f"| {j.get('id','')} | {j.get('title','')} | "
+            f"| {j.get('id','')} | [{j.get('title','')}]({j.get('_folder','')}/JOB.md) | "
             f"{j.get('reward_observed','')} | {j.get('status','')} | "
             f"{j.get('submission_status','')} | {compact_result(j)} | "
-            f"`{j.get('_folder','')}/` |"
+            f"[Open]({j.get('_folder','')}/JOB.md) |"
         )
 
     return """# JOBS — Generated Historical Ledger
@@ -104,14 +104,14 @@ def render_tasks(jobs):
 
     for j in actionable:
         lines += [
-            f"## {j.get('id','')} — {j.get('title','')}",
+            f"## [{j.get('id','')} — {j.get('title','')}]({j.get('_folder','')}/JOB.md)",
             f"- status: {j.get('status','')}",
             f"- {j.get('preferred_referent','📍 preferred referent not recorded')}",
             f"- next movement: {j.get('next_movement','')}",
             f"- acceptance: {j.get('acceptance','')}",
             f"- reward observed: {j.get('reward_observed','')}",
             f"- submission: {j.get('submission_status','')}",
-            f"- record: `{j.get('_folder','')}/`",
+            f"- record: [{j.get('_folder','')}/]({j.get('_folder','')}/JOB.md)",
             "",
         ]
     return "\n".join(lines)
