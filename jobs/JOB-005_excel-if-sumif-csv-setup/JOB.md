@@ -1,5 +1,9 @@
 # JOB-005 — Excel IF/SUMIF CSV Setup
 
+<!-- REVIEW_NAV_START -->
+[← JOB-004 — Excel Data Cleaning & Forecasting Formulas](../JOB-004_excel-data-cleaning-forecasting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-006 — One-Click Counter and Comparison Tool →](../JOB-006_one-click-counter-comparison/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -33,3 +37,7 @@ BLOCKED — the public listing does not include the live workbook or the exact c
 ## Next movement
 
 Obtain the client workbook and exact IF/SUMIF conditions, then build and independently reconcile the first draft before producing CSV and PDF outputs.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-004 — Excel Data Cleaning & Forecasting Formulas](../JOB-004_excel-data-cleaning-forecasting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-006 — One-Click Counter and Comparison Tool →](../JOB-006_one-click-counter-comparison/JOB.md)
+<!-- REVIEW_NAV_END -->
