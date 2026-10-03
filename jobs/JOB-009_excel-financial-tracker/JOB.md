@@ -1,5 +1,9 @@
 # JOB-009 — Excel Financial Tracker
 
+<!-- REVIEW_NAV_START -->
+[← JOB-008 — Customer Data Cleaning & Excel Automation](../JOB-008_customer-data-cleaning-excel-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-010 — Excel Logic & PDF Automation →](../JOB-010_excel-logic-pdf-automation/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -38,3 +42,7 @@ A clean Excel workbook that makes expense entry and review straightforward, with
 ## Next movement
 
 Review and submit if desired; adapt categories or layout only if the client requests changes.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-008 — Customer Data Cleaning & Excel Automation](../JOB-008_customer-data-cleaning-excel-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-010 — Excel Logic & PDF Automation →](../JOB-010_excel-logic-pdf-automation/JOB.md)
+<!-- REVIEW_NAV_END -->
