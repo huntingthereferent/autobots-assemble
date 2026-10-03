@@ -1,5 +1,9 @@
 # JOB-015 — Python Data Cleaning & Reporting
 
+<!-- REVIEW_NAV_START -->
+[← JOB-014 — Data Engineer — Python / SQL / AWS](../JOB-014_python-sql-aws-data-engineer/JOB.md) · [Job Index](../../JOBS.md) · [JOB-016 — One-Site Text Scraper Automation →](../JOB-016_one-site-text-scraper-automation/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 - **Source:** https://www.freelancer.com/projects/pandas/python-data-cleaning-reporting
 - **Project ID:** 40739384
 - **Reward observed:** ₹100–400 INR / hour
@@ -45,3 +49,7 @@ When the client dataset arrives, confirm the business rules for duplicate keys, 
 - `prototype/tests/test_cleaner.py`
 - `submission.txt`
 - `acceptance_report.txt`
+
+<!-- REVIEW_NAV_START -->
+[← JOB-014 — Data Engineer — Python / SQL / AWS](../JOB-014_python-sql-aws-data-engineer/JOB.md) · [Job Index](../../JOBS.md) · [JOB-016 — One-Site Text Scraper Automation →](../JOB-016_one-site-text-scraper-automation/JOB.md)
+<!-- REVIEW_NAV_END -->
