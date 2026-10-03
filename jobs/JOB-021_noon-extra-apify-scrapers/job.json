@@ -1,0 +1,29 @@
+{
+  "id": "JOB-021",
+  "title": "Add Noon & Extra Scrapers -- 2",
+  "source_url": "https://www.freelancer.sg/projects/python/add-noon-extra-scrapers",
+  "source_project_id": "40746706",
+  "reward_observed": "$30–250 USD",
+  "status": "blocked",
+  "preferred_referent": "📍 Existing Flask/Apify scraper integration bug",
+  "boundary": "Fix the existing Python Apify Actor calls for Noon and Extra in a Flask 3.10+ project, preserving the working-provider pattern and delivering fixed files plus GitHub handoff.",
+  "acceptance": "Search term “iphone 15” returns 20+ products from each of the Noon and Extra providers; screenshot proof and GitHub delivery supplied.",
+  "result": "Blocked — the two files to fix and the working reference file are hidden from the public listing, and Apify account/runtime access is required for the stated acceptance test.",
+  "next_movement": "When the existing files are supplied, diff their Actor input payloads against the working reference and actor schemas, patch only the provider adapters, run “iphone 15” against both actors, capture 20+ product evidence, then push the fixes.",
+  "blockers": [
+    "Existing provider files are hidden from the public listing.",
+    "Working reference file is hidden.",
+    "Apify account/runtime access is required for real actor execution and screenshot acceptance."
+  ],
+  "evidence": [],
+  "resume_bullets": [],
+  "notes": [
+    "Freelancer listing was open when checked on 2026-10-03.",
+    "The similarly titled project 40746696 is closed; this record refers to open project 40746706."
+  ],
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "date_added": "2026-10-03",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid"
+}
