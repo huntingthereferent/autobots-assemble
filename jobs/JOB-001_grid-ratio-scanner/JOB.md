@@ -1,5 +1,9 @@
 # JOB-001 — 3×3 Grid Ratio Scanner
 
+<!-- REVIEW_NAV_START -->
+[Job Index](../../JOBS.md) · [JOB-002 — Advanced Excel Macro Development →](../JOB-002_advanced-excel-macro/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Job ID:** JOB-001
@@ -43,3 +47,7 @@ PASS — 5/5 automated tests; 22/22 independent movement checks.
 4. Test evidence
 5. Submission state
 6. Older/frozen evidence
+
+<!-- REVIEW_NAV_START -->
+[Job Index](../../JOBS.md) · [JOB-002 — Advanced Excel Macro Development →](../JOB-002_advanced-excel-macro/JOB.md)
+<!-- REVIEW_NAV_END -->
