@@ -1,0 +1,35 @@
+{
+  "id": "JOB-002",
+  "slug": "advanced-excel-macro",
+  "title": "Advanced Excel Macro Development",
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "source_url": "https://www.freelancer.com/contest/advanced-excel-macro-development-2733659",
+  "reward_observed": "$120",
+  "date_added": "2026-10-03",
+  "status": "ready_to_submit",
+  "submission_status": "not_submitted",
+  "preferred_referent": "📍 External Excel transformation specification",
+  "boundary": "Transform a supplied A:Z CSV into the requested 15-column output, derive coverage averages, calculate Premium from an editable Settings multiplier, and export the Data view as CSV.",
+  "acceptance": "Every specified coverage code and required transformation checked independently.",
+  "result": "PASS — 41/41 acceptance checks.",
+  "next_movement": "When computer access is available, import CsvTransformer.bas into the workbook, save as .xlsm, review, and optionally submit.",
+  "evidence": [
+    "ExcelMacro_Solution.xlsx",
+    "CsvTransformer.bas",
+    "sample_input.csv",
+    "expected_output.csv",
+    "acceptance_report.txt",
+    "test_manifest.json"
+  ],
+  "notes": [
+    "Source column letters are treated as original A:Z positions so the specification remains internally consistent.",
+    "The brief asks for both CSV and a second worksheet/formatting; the workbook preserves Settings/formatting and the macro exports Data as CSV."
+  ],
+  "resume_bullets": [
+    "Converted an A:Z positional CSV specification into a reproducible 15-column transformation.",
+    "Built an Excel/VBA automation flow with editable settings and CSV export.",
+    "Resolved specification conflicts explicitly and verified every specified coverage code."
+  ],
+  "payment_status": "not_paid"
+}
