@@ -1,5 +1,9 @@
 # JOB-017 — Financial Transaction Excel Consolidation
 
+<!-- REVIEW_NAV_START -->
+[← JOB-016 — One-Site Text Scraper Automation](../JOB-016_one-site-text-scraper-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 - **Source:** https://www.freelancer.com/projects/data-analysis/financial-transaction-excel
 - **Project ID:** 40746565
 - **Reward observed:** ₹600–1,500 INR
@@ -33,3 +37,7 @@ Build a synthetic multi-file sales consolidation prototype with dedupe/date/curr
 ## Evidence
 
 - No evidence files recorded yet.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-016 — One-Site Text Scraper Automation](../JOB-016_one-site-text-scraper-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
+<!-- REVIEW_NAV_END -->
