@@ -1,0 +1,39 @@
+{
+  "id": "JOB-010",
+  "title": "Excel Logic & PDF Automation",
+  "source_url": "https://www.fr.freelancer.com/projects/automation/excel-logic-pdf-automation",
+  "source_project_id": "40747677",
+  "reward_observed": "₹100–400 INR / hour",
+  "status": "blocked",
+  "prototype_status": "complete",
+  "preferred_referent": "📍 External Excel IF/SUMIF + one-click PDF export specification",
+  "boundary": "Upgrade an existing Office 365 workbook by replacing manual totals/flags with reliable IF and SUMIF logic and adding one-click or shortcut PDF export that respects intended print area and page setup.",
+  "acceptance": "Updated workbook calculates totals/flags correctly as rows change, exports only the intended print area to a professional PDF in Office 365 for Windows, and includes brief usage notes or walkthrough.",
+  "result": "PROTOTYPE PASS — generic Office 365 workbook demonstrates IF/SUMIF/COUNTIF automation with zero formula errors and includes a native VBA PDF-export module; final client-workbook adaptation remains pending.",
+  "next_movement": "When the client shares the existing workbook, map the demonstrated logic to the real columns/rules, preserve its page setup and print area, run the macro in Office 365 for Windows, and verify the exported PDF.",
+  "blockers": [
+    "The client workbook and exact manual calculation rules are not publicly supplied.",
+    "Final PDF export must be run in desktop Office 365 for Windows against the client workbook to verify its actual print area/page setup."
+  ],
+  "evidence": [
+    "Excel_Logic_PDF_Automation_Demo.xlsx",
+    "PDFExport.bas",
+    "USER_NOTES.txt",
+    "preview.png",
+    "submission.txt",
+    "acceptance_report.txt"
+  ],
+  "resume_bullets": [
+    "Built an Office 365 automation prototype with row-level IF flags, SUMIF/COUNTIF report summaries, validation, and a native VBA one-click PDF export module.",
+    "Independently reconciled $9,101.82 of demo data and verified zero spreadsheet formula-error matches while keeping client-specific workbook adaptation explicitly separate."
+  ],
+  "notes": [
+    "Public listing was open for bidding when captured on 2026-10-03.",
+    "Prototype uses no external add-ins; final macro execution is client-environment dependent."
+  ],
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "date_added": "2026-10-03",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid"
+}
