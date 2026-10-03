@@ -1,5 +1,9 @@
 # JOB-010 — Excel Logic & PDF Automation
 
+<!-- REVIEW_NAV_START -->
+[← JOB-009 — Excel Financial Tracker](../JOB-009_excel-financial-tracker/JOB.md) · [Job Index](../../JOBS.md) · [JOB-011 — Excel Data Cleaning & Reporting →](../JOB-011_excel-data-cleaning-reporting/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -41,3 +45,7 @@ Updated workbook calculates totals/flags correctly as rows change, exports only 
 ## Next movement
 
 When the client file arrives, map the demonstrated logic to its columns/rules, preserve the existing print layout, run the macro, and verify the produced PDF.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-009 — Excel Financial Tracker](../JOB-009_excel-financial-tracker/JOB.md) · [Job Index](../../JOBS.md) · [JOB-011 — Excel Data Cleaning & Reporting →](../JOB-011_excel-data-cleaning-reporting/JOB.md)
+<!-- REVIEW_NAV_END -->
