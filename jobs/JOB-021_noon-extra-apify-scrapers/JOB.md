@@ -1,5 +1,9 @@
 # JOB-021 — Add Noon & Extra Scrapers -- 2
 
+<!-- REVIEW_NAV_START -->
+[← JOB-020 — Custom Data Entry Automation](../JOB-020_custom-data-entry-api-automation/JOB.md) · [Job Index](../../JOBS.md)
+<!-- REVIEW_NAV_END -->
+
 - **Source:** https://www.freelancer.sg/projects/python/add-noon-extra-scrapers
 - **Project ID:** 40746706
 - **Reward observed:** $30–250 USD
@@ -35,3 +39,7 @@ When the existing files are supplied, diff their Actor input payloads against th
 ## Evidence
 
 - No evidence files recorded yet.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-020 — Custom Data Entry Automation](../JOB-020_custom-data-entry-api-automation/JOB.md) · [Job Index](../../JOBS.md)
+<!-- REVIEW_NAV_END -->
