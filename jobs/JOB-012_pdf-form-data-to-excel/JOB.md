@@ -1,5 +1,9 @@
 # JOB-012 — PDF Form Data to Excel
 
+<!-- REVIEW_NAV_START -->
+[← JOB-011 — Excel Data Cleaning & Reporting](../JOB-011_excel-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-013 — Automate Monthly Report Scraping →](../JOB-013_monthly-report-scraping/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -28,3 +32,7 @@
 ## Next movement
 
 Map the first supplied form field-by-field, validate one extracted row against the PDF, then generalize and process the remaining batch.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-011 — Excel Data Cleaning & Reporting](../JOB-011_excel-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-013 — Automate Monthly Report Scraping →](../JOB-013_monthly-report-scraping/JOB.md)
+<!-- REVIEW_NAV_END -->
