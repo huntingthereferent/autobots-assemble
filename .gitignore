@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.sqlite
+*.db
+*.xlsx
+*.xlsm
+*.pdf
+*.png
+jobs/JOB-015_python-data-cleaning-reporting/prototype/output/
+jobs/JOB-015_python-data-cleaning-reporting/prototype/fixtures/raw_dirty_data.csv
+jobs/JOB-007_advanced-excel-automation-analysis/Regression_20k_Benchmark_Input.csv
