@@ -1,5 +1,9 @@
 # JOB-020 — Custom Data Entry Automation
 
+<!-- REVIEW_NAV_START -->
+[← JOB-019 — Browser Automation for Real Estate Data Migration](../JOB-019_browser-automation-real-estate-migration/JOB.md) · [Job Index](../../JOBS.md) · [JOB-021 — Add Noon & Extra Scrapers -- 2 →](../JOB-021_noon-extra-apify-scrapers/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 - **Source:** https://www.freelancer.co.it/projects/api-developmet/custom-data-entry-automation-good
 - **Project ID:** 40744676
 - **Reward observed:** $15–25 USD / hour
@@ -35,3 +39,7 @@ When access arrives, freeze the schema/payload mapping, build the API client wit
 ## Evidence
 
 - No evidence files recorded yet.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-019 — Browser Automation for Real Estate Data Migration](../JOB-019_browser-automation-real-estate-migration/JOB.md) · [Job Index](../../JOBS.md) · [JOB-021 — Add Noon & Extra Scrapers -- 2 →](../JOB-021_noon-extra-apify-scrapers/JOB.md)
+<!-- REVIEW_NAV_END -->
