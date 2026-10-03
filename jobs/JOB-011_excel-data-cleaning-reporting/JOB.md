@@ -1,5 +1,9 @@
 # JOB-011 — Excel Data Cleaning & Reporting
 
+<!-- REVIEW_NAV_START -->
+[← JOB-010 — Excel Logic & PDF Automation](../JOB-010_excel-logic-pdf-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-012 — PDF Form Data to Excel →](../JOB-012_pdf-form-data-to-excel/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -39,3 +43,7 @@ Deliver a well-organized `.xlsx` file whose data is cleaned consistently and who
 ## Next movement
 
 Apply the demonstrated pipeline to the real workbook once supplied and verify all source-to-output corrections.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-010 — Excel Logic & PDF Automation](../JOB-010_excel-logic-pdf-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-012 — PDF Form Data to Excel →](../JOB-012_pdf-form-data-to-excel/JOB.md)
+<!-- REVIEW_NAV_END -->
