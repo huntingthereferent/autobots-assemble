@@ -1,5 +1,9 @@
 # JOB-003 — Interactive Fuel Reporting App
 
+<!-- REVIEW_NAV_START -->
+[← JOB-002 — Advanced Excel Macro Development](../JOB-002_advanced-excel-macro/JOB.md) · [Job Index](../../JOBS.md) · [JOB-004 — Excel Data Cleaning & Forecasting Formulas →](../JOB-004_excel-data-cleaning-forecasting/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -60,3 +64,7 @@ The public contest does not provide the client's real input files or stationery,
 ## Next movement
 
 Obtain one real sample of each of the three inputs plus their stationery. Keep the external spec as 📍 while adapting only the parser/output edges required by those real files.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-002 — Advanced Excel Macro Development](../JOB-002_advanced-excel-macro/JOB.md) · [Job Index](../../JOBS.md) · [JOB-004 — Excel Data Cleaning & Forecasting Formulas →](../JOB-004_excel-data-cleaning-forecasting/JOB.md)
+<!-- REVIEW_NAV_END -->
