@@ -1,17 +1,16 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 language-network as a persistent AI operating/protocol environment",
+  "preferred_referent": "📍 user-supplied current referent",
   "protocol": "ai.session",
-  "goal": "Rebuild the repository so protocols, evidence, work, and domain layers remain distinct while all movement follows the A/B-constrained operational contract.",
-  "status": "active",
-  "result_state": "PARTIAL",
-  "next_movement": "Restore v0.17 source/evidence into the correct layers, then migrate job/work views without losing provenance.",
-  "walls": [
-    "Large binary artifacts cannot all be pushed through the current text-oriented GitHub write path in one movement; retain exact hashes and external archive provenance until a binary/LFS-capable path is available."
-  ],
+  "goal": "Use language-network as a persistent external operating layer for AI while preserving A/B witness/evidence boundaries across protocols and work.",
+  "status": "ready",
+  "result_state": "MOVE",
+  "next_movement": "On the next user task, admit the explicit referent, route only to the required protocol/work layer, and record any durable movement back into the repository.",
+  "walls": [],
   "evidence": [
     "AB_CONTRACT.md",
-    "protocols/README.md",
-    "evidence/archive/v0.17-summary.json"
+    "ENTRY.md",
+    "protocols/index.json",
+    "MIGRATION.md"
   ]
 }

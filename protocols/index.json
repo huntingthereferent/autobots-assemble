@@ -1,21 +1,51 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
-  "core": [
-    "core.referent",
-    "core.evidence",
-    "core.movement",
-    "core.wall",
-    "core.handoff",
-    "core.provenance"
-  ],
-  "ai": [
-    "ai.session",
-    "ai.repo-write"
-  ],
-  "work": [
-    "work.bounded-problem",
-    "work.job-hunt",
-    "work.osint"
-  ]
+  "protocols": {
+    "core.referent": {
+      "layer": "core",
+      "path": "protocols/core/referent.md"
+    },
+    "core.evidence": {
+      "layer": "core",
+      "path": "protocols/core/evidence.md"
+    },
+    "core.movement": {
+      "layer": "core",
+      "path": "protocols/core/movement.md"
+    },
+    "core.wall": {
+      "layer": "core",
+      "path": "protocols/core/wall.md"
+    },
+    "core.handoff": {
+      "layer": "core",
+      "path": "protocols/core/handoff.md"
+    },
+    "core.provenance": {
+      "layer": "core",
+      "path": "protocols/core/provenance.md"
+    },
+    "ai.session": {
+      "layer": "ai",
+      "path": "protocols/ai/session.md"
+    },
+    "ai.repo-write": {
+      "layer": "ai",
+      "path": "protocols/ai/repo-write.md"
+    },
+    "work.bounded-problem": {
+      "layer": "work",
+      "path": "protocols/work/bounded-problem.md"
+    },
+    "work.job-hunt": {
+      "layer": "work",
+      "path": "protocols/work/job-hunt.md"
+    },
+    "work.osint": {
+      "layer": "work",
+      "path": "protocols/work/osint.md"
+    }
+  },
+  "template": "protocols/TEMPLATE.md"
 }
