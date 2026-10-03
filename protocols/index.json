@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
+  "core": [
+    "core.referent",
+    "core.evidence",
+    "core.movement",
+    "core.wall",
+    "core.handoff",
+    "core.provenance"
+  ],
+  "ai": [
+    "ai.session",
+    "ai.repo-write"
+  ],
+  "work": [
+    "work.bounded-problem",
+    "work.job-hunt",
+    "work.osint"
+  ]
+}
