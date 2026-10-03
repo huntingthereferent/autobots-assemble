@@ -1,5 +1,9 @@
 # JOB-016 — One-Site Text Scraper Automation
 
+<!-- REVIEW_NAV_START -->
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-017 — Financial Transaction Excel Consolidation →](../JOB-017_financial-transaction-excel-consolidation/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 - **Source:** https://www.freelancer.com/projects/beautifulsoup/one-site-text-scraper-automation
 - **Project ID:** 40746654
 - **Reward observed:** ₹600–1,500 INR
@@ -34,3 +38,7 @@ Build a local fixture-driven scraper harness with configurable selectors, struct
 ## Evidence
 
 - No evidence files recorded yet.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-017 — Financial Transaction Excel Consolidation →](../JOB-017_financial-transaction-excel-consolidation/JOB.md)
+<!-- REVIEW_NAV_END -->
