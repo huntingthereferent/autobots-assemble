@@ -1,5 +1,9 @@
 # JOB-004 — Excel Data Cleaning & Forecasting Formulas
 
+<!-- REVIEW_NAV_START -->
+[← JOB-003 — Interactive Fuel Reporting App](../JOB-003_fuel-reporting-app/JOB.md) · [Job Index](../../JOBS.md) · [JOB-005 — Excel IF/SUMIF CSV Setup →](../JOB-005_excel-if-sumif-csv-setup/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Source:** Freelancer
@@ -51,3 +55,7 @@ The public listing does not provide the client's real spreadsheet. The current a
 ## Next movement
 
 Review the workbook and proposal text, then submit to Freelancer project 40747338. After submission/review, continue to the next queued task.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-003 — Interactive Fuel Reporting App](../JOB-003_fuel-reporting-app/JOB.md) · [Job Index](../../JOBS.md) · [JOB-005 — Excel IF/SUMIF CSV Setup →](../JOB-005_excel-if-sumif-csv-setup/JOB.md)
+<!-- REVIEW_NAV_END -->
