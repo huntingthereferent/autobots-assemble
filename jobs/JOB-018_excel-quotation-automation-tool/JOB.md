@@ -1,5 +1,9 @@
 # JOB-018 — Excel Quotation Automation Tool
 
+<!-- REVIEW_NAV_START -->
+[← JOB-017 — Financial Transaction Excel Consolidation](../JOB-017_financial-transaction-excel-consolidation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 - **Source:** https://www.dk.freelancer.com/projects/data-management/excel-quotation-automation-tool
 - **Project ID:** 40748108
 - **Reward observed:** $2–8 USD / hour
@@ -33,3 +37,7 @@ Build a self-contained Excel prototype with customer/code lookup, product lines,
 ## Evidence
 
 - No evidence files recorded yet.
+
+<!-- REVIEW_NAV_START -->
+[← JOB-017 — Financial Transaction Excel Consolidation](../JOB-017_financial-transaction-excel-consolidation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
+<!-- REVIEW_NAV_END -->
