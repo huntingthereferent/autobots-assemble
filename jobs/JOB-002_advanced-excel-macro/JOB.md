@@ -1,5 +1,9 @@
 # JOB-002 — Advanced Excel Macro Development
 
+<!-- REVIEW_NAV_START -->
+[← JOB-001 — 3×3 Grid Ratio Scanner](../JOB-001_grid-ratio-scanner/JOB.md) · [Job Index](../../JOBS.md) · [JOB-003 — Interactive Fuel Reporting App →](../JOB-003_fuel-reporting-app/JOB.md)
+<!-- REVIEW_NAV_END -->
+
 ## Identity
 
 - **Job ID:** JOB-002
@@ -44,3 +48,7 @@ PASS — 41/41 acceptance checks.
 4. Test evidence
 5. Submission state
 6. Older/frozen evidence
+
+<!-- REVIEW_NAV_START -->
+[← JOB-001 — 3×3 Grid Ratio Scanner](../JOB-001_grid-ratio-scanner/JOB.md) · [Job Index](../../JOBS.md) · [JOB-003 — Interactive Fuel Reporting App →](../JOB-003_fuel-reporting-app/JOB.md)
+<!-- REVIEW_NAV_END -->
