@@ -1585,6 +1585,105 @@
         "\"rip this apart\" can mean harsh criticism in ordinary English; this shape means structural analysis unless the active referent indicates critique",
         "\"break this down\" can mean simplify only; this shape requires reconnection/reconstruction"
       ]
+    },
+    {
+      "id": "RESEARCH.DIVE",
+      "canonical": "research dive",
+      "definition": "Start or continue an exploratory research dive in any academic/technical field. The entry may be broad or random; the movement discovers and records interesting referents without forcing them into a money/job goal.",
+      "preserves": [
+        "entry trigger",
+        "source provenance",
+        "interesting branches",
+        "uncertainty",
+        "field/context"
+      ],
+      "does_not_imply": [
+        "a fixed hypothesis",
+        "a job opportunity",
+        "commercialization",
+        "that every branch must be pursued"
+      ],
+      "surfaces": {
+        "standard": [
+          "Do a research dive on X.",
+          "Explore X academically."
+        ],
+        "plain": [
+          "Dive into X.",
+          "Look around X and save what is interesting."
+        ],
+        "casual": [
+          "Go down this rabbit hole.",
+          "Take a dive into X."
+        ],
+        "slang": [
+          "Go down academia on X.",
+          "Dig into X."
+        ],
+        "internet": [
+          "deep dive X",
+          "rabbit hole X"
+        ],
+        "caveman": [
+          "go learn X. keep interesting.",
+          "look X. find cool. save."
+        ],
+        "technical": [
+          "start exploratory research dive on X",
+          "open research.dive with X as entry referent"
+        ]
+      },
+      "ambiguity": [
+        "deep dive can also mean exhaustive analysis of a fixed question; research.dive permits exploratory branching unless the user specifies a tighter goal"
+      ]
+    },
+    {
+      "id": "RESEARCH.SAVE_DIVE",
+      "canonical": "save research dive",
+      "definition": "Persist the current exploratory research state into the repository so it can be reviewed or resumed later.",
+      "preserves": [
+        "current dive referent",
+        "source map",
+        "interesting findings",
+        "unknowns",
+        "branch candidates",
+        "provenance"
+      ],
+      "does_not_imply": [
+        "the dive is complete",
+        "the claims are proven",
+        "the dive becomes a project/job"
+      ],
+      "surfaces": {
+        "standard": [
+          "Save this research dive.",
+          "Archive this dive for later review."
+        ],
+        "plain": [
+          "Save this dive.",
+          "Keep this in the repo."
+        ],
+        "casual": [
+          "Bank this dive.",
+          "Save this rabbit hole."
+        ],
+        "slang": [
+          "Keep this one.",
+          "Bank this."
+        ],
+        "internet": [
+          "save dive",
+          "log this rabbit hole"
+        ],
+        "caveman": [
+          "save this learn.",
+          "keep dive repo."
+        ],
+        "technical": [
+          "persist current research.dive record",
+          "checkpoint exploratory research state"
+        ]
+      }
     }
   ]
 }

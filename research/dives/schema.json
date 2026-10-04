@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Language Network Research Dive",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "status",
+    "entry_referent",
+    "fields",
+    "trigger",
+    "findings",
+    "connections",
+    "unknowns",
+    "branches",
+    "sources",
+    "next_referent"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^DIVE-[0-9]{4}$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "seed",
+        "active",
+        "paused",
+        "closed"
+      ]
+    },
+    "entry_referent": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "trigger": {
+      "type": "string"
+    },
+    "why_interesting": {
+      "type": "string"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "connections": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "possible_money_handoffs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "next_referent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "next_movement": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "created_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_at": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}
