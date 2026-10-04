@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Execute one untouched first pass with the generic agent in the official starter, log every environment action as discovery+execution cost, and use the failure trace to improve generic perception/model/goal/planning without per-game hardcoding.",
+  "next_movement": "Keep advancing the generic solver offline. Gen-1 now has dual-lens state, conflict-aware object transitions, known-progress BFS, and CI. The live operator/execution path is pinned until computer access.",
   "walls": [
     "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
@@ -188,7 +188,24 @@
     "private_claim_boundary": "Only official hidden evaluation can establish competition 100%.",
     "runner": "research/dives/ARC3-TRACE-001/direct_agent/run_first_contact.py",
     "runbook": "research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md",
-    "first_run_rule": "The first public evaluation must preserve the exact agent hash and count discovery + execution actions; later banked/minimized replay paths cannot replace this witness."
+    "first_run_rule": "The first public evaluation must preserve the exact agent hash and count discovery + execution actions; later banked/minimized replay paths cannot replace this witness.",
+    "generations": {
+      "gen0": "research/dives/ARC3-TRACE-001/direct_agent/my_agent.py",
+      "gen1": {
+        "status": "hermetic_ci_pass",
+        "agent": "research/dives/ARC3-TRACE-001/direct_agent/gen1/my_agent.py",
+        "state": "research/dives/ARC3-TRACE-001/direct_agent/gen1/state.py",
+        "model": "research/dives/ARC3-TRACE-001/direct_agent/gen1/model.py",
+        "tests": "research/dives/ARC3-TRACE-001/direct_agent/gen1/test_core.py",
+        "ci_run": "https://github.com/huntingthereferent/language-network/actions/runs/37181443475"
+      }
+    },
+    "operator": {
+      "shell": "research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py",
+      "doc": "research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md",
+      "role": "ChatGPT-directed live action loop with append-only transcript once a computer is connected."
+    },
+    "execution_pin": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json"
   },
   "public_prior_art": {
     "status": "swallowed_supporting_evidence",
