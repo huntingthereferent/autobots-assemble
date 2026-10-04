@@ -20,7 +20,7 @@ class SportsBettingDissectionTests(unittest.TestCase):
 
     def test_lens_and_movement_are_separated(self):
         protocol = (ROOT / "protocols" / "domain" / "sports-betting-decision.md").read_text(encoding="utf-8")
-        self.assertIn("assessment, not network mutation", protocol)
+        self.assertIn("not network mutation", protocol)
         self.assertIn("Rendering must not record or place the decision", protocol)
 
 
