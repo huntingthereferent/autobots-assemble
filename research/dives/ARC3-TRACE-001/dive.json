@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Build the next direct generation from G0.1 live evidence: problem-type/goal inference + minimal discriminating actions + explicit discovery→execution switch; then run a new immutable 25-game first-contact sweep.",
+  "next_movement": "Implement compact latent-state induction from live action-delta evidence; preserve exact pixels as witness; then plan over learned latent transitions. Do not continue action-score tuning.",
   "walls": [
     "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
