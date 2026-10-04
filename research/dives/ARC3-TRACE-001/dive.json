@@ -5,7 +5,7 @@
   "status": "active",
   "protocol": "research.dive",
   "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
-  "preferred_referent": "📍 ARC3-TRACE-001 — A/B-constrained forward matching under first-contact ARC3",
+  "preferred_referent": "📍 ARC3-TRACE-001 — witness compression from supported within-environment correspondences",
   "fields": [
     "artificial intelligence",
     "interactive reasoning",
@@ -19,7 +19,7 @@
     "Open Source",
     "Prize / benchmark"
   ],
-  "goal": "Test whether relation evidence already carried by witnessed transitions can generate accurate forward predictions across supported correspondences, reducing environment actions without changing the admission contract.",
+  "goal": "Measure whether A/B-constrained forward matching can increase relations-resolved per ARC3 environment action by reusing only locally witnessed mechanics across explicitly supported corresponding contexts.",
   "definition_of_solved_for_first_trace": [
     "Every admitted rule is tied to an observable state transition or replay witness.",
     "Failed hypotheses remain preserved rather than silently rewritten.",
@@ -103,8 +103,9 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "On one official public environment, obtain the minimum first witnessed transition; search for supported corresponding contexts; generate exact forward predictions; spend the next action on the prediction split with highest discriminating value; record predictions, support/falsification, and actions avoided.",
+  "next_movement": "Locate a same-environment state containing multiple repeated or symmetric unresolved contexts; project an already witnessed local mechanic into each supported context, partition predicted outcomes, and use one held-out/live action to resolve the maximum number of candidate gates.",
   "walls": [
+    "Cross-environment standardized action IDs do not establish semantic correspondence; locally ground action/effect relations in each game.",
     "Axioms correspondence rule remains mathematically unresolved; forward projection is candidate propagation, not admitted fact until ARC3 supplies the witness.",
     "Exact full Kaggle competition terms/eligibility and final runtime/quota clauses still require direct live Kaggle rules inspection before any submission claim.",
     "Private evaluation mechanics are intentionally unavailable and cannot be used during development."
@@ -134,6 +135,27 @@
     "machine_contract": "research/dives/ARC3-TRACE-001/forward_match.json",
     "axioms_source": "huntingthereferent/axioms/AXIOMS_HANDOFF.md",
     "exact_boundary": "Experiment #2 established recursive implementation of relation admission under a supplied correspondence condition; it did not justify that correspondence principle as general A/B.",
-    "intended_gain": "replace repeated live probing with internally generated falsifiable predictions, then spend actions on high-discrimination witnesses"
-  }
+    "intended_gain": "replace repeated live probing with internally generated falsifiable predictions, then spend actions on high-discrimination witnesses",
+    "current_metric": "relations_resolved_per_environment_action",
+    "correction": "Prefer same-environment repeated/symmetric contexts first. Across environments, carry the contract/representation, not raw action semantics."
+  },
+  "experiments": [
+    {
+      "id": "FM-001",
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-001_ls20_inverse-action-calibration.json",
+      "result": "SUPPORTED_FORWARD_MATCH_CALIBRATION"
+    },
+    {
+      "id": "FM-002",
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-002_bp35_inverse-schema-transfer.json",
+      "result": "WALL_MISSING_CROSS_ENV_ACTION_CORRESPONDENCE",
+      "correction": "Standardized ARC action IDs are interface labels, not cross-environment semantic witnesses."
+    },
+    {
+      "id": "FM-003",
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-003_ls20_recursive-forward-match.json",
+      "result": "SUPPORTED_SAME_ENV_RECURSIVE_FORWARD_MATCH"
+    }
+  ],
+  "correspondence_gate": "research/dives/ARC3-TRACE-001/CORRESPONDENCE_GATE.md"
 }
