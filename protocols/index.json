@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
   "protocols": {
     "core.referent": {
@@ -57,6 +57,10 @@
     "research.source": {
       "layer": "research",
       "path": "protocols/research/source.md"
+    },
+    "domain.sports-betting.decision": {
+      "layer": "domain",
+      "path": "protocols/domain/sports-betting-decision.md"
     }
   },
   "template": "protocols/TEMPLATE.md"
