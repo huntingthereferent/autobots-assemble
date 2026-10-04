@@ -4,12 +4,13 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [ARC3-100 — first-contact discovery-inclusive 100%](research/dives/ARC3-TRACE-001/FIRST_CONTACT_100.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Run one untouched full public pass with the generic agent and count every discovery + execution action; improve generic solving from failures without embedding public solution paths. |
+| [ARC3-100 — first-contact discovery-inclusive 100%](research/dives/ARC3-TRACE-001/FIRST_CONTACT_100.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Continue generic solver development offline; Gen-1 is hermetic-CI green. Live first-contact execution resumes from the pinned computer bridge when hardware is available. |
 
 ## Pinned / resumable
 
 | Work | Lane | State | Resume from |
 |---|---|---|---|
+| [ARC3 execution bridge](state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json) | Infrastructure / ARC3 relation | PINNED DEPENDENCY | When a computer is available, connect an authorized terminal, install the official ARC starter, and run the preserved first-contact/operator workflow. |
 | [GEMS-001 — DOE GEMS hidden-fault mapping](money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md) | Money/Prize + Research relation | PINNED · MOVE_WITH_WALL | Verify GEMS-specific data-sharing terms; then run the local baseline through the exact output writer/validator before model changes. |
 
 ## Historical / paid-job adapter view
