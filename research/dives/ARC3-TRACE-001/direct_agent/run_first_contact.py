@@ -39,6 +39,7 @@ def load_agent(path: Path):
     if spec is None or spec.loader is None:
         raise RuntimeError(f"Could not load {path}")
     mod = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     if not hasattr(mod, "MyAgent"):
         raise RuntimeError(f"{path} must define MyAgent")
