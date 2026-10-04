@@ -1,0 +1,1478 @@
+{
+  "schema_version": 1,
+  "language": "en",
+  "principle": "surface form -> candidate movement shape + pragmatic modifiers; context selects resolution",
+  "shapes": [
+    {
+      "id": "ACK.RECEIVED",
+      "canonical": "received",
+      "definition": "Acknowledge receipt/understanding without claiming agreement or completion.",
+      "preserves": [
+        "current referent"
+      ],
+      "does_not_imply": [
+        "agreement",
+        "approval",
+        "completion"
+      ],
+      "surfaces": {
+        "standard": [
+          "I understand.",
+          "Got it."
+        ],
+        "plain": [
+          "Got it.",
+          "Okay."
+        ],
+        "casual": [
+          "Yep, got it.",
+          "I got you."
+        ],
+        "slang": [
+          "Bet.",
+          "Word."
+        ],
+        "internet": [
+          "k",
+          "gotchu"
+        ],
+        "caveman": [
+          "me get",
+          "got it"
+        ],
+        "technical": [
+          "ack",
+          "received"
+        ]
+      },
+      "ambiguity": [
+        "bet may also imply agreement/proceed depending on context",
+        "k can be neutral, annoyed, or merely receipt"
+      ]
+    },
+    {
+      "id": "ACK.CONFIRM",
+      "canonical": "confirmed",
+      "definition": "Affirm that a proposed interpretation/action is the intended one.",
+      "preserves": [
+        "referent",
+        "proposal being confirmed"
+      ],
+      "does_not_imply": [
+        "completion"
+      ],
+      "surfaces": {
+        "standard": [
+          "Yes, that's right.",
+          "Correct."
+        ],
+        "plain": [
+          "Yes.",
+          "That's it."
+        ],
+        "casual": [
+          "Yep, exactly.",
+          "That's the one."
+        ],
+        "slang": [
+          "Bet, yeah.",
+          "Facts."
+        ],
+        "internet": [
+          "yep",
+          "fr"
+        ],
+        "caveman": [
+          "yes that",
+          "right"
+        ],
+        "technical": [
+          "confirmed",
+          "affirmative"
+        ]
+      },
+      "ambiguity": [
+        "fr can express emphasis rather than literal confirmation"
+      ]
+    },
+    {
+      "id": "QUERY.CLARIFY",
+      "canonical": "clarify",
+      "definition": "Request the smallest missing distinction needed to continue.",
+      "preserves": [
+        "current referent"
+      ],
+      "does_not_imply": [
+        "rejection",
+        "scope widening"
+      ],
+      "surfaces": {
+        "standard": [
+          "What do you mean?",
+          "Can you clarify that?"
+        ],
+        "plain": [
+          "What do you mean?",
+          "Which one?"
+        ],
+        "casual": [
+          "Wait, what do you mean?",
+          "What part?"
+        ],
+        "slang": [
+          "What you mean?",
+          "Huh?"
+        ],
+        "internet": [
+          "wdym",
+          "bro what"
+        ],
+        "caveman": [
+          "mean what",
+          "which one"
+        ],
+        "technical": [
+          "clarify referent",
+          "disambiguate"
+        ]
+      },
+      "ambiguity": [
+        "bro what can carry surprise or disbelief in addition to clarification"
+      ]
+    },
+    {
+      "id": "QUERY.STATUS",
+      "canonical": "status",
+      "definition": "Ask where the current movement/work presently stands.",
+      "preserves": [
+        "current work referent"
+      ],
+      "does_not_imply": [
+        "change of scope"
+      ],
+      "surfaces": {
+        "standard": [
+          "What's the current status?",
+          "Where are we on this?"
+        ],
+        "plain": [
+          "Where are we?",
+          "What's done?"
+        ],
+        "casual": [
+          "Where are we at?",
+          "How far did we get?"
+        ],
+        "slang": [
+          "Where we at?",
+          "What's good with it?"
+        ],
+        "internet": [
+          "status?",
+          "where we @"
+        ],
+        "caveman": [
+          "where now",
+          "done what"
+        ],
+        "technical": [
+          "report current state",
+          "status check"
+        ]
+      }
+    },
+    {
+      "id": "MOVE.CONTINUE",
+      "canonical": "continue",
+      "definition": "Continue the current movement without changing the referent.",
+      "preserves": [
+        "current referent",
+        "current protocol unless a wall is reached"
+      ],
+      "does_not_imply": [
+        "approval of every prior interpretation",
+        "scope widening"
+      ],
+      "surfaces": {
+        "standard": [
+          "Continue.",
+          "Keep going."
+        ],
+        "plain": [
+          "Go ahead.",
+          "Keep going."
+        ],
+        "casual": [
+          "Yeah, keep going.",
+          "Go on."
+        ],
+        "slang": [
+          "Run it.",
+          "Keep cooking.",
+          "Send it."
+        ],
+        "internet": [
+          "continue",
+          "cook"
+        ],
+        "caveman": [
+          "keep go",
+          "do more"
+        ],
+        "technical": [
+          "continue current movement",
+          "resume execution"
+        ]
+      },
+      "ambiguity": [
+        "cook often adds approval/enthusiasm; the movement ID itself does not"
+      ]
+    },
+    {
+      "id": "MOVE.STOP",
+      "canonical": "stop",
+      "definition": "Stop the current movement without erasing its history.",
+      "preserves": [
+        "history",
+        "current referent unless explicitly changed"
+      ],
+      "does_not_imply": [
+        "delete",
+        "reject all prior work"
+      ],
+      "surfaces": {
+        "standard": [
+          "Stop.",
+          "Don't continue."
+        ],
+        "plain": [
+          "Stop here.",
+          "That's enough."
+        ],
+        "casual": [
+          "Hold up.",
+          "Stop there."
+        ],
+        "slang": [
+          "Cut it.",
+          "Chill."
+        ],
+        "internet": [
+          "stop",
+          "nvm"
+        ],
+        "caveman": [
+          "stop now",
+          "no more"
+        ],
+        "technical": [
+          "halt current movement",
+          "pause execution"
+        ]
+      },
+      "ambiguity": [
+        "nvm can mean cancel the request entirely rather than merely pause"
+      ]
+    },
+    {
+      "id": "MOVE.RETURN",
+      "canonical": "return",
+      "definition": "Return from a sub-referent to the recorded parent/return target.",
+      "preserves": [
+        "parent referent",
+        "submovement provenance"
+      ],
+      "does_not_imply": [
+        "discard submovement evidence"
+      ],
+      "surfaces": {
+        "standard": [
+          "Go back to the main point.",
+          "Return to the previous topic."
+        ],
+        "plain": [
+          "Go back.",
+          "Back to the main thing."
+        ],
+        "casual": [
+          "Back to where we were.",
+          "Go back up one."
+        ],
+        "slang": [
+          "Take it back.",
+          "Back to the main thing."
+        ],
+        "internet": [
+          "back",
+          "go back"
+        ],
+        "caveman": [
+          "go back",
+          "back main"
+        ],
+        "technical": [
+          "return to parent referent",
+          "resume return target"
+        ]
+      }
+    },
+    {
+      "id": "MOVE.REGROUND",
+      "canonical": "reground",
+      "definition": "Re-establish the active basis after movement while preserving relevant history and dropping unsupported active carry.",
+      "preserves": [
+        "referent lineage",
+        "history",
+        "surviving supported relations"
+      ],
+      "does_not_imply": [
+        "deletion of history"
+      ],
+      "surfaces": {
+        "standard": [
+          "Re-ground on what we actually know.",
+          "Reset to the supported facts."
+        ],
+        "plain": [
+          "Go back to what we know.",
+          "Reset from the evidence."
+        ],
+        "casual": [
+          "Okay, re-ground.",
+          "Back to what's actually there."
+        ],
+        "slang": [
+          "Reset the ground.",
+          "Back to facts."
+        ],
+        "internet": [
+          "reground",
+          "reset to facts"
+        ],
+        "caveman": [
+          "back known",
+          "keep real stuff"
+        ],
+        "technical": [
+          "reconstruct active ground",
+          "re-anchor on supported relations"
+        ]
+      }
+    },
+    {
+      "id": "SCOPE.NARROW",
+      "canonical": "narrow scope",
+      "definition": "Reduce active scope to a smaller named referent while keeping wider context recoverable.",
+      "preserves": [
+        "wider context as evidence"
+      ],
+      "does_not_imply": [
+        "irrelevance forever"
+      ],
+      "surfaces": {
+        "standard": [
+          "Focus only on this part.",
+          "Narrow it to X."
+        ],
+        "plain": [
+          "Just do X.",
+          "Only this part."
+        ],
+        "casual": [
+          "Just stick to X.",
+          "Let's only do this bit."
+        ],
+        "slang": [
+          "Lock in on X.",
+          "Keep it to X."
+        ],
+        "internet": [
+          "X only",
+          "focus X"
+        ],
+        "caveman": [
+          "only X",
+          "X now"
+        ],
+        "technical": [
+          "restrict scope to X",
+          "project onto X"
+        ]
+      }
+    },
+    {
+      "id": "SCOPE.WIDEN",
+      "canonical": "widen scope",
+      "definition": "Expand the active view to include additional related referents.",
+      "preserves": [
+        "current referent as part of wider view"
+      ],
+      "does_not_imply": [
+        "all available context is relevant"
+      ],
+      "surfaces": {
+        "standard": [
+          "Widen the scope.",
+          "Look one layer up."
+        ],
+        "plain": [
+          "Look at the bigger picture.",
+          "Include the related parts."
+        ],
+        "casual": [
+          "Zoom out a bit.",
+          "Go broader."
+        ],
+        "slang": [
+          "Open it up.",
+          "Zoom out."
+        ],
+        "internet": [
+          "zoom out",
+          "bigger picture"
+        ],
+        "caveman": [
+          "see more",
+          "look bigger"
+        ],
+        "technical": [
+          "increase observation resolution/scope",
+          "expand active projection"
+        ]
+      }
+    },
+    {
+      "id": "SCOPE.HOLD",
+      "canonical": "hold scope",
+      "definition": "Keep the current referent/scope fixed despite available adjacent branches.",
+      "preserves": [
+        "current referent"
+      ],
+      "does_not_imply": [
+        "adjacent branches are false"
+      ],
+      "surfaces": {
+        "standard": [
+          "Stay on this point.",
+          "Keep the scope here."
+        ],
+        "plain": [
+          "Stay here.",
+          "Don't branch."
+        ],
+        "casual": [
+          "Don't go off into that yet.",
+          "Stay on this."
+        ],
+        "slang": [
+          "Keep it right here.",
+          "Don't spin off."
+        ],
+        "internet": [
+          "stay on topic",
+          "no side quest"
+        ],
+        "caveman": [
+          "stay here",
+          "no branch"
+        ],
+        "technical": [
+          "pin current referent",
+          "hold scope"
+        ]
+      }
+    },
+    {
+      "id": "CORRECT.REPLACE",
+      "canonical": "correction",
+      "definition": "Replace a mistaken interpretation with the intended one while preserving the fact that the correction occurred.",
+      "preserves": [
+        "referent lineage",
+        "prior interpretation as historical evidence"
+      ],
+      "does_not_imply": [
+        "erase prior output"
+      ],
+      "surfaces": {
+        "standard": [
+          "No, I mean X.",
+          "Correction: X."
+        ],
+        "plain": [
+          "I mean X, not Y.",
+          "Use X instead."
+        ],
+        "casual": [
+          "No, not that—X.",
+          "I meant X."
+        ],
+        "slang": [
+          "Nah, X.",
+          "Nope, X."
+        ],
+        "internet": [
+          "nah X",
+          "*X"
+        ],
+        "caveman": [
+          "not Y. X.",
+          "me mean X"
+        ],
+        "technical": [
+          "replace interpretation Y with X",
+          "correct referent to X"
+        ]
+      }
+    },
+    {
+      "id": "CORRECT.NEGATE",
+      "canonical": "not that",
+      "definition": "Reject the current candidate without yet supplying a replacement.",
+      "preserves": [
+        "current question/referent"
+      ],
+      "does_not_imply": [
+        "new answer",
+        "global rejection"
+      ],
+      "surfaces": {
+        "standard": [
+          "No, that's not it.",
+          "Not that."
+        ],
+        "plain": [
+          "No.",
+          "That's wrong."
+        ],
+        "casual": [
+          "Nah, not that.",
+          "Nope."
+        ],
+        "slang": [
+          "Nah.",
+          "Ain't it."
+        ],
+        "internet": [
+          "nope",
+          "L"
+        ],
+        "caveman": [
+          "no that",
+          "wrong"
+        ],
+        "technical": [
+          "reject candidate",
+          "candidate false"
+        ]
+      },
+      "ambiguity": [
+        "L can be commentary/judgment rather than a formal rejection"
+      ]
+    },
+    {
+      "id": "STATE.UNKNOWN",
+      "canonical": "unknown",
+      "definition": "State that the answer/relation is not currently known.",
+      "preserves": [
+        "open question"
+      ],
+      "does_not_imply": [
+        "false",
+        "impossible",
+        "irrelevant"
+      ],
+      "surfaces": {
+        "standard": [
+          "I don't know.",
+          "That's unknown right now."
+        ],
+        "plain": [
+          "Don't know.",
+          "Not sure."
+        ],
+        "casual": [
+          "I have no idea.",
+          "I'm not sure yet."
+        ],
+        "slang": [
+          "No clue.",
+          "Beats me."
+        ],
+        "internet": [
+          "idk",
+          "??"
+        ],
+        "caveman": [
+          "me no know",
+          "unknown"
+        ],
+        "technical": [
+          "UNKNOWN",
+          "undetermined"
+        ]
+      }
+    },
+    {
+      "id": "STATE.PARTIAL",
+      "canonical": "partial",
+      "definition": "State that some support/result exists but the required coverage or completion is incomplete.",
+      "preserves": [
+        "supported subset",
+        "missing remainder"
+      ],
+      "does_not_imply": [
+        "complete",
+        "failed"
+      ],
+      "surfaces": {
+        "standard": [
+          "Partly.",
+          "We have part of it."
+        ],
+        "plain": [
+          "Some of it.",
+          "Not all the way."
+        ],
+        "casual": [
+          "Kinda.",
+          "We're partway there."
+        ],
+        "slang": [
+          "Halfway there.",
+          "Some of it checks out."
+        ],
+        "internet": [
+          "partial",
+          "kinda"
+        ],
+        "caveman": [
+          "some yes",
+          "not all"
+        ],
+        "technical": [
+          "PARTIAL",
+          "incomplete coverage"
+        ]
+      }
+    },
+    {
+      "id": "STATE.BLOCKED",
+      "canonical": "blocked",
+      "definition": "State that movement cannot continue until a named condition is satisfied.",
+      "preserves": [
+        "current referent",
+        "available evidence",
+        "missing condition"
+      ],
+      "does_not_imply": [
+        "failure",
+        "impossibility"
+      ],
+      "surfaces": {
+        "standard": [
+          "We're blocked on X.",
+          "We need X before we can continue."
+        ],
+        "plain": [
+          "Can't continue without X.",
+          "Need X first."
+        ],
+        "casual": [
+          "We're stuck until we get X.",
+          "Need X before we can move."
+        ],
+        "slang": [
+          "Can't move till X.",
+          "X is the wall."
+        ],
+        "internet": [
+          "blocked on X",
+          "need X"
+        ],
+        "caveman": [
+          "need X first",
+          "no X no move"
+        ],
+        "technical": [
+          "WALL: X missing",
+          "dependency blocked"
+        ]
+      }
+    },
+    {
+      "id": "WORK.REQUEST",
+      "canonical": "request work",
+      "definition": "Ask for a bounded action to be performed on the current or explicitly named referent.",
+      "preserves": [
+        "requested referent",
+        "definition of done when supplied"
+      ],
+      "does_not_imply": [
+        "permission to broaden scope"
+      ],
+      "surfaces": {
+        "standard": [
+          "Please do X.",
+          "Can you do X?"
+        ],
+        "plain": [
+          "Do X.",
+          "I need X."
+        ],
+        "casual": [
+          "Can you go do X?",
+          "Do X for me."
+        ],
+        "slang": [
+          "Run X.",
+          "Handle X."
+        ],
+        "internet": [
+          "do X pls",
+          "X pls"
+        ],
+        "caveman": [
+          "do X",
+          "need X"
+        ],
+        "technical": [
+          "execute X",
+          "perform operation X"
+        ]
+      }
+    },
+    {
+      "id": "WORK.SEARCH",
+      "canonical": "search",
+      "definition": "Search for evidence/opportunities relevant to a named referent.",
+      "preserves": [
+        "search referent",
+        "source provenance"
+      ],
+      "does_not_imply": [
+        "result correctness until sources are inspected"
+      ],
+      "surfaces": {
+        "standard": [
+          "Search for X.",
+          "Look up X."
+        ],
+        "plain": [
+          "Find X.",
+          "Search X."
+        ],
+        "casual": [
+          "Go look for X.",
+          "See what you can find on X."
+        ],
+        "slang": [
+          "Hunt X down.",
+          "Dig for X."
+        ],
+        "internet": [
+          "search X",
+          "find X"
+        ],
+        "caveman": [
+          "find X",
+          "look X"
+        ],
+        "technical": [
+          "query sources for X",
+          "perform retrieval"
+        ]
+      }
+    },
+    {
+      "id": "WORK.BUILD",
+      "canonical": "build",
+      "definition": "Create an implementation/artifact that satisfies the current bounded specification.",
+      "preserves": [
+        "specification",
+        "acceptance boundary"
+      ],
+      "does_not_imply": [
+        "tested",
+        "submitted",
+        "accepted"
+      ],
+      "surfaces": {
+        "standard": [
+          "Build it.",
+          "Implement X."
+        ],
+        "plain": [
+          "Make X.",
+          "Create it."
+        ],
+        "casual": [
+          "Go build it.",
+          "Put it together."
+        ],
+        "slang": [
+          "Cook it up.",
+          "Ship the build."
+        ],
+        "internet": [
+          "build it",
+          "make it"
+        ],
+        "caveman": [
+          "make X",
+          "build X"
+        ],
+        "technical": [
+          "implement specification",
+          "construct artifact"
+        ]
+      }
+    },
+    {
+      "id": "WORK.TEST",
+      "canonical": "test",
+      "definition": "Evaluate the current implementation against named acceptance/witness conditions.",
+      "preserves": [
+        "implementation identity",
+        "acceptance conditions",
+        "test evidence"
+      ],
+      "does_not_imply": [
+        "production validity beyond tested conditions"
+      ],
+      "surfaces": {
+        "standard": [
+          "Test it.",
+          "Run the acceptance tests."
+        ],
+        "plain": [
+          "Check if it works.",
+          "Test it against the rules."
+        ],
+        "casual": [
+          "Run it and see.",
+          "Make sure it passes."
+        ],
+        "slang": [
+          "Stress it.",
+          "Put it through its paces."
+        ],
+        "internet": [
+          "test it",
+          "run tests"
+        ],
+        "caveman": [
+          "check work",
+          "test X"
+        ],
+        "technical": [
+          "execute acceptance suite",
+          "validate implementation"
+        ]
+      }
+    },
+    {
+      "id": "WORK.REVIEW",
+      "canonical": "review",
+      "definition": "Inspect an existing artifact/result without automatically modifying it.",
+      "preserves": [
+        "artifact",
+        "review boundary"
+      ],
+      "does_not_imply": [
+        "edit",
+        "approval"
+      ],
+      "surfaces": {
+        "standard": [
+          "Review this.",
+          "Inspect the result."
+        ],
+        "plain": [
+          "Look this over.",
+          "Check it."
+        ],
+        "casual": [
+          "Take a look.",
+          "Go through it."
+        ],
+        "slang": [
+          "Give it a once-over.",
+          "Peep this."
+        ],
+        "internet": [
+          "review pls",
+          "check this"
+        ],
+        "caveman": [
+          "look at X",
+          "check X"
+        ],
+        "technical": [
+          "review only",
+          "inspect without mutation"
+        ]
+      }
+    },
+    {
+      "id": "WORK.SUBMIT",
+      "canonical": "submit",
+      "definition": "Send the bounded deliverable to the external target.",
+      "preserves": [
+        "deliverable identity",
+        "submission provenance"
+      ],
+      "does_not_imply": [
+        "accepted",
+        "paid"
+      ],
+      "surfaces": {
+        "standard": [
+          "Submit it.",
+          "Send the deliverable."
+        ],
+        "plain": [
+          "Send it in.",
+          "Turn it in."
+        ],
+        "casual": [
+          "Go ahead and submit it.",
+          "Send it over."
+        ],
+        "slang": [
+          "Send it.",
+          "Ship it."
+        ],
+        "internet": [
+          "submit",
+          "send it"
+        ],
+        "caveman": [
+          "send work",
+          "give them X"
+        ],
+        "technical": [
+          "perform submission",
+          "deliver artifact"
+        ]
+      },
+      "ambiguity": [
+        "send it may also mean continue/proceed; receiver must use context"
+      ]
+    },
+    {
+      "id": "HANDOFF.SEND",
+      "canonical": "handoff",
+      "definition": "Transfer the active work state to another actor/session/tool without changing its meaning.",
+      "preserves": [
+        "referent",
+        "goal",
+        "evidence",
+        "walls",
+        "do-not-upgrade claims",
+        "next movement"
+      ],
+      "does_not_imply": [
+        "receiver acceptance"
+      ],
+      "surfaces": {
+        "standard": [
+          "Hand this off.",
+          "Pass this to the next person/model."
+        ],
+        "plain": [
+          "Give this to the next one.",
+          "Pass it over."
+        ],
+        "casual": [
+          "Hand it over.",
+          "Send the context along."
+        ],
+        "slang": [
+          "Pass the baton.",
+          "Kick it over."
+        ],
+        "internet": [
+          "handoff",
+          "pass context"
+        ],
+        "caveman": [
+          "give next",
+          "send work state"
+        ],
+        "technical": [
+          "emit handoff packet",
+          "transfer execution state"
+        ]
+      }
+    },
+    {
+      "id": "HANDOFF.RECEIVE",
+      "canonical": "receive handoff",
+      "definition": "Accept a handoff for inspection while validating its referent/evidence contract before continuing.",
+      "preserves": [
+        "sender provenance",
+        "handoff packet"
+      ],
+      "does_not_imply": [
+        "blind trust",
+        "automatic continuation"
+      ],
+      "surfaces": {
+        "standard": [
+          "Receive the handoff.",
+          "Pick up from this handoff."
+        ],
+        "plain": [
+          "Take this over.",
+          "Continue from this context."
+        ],
+        "casual": [
+          "Pick this up.",
+          "Take it from here."
+        ],
+        "slang": [
+          "I got it from here.",
+          "Pass received."
+        ],
+        "internet": [
+          "got handoff",
+          "taking over"
+        ],
+        "caveman": [
+          "me take now",
+          "receive work"
+        ],
+        "technical": [
+          "ingest handoff packet",
+          "validate and resume"
+        ]
+      }
+    },
+    {
+      "id": "HANDOFF.RESUME",
+      "canonical": "resume handoff",
+      "definition": "Continue a previously handed-off movement from its recorded next referent.",
+      "preserves": [
+        "handoff referent",
+        "unresolved walls",
+        "return target"
+      ],
+      "does_not_imply": [
+        "restart from scratch"
+      ],
+      "surfaces": {
+        "standard": [
+          "Resume from the handoff.",
+          "Continue where it left off."
+        ],
+        "plain": [
+          "Pick up where we stopped.",
+          "Keep going from there."
+        ],
+        "casual": [
+          "Jump back in where we left it.",
+          "Pick it back up."
+        ],
+        "slang": [
+          "Run it from there.",
+          "Pick the thread back up."
+        ],
+        "internet": [
+          "resume",
+          "continue from handoff"
+        ],
+        "caveman": [
+          "continue there",
+          "start from last"
+        ],
+        "technical": [
+          "resume continuation pointer",
+          "restore active referent"
+        ]
+      }
+    },
+    {
+      "id": "HANDOFF.RETURN",
+      "canonical": "return handoff",
+      "definition": "Return execution/results to the recorded parent actor/referent.",
+      "preserves": [
+        "submovement evidence",
+        "return target"
+      ],
+      "does_not_imply": [
+        "merge without validation"
+      ],
+      "surfaces": {
+        "standard": [
+          "Return this to the parent task.",
+          "Hand the result back."
+        ],
+        "plain": [
+          "Send it back.",
+          "Go back with the result."
+        ],
+        "casual": [
+          "Kick it back up.",
+          "Bring it back."
+        ],
+        "slang": [
+          "Pass it back.",
+          "Send it upstream."
+        ],
+        "internet": [
+          "return result",
+          "back to parent"
+        ],
+        "caveman": [
+          "give back",
+          "return result"
+        ],
+        "technical": [
+          "return to parent referent",
+          "emit return packet"
+        ]
+      }
+    },
+    {
+      "id": "HANDOFF.MERGE",
+      "canonical": "merge handoffs",
+      "definition": "Combine compatible handoff results while preserving contradictions and separate provenance.",
+      "preserves": [
+        "source-specific provenance",
+        "unresolved conflicts"
+      ],
+      "does_not_imply": [
+        "contradictions resolved"
+      ],
+      "surfaces": {
+        "standard": [
+          "Merge the handoffs.",
+          "Combine these results carefully."
+        ],
+        "plain": [
+          "Put these together.",
+          "Combine them without losing differences."
+        ],
+        "casual": [
+          "Bring the threads together.",
+          "Merge the two."
+        ],
+        "slang": [
+          "Stitch them together.",
+          "Mash the compatible parts together."
+        ],
+        "internet": [
+          "merge contexts",
+          "combine threads"
+        ],
+        "caveman": [
+          "put together",
+          "keep conflict"
+        ],
+        "technical": [
+          "merge handoff packets",
+          "provenance-preserving merge"
+        ]
+      }
+    },
+    {
+      "id": "HANDOFF.BOUNDARY",
+      "canonical": "handoff boundary",
+      "definition": "Mark that the receiving layer uses a different witness/evidence contract and cannot silently inherit the prior one.",
+      "preserves": [
+        "source contract",
+        "destination contract",
+        "boundary"
+      ],
+      "does_not_imply": [
+        "translation is invalid"
+      ],
+      "surfaces": {
+        "standard": [
+          "This crosses a protocol boundary.",
+          "The next layer uses a different evidence standard."
+        ],
+        "plain": [
+          "Different rules start here.",
+          "We need a new check on the other side."
+        ],
+        "casual": [
+          "New rules on the other side.",
+          "This is a real boundary."
+        ],
+        "slang": [
+          "Different game over there.",
+          "New rules from here."
+        ],
+        "internet": [
+          "protocol boundary",
+          "new contract"
+        ],
+        "caveman": [
+          "new rules here",
+          "other side different"
+        ],
+        "technical": [
+          "declare contract boundary",
+          "handoff requires contract translation"
+        ]
+      }
+    },
+    {
+      "id": "REL.COMPARE",
+      "canonical": "compare",
+      "definition": "Place two or more candidates under the same named comparison relation without claiming identity.",
+      "preserves": [
+        "candidate identities",
+        "comparison criterion"
+      ],
+      "does_not_imply": [
+        "equivalence",
+        "causal relation"
+      ],
+      "surfaces": {
+        "standard": [
+          "Compare X and Y.",
+          "Put these side by side."
+        ],
+        "plain": [
+          "Compare them.",
+          "What's different?"
+        ],
+        "casual": [
+          "Stack them up.",
+          "How do they differ?"
+        ],
+        "slang": [
+          "Run them head-to-head.",
+          "Side-by-side them."
+        ],
+        "internet": [
+          "X vs Y",
+          "compare"
+        ],
+        "caveman": [
+          "X vs Y",
+          "see difference"
+        ],
+        "technical": [
+          "evaluate under shared criterion",
+          "compare candidates"
+        ]
+      }
+    },
+    {
+      "id": "REL.CONNECT",
+      "canonical": "connect",
+      "definition": "Assert or investigate a relation between two referents with explicit support.",
+      "preserves": [
+        "distinct referents",
+        "relation evidence"
+      ],
+      "does_not_imply": [
+        "identity",
+        "transitivity"
+      ],
+      "surfaces": {
+        "standard": [
+          "Connect X to Y.",
+          "What's the relation between X and Y?"
+        ],
+        "plain": [
+          "How are these related?",
+          "Link X and Y."
+        ],
+        "casual": [
+          "Tie these together.",
+          "How do these connect?"
+        ],
+        "slang": [
+          "Connect the dots.",
+          "Link them up."
+        ],
+        "internet": [
+          "X -> Y?",
+          "link these"
+        ],
+        "caveman": [
+          "X link Y",
+          "how connect"
+        ],
+        "technical": [
+          "resolve relation X→Y",
+          "establish supported edge"
+        ]
+      }
+    },
+    {
+      "id": "REL.SEPARATE",
+      "canonical": "separate",
+      "definition": "Preserve a distinction between items that were being collapsed together.",
+      "preserves": [
+        "both referents",
+        "distinguishing relation"
+      ],
+      "does_not_imply": [
+        "unrelated forever"
+      ],
+      "surfaces": {
+        "standard": [
+          "Keep those separate.",
+          "Those are different things."
+        ],
+        "plain": [
+          "Don't mix those.",
+          "Separate X and Y."
+        ],
+        "casual": [
+          "Those aren't the same thing.",
+          "Split those apart."
+        ],
+        "slang": [
+          "Don't mash those together.",
+          "Different buckets."
+        ],
+        "internet": [
+          "X != Y",
+          "separate"
+        ],
+        "caveman": [
+          "X not Y",
+          "keep apart"
+        ],
+        "technical": [
+          "preserve distinction",
+          "do not collapse referents"
+        ]
+      }
+    },
+    {
+      "id": "EVIDENCE.SUPPORT",
+      "canonical": "supported",
+      "definition": "Mark that evidence satisfies a named witness condition.",
+      "preserves": [
+        "source",
+        "witness",
+        "claim boundary"
+      ],
+      "does_not_imply": [
+        "support for stronger claims"
+      ],
+      "surfaces": {
+        "standard": [
+          "The evidence supports this.",
+          "This condition is satisfied."
+        ],
+        "plain": [
+          "We have proof for this part.",
+          "This checks out."
+        ],
+        "casual": [
+          "Yeah, this part is backed up.",
+          "We can support that."
+        ],
+        "slang": [
+          "That checks.",
+          "Receipts are there."
+        ],
+        "internet": [
+          "supported",
+          "checks out"
+        ],
+        "caveman": [
+          "evidence yes",
+          "this proven"
+        ],
+        "technical": [
+          "SUPPORTED",
+          "witness satisfied"
+        ]
+      }
+    },
+    {
+      "id": "EVIDENCE.CONFLICT",
+      "canonical": "evidence conflict",
+      "definition": "Preserve conflicting evidence without selecting a winner until the relevant correspondence/source issue is resolved.",
+      "preserves": [
+        "all conflicting sources",
+        "current referent"
+      ],
+      "does_not_imply": [
+        "either side false"
+      ],
+      "surfaces": {
+        "standard": [
+          "The sources conflict.",
+          "We have contradictory evidence."
+        ],
+        "plain": [
+          "These don't match.",
+          "The evidence disagrees."
+        ],
+        "casual": [
+          "These are telling us different things.",
+          "The sources don't line up."
+        ],
+        "slang": [
+          "Receipts clash.",
+          "These don't add up together."
+        ],
+        "internet": [
+          "conflicting sources",
+          "doesn't match"
+        ],
+        "caveman": [
+          "evidence fight",
+          "sources different"
+        ],
+        "technical": [
+          "evidence conflict",
+          "unresolved contradiction"
+        ]
+      }
+    },
+    {
+      "id": "OUTPUT.RENDER",
+      "canonical": "render",
+      "definition": "Project current network state through an output lens without creating movement.",
+      "preserves": [
+        "underlying snapshot",
+        "provenance"
+      ],
+      "does_not_imply": [
+        "new relation",
+        "state mutation"
+      ],
+      "surfaces": {
+        "standard": [
+          "Show me this as X.",
+          "Render the current state."
+        ],
+        "plain": [
+          "Show it this way.",
+          "Give me the X view."
+        ],
+        "casual": [
+          "Show me the readable version.",
+          "Flip it into X."
+        ],
+        "slang": [
+          "Give me the X view.",
+          "Skin it as X."
+        ],
+        "internet": [
+          "render X",
+          "view as X"
+        ],
+        "caveman": [
+          "show X way",
+          "make view X"
+        ],
+        "technical": [
+          "apply output lens",
+          "project snapshot"
+        ]
+      }
+    }
+  ]
+}

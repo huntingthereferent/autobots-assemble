@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "language": "en",
+  "registers": {
+    "standard": {
+      "description": "Conventional complete English; neutral default."
+    },
+    "plain": {
+      "description": "Simple direct English with minimal jargon."
+    },
+    "casual": {
+      "description": "Everyday conversational English."
+    },
+    "slang": {
+      "description": "Colloquial/slang forms whose pragmatic meaning depends strongly on context."
+    },
+    "internet": {
+      "description": "Online/text-native English: abbreviations, meme-adjacent shorthand, compressed punctuation/forms."
+    },
+    "caveman": {
+      "internal_alias": "telegraphic",
+      "description": "User-facing label for intentionally minimal telegraphic English: dropped articles/auxiliaries, short content-word order. It is a rendering style, not an identity, ethnicity, intelligence claim, or historical-linguistic category."
+    },
+    "technical": {
+      "description": "Explicit protocol/machine-adjacent English intended to minimize ambiguity."
+    }
+  }
+}
