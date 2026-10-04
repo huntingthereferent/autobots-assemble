@@ -110,6 +110,19 @@ I found the right representation
 
 False when independent spatial and symbolic constraints must remain satisfied together.
 
+### SP80 — pixels can omit causal history
+
+The win depends on an accumulated ACTION5 interaction condition after a move sequence.
+
+Failure form:
+
+```text
+same-looking current frame
+→ same task state
+```
+
+False when earlier interactions create latent accumulated state that is not fully visible in the endpoint image.
+
 ## Practical use
 
 When live solving resumes, this ledger is a diagnostic.
