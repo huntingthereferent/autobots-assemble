@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Continue concrete solved-case audit with M0R0. Do not resume solver architecture work unless a specific game failure demands it.",
+  "next_movement": "Build the next direct generation from G0.1 live evidence: problem-type/goal inference + minimal discriminating actions + explicit discovery→execution switch; then run a new immutable 25-game first-contact sweep.",
   "walls": [
     "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
@@ -283,5 +283,18 @@
     "id": "SOLVE_THE_WHOLE_THING",
     "spec": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
     "active": true
+  },
+  "live_execution": {
+    "status": "OPEN",
+    "run": "research/dives/ARC3-TRACE-001/runs/FIRST_CONTACT_G0_1_2026-10-04.md",
+    "result": {
+      "games_seen": 25,
+      "games_won": 0,
+      "levels_completed": 2,
+      "total_levels": 183,
+      "environment_actions": 15025,
+      "official_score": 0.0059025446738094935,
+      "agent_sha256": "8ddb2fd7743824c9c352e0711e44a3023785869f7d42426ed4e8150ad0c79e64"
+    }
   }
 }
