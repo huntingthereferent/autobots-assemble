@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "experiment_id": "FM-001",
+  "title": "LS20 inverse-action calibration",
+  "type": "retrospective_time_split_calibration",
+  "source": {
+    "role": "primary_replay",
+    "url": "https://arcprize.org/replay/8314341d-c2e5-4b75-af8a-a085eddd8165"
+  },
+  "evidence_cut": "after first witnessed ACTION3 horizontal movement and before later ACTION4 witness",
+  "admitted_transition": {
+    "action": "ACTION3",
+    "component": "horizontal_translation",
+    "delta_columns": -5,
+    "before_columns": [
+      34,
+      38
+    ],
+    "after_columns": [
+      29,
+      33
+    ],
+    "evidence_form": "official replay reasoning"
+  },
+  "forward_candidate": {
+    "relation": "candidate_directional_inverse",
+    "predicted_action": "ACTION4",
+    "predicted_component": "horizontal_translation",
+    "predicted_delta_columns": 5,
+    "predicted_before_columns": [
+      29,
+      33
+    ],
+    "predicted_after_columns": [
+      34,
+      38
+    ],
+    "status_before_unseal": "PREDICTED"
+  },
+  "withheld_witness": {
+    "action": "ACTION4",
+    "observed_component": "horizontal_translation",
+    "observed_delta_columns": 5,
+    "observed_before_columns": [
+      29,
+      33
+    ],
+    "observed_after_columns": [
+      34,
+      38
+    ],
+    "evidence_form": "official replay reasoning"
+  },
+  "result": "SUPPORTED_FORWARD_MATCH_CALIBRATION",
+  "efficiency": {
+    "primitive_discovery_probes_potentially_avoided": 1,
+    "task_required_actions_avoided": null,
+    "note": "An action needed for task progress is not counted as avoided merely because its primitive effect was predicted."
+  },
+  "recursive_output": {
+    "relation_type": "directional_inverse_schema",
+    "transferable_component": "horizontal_translation",
+    "local_parameters": [
+      "step_magnitude",
+      "blocking/context"
+    ],
+    "provenance": [
+      "ACTION3 witnessed transition",
+      "ACTION4 withheld confirmation"
+    ]
+  }
+}
