@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "experiment_id": "FM-003",
+  "title": "LS20 same-environment recursive forward match",
+  "type": "within_environment_translated_context_calibration",
+  "source": {
+    "role": "primary_replay",
+    "url": "https://arcprize.org/replay/8314341d-c2e5-4b75-af8a-a085eddd8165"
+  },
+  "source_witness": {
+    "environment": "LS20",
+    "action": "ACTION3",
+    "object": "same slider",
+    "before_columns": [
+      34,
+      38
+    ],
+    "after_columns": [
+      29,
+      33
+    ],
+    "delta_columns": -5
+  },
+  "correspondence": {
+    "scope": "same_environment",
+    "type": "translated_local_context",
+    "required_preservation": [
+      "same controllable object",
+      "same horizontal track",
+      "next-left region open"
+    ],
+    "forbidden_basis": [
+      "shared action label across games"
+    ]
+  },
+  "predictions": [
+    {
+      "input_columns": [
+        29,
+        33
+      ],
+      "action": "ACTION3",
+      "predicted_columns": [
+        24,
+        28
+      ],
+      "status_before_unseal": "PREDICTED"
+    },
+    {
+      "input_columns": [
+        24,
+        28
+      ],
+      "action": "ACTION3",
+      "predicted_columns": [
+        19,
+        23
+      ],
+      "status_before_unseal": "PREDICTED",
+      "recursive_reuse": true
+    }
+  ],
+  "withheld_witness": {
+    "evidence": "official replay later state after three consecutive left moves",
+    "endpoint_columns": [
+      19,
+      23
+    ],
+    "consistency": "matches repeated -5-column transition chain"
+  },
+  "result": "SUPPORTED_SAME_ENV_RECURSIVE_FORWARD_MATCH",
+  "closure": {
+    "output_reenters_same_contract": true,
+    "new_operator": false,
+    "new_action_semantics": false,
+    "new_future_schedule": false
+  },
+  "efficiency_claim": {
+    "type": "prediction_reuse",
+    "direct_task_actions_avoided": null,
+    "next_metric": "relations_resolved_per_environment_action"
+  }
+}
