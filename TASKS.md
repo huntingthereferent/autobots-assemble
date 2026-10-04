@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [ARC3-100 — first-contact discovery-inclusive 100%](research/dives/ARC3-TRACE-001/FIRST_CONTACT_100.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Continue generic solver development offline; Gen-1 is hermetic-CI green. Live first-contact execution resumes from the pinned computer bridge when hardware is available. |
+| [SOLVE THE WHOLE THING — ARC-AGI-3 100%](research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Gen-1 frozen as support. Continue concrete hard-game oracle audits (BP35, LF52 → RE86) while live first-contact execution remains pinned until computer access. |
 
 ## Pinned / resumable
 
