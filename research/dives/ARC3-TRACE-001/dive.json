@@ -5,7 +5,7 @@
   "status": "active",
   "protocol": "research.dive",
   "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
-  "preferred_referent": "📍 ARC3-TRACE-001 — trace one public ARC-AGI-3 environment from raw observation through causal model, inferred goal, plan, action, correction, and replay evidence.",
+  "preferred_referent": "📍 ARC3-TRACE-001 — A/B-constrained forward matching under first-contact ARC3",
   "fields": [
     "artificial intelligence",
     "interactive reasoning",
@@ -19,7 +19,7 @@
     "Open Source",
     "Prize / benchmark"
   ],
-  "goal": "Use the swallowed ARC-AGI-3 contract to build a provenance-preserving relation trace that survives transfer across first-contact environments, while measuring action cost separately from explanatory completeness.",
+  "goal": "Test whether relation evidence already carried by witnessed transitions can generate accurate forward predictions across supported correspondences, reducing environment actions without changing the admission contract.",
   "definition_of_solved_for_first_trace": [
     "Every admitted rule is tied to an observable state transition or replay witness.",
     "Failed hypotheses remain preserved rather than silently rewritten.",
@@ -102,9 +102,10 @@
       "supports": "current public-demo prior art and self-reported/public evidence boundary"
     }
   ],
-  "result_state": "MOVE",
-  "next_movement": "Select a currently available official public environment through the ARC toolkit and capture the first-contact frame plus available actions. Begin the state/action/effect ledger under the swallowed contract; do not use prior game semantics.",
+  "result_state": "MOVE_WITH_WALL",
+  "next_movement": "On one official public environment, obtain the minimum first witnessed transition; search for supported corresponding contexts; generate exact forward predictions; spend the next action on the prediction split with highest discriminating value; record predictions, support/falsification, and actions avoided.",
   "walls": [
+    "Axioms correspondence rule remains mathematically unresolved; forward projection is candidate propagation, not admitted fact until ARC3 supplies the witness.",
     "Exact full Kaggle competition terms/eligibility and final runtime/quota clauses still require direct live Kaggle rules inspection before any submission claim.",
     "Private evaluation mechanics are intentionally unavailable and cannot be used during development."
   ],
@@ -126,5 +127,13 @@
       "Competition Mode first-contact performance",
       "hidden/private external evaluation"
     ]
+  },
+  "forward_match": {
+    "status": "active_candidate",
+    "summary": "research/dives/ARC3-TRACE-001/FORWARD_MATCH.md",
+    "machine_contract": "research/dives/ARC3-TRACE-001/forward_match.json",
+    "axioms_source": "huntingthereferent/axioms/AXIOMS_HANDOFF.md",
+    "exact_boundary": "Experiment #2 established recursive implementation of relation admission under a supplied correspondence condition; it did not justify that correspondence principle as general A/B.",
+    "intended_gain": "replace repeated live probing with internally generated falsifiable predictions, then spend actions on high-discrimination witnesses"
   }
 }
