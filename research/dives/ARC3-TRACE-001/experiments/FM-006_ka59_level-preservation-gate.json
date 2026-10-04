@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "experiment_id": "FM-006",
+  "title": "KA59 level-boundary preservation gate",
+  "type": "cross_level_preservation_audit",
+  "official_evidence": {
+    "analysis_url": "https://arcprize.org/blog/arc-agi-3-gpt-5-5-opus-4-7-analysis",
+    "replay_url": "https://arcprize.org/replay/1dfbb619-2f6a-484a-89c8-bbe64abc977b",
+    "supported_facts": [
+      "Level 1 was solved in 37 actions.",
+      "The model's click/teleport working theory was wrong.",
+      "Level 2 required shape-matching and pushing.",
+      "The wrong Level 1 theory hardened into an unsuccessful Level 2 strategy."
+    ]
+  },
+  "correction": "LEVEL_COMPLETED does not imply WORLD_MODEL_PRESERVED",
+  "carried_relation_states": [
+    "SUPPORTED_PRESERVED",
+    "PREDICTED_PRESERVED",
+    "PARTIAL",
+    "UNKNOWN",
+    "FALSIFIED"
+  ],
+  "supported_preservation_requires": [
+    "source-level relation support independent of reward alone",
+    "destination-level correspondence witness"
+  ],
+  "new_level_procedure": [
+    "carry source relation as PREDICTED_PRESERVED when destination preservation is not yet witnessed",
+    "generate exact destination predictions",
+    "rank low-cost actions by candidate-pair separation",
+    "observe one discriminating witness",
+    "promote/falsify relations",
+    "only then allow surviving relations to dominate planning"
+  ],
+  "result": "SUPPORTED_LEVEL_BOUNDARY_PRESERVATION_GATE",
+  "next_test": "Run the gate and selector on a replay level boundary with explicit early competing correspondences."
+}
