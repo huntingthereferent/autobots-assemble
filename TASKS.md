@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [ARC3-TRACE-001 — preservation-aware witness compression](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE_WITH_WALL | At a level boundary, carry prior relations only as predicted-preserved; rank early actions by pair separation and use the cheapest witness that distinguishes preservation from failure. |
+| [ARC3-100 — human-level ARC-AGI-3 solve](research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Solve the public games directly for WIN + human-level action efficiency; use trace/compression machinery only when it improves the solve, then carry the same solver into Competition Mode. |
 
 ## Pinned / resumable
 
