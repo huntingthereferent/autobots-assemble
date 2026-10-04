@@ -97,6 +97,19 @@ I can predict every click
 
 False when the task lives in a different symbolic/compositional representation than the visible interaction dynamics.
 
+### SK48 — one framing is insufficient
+
+The solve simultaneously has spatial Sokoban-like constraints and a covered-color sequence objective. Earlier attempts were described as plateauing from one framing.
+
+Failure form:
+
+```text
+I found the right representation
+→ therefore I can discard the others
+```
+
+False when independent spatial and symbolic constraints must remain satisfied together.
+
 ## Practical use
 
 When live solving resumes, this ledger is a diagnostic.
