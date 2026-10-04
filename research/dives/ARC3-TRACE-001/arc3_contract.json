@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "contract_id": "ARC3-SWALLOWED-2026-10-03",
+  "attached_to": "ARC3-TRACE-001",
+  "status": "active_evidence",
+  "benchmark": {
+    "type": "interactive_turn_based",
+    "explicit_instructions": false,
+    "explicit_rules": false,
+    "explicit_goals": false,
+    "pillars": [
+      "exploration",
+      "modeling",
+      "goal_setting",
+      "planning_execution"
+    ],
+    "grid_max": [
+      64,
+      64
+    ],
+    "cell_values": "0-15",
+    "async_state_change": false
+  },
+  "actions": {
+    "standardized": [
+      "RESET",
+      "ACTION1",
+      "ACTION2",
+      "ACTION3",
+      "ACTION4",
+      "ACTION5",
+      "ACTION6",
+      "ACTION7"
+    ],
+    "availability_is_observed_affordance": true,
+    "semantics_require_witness": true,
+    "action6": "x,y coordinate action",
+    "action7": "undo where supported"
+  },
+  "scoring": {
+    "name": "RHAE",
+    "per_level_formula": "min(1.15, human_baseline_actions / ai_actions)^2",
+    "baseline": "upper-median best first-run human action count per level",
+    "later_levels_weighted_more": true,
+    "completion_caps_environment_score": true,
+    "internal_reasoning_not_environment_action": true
+  },
+  "competition": {
+    "submission": "Kaggle code competition",
+    "internet_during_evaluation": false,
+    "open_source_required_for_prizes": true,
+    "final_submission_date": "2026-11-02",
+    "competition_mode": {
+      "all_available_environments_scored": true,
+      "level_reset_only": true,
+      "make_once_per_environment": true,
+      "one_scorecard": true,
+      "inflight_score_hidden": true
+    }
+  },
+  "evaluation_layers": [
+    "public",
+    "semi_private_verified",
+    "private_competition"
+  ],
+  "prior_art": [
+    {
+      "name": "Tycho",
+      "public_demo_score": "100.0%",
+      "method_shape": "growing conversation plus falsification-tested executable world model delegated for planning"
+    },
+    {
+      "name": "Retrodict",
+      "public_demo_score": "99.9%",
+      "method_shape": "frame log plus hypotheses required to retrodict recorded history before live actions"
+    },
+    {
+      "name": "baseline1",
+      "public_demo_score": "99.0%",
+      "method_shape": "coding agent builds/verifies executable Python world model then plans through it"
+    }
+  ],
+  "claim_boundary": "A single public-game trace is research evidence, not an impressive external benchmark claim. Strong claims require transfer, action efficiency, Competition Mode, or hidden evaluation.",
+  "partial": [
+    "Exact full Kaggle terms/eligibility and final runtime/quota clauses require direct live Kaggle rules inspection before submission.",
+    "Previously referenced replay 7752f433-a3a4-4026-ae8c-6c32b4afcf9d does not expose loaded game metadata/reasoning through the current retrieval path; earlier ar25 characterization is not currently witnessed."
+  ],
+  "unknown": [
+    "private evaluation environment mechanics",
+    "private win conditions before first contact",
+    "private score for any local method"
+  ]
+}
