@@ -1,16 +1,20 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 user-supplied current referent",
-  "protocol": "ai.session",
-  "goal": "Use language-network as a persistent external operating layer for AI while preserving A/B witness/evidence boundaries across protocols and work.",
-  "status": "ready",
-  "result_state": "MOVE",
-  "next_movement": "On the next user task, admit the explicit referent, route only to the required protocol/work layer, and record any durable movement back into the repository.",
-  "walls": [],
+  "preferred_referent": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
+  "protocol": "work.bounded-problem",
+  "goal": "Produce a reproducible competitive GEMS GeoTIFF submission while preserving scientific, rule, license, and provenance boundaries.",
+  "status": "active",
+  "result_state": "MOVE_WITH_WALL",
+  "next_movement": "Enroll in GEMS and download competition data locally; then reproduce reference plumbing and validate exact public metric before changing models.",
+  "walls": [
+    "Competition data page requires logged-in enrollment.",
+    "Official rules must be personally reviewed/certified by the competitor.",
+    "Confirm gated-data AI/sharing permission before transferring gated competition data to a third-party service."
+  ],
   "evidence": [
-    "AB_CONTRACT.md",
-    "ENTRY.md",
-    "protocols/index.json",
-    "MIGRATION.md"
+    "money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/BASELINE_DISSECTION.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/STRATEGY.md",
+    "work/scans/SCAN-0001_2026-10-03.md"
   ]
 }

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "id": "GEMS-001",
+  "title": "Geologic Enhanced Mapping System Prize",
+  "status": "active",
+  "primary_lane": "money/prize",
+  "secondary_relations": [
+    "research/geoscience"
+  ],
+  "fields": [
+    "geophysics",
+    "geology",
+    "spatial ML",
+    "remote sensing",
+    "raster analysis"
+  ],
+  "deadline_utc": "2026-12-03T23:59:00Z",
+  "reward_usd_pool": 300000,
+  "state": "MOVE_WITH_WALL",
+  "walls": [
+    "Competition data page requires logged-in enrollment.",
+    "Competitor must personally review and certify official rules.",
+    "Confirm gated-data AI/sharing permission before transferring gated competition data to a third-party service."
+  ],
+  "next_movement": "Enroll and download competition data locally; reproduce reference plumbing and validate exact metric before model changes.",
+  "foundation_candidate": true
+}
