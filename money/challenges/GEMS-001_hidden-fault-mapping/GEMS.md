@@ -57,9 +57,17 @@ Known USGS/INGENIOUS fault pixels are pixel-exact masked from scoring. The mask 
 
 ## Data
 
-The public description lists conductivity/depth, detrended elevation/slope, strain, gravity and derivatives, magnetic data and derivatives, basement depth, seismic information, plus links to 1 m DEM data.
+Three downloaded competition files were supplied in-session and inspected directly:
 
-The public reference notebook reports a 3730 × 3292 raster with 19 numeric bands at 100 m resolution.
+- `example_submission.tif`
+- `gems-geodawn-numerical-features.tif`
+- `existing_faults.tif`
+
+The repository intentionally stores their hashes, metadata, and contract rather than committing the raw GeoTIFF binaries.
+
+See [DATASET_INSPECTION.md](DATASET_INSPECTION.md) and [data_manifest.json](data_manifest.json).
+
+The observed numerical feature raster is 3730 × 3292 with 19 float32 bands at 100 m resolution in EPSG:32611.
 
 ## Rules / data-use boundary
 
@@ -75,12 +83,25 @@ The official rules PDF is now treated as **swallowed evidence** for this challen
 
 Therefore, before gated competition data is transferred to a third-party AI/service, confirm the exact data-use language from the enrolled rules/data page. Public documentation and public reference code can be analyzed now.
 
+## Output layer
+
+The downloaded `example_submission.tif` is now the canonical submission-template witness.
+
+Challenge-local output code lives under [`output/`](output/). It:
+
+- writes one float32 GeoTIFF matching the template grid/CRS/transform;
+- preserves the template finite/NaN footprint exactly;
+- rejects finite output values outside [0, 1];
+- validates structure against the supplied example before submission.
+
+Important observation: on every finite template pixel, the downloaded `example_submission.tif` is **exactly equal** to `existing_faults.tif`. It is therefore a format/example scaffold, not a neutral blank prediction and not evidence of new faults.
+
 ## Next movement
 
-1. Enroll and personally accept the official rules.
-2. Download competition data locally.
-3. Reproduce reference plumbing locally.
-4. Validate our exact public metric implementation.
+1. Verify the exact GEMS-specific competition-data sharing/third-party-service language.
+2. Run the reference baseline locally against the downloaded inputs.
+3. Route baseline probabilities through the challenge-local output writer.
+4. Validate the generated GeoTIFF against the exact downloaded template.
 5. Replace random positive-patch validation with spatially honest validation.
 6. Build full-region inference where “unmapped” is not silently treated as “negative.”
 
