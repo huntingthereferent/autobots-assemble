@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "pin_id": "ARC3-EXECUTION-BRIDGE-2026-10-04",
+  "attached_to": "ARC3-100",
+  "status": "PINNED_DEPENDENCY",
+  "preferred_referent_at_pin": "📍 ARC3-100 — first-contact discovery-inclusive 100%",
+  "dependency": "Give ChatGPT an authorized execution surface with Python 3.12, git, internet for initial ARC setup, and the official ARC-AGI-3 starter/runtime.",
+  "preferred_path": "Remote Desktop Commander connected to a computer the user controls.",
+  "alternate_path": "A remote Linux workspace (for example a DigitalOcean droplet) that ChatGPT can control.",
+  "resume_steps": [
+    "clone/install the official ARC-AGI-3 Kaggle Starter",
+    "pull the current language-network ARC3 solver",
+    "place direct_agent/my_agent.py into the starter",
+    "run direct_agent/run_first_contact.py for one untouched public pass",
+    "preserve the exact agent hash and discovery+execution action counts",
+    "analyze failures and iterate only generic solver machinery",
+    "when locally strong, package the same generic agent for official hidden competition evaluation"
+  ],
+  "credential_boundary": "Kaggle credentials should be placed on the machine by the user, not pasted into chat.",
+  "note": "Pinned until the user has access to a computer. ARC3 research and solver development continue meanwhile; only live execution is deferred."
+}
