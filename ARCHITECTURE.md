@@ -254,3 +254,26 @@ paid physical build exposes a novel mechanism
 ```
 
 The source work remains provenance. The destination lane re-validates under its own goal and witness contract.
+
+
+## Discovery boundary
+
+ALL WORK discovery is not restricted to assigned or posted tasks.
+
+```text
+ALL WORK DISCOVERY
+├─ posted / assigned work
+├─ open-source contribution work
+├─ paid jobs / contracts / bounties
+├─ prizes / competitions
+├─ unsolved academic problems
+├─ unresolved scientific / engineering questions
+├─ replication / reproduction targets
+├─ standards / RFC / public technical problems
+├─ physical build / test challenges
+└─ frontier work with no task owner
+```
+
+The absence of a job posting is not evidence that there is no work.
+
+A scan may return the same candidate again on a later pass. Recurrence should be shown, not deduplicated away, unless the user explicitly requests only-new results.

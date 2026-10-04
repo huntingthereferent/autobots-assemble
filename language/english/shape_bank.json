@@ -1872,6 +1872,56 @@
           "evaluate work across goal, field, and realization axes"
         ]
       }
+    },
+    {
+      "id": "WORK.SCAN_ALL",
+      "canonical": "scan all work",
+      "definition": "Search broadly for hard work across all fields, goal lanes, and realization layers without assuming the work must be posted, assigned, paid, software-based, or credential-gated.",
+      "preserves": [
+        "all-work scope",
+        "field diversity",
+        "goal-lane distinctions",
+        "source provenance",
+        "credential/resource walls",
+        "frontier/unassigned work"
+      ],
+      "does_not_imply": [
+        "job-board-only search",
+        "posted-opportunity-only search",
+        "software-only work",
+        "money-only work",
+        "deduplication against prior scans unless explicitly requested"
+      ],
+      "surfaces": {
+        "standard": [
+          "Scan all work.",
+          "Search broadly for hard work with no credential requirement."
+        ],
+        "plain": [
+          "Look everywhere for hard work.",
+          "Find hard things I can work on without credentials."
+        ],
+        "casual": [
+          "Go scan the whole board.",
+          "Look across everything again."
+        ],
+        "slang": [
+          "Run ALL WORK.",
+          "Sweep the whole board."
+        ],
+        "internet": [
+          "scan ALL WORK",
+          "all work sweep"
+        ],
+        "caveman": [
+          "look all work. hard. no credentials.",
+          "search everything hard."
+        ],
+        "technical": [
+          "run credential-light all-work discovery",
+          "scan posted, open, frontier, and self-initiated work"
+        ]
+      }
     }
   ]
 }

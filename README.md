@@ -54,3 +54,10 @@ A work item stays in its original lane; Foundation records what it actually demo
 ## Core rule
 
 **current referent → admissible evidence → witness → movement/wall → provenance → continuation**
+
+
+## ALL WORK discovery
+
+[`work.all-work-scan`](protocols/work/all-work-scan.md) searches beyond job boards. Unsolved academic problems, unresolved engineering questions, open-source work, prizes, physical challenges, reproduction targets, and frontier work with no task owner all count.
+
+Repeated scans do not hide previously seen candidates by default.

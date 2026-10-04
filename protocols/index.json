@@ -1,5 +1,5 @@
 {
-  "schema_version": 8,
+  "schema_version": 9,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
   "protocols": {
     "core.referent": {
@@ -73,6 +73,10 @@
     "foundation.record": {
       "layer": "foundation",
       "path": "protocols/foundation/record.md"
+    },
+    "work.all-work-scan": {
+      "layer": "work",
+      "path": "protocols/work/all-work-scan.md"
     }
   },
   "template": "protocols/TEMPLATE.md"

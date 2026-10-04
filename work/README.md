@@ -44,3 +44,33 @@ The existing `jobs/` directory remains the canonical paid-job record set during 
 Any sufficiently evidenced work item may contribute to `foundation/` without being moved out of its original lane.
 
 Foundation is cross-lane evidence. Credibility is a read-only view over that evidence.
+
+
+## Discovery is broader than posted opportunities
+
+An ALL WORK scan must not assume someone has already packaged the work as a job, issue, bounty, or contest.
+
+Search classes include:
+
+- posted jobs/contracts/bounties;
+- open-source issues and public contribution queues;
+- prizes/challenges/competitions;
+- unsolved academic problems and conjectures;
+- unresolved scientific questions;
+- open engineering problems;
+- replication/reproduction targets;
+- standards/RFC/public technical problems;
+- public datasets with unanswered questions;
+- physical build/test challenges;
+- self-initiated work where the problem and validation boundary already exist;
+- frontier problems that nobody is currently “hiring” someone to solve.
+
+A problem can qualify as work when there is a real referent, a meaningful movement, and an inspectable witness/evidence boundary even if there is no employer or task owner.
+
+## Repeat scans
+
+By default, a new scan is independent.
+
+If a previously seen candidate independently appears again, **show it again**. Recurrence is evidence that the candidate remains reachable/relevant; do not hide it merely because it appeared in an earlier scan.
+
+Historical scan records may annotate “seen before,” but they must not silently suppress recurring candidates.
