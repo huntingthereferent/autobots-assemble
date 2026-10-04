@@ -7,114 +7,143 @@
 
 ## Current referent
 
-📍 **Trace one public ARC-AGI-3 environment from raw observation through causal model, inferred goal, plan, action, correction, and replay evidence.**
+📍 **Trace ARC-AGI-3 first-contact interaction as witnessed relations, then test whether the same admission contract transfers across environments without game-specific rewriting.**
 
-This is intentionally narrower than “solve ARC-AGI-3.” The first object is a complete, falsifiable trace.
+ARC3 has now been **swallowed** into this dive. The official benchmark, scoring method, interface, competition mode, testing policy, and current public prior art are attached evidence rather than separate architecture.
 
-## Why this is an unusually strong trace target
+See:
 
-ARC-AGI-3 does not provide natural-language instructions, rules, or goals. An agent must interact with an unfamiliar environment, infer mechanics from state changes, discover what counts as progress, plan over multiple steps, and revise when its model fails.
+- [ARC3_SWALLOWED.md](ARC3_SWALLOWED.md)
+- [arc3_contract.json](arc3_contract.json)
 
-That gives the trace an external structure:
+## Ground after swallowing
+
+The benchmark itself gives us a clean external sequence:
 
 ```text
-raw state
-→ intervention / action
-→ observed state delta
-→ candidate relation
-→ prediction
-→ confirming or falsifying transition
-→ compact world model
-→ inferred goal
-→ plan
-→ action sequence
-→ replay / score witness
+exploration
+→ model formation
+→ goal acquisition
+→ planning / execution
 ```
 
-The benchmark is useful because a convincing-looking explanation is not enough. Public replays expose the action history, and hidden benchmark evaluation provides a separate external witness for any later agent work.
+but the trace must not collapse those into one inference.
 
-## First environment: ar25
+For our purposes:
 
-Start with **ar25**, a public demo environment.
+```text
+observable state
++ available actions
++ chosen intervention
+→ observed delta
+→ candidate relation
+→ prediction
+→ later witness
+→ supported / partial / falsified / unknown
+```
 
-Why ar25:
+Mechanics, world-model relations, and inferred goals remain different relation classes.
 
-- public and inspectable;
-- model replays already show substantial exploration;
-- the replay contains failed interpretations, reversals, resets, and partial progress;
-- those mistakes are useful evidence because the trace must preserve corrections rather than rewrite history after the answer is known.
+## Important correction — public demo is not the impressive boundary
 
-The first pass must **not** inherit the model replay's prose as truth.
+The official ARC Prize Community Leaderboard already contains near/complete public-demo systems whose methods overlap our initial idea:
 
-Build the state/action/effect ledger from observable transitions first. Model reasoning becomes comparison evidence afterward.
+- Tycho: falsification-tested executable world model used for planning;
+- Retrodict: hypotheses must explain recorded history before spending new live actions;
+- baseline1: executable Python world model followed by planning.
 
-## Trace contract
+Therefore a clean trace of one public environment is useful research evidence, but **not a novel or impressive external claim by itself**.
 
-For each movement preserve:
+The differentiating boundary is now one or more of:
+
+1. the same relation-admission contract transfers unchanged across unseen environments;
+2. it learns useful relations with materially fewer environment actions;
+3. provenance exposes exactly where unsupported abstraction enters the model;
+4. it survives official Competition Mode / first-contact constraints;
+5. it receives hidden/private external evaluation.
+
+## Scoring changes what “good tracing” means
+
+ARC-AGI-3 uses Relative Human Action Efficiency (RHAE). Solving eventually is not enough; environment actions spent learning and acting matter.
+
+So preserve both:
+
+```text
+truth / witness quality
+AND
+action cost
+```
+
+Internal reasoning can be long without directly costing RHAE, while blind environment probing is explicitly expensive.
+
+## Interface ground
+
+Official docs establish a bounded action surface: RESET plus ACTION1–ACTION7, with only currently available actions exposed. The game provides affordances, not their game-specific meaning.
+
+That is useful for us:
+
+```text
+ACTION1 available       = supplied evidence
+ACTION1 means "move X"  = hypothesis until transition-witnessed
+```
+
+## Evaluation boundary
+
+Keep claims separated:
+
+```text
+local/public trace
+≠ community public-demo score
+≠ verified semi-private score
+≠ private competition score
+```
+
+The private competition set is intentionally unavailable.
+
+## Earlier ar25 target
+
+The previous ar25 replay reference is now **PARTIAL**, not deleted. Through the current retrieval path the replay shell is visible, but its game metadata/reasoning did not load. The earlier descriptive characterization is therefore not strong enough to orient the experiment.
+
+We will select a **currently available official public environment directly through the ARC toolkit** for first contact.
+
+## Trace record
+
+For every movement preserve:
 
 | Field | Meaning |
 |---|---|
 | state | observable configuration before action |
+| available_actions | affordance supplied by the environment |
 | action | intervention actually taken |
 | effect | observable delta afterward |
 | candidate relation | rule currently proposed |
-| witness strength | supported / partial / unknown / falsified |
-| prediction | what should happen next if the rule is real |
-| correction | what changed when prediction failed |
-| provenance | frame/replay/source that supports the movement |
-
-Separate three things that agents often collapse:
-
-1. **mechanic** — what an action does;
-2. **world model** — how mechanics interact with objects/state;
-3. **goal** — what future state actually counts as success.
-
-## First definition of solved
-
-The first trace is complete when:
-
-- admitted mechanics are tied to observed transitions;
-- failed hypotheses remain visible;
-- at least one rule makes a correct prediction about a later transition;
-- the inferred goal is evidenced separately from the mechanics;
-- the action path can be replayed/explained without hidden instructions;
-- the resulting trace structure can be reused unchanged on another public environment.
-
-## Known failure mode worth testing
-
-ARC Prize's own model analysis reports a recurring pattern: models can correctly notice a local action effect but build the wrong higher-level world model from it.
-
-That is exactly where this trace should be strongest. A local transition is evidence for the local relation only; it does not automatically license the larger semantic story.
-
-## Source map
-
-- ARC-AGI-3 benchmark: https://arcprize.org/arc-agi/3
-- ARC-AGI-3 technical report: https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf
-- ARC Prize 2026 ARC-AGI-3 competition: https://arcprize.org/competitions/2026/arc-agi-3
-- Human baseline/replay dataset: https://arcprize.org/blog/arc-agi-3-human-dataset
-- ARC-AGI-3 model failure analysis: https://arcprize.org/blog/arc-agi-3-gpt-5-5-opus-4-7-analysis
-- ar25 replay used as initial comparison evidence: https://arcprize.org/replay/7752f433-a3a4-4026-ae8c-6c32b4afcf9d
+| witness state | supported / partial / unknown / falsified |
+| prediction | next observable consequence if relation is real |
+| action cost | environment actions spent to acquire/use the relation |
+| correction | what changed after failed prediction |
+| provenance | exact frame/action/source supporting the movement |
 
 ## Handoff boundary
 
-GEMS was not closed.
-
-Its exact state was pinned at:
+GEMS remains pinned at:
 
 `state/pins/GEMS-001_2026-10-03.json`
 
-The move to ARC3-TRACE-001 is an explicit user-directed referent change, not evidence that the GEMS wall was resolved.
+Nothing in ARC3 resolves or replaces the GEMS wall.
 
 ## Next movement
 
-Reconstruct **ar25** from the earliest observable transitions.
+Use the official toolkit to select a currently exposed public environment.
 
-Do **not** begin by asking what the game “means.” Begin with:
+Capture only:
 
 ```text
-state₀
-+ action
-→ state₁ - state₀
+first-contact state₀
+available actions
+chosen action₀
+state₁ - state₀
 ```
 
-Build the ledger until a candidate relation can make a falsifiable prediction.
+Then continue until a candidate relation can make a prediction **before** its witness is observed.
+
+No inherited game semantics. No replay answer leakage. No “I recognize this.”
