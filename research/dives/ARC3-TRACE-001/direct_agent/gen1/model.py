@@ -86,15 +86,18 @@ class TransitionModel:
         nxt, dl, changed, bad = outcome
         return Edge(nxt, dl, changed, bad, support)
 
-    def confidence(self, state: StateView, action: ActionToken) -> float:
-        if self.exact_edge(state, action) is not None:
-            return 1.0
+    def object_confidence(self, state: StateView, action: ActionToken) -> float:
         votes = self.object_votes.get((state.object_key, action))
         if not votes:
             return 0.0
         total = sum(votes.values())
         best = votes.most_common(1)[0][1]
         return best / total if total else 0.0
+
+    def confidence(self, state: StateView, action: ActionToken) -> float:
+        if self.exact_edge(state, action) is not None:
+            return 1.0
+        return self.object_confidence(state, action)
 
     def best_motion_rule(self, action_id: int):
         votes = self.motion_rules.get(action_id)
@@ -166,7 +169,7 @@ class TransitionModel:
                 score += 80.0
             if ob.terminal_bad and ob.level_delta <= 0:
                 score -= 30.0
-            score += 6.0 * self.confidence(state, token)
+            score += 6.0 * self.object_confidence(state, token)
         else:
             score += 5.0
 
