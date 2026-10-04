@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "id": "ARC3-FORWARD-MATCH-001",
+  "attached_to": "ARC3-TRACE-001",
+  "layer": "one_above_direct_interaction",
+  "status": "candidate_operational_acceleration",
+  "mathematical_boundary": "Uses A/B constraints and Axioms Experiment #2 as evidence shape; does not identify the correspondence rule with general A/B or resolve its mathematical justification.",
+  "input": [
+    "witnessed_transition_graph",
+    "supported_parent_correspondences",
+    "available_actions",
+    "current_referent"
+  ],
+  "forward_candidate_requires": [
+    "observed source transition",
+    "supported parent correspondence",
+    "explicit delta transformation",
+    "exact observable prediction",
+    "falsification condition",
+    "provenance"
+  ],
+  "candidate_states": [
+    "PREDICTED",
+    "SUPPORTED",
+    "FALSIFIED",
+    "PARTIAL",
+    "UNKNOWN"
+  ],
+  "action_selection": {
+    "objective": "Spend internal compute before environment actions by choosing actions that maximally discriminate live forward candidates while retaining supported goal progress.",
+    "steps": [
+      "project live candidate relations through each available action",
+      "partition candidates by predicted observable outcome",
+      "prefer actions with greater discriminating power",
+      "break ties using supported goal progress and lower risk",
+      "observe one live transition",
+      "admit/falsify candidates and recurse"
+    ]
+  },
+  "stop_conditions": [
+    "correspondence is resemblance-only",
+    "required parent relation missing",
+    "state change may invalidate mechanic",
+    "prediction is not exact enough to witness",
+    "competing correspondences remain indistinguishable"
+  ],
+  "first_test_metrics": [
+    "environment_actions",
+    "forward_predictions",
+    "supported_predictions",
+    "falsified_predictions",
+    "repeated_probes_avoided",
+    "relation_precision",
+    "recursive_reuse_without_contract_change"
+  ]
+}
