@@ -4,7 +4,13 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [GEMS-001 — DOE GEMS hidden-fault mapping](money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md) | Money/Prize + Research relation | MOVE_WITH_WALL | Verify GEMS-specific data-sharing terms; then run the local baseline through the exact output writer/validator before model changes. |
+| [ARC3-TRACE-001 — ARC-AGI-3 causal reasoning trace](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE | Reconstruct ar25 from observable state/action/effect transitions; admit semantics only after the transition ledger supports them. |
+
+## Pinned / resumable
+
+| Work | Lane | State | Resume from |
+|---|---|---|---|
+| [GEMS-001 — DOE GEMS hidden-fault mapping](money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md) | Money/Prize + Research relation | PINNED · MOVE_WITH_WALL | Verify GEMS-specific data-sharing terms; then run the local baseline through the exact output writer/validator before model changes. |
 
 ## Historical / paid-job adapter view
 
