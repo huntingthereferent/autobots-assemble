@@ -5,12 +5,13 @@
   "goal": "Solve ARC-AGI-3 completely. Live execution is now available; use immutable discovery-inclusive runs to drive only generic, evidence-required corrections.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Use the completed G0.1 live sweep (2/183 levels, 0/25 games, 15025 actions) to build the next direct solver generation around problem-type/goal inference and discriminating actions rather than longer blind exploration. Re-run cleanly as a new generation.",
+  "next_movement": "Build the next direct solver around compact latent-state induction from observed action deltas: action-effect classes, stable/moving objects, relational variables, and exact-pixel witness preservation. Plan only after that abstraction is earned. G1/G1.1/action-score tweaks are closed as failed.",
   "walls": [
     "Private competition environments are intentionally hidden; private 100% requires an official Kaggle competition rerun.",
     "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
   ],
   "evidence": [
+    "research/dives/ARC3-TRACE-001/runs/G1_G1_1_LIVE_EXPERIMENTS_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/runs/FIRST_CONTACT_G0_1_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/oracles/HARD_CASES.md",
     "research/dives/ARC3-TRACE-001/oracles/TR87.md",
