@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Move from solved SB26 regression to the next unsolved game. Preserve Gen-2 visual grammar + latent witness machinery; infer each new task representation from live evidence rather than adding action-score heuristics.",
+  "next_movement": "Freeze the evidence-gated G2.3 typed-program mechanism (SB26 public regression 8/8, 124 actions). Move to the next unsolved public failure and infer its task representation from live causal evidence; do not widen SB26-specific assumptions.",
   "walls": [
     "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
@@ -303,5 +303,15 @@
       "mechanism": "generic frame-derived visual grammar + recursive symbolic synthesis",
       "report": "research/dives/ARC3-TRACE-001/runs/SB26_SYMBOLIC_RECOVERY_2026-10-04.md"
     }
+  },
+  "g2_3_sb26": {
+    "status": "PUBLIC_REGRESSION_100_NOT_CLEAN_FIRST_CONTACT",
+    "levels_completed": 8,
+    "total_levels": 8,
+    "actions": 124,
+    "state": "WIN",
+    "score": 100,
+    "agent_sha256": "218487afa5f1cfc3235f929d202bb6092f5cc9dddbd6253ab354a53b3045bd83",
+    "evidence": "research/dives/ARC3-TRACE-001/runs/G2_3_SB26_TYPED_PROGRAM_100_2026-10-04.md"
   }
 }
