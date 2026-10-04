@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Continue the public hard-case audit with RE86 after BP35 and LF52; preserve solution evidence as oracle-only and extract concrete failure classes relevant to later first-contact play.",
+  "next_movement": "Continue concrete solved-case audit with M0R0. Do not resume solver architecture work unless a specific game failure demands it.",
   "walls": [
     "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
@@ -217,8 +217,49 @@
         "game": "lf52",
         "path": "research/dives/ARC3-TRACE-001/oracles/LF52.md",
         "status": "PUBLIC_SOURCE_FREE_SOLVED_10_10"
+      },
+      {
+        "game": "re86",
+        "path": "research/dives/ARC3-TRACE-001/oracles/RE86.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_8_8"
+      },
+      {
+        "game": "wa30",
+        "path": "research/dives/ARC3-TRACE-001/oracles/WA30.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_9_9"
+      },
+      {
+        "game": "dc22",
+        "path": "research/dives/ARC3-TRACE-001/oracles/DC22.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_6_6"
+      },
+      {
+        "game": "g50t",
+        "path": "research/dives/ARC3-TRACE-001/oracles/G50T.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_7_7"
+      },
+      {
+        "game": "sb26",
+        "path": "research/dives/ARC3-TRACE-001/oracles/SB26.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_8_8"
+      },
+      {
+        "game": "sk48",
+        "path": "research/dives/ARC3-TRACE-001/oracles/SK48.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_8_8"
+      },
+      {
+        "game": "sp80",
+        "path": "research/dives/ARC3-TRACE-001/oracles/SP80.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_6_6"
+      },
+      {
+        "game": "tr87",
+        "path": "research/dives/ARC3-TRACE-001/oracles/TR87.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_6_6"
       }
-    ]
+    ],
+    "hard_case_ledger": "research/dives/ARC3-TRACE-001/oracles/HARD_CASES.md"
   },
   "public_prior_art": {
     "status": "swallowed_supporting_evidence",
