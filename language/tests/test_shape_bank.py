@@ -28,6 +28,14 @@ class EnglishShapeBankTests(unittest.TestCase):
         self.assertEqual(render("MOVE.CONTINUE", "internet"), "continue")
         self.assertEqual(render("MOVE.CONTINUE", "caveman"), "keep go")
 
+    def test_dissect_is_break_apart_and_connect(self):
+        item = next(x for x in load_bank()["shapes"] if x["id"] == "ANALYZE.DISSECT")
+        self.assertEqual(item["canonical"], "dissect")
+        self.assertIn("decompose", item["movement_sequence"])
+        self.assertIn("connect_supported_relations", item["movement_sequence"])
+        ids = {m["shape"] for m in candidates("dissect this")}
+        self.assertIn("ANALYZE.DISSECT", ids)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1523,6 +1523,68 @@
       "ambiguity": [
         "'swallow' can mean delete/discard in ordinary English; in this network shape it explicitly preserves provenance and unique constraints"
       ]
+    },
+    {
+      "id": "ANALYZE.DISSECT",
+      "canonical": "dissect",
+      "definition": "Open the current referent into its meaningful parts/layers, preserve provenance and uncertainty, trace how the parts relate, then reconstruct the useful whole. The operation is break apart AND connect, not merely summarize or criticize.",
+      "preserves": [
+        "current referent",
+        "part-to-whole relations",
+        "layer boundaries",
+        "source/provenance",
+        "uncertainty and unresolved distinctions"
+      ],
+      "does_not_imply": [
+        "destroy the whole",
+        "reduce everything to isolated pieces",
+        "criticize for its own sake",
+        "flatten distinct layers",
+        "invent missing connections"
+      ],
+      "movement_sequence": [
+        "decompose",
+        "separate_layers",
+        "trace_provenance",
+        "inspect_each_part_in_context",
+        "connect_supported_relations",
+        "preserve_unknowns",
+        "reconstruct"
+      ],
+      "surfaces": {
+        "standard": [
+          "Dissect this.",
+          "Analyze this piece by piece and reconnect it."
+        ],
+        "plain": [
+          "Break this apart and connect it.",
+          "Show me the parts and how they fit."
+        ],
+        "casual": [
+          "Pull this apart for me.",
+          "Break it down and put the connections back together."
+        ],
+        "slang": [
+          "Rip this apart and map it.",
+          "Crack this open."
+        ],
+        "internet": [
+          "dissect this",
+          "break this down"
+        ],
+        "caveman": [
+          "open thing. show parts. connect parts.",
+          "break apart. see links. rebuild."
+        ],
+        "technical": [
+          "decompose layers, trace provenance, and reconstruct supported relations",
+          "perform structure-preserving decomposition and recomposition"
+        ]
+      },
+      "ambiguity": [
+        "\"rip this apart\" can mean harsh criticism in ordinary English; this shape means structural analysis unless the active referent indicates critique",
+        "\"break this down\" can mean simplify only; this shape requires reconnection/reconstruction"
+      ]
     }
   ]
 }
