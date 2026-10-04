@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [SOLVE THE WHOLE THING — ARC-AGI-3 100%](research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Gen-1 frozen. Ten hard public solved cases are now audited; continue with M0R0 while live first-contact execution remains pinned until computer access. |
+| [SOLVE THE WHOLE THING — ARC-AGI-3 100%](research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md) | Research + Open Source/Prize relation | MOVE | Live bridge open. G0.1 clean sweep: 2/183 levels, 0/25 games, 15,025 actions. Build next generic generation from observed goal/representation failures, then run a new immutable sweep. |
 
 ## Pinned / resumable
 
