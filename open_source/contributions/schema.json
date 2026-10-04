@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Open Source Contribution Record",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "status",
+    "upstream_repository",
+    "entry_referent",
+    "contribution_type",
+    "next_movement"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^OSS-[0-9]{4}$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "discovered",
+        "oriented",
+        "picked_up",
+        "in_progress",
+        "pr_open",
+        "review",
+        "merged",
+        "declined",
+        "closed"
+      ]
+    },
+    "upstream_repository": {
+      "type": "string"
+    },
+    "issue_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pr_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "entry_referent": {
+      "type": "string"
+    },
+    "contribution_type": {
+      "type": "string"
+    },
+    "acceptance": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "walls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_referent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "next_movement": {
+      "type": "string"
+    },
+    "research_handoffs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "money_handoffs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    }
+  },
+  "additionalProperties": true
+}

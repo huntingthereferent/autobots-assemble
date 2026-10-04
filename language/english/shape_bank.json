@@ -1684,6 +1684,145 @@
           "checkpoint exploratory research state"
         ]
       }
+    },
+    {
+      "id": "OPENSOURCE.FIND",
+      "canonical": "find open-source work",
+      "definition": "Find public contribution opportunities in open-source projects where contribution, learning, reputation, or shared infrastructure is the primary goal rather than guaranteed payment.",
+      "preserves": [
+        "upstream project identity",
+        "public contribution goal",
+        "source provenance",
+        "maintainer contribution boundary"
+      ],
+      "does_not_imply": [
+        "paid work",
+        "permission to start without reading project rules",
+        "that every open issue welcomes outside contribution"
+      ],
+      "surfaces": {
+        "standard": [
+          "Find open-source work.",
+          "Find public contribution opportunities."
+        ],
+        "plain": [
+          "Find an open-source project I can help with.",
+          "Find public issues I can contribute to."
+        ],
+        "casual": [
+          "Find me some open-source stuff to work on.",
+          "Show me projects I can jump into."
+        ],
+        "slang": [
+          "Find some OSS work.",
+          "Find something open source I can hop on."
+        ],
+        "internet": [
+          "find OSS issues",
+          "opensource work pls"
+        ],
+        "caveman": [
+          "find public code work",
+          "find project help"
+        ],
+        "technical": [
+          "discover open-source contribution opportunities",
+          "query upstream contribution queues"
+        ]
+      }
+    },
+    {
+      "id": "OPENSOURCE.PICKUP",
+      "canonical": "pick up open-source work",
+      "definition": "Adopt one upstream public contribution opportunity as the current referent after checking the project's contribution and scope boundary.",
+      "preserves": [
+        "upstream issue/project identity",
+        "contribution rules",
+        "acceptance criteria",
+        "source provenance"
+      ],
+      "does_not_imply": [
+        "maintainer assignment",
+        "merge acceptance",
+        "payment"
+      ],
+      "surfaces": {
+        "standard": [
+          "Pick up this open-source issue.",
+          "Take this contribution task."
+        ],
+        "plain": [
+          "Work on this issue.",
+          "Take this one."
+        ],
+        "casual": [
+          "Let's pick this one up.",
+          "Jump on this issue."
+        ],
+        "slang": [
+          "Grab this issue.",
+          "Hop on this one."
+        ],
+        "internet": [
+          "pick this issue",
+          "claim this OSS task"
+        ],
+        "caveman": [
+          "take issue",
+          "do project task"
+        ],
+        "technical": [
+          "admit upstream contribution as active referent",
+          "begin open-source contribution task"
+        ]
+      }
+    },
+    {
+      "id": "OPENSOURCE.CONTRIBUTE",
+      "canonical": "contribute upstream",
+      "definition": "Produce and submit a change to an upstream open-source project under that project's contribution contract.",
+      "preserves": [
+        "upstream project identity",
+        "issue/problem scope",
+        "test/review evidence",
+        "attribution/provenance"
+      ],
+      "does_not_imply": [
+        "accepted",
+        "merged",
+        "released",
+        "paid"
+      ],
+      "surfaces": {
+        "standard": [
+          "Contribute this upstream.",
+          "Submit this change to the project."
+        ],
+        "plain": [
+          "Send the fix to the project.",
+          "Open the contribution."
+        ],
+        "casual": [
+          "Put this up as a PR.",
+          "Send it upstream."
+        ],
+        "slang": [
+          "Kick this upstream.",
+          "Ship the PR."
+        ],
+        "internet": [
+          "open PR",
+          "send upstream"
+        ],
+        "caveman": [
+          "give fix project",
+          "send code upstream"
+        ],
+        "technical": [
+          "submit upstream contribution",
+          "open contribution pull request"
+        ]
+      }
     }
   ]
 }
