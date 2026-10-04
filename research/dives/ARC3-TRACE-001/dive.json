@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Implement compact latent-state induction from live action-delta evidence; preserve exact pixels as witness; then plan over learned latent transitions. Do not continue action-score tuning.",
+  "next_movement": "Move from solved SB26 regression to the next unsolved game. Preserve Gen-2 visual grammar + latent witness machinery; infer each new task representation from live evidence rather than adding action-score heuristics.",
   "walls": [
     "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
@@ -295,6 +295,13 @@
       "environment_actions": 15025,
       "official_score": 0.0059025446738094935,
       "agent_sha256": "8ddb2fd7743824c9c352e0711e44a3023785869f7d42426ed4e8150ad0c79e64"
+    }
+  },
+  "solved_regressions": {
+    "sb26": {
+      "result": "8/8 · 124 actions · WIN · score 100",
+      "mechanism": "generic frame-derived visual grammar + recursive symbolic synthesis",
+      "report": "research/dives/ARC3-TRACE-001/runs/SB26_SYMBOLIC_RECOVERY_2026-10-04.md"
     }
   }
 }
