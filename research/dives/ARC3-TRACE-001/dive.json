@@ -5,7 +5,7 @@
   "status": "active",
   "protocol": "research.dive",
   "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
-  "preferred_referent": "📍 ARC3-TRACE-001 — witness compression from supported within-environment correspondences",
+  "preferred_referent": "📍 ARC3-TRACE-001 — preservation-aware witness compression",
   "fields": [
     "artificial intelligence",
     "interactive reasoning",
@@ -19,7 +19,7 @@
     "Open Source",
     "Prize / benchmark"
   ],
-  "goal": "Measure whether A/B-constrained forward matching can increase relations-resolved per ARC3 environment action by reusing only locally witnessed mechanics across explicitly supported corresponding contexts.",
+  "goal": "Increase relations-resolved per ARC3 environment action by combining forward prediction, pair-separation action selection, and explicit level-boundary preservation gates.",
   "definition_of_solved_for_first_trace": [
     "Every admitted rule is tied to an observable state transition or replay witness.",
     "Failed hypotheses remain preserved rather than silently rewritten.",
@@ -103,8 +103,9 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Locate a same-environment state containing multiple repeated or symmetric unresolved contexts; project an already witnessed local mechanic into each supported context, partition predicted outcomes, and use one held-out/live action to resolve the maximum number of candidate gates.",
+  "next_movement": "Use a replay level boundary as a held-out preservation test: carry prior relations only as PREDICTED_PRESERVED, generate competing new-level predictions, rank early actions with the selector, and compare against the recorded exploration path.",
   "walls": [
+    "Level completion does not certify the internal model that produced it; cross-level carry requires source support plus destination correspondence.",
     "Cross-environment standardized action IDs do not establish semantic correspondence; locally ground action/effect relations in each game.",
     "Axioms correspondence rule remains mathematically unresolved; forward projection is candidate propagation, not admitted fact until ARC3 supplies the witness.",
     "Exact full Kaggle competition terms/eligibility and final runtime/quota clauses still require direct live Kaggle rules inspection before any submission claim.",
@@ -155,7 +156,29 @@
       "id": "FM-003",
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-003_ls20_recursive-forward-match.json",
       "result": "SUPPORTED_SAME_ENV_RECURSIVE_FORWARD_MATCH"
+    },
+    {
+      "id": "FM-004",
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-004_ls20_witness-compression.json",
+      "result": "SUPPORTED_WITNESS_COMPRESSION"
+    },
+    {
+      "id": "FM-005",
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-005_ls20_selector-validation.json",
+      "result": "SUPPORTED_SELECTOR_RETROSPECTIVE_VALIDATION"
+    },
+    {
+      "id": "FM-006",
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-006_ka59_level-preservation-gate.json",
+      "result": "SUPPORTED_LEVEL_BOUNDARY_PRESERVATION_GATE"
     }
   ],
-  "correspondence_gate": "research/dives/ARC3-TRACE-001/CORRESPONDENCE_GATE.md"
+  "correspondence_gate": "research/dives/ARC3-TRACE-001/CORRESPONDENCE_GATE.md",
+  "selector": {
+    "implementation": "research/dives/ARC3-TRACE-001/selector/selector.py",
+    "tests": "research/dives/ARC3-TRACE-001/selector/test_selector.py",
+    "metric": "candidate-pair separation per environment action",
+    "validation": "FM-005 reproduces the LS20 discriminating ACTION2 choice using only pre-witness predictions."
+  },
+  "level_preservation_gate": "research/dives/ARC3-TRACE-001/LEVEL_PRESERVATION_GATE.md"
 }
