@@ -2,15 +2,16 @@
   "schema_version": 1,
   "preferred_referent": "📍 SOLVE THE WHOLE THING — ARC-AGI-3 100%",
   "protocol": "work.bounded-problem",
-  "goal": "Solve ARC-AGI-3 completely. Use verified public solved cases as oracle-only evidence, keep Gen-1 frozen unless a concrete solve failure requires it, and continue direct hard-game audits until live first-contact execution resumes.",
+  "goal": "Solve ARC-AGI-3 completely. Live execution is now available; use immutable discovery-inclusive runs to drive only generic, evidence-required corrections.",
   "status": "active",
-  "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Audit M0R0 next as a coupled-control symmetry case. Current hard-case oracle set covers BP35, LF52, RE86, WA30, DC22, G50T, SB26, SK48, SP80, and TR87.",
+  "result_state": "MOVE",
+  "next_movement": "Use the completed G0.1 live sweep (2/183 levels, 0/25 games, 15025 actions) to build the next direct solver generation around problem-type/goal inference and discriminating actions rather than longer blind exploration. Re-run cleanly as a new generation.",
   "walls": [
     "Private competition environments are intentionally hidden; private 100% requires an official Kaggle competition rerun.",
     "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
   ],
   "evidence": [
+    "research/dives/ARC3-TRACE-001/runs/FIRST_CONTACT_G0_1_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/oracles/HARD_CASES.md",
     "research/dives/ARC3-TRACE-001/oracles/TR87.md",
     "research/dives/ARC3-TRACE-001/oracles/SP80.md",
@@ -66,9 +67,8 @@
   },
   "deferred_dependencies": {
     "live_execution": {
-      "status": "PINNED",
-      "pin": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
-      "note": "Resume when user has a computer; solver development continues meanwhile."
+      "status": "RESOLVED",
+      "note": "Remote Desktop Commander is connected to the authorized Windows computer and the official ARC-AGI-3 runtime is installed and working."
     }
   },
   "phase": {
