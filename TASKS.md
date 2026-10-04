@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [ARC3-TRACE-001 — ARC3 witness compression](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE_WITH_WALL | Find repeated/symmetric contexts inside one game and use one discriminating witness to resolve multiple candidate relations; do not transfer action semantics by shared IDs across games. |
+| [ARC3-TRACE-001 — preservation-aware witness compression](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE_WITH_WALL | At a level boundary, carry prior relations only as predicted-preserved; rank early actions by pair separation and use the cheapest witness that distinguishes preservation from failure. |
 
 ## Pinned / resumable
 
