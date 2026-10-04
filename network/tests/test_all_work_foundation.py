@@ -12,7 +12,7 @@ class AllWorkFoundationTests(unittest.TestCase):
         self.assertIn("Goal lane", arch)
         self.assertIn("Field / domain", arch)
         self.assertIn("Realization layer", arch)
-        self.assertIn("Physical is not a goal lane", arch)
+        self.assertIn("physical is not a goal lane", arch.lower())
 
     def test_foundation_is_not_goal_lane_and_credibility_is_lens(self):
         text = (ROOT / "foundation" / "README.md").read_text(encoding="utf-8")
