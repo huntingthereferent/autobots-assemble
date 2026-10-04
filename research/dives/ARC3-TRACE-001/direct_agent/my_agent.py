@@ -138,6 +138,11 @@ class MyAgent(Agent):
             return
 
         prev = frames[-2]
+        # The official Agent seeds history with a synthetic FrameData(levels_completed=0)
+        # whose frame is empty. It is bookkeeping, not an observable 64x64 state.
+        if np.asarray(prev.frame).size == 0 or np.asarray(latest.frame).size == 0:
+            self.last_level = int(getattr(latest, "levels_completed", self.last_level))
+            return
         pk = _state_key(prev)
         ck = _state_key(latest)
         changed, bbox = _delta(prev, latest)
