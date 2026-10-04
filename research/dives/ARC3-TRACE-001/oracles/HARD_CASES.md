@@ -123,6 +123,19 @@ same-looking current frame
 
 False when earlier interactions create latent accumulated state that is not fully visible in the endpoint image.
 
+### TR87 — directional controls can encode a non-spatial task
+
+TR87 uses mostly ACTION1-4 but is a glyph string-rewriting problem, not navigation.
+
+Failure form:
+
+```text
+directional action semantics
+→ spatial problem semantics
+```
+
+False. The action may navigate a symbolic structure, cursor, output, or rewrite system rather than an avatar in space.
+
 ## Practical use
 
 When live solving resumes, this ledger is a diagnostic.
