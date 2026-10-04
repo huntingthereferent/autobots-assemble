@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [GEMS-001 — DOE GEMS hidden-fault mapping](money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md) | Money/Prize + Research relation | MOVE_WITH_WALL | Enroll/accept rules and download competition data locally; reproduce baseline plumbing and exact metric before model changes. |
+| [GEMS-001 — DOE GEMS hidden-fault mapping](money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md) | Money/Prize + Research relation | MOVE_WITH_WALL | Verify GEMS-specific data-sharing terms; then run the local baseline through the exact output writer/validator before model changes. |
 
 ## Historical / paid-job adapter view
 

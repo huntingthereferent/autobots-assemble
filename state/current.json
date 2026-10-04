@@ -5,14 +5,15 @@
   "goal": "Produce a reproducible competitive GEMS GeoTIFF submission while preserving scientific, rule, license, and provenance boundaries.",
   "status": "active",
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Enroll in GEMS and download competition data locally; then reproduce reference plumbing and validate exact public metric before changing models.",
+  "next_movement": "Verify the exact GEMS-specific competition-data sharing/third-party-service rule; then run the local baseline through the downloaded-data/output contract before changing models.",
   "walls": [
-    "Competition data page requires logged-in enrollment.",
-    "Official rules must be personally reviewed/certified by the competitor.",
-    "Confirm gated-data AI/sharing permission before transferring gated competition data to a third-party service."
+    "Exact GEMS competition-data sharing/third-party-service terms still need direct verification before further gated-data modeling outside the competitor-controlled environment."
   ],
   "evidence": [
     "money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/DATASET_INSPECTION.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/data_manifest.json",
+    "money/challenges/GEMS-001_hidden-fault-mapping/output/contract.json",
     "money/challenges/GEMS-001_hidden-fault-mapping/BASELINE_DISSECTION.md",
     "money/challenges/GEMS-001_hidden-fault-mapping/STRATEGY.md",
     "work/scans/SCAN-0001_2026-10-03.md"

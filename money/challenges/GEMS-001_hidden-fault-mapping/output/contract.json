@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "template": "example_submission.tif",
+  "hard_requirements": {
+    "driver": "GTiff",
+    "width": 3292,
+    "height": 3730,
+    "count": 1,
+    "dtype": "float32",
+    "crs": "EPSG:32611",
+    "transform": [
+      100,
+      0,
+      243350,
+      0,
+      -100,
+      4508550,
+      0,
+      0,
+      1
+    ],
+    "bounds": [
+      243350,
+      4135550,
+      572550,
+      4508550
+    ],
+    "resolution_m": [
+      100,
+      100
+    ],
+    "nodata": "NaN",
+    "finite_value_range": [
+      0,
+      1
+    ],
+    "footprint": "finite/NaN mask must exactly match example_submission.tif"
+  },
+  "observed_template_encoding": {
+    "compression": "LZW",
+    "tiled": false,
+    "interleave": "band",
+    "block_shape": [
+      1,
+      3292
+    ],
+    "area_or_point": "Area"
+  },
+  "template_observation": {
+    "finite_pixels": 5167373,
+    "nan_pixels": 7111787,
+    "note": "supplied example values equal existing_faults exactly on every finite pixel; values are format scaffolding, not novel-fault predictions"
+  }
+}

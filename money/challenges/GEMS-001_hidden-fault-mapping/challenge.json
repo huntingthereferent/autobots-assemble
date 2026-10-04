@@ -18,12 +18,9 @@
   "reward_usd_pool": 300000,
   "state": "MOVE_WITH_WALL",
   "walls": [
-    "Competitor must enroll and personally accept/certify the official rules on DrivenData.",
-    "Competition data page requires logged-in enrollment.",
-    "Competitor must personally review and certify official rules.",
-    "Confirm gated-data AI/sharing permission before transferring gated competition data to a third-party service."
+    "Exact GEMS competition-data sharing/third-party-service terms still need direct verification before further gated-data modeling outside the competitor-controlled environment."
   ],
-  "next_movement": "Enroll/accept the rules and download competition data locally; verify exact gated-data sharing terms; then reproduce reference plumbing and validate the exact metric before model changes.",
+  "next_movement": "Verify the GEMS-specific data-use/sharing rule; then run the local baseline through the exact output adapter and validator before model changes.",
   "foundation_candidate": true,
   "rules_evidence": {
     "state": "PARTIAL",
@@ -44,5 +41,28 @@
       "Exact full-text legal conditions not exposed in the accessible official HTML excerpts.",
       "Exact data-sharing/third-party-AI treatment must be verified from the enrolled rules/data terms."
     ]
-  }
+  },
+  "data_evidence": {
+    "state": "RECEIVED_IN_SESSION",
+    "raw_files_committed": false,
+    "reason": "Preserve competition-data boundary and avoid committing large/gated binaries; repository stores hashes/schema only.",
+    "files": [
+      {
+        "name": "example_submission.tif",
+        "bytes": 1599597,
+        "sha256": "2176d08e485aa2cd2860ce8df539db4faf4d76163b38a4dd8c30a40454d35cbc"
+      },
+      {
+        "name": "gems-geodawn-numerical-features.tif",
+        "bytes": 418912844,
+        "sha256": "4371c82e3b8339b807bdffcf4ef59a225520fe2988d521be208ae33743123bc5"
+      },
+      {
+        "name": "existing_faults.tif",
+        "bytes": 425830,
+        "sha256": "7ba308ccdc4418b31a178f4f1ef21aaa6e152e4028f2f6f64b01f7eb25ae4093"
+      }
+    ]
+  },
+  "output_contract": "money/challenges/GEMS-001_hidden-fault-mapping/output/contract.json"
 }

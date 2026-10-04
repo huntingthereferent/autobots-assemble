@@ -11,9 +11,10 @@ class GemsActivationTests(unittest.TestCase):
         state = json.loads((ROOT / "state" / "current.json").read_text(encoding="utf-8"))
         self.assertIn("GEMS-001", state["preferred_referent"])
 
-    def test_record_has_data_wall(self):
+    def test_record_tracks_received_data_and_remaining_compliance_wall(self):
         rec = json.loads((GEMS / "challenge.json").read_text(encoding="utf-8"))
-        self.assertTrue(any("data page" in w.lower() for w in rec["walls"]))
+        self.assertEqual(rec["data_evidence"]["state"], "RECEIVED_IN_SESSION")
+        self.assertTrue(any("third-party" in w.lower() for w in rec["walls"]))
 
     def test_unmapped_is_not_negative(self):
         text = (GEMS / "BASELINE_DISSECTION.md").read_text(encoding="utf-8")
