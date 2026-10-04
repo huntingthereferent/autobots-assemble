@@ -1473,6 +1473,56 @@
           "project snapshot"
         ]
       }
+    },
+    {
+      "id": "LAYER.ABSORB",
+      "canonical": "absorb child layer",
+      "definition": "Fold a specialized layer/protocol into a more general parent when it has no unique witness/evidence contract, while preserving provenance and compatibility history.",
+      "preserves": [
+        "child provenance",
+        "unique rules if any",
+        "parent contract",
+        "historical references"
+      ],
+      "does_not_imply": [
+        "delete history",
+        "erase terminology",
+        "pretend the child never existed",
+        "merge incompatible witness contracts"
+      ],
+      "surfaces": {
+        "standard": [
+          "Absorb X into the parent layer.",
+          "Fold X into the broader protocol."
+        ],
+        "plain": [
+          "Make X part of the bigger layer.",
+          "Put X inside the general one."
+        ],
+        "casual": [
+          "Roll X into the bigger thing.",
+          "Fold X in."
+        ],
+        "slang": [
+          "Swallow X.",
+          "Eat X into the parent."
+        ],
+        "internet": [
+          "swallow X",
+          "fold X in"
+        ],
+        "caveman": [
+          "big layer eat X",
+          "X go inside parent"
+        ],
+        "technical": [
+          "subsume X under parent contract",
+          "absorb specialized protocol X"
+        ]
+      },
+      "ambiguity": [
+        "'swallow' can mean delete/discard in ordinary English; in this network shape it explicitly preserves provenance and unique constraints"
+      ]
     }
   ]
 }

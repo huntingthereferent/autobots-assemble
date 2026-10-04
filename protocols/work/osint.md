@@ -1,17 +1,21 @@
-# Work Protocol — OSINT
+# Compatibility Alias — OSINT
 
-## Referent
+`work.osint` is no longer a registered standalone protocol.
 
-The current external question or entity being investigated.
+It has been **swallowed by** [`research.source`](../research/source.md) because the earlier OSINT rules did not require a distinct witness/evidence contract.
 
-## Evidence rules
+The term **OSINT** is still valid language for public/open-source investigation. Historical records using it remain valid provenance.
 
-- distinguish primary source, secondary source, and community report;
-- preserve URLs/timestamps where available;
-- do not let a search result snippet outrank the opened source it refers to;
-- contradictory sources remain separate evidence until correspondence is established;
-- absence from search is not proof of absence.
+Operational routing:
 
-## Movement
+```text
+work.osint
+    ↓ compatibility
+research.source
+    +
+core.evidence
+    +
+core.provenance
+```
 
-Each movement should answer a bounded question or narrow the next question. Broad collection without a current referent is not itself progress.
+This is absorption, not deletion: unique future OSINT-specific constraints may be added as a domain adapter if they actually require a different contract.

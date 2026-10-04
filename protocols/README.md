@@ -8,22 +8,33 @@ A protocol may specialize the witness conditions, but it may not silently change
 
 ## Core protocols
 
-- [\`core/referent.md\`](core/referent.md) — preserve and change the active referent.
-- [\`core/evidence.md\`](core/evidence.md) — admit evidence and preserve uncertainty.
-- [\`core/movement.md\`](core/movement.md) — make one supported movement.
-- [\`core/wall.md\`](core/wall.md) — stop without fabricating an edge.
-- [\`core/handoff.md\`](core/handoff.md) — move work between agents/tools while preserving the referent.
-- [\`core/provenance.md\`](core/provenance.md) — retain source/witness/parent history.
+- [`core/referent.md`](core/referent.md) — preserve and change the active referent.
+- [`core/evidence.md`](core/evidence.md) — admit evidence and preserve uncertainty.
+- [`core/movement.md`](core/movement.md) — make one supported movement.
+- [`core/wall.md`](core/wall.md) — stop without fabricating an edge.
+- [`core/handoff.md`](core/handoff.md) — move work between agents/tools while preserving the referent.
+- [`core/provenance.md`](core/provenance.md) — retain source/witness/parent history.
 
 ## AI protocols
 
-- [\`ai/session.md\`](ai/session.md) — enter and operate a session.
-- [\`ai/repo-write.md\`](ai/repo-write.md) — mutate this repository without losing provenance.
+- [`ai/session.md`](ai/session.md) — enter and operate a session.
+- [`ai/repo-write.md`](ai/repo-write.md) — mutate this repository without losing provenance.
+
+## Research protocols
+
+- [`research/source.md`](research/source.md) — discover, inspect, compare, and resolve external sources around a bounded referent.
+
+**OSINT is swallowed here.** It does not need a separate witness contract. “OSINT” remains useful vocabulary for public/open-source investigation, but operationally it is one surface/domain label for source research.
 
 ## Work protocols
 
-- [\`work/bounded-problem.md\`](work/bounded-problem.md) — externally supplied finite problems.
-- [\`work/job-hunt.md\`](work/job-hunt.md) — discover and admit external work.
-- [\`work/osint.md\`](work/osint.md) — public-source investigation.
+- [`work/bounded-problem.md`](work/bounded-problem.md) — externally supplied finite problems.
+- [`work/job-hunt.md`](work/job-hunt.md) — discover and admit external work; uses `research.source` for public-source retrieval.
 
-Future domain protocols should compose these rather than replacing them.
+## Language/output protocols
+
+- `language.decode`
+- `language.render`
+- `output.lens`
+
+Future domain protocols should compose these rather than duplicating a child protocol whose witness contract is already represented one layer up.
