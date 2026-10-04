@@ -5,7 +5,7 @@
   "status": "active",
   "protocol": "research.dive",
   "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
-  "preferred_referent": "📍 ARC3-TRACE-001 — preservation-aware witness compression",
+  "preferred_referent": "📍 ARC3-100 — solve ARC-AGI-3 at human-level 100%",
   "fields": [
     "artificial intelligence",
     "interactive reasoning",
@@ -19,7 +19,7 @@
     "Open Source",
     "Prize / benchmark"
   ],
-  "goal": "Increase relations-resolved per ARC3 environment action by combining forward prediction, pair-separation action selection, and explicit level-boundary preservation gates.",
+  "goal": "Directly solve ARC-AGI-3 with human-level first-contact adaptability and action efficiency. Existing tracing work is supporting machinery, not the active research objective.",
   "definition_of_solved_for_first_trace": [
     "Every admitted rule is tied to an observable state transition or replay witness.",
     "Failed hypotheses remain preserved rather than silently rewritten.",
@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Use a replay level boundary as a held-out preservation test: carry prior relations only as PREDICTED_PRESERVED, generate competing new-level predictions, rank early actions with the selector, and compare against the recorded exploration path.",
+  "next_movement": "Run direct solving on public environments; optimize for WIN plus human-baseline efficiency. Invoke forward-match/selector/preservation tools only when they reduce uncertainty or action cost.",
   "walls": [
     "Level completion does not certify the internal model that produced it; cross-level carry requires source support plus destination correspondence.",
     "Cross-environment standardized action IDs do not establish semantic correspondence; locally ground action/effect relations in each game.",
@@ -131,7 +131,7 @@
     ]
   },
   "forward_match": {
-    "status": "active_candidate",
+    "status": "supporting_only",
     "summary": "research/dives/ARC3-TRACE-001/FORWARD_MATCH.md",
     "machine_contract": "research/dives/ARC3-TRACE-001/forward_match.json",
     "axioms_source": "huntingthereferent/axioms/AXIOMS_HANDOFF.md",
@@ -180,5 +180,12 @@
     "metric": "candidate-pair separation per environment action",
     "validation": "FM-005 reproduces the LS20 discriminating ACTION2 choice using only pre-witness predictions."
   },
-  "level_preservation_gate": "research/dives/ARC3-TRACE-001/LEVEL_PRESERVATION_GATE.md"
+  "level_preservation_gate": "research/dives/ARC3-TRACE-001/LEVEL_PRESERVATION_GATE.md",
+  "direct_solve": {
+    "status": "active_primary_objective",
+    "spec": "research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md",
+    "target": "100% official ARC-AGI-3 score",
+    "public_development_goal": "WIN every public environment and measure action efficiency against human baselines",
+    "private_claim_boundary": "Only official hidden evaluation can establish competition 100%."
+  }
 }
