@@ -1,21 +1,22 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
-  "protocol": "work.bounded-problem",
-  "goal": "Produce a reproducible competitive GEMS GeoTIFF submission while preserving scientific, rule, license, and provenance boundaries.",
+  "preferred_referent": "📍 ARC3-TRACE-001 — ARC-AGI-3 causal reasoning trace",
+  "protocol": "research.dive",
+  "goal": "Trace one public ARC-AGI-3 environment from raw observation through intervention, observed effect, hypothesis, correction, world model, inferred goal, plan, and replay evidence; then test whether the same trace contract transfers unchanged to a second environment.",
   "status": "active",
-  "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Verify the exact GEMS-specific competition-data sharing/third-party-service rule; then run the local baseline through the downloaded-data/output contract before changing models.",
-  "walls": [
-    "Exact GEMS competition-data sharing/third-party-service terms still need direct verification before further gated-data modeling outside the competitor-controlled environment."
-  ],
+  "result_state": "MOVE",
+  "next_movement": "Reconstruct ar25 from the earliest observable transitions first. Build a state/action/effect ledger before accepting semantic interpretations from model reasoning traces.",
+  "walls": [],
   "evidence": [
-    "money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md",
-    "money/challenges/GEMS-001_hidden-fault-mapping/DATASET_INSPECTION.md",
-    "money/challenges/GEMS-001_hidden-fault-mapping/data_manifest.json",
-    "money/challenges/GEMS-001_hidden-fault-mapping/output/contract.json",
-    "money/challenges/GEMS-001_hidden-fault-mapping/BASELINE_DISSECTION.md",
-    "money/challenges/GEMS-001_hidden-fault-mapping/STRATEGY.md",
+    "research/dives/ARC3-TRACE-001/dive.json",
+    "research/dives/ARC3-TRACE-001/DIVE.md",
+    "state/pins/GEMS-001_2026-10-03.json",
     "work/scans/SCAN-0001_2026-10-03.md"
-  ]
+  ],
+  "handoff": {
+    "type": "HANDOFF.BOUNDARY",
+    "from": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
+    "from_state": "state/pins/GEMS-001_2026-10-03.json",
+    "reason": "Explicit user-directed referent change after pinning GEMS."
+  }
 }
