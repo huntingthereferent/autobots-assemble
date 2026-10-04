@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "languages": {
+    "en": {
+      "name": "English",
+      "status": "active",
+      "root": "language/english",
+      "shape_bank": "language/english/shape_bank.json",
+      "registers": "language/english/registers.json"
+    }
+  },
+  "neutral_shape_contract": "language/SHAPE_CONTRACT.md"
+}
