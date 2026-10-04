@@ -45,7 +45,7 @@ class ModelTests(unittest.TestCase):
         self.assertIsNotNone(edge)
         self.assertTrue(edge.changed)
 
-    def test_conflicting_abstract_outcomes_reduce_confidence(self):
+    def test_conflicting_abstract_outcomes_do_not_override_exact_evidence(self):
         m = TransitionModel()
         s0 = perceive_grid(board(10, 10))
         s1 = perceive_grid(board(9, 10))
@@ -53,7 +53,8 @@ class ModelTests(unittest.TestCase):
         m.update(s0, (3,), s1, level_delta=0, terminal_bad=False)
         m.object_votes[(s0.object_key, (3,))][(s2.object_key, 0, True, False)] += 1
         self.assertIsNone(m.object_edge(s0, (3,)))
-        self.assertAlmostEqual(m.confidence(s0, (3,)), 0.5)
+        self.assertAlmostEqual(m.object_confidence(s0, (3,)), 0.5)
+        self.assertAlmostEqual(m.confidence(s0, (3,)), 1.0)
 
     def test_bfs_finds_known_progress(self):
         m = TransitionModel()
