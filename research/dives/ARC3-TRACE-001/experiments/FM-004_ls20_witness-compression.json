@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "experiment_id": "FM-004",
+  "title": "LS20 witness compression by prediction partition",
+  "type": "within_environment_discriminating_action_test",
+  "source": {
+    "role": "primary_replay",
+    "url": "https://arcprize.org/replay/8314341d-c2e5-4b75-af8a-a085eddd8165",
+    "pre_frame": 18,
+    "witness_frame": 19
+  },
+  "pre_action_state": {
+    "glyph": [
+      "X.X",
+      "..X",
+      "XXX"
+    ],
+    "action": "ACTION2",
+    "context": [
+      "block above marker",
+      "ACTION2 locally grounded as downward movement",
+      "off-marker move previously produced no glyph change"
+    ]
+  },
+  "candidate_models": [
+    {
+      "id": "H_flip",
+      "rule": "ACTION2 + marker landing -> vertical flip",
+      "predicted_glyph": [
+        "XXX",
+        "..X",
+        "X.X"
+      ],
+      "pre_status": "PREDICTED",
+      "post_status": "FALSIFIED"
+    },
+    {
+      "id": "H_rotate",
+      "rule": "valid marker landing -> 90 degree clockwise rotation",
+      "predicted_glyph": [
+        "X.X",
+        "X..",
+        "XXX"
+      ],
+      "pre_status": "PREDICTED",
+      "post_status": "SUPPORTED"
+    }
+  ],
+  "observed_glyph": [
+    "X.X",
+    "X..",
+    "XXX"
+  ],
+  "result": "SUPPORTED_WITNESS_COMPRESSION",
+  "compression": {
+    "environment_actions_spent": 1,
+    "candidate_models_separated": 2,
+    "direct_model_resolution_ratio": 2,
+    "benchmark_speedup_claim": false
+  },
+  "selector_shape": [
+    "enumerate admissible candidate models",
+    "predict exact observable outcome per candidate/action",
+    "partition candidates by predicted outcome",
+    "choose action with high unresolved-partition discrimination",
+    "observe one witness",
+    "update multiple relation statuses",
+    "recurse"
+  ],
+  "next_test": "Implement a generic prediction-partition selector and compare it with a simpler exploration policy on held-out replay segments or live public play."
+}
