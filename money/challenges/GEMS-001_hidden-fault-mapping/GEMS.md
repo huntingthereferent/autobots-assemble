@@ -23,9 +23,16 @@ The work has an unusually strong external witness:
 
 ## Eligibility boundary
 
-The competition page says individual competitors must be U.S. citizens or permanent residents; a team captain must meet that same criterion. The official rules control final eligibility. The captain criterion is presently treated as **not a wall**, but the competitor must personally review and certify the rules during registration.
+The official NLR rules publication and the DrivenData competition materials establish the following public eligibility boundary:
 
-Federal entities and federal employees are listed as ineligible.
+- individual competitors must be U.S. citizens or permanent residents;
+- a team must have a captain who is a U.S. citizen or permanent resident;
+- private entities must be incorporated in the United States and maintain a primary place of business in the United States;
+- federal entities and federal employees are not eligible.
+
+Nothing in the public eligibility summary adds a professional, academic, or licensing credential to the word **captain**. Here, captain is the qualifying team representative role; citizenship/permanent-resident status is the relevant public eligibility condition.
+
+Registration also carries a federal certification: the competitor certifies eligibility and rule compliance, under penalty of perjury, and represents that submission information is truthful.
 
 ## Submission contract
 
@@ -54,11 +61,19 @@ The public description lists conductivity/depth, detrended elevation/slope, stra
 
 The public reference notebook reports a 3730 × 3292 raster with 19 numeric bands at 100 m resolution.
 
-## Immediate wall
+## Rules / data-use boundary
 
 The competition data page requires logged-in enrollment.
 
-Before any gated competition data is transferred to a third-party AI/service, confirm that the official data-use rules permit that transfer. Public documentation and public reference code can be analyzed now.
+The public rule excerpts explicitly allow and encourage external data when the competitor/team has the necessary licenses to use it for the challenge.
+
+The official rules PDF is now treated as **swallowed evidence** for this challenge rather than as a separate protocol. A direct full-text render of the 19-page PDF was not available through the current retrieval path, so the repository distinguishes:
+
+- **SUPPORTED:** facts exposed by the official NLR publication record and DrivenData's official rule excerpts;
+- **PARTIAL:** rule sections that require the PDF text itself before we assert their exact wording;
+- **UNKNOWN:** any AI/data-sharing restriction not visible in the public excerpts.
+
+Therefore, before gated competition data is transferred to a third-party AI/service, confirm the exact data-use language from the enrolled rules/data page. Public documentation and public reference code can be analyzed now.
 
 ## Next movement
 
@@ -68,6 +83,10 @@ Before any gated competition data is transferred to a third-party AI/service, co
 4. Validate our exact public metric implementation.
 5. Replace random positive-patch validation with spatially honest validation.
 6. Build full-region inference where “unmapped” is not silently treated as “negative.”
+
+## Rules summary
+
+See [OFFICIAL_RULES_SUMMARY.md](OFFICIAL_RULES_SUMMARY.md). The rules are evidence attached to GEMS-001; they do not create a new architectural layer.
 
 ## Public sources
 

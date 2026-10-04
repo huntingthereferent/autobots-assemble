@@ -18,10 +18,31 @@
   "reward_usd_pool": 300000,
   "state": "MOVE_WITH_WALL",
   "walls": [
+    "Competitor must enroll and personally accept/certify the official rules on DrivenData.",
     "Competition data page requires logged-in enrollment.",
     "Competitor must personally review and certify official rules.",
     "Confirm gated-data AI/sharing permission before transferring gated competition data to a third-party service."
   ],
-  "next_movement": "Enroll and download competition data locally; reproduce reference plumbing and validate exact metric before model changes.",
-  "foundation_candidate": true
+  "next_movement": "Enroll/accept the rules and download competition data locally; verify exact gated-data sharing terms; then reproduce reference plumbing and validate the exact metric before model changes.",
+  "foundation_candidate": true,
+  "rules_evidence": {
+    "state": "PARTIAL",
+    "swallowed_into": "GEMS-001",
+    "publication_number": "NLR/OT-6A50-96647",
+    "doi": "10.2172/3818146",
+    "pages": 19,
+    "supported": [
+      "Individual competitors must be U.S. citizens or permanent residents.",
+      "Teams must have a captain who is a U.S. citizen or permanent resident.",
+      "Private entities must be incorporated in and maintain a primary place of business in the United States.",
+      "Federal entities and federal employees are not eligible.",
+      "External data is permitted/encouraged when the competitor/team has the necessary licenses.",
+      "Competition uses DrivenData for submissions and performance assessment.",
+      "Total cash prize pool is $300,000."
+    ],
+    "partial": [
+      "Exact full-text legal conditions not exposed in the accessible official HTML excerpts.",
+      "Exact data-sharing/third-party-AI treatment must be verified from the enrolled rules/data terms."
+    ]
+  }
 }
