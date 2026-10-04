@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [ARC3-100 — human-level ARC-AGI-3 solve](research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Solve the public games directly for WIN + human-level action efficiency; use trace/compression machinery only when it improves the solve, then carry the same solver into Competition Mode. |
+| [ARC3-100 — first-contact discovery-inclusive 100%](research/dives/ARC3-TRACE-001/FIRST_CONTACT_100.md) | Research + Open Source/Prize relation | MOVE_WITH_WALL | Run one untouched full public pass with the generic agent and count every discovery + execution action; improve generic solving from failures without embedding public solution paths. |
 
 ## Pinned / resumable
 
