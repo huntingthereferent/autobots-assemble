@@ -1,48 +1,51 @@
 # Architecture — Shared Kernel, Separate Lanes
 
-The repository has one shared operating kernel and two intentionally separate human-goal lanes.
+The repository has one shared operating kernel and three intentionally separate human-goal lanes.
 
 ```text
-                         SHARED KERNEL
-        A/B boundary · language · network · protocols · lenses
+                               SHARED KERNEL
+              A/B · language · network · protocols · lenses
                     evidence · provenance · state
-                              │
-                 ┌────────────┴────────────┐
-                 │                         │
-          THEORY / RESEARCH            MONEY / JOBS
-                 │                         │
-          research/                    money/
-          domains/                     jobs/
-          papers/notes/dives           paid work / bids /
-          experiments                  deliverables
+                                  │
+                 ┌────────────────┼────────────────┐
+                 │                │                │
+          THEORY / RESEARCH   OPEN SOURCE      MONEY / JOBS
+                 │                │                │
+             research/        open_source/       money/
+             domains/         upstream issues    jobs/
+             dives/notes      PRs/docs/tests     paid work
+             experiments      community work     bids/deliverables
 ```
 
-## Why the split exists
+## Why three lanes
 
-Research and money can touch, but they do not have the same objective.
+The same skill can serve different goals, and those goals should not silently replace one another.
 
-A research dive may be interesting with **no commercial use at all**. A job may be useful even if it contributes nothing to theory. Mixing the two causes accidental reorientation: curiosity starts being judged by whether it pays, or paid work starts being treated as evidence for theory merely because it used the same tools.
+**Theory / Research** asks:
+> What is interesting, true, structurally useful, unresolved, or worth following?
+
+**Open Source** asks:
+> What public project can I contribute to under its own upstream rules?
+
+**Money / Jobs** asks:
+> What bounded external work can be completed, submitted, accepted, or paid?
 
 ## Shared kernel
 
-Both lanes may use the same:
+All three lanes may reuse:
 
-- A/B witness/evidence boundary;
-- language and operator phrases;
+- A/B witness/evidence boundaries;
+- language/operator phrases;
 - handoff language;
 - source research;
-- generic relation network;
+- the generic relation network;
 - provenance;
 - output lenses;
 - tool/session protocols.
 
-Shared machinery does not collapse the goals.
+Shared machinery does not collapse the lane goal.
 
-## Theory / research lane
-
-Primary question:
-
-> What is interesting, true, structurally useful, unresolved, or worth following?
+## Theory / Research
 
 Typical outputs:
 
@@ -51,47 +54,61 @@ Typical outputs:
 - paper/source maps;
 - experiments;
 - domain dissections;
-- unresolved questions;
-- possible connections.
+- unresolved questions.
 
-No requirement to monetize.
+No requirement to monetize or contribute upstream.
 
-## Money / jobs lane
-
-Primary question:
-
-> What bounded external work can be completed, submitted, accepted, or paid?
+## Open Source
 
 Typical outputs:
 
-- opportunities;
-- job records;
-- bids/proposals;
+- public issues;
+- bug fixes;
+- documentation;
+- tests;
+- review/reproduction work;
+- upstream pull requests;
+- standards/RFC participation;
+- scientific/open-data tooling;
+- community-maintained infrastructure.
+
+Payment may exist incidentally, but it is not assumed.
+
+## Money / Jobs
+
+Typical outputs:
+
+- job opportunities;
+- contracts/bounties;
+- proposals;
 - deliverables;
 - acceptance tests;
 - submission/payment state.
 
-No requirement to contribute to theory.
+## Crossing lanes
 
-## Crossing the boundary
-
-A crossing is an explicit handoff, never an automatic promotion.
+A crossing is an explicit handoff: `HANDOFF.BOUNDARY`.
 
 Examples:
 
 ```text
 research dive
-→ "this might solve a paid problem"
+→ reusable public implementation
+→ HANDOFF.BOUNDARY
+→ open-source contribution candidate
+```
+
+```text
+open-source issue has a bounty
+→ compensation becomes primary
 → HANDOFF.BOUNDARY
 → money/job candidate
 ```
 
-or:
-
 ```text
-job exposes a reusable structural pattern
+open-source work reveals a novel question
 → HANDOFF.BOUNDARY
-→ research/theory candidate
+→ research dive candidate
 ```
 
-The source lane remains provenance. The receiving lane re-validates under its own goal and witness contract.
+The source lane remains provenance. The receiving lane re-validates the item under its own goal and witness contract.
