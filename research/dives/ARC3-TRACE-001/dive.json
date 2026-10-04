@@ -5,7 +5,7 @@
   "status": "active",
   "protocol": "research.dive",
   "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
-  "preferred_referent": "📍 ARC3-100 — solve ARC-AGI-3 at human-level 100%",
+  "preferred_referent": "📍 ARC3-100 — first-contact discovery-inclusive 100%",
   "fields": [
     "artificial intelligence",
     "interactive reasoning",
@@ -19,7 +19,7 @@
     "Open Source",
     "Prize / benchmark"
   ],
-  "goal": "Directly solve ARC-AGI-3 with human-level first-contact adaptability and action efficiency. Existing tracing work is supporting machinery, not the active research objective.",
+  "goal": "Solve ARC-AGI-3 on first contact with total discovery+execution environment actions near or better than human first-run baselines. Banked-path efficiency is supporting evidence, not the acceptance condition.",
   "definition_of_solved_for_first_trace": [
     "Every admitted rule is tied to an observable state transition or replay witness.",
     "Failed hypotheses remain preserved rather than silently rewritten.",
@@ -103,13 +103,11 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Run direct solving on public environments; optimize for WIN plus human-baseline efficiency. Invoke forward-match/selector/preservation tools only when they reduce uncertainty or action cost.",
+  "next_movement": "Execute one untouched first pass with the generic agent in the official starter, log every environment action as discovery+execution cost, and use the failure trace to improve generic perception/model/goal/planning without per-game hardcoding.",
   "walls": [
-    "Level completion does not certify the internal model that produced it; cross-level carry requires source support plus destination correspondence.",
-    "Cross-environment standardized action IDs do not establish semantic correspondence; locally ground action/effect relations in each game.",
-    "Axioms correspondence rule remains mathematically unresolved; forward projection is candidate propagation, not admitted fact until ARC3 supplies the witness.",
-    "Exact full Kaggle competition terms/eligibility and final runtime/quota clauses still require direct live Kaggle rules inspection before any submission claim.",
-    "Private evaluation mechanics are intentionally unavailable and cannot be used during development."
+    "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
+    "Private competition performance remains UNKNOWN until official hidden evaluation.",
+    "OpenWorld's public 25/25 and RHAE 100 prove public completion/final-path efficiency, not discovery-inclusive first-contact 100%."
   ],
   "handoff_from": {
     "type": "HANDOFF.BOUNDARY",
@@ -149,8 +147,8 @@
     {
       "id": "FM-002",
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-002_bp35_inverse-schema-transfer.json",
-      "result": "WALL_MISSING_CROSS_ENV_ACTION_CORRESPONDENCE",
-      "correction": "Standardized ARC action IDs are interface labels, not cross-environment semantic witnesses."
+      "result": "PARTIAL_DIRECTIONAL_SEMANTIC_TRANSFER",
+      "correction": "Official ARC docs supply ACTION1-4 direction semantics; game-specific transition consequences still require local evidence."
     },
     {
       "id": "FM-003",
@@ -183,9 +181,28 @@
   "level_preservation_gate": "research/dives/ARC3-TRACE-001/LEVEL_PRESERVATION_GATE.md",
   "direct_solve": {
     "status": "active_primary_objective",
-    "spec": "research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md",
-    "target": "100% official ARC-AGI-3 score",
-    "public_development_goal": "WIN every public environment and measure action efficiency against human baselines",
+    "spec": "research/dives/ARC3-TRACE-001/FIRST_CONTACT_100.md",
+    "implementation": "research/dives/ARC3-TRACE-001/direct_agent/my_agent.py",
+    "acceptance": "Measure the untouched first-contact run including discovery actions; never replace it with a later banked/minimized replay score.",
+    "public_goal": "25/25 public games under one generic solver with discovery-inclusive first-contact efficiency at/above human baseline.",
     "private_claim_boundary": "Only official hidden evaluation can establish competition 100%."
+  },
+  "public_prior_art": {
+    "status": "swallowed_supporting_evidence",
+    "file": "research/dives/ARC3-TRACE-001/PUBLIC_100_PRIOR_ART.md",
+    "public_completion": "OpenWorld Fable archive reports 25/25 games and 183/183 levels source-free.",
+    "rhae_scope": "Reported RHAE 100 scores banked replay paths; E149 explicitly says discovery exploration/model-building/search cost is omitted.",
+    "consequence": "Do not spend effort proving public completion is possible. Target first-contact discovery economy."
+  },
+  "official_action_priors": {
+    "source": "https://docs.arcprize.org/actions",
+    "ACTION1": "up",
+    "ACTION2": "down",
+    "ACTION3": "left",
+    "ACTION4": "right",
+    "ACTION5": "game-specific simple interaction",
+    "ACTION6": "coordinate click",
+    "ACTION7": "undo",
+    "boundary": "Direction semantics are supplied for ACTION1-4; affected object, movement scale, collision/side effects, goals, and game-specific interactions still require current-game evidence."
   }
 }
