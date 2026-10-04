@@ -1,8 +1,8 @@
-# FM-002 — BP35 Hard-Environment Schema Transfer
+# FM-002 — BP35 Cross-Environment Transfer Attempt
 
-**Type:** cross-environment forward-match test  
-**Status:** partial transfer / supported local component  
-**Purpose:** test whether the FM-001 relation shape transfers without copying LS20's game-specific magnitude or higher-level dynamics.
+**Type:** cross-environment correspondence test  
+**Status:** WALL — missing cross-environment action-semantic correspondence  
+**Purpose:** test whether FM-001 can legitimately transfer an inverse-action relation from LS20 into BP35.
 
 ## Source
 
@@ -10,9 +10,9 @@ Official ARC Prize BP35 replay:
 
 https://arcprize.org/replay/5a2a4b50-bb1b-4219-a268-35dee2268d28
 
-## First-contact witness used
+## Current-environment witness
 
-The official replay reasoning records:
+The BP35 replay reasoning records a local transition:
 
 ```text
 ACTION3
@@ -20,135 +20,106 @@ ACTION3
 → facing reverses
 ```
 
-Admitted local component:
+This independently supports a BP35-local relation between ACTION3 and a leftward primitive component.
+
+## Proposed carry from FM-001
+
+FM-001 established, inside LS20, that an ACTION3 leftward slider movement was followed by an ACTION4 inverse rightward movement.
+
+The tempting transfer was:
 
 ```text
-horizontal translation = -6 px
-direction marker/facing = left
+LS20: ACTION3 ↔ ACTION4 directional inverse
+                  ↓
+BP35: ACTION3 ↔ ACTION4 directional inverse ?
 ```
 
-This is the only current-game primitive needed to localize the transferred schema.
+## Correction
 
-## What FM-001 may carry forward
+That transfer is **not admitted**.
 
-FM-001 supports the abstract candidate relation:
+ARC3 standardizes the action identifiers, but game-specific semantics still require a witness. The fact that both environments expose symbols named ACTION3 and ACTION4 does not itself support a relation saying those symbols carry the same directional semantics across games.
+
+The missing parent relation is:
 
 ```text
-ACTION3 / ACTION4
-can form a directional-inverse pair
-for a horizontal controllable component
+LS20 ACTION3/ACTION4 semantic pair
+        CORRESPONDS TO
+BP35 ACTION3/ACTION4 semantic pair
 ```
 
-FM-001 does **not** license:
+No witness currently earns that correspondence merely from interface identity.
 
-- a 5-column step in BP35;
-- LS20 object identity;
-- LS20 blocking rules;
-- absence of additional BP35 dynamics;
-- any BP35 goal semantics.
-
-Therefore the transferred candidate must be re-parameterized from BP35's own witness.
-
-## Forward prediction
-
-Given BP35's witnessed local scale of one six-pixel cell:
+Therefore:
 
 ```text
-if ACTION4 is the local inverse primitive
-and the equivalent horizontal move is unblocked,
-
-ACTION4
-→ horizontal component +6 px
-→ facing/direction marker reverses to the right
+same action ID
+≠ same semantic relation
 ```
 
-Status before a current-game witness:
+## What BP35 evidence can establish
 
-`PREDICTED`
-
-## Critical factorization
-
-Do **not** predict the whole next frame from the horizontal primitive.
-
-Factor the transition:
+BP35's own ACTION3 witness may be admitted locally:
 
 ```text
-ACTION
-→ primitive horizontal component
-+ context-coupled consequences
+BP35 ACTION3
+→ horizontal translation -6 px
+→ facing left
 ```
 
-For BP35:
+Independent BP35 evidence may later establish ACTION4 locally as the inverse. If so, that would demonstrate that the same abstract relation family occurs in both games.
 
-```text
-horizontal inverse component
-= forward-match candidate
-
-additional slide / pull / collision / state consequence
-= UNKNOWN until BP35 context supports it
-```
-
-This is the important result.
-
-If we copied the entire LS20 transition shape into BP35, we would silently assert that nothing else happens after the horizontal move. The parent evidence does not support that.
-
-## External comparison evidence
-
-A derived public BP35 explainer based on the released game/replay material describes left/right movement as one sideways cell and indicates additional context-dependent movement behavior.
-
-That supports the **local horizontal component** while simultaneously showing why the full composite transition cannot be inherited from LS20.
-
-Treat this as derived/secondary validation, not as the primary witness.
+But it would **not** retroactively mean the LS20 relation predicted BP35 before BP35-local evidence.
 
 ## Result
 
-`PARTIAL_TRANSFER_SUPPORTED_LOCAL_COMPONENT`
+`WALL_MISSING_CROSS_ENV_ACTION_CORRESPONDENCE`
 
-Supported carry:
+This replaces the earlier `PARTIAL_TRANSFER_SUPPORTED_LOCAL_COMPONENT` interpretation.
 
-```text
-directional-inverse schema
-+ BP35 local step scale
-→ exact candidate horizontal component
-```
+The earlier record was too permissive because it treated standardized action IDs as if they supplied semantic correspondence.
 
-Not yet supported carry:
+## Preserved useful result
+
+The factorization insight survives:
 
 ```text
-horizontal component
-→ complete BP35 next-state prediction
-```
-
-The first unsupported relation is the mapping from the local primitive to BP35's additional context-dependent consequence.
-
-## Why this matters
-
-The forward matcher can save probes only if it is allowed to reuse supported relation components **without importing an entire old world model**.
-
-So the useful representation is not:
-
-```text
-ACTION4 → next frame
-```
-
-It is:
-
-```text
-ACTION4
+ACTION
 → primitive effect(s)
-→ gated context relations
-→ composite next frame
+→ context gates
+→ composite consequence
 ```
 
-Each edge keeps its own witness.
+But every transferred edge still needs a correspondence witness.
+
+## Forward-match rule after correction
+
+### Within one environment
+
+A witnessed action effect may be projected into another **supported corresponding context** using the same action identity, because the action belongs to the same game semantics and only the context correspondence must be earned.
+
+### Across environments
+
+Do not transfer raw action IDs as semantics.
+
+Cross-environment reuse may carry:
+
+- representation shape;
+- relation classes;
+- candidate generation procedure;
+- witness contract;
+- action-selection strategy.
+
+It may not carry a game-specific action mapping until the new environment earns that mapping.
 
 ## Next seam
 
-Represent action effects as composable evidence-bearing components.
+Use forward matching first **within an environment**:
 
-Then ask, for each candidate action:
+```text
+same witnessed action
++ supported corresponding local context
+→ candidate effect in new context
+```
 
-1. which primitive components are already forward-matchable;
-2. which context gates are supported in the current state;
-3. which consequences remain UNKNOWN;
-4. which one live action would discriminate the unresolved gates most efficiently.
+For cross-environment work, locally ground the action/effect relation first, then compare the abstract relation structures afterward.
