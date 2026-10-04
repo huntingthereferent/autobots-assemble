@@ -51,6 +51,27 @@ Do not bet everything on one U-Net:
 
 If rules/licenses permit, derive slope, curvature, local relief, multi-azimuth hillshade, and lineament/scarp evidence, then aggregate reproducibly to the 100 m submission grid.
 
+### DEM ingestion policy
+
+Do **not** manually upload every 1 m DEM tile into the chat.
+
+Use one or a few tiles to validate the derivation pipeline first. If the derived terrain features improve spatially honest validation, batch-process **all tiles that overlap the GEMS submission footprint** locally from the TNM item manifest.
+
+Per-tile processing:
+
+```text
+1 m DEM tile
+→ verify hash / CRS / nodata
+→ reproject only as needed
+→ derive terrain structure at native/multiscale resolution
+→ aggregate features to the 100 m GEMS grid
+→ write compact derived layers + provenance
+```
+
+Candidate derived layers include slope, curvature, local relief, multi-azimuth hillshade, ridge/valley measures, lineament/scarp evidence, and orientation/coherence measures.
+
+The first inspected tile, `USGS_1M_10_x75y441_CA_SierraNevada_B22.tif`, is ~10 × 10 km, EPSG:26910, and overlaps only a narrow western slice of the GEMS study grid after reprojection. It is therefore useful as a pipeline test tile, not as representative coverage of the entire challenge area.
+
 ## 8 — Expert-discovery list
 
 Maintain a ranked internal list of likely unmapped faults with supporting modalities and model agreement. This matters because expert-confirmed discoveries can enter the final-round ground truth.

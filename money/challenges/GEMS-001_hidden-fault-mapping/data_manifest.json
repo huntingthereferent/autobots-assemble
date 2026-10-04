@@ -95,5 +95,54 @@
     "example_submission equals existing_faults exactly at all 5,167,373 finite pixels.",
     "all 19 feature bands are simultaneously valid at 5,165,840 pixels.",
     "3,073 submission-footprint pixels lack at least one feature value; 1,540 all-feature-valid pixels lie outside the submission footprint."
+  ],
+  "external_dem_tiles": [
+    {
+      "name": "USGS_1M_10_x75y441_CA_SierraNevada_B22.tif",
+      "bytes": 238657987,
+      "sha256": "cd6823dafb960c8eb49b95eb2fe91dacecf52d7856599739879093ed86302a65",
+      "driver": "GTiff",
+      "bands": 1,
+      "dtype": "float32",
+      "crs": "EPSG:26910",
+      "resolution_m": [
+        1,
+        1
+      ],
+      "transform": [
+        1,
+        0,
+        749994.0000231203,
+        0,
+        -1,
+        4410006.000052751,
+        0,
+        0,
+        1
+      ],
+      "bounds": [
+        749994.0000231203,
+        4399994.000052751,
+        760006.0000231203,
+        4410006.000052751
+      ],
+      "nodata": -999999,
+      "compression": "LZW",
+      "valid_pixels": 88172690,
+      "nodata_pixels": 12067454,
+      "elevation_m": {
+        "min": 1437.4375,
+        "max": 2393.78515625,
+        "mean": 1665.183315695597,
+        "std": 211.63889144297104
+      },
+      "bounds_reprojected_to_gems_crs": [
+        235655.92759698688,
+        4399804.757140742,
+        246316.11207065877,
+        4410464.941333868
+      ],
+      "relation_to_gems": "Overlaps only the western edge of the GEMS grid after reprojection; source CRS is NAD83 / UTM zone 10N while GEMS is WGS84 / UTM zone 11N."
+    }
   ]
 }
