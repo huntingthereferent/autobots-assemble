@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Foundation Record",
+  "type": "object",
+  "required": [
+    "id",
+    "source_work",
+    "title",
+    "goal_lane",
+    "fields",
+    "realization_layers",
+    "evidence",
+    "demonstrated_capability"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^FOUND-[0-9]{4}$"
+    },
+    "source_work": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "goal_lane": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "realization_layers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deepest_supported_layer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "problem": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "demonstrated_capability": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "difficulty_evidence": {
+      "type": "object"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "external_witness": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "failures_and_corrections": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "limits": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": true
+}

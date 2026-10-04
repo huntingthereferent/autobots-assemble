@@ -1,6 +1,6 @@
 # Language Network
 
-A persistent external operating environment for using AI across work, research, tools, domains, and human language.
+A persistent external operating environment for using AI across **ALL WORK**: research, public contribution, paid work, software, mathematics, physical systems, fabrication, measurement, manufacturing, and future fields/layers.
 
 The repository is **not A/B itself**. A/B remains the recursively reusable mathematical operation and witness/evidence contract.
 
@@ -12,15 +12,33 @@ The repository is **not A/B itself**. A/B remains the recursively reusable mathe
 4. [`state/current.json`](state/current.json)
 5. [`protocols/README.md`](protocols/README.md)
 6. [`language/README.md`](language/README.md) when human language/register matters
-7. the active lane record reached from the current referent
+7. the active work record reached from the current referent
 
-## Three goal lanes
+## ALL WORK
 
-- **Theory / Research** — [`research/`](research/) for academia, theory, experiments, and random dives.
-- **Open Source** — [`open_source/`](open_source/) for public project contributions.
-- **Money / Jobs** — [`money/`](money/) plus [`jobs/`](jobs/) for paid/external work.
+[`work/`](work/) defines the umbrella:
 
-Crossing lanes requires an explicit handoff.
+- **goal lane** — research, open source, money/jobs, or a future purpose;
+- **field/domain** — math, software, electronics, mechanical, biology, manufacturing, etc.;
+- **realization layer** — idea, research, model, simulation, design, implementation, physical build, measurement, inspection, validation, deployed/operating.
+
+These axes are separate. **Physical is not a goal lane. Software is not the default meaning of work.**
+
+## Current goal lanes
+
+- **Theory / Research** — [`research/`](research/)
+- **Open Source** — [`open_source/`](open_source/)
+- **Money / Jobs** — [`money/`](money/) plus [`jobs/`](jobs/)
+
+Crossing goal lanes requires an explicit handoff.
+
+## Foundation and credibility
+
+[`foundation/`](foundation/) is the cross-lane evidence base of demonstrated work.
+
+A work item stays in its original lane; Foundation records what it actually demonstrated and how deeply it was realized.
+
+**Credibility is a read-only lens over Foundation**, not a manually assigned score and not synonymous with coding reputation.
 
 ## Shared layers
 
@@ -32,18 +50,6 @@ Crossing lanes requires an explicit handoff.
 - **domains/**
 - **evidence/**
 - **state/**
-
-## Research dives
-
-Random academia is valid. Durable dives live under [`research/dives/`](research/dives/).
-
-## Open source
-
-Open-source contributions get their own durable records rather than being mixed into paid jobs. A contribution can be code, docs, tests, review, data, standards work, or another upstream contribution.
-
-## Output lenses
-
-Rendering changes representation, not state.
 
 ## Core rule
 
