@@ -1,15 +1,20 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 ARC3-TRACE-001 — ARC-AGI-3 causal reasoning trace",
+  "preferred_referent": "📍 ARC3-TRACE-001 — ARC-AGI-3 transferable first-contact trace",
   "protocol": "research.dive",
-  "goal": "Trace one public ARC-AGI-3 environment from raw observation through intervention, observed effect, hypothesis, correction, world model, inferred goal, plan, and replay evidence; then test whether the same trace contract transfers unchanged to a second environment.",
+  "goal": "Use the swallowed ARC-AGI-3 contract to trace witnessed relations under first-contact conditions, measure environment-action cost, and test transfer without game-specific rewriting.",
   "status": "active",
-  "result_state": "MOVE",
-  "next_movement": "Reconstruct ar25 from the earliest observable transitions first. Build a state/action/effect ledger before accepting semantic interpretations from model reasoning traces.",
-  "walls": [],
+  "result_state": "MOVE_WITH_WALL",
+  "next_movement": "Select a currently available official public environment through the ARC toolkit; capture first-contact state and available actions, then begin a state/action/effect ledger with no inherited semantics.",
+  "walls": [
+    "Exact full Kaggle competition terms/eligibility and final runtime/quota clauses require direct live Kaggle rules inspection before any submission claim.",
+    "Private evaluation mechanics are intentionally hidden and unavailable for development."
+  ],
   "evidence": [
     "research/dives/ARC3-TRACE-001/dive.json",
     "research/dives/ARC3-TRACE-001/DIVE.md",
+    "research/dives/ARC3-TRACE-001/ARC3_SWALLOWED.md",
+    "research/dives/ARC3-TRACE-001/arc3_contract.json",
     "state/pins/GEMS-001_2026-10-03.json",
     "work/scans/SCAN-0001_2026-10-03.md"
   ],
