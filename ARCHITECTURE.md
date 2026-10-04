@@ -87,7 +87,7 @@ Typical outputs:
 
 ## Crossing lanes
 
-A crossing is an explicit `HANDOFF.BOUNDARY`.
+A crossing is an explicit handoff: `HANDOFF.BOUNDARY`.
 
 Examples:
 
