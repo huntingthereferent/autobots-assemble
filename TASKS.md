@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [ARC3-TRACE-001 — ARC-AGI-3 transferable first-contact trace](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE_WITH_WALL | Select a current official public environment through the toolkit; capture first-contact state/actions and trace witnessed relations while measuring action cost. |
+| [ARC3-TRACE-001 — ARC3 witness compression](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE_WITH_WALL | Find repeated/symmetric contexts inside one game and use one discriminating witness to resolve multiple candidate relations; do not transfer action semantics by shared IDs across games. |
 
 ## Pinned / resumable
 
