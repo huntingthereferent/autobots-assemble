@@ -84,6 +84,19 @@ map current reachable states
 
 False when the solver must deliberately construct a future helper from its own past trajectory.
 
+### SB26 — the interface is not the task
+
+Near-perfect transition models and good controllability still did not solve the game. The latent problem is program synthesis over subroutine slots and a target flattened color sequence.
+
+Failure form:
+
+```text
+I can predict every click
+→ therefore I have represented the problem correctly
+```
+
+False when the task lives in a different symbolic/compositional representation than the visible interaction dynamics.
+
 ## Practical use
 
 When live solving resumes, this ledger is a diagnostic.
