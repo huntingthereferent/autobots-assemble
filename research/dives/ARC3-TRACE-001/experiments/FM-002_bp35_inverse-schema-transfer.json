@@ -1,53 +1,52 @@
 {
   "schema_version": 1,
   "experiment_id": "FM-002",
-  "title": "BP35 hard-environment inverse-schema transfer",
-  "type": "cross_environment_forward_match",
+  "title": "BP35 cross-environment transfer attempt",
+  "type": "cross_environment_correspondence_test",
   "primary_source": {
     "role": "primary_replay",
     "url": "https://arcprize.org/replay/5a2a4b50-bb1b-4219-a268-35dee2268d28"
-  },
-  "imported_relation": {
-    "source_experiment": "FM-001",
-    "relation_type": "directional_inverse_schema",
-    "imported_component": "horizontal_translation",
-    "explicitly_not_imported": [
-      "LS20 step magnitude",
-      "object identity",
-      "blocking rules",
-      "goal semantics",
-      "absence of additional dynamics"
-    ]
   },
   "current_environment_witness": {
     "action": "ACTION3",
     "component": "horizontal_translation",
     "delta_pixels": -6,
-    "facing_effect": "reversed/left",
-    "evidence_form": "official replay reasoning"
+    "facing_effect": "left/reversed",
+    "evidence_form": "official replay reasoning",
+    "scope": "BP35 only"
   },
-  "forward_candidate": {
-    "action": "ACTION4",
-    "predicted_local_component": {
-      "horizontal_delta_pixels": 6,
-      "facing_effect": "right"
-    },
-    "context_condition": "equivalent horizontal move unblocked",
-    "status": "PREDICTED"
+  "attempted_import": {
+    "source_experiment": "FM-001",
+    "relation": "ACTION3/ACTION4 directional inverse",
+    "failure": "No witness establishes that standardized action IDs preserve game-specific semantics across LS20 and BP35."
   },
-  "unresolved_components": [
-    "additional context-dependent slide/pull dynamics",
-    "collision consequences",
-    "goal relevance"
-  ],
-  "result": "PARTIAL_TRANSFER_SUPPORTED_LOCAL_COMPONENT",
-  "first_wall": "The local inverse primitive does not by itself determine the full composite BP35 next state.",
-  "representation_update": {
-    "action_effect_shape": [
-      "primitive_components",
+  "result": "WALL_MISSING_CROSS_ENV_ACTION_CORRESPONDENCE",
+  "correction_of_prior_result": "PARTIAL_TRANSFER_SUPPORTED_LOCAL_COMPONENT",
+  "preserved_insight": {
+    "transition_factorization": [
+      "primitive_effects",
       "context_gates",
       "composite_consequences"
     ],
-    "rule": "Each component/gate/consequence retains an independent witness."
+    "requirement": "Every transferred edge requires a supported correspondence."
+  },
+  "allowed_reuse": {
+    "within_environment": "same witnessed action + supported corresponding context may generate a candidate effect",
+    "cross_environment": [
+      "representation shape",
+      "relation classes",
+      "candidate generation procedure",
+      "witness contract",
+      "action-selection strategy"
+    ]
+  },
+  "forbidden_reuse": {
+    "cross_environment": [
+      "raw action semantics",
+      "step magnitude",
+      "object identity",
+      "blocking rules",
+      "goal semantics"
+    ]
   }
 }
