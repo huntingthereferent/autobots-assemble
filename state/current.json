@@ -1,13 +1,14 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 ARC3-TRACE-001 — A/B-constrained forward matching under ARC3 first-contact",
+  "preferred_referent": "📍 ARC3-TRACE-001 — witness compression from supported within-environment correspondences",
   "protocol": "research.dive",
-  "goal": "Use witnessed ARC3 relations plus supported parent correspondences to generate falsifiable forward predictions before spending environment actions; choose live actions that discriminate the most candidate relations, then recurse under the same witness contract.",
+  "goal": "Use locally witnessed ARC3 mechanics plus supported same-environment correspondences to resolve multiple candidate relations per live environment action, without transferring game-specific action semantics across environments.",
   "status": "active",
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Enter one current official public ARC3 environment. After the minimum first witnessed transition, search for supported corresponding contexts, generate forward predictions without probing them, and choose the next action by discriminating power/action cost.",
+  "next_movement": "Find a public ARC3 state with multiple repeated/symmetric unresolved contexts. Build candidate effect partitions from already witnessed local mechanics, then choose one live/replay-held-out action whose outcome can support or reject several context gates at once.",
   "walls": [
-    "The Axioms correspondence principle is recursively implementable but not yet justified as general A/B; ARC3 forward matches remain predictions until externally witnessed.",
+    "Cross-environment standardized action IDs do not supply semantic correspondence; game-specific action meanings must be locally grounded.",
+    "The Axioms correspondence principle remains mathematically unresolved; every forward projection still requires an explicit correspondence witness.",
     "Exact full Kaggle competition terms/eligibility and final runtime/quota clauses require direct live Kaggle rules inspection before any submission claim.",
     "Private evaluation mechanics are intentionally hidden and unavailable for development."
   ],
@@ -18,6 +19,10 @@
     "research/dives/ARC3-TRACE-001/arc3_contract.json",
     "research/dives/ARC3-TRACE-001/forward_match.json",
     "research/dives/ARC3-TRACE-001/FORWARD_MATCH.md",
+    "research/dives/ARC3-TRACE-001/experiments/FM-003_ls20_recursive-forward-match.json",
+    "research/dives/ARC3-TRACE-001/experiments/FM-002_bp35_inverse-schema-transfer.json",
+    "research/dives/ARC3-TRACE-001/experiments/FM-001_ls20_inverse-action-calibration.json",
+    "research/dives/ARC3-TRACE-001/CORRESPONDENCE_GATE.md",
     "state/pins/GEMS-001_2026-10-03.json",
     "work/scans/SCAN-0001_2026-10-03.md"
   ],
