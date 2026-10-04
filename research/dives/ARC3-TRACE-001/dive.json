@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "dive_id": "ARC3-TRACE-001",
+  "title": "ARC-AGI-3 causal reasoning trace",
+  "status": "active",
+  "protocol": "research.dive",
+  "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
+  "preferred_referent": "📍 ARC3-TRACE-001 — trace one public ARC-AGI-3 environment from raw observation through causal model, inferred goal, plan, action, correction, and replay evidence.",
+  "fields": [
+    "artificial intelligence",
+    "interactive reasoning",
+    "agentic systems",
+    "causal inference",
+    "world-model construction",
+    "planning"
+  ],
+  "lane": "Theory / Research",
+  "relations": [
+    "Open Source",
+    "Prize / benchmark"
+  ],
+  "goal": "Produce a provenance-preserving causal trace for one public ARC-AGI-3 environment that separates observation, intervention, observed effect, hypothesis, falsification/correction, inferred rule, inferred goal, plan, and verified outcome. Then test whether the same trace contract can be reused on a second environment.",
+  "definition_of_solved_for_first_trace": [
+    "Every admitted rule is tied to an observable state transition or replay witness.",
+    "Failed hypotheses remain preserved rather than silently rewritten.",
+    "The inferred goal is distinguished from the mechanics used to reach it.",
+    "A compact world model predicts at least one later state transition before it is observed.",
+    "The final trace explains a successful or meaningfully advancing action sequence without relying on hidden instructions.",
+    "The output can be presented unchanged as input to the same trace contract on another public environment."
+  ],
+  "benchmark_context": {
+    "name": "ARC-AGI-3",
+    "competition_deadline": "2026-11-02",
+    "external_witness": "Hidden benchmark evaluation plus public replay/action traces and human baselines.",
+    "prize_relation": "$850K ARC-AGI-3 track; $700K grand prize for 100% according to official competition page.",
+    "important_boundary": "Prize-eligible competition solutions must be open source and evaluation has no internet access. The first trace is public research and does not claim competition eligibility or benchmark performance."
+  },
+  "initial_target": {
+    "environment": "ar25",
+    "reason": "It is a public ARC-AGI-3 demo environment with inspectable model replays showing exploratory actions, mistaken hypotheses, corrections, and partial progression. This makes the reasoning path externally inspectable rather than invented from a solved description."
+  },
+  "source_map": [
+    {
+      "type": "official benchmark",
+      "url": "https://arcprize.org/arc-agi/3",
+      "supports": "benchmark purpose, interactive reasoning shape, human-solvability framing"
+    },
+    {
+      "type": "official technical report",
+      "url": "https://arcprize.org/media/ARC_AGI_3_Technical_Report.pdf",
+      "supports": "benchmark methodology, goal inference, world-model building, planning, efficiency"
+    },
+    {
+      "type": "official competition",
+      "url": "https://arcprize.org/competitions/2026/arc-agi-3",
+      "supports": "external evaluation, prize structure, open-source requirement, no-internet evaluation boundary"
+    },
+    {
+      "type": "official human dataset",
+      "url": "https://arcprize.org/blog/arc-agi-3-human-dataset",
+      "supports": "human baseline design and public step-by-step replay availability"
+    },
+    {
+      "type": "official model-analysis",
+      "url": "https://arcprize.org/blog/arc-agi-3-gpt-5-5-opus-4-7-analysis",
+      "supports": "known failure modes including local-effect recognition without correct world-model abstraction"
+    },
+    {
+      "type": "public replay",
+      "url": "https://arcprize.org/replay/7752f433-a3a4-4026-ae8c-6c32b4afcf9d",
+      "supports": "inspectable ar25 action/reasoning trace with partial progression and corrections"
+    }
+  ],
+  "result_state": "MOVE",
+  "next_movement": "Reconstruct ar25 from the earliest observable transitions first: make a state/action/effect ledger before accepting any semantic interpretation. Use later replay reasoning only as comparison evidence, not as ground truth.",
+  "walls": [],
+  "handoff_from": {
+    "type": "HANDOFF.BOUNDARY",
+    "source": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
+    "source_state": "state/pins/GEMS-001_2026-10-03.json",
+    "reason": "Explicit user-directed referent change. GEMS remains pinned and resumable."
+  }
+}
