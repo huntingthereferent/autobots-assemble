@@ -5,7 +5,7 @@
   "status": "active",
   "protocol": "research.dive",
   "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
-  "preferred_referent": "📍 ARC3-100 — first-contact discovery-inclusive 100%",
+  "preferred_referent": "📍 SOLVE THE WHOLE THING — ARC-AGI-3 100%",
   "fields": [
     "artificial intelligence",
     "interactive reasoning",
@@ -19,7 +19,7 @@
     "Open Source",
     "Prize / benchmark"
   ],
-  "goal": "Solve ARC-AGI-3 on first contact with total discovery+execution environment actions near or better than human first-run baselines. Banked-path efficiency is supporting evidence, not the acceptance condition.",
+  "goal": "Directly solve the whole ARC-AGI-3 benchmark. Public source-free completions are oracle evidence; Gen-1 is frozen supporting tooling; current offline work is concrete solved-case/failure-boundary analysis rather than further architecture building.",
   "definition_of_solved_for_first_trace": [
     "Every admitted rule is tied to an observable state transition or replay witness.",
     "Failed hypotheses remain preserved rather than silently rewritten.",
@@ -103,7 +103,7 @@
     }
   ],
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Keep advancing the generic solver offline. Gen-1 now has dual-lens state, conflict-aware object transitions, known-progress BFS, and CI. The live operator/execution path is pinned until computer access.",
+  "next_movement": "Continue the public hard-case audit with RE86 after BP35 and LF52; preserve solution evidence as oracle-only and extract concrete failure classes relevant to later first-contact play.",
   "walls": [
     "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
@@ -192,7 +192,7 @@
     "generations": {
       "gen0": "research/dives/ARC3-TRACE-001/direct_agent/my_agent.py",
       "gen1": {
-        "status": "hermetic_ci_pass",
+        "status": "frozen_supporting_tooling_hermetic_ci_pass",
         "agent": "research/dives/ARC3-TRACE-001/direct_agent/gen1/my_agent.py",
         "state": "research/dives/ARC3-TRACE-001/direct_agent/gen1/state.py",
         "model": "research/dives/ARC3-TRACE-001/direct_agent/gen1/model.py",
@@ -205,7 +205,20 @@
       "doc": "research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md",
       "role": "ChatGPT-directed live action loop with append-only transcript once a computer is connected."
     },
-    "execution_pin": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json"
+    "execution_pin": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
+    "oracle_ledger": "research/dives/ARC3-TRACE-001/oracles/public_solve_ledger.json",
+    "solved_cases": [
+      {
+        "game": "bp35",
+        "path": "research/dives/ARC3-TRACE-001/oracles/BP35.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_9_9"
+      },
+      {
+        "game": "lf52",
+        "path": "research/dives/ARC3-TRACE-001/oracles/LF52.md",
+        "status": "PUBLIC_SOURCE_FREE_SOLVED_10_10"
+      }
+    ]
   },
   "public_prior_art": {
     "status": "swallowed_supporting_evidence",
@@ -224,5 +237,10 @@
     "ACTION6": "coordinate click",
     "ACTION7": "undo",
     "boundary": "Direction semantics are supplied for ACTION1-4; affected object, movement scale, collision/side effects, goals, and game-specific interactions still require current-game evidence."
+  },
+  "phase": {
+    "id": "SOLVE_THE_WHOLE_THING",
+    "spec": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
+    "active": true
   }
 }
