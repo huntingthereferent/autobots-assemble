@@ -1,6 +1,14 @@
 # TASKS — Current Work
 
-> Generated from canonical \`jobs/*/job.json\` records through the A/B work adapter.
+## Active ALL WORK
+
+| Work | Lane | State | Next movement |
+|---|---|---|---|
+| [GEMS-001 — DOE GEMS hidden-fault mapping](money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md) | Money/Prize + Research relation | MOVE_WITH_WALL | Enroll/accept rules and download competition data locally; reproduce baseline plumbing and exact metric before model changes. |
+
+## Historical / paid-job adapter view
+
+> The table below is generated from canonical \`jobs/*/job.json\` records through the A/B work adapter. Active ALL WORK above is maintained separately.
 
 | Job | Protocol result | Work status | Next movement |
 |---|---|---|---|

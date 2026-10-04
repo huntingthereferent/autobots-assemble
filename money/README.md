@@ -17,3 +17,10 @@ To move something from research into this lane, create an explicit handoff that 
 - what must be revalidated.
 
 Likewise, a completed job can produce a research candidate without making the paid result itself a theory claim.
+
+
+## Prize challenges
+
+Hard externally judged prize work lives under [`money/challenges/`](challenges/) when compensation is the primary active goal.
+
+Active: [GEMS-001](challenges/GEMS-001_hidden-fault-mapping/GEMS.md).
