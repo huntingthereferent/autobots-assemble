@@ -71,6 +71,19 @@ my model has no solution
 
 False unless model completeness is independently established.
 
+### G50T — past-you is part of the plan
+
+A recorded path is replayed by a ghost so the ghost can hold a switch while the fresh player continues.
+
+Failure form:
+
+```text
+map current reachable states
+→ therefore I have represented the important planning state
+```
+
+False when the solver must deliberately construct a future helper from its own past trajectory.
+
 ## Practical use
 
 When live solving resumes, this ledger is a diagnostic.
