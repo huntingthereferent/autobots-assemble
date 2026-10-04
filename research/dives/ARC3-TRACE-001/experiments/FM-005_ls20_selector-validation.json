@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "experiment_id": "FM-005",
+  "title": "LS20 retrospective selector validation",
+  "type": "held_out_action_ranking_replay_test",
+  "source": {
+    "role": "primary_replay",
+    "url": "https://arcprize.org/replay/8314341d-c2e5-4b75-af8a-a085eddd8165",
+    "pre_action_frame": 18,
+    "held_out_witness_frame": 19
+  },
+  "discriminating_observable": "bottom_left_glyph",
+  "candidate_models": {
+    "H_flip": {
+      "ACTION1": [
+        "X.X",
+        "..X",
+        "XXX"
+      ],
+      "ACTION2": [
+        "XXX",
+        "..X",
+        "X.X"
+      ],
+      "ACTION3": [
+        "X.X",
+        "..X",
+        "XXX"
+      ],
+      "ACTION4": [
+        "X.X",
+        "..X",
+        "XXX"
+      ]
+    },
+    "H_rotate": {
+      "ACTION1": [
+        "X.X",
+        "..X",
+        "XXX"
+      ],
+      "ACTION2": [
+        "X.X",
+        "X..",
+        "XXX"
+      ],
+      "ACTION3": [
+        "X.X",
+        "..X",
+        "XXX"
+      ],
+      "ACTION4": [
+        "X.X",
+        "..X",
+        "XXX"
+      ]
+    }
+  },
+  "selector_scores": {
+    "ACTION1": {
+      "separated_pairs": 0,
+      "total_pairs": 1,
+      "separation_rate": 0
+    },
+    "ACTION2": {
+      "separated_pairs": 1,
+      "total_pairs": 1,
+      "separation_rate": 1
+    },
+    "ACTION3": {
+      "separated_pairs": 0,
+      "total_pairs": 1,
+      "separation_rate": 0
+    },
+    "ACTION4": {
+      "separated_pairs": 0,
+      "total_pairs": 1,
+      "separation_rate": 0
+    }
+  },
+  "selector_choice": "ACTION2",
+  "replay_action": "ACTION2",
+  "held_out_observation": [
+    "X.X",
+    "X..",
+    "XXX"
+  ],
+  "supported_candidate": "H_rotate",
+  "falsified_candidate": "H_flip",
+  "result": "SUPPORTED_SELECTOR_RETROSPECTIVE_VALIDATION",
+  "next_test": "Find a held-out decision where selector ranking differs from the recorded exploratory action and test whether the alternative would resolve more candidate relations."
+}
