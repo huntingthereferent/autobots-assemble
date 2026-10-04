@@ -5,13 +5,20 @@
   "goal": "Solve novel ARC-AGI-3 environments to 100% while counting the real first-contact exploration used to discover controls, mechanics, goals, and plans; do not substitute a later banked/minimized replay path for the discovery run.",
   "status": "active",
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Run the generic first-contact agent through the official ARC-AGI-3 starter as one clean first pass over the public set; preserve actual discovery+execution actions, level progress, deaths/resets, and score. Improve the generic solver from those first-run failures without embedding per-game solution paths.",
+  "next_movement": "Continue offline solver development around Gen-1 dual-lens perception, learned transition planning, and the operator shell. Live ARC execution is pinned separately until a computer is available; do not stop research merely because the runtime is unavailable.",
   "walls": [
-    "The current chat runtime does not have the arc_agi game engine or a live ARC3 execution session, so the newly built agent cannot be honestly scored here yet.",
     "Private competition environments are intentionally hidden; private 100% requires an official Kaggle competition rerun.",
     "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
   ],
   "evidence": [
+    "research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md",
+    "research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py",
+    ".github/workflows/arc3_gen1_tests.yml",
+    "research/dives/ARC3-TRACE-001/direct_agent/gen1/test_core.py",
+    "research/dives/ARC3-TRACE-001/direct_agent/gen1/my_agent.py",
+    "research/dives/ARC3-TRACE-001/direct_agent/gen1/model.py",
+    "research/dives/ARC3-TRACE-001/direct_agent/gen1/state.py",
+    "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
     "research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md",
     "research/dives/ARC3-TRACE-001/direct_agent/run_first_contact.py",
     "research/dives/ARC3-TRACE-001/ACTION_SEMANTICS_CORRECTION.md",
@@ -43,5 +50,12 @@
     "from": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
     "from_state": "state/pins/GEMS-001_2026-10-03.json",
     "reason": "Explicit user-directed referent change after pinning GEMS."
+  },
+  "deferred_dependencies": {
+    "live_execution": {
+      "status": "PINNED",
+      "pin": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
+      "note": "Resume when user has a computer; solver development continues meanwhile."
+    }
   }
 }
