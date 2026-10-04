@@ -5,12 +5,13 @@
   "goal": "Solve ARC-AGI-3 completely. Live execution is now available; use immutable discovery-inclusive runs to drive only generic, evidence-required corrections.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Build the next direct solver around compact latent-state induction from observed action deltas: action-effect classes, stable/moving objects, relational variables, and exact-pixel witness preservation. Plan only after that abstraction is earned. G1/G1.1/action-score tweaks are closed as failed.",
+  "next_movement": "Treat SB26 as a solved regression (generic visual-grammar mode: 8/8, 124 actions, score 100). Apply the earned representation-first movement to the next unsolved public failure: infer the task language from observable structure before search, add only generic machinery justified by that live failure, and preserve SB26 as a no-regression test.",
   "walls": [
     "Private competition environments are intentionally hidden; private 100% requires an official Kaggle competition rerun.",
     "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
   ],
   "evidence": [
+    "research/dives/ARC3-TRACE-001/runs/SB26_SYMBOLIC_RECOVERY_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/runs/G1_G1_1_LIVE_EXPERIMENTS_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/runs/FIRST_CONTACT_G0_1_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/oracles/HARD_CASES.md",
@@ -76,5 +77,17 @@
     "id": "SOLVE_THE_WHOLE_THING",
     "spec": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
     "gen1_status": "FROZEN_SUPPORTING_TOOLING"
+  },
+  "live_progress": {
+    "sb26": {
+      "status": "SOLVED_GENERIC_VISUAL_GRAMMAR",
+      "levels_completed": 8,
+      "total_levels": 8,
+      "actions": 124,
+      "state": "WIN",
+      "score": 100,
+      "game_id_branch": false,
+      "banked_replay_in_solver": false
+    }
   }
 }
