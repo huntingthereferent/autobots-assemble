@@ -185,7 +185,10 @@
     "implementation": "research/dives/ARC3-TRACE-001/direct_agent/my_agent.py",
     "acceptance": "Measure the untouched first-contact run including discovery actions; never replace it with a later banked/minimized replay score.",
     "public_goal": "25/25 public games under one generic solver with discovery-inclusive first-contact efficiency at/above human baseline.",
-    "private_claim_boundary": "Only official hidden evaluation can establish competition 100%."
+    "private_claim_boundary": "Only official hidden evaluation can establish competition 100%.",
+    "runner": "research/dives/ARC3-TRACE-001/direct_agent/run_first_contact.py",
+    "runbook": "research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md",
+    "first_run_rule": "The first public evaluation must preserve the exact agent hash and count discovery + execution actions; later banked/minimized replay paths cannot replace this witness."
   },
   "public_prior_art": {
     "status": "swallowed_supporting_evidence",
