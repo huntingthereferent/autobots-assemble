@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "phase": "SOLVE_THE_WHOLE_THING",
+  "role": "oracle_only",
+  "source": {
+    "repository": "quome-cloud/openworld",
+    "file": "experiments/results/arc3_fullgame_sourcefree_fable.json",
+    "protocol": "source-free; process-isolated; replay-verified according to source artifact"
+  },
+  "boundary": "These solved paths are regression/oracle evidence only and must not be embedded as game-specific policies in the first-contact/competition solver.",
+  "public_games": [
+    {
+      "game": "lf52",
+      "levels": 10,
+      "actions": 914,
+      "clicks": 374
+    },
+    {
+      "game": "re86",
+      "levels": 8,
+      "actions": 699,
+      "clicks": 0
+    },
+    {
+      "game": "wa30",
+      "levels": 9,
+      "actions": 619,
+      "clicks": 0
+    },
+    {
+      "game": "sk48",
+      "levels": 8,
+      "actions": 556,
+      "clicks": 27
+    },
+    {
+      "game": "dc22",
+      "levels": 6,
+      "actions": 491,
+      "clicks": 141
+    },
+    {
+      "game": "ls20",
+      "levels": 7,
+      "actions": 421,
+      "clicks": 0
+    },
+    {
+      "game": "bp35",
+      "levels": 9,
+      "actions": 384,
+      "clicks": 185
+    },
+    {
+      "game": "ka59",
+      "levels": 7,
+      "actions": 377,
+      "clicks": 20
+    },
+    {
+      "game": "tr87",
+      "levels": 6,
+      "actions": 349,
+      "clicks": 0
+    },
+    {
+      "game": "g50t",
+      "levels": 7,
+      "actions": 314,
+      "clicks": 0
+    },
+    {
+      "game": "ar25",
+      "levels": 8,
+      "actions": 254,
+      "clicks": 16
+    },
+    {
+      "game": "s5i5",
+      "levels": 8,
+      "actions": 253,
+      "clicks": 253
+    },
+    {
+      "game": "cn04",
+      "levels": 6,
+      "actions": 211,
+      "clicks": 14
+    },
+    {
+      "game": "m0r0",
+      "levels": 6,
+      "actions": 198,
+      "clicks": 12
+    },
+    {
+      "game": "tu93",
+      "levels": 9,
+      "actions": 187,
+      "clicks": 0
+    },
+    {
+      "game": "vc33",
+      "levels": 7,
+      "actions": 170,
+      "clicks": 170
+    },
+    {
+      "game": "sc25",
+      "levels": 6,
+      "actions": 167,
+      "clicks": 71
+    },
+    {
+      "game": "su15",
+      "levels": 9,
+      "actions": 141,
+      "clicks": 141
+    },
+    {
+      "game": "sp80",
+      "levels": 6,
+      "actions": 138,
+      "clicks": 17
+    },
+    {
+      "game": "cd82",
+      "levels": 6,
+      "actions": 126,
+      "clicks": 36
+    },
+    {
+      "game": "sb26",
+      "levels": 8,
+      "actions": 124,
+      "clicks": 116
+    },
+    {
+      "game": "tn36",
+      "levels": 7,
+      "actions": 123,
+      "clicks": 123
+    },
+    {
+      "game": "lp85",
+      "levels": 8,
+      "actions": 98,
+      "clicks": 98
+    },
+    {
+      "game": "r11l",
+      "levels": 6,
+      "actions": 86,
+      "clicks": 86
+    },
+    {
+      "game": "ft09",
+      "levels": 6,
+      "actions": 83,
+      "clicks": 83
+    }
+  ],
+  "total_games": 25,
+  "total_levels": 183,
+  "all_source_artifact_completed": true,
+  "current_audit_target": "bp35"
+}
