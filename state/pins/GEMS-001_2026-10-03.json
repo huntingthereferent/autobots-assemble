@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "pin_id": "PIN-GEMS-001-2026-10-03",
+  "preferred_referent": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
+  "protocol": "work.bounded-problem",
+  "lane": "Money / Prize",
+  "status": "pinned",
+  "pinned_at_local": "2026-10-03T23:22:00-05:00",
+  "pin_reason": "User explicitly pinned the active GEMS work before moving the current referent to a separate impressive tracing target.",
+  "goal": "Produce a reproducible competitive GEMS GeoTIFF submission while preserving scientific, rule, license, and provenance boundaries.",
+  "result_state": "MOVE_WITH_WALL",
+  "resume_from": "Verify the exact GEMS-specific competition-data sharing/third-party-service rule; then run the local baseline through the downloaded-data/output contract before changing models.",
+  "walls": [
+    "Exact GEMS competition-data sharing/third-party-service terms still need direct verification before further gated-data modeling outside the competitor-controlled environment."
+  ],
+  "evidence": [
+    "money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/DATASET_INSPECTION.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/data_manifest.json",
+    "money/challenges/GEMS-001_hidden-fault-mapping/output/contract.json",
+    "money/challenges/GEMS-001_hidden-fault-mapping/BASELINE_DISSECTION.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/STRATEGY.md",
+    "money/challenges/GEMS-001_hidden-fault-mapping/DEM_INGEST.md",
+    "work/scans/SCAN-0001_2026-10-03.md"
+  ],
+  "continuation_rule": "Pinned means preserved and resumable, not completed or abandoned. Resume from resume_from unless a new explicit referent overrides it."
+}
