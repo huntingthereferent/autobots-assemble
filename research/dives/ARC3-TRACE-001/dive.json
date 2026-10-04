@@ -19,7 +19,7 @@
     "Open Source",
     "Prize / benchmark"
   ],
-  "goal": "Produce a provenance-preserving causal trace for one public ARC-AGI-3 environment that separates observation, intervention, observed effect, hypothesis, falsification/correction, inferred rule, inferred goal, plan, and verified outcome. Then test whether the same trace contract can be reused on a second environment.",
+  "goal": "Use the swallowed ARC-AGI-3 contract to build a provenance-preserving relation trace that survives transfer across first-contact environments, while measuring action cost separately from explanatory completeness.",
   "definition_of_solved_for_first_trace": [
     "Every admitted rule is tied to an observable state transition or replay witness.",
     "Failed hypotheses remain preserved rather than silently rewritten.",
@@ -36,8 +36,9 @@
     "important_boundary": "Prize-eligible competition solutions must be open source and evaluation has no internet access. The first trace is public research and does not claim competition eligibility or benchmark performance."
   },
   "initial_target": {
-    "environment": "ar25",
-    "reason": "It is a public ARC-AGI-3 demo environment with inspectable model replays showing exploratory actions, mistaken hypotheses, corrections, and partial progression. This makes the reasoning path externally inspectable rather than invented from a solved description."
+    "environment": "current official public environment to be selected through the toolkit",
+    "status": "reselect_after_swallow",
+    "reason": "The earlier ar25 replay characterization is PARTIAL through the current retrieval path. Select a currently available official environment directly from the toolkit rather than treating stale replay prose as ground truth."
   },
   "source_map": [
     {
@@ -69,15 +70,61 @@
       "type": "public replay",
       "url": "https://arcprize.org/replay/7752f433-a3a4-4026-ae8c-6c32b4afcf9d",
       "supports": "inspectable ar25 action/reasoning trace with partial progression and corrections"
+    },
+    {
+      "type": "official docs",
+      "url": "https://docs.arcprize.org/game-schema",
+      "supports": "game state, grid, frame, and available-action contract"
+    },
+    {
+      "type": "official docs",
+      "url": "https://docs.arcprize.org/actions",
+      "supports": "standardized action vocabulary and affordance boundary"
+    },
+    {
+      "type": "official docs",
+      "url": "https://docs.arcprize.org/methodology",
+      "supports": "RHAE completion/action-efficiency scoring"
+    },
+    {
+      "type": "official docs",
+      "url": "https://docs.arcprize.org/toolkit/competition_mode",
+      "supports": "first-contact/competition mode restrictions"
+    },
+    {
+      "type": "official testing policy",
+      "url": "https://arcprize.org/policy",
+      "supports": "public vs semi-private vs private evaluation and verification boundary"
+    },
+    {
+      "type": "official community leaderboard",
+      "url": "https://arcprize.org/leaderboard/community",
+      "supports": "current public-demo prior art and self-reported/public evidence boundary"
     }
   ],
   "result_state": "MOVE",
-  "next_movement": "Reconstruct ar25 from the earliest observable transitions first: make a state/action/effect ledger before accepting any semantic interpretation. Use later replay reasoning only as comparison evidence, not as ground truth.",
-  "walls": [],
+  "next_movement": "Select a currently available official public environment through the ARC toolkit and capture the first-contact frame plus available actions. Begin the state/action/effect ledger under the swallowed contract; do not use prior game semantics.",
+  "walls": [
+    "Exact full Kaggle competition terms/eligibility and final runtime/quota clauses still require direct live Kaggle rules inspection before any submission claim.",
+    "Private evaluation mechanics are intentionally unavailable and cannot be used during development."
+  ],
   "handoff_from": {
     "type": "HANDOFF.BOUNDARY",
     "source": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
     "source_state": "state/pins/GEMS-001_2026-10-03.json",
     "reason": "Explicit user-directed referent change. GEMS remains pinned and resumable."
+  },
+  "swallowed_evidence": {
+    "status": "swallowed",
+    "summary": "research/dives/ARC3-TRACE-001/ARC3_SWALLOWED.md",
+    "machine_contract": "research/dives/ARC3-TRACE-001/arc3_contract.json",
+    "correction": "Public-demo tracing/world-model/falsification approaches already have strong prior art. A single public-game trace is not sufficient for an impressive external claim.",
+    "differentiating_boundary": [
+      "cross-environment transfer without game-specific contract changes",
+      "action-efficient relation acquisition",
+      "machine-auditable provenance and unsupported-jump detection",
+      "Competition Mode first-contact performance",
+      "hidden/private external evaluation"
+    ]
   }
 }
