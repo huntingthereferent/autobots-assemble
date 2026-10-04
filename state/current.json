@@ -1,16 +1,20 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 ARC3-100 — first-contact discovery-inclusive 100%",
+  "preferred_referent": "📍 SOLVE THE WHOLE THING — ARC-AGI-3 100%",
   "protocol": "work.bounded-problem",
-  "goal": "Solve novel ARC-AGI-3 environments to 100% while counting the real first-contact exploration used to discover controls, mechanics, goals, and plans; do not substitute a later banked/minimized replay path for the discovery run.",
+  "goal": "Solve ARC-AGI-3 completely. Use public solved cases as oracle evidence, keep Gen-1 frozen as supporting tooling, and continue concrete solve/failure-boundary work until live first-contact execution resumes.",
   "status": "active",
   "result_state": "MOVE_WITH_WALL",
-  "next_movement": "Continue offline solver development around Gen-1 dual-lens perception, learned transition planning, and the operator shell. Live ARC execution is pinned separately until a computer is available; do not stop research merely because the runtime is unavailable.",
+  "next_movement": "Audit concrete hard public solved cases as oracle-only evidence. BP35 and LF52 are recorded; next inspect RE86 to separate long-horizon difficulty from click-coordinate complexity. Live execution remains pinned until computer access.",
   "walls": [
     "Private competition environments are intentionally hidden; private 100% requires an official Kaggle competition rerun.",
     "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
   ],
   "evidence": [
+    "research/dives/ARC3-TRACE-001/oracles/LF52.md",
+    "research/dives/ARC3-TRACE-001/oracles/BP35.md",
+    "research/dives/ARC3-TRACE-001/oracles/public_solve_ledger.json",
+    "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
     "research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md",
     "research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py",
     ".github/workflows/arc3_gen1_tests.yml",
@@ -57,5 +61,10 @@
       "pin": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
       "note": "Resume when user has a computer; solver development continues meanwhile."
     }
+  },
+  "phase": {
+    "id": "SOLVE_THE_WHOLE_THING",
+    "spec": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
+    "gen1_status": "FROZEN_SUPPORTING_TOOLING"
   }
 }
