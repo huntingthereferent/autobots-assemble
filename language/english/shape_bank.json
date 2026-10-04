@@ -1823,6 +1823,55 @@
           "open contribution pull request"
         ]
       }
+    },
+    {
+      "id": "WORK.ALL",
+      "canonical": "all work",
+      "definition": "Treat work literally as the full superset of purposeful activity across all fields, media, scales, and realization layers. Goal lanes classify why the work is being done; fields classify what it touches; realization layers classify how far it has moved from idea to observed result.",
+      "preserves": [
+        "goal lane",
+        "field/domain",
+        "realization layer",
+        "provenance",
+        "evidence depth"
+      ],
+      "does_not_imply": [
+        "software-only work",
+        "paid work only",
+        "research only",
+        "physical work as a separate goal lane",
+        "that unlike fields share the same witness contract"
+      ],
+      "surfaces": {
+        "standard": [
+          "Consider all work.",
+          "Use the all-work view."
+        ],
+        "plain": [
+          "All work means everything.",
+          "Look across every kind of work."
+        ],
+        "casual": [
+          "I mean literally all work.",
+          "All fields, all layers."
+        ],
+        "slang": [
+          "All work. Everything.",
+          "Whole board."
+        ],
+        "internet": [
+          "ALL WORK",
+          "all fields all layers"
+        ],
+        "caveman": [
+          "all work. all fields. all layers.",
+          "everything work."
+        ],
+        "technical": [
+          "project across the all-work superset",
+          "evaluate work across goal, field, and realization axes"
+        ]
+      }
     }
   ]
 }

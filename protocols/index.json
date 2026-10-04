@@ -1,5 +1,5 @@
 {
-  "schema_version": 7,
+  "schema_version": 8,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
   "protocols": {
     "core.referent": {
@@ -69,6 +69,10 @@
     "opensource.contribution": {
       "layer": "open_source",
       "path": "protocols/open_source/contribution.md"
+    },
+    "foundation.record": {
+      "layer": "foundation",
+      "path": "protocols/foundation/record.md"
     }
   },
   "template": "protocols/TEMPLATE.md"
