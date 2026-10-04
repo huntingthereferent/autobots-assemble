@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [ARC3-TRACE-001 — ARC-AGI-3 causal reasoning trace](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE | Reconstruct ar25 from observable state/action/effect transitions; admit semantics only after the transition ledger supports them. |
+| [ARC3-TRACE-001 — ARC-AGI-3 transferable first-contact trace](research/dives/ARC3-TRACE-001/DIVE.md) | Theory/Research + Open Source/Prize relation | MOVE_WITH_WALL | Select a current official public environment through the toolkit; capture first-contact state/actions and trace witnessed relations while measuring action cost. |
 
 ## Pinned / resumable
 
