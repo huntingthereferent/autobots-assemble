@@ -12,6 +12,8 @@
     "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
   ],
   "evidence": [
+    "research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md",
+    "research/dives/ARC3-TRACE-001/direct_agent/run_first_contact.py",
     "research/dives/ARC3-TRACE-001/ACTION_SEMANTICS_CORRECTION.md",
     "research/dives/ARC3-TRACE-001/PUBLIC_100_PRIOR_ART.md",
     "research/dives/ARC3-TRACE-001/direct_agent/my_agent.py",
