@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Language Network Handoff Packet",
+  "type": "object",
+  "required": [
+    "referent",
+    "goal",
+    "state",
+    "evidence",
+    "witnesses",
+    "movement",
+    "walls",
+    "artifacts",
+    "do_not_upgrade",
+    "next_referent",
+    "return_target"
+  ],
+  "properties": {
+    "referent": {
+      "type": "string"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "state": {
+      "enum": [
+        "MOVE",
+        "WALL",
+        "UNKNOWN",
+        "PARTIAL"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "witnesses": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "movement": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "walls": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "do_not_upgrade": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_referent": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "return_target": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "surface": {
+      "type": "object",
+      "description": "Optional human-language rendering metadata; not canonical movement state."
+    }
+  },
+  "additionalProperties": true
+}

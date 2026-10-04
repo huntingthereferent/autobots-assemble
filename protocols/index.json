@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
   "protocols": {
     "core.referent": {
@@ -45,6 +45,18 @@
     "work.osint": {
       "layer": "work",
       "path": "protocols/work/osint.md"
+    },
+    "language.decode": {
+      "layer": "language",
+      "path": "protocols/language/decode.md"
+    },
+    "language.render": {
+      "layer": "language",
+      "path": "protocols/language/render.md"
+    },
+    "output.lens": {
+      "layer": "output",
+      "path": "protocols/output/lens.md"
     }
   },
   "template": "protocols/TEMPLATE.md"
