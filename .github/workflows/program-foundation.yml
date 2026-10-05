@@ -3,18 +3,12 @@ name: program-foundation
 on:
   push:
     paths:
-      - "foundation/program_kernel/**"
-      - "foundation/program_examples/**"
-      - "foundation/program-foundation.schema.json"
-      - "foundation/PROGRAM_FOUNDATION.md"
+      - "foundation/**"
       - "network/tests/test_program_foundation.py"
       - ".github/workflows/program-foundation.yml"
   pull_request:
     paths:
-      - "foundation/program_kernel/**"
-      - "foundation/program_examples/**"
-      - "foundation/program-foundation.schema.json"
-      - "foundation/PROGRAM_FOUNDATION.md"
+      - "foundation/**"
       - "network/tests/test_program_foundation.py"
       - ".github/workflows/program-foundation.yml"
 
