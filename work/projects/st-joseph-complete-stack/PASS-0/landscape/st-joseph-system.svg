@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="650" viewBox="0 0 1600 650">
+<rect width="100%" height="100%" fill="white"/>
+<text x="800" y="24" text-anchor="middle" font-family="sans-serif" font-size="18">St. Joseph, Missouri — PASS-0 Complete-Stack System Landscape</text>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="black"/></marker></defs>
+<line x1="101.9" y1="243.1" x2="1459.2" y2="141.8" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="101.2" text-anchor="middle" font-family="sans-serif" font-size="8">occupies / modifies</text>
+<line x1="150.1" y1="272.9" x2="319.5" y2="436.6" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="207.3" y="273.8" text-anchor="middle" font-family="sans-serif" font-size="8">contains / serves</text>
+<line x1="150.2" y1="263.9" x2="256.6" y2="263.9" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="207.3" y="260.0" text-anchor="middle" font-family="sans-serif" font-size="8">is administered through</text>
+<line x1="381.0" y1="469.5" x2="840.7" y2="494.2" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="607.7" y="489.8" text-anchor="middle" font-family="sans-serif" font-size="8">use</text>
+<line x1="338.2" y1="443.8" x2="902.7" y2="330.1" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="607.7" y="368.5" text-anchor="middle" font-family="sans-serif" font-size="8">consume</text>
+<line x1="381.0" y1="451.1" x2="541.8" y2="431.8" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="429.5" text-anchor="middle" font-family="sans-serif" font-size="8">occupy</text>
+<line x1="345.6" y1="471.6" x2="554.6" y2="525.9" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="497.5" text-anchor="middle" font-family="sans-serif" font-size="8">work / consume / produce</text>
+<line x1="381.1" y1="459.3" x2="573.9" y2="464.5" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="455.5" text-anchor="middle" font-family="sans-serif" font-size="8">use / staff</text>
+<line x1="332.0" y1="443.8" x2="550.6" y2="254.1" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="329.5" text-anchor="middle" font-family="sans-serif" font-size="8">use</text>
+<line x1="338.2" y1="471.7" x2="578.4" y2="594.0" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="523.4" text-anchor="middle" font-family="sans-serif" font-size="8">use</text>
+<line x1="387.4" y1="275.8" x2="925.4" y2="467.2" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="607.7" y="308.1" text-anchor="middle" font-family="sans-serif" font-size="8">plans / maintains parts of</text>
+<line x1="339.5" y1="249.9" x2="1205.3" y2="227.0" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="172.2" text-anchor="middle" font-family="sans-serif" font-size="8">operates / bills</text>
+<line x1="334.8" y1="250.0" x2="1202.7" y2="140.8" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="147.8" text-anchor="middle" font-family="sans-serif" font-size="8">manages</text>
+<line x1="363.9" y1="250.1" x2="563.8" y2="207.2" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="210.4" text-anchor="middle" font-family="sans-serif" font-size="8">manages</text>
+<line x1="345.6" y1="277.7" x2="545.6" y2="405.8" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="303.6" text-anchor="middle" font-family="sans-serif" font-size="8">plans / regulates</text>
+<line x1="331.7" y1="277.7" x2="546.6" y2="524.4" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="379.1" text-anchor="middle" font-family="sans-serif" font-size="8">supports / plans for</text>
+<line x1="387.5" y1="259.2" x2="550.0" y2="246.8" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="245.5" text-anchor="middle" font-family="sans-serif" font-size="8">plans / maintains</text>
+<line x1="387.5" y1="268.2" x2="531.4" y2="278.4" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="265.4" text-anchor="middle" font-family="sans-serif" font-size="8">plans / maintains</text>
+<line x1="976.5" y1="473.0" x2="1499.9" y2="178.6" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1239.5" y="395.9" text-anchor="middle" font-family="sans-serif" font-size="8">is constrained by</text>
+<line x1="1009.4" y1="500.6" x2="1166.3" y2="534.0" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="506.6" text-anchor="middle" font-family="sans-serif" font-size="8">connects to</text>
+<line x1="976.7" y1="330.3" x2="1205.4" y2="330.3" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="326.5" text-anchor="middle" font-family="sans-serif" font-size="8">includes external provider</text>
+<line x1="976.7" y1="334.8" x2="1175.9" y2="362.7" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="341.7" text-anchor="middle" font-family="sans-serif" font-size="8">includes external provider</text>
+<line x1="976.7" y1="325.8" x2="1211.0" y2="292.9" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="299.0" text-anchor="middle" font-family="sans-serif" font-size="8">includes external provider</text>
+<line x1="976.5" y1="318.8" x2="1205.7" y2="240.4" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="257.7" text-anchor="middle" font-family="sans-serif" font-size="8">includes city service</text>
+<line x1="961.8" y1="316.3" x2="1211.9" y2="158.4" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="195.9" text-anchor="middle" font-family="sans-serif" font-size="8">interfaces with</text>
+<line x1="963.0" y1="344.1" x2="1213.7" y2="530.8" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="409.7" text-anchor="middle" font-family="sans-serif" font-size="8">partly supplied by</text>
+<line x1="1268.5" y1="142.0" x2="1433.1" y2="152.7" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1379.6" y="143.2" text-anchor="middle" font-family="sans-serif" font-size="8">drains across / responds to</text>
+<line x1="665.9" y1="437.5" x2="850.4" y2="471.7" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="438.7" text-anchor="middle" font-family="sans-serif" font-size="8">depends on access</text>
+<line x1="666.0" y1="419.8" x2="914.9" y2="348.1" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="383.0" text-anchor="middle" font-family="sans-serif" font-size="8">depends on</text>
+<line x1="662.4" y1="549.1" x2="916.8" y2="504.7" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="538.7" text-anchor="middle" font-family="sans-serif" font-size="8">depends on movement of people / freight</text>
+<line x1="662.3" y1="537.0" x2="929.3" y2="350.5" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="475.3" text-anchor="middle" font-family="sans-serif" font-size="8">depends on</text>
+<line x1="662.3" y1="552.2" x2="1153.2" y2="555.4" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="943.6" y="557.0" text-anchor="middle" font-family="sans-serif" font-size="8">trades / connects</text>
+<line x1="657.9" y1="233.3" x2="1433.1" y2="159.3" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="1099.7" y="162.3" text-anchor="middle" font-family="sans-serif" font-size="8">uses / preserves</text>
+<line x1="640.1" y1="297.5" x2="927.1" y2="466.9" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="315.0" text-anchor="middle" font-family="sans-serif" font-size="8">depends on access</text>
+<line x1="676.0" y1="289.3" x2="903.1" y2="321.2" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="762.3" y="287.5" text-anchor="middle" font-family="sans-serif" font-size="8">depends on</text>
+<line x1="671.6" y1="607.6" x2="1153.0" y2="562.4" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="943.6" y="572.3" text-anchor="middle" font-family="sans-serif" font-size="8">connects to</text>
+<line x1="137.4" y1="503.9" x2="263.5" y2="472.9" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="207.3" y="472.3" text-anchor="middle" font-family="sans-serif" font-size="8">Census QuickFacts</text>
+<line x1="87.9" y1="502.7" x2="307.6" y2="283.5" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="207.3" y="324.2" text-anchor="middle" font-family="sans-serif" font-size="8">city comprehensive plan</text>
+<line x1="137.4" y1="529.8" x2="917.6" y2="505.0" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="557.0" text-anchor="middle" font-family="sans-serif" font-size="8">public works / transportation plans</text>
+<line x1="104.3" y1="502.7" x2="902.9" y2="330.1" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="463.4" y="354.7" text-anchor="middle" font-family="sans-serif" font-size="8">city utility-services listing</text>
+<line x1="137.3" y1="522.0" x2="545.2" y2="543.0" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="326.0" y="529.5" text-anchor="middle" font-family="sans-serif" font-size="8">Census / city planning</text>
+<line x1="96.1" y1="530.5" x2="535.9" y2="622.6" stroke="black" stroke-width="1" marker-end="url(#a)"/>
+<text x="326.0" y="613.5" text-anchor="middle" font-family="sans-serif" font-size="8">Census QuickFacts</text>
+<rect x="20.0" y="243.3" width="130.0" height="41.2" fill="white" stroke="black" rx="3"/>
+<text x="85.0" y="257.9" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">St. Joseph</text>
+<text x="85.0" y="269.9" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">(current referent)</text>
+<rect x="1441.0" y="142.7" width="139.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="1510.5" y="151.7" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Physical substrate</text>
+<text x="1510.5" y="163.7" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">land / Missouri River / built form</text>
+<rect x="271.0" y="442.8" width="109.9" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="326.0" y="457.8" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Population &amp; households</text>
+<rect x="264.5" y="248.9" width="122.9" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="326.0" y="263.9" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">City governance &amp; planning</text>
+<rect x="848.6" y="471.8" width="190.1" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="943.6" y="480.8" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Mobility system</text>
+<text x="943.6" y="492.8" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">streets / transit / freight / air / walking / biking</text>
+<rect x="908.6" y="315.3" width="70.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="943.6" y="330.3" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Utility system</text>
+<rect x="1204.5" y="315.3" width="70.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="1239.5" y="324.3" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Electricity</text>
+<text x="1239.5" y="336.3" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Evergy</text>
+<rect x="1183.7" y="356.5" width="111.5" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="1239.5" y="365.5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Water</text>
+<text x="1239.5" y="377.5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Missouri American Water</text>
+<rect x="1204.5" y="274.1" width="70.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="1239.5" y="283.1" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Gas</text>
+<text x="1239.5" y="295.1" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Spire</text>
+<rect x="1204.5" y="214.5" width="70.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="1239.5" y="223.5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Sewer</text>
+<text x="1239.5" y="235.5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">City utility</text>
+<rect x="1204.5" y="125.2" width="70.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="1239.5" y="140.2" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Stormwater</text>
+<rect x="571.8" y="186.3" width="71.8" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="607.7" y="201.3" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Landfill / waste</text>
+<rect x="549.7" y="409.2" width="116.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="607.7" y="424.2" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Housing &amp; neighborhoods</text>
+<rect x="553.1" y="526.8" width="109.2" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="607.7" y="541.8" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Economy &amp; employment</text>
+<rect x="572.7" y="450.4" width="70.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="607.7" y="465.4" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Education</text>
+<rect x="557.7" y="227.5" width="100.0" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="607.7" y="242.5" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Parks / trails / wellness</text>
+<rect x="539.4" y="268.7" width="136.7" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="607.7" y="283.7" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Public facilities &amp; infrastructure</text>
+<rect x="543.9" y="597.0" width="127.5" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="607.7" y="606.0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Digital connectivity</text>
+<text x="607.7" y="618.0" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">computer / broadband access</text>
+<rect x="1160.8" y="534.4" width="157.3" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="1239.5" y="543.4" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">External regional systems</text>
+<text x="1239.5" y="555.4" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">Kansas City / state / federal / markets</text>
+<rect x="32.7" y="501.6" width="104.6" height="30.0" fill="white" stroke="black" rx="3"/>
+<text x="85.0" y="516.6" text-anchor="middle" dominant-baseline="middle" font-family="sans-serif" font-size="9">PASS-0 public evidence</text>
+</svg>
