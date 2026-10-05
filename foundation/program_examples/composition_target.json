@@ -1,0 +1,25 @@
+{
+  "id": "example.count-description",
+  "referent": "Describe a supplied integer count",
+  "boundary": {
+    "inside": ["integer parity description"],
+    "outside": ["source of the count"]
+  },
+  "inputs": {
+    "count": {"type": "integer"}
+  },
+  "operations": [
+    {
+      "id": "describe",
+      "implementation": "foundation.program_examples.operations:describe_count",
+      "consumes": ["count"],
+      "produces": ["description"]
+    }
+  ],
+  "outputs": {
+    "description": {"type": "string"}
+  },
+  "witnesses": [
+    {"id": "description-exists", "kind": "exists", "target": "description"}
+  ]
+}
