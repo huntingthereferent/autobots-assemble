@@ -34,7 +34,7 @@ learner
 See:
 
 - [Homeschool Schedule](operations/HOMESCHOOL_SCHEDULE.md)
-- [Machine-readable schedule](operations/homeschool_schedule.json)
+- [Machine-readable schedule template](operations/schedule_template.json)
 - [Private-source provenance boundary](evidence/PROVENANCE.md)
 
 ## Company decomposition
