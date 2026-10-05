@@ -64,22 +64,38 @@ A decorative concept image is **not** CAD-like evidence by itself.
 - degrees of freedom or fixed relations;
 - replaceable placeholder components.
 
-## Standard CAD-like output package
+## A/B-ordered CAD-like output package
 
-When useful, emit:
+The package is grouped by one local question at a time rather than one flat deliverable list.
 
-1. **geometry source** — editable/native/parametric representation;
-2. **overview render** — visual orientation only;
-3. **orthographic views** — front/top/side or appropriate sections;
-4. **dimensioned drawing** — dimensions needed by current relations;
-5. **interface drawing** — connection/mating locations and contracts;
-6. **parameter table** — named dimensions/variables with units and provenance;
-7. **assumption/placeholder table**;
-8. **derived quantities** — volume, estimated mass, centers, clearances, etc. when supported;
-9. **witness status** — represented/modelled/simulated/built/measured;
-10. **downstream dependency list** — what consumes the geometry.
+### 1. Geometry source
 
-Not every problem requires all ten. The referent selects the necessary subset.
+What carries the editable spatial referent?
+
+- native/parametric geometry;
+- assembly structure;
+- component geometry.
+
+### 2. Geometric views
+
+What spatial relation must be inspected?
+
+- **orientation** → overview render;
+- **projection/section** → orthographic or sectional views;
+- **dimension** → dimensioned drawing;
+- **mating/interface** → interface drawing.
+
+### 3. Parameter and evidence records
+
+What makes the geometry usable downstream?
+
+- parameter table with units/provenance;
+- assumption/placeholder table;
+- derived quantities such as volume, estimated mass, centers, clearances;
+- witness status;
+- downstream dependency list.
+
+Not every branch is required. The current relation selects the necessary branch, and any child can be decomposed again.
 
 ## Example
 
