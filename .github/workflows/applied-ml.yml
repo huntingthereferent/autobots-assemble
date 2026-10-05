@@ -1,0 +1,53 @@
+name: applied-ml-modeling
+
+on:
+  push:
+    paths:
+      - "work/projects/applied-ml-modeling/**"
+      - ".github/workflows/applied-ml.yml"
+      - "foundation/ABILITY_MAP.json"
+  pull_request:
+    paths:
+      - "work/projects/applied-ml-modeling/**"
+      - ".github/workflows/applied-ml.yml"
+      - "foundation/ABILITY_MAP.json"
+
+jobs:
+  model-evidence:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/applied-ml-modeling
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[test]"
+      - name: Train and record model evidence
+        run: python -m ml_evidence --output-dir artifacts
+      - name: Verify modeling boundaries
+        run: pytest -q
+      - name: Inspect recorded metrics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          metrics = json.loads(Path("artifacts/metrics.json").read_text())
+          metadata = json.loads(Path("artifacts/metadata.json").read_text())
+
+          assert metrics["candidate"]["roc_auc"] > metrics["baseline"]["roc_auc"]
+          assert metrics["candidate"]["roc_auc"] > 0.90
+          assert metrics["cross_validation_training_only"]["roc_auc"]["mean"] > 0.90
+          assert metadata["rows_train"] + metadata["rows_test"] == metadata["rows_total"]
+          assert metadata["benchmark_only"] is True
+          print(json.dumps({"metrics": metrics, "metadata": metadata}, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: applied-ml-model-evidence
+          path: |
+            work/projects/applied-ml-modeling/artifacts/model.joblib
+            work/projects/applied-ml-modeling/artifacts/metrics.json
+            work/projects/applied-ml-modeling/artifacts/metadata.json
