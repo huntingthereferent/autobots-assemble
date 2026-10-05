@@ -32,3 +32,17 @@ class ReconciliationRecord(Base):
     sources: Mapped[list] = mapped_column(JSON)
     conflicting_fields: Mapped[list] = mapped_column(JSON)
     selected_payload: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+
+
+class LifecycleRecord(Base):
+    __tablename__ = "lifecycle_records"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    source: Mapped[str] = mapped_column(String(128), index=True)
+    source_id: Mapped[str] = mapped_column(String(256), index=True)
+    canonical_key: Mapped[str] = mapped_column(String(512), index=True)
+    entity_type: Mapped[str] = mapped_column(String(128), index=True)
+    recorded_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    state: Mapped[str] = mapped_column(String(32), index=True)
+    transition: Mapped[str] = mapped_column(String(32), index=True)
+    observation_id: Mapped[int | None] = mapped_column(Integer, nullable=True)
