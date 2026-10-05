@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| Arbitrary Program Foundation | Foundation / reusable implementation substrate | MOVE | The bottleneck is shared foundation, not missing resume categories. First kernel contract now expresses referent → boundary → inputs → representation/operations → optional state → outputs → witnesses without knowing program type. Current witness: one unchanged kernel must realize stateless, stateful, and event/device-style programs and preserve contract-valid output → next-input movement. |
+| Arbitrary Program Foundation | Foundation / reusable implementation substrate | MOVE | Shape-independent kernel is green across stateless, stateful, and event/device realizations. Cross-program composition is also green: compatible outputs become inputs with source execution provenance preserved; incompatible contracts stop before movement. Next: lift pairwise links into a generic validated execution graph so arbitrary bounded programs are assembled from relations rather than hand orchestration. |
 | [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation evidence / regression realization | PINNED / EVIDENCE | Failure/recovery is now closed with green PostgreSQL CI: upstream and durable-commit failures persist as failed runs, prior valid state survives, recovery appends cleanly, Grafana/Prometheus/Alertmanager surface failures, and destructive PostgreSQL backup→destroy→restore verification passes. Next: make disappeared/stale identity a durable cross-run lifecycle state, preserve history, expose it through API/UI, and verify reappearance. |
 
 ## Pinned / resumable
