@@ -1,0 +1,84 @@
+{
+  "id": "FOUND-0004",
+  "source_work": "work/projects/systems-networking-lab/README.md",
+  "title": "Systems / Networking Lab — Direct TCP Protocol Evidence",
+  "goal_lane": "foundation / resume-evidence build",
+  "fields": [
+    "systems",
+    "networking",
+    "TCP/IP",
+    "Python"
+  ],
+  "realization_layers": [
+    "concept",
+    "design",
+    "implemented",
+    "tested",
+    "measured"
+  ],
+  "deepest_supported_layer": "measured",
+  "problem": "Demonstrate direct socket-level networking behavior without hiding the witness behind HTTP frameworks or third-party infrastructure.",
+  "constraints": [
+    "All network targets are loopback/local project-owned servers.",
+    "No third-party network administration or offensive testing claim.",
+    "Performance numbers are loopback measurements from the CI runner, not internet/network-wide benchmarks."
+  ],
+  "demonstrated_capability": [
+    "TCP bind/listen/accept lifecycle",
+    "TCP client connection/send/receive behavior",
+    "explicit 4-byte big-endian length-prefixed framing",
+    "partial-read-safe framed receive logic",
+    "multiple sequential framed requests on one TCP connection",
+    "latency and throughput measurement",
+    "connection-refused classification",
+    "read-timeout classification",
+    "clean GitHub Actions networking acceptance"
+  ],
+  "measured_result": {
+    "protocol": "TCP / 4-byte big-endian length-prefixed frames",
+    "small_round_trip_latency_ms": 1.4766989999941416,
+    "one_mib_round_trip_latency_ms": 3.5514669999940907,
+    "one_mib_round_trip_bytes": 2097152,
+    "one_mib_loopback_throughput_mib_s": 563.1475669077955,
+    "refused_connection_error": "ConnectionRefusedError",
+    "read_timeout_error": "TimeoutError"
+  },
+  "evidence": [
+    {
+      "path": "work/projects/systems-networking-lab/README.md",
+      "kind": "networking evidence contract"
+    },
+    {
+      "path": "work/projects/systems-networking-lab/network_lab/protocol.py",
+      "kind": "framing implementation"
+    },
+    {
+      "path": "work/projects/systems-networking-lab/network_lab/server.py",
+      "kind": "socket server implementation"
+    },
+    {
+      "path": "work/projects/systems-networking-lab/network_lab/client.py",
+      "kind": "socket client and failure classification"
+    },
+    {
+      "path": "work/projects/systems-networking-lab/tests/test_networking.py",
+      "kind": "network behavior tests"
+    },
+    {
+      "path": ".github/workflows/systems-networking-lab.yml",
+      "kind": "clean CI and measured witness"
+    }
+  ],
+  "external_witness": [
+    {
+      "system": "GitHub Actions",
+      "claim": "systems-networking-lab workflow run 1 passed framing, multi-request TCP, latency/throughput measurement, refused-connection, timeout, and artifact acceptance"
+    }
+  ],
+  "limits": [
+    "No enterprise network administration witness.",
+    "No routing/switching configuration witness.",
+    "No packet-capture/protocol-analysis witness beyond the implemented framing.",
+    "No third-party or production network operations witness."
+  ]
+}
