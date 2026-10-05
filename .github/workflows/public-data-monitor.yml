@@ -101,3 +101,75 @@ jobs:
       - run: docker compose ps
       - if: always()
         run: docker compose down -v
+
+
+  migration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: migration_test
+          POSTGRES_USER: monitor
+          POSTGRES_PASSWORD: monitor
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U monitor -d migration_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://monitor:monitor@localhost:5432/migration_test
+    defaults:
+      run:
+        working-directory: work/projects/public-data-monitor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[test]"
+      - name: Create pre-migration source_runs schema
+        run: |
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine, text
+          engine = create_engine(os.environ["DATABASE_URL"])
+          with engine.begin() as conn:
+              conn.execute(text("""
+                  CREATE TABLE source_runs (
+                      id SERIAL PRIMARY KEY,
+                      source VARCHAR(128) NOT NULL,
+                      started_at TIMESTAMPTZ NOT NULL,
+                      finished_at TIMESTAMPTZ NULL,
+                      status VARCHAR(32) NOT NULL,
+                      items_seen INTEGER NOT NULL DEFAULT 0,
+                      error_type VARCHAR(256) NULL,
+                      error_message TEXT NULL
+                  )
+              """))
+          PY
+      - run: alembic upgrade head
+      - name: Verify upgrade
+        run: |
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine, inspect
+          engine = create_engine(os.environ["DATABASE_URL"])
+          inspector = inspect(engine)
+          columns = {c["name"] for c in inspector.get_columns("source_runs")}
+          indexes = {i["name"] for i in inspector.get_indexes("source_runs")}
+          assert "task_id" in columns
+          assert "ix_source_runs_task_id" in indexes
+          PY
+      - run: alembic downgrade base
+      - name: Verify downgrade
+        run: |
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine, inspect
+          engine = create_engine(os.environ["DATABASE_URL"])
+          columns = {c["name"] for c in inspect(engine).get_columns("source_runs")}
+          assert "task_id" not in columns
+          PY
