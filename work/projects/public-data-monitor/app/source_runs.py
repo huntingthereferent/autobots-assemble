@@ -6,11 +6,12 @@ from .db import Base, SessionLocal, engine
 from .run_models import SourceRun
 
 
-def start_source_run(source: str) -> int:
+def start_source_run(source: str, task_id: str | None = None) -> int:
     Base.metadata.create_all(engine)
     with SessionLocal() as session:
         record = SourceRun(
             source=source,
+            task_id=task_id,
             started_at=datetime.now(timezone.utc),
             finished_at=None,
             status="running",
