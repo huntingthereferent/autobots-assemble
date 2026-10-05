@@ -1,0 +1,52 @@
+name: systems-networking-lab
+
+on:
+  push:
+    paths:
+      - "work/projects/systems-networking-lab/**"
+      - ".github/workflows/systems-networking-lab.yml"
+      - "foundation/ABILITY_MAP.json"
+  pull_request:
+    paths:
+      - "work/projects/systems-networking-lab/**"
+      - ".github/workflows/systems-networking-lab.yml"
+      - "foundation/ABILITY_MAP.json"
+
+jobs:
+  networking-evidence:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/systems-networking-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[test]"
+      - name: Verify socket and protocol behavior
+        run: pytest -q
+      - name: Measure local networking behavior
+        run: python -m network_lab --report artifacts/network_report.json
+      - name: Inspect measured witness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/network_report.json").read_text())
+
+          assert report["small_round_trip"]["status"] == "ok"
+          assert report["one_mib_round_trip"]["status"] == "ok"
+          assert report["one_mib_round_trip"]["bytes_round_trip"] == 2 * 1024 * 1024
+          assert report["one_mib_round_trip"]["latency_ms"] > 0
+          assert report["one_mib_round_trip"]["throughput_mib_s"] > 0
+          assert report["refused_connection"]["status"] == "refused"
+          assert report["read_timeout"]["status"] == "timeout"
+
+          print(json.dumps(report, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: systems-networking-evidence
+          path: work/projects/systems-networking-lab/artifacts/network_report.json
