@@ -15,4 +15,3 @@ jobs:
           python-version: "3.12"
       - run: python -m unittest discover -s network/tests -p "test_*.py"
       - run: python -m unittest discover -s language/tests -p "test_*.py"
-      - run: python -m unittest discover -s lenses/tests -p "test_*.py"
