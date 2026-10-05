@@ -19,6 +19,25 @@ A CAD-like artifact may be:
 
 A decorative concept image is **not** CAD-like evidence by itself.
 
+## Production mechanism
+
+The default implementation path is defined in [CAD_TOOLCHAIN.md](CAD_TOOLCHAIN.md).
+
+Canonical production is:
+
+```text
+parameters / evidence
+→ editable parametric source
+→ generated STEP/STL/DXF/SVG outputs
+→ geometry checks
+→ derived quantities
+→ downstream artifacts
+```
+
+Prefer **CadQuery** for general parametric 3D geometry, **OpenSCAD** for simple declarative constructive geometry, **ezdxf** for DXF drawing output, and geometry libraries such as **Trimesh/Shapely** for supported spatial checks.
+
+The editable geometric source is canonical; renders and exports are reproducible outputs.
+
 ## Required structure when relevant
 
 ### Geometry
@@ -72,9 +91,13 @@ The package is grouped by one local question at a time rather than one flat deli
 
 What carries the editable spatial referent?
 
-- native/parametric geometry;
+- CadQuery source by default for general parametric solids/assemblies;
+- OpenSCAD source when simple constructive geometry is the cleaner representation;
+- native/parametric geometry where another format is required by the referent;
 - assembly structure;
 - component geometry.
+
+Generated exchange outputs may include STEP, STL, DXF, and SVG, but they do not replace the preserved editable source.
 
 ### 2. Geometric views
 
