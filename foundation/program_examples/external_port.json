@@ -1,0 +1,26 @@
+{
+  "id": "example.external-port",
+  "referent": "Resolve a represented key through an admitted external relation",
+  "boundary": {
+    "inside": ["key admission", "declared external read", "returned value"],
+    "outside": ["adapter storage mechanism", "adapter lifecycle"]
+  },
+  "inputs": {
+    "key": {"type": "string"}
+  },
+  "operations": [
+    {
+      "id": "lookup",
+      "implementation": "foundation.program_examples.operations:external_lookup",
+      "consumes": ["key"],
+      "produces": ["value"],
+      "effects": ["kv.read"]
+    }
+  ],
+  "outputs": {
+    "value": {"type": "string"}
+  },
+  "witnesses": [
+    {"id": "value-exists", "kind": "exists", "target": "value"}
+  ]
+}
