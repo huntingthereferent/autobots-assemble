@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "purpose": "Project verified work upward into human-recognized ability categories. Ability state is evidence-derived; planned work does not upgrade a category.",
+  "purpose": "Read-only projection of demonstrated work into human-recognized ability categories for resume/credibility views. This map does not select development or define the foundation.",
   "states": [
     "unwitnessed",
     "partial",
@@ -213,17 +213,5 @@
       "supports": [],
       "next_gap": "Need physical design/build/measurement/inspection evidence."
     }
-  ],
-  "next_project_selection": {
-    "selected_gap": "Mechanical / Fabrication / Manufacturing",
-    "reason": "This is now the largest completely unwitnessed technical category in the complete-stack map. Unlike the software layers, it should not be closed with simulation alone: the useful witness requires a physical artifact, dimensions/tolerances, build process, measurement, and inspection.",
-    "acceptance_boundary": [
-      "Produce a real physical artifact rather than only CAD or simulation.",
-      "Record material, dimensions, tolerances, tools/process, and acceptance criteria before building.",
-      "Measure the finished artifact against the intended dimensions.",
-      "Preserve failure/correction evidence rather than presenting only the final object.",
-      "Use photos/measurements/inspection as Foundation evidence.",
-      "Do not upgrade CAD-only work to built/measured physical capability."
-    ]
-  }
+  ]
 }
