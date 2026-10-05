@@ -209,12 +209,12 @@ Hacker News is used here because the same stories are exposed through HTML and t
 - [x] HTTPS infrastructure configuration (runtime deployment still open)
 - [ ] secret/config handling
 - [x] metrics + dashboards; production cloud alarms remain open
-- [ ] backup/recovery path
+- [x] backup/recovery path
 
 ### Platform Slice 5 — hardening
 - [x] load/performance benchmark
 - [x] dependency/container security scan
-- [ ] failure injection/recovery test
+- [x] failure injection/recovery test
 - [ ] operator runbook
 - [x] Foundation capability record using verified witnesses only
 
@@ -379,3 +379,45 @@ The current stack now has verified acquisition, persistence, APIs, background sc
 The stack now has inspectable witnesses for acquisition, persistence, history, reconciliation, durable identity, APIs, scheduled work, Docker orchestration, CI, Prometheus, Grafana, security scanning, load testing, Terraform validation, a real frontend, and browser-level assertions.
 
 The next missing capability is **failure/recovery engineering**: deliberately break a source or dependency, prove that failure is surfaced through source-run state and observability, preserve prior valid state, and demonstrate clean recovery. AWS production deployment remains a separate open witness and must not be upgraded from validated configuration to deployed operation without runtime evidence.
+
+
+## Failure, recovery, alerting, and backup evidence
+
+A complete operational failure path is now verified in clean PostgreSQL CI:
+
+- a valid source observation is persisted first.
+- an injected upstream outage produces a failed `source_runs` record with the exact exception type/message.
+- the failed acquisition does not mutate the last valid observation history.
+- Prometheus records the failed source run.
+- the operations API exposes the failed run.
+- a later successful acquisition appends a new observation, classifies it as changed, and returns the source to success.
+- durable commit failures are also classified as failed source runs; acquisition alone is no longer sufficient for a successful operational run.
+- source observation batches are committed atomically so a mid-commit exception cannot intentionally produce a partially accepted batch.
+
+Failure visibility now reaches the operational surface:
+
+- Grafana's provisioned `Platform Overview` dashboard includes a `Failed Source Runs (1h)` panel.
+- Prometheus evaluates the `SourceRunFailures` alert rule.
+- Alertmanager is part of the Docker topology and receives Prometheus alert routing.
+- Docker-stack CI verifies the alert rule is loaded and Alertmanager reports ready.
+
+Database recovery is separately verified:
+
+- reproducible backup and restore scripts live under `ops/`.
+- CI writes durable platform state, dumps PostgreSQL, destroys the public schema, restores the dump, then verifies the exact source-run status and observation payload survived.
+- the recovery witness is PostgreSQL/container scoped; it does not claim AWS RDS snapshot or point-in-time recovery before a live AWS runtime exists.
+
+**Verified consolidated run:** public-data-monitor workflow run 158, commit `4579d0a2c79aa30d24a3814f4e423b1200dfb933`: all jobs green, including unit, live-source, PostgreSQL integration, acquisition resilience, migrations, Docker stack, security, performance, Terraform, frontend, browser UI, and backup/restore.
+
+## Current edge — state lifecycle
+
+The next unresolved platform relation is not another infrastructure component. The engine can classify `DISAPPEARED` in memory, but durable collection cycles do not yet prove that an entity present in one successful source snapshot and absent from the next is persisted and exposed as stale/disappeared state without deleting its history.
+
+Next witness:
+
+1. persist a complete successful snapshot for a source;
+2. persist a later complete snapshot where one prior identity is absent;
+3. record an explicit disappeared/stale state transition;
+4. preserve the prior observation/history;
+5. expose current lifecycle state through the API;
+6. verify reappearance becomes a new valid transition rather than silently rewriting history.
