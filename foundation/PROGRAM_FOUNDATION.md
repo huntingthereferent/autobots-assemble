@@ -173,3 +173,43 @@ program node
 The graph layer must validate structure before execution, preserve lineage through every edge, and remain ignorant of domain/program category.
 
 A cycle is not automatically invalid in the larger research sense, but this first bounded graph executor must reject cycles unless an explicit state/time contract exists. It must never invent recursion semantics.
+
+
+### Witness 3 — generic relation graph
+
+The same manifests can now be assembled as graph nodes with declared value relations.
+
+Verified behavior:
+
+- topological execution is derived from relations rather than hand call order;
+- required input relations are checked before execution;
+- linked values retain node/execution provenance;
+- a manifest can be reused as another node downstream without kernel changes;
+- incompatible links are rejected;
+- cycles are rejected because recurrence semantics are not yet explicit.
+
+**Verified:** program-foundation workflow run 13 and protocol-tests run 465 passed on commit `b9a45e20b806acf2f09d29e16dec8bb2a9cbe5c8`.
+
+## Current edge — explicit recurrence
+
+A cycle cannot be admitted merely because two types happen to match.
+
+The next foundation witness is bounded recurrence:
+
+```text
+realization(input_n)
+      ↓
+   output_n
+      ↓ same declared value contract
+realization(input_n+1)
+```
+
+The software layer must preserve:
+
+- contract compatibility;
+- iteration identity;
+- parent execution identity;
+- value provenance;
+- an explicit bound or stop condition.
+
+This is evidence that realized outputs can remain usable under repeated application. It is not a claim that the runtime itself is A/B.
