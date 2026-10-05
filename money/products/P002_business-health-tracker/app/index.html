@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Business Health Check</title>
+  <meta name="description" content="A simple business health tracker for small business owners.">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="brand">
+      <div class="mark">BH</div>
+      <div>
+        <p class="eyebrow">Business Health Check</p>
+        <h1>Know where your business stands.</h1>
+        <p class="sub">Four quick inputs. Plain-English results. No accounting jargon.</p>
+      </div>
+    </header>
+
+    <section id="form-panel" class="panel">
+      <div class="panel-head">
+        <span id="progress">Step 1 of 4</span>
+        <span class="quiet">About 1 minute</span>
+      </div>
+
+      <form id="health-form" novalidate>
+        <section class="step">
+          <label for="initialInvestment">How much did you put in to get started?</label>
+          <p class="hint">Equipment, setup, opening stock, deposits, launch costs, etc.</p>
+          <div class="money-input">
+            <span>$</span>
+            <input id="initialInvestment" name="initialInvestment" type="number" min="0" step="0.01" value="5000" required>
+          </div>
+        </section>
+
+        <section class="step" hidden>
+          <label for="monthlyFixedCosts">What does the business cost to run each month?</label>
+          <p class="hint">Rent, software, insurance, wages, subscriptions, utilities, and other recurring costs.</p>
+          <div class="money-input">
+            <span>$</span>
+            <input id="monthlyFixedCosts" name="monthlyFixedCosts" type="number" min="0" step="0.01" value="2200" required>
+          </div>
+        </section>
+
+        <section class="step" hidden>
+          <div class="field-group">
+            <label for="unitCost">What does one sale cost you?</label>
+            <div class="money-input">
+              <span>$</span>
+              <input id="unitCost" name="unitCost" type="number" min="0" step="0.01" value="8" required>
+            </div>
+          </div>
+          <div class="field-group">
+            <label for="unitPrice">What do you charge for one sale?</label>
+            <div class="money-input">
+              <span>$</span>
+              <input id="unitPrice" name="unitPrice" type="number" min="0.01" step="0.01" value="20" required>
+            </div>
+          </div>
+        </section>
+
+        <section class="step" hidden>
+          <label for="monthlySales">How many sales do you make in a typical month?</label>
+          <p class="hint">Use your best recent monthly average.</p>
+          <div class="plain-input">
+            <input id="monthlySales" name="monthlySales" type="number" min="0" step="1" value="150" required>
+            <span>sales</span>
+          </div>
+        </section>
+
+        <p id="form-error" class="error" hidden></p>
+
+        <div class="actions">
+          <button id="back" type="button" class="ghost">Back</button>
+          <button id="next" type="button" class="primary">Continue</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="dashboard" class="dashboard" hidden>
+      <div id="status" class="status-card" data-status="yellow">
+        <div>
+          <p class="eyebrow">Business status</p>
+          <h2 id="status-label">Close</h2>
+        </div>
+        <span class="status-dot" aria-hidden="true"></span>
+      </div>
+
+      <div class="headline-card">
+        <p class="eyebrow">Your next number</p>
+        <h2 id="headline-number">Sell 34 more units</h2>
+        <p id="headline-detail">at the current price and cost to reach monthly break-even.</p>
+      </div>
+
+      <div class="metrics">
+        <article>
+          <span>Monthly profit / loss</span>
+          <strong id="profit">$0</strong>
+        </article>
+        <article>
+          <span>Monthly revenue</span>
+          <strong id="revenue">$0</strong>
+        </article>
+        <article>
+          <span>Break-even point</span>
+          <strong id="break-even">0 units / month</strong>
+        </article>
+        <article>
+          <span>Contribution per sale</span>
+          <strong id="contribution">$0.00</strong>
+        </article>
+        <article>
+          <span>Startup payback</span>
+          <strong id="payback">Not yet</strong>
+        </article>
+      </div>
+
+      <article class="insight">
+        <div class="insight-head">
+          <span class="spark">✦</span>
+          <div>
+            <p class="eyebrow">One useful next move</p>
+            <span id="insight-source" class="quiet">Local suggestion</span>
+          </div>
+        </div>
+        <p id="insight-text"></p>
+      </article>
+
+      <details class="assumptions">
+        <summary>How the numbers are calculated</summary>
+        <p>Monthly profit = (price − product cost) × sales − monthly running costs. Break-even units = monthly running costs ÷ contribution per sale. Startup payback uses current monthly profit and is shown only when monthly profit is positive.</p>
+      </details>
+
+      <button id="reset" type="button" class="ghost wide">Change my numbers</button>
+    </section>
+
+    <footer>
+      <p>Quick operating estimate only. This is not accounting, tax, or financial advice.</p>
+    </footer>
+  </main>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
