@@ -279,3 +279,16 @@ The next operational layer is schema migration + recurring execution + source-ru
 - unit, live-source, acquisition-resilience, and PostgreSQL integration CI lanes pass.
 
 Next operational edge: versioned schema migration, recurring acquisition, and persisted source-run health.
+
+
+## Operational run-state evidence
+
+- every orchestrated source acquisition now creates a persisted source-run record.
+- successful runs store start/end timestamps, status, and item count.
+- failed runs store start/end timestamps plus exception type and message.
+- source-run health is queryable through `/api/ops/source-runs`.
+- a scheduler-safe one-shot runner exists so external schedulers can invoke acquisition without embedding scheduling concerns inside source adapters.
+- CI exposed and then verified a packaging boundary introduced by the new `migrations/` directory; package discovery was made explicit rather than removing the migration layer.
+- after that repair, unit, live-source, acquisition-resilience, and PostgreSQL/source-run integration lanes all pass.
+
+Current operational edge: finish the first versioned migration revision, then bind recurring execution to durable infrastructure rather than an ephemeral CI database.
