@@ -7,9 +7,13 @@ GEMS = ROOT / "money" / "challenges" / "GEMS-001_hidden-fault-mapping"
 
 
 class GemsActivationTests(unittest.TestCase):
-    def test_active_referent(self):
-        state = json.loads((ROOT / "state" / "current.json").read_text(encoding="utf-8"))
-        self.assertIn("GEMS-001", state["preferred_referent"])
+    def test_gems_remains_pinned_when_another_referent_is_active(self):
+        tasks = (ROOT / "TASKS.md").read_text(encoding="utf-8")
+        self.assertIn("GEMS-001", tasks)
+        self.assertIn("PINNED", tasks)
+
+        pin = ROOT / "state" / "pins" / "GEMS-001_2026-10-03.json"
+        self.assertTrue(pin.exists())
 
     def test_record_tracks_received_data_and_remaining_compliance_wall(self):
         rec = json.loads((GEMS / "challenge.json").read_text(encoding="utf-8"))
