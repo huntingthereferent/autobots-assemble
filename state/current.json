@@ -2,10 +2,10 @@
   "schema_version": 1,
   "preferred_referent": "📍 Complete-Stack Artifact Output Layer",
   "protocol": "work.bounded-problem",
-  "goal": "Standardize the working outputs produced while traversing a complete stack so program code, CAD-like geometry, system landscapes, math models, schematics, BOMs, and test/measurement artifacts share one evidence/provenance boundary and can become valid inputs to later traversal.",
+  "goal": "Standardize complete-stack working outputs with concrete generation mechanisms: parametric CAD-like geometry, machine-readable system landscapes, math models, programs, schematics, BOMs, and test/measurement artifacts. Every generated output must retain canonical-source, check, witness-depth, and provenance lineage so it can become valid input to later traversal.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Use the A/B-ordered artifact categories on the first integrated physical-system target. Every sibling set must share one local axis; every child remains decomposable. As traversal reaches geometry emit structural→spatial→CAD-like artifacts; system topology emits structural→relational→system-landscape artifacts; quantitative behavior emits behavioral→quantitative→math-model artifacts; executable behavior emits behavioral→executable→program artifacts; empirical witness emits observational→empirical→test/measurement artifacts. Keep witness depth, dependency layer, goal lane, and view as separate category axes.",
+  "next_movement": "Apply the output layer on the first integrated physical-system target. For geometry: parameters/evidence → CadQuery by default (OpenSCAD when simpler) → STEP/STL/DXF/SVG → geometry checks → derived values. For system landscapes: named referents/relations → Graphviz/DOT → SVG/PDF/PNG → graph checks. Feed derived outputs into math/program/schematic/BOM artifacts and propagate invalidation when upstream parameters or evidence change.",
   "walls": [
     "Do not redefine A/B as Complete Stack, this repository, a workflow, or an implementation layer.",
     "Do not stop traversal merely because a required dependency belongs to another discipline.",
@@ -24,7 +24,9 @@
     "artifacts/MATH_MODEL.md",
     "artifacts/PROGRAM.md",
     "artifacts/artifact.schema.json",
-    "COMPLETE_STACK.md"
+    "COMPLETE_STACK.md",
+    "artifacts/CAD_TOOLCHAIN.md",
+    "artifacts/LANDSCAPE_TOOLCHAIN.md"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
