@@ -1,0 +1,55 @@
+name: program-foundation
+
+on:
+  push:
+    paths:
+      - "foundation/program_kernel/**"
+      - "foundation/program_examples/**"
+      - "foundation/program-foundation.schema.json"
+      - "foundation/PROGRAM_FOUNDATION.md"
+      - "network/tests/test_program_foundation.py"
+      - ".github/workflows/program-foundation.yml"
+  pull_request:
+    paths:
+      - "foundation/program_kernel/**"
+      - "foundation/program_examples/**"
+      - "foundation/program-foundation.schema.json"
+      - "foundation/PROGRAM_FOUNDATION.md"
+      - "network/tests/test_program_foundation.py"
+      - ".github/workflows/program-foundation.yml"
+
+jobs:
+  foundation-witness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest jsonschema
+      - name: Verify shape-independent kernel
+        run: pytest -q network/tests/test_program_foundation.py
+      - name: Show admitted program shapes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from foundation.program_kernel.manifest import load_manifest
+          from foundation.program_kernel.runtime import execute
+
+          root = Path("foundation/program_examples")
+          cases = [
+              ("stateless.json", {"text": "  ONE   two THREE "}, None),
+              ("stateful.json", {"delta": 2}, {"count": 5}),
+              ("event_device.json", {"samples": [False, True, False, True, True, True]}, None),
+          ]
+
+          for name, inputs, state in cases:
+              manifest = load_manifest(root / name)
+              record = execute(manifest, inputs, initial_state=state)
+              print({
+                  "manifest": record.manifest_id,
+                  "steps": [step.operation for step in record.steps],
+                  "witnesses": record.witnesses,
+              })
+              assert all(item["passed"] for item in record.witnesses)
+          PY
