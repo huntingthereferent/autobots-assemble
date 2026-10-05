@@ -18,6 +18,9 @@ required layers as actually reached
         ↓
 represent / model / simulate / design / build / measure / inspect / validate
         ↓
+working artifacts
+(program / CAD-like / landscape / math / schematic / BOM / test)
+        ↓
 evidence + provenance
         ↓
 FOUNDATION
@@ -94,6 +97,16 @@ Research, open source, and paid work answer **why** the work exists rather than 
 - `money/` and `jobs/`
 
 The same complete-stack capability may be exercised in any of them.
+
+## Artifact layer
+
+Traversal emits working artifacts when a relation needs an inspectable representation.
+
+Artifacts are not presentation-only views. They can be revised, calculated from, simulated, tested, and consumed by downstream artifacts.
+
+See [artifacts/README.md](artifacts/README.md).
+
+`views/` remains read-only presentation. `artifacts/` carries working represented structure.
 
 ## Work and Foundation
 
