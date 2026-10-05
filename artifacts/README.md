@@ -27,7 +27,10 @@ artifact
 └─ preserved relation
    ├─ structural
    │  ├─ spatial
-   │  │  └─ CAD-like
+   │  │  ├─ object / local frame
+   │  │  │  └─ CAD-like
+   │  │  └─ georeferenced / world frame
+   │  │     └─ geospatial
    │  ├─ relational
    │  │  └─ system landscape
    │  ├─ connectivity
@@ -126,6 +129,7 @@ This is why artifacts belong inside traversal rather than after it.
 Current default production mechanisms:
 
 - **CAD-like** → CadQuery/OpenSCAD source → STEP/STL/DXF/SVG + geometric checks; see [CAD_TOOLCHAIN.md](CAD_TOOLCHAIN.md).
+- **geospatial** → GeoJSON/GeoPackage/georeferenced raster + CRS/topology checks → map views; see [GEOSPATIAL_TOOLCHAIN.md](GEOSPATIAL_TOOLCHAIN.md).
 - **system landscape** → Graphviz/DOT source → SVG/PDF/PNG + graph checks; see [LANDSCAPE_TOOLCHAIN.md](LANDSCAPE_TOOLCHAIN.md).
 - **program** → source/manifests/tests/runtime evidence under the frozen program foundation.
 - **math model** → explicit equations/inputs/units/provenance plus calculated outputs.
