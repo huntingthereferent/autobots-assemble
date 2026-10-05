@@ -96,6 +96,14 @@ The placeholder must preserve what is measured or sourced, what is assumed, what
 
 A placeholder never upgrades itself into a physical witness.
 
+## Company layer
+
+`companies/` contains persistent operating organizations.
+
+A company is a durable referent, not a goal lane or product. It may span operations, products/services, work/projects, people, assets, finance, compliance, and external relations while preserving each layer's own evidence boundary.
+
+A repo company record does not imply legal incorporation, accreditation, licensure, or regulatory approval; those states require explicit evidence.
+
 ## Goal lanes
 
 Research, open source, and paid work answer **why** the work exists rather than defining the technical stack.
