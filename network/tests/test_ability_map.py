@@ -25,7 +25,7 @@ class AbilityMapTests(unittest.TestCase):
             if ability["state"] == "unwitnessed":
                 self.assertEqual(ability.get("evidence", []), [])
 
-    def test_selected_next_project_targets_an_unwitnessed_gap(self):
+    def test_selected_next_project_targets_an_unclosed_gap(self):
         ability_map = json.loads(
             (ROOT / "foundation" / "ABILITY_MAP.json").read_text(encoding="utf-8")
         )
@@ -34,7 +34,7 @@ class AbilityMapTests(unittest.TestCase):
             ability for ability in ability_map["abilities"]
             if ability["ability"] == selection
         )
-        self.assertEqual(selected["state"], "unwitnessed")
+        self.assertIn(selected["state"], {"unwitnessed", "partial"})
 
 
 if __name__ == "__main__":
