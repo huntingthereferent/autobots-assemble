@@ -1,5 +1,12 @@
 # Program Foundation
 
+## Status — frozen capability evidence
+
+This foundation is the first broad **Programs** capability proof under [Complete Stack](../COMPLETE_STACK.md).
+
+It is frozen at the current verified boundary. Do not continue adding generic program features by default. Reopen only when a real incoming problem exposes a missing relation that the current foundation cannot carry.
+
+
 ## Referent
 
 This is the reusable implementation foundation beneath arbitrary program realizations.
