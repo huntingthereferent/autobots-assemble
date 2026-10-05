@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "companies": [
+    {
+      "id": "COMPANY-001",
+      "name": "Online School",
+      "path": "companies/online-school/COMPANY.md",
+      "state": "operating_model",
+      "operator": "Dessy",
+      "legal_status": "not_claimed_as_incorporated_accredited_or_licensed"
+    }
+  ]
+}
