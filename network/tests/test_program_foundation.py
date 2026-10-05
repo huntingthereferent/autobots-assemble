@@ -6,6 +6,7 @@ from pathlib import Path
 import tempfile
 import unittest
 
+from foundation.program_kernel.compose import CompositionError, Link, execute_linked
 from foundation.program_kernel.contracts import ContractError
 from foundation.program_kernel.manifest import ManifestError, load_manifest
 from foundation.program_kernel.runtime import execute
@@ -90,6 +91,44 @@ class ProgramFoundationTests(unittest.TestCase):
             self.assertTrue(record.steps)
             self.assertTrue(record.witnesses)
             self.assertIsInstance(record.values, dict)
+
+    def test_cross_program_output_becomes_input_with_provenance(self):
+        source_manifest = load_manifest(EXAMPLES / "stateless.json")
+        target_manifest = load_manifest(EXAMPLES / "composition_target.json")
+
+        source = execute(source_manifest, {"text": "one two three"})
+        target = execute_linked(
+            source_manifest=source_manifest,
+            source_record=source,
+            target_manifest=target_manifest,
+            link=Link(source_output="count", target_input="count"),
+        )
+
+        self.assertEqual(target.values["description"], "3 is odd")
+        self.assertEqual(target.parent_executions, [source.execution_id])
+        self.assertEqual(
+            target.provenance["count"]["source_execution_id"],
+            source.execution_id,
+        )
+        self.assertEqual(
+            target.provenance["count"]["source_output"],
+            "count",
+        )
+        self.assertTrue(all(w["passed"] for w in target.witnesses))
+
+    def test_incompatible_cross_program_contract_is_rejected(self):
+        source_manifest = load_manifest(EXAMPLES / "stateless.json")
+        target_manifest = load_manifest(EXAMPLES / "stateful.json")
+        source = execute(source_manifest, {"text": "one two three"})
+
+        with self.assertRaises(CompositionError):
+            execute_linked(
+                source_manifest=source_manifest,
+                source_record=source,
+                target_manifest=target_manifest,
+                link=Link(source_output="normalized", target_input="delta"),
+                initial_state={"count": 5},
+            )
 
 
 if __name__ == "__main__":
