@@ -7,10 +7,12 @@ from sqlalchemy import desc, select
 from sqlalchemy.orm import Session
 
 from .db import Base, SessionLocal, engine
+from .history_api import router as history_router
 from .models import EarthquakeEvent
 from .schemas import EarthquakeOut
 
-app = FastAPI(title="Public Data Monitor", version="0.1.0")
+app = FastAPI(title="Multi-Source State & Reconciliation Platform", version="0.2.0")
+app.include_router(history_router)
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 
