@@ -79,3 +79,25 @@ jobs:
           python-version: "3.12"
       - run: pip install -e ".[test]"
       - run: pytest -q tests/test_acquisition.py
+
+
+  docker-stack:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/public-data-monitor
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose config
+      - run: docker compose up -d --build
+      - run: |
+          for i in {1..30}; do
+            if curl --fail http://localhost:8000/api/health; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs
+          exit 1
+      - run: docker compose exec -T worker celery -A app.celery_app.celery_app inspect ping
+      - run: docker compose ps
+      - if: always()
+        run: docker compose down -v
