@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "preferred_referent": "📍 Online School — Company Operating Model",
+  "company_id": "COMPANY-001",
+  "status": "active",
+  "result_state": "MOVE",
+  "goal": "Turn Dessy's demonstrated homeschool operating schedule into a reusable online-school company while preserving the distinction between private household evidence, public operating structure, products/services, software, legal formation, and external learner outcomes.",
+  "next_movement": "Decompress the existing learning operation into the first online delivery surface: schedule → curriculum units → learner activity → parent/operator visibility → progress evidence. Preserve the current home-education schedule as operating evidence and do not claim incorporation, accreditation, licensure, public enrollment, or external outcomes until separately witnessed.",
+  "walls": [
+    "Do not publish minor learner identities or individualized private records in the public company layer.",
+    "Do not treat the existing homeschool schedule as proof of accreditation, licensure, incorporation, or external customer outcomes.",
+    "Do not collapse the company into a single product; products/services are outputs of the company.",
+    "Do not overwrite the private household schedule when generalizing the reusable company operation."
+  ],
+  "evidence": [
+    "companies/online-school/COMPANY.md",
+    "companies/online-school/company.json",
+    "companies/online-school/operations/HOMESCHOOL_SCHEDULE.md",
+    "companies/online-school/operations/schedule_template.json",
+    "companies/online-school/evidence/PROVENANCE.md"
+  ]
+}
