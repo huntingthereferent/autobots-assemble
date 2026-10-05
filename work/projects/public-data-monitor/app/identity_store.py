@@ -5,6 +5,7 @@ from sqlalchemy import desc, select
 from .db import Base, SessionLocal, engine
 from .identity import IdentityDecision
 from .identity_models import IdentityDecisionRecord
+from .metrics import IDENTITY_DECISIONS
 
 
 def persist_identity_decision(
@@ -34,6 +35,7 @@ def persist_identity_decision(
         session.add(record)
         session.commit()
         session.refresh(record)
+        IDENTITY_DECISIONS.labels(matched=str(decision.matched).lower()).inc()
         return record
 
 
