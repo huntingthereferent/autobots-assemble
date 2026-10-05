@@ -8,11 +8,13 @@ from sqlalchemy.orm import Session
 
 from .db import Base, SessionLocal, engine
 from .history_api import router as history_router
+from .ops_api import router as ops_router
 from .models import EarthquakeEvent
 from .schemas import EarthquakeOut
 
 app = FastAPI(title="Multi-Source State & Reconciliation Platform", version="0.2.0")
 app.include_router(history_router)
+app.include_router(ops_router)
 templates = Jinja2Templates(directory=str(Path(__file__).parent / "templates"))
 
 
