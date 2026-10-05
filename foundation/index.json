@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "next_id": 4,
+  "next_id": 5,
   "records": [
     {
       "id": "FOUND-0001",
@@ -16,6 +16,11 @@
       "id": "FOUND-0003",
       "path": "foundation/FOUND-0003_application-security-lab.json",
       "title": "Application Security Lab — Injection Detection and Remediation"
+    },
+    {
+      "id": "FOUND-0004",
+      "path": "foundation/FOUND-0004_systems-networking-lab.json",
+      "title": "Systems / Networking Lab — Direct TCP Protocol Evidence"
     }
   ]
 }
