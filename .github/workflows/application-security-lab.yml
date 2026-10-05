@@ -1,0 +1,63 @@
+name: application-security-lab
+
+on:
+  push:
+    paths:
+      - "work/projects/application-security-lab/**"
+      - ".github/workflows/application-security-lab.yml"
+      - "foundation/ABILITY_MAP.json"
+  pull_request:
+    paths:
+      - "work/projects/application-security-lab/**"
+      - ".github/workflows/application-security-lab.yml"
+      - "foundation/ABILITY_MAP.json"
+
+jobs:
+  application-security:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/application-security-lab
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[test]"
+      - name: Prove vulnerable and remediated behavior
+        run: pytest -q
+      - name: Write before-after security report
+        run: python -m appsec_lab --report artifacts/security_report.json
+      - name: Scan remediated implementation
+        run: bandit -q appsec_lab/secure.py -f json -o artifacts/bandit_secure.json
+      - name: Scan intentional before-state
+        run: |
+          bandit -q appsec_lab/vulnerable.py -f json -o artifacts/bandit_vulnerable.json || true
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          secure = json.loads(Path("artifacts/bandit_secure.json").read_text())
+          vulnerable = json.loads(Path("artifacts/bandit_vulnerable.json").read_text())
+          report = json.loads(Path("artifacts/security_report.json").read_text())
+
+          assert secure["results"] == []
+          assert len(vulnerable["results"]) >= 1
+          assert report["before"]["vulnerable"] is True
+          assert report["before"]["rows_returned"] == 3
+          assert report["after"]["controlled_input_rows_returned"] == 0
+          assert report["after"]["regression_blocked"] is True
+
+          print(json.dumps({
+              "secure_static_findings": len(secure["results"]),
+              "vulnerable_static_findings": len(vulnerable["results"]),
+              "behavioral_report": report,
+          }, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: application-security-evidence
+          path: |
+            work/projects/application-security-lab/artifacts/security_report.json
+            work/projects/application-security-lab/artifacts/bandit_secure.json
+            work/projects/application-security-lab/artifacts/bandit_vulnerable.json
