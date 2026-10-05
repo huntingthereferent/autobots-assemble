@@ -6,20 +6,22 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 
 
-class AllWorkFoundationTests(unittest.TestCase):
-    def test_all_work_axes_are_separate(self):
+class CompleteStackFoundationTests(unittest.TestCase):
+    def test_complete_stack_separates_problem_capability_layer_and_depth(self):
         arch = (ROOT / "ARCHITECTURE.md").read_text(encoding="utf-8")
-        self.assertIn("Goal lane", arch)
-        self.assertIn("Field / domain", arch)
-        self.assertIn("Realization layer", arch)
-        self.assertIn("physical is not a goal lane", arch.lower())
+        self.assertIn("Referent", arch)
+        self.assertIn("Capability", arch)
+        self.assertIn("Dependency layer", arch)
+        self.assertIn("Realization depth", arch)
+        self.assertIn("No layer is privileged", arch)
 
-    def test_foundation_is_not_goal_lane_and_credibility_is_lens(self):
+    def test_foundation_is_evidence_and_views_are_read_only(self):
         text = (ROOT / "foundation" / "README.md").read_text(encoding="utf-8")
-        self.assertIn("Foundation is not a fourth goal lane", text)
-        self.assertIn("Credibility is derived from Foundation", text)
-        lens = (ROOT / "foundation" / "CREDIBILITY_LENS.md").read_text(encoding="utf-8")
-        self.assertIn("read-only projection", lens)
+        self.assertIn("preserved body of **demonstrated evidence**", text)
+        self.assertIn("not the repo's top-level goal", text)
+        view = (ROOT / "foundation" / "CREDIBILITY_VIEW.md").read_text(encoding="utf-8")
+        self.assertIn("read-only projection", view)
+        self.assertIn("does not select development", view)
 
     def test_foundation_protocol_registered(self):
         index = json.loads((ROOT / "protocols" / "index.json").read_text(encoding="utf-8"))
