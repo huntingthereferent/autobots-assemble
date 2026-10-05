@@ -1,0 +1,83 @@
+{
+  "id": "FOUND-0005",
+  "source_work": "work/projects/embedded-systems-lab/README.md",
+  "title": "Embedded Systems Lab — AVR Firmware and Deterministic Simulation",
+  "goal_lane": "foundation / resume-evidence build",
+  "fields": [
+    "embedded systems",
+    "firmware",
+    "C",
+    "microcontrollers"
+  ],
+  "realization_layers": [
+    "concept",
+    "design",
+    "implemented",
+    "tested"
+  ],
+  "deepest_supported_layer": "tested",
+  "problem": "Build firmware with a real microcontroller target toolchain and prove deterministic timing/state-machine behavior in simulation without upgrading simulated evidence into a physical-hardware claim.",
+  "constraints": [
+    "Target is ATmega328P using AVR-GCC.",
+    "Host simulation proves controller logic but is not physical board operation.",
+    "No electrical or instrumentation claim without hardware measurement."
+  ],
+  "demonstrated_capability": [
+    "C firmware state-machine implementation",
+    "ATmega328P GPIO configuration",
+    "1 ms Timer0 compare interrupt configuration",
+    "interrupt-driven button sampling and LED output",
+    "20 ms software debounce behavior",
+    "AVR-GCC target compilation",
+    "Intel HEX generation",
+    "host deterministic simulation of switch bounce and repeated presses",
+    "firmware image size inspection"
+  ],
+  "measured_result": {
+    "target": "ATmega328P",
+    "clock_hz": 16000000,
+    "program_bytes": 360,
+    "program_percent": 1.1,
+    "data_bytes": 4,
+    "data_percent": 0.2,
+    "simulation_result": "bounce suppressed; two stable presses produced two toggles"
+  },
+  "evidence": [
+    {
+      "path": "work/projects/embedded-systems-lab/README.md",
+      "kind": "embedded evidence contract"
+    },
+    {
+      "path": "work/projects/embedded-systems-lab/firmware/main.c",
+      "kind": "AVR hardware adapter / ISR"
+    },
+    {
+      "path": "work/projects/embedded-systems-lab/firmware/controller.c",
+      "kind": "firmware state machine"
+    },
+    {
+      "path": "work/projects/embedded-systems-lab/sim/sim.c",
+      "kind": "deterministic simulation witness"
+    },
+    {
+      "path": "work/projects/embedded-systems-lab/Makefile",
+      "kind": "target + simulator build"
+    },
+    {
+      "path": ".github/workflows/embedded-systems-lab.yml",
+      "kind": "clean AVR toolchain CI witness"
+    }
+  ],
+  "external_witness": [
+    {
+      "system": "GitHub Actions",
+      "claim": "embedded-systems-lab workflow run 1 passed AVR target build, HEX generation, deterministic debounce simulation, firmware size inspection, target image inspection, and artifact upload"
+    }
+  ],
+  "limits": [
+    "No physical microcontroller board execution.",
+    "No oscilloscope or logic-analyzer measurement.",
+    "No circuit design or PCB design witness.",
+    "No physical electronics debugging witness."
+  ]
+}
