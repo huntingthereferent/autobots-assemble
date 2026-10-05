@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [Public Data Monitor](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Clean GitHub Actions run passed for the initial vertical-slice scaffold. Next: execute live USGS ingestion against PostgreSQL, verify idempotent replay and API/dashboard output, then add the second acquisition mode. |
+| [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Use Case 001 now proves live API acquisition, validation, PostgreSQL idempotent persistence, API exposure, and CI. Next: generalize the source/canonical-state boundary and add Use Case 002 as a real HTML scraper so the engine can compare and reconcile heterogeneous sources. |
 
 ## Pinned / resumable
 
