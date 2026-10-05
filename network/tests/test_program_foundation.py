@@ -9,6 +9,7 @@ import unittest
 from foundation.program_kernel.compose import CompositionError, Link, execute_linked
 from foundation.program_kernel.contracts import ContractError
 from foundation.program_kernel.graph import GraphError, GraphLink, GraphNode, execute_graph
+from foundation.program_kernel.recurrence import Feedback, RecurrenceError, execute_recurrence
 from foundation.program_kernel.manifest import ManifestError, load_manifest
 from foundation.program_kernel.runtime import execute
 
@@ -198,6 +199,65 @@ class ProgramFoundationTests(unittest.TestCase):
             execute_graph(
                 nodes={"only": GraphNode(manifest=stateless)},
                 links=[],
+            )
+
+    def test_bounded_recurrence_reuses_output_under_same_contract(self):
+        manifest = load_manifest(EXAMPLES / "recurrence.json")
+
+        run = execute_recurrence(
+            manifest,
+            seed_inputs={"value": 0},
+            feedback=Feedback(source_output="value", target_input="value"),
+            steps=4,
+        )
+
+        self.assertEqual(
+            [record.values["value"] for record in run.records],
+            [1, 2, 3, 4],
+        )
+
+        for index, record in enumerate(run.records):
+            self.assertTrue(all(w["passed"] for w in record.witnesses))
+            if index == 0:
+                self.assertEqual(record.parent_executions, [])
+                self.assertEqual(
+                    record.provenance["value"]["kind"],
+                    "operation_output",
+                )
+            else:
+                previous = run.records[index - 1]
+                self.assertEqual(
+                    record.parent_executions,
+                    [previous.execution_id],
+                )
+                # The final value provenance records the operation that produced
+                # the current output, while the step's consumed input lineage
+                # is preserved by the parent execution relation.
+                self.assertEqual(
+                    record.provenance["value"]["execution_id"],
+                    record.execution_id,
+                )
+
+    def test_recurrence_rejects_zero_steps(self):
+        manifest = load_manifest(EXAMPLES / "recurrence.json")
+
+        with self.assertRaises(RecurrenceError):
+            execute_recurrence(
+                manifest,
+                seed_inputs={"value": 0},
+                feedback=Feedback(source_output="value", target_input="value"),
+                steps=0,
+            )
+
+    def test_recurrence_rejects_incompatible_feedback_contract(self):
+        source = load_manifest(EXAMPLES / "stateless.json")
+
+        with self.assertRaises(RecurrenceError):
+            execute_recurrence(
+                source,
+                seed_inputs={"text": "one two"},
+                feedback=Feedback(source_output="count", target_input="text"),
+                steps=2,
             )
 
 
