@@ -179,8 +179,8 @@ Hacker News is used here because the same stories are exposed through HTML and t
 - [x] idempotent PostgreSQL persistence in CI
 - [x] persisted records exposed through FastAPI
 - [x] unit + PostgreSQL integration + live-source CI
-- [ ] Docker Compose runtime verification
-- [ ] visual UI verification
+- [x] Docker Compose runtime verification
+- [x] visual UI verification
 
 ### Platform Slice 2 — heterogeneous source + comparison
 - [x] add real HTML scraper adapter
@@ -194,29 +194,29 @@ Hacker News is used here because the same stories are exposed through HTML and t
 - [x] retry/backoff and typed source failure handling
 
 ### Platform Slice 3 — reconciliation + history
-- [ ] cross-source identity model
+- [x] cross-source identity model
 - [x] observation history
 - [ ] reconciliation rules with explicit evidence boundary
 - [ ] disappeared/stale state handling
 - [x] persisted reconciliation state queryable through API
-- [ ] Alembic migrations
+- [x] Alembic migrations
 - [ ] indexes justified by measured queries
 
 ### Platform Slice 4 — automation + production service
-- [ ] scheduled acquisition
+- [x] scheduled acquisition
 - [ ] downstream alerts/actions
 - [ ] AWS deployment
-- [ ] HTTPS
+- [x] HTTPS infrastructure configuration (runtime deployment still open)
 - [ ] secret/config handling
-- [ ] logs + metrics + alarms
+- [x] metrics + dashboards; production cloud alarms remain open
 - [ ] backup/recovery path
 
 ### Platform Slice 5 — hardening
-- [ ] load/performance benchmark
-- [ ] dependency/security scan
+- [x] load/performance benchmark
+- [x] dependency/container security scan
 - [ ] failure injection/recovery test
 - [ ] operator runbook
-- [ ] generated resume evidence summary using verified witnesses only
+- [x] Foundation capability record using verified witnesses only
 
 ## Evidence rule
 
@@ -352,4 +352,30 @@ Current edge: add Grafana visualization over the verified Prometheus layer, then
 
 The current stack now has verified acquisition, persistence, APIs, background scheduling, migrations, identity/reconciliation, observability, visualization, vulnerability scanning, and load testing.
 
-Current edge: infrastructure-as-code for the AWS production topology. Terraform validation can prove the configuration shape; AWS deployment remains open until an actual cloud runtime witness exists.
+## Infrastructure-as-code evidence
+
+- Terraform defines the AWS production topology around ECS, RDS PostgreSQL, Redis, IAM, security groups, HTTPS load balancing, and service outputs.
+- GitHub Actions runs `terraform fmt -check`, `terraform init -backend=false`, and `terraform validate`.
+- infrastructure configuration is therefore evidenced as valid IaC shape; an actual AWS runtime deployment is **not** claimed yet.
+
+## Full-stack dashboard evidence
+
+- the platform now includes a dedicated frontend service built with TypeScript/Vite and served through nginx.
+- Docker Compose includes the frontend alongside API, PostgreSQL, Redis, worker, scheduler, Prometheus, and Grafana.
+- CI builds the frontend image and verifies the rendered platform shell plus proxied API health.
+- the dashboard exposes source runs and cross-system identity decisions rather than a decorative mock.
+
+## Browser / E2E evidence
+
+- Playwright is configured against the containerized frontend.
+- the E2E test requires real seeded GitHub and PyPI source runs plus a persisted matched identity decision.
+- assertions verify `github_api`, `pypi_api`, `MATCHED`, `github_repo:1362490`, and `pypi_package:requests`.
+- the test captures a full-page screenshot artifact for visual inspection.
+- CI now seeds this evidence **inside the browser-ui job after the API stack is live**, so the browser witness and its data share the same runtime.
+- browser artifacts are retained for inspection after the run.
+
+## Current boundary
+
+The stack now has inspectable witnesses for acquisition, persistence, history, reconciliation, durable identity, APIs, scheduled work, Docker orchestration, CI, Prometheus, Grafana, security scanning, load testing, Terraform validation, a real frontend, and browser-level assertions.
+
+The next missing capability is **failure/recovery engineering**: deliberately break a source or dependency, prove that failure is surfaced through source-run state and observability, preserve prior valid state, and demonstrate clean recovery. AWS production deployment remains a separate open witness and must not be upgraded from validated configuration to deployed operation without runtime evidence.
