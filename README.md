@@ -1,63 +1,52 @@
 # Language Network
 
-A persistent external operating environment for using AI across **ALL WORK**: research, public contribution, paid work, software, mathematics, physical systems, fabrication, measurement, manufacturing, and future fields/layers.
+A persistent external operating environment for **complete-stack problem solving**.
+
+The repository is centered on one practical orientation:
+
+> Given a real problem, keep traversing every required dependency layer until the stack needed for a valid solution is represented, evidenced, realized, or explicitly walled.
+
+"Complete stack" is not full-stack web development. A problem can cross software, mathematics, physics, electronics, mechanics, materials, fabrication, manufacturing, economics, safety, regulation, or any other layer actually required by the referent.
 
 The repository is **not A/B itself**. A/B remains the recursively reusable mathematical operation and witness/evidence contract.
 
 ## Start here
 
-1. [`ENTRY.md`](ENTRY.md)
-2. [`AB_CONTRACT.md`](AB_CONTRACT.md)
-3. [`ARCHITECTURE.md`](ARCHITECTURE.md)
-4. [`state/current.json`](state/current.json)
-5. [`protocols/README.md`](protocols/README.md)
-6. [`language/README.md`](language/README.md) when human language/register matters
-7. the active work record reached from the current referent
+1. [COMPLETE_STACK.md](COMPLETE_STACK.md)
+2. [ENTRY.md](ENTRY.md)
+3. [AB_CONTRACT.md](AB_CONTRACT.md)
+4. [state/current.json](state/current.json)
+5. [capabilities/README.md](capabilities/README.md)
+6. the active work/evidence reached from the current referent
 
-## ALL WORK
+## Core structure
 
-[`work/`](work/) defines the umbrella:
+- **Complete Stack** — top-level problem orientation.
+- **capabilities/** — broad problem-spaces already demonstrated or being expanded.
+- **work/** — concrete problems and projects.
+- **foundation/** — preserved demonstrated evidence.
+- **research/**, **open_source/**, **money/** / **jobs/** — why particular work exists.
+- **protocols/** — reusable bounded operating contracts.
+- **language/** — interpretation/rendering of human language.
+- **network/** — preserved relation structures.
+- **state/** — current routing pointer.
+- **views/** — read-only/generated projections.
+- **domains/** — specialized adapters only when a distinct domain witness contract is actually needed.
 
-- **goal lane** — research, open source, money/jobs, or a future purpose;
-- **field/domain** — math, software, electronics, mechanical, biology, manufacturing, etc.;
-- **realization layer** — idea, research, model, simulation, design, implementation, physical build, measurement, inspection, validation, deployed/operating.
+## First capability proof
 
-These axes are separate. **Physical is not a goal lane. Software is not the default meaning of work.**
+The first broad capability proof is **Programs**.
 
-## Current goal lanes
+The program foundation demonstrated shared structure across unlike program shapes, composition, relation graphs, bounded recurrence, provenance, and external effects/ports.
 
-- **Theory / Research** — [`research/`](research/)
-- **Open Source** — [`open_source/`](open_source/)
-- **Money / Jobs** — [`money/`](money/) plus [`jobs/`](jobs/)
+It is now frozen as evidence. It should be reopened only when a real problem exposes a missing relation.
 
-Crossing goal lanes requires an explicit handoff.
+## Current expansion
 
-## Foundation and credibility
-
-[`foundation/`](foundation/) is the cross-lane evidence base of demonstrated work.
-
-A work item stays in its original lane; Foundation records what it actually demonstrated and how deeply it was realized.
-
-**Credibility is a read-only lens over Foundation**, not a manually assigned score and not synonymous with coding reputation.
-
-## Shared layers
-
-- **A/B boundary**
-- **network/**
-- **protocols/**
-- **language/**
-- **lenses/**
-- **domains/**
-- **evidence/**
-- **state/**
+The next broad expansion is toward **integrated physical systems / machines**, where complete-stack traversal must survive non-digital layers without pretending simulation or placeholders are physical witnesses.
 
 ## Core rule
 
-**current referent → admissible evidence → witness → movement/wall → provenance → continuation**
+**current referent → required relation → enter required layer → witness/model/build/measure → preserve provenance → return result as valid input → continue**
 
-
-## ALL WORK discovery
-
-[`work.all-work-scan`](protocols/work/all-work-scan.md) searches beyond job boards. Unsolved academic problems, unresolved engineering questions, open-source work, prizes, physical challenges, reproduction targets, and frontier work with no task owner all count.
-
-Repeated scans do not hide previously seen candidates by default.
+Do not stop merely because the next dependency belongs to another discipline.
