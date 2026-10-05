@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "company": "Online School",
+  "source_relation": "generalized from Dessy's existing homeschool operating schedule",
+  "privacy_mode": "anonymized_operating_structure",
+  "daily_rhythm": [
+    {
+      "order": 1,
+      "label": "school-only block",
+      "start": "09:30",
+      "end": "11:00"
+    },
+    {
+      "order": 2,
+      "label": "break"
+    },
+    {
+      "order": 3,
+      "label": "reading time"
+    },
+    {
+      "order": 4,
+      "label": "afternoon activity"
+    }
+  ],
+  "individualized_tracks": [
+    {
+      "id": "track_a",
+      "weekday_blocks": [
+        {
+          "activity": "independent reading",
+          "minutes": 30
+        },
+        {
+          "activity": "writing",
+          "minutes": 30
+        }
+      ]
+    },
+    {
+      "id": "track_b",
+      "weekday_blocks": [
+        {
+          "activity": "phonics workbook",
+          "minutes": 30
+        },
+        {
+          "activity": "core academic workbook",
+          "minutes": 60
+        },
+        {
+          "activity": "guided reading",
+          "minutes": 20
+        },
+        {
+          "activity": "beginning writing",
+          "minutes": 20
+        }
+      ]
+    }
+  ],
+  "shared_weekday_blocks": [
+    {
+      "activity": "mathematics",
+      "minutes": 60
+    },
+    {
+      "activity": "science documentary / guided science study",
+      "minutes": 90
+    },
+    {
+      "activity": "art / creative work",
+      "minutes": 60
+    }
+  ],
+  "mwf_blocks": [
+    {
+      "activity": "history / social studies",
+      "minutes": 60
+    },
+    {
+      "activity": "physical education outing",
+      "minutes": 90
+    }
+  ],
+  "wednesday_blocks": [
+    {
+      "activity": "shared hands-on science project",
+      "minutes": 180
+    }
+  ],
+  "math_pattern": {
+    "monday": "direct lesson",
+    "tuesday": "practice",
+    "wednesday": "practice / applied work",
+    "thursday": "direct lesson",
+    "friday": "review / practice"
+  },
+  "demonstrated_theme_cycles": [
+    "water / Missouri River / weather / conservation",
+    "plants / seeds / plant structures",
+    "seasons / fall / sunlight / shadows",
+    "trade / stores / packaging / markets",
+    "recipes / food science / nutrition"
+  ],
+  "witness_boundary": {
+    "demonstrated": [
+      "recurring home-education schedule",
+      "subject-duration planning",
+      "weekly thematic substitution",
+      "hands-on project cadence",
+      "instructional-time tracking"
+    ],
+    "not_demonstrated": [
+      "business incorporation",
+      "school accreditation",
+      "school licensure",
+      "public enrollment",
+      "paid external customers"
+    ]
+  }
+}
