@@ -1,0 +1,75 @@
+digraph st_joseph_pass0 {
+  graph [rankdir=LR, labelloc="t", label="St. Joseph, Missouri — PASS-0 Complete-Stack System Landscape", fontsize=18];
+  node [shape=box, fontsize=10];
+  edge [fontsize=9];
+
+  city [label="St. Joseph\n(current referent)", shape=doubleoctagon];
+
+  physical [label="Physical substrate\nland / Missouri River / built form"];
+  people [label="Population & households"];
+  governance [label="City governance & planning"];
+  mobility [label="Mobility system\nstreets / transit / freight / air / walking / biking"];
+  utilities [label="Utility system"];
+  electric [label="Electricity\nEvergy"];
+  water [label="Water\nMissouri American Water"];
+  gas [label="Gas\nSpire"];
+  sewer [label="Sewer\nCity utility"];
+  storm [label="Stormwater"];
+  waste [label="Landfill / waste"];
+  housing [label="Housing & neighborhoods"];
+  economy [label="Economy & employment"];
+  education [label="Education"];
+  parks [label="Parks / trails / wellness"];
+  publicfac [label="Public facilities & infrastructure"];
+  digital [label="Digital connectivity\ncomputer / broadband access"];
+  external [label="External regional systems\nKansas City / state / federal / markets"];
+  evidence [label="PASS-0 public evidence", shape=note];
+
+  city -> physical [label="occupies / modifies"];
+  city -> people [label="contains / serves"];
+  city -> governance [label="is administered through"];
+
+  governance -> mobility [label="plans / maintains parts of"];
+  governance -> sewer [label="operates / bills"];
+  governance -> storm [label="manages"];
+  governance -> waste [label="manages"];
+  governance -> parks [label="plans / maintains"];
+  governance -> publicfac [label="plans / maintains"];
+  governance -> housing [label="plans / regulates"];
+  governance -> economy [label="supports / plans for"];
+
+  utilities -> electric [label="includes external provider"];
+  utilities -> water [label="includes external provider"];
+  utilities -> gas [label="includes external provider"];
+  utilities -> sewer [label="includes city service"];
+  utilities -> storm [label="interfaces with"];
+
+  people -> housing [label="occupy"];
+  people -> mobility [label="use"];
+  people -> utilities [label="consume"];
+  people -> education [label="use / staff"];
+  people -> parks [label="use"];
+  people -> economy [label="work / consume / produce"];
+  people -> digital [label="use"];
+
+  economy -> mobility [label="depends on movement of people / freight"];
+  economy -> utilities [label="depends on"];
+  economy -> external [label="trades / connects"];
+  housing -> utilities [label="depends on"];
+  housing -> mobility [label="depends on access"];
+  publicfac -> utilities [label="depends on"];
+  publicfac -> mobility [label="depends on access"];
+  mobility -> physical [label="is constrained by"];
+  storm -> physical [label="drains across / responds to"];
+  parks -> physical [label="uses / preserves"];
+  digital -> external [label="connects to"];
+  mobility -> external [label="connects to"];
+  utilities -> external [label="partly supplied by"];
+
+  evidence -> governance [label="city comprehensive plan"];
+  evidence -> mobility [label="public works / transportation plans"];
+  evidence -> utilities [label="city utility-services listing"];
+  evidence -> people [label="Census QuickFacts"];
+  evidence -> digital [label="Census QuickFacts"];
+  evidence -> economy [label="Census / city planning"];
+}
