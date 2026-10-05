@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Use Case 002 now proves live HTML + API acquisition, canonical identity pairing, parser regression, and field-level reconciliation across heterogeneous representations. Next: persist observation history and reconciliation results, then add retry/failure handling before moving to fuzzy cross-system identity. |
+| [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Full stack now reaches durable identity, Prometheus/Grafana observability, k6 performance evidence, Trivy scanning, Terraform AWS topology validation, Dockerized frontend, and Playwright browser assertions over seeded GitHub↔PyPI evidence. Next: close failure/recovery engineering by injecting a source/dependency failure, proving surfaced failure state + preserved prior valid state + clean recovery; keep actual AWS deployment as a separate unclaimed runtime witness. |
 
 ## Pinned / resumable
 
