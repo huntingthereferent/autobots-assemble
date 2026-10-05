@@ -5,12 +5,14 @@
   "goal": "Solve ARC-AGI-3 completely. Live execution is now available; use immutable discovery-inclusive runs to drive only generic, evidence-required corrections.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Freeze the evidence-gated G2.3 typed-program mechanism (SB26 public regression 8/8, 124 actions). Move to the next unsolved public failure and infer its task representation from live causal evidence; do not widen SB26-specific assumptions.",
+  "next_movement": "Freeze G2 relational-construction witness (SB26 8/8, WIN, 530 actions; oracle-assisted development, not clean first-contact). Return to unresolved public failure classes and build the next generic mechanism from live evidence; integrate by witnessed relation class, never game ID.",
   "walls": [
     "Private competition environments are intentionally hidden; private 100% requires an official Kaggle competition rerun.",
     "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
   ],
   "evidence": [
+    "research/dives/ARC3-TRACE-001/direct_agent/gen2/my_agent.py",
+    "research/dives/ARC3-TRACE-001/runs/G2_SB26_FULL_SOLVE_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/runs/G2_3_SB26_TYPED_PROGRAM_100_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/runs/SB26_SYMBOLIC_RECOVERY_2026-10-04.md",
     "research/dives/ARC3-TRACE-001/runs/G1_G1_1_LIVE_EXPERIMENTS_2026-10-04.md",
