@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 Complete-Stack Capability Build",
+  "preferred_referent": "📍 Complete-Stack Artifact Output Layer",
   "protocol": "work.bounded-problem",
-  "goal": "Build and preserve complete-stack problem-solving capability: for any real problem, traverse every required dependency layer until the stack needed for a valid solution is represented, evidenced, realized, or explicitly walled. Programs are the first frozen broad capability proof, not the repository's top-level destination.",
+  "goal": "Standardize the working outputs produced while traversing a complete stack so program code, CAD-like geometry, system landscapes, math models, schematics, BOMs, and test/measurement artifacts share one evidence/provenance boundary and can become valid inputs to later traversal.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Keep the arbitrary-program foundation frozen as demonstrated capability evidence. Expand complete-stack capability into integrated physical systems / machines, where unavailable physical components may be represented by bounded measured/justified interfaces while mechanics, electronics, controls, software, fabrication/manufacturing, testing, cost, safety, and other required layers remain visible.",
+  "next_movement": "Use the artifact contract on the first integrated physical-system target. As traversal reaches geometry emit CAD-like artifacts; as it reaches system relations emit landscapes; as it reaches quantitative dependencies emit math-model artifacts; as it reaches computation emit program artifacts. Preserve placeholder/witness depth and propagate invalidation across artifacts.",
   "walls": [
     "Do not redefine A/B as Complete Stack, this repository, a workflow, or an implementation layer.",
     "Do not stop traversal merely because a required dependency belongs to another discipline.",
@@ -14,14 +14,14 @@
     "Do not reopen the program foundation unless a real incoming problem exposes a missing relation."
   ],
   "evidence": [
-    "COMPLETE_STACK.md",
-    "capabilities/README.md",
-    "foundation/PROGRAM_FOUNDATION.md",
-    "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
-    "foundation/FOUND-0002_applied-ml-modeling.json",
-    "foundation/FOUND-0003_application-security-lab.json",
-    "foundation/FOUND-0004_systems-networking-lab.json",
-    "foundation/FOUND-0005_embedded-systems-lab.json"
+    "artifacts/README.md",
+    "artifacts/ARTIFACT_CONTRACT.md",
+    "artifacts/CAD_LIKE.md",
+    "artifacts/SYSTEM_LANDSCAPE.md",
+    "artifacts/MATH_MODEL.md",
+    "artifacts/PROGRAM.md",
+    "artifacts/artifact.schema.json",
+    "COMPLETE_STACK.md"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
