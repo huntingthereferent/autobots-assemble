@@ -1,0 +1,16 @@
+[project]
+name = "systems-networking-lab"
+version = "0.1.0"
+description = "Direct local TCP networking evidence"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8,<9",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools]
+packages = ["network_lab"]
