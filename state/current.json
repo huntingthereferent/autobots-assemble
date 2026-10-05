@@ -1,32 +1,30 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 Complete-Stack Artifact Output Layer",
+  "preferred_referent": "📍 St. Joseph, Missouri — Complete-Stack Benchmark",
   "protocol": "work.bounded-problem",
-  "goal": "Standardize complete-stack working outputs with concrete generation mechanisms: parametric CAD-like geometry, machine-readable system landscapes, math models, programs, schematics, BOMs, and test/measurement artifacts. Every generated output must retain canonical-source, check, witness-depth, and provenance lineage so it can become valid input to later traversal.",
+  "goal": "Traverse St. Joseph, Missouri as a real physical/social/technical system. Preserve a bounded first pass, emit working artifacts as each relation opens, compare frozen representations/predictions against deeper real-world evidence, preserve mismatches, and recursively reconcile them without erasing prior passes.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Apply the output layer on the first integrated physical-system target. For geometry: parameters/evidence → CadQuery by default (OpenSCAD when simpler) → STEP/STL/DXF/SVG → geometry checks → derived values. For system landscapes: named referents/relations → Graphviz/DOT → SVG/PDF/PNG → graph checks. Feed derived outputs into math/program/schematic/BOM artifacts and propagate invalidation when upstream parameters or evidence change.",
+  "next_movement": "Open the spatial relation exposed by PASS-0 without forcing it into CAD: establish a georeferenced city-scale representation using the post-freeze official GIS/map surfaces, preserve CRS/source/accuracy boundaries, and use it to select the first subsystem where a new prediction can be frozen before its detailed reality-check evidence is opened.",
   "walls": [
-    "Do not redefine A/B as Complete Stack, this repository, a workflow, or an implementation layer.",
-    "Do not stop traversal merely because a required dependency belongs to another discipline.",
-    "Do not upgrade a digital placeholder, model, simulation, or design into a physical witness.",
-    "Do not let résumé categories select development.",
-    "Do not reopen the program foundation unless a real incoming problem exposes a missing relation."
+    "Do not redefine A/B as the city model, benchmark workflow, or repository.",
+    "Do not retroactively add post-freeze GIS/map evidence to STJ-ART-0001 PASS-0 provenance.",
+    "Do not treat GIS/cartographic geometry as survey/fabrication geometry.",
+    "Do not treat planning documents as evidence of current measured asset condition or capacity.",
+    "Preserve source disagreements instead of forcing one value.",
+    "Do not revise a frozen prediction/representation in place after a reality check; create the next pass and link the mismatch."
   ],
   "evidence": [
-    "CATEGORY_CONTRACT.md",
-    "category_axes.json",
-    "artifacts/categories.json",
-    "artifacts/README.md",
-    "artifacts/ARTIFACT_CONTRACT.md",
-    "artifacts/CAD_LIKE.md",
-    "artifacts/SYSTEM_LANDSCAPE.md",
-    "artifacts/MATH_MODEL.md",
-    "artifacts/PROGRAM.md",
-    "artifacts/artifact.schema.json",
-    "COMPLETE_STACK.md",
-    "artifacts/CAD_TOOLCHAIN.md",
-    "artifacts/LANDSCAPE_TOOLCHAIN.md"
+    "work/projects/st-joseph-complete-stack/README.md",
+    "work/projects/st-joseph-complete-stack/PASS-0/BOUNDARY.md",
+    "work/projects/st-joseph-complete-stack/PASS-0/evidence/sources.json",
+    "work/projects/st-joseph-complete-stack/PASS-0/landscape/artifact.json",
+    "work/projects/st-joseph-complete-stack/PASS-0/landscape/st-joseph-system.dot",
+    "work/projects/st-joseph-complete-stack/PASS-0/landscape/st-joseph-system.svg",
+    "work/projects/st-joseph-complete-stack/REALITY-CHECK.md",
+    "work/projects/st-joseph-complete-stack/REALITY-CHECK/sources.json",
+    "artifacts/GEOSPATIAL.md",
+    "artifacts/GEOSPATIAL_TOOLCHAIN.md"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -35,15 +33,16 @@
     "reason": "Explicit user-directed resume of the Multi-Source State & Reconciliation / resume-evidence build in this window. ARC remains pinned/resumable in TASKS.md."
   },
   "verified_run": {
-    "workflow": "program-foundation",
-    "run_number": 26,
-    "result": "success",
-    "verified_capabilities": [
-      "shape-independent program realizations",
-      "cross-program composition and generic relation graphs",
-      "bounded same-contract recurrence",
-      "execution/value lineage",
-      "declared external effects through admitted adapters"
+    "benchmark": "St. Joseph Complete-Stack Benchmark",
+    "phase": "PASS-0",
+    "artifact": "STJ-ART-0001",
+    "result": "represented",
+    "checks": [
+      "20 named system/referent nodes",
+      "42 labeled directed relations",
+      "canonical Graphviz source preserved",
+      "generated SVG view preserved",
+      "PASS-0 evidence boundary frozen before post-freeze GIS sources"
     ]
   }
 }
