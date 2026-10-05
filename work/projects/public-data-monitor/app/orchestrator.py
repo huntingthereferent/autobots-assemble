@@ -4,7 +4,13 @@ from .platform import SourceObservation
 from .source_runs import fail_source_run, finish_source_run, start_source_run
 
 
-def run_source(\n    source: str,\n    fetch: Callable[[], list[SourceObservation]],\n    *,\n    task_id: str | None = None,\n) -> list[SourceObservation]:\n    run_id = start_source_run(source, task_id=task_id)
+def run_source(
+    source: str,
+    fetch: Callable[[], list[SourceObservation]],
+    *,
+    task_id: str | None = None,
+) -> list[SourceObservation]:
+    run_id = start_source_run(source, task_id=task_id)
     try:
         observations = fetch()
     except Exception as exc:
