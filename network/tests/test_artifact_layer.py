@@ -65,6 +65,31 @@ class ArtifactLayerTests(unittest.TestCase):
         self.assertIn("witness_depth", schema["required"])
         self.assertIn("provenance", schema["required"])
 
+    def test_cad_toolchain_preserves_editable_source_and_engineering_exports(self):
+        text = (ROOT / "artifacts" / "CAD_TOOLCHAIN.md").read_text(encoding="utf-8")
+        self.assertIn("CadQuery", text)
+        self.assertIn("OpenSCAD", text)
+        self.assertIn("STEP", text)
+        self.assertIn("DXF", text)
+        self.assertIn("SVG", text)
+        self.assertIn("editable source is canonical", text)
+        self.assertIn("Concept imagery", text)
+
+    def test_landscape_toolchain_uses_machine_readable_graph_source(self):
+        text = (ROOT / "artifacts" / "LANDSCAPE_TOOLCHAIN.md").read_text(encoding="utf-8")
+        self.assertIn("Graphviz / DOT", text)
+        self.assertIn("graph source is canonical", text)
+        self.assertIn("Generated SVG/PDF/PNG", text)
+
+    def test_artifact_schema_requires_source_output_check_lineage(self):
+        schema = json.loads((ROOT / "artifacts" / "artifact.schema.json").read_text(encoding="utf-8"))
+        for field in ("canonical_source", "generated_outputs", "checks"):
+            self.assertIn(field, schema["required"])
+        self.assertEqual(
+            set(schema["properties"]["checks"]["items"]["properties"]["status"]["enum"]),
+            {"pass", "fail", "unknown", "not_run"},
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
