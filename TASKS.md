@@ -5,6 +5,7 @@
 | Work | Lane | State | Next movement |
 |---|---|---|---|
 | [St. Joseph Complete-Stack Benchmark](work/projects/st-joseph-complete-stack/README.md) | Real-world complete-stack traversal | MOVE | PASS-0 is frozen with STJ-ART-0001: 20 system nodes, 42 labeled relations, canonical DOT source and generated SVG. St. Joseph exposed a new spatial relation: georeferenced/world-frame geometry is now a geospatial sibling of local/object-frame CAD-like geometry. Next: establish the city-scale geospatial representation from post-freeze official GIS/map evidence, then freeze the first deeper subsystem prediction before opening its detailed reality-check evidence. |
+| [Online School](companies/online-school/COMPANY.md) | Company / education operation | MOVE | Dessy's existing homeschool schedule is merged as the first operating evidence, with minor identities removed from the public company layer. Next: decompress schedule → curriculum → learner activity → operator/parent interface → progress evidence into the first online delivery surface; keep legal/accreditation states explicit and unwitnessed until reached. |
 | [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Preserve as the first broad capability proof. Reopen only if a real problem exposes a program relation the current foundation cannot carry. |
 
 ## Pinned / resumable
