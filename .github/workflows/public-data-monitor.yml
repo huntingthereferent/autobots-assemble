@@ -210,6 +210,7 @@ jobs:
           assert "task_id" in columns
           assert "ix_source_runs_task_id" in indexes
           assert "identity_decision_records" in inspector.get_table_names()
+          assert "lifecycle_records" in inspector.get_table_names()
           PY
       - run: alembic downgrade base
       - name: Verify downgrade
@@ -222,6 +223,7 @@ jobs:
           columns = {c["name"] for c in inspector.get_columns("source_runs")}
           assert "task_id" not in columns
           assert "identity_decision_records" not in inspector.get_table_names()
+          assert "lifecycle_records" not in inspector.get_table_names()
           PY
 
 
