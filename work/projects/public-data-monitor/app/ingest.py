@@ -60,9 +60,4 @@ def ingest() -> dict[str, int]:
 
 if __name__ == "__main__":
     result = ingest()
-    print(
-        " ".join(
-            f"{key}={value}"
-            for key, value in result.items()
-        )
-    )
+    print(" ".join(f"{key}={value}" for key, value in result.items()))
