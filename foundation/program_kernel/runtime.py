@@ -4,6 +4,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 import importlib
 from typing import Any, Callable
+from uuid import uuid4
 
 from .contracts import assert_contract
 
@@ -20,11 +21,14 @@ class StepRecord:
 
 @dataclass(frozen=True)
 class ExecutionRecord:
+    execution_id: str
     manifest_id: str
     referent: str
+    parent_executions: list[str]
     steps: list[StepRecord]
     witnesses: list[dict[str, Any]]
     values: dict[str, Any]
+    provenance: dict[str, dict[str, Any]]
 
 
 def _load_callable(path: str) -> Callable[..., dict[str, Any]]:
@@ -70,10 +74,23 @@ def execute(
     inputs: dict[str, Any],
     *,
     initial_state: dict[str, Any] | None = None,
+    input_provenance: dict[str, dict[str, Any]] | None = None,
+    parent_executions: list[str] | None = None,
 ) -> ExecutionRecord:
+    execution_id = str(uuid4())
     values: dict[str, Any] = {}
-    values.update(initial_state or {})
-    values.update(inputs)
+    provenance: dict[str, dict[str, Any]] = {}
+
+    for name, value in (initial_state or {}).items():
+        values[name] = value
+        provenance[name] = {"kind": "initial_state"}
+
+    for name, value in inputs.items():
+        values[name] = value
+        provenance[name] = (input_provenance or {}).get(
+            name,
+            {"kind": "external_input"},
+        )
 
     contracts = _contracts(manifest)
 
@@ -112,6 +129,12 @@ def execute(
             if name in contracts:
                 assert_contract(name, contracts[name], value)
             values[name] = value
+            provenance[name] = {
+                "kind": "operation_output",
+                "execution_id": execution_id,
+                "operation": operation["id"],
+                "consumed": list(operation["consumes"]),
+            }
 
         steps.append(
             StepRecord(
@@ -127,19 +150,25 @@ def execute(
     witnesses = [_check_witness(item, values) for item in manifest["witnesses"]]
 
     return ExecutionRecord(
+        execution_id=execution_id,
         manifest_id=manifest["id"],
         referent=manifest["referent"],
+        parent_executions=list(parent_executions or []),
         steps=steps,
         witnesses=witnesses,
         values=values,
+        provenance=provenance,
     )
 
 
 def execution_dict(record: ExecutionRecord) -> dict[str, Any]:
     return {
+        "execution_id": record.execution_id,
         "manifest_id": record.manifest_id,
         "referent": record.referent,
+        "parent_executions": record.parent_executions,
         "steps": [asdict(step) for step in record.steps],
         "witnesses": record.witnesses,
         "values": record.values,
+        "provenance": record.provenance,
     }
