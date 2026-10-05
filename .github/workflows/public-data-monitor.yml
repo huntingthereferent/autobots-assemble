@@ -107,7 +107,12 @@ jobs:
           docker compose logs prometheus
           exit 1
       - run: |
-          curl --fail "http://localhost:9090/api/v1/targets" | grep -q '"health":"up"'
+          for i in {1..30}; do
+            if curl --fail "http://localhost:9090/api/v1/targets" | grep -q '"health":"up"'; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs prometheus
+          exit 1
       - run: docker compose ps
       - if: always()
         run: docker compose down -v
@@ -172,6 +177,7 @@ jobs:
           indexes = {i["name"] for i in inspector.get_indexes("source_runs")}
           assert "task_id" in columns
           assert "ix_source_runs_task_id" in indexes
+          assert "identity_decision_records" in inspector.get_table_names()
           PY
       - run: alembic downgrade base
       - name: Verify downgrade
@@ -180,6 +186,8 @@ jobs:
           import os
           from sqlalchemy import create_engine, inspect
           engine = create_engine(os.environ["DATABASE_URL"])
-          columns = {c["name"] for c in inspect(engine).get_columns("source_runs")}
+          inspector = inspect(engine)
+          columns = {c["name"] for c in inspector.get_columns("source_runs")}
           assert "task_id" not in columns
+          assert "identity_decision_records" not in inspector.get_table_names()
           PY
