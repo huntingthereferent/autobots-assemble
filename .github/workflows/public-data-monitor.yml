@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[test]"
-      - run: pytest -q tests/test_usgs.py tests/test_api.py tests/test_platform.py tests/test_hn.py tests/test_github_source.py tests/test_identity.py tests/test_tasks.py
+      - run: pytest -q tests/test_usgs.py tests/test_api.py tests/test_platform.py tests/test_hn.py tests/test_github_source.py tests/test_identity.py tests/test_tasks.py tests/test_metrics.py
 
   postgres-integration:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[test]"
-      - run: pytest -q tests/test_postgres_integration.py tests/test_history_store.py tests/test_source_runs.py
+      - run: pytest -q tests/test_postgres_integration.py tests/test_history_store.py tests/test_source_runs.py tests/test_identity_store.py
 
 
   live-source-smoke:
@@ -98,6 +98,16 @@ jobs:
           docker compose logs
           exit 1
       - run: docker compose exec -T worker celery -A app.celery_app.celery_app inspect ping
+      - run: curl --fail http://localhost:8000/metrics
+      - run: |
+          for i in {1..30}; do
+            if curl --fail http://localhost:9090/-/ready; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs prometheus
+          exit 1
+      - run: |
+          curl --fail "http://localhost:9090/api/v1/targets" | grep -q '"health":"up"'
       - run: docker compose ps
       - if: always()
         run: docker compose down -v
