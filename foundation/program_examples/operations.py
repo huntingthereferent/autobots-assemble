@@ -44,3 +44,7 @@ def debounce(samples: list) -> dict:
 def describe_count(count: int) -> dict:
     parity = "even" if count % 2 == 0 else "odd"
     return {"description": f"{count} is {parity}"}
+
+
+def increment(value: int) -> dict:
+    return {"value": value + 1}
