@@ -5,7 +5,7 @@
   "goal": "Build the reusable implementation foundation beneath arbitrary bounded program realizations. A/B remains the recursive mathematical operation; this software foundation must preserve enough referent/boundary/input/representation/operation/state/output/witness structure that new programs stop requiring the same scaffolding to be rebuilt by hand.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Verify the first shape-independent kernel witness across stateless, stateful, and event/device-style realizations. If it holds, move one layer deeper into composability: make realizations connect without kernel changes, preserve provenance across executions, and prove that valid outputs can become valid inputs across program boundaries under declared contracts.",
+  "next_movement": "Lift pairwise contract-checked composition into a generic bounded execution graph: nodes are program realizations, edges are declared value relations, graph validation rejects unresolved inputs/incompatible contracts/cycles that lack an explicit state-time model, and execution preserves lineage through the graph. Do not add domain behavior to the kernel.",
   "walls": [
     "Do not redefine A/B as the software foundation, workflow, factory, or runtime.",
     "Do not let resume ability categories select development.",
@@ -27,5 +27,17 @@
     "from_state": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
     "reason": "Explicit user-directed resume of the Multi-Source State & Reconciliation / resume-evidence build in this window. ARC remains pinned/resumable in TASKS.md."
   },
-  "verified_run": null
+  "verified_run": {
+    "workflow": "program-foundation",
+    "run_number": 10,
+    "result": "success",
+    "verified_capabilities": [
+      "one unchanged kernel realizes stateless, stateful, and event/device-style programs",
+      "invalid manifests and value-contract mismatches fail before unsupported execution",
+      "operation output can feed a later operation under a declared contract",
+      "one program realization can feed another through compatible contracts",
+      "cross-program execution provenance preserves source execution identity",
+      "incompatible cross-program links are rejected"
+    ]
+  }
 }
