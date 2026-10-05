@@ -254,3 +254,45 @@ The common foundation should only preserve:
 - what evidence/result crossed back into the program.
 
 This is an admission/evidence contract, not a security sandbox.
+
+
+### Witness 5 — declared external effects
+
+Operations may now declare named external effects without teaching the kernel what those effects mean.
+
+Execution receives realization-specific adapters and records each admitted call.
+
+Verified behavior:
+
+- a declared + admitted effect can return represented data;
+- the effect call records effect name, adapter identity, argument shape, and result type;
+- a declared effect without an admitted adapter fails;
+- an adapter cannot be used under an effect name the operation did not declare.
+
+**Verified:** program-foundation workflow run 26 and protocol-tests run 481 passed on commit `8598153b087dc1825439b01b7876bbb5e88b4477`.
+
+This is explicit boundary admission/evidence. It is not Python sandboxing.
+
+## Current edge — conditional movement
+
+Execution is still structurally predetermined by operation order, graph edges, or recurrence feedback.
+
+The next foundation witness is conditional relation selection:
+
+```text
+current represented evidence
+      ↓ evaluate declared guard
+admitted relation A / B / ...
+      ↓
+next realization
+```
+
+The foundation should preserve:
+
+- which alternatives were declared;
+- what represented values were inspected;
+- which guard matched;
+- why that relation was admitted;
+- what happens when no relation or multiple incompatible relations match.
+
+Branch conditions remain realization policy. The kernel only preserves selection structure and evidence.
