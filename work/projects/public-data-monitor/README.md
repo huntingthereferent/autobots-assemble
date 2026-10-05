@@ -263,3 +263,19 @@ This closes the first heterogeneous-source witness. The next layer is persistenc
 - unit, live-source, acquisition-resilience, and PostgreSQL integration CI lanes pass.
 
 The next operational layer is schema migration + recurring execution + source-run status. That will replace implicit table creation with versioned database evolution and make scheduled acquisition inspectable as its own state.
+
+
+## Persistence and resilience evidence
+
+- append-only observation history is persisted in PostgreSQL.
+- later observations are classified against the previous stored observation.
+- prior payloads remain queryable instead of being overwritten.
+- reconciliation outcomes are persisted separately from observations.
+- field-level conflicts remain explicit after persistence.
+- observation history and reconciliation history are exposed through FastAPI.
+- acquisition retry uses exponential backoff.
+- transient failures recover within the configured attempt budget.
+- exhausted retries raise a typed source failure with source, URL, attempts, and final error.
+- unit, live-source, acquisition-resilience, and PostgreSQL integration CI lanes pass.
+
+Next operational edge: versioned schema migration, recurring acquisition, and persisted source-run health.
