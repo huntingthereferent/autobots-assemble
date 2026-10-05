@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| Complete Technical Ability Stack | Foundation / resume-evidence build | MOVE | Software/platform, data engineering, databases, spreadsheet engineering, data analysis, scraping/automation, DevOps/reliability, applied ML, and application security now have tested witnesses. Cloud/AWS remains partial pending live deployment. Next: close Systems / Networking with a direct local protocol/socket witness including measurable performance and failure behavior. |
+| Complete Technical Ability Stack | Foundation / resume-evidence build | MOVE | Conventional software-side categories now have broad tested evidence: platform/software, data, databases, spreadsheet/data analysis, automation/scraping, DevOps/reliability, applied ML, application security, and direct systems/networking. Cloud/AWS remains partial pending a live runtime. Next: begin Electronics / Embedded Systems with target-toolchain + simulation/emulation evidence, explicitly below physical hardware depth. |
 | [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Failure/recovery is now closed with green PostgreSQL CI: upstream and durable-commit failures persist as failed runs, prior valid state survives, recovery appends cleanly, Grafana/Prometheus/Alertmanager surface failures, and destructive PostgreSQL backup→destroy→restore verification passes. Next: make disappeared/stale identity a durable cross-run lifecycle state, preserve history, expose it through API/UI, and verify reappearance. |
 
 ## Pinned / resumable
