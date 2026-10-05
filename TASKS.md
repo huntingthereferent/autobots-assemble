@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| Arbitrary Program Foundation | Foundation / reusable implementation substrate | MOVE | Foundation is now green for shape independence, cross-program composition, generic relation graphs, provenance, and bounded same-contract recurrence. The next bottleneck is boundary crossing: kernel realizations are still in-memory. Next: add a generic declared effect/port relation so files, networks, devices, processes, or other external systems remain realization-specific while admission/evidence stays common. |
+| Arbitrary Program Foundation | Foundation / reusable implementation substrate | MOVE | Green foundation now covers shape-independent realizations, composition, validated relation graphs, lineage, bounded recurrence, and declared external effects through realization-specific adapters. Next: add conditional relation selection so movement can depend on current represented evidence instead of a fully predetermined path, while preserving why each branch was admitted. |
 | [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation evidence / regression realization | PINNED / EVIDENCE | Failure/recovery is now closed with green PostgreSQL CI: upstream and durable-commit failures persist as failed runs, prior valid state survives, recovery appends cleanly, Grafana/Prometheus/Alertmanager surface failures, and destructive PostgreSQL backup→destroy→restore verification passes. Next: make disappeared/stale identity a durable cross-run lifecycle state, preserve history, expose it through API/UI, and verify reappearance. |
 
 ## Pinned / resumable
