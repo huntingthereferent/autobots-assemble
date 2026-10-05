@@ -5,7 +5,7 @@
   "goal": "Build the reusable implementation foundation beneath arbitrary bounded program realizations. A/B remains the recursive mathematical operation; this software foundation must preserve enough referent/boundary/input/representation/operation/state/output/witness structure that new programs stop requiring the same scaffolding to be rebuilt by hand.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Lift pairwise contract-checked composition into a generic bounded execution graph: nodes are program realizations, edges are declared value relations, graph validation rejects unresolved inputs/incompatible contracts/cycles that lack an explicit state-time model, and execution preserves lineage through the graph. Do not add domain behavior to the kernel.",
+  "next_movement": "Add explicit bounded recurrence to the program foundation. A realized output may re-enter the same realization as a next input only when source/target value contracts are compatible, each iteration preserves parent/provenance, and an explicit step/stop boundary prevents invented recursion semantics. This is a software witness of recursive reuse, not a redefinition of A/B.",
   "walls": [
     "Do not redefine A/B as the software foundation, workflow, factory, or runtime.",
     "Do not let resume ability categories select development.",
@@ -29,15 +29,16 @@
   },
   "verified_run": {
     "workflow": "program-foundation",
-    "run_number": 10,
+    "run_number": 13,
     "result": "success",
     "verified_capabilities": [
-      "one unchanged kernel realizes stateless, stateful, and event/device-style programs",
-      "invalid manifests and value-contract mismatches fail before unsupported execution",
-      "operation output can feed a later operation under a declared contract",
-      "one program realization can feed another through compatible contracts",
-      "cross-program execution provenance preserves source execution identity",
-      "incompatible cross-program links are rejected"
+      "shape-independent execution",
+      "cross-program contract composition",
+      "execution/value provenance",
+      "generic topologically validated program graphs",
+      "required-input relation validation",
+      "incompatible-link rejection",
+      "cycle rejection without explicit state/time semantics"
     ]
   }
 }
