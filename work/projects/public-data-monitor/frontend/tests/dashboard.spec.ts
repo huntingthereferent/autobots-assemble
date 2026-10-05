@@ -11,6 +11,9 @@ test("dashboard renders live platform state", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Cross-system decisions" }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Current identity state" }),
+  ).toBeVisible();
   await expect(page.getByText("Acquire")).toBeVisible();
   await expect(page.getByText("Operate")).toBeVisible();
 
@@ -19,6 +22,9 @@ test("dashboard renders live platform state", async ({ page }) => {
   await expect(page.getByText("MATCHED").first()).toBeVisible();
   await expect(page.getByText("github_repo:1362490").first()).toBeVisible();
   await expect(page.getByText("pypi_package:requests").first()).toBeVisible();
+  await expect(page.getByText("github_repo:1362490").last()).toBeVisible();
+  await expect(page.getByText("pypi_package:requests").last()).toBeVisible();
+  await expect(page.getByText("present").first()).toBeVisible();
 
   const response = await page.request.get("/api/health");
   expect(response.ok()).toBeTruthy();
