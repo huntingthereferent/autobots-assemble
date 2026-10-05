@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "benchmark": "St. Joseph Complete-Stack Benchmark",
+  "phase": "REALITY-CHECK / post PASS-0 discovery",
+  "note": "These sources were discovered after STJ-ART-0001 and its PASS-0 evidence boundary were frozen. They did not orient the construction of that artifact.",
+  "sources": [
+    {
+      "id": "STJ-RC-001",
+      "title": "City Map / GIS",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://www.stjosephmo.gov/149/City-Map-GIS",
+      "role": "official geospatial reality-check surface"
+    },
+    {
+      "id": "STJ-RC-002",
+      "title": "Maps — Metropolitan Planning Organization",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://www.stjosephmo.gov/901/Maps",
+      "role": "official transportation/map reality-check surface"
+    },
+    {
+      "id": "STJ-RC-003",
+      "title": "2024 St. Joseph Neighborhood Map",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://www.stjosephmo.gov/DocumentCenter/View/19534/St-Joseph-Neighborhood-Map-PDF",
+      "role": "official neighborhood/geographic reality-check artifact"
+    }
+  ]
+}
