@@ -102,6 +102,14 @@ jobs:
           docker compose logs
           exit 1
       - run: docker compose exec -T worker celery -A app.celery_app.celery_app inspect ping
+      - run: |
+          for i in {1..30}; do
+            if curl --fail http://localhost:8080/ | grep -q "State & Reconciliation Platform"; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs frontend
+          exit 1
+      - run: curl --fail http://localhost:8080/api/health
       - run: curl --fail http://localhost:8000/metrics
       - run: |
           for i in {1..30}; do
@@ -251,3 +259,18 @@ jobs:
       - run: terraform fmt -check -recursive
       - run: terraform init -backend=false
       - run: terraform validate
+
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/public-data-monitor/frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm install
+      - run: npm run build
+      - run: docker build -t state-reconciliation-frontend:ci .
