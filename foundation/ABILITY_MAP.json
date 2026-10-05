@@ -175,10 +175,19 @@
     },
     {
       "ability": "Systems / Networking",
-      "state": "unwitnessed",
-      "evidence": [],
-      "supports": [],
-      "next_gap": "Need a direct operating-system/networking witness rather than incidental Docker networking."
+      "state": "tested",
+      "evidence": [
+        "foundation/FOUND-0004_systems-networking-lab.json"
+      ],
+      "supports": [
+        "TCP socket lifecycle",
+        "binary stream framing",
+        "partial-read-safe protocol handling",
+        "connection reuse",
+        "latency/throughput measurement",
+        "refused/timeout failure classification"
+      ],
+      "next_gap": "Routing/switching, packet analysis, and production network administration remain separate witnesses."
     },
     {
       "ability": "Electronics / Embedded Systems",
@@ -196,15 +205,15 @@
     }
   ],
   "next_project_selection": {
-    "selected_gap": "Systems / Networking",
-    "reason": "This remains a major human-recognized technical category with no direct witness. It is reachable locally and can be proven without reusing application-level Docker behavior as a substitute for operating-system/network evidence.",
+    "selected_gap": "Electronics / Embedded Systems",
+    "reason": "The conventional software-side ability categories are now broadly evidenced. Embedded/electronics is the next genuinely different technical layer. A simulator/emulator can establish a first firmware witness, but the category must remain below physical-operation depth until hardware is actually built and measured.",
     "acceptance_boundary": [
-      "Use only local/owned hosts, loopback, containers, or synthetic network fixtures.",
-      "Demonstrate socket-level communication and protocol behavior directly.",
-      "Capture measurable latency/throughput/error evidence rather than only configuration.",
-      "Include failure behavior such as timeout, refused connection, or dropped peer.",
-      "Automate the witness in clean CI where possible.",
-      "Do not claim third-party network administration or offensive network testing."
+      "Use C/C++ firmware or equivalent low-level target code rather than another Python application.",
+      "Target a defined microcontroller architecture or faithful simulator/emulator.",
+      "Demonstrate deterministic GPIO/timing/state-machine behavior.",
+      "Compile with the actual target toolchain where possible.",
+      "Automate firmware tests or simulation evidence.",
+      "Keep simulated/emulated evidence distinct from physical hardware measurement."
     ]
   }
 }
