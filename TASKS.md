@@ -4,12 +4,13 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [SOLVE THE WHOLE THING — ARC-AGI-3 100%](research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md) | Research + Open Source/Prize relation | MOVE | Live Gen-2: SB26 solved generically 8/8 in 124 actions, score 100. Preserve as regression; continue representation-first recovery on the next unsolved public game. |
+| [Public Data Monitor](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Clean GitHub Actions run passed for the initial vertical-slice scaffold. Next: execute live USGS ingestion against PostgreSQL, verify idempotent replay and API/dashboard output, then add the second acquisition mode. |
 
 ## Pinned / resumable
 
 | Work | Lane | State | Resume from |
 |---|---|---|---|
+| [SOLVE THE WHOLE THING — ARC-AGI-3 100%](research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md) | Research + Open Source/Prize relation | PINNED / RESUMABLE | Resume from SB26 generic 8/8 solve and continue representation-first recovery on the next unsolved public game. |
 | [ARC3 execution bridge](state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json) | Infrastructure / ARC3 relation | PINNED DEPENDENCY | When a computer is available, connect an authorized terminal, install the official ARC starter, and run the preserved first-contact/operator workflow. |
 | [GEMS-001 — DOE GEMS hidden-fault mapping](money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md) | Money/Prize + Research relation | PINNED · MOVE_WITH_WALL | Verify GEMS-specific data-sharing terms; then run the local baseline through the exact output writer/validator before model changes. |
 
