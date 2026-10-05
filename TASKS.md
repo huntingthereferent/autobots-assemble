@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| Complete-Stack Artifact Output Layer | Capability substrate / cross-layer representation | MOVE | Output production is now concrete: CadQuery/OpenSCAD → STEP/STL/DXF/SVG + geometry checks for CAD-like artifacts; Graphviz/DOT → SVG/PDF/PNG + graph checks for landscapes. Every generated file retains canonical-source/provenance lineage. Next: exercise the full chain on one integrated physical-system target. |
+| [St. Joseph Complete-Stack Benchmark](work/projects/st-joseph-complete-stack/README.md) | Real-world complete-stack traversal | MOVE | PASS-0 is frozen with STJ-ART-0001: 20 system nodes, 42 labeled relations, canonical DOT source and generated SVG. St. Joseph exposed a new spatial relation: georeferenced/world-frame geometry is now a geospatial sibling of local/object-frame CAD-like geometry. Next: establish the city-scale geospatial representation from post-freeze official GIS/map evidence, then freeze the first deeper subsystem prediction before opening its detailed reality-check evidence. |
 | [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Preserve as the first broad capability proof. Reopen only if a real problem exposes a program relation the current foundation cannot carry. |
 
 ## Pinned / resumable
