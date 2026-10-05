@@ -48,3 +48,7 @@ def describe_count(count: int) -> dict:
 
 def increment(value: int) -> dict:
     return {"value": value + 1}
+
+
+def external_lookup(key: str, ports) -> dict:
+    return {"value": ports.call("kv.read", key)}
