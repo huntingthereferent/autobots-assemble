@@ -1,0 +1,28 @@
+{
+  "id": "example.stateful-counter",
+  "referent": "Advance persistent integer state by an admitted delta",
+  "boundary": {
+    "inside": ["integer state", "delta application"],
+    "outside": ["storage backend", "concurrency policy"]
+  },
+  "inputs": {
+    "delta": {"type": "integer"}
+  },
+  "state": {
+    "count": {"type": "integer"}
+  },
+  "operations": [
+    {
+      "id": "advance",
+      "implementation": "foundation.program_examples.operations:add",
+      "consumes": ["count", "delta"],
+      "produces": ["count"]
+    }
+  ],
+  "outputs": {
+    "count": {"type": "integer"}
+  },
+  "witnesses": [
+    {"id": "count-is-seven", "kind": "equals", "target": "count", "expected": 7}
+  ]
+}
