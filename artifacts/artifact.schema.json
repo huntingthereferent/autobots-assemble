@@ -7,6 +7,7 @@
   "required": [
     "id",
     "referent",
+    "category_path",
     "representation_type",
     "boundary",
     "inputs",
@@ -32,8 +33,7 @@
         "math_model",
         "schematic",
         "bom",
-        "test_measurement",
-        "other"
+        "test_measurement"
       ]
     },
     "boundary": {
@@ -152,6 +152,33 @@
         "type": "string"
       },
       "default": []
+    },
+    "category_path": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "axis",
+          "value",
+          "relation"
+        ],
+        "properties": {
+          "axis": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1
+          },
+          "relation": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
     }
   }
 }
