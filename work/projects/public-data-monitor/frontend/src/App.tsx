@@ -10,6 +10,16 @@ type SourceRun = {
   error_type: string | null;
 };
 
+type LifecycleState = {
+  id: number;
+  source: string;
+  source_id: string;
+  canonical_key: string;
+  state: string;
+  transition: string;
+  recorded_at: string;
+};
+
 type IdentityDecision = {
   id: number;
   left_key: string;
@@ -35,6 +45,7 @@ function App() {
   const [health, setHealth] = useState("checking");
   const [runs, setRuns] = useState<SourceRun[]>([]);
   const [identities, setIdentities] = useState<IdentityDecision[]>([]);
+  const [lifecycle, setLifecycle] = useState<LifecycleState[]>([]);
   const [loadState, setLoadState] = useState<LoadState>("loading");
 
   useEffect(() => {
@@ -44,12 +55,14 @@ function App() {
       fetch("/api/health").then((response) => response.json()),
       fetch("/api/ops/source-runs?limit=12").then((response) => response.json()),
       fetch("/api/identity/decisions?limit=8").then((response) => response.json()),
+      fetch("/api/lifecycle?limit=12").then((response) => response.json()),
     ])
-      .then(([healthPayload, runPayload, identityPayload]) => {
+      .then(([healthPayload, runPayload, identityPayload, lifecyclePayload]) => {
         if (!active) return;
         setHealth(healthPayload.status ?? "unknown");
         setRuns(runPayload);
         setIdentities(identityPayload);
+        setLifecycle(lifecyclePayload);
         setLoadState("ready");
       })
       .catch(() => {
@@ -70,6 +83,10 @@ function App() {
   const matchedIdentities = useMemo(
     () => identities.filter((decision) => decision.matched).length,
     [identities],
+  );
+  const disappearedIdentities = useMemo(
+    () => lifecycle.filter((item) => item.state === "disappeared").length,
+    [lifecycle],
   );
 
   return (
@@ -109,6 +126,11 @@ function App() {
           <span>Identity matches</span>
           <strong>{matchedIdentities}</strong>
           <small>Evidence-backed cross-system links</small>
+        </article>
+        <article className="stat">
+          <span>Disappeared identities</span>
+          <strong>{disappearedIdentities}</strong>
+          <small>Durable lifecycle state</small>
         </article>
       </section>
 
@@ -178,6 +200,38 @@ function App() {
                       </span>
                     ))}
                   </div>
+                </div>
+              ))
+            )}
+          </div>
+        </article>
+        <article className="panel panel-wide">
+          <div className="panel-heading">
+            <div>
+              <p className="kicker">STATE LIFECYCLE</p>
+              <h2>Current identity state</h2>
+            </div>
+            <span className="mono">latest per source identity</span>
+          </div>
+
+          <div className="table" role="table">
+            <div className="table-row table-head" role="row">
+              <span>Identity</span>
+              <span>Source</span>
+              <span>State</span>
+              <span>Transition</span>
+            </div>
+            {lifecycle.length === 0 ? (
+              <div className="empty">No lifecycle evidence yet.</div>
+            ) : (
+              lifecycle.map((item) => (
+                <div className="table-row" role="row" key={item.id}>
+                  <span className="source-name">{item.canonical_key}</span>
+                  <span className="mono">{item.source}</span>
+                  <span>
+                    <b className={"status status-" + item.state}>{item.state}</b>
+                  </span>
+                  <span className="mono subtle">{item.transition}</span>
                 </div>
               ))
             )}
