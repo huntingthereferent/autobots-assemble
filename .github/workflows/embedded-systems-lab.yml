@@ -1,0 +1,48 @@
+name: embedded-systems-lab
+
+on:
+  push:
+    paths:
+      - "work/projects/embedded-systems-lab/**"
+      - ".github/workflows/embedded-systems-lab.yml"
+      - "foundation/ABILITY_MAP.json"
+  pull_request:
+    paths:
+      - "work/projects/embedded-systems-lab/**"
+      - ".github/workflows/embedded-systems-lab.yml"
+      - "foundation/ABILITY_MAP.json"
+
+jobs:
+  avr-firmware-evidence:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/embedded-systems-lab
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install AVR target toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-avr avr-libc binutils-avr
+      - name: Build AVR firmware and host simulator
+        run: make all
+      - name: Run deterministic firmware simulation
+        run: make test
+      - name: Record target firmware size
+        run: |
+          make size | tee build/firmware-size.txt
+          test -s build/firmware.hex
+          test -s build/firmware.elf
+      - name: Inspect target image
+        run: |
+          avr-objdump -h -S build/firmware.elf > build/firmware-disassembly.txt
+          grep -q "TIMER0_COMPA" build/firmware-disassembly.txt || true
+          head -n 20 build/firmware.hex
+      - uses: actions/upload-artifact@v4
+        with:
+          name: embedded-systems-evidence
+          path: |
+            work/projects/embedded-systems-lab/build/firmware.elf
+            work/projects/embedded-systems-lab/build/firmware.hex
+            work/projects/embedded-systems-lab/build/firmware-size.txt
+            work/projects/embedded-systems-lab/build/firmware-disassembly.txt
