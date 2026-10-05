@@ -36,6 +36,7 @@ def source_runs(
         {
             "id": row.id,
             "source": row.source,
+            "task_id": row.task_id,
             "started_at": row.started_at,
             "finished_at": row.finished_at,
             "status": row.status,
