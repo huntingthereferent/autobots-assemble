@@ -1,76 +1,40 @@
-# Work Layer — ALL WORK
+# Work
 
-Actual work is an application/evidence layer, not the definition of A/B or the network.
+`work/` contains concrete problems and realizations.
 
-**ALL WORK means literal all work:** all fields, all media, all scales, and all realization layers.
+It is not the definition of A/B and it is not the top-level architecture.
 
-Do not infer “software” from the word work.
+The repository-wide orientation is [Complete Stack](../COMPLETE_STACK.md): follow the current problem through every dependency layer it actually requires.
 
-## Three independent questions
+## For each work item
 
-For any work item, ask:
+Preserve:
 
-1. **Goal lane:** why are we doing it?
-2. **Field/domain:** what does it touch?
-3. **Realization layer:** what has actually been reached?
+- current referent;
+- why the work exists (research / open source / paid / other);
+- dependency layers actually reached;
+- realization depth reached in each important layer;
+- evidence and provenance;
+- placeholders and assumptions;
+- walls / missing witnesses;
+- next supported movement.
 
-Examples:
+## Cross-layer work
 
-```text
-paid motor-controller repair
-goal: money/jobs
-fields: electronics + controls + physical repair
-realization: measured/validated physical result
-```
+Crossing fields is expected when the referent requires it.
 
-```text
-open-source finite-element solver fix
-goal: open source
-fields: software + numerical methods + mechanics
-realization: implementation/test/upstream review
-```
+A physical product can legitimately contain software, electronics, mechanics, materials, manufacturing, testing, safety, cost, and regulatory work under one problem.
 
-```text
-random metallurgy experiment
-goal: research
-fields: materials + chemistry + fabrication
-realization: experiment/measurement
-```
-
-The existing `jobs/` directory remains the canonical paid-job record set during migration. Research and open-source work keep their own durable records.
+Do not split those layers into unrelated projects merely because humans normally assign them to different specialties.
 
 ## Foundation
 
-Any sufficiently evidenced work item may contribute to `foundation/` without being moved out of its original lane.
+Completed or partial work can contribute demonstrated evidence to `foundation/` without leaving its original context.
 
-Foundation is cross-lane evidence. Credibility is a read-only view over that evidence.
+Foundation records what was actually demonstrated. Capability summaries are derived from that evidence.
 
+## Legacy records
 
-## Discovery is broader than posted opportunities
+`jobs/` remains the durable paid-work record set.
 
-An ALL WORK scan must not assume someone has already packaged the work as a job, issue, bounty, or contest.
-
-Search classes include:
-
-- posted jobs/contracts/bounties;
-- open-source issues and public contribution queues;
-- prizes/challenges/competitions;
-- unsolved academic problems and conjectures;
-- unresolved scientific questions;
-- open engineering problems;
-- replication/reproduction targets;
-- standards/RFC/public technical problems;
-- public datasets with unanswered questions;
-- physical build/test challenges;
-- self-initiated work where the problem and validation boundary already exist;
-- frontier problems that nobody is currently “hiring” someone to solve.
-
-A problem can qualify as work when there is a real referent, a meaningful movement, and an inspectable witness/evidence boundary even if there is no employer or task owner.
-
-## Repeat scans
-
-By default, a new scan is independent.
-
-If a previously seen candidate independently appears again, **show it again**. Recurrence is evidence that the candidate remains reachable/relevant; do not hide it merely because it appeared in an earlier scan.
-
-Historical scan records may annotate “seen before,” but they must not silently suppress recurring candidates.
+Older scans and goal-lane structures remain provenance. They no longer define the repository's center.
