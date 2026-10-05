@@ -1,0 +1,33 @@
+{
+  "id": "example.stateless-text",
+  "referent": "Normalize supplied text and count resulting words",
+  "boundary": {
+    "inside": ["text normalization", "word counting"],
+    "outside": ["language interpretation", "semantic rewriting"]
+  },
+  "inputs": {
+    "text": {"type": "string"}
+  },
+  "operations": [
+    {
+      "id": "normalize",
+      "implementation": "foundation.program_examples.operations:normalize_text",
+      "consumes": ["text"],
+      "produces": ["normalized"]
+    },
+    {
+      "id": "count",
+      "implementation": "foundation.program_examples.operations:word_count",
+      "consumes": ["normalized"],
+      "produces": ["count"]
+    }
+  ],
+  "outputs": {
+    "normalized": {"type": "string"},
+    "count": {"type": "integer"}
+  },
+  "witnesses": [
+    {"id": "normalized-exists", "kind": "exists", "target": "normalized"},
+    {"id": "count-is-three", "kind": "equals", "target": "count", "expected": 3}
+  ]
+}
