@@ -1,25 +1,27 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 Arbitrary Program Foundation",
+  "preferred_referent": "📍 Complete-Stack Capability Build",
   "protocol": "work.bounded-problem",
-  "goal": "Build the reusable implementation foundation beneath arbitrary bounded program realizations. A/B remains the recursive mathematical operation; this software foundation must preserve enough referent/boundary/input/representation/operation/state/output/witness structure that new programs stop requiring the same scaffolding to be rebuilt by hand.",
+  "goal": "Build and preserve complete-stack problem-solving capability: for any real problem, traverse every required dependency layer until the stack needed for a valid solution is represented, evidenced, realized, or explicitly walled. Programs are the first frozen broad capability proof, not the repository's top-level destination.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Add conditional relation selection. Current programs execute declared sequences/graphs, recurrence, and effects, but the next movement is still structurally predetermined. Introduce a generic guard/decision contract that selects among already-declared relations from current represented values/evidence, records why a branch was admitted, and rejects ambiguous/unmatched movement unless an explicit fallback exists. Keep domain policy outside the kernel.",
+  "next_movement": "Keep the arbitrary-program foundation frozen as demonstrated capability evidence. Expand complete-stack capability into integrated physical systems / machines, where unavailable physical components may be represented by bounded measured/justified interfaces while mechanics, electronics, controls, software, fabrication/manufacturing, testing, cost, safety, and other required layers remain visible.",
   "walls": [
-    "Do not redefine A/B as the software foundation, workflow, factory, or runtime.",
-    "Do not let resume ability categories select development.",
-    "Do not add a program shape merely to increase category coverage.",
-    "Kernel logic must remain domain/category agnostic.",
-    "A realization-specific concern belongs outside the kernel unless multiple unrelated realizations force the same relation."
+    "Do not redefine A/B as Complete Stack, this repository, a workflow, or an implementation layer.",
+    "Do not stop traversal merely because a required dependency belongs to another discipline.",
+    "Do not upgrade a digital placeholder, model, simulation, or design into a physical witness.",
+    "Do not let résumé categories select development.",
+    "Do not reopen the program foundation unless a real incoming problem exposes a missing relation."
   ],
   "evidence": [
+    "COMPLETE_STACK.md",
+    "capabilities/README.md",
     "foundation/PROGRAM_FOUNDATION.md",
-    "foundation/program-foundation.schema.json",
-    "foundation/program_kernel/",
-    "foundation/program_examples/",
-    "network/tests/test_program_foundation.py",
-    "foundation/ABILITY_MAP.json"
+    "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+    "foundation/FOUND-0002_applied-ml-modeling.json",
+    "foundation/FOUND-0003_application-security-lab.json",
+    "foundation/FOUND-0004_systems-networking-lab.json",
+    "foundation/FOUND-0005_embedded-systems-lab.json"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -32,13 +34,11 @@
     "run_number": 26,
     "result": "success",
     "verified_capabilities": [
-      "shape-independent realizations",
-      "cross-program composition and generic graphs",
+      "shape-independent program realizations",
+      "cross-program composition and generic relation graphs",
       "bounded same-contract recurrence",
       "execution/value lineage",
-      "declared external effects through admitted adapters",
-      "effect-call evidence",
-      "missing or undeclared external effects rejected"
+      "declared external effects through admitted adapters"
     ]
   }
 }
