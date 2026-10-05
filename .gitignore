@@ -13,3 +13,6 @@ jobs/JOB-007_advanced-excel-automation-analysis/Regression_20k_Benchmark_Input.c
 # GEMS competition data/output binaries stay local
 money/challenges/GEMS-001_hidden-fault-mapping/data/*.tif
 money/challenges/GEMS-001_hidden-fault-mapping/outputs/*.tif
+
+# Online School runtime/private task state
+companies/online-school/app/data/
