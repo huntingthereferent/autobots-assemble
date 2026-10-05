@@ -119,6 +119,15 @@ jobs:
           docker compose logs prometheus
           exit 1
       - run: |
+          curl --fail http://localhost:9090/api/v1/rules | grep -q '"name":"SourceRunFailures"'
+      - run: |
+          for i in {1..30}; do
+            if curl --fail http://localhost:9093/-/ready; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs alertmanager
+          exit 1
+      - run: |
           for i in {1..30}; do
             if curl --fail "http://localhost:9090/api/v1/targets" | grep -q '"health":"up"'; then exit 0; fi
             sleep 2
