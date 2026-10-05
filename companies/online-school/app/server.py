@@ -1,0 +1,226 @@
+from __future__ import annotations
+
+from datetime import date
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
+import json
+import mimetypes
+import os
+import threading
+
+from schedule_engine import generate_tasks, load_schedule, load_themes, merge_generated, validate_task
+
+
+ROOT = Path(__file__).resolve().parent
+DATA_DIR = ROOT / "data"
+STATE_PATH = DATA_DIR / "state.json"
+HOST = os.environ.get("HOST", "127.0.0.1")
+PORT = int(os.environ.get("PORT", "8030"))
+LOCK = threading.Lock()
+
+
+def default_state():
+    return {
+        "schema_version": 1,
+        "tasks": [],
+        "learners": [
+            {"id": "track_a", "display_name": "Learner A"},
+            {"id": "track_b", "display_name": "Learner B"},
+        ],
+        "settings": {"school_name": "Online School"},
+    }
+
+
+def load_state():
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    if not STATE_PATH.exists():
+        state = default_state()
+        save_state(state)
+        return state
+    return json.loads(STATE_PATH.read_text(encoding="utf-8"))
+
+
+def save_state(state):
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    tmp = STATE_PATH.with_suffix(".tmp")
+    tmp.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    tmp.replace(STATE_PATH)
+
+
+def json_body(handler):
+    length = int(handler.headers.get("Content-Length", "0"))
+    if length <= 0:
+        return {}
+    return json.loads(handler.rfile.read(length).decode("utf-8"))
+
+
+class Handler(BaseHTTPRequestHandler):
+    def send_json(self, payload, status=200):
+        raw = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(raw)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(raw)
+
+    def api_error(self, message, status=400):
+        self.send_json({"error": message}, status)
+
+    def do_GET(self):
+        parsed = urlparse(self.path)
+
+        if parsed.path == "/api/state":
+            with LOCK:
+                state = load_state()
+            self.send_json({
+                **state,
+                "schedule": load_schedule(),
+                "themes": load_themes(),
+            })
+            return
+
+        if parsed.path == "/api/tasks":
+            params = parse_qs(parsed.query)
+            with LOCK:
+                tasks = list(load_state().get("tasks", []))
+            for key in ("date", "status", "kind", "scope"):
+                if params.get(key):
+                    value = params[key][0]
+                    tasks = [t for t in tasks if str(t.get(key, "")) == value]
+            if params.get("learner"):
+                learner = params["learner"][0]
+                tasks = [t for t in tasks if learner in t.get("learner_ids", [])]
+            tasks.sort(key=lambda t: (t.get("date", ""), t.get("title", "")))
+            self.send_json({"tasks": tasks})
+            return
+
+        if parsed.path == "/api/today":
+            day = parse_qs(parsed.query).get("date", [date.today().isoformat()])[0]
+            try:
+                generated = generate_tasks(day, day)
+            except ValueError as exc:
+                self.api_error(str(exc))
+                return
+            with LOCK:
+                state = load_state()
+                state["tasks"], added = merge_generated(state.get("tasks", []), generated)
+                save_state(state)
+                tasks = [t for t in state["tasks"] if t.get("date") == day]
+            self.send_json({"date": day, "added": added, "tasks": tasks})
+            return
+
+        if parsed.path.startswith("/api/"):
+            self.api_error("not found", 404)
+            return
+
+        requested = "index.html" if parsed.path in {"", "/"} else parsed.path.lstrip("/")
+        file_path = (ROOT / requested).resolve()
+        if ROOT not in file_path.parents and file_path != ROOT:
+            self.send_error(403)
+            return
+        if not file_path.is_file():
+            self.send_error(404)
+            return
+        content = file_path.read_bytes()
+        mime, _ = mimetypes.guess_type(str(file_path))
+        self.send_response(200)
+        self.send_header("Content-Type", (mime or "application/octet-stream") + ("; charset=utf-8" if (mime or "").startswith("text/") or file_path.suffix in {".js", ".mjs"} else ""))
+        self.send_header("Content-Length", str(len(content)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(content)
+
+    def do_POST(self):
+        parsed = urlparse(self.path)
+
+        if parsed.path == "/api/generate":
+            try:
+                payload = json_body(self)
+                start = str(payload.get("start") or date.today().isoformat())
+                end = str(payload.get("end") or start)
+                generated = generate_tasks(start, end)
+                with LOCK:
+                    state = load_state()
+                    state["tasks"], added = merge_generated(state.get("tasks", []), generated)
+                    save_state(state)
+                self.send_json({"added": added, "generated": len(generated), "start": start, "end": end}, 201)
+            except (ValueError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
+
+        if parsed.path == "/api/tasks":
+            try:
+                task = validate_task(json_body(self))
+                with LOCK:
+                    state = load_state()
+                    state.setdefault("tasks", []).append(task)
+                    save_state(state)
+                self.send_json(task, 201)
+            except (ValueError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
+
+        if parsed.path.startswith("/api/"):
+            self.api_error("not found", 404)
+            return
+
+        self.send_error(404)
+
+    def do_PATCH(self):
+        parsed = urlparse(self.path)
+        if not parsed.path.startswith("/api/tasks/"):
+            self.api_error("not found", 404)
+            return
+
+        task_id = parsed.path.removeprefix("/api/tasks/")
+        try:
+            patch = json_body(self)
+        except json.JSONDecodeError as exc:
+            self.api_error(str(exc))
+            return
+
+        allowed = {"title", "category", "kind", "scope", "learner_ids", "planned_minutes", "status", "notes", "meta", "date"}
+        patch = {k: v for k, v in patch.items() if k in allowed}
+
+        with LOCK:
+            state = load_state()
+            for i, current in enumerate(state.get("tasks", [])):
+                if current.get("id") != task_id:
+                    continue
+                candidate = {**current, **patch, "id": task_id}
+                try:
+                    state["tasks"][i] = validate_task(candidate)
+                except ValueError as exc:
+                    self.api_error(str(exc))
+                    return
+                save_state(state)
+                self.send_json(state["tasks"][i])
+                return
+
+        self.api_error("task not found", 404)
+
+    def do_DELETE(self):
+        parsed = urlparse(self.path)
+        if not parsed.path.startswith("/api/tasks/"):
+            self.api_error("not found", 404)
+            return
+        task_id = parsed.path.removeprefix("/api/tasks/")
+        with LOCK:
+            state = load_state()
+            before = len(state.get("tasks", []))
+            state["tasks"] = [t for t in state.get("tasks", []) if t.get("id") != task_id]
+            if len(state["tasks"]) == before:
+                self.api_error("task not found", 404)
+                return
+            save_state(state)
+        self.send_json({"deleted": task_id})
+
+    def log_message(self, fmt, *args):
+        print(f"{self.address_string()} - {fmt % args}")
+
+
+if __name__ == "__main__":
+    print(f"Online School running at http://{HOST}:{PORT}")
+    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
