@@ -7,7 +7,7 @@
   "legal_status": "not_claimed_as_incorporated_accredited_or_licensed",
   "referent": "Online learning company generalized from Dessy's existing homeschool operating schedule",
   "first_operating_evidence": [
-    "companies/online-school/operations/homeschool_schedule.json",
+    "companies/online-school/operations/schedule_template.json",
     "companies/online-school/operations/HOMESCHOOL_SCHEDULE.md",
     "companies/online-school/evidence/PROVENANCE.md"
   ],
