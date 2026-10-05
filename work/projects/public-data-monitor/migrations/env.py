@@ -8,6 +8,7 @@ from app.db import Base
 from app import models
 from app import history_models
 from app import run_models
+from app import identity_models
 
 config = context.config
 
