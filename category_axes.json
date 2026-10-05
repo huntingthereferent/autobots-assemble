@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "rule": "one relational axis per sibling set; child remains valid referent for further decomposition",
+  "layers": {
+    "current_problem": {
+      "axis": "required_relation",
+      "question": "What relation must the current referent satisfy next?",
+      "open_ended": true
+    },
+    "capability": {
+      "axis": "evidenced_problem_space",
+      "question": "Across what broad problem-space has repeated complete-stack closure been evidenced?",
+      "open_ended": true
+    },
+    "dependency": {
+      "axis": "required_dependency_relation",
+      "question": "What dependency did the current referent actually open?",
+      "open_ended": true
+    },
+    "artifact": {
+      "axis": "preserved_relation",
+      "question": "What relation does this artifact primarily preserve?",
+      "registry": "artifacts/categories.json",
+      "open_ended": true
+    },
+    "witness": {
+      "axis": "evidence_depth",
+      "question": "How deeply is this relation actually witnessed?",
+      "ordered_values": [
+        "unknown",
+        "researched",
+        "represented",
+        "modeled",
+        "simulated",
+        "designed",
+        "implemented",
+        "tested",
+        "built",
+        "measured",
+        "inspected",
+        "validated",
+        "deployed_operating"
+      ]
+    },
+    "goal_lane": {
+      "axis": "reason_for_work",
+      "question": "Why is this work being done?",
+      "known_values": [
+        "research",
+        "open_source",
+        "paid"
+      ],
+      "open_ended": true
+    },
+    "view": {
+      "axis": "requested_projection",
+      "question": "What read-only projection of existing evidence is being requested?",
+      "open_ended": true
+    }
+  }
+}
