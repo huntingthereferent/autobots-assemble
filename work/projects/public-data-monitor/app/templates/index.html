@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Public Data Monitor</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 2rem auto; padding: 0 1rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { text-align: left; padding: .55rem; border-bottom: 1px solid #ddd; }
+    .muted { opacity: .65; }
+  </style>
+</head>
+<body>
+  <h1>Public Data Monitor</h1>
+  <p class="muted">Current slice: USGS earthquakes. Stored records preserve source IDs and source update times.</p>
+  <table>
+    <thead><tr><th>Time</th><th>Magnitude</th><th>Place</th><th>Depth km</th></tr></thead>
+    <tbody>
+    {% for event in events %}
+      <tr>
+        <td>{{ event.occurred_at }}</td>
+        <td>{{ event.magnitude }}</td>
+        <td><a href="{{ event.source_url }}">{{ event.place }}</a></td>
+        <td>{{ "%.1f"|format(event.depth_km) }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="4">No events stored yet. Run the ingestion command.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>
