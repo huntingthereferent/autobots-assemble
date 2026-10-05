@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| Complete-Stack Capability Build | Capability / cross-layer problem solving | MOVE | Programs are frozen as the first broad capability proof. Next expansion is integrated physical systems / machines: preserve the whole required dependency stack across physical measurement, mechanics, electronics, controls, software, fabrication/manufacturing, testing, cost, safety, and any other layer the referent actually opens. Use bounded placeholders without upgrading them into physical evidence. |
+| Complete-Stack Artifact Output Layer | Capability substrate / cross-layer representation | MOVE | Standardize traversal outputs at one sibling layer: program artifacts, CAD-like geometry, system landscapes, math models, schematics, BOMs, and test/measurement artifacts. Next: use these outputs together on the first integrated physical-system target so every dependency hit is represented, decomposed, quantified, and fed forward with witness/provenance preserved. |
 | [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Preserve as the first broad capability proof. Reopen only if a real problem exposes a program relation the current foundation cannot carry. |
 
 ## Pinned / resumable
