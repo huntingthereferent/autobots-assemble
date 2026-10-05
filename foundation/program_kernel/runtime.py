@@ -7,6 +7,7 @@ from typing import Any, Callable
 from uuid import uuid4
 
 from .contracts import assert_contract
+from .effects import EffectCall, PortContext
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,7 @@ class ExecutionRecord:
     witnesses: list[dict[str, Any]]
     values: dict[str, Any]
     provenance: dict[str, dict[str, Any]]
+    effect_calls: list[EffectCall]
 
 
 def _load_callable(path: str) -> Callable[..., dict[str, Any]]:
@@ -76,6 +78,7 @@ def execute(
     initial_state: dict[str, Any] | None = None,
     input_provenance: dict[str, dict[str, Any]] | None = None,
     parent_executions: list[str] | None = None,
+    effect_adapters: dict[str, Callable[..., Any]] | None = None,
 ) -> ExecutionRecord:
     execution_id = str(uuid4())
     values: dict[str, Any] = {}
@@ -101,6 +104,8 @@ def execute(
             assert_contract(name, contract, values[name])
 
     steps: list[StepRecord] = []
+    effect_calls: list[EffectCall] = []
+    admitted_effects = dict(effect_adapters or {})
 
     for operation in manifest["operations"]:
         missing = [name for name in operation["consumes"] if name not in values]
@@ -110,6 +115,14 @@ def execute(
             )
 
         kwargs = {name: values[name] for name in operation["consumes"]}
+        declared_effects = set(operation.get("effects", []))
+        if declared_effects:
+            kwargs["ports"] = PortContext(
+                declared=declared_effects,
+                adapters=admitted_effects,
+                calls=effect_calls,
+            )
+
         started = datetime.now(timezone.utc).isoformat()
         result = _load_callable(operation["implementation"])(**kwargs)
         finished = datetime.now(timezone.utc).isoformat()
@@ -158,6 +171,7 @@ def execute(
         witnesses=witnesses,
         values=values,
         provenance=provenance,
+        effect_calls=effect_calls,
     )
 
 
@@ -171,4 +185,5 @@ def execution_dict(record: ExecutionRecord) -> dict[str, Any]:
         "witnesses": record.witnesses,
         "values": record.values,
         "provenance": record.provenance,
+        "effect_calls": [asdict(call) for call in record.effect_calls],
     }
