@@ -4,15 +4,16 @@ When an AI uses this repository as an extension of the user, do **not** begin by
 
 ## Entry sequence
 
-1. Read `AB_CONTRACT.md`.
-2. Read `state/current.json`.
-3. Recover the preferred current referent.
-4. Read only the protocol(s) reached by that referent.
-5. Read the active work/domain record.
-6. If language/register matters, decode through `language/` without treating the wording as the referent itself.
-7. Pull older evidence only when the active relation requires it.
-8. Perform one bounded movement at a time.
-9. Record result, provenance, wall/uncertainty state, and next referent.
+1. Read `COMPLETE_STACK.md`.
+2. Read `AB_CONTRACT.md`.
+3. Read `state/current.json`.
+4. Recover the preferred current referent.
+5. Read only the protocol(s) reached by that referent.
+6. Read the active work/capability/domain record reached by that referent.
+7. If language/register matters, decode through `language/` without treating the wording as the referent itself.
+8. Pull older evidence only when the active relation requires it.
+9. Perform one bounded movement at a time.
+10. Record result, provenance, wall/uncertainty state, and next referent.
 
 ## Language shortcut
 
@@ -38,9 +39,9 @@ A substantive AI response or repo mutation should leave recoverable:
 - turn A/B into the implementation layer;
 - infer a missing relation because an older layer looks similar;
 - treat surface wording as permanent meaning;
-- let an output lens mutate the network;
+- let a read-only view mutate the underlying evidence/network;
 - upgrade `tested` to `submitted`, `submitted` to `accepted`, or `accepted` to `paid`;
 - collapse evidence, interpretation, and action into one undocumented step;
-- broaden scope merely because more data exists.
+- broaden scope merely because more data exists; crossing disciplines is valid only when the current referent actually requires it.
 
 If the user gives a new explicit referent, that becomes primary unless it conflicts with an explicit safety or authority boundary.
