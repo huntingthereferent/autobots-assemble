@@ -1,5 +1,5 @@
 {
-  "schema_version": 9,
+  "schema_version": 10,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
   "protocols": {
     "core.referent": {
@@ -49,10 +49,6 @@
     "language.render": {
       "layer": "language",
       "path": "protocols/language/render.md"
-    },
-    "output.lens": {
-      "layer": "output",
-      "path": "protocols/output/lens.md"
     },
     "research.source": {
       "layer": "research",
