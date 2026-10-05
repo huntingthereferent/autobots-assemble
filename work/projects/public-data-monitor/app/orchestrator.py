@@ -2,7 +2,7 @@ from collections.abc import Callable
 from time import perf_counter
 
 from .metrics import SOURCE_ITEMS, SOURCE_RUN_DURATION, SOURCE_RUNS
-from .observation_store import persist_observation
+from .observation_store import persist_observations
 from .platform import SourceObservation
 from .source_runs import fail_source_run, finish_source_run, start_source_run
 
@@ -53,7 +53,6 @@ def run_source_persisted(
     """
 
     def commit(observations: list[SourceObservation]) -> None:
-        for observation in observations:
-            persist_observation(observation)
+        persist_observations(observations)
 
     return run_source(source, fetch, task_id=task_id, commit=commit)
