@@ -25,16 +25,13 @@ class AbilityMapTests(unittest.TestCase):
             if ability["state"] == "unwitnessed":
                 self.assertEqual(ability.get("evidence", []), [])
 
-    def test_selected_next_project_targets_an_unclosed_gap(self):
+    def test_ability_map_does_not_select_development(self):
         ability_map = json.loads(
             (ROOT / "foundation" / "ABILITY_MAP.json").read_text(encoding="utf-8")
         )
-        selection = ability_map["next_project_selection"]["selected_gap"]
-        selected = next(
-            ability for ability in ability_map["abilities"]
-            if ability["ability"] == selection
-        )
-        self.assertIn(selected["state"], {"unwitnessed", "partial"})
+
+        self.assertNotIn("next_project_selection", ability_map)
+        self.assertIn("Read-only projection", ability_map["purpose"])
 
 
 if __name__ == "__main__":
