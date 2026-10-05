@@ -1,0 +1,25 @@
+{
+  "id": "example.recurrence-counter",
+  "referent": "Apply the same increment realization repeatedly under one value contract",
+  "boundary": {
+    "inside": ["integer increment", "bounded repeated application"],
+    "outside": ["unbounded recursion", "persistence between separate runs"]
+  },
+  "inputs": {
+    "value": {"type": "integer"}
+  },
+  "operations": [
+    {
+      "id": "increment",
+      "implementation": "foundation.program_examples.operations:increment",
+      "consumes": ["value"],
+      "produces": ["value"]
+    }
+  ],
+  "outputs": {
+    "value": {"type": "integer"}
+  },
+  "witnesses": [
+    {"id": "value-exists", "kind": "exists", "target": "value"}
+  ]
+}
