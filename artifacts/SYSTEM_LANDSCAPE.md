@@ -8,6 +8,12 @@ It shows what exists, what depends on what, what crosses boundaries, and where e
 
 It is not merely an architecture picture.
 
+## Production mechanism
+
+The default implementation path is defined in [LANDSCAPE_TOOLCHAIN.md](LANDSCAPE_TOOLCHAIN.md).
+
+Use a machine-readable graph source, normally **Graphviz/DOT**, as the canonical artifact. SVG/PDF/PNG diagrams are generated views. This keeps nodes, relations, feedback loops, placeholders, and artifact references traversable rather than trapping them in an image.
+
 ## What the landscape must preserve
 
 When present, distinguish:
