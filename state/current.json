@@ -5,7 +5,7 @@
   "goal": "Build a human-recognized technical ability profile backward from inspectable evidence. Projects are witnesses for missing ability categories; they are not the top-level referent.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Build the next evidence gap: Cybersecurity / Application Security. Use an owned/local vulnerable target, define threats and expected controls, demonstrate detection plus remediation, and add automated security regression. Keep Cloud/AWS deployment and other unwitnessed categories separate.",
+  "next_movement": "Build the next evidence gap: Systems / Networking. Use local/owned socket or container boundaries, prove protocol communication directly, record latency/throughput/failure behavior, and automate the witness. Do not extend the completed ML or application-security projects merely for feature depth.",
   "walls": [
     "Do not grow a completed evidence project merely because more features are technically available.",
     "Do not upgrade an ability category without an inspectable witness.",
@@ -16,6 +16,7 @@
     "foundation/ABILITY_MAP.json",
     "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
     "foundation/FOUND-0002_applied-ml-modeling.json",
+    "foundation/FOUND-0003_application-security-lab.json",
     "generate_outputs.py"
   ],
   "handoff": {
@@ -25,15 +26,15 @@
     "reason": "Explicit user-directed resume of the Multi-Source State & Reconciliation / resume-evidence build in this window. ARC remains pinned/resumable in TASKS.md."
   },
   "verified_run": {
-    "workflow": "applied-ml-modeling",
+    "workflow": "application-security-lab",
     "run_number": 1,
     "result": "success",
     "verified_capabilities": [
-      "train/test separation",
-      "training-only cross-validation",
-      "baseline comparison",
-      "held-out model evaluation",
-      "serialized model reload equivalence"
+      "local threat-boundary analysis",
+      "controlled injection reproduction",
+      "parameterized remediation",
+      "behavioral security regression",
+      "static before/after analysis"
     ]
   }
 }
