@@ -5,7 +5,7 @@
 | Work | Lane | State | Next movement |
 |---|---|---|---|
 | Complete-Stack Capability Build | Capability / cross-layer problem solving | MOVE | Programs are frozen as the first broad capability proof. Next expansion is integrated physical systems / machines: preserve the whole required dependency stack across physical measurement, mechanics, electronics, controls, software, fabrication/manufacturing, testing, cost, safety, and any other layer the referent actually opens. Use bounded placeholders without upgrading them into physical evidence. |
-| [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Failure/recovery is now closed with green PostgreSQL CI: upstream and durable-commit failures persist as failed runs, prior valid state survives, recovery appends cleanly, Grafana/Prometheus/Alertmanager surface failures, and destructive PostgreSQL backup→destroy→restore verification passes. Next: make disappeared/stale identity a durable cross-run lifecycle state, preserve history, expose it through API/UI, and verify reappearance. |
+| [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Preserve as the first broad capability proof. Reopen only if a real problem exposes a program relation the current foundation cannot carry. |
 
 ## Pinned / resumable
 
