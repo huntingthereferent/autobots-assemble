@@ -134,6 +134,8 @@ jobs:
           exit 1
       - run: |
           curl --fail -u admin:admin "http://localhost:3000/api/search?query=Platform%20Overview" | grep -q '"uid":"platform-overview"'
+      - run: |
+          curl --fail -u admin:admin http://localhost:3000/api/dashboards/uid/platform-overview | grep -q "Failed Source Runs (1h)"
       - run: docker compose ps
       - if: always()
         run: docker compose down -v
