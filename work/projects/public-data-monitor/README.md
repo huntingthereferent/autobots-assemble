@@ -292,3 +292,36 @@ Next operational edge: versioned schema migration, recurring acquisition, and pe
 - after that repair, unit, live-source, acquisition-resilience, and PostgreSQL/source-run integration lanes all pass.
 
 Current operational edge: finish the first versioned migration revision, then bind recurring execution to durable infrastructure rather than an ephemeral CI database.
+
+
+## Popular production-stack evidence
+
+The operational stack now uses widely adopted components rather than a custom scheduler:
+
+- FastAPI for the HTTP service.
+- PostgreSQL for persistent application/state history.
+- Redis as the Celery broker/backend.
+- Celery worker for background execution.
+- Celery Beat for recurring schedules.
+- Docker Compose for the local multi-service topology.
+- GitHub Actions for clean-environment CI.
+
+A complete-stack CI lane now builds and starts PostgreSQL + Redis + Celery worker + Celery Beat + FastAPI, verifies the API health endpoint, receives a successful Celery worker ping through Redis, inspects running services, and tears the stack down cleanly.
+
+## Use Case 003 — GitHub repository monitoring
+
+GitHub is now a live scheduled source.
+
+The adapter monitors the public `psf/requests` repository through the GitHub REST API and converts repository state into the same canonical observation contract used by the other sources.
+
+Captured state includes repository identity, default branch, stars, forks, open-issue count, push time, archive state, source URL, and source update time.
+
+**Verified**
+- fixture-backed GitHub adapter test
+- live GitHub API smoke test
+- stable GitHub repository ID used as canonical identity
+- Celery task registered for GitHub collection
+- Celery Beat schedule registered for recurring collection
+- full unit, live-source, PostgreSQL, acquisition-resilience, and complete Docker-stack CI lanes pass with GitHub included
+
+Next edge: complete the versioned Alembic revision, then persist Celery task/run correlation and move into a genuinely ambiguous identity problem across independent systems.
