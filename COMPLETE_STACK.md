@@ -62,7 +62,7 @@ continue
 
 Traversal can move horizontally across fields and vertically through realization depth.
 
-When a relation needs to become inspectable or reusable, traversal emits a working artifact. Code, CAD-like geometry, system landscapes, equations/models, schematics, BOMs, and test/measurement packages are sibling representations at this layer. See [artifacts/README.md](artifacts/README.md).
+When a relation needs to become inspectable or reusable, traversal emits a working artifact. Each generated artifact preserves its canonical source, reproducible outputs, checks, witness depth, and provenance. CAD-like geometry is produced from editable parametric source into engineering exchange/drawing outputs; system landscapes are produced from machine-readable graph source into rendered diagrams. See [artifacts/README.md](artifacts/README.md).
 
 ## Layer status
 
