@@ -150,15 +150,26 @@ Its domain is incidental. Its evidence survives as substrate for the general eng
 - API integration: persisted records are returned through the backend API
 - live-source smoke: current external feed successfully fetched and validated in GitHub Actions
 
-### Use Case 002 — HTML scraper adapter
+### Use Case 002 — HTML + API dual-representation reconciliation
 
-Next use case must add capabilities not already proved by Use Case 001:
-- real HTML parsing
+Hacker News is used here because the same stories are exposed through HTML and the official public API, with stable numeric item IDs. The API documentation identifies items by unique integer IDs and exposes top stories separately, which gives a clean cross-representation identity witness.
+
+**Verified**
+- live HTML acquisition
+- live API acquisition
+- HTML parser emits the same canonical-key shape as the API adapter
 - fixture-based parser regression
-- retries / backoff
+- shared story IDs discovered across both live representations
+- canonical pairing uses stable item identity rather than title text
+- reconciliation distinguishes agreement from field-level conflict
+- full unit, live-source, and PostgreSQL CI lanes remain green
+
+**Still open**
+- retry/backoff
 - source failure handling
-- source lineage
-- multi-source comparison/reconciliation
+- persisted observation history
+- persisted reconciliation results
+- fuzzy identity matching across genuinely independent systems
 
 ## Acceptance ladder
 
@@ -172,14 +183,14 @@ Next use case must add capabilities not already proved by Use Case 001:
 - [ ] visual UI verification
 
 ### Platform Slice 2 — heterogeneous source + comparison
-- [ ] add real HTML scraper adapter
+- [x] add real HTML scraper adapter
 - [x] source-adapter interface
 - [ ] raw/source provenance model
 - [x] canonical observation model independent of source/domain
 - [x] change classification for new / changed / unchanged / disappeared
-- [ ] multi-source comparison
+- [x] multi-source comparison on shared canonical identity
 - [x] conflict representation without an invented winner
-- [ ] fixture-based parser regression
+- [x] fixture-based parser regression
 - [ ] retry/backoff and source failure handling
 
 ### Platform Slice 3 — reconciliation + history
@@ -227,3 +238,12 @@ The first source-specific implementation has now been lifted into a reusable pla
 - unit, live-source, and PostgreSQL integration CI lanes all pass after the abstraction.
 
 The next missing witness is heterogeneous-source comparison: a real HTML adapter must emit the same observation contract, after which cross-source identity and reconciliation can be exercised on actual independent sources.
+
+
+## Heterogeneous-source evidence
+
+Use Case 002 proves that the platform can ingest the same underlying entities through two different representations and carry both into one canonical observation contract.
+
+A live CI run fetched Hacker News HTML and the official public API, found overlapping story identities by stable item ID, paired them by canonical key, and passed reconciliation with either AGREEMENT or explicit CONFLICT as valid outcomes. No title-based guessing is used for identity.
+
+This closes the first heterogeneous-source witness. The next layer is persistence of observation history and reconciliation state so change/conflict can be queried over time rather than only computed in memory.
