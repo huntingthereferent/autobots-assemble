@@ -34,6 +34,14 @@ A/B remains the recursively reusable mathematical operation and witness/evidence
 
 This architecture is not A/B. It is a repository organization that preserves repeated applications and their evidence.
 
+## Category discipline
+
+All categorization follows [CATEGORY_CONTRACT.md](CATEGORY_CONTRACT.md).
+
+At any one level, siblings must answer the same relational question. Dependency layer, artifact type, witness depth, goal lane, capability, and view are separate axes; they must not be flattened into one category list.
+
+A child category remains a valid referent and can be decomposed again by the same rule.
+
 ## Capability layer
 
 A capability is a broad space in which unlike concrete problems can increasingly be carried through their required stacks.
