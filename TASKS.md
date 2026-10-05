@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Full stack now reaches durable identity, Prometheus/Grafana observability, k6 performance evidence, Trivy scanning, Terraform AWS topology validation, Dockerized frontend, and Playwright browser assertions over seeded GitHub↔PyPI evidence. Next: close failure/recovery engineering by injecting a source/dependency failure, proving surfaced failure state + preserved prior valid state + clean recovery; keep actual AWS deployment as a separate unclaimed runtime witness. |
+| [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Failure/recovery is now closed with green PostgreSQL CI: upstream and durable-commit failures persist as failed runs, prior valid state survives, recovery appends cleanly, Grafana/Prometheus/Alertmanager surface failures, and destructive PostgreSQL backup→destroy→restore verification passes. Next: make disappeared/stale identity a durable cross-run lifecycle state, preserve history, expose it through API/UI, and verify reappearance. |
 
 ## Pinned / resumable
 
