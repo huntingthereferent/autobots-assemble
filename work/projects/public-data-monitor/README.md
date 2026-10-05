@@ -325,3 +325,17 @@ Captured state includes repository identity, default branch, stars, forks, open-
 - full unit, live-source, PostgreSQL, acquisition-resilience, and complete Docker-stack CI lanes pass with GitHub included
 
 Next edge: complete the versioned Alembic revision, then persist Celery task/run correlation and move into a genuinely ambiguous identity problem across independent systems.
+
+
+## Durable identity and observability evidence
+
+- GitHub↔PyPI identity decisions are now persisted with score, threshold, match outcome, and the exact weighted evidence used to justify the link.
+- identity decisions are queryable through `/api/identity/decisions`.
+- Alembic revision `0002_identity_decisions` versions the identity ledger schema.
+- migration CI verifies the identity table appears on upgrade and disappears on downgrade.
+- Prometheus instrumentation exposes source-run, item-count, duration, reconciliation, and identity-decision metrics.
+- Prometheus 3.15.0 runs as a real service in Docker Compose and scrapes the FastAPI `/metrics` endpoint.
+- complete-stack CI waits until Prometheus reports the application target as healthy rather than merely checking that the Prometheus server started.
+- all current CI lanes pass: unit, live-source, PostgreSQL integration, acquisition resilience, Alembic upgrade/downgrade, and complete Docker stack.
+
+Current edge: add Grafana visualization over the verified Prometheus layer, then continue into security/performance hardening.
