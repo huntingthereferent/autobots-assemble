@@ -121,6 +121,17 @@ math model
 
 This is why artifacts belong inside traversal rather than after it.
 
+## Concrete generators
+
+Current default production mechanisms:
+
+- **CAD-like** → CadQuery/OpenSCAD source → STEP/STL/DXF/SVG + geometric checks; see [CAD_TOOLCHAIN.md](CAD_TOOLCHAIN.md).
+- **system landscape** → Graphviz/DOT source → SVG/PDF/PNG + graph checks; see [LANDSCAPE_TOOLCHAIN.md](LANDSCAPE_TOOLCHAIN.md).
+- **program** → source/manifests/tests/runtime evidence under the frozen program foundation.
+- **math model** → explicit equations/inputs/units/provenance plus calculated outputs.
+
+Generated visuals do not replace their canonical source representation.
+
 ## Views are different
 
 `views/` may render, summarize, filter, or present artifacts/evidence.
