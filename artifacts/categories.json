@@ -9,7 +9,17 @@
       "children": {
         "spatial": {
           "relation": "preserves spatial structure",
-          "leaf": "cad_like"
+          "axis": "spatial_reference_frame",
+          "children": {
+            "local_object": {
+              "relation": "preserves object/local-frame geometry",
+              "leaf": "cad_like"
+            },
+            "georeferenced_world": {
+              "relation": "preserves georeferenced world-space geometry",
+              "leaf": "geospatial"
+            }
+          }
         },
         "relational": {
           "relation": "preserves system topology and named relations",
