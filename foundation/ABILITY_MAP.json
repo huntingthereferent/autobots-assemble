@@ -142,15 +142,20 @@
     },
     {
       "ability": "Cybersecurity",
-      "state": "partial",
+      "state": "tested",
       "evidence": [
-        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+        "foundation/FOUND-0003_application-security-lab.json"
       ],
       "supports": [
         "container vulnerability scanning",
-        "safe failure boundaries"
+        "application threat-boundary analysis",
+        "controlled vulnerability reproduction",
+        "secure coding remediation",
+        "behavioral security regression",
+        "static before/after analysis"
       ],
-      "next_gap": "No dedicated security assessment, threat model, exploit/defense, or security-engineering project."
+      "next_gap": "Broader OWASP coverage, network security, and production security operations remain separate witnesses."
     },
     {
       "ability": "Machine Learning / Applied AI",
@@ -191,15 +196,15 @@
     }
   ],
   "next_project_selection": {
-    "selected_gap": "Cybersecurity",
-    "reason": "Cybersecurity is already partial from container scanning but lacks a dedicated security-engineering witness. It can be advanced to tested locally without inventing cloud deployment or requiring private client access.",
+    "selected_gap": "Systems / Networking",
+    "reason": "This remains a major human-recognized technical category with no direct witness. It is reachable locally and can be proven without reusing application-level Docker behavior as a substitute for operating-system/network evidence.",
     "acceptance_boundary": [
-      "Use only an owned/local intentionally vulnerable target or synthetic fixture.",
-      "Define assets, trust boundaries, threats, and expected controls before testing.",
-      "Demonstrate at least one detected vulnerability class and one verified remediation.",
-      "Automate security regression checks so the repaired state remains inspectable.",
-      "Separate dependency scanning from application-security evidence.",
-      "Do not claim penetration-testing experience against third-party systems."
+      "Use only local/owned hosts, loopback, containers, or synthetic network fixtures.",
+      "Demonstrate socket-level communication and protocol behavior directly.",
+      "Capture measurable latency/throughput/error evidence rather than only configuration.",
+      "Include failure behavior such as timeout, refused connection, or dropped peer.",
+      "Automate the witness in clean CI where possible.",
+      "Do not claim third-party network administration or offensive network testing."
     ]
   }
 }
