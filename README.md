@@ -13,11 +13,12 @@ The repository is **not A/B itself**. A/B remains the recursively reusable mathe
 ## Start here
 
 1. [COMPLETE_STACK.md](COMPLETE_STACK.md)
-2. [ENTRY.md](ENTRY.md)
-3. [AB_CONTRACT.md](AB_CONTRACT.md)
-4. [state/current.json](state/current.json)
-5. [capabilities/README.md](capabilities/README.md)
-6. the active work/evidence reached from the current referent
+2. [CATEGORY_CONTRACT.md](CATEGORY_CONTRACT.md)
+3. [ENTRY.md](ENTRY.md)
+4. [AB_CONTRACT.md](AB_CONTRACT.md)
+5. [state/current.json](state/current.json)
+6. [capabilities/README.md](capabilities/README.md)
+7. the active work/evidence reached from the current referent
 
 ## Core structure
 
