@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 [project.optional-dependencies]
 test = [
   "pytest>=8,<9",
+  "bandit>=1.8,<2",
 ]
 
 [tool.pytest.ini_options]
