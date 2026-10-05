@@ -111,3 +111,66 @@ def test_failure_preserves_last_valid_state_and_recovery_appends_cleanly():
     latest_ops = client.get(f"/api/ops/source-runs?source={SOURCE}&limit=1")
     assert latest_ops.status_code == 200
     assert latest_ops.json()[0]["status"] == "success"
+
+
+def test_commit_failure_marks_run_failed_without_mutating_history():
+    Base.metadata.create_all(engine)
+    source = "commit_failure_fixture"
+
+    good = SourceObservation(
+        source=source,
+        source_id="stable",
+        observed_at=NOW,
+        entity_type="fixture",
+        canonical_key="fixture:commit-failure",
+        payload={"value": "stable"},
+    )
+    run_source_persisted(source, lambda: [good])
+
+    with SessionLocal() as session:
+        before = list(
+            session.scalars(
+                select(ObservationRecord).where(ObservationRecord.source == source)
+            )
+        )
+    assert len(before) == 1
+
+    from app.orchestrator import run_source
+
+    def rejected_commit(_observations):
+        raise RuntimeError("injected durable commit failure")
+
+    with pytest.raises(RuntimeError, match="injected durable commit failure"):
+        run_source(
+            source,
+            lambda: [
+                SourceObservation(
+                    source=source,
+                    source_id="new",
+                    observed_at=NOW + timedelta(minutes=1),
+                    entity_type="fixture",
+                    canonical_key="fixture:commit-failure-new",
+                    payload={"value": "must-not-persist"},
+                )
+            ],
+            commit=rejected_commit,
+        )
+
+    with SessionLocal() as session:
+        after = list(
+            session.scalars(
+                select(ObservationRecord).where(ObservationRecord.source == source)
+            )
+        )
+        latest_run = session.scalar(
+            select(SourceRun)
+            .where(SourceRun.source == source)
+            .order_by(SourceRun.id.desc())
+            .limit(1)
+        )
+
+    assert len(after) == 1
+    assert after[0].payload == {"value": "stable"}
+    assert latest_run is not None
+    assert latest_run.status == "failed"
+    assert latest_run.error_type == "RuntimeError"
