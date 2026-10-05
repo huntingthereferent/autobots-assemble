@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| Complete-Stack Artifact Output Layer | Capability substrate / cross-layer representation | MOVE | Artifact output is now A/B-categorized by one relation axis per level. Next: apply the category paths on the first integrated physical-system target; recursively decompose every child reached, while keeping artifact type, dependency layer, witness depth, goal lane, and view as separate projections. |
+| Complete-Stack Artifact Output Layer | Capability substrate / cross-layer representation | MOVE | Output production is now concrete: CadQuery/OpenSCAD → STEP/STL/DXF/SVG + geometry checks for CAD-like artifacts; Graphviz/DOT → SVG/PDF/PNG + graph checks for landscapes. Every generated file retains canonical-source/provenance lineage. Next: exercise the full chain on one integrated physical-system target. |
 | [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Preserve as the first broad capability proof. Reopen only if a real problem exposes a program relation the current foundation cannot carry. |
 
 ## Pinned / resumable
