@@ -80,5 +80,14 @@ services:
       prometheus:
         condition: service_started
 
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      api:
+        condition: service_started
+
 volumes:
   pgdata:
