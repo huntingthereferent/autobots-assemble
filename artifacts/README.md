@@ -14,17 +14,43 @@ referent
   → artifact output becomes input elsewhere
 ```
 
-## Same layer, different representation
+## A/B-ordered artifact categories
 
-These are sibling artifact families:
+Artifact categories are not a flat list.
 
-- **program** — executable/computational representation;
-- **CAD-like geometry** — spatial/physical representation;
-- **system landscape** — relational/topological representation;
-- **math model** — quantitative relation representation;
-- **schematic** — connectivity/functional representation;
-- **BOM / composition model** — parts/material composition representation;
-- **test / measurement artifact** — witness-producing representation.
+The first question is:
+
+> **What relation does this artifact primarily preserve?**
+
+```text
+artifact
+└─ preserved relation
+   ├─ structural
+   │  ├─ spatial
+   │  │  └─ CAD-like
+   │  ├─ relational
+   │  │  └─ system landscape
+   │  ├─ connectivity
+   │  │  └─ schematic
+   │  └─ composition
+   │     └─ BOM
+   │
+   ├─ behavioral
+   │  ├─ quantitative
+   │  │  └─ math model
+   │  └─ executable
+   │     └─ program
+   │
+   └─ observational
+      └─ empirical
+         └─ test / measurement
+```
+
+This taxonomy is stored in [categories.json](categories.json).
+
+The tree is open-ended. A new representation is added only when traversal reaches a relation that the current tree cannot preserve.
+
+Witness depth, field/domain, payment status, and capability are **not** artifact-type children. They are separate projections under the repository [category contract](../CATEGORY_CONTRACT.md).
 
 No family is automatically more real than another.
 
