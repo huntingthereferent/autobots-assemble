@@ -20,6 +20,10 @@ celery_app.conf.update(
         "collect-hn-every-5-minutes": {
             "task": "app.tasks.collect_hn",
             "schedule": 300.0,
+        },
+        "collect-github-every-10-minutes": {
+            "task": "app.tasks.collect_github",
+            "schedule": 600.0,
         }
     },
 )
