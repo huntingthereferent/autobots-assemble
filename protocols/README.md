@@ -31,10 +31,11 @@ A protocol may specialize the witness conditions, but it may not silently change
 - [`work/bounded-problem.md`](work/bounded-problem.md) — externally supplied finite problems.
 - [`work/job-hunt.md`](work/job-hunt.md) — discover and admit external work; uses `research.source` for public-source retrieval.
 
-## Language/output protocols
+## Language protocols
 
 - `language.decode`
 - `language.render`
-- `output.lens`
 
-Future domain protocols should compose these rather than duplicating a child protocol whose witness contract is already represented one layer up.
+Read-only projections are generated through `views/` and source-specific generators; they no longer require a separate output-lens protocol.
+
+Future domain protocols should compose existing contracts rather than duplicating a child protocol whose witness contract is already represented one layer up.
