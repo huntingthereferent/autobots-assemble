@@ -8,6 +8,7 @@ import unittest
 
 from foundation.program_kernel.compose import CompositionError, Link, execute_linked
 from foundation.program_kernel.contracts import ContractError
+from foundation.program_kernel.graph import GraphError, GraphLink, GraphNode, execute_graph
 from foundation.program_kernel.manifest import ManifestError, load_manifest
 from foundation.program_kernel.runtime import execute
 
@@ -128,6 +129,75 @@ class ProgramFoundationTests(unittest.TestCase):
                 target_manifest=target_manifest,
                 link=Link(source_output="normalized", target_input="delta"),
                 initial_state={"count": 5},
+            )
+
+    def test_generic_graph_executes_relations_without_domain_kernel_changes(self):
+        stateless = load_manifest(EXAMPLES / "stateless.json")
+        describe = load_manifest(EXAMPLES / "composition_target.json")
+
+        graph = execute_graph(
+            nodes={
+                "source": GraphNode(
+                    manifest=stateless,
+                    inputs={"text": "one two three"},
+                ),
+                "describe": GraphNode(manifest=describe),
+                "reuse": GraphNode(manifest=stateless),
+            },
+            links=[
+                GraphLink("source", "count", "describe", "count"),
+                GraphLink("describe", "description", "reuse", "text"),
+            ],
+        )
+
+        self.assertEqual(graph.order, ["source", "describe", "reuse"])
+        self.assertEqual(graph.records["source"].values["count"], 3)
+        self.assertEqual(graph.records["describe"].values["description"], "3 is odd")
+        self.assertEqual(graph.records["reuse"].values["normalized"], "3 is odd")
+        self.assertEqual(graph.records["reuse"].values["count"], 3)
+
+        describe_record = graph.records["describe"]
+        reuse_record = graph.records["reuse"]
+        self.assertEqual(
+            describe_record.provenance["count"]["source_node"],
+            "source",
+        )
+        self.assertEqual(
+            reuse_record.provenance["text"]["source_node"],
+            "describe",
+        )
+        self.assertIn(
+            graph.records["source"].execution_id,
+            describe_record.parent_executions,
+        )
+        self.assertIn(
+            describe_record.execution_id,
+            reuse_record.parent_executions,
+        )
+
+    def test_graph_rejects_cycle_without_explicit_state_time_model(self):
+        stateless = load_manifest(EXAMPLES / "stateless.json")
+        describe = load_manifest(EXAMPLES / "composition_target.json")
+
+        with self.assertRaises(GraphError):
+            execute_graph(
+                nodes={
+                    "a": GraphNode(manifest=stateless),
+                    "b": GraphNode(manifest=describe),
+                },
+                links=[
+                    GraphLink("a", "count", "b", "count"),
+                    GraphLink("b", "description", "a", "text"),
+                ],
+            )
+
+    def test_graph_rejects_missing_required_relation(self):
+        stateless = load_manifest(EXAMPLES / "stateless.json")
+
+        with self.assertRaises(GraphError):
+            execute_graph(
+                nodes={"only": GraphNode(manifest=stateless)},
+                links=[],
             )
 
 
