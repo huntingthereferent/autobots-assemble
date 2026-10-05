@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[test]"
-      - run: pytest -q tests/test_usgs.py tests/test_api.py tests/test_platform.py tests/test_hn.py
+      - run: pytest -q tests/test_usgs.py tests/test_api.py tests/test_platform.py tests/test_hn.py tests/test_github_source.py tests/test_tasks.py
 
   postgres-integration:
     runs-on: ubuntu-latest
@@ -65,7 +65,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[test]"
-      - run: pytest -q tests/test_live_source.py tests/test_hn_live.py
+      - run: pytest -q tests/test_live_source.py tests/test_hn_live.py tests/test_github_live.py
 
   acquisition-resilience:
     runs-on: ubuntu-latest
