@@ -40,7 +40,10 @@
     "Terraform AWS ECS/RDS/Redis/ALB/IAM configuration",
     "TypeScript/Vite frontend integration",
     "Playwright browser/E2E assertions over seeded live-source evidence",
-    "GitHub Actions CI across unit, integration, migration, stack, security, performance, infrastructure, frontend, and browser lanes"
+    "GitHub Actions CI across unit, integration, migration, stack, security, performance, infrastructure, frontend, and browser lanes",
+    "controlled upstream and durable-commit failure recovery with preserved prior state",
+    "Prometheus alert rules routed to Alertmanager and visualized in Grafana",
+    "destructive PostgreSQL backup/restore verification in clean CI"
   ],
   "difficulty_evidence": {
     "interfaces_crossed": [
@@ -85,22 +88,46 @@
     {
       "path": "work/projects/public-data-monitor/grafana/",
       "kind": "observability visualization witness"
+    },
+    {
+      "path": "work/projects/public-data-monitor/tests/test_failure_recovery.py",
+      "kind": "failure/recovery witness"
+    },
+    {
+      "path": "work/projects/public-data-monitor/prometheus-rules.yml",
+      "kind": "failure alert witness"
+    },
+    {
+      "path": "work/projects/public-data-monitor/ops/BACKUP_RESTORE.md",
+      "kind": "database recovery runbook/witness"
     }
   ],
   "external_witness": [
     {
       "system": "GitHub Actions",
       "claim": "clean-environment automated execution across project lanes"
+    },
+    {
+      "system": "GitHub Actions",
+      "claim": "workflow run 158 passed all project jobs including PostgreSQL recovery, browser UI, Docker observability/alerting, performance, security, Terraform, and destructive backup/restore"
     }
   ],
   "failures_and_corrections": [
     {
       "issue": "Playwright live-data seed was placed in the frontend build job, which did not start the API stack.",
       "correction": "Moved the seed into browser-ui after Docker Compose starts the API/frontend stack so the asserted data exists in the same runtime."
+    },
+    {
+      "issue": "Source success originally represented acquisition completion before durable history commit.",
+      "correction": "Bound durable commit into the operational run boundary so acquisition or commit failure both produce failed source runs."
+    },
+    {
+      "issue": "Per-observation commits could permit a partial durable batch if a later observation failed.",
+      "correction": "Replaced the persisted source path with one atomic observation batch transaction."
     }
   ],
   "limits": [
     "AWS infrastructure is validated configuration; live cloud deployment is still open.",
-    "Controlled dependency failure/recovery witness is the next active capability edge."
+    "Durable disappeared/stale lifecycle state across complete snapshots remains the next active platform witness."
   ]
 }
