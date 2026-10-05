@@ -29,4 +29,5 @@ Do not create empty directories in advance. Add each layer only when the trace r
 
 ## Current products
 
-- [P001 — Service Workflow](P001_service-workflow/PRODUCT.md) — candidate reusable workflow product.
+- [P001 — Service Workflow](P001_service-workflow/PRODUCT.md) — parked unvalidated candidate created before an external product scan.
+- [P002 — Business Health Check](P002_business-health-tracker/PRODUCT.md) — working proof traced from a current $300 external MVP brief.
