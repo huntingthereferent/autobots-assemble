@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "next_id": 5,
+  "next_id": 6,
   "records": [
     {
       "id": "FOUND-0001",
@@ -21,6 +21,11 @@
       "id": "FOUND-0004",
       "path": "foundation/FOUND-0004_systems-networking-lab.json",
       "title": "Systems / Networking Lab — Direct TCP Protocol Evidence"
+    },
+    {
+      "id": "FOUND-0005",
+      "path": "foundation/FOUND-0005_embedded-systems-lab.json",
+      "title": "Embedded Systems Lab — AVR Firmware and Deterministic Simulation"
     }
   ]
 }
