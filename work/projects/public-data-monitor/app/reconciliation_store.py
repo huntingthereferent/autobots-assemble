@@ -4,6 +4,7 @@ from sqlalchemy import desc, select
 
 from .db import Base, SessionLocal, engine
 from .history_models import ReconciliationRecord
+from .metrics import RECONCILIATIONS
 from .platform import SourceObservation, reconcile
 
 
@@ -23,6 +24,7 @@ def persist_reconciliation(observations: list[SourceObservation]) -> Reconciliat
         session.add(record)
         session.commit()
         session.refresh(record)
+        RECONCILIATIONS.labels(status=result.status.value).inc()
         return record
 
 
