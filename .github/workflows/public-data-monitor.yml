@@ -232,3 +232,18 @@ jobs:
           docker run --rm             --network public-data-monitor_default             -v "$PWD/k6:/scripts:ro"             grafana/k6:2.3.0 run /scripts/load.js
       - if: always()
         run: docker compose down -v
+
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/public-data-monitor/infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.16.0
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false
+      - run: terraform validate
