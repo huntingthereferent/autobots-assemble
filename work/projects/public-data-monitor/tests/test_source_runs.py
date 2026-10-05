@@ -1,6 +1,8 @@
+from fastapi.testclient import TestClient
 from sqlalchemy import select
 
 from app.db import Base, SessionLocal, engine
+from app.main import app
 from app.orchestrator import run_source
 from app.platform import SourceObservation
 from app.run_models import SourceRun
@@ -61,3 +63,20 @@ def test_failed_source_run_preserves_error():
     assert record.status == "failed"
     assert record.error_type == "RuntimeError"
     assert "fixture failure" in record.error_message
+
+
+def test_source_run_health_is_queryable_through_api():
+    def fetch():
+        return []
+
+    run_source("fixture_ops_api", fetch)
+
+    client = TestClient(app)
+    response = client.get("/api/ops/source-runs?source=fixture_ops_api&limit=1")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert len(payload) == 1
+    assert payload[0]["source"] == "fixture_ops_api"
+    assert payload[0]["status"] == "success"
+    assert payload[0]["items_seen"] == 0
