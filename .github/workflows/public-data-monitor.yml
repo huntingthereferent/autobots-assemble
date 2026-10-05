@@ -22,7 +22,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[test]"
-      - run: pytest -q tests/test_usgs.py tests/test_api.py
+      - run: pytest -q tests/test_usgs.py tests/test_api.py tests/test_platform.py
 
   postgres-integration:
     runs-on: ubuntu-latest
