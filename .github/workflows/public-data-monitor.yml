@@ -268,21 +268,6 @@ jobs:
         working-directory: work/projects/public-data-monitor/frontend
     steps:
       - uses: actions/checkout@v4
-      - name: Seed live browser evidence
-        run: |
-          docker compose exec -T api python - <<'PY'
-          from app.github_source import fetch_repository
-          from app.identity import link_github_repo_to_package
-          from app.identity_store import persist_identity_decision
-          from app.orchestrator import run_source
-          from app.pypi_source import fetch_project
-
-          github_rows = run_source("github_api", fetch_repository)
-          package_rows = run_source("pypi_api", fetch_project)
-          decision = link_github_repo_to_package(github_rows[0], package_rows[0])
-          persist_identity_decision(decision, threshold=100)
-          assert decision.matched
-          PY
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -306,6 +291,21 @@ jobs:
           done
           docker compose logs api frontend
           exit 1
+      - name: Seed live browser evidence
+        run: |
+          docker compose exec -T api python - <<'PY'
+          from app.github_source import fetch_repository
+          from app.identity import link_github_repo_to_package
+          from app.identity_store import persist_identity_decision
+          from app.orchestrator import run_source
+          from app.pypi_source import fetch_project
+
+          github_rows = run_source("github_api", fetch_repository)
+          package_rows = run_source("pypi_api", fetch_project)
+          decision = link_github_repo_to_package(github_rows[0], package_rows[0])
+          persist_identity_decision(decision, threshold=100)
+          assert decision.matched
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
