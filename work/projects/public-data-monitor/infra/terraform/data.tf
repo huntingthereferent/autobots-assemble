@@ -4,22 +4,22 @@ resource "aws_db_subnet_group" "main" {
 }
 
 resource "aws_db_instance" "postgres" {
-  identifier              = "state-reconciliation-platform"
-  engine                  = "postgres"
-  engine_version          = "16"
-  instance_class          = "db.t4g.micro"
-  allocated_storage       = 20
-  max_allocated_storage   = 100
-  storage_encrypted       = true
-  db_name                 = "platform"
-  username                = "platform"
+  identifier                  = "state-reconciliation-platform"
+  engine                      = "postgres"
+  engine_version              = "16"
+  instance_class              = "db.t4g.micro"
+  allocated_storage           = 20
+  max_allocated_storage       = 100
+  storage_encrypted           = true
+  db_name                     = "platform"
+  username                    = "platform"
   manage_master_user_password = true
-  db_subnet_group_name    = aws_db_subnet_group.main.name
-  vpc_security_group_ids  = [aws_security_group.postgres.id]
-  backup_retention_period = 7
-  deletion_protection     = true
-  skip_final_snapshot     = false
-  publicly_accessible     = false
+  db_subnet_group_name        = aws_db_subnet_group.main.name
+  vpc_security_group_ids      = [aws_security_group.postgres.id]
+  backup_retention_period     = 7
+  deletion_protection         = true
+  skip_final_snapshot         = false
+  publicly_accessible         = false
 }
 
 resource "aws_elasticache_subnet_group" "main" {
