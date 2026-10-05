@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "purpose": "Project verified work upward into human-recognized ability categories. Ability state is evidence-derived; planned work does not upgrade a category.",
+  "states": [
+    "unwitnessed",
+    "partial",
+    "tested",
+    "deployed_operating"
+  ],
+  "abilities": [
+    {
+      "ability": "Software / Platform Engineering",
+      "state": "tested",
+      "evidence": [
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
+      ],
+      "supports": [
+        "backend services",
+        "frontend integration",
+        "stateful systems",
+        "failure/recovery",
+        "multi-service runtime"
+      ],
+      "next_gap": "Live production deployment is still unwitnessed."
+    },
+    {
+      "ability": "Data Engineering",
+      "state": "tested",
+      "evidence": [
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+        "jobs/JOB-014_python-sql-aws-data-engineer/job.json",
+        "jobs/JOB-015_python-data-cleaning-reporting/job.json"
+      ],
+      "supports": [
+        "ingestion",
+        "normalization",
+        "SQL persistence",
+        "history/lineage",
+        "ETL validation",
+        "data-quality handling"
+      ],
+      "next_gap": "Production cloud runtime remains unverified."
+    },
+    {
+      "ability": "Database Engineering",
+      "state": "tested",
+      "evidence": [
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+        "jobs/JOB-014_python-sql-aws-data-engineer/job.json"
+      ],
+      "supports": [
+        "PostgreSQL schema design",
+        "migrations",
+        "indexes",
+        "transactional recovery",
+        "backup/restore"
+      ],
+      "next_gap": "Measured query-plan/index tuning on a large real workload is still thin."
+    },
+    {
+      "ability": "Spreadsheet Automation / Excel Engineering",
+      "state": "tested",
+      "evidence": [
+        "jobs/JOB-002_advanced-excel-macro/job.json",
+        "jobs/JOB-004_excel-data-cleaning-forecasting/job.json",
+        "jobs/JOB-009_excel-financial-tracker/job.json",
+        "jobs/JOB-011_excel-data-cleaning-reporting/job.json"
+      ],
+      "supports": [
+        "VBA automation",
+        "formula systems",
+        "data cleaning",
+        "reporting",
+        "forecasting"
+      ],
+      "next_gap": "Some external jobs remain unsubmitted/client-blocked, but the technical category already has tested artifacts."
+    },
+    {
+      "ability": "Data Analysis / Reporting",
+      "state": "tested",
+      "evidence": [
+        "jobs/JOB-004_excel-data-cleaning-forecasting/job.json",
+        "jobs/JOB-007_advanced-excel-automation-analysis/job.json",
+        "jobs/JOB-009_excel-financial-tracker/job.json",
+        "jobs/JOB-015_python-data-cleaning-reporting/job.json"
+      ],
+      "supports": [
+        "cleaning",
+        "regression/forecasting",
+        "reconciliation",
+        "report generation",
+        "measured outputs"
+      ],
+      "next_gap": "Dedicated BI/dashboard tooling is not yet a separate witness, but the broader analysis category is already demonstrated."
+    },
+    {
+      "ability": "Web Scraping / Automation",
+      "state": "tested",
+      "evidence": [
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+        "jobs/JOB-013_monthly-report-scraping/job.json"
+      ],
+      "supports": [
+        "HTML parsing",
+        "API acquisition",
+        "scheduled acquisition",
+        "parser regression",
+        "retry/backoff"
+      ],
+      "next_gap": "Authenticated browser automation remains mostly client-blocked."
+    },
+    {
+      "ability": "DevOps / CI / Observability / Reliability",
+      "state": "tested",
+      "evidence": [
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
+      ],
+      "supports": [
+        "Docker",
+        "GitHub Actions",
+        "Prometheus/Grafana",
+        "Alertmanager",
+        "load testing",
+        "container scanning",
+        "failure recovery"
+      ],
+      "next_gap": "Cloud production operations are not yet witnessed."
+    },
+    {
+      "ability": "Cloud / AWS",
+      "state": "partial",
+      "evidence": [
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+        "jobs/JOB-014_python-sql-aws-data-engineer/job.json"
+      ],
+      "supports": [
+        "Terraform AWS topology",
+        "ECS/Fargate design",
+        "RDS/Redis/ALB/IAM configuration"
+      ],
+      "next_gap": "Actual AWS deployment/operation."
+    },
+    {
+      "ability": "Cybersecurity",
+      "state": "partial",
+      "evidence": [
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
+      ],
+      "supports": [
+        "container vulnerability scanning",
+        "safe failure boundaries"
+      ],
+      "next_gap": "No dedicated security assessment, threat model, exploit/defense, or security-engineering project."
+    },
+    {
+      "ability": "Machine Learning / Applied AI",
+      "state": "unwitnessed",
+      "evidence": [],
+      "supports": [],
+      "next_gap": "Need a reproducible modeling project with baselines, feature pipeline, train/validation/test separation, measured evaluation, model artifact/versioning, inference, and regression checks."
+    },
+    {
+      "ability": "Systems / Networking",
+      "state": "unwitnessed",
+      "evidence": [],
+      "supports": [],
+      "next_gap": "Need a direct operating-system/networking witness rather than incidental Docker networking."
+    },
+    {
+      "ability": "Electronics / Embedded Systems",
+      "state": "unwitnessed",
+      "evidence": [],
+      "supports": [],
+      "next_gap": "Need a physical or simulated-to-measured embedded/electronics build."
+    },
+    {
+      "ability": "Mechanical / Fabrication / Manufacturing",
+      "state": "unwitnessed",
+      "evidence": [],
+      "supports": [],
+      "next_gap": "Need physical design/build/measurement/inspection evidence."
+    }
+  ],
+  "next_project_selection": {
+    "selected_gap": "Machine Learning / Applied AI",
+    "reason": "It is the nearest major human-recognized technical category with no direct witness. Existing Python/data/database/CI evidence can support the implementation without making the new project another copy of the platform project.",
+    "acceptance_boundary": [
+      "Model performance must be compared against a simple baseline.",
+      "Training and evaluation data separation must be explicit.",
+      "Feature transformation must be reproducible and fitted only on training data.",
+      "Metrics must be recorded, not described qualitatively.",
+      "A serialized model artifact must be reloadable for inference.",
+      "Inference behavior must be covered by automated tests.",
+      "No claim of production ML deployment until a deployed runtime exists."
+    ]
+  }
+}
