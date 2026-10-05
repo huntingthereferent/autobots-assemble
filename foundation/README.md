@@ -1,33 +1,32 @@
 # Foundation
 
-Foundation is the cross-lane body of **demonstrated work evidence**.
+Foundation is the preserved body of **demonstrated evidence** produced by complete-stack work.
 
-It exists because the long-term target is not “be credible at coding.” The target is to preserve repeated demonstrated capability across software, research, mathematics, electronics, mechanical systems, fabrication, measurement, manufacturing, and whatever other fields become reachable.
+It is not the repo's top-level goal, not a résumé, and not a manually assigned capability score.
 
-## Foundation is not a fourth goal lane
+## Relation to Complete Stack
 
-A work item stays where its goal belongs:
+```text
+real problem
+→ complete-stack traversal
+→ artifact / measurement / test / result
+→ evidence + provenance
+→ Foundation record
+→ capability/read-only projection
+```
 
-- research work stays in `research/`;
-- open-source work stays in `open_source/`;
-- paid work stays in `money/` / `jobs/`.
-
-Foundation stores a reference/projection of what that work actually demonstrated.
-
-## Evidence depth
-
-A record should state the deepest evidenced realization reached, without upgrading it.
+Foundation should preserve the deepest state actually witnessed without upgrading it.
 
 Examples:
 
 ```text
-concept
-model
-simulation
-design
+represented
+modeled
+simulated
+designed
 implemented
 tested
-built
+physically built
 measured
 inspected
 externally reviewed
@@ -35,36 +34,20 @@ independently reproduced
 deployed / operating
 ```
 
-These labels are domain-sensitive. Physical work should preserve physical witnesses such as dimensions, tolerances, material/process state, instrumentation, measurements, inspection, failure/correction history, and observed output when relevant.
+## Physical evidence
 
-## Difficulty evidence
+When a stack crosses into physical reality, preserve relevant dimensions, tolerances, material/process state, instrumentation, measurements, inspection, failures/corrections, and observed output.
 
-Foundation may record why a work item was difficult, but difficulty should remain inspectable rather than self-awarded.
+A digital placeholder or simulation may support surrounding design but remains visibly distinct from a physical witness.
 
-Possible dimensions:
+## Capability projection
 
-- constraints;
-- uncertainty;
-- interfaces crossed;
-- precision/tolerance;
-- scale;
-- performance;
-- validation burden;
-- failures/corrections;
-- external review independence;
-- idea-to-observed-result distance.
+[ABILITY_MAP.json](ABILITY_MAP.json) and other generated/read-only outputs summarize Foundation evidence for human use.
 
-## Credibility lens
+They do not select development.
 
-Credibility is derived from Foundation; it is not manually set.
+## Programs
 
-A credibility lens may answer questions such as:
+The first broad capability proof is preserved in [PROGRAM_FOUNDATION.md](PROGRAM_FOUNDATION.md) plus the supporting Foundation records.
 
-- What are the hardest things actually completed?
-- Where is there repeated externally reviewed work?
-- Which fields have evidence beyond design/simulation?
-- What physical work reached measurement or inspection?
-- Where has work crossed software ↔ hardware ↔ physical process?
-- Is there repeated closure across unrelated problem types?
-
-The lens must expose the underlying work/evidence so another person can inspect the basis of the claim.
+That capability is frozen unless a real problem exposes a missing relation that requires reopening it.
