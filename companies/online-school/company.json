@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "COMPANY-001",
+  "name": "Online School",
+  "operator": "Dessy",
+  "state": "operating_model",
+  "legal_status": "not_claimed_as_incorporated_accredited_or_licensed",
+  "referent": "Online learning company generalized from Dessy's existing homeschool operating schedule",
+  "first_operating_evidence": [
+    "companies/online-school/operations/homeschool_schedule.json",
+    "companies/online-school/operations/HOMESCHOOL_SCHEDULE.md",
+    "companies/online-school/evidence/PROVENANCE.md"
+  ],
+  "privacy_boundary": [
+    "Do not publish minor learner names in the company operating record.",
+    "Do not publish individualized learning/health details unless explicitly required and appropriately protected.",
+    "Private source schedule may be summarized structurally without copying identifying child records."
+  ],
+  "current_service_shape": [
+    "recurring instructional schedule",
+    "reading/writing/math/science/art",
+    "history and physical education cadence",
+    "weekly hands-on science project",
+    "theme-based weekly learning",
+    "instructional-time tracking"
+  ],
+  "next_valid_movements": [
+    "separate curriculum from schedule",
+    "define learner/parent/operator interfaces",
+    "derive first online delivery surface from the existing schedule",
+    "define business/legal/privacy boundaries before public enrollment or sale"
+  ]
+}
