@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
+from fastapi.testclient import TestClient
 from sqlalchemy import select
 
 from app.db import Base, SessionLocal, engine
@@ -7,6 +8,7 @@ from app.history_models import ObservationRecord, ReconciliationRecord
 from app.observation_store import persist_observation
 from app.platform import SourceObservation
 from app.reconciliation_store import persist_reconciliation
+from app.main import app
 
 
 NOW = datetime(2026, 10, 5, 10, 0, tzinfo=timezone.utc)
@@ -65,3 +67,31 @@ def test_persisted_reconciliation_conflict():
     assert stored.sources == ["api", "html"]
     assert stored.conflicting_fields == ["value"]
     assert stored.selected_payload is None
+
+
+def test_history_and_reconciliation_are_queryable_through_api():
+    Base.metadata.create_all(engine)
+    source_id = "api-history-case-001"
+    canonical_key = f"story:{source_id}"
+
+    persist_observation(make_observation("api", source_id, 1))
+    persist_observation(make_observation("api", source_id, 2, minute=1))
+    persist_reconciliation([
+        make_observation("api", source_id, 2, minute=1),
+        make_observation("html", source_id, 3, minute=1),
+    ])
+
+    client = TestClient(app)
+
+    history_response = client.get(f"/api/history/{canonical_key}")
+    assert history_response.status_code == 200
+    history_payload = history_response.json()
+    assert len(history_payload) >= 2
+    assert history_payload[0]["change_kind"] == "changed"
+
+    reconciliation_response = client.get(f"/api/reconciliations/{canonical_key}")
+    assert reconciliation_response.status_code == 200
+    reconciliation_payload = reconciliation_response.json()
+    assert len(reconciliation_payload) >= 1
+    assert reconciliation_payload[0]["status"] == "conflict"
+    assert reconciliation_payload[0]["conflicting_fields"] == ["value"]
