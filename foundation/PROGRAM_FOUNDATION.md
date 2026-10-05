@@ -213,3 +213,44 @@ The software layer must preserve:
 - an explicit bound or stop condition.
 
 This is evidence that realized outputs can remain usable under repeated application. It is not a claim that the runtime itself is A/B.
+
+
+### Witness 4 — bounded recurrence
+
+A realization can now feed one of its declared outputs back into one of its declared inputs across repeated executions when the value contracts are compatible.
+
+Verified behavior:
+
+- the first value is explicitly seeded;
+- every later execution names the prior execution as its parent;
+- the same manifest and operation implementation are reused unchanged;
+- a finite step bound is required;
+- zero-step recurrence is rejected;
+- incompatible output → input feedback is rejected.
+
+**Verified:** program-foundation workflow run 18 and protocol-tests run 471 passed on commit `3fe0a95f878a11e1a1239afd8fa64fa0f06945b4`.
+
+## Current edge — external effects / ports
+
+The kernel can now transform, compose, graph, and recur over represented values, but useful programs also cross boundaries into systems not owned by the kernel.
+
+The foundation needs a generic relation for:
+
+```text
+realization
+   ↓ declared required effect
+external port / adapter
+   ↓ observed result
+represented value + provenance
+```
+
+The kernel must not contain filesystem, network, device, process, UI, or service-specific behavior. Those remain adapters.
+
+The common foundation should only preserve:
+
+- what effect an operation declares;
+- whether that effect was admitted for this execution;
+- what adapter satisfied it;
+- what evidence/result crossed back into the program.
+
+This is an admission/evidence contract, not a security sandbox.
