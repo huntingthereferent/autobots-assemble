@@ -1,0 +1,28 @@
+{
+  "id": "example.event-device",
+  "referent": "Reduce a sampled noisy button stream into stable device state",
+  "boundary": {
+    "inside": ["sample stream", "debounce state transition", "LED state"],
+    "outside": ["electrical voltage", "physical GPIO", "wall-clock timing"]
+  },
+  "inputs": {
+    "samples": {"type": "array"}
+  },
+  "operations": [
+    {
+      "id": "debounce-stream",
+      "implementation": "foundation.program_examples.operations:debounce",
+      "consumes": ["samples"],
+      "produces": ["stable_pressed", "led_on", "toggle_count"]
+    }
+  ],
+  "outputs": {
+    "stable_pressed": {"type": "boolean"},
+    "led_on": {"type": "boolean"},
+    "toggle_count": {"type": "integer"}
+  },
+  "witnesses": [
+    {"id": "one-toggle", "kind": "equals", "target": "toggle_count", "expected": 1},
+    {"id": "led-on", "kind": "equals", "target": "led_on", "expected": true}
+  ]
+}
