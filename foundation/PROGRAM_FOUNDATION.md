@@ -125,3 +125,51 @@ It no longer selects development.
 Individual projects remain evidence/regression cases.
 
 The active development referent is the reusable program foundation.
+
+
+## Verified foundation movement
+
+### Witness 1 — shape independence
+
+One unchanged kernel now realizes:
+
+- a stateless text transformation;
+- a stateful counter;
+- an event/device-style debounce stream.
+
+All use the same manifest and execution/witness contracts.
+
+### Witness 2 — cross-realization composition
+
+A realized output from one manifest can be admitted as an input to another manifest when the declared value contracts are compatible.
+
+The receiving execution records:
+
+- parent execution identity;
+- source manifest identity;
+- source output name;
+- linked-input provenance.
+
+An incompatible link is rejected before the target operation executes.
+
+**Verified:** program-foundation workflow run 10 and protocol-tests run 460 passed on commit `a83e2bc1c71367b5de66acdd3785f48b2f857b98`.
+
+## Current edge — relation graph
+
+Pairwise composition still requires hand orchestration.
+
+The next witness is a generic bounded execution graph:
+
+```text
+program node
+   output
+     ↓ declared compatible relation
+program node
+   output
+     ↓
+program node
+```
+
+The graph layer must validate structure before execution, preserve lineage through every edge, and remain ignorant of domain/program category.
+
+A cycle is not automatically invalid in the larger research sense, but this first bounded graph executor must reject cycles unless an explicit state/time contract exists. It must never invent recursion semantics.
