@@ -1,279 +1,123 @@
-# Architecture — All Work Over Separate Axes
+# Architecture — Complete Stack
 
-The repository has one shared operating kernel. **ALL WORK** is the literal superset of purposeful work across every field, medium, scale, and realization layer.
+The architecture exists to preserve movement through a problem's **entire required dependency stack**.
 
-Do not confuse three different classification axes:
+It separates four things that were previously easy to blur:
 
-1. **Goal lane** — why the work is being done.
-2. **Field / domain** — what kind of world or knowledge the work touches.
-3. **Realization layer** — how far the work has moved from idea toward observed operation.
+1. **Referent** — the problem currently being solved.
+2. **Capability** — a broad problem-space already demonstrated or being expanded.
+3. **Dependency layer** — any field/system the current problem actually requires.
+4. **Realization depth** — how far evidence has moved from representation toward observed operation.
 
 ```text
-                                ALL WORK
-                                   │
-                            SHARED KERNEL
-             A/B · language · network · protocols · lenses
-                    evidence · provenance · state
-                                   │
-             ┌─────────────────────┼─────────────────────┐
-             │                     │                     │
-      THEORY / RESEARCH        OPEN SOURCE          MONEY / JOBS
-          goal lane              goal lane             goal lane
-             │                     │                     │
-             └─────────────────────┼─────────────────────┘
-                                   │
-                          work can touch ANY field
-                                   │
-      math · physics · biology · chemistry · software · electronics
-       mechanical · fabrication · manufacturing · construction · ...
-                                   │
-                          and ANY realization layer
-                                   │
-       idea → research → model → simulation → design → implementation
-         → physical build → measurement → inspection → validation
-                           → deployed / operating
-                                   │
-                              FOUNDATION
-                                   │
-                         credibility lens(es)
+REAL PROBLEM / REFERENT
+        ↓
+COMPLETE-STACK TRAVERSAL
+        ↓
+required layers as actually reached
+        ↓
+represent / model / simulate / design / build / measure / inspect / validate
+        ↓
+evidence + provenance
+        ↓
+FOUNDATION
+        ↓
+capability / read-only views
 ```
 
-## ALL WORK
+## A/B boundary
 
-“ALL WORK” is not shorthand for computer work, paid work, freelance work, research, or open source.
+A/B remains the recursively reusable mathematical operation and witness/evidence contract.
 
-It means work in **all fields and all layers**.
+This architecture is not A/B. It is a repository organization that preserves repeated applications and their evidence.
 
-Examples may include:
+## Capability layer
 
-- proving or testing a mathematical relation;
-- reading and connecting academic papers;
-- fixing an upstream software bug;
-- writing a paid spreadsheet automation;
-- designing a circuit;
-- building a controller;
-- fabricating a mechanical part;
-- measuring tolerances;
-- testing a material or process;
-- debugging a robot;
-- validating a production step;
-- designing or operating larger physical systems.
+A capability is a broad space in which unlike concrete problems can increasingly be carried through their required stacks.
 
-No field is privileged by the architecture.
+Capabilities are not résumé labels and are not isolated disciplines.
 
-## Axis 1 — Goal lane
+The first broad proof, **Programs**, is frozen in [capabilities/README.md](capabilities/README.md).
 
-The current goal determines the lane.
+## Dependency layers
 
-### Theory / Research
+Dependency layers are open-ended and entered only when the current referent requires them.
 
-Primary question:
+Examples include mathematics, software, physics, chemistry, biology, electronics, controls, mechanics, materials, fabrication, manufacturing, economics, safety, regulation, supply chain, and human factors.
 
-> What is interesting, true, structurally useful, unresolved, or worth following?
+No layer is privileged.
 
-No requirement to monetize or contribute upstream.
+## Realization depth
 
-### Open Source
-
-Primary question:
-
-> What public project can I contribute to under its upstream rules?
-
-Payment may occur, but it is not assumed.
-
-### Money / Jobs
-
-Primary question:
-
-> What bounded external work can be completed, submitted, accepted, or paid?
-
-No requirement to contribute to theory.
-
-### Why physical is not a goal lane
-
-“Physical,” “software,” “mathematical,” and similar terms describe **what the work touches**, not why it is being done.
-
-A physical build can be:
-
-- research;
-- open source;
-- paid work;
-- or another future goal lane.
-
-Do not create a separate “physical” goal lane merely because the implementation leaves software.
-
-## Axis 2 — Field / domain
-
-Field labels are open-ended. Examples:
-
-- mathematics;
-- computer science / software;
-- physics;
-- chemistry;
-- biology;
-- electronics;
-- electrical engineering;
-- mechanical engineering;
-- controls / robotics;
-- materials;
-- fabrication;
-- manufacturing;
-- construction / infrastructure;
-- medicine / life science;
-- finance / economics;
-- and any future field reached by the current referent.
-
-Cross-field work keeps each field's witness conditions rather than flattening them into one generic “hard problem.”
-
-## Axis 3 — Realization layer
-
-A useful generic ladder is:
+Keep reached depth explicit:
 
 ```text
-idea
-→ research
-→ model
-→ simulation
-→ design
-→ implementation
-→ physical build
-→ measurement
-→ inspection
-→ external validation
+unknown
+→ researched
+→ represented
+→ modeled
+→ simulated
+→ designed
+→ implemented
+→ physically built
+→ measured
+→ inspected
+→ externally validated
 → deployed / operating
 ```
 
-This is not a mandatory linear lifecycle. Work may skip layers, loop backward, or use field-specific layers.
+This is not a mandatory linear lifecycle.
 
-The important rule is **do not upgrade the reached layer**.
-
-Examples:
+The invariant is:
 
 ```text
-designed ≠ simulated
+represented ≠ physically present
 simulated ≠ built
 built ≠ measured
-measured ≠ independently validated
-validated prototype ≠ deployed system
+tested ≠ deployed
 ```
 
-The same applies in software and research:
+## Placeholders
+
+A missing physical relation may be represented by a bounded digital placeholder when the interface is known well enough to continue valid surrounding work.
+
+The placeholder must preserve what is measured or sourced, what is assumed, what downstream layers consume, what evidence is still missing, and what must be rerun when the real witness arrives.
+
+A placeholder never upgrades itself into a physical witness.
+
+## Goal lanes
+
+Research, open source, and paid work answer **why** the work exists rather than defining the technical stack.
+
+- `research/`
+- `open_source/`
+- `money/` and `jobs/`
+
+The same complete-stack capability may be exercised in any of them.
+
+## Work and Foundation
+
+Concrete work remains where it belongs. Foundation preserves what that work actually demonstrated.
 
 ```text
-idea ≠ implementation
-implementation ≠ tested
-tested ≠ externally reviewed
-paper read ≠ claim reproduced
-model proposed ≠ empirical validation
+work item
+→ evidence / witness
+→ Foundation record
+→ capability projection
 ```
 
-## Foundation
+Capability/read-only outputs may summarize Foundation. They may not manufacture evidence.
 
-Foundation is the preserved body of demonstrated work across lanes, fields, and realization layers.
+## Language and views
 
-It is **not** a résumé and **not** a self-declared credibility score.
+`language/` handles interpretation/rendering of human expression.
 
-A foundation record preserves what was actually reached:
+`views/` and generated outputs handle read-only projections.
 
-- problem/referent;
-- field(s);
-- goal lane;
-- constraints;
-- uncertainty crossed;
-- interfaces crossed;
-- artifact/result;
-- realization layer reached;
-- evidence and tests;
-- measurements/inspection when physical;
-- external review/acceptance when present;
-- failures/corrections;
-- provenance.
+The old generic `lenses/` layer is removed because those responsibilities are already represented by these more specific layers.
 
-The same work item remains in its original lane. Foundation references it rather than moving it.
+## Core invariant
 
-## Credibility
+**Do not stop traversal because the next required relation belongs to another discipline.**
 
-Credibility is a **derived output lens over Foundation evidence**.
-
-```text
-many preserved work records
-        ↓
-filter by field / difficulty / evidence depth / realization layer
-        ↓
-credibility lens
-```
-
-The lens may show repeated closure across unlike problems, but it may not manufacture a stronger claim than the evidence supports.
-
-One software merge, one measured physical build, one reproduced research result, and one externally accepted paid deliverable remain different kinds of evidence even when shown together.
-
-## “Hard”
-
-“Hard” is not a universal scalar and should not be reduced to code complexity.
-
-Useful evidence dimensions include:
-
-- number/severity of real constraints;
-- uncertainty crossed;
-- interfaces crossed;
-- required precision/tolerance;
-- scale;
-- performance burden;
-- consequences of error;
-- validation burden;
-- failed approaches/corrections;
-- independence of external witness;
-- distance from initial idea to observed result.
-
-These dimensions may support later comparison lenses. They do not erase domain-specific difficulty.
-
-## Crossing goal lanes
-
-A goal-lane crossing is an explicit handoff: `HANDOFF.BOUNDARY`.
-
-Examples:
-
-```text
-research result
-→ useful upstream implementation
-→ HANDOFF.BOUNDARY
-→ open-source candidate
-```
-
-```text
-open-source issue gains a bounty / paid contract
-→ compensation becomes primary
-→ HANDOFF.BOUNDARY
-→ money/job candidate
-```
-
-```text
-paid physical build exposes a novel mechanism
-→ HANDOFF.BOUNDARY
-→ research candidate
-```
-
-The source work remains provenance. The destination lane re-validates under its own goal and witness contract.
-
-
-## Discovery boundary
-
-ALL WORK discovery is not restricted to assigned or posted tasks.
-
-```text
-ALL WORK DISCOVERY
-├─ posted / assigned work
-├─ open-source contribution work
-├─ paid jobs / contracts / bounties
-├─ prizes / competitions
-├─ unsolved academic problems
-├─ unresolved scientific / engineering questions
-├─ replication / reproduction targets
-├─ standards / RFC / public technical problems
-├─ physical build / test challenges
-└─ frontier work with no task owner
-```
-
-The absence of a job posting is not evidence that there is no work.
-
-A scan may return the same candidate again on a later pass. Recurrence should be shown, not deduplicated away, unless the user explicitly requests only-new results.
+A movement stops only at a supported result, an explicit bounded placeholder that preserves continuation, or a recorded wall.
