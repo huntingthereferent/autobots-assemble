@@ -90,6 +90,17 @@ class ArtifactLayerTests(unittest.TestCase):
             {"pass", "fail", "unknown", "not_run"},
         )
 
+    def test_geospatial_is_spatial_sibling_not_cad_alias(self):
+        categories = json.loads((ROOT / "artifacts" / "categories.json").read_text(encoding="utf-8"))
+        spatial = categories["children"]["structural"]["children"]["spatial"]
+        self.assertEqual(spatial["axis"], "spatial_reference_frame")
+        self.assertEqual(spatial["children"]["local_object"]["leaf"], "cad_like")
+        self.assertEqual(spatial["children"]["georeferenced_world"]["leaf"], "geospatial")
+
+        geo = (ROOT / "artifacts" / "GEOSPATIAL.md").read_text(encoding="utf-8")
+        self.assertIn("georeferenced / world frame", geo)
+        self.assertIn("should not be forced into CAD", geo)
+
 
 if __name__ == "__main__":
     unittest.main()
