@@ -173,12 +173,12 @@ Next use case must add capabilities not already proved by Use Case 001:
 
 ### Platform Slice 2 — heterogeneous source + comparison
 - [ ] add real HTML scraper adapter
-- [ ] source-adapter interface
+- [x] source-adapter interface
 - [ ] raw/source provenance model
-- [ ] canonical record model independent of source/domain
-- [ ] change classification
+- [x] canonical observation model independent of source/domain
+- [x] change classification for new / changed / unchanged / disappeared
 - [ ] multi-source comparison
-- [ ] conflict representation
+- [x] conflict representation without an invented winner
 - [ ] fixture-based parser regression
 - [ ] retry/backoff and source failure handling
 
@@ -212,3 +212,18 @@ Next use case must add capabilities not already proved by Use Case 001:
 A resume claim is added only after its witness exists. Planned layers are not completed abilities.
 
 Older adapters and use cases remain evidence. They do not become the preferred referent unless the current platform relation explicitly moves back to them.
+
+
+## Platform generalization evidence
+
+The first source-specific implementation has now been lifted into a reusable platform layer:
+
+- `SourceAdapter` defines a source boundary independent of domain.
+- `SourceObservation` carries source identity, canonical identity, timestamps, provenance URL, entity type, and source payload.
+- change classification is tested for NEW, CHANGED, UNCHANGED, and DISAPPEARED states.
+- reconciliation is tested for SINGLE_SOURCE, AGREEMENT, and CONFLICT states.
+- conflicting fields are named explicitly and no source is silently selected when evidence disagrees.
+- the original live JSON source is wrapped as an adapter that emits canonical observations.
+- unit, live-source, and PostgreSQL integration CI lanes all pass after the abstraction.
+
+The next missing witness is heterogeneous-source comparison: a real HTML adapter must emit the same observation contract, after which cross-source identity and reconciliation can be exercised on actual independent sources.
