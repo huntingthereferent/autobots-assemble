@@ -32,6 +32,7 @@
       "enum": [
         "program",
         "cad_like",
+        "geospatial",
         "system_landscape",
         "math_model",
         "schematic",
