@@ -32,6 +32,10 @@ Do not redefine A/B as:
 
 The repository preserves evidence of repeated movement through real dependency structures.
 
+## Category discipline
+
+Category paths follow [CATEGORY_CONTRACT.md](CATEGORY_CONTRACT.md): one local axis per sibling set, derived from the relation actually reached. Categories remain recursively decomposable and separate from witness/status/goal labels.
+
 ## Stack traversal
 
 For any problem:
