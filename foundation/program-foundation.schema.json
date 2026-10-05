@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aeren.local/program-foundation.schema.json",
+  "title": "Program Foundation Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "referent",
+    "boundary",
+    "inputs",
+    "operations",
+    "outputs",
+    "witnesses"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "referent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "inside",
+        "outside"
+      ],
+      "properties": {
+        "inside": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "outside": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/valueContract"
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/valueContract"
+      },
+      "default": {}
+    },
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "implementation",
+          "consumes",
+          "produces"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "implementation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "consumes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "produces": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/valueContract"
+      }
+    },
+    "witnesses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "target"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "equals",
+              "exists",
+              "predicate"
+            ]
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected": {}
+        }
+      }
+    }
+  },
+  "$defs": {
+    "valueContract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "string",
+            "integer",
+            "number",
+            "boolean",
+            "object",
+            "array",
+            "bytes",
+            "any"
+          ]
+        },
+        "required": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  }
+}
