@@ -154,10 +154,19 @@
     },
     {
       "ability": "Machine Learning / Applied AI",
-      "state": "unwitnessed",
-      "evidence": [],
-      "supports": [],
-      "next_gap": "Need a reproducible modeling project with baselines, feature pipeline, train/validation/test separation, measured evaluation, model artifact/versioning, inference, and regression checks."
+      "state": "tested",
+      "evidence": [
+        "foundation/FOUND-0002_applied-ml-modeling.json"
+      ],
+      "supports": [
+        "train/test separation",
+        "leakage-safe preprocessing pipeline",
+        "baseline comparison",
+        "cross-validation",
+        "held-out model evaluation",
+        "serialized/reloadable inference"
+      ],
+      "next_gap": "Deep learning, LLM/transformer work, and production MLOps remain separate unwitnessed layers."
     },
     {
       "ability": "Systems / Networking",
@@ -182,16 +191,15 @@
     }
   ],
   "next_project_selection": {
-    "selected_gap": "Machine Learning / Applied AI",
-    "reason": "It is the nearest major human-recognized technical category with no direct witness. Existing Python/data/database/CI evidence can support the implementation without making the new project another copy of the platform project.",
+    "selected_gap": "Cybersecurity",
+    "reason": "Cybersecurity is already partial from container scanning but lacks a dedicated security-engineering witness. It can be advanced to tested locally without inventing cloud deployment or requiring private client access.",
     "acceptance_boundary": [
-      "Model performance must be compared against a simple baseline.",
-      "Training and evaluation data separation must be explicit.",
-      "Feature transformation must be reproducible and fitted only on training data.",
-      "Metrics must be recorded, not described qualitatively.",
-      "A serialized model artifact must be reloadable for inference.",
-      "Inference behavior must be covered by automated tests.",
-      "No claim of production ML deployment until a deployed runtime exists."
+      "Use only an owned/local intentionally vulnerable target or synthetic fixture.",
+      "Define assets, trust boundaries, threats, and expected controls before testing.",
+      "Demonstrate at least one detected vulnerability class and one verified remediation.",
+      "Automate security regression checks so the repaired state remains inspectable.",
+      "Separate dependency scanning from application-security evidence.",
+      "Do not claim penetration-testing experience against third-party systems."
     ]
   }
 }
