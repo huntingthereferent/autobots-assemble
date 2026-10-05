@@ -1,18 +1,21 @@
 from datetime import datetime, timezone
 
+from sqlalchemy import func, select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from .db import Base, SessionLocal, engine
 from .models import EarthquakeEvent
+from .schemas import EarthquakeIn
 from .usgs import fetch_events
 
 
-def ingest() -> int:
+def persist_events(events: list[EarthquakeIn]) -> dict[str, int]:
     Base.metadata.create_all(engine)
-    events = fetch_events()
     now = datetime.now(timezone.utc)
 
     with SessionLocal() as session:
+        before = session.scalar(select(func.count()).select_from(EarthquakeEvent)) or 0
+
         for event in events:
             values = {**event.model_dump(), "ingested_at": now}
             if engine.dialect.name == "postgresql":
@@ -39,11 +42,27 @@ def ingest() -> int:
                 else:
                     for key, value in values.items():
                         setattr(current, key, value)
-        session.commit()
 
-    return len(events)
+        session.commit()
+        after = session.scalar(select(func.count()).select_from(EarthquakeEvent)) or 0
+
+    return {
+        "fetched": len(events),
+        "rows_before": before,
+        "rows_after": after,
+        "new_rows": after - before,
+    }
+
+
+def ingest() -> dict[str, int]:
+    return persist_events(fetch_events())
 
 
 if __name__ == "__main__":
-    count = ingest()
-    print(f"ingested={count}")
+    result = ingest()
+    print(
+        " ".join(
+            f"{key}={value}"
+            for key, value in result.items()
+        )
+    )
