@@ -1,11 +1,16 @@
 {
   "schema_version": 1,
-  "next_id": 2,
+  "next_id": 3,
   "records": [
     {
       "id": "FOUND-0001",
       "path": "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
       "title": "Multi-Source State & Reconciliation Platform"
+    },
+    {
+      "id": "FOUND-0002",
+      "path": "foundation/FOUND-0002_applied-ml-modeling.json",
+      "title": "Applied ML Modeling — Reproducible Classification Evidence"
     }
   ]
 }
