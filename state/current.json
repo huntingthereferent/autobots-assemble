@@ -5,7 +5,7 @@
   "goal": "Build a human-recognized technical ability profile backward from inspectable evidence. Projects are witnesses for missing ability categories; they are not the top-level referent.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Build the next evidence gap: Systems / Networking. Use local/owned socket or container boundaries, prove protocol communication directly, record latency/throughput/failure behavior, and automate the witness. Do not extend the completed ML or application-security projects merely for feature depth.",
+  "next_movement": "Build the next genuinely different evidence layer: Electronics / Embedded Systems. Start with target-toolchain firmware plus deterministic simulation/emulation evidence. Keep this distinct from physical hardware operation; do not upgrade to built/measured physical evidence until real hardware exists.",
   "walls": [
     "Do not grow a completed evidence project merely because more features are technically available.",
     "Do not upgrade an ability category without an inspectable witness.",
@@ -17,6 +17,7 @@
     "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
     "foundation/FOUND-0002_applied-ml-modeling.json",
     "foundation/FOUND-0003_application-security-lab.json",
+    "foundation/FOUND-0004_systems-networking-lab.json",
     "generate_outputs.py"
   ],
   "handoff": {
@@ -26,15 +27,15 @@
     "reason": "Explicit user-directed resume of the Multi-Source State & Reconciliation / resume-evidence build in this window. ARC remains pinned/resumable in TASKS.md."
   },
   "verified_run": {
-    "workflow": "application-security-lab",
+    "workflow": "systems-networking-lab",
     "run_number": 1,
     "result": "success",
     "verified_capabilities": [
-      "local threat-boundary analysis",
-      "controlled injection reproduction",
-      "parameterized remediation",
-      "behavioral security regression",
-      "static before/after analysis"
+      "direct TCP sockets",
+      "length-prefixed framing",
+      "connection reuse",
+      "latency/throughput measurement",
+      "refused/timeout failure classification"
     ]
   }
 }
