@@ -339,3 +339,17 @@ Next edge: complete the versioned Alembic revision, then persist Celery task/run
 - all current CI lanes pass: unit, live-source, PostgreSQL integration, acquisition resilience, Alembic upgrade/downgrade, and complete Docker stack.
 
 Current edge: add Grafana visualization over the verified Prometheus layer, then continue into security/performance hardening.
+
+
+## Visualization, security, and performance evidence
+
+- Grafana is provisioned as code with Prometheus as its datasource.
+- CI verifies Grafana health and confirms the provisioned `Platform Overview` dashboard by UID.
+- Trivy 0.75.0 scans the built application container and fails CI on fixed CRITICAL vulnerabilities; the current image passes with no critical findings.
+- k6 2.3.0 runs a 20-second, 10-VU load test against the containerized FastAPI service.
+- measured k6 result: 3,858 HTTP requests, 0.00% request failures, p95 request duration 3.62 ms, 1,929 completed iterations, and 7,716/7,716 successful checks.
+- the k6 thresholds are enforced in CI: failure rate <1% and p95 latency <500 ms.
+
+The current stack now has verified acquisition, persistence, APIs, background scheduling, migrations, identity/reconciliation, observability, visualization, vulnerability scanning, and load testing.
+
+Current edge: infrastructure-as-code for the AWS production topology. Terraform validation can prove the configuration shape; AWS deployment remains open until an actual cloud runtime witness exists.
