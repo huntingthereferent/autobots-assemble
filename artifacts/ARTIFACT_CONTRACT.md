@@ -13,6 +13,8 @@ artifact
 ├─ id
 ├─ referent
 ├─ boundary
+├─ category_path
+│  └─ one relational axis per level
 ├─ representation_type
 ├─ inputs
 │  ├─ witnessed
@@ -24,6 +26,23 @@ artifact
 ├─ provenance
 └─ invalidation / replacement conditions
 ```
+
+## Rule: categories remain relational
+
+Each artifact carries a category path whose segments can be read as relations.
+
+Example:
+
+```text
+artifact
+→ preserves structure
+→ spatial structure
+→ CAD-like
+```
+
+Sibling segments must use one axis. Witness depth, domain, goal lane, and status stay outside this path.
+
+The canonical artifact category tree is [categories.json](categories.json).
 
 ## Rule: representation must expose what downstream work needs
 
