@@ -1,5 +1,11 @@
 {
   "schema_version": 1,
-  "next_id": 1,
-  "records": []
+  "next_id": 2,
+  "records": [
+    {
+      "id": "FOUND-0001",
+      "path": "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+      "title": "Multi-Source State & Reconciliation Platform"
+    }
+  ]
 }
