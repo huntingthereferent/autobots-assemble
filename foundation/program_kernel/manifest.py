@@ -103,6 +103,12 @@ def validate_manifest(payload: Any) -> dict[str, Any]:
             isinstance(operation["produces"], list) and operation["produces"],
             f"operations[{index}].produces must be a non-empty array",
         )
+        if "effects" in operation:
+            _require(
+                isinstance(operation["effects"], list)
+                and all(isinstance(item, str) and item for item in operation["effects"]),
+                f"operations[{index}].effects must be an array of non-empty strings",
+            )
 
     witnesses = payload["witnesses"]
     _require(isinstance(witnesses, list) and witnesses, "witnesses must be non-empty")
