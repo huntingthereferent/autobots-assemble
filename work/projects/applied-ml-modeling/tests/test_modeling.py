@@ -1,7 +1,5 @@
 from pathlib import Path
 
-import joblib
-
 from ml_evidence.modeling import (
     load_dataset,
     load_model,
@@ -41,11 +39,10 @@ def test_model_artifact_reloads_with_equivalent_inference(tmp_path: Path):
     _, X_test, _, _ = split_dataset(X, y)
     sample = X_test.head(10)
 
-    before = joblib.load(result["model_path"]).predict_proba(sample)
-    after = model.predict_proba(sample)
+    held_out = model.predict_proba(X_test)[:, 1]
 
-    assert before.shape == after.shape
-    assert (before == after).all()
+    assert len(held_out) == len(result["held_out_probabilities"])
+    assert held_out.tolist() == result["held_out_probabilities"]
 
 
 def test_machine_readable_artifacts_are_written(tmp_path: Path):
