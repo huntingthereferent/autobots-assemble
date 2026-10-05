@@ -121,6 +121,7 @@ def train_and_evaluate(output_dir: str | Path) -> dict:
     cv_metrics = training_cross_validation(candidate, X_train, y_train)
     candidate.fit(X_train, y_train)
     candidate_metrics = evaluate(candidate, X_test, y_test)
+    held_out_probabilities = candidate.predict_proba(X_test)[:, 1].tolist()
 
     model_path = output / "model.joblib"
     metrics_path = output / "metrics.json"
@@ -156,6 +157,7 @@ def train_and_evaluate(output_dir: str | Path) -> dict:
         "metadata_path": str(metadata_path),
         "metrics": metrics,
         "test_index": list(X_test.index),
+        "held_out_probabilities": held_out_probabilities,
     }
 
 
