@@ -4,6 +4,12 @@ This lane is for work whose primary goal is external economic value: jobs, bount
 
 The existing [`/jobs`](../jobs/) directory remains the canonical job ledger during migration so its links/history are not broken.
 
+## Products
+
+Reusable product builds live under [`money/products/`](products/).
+
+A product record preserves the reusable product shape. A client-specific sale or delivery may create a separate job record that points back to the product it instantiates.
+
 ## Boundary from research
 
 A research result is not a job automatically.
