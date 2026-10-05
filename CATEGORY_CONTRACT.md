@@ -96,6 +96,7 @@ Example:
 ```text
 structural artifact
 → spatial relation
+→ object/local reference frame
 → CAD-like artifact
 → assembly
 → component
