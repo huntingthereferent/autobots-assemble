@@ -113,6 +113,15 @@ jobs:
           done
           docker compose logs prometheus
           exit 1
+      - run: |
+          for i in {1..30}; do
+            if curl --fail -u admin:admin http://localhost:3000/api/health; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs grafana
+          exit 1
+      - run: |
+          curl --fail -u admin:admin "http://localhost:3000/api/search?query=Platform%20Overview" | grep -q '"uid":"platform-overview"'
       - run: docker compose ps
       - if: always()
         run: docker compose down -v
