@@ -1,0 +1,106 @@
+{
+  "id": "FOUND-0001",
+  "source_work": "work/projects/public-data-monitor/README.md",
+  "title": "Multi-Source State & Reconciliation Platform",
+  "goal_lane": "foundation / resume-evidence build",
+  "fields": [
+    "software engineering",
+    "data engineering",
+    "backend",
+    "frontend",
+    "databases",
+    "DevOps",
+    "cloud infrastructure",
+    "observability",
+    "testing"
+  ],
+  "realization_layers": [
+    "concept",
+    "design",
+    "implemented",
+    "tested"
+  ],
+  "deepest_supported_layer": "tested",
+  "problem": "Build one reusable system that acquires changing heterogeneous public state, preserves identity/provenance/history, reconciles differences, exposes results, and carries operational evidence through the full stack.",
+  "constraints": [
+    "Do not treat one use case or source as the definition of the platform.",
+    "Do not claim live AWS deployment from Terraform validation alone.",
+    "Do not claim an ability unless an inspectable witness exists."
+  ],
+  "demonstrated_capability": [
+    "Python and FastAPI backend engineering",
+    "PostgreSQL persistence, migrations, history, and identity ledgers",
+    "heterogeneous API + HTML ingestion and canonicalization",
+    "cross-source reconciliation with explicit conflict state",
+    "Celery + Redis scheduled/background execution",
+    "Docker Compose multi-service orchestration",
+    "Prometheus metrics and Grafana dashboards",
+    "Trivy container vulnerability scanning",
+    "k6 load testing with enforced thresholds",
+    "Terraform AWS ECS/RDS/Redis/ALB/IAM configuration",
+    "TypeScript/Vite frontend integration",
+    "Playwright browser/E2E assertions over seeded live-source evidence",
+    "GitHub Actions CI across unit, integration, migration, stack, security, performance, infrastructure, frontend, and browser lanes"
+  ],
+  "difficulty_evidence": {
+    "interfaces_crossed": [
+      "external APIs",
+      "HTML",
+      "Python",
+      "PostgreSQL",
+      "Redis",
+      "Celery",
+      "FastAPI",
+      "TypeScript frontend",
+      "Docker",
+      "Prometheus",
+      "Grafana",
+      "Terraform",
+      "GitHub Actions",
+      "Playwright"
+    ],
+    "validation_burden": "Evidence is carried from source acquisition through persistence/API/UI/CI rather than inferred from isolated code."
+  },
+  "evidence": [
+    {
+      "path": "work/projects/public-data-monitor/README.md",
+      "kind": "project evidence ledger"
+    },
+    {
+      "path": ".github/workflows/public-data-monitor.yml",
+      "kind": "CI acceptance paths"
+    },
+    {
+      "path": "work/projects/public-data-monitor/frontend/tests/dashboard.spec.ts",
+      "kind": "browser witness"
+    },
+    {
+      "path": "work/projects/public-data-monitor/infra/terraform/",
+      "kind": "AWS IaC witness"
+    },
+    {
+      "path": "work/projects/public-data-monitor/k6/",
+      "kind": "performance witness"
+    },
+    {
+      "path": "work/projects/public-data-monitor/grafana/",
+      "kind": "observability visualization witness"
+    }
+  ],
+  "external_witness": [
+    {
+      "system": "GitHub Actions",
+      "claim": "clean-environment automated execution across project lanes"
+    }
+  ],
+  "failures_and_corrections": [
+    {
+      "issue": "Playwright live-data seed was placed in the frontend build job, which did not start the API stack.",
+      "correction": "Moved the seed into browser-ui after Docker Compose starts the API/frontend stack so the asserted data exists in the same runtime."
+    }
+  ],
+  "limits": [
+    "AWS infrastructure is validated configuration; live cloud deployment is still open.",
+    "Controlled dependency failure/recovery witness is the next active capability edge."
+  ]
+}
