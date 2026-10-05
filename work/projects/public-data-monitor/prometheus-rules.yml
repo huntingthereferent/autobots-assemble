@@ -1,0 +1,11 @@
+groups:
+  - name: platform-source-health
+    rules:
+      - alert: SourceRunFailures
+        expr: increase(platform_source_runs_total{status="failed"}[5m]) > 0
+        for: 0m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Source run failure detected"
+          description: "{{ $labels.source }} recorded at least one failed run in the last 5 minutes."
