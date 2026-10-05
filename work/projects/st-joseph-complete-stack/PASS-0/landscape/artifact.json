@@ -1,0 +1,162 @@
+{
+  "id": "STJ-ART-0001",
+  "referent": "St. Joseph, Missouri — PASS-0 complete-stack system landscape",
+  "category_path": [
+    {
+      "axis": "preserved_relation",
+      "value": "structural",
+      "relation": "preserves structure"
+    },
+    {
+      "axis": "structure_kind",
+      "value": "relational",
+      "relation": "preserves system topology and named relations"
+    },
+    {
+      "axis": "representation_type",
+      "value": "system_landscape",
+      "relation": "renders the currently admitted city systems and relations"
+    }
+  ],
+  "representation_type": "system_landscape",
+  "canonical_source": {
+    "path": "work/projects/st-joseph-complete-stack/PASS-0/landscape/st-joseph-system.dot",
+    "format": "graphviz_dot",
+    "tool": "Graphviz",
+    "role": "canonical machine-readable relation graph"
+  },
+  "generated_outputs": [
+    {
+      "path": "work/projects/st-joseph-complete-stack/PASS-0/landscape/st-joseph-system.svg",
+      "format": "svg",
+      "purpose": "generated inspectable PASS-0 system landscape"
+    }
+  ],
+  "checks": [
+    {
+      "name": "graphviz_render",
+      "status": "pass",
+      "evidence": "DOT source rendered successfully through Graphviz.",
+      "source": "local Graphviz 2.42.4"
+    },
+    {
+      "name": "named_relation_edges",
+      "status": "pass",
+      "evidence": "42 directed relations are explicitly labeled in the canonical source.",
+      "source": "st-joseph-system.dot"
+    },
+    {
+      "name": "system_nodes",
+      "status": "pass",
+      "evidence": "20 named referent/system nodes are represented.",
+      "source": "st-joseph-system.dot"
+    }
+  ],
+  "boundary": {
+    "inside": [
+      "coarse city system topology supported by PASS-0 public evidence",
+      "governance/planning",
+      "population/households",
+      "mobility",
+      "utilities",
+      "housing",
+      "economy/employment",
+      "education",
+      "parks/wellness",
+      "public facilities",
+      "digital connectivity",
+      "physical substrate",
+      "external regional dependencies"
+    ],
+    "outside": [
+      "component-level infrastructure geometry",
+      "asset condition/capacity",
+      "parcel/building-level geometry",
+      "private operational data",
+      "field measurements",
+      "detailed engineering models"
+    ]
+  },
+  "inputs": [
+    {
+      "name": "STJ-SRC-001",
+      "status": "witnessed",
+      "value": "city comprehensive planning scope",
+      "units": null,
+      "source": "PASS-0/evidence/sources.json"
+    },
+    {
+      "name": "STJ-SRC-002",
+      "status": "witnessed",
+      "value": "transport planning surfaces",
+      "units": null,
+      "source": "PASS-0/evidence/sources.json"
+    },
+    {
+      "name": "STJ-SRC-003",
+      "status": "witnessed",
+      "value": "public works/mobility responsibilities",
+      "units": null,
+      "source": "PASS-0/evidence/sources.json"
+    },
+    {
+      "name": "STJ-SRC-004",
+      "status": "witnessed",
+      "value": "utility providers/services",
+      "units": null,
+      "source": "PASS-0/evidence/sources.json"
+    },
+    {
+      "name": "STJ-SRC-005",
+      "status": "witnessed",
+      "value": "population/economic/digital context",
+      "units": null,
+      "source": "PASS-0/evidence/sources.json"
+    },
+    {
+      "name": "STJ-SRC-006",
+      "status": "witnessed",
+      "value": "city public fast-fact surface",
+      "units": null,
+      "source": "PASS-0/evidence/sources.json"
+    }
+  ],
+  "parameters": {
+    "pass": "PASS-0",
+    "node_count": 20,
+    "directed_relation_count": 42
+  },
+  "interfaces": [
+    "each landscape node may become the referent of a deeper traversal",
+    "each labeled edge may open a quantitative, spatial, executable, schematic, composition, or observational artifact"
+  ],
+  "outputs": {
+    "primary": "machine-readable city dependency landscape",
+    "node_count": 20,
+    "directed_relation_count": 42
+  },
+  "assumptions_placeholders": [
+    "system classes are intentionally coarse at PASS-0",
+    "many ownership/interface details remain unresolved",
+    "external regional systems are represented as a coarse boundary node"
+  ],
+  "witness_depth": "represented",
+  "provenance": [
+    "work/projects/st-joseph-complete-stack/PASS-0/evidence/sources.json",
+    "work/projects/st-joseph-complete-stack/PASS-0/BOUNDARY.md"
+  ],
+  "invalidators": [
+    "deeper official evidence contradicts a represented relation",
+    "a named service/provider boundary changes",
+    "later traversal shows two coarse nodes must be separated to preserve materially different relations"
+  ],
+  "downstream": [
+    "mobility decomposition",
+    "utility decomposition",
+    "physical/geographic decomposition",
+    "housing/land-use decomposition",
+    "economic/logistics decomposition",
+    "public-facility decomposition",
+    "reality-check diff"
+  ]
+}
