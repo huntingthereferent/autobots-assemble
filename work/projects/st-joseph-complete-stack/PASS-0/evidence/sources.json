@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "benchmark": "St. Joseph Complete-Stack Benchmark",
+  "pass": "PASS-0",
+  "captured_on": "2026-10-05",
+  "sources": [
+    {
+      "id": "STJ-SRC-001",
+      "title": "Comprehensive & Land Use Plan",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://www.stjosephmo.gov/804/Comprehensive-Land-Use-Plan",
+      "admitted_facts": [
+        "Comprehensive Plan adopted in 2022 with an approximately 20-year planning horizon into the 2040s.",
+        "Plan explicitly covers land use/urban design, transportation/connectivity, housing/neighborhoods, parks/wellness, economic development, and public facilities/infrastructure."
+      ]
+    },
+    {
+      "id": "STJ-SRC-002",
+      "title": "Plans and Projects",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://stjosephmo.gov/889/Plans-and-Projects",
+      "admitted_facts": [
+        "City planning surface includes metropolitan transportation, transit, active transportation, airport, safety, and transportation-improvement planning."
+      ]
+    },
+    {
+      "id": "STJ-SRC-003",
+      "title": "Public Works & Transportation",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://stjosephmo.gov/293/Public-Works-Transportation",
+      "admitted_facts": [
+        "Department responsibilities include airport, mass transit, landfill, streets, stormwater, and sewage treatment.",
+        "Mobility modes explicitly include transit, freight, automobiles, walking, air, and biking."
+      ]
+    },
+    {
+      "id": "STJ-SRC-004",
+      "title": "Utility Services",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://www.stjosephmo.gov/708/Utility-Services",
+      "admitted_facts": [
+        "Electric utility surface identifies Evergy.",
+        "Water utility surface identifies Missouri American Water.",
+        "Gas utility surface identifies Spire Energy.",
+        "City utility surface includes sewer."
+      ]
+    },
+    {
+      "id": "STJ-SRC-005",
+      "title": "QuickFacts — St. Joseph city, Missouri",
+      "publisher": "U.S. Census Bureau",
+      "url": "https://www.census.gov/quickfacts/fact/table/stjosephcitymissouri/INC110223",
+      "admitted_facts": [
+        "2025 population estimate: 71,001.",
+        "2020 Census population: 72,473.",
+        "2020-2024 median household income in 2024 dollars: $57,956.",
+        "2020-2024 households with broadband Internet subscription: 85.9%."
+      ]
+    },
+    {
+      "id": "STJ-SRC-006",
+      "title": "City of St. Joseph official homepage",
+      "publisher": "City of St. Joseph, Missouri",
+      "url": "https://www.stjosephmo.gov/",
+      "admitted_facts": [
+        "City homepage exposes high-level fast facts including population, parks/facilities, trails/parkway, licensed businesses, and commute time.",
+        "Homepage population figure differs from the Census 2025 estimate; this discrepancy is preserved rather than reconciled in PASS-0."
+      ]
+    }
+  ],
+  "unresolved": [
+    {
+      "relation": "population figure",
+      "evidence": [
+        "STJ-SRC-005",
+        "STJ-SRC-006"
+      ],
+      "state": "PARTIAL",
+      "note": "Public surfaces report different population figures/vintages. PASS-0 does not force a single value where provenance differs."
+    }
+  ]
+}
