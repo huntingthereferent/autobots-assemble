@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| Complete-Stack Artifact Output Layer | Capability substrate / cross-layer representation | MOVE | Standardize traversal outputs at one sibling layer: program artifacts, CAD-like geometry, system landscapes, math models, schematics, BOMs, and test/measurement artifacts. Next: use these outputs together on the first integrated physical-system target so every dependency hit is represented, decomposed, quantified, and fed forward with witness/provenance preserved. |
+| Complete-Stack Artifact Output Layer | Capability substrate / cross-layer representation | MOVE | Artifact output is now A/B-categorized by one relation axis per level. Next: apply the category paths on the first integrated physical-system target; recursively decompose every child reached, while keeping artifact type, dependency layer, witness depth, goal lane, and view as separate projections. |
 | [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Preserve as the first broad capability proof. Reopen only if a real problem exposes a program relation the current foundation cannot carry. |
 
 ## Pinned / resumable
