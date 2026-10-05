@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "root": "artifact",
+  "axis": "preserved_relation",
+  "children": {
+    "structural": {
+      "relation": "preserves structure",
+      "axis": "structure_kind",
+      "children": {
+        "spatial": {
+          "relation": "preserves spatial structure",
+          "leaf": "cad_like"
+        },
+        "relational": {
+          "relation": "preserves system topology and named relations",
+          "leaf": "system_landscape"
+        },
+        "connectivity": {
+          "relation": "preserves functional or physical connectivity",
+          "leaf": "schematic"
+        },
+        "composition": {
+          "relation": "preserves parts/material composition",
+          "leaf": "bom"
+        }
+      }
+    },
+    "behavioral": {
+      "relation": "preserves behavior",
+      "axis": "behavior_kind",
+      "children": {
+        "quantitative": {
+          "relation": "preserves quantitative behavior",
+          "leaf": "math_model"
+        },
+        "executable": {
+          "relation": "preserves executable/computational behavior",
+          "leaf": "program"
+        }
+      }
+    },
+    "observational": {
+      "relation": "preserves observed/witness-producing evidence",
+      "axis": "observation_kind",
+      "children": {
+        "empirical": {
+          "relation": "preserves test or measurement observation",
+          "leaf": "test_measurement"
+        }
+      }
+    }
+  }
+}
