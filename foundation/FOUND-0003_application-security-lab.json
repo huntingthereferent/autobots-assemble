@@ -1,0 +1,80 @@
+{
+  "id": "FOUND-0003",
+  "source_work": "work/projects/application-security-lab/README.md",
+  "title": "Application Security Lab — Injection Detection and Remediation",
+  "goal_lane": "foundation / resume-evidence build",
+  "fields": [
+    "cybersecurity",
+    "application security",
+    "secure coding",
+    "testing"
+  ],
+  "realization_layers": [
+    "concept",
+    "design",
+    "implemented",
+    "tested"
+  ],
+  "deepest_supported_layer": "tested",
+  "problem": "Demonstrate one complete application-security correction over an owned local target: define the trust boundary, reproduce a vulnerability, remediate it, and lock the repair with behavioral and static regression evidence.",
+  "constraints": [
+    "Target is an owned/local in-memory SQLite fixture.",
+    "No third-party exploitation or penetration-testing claim.",
+    "The intentionally vulnerable implementation is retained only as a before-state witness."
+  ],
+  "demonstrated_capability": [
+    "application threat-boundary definition",
+    "controlled SQL-injection reproduction in a local fixture",
+    "parameterized-SQL remediation",
+    "behavioral security regression tests",
+    "machine-readable before/after security reporting",
+    "Bandit static-analysis comparison between vulnerable and remediated implementations",
+    "GitHub Actions clean-environment security acceptance"
+  ],
+  "measured_result": {
+    "vulnerable_rows_returned": 3,
+    "remediated_rows_returned_for_controlled_input": 0,
+    "normal_lookup_rows_after_remediation": 1,
+    "vulnerable_static_findings": 1,
+    "secure_static_findings": 0,
+    "regression_blocked": true
+  },
+  "evidence": [
+    {
+      "path": "work/projects/application-security-lab/README.md",
+      "kind": "security evidence contract"
+    },
+    {
+      "path": "work/projects/application-security-lab/THREAT_MODEL.md",
+      "kind": "threat/trust-boundary record"
+    },
+    {
+      "path": "work/projects/application-security-lab/appsec_lab/vulnerable.py",
+      "kind": "controlled before-state"
+    },
+    {
+      "path": "work/projects/application-security-lab/appsec_lab/secure.py",
+      "kind": "remediated implementation"
+    },
+    {
+      "path": "work/projects/application-security-lab/tests/test_security.py",
+      "kind": "behavioral regression witness"
+    },
+    {
+      "path": ".github/workflows/application-security-lab.yml",
+      "kind": "clean CI and static-analysis witness"
+    }
+  ],
+  "external_witness": [
+    {
+      "system": "GitHub Actions",
+      "claim": "application-security-lab workflow run 1 passed behavioral before/after tests, security-report verification, Bandit scan of remediated code, expected finding in the intentional vulnerable fixture, and artifact upload"
+    }
+  ],
+  "limits": [
+    "No third-party penetration testing.",
+    "No red-team or network exploitation witness.",
+    "No production security-operations witness.",
+    "Only one demonstrated vulnerability class so far."
+  ]
+}
