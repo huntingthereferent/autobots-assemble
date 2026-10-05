@@ -20,9 +20,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pytest jsonschema
+      - run: python -m pip install --upgrade pip
       - name: Verify shape-independent kernel
-        run: pytest -q network/tests/test_program_foundation.py
+        run: python -m unittest network.tests.test_program_foundation -v
       - name: Show admitted program shapes
         run: |
           python - <<'PY'
