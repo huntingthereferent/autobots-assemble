@@ -1,32 +1,22 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 Multi-Source State & Reconciliation Platform",
+  "preferred_referent": "📍 Complete Technical Ability Stack",
   "protocol": "work.bounded-problem",
-  "goal": "Build a complete, inspectable resume-evidence stack that demonstrates end-to-end systems capability without upgrading planned or configuration-only layers into completed claims.",
+  "goal": "Build a human-recognized technical ability profile backward from inspectable evidence. Projects are witnesses for missing ability categories; they are not the top-level referent.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Persist lifecycle state across complete source snapshots: when a previously observed identity is absent from a later successful snapshot, record disappeared/stale without deleting history; expose current lifecycle state through API/UI; then verify a later reappearance as another explicit transition.",
+  "next_movement": "Build the next evidence gap: Cybersecurity / Application Security. Use an owned/local vulnerable target, define threats and expected controls, demonstrate detection plus remediation, and add automated security regression. Keep Cloud/AWS deployment and other unwitnessed categories separate.",
   "walls": [
-    "Terraform validation proves infrastructure configuration shape, not a live AWS deployment.",
-    "PostgreSQL backup/restore is verified locally/CI; managed RDS snapshot/PITR recovery remains unclaimed until a live AWS runtime exists.",
-    "Resume claims must remain tied to inspectable repository or CI witnesses."
+    "Do not grow a completed evidence project merely because more features are technically available.",
+    "Do not upgrade an ability category without an inspectable witness.",
+    "Do not treat configuration-only cloud evidence as deployed/operating.",
+    "Do not perform security testing against third-party systems without authorization."
   ],
   "evidence": [
-    "work/projects/public-data-monitor/README.md",
-    ".github/workflows/public-data-monitor.yml",
-    "work/projects/public-data-monitor/frontend/playwright.config.ts",
-    "work/projects/public-data-monitor/frontend/tests/dashboard.spec.ts",
-    "work/projects/public-data-monitor/docker-compose.yml",
-    "work/projects/public-data-monitor/prometheus.yml",
-    "work/projects/public-data-monitor/grafana/",
-    "work/projects/public-data-monitor/k6/",
-    "work/projects/public-data-monitor/infra/terraform/",
-    "work/projects/public-data-monitor/tests/test_identity_store.py",
-    "work/projects/public-data-monitor/tests/test_metrics.py",
-    "work/projects/public-data-monitor/tests/test_failure_recovery.py",
-    "work/projects/public-data-monitor/prometheus-rules.yml",
-    "work/projects/public-data-monitor/alertmanager.yml",
-    "work/projects/public-data-monitor/ops/BACKUP_RESTORE.md"
+    "foundation/ABILITY_MAP.json",
+    "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
+    "foundation/FOUND-0002_applied-ml-modeling.json",
+    "generate_outputs.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -35,16 +25,15 @@
     "reason": "Explicit user-directed resume of the Multi-Source State & Reconciliation / resume-evidence build in this window. ARC remains pinned/resumable in TASKS.md."
   },
   "verified_run": {
-    "workflow": "public-data-monitor",
-    "run_number": 158,
-    "commit": "4579d0a2c79aa30d24a3814f4e423b1200dfb933",
-    "result": "all jobs green",
+    "workflow": "applied-ml-modeling",
+    "run_number": 1,
+    "result": "success",
     "verified_capabilities": [
-      "failure/recovery",
-      "atomic durable source commits",
-      "failure metrics/alerting",
-      "browser E2E",
-      "PostgreSQL backup/restore"
+      "train/test separation",
+      "training-only cross-validation",
+      "baseline comparison",
+      "held-out model evaluation",
+      "serialized model reload equivalence"
     ]
   }
 }
