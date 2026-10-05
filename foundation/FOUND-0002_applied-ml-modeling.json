@@ -1,0 +1,90 @@
+{
+  "id": "FOUND-0002",
+  "source_work": "work/projects/applied-ml-modeling/README.md",
+  "title": "Applied ML Modeling — Reproducible Classification Evidence",
+  "goal_lane": "foundation / resume-evidence build",
+  "fields": [
+    "machine learning",
+    "applied AI",
+    "data science",
+    "model evaluation",
+    "Python"
+  ],
+  "realization_layers": [
+    "concept",
+    "design",
+    "implemented",
+    "tested"
+  ],
+  "deepest_supported_layer": "tested",
+  "problem": "Build a leakage-safe, reproducible supervised-learning workflow with a trivial baseline, training-only cross-validation, held-out evaluation, serialized model artifact, reloadable inference, and clean-environment CI evidence.",
+  "constraints": [
+    "Benchmark dataset is used only to witness modeling mechanics; no clinical utility claim is made.",
+    "Test data cannot fit preprocessing or model parameters.",
+    "Model quality must be measured against a trivial baseline.",
+    "Production ML deployment is not claimed."
+  ],
+  "demonstrated_capability": [
+    "scikit-learn Pipeline construction with StandardScaler + LogisticRegression",
+    "explicit stratified train/test separation",
+    "5-fold stratified cross-validation on training data only",
+    "baseline comparison with DummyClassifier",
+    "held-out accuracy, F1, and ROC AUC evaluation",
+    "model serialization and reload-equivalent inference",
+    "machine-readable metrics and metadata artifacts",
+    "GitHub Actions clean-environment model training and acceptance tests"
+  ],
+  "measured_result": {
+    "dataset": "sklearn.datasets.load_breast_cancer",
+    "rows_total": 569,
+    "rows_train": 455,
+    "rows_test": 114,
+    "feature_count": 30,
+    "baseline": {
+      "accuracy": 0.631578947368421,
+      "f1": 0.7741935483870968,
+      "roc_auc": 0.5
+    },
+    "candidate": {
+      "accuracy": 0.9824561403508771,
+      "f1": 0.9861111111111112,
+      "roc_auc": 0.9953703703703703
+    },
+    "cross_validation_training_only": {
+      "accuracy_mean": 0.9780219780219781,
+      "f1_mean": 0.9825442464894886,
+      "roc_auc_mean": 0.9958720330237357,
+      "roc_auc_std": 0.004960006126191094
+    }
+  },
+  "evidence": [
+    {
+      "path": "work/projects/applied-ml-modeling/README.md",
+      "kind": "project evidence contract"
+    },
+    {
+      "path": "work/projects/applied-ml-modeling/ml_evidence/modeling.py",
+      "kind": "modeling implementation"
+    },
+    {
+      "path": "work/projects/applied-ml-modeling/tests/test_modeling.py",
+      "kind": "model-boundary and artifact tests"
+    },
+    {
+      "path": ".github/workflows/applied-ml.yml",
+      "kind": "clean CI witness"
+    }
+  ],
+  "external_witness": [
+    {
+      "system": "GitHub Actions",
+      "claim": "applied-ml-modeling workflow run 1 passed training, automated modeling-boundary tests, metric inspection, and artifact upload"
+    }
+  ],
+  "limits": [
+    "No deep-learning witness.",
+    "No LLM/transformer witness.",
+    "No production model serving or MLOps deployment witness.",
+    "Benchmark performance is not a clinical-use claim."
+  ]
+}
