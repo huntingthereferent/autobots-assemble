@@ -25,6 +25,7 @@ The repository is **not A/B itself**. A/B remains the recursively reusable mathe
 - **Complete Stack** — top-level problem orientation.
 - **capabilities/** — broad problem-spaces already demonstrated or being expanded.
 - **work/** — concrete problems and projects.
+- **companies/** — persistent operating organizations that may contain operations, products/services, people, assets, finance, compliance, and work.
 - **artifacts/** — working representations produced by traversal: programs, CAD-like geometry, system landscapes, math models, schematics, BOMs, tests/measurements.
 - **foundation/** — preserved demonstrated evidence.
 - **research/**, **open_source/**, **money/** / **jobs/** — why particular work exists.
