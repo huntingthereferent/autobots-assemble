@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Online School</title>
+  <meta name="description" content="A simple HTTP task monitor for the Online School operating schedule.">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div>
+        <p class="eyebrow">Online School</p>
+        <h1>Today’s school</h1>
+        <p class="sub">One place for the whole schedule: individual work, shared lessons, projects, outings, and anything added later.</p>
+      </div>
+      <div class="datebox">
+        <label for="day">Day</label>
+        <input id="day" type="date">
+      </div>
+    </header>
+
+    <section class="rhythm" aria-labelledby="rhythm-title">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Daily rhythm</p>
+          <h2 id="rhythm-title">How the day moves</h2>
+        </div>
+      </div>
+      <div id="rhythm-list" class="rhythm-list"></div>
+    </section>
+
+    <section class="summary" aria-live="polite">
+      <article><span>Tasks</span><strong id="task-count">0</strong></article>
+      <article><span>Done</span><strong id="done-count">0</strong></article>
+      <article><span>Planned time</span><strong id="planned-time">0h</strong></article>
+      <article><span>Remaining</span><strong id="remaining-time">0h</strong></article>
+    </section>
+
+    <section class="toolbar">
+      <div class="filters" role="group" aria-label="Task filters">
+        <button type="button" class="filter active" data-filter="all">All</button>
+        <button type="button" class="filter" data-filter="todo">To do</button>
+        <button type="button" class="filter" data-filter="done">Done</button>
+      </div>
+      <button id="add-task" type="button" class="primary">+ Add task</button>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Task monitor</p>
+          <h2>Everything scheduled</h2>
+        </div>
+        <span id="theme" class="theme"></span>
+      </div>
+      <div id="task-list" class="task-list"></div>
+      <p id="empty" class="empty" hidden>No tasks for this view.</p>
+    </section>
+
+    <dialog id="task-dialog">
+      <form id="task-form" method="dialog">
+        <div class="dialog-head">
+          <div>
+            <p class="eyebrow">New task</p>
+            <h2>Add anything</h2>
+          </div>
+          <button id="close-dialog" type="button" class="icon-button" aria-label="Close">×</button>
+        </div>
+
+        <label>Task
+          <input name="title" required maxlength="120" placeholder="Library trip, spelling review, experiment…">
+        </label>
+
+        <div class="form-grid">
+          <label>Planned minutes
+            <input name="planned_minutes" type="number" min="0" max="1440" step="5" value="30">
+          </label>
+          <label>Who
+            <select name="learner">
+              <option value="">Shared / everyone</option>
+              <option value="track_a">Learner A</option>
+              <option value="track_b">Learner B</option>
+            </select>
+          </label>
+        </div>
+
+        <label>Notes
+          <textarea name="notes" rows="3" placeholder="Optional detail"></textarea>
+        </label>
+
+        <p id="form-error" class="error" hidden></p>
+
+        <div class="dialog-actions">
+          <button id="cancel-task" type="button" class="ghost">Cancel</button>
+          <button type="submit" class="primary">Add task</button>
+        </div>
+      </form>
+    </dialog>
+  </main>
+  <script src="./app.js" defer></script>
+</body>
+</html>
