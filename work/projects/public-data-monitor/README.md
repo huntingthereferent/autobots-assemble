@@ -42,13 +42,13 @@ The target is not merely a working app. Each layer must produce inspectable evid
 ## Acceptance ladder
 
 ### Slice 1 — local spine
-- [ ] Fetch live USGS GeoJSON.
-- [ ] Validate and normalize events.
-- [ ] Idempotently persist events.
-- [ ] Serve event JSON through FastAPI.
+- [x] Fetch live USGS GeoJSON.
+- [x] Validate and normalize events.
+- [x] Idempotently persist events against PostgreSQL in CI.
+- [x] Serve persisted event JSON through FastAPI.
 - [ ] Render a small dashboard.
 - [ ] Run locally through Docker Compose.
-- [ ] Pass automated tests in GitHub Actions.
+- [x] Pass unit, PostgreSQL integration, and live-source smoke tests in GitHub Actions.
 
 ### Slice 2 — second acquisition mode
 - [ ] Add a public HTML source through a real scraper adapter.
@@ -79,3 +79,14 @@ The target is not merely a working app. Each layer must produce inspectable evid
 ## Evidence rule
 
 A resume claim is added only after its witness exists here. Planned layers are not completed abilities.
+
+
+## Verified evidence
+
+- Clean GitHub Actions unit job: PASS.
+- PostgreSQL 16 integration job: PASS.
+- Idempotent replay witness: replaying the same source ID keeps row count stable while updating changed fields.
+- API integration witness: a row persisted through the ingestion layer is returned through `/api/events`.
+- Live-source witness: the application successfully fetched and validated the current USGS real-time feed in GitHub Actions.
+
+Still open in Slice 1: visual dashboard verification and full Docker Compose runtime verification.
