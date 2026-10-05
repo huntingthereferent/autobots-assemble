@@ -8,6 +8,13 @@ from datetime import datetime, timezone
 ROOT = Path(__file__).resolve().parent
 JOBS_DIR = ROOT / "jobs"
 GENERATED_DIR = ROOT / "generated"
+ABILITY_MAP_PATH = ROOT / "foundation" / "ABILITY_MAP.json"
+
+
+def load_ability_map():
+    if not ABILITY_MAP_PATH.exists():
+        return {"abilities": [], "next_project_selection": {}}
+    return json.loads(ABILITY_MAP_PATH.read_text(encoding="utf-8"))
 
 
 def load_jobs():
@@ -117,18 +124,53 @@ def render_tasks(jobs):
     return "\n".join(lines)
 
 
-def render_resume(jobs):
+def render_resume(jobs, ability_map=None):
+    ability_map = ability_map or load_ability_map()
     lines = [
         "# James — Generated Resume View",
         "",
-        "> AUTO-GENERATED from verified repo job records.",
+        "> AUTO-GENERATED from repository evidence.",
+        "> Ability claims come from Foundation/job witnesses; planned work does not upgrade a category.",
         "> Unsubmitted/unpaid work remains labeled as independent project work.",
         "",
         "## Professional Summary",
         "",
-        "Independent technical problem solver focused on bounded systems analysis, "
-        "workflow tracing, data transformation, verification, automation, and "
-        "evidence-backed testing.",
+        "Technical problem solver with tested evidence across software/platform engineering, "
+        "data engineering, database systems, automation, data analysis, scraping, CI, "
+        "observability, reliability, and spreadsheet engineering.",
+        "",
+        "## Demonstrated Abilities",
+        "",
+    ]
+
+    for item in ability_map.get("abilities", []):
+        state = item.get("state", "unwitnessed")
+        if state not in {"tested", "deployed_operating"}:
+            continue
+        supports = item.get("supports", [])
+        lines.append(f"### {item.get('ability', 'Unnamed ability')} — {state}")
+        if supports:
+            lines.append("- Evidence supports: " + ", ".join(supports) + ".")
+        evidence = item.get("evidence", [])
+        if evidence:
+            lines.append(f"- Inspectable witnesses: {len(evidence)}")
+        lines.append("")
+
+    lines += [
+        "## Partial / Not Yet Claimed",
+        "",
+    ]
+
+    for item in ability_map.get("abilities", []):
+        state = item.get("state", "unwitnessed")
+        if state == "tested" or state == "deployed_operating":
+            continue
+        lines.append(
+            f"- **{item.get('ability', 'Unnamed ability')} — {state}:** "
+            f"{item.get('next_gap', 'No next gap recorded.')}"
+        )
+
+    lines += [
         "",
         "## Selected Technical Projects",
         "",
@@ -186,6 +228,36 @@ def render_portfolio(jobs):
         lines += [""]
 
     return "\n".join(lines)
+
+
+def render_ability_map(ability_map):
+    lines = [
+        "# ABILITY MAP — Generated Evidence Projection",
+        "",
+        "> AUTO-GENERATED from foundation/ABILITY_MAP.json.",
+        "> This is a projection over evidence, not a self-rating.",
+        "",
+        "| Ability | State | Witnesses | Next gap |",
+        "|---|---|---:|---|",
+    ]
+
+    for item in ability_map.get("abilities", []):
+        lines.append(
+            f"| {item.get('ability','')} | {item.get('state','')} | "
+            f"{len(item.get('evidence', []))} | {item.get('next_gap','')} |"
+        )
+
+    selection = ability_map.get("next_project_selection", {})
+    if selection:
+        lines += [
+            "",
+            "## Next Evidence Build",
+            "",
+            f"- Selected gap: {selection.get('selected_gap','')}",
+            f"- Reason: {selection.get('reason','')}",
+        ]
+
+    return "\n".join(lines) + "\n"
 
 
 def render_work_summary(jobs):
@@ -246,11 +318,13 @@ def render_json_snapshot(jobs):
 def generate_all(output_dir: Path = GENERATED_DIR):
     output_dir.mkdir(parents=True, exist_ok=True)
     jobs = load_jobs()
+    ability_map = load_ability_map()
 
     outputs = {
         "JOBS.md": render_jobs(jobs),
         "TASKS.md": render_tasks(jobs),
-        "RESUME.md": render_resume(jobs),
+        "RESUME.md": render_resume(jobs, ability_map),
+        "ABILITY_MAP.md": render_ability_map(ability_map),
         "PORTFOLIO.md": render_portfolio(jobs),
         "WORK_SUMMARY.md": render_work_summary(jobs),
         "jobs_snapshot.json": render_json_snapshot(jobs),
@@ -274,18 +348,24 @@ def main():
     parser.add_argument(
         "--print",
         dest="print_view",
-        choices=["jobs", "tasks", "resume", "portfolio", "summary"],
+        choices=["jobs", "tasks", "resume", "portfolio", "summary", "abilities"],
         help="Print one generated view to stdout.",
     )
     args = parser.parse_args()
 
     jobs = load_jobs()
+    ability_map = load_ability_map()
 
     if args.print_view:
+        if args.print_view == "abilities":
+            print(render_ability_map(ability_map))
+            return
+        if args.print_view == "resume":
+            print(render_resume(jobs, ability_map))
+            return
         views = {
             "jobs": render_jobs,
             "tasks": render_tasks,
-            "resume": render_resume,
             "portfolio": render_portfolio,
             "summary": render_work_summary,
         }
