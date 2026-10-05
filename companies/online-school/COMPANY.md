@@ -14,7 +14,9 @@ The first real operating evidence comes from Dessy's homeschool schedule and les
 - **first operating evidence:** existing home-education schedule and tracker
 - **first service shape:** structured online/home learning program with recurring instruction, projects, reading, movement, and progress tracking
 
-The repo may later add legal formation, enrollment, billing, curriculum products, teachers, software, parent dashboards, or accreditation/compliance work only when those relations become real.
+The first software surface now exists as a deliberately small HTTP task monitor: [app/README.md](app/README.md). It loads the operating schedule, generates recurring tasks, accepts arbitrary additional tasks, persists completion state locally, and exposes the same state through JSON endpoints.
+
+The repo may later add legal formation, enrollment, billing, curriculum products, teachers, broader platform surfaces, or accreditation/compliance work only when those relations become real.
 
 ## Operating shape
 
