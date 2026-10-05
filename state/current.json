@@ -1,96 +1,33 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 SOLVE THE WHOLE THING — ARC-AGI-3 100%",
+  "preferred_referent": "📍 Multi-Source State & Reconciliation Platform",
   "protocol": "work.bounded-problem",
-  "goal": "Solve ARC-AGI-3 completely. Live execution is now available; use immutable discovery-inclusive runs to drive only generic, evidence-required corrections.",
+  "goal": "Build a complete, inspectable resume-evidence stack that demonstrates end-to-end systems capability without upgrading planned or configuration-only layers into completed claims.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Freeze G2 relational-construction witness (SB26 8/8, WIN, 530 actions; oracle-assisted development, not clean first-contact). Return to unresolved public failure classes and build the next generic mechanism from live evidence; integrate by witnessed relation class, never game ID.",
+  "next_movement": "Inject and recover from a controlled source or dependency failure. Require persisted failed source-run evidence, observability visibility, preservation of prior valid state, and a subsequent clean successful run. After that, separate local/CI closure from the still-open AWS runtime deployment witness.",
   "walls": [
-    "Private competition environments are intentionally hidden; private 100% requires an official Kaggle competition rerun.",
-    "Public prior art demonstrates 25/25 completion and post-hoc banked-path RHAE 100, but its discovery actions are not included in that RHAE; it does not establish discovery-inclusive first-contact 100%."
+    "Terraform validation proves infrastructure configuration shape, not a live AWS deployment.",
+    "Browser/E2E evidence is only closed when the seeded live-source state and Playwright assertions execute in the same running stack.",
+    "Resume claims must remain tied to inspectable repository or CI witnesses."
   ],
   "evidence": [
-    "research/dives/ARC3-TRACE-001/direct_agent/gen2/my_agent.py",
-    "research/dives/ARC3-TRACE-001/runs/G2_SB26_FULL_SOLVE_2026-10-04.md",
-    "research/dives/ARC3-TRACE-001/runs/G2_3_SB26_TYPED_PROGRAM_100_2026-10-04.md",
-    "research/dives/ARC3-TRACE-001/runs/SB26_SYMBOLIC_RECOVERY_2026-10-04.md",
-    "research/dives/ARC3-TRACE-001/runs/G1_G1_1_LIVE_EXPERIMENTS_2026-10-04.md",
-    "research/dives/ARC3-TRACE-001/runs/FIRST_CONTACT_G0_1_2026-10-04.md",
-    "research/dives/ARC3-TRACE-001/oracles/HARD_CASES.md",
-    "research/dives/ARC3-TRACE-001/oracles/TR87.md",
-    "research/dives/ARC3-TRACE-001/oracles/SP80.md",
-    "research/dives/ARC3-TRACE-001/oracles/SK48.md",
-    "research/dives/ARC3-TRACE-001/oracles/SB26.md",
-    "research/dives/ARC3-TRACE-001/oracles/G50T.md",
-    "research/dives/ARC3-TRACE-001/oracles/DC22.md",
-    "research/dives/ARC3-TRACE-001/oracles/WA30.md",
-    "research/dives/ARC3-TRACE-001/oracles/RE86.md",
-    "research/dives/ARC3-TRACE-001/oracles/LF52.md",
-    "research/dives/ARC3-TRACE-001/oracles/BP35.md",
-    "research/dives/ARC3-TRACE-001/oracles/public_solve_ledger.json",
-    "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
-    "research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md",
-    "research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py",
-    ".github/workflows/arc3_gen1_tests.yml",
-    "research/dives/ARC3-TRACE-001/direct_agent/gen1/test_core.py",
-    "research/dives/ARC3-TRACE-001/direct_agent/gen1/my_agent.py",
-    "research/dives/ARC3-TRACE-001/direct_agent/gen1/model.py",
-    "research/dives/ARC3-TRACE-001/direct_agent/gen1/state.py",
-    "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
-    "research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md",
-    "research/dives/ARC3-TRACE-001/direct_agent/run_first_contact.py",
-    "research/dives/ARC3-TRACE-001/ACTION_SEMANTICS_CORRECTION.md",
-    "research/dives/ARC3-TRACE-001/PUBLIC_100_PRIOR_ART.md",
-    "research/dives/ARC3-TRACE-001/direct_agent/my_agent.py",
-    "research/dives/ARC3-TRACE-001/FIRST_CONTACT_100.md",
-    "research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md",
-    "research/dives/ARC3-TRACE-001/dive.json",
-    "research/dives/ARC3-TRACE-001/DIVE.md",
-    "research/dives/ARC3-TRACE-001/ARC3_SWALLOWED.md",
-    "research/dives/ARC3-TRACE-001/arc3_contract.json",
-    "research/dives/ARC3-TRACE-001/forward_match.json",
-    "research/dives/ARC3-TRACE-001/FORWARD_MATCH.md",
-    "research/dives/ARC3-TRACE-001/LEVEL_PRESERVATION_GATE.md",
-    "research/dives/ARC3-TRACE-001/selector/test_selector.py",
-    "research/dives/ARC3-TRACE-001/selector/selector.py",
-    "research/dives/ARC3-TRACE-001/experiments/FM-006_ka59_level-preservation-gate.json",
-    "research/dives/ARC3-TRACE-001/experiments/FM-005_ls20_selector-validation.json",
-    "research/dives/ARC3-TRACE-001/experiments/FM-004_ls20_witness-compression.json",
-    "research/dives/ARC3-TRACE-001/experiments/FM-003_ls20_recursive-forward-match.json",
-    "research/dives/ARC3-TRACE-001/experiments/FM-002_bp35_inverse-schema-transfer.json",
-    "research/dives/ARC3-TRACE-001/experiments/FM-001_ls20_inverse-action-calibration.json",
-    "research/dives/ARC3-TRACE-001/CORRESPONDENCE_GATE.md",
-    "state/pins/GEMS-001_2026-10-03.json",
-    "work/scans/SCAN-0001_2026-10-03.md"
+    "work/projects/public-data-monitor/README.md",
+    ".github/workflows/public-data-monitor.yml",
+    "work/projects/public-data-monitor/frontend/playwright.config.ts",
+    "work/projects/public-data-monitor/frontend/tests/dashboard.spec.ts",
+    "work/projects/public-data-monitor/docker-compose.yml",
+    "work/projects/public-data-monitor/prometheus.yml",
+    "work/projects/public-data-monitor/grafana/",
+    "work/projects/public-data-monitor/k6/",
+    "work/projects/public-data-monitor/infra/terraform/",
+    "work/projects/public-data-monitor/tests/test_identity_store.py",
+    "work/projects/public-data-monitor/tests/test_metrics.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
-    "from": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
-    "from_state": "state/pins/GEMS-001_2026-10-03.json",
-    "reason": "Explicit user-directed referent change after pinning GEMS."
-  },
-  "deferred_dependencies": {
-    "live_execution": {
-      "status": "RESOLVED",
-      "note": "Remote Desktop Commander is connected to the authorized Windows computer and the official ARC-AGI-3 runtime is installed and working."
-    }
-  },
-  "phase": {
-    "id": "SOLVE_THE_WHOLE_THING",
-    "spec": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
-    "gen1_status": "FROZEN_SUPPORTING_TOOLING"
-  },
-  "live_progress": {
-    "sb26": {
-      "status": "SOLVED_GENERIC_VISUAL_GRAMMAR",
-      "levels_completed": 8,
-      "total_levels": 8,
-      "actions": 124,
-      "state": "WIN",
-      "score": 100,
-      "game_id_branch": false,
-      "banked_replay_in_solver": false
-    }
+    "from": "📍 SOLVE THE WHOLE THING — ARC-AGI-3 100%",
+    "from_state": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
+    "reason": "Explicit user-directed resume of the Multi-Source State & Reconciliation / resume-evidence build in this window. ARC remains pinned/resumable in TASKS.md."
   }
 }
