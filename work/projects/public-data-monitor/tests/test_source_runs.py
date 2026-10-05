@@ -80,3 +80,18 @@ def test_source_run_health_is_queryable_through_api():
     assert payload[0]["source"] == "fixture_ops_api"
     assert payload[0]["status"] == "success"
     assert payload[0]["items_seen"] == 0
+
+
+def test_task_id_is_persisted_for_source_run():
+    from app.source_runs import start_source_run, finish_source_run
+
+    run_id = start_source_run("fixture_task_correlation", task_id="task-123")
+    finish_source_run(run_id, items_seen=2)
+
+    with SessionLocal() as session:
+        record = session.get(SourceRun, run_id)
+
+    assert record is not None
+    assert record.task_id == "task-123"
+    assert record.status == "success"
+    assert record.items_seen == 2
