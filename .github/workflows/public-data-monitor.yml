@@ -51,7 +51,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[test]"
-      - run: pytest -q tests/test_postgres_integration.py tests/test_history_store.py
+      - run: pytest -q tests/test_postgres_integration.py tests/test_history_store.py tests/test_source_runs.py
 
 
   live-source-smoke:
