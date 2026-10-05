@@ -16,6 +16,9 @@ artifact
 ├─ category_path
 │  └─ one relational axis per level
 ├─ representation_type
+├─ canonical_source
+├─ generated_outputs
+├─ checks
 ├─ inputs
 │  ├─ witnessed
 │  └─ assumed / placeholder
@@ -43,6 +46,30 @@ artifact
 Sibling segments must use one axis. Witness depth, domain, goal lane, and status stay outside this path.
 
 The canonical artifact category tree is [categories.json](categories.json).
+
+## Rule: generated outputs retain their source
+
+When an artifact has generated files, preserve:
+
+- **canonical_source** — editable/machine-readable source that carries the represented relation;
+- **generated_outputs** — reproducible exports/renders derived from that source;
+- **checks** — machine/human checks performed against the representation.
+
+Examples:
+
+```text
+CadQuery source
+→ STEP / STL / DXF / SVG
+→ dimension / clearance / collision checks
+```
+
+```text
+Graphviz DOT source
+→ SVG / PDF / PNG
+→ relation-label / orphan / reachability checks
+```
+
+A generated image or exchange file must not silently become the canonical source.
 
 ## Rule: representation must expose what downstream work needs
 
