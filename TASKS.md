@@ -4,7 +4,7 @@
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
-| [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Use Case 001 now proves live API acquisition, validation, PostgreSQL idempotent persistence, API exposure, and CI. Next: generalize the source/canonical-state boundary and add Use Case 002 as a real HTML scraper so the engine can compare and reconcile heterogeneous sources. |
+| [Multi-Source State & Reconciliation Platform](work/projects/public-data-monitor/README.md) | Foundation / resume-evidence build | MOVE | Use Case 002 now proves live HTML + API acquisition, canonical identity pairing, parser regression, and field-level reconciliation across heterogeneous representations. Next: persist observation history and reconciliation results, then add retry/failure handling before moving to fuzzy cross-system identity. |
 
 ## Pinned / resumable
 
