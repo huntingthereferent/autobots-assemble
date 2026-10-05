@@ -27,8 +27,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
-      redis:
-        condition: service_started
 
   beat:
     build: .
@@ -46,11 +44,14 @@ services:
     build: .
     environment:
       DATABASE_URL: postgresql+psycopg://monitor:monitor@db:5432/public_data_monitor
+      REDIS_URL: redis://redis:6379/0
     ports:
       - "8000:8000"
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
 
 volumes:
   pgdata:
