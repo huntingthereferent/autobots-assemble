@@ -30,39 +30,25 @@ When present, distinguish:
 - walls;
 - downstream dependents.
 
-## Diagram families
+## Diagram categories by emphasized relation
 
 Use the smallest diagram that preserves the relation currently needed.
 
-### 1. Context landscape
+The sibling question is:
 
-Shows the referent and external systems/boundaries.
+> **Which relation must this landscape emphasize?**
 
-### 2. System decomposition
+- **boundary** → context landscape;
+- **composition** → system decomposition;
+- **dependency** → dependency graph;
+- **interface** → interface map;
+- **flow** → flow diagram;
+- **spatial placement** → packaging diagram;
+- **evidence state** → evidence landscape.
 
-Shows system → subsystem → component structure.
+Each branch can be decomposed again. For example, a flow diagram may next distinguish energy, material, information, heat, force, or another actually reached flow relation.
 
-### 3. Dependency graph
-
-Shows what values/artifacts depend on what others.
-
-Useful for propagation and invalidation.
-
-### 4. Interface map
-
-Shows connections/contracts between components or layers.
-
-### 5. Flow diagram
-
-Shows movement of energy, material, information, money, heat, force, etc.
-
-### 6. Spatial/packaging diagram
-
-Shows rough placement and geometric constraints before or alongside CAD.
-
-### 7. Evidence landscape
-
-Overlays witness state:
+An evidence landscape may overlay:
 
 ```text
 [MEASURED] wheel radius
