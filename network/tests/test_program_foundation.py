@@ -8,6 +8,7 @@ import unittest
 
 from foundation.program_kernel.compose import CompositionError, Link, execute_linked
 from foundation.program_kernel.contracts import ContractError
+from foundation.program_kernel.effects import EffectError
 from foundation.program_kernel.graph import GraphError, GraphLink, GraphNode, execute_graph
 from foundation.program_kernel.recurrence import Feedback, RecurrenceError, execute_recurrence
 from foundation.program_kernel.manifest import ManifestError, load_manifest
@@ -258,6 +259,45 @@ class ProgramFoundationTests(unittest.TestCase):
                 seed_inputs={"text": "one two"},
                 feedback=Feedback(source_output="count", target_input="text"),
                 steps=2,
+            )
+
+    def test_declared_external_effect_uses_admitted_adapter_and_records_call(self):
+        manifest = load_manifest(EXAMPLES / "external_port.json")
+        store = {"alpha": "value-from-outside"}
+
+        def read_adapter(key):
+            return store[key]
+
+        record = execute(
+            manifest,
+            {"key": "alpha"},
+            effect_adapters={"kv.read": read_adapter},
+        )
+
+        self.assertEqual(record.values["value"], "value-from-outside")
+        self.assertEqual(len(record.effect_calls), 1)
+        call = record.effect_calls[0]
+        self.assertEqual(call.effect, "kv.read")
+        self.assertEqual(call.adapter, "ProgramFoundationTests.test_declared_external_effect_uses_admitted_adapter_and_records_call.<locals>.read_adapter")
+        self.assertEqual(call.result_type, "str")
+        self.assertTrue(all(w["passed"] for w in record.witnesses))
+
+    def test_declared_effect_without_admitted_adapter_is_rejected(self):
+        manifest = load_manifest(EXAMPLES / "external_port.json")
+
+        with self.assertRaises(EffectError):
+            execute(manifest, {"key": "alpha"})
+
+    def test_operation_cannot_call_effect_it_did_not_declare(self):
+        manifest = load_manifest(EXAMPLES / "external_port.json")
+        changed = copy.deepcopy(manifest)
+        changed["operations"][0]["effects"] = ["different.read"]
+
+        with self.assertRaises(EffectError):
+            execute(
+                changed,
+                {"key": "alpha"},
+                effect_adapters={"kv.read": lambda key: "value"},
             )
 
 
