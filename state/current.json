@@ -5,7 +5,7 @@
   "goal": "Standardize the working outputs produced while traversing a complete stack so program code, CAD-like geometry, system landscapes, math models, schematics, BOMs, and test/measurement artifacts share one evidence/provenance boundary and can become valid inputs to later traversal.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Use the artifact contract on the first integrated physical-system target. As traversal reaches geometry emit CAD-like artifacts; as it reaches system relations emit landscapes; as it reaches quantitative dependencies emit math-model artifacts; as it reaches computation emit program artifacts. Preserve placeholder/witness depth and propagate invalidation across artifacts.",
+  "next_movement": "Use the A/B-ordered artifact categories on the first integrated physical-system target. Every sibling set must share one local axis; every child remains decomposable. As traversal reaches geometry emit structural→spatial→CAD-like artifacts; system topology emits structural→relational→system-landscape artifacts; quantitative behavior emits behavioral→quantitative→math-model artifacts; executable behavior emits behavioral→executable→program artifacts; empirical witness emits observational→empirical→test/measurement artifacts. Keep witness depth, dependency layer, goal lane, and view as separate category axes.",
   "walls": [
     "Do not redefine A/B as Complete Stack, this repository, a workflow, or an implementation layer.",
     "Do not stop traversal merely because a required dependency belongs to another discipline.",
@@ -14,6 +14,9 @@
     "Do not reopen the program foundation unless a real incoming problem exposes a missing relation."
   ],
   "evidence": [
+    "CATEGORY_CONTRACT.md",
+    "category_axes.json",
+    "artifacts/categories.json",
     "artifacts/README.md",
     "artifacts/ARTIFACT_CONTRACT.md",
     "artifacts/CAD_LIKE.md",
