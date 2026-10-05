@@ -25,10 +25,18 @@ class AllWorkFoundationTests(unittest.TestCase):
         index = json.loads((ROOT / "protocols" / "index.json").read_text(encoding="utf-8"))
         self.assertIn("foundation.record", index["protocols"])
 
-    def test_foundation_registry_starts_empty(self):
+    def test_foundation_registry_is_consistent(self):
         index = json.loads((ROOT / "foundation" / "index.json").read_text(encoding="utf-8"))
-        self.assertEqual(index["next_id"], 1)
-        self.assertEqual(index["records"], [])
+        ids = [int(record["id"].split("-")[1]) for record in index["records"]]
+        expected_next = max(ids, default=0) + 1
+        self.assertEqual(index["next_id"], expected_next)
+
+        for record in index["records"]:
+            path = ROOT / record["path"]
+            self.assertTrue(path.exists(), record["path"])
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            self.assertEqual(payload["id"], record["id"])
+            self.assertEqual(payload["title"], record["title"])
 
 
 if __name__ == "__main__":
