@@ -11,7 +11,7 @@ on:
       - ".github/workflows/public-data-monitor.yml"
 
 jobs:
-  test:
+  unit:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -22,4 +22,33 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e ".[test]"
-      - run: pytest -q
+      - run: pytest -q tests/test_usgs.py tests/test_api.py
+
+  postgres-integration:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: public_data_monitor_test
+          POSTGRES_USER: monitor
+          POSTGRES_PASSWORD: monitor
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U monitor -d public_data_monitor_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://monitor:monitor@localhost:5432/public_data_monitor_test
+    defaults:
+      run:
+        working-directory: work/projects/public-data-monitor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[test]"
+      - run: pytest -q tests/test_postgres_integration.py
