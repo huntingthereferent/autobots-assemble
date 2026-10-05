@@ -21,3 +21,10 @@ test = [
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.setuptools.package-data]
+app = ["templates/*.html"]
