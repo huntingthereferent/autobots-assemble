@@ -274,3 +274,42 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: docker build -t state-reconciliation-frontend:ci .
+
+
+  browser-ui:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: work/projects/public-data-monitor
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker compose up -d --build db redis api frontend
+      - run: |
+          for i in {1..30}; do
+            if curl --fail http://localhost:8080/; then exit 0; fi
+            sleep 2
+          done
+          docker compose logs api frontend
+          exit 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - working-directory: work/projects/public-data-monitor/frontend
+        run: npm install
+      - working-directory: work/projects/public-data-monitor/frontend
+        run: npx playwright install --with-deps chromium
+      - working-directory: work/projects/public-data-monitor/frontend
+        env:
+          PLAYWRIGHT_BASE_URL: http://localhost:8080
+        run: npx playwright test
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: platform-ui-evidence
+          path: |
+            work/projects/public-data-monitor/frontend/test-results/
+            work/projects/public-data-monitor/frontend/playwright-report/
+          if-no-files-found: error
+          retention-days: 14
+      - if: always()
+        run: docker compose down -v
