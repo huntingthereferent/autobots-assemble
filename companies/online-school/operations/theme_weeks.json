@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "weeks": [
+    {
+      "label": "2026-09-07 — Water and Missouri River",
+      "start": "2026-09-07",
+      "end": "2026-09-11",
+      "theme_summary": "water sources / Missouri River / water cycle / weather / floods and conservation",
+      "days": []
+    },
+    {
+      "label": "2026-09-14 — Plants",
+      "start": "2026-09-14",
+      "end": "2026-09-18",
+      "theme_summary": "seeds / plant needs / roots / stems / leaves / flowers",
+      "days": []
+    },
+    {
+      "label": "2026-09-21 — Seasons",
+      "start": "2026-09-21",
+      "end": "2026-09-25",
+      "theme_summary": "seasons / fall / sunlight / shadows / seasonal life",
+      "days": []
+    },
+    {
+      "label": "2026-09-28 — Trade and Stores",
+      "start": "2026-09-28",
+      "end": "2026-10-02",
+      "theme_summary": "trade / stores / packaging / markets / purchasing",
+      "days": []
+    },
+    {
+      "label": "2026-10-05 — Food Science",
+      "start": "2026-10-05",
+      "end": "2026-10-09",
+      "theme_summary": "recipes / kitchen safety / mixtures / yeast / heat / nutrition",
+      "days": [
+        {
+          "date": "2026-10-05",
+          "theme": "Recipes, kitchen safety, and measuring tools",
+          "math": "Whole, half, and quarter measurements",
+          "math_mode": "direct lesson"
+        },
+        {
+          "date": "2026-10-06",
+          "theme": "Solids, liquids, mixtures, and solutions",
+          "math": "Adding measurements and comparing quantities",
+          "math_mode": "practice"
+        },
+        {
+          "date": "2026-10-07",
+          "theme": "Yeast, temperature, and dough changes",
+          "math": "Fractions, elapsed time, and recording data",
+          "math_mode": "practice / applied work"
+        },
+        {
+          "date": "2026-10-08",
+          "theme": "Heat and the physical changes in food",
+          "math": "Equal groups, arrays, and recipe scaling",
+          "math_mode": "direct lesson"
+        },
+        {
+          "date": "2026-10-09",
+          "theme": "Nutrition, menus, and reducing food waste",
+          "math": "Kitchen-math review and word problems",
+          "math_mode": "review / practice"
+        }
+      ]
+    }
+  ]
+}
