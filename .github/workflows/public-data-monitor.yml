@@ -257,6 +257,96 @@ jobs:
         run: docker compose down -v
 
 
+  backup-restore:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: public_data_monitor
+          POSTGRES_USER: monitor
+          POSTGRES_PASSWORD: monitor
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U monitor -d public_data_monitor"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://monitor:monitor@localhost:5432/public_data_monitor
+      PGPASSWORD: monitor
+    defaults:
+      run:
+        working-directory: work/projects/public-data-monitor
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e ".[test]"
+      - name: Seed durable platform state
+        run: |
+          python - <<'PY'
+          from datetime import datetime, timezone
+          from app.orchestrator import run_source_persisted
+          from app.platform import SourceObservation
+
+          run_source_persisted(
+              "backup_fixture",
+              lambda: [
+                  SourceObservation(
+                      source="backup_fixture",
+                      source_id="stable-1",
+                      observed_at=datetime(2026, 10, 5, 12, 30, tzinfo=timezone.utc),
+                      entity_type="fixture",
+                      canonical_key="fixture:backup-stable-1",
+                      payload={"value": "must-survive"},
+                  )
+              ],
+          )
+          PY
+      - name: Dump database
+        run: |
+          docker run --rm --network host -e PGPASSWORD=monitor postgres:16             pg_dump -h 127.0.0.1 -U monitor -d public_data_monitor             --clean --if-exists --no-owner --no-privileges > platform-backup.sql
+          test -s platform-backup.sql
+      - name: Destroy application schema
+        run: |
+          docker run --rm --network host -e PGPASSWORD=monitor postgres:16             psql -v ON_ERROR_STOP=1 -h 127.0.0.1 -U monitor -d public_data_monitor             -c "DROP SCHEMA public CASCADE; CREATE SCHEMA public;"
+      - name: Restore database
+        run: |
+          docker run --rm -i --network host -e PGPASSWORD=monitor postgres:16             psql -v ON_ERROR_STOP=1 -h 127.0.0.1 -U monitor -d public_data_monitor             < platform-backup.sql
+      - name: Verify restored state
+        run: |
+          python - <<'PY'
+          from sqlalchemy import select
+          from app.db import SessionLocal
+          from app.history_models import ObservationRecord
+          from app.run_models import SourceRun
+
+          with SessionLocal() as session:
+              run = session.scalar(
+                  select(SourceRun)
+                  .where(SourceRun.source == "backup_fixture")
+                  .order_by(SourceRun.id.desc())
+                  .limit(1)
+              )
+              observation = session.scalar(
+                  select(ObservationRecord)
+                  .where(ObservationRecord.canonical_key == "fixture:backup-stable-1")
+                  .order_by(ObservationRecord.id.desc())
+                  .limit(1)
+              )
+
+          assert run is not None
+          assert run.status == "success"
+          assert run.items_seen == 1
+          assert observation is not None
+          assert observation.payload == {"value": "must-survive"}
+          assert observation.change_kind == "new"
+          PY
+
+
   terraform:
     runs-on: ubuntu-latest
     defaults:
