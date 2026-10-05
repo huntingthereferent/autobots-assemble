@@ -5,7 +5,7 @@
   "goal": "Build the reusable implementation foundation beneath arbitrary bounded program realizations. A/B remains the recursive mathematical operation; this software foundation must preserve enough referent/boundary/input/representation/operation/state/output/witness structure that new programs stop requiring the same scaffolding to be rebuilt by hand.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Add explicit bounded recurrence to the program foundation. A realized output may re-enter the same realization as a next input only when source/target value contracts are compatible, each iteration preserves parent/provenance, and an explicit step/stop boundary prevents invented recursion semantics. This is a software witness of recursive reuse, not a redefinition of A/B.",
+  "next_movement": "Add an explicit external-effect/port contract. The kernel currently composes and recurs over in-memory values but has no generic relation for crossing into files, networks, devices, processes, or other external systems. Realizations should declare required effects; execution should record admitted effects and refuse undeclared/ungranted ones. Keep effect implementations outside the kernel and do not claim Python-level sandboxing.",
   "walls": [
     "Do not redefine A/B as the software foundation, workflow, factory, or runtime.",
     "Do not let resume ability categories select development.",
@@ -29,16 +29,16 @@
   },
   "verified_run": {
     "workflow": "program-foundation",
-    "run_number": 13,
+    "run_number": 18,
     "result": "success",
     "verified_capabilities": [
-      "shape-independent execution",
-      "cross-program contract composition",
-      "execution/value provenance",
-      "generic topologically validated program graphs",
-      "required-input relation validation",
-      "incompatible-link rejection",
-      "cycle rejection without explicit state/time semantics"
+      "shape-independent realizations",
+      "cross-program composition",
+      "generic relation graph execution",
+      "value and execution provenance",
+      "bounded recurrence under compatible input/output contracts",
+      "iteration parent lineage",
+      "zero-step and incompatible recurrence rejection"
     ]
   }
 }
