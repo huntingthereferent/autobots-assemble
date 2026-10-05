@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: public_data_monitor
+      POSTGRES_USER: monitor
+      POSTGRES_PASSWORD: monitor
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U monitor -d public_data_monitor"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://monitor:monitor@db:5432/public_data_monitor
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:
