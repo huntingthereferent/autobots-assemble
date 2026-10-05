@@ -1,5 +1,9 @@
 name: public-data-monitor
 
+concurrency:
+  group: public-data-monitor-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     paths:
