@@ -191,14 +191,14 @@ Hacker News is used here because the same stories are exposed through HTML and t
 - [x] multi-source comparison on shared canonical identity
 - [x] conflict representation without an invented winner
 - [x] fixture-based parser regression
-- [ ] retry/backoff and source failure handling
+- [x] retry/backoff and typed source failure handling
 
 ### Platform Slice 3 — reconciliation + history
 - [ ] cross-source identity model
-- [ ] observation history
+- [x] observation history
 - [ ] reconciliation rules with explicit evidence boundary
 - [ ] disappeared/stale state handling
-- [ ] reconciliation report
+- [x] persisted reconciliation state queryable through API
 - [ ] Alembic migrations
 - [ ] indexes justified by measured queries
 
@@ -247,3 +247,19 @@ Use Case 002 proves that the platform can ingest the same underlying entities th
 A live CI run fetched Hacker News HTML and the official public API, found overlapping story identities by stable item ID, paired them by canonical key, and passed reconciliation with either AGREEMENT or explicit CONFLICT as valid outcomes. No title-based guessing is used for identity.
 
 This closes the first heterogeneous-source witness. The next layer is persistence of observation history and reconciliation state so change/conflict can be queried over time rather than only computed in memory.
+
+
+## Persistence and resilience evidence
+
+- append-only observation history is persisted in PostgreSQL rather than overwriting prior state.
+- the second observation for the same source identity is classified against the previous persisted observation.
+- persisted history retains both the old and new payloads.
+- reconciliation outcomes are persisted independently from source observations.
+- field-level conflicts remain explicit after persistence; unresolved conflicts do not gain a selected payload.
+- observation history and reconciliation history are queryable through dedicated FastAPI routes.
+- acquisition retry behavior is isolated behind a reusable helper with exponential backoff.
+- transient failures recover within the configured attempt budget.
+- exhausted retries raise a typed source failure containing source, URL, attempt count, and final error evidence.
+- unit, live-source, acquisition-resilience, and PostgreSQL integration CI lanes pass.
+
+The next operational layer is schema migration + recurring execution + source-run status. That will replace implicit table creation with versioned database evolution and make scheduled acquisition inspectable as its own state.
