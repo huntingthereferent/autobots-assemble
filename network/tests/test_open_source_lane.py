@@ -11,11 +11,13 @@ class OpenSourceArchitectureTests(unittest.TestCase):
         index = json.loads((ROOT / "protocols" / "index.json").read_text(encoding="utf-8"))
         self.assertIn("opensource.contribution", index["protocols"])
 
-    def test_three_lanes_are_explicit(self):
+    def test_goal_lanes_remain_explicit_why_metadata(self):
         arch = (ROOT / "ARCHITECTURE.md").read_text(encoding="utf-8")
-        self.assertIn("THEORY / RESEARCH", arch)
-        self.assertIn("OPEN SOURCE", arch)
-        self.assertIn("MONEY / JOBS", arch)
+        self.assertIn("## Goal lanes", arch)
+        self.assertIn("Research, open source, and paid work answer **why**", arch)
+        self.assertIn("`research/`", arch)
+        self.assertIn("`open_source/`", arch)
+        self.assertIn("`money/` and `jobs/`", arch)
 
     def test_open_source_registry_is_separate_from_jobs(self):
         reg = json.loads((ROOT / "open_source" / "contributions" / "index.json").read_text(encoding="utf-8"))
