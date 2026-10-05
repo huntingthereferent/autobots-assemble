@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aeren.local/artifact.schema.json",
+  "title": "Complete Stack Artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "referent",
+    "representation_type",
+    "boundary",
+    "inputs",
+    "interfaces",
+    "outputs",
+    "witness_depth",
+    "provenance"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "referent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "representation_type": {
+      "enum": [
+        "program",
+        "cad_like",
+        "system_landscape",
+        "math_model",
+        "schematic",
+        "bom",
+        "test_measurement",
+        "other"
+      ]
+    },
+    "boundary": {
+      "type": "object",
+      "required": [
+        "inside",
+        "outside"
+      ],
+      "properties": {
+        "inside": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outside": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "status"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "witnessed",
+              "derived",
+              "assumed",
+              "placeholder",
+              "unknown"
+            ]
+          },
+          "value": {},
+          "units": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "parameters": {
+      "type": "object",
+      "default": {}
+    },
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "outputs": {
+      "type": "object"
+    },
+    "assumptions_placeholders": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "witness_depth": {
+      "enum": [
+        "unknown",
+        "researched",
+        "represented",
+        "modeled",
+        "simulated",
+        "designed",
+        "implemented",
+        "tested",
+        "built",
+        "measured",
+        "inspected",
+        "validated",
+        "deployed_operating"
+      ]
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "invalidators": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "downstream": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    }
+  }
+}
