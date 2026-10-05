@@ -191,10 +191,20 @@
     },
     {
       "ability": "Electronics / Embedded Systems",
-      "state": "unwitnessed",
-      "evidence": [],
-      "supports": [],
-      "next_gap": "Need a physical or simulated-to-measured embedded/electronics build."
+      "state": "partial",
+      "evidence": [
+        "foundation/FOUND-0005_embedded-systems-lab.json"
+      ],
+      "supports": [
+        "C firmware state machines",
+        "AVR target toolchain",
+        "GPIO register configuration",
+        "timer interrupts",
+        "software debounce",
+        "target image generation",
+        "deterministic firmware simulation"
+      ],
+      "next_gap": "Physical board execution, electrical measurement, hardware debugging, and circuit/PCB evidence remain unwitnessed."
     },
     {
       "ability": "Mechanical / Fabrication / Manufacturing",
@@ -205,15 +215,15 @@
     }
   ],
   "next_project_selection": {
-    "selected_gap": "Electronics / Embedded Systems",
-    "reason": "The conventional software-side ability categories are now broadly evidenced. Embedded/electronics is the next genuinely different technical layer. A simulator/emulator can establish a first firmware witness, but the category must remain below physical-operation depth until hardware is actually built and measured.",
+    "selected_gap": "Mechanical / Fabrication / Manufacturing",
+    "reason": "This is now the largest completely unwitnessed technical category in the complete-stack map. Unlike the software layers, it should not be closed with simulation alone: the useful witness requires a physical artifact, dimensions/tolerances, build process, measurement, and inspection.",
     "acceptance_boundary": [
-      "Use C/C++ firmware or equivalent low-level target code rather than another Python application.",
-      "Target a defined microcontroller architecture or faithful simulator/emulator.",
-      "Demonstrate deterministic GPIO/timing/state-machine behavior.",
-      "Compile with the actual target toolchain where possible.",
-      "Automate firmware tests or simulation evidence.",
-      "Keep simulated/emulated evidence distinct from physical hardware measurement."
+      "Produce a real physical artifact rather than only CAD or simulation.",
+      "Record material, dimensions, tolerances, tools/process, and acceptance criteria before building.",
+      "Measure the finished artifact against the intended dimensions.",
+      "Preserve failure/correction evidence rather than presenting only the final object.",
+      "Use photos/measurements/inspection as Foundation evidence.",
+      "Do not upgrade CAD-only work to built/measured physical capability."
     ]
   }
 }
