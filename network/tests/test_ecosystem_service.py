@@ -31,7 +31,7 @@ class EcosystemServiceTests(unittest.TestCase):
             service = self.make_service(tmp)
             task = service.add_task({
                 "title": "Review current repo movement",
-                "referent": "Language Network",
+                "referent": "Continuity Layer",
                 "assignee": "james",
             })
 
