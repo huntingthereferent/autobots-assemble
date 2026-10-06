@@ -357,6 +357,8 @@ function render() {
   $("#studio-link").href = `./worksheet.html?learner=${learnerName}${adultMode}`;
   $("#create-worksheet-link").href = `./worksheet.html?learner=${learnerName}${adultMode}`;
   $("#academic-print-link").href = `./worksheet.html?learner=${learnerName}&mode=adult`;
+  const recordLink = $("#learner-record-link");
+  if (recordLink) recordLink.href = `./profile.html?learner=${encodeURIComponent(item.id)}`;
 }
 
 async function load() {
