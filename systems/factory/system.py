@@ -152,6 +152,9 @@ class FactorySystem:
     def events(self) -> tuple[dict[str, Any], ...]:
         return tuple(self._events)
 
+    def orders(self) -> tuple[FactoryOrder, ...]:
+        return tuple(self._orders.values())
+
     def _stage_inputs(self, order: FactoryOrder) -> dict[str, Any]:
         state = order.local_state
         stage = STAGES[order.stage_index]["name"]
