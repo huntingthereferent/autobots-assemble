@@ -18,12 +18,13 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 from systems.education import EducationKernel, Observation
-from systems.missouri_curriculum import path_for_grade
 from schedule_engine import generate_tasks, load_schedule, load_themes, merge_generated, validate_task
 from school_view import build_school_view
 from worksheet_engine import generate_worksheet, validate_saved_worksheet
 from placement import placement_plan
 from weekly_itinerary import generate_all_weeks
+from recordkeeping import build_record_packet
+from missouri_comparison import build_comparison
 
 
 DATA_DIR = Path(
@@ -341,131 +342,34 @@ class Handler(BaseHTTPRequestHandler):
                 if learner is None:
                     self.api_error("learner not found", 404)
                     return
-
-                grade = str(learner.get("grade_context") or "").strip()
-                try:
-                    targets = list(path_for_grade(grade)) if grade else []
-                except ValueError:
-                    targets = []
-
-                progress_records = learner.get("progress_records") or {}
-                learner_tasks = [
-                    task for task in state.get("tasks", [])
-                    if learner_id in task.get("learner_ids", [])
-                ]
-                learner_worksheets = [
-                    item for item in state.get("worksheets", [])
-                    if str(item.get("learner") or "") in {
-                        learner_id,
-                        str(learner.get("display_name") or ""),
-                    }
-                ]
-                kernel = education_kernel()
-                observations = [
-                    asdict(item)
-                    for item in kernel.observations_for_person(learner_id)
-                ]
-                relations = [
-                    asdict(item)
-                    for item in kernel.current_for_person(learner_id)
-                ]
-
-                standards = []
-                for target in targets:
-                    record = progress_records.get(target.code) or {}
-                    linked_tasks = [
-                        task for task in learner_tasks
-                        if str((task.get("meta") or {}).get("curriculum_standard") or "") == target.code
-                    ]
-                    linked_worksheets = []
-                    for item in learner_worksheets:
-                        source = item.get("source") or {}
-                        provenance = source.get("provenance") if isinstance(source, dict) else {}
-                        if isinstance(provenance, dict) and str(provenance.get("standard") or "") == target.code:
-                            linked_worksheets.append(item)
-                    standards.append(
-                        {
-                            "code": target.code,
-                            "unit": target.unit,
-                            "title": target.title,
-                            "description": target.description,
-                            "skill": target.skill,
-                            "status": str(record.get("status") or "not-observed"),
-                            "note": str(record.get("note") or ""),
-                            "updated_at": record.get("updated_at"),
-                            "task_evidence": [
-                                {
-                                    "id": task.get("id"),
-                                    "date": task.get("date"),
-                                    "title": task.get("title"),
-                                    "status": task.get("status"),
-                                }
-                                for task in linked_tasks
-                            ],
-                            "worksheet_evidence": [
-                                {
-                                    "worksheet_id": item.get("worksheet_id"),
-                                    "title": item.get("title"),
-                                }
-                                for item in linked_worksheets
-                            ],
-                        }
-                    )
-
-                completed_tasks = [
-                    task for task in learner_tasks
-                    if task.get("status") == "done"
-                ]
-                recorded_minutes = sum(
-                    int(task.get("planned_minutes") or 0)
-                    for task in completed_tasks
+                packet = build_record_packet(
+                    state=state,
+                    learner=learner,
+                    kernel=education_kernel(),
                 )
-                scheduled_minutes = sum(
-                    int(task.get("planned_minutes") or 0)
-                    for task in learner_tasks
-                )
-                by_category = {}
-                for task in completed_tasks:
-                    category = str(task.get("category") or task.get("title") or "other")
-                    by_category[category] = by_category.get(category, 0) + int(task.get("planned_minutes") or 0)
+            self.send_json({
+                "schema_version": 1,
+                "generated_on": date.today().isoformat(),
+                **packet,
+            })
+            return
 
-                calendar_rows = [
-                    row for row in state.get("calendar", [])
-                    if str(row.get("learner_id") or "") == learner_id
-                ]
-
-                self.send_json(
-                    {
-                        "schema_version": 1,
-                        "generated_on": date.today().isoformat(),
-                        "learner": learner,
-                        "grade_context": grade,
-                        "standards_source": (
-                            "Missouri Learning Standards comparison fixture"
-                            if standards
-                            else "No Missouri comparison map loaded for this grade yet"
-                        ),
-                        "standards": standards,
-                        "placement": learner.get("placement") or {},
-                        "current_relations": relations,
-                        "observations": observations,
-                        "human_notes": learner.get("human_notes") or [],
-                        "tasks": learner_tasks,
-                        "worksheets": learner_worksheets,
-                        "calendar": calendar_rows,
-                        "hours": {
-                            "recorded_completed_minutes": recorded_minutes,
-                            "recorded_completed_hours": round(recorded_minutes / 60, 2),
-                            "scheduled_minutes": scheduled_minutes,
-                            "scheduled_hours": round(scheduled_minutes / 60, 2),
-                            "completed_by_category_minutes": by_category,
-                        },
-                        "record_boundary": (
-                            "Task completion and worksheet completion are evidence records; "
-                            "they do not automatically establish mastery."
-                        ),
-                    }
+        if parsed.path == "/api/comparison":
+            learner_id = parse_qs(parsed.query).get("learner", [""])[0]
+            with LOCK:
+                state = load_state()
+                learner = next(
+                    (
+                        item for item in state.get("learners", [])
+                        if str(item.get("id") or "") == learner_id
+                    ),
+                    None,
                 )
+                if learner is None:
+                    self.api_error("learner not found", 404)
+                    return
+                comparison = build_comparison(state=state, learner=learner)
+            self.send_json(comparison)
             return
 
         if parsed.path == "/api/tasks":
@@ -755,7 +659,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.api_error(str(exc))
             return
 
-        if parsed.path == "/api/progress":
+        if parsed.path in {"/api/comparison/progress", "/api/progress"}:
             try:
                 payload = json_body(self)
                 learner_id = str(payload.get("learner_id") or "").strip()
