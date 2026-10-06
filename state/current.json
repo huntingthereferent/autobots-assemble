@@ -1,18 +1,19 @@
 {
   "schema_version": 1,
-  "preferred_referent": "♻ Running Ecosystem → Durable Recovery",
+  "preferred_referent": "🌐 Running Ecosystem → HTTP Entrance",
   "protocol": "core.handoff",
-  "goal": "Preserve the demonstrated multi-system ecosystem across process restarts: system-local state, outstanding handoffs, origin routing, event/evidence history, and activation projections must recover without duplicating work or silently upgrading evidence.",
+  "goal": "Expose the now-restartable connected-system ecosystem through one bounded HTTP interface so human activations, queue inspection, explicit note/task admission, and handoff results can enter the same durable runtime without bypassing system-local boundaries.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Add durable handoff-spec persistence and orchestrator recovery. Restart a mixed Personal Operations + Online School + Factory run mid-movement, reconstruct outstanding work from persisted state/evidence, continue the factory from the correct stage, preserve human READY handoffs for ohayo, and prove no duplicate handoffs/events are created.",
+  "next_movement": "Build a small persistent ecosystem HTTP service over the demonstrated runtime: activation endpoint (`ohayo` + actor), live handoff/task queue, Personal Operations note/task intake with explicit admission, result-return endpoint, and system/runtime status. Use durable local stores/journal underneath and keep Online School's existing HTTP app as a system-specific surface rather than duplicating its entire UI.",
   "walls": [
-    "Do not redefine A/B as the runtime, orchestrator, recovery mechanism, system interface, factory, school, planner, or activation layer.",
-    "Do not flatten system-local schemas into runtime persistence.",
-    "Do not treat an append-only event log as sufficient recovery if the immutable handoff specification needed to interpret those events is missing.",
-    "Do not regenerate an already-issued physical/human handoff as new work merely because the process restarted.",
-    "Do not lose origin-system routing on restart; returned results must reconcile to the system that emitted the handoff.",
-    "Do not upgrade simulation evidence or school completion evidence during replay/recovery."
+    "Do not redefine A/B as the HTTP service, runtime, orchestrator, recovery mechanism, planner, school, or factory.",
+    "Do not let the HTTP API bypass system-local admission/reconciliation contracts.",
+    "Do not let note creation automatically create a task or handoff.",
+    "Do not let an activation mutate state merely by being requested.",
+    "Do not accept COMPLETE without the handoff's required admissible evidence.",
+    "Do not expose private live Personal Operations state through repository commits.",
+    "Do not duplicate existing Online School UI/state when a shared adapter can connect it."
   ],
   "evidence": [
     "protocols/core/handoff.md",
@@ -50,7 +51,10 @@
     "network/tests/test_orchestrator.py",
     "runtime/examples/ecosystem_loop.py",
     "network/tests/test_full_ecosystem.py",
-    "runtime/examples/full_ecosystem.py"
+    "runtime/examples/full_ecosystem.py",
+    "runtime/journal.py",
+    "runtime/examples/restart_recovery.py",
+    "network/tests/test_recovery.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -58,17 +62,17 @@
     "reason": "The user explicitly backed out of the school implementation layer and generalized the repo into a translation/evidence spine with cross-layer handoffs, then directed implementation of the shared handoff runtime."
   },
   "verified_run": {
-    "benchmark": "Three-System Orchestrated Ecosystem",
+    "benchmark": "Durable Restart Recovery",
     "result": "implemented_and_locally_tested",
     "checks": [
-      "Personal Operations, Online School, and Factory run under one generic orchestrator",
-      "17 live handoffs coexist without sharing local schemas",
-      "five factory handoffs execute automatically through registered simulator actors",
-      "factory reaches complete/shipped while human school/personal work remains READY",
-      "James ohayo compresses full ecosystem state to guided reading + current repo task",
-      "human results route back to the system that emitted the handoff",
-      "completed James handoffs disappear from ohayo without completing unrelated school work",
-      "46 focused runtime/system/orchestration tests passed locally"
+      "runtime journal restores immutable handoff contracts and event-derived state",
+      "READY James handoff survives restart and remains visible through ohayo",
+      "human result persisted before origin reconciliation is applied after restart",
+      "factory result persisted before factory reconciliation is not executed twice",
+      "pending factory handoff reconstructs with the same handoff ID",
+      "mid-factory restart continues from the correct next stage",
+      "recovered factory finishes with exactly five unique handoffs",
+      "51 focused runtime/system/orchestration/recovery tests passed locally"
     ]
   }
 }
