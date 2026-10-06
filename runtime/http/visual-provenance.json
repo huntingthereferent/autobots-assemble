@@ -1,21 +1,25 @@
 {
   "schema_version": 1,
-  "surface_id": "runtime_day_attention",
+  "surface_id": "runtime_continuity_social_hub",
   "surface_path": "runtime/http/index.html",
-  "template_id": "day_attention_ops_v1",
+  "template_id": "continuity_social_hub_v1",
   "preserve": [
-    "three distinct attention streams",
-    "quiet operational density",
-    "current attention before supporting systems",
-    "source-system distinctions"
+    "movement-first hierarchy",
+    "cross-system feed",
+    "thread/reply/return lineage",
+    "source-system provenance",
+    "movement anchors",
+    "time attached to movement rather than replacing it"
   ],
   "local_additions": [
-    "activation word entrance",
-    "notes/plans/tasks management",
-    "live handoff inspection"
+    "ohayo activation entrance",
+    "Calendar movement anchors",
+    "live handoff state",
+    "supporting notes/plans/tasks/reminders",
+    "future Online School, Factory, research, jobs, and other system sources"
   ],
   "deviations": [
-    "The same surface also exposes supporting Personal Operations records below the day-attention projection."
+    "The current implementation still exposes some supporting records in management forms while the unified contextual composer/feed actions are built."
   ],
-  "last_reviewed": "2026-10-05"
+  "last_reviewed": "2026-10-06"
 }
