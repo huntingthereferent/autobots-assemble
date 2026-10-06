@@ -52,7 +52,7 @@ async function loadRecord(learnerId){
 
 function renderStandards(){
   const root=$("#standards-list");
-  const standards=record.standards||[];
+  const standards=comparison?.standards||[];
   root.replaceChildren(...standards.map(target=>{
     const meta=statusMeta(target.status);
     const card=document.createElement("article");
@@ -84,7 +84,7 @@ function renderStandards(){
       ? evidenceCount+" linked task/work evidence item(s)"
       : "No explicitly linked task/work evidence yet";
     card.querySelector("button").onclick=async()=>{
-      const response=await fetch("/api/progress",{
+      const response=await fetch("/api/comparison/progress",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body:JSON.stringify({
@@ -110,9 +110,9 @@ function render(){
     record.grade_context ? "Grade comparison "+record.grade_context : "No grade comparison selected"
   ].filter(Boolean).join(" · ");
   $("#generated-on").textContent=record.generated_on||"";
-  $("#standards-source").textContent=record.standards_source||"";
+  $("#standards-source").textContent=comparison?.source||"";
 
-  const standards=record.standards||[];
+  const standards=comparison?.standards||[];
   $("#count-demonstrated").textContent=standards.filter(x=>x.status==="demonstrated").length;
   $("#count-developing").textContent=standards.filter(x=>x.status==="developing").length;
   $("#recorded-hours").textContent=record.hours?.recorded_completed_hours??0;
@@ -182,7 +182,7 @@ function render(){
     row(item.date+" · "+item.relation,"Current generated week")
   ));
 
-  $("#record-boundary").textContent=record.record_boundary||"";
+  $("#record-boundary").textContent=[record.boundary||"",comparison?.boundary||""].filter(Boolean).join(" ");
 }
 
 $("#learner-select").onchange=event=>{
