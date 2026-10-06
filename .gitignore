@@ -19,3 +19,6 @@ companies/online-school/app/data/
 
 # Personal Operations private/live state
 systems/personal_operations/data/
+
+# Factory System runtime/simulation state
+systems/factory/data/
