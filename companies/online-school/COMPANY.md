@@ -104,3 +104,30 @@ Online School
 ```
 
 Those branches are not pre-claimed. They open when the company actually reaches them.
+
+## Hard layer boundaries
+
+Online School keeps three separate projections that may reference the same learner evidence but do not own one another:
+
+```text
+LEARNING
+current learner evidence
+→ reachable next movement
+→ weekly material / retest
+
+RECORDKEEPING
+what happened
+→ dated activity / hours / work / observations / adult notes
+
+MISSOURI COMPARISON
+recorded learner state
+↔ loaded Missouri grade expectations
+```
+
+Rules:
+
+- The learning engine does not import Missouri standards or recordkeeping logic.
+- Recordkeeping preserves events and evidence; it does not choose future lessons.
+- Missouri comparison is reference/reporting only; changing a comparison checkbox cannot directly generate or advance curriculum.
+- A single printable learner packet may contain both recordkeeping and Missouri comparison, but their authority remains separate.
+- Grade context belongs to profile/reporting context and presentation guardrails; it is not the learner's current educational truth.
