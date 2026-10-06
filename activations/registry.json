@@ -8,7 +8,7 @@
       ],
       "actor_id": "james",
       "referent": "James / current day",
-      "projection": "task_queue",
+      "projection": "day_attention",
       "selectors": {
         "assignee": "james",
         "statuses": [
@@ -21,7 +21,9 @@
       },
       "sources": [
         "runtime handoff state",
-        "connected systems that emit handoffs assigned to james"
+        "connected systems that emit handoffs assigned to james",
+        "explicit day-to-day reminders for james",
+        "calendar relations that apply to james today"
       ],
       "boundaries": [
         "Render tasks, dependencies, and blockers; do not invent a rigid hourly schedule.",

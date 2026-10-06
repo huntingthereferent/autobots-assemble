@@ -20,7 +20,7 @@ The repo may later add legal formation, enrollment, billing, curriculum products
 
 ## Education kernel orientation
 
-Online School is currently an embryo around the education kernel. The present software primarily proves transport, artifacts, handoffs, returned evidence, and reconciliation boundaries.
+Online School is currently an embryo around the education kernel. The shared executable kernel lives at `systems/education/`; Online School is one operating company that can consume it. The present school software primarily proves transport, artifacts, handoffs, returned evidence, and reconciliation boundaries.
 
 A learner label, name, grade, standard, schedule position, or prior model is context. It does not define the learner's current state.
 

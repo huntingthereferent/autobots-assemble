@@ -69,6 +69,26 @@ class VisualProvenanceTests(unittest.TestCase):
         self.assertIn("curriculum", additions)
         self.assertIn("homework", additions)
 
+    def test_day_attention_surface_has_its_own_visual_binding(self):
+        binding = json.loads(
+            (ROOT / "runtime" / "http" / "visual-provenance.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        registry = json.loads((PROVENANCE / "registry.json").read_text(encoding="utf-8"))
+        ids = {item["template_id"] for item in registry["templates"]}
+        self.assertIn(binding["template_id"], ids)
+
+        surface = ROOT / binding["surface_path"]
+        self.assertTrue(surface.is_file())
+        html = surface.read_text(encoding="utf-8")
+        self.assertIn(
+            f'<meta name="visual-template" content="{binding["template_id"]}">',
+            html,
+        )
+        preserve = " ".join(binding["preserve"]).lower()
+        self.assertIn("three distinct attention streams", preserve)
+
     def test_schema_contracts_exist(self):
         for name in ("visual-template.schema.json", "surface-binding.schema.json"):
             schema = json.loads((PROVENANCE / "schema" / name).read_text(encoding="utf-8"))

@@ -51,7 +51,7 @@ Likewise, a plan can contain possible steps without those steps automatically ap
 
 James's `ohayo` activation does not read notes/plans directly.
 
-It sees **live handoffs assigned to James**.
+Personal Operations contributes **live handoffs assigned to James**. The broader `day_attention` projection may also include explicitly admitted reminders and Calendar relations for James. Those remain separate systems rather than being converted into Personal Operations tasks.
 
 Therefore:
 

@@ -147,6 +147,32 @@ class EcosystemServiceTests(unittest.TestCase):
             self.assertEqual(len(service.list_tasks()), 0)
             self.assertEqual(len(service.list_handoffs()), 0)
 
+    def test_calendar_and_reminders_change_attention_without_creating_work(self):
+        from datetime import datetime
+        with TemporaryDirectory() as tmp:
+            service = self.make_service(tmp)
+            service.add_reminder({
+                "text": "Check the day",
+                "actor_id": "james",
+                "referent": "James / current day",
+                "cadence": "daily",
+            })
+            service.add_calendar_event({
+                "title": "School block",
+                "referent": "school / current day",
+                "participants": ["james"],
+                "starts_at": "2026-10-05T09:30:00-05:00",
+            })
+
+            self.assertEqual(service.status()["runtime"]["handoffs"], 0)
+            attention = service.attention(
+                actor_id="james",
+                now=datetime.fromisoformat("2026-10-05T10:00:00-05:00"),
+            )
+            self.assertEqual([x["text"] for x in attention["reminders"]], ["Check the day"])
+            self.assertEqual([x["title"] for x in attention["calendar"]], ["School block"])
+            self.assertEqual(attention["tasks"], [])
+
     def test_unknown_activation_is_not_guessed(self):
         with TemporaryDirectory() as tmp:
             service = self.make_service(tmp)

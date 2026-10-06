@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 Online School — Company Operating Model",
+  "preferred_referent": "📍 Online School — Education Kernel Embryo / Operating Company",
   "company_id": "COMPANY-001",
   "status": "active",
   "result_state": "MOVE",
-  "goal": "Turn Dessy's demonstrated homeschool operating schedule into a reusable online-school company while preserving the distinction between private household evidence, public operating structure, products/services, software, legal formation, and external learner outcomes.",
-  "next_movement": "Use the HTTP task monitor as the first operating surface. Run the current recurring schedule through it, preserve completion state locally, and only open new platform relations when real use exposes them. Keep the task contract broad enough for recurring and one-off activities without narrowing the existing operation.",
+  "goal": "Develop Online School as an operating company around the shared education kernel: repeatedly reground on the person actually evidenced now, preserve prior learner relations as natural provenance, and construct person-specific paths to knowledge without allowing identity, grade, schedule, or prior models to define the learner.",
+  "next_movement": "Use the existing schedule, worksheet, curriculum, handoff, and returned-evidence pipes as test substrates for the shared education kernel. Feed observations into current learner relations, preserve their ancestry, and let later educational movements consume those relations without treating the current Missouri sequence or score thresholds as learner-path intelligence.",
   "walls": [
     "Do not publish minor learner identities or individualized private records in the public company layer.",
     "Do not treat the existing homeschool schedule as proof of accreditation, licensure, incorporation, or external customer outcomes.",
@@ -21,6 +21,9 @@
     "companies/online-school/app/README.md",
     "companies/online-school/app/server.py",
     "companies/online-school/app/schedule_engine.py",
-    "companies/online-school/app/index.html"
+    "companies/online-school/app/index.html",
+    "systems/education/model.py",
+    "systems/education/kernel.py",
+    "systems/missouri_curriculum.py"
   ]
 }

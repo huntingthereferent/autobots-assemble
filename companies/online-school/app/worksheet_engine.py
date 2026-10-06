@@ -285,6 +285,14 @@ def generate_worksheet(payload: dict[str, Any]) -> dict[str, Any]:
         "include_answer_key": bool(payload.get("include_answer_key", True)),
         "passage": _clean(payload.get("passage")) if template == "reading" else "",
         "items": [item.as_dict() for item in items],
+        "provenance": dict(payload.get("provenance") or {}),
+        "generation": {
+            "engine": "online-school/worksheet-engine",
+            "schema_version": 1,
+            "template": template,
+            "seed": seed,
+            "variant": _clean(payload.get("variant")) or "A",
+        },
         "source": {
             key: working_payload.get(key)
             for key in (

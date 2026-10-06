@@ -135,5 +135,59 @@ class WorksheetEngineTests(unittest.TestCase):
         self.assertTrue(all("____" in item["prompt"] for item in fill["items"]))
 
 
+    def test_explicit_within_bounds_result_not_just_operands(self):
+        ws = engine.generate_worksheet({
+            "template": "arithmetic",
+            "math_prompt": "Addition and subtraction within 20 for 1st grade",
+            "question_type": "short-answer",
+            "count": 30,
+            "seed": 17,
+        })
+        import re
+        for item in ws["items"]:
+            prompt = item["prompt"].replace("−", "-")
+            nums = [int(x) for x in re.findall(r"\d+", prompt)]
+            answer = int(item["answer"].split("\n", 1)[0])
+            self.assertLessEqual(answer, 20)
+            self.assertTrue(all(n <= 20 for n in nums[:2]))
+
+    def test_curriculum_specific_constraints_survive_prompt_translation(self):
+        cases = [
+            ("Halves and fourths as equal shares for 1st grade", ("2 equal parts", "4 equal parts")),
+            ("Tell time to the hour and half-hour for 1st grade", (":00", ":30")),
+            ("Coin values penny nickel dime quarter for 1st grade", ("penny", "nickel", "dime", "quarter")),
+            ("Two-step word problems using all four operations for 3rd grade", ("Then", "First")),
+            ("Multiplication as equal groups for 3rd grade", ("equal groups",)),
+            ("Division as sharing and grouping for 3rd grade", ("shared equally",)),
+        ]
+        for prompt, needles in cases:
+            ws = engine.generate_worksheet({
+                "template": "arithmetic",
+                "math_prompt": prompt,
+                "question_type": "short-answer",
+                "count": 6,
+                "seed": 11,
+            })
+            joined = "\n".join(item["prompt"] + "\n" + item["answer"] for item in ws["items"])
+            self.assertTrue(any(needle in joined for needle in needles), prompt)
+
+    def test_generated_worksheet_preserves_originating_provenance(self):
+        provenance = {
+            "curriculum": "Missouri Math Studio",
+            "standard": "1.RA.C.7",
+            "unit": 2,
+            "skill": "addSub20",
+        }
+        ws = engine.generate_worksheet({
+            "template": "arithmetic",
+            "math_prompt": "Addition and subtraction within 20 for 1st grade",
+            "count": 4,
+            "seed": 5,
+            "provenance": provenance,
+        })
+        self.assertEqual(ws["provenance"], provenance)
+        self.assertEqual(ws["generation"]["engine"], "online-school/worksheet-engine")
+        self.assertEqual(ws["generation"]["seed"], 5)
+
 if __name__ == "__main__":
     unittest.main()

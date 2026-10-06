@@ -38,7 +38,7 @@ def infer_spec(p: dict[str,Any]) -> dict[str,Any]:
                 ("subtraction" in prompt or "subtract" in prompt)):
             topic = "mixed"
         if topic != "mixed":
-            checks=[("word problem","word-problems"),("fraction","fractions"),("decimal","decimals"),
+            checks=[("word problem","word-problems"),("equal share","fractions"),("halves","fractions"),("fourths","fractions"),("fraction","fractions"),("decimal","decimals"),
                     ("percent","percent"),("algebra","algebra"),("equation","algebra"),
                     ("geometry","geometry"),("area","geometry"),("perimeter","geometry"),
                     ("time","time"),("clock","time"),("money","money"),("coin","money"),
@@ -55,16 +55,30 @@ def infer_spec(p: dict[str,Any]) -> dict[str,Any]:
     q=clean(p.get("question_type")).lower() or "short-answer"
     q={"single choice":"single-choice","fill blank":"fill-blank"}.get(q,q)
     if q not in QUESTION_TYPES: q="short-answer"
+    constraints={
+        "halves_fourths": "halves and fourths" in prompt or "two or four equal shares" in prompt,
+        "hour_half_hour": "hour and half-hour" in prompt or "hour and half hour" in prompt,
+        "coin_values": "coin values" in prompt or all(x in prompt for x in ("penny","nickel","dime","quarter")),
+        "equal_groups": "equal groups" in prompt,
+        "sharing_grouping": "sharing and grouping" in prompt,
+        "two_step": "two-step" in prompt or "two step" in prompt,
+    }
     return {"grade":grade,"topic":topic,"within":within,"count":count,
             "question_type":q,"difficulty":clean(p.get("level")).lower() or "standard",
-            "prompt":clean(p.get("math_prompt") or p.get("topic"))}
+            "prompt":clean(p.get("math_prompt") or p.get("topic")),
+            "constraints":constraints}
 
 def bounds(grade:int,difficulty:str,within:int|None):
     base={0:(5,5),1:(20,10),2:(100,12),3:(1000,12),4:(10000,12),5:(100000,20),6:(1000000,25)}
     add,mult=base.get(min(grade,6),(1000000,30))
-    if within: add=within
-    if difficulty=="support": add=max(5,add//2); mult=max(5,mult//2)
-    if difficulty=="challenge": add*=2; mult=max(mult,15)
+    explicit_within = within is not None
+    if explicit_within: add=within
+    if difficulty=="support":
+        add=max(5,add//2) if not explicit_within else add
+        mult=max(5,mult//2)
+    if difficulty=="challenge":
+        if not explicit_within: add*=2
+        mult=max(mult,15)
     return add,mult
 
 def item(prompt,answer,why,kind="math",choices=()):
@@ -108,7 +122,8 @@ def arithmetic(topic,grade,difficulty,within,rng):
         ops=["addition","subtraction"]+(["multiplication","division"] if grade>=3 else [])
         topic=rng.choice(ops)
     if topic=="addition":
-        a,b=rng.randint(0,add),rng.randint(0,add)
+        a=rng.randint(0,add)
+        b=rng.randint(0,max(0,add-a)) if within is not None else rng.randint(0,add)
         return item(f"{a} + {b} =",str(a+b),f"Add {a} and {b}.")
     if topic=="subtraction":
         a,b=rng.randint(0,add),rng.randint(0,add); a,b=max(a,b),min(a,b)
@@ -119,7 +134,13 @@ def arithmetic(topic,grade,difficulty,within,rng):
     d=rng.randint(1,max(2,mult)); q=rng.randint(1,max(2,mult)); n=d*q
     return item(f"{n} ÷ {d} =",str(q),f"{d} × {q} = {n}, so {n} ÷ {d} = {q}.")
 
-def fractions(grade,difficulty,rng):
+def fractions(grade,difficulty,rng,constraints=None):
+    constraints=constraints or {}
+    if constraints.get("halves_fourths"):
+        d=rng.choice((2,4)); n=rng.randint(1,d-1); shape=rng.choice(("circle","rectangle"))
+        word="halves" if d==2 else "fourths"
+        return item(f"A {shape} is split into {d} equal parts. {n} part(s) are selected. What fraction of the whole is selected?",
+                    f"{n}/{d}",f"{d} equal parts are {word}; {n} selected part(s) is {n}/{d}.")
     denmax=6 if grade<=3 else (20 if difficulty=="challenge" else 12)
     d=rng.randint(2,denmax)
     if grade<=3:
@@ -166,13 +187,25 @@ def geometry(grade,rng):
     return item(f"A rectangle is {w} by {h} units. What is its perimeter?",str(2*(w+h)),
                 f"Perimeter = 2({w}+{h}) = {2*(w+h)} units.")
 
-def time_problem(rng):
+def time_problem(rng,constraints=None):
+    constraints=constraints or {}
+    if constraints.get("hour_half_hour"):
+        h=rng.randint(1,12); m=rng.choice((0,30))
+        return item(f"Write the time shown in words: {h}:{m:02d}.",
+                    f"{h} o'clock" if m==0 else f"half past {h}",
+                    "Times ending in :00 are on the hour; times ending in :30 are half past the hour.")
     h=rng.randint(1,12); m=rng.choice((0,5,10,15,20,25,30,35,40,45,50,55)); delta=rng.choice((15,30,45,60,90))
     total=(h%12)*60+m+delta; h2=(total//60)%12 or 12; m2=total%60
     return item(f"It is {h}:{m:02d}. What time will it be in {delta} minutes?",f"{h2}:{m2:02d}",
                 f"Add {delta} minutes to {h}:{m:02d}.")
 
-def money(rng):
+def money(rng,constraints=None):
+    constraints=constraints or {}
+    if constraints.get("coin_values"):
+        coin,value=rng.choice((("penny",1),("nickel",5),("dime",10),("quarter",25)))
+        if rng.choice((True,False)):
+            return item(f"How many cents is a {coin} worth?",str(value),f"A {coin} is worth {value} cents.")
+        return item(f"Which coin is worth {value} cents?",coin,f"The {coin} is worth {value} cents.")
     cents=rng.randint(50,1800); price=cents/100; paid=rng.choice((5,10,20))
     while paid*100<cents: paid*=2
     change=paid-price
@@ -200,7 +233,15 @@ def patterns(grade,rng):
     return item(f"What comes next? {', '.join(map(str,seq))}, ___",str(ans),
                 f"The rule is +{step}, so the next number is {ans}.")
 
-def word_problem(grade,difficulty,rng):
+def word_problem(grade,difficulty,rng,constraints=None):
+    constraints=constraints or {}
+    if constraints.get("two_step"):
+        groups=rng.randint(2,8); each=rng.randint(2,10); added=rng.randint(1,20)
+        total=groups*each+added
+        return item(f"There are {groups} boxes with {each} pencils in each box. Then {added} more pencils are added. How many pencils are there altogether?",
+                    str(total),
+                    f"First multiply {groups} × {each} = {groups*each}. Then add {added}: {groups*each} + {added} = {total}.",
+                    kind="response")
     topic=rng.choice(["addition","subtraction"]+(["multiplication","division"] if grade>=3 else []))
     x=arithmetic(topic,grade,difficulty,None,rng); nums=[int(v) for v in re.findall(r"\d+",x["prompt"])]
     name=rng.choice(("Maya","Rose","Jordan","Kai","Luna"))
@@ -212,19 +253,28 @@ def word_problem(grade,difficulty,rng):
 
 def build(spec,rng):
     t,g,d=spec["topic"],spec["grade"],spec["difficulty"]
+    constraints=spec.get("constraints") or {}
+    if t=="multiplication" and constraints.get("equal_groups"):
+        groups=rng.randint(2,10); each=rng.randint(2,10)
+        return item(f"There are {groups} equal groups with {each} objects in each group. How many objects altogether?",
+                    str(groups*each),f"{groups} groups of {each} is {groups} × {each} = {groups*each}.",kind="response")
+    if t=="division" and constraints.get("sharing_grouping"):
+        groups=rng.randint(2,10); each=rng.randint(2,10); total=groups*each
+        return item(f"{total} objects are shared equally among {groups} groups. How many objects are in each group?",
+                    str(each),f"{total} ÷ {groups} = {each}; each group receives {each}.",kind="response")
     if t in {"addition","subtraction","multiplication","division","mixed"}: return arithmetic(t,g,d,spec["within"],rng)
-    if t=="fractions": return fractions(g,d,rng)
+    if t=="fractions": return fractions(g,d,rng,constraints)
     if t=="decimals": return decimals(g,rng)
     if t=="percent": return percent(rng)
     if t=="algebra": return algebra(g,d,rng)
     if t=="geometry": return geometry(g,rng)
-    if t=="time": return time_problem(rng)
-    if t=="money": return money(rng)
+    if t=="time": return time_problem(rng,constraints)
+    if t=="money": return money(rng,constraints)
     if t=="measurement": return measurement(rng)
     if t=="place-value": return place_value(g,rng)
     if t=="comparison": return comparison(g,rng)
     if t=="patterns": return patterns(g,rng)
-    return word_problem(g,d,rng)
+    return word_problem(g,d,rng,constraints)
 
 def generate_math(payload:dict[str,Any],rng:Random):
     spec=infer_spec(payload); out=[]; seen=set(); tries=0

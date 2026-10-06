@@ -129,7 +129,7 @@ def run_activation(
     Activations select and render existing handoffs. They do not manufacture
     unsupported work or mutate handoff state.
     """
-    if route.projection != "task_queue":
+    if route.projection not in {"task_queue", "day_attention"}:
         raise ValueError(f"unsupported projection: {route.projection}")
 
     items = []
@@ -154,9 +154,14 @@ def run_activation(
         )
     )
 
+    note = (
+        "Activation rendered existing attention; no new obligations were inferred."
+        if route.projection == "day_attention"
+        else "Activation rendered existing handoffs; no new work was inferred."
+    )
     return ActivationResult(
         route=route,
         surface=surface,
         items=tuple(items),
-        note="Activation rendered existing handoffs; no new work was inferred.",
+        note=note,
     )

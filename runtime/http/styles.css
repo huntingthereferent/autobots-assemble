@@ -19,7 +19,9 @@ p { margin-top: 0; }
 .primary { background: #1f4fd6; color: white; min-width: 110px; }
 .secondary { background: #eef2ff; color: #253c9d; }
 .admit { background: #171a1f; color: #fff; }
-.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 10px; margin: 18px 0; }
+.attention-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 16px; }
+.attention-grid h3 { margin: 0; font-size: .88rem; color: #4b5563; }
 .stat, .panel { background: white; border: 1px solid #e2e5e9; border-radius: 16px; }
 .stat { padding: 14px; }
 .stat span { display: block; color: #6b7280; font-size: .78rem; }
@@ -44,7 +46,7 @@ textarea { min-height: 76px; resize: vertical; }
 .error { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: #8f1d1d; color: white; padding: 10px 14px; border-radius: 10px; }
 @media (max-width: 760px) {
   .hero { align-items: stretch; flex-direction: column; }
-  .grid { grid-template-columns: 1fr; }
+  .grid, .attention-grid { grid-template-columns: 1fr; }
   .wide { grid-column: auto; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .task-form { grid-template-columns: 1fr; }

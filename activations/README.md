@@ -23,10 +23,14 @@ If the same surface means different things for different people, the actor/conte
     "ohayo"
     → James
     → current day
-    → task queue
-    → handoffs currently assigned to James
+    → day attention
+    → live handoffs assigned to James
+      + explicit reminders due for James
+      + Calendar relations applying to James today
 
-The default projection contains tasks and their live states/dependencies.
+The default projection is a **day-attention** view: live tasks/handoffs assigned to James plus explicit recurring reminders that are due for him. It remains a projection over existing state and does not invent obligations.
+
+The same day-attention projection can be polled without speaking the activation word, which gives a notification/reminder surface something stable to check continuously. `ohayo` is the human-language entrance into that same state.
 
 It does **not** manufacture an hourly calendar because James's current day-to-day contract is task-oriented: his timing is organized around the movement of the rest of the household/system.
 

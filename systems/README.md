@@ -23,8 +23,11 @@ system reconciles its own local state
 This allows unlike systems to remain unlike internally while sharing one cross-boundary carrier.
 
 Examples already present in the ecosystem include:
-- Online School — education operation and schedule/task state;
+- Education Kernel — present learner relations regrounded from observations while prior relations remain natural provenance;
+- Online School — education operation and schedule/task/artifact state;
 - Personal Operations — notes, tasks, and plans;
+- Calendar — dated/recurring time relations without automatically becoming work;
+- Day-to-Day — person-facing attention projection over live work, explicit reminders, and Calendar;
 - Factory System — order/stage state that generates the next handoff after each reconciliation;
 - simulated factory witnesses — production state/events;
 - future company, research, city, software, machine, or household systems.

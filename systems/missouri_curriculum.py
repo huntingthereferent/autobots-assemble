@@ -107,6 +107,11 @@ def target_by_code(code: str) -> CurriculumTarget:
 
 
 def next_target(current_code: str) -> CurriculumTarget | None:
+    """Return the next item in the current curriculum sequencing fixture.
+
+    This proves curriculum motion through the pipes. It is not the education
+    kernel's learner-path decision rule and must not be treated as one.
+    """
     current = target_by_code(current_code)
     path = path_for_grade(current.grade)
     for index, target in enumerate(path):
@@ -183,6 +188,12 @@ def reconcile_homework(
     total: int,
     completed: bool = True,
 ) -> dict[str, Any]:
+    """Pipe-test reconciliation policy, not a mastery model.
+
+    Percentage thresholds make movement observable in the current embryo.
+    The education kernel should later reconcile relation-level observations
+    rather than promote this score policy into learner intelligence.
+    """
     if total <= 0 or correct < 0 or correct > total:
         raise ValueError("invalid homework score")
     accuracy = correct / total

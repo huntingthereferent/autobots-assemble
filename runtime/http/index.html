@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="visual-template" content="day_attention_ops_v1">
   <title>Connected Systems</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
@@ -22,12 +23,25 @@
     <section class="activation panel">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Activation</p>
+          <p class="eyebrow">Day attention</p>
           <h2>James / current day</h2>
         </div>
-        <span id="activation-note"></span>
+        <span id="activation-note">Live work + Calendar + admitted reminders</span>
       </div>
-      <div id="ohayo-list" class="stack"></div>
+      <div class="attention-grid">
+        <div>
+          <h3>Work in front</h3>
+          <div id="attention-tasks" class="stack"></div>
+        </div>
+        <div>
+          <h3>Calendar</h3>
+          <div id="attention-calendar" class="stack"></div>
+        </div>
+        <div>
+          <h3>Reminders</h3>
+          <div id="attention-reminders" class="stack"></div>
+        </div>
+      </div>
     </section>
 
     <section class="grid">
@@ -54,6 +68,32 @@
           <button class="secondary">Add plan</button>
         </form>
         <div id="plans" class="stack"></div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div><p class="eyebrow">Time truth</p><h2>Calendar</h2></div>
+        </div>
+        <form id="calendar-form" class="form">
+          <input name="title" required placeholder="Event / deadline / routine">
+          <input name="referent" required placeholder="Referent">
+          <input name="starts_at" type="datetime-local">
+          <button class="secondary">Add calendar relation</button>
+        </form>
+        <div id="calendar-events" class="stack"></div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div><p class="eyebrow">Explicit attention</p><h2>Reminders</h2></div>
+        </div>
+        <form id="reminder-form" class="form">
+          <input name="text" required placeholder="What should stay in front?">
+          <input name="referent" required placeholder="Referent">
+          <input name="local_time" type="time">
+          <button class="secondary">Add daily reminder</button>
+        </form>
+        <div id="reminders" class="stack"></div>
       </article>
 
       <article class="panel wide">

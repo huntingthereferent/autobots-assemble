@@ -1,8 +1,8 @@
-# Online School HTTP Task Monitor
+# Online School Local Operating Surface
 
-A deliberately small first online delivery surface for **Online School**.
+The first local HTTP website/API for **Online School**.
 
-It is a local HTTP website/API whose job is to carry the entire school schedule as tasks without forcing the schedule into a narrow UI.
+It began as a deliberately small task monitor and now also carries worksheet artifacts and curriculum-motion proofs. It remains an operating surface, not the education kernel itself. The shared education kernel lives in `systems/education/`; this app supplies school-shaped activities/artifacts/handoffs that can later consume and return learner evidence.
 
 ## What it does
 
@@ -108,7 +108,7 @@ That file is intentionally ignored by Git. The committed defaults use anonymous 
 
 ## Boundary
 
-This is a task monitor / HTTP interface.
+This is a local school operating / artifact interface.
 
 It is not yet:
 - an LMS;

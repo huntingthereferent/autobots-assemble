@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
@@ -77,6 +78,23 @@ class Handler(BaseHTTPRequestHandler):
 
                 if parsed.path == "/api/tasks":
                     self.send_json({"tasks": SERVICE.list_tasks()})
+                    return
+
+                if parsed.path == "/api/reminders":
+                    self.send_json({"reminders": SERVICE.list_reminders()})
+                    return
+
+                if parsed.path == "/api/calendar":
+                    self.send_json({"events": SERVICE.list_calendar_events()})
+                    return
+
+                if parsed.path == "/api/attention":
+                    actor = query.get("actor", [""])[0]
+                    if not actor:
+                        raise ValueError("actor is required")
+                    at = query.get("at", [""])[0]
+                    now = datetime.fromisoformat(at) if at else None
+                    self.send_json(SERVICE.attention(actor_id=actor, now=now))
                     return
 
                 if parsed.path == "/api/handoffs":
@@ -168,6 +186,37 @@ class Handler(BaseHTTPRequestHandler):
                         SERVICE.add_task(payload),
                         201,
                     )
+                    return
+
+                if parsed.path == "/api/reminders":
+                    self.send_json(
+                        SERVICE.add_reminder(payload),
+                        201,
+                    )
+                    return
+
+                if parsed.path == "/api/calendar":
+                    self.send_json(
+                        SERVICE.add_calendar_event(payload),
+                        201,
+                    )
+                    return
+
+                if (
+                    parsed.path.startswith("/api/reminders/")
+                    and parsed.path.endswith("/ack")
+                ):
+                    reminder_id = parsed.path.removeprefix(
+                        "/api/reminders/"
+                    ).removesuffix("/ack").strip("/")
+                    local_date = str(payload.get("local_date") or "").strip()
+                    if not local_date:
+                        raise ValueError("local_date is required")
+                    SERVICE.acknowledge_reminder(
+                        reminder_id,
+                        local_date=local_date,
+                    )
+                    self.send_json({"acknowledged": reminder_id})
                     return
 
                 if (

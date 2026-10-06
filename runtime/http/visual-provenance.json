@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "surface_id": "runtime_day_attention",
+  "surface_path": "runtime/http/index.html",
+  "template_id": "day_attention_ops_v1",
+  "preserve": [
+    "three distinct attention streams",
+    "quiet operational density",
+    "current attention before supporting systems",
+    "source-system distinctions"
+  ],
+  "local_additions": [
+    "activation word entrance",
+    "notes/plans/tasks management",
+    "live handoff inspection"
+  ],
+  "deviations": [
+    "The same surface also exposes supporting Personal Operations records below the day-attention projection."
+  ],
+  "last_reviewed": "2026-10-05"
+}

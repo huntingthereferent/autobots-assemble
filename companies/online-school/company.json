@@ -18,16 +18,18 @@
   ],
   "current_service_shape": [
     "recurring instructional schedule",
-    "reading/writing/math/science/art",
-    "history and physical education cadence",
-    "weekly hands-on science project",
-    "theme-based weekly learning",
-    "instructional-time tracking"
+    "worksheet/artifact generation",
+    "school-task to shared-handoff translation",
+    "returned evidence and reconciliation proof",
+    "curriculum-linked motion fixtures",
+    "shared education-kernel observation/regrounding proof",
+    "instructional-time planning"
   ],
   "next_valid_movements": [
-    "separate curriculum from schedule",
-    "define learner/parent/operator interfaces",
-    "derive first online delivery surface from the existing schedule",
+    "feed real educational observations into the shared education kernel without treating identity/grade as learner state",
+    "let current learner relations select among multiple educational actuators rather than assuming worksheet output",
+    "connect curriculum/standards as reachable obligations rather than a fixed learner path",
+    "preserve cross-layer provenance from learner relation through activity/artifact/handoff/evidence and back",
     "define business/legal/privacy boundaries before public enrollment or sale"
   ]
 }

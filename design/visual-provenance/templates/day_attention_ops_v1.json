@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "template_id": "day_attention_ops_v1",
+  "name": "Day Attention Operations",
+  "layer": "person_day_attention",
+  "status": "approved",
+  "intent": "A calm person-facing operational surface that keeps current work, calendar relations, and explicit reminders visible without flattening them into one task list.",
+  "witnesses": [
+    {
+      "kind": "internal",
+      "source": "runtime/http/index.html",
+      "observed_on": "2026-10-05",
+      "notes": "Internal visual witness established with the first Day-to-Day implementation. Preserve separation of attention streams and restrained operational density."
+    }
+  ],
+  "grammar": {
+    "layout": {
+      "shape": "current attention first, supporting local systems below",
+      "grouping": "work, calendar, and reminders remain distinct",
+      "primary_action": "activation remains available without being required for passive visibility",
+      "refresh": "quiet automatic refresh; no disruptive animation"
+    },
+    "hierarchy": {
+      "strength": "clear",
+      "sequence": [
+        "current attention",
+        "context systems",
+        "explicit work",
+        "shared carrier"
+      ],
+      "marketing_weight": "none"
+    },
+    "density": "medium-compact",
+    "controls": {
+      "treatment": "conventional forms and buttons",
+      "choice_count": "small and explicit",
+      "advanced_options": "defer until the relation requires them"
+    },
+    "surface": {
+      "decoration": "restrained",
+      "cards": "only for meaningful system/group boundaries",
+      "radius": "moderate",
+      "shadows": "minimal",
+      "color": "neutral base with functional accent"
+    },
+    "typography": {
+      "tone": "plain operational",
+      "hierarchy": "current attention and time relations scan before supporting detail"
+    },
+    "motion": {
+      "default": "quiet",
+      "rule": "refresh state without decorative motion"
+    }
+  },
+  "avoid": [
+    "gamified productivity scores",
+    "streaks or guilt-inducing completion language",
+    "one undifferentiated task feed",
+    "ornamental gradients or glow",
+    "notification noise without an admitted reminder or source relation",
+    "calendar density that implies every relation is a rigid appointment"
+  ],
+  "adaptation_rules": [
+    "Keep Calendar as time truth and Day-to-Day as attention; do not visually merge their state models.",
+    "Keep source-system work identifiable rather than rewriting everything as a local task.",
+    "Make current attention visible without requiring an activation click.",
+    "Activation words enter the same state rather than creating a parallel view.",
+    "Prefer readable time and referent context over decorative status treatment."
+  ],
+  "review": {
+    "confidence": "high",
+    "notes": "Approved initial internal visual template for the person-facing day-attention layer."
+  }
+}

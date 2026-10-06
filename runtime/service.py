@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -10,6 +11,8 @@ from runtime.handoff import EvidenceRecord, ExecutionResult
 from runtime.journal import RuntimeJournal
 from runtime.orchestrator import Orchestrator
 from systems.bindings import personal_operations_binding
+from systems.calendar import CalendarEvent, CalendarStore
+from systems.day_to_day import DayToDayStore, Reminder, attention_projection
 from systems.personal_operations import (
     Note,
     PersonalOperationsStore,
@@ -41,6 +44,12 @@ class EcosystemService:
 
         self.personal = PersonalOperationsStore(
             self.data_dir / "personal_operations.jsonl"
+        )
+        self.day_to_day = DayToDayStore(
+            self.data_dir / "day_to_day.jsonl"
+        )
+        self.calendar = CalendarStore(
+            self.data_dir / "calendar.jsonl"
         )
         self.runtime = HandoffRuntime(
             event_store=RuntimeJournal(
@@ -76,6 +85,12 @@ class EcosystemService:
                         for task in self.personal.tasks()
                         if self.personal.task_result(task.task_id) is not None
                     ),
+                },
+                "day-to-day": {
+                    "reminders": len(self.day_to_day.reminders()),
+                },
+                "calendar": {
+                    "events": len(self.calendar.events()),
                 }
             },
             "runtime": {
@@ -169,6 +184,61 @@ class EcosystemService:
             )
         return rows
 
+    def add_reminder(self, payload: dict[str, Any]) -> dict[str, Any]:
+        reminder = self.day_to_day.add_reminder(
+            Reminder.create(
+                str(payload.get("text") or ""),
+                actor_id=str(payload.get("actor_id") or ""),
+                referent=str(payload.get("referent") or ""),
+                cadence=str(payload.get("cadence") or "daily"),
+                weekdays=tuple(int(x) for x in payload.get("weekdays") or ()),
+                local_time=str(payload.get("local_time") or ""),
+                provenance=tuple(str(x) for x in payload.get("provenance") or ()),
+            )
+        )
+        return asdict(reminder)
+
+    def list_reminders(self) -> list[dict[str, Any]]:
+        return [asdict(item) for item in self.day_to_day.reminders()]
+
+    def acknowledge_reminder(self, reminder_id: str, *, local_date: str) -> None:
+        self.day_to_day.acknowledge(reminder_id, local_date=local_date)
+
+    def add_calendar_event(self, payload: dict[str, Any]) -> dict[str, Any]:
+        event = self.calendar.add(
+            CalendarEvent.create(
+                str(payload.get("title") or ""),
+                referent=str(payload.get("referent") or ""),
+                participants=tuple(str(x) for x in payload.get("participants") or ()),
+                kind=str(payload.get("kind") or "event"),
+                starts_at=str(payload.get("starts_at") or ""),
+                ends_at=str(payload.get("ends_at") or ""),
+                due_at=str(payload.get("due_at") or ""),
+                recurrence=str(payload.get("recurrence") or "none"),
+                weekdays=tuple(int(x) for x in payload.get("weekdays") or ()),
+                notes=str(payload.get("notes") or ""),
+                provenance=tuple(str(x) for x in payload.get("provenance") or ()),
+            )
+        )
+        return asdict(event)
+
+    def list_calendar_events(self) -> list[dict[str, Any]]:
+        return [asdict(item) for item in self.calendar.events()]
+
+    def attention(self, *, actor_id: str, now: datetime | None = None) -> dict[str, Any]:
+        now = now or datetime.now().astimezone()
+        pairs = [
+            (self.runtime.get(handoff_id), state)
+            for handoff_id, state in self.runtime.snapshot().items()
+        ]
+        return attention_projection(
+            actor_id=actor_id,
+            now=now,
+            handoffs=pairs,
+            reminders=self.day_to_day.due_reminders(actor_id, now=now),
+            calendar_events=self.calendar.events_for(actor_id, now=now),
+        )
+
     def _handoff_view(self, handoff_id: str, state=None) -> dict[str, Any]:
         handoff = self.runtime.get(handoff_id)
         state = state or self.runtime.state(handoff_id)
@@ -236,13 +306,21 @@ class EcosystemService:
                 for handoff_id, state in self.runtime.snapshot().items()
             ],
         )
-        return {
+        payload = {
             "activation_id": route.activation_id,
             "referent": route.referent,
             "projection": route.projection,
             "items": list(result.items),
             "note": result.note,
         }
+        if route.projection == "day_attention":
+            attention = self.attention(actor_id=actor_id)
+            payload["items"] = attention["tasks"]
+            payload["tasks"] = attention["tasks"]
+            payload["reminders"] = attention["reminders"]
+            payload["calendar"] = attention["calendar"]
+            payload["local_date"] = attention["local_date"]
+        return payload
 
     def return_result(
         self,

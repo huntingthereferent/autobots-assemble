@@ -28,7 +28,7 @@ class ActivationTests(unittest.TestCase):
         route = self.registry.resolve("ohayo", actor_id="james")
         self.assertIsNotNone(route)
         self.assertEqual(route.activation_id, "ACT-JAMES-OHAYO-001")
-        self.assertEqual(route.projection, "task_queue")
+        self.assertEqual(route.projection, "day_attention")
 
         self.assertIsNone(self.registry.resolve("ohayo", actor_id="dessy"))
         self.assertIsNone(self.registry.resolve("hello", actor_id="james"))
@@ -117,7 +117,7 @@ class ActivationTests(unittest.TestCase):
         route = self.registry.resolve("ohayo", actor_id="james")
         result = run_activation(route, surface="ohayo", handoffs=[])
         self.assertEqual(result.items, ())
-        self.assertIn("no new work was inferred", result.note.lower())
+        self.assertIn("no new obligations were inferred", result.note.lower())
 
 
 if __name__ == "__main__":

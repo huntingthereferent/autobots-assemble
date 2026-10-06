@@ -211,12 +211,20 @@ GET  /api/tasks
 POST /api/tasks
 POST /api/tasks/{task_id}/admit
 
+GET  /api/reminders
+POST /api/reminders
+POST /api/reminders/{reminder_id}/ack
+
+GET  /api/calendar
+POST /api/calendar
+GET  /api/attention?actor=james&at=<optional ISO datetime>
+
 GET  /api/handoffs?actor=&status=
 POST /api/handoffs/{handoff_id}/result
 
 GET  /api/activate?surface=ohayo&actor=james
 ```
 
-The HTTP layer does not create a parallel model. It calls the existing Personal Operations, activation, orchestrator, runtime, evidence, and recovery contracts.
+The HTTP layer does not create a parallel model. It calls the existing Personal Operations, Calendar, Day-to-Day, activation, orchestrator, runtime, evidence, and recovery contracts.
 
-The included dashboard exposes Notes, Plans, Tasks, Live Handoffs, and the `ohayo` projection while preserving their boundaries.
+The included dashboard exposes current Day-to-Day attention (live work, Calendar, explicit reminders), Notes, Plans, Tasks, and Live Handoffs while preserving their boundaries. The attention view refreshes quietly and `ohayo` enters that same state explicitly rather than creating a second model.

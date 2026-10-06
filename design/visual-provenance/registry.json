@@ -6,6 +6,12 @@
       "layer": "worksheet_generation",
       "status": "approved",
       "path": "design/visual-provenance/templates/notegpt_math_generator_v1.json"
+    },
+    {
+      "template_id": "day_attention_ops_v1",
+      "layer": "person_day_attention",
+      "status": "approved",
+      "path": "design/visual-provenance/templates/day_attention_ops_v1.json"
     }
   ]
 }
