@@ -91,3 +91,15 @@ It is not yet:
 - a hosted multi-tenant service.
 
 Those relations can open later if the company actually requires them.
+
+## Shared handoff boundary
+
+Online School keeps its own task schema.
+
+`handoff_adapter.py` translates a school task into the shared runtime carrier without replacing the school's local model.
+
+The current schedule explicitly marks the existing guided-reading block with `responsible_actor: james`. That means the generated school task can become a handoff assigned to James while learner identities remain anonymized in the public company layer.
+
+A returned handoff state is translated back into a **school task patch**. The school remains responsible for applying/persisting its local state.
+
+Task completion does not automatically establish learner mastery.
