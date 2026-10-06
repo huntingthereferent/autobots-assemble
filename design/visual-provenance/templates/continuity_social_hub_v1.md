@@ -30,3 +30,21 @@ The Continuity Layer translates those relations into a system-neutral hub rather
 ## Avoid
 
 No school-first homepage, KPI dashboard, subsystem-card grid as the dominant structure, engagement metrics, follower mechanics, streaks, notification spam, or flattening all entries into tasks.
+
+## Identity entrance
+
+The main social hub may expose familiar provider entrances such as Google, Apple, GitHub, and Microsoft, but visually they are entrances into one Continuity identity rather than separate account types.
+
+Preserve:
+
+- one local person identity after authentication;
+- provider icon/name only at the entrance and linked-account settings;
+- return to the same movement front after login;
+- explicit account linking rather than silent merging.
+
+Avoid:
+
+- a provider-branded homepage;
+- treating Google/GitHub/etc. as separate user silos;
+- using handles or mutable email as the durable person key;
+- interrupting movement with unnecessary profile setup after an existing linked identity is resolved.
