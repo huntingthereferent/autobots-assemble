@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "template_id": "continuity_social_hub_v1",
+  "name": "Continuity Social Hub",
+  "layer": "ecosystem_social_movement",
+  "status": "approved",
+  "intent": "A whole-ecosystem social hub organized around movement between referents, people, systems, and time rather than around any one application such as school, tasks, or calendar.",
+  "witnesses": [
+    {
+      "kind": "external",
+      "source": "X conversations/replies/mentions/reposts",
+      "observed_on": "2026-10-06",
+      "notes": "Reply, mention, quote/repost, and thread mechanics expose OPEN/PING/REPLY/ECHO/BRANCH relations."
+    },
+    {
+      "kind": "external",
+      "source": "Reddit comments/reposts",
+      "observed_on": "2026-10-06",
+      "notes": "Root posts, nested discussion, and reposting preserve source while opening a new audience/context."
+    },
+    {
+      "kind": "external",
+      "source": "Slack Activity/threads/mentions/reactions",
+      "observed_on": "2026-10-06",
+      "notes": "One activity surface aggregates unlike movement types while preserving their distinctions and source context."
+    },
+    {
+      "kind": "external",
+      "source": "GitHub Discussions",
+      "observed_on": "2026-10-06",
+      "notes": "Open conversations can remain conversational or move into scoped work without requiring the conversation surface to become the work system."
+    },
+    {
+      "kind": "internal",
+      "source": "language/words/movement_anchors.json",
+      "observed_on": "2026-10-06",
+      "notes": "Internal movement bank supplies platform-neutral movement anchors."
+    }
+  ],
+  "grammar": {
+    "layout": {
+      "shape": "feed-first social hub with persistent movement rail, current front, threaded/cross-boundary movement, and supporting sources below",
+      "primary_axis": "movement chronology and relation",
+      "source_treatment": "source systems remain visible as provenance labels, not page silos",
+      "branching": "child movement may visually indent or thread while retaining parent context",
+      "return_paths": "replies, reopened items, and returned handoffs should visibly point back to their referent"
+    },
+    "hierarchy": {
+      "sequence": [
+        "movement rail",
+        "current front/feed",
+        "active threads and returns",
+        "time anchors",
+        "source/system context"
+      ],
+      "strength": "strong",
+      "marketing_weight": "none"
+    },
+    "density": "social-feed medium",
+    "controls": {
+      "composer": "single contextual composer may open notes/tasks/calendar/handoffs by selected movement type rather than separate app dashboards",
+      "filters": "movement type, source system, actor, unread/current",
+      "quick_actions": "reply, react, branch, handoff, resolve, reopen"
+    },
+    "surface": {
+      "decoration": "restrained social/product UI",
+      "cards": "feed entries rather than dashboard metric cards",
+      "radius": "moderate",
+      "shadows": "minimal",
+      "color": "neutral base; movement/source chips carry restrained functional differentiation"
+    },
+    "typography": {
+      "tone": "conversation first, operational underneath",
+      "hierarchy": "actor/referent/movement/time before system implementation detail"
+    },
+    "motion": {
+      "default": "quiet live-feed updates",
+      "rule": "new movement may enter the feed without decorative animation or attention theft"
+    }
+  },
+  "avoid": [
+    "school-first navigation on the ecosystem homepage",
+    "dashboard-first KPI layout",
+    "one card per subsystem as the primary information architecture",
+    "flattening every movement into a task",
+    "notification red-dot noise without an admitted relation",
+    "social engagement scores, follower counts, streaks, or gamification",
+    "hiding source provenance when movement crosses systems",
+    "ornamental AI gradients, glow, or excessive glass effects"
+  ],
+  "adaptation_rules": [
+    "Treat Online School, Personal Operations, Calendar, Factory, research, jobs, and future systems as sources into the same movement hub.",
+    "Preserve source-system ownership even when entries share one feed.",
+    "Use the movement anchor bank as the interaction grammar.",
+    "Calendar contributes time anchors; it does not become the homepage organizing model.",
+    "A discussion may become a task/handoff/issue-like object only through an explicit movement such as HANDOFF.",
+    "SILENCE is displayable as an observed absence window but must not be styled as blame or failure.",
+    "REOPEN should reconnect to prior lineage rather than render as an unrelated new item."
+  ],
+  "review": {
+    "confidence": "high",
+    "notes": "Main ecosystem surface provenance. Replaces day_attention_ops_v1 for runtime/http only; the older day-attention template remains valid for narrower person-day surfaces."
+  }
+}
