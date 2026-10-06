@@ -1,18 +1,19 @@
 {
   "schema_version": 1,
-  "preferred_referent": "🗒 Personal Operations → Shared Handoffs",
+  "preferred_referent": "🏭 Connected Systems → Running Handoff Ecosystem",
   "protocol": "core.handoff",
-  "goal": "Connect a persistent personal note/task/plan system to the cross-layer runtime while preserving the distinction between remembered context, plans, executable tasks, and admitted handoffs. Activation words project live handoffs rather than reading private notes/plans as obligations.",
+  "goal": "Run unlike systems with their own local state through one shared cross-layer handoff carrier: Personal Operations, Online School, and a state-driven Factory System now emit/reconcile handoffs without collapsing their local schemas.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Connect additional real systems to the same boundary: Online School should emit/consume shared handoffs instead of maintaining an isolated task model, then use those handoffs alongside Personal Operations in activation projections such as James's ohayo.",
+  "next_movement": "Derive the common system-adapter interface from the demonstrated systems and build a generic orchestrator that can ask registered systems for ready handoffs, route them through eligible actors/adapters, reconcile results back to the originating system, and preserve all event/evidence boundaries.",
   "walls": [
-    "Do not redefine A/B as the activation layer, personal planner, task manager, or handoff runtime.",
-    "Do not let an activation word invent tasks or mutate state merely by being spoken.",
-    "Do not turn James's ohayo route into a rigid hourly schedule; its current projection is tasks/dependencies/blockers only.",
-    "Do not collapse notes, tasks, plans, and handoffs into one record type; their relations differ.",
-    "Do not expose other actors' tasks through an actor-scoped activation unless an explicit shared relation admits them.",
-    "Preserve the existing handoff evidence/provenance contract beneath every activation projection."
+    "Do not redefine A/B as the runtime, orchestrator, system interface, factory, school, planner, or activation layer.",
+    "Do not flatten system-local schemas into the shared Handoff carrier; the carrier exists at boundaries.",
+    "Do not let activations manufacture work; they project supported live handoffs.",
+    "Do not promote notes/plans to tasks or tasks to handoffs without the relevant explicit admission.",
+    "Do not treat school task completion as learner mastery without separate evidence.",
+    "Do not upgrade factory simulation evidence to physical/measurement evidence.",
+    "Do not hard-code downstream factory handoffs before the preceding system state has reconciled."
   ],
   "evidence": [
     "protocols/core/handoff.md",
@@ -35,7 +36,16 @@
     "systems/personal_operations/model.py",
     "systems/personal_operations/store.py",
     "systems/personal_operations/example_james_day.py",
-    "network/tests/test_personal_operations.py"
+    "network/tests/test_personal_operations.py",
+    "companies/online-school/app/handoff_adapter.py",
+    "runtime/examples/cross_system_ohayo.py",
+    "network/tests/test_online_school_handoffs.py",
+    "systems/factory/README.md",
+    "systems/factory/model.py",
+    "systems/factory/system.py",
+    "systems/factory/simulated.py",
+    "systems/factory/example_run.py",
+    "network/tests/test_factory_system.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -43,16 +53,19 @@
     "reason": "The user explicitly backed out of the school implementation layer and generalized the repo into a translation/evidence spine with cross-layer handoffs, then directed implementation of the shared handoff runtime."
   },
   "verified_run": {
-    "benchmark": "Personal Operations → Activation",
-    "result": "implemented_pending_latest_ci",
+    "benchmark": "Connected Systems / Running Factory",
+    "result": "implemented_and_locally_tested",
     "checks": [
-      "notes remain notes by default",
-      "plan steps do not automatically become tasks",
-      "unadmitted tasks remain local",
-      "only explicit task admission creates a shared Handoff",
-      "one local task cannot be admitted twice",
-      "admitted James task flows through runtime to ohayo",
-      "append-only JSONL state can be replayed without collapsing record types"
+      "Personal Operations and Online School retain separate local schemas",
+      "both systems can emit the same shared Handoff carrier",
+      "James ohayo joins school and personal handoffs into one task projection",
+      "Online School completion maps back to a local task patch without claiming mastery",
+      "Factory System generates each next handoff from changed local order state",
+      "blocked factory result does not advance stage",
+      "factory state/event history is append-only and replayable",
+      "10 simulated units move supply → machine → inspect → assemble → ship",
+      "simulation evidence remains marked simulated in both runtime and factory reconciliation",
+      "35 focused cross-system tests passed locally"
     ]
   }
 }
