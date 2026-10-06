@@ -29,6 +29,12 @@
       "source": "GitHub Discussions",
       "observed_on": "2026-10-06",
       "notes": "Open conversations can remain conversational or move into scoped work without requiring the conversation surface to become the work system."
+    },
+    {
+      "kind": "external",
+      "source": "Yahoo! JAPAN homepage portal",
+      "observed_on": "2026-10-06",
+      "notes": "Dense multi-domain portal: persistent search, broad service directory, news, personal status, weather/calendar/transit, sports, and trending modules coexist on one homepage without collapsing into one application."
     }
   ],
   "grammar": {
@@ -37,16 +43,23 @@
       "primary_axis": "feed chronology and conversation/thread relation",
       "source_treatment": "source systems appear as identity/context on feed entries, not as separate dashboard cards",
       "branching": "replies and threads visually retain parent context",
-      "return_paths": "notifications/activity reopen the relevant conversation in context"
+      "return_paths": "notifications/activity reopen the relevant conversation in context",
+      "portal": {
+        "shape": "portal breadth around a central/current surface",
+        "service_access": "many domain entrances remain directly reachable from home",
+        "module_behavior": "unlike domains may use distinct modules while retaining a common page shell",
+        "search": "global search remains prominent as a cross-domain entrance",
+        "personalization": "personal status and current-day information sit alongside public/global modules"
+      }
     },
     "hierarchy": {
       "sequence": [
-        "navigation and identity",
-        "composer",
-        "home/feed",
-        "threads and replies",
-        "activity/context",
-        "source metadata"
+        "global identity/search",
+        "primary feed/current movement",
+        "service/domain entrances",
+        "personal/current-day modules",
+        "news/activity/trending context",
+        "deeper source-specific views"
       ],
       "strength": "strong",
       "marketing_weight": "none"
@@ -81,7 +94,8 @@
     "flattening every movement into a task",
     "social engagement scores, follower counts, streaks, or gamification",
     "hiding source provenance when movement crosses systems",
-    "ornamental AI gradients, glow, or excessive glass effects"
+    "ornamental AI gradients, glow, or excessive glass effects",
+    "forcing every system into identical feed cards when a portal module better preserves the source relation"
   ],
   "adaptation_rules": [
     "Treat Online School, Personal Operations, Calendar, Factory, research, jobs, and future systems as sources contributing entries to the same hub.",
@@ -89,10 +103,12 @@
     "Keep semantic Words Movement anchors below the visual layer; do not render the anchor bank as navigation, badges, or visual taxonomy.",
     "Calendar contributes time/context to entries but does not organize the homepage.",
     "A conversation becomes scoped work only through an explicit backend transition; visually it remains a conversation until that transition is represented.",
-    "Use standard social-feed affordances so people can understand the surface without learning the internal movement vocabulary."
+    "Use standard social-feed affordances so people can understand the surface without learning the internal movement vocabulary.",
+    "Borrow portal breadth from Yahoo! JAPAN: many unlike systems may remain directly reachable from one homepage without being flattened into a single feed.",
+    "Use modules where domain-specific information benefits from its own compact visual grammar, while keeping the overall shell continuous."
   ],
   "review": {
     "confidence": "high",
-    "notes": "Main ecosystem social-hub visual template. Internal Words Movement anchors remain backend semantics and are intentionally absent from the visual grammar."
+    "notes": "Main ecosystem visual template combines social-feed movement with portal breadth. Yahoo! JAPAN is a witness for multi-domain hub structure; social platforms remain witnesses for conversational/feed movement."
   }
 }
