@@ -1,6 +1,6 @@
 # Sports Betting Domain
 
-This directory is the reconstructed result of applying `ANALYZE.DISSECT` to the old v0.17 sports-betting layer.
+This directory preserves the current sports-betting domain contract after separating domain-specific decision logic from generic source, evidence, movement, and rendering concerns.
 
 The old code mixed several concerns under one familiar label:
 
@@ -45,4 +45,4 @@ output lens
 
 The sports-betting domain therefore does **not** own source search, generic evidence rules, network movement, or rendering. It owns the domain-specific decision witnesses and calculations.
 
-See [DISSECTION.md](DISSECTION.md), [RELATIONS.md](RELATIONS.md), and [MIGRATION.md](MIGRATION.md).
+See [DISSECTION.md](DISSECTION.md) and [RELATIONS.md](RELATIONS.md).
