@@ -6,9 +6,6 @@ __pycache__/
 *.xlsm
 *.pdf
 *.png
-jobs/JOB-015_python-data-cleaning-reporting/prototype/output/
-jobs/JOB-015_python-data-cleaning-reporting/prototype/fixtures/raw_dirty_data.csv
-jobs/JOB-007_advanced-excel-automation-analysis/Regression_20k_Benchmark_Input.csv
 
 # GEMS competition data/output binaries stay local
 money/challenges/GEMS-001_hidden-fault-mapping/data/*.tif
