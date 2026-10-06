@@ -128,6 +128,25 @@ The placeholder must preserve what is measured or sourced, what is assumed, what
 
 A placeholder never upgrades itself into a physical witness.
 
+## System-local state
+
+Concrete systems keep their own local state and expose supported movement through the shared handoff carrier.
+
+```text
+system-local state
+→ system-specific admission / adapter
+→ shared handoff
+→ receiver
+→ result + evidence
+→ system-specific reconciliation
+```
+
+The runtime does not flatten every system into one schema. Online School can preserve educational schedule/task concepts; Personal Operations can preserve notes/tasks/plans; a factory can preserve orders/material/station state; other systems may preserve entirely different local records.
+
+The common boundary is the handoff, not the internal data model.
+
+See [`systems/README.md`](systems/README.md).
+
 ## Company layer
 
 `companies/` contains persistent operating organizations.
