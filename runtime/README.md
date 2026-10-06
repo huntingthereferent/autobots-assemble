@@ -97,8 +97,10 @@ A handoff cannot become `COMPLETE` unless every required witness is returned usi
 - `handoff.py` — carrier, evidence, state, execution result, simulated actor
 - `engine.py` — append-only event store and runtime
 - `projections.py` — task/job/command projections
+- `activation.py` — explicit actor+surface activation routes over existing handoff state
 - `handoff.schema.json` — external serialized handoff shape
 - `examples/cross_layer.py` — same carrier across James/school/software/factory
 - `examples/tiny_factory.py` — sequential simulated production run
+- `examples/ohayo.py` — James `ohayo` activation over a mixed handoff set
 
 The examples are witnesses for the runtime shape, not claims about physical production.
