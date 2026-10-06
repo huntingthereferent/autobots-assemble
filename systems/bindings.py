@@ -70,3 +70,41 @@ def personal_operations_binding(
         emit_ready=emit_ready,
         reconcile=reconcile,
     )
+
+
+
+def online_school_binding(
+    *,
+    task_provider,
+    task_to_handoff,
+    apply_patch,
+) -> SystemBinding:
+    """Bind Online School's existing local task model to the shared runtime.
+
+    The binding intentionally receives the school's own provider/adapter/patch
+    functions instead of importing or replacing its local schema.
+    """
+
+    def emit_ready():
+        emissions = []
+        for task in task_provider():
+            if str(task.get("status") or "todo") == "done":
+                continue
+            handoff = task_to_handoff(task)
+            emissions.append(
+                SystemEmission(
+                    system_id="online-school",
+                    local_ref=str(task["id"]),
+                    handoff=handoff,
+                )
+            )
+        return tuple(emissions)
+
+    def reconcile(emission, state):
+        apply_patch(emission.local_ref, state)
+
+    return SystemBinding(
+        system_id="online-school",
+        emit_ready=emit_ready,
+        reconcile=reconcile,
+    )
