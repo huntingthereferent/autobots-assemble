@@ -8,153 +8,160 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <main class="hub-shell">
-    <aside class="left-nav">
-      <div class="brand">Continuity</div>
-      <nav>
-        <button class="nav-item active">Home</button>
-        <button class="nav-item">Following</button>
-        <button class="nav-item">Threads</button>
-        <button class="nav-item">Activity</button>
-        <button class="nav-item">Calendar</button>
-        <button class="nav-item">School</button>
-        <button class="nav-item">Work</button>
-        <button class="nav-item">Research</button>
-      </nav>
-      <button id="ohayo" class="profile-button">ohayo</button>
-    </aside>
+  <header class="portal-header">
+    <div class="portal-bar">
+      <a class="wordmark" href="#" aria-label="Continuity home">Continuity</a>
+      <form class="search-shell" id="hub-search">
+        <input id="global-search" type="search" autocomplete="off" placeholder="Search your Continuity">
+        <button type="submit">Search</button>
+      </form>
+      <div class="header-actions">
+        <button class="quiet-button" type="button">Activity</button>
+        <button id="ohayo" class="identity-button" type="button"><span class="mini-avatar">C</span><span>Your Continuity</span></button>
+      </div>
+    </div>
+    <nav class="portal-nav" aria-label="Connected spaces">
+      <button class="portal-link active" data-source="all">Home</button>
+      <button class="portal-link" data-source="school">School</button>
+      <button class="portal-link" data-source="calendar">Calendar</button>
+      <button class="portal-link" data-source="personal">Personal</button>
+      <button class="portal-link" data-source="research">Research</button>
+      <button class="portal-link" data-source="jobs">Jobs</button>
+      <button class="portal-link" data-source="factory">Factory</button>
+      <button class="portal-link" data-source="all">More</button>
+    </nav>
+  </header>
 
-    <section class="feed-column">
-      <header class="feed-header">
-        <div>
-          <p class="eyebrow">Your hub</p>
-          <h1>Continuity</h1>
+  <main class="portal-shell">
+    <section class="hero-grid">
+      <article class="current-card">
+        <div class="current-copy">
+          <p class="kicker">Your world, in one place</p>
+          <h1>Keep the thread.</h1>
+          <p>People, school, time, work, research, and connected systems can all move through Continuity without losing where anything came from.</p>
         </div>
-        <button class="ghost">New</button>
-      </header>
-
-      <section class="global-search">
-        <input type="search" placeholder="Search people, conversations, school, work, research, calendar…">
-      </section>
-
-      <section class="portal-strip" aria-label="Connected spaces">
-        <button><b>School</b><span>learning & family</span></button>
-        <button><b>Calendar</b><span>time & events</span></button>
-        <button><b>Work</b><span>jobs & projects</span></button>
-        <button><b>Research</b><span>evidence & questions</span></button>
-        <button><b>Factory</b><span>systems & operations</span></button>
-        <button><b>More</b><span>connected sources</span></button>
-      </section>
-
-      <section class="composer panel">
-        <div class="avatar">C</div>
-        <div class="composer-body">
-          <textarea id="composer-text" placeholder="What is happening?"></textarea>
-          <div class="composer-actions">
-            <span>Share into Continuity</span>
-            <button class="primary">Post</button>
-          </div>
+        <div class="current-now">
+          <span class="now-label">In front now</span>
+          <div id="attention-tasks" class="compact-list"></div>
         </div>
-      </section>
+      </article>
 
-      <section class="feed-tabs">
-        <button class="tab active">For you</button>
-        <button class="tab">Following</button>
-        <button class="tab">Current</button>
-      </section>
-
-      <section id="handoffs" class="feed"></section>
-
-      <section class="feed-secondary">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Current attention</p>
-            <h2>In front now</h2>
-          </div>
+      <aside class="today-card">
+        <div class="module-heading">
+          <div><p class="kicker">Today</p><h2>Time & attention</h2></div>
           <span id="activation-note"></span>
         </div>
-        <div id="attention-tasks" class="feed"></div>
-      </section>
+        <div id="attention-calendar" class="compact-list"></div>
+        <div id="attention-reminders" class="compact-list reminders-list"></div>
+      </aside>
     </section>
 
-    <aside class="right-rail">
-      <section class="rail-card identity-card">
-        <div class="avatar small">C</div>
-        <div>
-          <strong>Your Continuity</strong>
-          <p>One identity across connected sources.</p>
-        </div>
-      </section>
+    <section class="service-directory" aria-label="Connected services">
+      <button class="service-tile" data-source="school"><span class="service-mark">S</span><span><b>School</b><small>Learning, learners, worksheets</small></span></button>
+      <button class="service-tile" data-source="calendar"><span class="service-mark">C</span><span><b>Calendar</b><small>Time, events, routines</small></span></button>
+      <button class="service-tile" data-source="personal"><span class="service-mark">P</span><span><b>Personal</b><small>Notes, plans, day-to-day</small></span></button>
+      <button class="service-tile" data-source="work"><span class="service-mark">W</span><span><b>Work</b><small>Tasks, projects, handoffs</small></span></button>
+      <button class="service-tile" data-source="research"><span class="service-mark">R</span><span><b>Research</b><small>Evidence, questions, findings</small></span></button>
+      <button class="service-tile" data-source="jobs"><span class="service-mark">J</span><span><b>Jobs</b><small>Opportunities and paid work</small></span></button>
+      <button class="service-tile" data-source="factory"><span class="service-mark">F</span><span><b>Factory</b><small>Systems and operations</small></span></button>
+      <button class="service-tile" data-source="all"><span class="service-mark">+</span><span><b>Everything</b><small>All connected sources</small></span></button>
+    </section>
 
-      <section class="rail-card">
-        <p class="eyebrow">Activity</p>
-        <div id="attention-reminders" class="stack"></div>
-      </section>
+    <section class="content-grid">
+      <div class="main-stream">
+        <section class="share-card">
+          <div class="avatar">C</div>
+          <div class="share-body">
+            <textarea id="composer-text" placeholder="Share an update with your Continuity"></textarea>
+            <div class="share-footer">
+              <span>Conversation stays conversation until you explicitly turn it into work.</span>
+              <button class="primary" type="button" id="composer-post">Post</button>
+            </div>
+          </div>
+        </section>
 
-      <section class="rail-card">
-        <p class="eyebrow">Today</p>
-        <div id="attention-calendar" class="stack"></div>
-      </section>
+        <section class="stream-header">
+          <div>
+            <p class="kicker">Across Continuity</p>
+            <h2>What’s happening</h2>
+          </div>
+          <div class="stream-tabs">
+            <button class="stream-tab active" data-feed="all">For you</button>
+            <button class="stream-tab" data-feed="current">Current</button>
+            <button class="stream-tab" data-feed="following">Following</button>
+          </div>
+        </section>
 
-      <section class="rail-card">
-        <p class="eyebrow">Connected sources</p>
-        <div class="source-list">
-          <span>School</span>
-          <span>Calendar</span>
-          <span>Personal</span>
-          <span>Factory</span>
-          <span>Research</span>
-          <span>Jobs</span>
-        </div>
-      </section>
+        <section id="handoffs" class="feed"></section>
+        <div id="empty-feed" class="empty-state" hidden>No matching movement right now.</div>
+      </div>
 
-      <details class="rail-card manage">
-        <summary>Manage local layers</summary>
-        <div class="manage-grid">
-          <form id="note-form" class="form">
-            <textarea name="body" required placeholder="Add note"></textarea>
-            <input name="referent" placeholder="Referent">
-            <button class="secondary">Save note</button>
-          </form>
+      <aside class="side-column">
+        <section class="side-module identity-module">
+          <div class="avatar large">C</div>
+          <div>
+            <p class="kicker">Identity</p>
+            <h2>Your Continuity</h2>
+            <p>One person across linked sign-ins and connected sources.</p>
+          </div>
+        </section>
 
-          <form id="plan-form" class="form">
-            <input name="title" required placeholder="Plan">
-            <input name="referent" required placeholder="Referent">
-            <textarea name="steps" placeholder="Steps"></textarea>
-            <button class="secondary">Save plan</button>
-          </form>
+        <section class="side-module">
+          <div class="module-heading"><div><p class="kicker">Quick look</p><h2>Connected state</h2></div></div>
+          <div id="stats" class="status-grid"></div>
+        </section>
 
-          <form id="calendar-form" class="form">
-            <input name="title" required placeholder="Calendar relation">
-            <input name="referent" required placeholder="Referent">
-            <input name="starts_at" type="datetime-local">
-            <button class="secondary">Add time</button>
-          </form>
+        <section class="side-module">
+          <div class="module-heading"><div><p class="kicker">Open directly</p><h2>Sources</h2></div></div>
+          <div class="source-list">
+            <button data-source="school">Online School</button>
+            <button data-source="calendar">Calendar</button>
+            <button data-source="personal">Personal Operations</button>
+            <button data-source="research">Research</button>
+            <button data-source="jobs">Jobs</button>
+            <button data-source="factory">Factory</button>
+          </div>
+        </section>
 
-          <form id="reminder-form" class="form">
-            <input name="text" required placeholder="Reminder">
-            <input name="referent" required placeholder="Referent">
-            <input name="local_time" type="time">
-            <button class="secondary">Add reminder</button>
-          </form>
-
-          <form id="task-form" class="form">
-            <input name="title" required placeholder="Task">
-            <input name="referent" required placeholder="Referent">
-            <input name="assignee" required value="james" placeholder="Assignee">
-            <button class="secondary">Create task</button>
-          </form>
-        </div>
-      </details>
-    </aside>
+        <details class="side-module manage">
+          <summary>Manage local layers</summary>
+          <div class="manage-grid">
+            <form id="note-form" class="form">
+              <textarea name="body" required placeholder="Add note"></textarea>
+              <input name="referent" placeholder="Referent">
+              <button class="secondary">Save note</button>
+            </form>
+            <form id="plan-form" class="form">
+              <input name="title" required placeholder="Plan">
+              <input name="referent" required placeholder="Referent">
+              <textarea name="steps" placeholder="Steps"></textarea>
+              <button class="secondary">Save plan</button>
+            </form>
+            <form id="calendar-form" class="form">
+              <input name="title" required placeholder="Calendar relation">
+              <input name="referent" required placeholder="Referent">
+              <input name="starts_at" type="datetime-local">
+              <button class="secondary">Add time</button>
+            </form>
+            <form id="reminder-form" class="form">
+              <input name="text" required placeholder="Reminder">
+              <input name="referent" required placeholder="Referent">
+              <input name="local_time" type="time">
+              <button class="secondary">Add reminder</button>
+            </form>
+            <form id="task-form" class="form">
+              <input name="title" required placeholder="Task">
+              <input name="referent" required placeholder="Referent">
+              <input name="assignee" required value="james" placeholder="Assignee">
+              <button class="secondary">Create task</button>
+            </form>
+          </div>
+        </details>
+      </aside>
+    </section>
 
     <section hidden>
-      <div id="stats"></div>
-      <div id="notes"></div>
-      <div id="plans"></div>
-      <div id="calendar-events"></div>
-      <div id="reminders"></div>
-      <div id="tasks"></div>
+      <div id="notes"></div><div id="plans"></div><div id="calendar-events"></div><div id="reminders"></div><div id="tasks"></div>
     </section>
 
     <p id="error" class="error" hidden></p>
