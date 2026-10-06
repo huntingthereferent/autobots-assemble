@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Learner Record · Online School</title>
+  <link rel="stylesheet" href="./profile.css">
+</head>
+<body>
+  <header class="record-header">
+    <a href="./" class="brand">← Online School</a>
+    <div class="header-actions">
+      <select id="learner-select" aria-label="Learner"></select>
+      <button id="print-record" type="button">Print full record</button>
+    </div>
+  </header>
+
+  <main id="record" class="record-shell">
+    <section class="record-hero">
+      <div>
+        <p class="eyebrow">Learner record</p>
+        <h1 id="learner-name">Learner</h1>
+        <p id="learner-meta"></p>
+      </div>
+      <div class="record-stamp">
+        <strong id="generated-on"></strong>
+        <span>Current record snapshot</span>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <span>Demonstrated</span>
+        <strong id="count-demonstrated">0</strong>
+      </article>
+      <article class="summary-card">
+        <span>Developing</span>
+        <strong id="count-developing">0</strong>
+      </article>
+      <article class="summary-card">
+        <span>Recorded hours</span>
+        <strong id="recorded-hours">0</strong>
+      </article>
+      <article class="summary-card">
+        <span>Work samples</span>
+        <strong id="work-count">0</strong>
+      </article>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Progress map</p>
+          <h2>Missouri comparison</h2>
+        </div>
+        <span id="standards-source" class="source-note"></span>
+      </div>
+      <p class="boundary-note">Standards are a comparison map. A task or worksheet can be evidence without automatically proving mastery.</p>
+      <div id="standards-list" class="standards-list"></div>
+      <div id="standards-empty" class="empty-note" hidden>No comparison map is loaded for this grade yet.</div>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Current state</p><h2>Learning edges</h2></div>
+      </div>
+      <div id="relations-list" class="record-list"></div>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Evidence</p><h2>Observations & evaluations</h2></div>
+      </div>
+      <div id="observations-list" class="record-list"></div>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Assessment</p><h2>Placement & weekly retests</h2></div>
+      </div>
+      <div id="placement-record"></div>
+      <div id="retests-list" class="record-list"></div>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Instruction</p><h2>Hours & activity record</h2></div>
+      </div>
+      <div id="hours-breakdown" class="hours-grid"></div>
+      <div id="task-record" class="record-list compact"></div>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Portfolio</p><h2>Saved work</h2></div>
+      </div>
+      <div id="worksheets-list" class="record-list"></div>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
+        <div><p class="eyebrow">Calendar</p><h2>Current planned week</h2></div>
+      </div>
+      <div id="calendar-list" class="record-list compact"></div>
+    </section>
+
+    <footer class="record-footer">
+      <p id="record-boundary"></p>
+    </footer>
+  </main>
+
+  <script src="./profile.js" defer></script>
+</body>
+</html>
