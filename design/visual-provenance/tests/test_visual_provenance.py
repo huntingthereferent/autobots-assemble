@@ -139,7 +139,9 @@ class VisualProvenanceTests(unittest.TestCase):
             html,
         )
         preserve = " ".join(binding["preserve"]).lower()
-        self.assertIn("movement-first hierarchy", preserve)\n        self.assertIn("cross-system feed", preserve)\n        self.assertIn("source-system provenance", preserve)
+        self.assertIn("movement-first hierarchy", preserve)
+        self.assertIn("cross-system feed", preserve)
+        self.assertIn("source-system provenance", preserve)
 
     def test_schema_contracts_exist(self):
         for name in ("visual-template.schema.json", "surface-binding.schema.json"):
