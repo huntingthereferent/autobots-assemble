@@ -510,47 +510,82 @@ class Handler(BaseHTTPRequestHandler):
 
                     if subject == "mathematics":
                         diagnostic = section["diagnostic"]
-                        band_totals = {}
-                        band_correct = {}
-                        correct = 0
-                        for item in diagnostic["items"]:
-                            band = item["band"]
-                            band_totals[band] = band_totals.get(band, 0) + 1
-                            given = str(responses.get(item["id"]) or "").strip().lower()
-                            expected = str(item["answer"] or "").strip().lower()
-                            hit = given == expected
-                            if hit:
-                                correct += 1
-                                band_correct[band] = band_correct.get(band, 0) + 1
-
-                        band_scores = {}
-                        start_band = diagnostic["bands"][0]["id"]
-                        for band in diagnostic["bands"]:
-                            band_id = band["id"]
-                            total = band_totals.get(band_id, 0)
-                            accuracy = (
-                                band_correct.get(band_id, 0) / total
-                                if total
-                                else 0.0
+                        if diagnostic.get("kind") == "mental-probe":
+                            movements = []
+                            first_wall = None
+                            correct = 0
+                            for item in diagnostic["items"]:
+                                item_id = item["id"]
+                                given = str(responses.get(item_id) or "").strip().lower()
+                                expected = str(item["answer"] or "").strip().lower()
+                                path = str(responses.get(item_id + "__path") or "").strip()
+                                wall = str(responses.get(item_id + "__wall") or "no").strip()
+                                hit = given == expected
+                                if hit:
+                                    correct += 1
+                                movement = {
+                                    "id": item_id,
+                                    "domain": item.get("domain"),
+                                    "prompt": item.get("prompt"),
+                                    "correct": hit,
+                                    "path": path,
+                                    "wall": wall,
+                                }
+                                movements.append(movement)
+                                if first_wall is None and (wall != "no" or not hit):
+                                    first_wall = movement
+                            result.update(
+                                {
+                                    "correct": correct,
+                                    "total": len(diagnostic["items"]),
+                                    "start_band": "arithmetic",
+                                    "mental_movements": movements,
+                                    "first_wall": first_wall,
+                                    "wall_found": first_wall is not None,
+                                }
                             )
-                            band_scores[band_id] = {
-                                "correct": band_correct.get(band_id, 0),
-                                "total": total,
-                                "accuracy": accuracy,
-                            }
-                            if accuracy >= 0.70:
-                                start_band = band_id
-                            else:
-                                break
+                        else:
+                            band_totals = {}
+                            band_correct = {}
+                            correct = 0
+                            for item in diagnostic["items"]:
+                                band = item["band"]
+                                band_totals[band] = band_totals.get(band, 0) + 1
+                                given = str(responses.get(item["id"]) or "").strip().lower()
+                                expected = str(item["answer"] or "").strip().lower()
+                                hit = given == expected
+                                if hit:
+                                    correct += 1
+                                    band_correct[band] = band_correct.get(band, 0) + 1
 
-                        result.update(
-                            {
-                                "correct": correct,
-                                "total": len(diagnostic["items"]),
-                                "band_scores": band_scores,
-                                "start_band": start_band,
-                            }
-                        )
+                            band_scores = {}
+                            start_band = diagnostic["bands"][0]["id"]
+                            for band in diagnostic["bands"]:
+                                band_id = band["id"]
+                                total = band_totals.get(band_id, 0)
+                                accuracy = (
+                                    band_correct.get(band_id, 0) / total
+                                    if total
+                                    else 0.0
+                                )
+                                band_scores[band_id] = {
+                                    "correct": band_correct.get(band_id, 0),
+                                    "total": total,
+                                    "accuracy": accuracy,
+                                }
+                                if accuracy >= 0.70:
+                                    start_band = band_id
+                                else:
+                                    break
+
+                            result.update(
+                                {
+                                    "correct": correct,
+                                    "total": len(diagnostic["items"]),
+                                    "band_scores": band_scores,
+                                    "start_band": start_band,
+                                }
+                            )
                     else:
                         result["responses"] = {
                             str(key): str(value)

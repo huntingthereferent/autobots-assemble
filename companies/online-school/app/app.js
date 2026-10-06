@@ -453,12 +453,14 @@ async function openPlacement(subject) {
         band.textContent = item.band_label;
         root.append(band);
       }
-      const row = document.createElement("label");
+      const row = document.createElement("div");
       row.className = "placement-item";
-      row.innerHTML = "<small></small><strong></strong><input autocomplete=\"off\">";
+      row.innerHTML = "<small></small><strong></strong><label>Answer<input class=\"probe-answer\" autocomplete=\"off\"></label><label>How did you get there?<textarea class=\"probe-path\" rows=\"2\" placeholder=\"Tell the movement in your own words\"></textarea></label><label>Did you hit a wall?<select class=\"probe-wall\"><option value=\"no\">No — I could move it mentally</option><option value=\"paper\">I needed paper</option><option value=\"stuck\">I got stuck / lost the move</option></select></label>";
       row.querySelector("small").textContent = item.domain.replaceAll("-", " ");
       row.querySelector("strong").textContent = item.prompt;
-      row.querySelector("input").name = item.id;
+      row.querySelector(".probe-answer").name = item.id;
+      row.querySelector(".probe-path").name = item.id + "__path";
+      row.querySelector(".probe-wall").name = item.id + "__wall";
       root.append(row);
     }
   } else {
@@ -506,8 +508,12 @@ placementForm.addEventListener("submit", async event => {
     if (!response.ok) throw new Error(body.error || "Could not submit placement");
     placementDialog.close();
 
-    if (subject === "mathematics" && body.result?.start_band) {
-      alert(`Math starting band: ${body.result.start_band}`);
+    if (subject === "mathematics") {
+      if (body.result?.first_wall?.prompt) {
+        alert(`Wall found at: ${body.result.first_wall.prompt}`);
+      } else if (body.result?.start_band === "arithmetic") {
+        alert("No arithmetic wall showed up in this probe yet.");
+      }
     }
     await load();
   } catch (err) {

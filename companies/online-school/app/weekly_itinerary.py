@@ -17,6 +17,13 @@ def _placement_result(learner: dict, subject: str) -> dict:
 def _math_focus(learner: dict) -> str:
     result = _placement_result(learner, "mathematics")
     band = str(result.get("start_band") or "foundations")
+    if band == "arithmetic":
+        wall = result.get("first_wall") or {}
+        if wall:
+            prompt = str(wall.get("prompt") or "arithmetic movement")
+            domain = str(wall.get("domain") or "arithmetic")
+            return f"drill the {domain} wall around {prompt}, then recombine and retry"
+        return "mental arithmetic fluency, decomposition, and recombination"
     return {
         "foundations": "foundation mathematics",
         "secondary": "functions and algebra bridge",

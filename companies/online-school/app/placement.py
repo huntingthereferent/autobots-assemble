@@ -38,12 +38,50 @@ ADULT_MATH_BANDS = (
 )
 
 
+def mental_arithmetic_placement() -> dict[str, Any]:
+    items = (
+        ("arith-01", "addition", "7 + 8", "15"),
+        ("arith-02", "subtraction", "15 - 6", "9"),
+        ("arith-03", "multiplication", "6 x 4", "24"),
+        ("arith-04", "division", "24 / 6", "4"),
+        ("arith-05", "addition", "18 + 27", "45"),
+    )
+    return {
+        "subject": "mathematics",
+        "kind": "mental-probe",
+        "adult": True,
+        "age_bounded": False,
+        "grade_bounded": False,
+        "bands": [
+            {
+                "id": "arithmetic",
+                "label": "Mental arithmetic",
+                "domains": ("addition", "subtraction", "multiplication", "division"),
+            }
+        ],
+        "items": [
+            {
+                "id": item_id,
+                "band": "arithmetic",
+                "band_label": "Mental arithmetic",
+                "domain": domain,
+                "family": "mental-move",
+                "prompt": prompt,
+                "answer": answer,
+                "ask_path": True,
+                "ask_wall": True,
+            }
+            for item_id, domain, prompt, answer in items
+        ],
+    }
+
+
 def math_placement(age: int | None, grade: str, seed: int = 1) -> dict[str, Any]:
     rng = Random(seed)
     adult = age is not None and age >= 18
 
     if adult:
-        bands = ADULT_MATH_BANDS
+        return mental_arithmetic_placement()
     else:
         try:
             g = int(grade)
@@ -112,10 +150,13 @@ def placement_plan(learner: dict[str, Any]) -> list[dict[str, Any]]:
     return [
         {
             "subject": "mathematics",
-            "title": "Placement test — Mathematics",
-            "minutes": 45 if adult else 25,
+            "title": "Mental math probe" if adult else "Placement test — Mathematics",
+            "minutes": 15 if adult else 25,
             "description": (
-                "Start broad. Stop guessing where the learner belongs; use the returned answers to locate the current mathematical line."
+                "Do it in your head if you can. Tell how you moved through it. "
+                "If you need paper or hit a wall, mark that honestly. The wall is what school needs."
+                if adult else
+                "Start gently and use the returned answers to locate the current mathematical line."
             ),
             "diagnostic": math_placement(age, grade, seed=17),
         },
