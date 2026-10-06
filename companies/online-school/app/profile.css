@@ -81,3 +81,12 @@ button,select,input,textarea{font:inherit}
   .standard-controls{display:none!important}
   .source-note,.boundary-note,.record-footer{color:#555}
 }
+
+.note-form{display:grid;gap:10px;margin-bottom:14px;padding:14px;border:1px solid var(--line);border-radius:16px;background:#faf9f6}
+.note-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.note-form label{display:grid;gap:5px;font-size:.69rem;font-weight:800;color:var(--muted)}
+.note-form input,.note-form select,.note-form textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:#fff;padding:9px;color:var(--ink)}
+.note-form button{justify-self:start;border:0;border-radius:10px;padding:9px 12px;background:var(--ink);color:#fff;font-weight:900}
+.human-note-meta{font-size:.64rem;color:var(--muted);margin-top:4px}
+@media(max-width:760px){.note-grid{grid-template-columns:1fr 1fr}}
+@media print{.note-form{display:none!important}}
