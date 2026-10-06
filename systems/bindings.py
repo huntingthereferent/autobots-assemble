@@ -15,9 +15,13 @@ def factory_binding(
         emissions = []
         for order_id in order_ids:
             order = factory.order(order_id)
-            if order.status == "complete" or order.pending_handoff_id:
+            if order.status == "complete":
                 continue
-            handoff = factory.next_handoff(order_id)
+            handoff = (
+                factory.pending_handoff(order_id)
+                if order.pending_handoff_id
+                else factory.next_handoff(order_id)
+            )
             if handoff is not None:
                 emissions.append(
                     SystemEmission(
