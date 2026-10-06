@@ -194,22 +194,16 @@ class FactorySystem:
             }
         raise ValueError(f"unknown factory stage: {stage}")
 
-    def next_handoff(self, order_id: str) -> Handoff | None:
-        order = self.order(order_id)
-        if order.status == "complete":
-            return None
-        if order.pending_handoff_id:
-            raise ValueError(
-                f"order {order_id} is awaiting {order.pending_handoff_id}"
-            )
+    def _build_handoff(
+        self,
+        order: FactoryOrder,
+        *,
+        handoff_id: str,
+    ) -> Handoff:
         if order.stage_index >= len(STAGES):
-            return None
-
+            raise ValueError(f"order {order.order_id} has no remaining stage")
         stage = STAGES[order.stage_index]
-        handoff_id = (
-            f"factory-{order.order_id}-{order.stage_index + 1:02d}-{stage['name']}"
-        )
-        handoff = Handoff(
+        return Handoff(
             handoff_id=handoff_id,
             referent=f"{order.order_id} / {order.product}",
             from_actor="factory-system",
@@ -236,6 +230,32 @@ class FactorySystem:
                 "title": f"{order.order_id} — {stage['name']}",
             },
         )
+    def pending_handoff(self, order_id: str) -> Handoff | None:
+        """Reconstruct an already-emitted handoff without emitting it again."""
+        order = self.order(order_id)
+        if not order.pending_handoff_id:
+            return None
+        return self._build_handoff(
+            order,
+            handoff_id=order.pending_handoff_id,
+        )
+
+    def next_handoff(self, order_id: str) -> Handoff | None:
+        order = self.order(order_id)
+        if order.status == "complete":
+            return None
+        if order.pending_handoff_id:
+            raise ValueError(
+                f"order {order_id} is awaiting {order.pending_handoff_id}"
+            )
+        if order.stage_index >= len(STAGES):
+            return None
+
+        stage = STAGES[order.stage_index]
+        handoff_id = (
+            f"factory-{order.order_id}-{order.stage_index + 1:02d}-{stage['name']}"
+        )
+        handoff = self._build_handoff(order, handoff_id=handoff_id)
         self._append(
             "HANDOFF_EMITTED",
             {
