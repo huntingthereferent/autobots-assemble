@@ -1,5 +1,5 @@
 {
-  "schema_version": 11,
+  "schema_version": 12,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
   "protocols": {
     "core.referent": {
@@ -33,6 +33,14 @@
     "ai.repo-write": {
       "layer": "ai",
       "path": "protocols/ai/repo-write.md"
+    },
+    "ai.purge": {
+      "layer": "ai",
+      "path": "protocols/ai/purge.md"
+    },
+    "ai.james": {
+      "layer": "ai",
+      "path": "protocols/ai/james.md"
     },
     "work.bounded-problem": {
       "layer": "work",
