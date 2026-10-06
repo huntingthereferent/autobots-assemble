@@ -40,8 +40,10 @@ def _research_focus(learner: dict) -> str:
 def _task(*, learner_id: str, day: date, title: str, minutes: int, subject: str,
           week_id: str, phase: str, focus: str, order: int) -> dict:
     key = f"{week_id}:{learner_id}:{day.isoformat()}:{subject}:{phase}:{order}"
+    task_uuid = uuid.uuid5(uuid.NAMESPACE_URL, "online-school-week:" + key)
+    material_seed = int(task_uuid.hex[:8], 16)
     return {
-        "id": str(uuid.uuid5(uuid.NAMESPACE_URL, "online-school-week:" + key)),
+        "id": str(task_uuid),
         "date": day.isoformat(),
         "title": title,
         "category": subject,
@@ -58,6 +60,11 @@ def _task(*, learner_id: str, day: date, title: str, minutes: int, subject: str,
             "week_phase": phase,
             "subject": subject,
             "focus": focus,
+            "material_seed": material_seed,
+            "material_request": (
+                f"Generate fresh {subject.replace('-', ' ')} material for {focus}. "
+                f"Week {week_id}; phase {phase}; seed {material_seed}."
+            ),
             "calendar_relation": True,
             "day_to_day": True,
             "placement": phase == "retest",
