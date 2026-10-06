@@ -65,6 +65,7 @@ def make_task(
     theme: dict,
     notes: str | None = None,
     kind: str = "instruction",
+    metadata: dict | None = None,
 ):
     task = {
         "id": task_id(day, scope, activity, learner_ids),
@@ -78,7 +79,7 @@ def make_task(
         "status": "todo",
         "source": source,
         "notes": notes or "",
-        "meta": {},
+        "meta": dict(metadata or {}),
     }
     if theme.get("theme"):
         task["meta"]["theme"] = theme["theme"]
@@ -115,6 +116,11 @@ def generate_tasks_for_day(day: str, schedule: dict | None = None, themes: dict 
                     learner_ids=[track_id],
                     source="schedule_template:individualized_tracks",
                     theme=theme,
+                    metadata={
+                        key: value
+                        for key, value in block.items()
+                        if key not in {"activity", "minutes"}
+                    },
                 )
             )
 
@@ -128,6 +134,11 @@ def generate_tasks_for_day(day: str, schedule: dict | None = None, themes: dict 
                 learner_ids=learner_ids,
                 source="schedule_template:shared_weekday_blocks",
                 theme=theme,
+                metadata={
+                    key: value
+                    for key, value in block.items()
+                    if key not in {"activity", "minutes"}
+                },
             )
         )
 
@@ -142,6 +153,11 @@ def generate_tasks_for_day(day: str, schedule: dict | None = None, themes: dict 
                     learner_ids=learner_ids,
                     source="schedule_template:mwf_blocks",
                     theme=theme,
+                    metadata={
+                        key: value
+                        for key, value in block.items()
+                        if key not in {"activity", "minutes"}
+                    },
                 )
             )
 
@@ -156,6 +172,11 @@ def generate_tasks_for_day(day: str, schedule: dict | None = None, themes: dict 
                     learner_ids=learner_ids,
                     source="schedule_template:wednesday_blocks",
                     theme=theme,
+                    metadata={
+                        key: value
+                        for key, value in block.items()
+                        if key not in {"activity", "minutes"}
+                    },
                 )
             )
 
