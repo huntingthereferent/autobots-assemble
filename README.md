@@ -60,8 +60,20 @@ Unavailable providers remain visible as unavailable rather than receiving genera
 
 The frontage exposes two useful views over the same live items:
 
-- **Balanced** — round-robin across sources so high-volume feeds do not erase slower sources;
+- **Balanced** — round-robin across provider streams so high-volume feeds do not erase slower sources;
 - **Latest** — strict cross-source chronology so source-volume collisions remain observable.
+
+Live items do not have one exclusive category. Their identity is relational:
+
+```text
+provider
+publisher
+medium
+roles[]
+topics[]
+```
+
+For example, a Reuters report carried by YouTube is simultaneously provider=`YouTube`, publisher=`Reuters`, medium=`video`, and role=`news`. The same item can therefore appear in both News and Video projections without being duplicated.
 
 Opening an external item records a bounded traversal touch and then opens the original external source. The feed itself remains ephemeral.
 

@@ -1,23 +1,25 @@
 {
   "schema_version": 1,
-  "preferred_referent": "Continuity → Live Mixed Internet Feed Stress Test",
+  "preferred_referent": "Continuity → Multi-Axis Live Feed Identity",
   "protocol": "core.traversal",
-  "goal": "Test whether Continuity can carry real live movement from unlike external feeds in one frontage without losing source identity, current trail, or external ownership. The feed remains ephemeral; only explicit traversal touches become durable local state.",
+  "goal": "Carry real live movement from unlike external feeds without forcing each item into one category. Preserve provider, publisher, medium, roles, topics, source locator, and traversal ancestry independently so one external item can participate in several valid projections without duplication.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Use the repaired live frontage to test the remaining collisions: one item having multiple roles at once (provider / publisher / medium / news-social function), duplicate coverage of the same event, and continuation of the trace after the user leaves Continuity for an external site.",
+  "next_movement": "Preserve more native provider affordances inside the common feed placement without flattening them into generic text cards. Clean provider-specific noise, expose media/thumbnail/discussion relations where available, then test duplicate coverage of the same event without merging source claims.",
   "walls": [
     "Do not put social networks, news sites, video platforms, forums, or other external feeds inside Continuity as owned state.",
     "Do not persist the mixed feed contents by default.",
     "Do not generate substitute posts for unavailable providers.",
     "Do not let high-volume sources define the whole frontage merely because they publish faster.",
     "Do not hide raw chronology; preserve a Latest view beside any balancing projection.",
+    "Do not collapse provider, publisher, medium, role, and topic into one source_kind.",
+    "Do not duplicate an item merely because it belongs to multiple projections such as News and Video.",
     "Do not erase source identity or external locator during normalization.",
     "Do not turn opening a feed item into work; it creates only a traversal touch unless the user explicitly produces another output.",
     "Do not treat touching or displaying an item as evidence that its claims are true.",
     "Do not call internal systems external sources.",
     "Do not bury live movement beneath the area/system directories on the homepage.",
-    "Do not redefine A/B as the feed mixer, balancing algorithm, traversal trace, or portal."
+    "Do not redefine A/B as the feed mixer, identity axes, traversal trace, or portal."
   ],
   "evidence": [
     "README.md",
@@ -38,12 +40,11 @@
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
-    "from": "Live mixed-feed build → frontage audit",
-    "reason": "The live feed itself survived unlike sources, but the audit exposed a stale CSS shell and wrong homepage priority. The shell was rebuilt around live movement while human areas and local systems remain available below it."
+    "from": "Frontpage live-movement audit → multi-axis feed identity",
+    "reason": "The audit showed that source_kind forced unlike relations into one category. The live item contract now preserves provider, publisher, medium, roles, and topics independently; frontend filters project those relations rather than duplicating or reclassifying the item."
   },
   "live_test": {
     "observed_at": "2026-10-06",
-    "observed_items": 58,
     "working_sources": [
       "Reddit public RSS",
       "Lemmy public API",
@@ -55,10 +56,23 @@
       "Bluesky public API returned HTTP 403 from this host"
     ],
     "views": {
-      "balanced": "Round-robin across sources to prevent high-volume feeds from erasing slower feeds.",
-      "latest": "Strict chronological ordering to expose the actual volume/frequency collision."
+      "balanced": "Round-robin across provider streams to prevent high-volume feeds from erasing slower feeds.",
+      "latest": "Strict chronological ordering to expose the actual volume/frequency collision.",
+      "social": "Projects items whose roles include social.",
+      "news": "Projects items whose roles include news regardless of medium/provider.",
+      "video": "Projects items whose medium is video.",
+      "community": "Projects items whose roles include community."
     },
-    "observed_collision": "Strict chronology was immediately dominated by Lemmy and Hacker News because those sources were publishing every few seconds."
+    "witness": {
+      "item": "Reuters report carried by YouTube",
+      "provider": "YouTube",
+      "publisher": "Reuters",
+      "medium": "video",
+      "roles": [
+        "news"
+      ],
+      "result": "The same live item is valid in both News and Video projections without duplication."
+    }
   },
   "frontpage_audit": {
     "fixed": [
@@ -66,13 +80,15 @@
       "Moved live internet movement above human-area and local-system directories.",
       "Renamed internal source language to Your systems while reserving External feeds for internet movement.",
       "Made Current trail sticky and rendered a visible Mixed feed → source breadcrumb as touches accumulate.",
-      "Kept source kinds visually distinct without converting external items into Continuity-owned posts.",
-      "Verified the mobile document does not exceed the viewport; area cards move to a horizontal launcher below the live feed."
+      "Kept external source/provider identity visible without converting items into Continuity-owned posts.",
+      "Replaced flat source_kind classification with independent provider / publisher / medium / roles / topics.",
+      "News and Video filters can now overlap on one Reuters/YouTube item without duplicating it."
     ],
     "remaining": [
-      "One external item needs independent provider / publisher / medium / functional roles instead of one flat source_kind.",
+      "Provider-specific content is still flattened too aggressively into generic text cards.",
       "Multiple sources covering one real event still appear as separate feed items.",
-      "The website can record departure from Continuity but cannot observe subsequent cross-site navigation without a browser companion/shell."
+      "The website can record departure from Continuity but cannot observe subsequent cross-site navigation without a browser companion/shell.",
+      "Top-level Search and Post controls are still not backed by real Continuity behavior."
     ]
   },
   "human_areas": {
@@ -93,16 +109,15 @@
     "rule": "Human areas remain entrances for what the person is doing. The mixed external feed is movement through the internet, not another human area."
   },
   "verified_run": {
-    "benchmark": "Frontpage Live-Movement Audit",
+    "benchmark": "Multi-Axis Live Feed Identity",
     "result": "implemented_and_locally_tested",
     "checks": [
-      "Live movement renders before the human-area directory.",
-      "External feeds and internal systems have separate visible language.",
-      "Current trail renders before live items and accumulates source breadcrumbs.",
-      "Balanced and Latest continue to project the same ephemeral live items.",
-      "Desktop and mobile screenshots were visually audited after the CSS rewrite.",
-      "Browser measurement showed no real horizontal document overflow.",
-      "53 focused runtime/traversal/frontage/visual-provenance tests passed."
+      "Live items no longer contain source_kind.",
+      "Provider, publisher, medium, roles, and topics are independent fields.",
+      "Reuters-on-YouTube renders visibly as video + news.",
+      "Frontend filters use roles and medium instead of exclusive source category.",
+      "Traversal provenance records provider, publisher, medium, and roles.",
+      "55 focused runtime/traversal/frontage/visual-provenance tests passed."
     ]
   }
 }

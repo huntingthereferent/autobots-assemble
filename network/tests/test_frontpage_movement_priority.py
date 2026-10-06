@@ -22,6 +22,12 @@ class FrontpageMovementPriorityTests(unittest.TestCase):
         html = HTML.read_text(encoding="utf-8")
         self.assertLess(html.index('id="trail-bar"'), html.index('id="live-feed"'))
 
+    def test_live_filters_use_independent_roles_and_medium(self):
+        app = (ROOT / "runtime" / "http" / "app.js").read_text(encoding="utf-8")
+        self.assertNotIn("item.source_kind", app)
+        self.assertIn("roles.includes(filter)", app)
+        self.assertIn('item.medium === "video"', app)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -790,3 +790,11 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .live-item-head > *:first-child { min-width: 0; }
   .live-locator { max-width: 42%; }
 }
+
+.identity-chips {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}

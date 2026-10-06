@@ -285,15 +285,22 @@ async function recordLiveTouch(item) {
   const payload = {
     session_id: trailSessionId(),
     parent_trace_id: state.parent,
-    surface_kind: item.source_kind || "external",
+    surface_kind: item.provider_surface || item.medium || "external",
     locator: item.url,
-    provider: item.source_name || item.source_id || "",
+    provider: item.provider || item.source_name || item.source_id || "",
     label: item.title || "",
     referent_before: state.referent,
     relation: "open live feed item",
     referent_after: item.title || item.url,
     what_changed: "moved from the mixed live feed into an external source",
-    provenance: ["live-feed:" + (item.source_id || "unknown"), String(item.id || "")]
+    provenance: [
+      "live-feed:" + (item.source_id || "unknown"),
+      "provider:" + (item.provider || item.source_name || "unknown"),
+      item.publisher ? "publisher:" + item.publisher : "",
+      item.medium ? "medium:" + item.medium : "",
+      ...((item.roles || []).map(function(role) { return "role:" + role; })),
+      String(item.id || "")
+    ].filter(Boolean)
   };
 
   try {
@@ -321,7 +328,10 @@ async function recordLiveTouch(item) {
 function liveFeedCard(item) {
   const article = document.createElement("article");
   article.className = "live-item";
-  article.dataset.kind = item.source_kind || "external";
+  const roles = item.roles || [];
+  article.dataset.kind = item.medium === "video"
+    ? "video"
+    : (roles[0] || item.provider_surface || "external");
   article.dataset.source = item.source_id || "";
 
   const head = document.createElement("div");
@@ -335,10 +345,18 @@ function liveFeedCard(item) {
   context.textContent = [item.context, relativeTime(item.published_at)].filter(Boolean).join(" · ");
   source.append(sourceName, context);
 
-  const kind = document.createElement("span");
-  kind.className = "source-chip";
-  kind.textContent = item.native_type || item.source_kind || "external";
-  head.append(source, kind);
+  const identity = document.createElement("div");
+  identity.className = "identity-chips";
+  const labels = []
+    .concat(item.medium ? [item.medium] : [])
+    .concat(item.roles || []);
+  Array.from(new Set(labels)).slice(0, 3).forEach(function(label) {
+    const chip = document.createElement("span");
+    chip.className = "source-chip";
+    chip.textContent = label;
+    identity.appendChild(chip);
+  });
+  head.append(source, identity);
 
   const title = document.createElement("h3");
   title.className = "live-title";
@@ -362,7 +380,7 @@ function liveFeedCard(item) {
   const open = document.createElement("button");
   open.className = "live-open";
   open.type = "button";
-  open.textContent = item.source_kind === "video" ? "Watch" : "Open source";
+  open.textContent = item.medium === "video" ? "Watch" : "Open source";
   open.addEventListener("click", function() {
     const popup = window.open("about:blank", "_blank");
     recordLiveTouch(item).catch(showError).finally(function() {
@@ -437,6 +455,13 @@ function balancedLiveItems(items) {
   return out;
 }
 
+function liveItemMatchesFilter(item, filter) {
+  if (filter === "all" || filter === "balanced" || filter === "latest") return true;
+  const roles = item.roles || [];
+  if (filter === "video") return item.medium === "video";
+  return roles.includes(filter);
+}
+
 function renderLiveFeed() {
   const all = liveFeedState.items || [];
   let items;
@@ -446,7 +471,7 @@ function renderLiveFeed() {
     items = all;
   } else {
     items = balancedLiveItems(all.filter(function(item) {
-      return item.source_kind === liveFeedFilter;
+      return liveItemMatchesFilter(item, liveFeedFilter);
     }));
   }
   $("#live-feed").replaceChildren(...items.map(liveFeedCard));

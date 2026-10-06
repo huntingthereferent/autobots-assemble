@@ -4,11 +4,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 from html import unescape
-from pathlib import Path
 from threading import RLock
 from time import monotonic
 from typing import Any, Callable
-from urllib.parse import quote
 from urllib.request import Request, urlopen
 import json
 import re
@@ -38,6 +36,10 @@ def _clean_text(value: str, *, limit: int = MAX_SNIPPET) -> str:
     return value[: limit - 1].rstrip() + "…"
 
 
+def _many(values) -> list[str]:
+    return list(dict.fromkeys(str(x).strip() for x in values or () if str(x).strip()))
+
+
 def _iso_from_rss(value: str) -> str:
     if not value:
         return ""
@@ -63,10 +65,14 @@ def _item(
     *,
     item_id: str,
     source_id: str,
-    source_name: str,
-    source_kind: str,
+    provider: str,
+    provider_surface: str,
+    medium: str,
     title: str,
     url: str,
+    publisher: str = "",
+    roles: tuple[str, ...] | list[str] = (),
+    topics: tuple[str, ...] | list[str] = (),
     published_at: str = "",
     author: str = "",
     context: str = "",
@@ -74,12 +80,27 @@ def _item(
     metrics: dict[str, Any] | None = None,
     native_type: str = "",
 ) -> dict[str, Any]:
+    roles_clean = _many(roles)
+    topics_clean = _many(topics)
+    publisher = _clean_text(publisher, limit=120)
+    provider = _clean_text(provider, limit=120)
+    source_name = provider
+    if publisher and publisher.casefold() != provider.casefold():
+        source_name = f"{provider} · {publisher}"
+
     return {
         "id": item_id,
+        # source_id is the adapter/provider stream key used for balancing.
         "source_id": source_id,
         "source_name": source_name,
-        "source_kind": source_kind,
-        "native_type": native_type or source_kind,
+        # These axes are deliberately independent.
+        "provider": provider,
+        "provider_surface": provider_surface,
+        "publisher": publisher,
+        "medium": medium,
+        "roles": roles_clean,
+        "topics": topics_clean,
+        "native_type": native_type or medium,
         "title": _clean_text(title, limit=240),
         "url": url,
         "published_at": published_at,
@@ -109,9 +130,10 @@ def fetch_reddit(limit: int = 12) -> list[dict[str, Any]]:
             _item(
                 item_id=f"reddit:{entry_id}",
                 source_id="reddit",
-                source_name="Reddit",
-                source_kind="social",
-                native_type="post",
+                provider="Reddit",
+                provider_surface="social_platform",
+                medium="post",
+                roles=("social", "community"),
                 title=title,
                 url=url,
                 published_at=published,
@@ -136,9 +158,10 @@ def fetch_lemmy(limit: int = 12) -> list[dict[str, Any]]:
             _item(
                 item_id=f"lemmy:{post.get('id', local_url)}",
                 source_id="lemmy",
-                source_name="Lemmy",
-                source_kind="social",
-                native_type="post",
+                provider="Lemmy",
+                provider_surface="social_platform",
+                medium="post",
+                roles=("social", "community"),
                 title=post.get("name") or "",
                 url=local_url,
                 published_at=post.get("published") or "",
@@ -171,6 +194,7 @@ def fetch_hacker_news(limit: int = 12) -> list[dict[str, Any]]:
             if story:
                 stories.append(story)
     stories.sort(key=lambda x: x.get("time") or 0, reverse=True)
+
     rows = []
     for story in stories[:limit]:
         story_id = story.get("id")
@@ -181,13 +205,15 @@ def fetch_hacker_news(limit: int = 12) -> list[dict[str, Any]]:
             published = datetime.fromtimestamp(
                 int(story["time"]), tz=timezone.utc
             ).isoformat()
+
         rows.append(
             _item(
                 item_id=f"hn:{story_id}",
                 source_id="hacker_news",
-                source_name="Hacker News",
-                source_kind="community",
-                native_type="story",
+                provider="Hacker News",
+                provider_surface="community",
+                medium="link" if external else "discussion",
+                roles=("community",),
                 title=story.get("title") or "",
                 url=external or discussion,
                 published_at=published,
@@ -216,13 +242,17 @@ def fetch_reuters_youtube(limit: int = 10) -> list[dict[str, Any]]:
             _item(
                 item_id=f"youtube:{video_id}",
                 source_id="youtube_reuters",
-                source_name="YouTube · Reuters",
-                source_kind="video",
-                native_type="video",
+                provider="YouTube",
+                provider_surface="video_platform",
+                publisher="Reuters",
+                medium="video",
+                roles=("news",),
                 title=entry.findtext(f"{{{atom}}}title", default=""),
                 url=link.attrib.get("href", "") if link is not None else "",
                 published_at=entry.findtext(f"{{{atom}}}published", default=""),
-                author=entry.findtext(f"{{{atom}}}author/{{{atom}}}name", default="Reuters"),
+                author=entry.findtext(
+                    f"{{{atom}}}author/{{{atom}}}name", default="Reuters"
+                ),
                 context="Reuters",
             )
         )
@@ -239,9 +269,11 @@ def fetch_bbc_news(limit: int = 12) -> list[dict[str, Any]]:
             _item(
                 item_id=f"bbc:{guid}",
                 source_id="bbc_news",
-                source_name="BBC News",
-                source_kind="news",
-                native_type="article",
+                provider="BBC News",
+                provider_surface="news_site",
+                publisher="BBC News",
+                medium="article",
+                roles=("news",),
                 title=node.findtext("title", default=""),
                 url=url,
                 published_at=_iso_from_rss(node.findtext("pubDate", default="")),
@@ -262,12 +294,22 @@ FETCHERS: dict[str, Callable[[], list[dict[str, Any]]]] = {
 }
 
 SOURCE_META = {
-    "reddit": {"name": "Reddit", "kind": "social", "access": "public RSS"},
-    "lemmy": {"name": "Lemmy", "kind": "social", "access": "public API"},
-    "hacker_news": {"name": "Hacker News", "kind": "community", "access": "public API"},
-    "youtube_reuters": {"name": "YouTube · Reuters", "kind": "video", "access": "public Atom"},
-    "bbc_news": {"name": "BBC News", "kind": "news", "access": "public RSS"},
-    "bluesky": {"name": "Bluesky", "kind": "social", "access": "public API", "enabled": False, "reason": "public endpoint returns 403 from this host; keep external rather than fabricate data"},
+    "reddit": {"name": "Reddit", "surface": "social_platform", "access": "public RSS"},
+    "lemmy": {"name": "Lemmy", "surface": "social_platform", "access": "public API"},
+    "hacker_news": {"name": "Hacker News", "surface": "community", "access": "public API"},
+    "youtube_reuters": {
+        "name": "YouTube · Reuters",
+        "surface": "video_platform",
+        "access": "public Atom",
+    },
+    "bbc_news": {"name": "BBC News", "surface": "news_site", "access": "public RSS"},
+    "bluesky": {
+        "name": "Bluesky",
+        "surface": "social_platform",
+        "access": "public API",
+        "enabled": False,
+        "reason": "public endpoint returns 403 from this host; keep external rather than fabricate data",
+    },
 }
 
 
