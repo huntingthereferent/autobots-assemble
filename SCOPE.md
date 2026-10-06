@@ -46,8 +46,6 @@ Never hide a missing dependency by naming a stronger completion state.
 
 Use an explicit wall or bounded placeholder when necessary.
 
-## Legacy job records
+## External job records
 
-`jobs/` remains a durable paid-work record set.
-
-It is no longer the repository-wide scope model.
+`jobs/` holds only currently retained external-work opportunities. It is not permanent capability history and does not define repository-wide scope.
