@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Language Network Research Dive",
+  "title": "Continuity Layer Research Dive",
   "type": "object",
   "required": [
     "id",
