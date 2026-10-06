@@ -262,8 +262,18 @@ class EcosystemService:
             )
             for item in payload.get("evidence") or ()
         )
+        status = str(payload.get("status") or "UNKNOWN").upper()
+        if status not in {
+            "COMPLETE",
+            "PARTIAL",
+            "BLOCKED",
+            "FAILED",
+            "UNKNOWN",
+        }:
+            raise ValueError(f"invalid result status: {status}")
+
         result = ExecutionResult(
-            status=str(payload.get("status") or "UNKNOWN"),
+            status=status,
             output=dict(payload.get("output") or {}),
             evidence=evidence,
             note=str(payload.get("note") or ""),
