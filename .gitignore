@@ -16,3 +16,6 @@ money/challenges/GEMS-001_hidden-fault-mapping/outputs/*.tif
 
 # Online School runtime/private task state
 companies/online-school/app/data/
+
+# Personal Operations private/live state
+systems/personal_operations/data/
