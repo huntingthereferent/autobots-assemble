@@ -22,3 +22,6 @@ systems/personal_operations/data/
 
 # Factory System runtime/simulation state
 systems/factory/data/
+
+# Ecosystem HTTP runtime/private state
+runtime/data/
