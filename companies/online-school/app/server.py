@@ -10,6 +10,7 @@ import os
 import threading
 
 from schedule_engine import generate_tasks, load_schedule, load_themes, merge_generated, validate_task
+from worksheet_engine import generate_worksheet, validate_saved_worksheet
 
 
 ROOT = Path(__file__).resolve().parent
@@ -24,6 +25,7 @@ def default_state():
     return {
         "schema_version": 1,
         "tasks": [],
+        "worksheets": [],
         "learners": [
             {"id": "track_a", "display_name": "Learner A"},
             {"id": "track_b", "display_name": "Learner B"},
@@ -79,6 +81,27 @@ class Handler(BaseHTTPRequestHandler):
                 "schedule": load_schedule(),
                 "themes": load_themes(),
             })
+            return
+
+        if parsed.path == "/api/worksheets":
+            with LOCK:
+                worksheets = list(load_state().get("worksheets", []))
+            worksheets.sort(key=lambda item: str(item.get("title") or "").lower())
+            self.send_json({"worksheets": worksheets})
+            return
+
+        if parsed.path.startswith("/api/worksheets/"):
+            worksheet_id = parsed.path.removeprefix("/api/worksheets/")
+            with LOCK:
+                worksheets = list(load_state().get("worksheets", []))
+            worksheet = next(
+                (item for item in worksheets if item.get("worksheet_id") == worksheet_id),
+                None,
+            )
+            if worksheet is None:
+                self.api_error("worksheet not found", 404)
+            else:
+                self.send_json(worksheet)
             return
 
         if parsed.path == "/api/tasks":
@@ -150,6 +173,28 @@ class Handler(BaseHTTPRequestHandler):
                 self.api_error(str(exc))
             return
 
+        if parsed.path == "/api/worksheets/generate":
+            try:
+                self.send_json(generate_worksheet(json_body(self)), 201)
+            except (ValueError, TypeError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
+
+        if parsed.path == "/api/worksheets":
+            try:
+                worksheet = validate_saved_worksheet(json_body(self))
+                with LOCK:
+                    state = load_state()
+                    current = list(state.get("worksheets", []))
+                    current = [item for item in current if item.get("worksheet_id") != worksheet["worksheet_id"]]
+                    current.append(worksheet)
+                    state["worksheets"] = current
+                    save_state(state)
+                self.send_json(worksheet, 201)
+            except (ValueError, TypeError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
+
         if parsed.path == "/api/tasks":
             try:
                 task = validate_task(json_body(self))
@@ -203,6 +248,22 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_DELETE(self):
         parsed = urlparse(self.path)
+        if parsed.path.startswith("/api/worksheets/"):
+            worksheet_id = parsed.path.removeprefix("/api/worksheets/")
+            with LOCK:
+                state = load_state()
+                before = len(state.get("worksheets", []))
+                state["worksheets"] = [
+                    item for item in state.get("worksheets", [])
+                    if item.get("worksheet_id") != worksheet_id
+                ]
+                if len(state["worksheets"]) == before:
+                    self.api_error("worksheet not found", 404)
+                    return
+                save_state(state)
+            self.send_json({"deleted": worksheet_id})
+            return
+
         if not parsed.path.startswith("/api/tasks/"):
             self.api_error("not found", 404)
             return

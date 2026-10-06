@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Worksheet Studio · Online School</title>
+  <meta name="description" content="Create, edit, differentiate, save, and print worksheets from Online School.">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./worksheet.css">
+</head>
+<body>
+  <main class="shell worksheet-shell">
+    <header class="top worksheet-top no-print">
+      <div>
+        <p class="eyebrow">Online School</p>
+        <h1>Worksheet Studio</h1>
+        <p class="sub">Build the page around the knowledge path, then edit every line before it prints.</p>
+      </div>
+      <div class="studio-actions">
+        <a class="ghost button-link" href="./">← School</a>
+        <button id="save-worksheet" class="ghost" type="button">Save</button>
+        <button id="print-worksheet" class="primary" type="button">Print / PDF</button>
+      </div>
+    </header>
+
+    <section class="studio-grid">
+      <aside class="studio-controls no-print">
+        <div class="control-card">
+          <p class="eyebrow">Generate</p>
+          <label>Template
+            <select id="template">
+              <option value="arithmetic">Arithmetic</option>
+              <option value="spelling">Spelling</option>
+              <option value="vocabulary">Vocabulary</option>
+              <option value="reading">Reading + thinking</option>
+              <option value="handwriting">Handwriting / copywork</option>
+              <option value="custom">Custom Q + A</option>
+            </select>
+          </label>
+
+          <div class="form-grid">
+            <label>Level
+              <select id="level">
+                <option value="support">Support</option>
+                <option value="standard" selected>Standard</option>
+                <option value="challenge">Challenge</option>
+              </select>
+            </label>
+            <label>Variant
+              <input id="variant" value="A" maxlength="12">
+            </label>
+          </div>
+
+          <label>Title
+            <input id="ws-title" placeholder="Fractions review">
+          </label>
+          <label>Knowledge goal
+            <input id="knowledge-goal" placeholder="What should this page help make reachable?">
+          </label>
+
+          <div class="form-grid">
+            <label>Learner
+              <input id="learner" placeholder="Optional">
+            </label>
+            <label>Subject
+              <input id="subject" placeholder="Math, reading…">
+            </label>
+          </div>
+
+          <label>Directions
+            <textarea id="instructions" rows="2" placeholder="Optional student directions"></textarea>
+          </label>
+
+          <div id="template-fields"></div>
+
+          <div class="form-grid">
+            <label>Paper
+              <select id="page-size">
+                <option value="letter">US Letter</option>
+                <option value="a4">A4</option>
+              </select>
+            </label>
+            <label>Columns
+              <select id="columns">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-grid">
+            <label>Seed
+              <input id="seed" type="number" value="1">
+            </label>
+            <label class="check-label">Answer key
+              <input id="answer-key-toggle" type="checkbox" checked>
+            </label>
+          </div>
+
+          <button id="generate-worksheet" class="primary wide" type="button">Generate worksheet</button>
+          <p id="worksheet-error" class="error" hidden></p>
+        </div>
+
+        <div class="control-card">
+          <div class="section-head compact">
+            <div>
+              <p class="eyebrow">Edit</p>
+              <h2>Questions</h2>
+            </div>
+            <button id="add-question" type="button" class="ghost small">+ Question</button>
+          </div>
+          <div id="question-editor" class="question-editor"></div>
+        </div>
+
+        <div class="control-card">
+          <p class="eyebrow">Saved library</p>
+          <div id="worksheet-library" class="worksheet-library"></div>
+        </div>
+      </aside>
+
+      <section class="paper-wrap">
+        <article id="worksheet-paper" class="worksheet-paper">
+          <header class="worksheet-header">
+            <div class="worksheet-brand">ONLINE SCHOOL</div>
+            <h2 id="preview-title">Worksheet Studio</h2>
+            <p id="preview-subtitle" class="preview-subtitle"></p>
+            <div class="student-line">
+              <span>Name: ______________________________</span>
+              <span>Date: __________________</span>
+            </div>
+            <p id="preview-goal" class="knowledge-goal"></p>
+            <p id="preview-instructions" class="preview-instructions"></p>
+          </header>
+
+          <div id="passage-block" class="passage-block" hidden>
+            <h3>Read</h3>
+            <p id="preview-passage"></p>
+          </div>
+
+          <ol id="worksheet-items" class="worksheet-items"></ol>
+
+          <footer class="worksheet-footer">
+            <span id="preview-meta"></span>
+            <span>Path to knowledge through language</span>
+          </footer>
+        </article>
+
+        <article id="answer-paper" class="worksheet-paper answer-paper">
+          <header class="worksheet-header">
+            <div class="worksheet-brand">ONLINE SCHOOL · ANSWER KEY</div>
+            <h2 id="answer-title">Answer Key</h2>
+          </header>
+          <ol id="answer-items" class="answer-items"></ol>
+          <footer class="worksheet-footer">
+            <span>Teacher copy</span>
+            <span>Evidence does not automatically equal mastery.</span>
+          </footer>
+        </article>
+      </section>
+    </section>
+  </main>
+  <script src="./worksheet.js" defer></script>
+</body>
+</html>

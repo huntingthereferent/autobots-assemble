@@ -72,7 +72,8 @@ textarea { resize: vertical; }
 .summary strong { font-size: 1.35rem; }
 
 .toolbar { margin: 22px 0 18px; }
-.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.filters, .studio-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+.button-link { text-decoration: none; display: inline-flex; align-items: center; justify-content: center; }
 .filter, .ghost, .primary, .icon-button {
   border-radius: 10px;
   border: 1px solid var(--line);

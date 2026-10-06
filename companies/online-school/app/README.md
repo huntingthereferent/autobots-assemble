@@ -41,7 +41,28 @@ POST   /api/generate
 POST   /api/tasks
 PATCH  /api/tasks/{id}
 DELETE /api/tasks/{id}
+
+GET    /api/worksheets
+GET    /api/worksheets/{id}
+POST   /api/worksheets/generate
+POST   /api/worksheets
+DELETE /api/worksheets/{id}
 ```
+
+## Worksheet Studio
+
+`/worksheet.html` is the native printable worksheet authoring surface. It is not a separate product: saved worksheets live in Online School state and remain available to later school/runtime layers.
+
+Current generation modes:
+
+- arithmetic, including deterministic variants and mixed operations;
+- spelling with support / standard / challenge movements;
+- vocabulary from term-definition pairs;
+- reading + thinking from a supplied source passage;
+- handwriting / copywork;
+- fully custom question + answer rows.
+
+Every generated question remains editable. The studio supports learner/subject/knowledge-goal context, answer keys, response-space editing, 1–3 column layouts, US Letter/A4 paper, saved worksheet reuse, and clean browser Print/PDF output. A seed + variant label make parallel or repeatable versions explicit rather than silently regenerating different work.
 
 Example generation request:
 
