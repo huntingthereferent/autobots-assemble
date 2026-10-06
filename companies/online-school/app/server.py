@@ -22,6 +22,7 @@ from schedule_engine import generate_tasks, load_schedule, load_themes, merge_ge
 from school_view import build_school_view
 from worksheet_engine import generate_worksheet, validate_saved_worksheet
 from placement import placement_plan
+from weekly_itinerary import generate_all_weeks
 
 
 DATA_DIR = Path(
@@ -262,7 +263,11 @@ class Handler(BaseHTTPRequestHandler):
                 state = load_state()
                 generated = adapt_generated_to_learners(generated, state)
                 generated.extend(placement_tasks(day, state))
-                generated.extend(adult_required_tasks(day, state))
+                weekly_tasks, calendar_rows = generate_all_weeks(state, day)
+                generated.extend(weekly_tasks)
+                if not weekly_tasks:
+                    generated.extend(adult_required_tasks(day, state))
+                state["calendar"] = calendar_rows
                 state["tasks"], _added = merge_generated(
                     state.get("tasks", []),
                     generated,
@@ -346,7 +351,11 @@ class Handler(BaseHTTPRequestHandler):
                 state = load_state()
                 generated = adapt_generated_to_learners(generated, state)
                 generated.extend(placement_tasks(day, state))
-                generated.extend(adult_required_tasks(day, state))
+                weekly_tasks, calendar_rows = generate_all_weeks(state, day)
+                generated.extend(weekly_tasks)
+                if not weekly_tasks:
+                    generated.extend(adult_required_tasks(day, state))
+                state["calendar"] = calendar_rows
                 state["tasks"], added = merge_generated(state.get("tasks", []), generated)
                 save_state(state)
                 tasks = [t for t in state["tasks"] if t.get("date") == day]
@@ -608,23 +617,25 @@ class Handler(BaseHTTPRequestHandler):
                 payload = json_body(self)
                 start = str(payload.get("start") or date.today().isoformat())
                 end = str(payload.get("end") or start)
-                generated = generate_tasks(start, end)
+                generated = generate_tasks(start, start)
                 with LOCK:
                     state = load_state()
                     generated = adapt_generated_to_learners(generated, state)
-                    cursor = start
-                    adult_rows = []
-                    from datetime import timedelta as _timedelta
-                    current = date.fromisoformat(start)
-                    stop = date.fromisoformat(end)
-                    while current <= stop:
-                        adult_rows.extend(placement_tasks(current.isoformat(), state))
-                        adult_rows.extend(adult_required_tasks(current.isoformat(), state))
-                        current += _timedelta(days=1)
-                    generated.extend(adult_rows)
+                    generated.extend(placement_tasks(start, state))
+                    weekly_tasks, calendar_rows = generate_all_weeks(state, start)
+                    generated.extend(weekly_tasks)
+                    if not weekly_tasks:
+                        generated.extend(adult_required_tasks(start, state))
+                    state["calendar"] = calendar_rows
                     state["tasks"], added = merge_generated(state.get("tasks", []), generated)
                     save_state(state)
-                self.send_json({"added": added, "generated": len(generated), "start": start, "end": end}, 201)
+                self.send_json({
+                    "added": added,
+                    "generated": len(generated),
+                    "start": start,
+                    "end": start,
+                    "bounded_week": True,
+                }, 201)
             except (ValueError, json.JSONDecodeError) as exc:
                 self.api_error(str(exc))
             return
