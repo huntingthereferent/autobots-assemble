@@ -27,6 +27,7 @@ class SystemBinding:
 class OrchestrationStep:
     submitted: tuple[str, ...] = ()
     executed: tuple[str, ...] = ()
+    reconciled: tuple[str, ...] = ()
     waiting_for_actor: tuple[str, ...] = ()
 
 
@@ -59,6 +60,7 @@ class Orchestrator:
     def step(self) -> OrchestrationStep:
         submitted: list[str] = []
         executed: list[str] = []
+        reconciled: list[str] = []
         waiting: list[str] = []
 
         for binding in self._systems.values():
@@ -70,12 +72,35 @@ class Orchestrator:
                     )
 
                 handoff = emission.handoff
-                if not self._runtime_has(handoff.handoff_id):
+                already_known = self._runtime_has(handoff.handoff_id)
+                if not already_known:
                     self.runtime.submit(handoff)
-                    self._origins[handoff.handoff_id] = (binding, emission)
                     submitted.append(handoff.handoff_id)
 
+                # Rebuild origin routing even when the handoff came from a
+                # recovered durable runtime rather than this process.
+                self._origins.setdefault(
+                    handoff.handoff_id,
+                    (binding, emission),
+                )
+
                 state = self.runtime.state(handoff.handoff_id)
+
+                # A crash may occur after the runtime accepted a result but
+                # before the originating system reconciled it. If that system
+                # re-emits the same pending handoff on restart, apply the
+                # already-recorded result instead of executing again.
+                if already_known and state.status in {
+                    "COMPLETE",
+                    "PARTIAL",
+                    "BLOCKED",
+                    "FAILED",
+                    "UNKNOWN",
+                }:
+                    binding.reconcile(emission, state)
+                    reconciled.append(handoff.handoff_id)
+                    continue
+
                 if state.status != "READY":
                     continue
 
@@ -91,6 +116,7 @@ class Orchestrator:
         return OrchestrationStep(
             submitted=tuple(submitted),
             executed=tuple(executed),
+            reconciled=tuple(reconciled),
             waiting_for_actor=tuple(waiting),
         )
 
@@ -124,7 +150,7 @@ class Orchestrator:
         for _ in range(max_steps):
             step = self.step()
             steps.append(step)
-            if not step.submitted and not step.executed:
+            if not step.submitted and not step.executed and not step.reconciled:
                 return tuple(steps)
 
         raise RuntimeError(
