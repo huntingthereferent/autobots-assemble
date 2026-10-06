@@ -20,6 +20,8 @@ A protocol may specialize the witness conditions, but it may not silently change
 
 - [`ai/session.md`](ai/session.md) — enter and operate a session.
 - [`ai/repo-write.md`](ai/repo-write.md) — mutate this repository without losing provenance.
+- [`ai/purge.md`](ai/purge.md) — neutral one-item-at-a-time repository cleanup review.
+- [`ai/james.md`](ai/james.md) — gate repository additions by James-confirmed speaker identity without inferring identity from style or topic.
 
 ## Research protocols
 
