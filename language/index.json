@@ -9,5 +9,10 @@
       "registers": "language/english/registers.json"
     }
   },
-  "neutral_shape_contract": "language/SHAPE_CONTRACT.md"
+  "neutral_shape_contract": "language/SHAPE_CONTRACT.md",
+  "words_movement": {
+    "status": "active",
+    "root": "language/words",
+    "anchor_bank": "language/words/movement_anchors.json"
+  }
 }
