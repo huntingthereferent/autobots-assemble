@@ -252,15 +252,6 @@ function renderArtifacts(item) {
 }
 
 function renderGrownup(item) {
-  $("#obligations").replaceChildren(...(item.curriculum_obligations || []).map(target => {
-    const row = document.createElement("div");
-    row.className = "requirement-row";
-    row.innerHTML = "<strong></strong><span></span>";
-    row.querySelector("strong").textContent = target.title;
-    row.querySelector("span").textContent = target.description;
-    return row;
-  }));
-
   const calendarRows = (state?.calendar || []).filter(
     row => row.learner_id === item.id
   );
