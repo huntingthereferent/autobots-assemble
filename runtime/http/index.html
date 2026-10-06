@@ -19,6 +19,7 @@
         <button class="nav-item">Calendar</button>
         <button class="nav-item">School</button>
         <button class="nav-item">Work</button>
+        <button class="nav-item">Research</button>
       </nav>
       <button id="ohayo" class="profile-button">ohayo</button>
     </aside>
@@ -26,18 +27,31 @@
     <section class="feed-column">
       <header class="feed-header">
         <div>
-          <p class="eyebrow">Home</p>
+          <p class="eyebrow">Your hub</p>
           <h1>Continuity</h1>
         </div>
         <button class="ghost">New</button>
       </header>
+
+      <section class="global-search">
+        <input type="search" placeholder="Search people, conversations, school, work, research, calendar…">
+      </section>
+
+      <section class="portal-strip" aria-label="Connected spaces">
+        <button><b>School</b><span>learning & family</span></button>
+        <button><b>Calendar</b><span>time & events</span></button>
+        <button><b>Work</b><span>jobs & projects</span></button>
+        <button><b>Research</b><span>evidence & questions</span></button>
+        <button><b>Factory</b><span>systems & operations</span></button>
+        <button><b>More</b><span>connected sources</span></button>
+      </section>
 
       <section class="composer panel">
         <div class="avatar">C</div>
         <div class="composer-body">
           <textarea id="composer-text" placeholder="What is happening?"></textarea>
           <div class="composer-actions">
-            <span>Post to the hub</span>
+            <span>Share into Continuity</span>
             <button class="primary">Post</button>
           </div>
         </div>
@@ -64,18 +78,26 @@
     </section>
 
     <aside class="right-rail">
+      <section class="rail-card identity-card">
+        <div class="avatar small">C</div>
+        <div>
+          <strong>Your Continuity</strong>
+          <p>One identity across connected sources.</p>
+        </div>
+      </section>
+
       <section class="rail-card">
         <p class="eyebrow">Activity</p>
         <div id="attention-reminders" class="stack"></div>
       </section>
 
       <section class="rail-card">
-        <p class="eyebrow">Time</p>
+        <p class="eyebrow">Today</p>
         <div id="attention-calendar" class="stack"></div>
       </section>
 
       <section class="rail-card">
-        <p class="eyebrow">Sources</p>
+        <p class="eyebrow">Connected sources</p>
         <div class="source-list">
           <span>School</span>
           <span>Calendar</span>
