@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="visual-template" content="day_attention_ops_v1">
-  <title>Connected Systems</title>
+  <title>Continuity Layer — Movement</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -12,110 +12,141 @@
     <header class="hero">
       <div>
         <p class="eyebrow">Continuity Layer</p>
-        <h1>Connected systems</h1>
-        <p class="sub">Notes stay notes. Tasks enter the runtime only when admitted. Activations compress the live ecosystem into the view you need.</p>
+        <h1>Movement</h1>
+        <p class="sub">The front page follows what is moving now. Systems, time, tasks, notes, and artifacts appear only as the movement reaches them.</p>
       </div>
       <button id="ohayo" class="primary">ohayo</button>
     </header>
 
-    <section class="stats" id="stats"></section>
+    <section class="movement-rail" aria-label="Word movement anchors">
+      <span>OPEN</span><i>→</i>
+      <span>PING</span><i>→</i>
+      <span>REPLY</span><i>→</i>
+      <span>BRANCH</span><i>→</i>
+      <span>ECHO</span><i>→</i>
+      <span>REACT</span><i>→</i>
+      <span>HANDOFF</span><i>→</i>
+      <span>RESOLVE</span><i>→</i>
+      <span>SILENCE</span><i>→</i>
+      <span>REOPEN</span>
+    </section>
 
-    <section class="activation panel">
+    <section class="movement-front panel">
       <div class="section-head">
         <div>
-          <p class="eyebrow">Day attention</p>
-          <h2>James / current day</h2>
+          <p class="eyebrow">Current front</p>
+          <h2>What is moving now</h2>
         </div>
-        <span id="activation-note">Live work + Calendar + admitted reminders</span>
+        <span id="activation-note">Live work + time + admitted attention</span>
       </div>
-      <div class="attention-grid">
-        <div>
-          <h3>Work in front</h3>
+      <div class="front-grid">
+        <div class="front-primary">
+          <h3>In motion</h3>
           <div id="attention-tasks" class="stack"></div>
         </div>
         <div>
-          <h3>Calendar</h3>
+          <h3>Time anchors</h3>
           <div id="attention-calendar" class="stack"></div>
         </div>
         <div>
-          <h3>Reminders</h3>
+          <h3>Held in front</h3>
           <div id="attention-reminders" class="stack"></div>
         </div>
       </div>
     </section>
 
-    <section class="grid">
-      <article class="panel">
-        <div class="section-head">
-          <div><p class="eyebrow">Context</p><h2>Notes</h2></div>
-        </div>
-        <form id="note-form" class="form">
-          <textarea name="body" required placeholder="Remember something without turning it into work."></textarea>
-          <input name="referent" placeholder="Referent (optional)">
-          <button class="secondary">Add note</button>
-        </form>
-        <div id="notes" class="stack"></div>
-      </article>
+    <section class="movement-section">
+      <div class="section-title">
+        <p class="eyebrow">Cross-boundary movement</p>
+        <h2>Returns, branches, and handoffs</h2>
+      </div>
+      <div id="handoffs" class="movement-stream"></div>
+    </section>
 
+    <section class="movement-section">
+      <div class="section-title">
+        <p class="eyebrow">Time truth</p>
+        <h2>Movement anchors on the calendar</h2>
+      </div>
       <article class="panel">
-        <div class="section-head">
-          <div><p class="eyebrow">Possible movement</p><h2>Plans</h2></div>
-        </div>
-        <form id="plan-form" class="form">
-          <input name="title" required placeholder="Plan title">
+        <form id="calendar-form" class="form movement-form">
+          <input name="title" required placeholder="Movement / event">
           <input name="referent" required placeholder="Referent">
-          <textarea name="steps" placeholder="Steps, one per line"></textarea>
-          <button class="secondary">Add plan</button>
-        </form>
-        <div id="plans" class="stack"></div>
-      </article>
-
-      <article class="panel">
-        <div class="section-head">
-          <div><p class="eyebrow">Time truth</p><h2>Calendar</h2></div>
-        </div>
-        <form id="calendar-form" class="form">
-          <input name="title" required placeholder="Event / deadline / routine">
-          <input name="referent" required placeholder="Referent">
+          <select name="movement_anchor">
+            <option value="">No anchor</option>
+            <option>OPEN</option><option>PING</option><option>REPLY</option>
+            <option>BRANCH</option><option>ECHO</option><option>REACT</option>
+            <option>HANDOFF</option><option>RESOLVE</option><option>SILENCE</option>
+            <option>REOPEN</option>
+          </select>
           <input name="starts_at" type="datetime-local">
-          <button class="secondary">Add calendar relation</button>
+          <button class="secondary">Anchor movement</button>
         </form>
         <div id="calendar-events" class="stack"></div>
       </article>
-
-      <article class="panel">
-        <div class="section-head">
-          <div><p class="eyebrow">Explicit attention</p><h2>Reminders</h2></div>
-        </div>
-        <form id="reminder-form" class="form">
-          <input name="text" required placeholder="What should stay in front?">
-          <input name="referent" required placeholder="Referent">
-          <input name="local_time" type="time">
-          <button class="secondary">Add daily reminder</button>
-        </form>
-        <div id="reminders" class="stack"></div>
-      </article>
-
-      <article class="panel wide">
-        <div class="section-head">
-          <div><p class="eyebrow">Explicit work</p><h2>Tasks</h2></div>
-        </div>
-        <form id="task-form" class="form task-form">
-          <input name="title" required placeholder="Task">
-          <input name="referent" required placeholder="Referent">
-          <input name="assignee" required value="james" placeholder="Assignee">
-          <button class="secondary">Create local task</button>
-        </form>
-        <div id="tasks" class="stack"></div>
-      </article>
-
-      <article class="panel wide">
-        <div class="section-head">
-          <div><p class="eyebrow">Shared carrier</p><h2>Live handoffs</h2></div>
-        </div>
-        <div id="handoffs" class="stack"></div>
-      </article>
     </section>
+
+    <section class="stats" id="stats"></section>
+
+    <details class="support-layer">
+      <summary>
+        <span><b>Supporting layers</b> — notes, plans, reminders, tasks</span>
+        <span>open</span>
+      </summary>
+
+      <section class="grid support-grid">
+        <article class="panel">
+          <div class="section-head">
+            <div><p class="eyebrow">Context</p><h2>Notes</h2></div>
+          </div>
+          <form id="note-form" class="form">
+            <textarea name="body" required placeholder="Preserve context without turning it into movement."></textarea>
+            <input name="referent" placeholder="Referent (optional)">
+            <button class="secondary">Add note</button>
+          </form>
+          <div id="notes" class="stack"></div>
+        </article>
+
+        <article class="panel">
+          <div class="section-head">
+            <div><p class="eyebrow">Possible movement</p><h2>Plans</h2></div>
+          </div>
+          <form id="plan-form" class="form">
+            <input name="title" required placeholder="Plan title">
+            <input name="referent" required placeholder="Referent">
+            <textarea name="steps" placeholder="Possible movements, one per line"></textarea>
+            <button class="secondary">Add plan</button>
+          </form>
+          <div id="plans" class="stack"></div>
+        </article>
+
+        <article class="panel">
+          <div class="section-head">
+            <div><p class="eyebrow">Explicit attention</p><h2>Reminders</h2></div>
+          </div>
+          <form id="reminder-form" class="form">
+            <input name="text" required placeholder="What should stay in front?">
+            <input name="referent" required placeholder="Referent">
+            <input name="local_time" type="time">
+            <button class="secondary">Add daily reminder</button>
+          </form>
+          <div id="reminders" class="stack"></div>
+        </article>
+
+        <article class="panel">
+          <div class="section-head">
+            <div><p class="eyebrow">Explicit work</p><h2>Tasks</h2></div>
+          </div>
+          <form id="task-form" class="form">
+            <input name="title" required placeholder="Task">
+            <input name="referent" required placeholder="Referent">
+            <input name="assignee" required value="james" placeholder="Assignee">
+            <button class="secondary">Create local task</button>
+          </form>
+          <div id="tasks" class="stack"></div>
+        </article>
+      </section>
+    </details>
 
     <p id="error" class="error" hidden></p>
   </main>
