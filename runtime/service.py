@@ -3,13 +3,13 @@ from __future__ import annotations
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterable
 
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.engine import HandoffRuntime
-from runtime.handoff import EvidenceRecord, ExecutionResult
+from runtime.handoff import EvidenceRecord, ExecutionResult, SimulatedActor
 from runtime.journal import RuntimeJournal
-from runtime.orchestrator import Orchestrator
+from runtime.orchestrator import Orchestrator, SystemBinding
 from systems.bindings import personal_operations_binding
 from systems.calendar import CalendarEvent, CalendarStore
 from systems.day_to_day import DayToDayStore, Reminder, attention_projection
@@ -38,6 +38,8 @@ class EcosystemService:
         *,
         data_dir: str | Path,
         activation_registry: str | Path = DEFAULT_ACTIVATIONS,
+        system_bindings: Iterable[SystemBinding] = (),
+        actors: Iterable[SimulatedActor] = (),
     ) -> None:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
@@ -60,6 +62,10 @@ class EcosystemService:
         self.orchestrator.register_system(
             personal_operations_binding(self.personal)
         )
+        for binding in system_bindings:
+            self.orchestrator.register_system(binding)
+        for actor in actors:
+            self.orchestrator.register_actor(actor)
         self.activations = ActivationRegistry.from_json(
             activation_registry
         )
@@ -75,6 +81,7 @@ class EcosystemService:
             by_status[state.status] = by_status.get(state.status, 0) + 1
 
         return {
+            "registered_systems": list(self.orchestrator._systems),
             "systems": {
                 "personal-operations": {
                     "notes": len(self.personal.notes()),
@@ -99,6 +106,14 @@ class EcosystemService:
                 "events": len(self.runtime.event_store.all()),
             },
         }
+
+    def step(self):
+        """Advance one orchestration pass across every registered system."""
+        return self.orchestrator.step()
+
+    def run_until_idle(self, *, max_steps: int = 100):
+        """Advance executable work while leaving unavailable actors READY."""
+        return self.orchestrator.run_until_idle(max_steps=max_steps)
 
     def add_note(self, payload: dict[str, Any]) -> dict[str, Any]:
         note = self.personal.add_note(
