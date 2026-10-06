@@ -37,6 +37,9 @@ __all__ = [
     "SystemBinding",
     "OrchestrationStep",
     "Orchestrator",
+    "RuntimeJournal",
 ]
 
 from .orchestrator import OrchestrationStep, Orchestrator, SystemBinding, SystemEmission
+
+from .journal import RuntimeJournal
