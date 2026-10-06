@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "preferred_referent": "☀ Activation Routing → Personal Operations",
-  "protocol": "language.activation",
-  "goal": "Use compact human activation words as explicit entrances into the repository/runtime ecosystem. Resolve actor + current referent + projection over existing handoffs without inventing work, then connect a persistent personal-operations source that can turn supported notes/tasks/plans into handoffs.",
+  "preferred_referent": "🗒 Personal Operations → Shared Handoffs",
+  "protocol": "core.handoff",
+  "goal": "Connect a persistent personal note/task/plan system to the cross-layer runtime while preserving the distinction between remembered context, plans, executable tasks, and admitted handoffs. Activation words project live handoffs rather than reading private notes/plans as obligations.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Create a persistent personal-operations system for notes, tasks, and plans that remains separate from the handoff carrier: notes are observations by default, tasks become handoffs only when explicitly admitted, and activations such as James's 'ohayo' project the resulting live handoffs.",
+  "next_movement": "Connect additional real systems to the same boundary: Online School should emit/consume shared handoffs instead of maintaining an isolated task model, then use those handoffs alongside Personal Operations in activation projections such as James's ohayo.",
   "walls": [
     "Do not redefine A/B as the activation layer, personal planner, task manager, or handoff runtime.",
     "Do not let an activation word invent tasks or mutate state merely by being spoken.",
@@ -29,7 +29,13 @@
     "runtime/activation.py",
     "runtime/examples/ohayo.py",
     "protocols/language/activation.md",
-    "network/tests/test_activation.py"
+    "network/tests/test_activation.py",
+    "systems/README.md",
+    "systems/personal_operations/README.md",
+    "systems/personal_operations/model.py",
+    "systems/personal_operations/store.py",
+    "systems/personal_operations/example_james_day.py",
+    "network/tests/test_personal_operations.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -37,15 +43,16 @@
     "reason": "The user explicitly backed out of the school implementation layer and generalized the repo into a translation/evidence spine with cross-layer handoffs, then directed implementation of the shared handoff runtime."
   },
   "verified_run": {
-    "benchmark": "Activation Routing",
+    "benchmark": "Personal Operations → Activation",
     "result": "implemented_pending_latest_ci",
     "checks": [
-      "actor+surface pair resolves explicit activation route",
-      "James ohayo targets James/current-day task projection",
-      "mixed ecosystem handoffs are filtered by assignee and live status",
-      "completed and other-actor handoffs are excluded",
-      "activation is read-only over runtime state",
-      "route boundaries prohibit rigid schedule and invented obligations"
+      "notes remain notes by default",
+      "plan steps do not automatically become tasks",
+      "unadmitted tasks remain local",
+      "only explicit task admission creates a shared Handoff",
+      "one local task cannot be admitted twice",
+      "admitted James task flows through runtime to ohayo",
+      "append-only JSONL state can be replayed without collapsing record types"
     ]
   }
 }
