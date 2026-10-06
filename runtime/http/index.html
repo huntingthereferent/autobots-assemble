@@ -4,149 +4,136 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="visual-template" content="continuity_social_hub_v1">
-  <title>Continuity Layer — Movement</title>
+  <title>Continuity</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-  <main class="shell">
-    <header class="hero">
-      <div>
-        <p class="eyebrow">Continuity Layer</p>
-        <h1>Movement</h1>
-        <p class="sub">One social surface for movement across the whole ecosystem. School, Calendar, Personal Operations, Factory, research, jobs, and future systems enter as sources—not separate homepages.</p>
-      </div>
-      <button id="ohayo" class="primary">ohayo</button>
-    </header>
+  <main class="hub-shell">
+    <aside class="left-nav">
+      <div class="brand">Continuity</div>
+      <nav>
+        <button class="nav-item active">Home</button>
+        <button class="nav-item">Following</button>
+        <button class="nav-item">Threads</button>
+        <button class="nav-item">Activity</button>
+        <button class="nav-item">Calendar</button>
+        <button class="nav-item">School</button>
+        <button class="nav-item">Work</button>
+      </nav>
+      <button id="ohayo" class="profile-button">ohayo</button>
+    </aside>
 
-    <section class="movement-rail" aria-label="Word movement anchors">
-      <span>OPEN</span><i>→</i>
-      <span>PING</span><i>→</i>
-      <span>REPLY</span><i>→</i>
-      <span>BRANCH</span><i>→</i>
-      <span>ECHO</span><i>→</i>
-      <span>REACT</span><i>→</i>
-      <span>HANDOFF</span><i>→</i>
-      <span>RESOLVE</span><i>→</i>
-      <span>SILENCE</span><i>→</i>
-      <span>REOPEN</span>
-    </section>
-
-    <section class="movement-front panel">
-      <div class="section-head">
+    <section class="feed-column">
+      <header class="feed-header">
         <div>
-          <p class="eyebrow">Current front</p>
-          <h2>What is moving now</h2>
+          <p class="eyebrow">Home</p>
+          <h1>Continuity</h1>
         </div>
-        <span id="activation-note">Live work + time + admitted attention</span>
-      </div>
-      <div class="front-grid">
-        <div class="front-primary">
-          <h3>In motion</h3>
-          <div id="attention-tasks" class="stack"></div>
-        </div>
-        <div>
-          <h3>Time anchors</h3>
-          <div id="attention-calendar" class="stack"></div>
-        </div>
-        <div>
-          <h3>Held in front</h3>
-          <div id="attention-reminders" class="stack"></div>
-        </div>
-      </div>
-    </section>
+        <button class="ghost">New</button>
+      </header>
 
-    <section class="movement-section">
-      <div class="section-title">
-        <p class="eyebrow">Threads · returns · handoffs</p>
-        <h2>Movement feed</h2>
-      </div>
-      <div id="handoffs" class="movement-stream"></div>
-    </section>
-
-    <section class="movement-section">
-      <div class="section-title">
-        <p class="eyebrow">Time truth</p>
-        <h2>Movement anchors on the calendar</h2>
-      </div>
-      <article class="panel">
-        <form id="calendar-form" class="form movement-form">
-          <input name="title" required placeholder="Movement / event">
-          <input name="referent" required placeholder="Referent">
-          <select name="movement_anchor">
-            <option value="">No anchor</option>
-            <option>OPEN</option><option>PING</option><option>REPLY</option>
-            <option>BRANCH</option><option>ECHO</option><option>REACT</option>
-            <option>HANDOFF</option><option>RESOLVE</option><option>SILENCE</option>
-            <option>REOPEN</option>
-          </select>
-          <input name="starts_at" type="datetime-local">
-          <button class="secondary">Anchor movement</button>
-        </form>
-        <div id="calendar-events" class="stack"></div>
-      </article>
-    </section>
-
-    <section class="stats" id="stats"></section>
-
-    <details class="support-layer">
-      <summary>
-        <span><b>Supporting layers</b> — notes, plans, reminders, tasks</span>
-        <span>open</span>
-      </summary>
-
-      <section class="grid support-grid">
-        <article class="panel">
-          <div class="section-head">
-            <div><p class="eyebrow">Context</p><h2>Notes</h2></div>
+      <section class="composer panel">
+        <div class="avatar">C</div>
+        <div class="composer-body">
+          <textarea id="composer-text" placeholder="What is happening?"></textarea>
+          <div class="composer-actions">
+            <span>Post to the hub</span>
+            <button class="primary">Post</button>
           </div>
+        </div>
+      </section>
+
+      <section class="feed-tabs">
+        <button class="tab active">For you</button>
+        <button class="tab">Following</button>
+        <button class="tab">Current</button>
+      </section>
+
+      <section id="handoffs" class="feed"></section>
+
+      <section class="feed-secondary">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Current attention</p>
+            <h2>In front now</h2>
+          </div>
+          <span id="activation-note"></span>
+        </div>
+        <div id="attention-tasks" class="feed"></div>
+      </section>
+    </section>
+
+    <aside class="right-rail">
+      <section class="rail-card">
+        <p class="eyebrow">Activity</p>
+        <div id="attention-reminders" class="stack"></div>
+      </section>
+
+      <section class="rail-card">
+        <p class="eyebrow">Time</p>
+        <div id="attention-calendar" class="stack"></div>
+      </section>
+
+      <section class="rail-card">
+        <p class="eyebrow">Sources</p>
+        <div class="source-list">
+          <span>School</span>
+          <span>Calendar</span>
+          <span>Personal</span>
+          <span>Factory</span>
+          <span>Research</span>
+          <span>Jobs</span>
+        </div>
+      </section>
+
+      <details class="rail-card manage">
+        <summary>Manage local layers</summary>
+        <div class="manage-grid">
           <form id="note-form" class="form">
-            <textarea name="body" required placeholder="Preserve context without turning it into movement."></textarea>
-            <input name="referent" placeholder="Referent (optional)">
-            <button class="secondary">Add note</button>
+            <textarea name="body" required placeholder="Add note"></textarea>
+            <input name="referent" placeholder="Referent">
+            <button class="secondary">Save note</button>
           </form>
-          <div id="notes" class="stack"></div>
-        </article>
 
-        <article class="panel">
-          <div class="section-head">
-            <div><p class="eyebrow">Possible movement</p><h2>Plans</h2></div>
-          </div>
           <form id="plan-form" class="form">
-            <input name="title" required placeholder="Plan title">
+            <input name="title" required placeholder="Plan">
             <input name="referent" required placeholder="Referent">
-            <textarea name="steps" placeholder="Possible movements, one per line"></textarea>
-            <button class="secondary">Add plan</button>
+            <textarea name="steps" placeholder="Steps"></textarea>
+            <button class="secondary">Save plan</button>
           </form>
-          <div id="plans" class="stack"></div>
-        </article>
 
-        <article class="panel">
-          <div class="section-head">
-            <div><p class="eyebrow">Explicit attention</p><h2>Reminders</h2></div>
-          </div>
+          <form id="calendar-form" class="form">
+            <input name="title" required placeholder="Calendar relation">
+            <input name="referent" required placeholder="Referent">
+            <input name="starts_at" type="datetime-local">
+            <button class="secondary">Add time</button>
+          </form>
+
           <form id="reminder-form" class="form">
-            <input name="text" required placeholder="What should stay in front?">
+            <input name="text" required placeholder="Reminder">
             <input name="referent" required placeholder="Referent">
             <input name="local_time" type="time">
-            <button class="secondary">Add daily reminder</button>
+            <button class="secondary">Add reminder</button>
           </form>
-          <div id="reminders" class="stack"></div>
-        </article>
 
-        <article class="panel">
-          <div class="section-head">
-            <div><p class="eyebrow">Explicit work</p><h2>Tasks</h2></div>
-          </div>
           <form id="task-form" class="form">
             <input name="title" required placeholder="Task">
             <input name="referent" required placeholder="Referent">
             <input name="assignee" required value="james" placeholder="Assignee">
-            <button class="secondary">Create local task</button>
+            <button class="secondary">Create task</button>
           </form>
-          <div id="tasks" class="stack"></div>
-        </article>
-      </section>
-    </details>
+        </div>
+      </details>
+    </aside>
+
+    <section hidden>
+      <div id="stats"></div>
+      <div id="notes"></div>
+      <div id="plans"></div>
+      <div id="calendar-events"></div>
+      <div id="reminders"></div>
+      <div id="tasks"></div>
+    </section>
 
     <p id="error" class="error" hidden></p>
   </main>
