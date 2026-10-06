@@ -1,17 +1,18 @@
 {
   "schema_version": 1,
-  "preferred_referent": "↔ Cross-Layer Handoff Runtime",
-  "protocol": "core.handoff",
-  "goal": "Make the repository's translation/evidence spine executable through one handoff carrier that can move between humans, school operations, software, machines, simulators, and later other connected systems without silently changing the referent or evidence contract.",
+  "preferred_referent": "☀ Activation Routing → Personal Operations",
+  "protocol": "language.activation",
+  "goal": "Use compact human activation words as explicit entrances into the repository/runtime ecosystem. Resolve actor + current referent + projection over existing handoffs without inventing work, then connect a persistent personal-operations source that can turn supported notes/tasks/plans into handoffs.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Add translation/activation routing above the carrier so a compact human trigger such as James's 'ohayo' can resolve person + current referent + projection and generate valid handoffs, while keeping the same runtime underneath.",
+  "next_movement": "Create a persistent personal-operations system for notes, tasks, and plans that remains separate from the handoff carrier: notes are observations by default, tasks become handoffs only when explicitly admitted, and activations such as James's 'ohayo' project the resulting live handoffs.",
   "walls": [
-    "Do not redefine A/B as the handoff runtime, workflow engine, task manager, planner, or factory.",
-    "Do not equate a handoff with its task/job/command projection.",
-    "Do not upgrade simulation evidence to physical, measured, inspected, or externally validated evidence.",
-    "Do not make live runtime state replace repository provenance/evidence history.",
-    "Do not force unlike receiving layers to share an evidence kind merely because they share the same outer handoff carrier."
+    "Do not redefine A/B as the activation layer, personal planner, task manager, or handoff runtime.",
+    "Do not let an activation word invent tasks or mutate state merely by being spoken.",
+    "Do not turn James's ohayo route into a rigid hourly schedule; its current projection is tasks/dependencies/blockers only.",
+    "Do not collapse notes, tasks, plans, and handoffs into one record type; their relations differ.",
+    "Do not expose other actors' tasks through an actor-scoped activation unless an explicit shared relation admits them.",
+    "Preserve the existing handoff evidence/provenance contract beneath every activation projection."
   ],
   "evidence": [
     "protocols/core/handoff.md",
@@ -22,7 +23,13 @@
     "runtime/handoff.schema.json",
     "runtime/examples/cross_layer.py",
     "runtime/examples/tiny_factory.py",
-    "network/tests/test_handoff_runtime.py"
+    "network/tests/test_handoff_runtime.py",
+    "activations/README.md",
+    "activations/registry.json",
+    "runtime/activation.py",
+    "runtime/examples/ohayo.py",
+    "protocols/language/activation.md",
+    "network/tests/test_activation.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -30,16 +37,15 @@
     "reason": "The user explicitly backed out of the school implementation layer and generalized the repo into a translation/evidence spine with cross-layer handoffs, then directed implementation of the shared handoff runtime."
   },
   "verified_run": {
-    "benchmark": "Cross-layer Handoff Runtime",
-    "result": "implemented_and_tested",
+    "benchmark": "Activation Routing",
+    "result": "implemented_pending_latest_ci",
     "checks": [
-      "James-style human task, school task, software job, and factory command use the same Handoff carrier",
-      "COMPLETE rejects missing or inadmissible evidence",
-      "dependent handoffs remain WAITING until upstream completion",
-      "event history is append-only",
-      "tiny simulated factory moves 10 demo units through supply → machine → inspection → assembly → shipping",
-      "simulation evidence remains explicitly simulated",
-      "protocol-tests run 608 completed successfully"
+      "actor+surface pair resolves explicit activation route",
+      "James ohayo targets James/current-day task projection",
+      "mixed ecosystem handoffs are filtered by assignee and live status",
+      "completed and other-actor handoffs are excluded",
+      "activation is read-only over runtime state",
+      "route boundaries prohibit rigid schedule and invented obligations"
     ]
   }
 }
