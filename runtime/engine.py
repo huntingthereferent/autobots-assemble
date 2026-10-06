@@ -53,24 +53,37 @@ class HandoffRuntime:
 
     def __init__(self, *, event_store: EventStore | None = None) -> None:
         self.event_store = event_store or EventStore()
-        self._handoffs: dict[str, Handoff] = {}
+        restored = getattr(self.event_store, "handoffs", lambda: ())()
+        self._handoffs: dict[str, Handoff] = {
+            handoff.handoff_id: handoff
+            for handoff in restored
+        }
 
     def submit(self, handoff: Handoff) -> HandoffState:
         if handoff.handoff_id in self._handoffs:
             raise ValueError(f"handoff already exists: {handoff.handoff_id}")
-        self._handoffs[handoff.handoff_id] = handoff
-        self.event_store.append(
-            HandoffEvent.create(
-                handoff_id=handoff.handoff_id,
-                event_type="CREATED",
-                actor_id=handoff.from_actor,
-                data={
-                    "referent": handoff.referent,
-                    "to_actor": handoff.to_actor,
-                    "required_relation": handoff.required_relation,
-                },
-            )
+        created = HandoffEvent.create(
+            handoff_id=handoff.handoff_id,
+            event_type="CREATED",
+            actor_id=handoff.from_actor,
+            data={
+                "referent": handoff.referent,
+                "to_actor": handoff.to_actor,
+                "required_relation": handoff.required_relation,
+            },
         )
+
+        append_submission = getattr(
+            self.event_store,
+            "append_submission",
+            None,
+        )
+        if append_submission is not None:
+            append_submission(handoff, created)
+        else:
+            self.event_store.append(created)
+
+        self._handoffs[handoff.handoff_id] = handoff
         return self.state(handoff.handoff_id)
 
     def get(self, handoff_id: str) -> Handoff:
