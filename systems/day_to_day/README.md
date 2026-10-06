@@ -24,3 +24,5 @@ Activation words are entrances into that projection. A scheduler/notification su
 - Different people can have different activation words and different projections.
 
 This is intentionally separate from the education kernel. Education may emit a handoff for a person; Day-to-Day only helps that person keep it in front when it needs attention.
+
+For Online School, the current weekly itinerary is one such source-system handoff surface. Day-to-Day consumes only the dated movements for the current week; it does not generate future curriculum or bypass the Friday retest that closes the week.
