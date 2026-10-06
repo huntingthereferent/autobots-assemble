@@ -206,6 +206,27 @@ a{text-decoration:none}
 .switch-person strong,.switch-person small{display:block}
 .switch-person small{color:var(--muted);font-size:.68rem;margin-top:2px}
 
+.placement-dialog{width:min(760px,calc(100% - 24px))}
+.placement-intro{margin:-4px 0 6px;color:var(--muted);line-height:1.5}
+.placement-items{display:grid;gap:12px;max-height:58vh;overflow:auto;padding-right:4px}
+.placement-item{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px}
+.placement-item strong{display:block;font-size:.84rem;line-height:1.4;margin-bottom:8px}
+.placement-item small{display:block;color:var(--muted);font-size:.67rem;margin-bottom:7px}
+.placement-item input,.placement-item textarea{
+  width:100%;border:1px solid #ddd8ce;background:#fffdf9;color:var(--ink);
+  border-radius:12px;padding:11px 12px;outline:none
+}
+.placement-item textarea{min-height:95px;resize:vertical}
+.placement-band{
+  margin:6px 0 2px;padding:6px 9px;border-radius:999px;background:#f1edff;
+  color:#6251c8;font-size:.66rem;font-weight:900;width:max-content
+}
+.task-card[data-placement="true"]{border-color:#cfc6ff;background:linear-gradient(180deg,#fff,#faf8ff)}
+.task-card[data-placement="true"]::after{
+  content:"START";position:absolute;right:14px;bottom:13px;font-size:.62rem;font-weight:900;
+  letter-spacing:.08em;color:#6757c8
+}
+
 .welcome-two{display:grid;grid-template-columns:.7fr 1.3fr;gap:12px}
 .academic-lab{
   background:

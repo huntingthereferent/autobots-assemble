@@ -9,6 +9,9 @@ const observationDialog = $("#observation-dialog");
 const observationForm = $("#observation-form");
 const observationError = $("#observation-error");
 const switchDialog = $("#switch-dialog");
+const placementDialog = $("#placement-dialog");
+const placementForm = $("#placement-form");
+const placementError = $("#placement-error");
 
 let school = null;
 let state = null;
@@ -96,13 +99,18 @@ function renderFocus(item) {
   const root = $("#focus-content");
   const empty = $("#focus-empty");
   const done = $("#focus-done");
+  const startTest = $("#focus-start-test");
+  const tell = $("#focus-tell");
 
   root.replaceChildren();
 
   if (!focus) {
     empty.hidden = false;
     done.hidden = true;
+    startTest.hidden = true;
+    tell.hidden = false;
     done.dataset.taskId = "";
+    startTest.dataset.subject = "";
     return;
   }
 
@@ -134,8 +142,12 @@ function renderFocus(item) {
   }
 
   root.append(tag, title, description, meta);
-  done.hidden = focus.status === "done";
-  done.dataset.taskId = focus.id;
+  const isPlacement = focus.source === "placement";
+  startTest.hidden = !isPlacement;
+  startTest.dataset.subject = isPlacement ? (focus.meta?.placement_subject || "") : "";
+  tell.hidden = isPlacement;
+  done.hidden = isPlacement || focus.status === "done";
+  done.dataset.taskId = isPlacement ? "" : focus.id;
 }
 
 function taskCard(task) {
@@ -143,6 +155,8 @@ function taskCard(task) {
   const card = document.createElement("article");
   card.className = "task-card" + (task.status === "done" ? " done" : "");
   card.dataset.subject = info.key;
+  const isPlacement = task.source === "placement";
+  card.dataset.placement = isPlacement ? "true" : "false";
 
   const icon = document.createElement("span");
   icon.className = "task-icon";
@@ -153,9 +167,22 @@ function taskCard(task) {
   check.className = "task-check";
   check.textContent = task.status === "done" ? "✓" : "";
   check.setAttribute("aria-label", `Mark ${task.title} ${task.status === "done" ? "not done" : "done"}`);
-  check.onclick = async () => {
-    await patchTask(task.id, {status: task.status === "done" ? "todo" : "done"});
-  };
+  if (isPlacement) {
+    check.hidden = true;
+    card.tabIndex = 0;
+    card.setAttribute("role", "button");
+    card.onclick = () => openPlacement(task.meta?.placement_subject || "");
+    card.onkeydown = event => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openPlacement(task.meta?.placement_subject || "");
+      }
+    };
+  } else {
+    check.onclick = async () => {
+      await patchTask(task.id, {status: task.status === "done" ? "todo" : "done"});
+    };
+  }
 
   const copy = document.createElement("div");
   const title = document.createElement("strong");
@@ -384,6 +411,103 @@ welcomeForm.addEventListener("submit", async event => {
   } catch (err) {
     welcomeError.textContent = err.message;
     welcomeError.hidden = false;
+  }
+});
+
+
+async function openPlacement(subject) {
+  const learner = person();
+  if (!learner || !subject) return;
+  placementError.hidden = true;
+  const response = await fetch(`/api/placement?learner=${encodeURIComponent(learner.id)}`, {cache:"no-store"});
+  const body = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    alert(body.error || "Could not open placement");
+    return;
+  }
+
+  const section = (body.sections || []).find(item => item.subject === subject);
+  if (!section) {
+    alert("Placement section not found");
+    return;
+  }
+
+  placementForm.dataset.subject = subject;
+  $("#placement-title").textContent = section.title;
+  $("#placement-intro").textContent = section.description || "";
+  const root = $("#placement-items");
+  root.replaceChildren();
+
+  if (subject === "mathematics") {
+    let currentBand = "";
+    for (const item of section.diagnostic.items || []) {
+      if (item.band !== currentBand) {
+        currentBand = item.band;
+        const band = document.createElement("div");
+        band.className = "placement-band";
+        band.textContent = item.band_label;
+        root.append(band);
+      }
+      const row = document.createElement("label");
+      row.className = "placement-item";
+      row.innerHTML = "<small></small><strong></strong><input autocomplete=\"off\">";
+      row.querySelector("small").textContent = item.domain.replaceAll("-", " ");
+      row.querySelector("strong").textContent = item.prompt;
+      row.querySelector("input").name = item.id;
+      root.append(row);
+    }
+  } else {
+    const prompts = section.prompts || [];
+    prompts.forEach((prompt, index) => {
+      const row = document.createElement("label");
+      row.className = "placement-item";
+      row.innerHTML = "<strong></strong><textarea></textarea>";
+      row.querySelector("strong").textContent = prompt;
+      row.querySelector("textarea").name = `q${index + 1}`;
+      root.append(row);
+    });
+  }
+
+  placementDialog.showModal();
+}
+
+$("#focus-start-test").onclick = event => {
+  openPlacement(event.currentTarget.dataset.subject || "");
+};
+$("#close-placement").onclick = () => placementDialog.close();
+
+placementForm.addEventListener("submit", async event => {
+  event.preventDefault();
+  placementError.hidden = true;
+  const learner = person();
+  const subject = placementForm.dataset.subject;
+  const data = new FormData(placementForm);
+  const responses = {};
+  for (const [key, value] of data.entries()) {
+    responses[key] = String(value).trim();
+  }
+
+  try {
+    const response = await fetch("/api/placement/submit", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        learner_id: learner.id,
+        subject,
+        responses
+      })
+    });
+    const body = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(body.error || "Could not submit placement");
+    placementDialog.close();
+
+    if (subject === "mathematics" && body.result?.start_band) {
+      alert(`Math starting band: ${body.result.start_band}`);
+    }
+    await load();
+  } catch (err) {
+    placementError.textContent = err.message;
+    placementError.hidden = false;
   }
 });
 

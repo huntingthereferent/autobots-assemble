@@ -92,6 +92,7 @@
             <p>You can pick something from today, make something, read, ask a question, or explore.</p>
           </div>
           <div class="focus-actions">
+            <button id="focus-start-test" class="big-action" type="button" hidden>Start test →</button>
             <button id="focus-done" class="big-action" type="button" hidden>Done ✓</button>
             <button id="focus-tell" class="soft-action" type="button">Tell what happened</button>
           </div>
@@ -223,6 +224,22 @@
       </details>
       <button class="big-action" type="submit">Save it</button>
       <p id="observation-error" class="form-error" hidden></p>
+    </form>
+  </dialog>
+
+  <dialog id="placement-dialog" class="kid-dialog placement-dialog">
+    <form id="placement-form">
+      <div class="dialog-top">
+        <div>
+          <p class="eyebrow">Placement</p>
+          <h2 id="placement-title">Find your starting point</h2>
+        </div>
+        <button id="close-placement" class="round-close" type="button">×</button>
+      </div>
+      <p id="placement-intro" class="placement-intro"></p>
+      <div id="placement-items" class="placement-items"></div>
+      <button class="big-action" type="submit">Submit test</button>
+      <p id="placement-error" class="form-error" hidden></p>
     </form>
   </dialog>
 

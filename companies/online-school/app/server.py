@@ -21,6 +21,7 @@ from systems.education import EducationKernel, Observation
 from schedule_engine import generate_tasks, load_schedule, load_themes, merge_generated, validate_task
 from school_view import build_school_view
 from worksheet_engine import generate_worksheet, validate_saved_worksheet
+from placement import placement_plan
 
 
 DATA_DIR = Path(
@@ -53,6 +54,14 @@ def normalize_state(state):
             and str(item.get("display_name") or "") in {"Learner A", "Learner B"}
         )
     ]
+    for learner in learners:
+        placement = learner.get("placement")
+        if not isinstance(placement, dict):
+            learner["placement"] = {
+                "status": "required",
+                "completed_subjects": [],
+                "results": {},
+            }
     state["learners"] = learners
 
     normalized_tasks = []
@@ -119,6 +128,47 @@ def adapt_generated_to_learners(generated, state):
     return adapted
 
 
+def placement_tasks(day, state):
+    rows = []
+    for learner in state.get("learners", []):
+        placement = learner.get("placement") or {}
+        completed = set(placement.get("completed_subjects") or [])
+        for section in placement_plan(learner):
+            subject = section["subject"]
+            if subject in completed:
+                continue
+            rows.append(
+                {
+                    "id": str(
+                        uuid.uuid5(
+                            uuid.NAMESPACE_URL,
+                            f"online-school:placement:{day}:{learner.get('id')}:{subject}",
+                        )
+                    ),
+                    "date": day,
+                    "title": section["title"],
+                    "category": "placement",
+                    "kind": "assessment",
+                    "scope": "individual",
+                    "learner_ids": [str(learner.get("id") or "")],
+                    "planned_minutes": section["minutes"],
+                    "status": "todo",
+                    "source": "placement",
+                    "notes": section["description"],
+                    "meta": {
+                        "placement": True,
+                        "placement_subject": subject,
+                    },
+                }
+            )
+    return rows
+
+
+def placement_complete(learner):
+    placement = learner.get("placement") or {}
+    return placement.get("status") == "complete"
+
+
 def adult_required_tasks(day, state):
     if date.fromisoformat(day).weekday() > 4:
         return []
@@ -135,6 +185,8 @@ def adult_required_tasks(day, state):
         except (TypeError, ValueError):
             age = None
         if age is None or age < 18:
+            continue
+        if not placement_complete(learner):
             continue
         learner_id = str(learner.get("id") or "")
         for title, minutes, notes in blocks:
@@ -209,6 +261,7 @@ class Handler(BaseHTTPRequestHandler):
             with LOCK:
                 state = load_state()
                 generated = adapt_generated_to_learners(generated, state)
+                generated.extend(placement_tasks(day, state))
                 generated.extend(adult_required_tasks(day, state))
                 state["tasks"], _added = merge_generated(
                     state.get("tasks", []),
@@ -244,6 +297,29 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json(worksheet)
             return
 
+        if parsed.path == "/api/placement":
+            learner_id = parse_qs(parsed.query).get("learner", [""])[0]
+            with LOCK:
+                state = load_state()
+                learner = next(
+                    (
+                        item for item in state.get("learners", [])
+                        if str(item.get("id") or "") == learner_id
+                    ),
+                    None,
+                )
+            if learner is None:
+                self.api_error("learner not found", 404)
+                return
+            self.send_json(
+                {
+                    "learner_id": learner_id,
+                    "placement": learner.get("placement") or {},
+                    "sections": placement_plan(learner),
+                }
+            )
+            return
+
         if parsed.path == "/api/tasks":
             params = parse_qs(parsed.query)
             with LOCK:
@@ -269,6 +345,7 @@ class Handler(BaseHTTPRequestHandler):
             with LOCK:
                 state = load_state()
                 generated = adapt_generated_to_learners(generated, state)
+                generated.extend(placement_tasks(day, state))
                 generated.extend(adult_required_tasks(day, state))
                 state["tasks"], added = merge_generated(state.get("tasks", []), generated)
                 save_state(state)
@@ -318,6 +395,11 @@ class Handler(BaseHTTPRequestHandler):
                     "display_name": name,
                     "grade_context": grade,
                     "age": age,
+                    "placement": {
+                        "status": "required",
+                        "completed_subjects": [],
+                        "results": {},
+                    },
                 }
                 with LOCK:
                     state = load_state()
@@ -329,6 +411,149 @@ class Handler(BaseHTTPRequestHandler):
                                 task["learner_ids"] = ids + [learner["id"]]
                     save_state(state)
                 self.send_json(learner, 201)
+            except (ValueError, TypeError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
+
+        if parsed.path == "/api/placement/submit":
+            try:
+                payload = json_body(self)
+                learner_id = str(payload.get("learner_id") or "").strip()
+                subject = str(payload.get("subject") or "").strip()
+                responses = payload.get("responses") or {}
+                if not learner_id or not subject:
+                    raise ValueError("learner_id and subject are required")
+
+                with LOCK:
+                    state = load_state()
+                    learner = next(
+                        (
+                            item for item in state.get("learners", [])
+                            if str(item.get("id") or "") == learner_id
+                        ),
+                        None,
+                    )
+                    if learner is None:
+                        raise ValueError("unknown learner")
+
+                    section = next(
+                        (
+                            item for item in placement_plan(learner)
+                            if item["subject"] == subject
+                        ),
+                        None,
+                    )
+                    if section is None:
+                        raise ValueError("unknown placement subject")
+
+                    result = {
+                        "subject": subject,
+                        "submitted": True,
+                        "response_count": len(responses),
+                    }
+
+                    if subject == "mathematics":
+                        diagnostic = section["diagnostic"]
+                        band_totals = {}
+                        band_correct = {}
+                        correct = 0
+                        for item in diagnostic["items"]:
+                            band = item["band"]
+                            band_totals[band] = band_totals.get(band, 0) + 1
+                            given = str(responses.get(item["id"]) or "").strip().lower()
+                            expected = str(item["answer"] or "").strip().lower()
+                            hit = given == expected
+                            if hit:
+                                correct += 1
+                                band_correct[band] = band_correct.get(band, 0) + 1
+
+                        band_scores = {}
+                        start_band = diagnostic["bands"][0]["id"]
+                        for band in diagnostic["bands"]:
+                            band_id = band["id"]
+                            total = band_totals.get(band_id, 0)
+                            accuracy = (
+                                band_correct.get(band_id, 0) / total
+                                if total
+                                else 0.0
+                            )
+                            band_scores[band_id] = {
+                                "correct": band_correct.get(band_id, 0),
+                                "total": total,
+                                "accuracy": accuracy,
+                            }
+                            if accuracy >= 0.70:
+                                start_band = band_id
+                            else:
+                                break
+
+                        result.update(
+                            {
+                                "correct": correct,
+                                "total": len(diagnostic["items"]),
+                                "band_scores": band_scores,
+                                "start_band": start_band,
+                            }
+                        )
+                    else:
+                        result["responses"] = {
+                            str(key): str(value)
+                            for key, value in responses.items()
+                        }
+
+                    placement = learner.setdefault(
+                        "placement",
+                        {
+                            "status": "required",
+                            "completed_subjects": [],
+                            "results": {},
+                        },
+                    )
+                    completed = set(placement.get("completed_subjects") or [])
+                    completed.add(subject)
+                    placement["completed_subjects"] = sorted(completed)
+                    placement.setdefault("results", {})[subject] = result
+                    required_subjects = {
+                        item["subject"] for item in placement_plan(learner)
+                    }
+                    if required_subjects.issubset(completed):
+                        placement["status"] = "complete"
+
+                    for task in state.get("tasks", []):
+                        if (
+                            task.get("source") == "placement"
+                            and learner_id in task.get("learner_ids", [])
+                            and (task.get("meta") or {}).get("placement_subject") == subject
+                        ):
+                            task["status"] = "done"
+
+                    save_state(state)
+
+                    kernel = education_kernel()
+                    support = (
+                        f"placement start band: {result.get('start_band')}"
+                        if subject == "mathematics"
+                        else f"{subject} placement response submitted"
+                    )
+                    relation = kernel.observe(
+                        Observation.create(
+                            person_ref=learner_id,
+                            referent=f"placement:{subject}",
+                            observed=f"completed {subject} placement",
+                            supports=(support,),
+                            evidence_refs=(f"placement:{subject}",),
+                            provenance=("online-school:placement",),
+                        )
+                    )
+
+                self.send_json(
+                    {
+                        "result": result,
+                        "placement": learner["placement"],
+                        "relation": asdict(relation),
+                    },
+                    201,
+                )
             except (ValueError, TypeError, json.JSONDecodeError) as exc:
                 self.api_error(str(exc))
             return
@@ -393,6 +618,7 @@ class Handler(BaseHTTPRequestHandler):
                     current = date.fromisoformat(start)
                     stop = date.fromisoformat(end)
                     while current <= stop:
+                        adult_rows.extend(placement_tasks(current.isoformat(), state))
                         adult_rows.extend(adult_required_tasks(current.isoformat(), state))
                         current += _timedelta(days=1)
                     generated.extend(adult_rows)

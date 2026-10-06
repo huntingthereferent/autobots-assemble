@@ -83,6 +83,12 @@ def build_school_view(
             task for task in learner_tasks
             if task.get("status") != "done"
         ]
+        unfinished.sort(
+            key=lambda task: (
+                0 if task.get("source") == "placement" else 1,
+                str(task.get("title") or ""),
+            )
+        )
         shared_unfinished = [
             task for task in shared_tasks
             if task.get("status") != "done"
@@ -110,6 +116,11 @@ def build_school_view(
                 "presentation_guardrails": {
                     "age_bounded": not adult,
                     "grade_bounded": not adult,
+                },
+                "placement": learner.get("placement") or {
+                    "status": "required",
+                    "completed_subjects": [],
+                    "results": {},
                 },
                 "academic_tools": (
                     [
