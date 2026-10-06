@@ -4,77 +4,131 @@
   "name": "Person-First Education Workspace",
   "layer": "education_workspace",
   "status": "approved",
-  "intent": "A calm operational education surface that starts from the learner's current evidenced relations, then exposes today's movement, curriculum obligations, artifacts, and schedule without turning grade or schedule into learner state.",
+  "intent": "A calm person-first education surface. The learner's current evidenced relation determines movement; academic visual grammar supplies stable orientation through subject identity, current work, upcoming movement, recent feedback/evidence, and resumable learning without turning grades, scores, schedules, or course sequence into learner truth.",
   "witnesses": [
     {
       "kind": "internal",
       "source": "companies/online-school/app/index.html",
       "observed_on": "2026-10-05",
-      "notes": "Internal witness produced from the education-kernel architecture. Preserve learner-first hierarchy, separation of present relation from obligations, and restrained operational density."
+      "notes": "Internal witness produced from the education-kernel architecture. Preserve learner-first hierarchy and separation of present relation from obligations."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://community.instructure.com/en/kb/articles/664877-how-do-i-use-the-dashboard-as-a-student",
+      "observed_on": "2026-10-05",
+      "notes": "Canvas witness: dashboard as landing orientation; course identity, agenda/to-do, recent activity, upcoming work and feedback are separate but globally reachable."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://docs.moodle.org/500/en/Activities_overview",
+      "observed_on": "2026-10-05",
+      "notes": "Moodle witness: activity overview preserves activity type, dates, completion requirements, submission state and course context without requiring navigation through every course section."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://docs.moodle.org/502/en/New_Features",
+      "observed_on": "2026-10-05",
+      "notes": "Moodle witness: dashboard is treated as a central starting point with quick access to courses; simplified subsection presentation reduces bordered-box fragmentation."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://help.blackboard.com/sites/default/files/documents/2022-11/Educators.pdf",
+      "observed_on": "2026-10-05",
+      "notes": "Blackboard witness: persistent academic orientation through courses, calendar, activity stream, messages and grades; activity stream answers what requires attention now."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://edx.readthedocs.io/_/downloads/open-edx-learner-guide/en/dogwood/pdf/",
+      "observed_on": "2026-10-05",
+      "notes": "edX witness: current courses and a direct View Course/continue action provide a simple learner entry into ongoing work."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://www.khanacademy.org/khan-for-educators/khan-for-educators-advanced-course/x2e5750eab575b791%3Akhan-for-educators-advanced/x2e5750eab575b791%3Ausing-ka-reports-to-personalize-learning/a/review-student-progress-toward-mastery-a9",
+      "observed_on": "2026-10-05",
+      "notes": "Khan witness: teacher-side progress and student skill detail are useful deeper views, but progress metrics must remain subordinate to actual evidence in this system."
     }
   ],
   "grammar": {
     "layout": {
-      "shape": "learner selector → current relation → observation/regrounding → today movement, with obligations/artifacts secondary",
-      "grouping": "current learner truth, obligations, artifacts, and operating schedule remain visually distinct",
-      "primary_action": "record observation and reground",
-      "secondary_actions": "open worksheet artifact studio or add local activity"
+      "shape": "learner → subject/course orientation → in front now / continue → today and upcoming → recent feedback/evidence → deeper map and operator layers",
+      "grouping": "current learner truth, academic orientation, obligations, artifacts, feedback/evidence, and operating schedule remain visually distinct",
+      "primary_action": "continue the next supported educational movement",
+      "secondary_actions": "record observation, open learning details, inspect evidence, create artifact, or adjust local activity"
     },
     "hierarchy": {
       "strength": "strong",
       "sequence": [
         "learner",
-        "current relation",
-        "reground",
-        "today movement",
+        "subject/course identity",
+        "in front now",
+        "continue/current work",
+        "today and upcoming",
+        "recent feedback/evidence",
+        "learning map",
         "curriculum obligations",
         "artifacts",
         "schedule"
       ],
       "marketing_weight": "none"
     },
+    "academic_orientation": {
+      "subject_identity": "stable visual anchor; use subject/course labels to orient without making subject the kernel",
+      "current_work": "one obvious resumable movement should dominate the learner-facing hierarchy",
+      "upcoming": "dates and due/upcoming relations orient time but do not define the learning path",
+      "recent_feedback": "surface returned work/evidence near current movement; avoid hiding feedback in a separate administrative area",
+      "progress": "use descriptive evidence/state and movement history; percentage/mastery displays may orient only when their witness is explicit and must not stand in for learner truth",
+      "navigation": "courses/subjects, calendar/today, activity/evidence and materials should remain predictable across sessions",
+      "density": "prefer academic scanability: headings/dividers/lists before card-per-field fragmentation"
+    },
     "density": "medium-compact",
     "controls": {
-      "treatment": "conventional inputs with plain labels",
+      "treatment": "conventional academic controls with plain labels",
       "choice_count": "bounded",
-      "advanced_options": "kept outside the current relation unless reached"
+      "advanced_options": "kept outside the learner's current movement unless reached"
     },
     "surface": {
       "decoration": "restrained",
-      "cards": "only where a distinct relation/state boundary exists",
+      "cards": "course/subject or meaningful state boundaries only; use headers and dividers for subordinate structure",
       "radius": "moderate",
       "shadows": "none/minimal",
-      "color": "neutral base with one functional accent"
+      "color": "neutral base with restrained subject accents and one functional primary accent"
     },
     "typography": {
-      "tone": "plain, precise, educational but not childish",
-      "hierarchy": "current relation and referent scan before metrics"
+      "tone": "plain, precise, academically legible, not institutional or childish",
+      "hierarchy": "learner/current movement scans before administrative metrics or standards"
     },
     "motion": {
       "default": "quiet",
-      "rule": "state changes after evidence submission; no decorative motion"
+      "rule": "state changes after evidence/activity return; no decorative motion"
     }
   },
   "avoid": [
     "conventional LMS gradebook as the primary surface",
+    "institutional navigation for its own sake",
     "gamified mastery bars",
     "streaks, points, badges, or guilt language",
     "grade level presented as learner truth",
-    "schedule presented as the learner path",
+    "schedule or course sequence presented as the learner path",
+    "percentage progress used as a substitute for evidence",
     "AI-gradient dashboards",
     "card-per-field visual fragmentation",
     "childish decorative school motifs"
   ],
   "adaptation_rules": [
-    "Current learner relations must visually precede curriculum obligations.",
+    "Translate kernel language into ordinary academic learner language on the default surface; keep precise kernel terminology in deeper/operator views.",
+    "Give every active movement a stable subject/course identity when one exists.",
+    "Make one current supported movement resumable through an obvious Continue/Start action.",
+    "Keep Today/Upcoming and recent feedback/evidence close to the current movement.",
+    "Current learner relations must remain upstream of curriculum obligations even when obligations are displayed through familiar course/subject navigation.",
     "Grade context may appear only as obligation/reporting context.",
-    "The observation form must describe evidence, not label the learner.",
-    "Today’s schedule is an actuator layer and remains subordinate to the learner relation.",
+    "Manual observation entry should be secondary to normal learning movement and returned evidence.",
     "Artifacts must retain provenance and be treated as evidence surfaces, not mastery claims.",
-    "Keep the operator surface usable for adults while avoiding institutional LMS assumptions."
+    "Prefer section headings and dividers over many equally weighted cards.",
+    "Keep the operator surface academically familiar without importing institutional bureaucracy that has no current relation."
   ],
   "review": {
     "confidence": "high",
-    "notes": "Approved first visual template for the Online School education workspace."
+    "notes": "Expanded with academic visual witnesses from Canvas, Moodle, Blackboard, edX and Khan Academy. Academic grammar is used for orientation only; learner truth remains evidence-grounded."
   }
 }

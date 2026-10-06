@@ -5,19 +5,26 @@
   "template_id": "education_workspace_v1",
   "preserve": [
     "learner-first hierarchy",
+    "stable subject/course orientation",
+    "one obvious current/resumable movement",
+    "today/upcoming close to current work",
+    "recent feedback/evidence close to the movement it changes",
     "current relation before curriculum obligations",
-    "observation/regrounding as primary kernel action",
     "separate artifact and operating schedule layers",
-    "restrained adult-facing operational density"
+    "restrained academically legible density"
   ],
   "local_additions": [
     "date-scoped school movement",
     "Missouri obligation context",
     "worksheet studio link",
-    "manual school activity entry"
+    "manual school activity entry",
+    "evidence-grounded learner relations"
   ],
   "deviations": [
-    "The embryo still uses scheduled tasks as its main actuator set while additional educational actuator types are not yet wired."
+    "The current embryo does not yet derive a single Continue movement from the learner relation.",
+    "Manual observation entry is still more prominent than the mature academic grammar allows.",
+    "Subjects are present in activities/artifacts but are not yet the stable top-level visual anchors.",
+    "Returned artifact/handoff evidence is not yet automatically projected as recent feedback."
   ],
   "last_reviewed": "2026-10-05"
 }
