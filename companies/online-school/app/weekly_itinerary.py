@@ -162,7 +162,12 @@ def _previous_week_closed(state: dict, learner_id: str, start: date) -> bool:
         if (task.get("meta") or {}).get("week_id") == previous_id
     ]
     if not previous:
-        return True
+        any_week = any(
+            (task.get("meta") or {}).get("week_id")
+            and learner_id in task.get("learner_ids", [])
+            for task in state.get("tasks", [])
+        )
+        return not any_week
     retests = [
         task
         for task in previous
