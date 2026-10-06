@@ -1,6 +1,6 @@
 {
-  "schema_version": 1,
-  "purpose": "Read-only projection of demonstrated work into human-recognized ability categories for resume/credibility views. This map does not select development or define the foundation.",
+  "schema_version": 2,
+  "purpose": "Read-only projection of demonstrated current/canonical evidence into human-recognized ability categories. Historical job wrappers are not retained solely to support capability claims.",
   "states": [
     "unwitnessed",
     "partial",
@@ -27,9 +27,7 @@
       "ability": "Data Engineering",
       "state": "tested",
       "evidence": [
-        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
-        "jobs/JOB-014_python-sql-aws-data-engineer/job.json",
-        "jobs/JOB-015_python-data-cleaning-reporting/job.json"
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
       ],
       "supports": [
         "ingestion",
@@ -45,8 +43,7 @@
       "ability": "Database Engineering",
       "state": "tested",
       "evidence": [
-        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
-        "jobs/JOB-014_python-sql-aws-data-engineer/job.json"
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
       ],
       "supports": [
         "PostgreSQL schema design",
@@ -59,46 +56,29 @@
     },
     {
       "ability": "Spreadsheet Automation / Excel Engineering",
-      "state": "tested",
-      "evidence": [
-        "jobs/JOB-002_advanced-excel-macro/job.json",
-        "jobs/JOB-004_excel-data-cleaning-forecasting/job.json",
-        "jobs/JOB-009_excel-financial-tracker/job.json",
-        "jobs/JOB-011_excel-data-cleaning-reporting/job.json"
-      ],
-      "supports": [
-        "VBA automation",
-        "formula systems",
-        "data cleaning",
-        "reporting",
-        "forecasting"
-      ],
-      "next_gap": "Some external jobs remain unsubmitted/client-blocked, but the technical category already has tested artifacts."
+      "state": "unwitnessed",
+      "evidence": [],
+      "supports": [],
+      "next_gap": "Reproduce one current canonical spreadsheet-automation witness if this capability is needed; old unsubmitted job wrappers are not retained as permanent proof."
     },
     {
       "ability": "Data Analysis / Reporting",
-      "state": "tested",
+      "state": "partial",
       "evidence": [
-        "jobs/JOB-004_excel-data-cleaning-forecasting/job.json",
-        "jobs/JOB-007_advanced-excel-automation-analysis/job.json",
-        "jobs/JOB-009_excel-financial-tracker/job.json",
-        "jobs/JOB-015_python-data-cleaning-reporting/job.json"
+        "foundation/FOUND-0002_applied-ml-modeling.json"
       ],
       "supports": [
-        "cleaning",
-        "regression/forecasting",
-        "reconciliation",
-        "report generation",
-        "measured outputs"
+        "reproducible metric generation",
+        "held-out evaluation",
+        "machine-readable results"
       ],
-      "next_gap": "Dedicated BI/dashboard tooling is not yet a separate witness, but the broader analysis category is already demonstrated."
+      "next_gap": "Build a current canonical analysis/reporting witness outside an old job wrapper for the broader category."
     },
     {
       "ability": "Web Scraping / Automation",
       "state": "tested",
       "evidence": [
-        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
-        "jobs/JOB-013_monthly-report-scraping/job.json"
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
       ],
       "supports": [
         "HTML parsing",
@@ -107,7 +87,7 @@
         "parser regression",
         "retry/backoff"
       ],
-      "next_gap": "Authenticated browser automation remains mostly client-blocked."
+      "next_gap": "Authenticated browser automation remains a separate witness."
     },
     {
       "ability": "DevOps / CI / Observability / Reliability",
@@ -130,8 +110,7 @@
       "ability": "Cloud / AWS",
       "state": "partial",
       "evidence": [
-        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json",
-        "jobs/JOB-014_python-sql-aws-data-engineer/job.json"
+        "foundation/FOUND-0001_multi-source-state-reconciliation-platform.json"
       ],
       "supports": [
         "Terraform AWS topology",
