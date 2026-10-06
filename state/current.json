@@ -5,7 +5,7 @@
   "goal": "Fit substantially more real external movement on screen while preserving more useful source text. Keep source identity and multi-axis relations readable, remove oversized per-item controls, and make the source headline itself the traversal action.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Normalize provider-specific source text without reducing density: strip RSS/markdown boilerplate, distinguish useful body text from promotional/footer text, preserve native media/discussion relations, and then test shared-event clustering without merging source claims.",
+  "next_movement": "Continue the dense mixed-feed test without Lemmy. Normalize source-specific transport/UI noise for the remaining providers, preserve useful native text and relations, then test shared-event clustering without merging source claims.",
   "walls": [
     "Do not put social networks, news sites, video platforms, forums, or other external feeds inside Continuity as owned state.",
     "Do not persist the mixed feed contents by default.",
@@ -47,7 +47,6 @@
     "observed_at": "2026-10-06",
     "working_sources": [
       "Reddit public RSS",
-      "Lemmy public API",
       "Hacker News public API",
       "Reuters YouTube Atom",
       "BBC News RSS"
@@ -87,7 +86,8 @@
       "Raised bounded source excerpt budget from 320 to 640 characters.",
       "Added Reuters/YouTube media descriptions when the provider feed supplies them.",
       "Reduced hero, stream header, filter, trail, card, and side-rail spacing to increase useful movement per viewport.",
-      "Collapsed the mobile intro and trail so the first live items appear materially higher on screen."
+      "Collapsed the mobile intro and trail so the first live items appear materially higher on screen.",
+      "Removed Lemmy from the live mixed-feed source set at user request; historical traversal evidence, if any, remains provenance rather than being rewritten."
     ],
     "remaining": [
       "Longer source excerpts expose provider boilerplate, raw markdown/link syntax, hashtags, and promotional footer text that still need provider-specific cleanup.",
@@ -123,7 +123,8 @@
       "Reuters YouTube descriptions are projected when present.",
       "Desktop and mobile before/after renders were visually audited.",
       "Mobile intro/trail are compact enough that live movement begins materially higher in the viewport.",
-      "57 focused runtime/traversal/frontage/visual-provenance tests passed."
+      "Lemmy is absent from the live source adapter registry and working-source list.",
+      "58 focused runtime/traversal/frontage/visual-provenance tests passed."
     ]
   },
   "density_audit": {

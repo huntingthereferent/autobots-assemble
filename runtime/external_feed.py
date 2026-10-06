@@ -18,7 +18,6 @@ CACHE_SECONDS = 45
 MAX_SNIPPET = 640
 
 REDDIT_POPULAR_RSS = "https://www.reddit.com/r/popular/.rss"
-LEMMY_NEW = "https://lemmy.world/api/v3/post/list?sort=New&limit=14"
 HN_NEW = "https://hacker-news.firebaseio.com/v0/newstories.json"
 HN_ITEM = "https://hacker-news.firebaseio.com/v0/item/{item_id}.json"
 REUTERS_YOUTUBE = "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
@@ -145,38 +144,6 @@ def fetch_reddit(limit: int = 12) -> list[dict[str, Any]]:
     return rows
 
 
-def fetch_lemmy(limit: int = 12) -> list[dict[str, Any]]:
-    data = json.loads(_fetch(LEMMY_NEW).decode("utf-8"))
-    rows = []
-    for wrapper in (data.get("posts") or [])[:limit]:
-        post = wrapper.get("post") or {}
-        creator = wrapper.get("creator") or {}
-        community = wrapper.get("community") or {}
-        counts = wrapper.get("counts") or {}
-        local_url = post.get("ap_id") or post.get("url") or ""
-        rows.append(
-            _item(
-                item_id=f"lemmy:{post.get('id', local_url)}",
-                source_id="lemmy",
-                provider="Lemmy",
-                provider_surface="social_platform",
-                medium="post",
-                roles=("social", "community"),
-                title=post.get("name") or "",
-                url=local_url,
-                published_at=post.get("published") or "",
-                author=creator.get("name") or "",
-                context=community.get("name") or "lemmy.world",
-                snippet=post.get("body") or "",
-                metrics={
-                    "score": counts.get("score"),
-                    "comments": counts.get("comments"),
-                },
-            )
-        )
-    return rows
-
-
 def _fetch_hn_item(item_id: int) -> dict[str, Any] | None:
     try:
         return json.loads(_fetch(HN_ITEM.format(item_id=item_id), timeout=7).decode("utf-8"))
@@ -293,7 +260,6 @@ def fetch_bbc_news(limit: int = 12) -> list[dict[str, Any]]:
 
 FETCHERS: dict[str, Callable[[], list[dict[str, Any]]]] = {
     "reddit": fetch_reddit,
-    "lemmy": fetch_lemmy,
     "hacker_news": fetch_hacker_news,
     "youtube_reuters": fetch_reuters_youtube,
     "bbc_news": fetch_bbc_news,
@@ -301,7 +267,6 @@ FETCHERS: dict[str, Callable[[], list[dict[str, Any]]]] = {
 
 SOURCE_META = {
     "reddit": {"name": "Reddit", "surface": "social_platform", "access": "public RSS"},
-    "lemmy": {"name": "Lemmy", "surface": "social_platform", "access": "public API"},
     "hacker_news": {"name": "Hacker News", "surface": "community", "access": "public API"},
     "youtube_reuters": {
         "name": "YouTube · Reuters",

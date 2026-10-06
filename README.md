@@ -51,7 +51,6 @@ A trace is richer than browser history: it preserves the relational reason for m
 The homepage can project live external movement without persisting the feed contents. The first public, credential-free test adapters are:
 
 - Reddit public RSS;
-- Lemmy public API;
 - Hacker News public API;
 - Reuters YouTube Atom feed;
 - BBC News RSS.

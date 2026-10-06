@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from runtime.external_feed import MAX_SNIPPET, LiveFeed, _item
+from runtime.external_feed import FETCHERS, MAX_SNIPPET, SOURCE_META, LiveFeed, _item
 
 
 def _row(source_id, provider, roles, medium, title, published):
@@ -129,6 +129,10 @@ class ExternalLiveFeedTests(unittest.TestCase):
         self.assertIn("provider unavailable", statuses["broken"]["error"])
         self.assertFalse(statuses["auth_only"]["ok"])
         self.assertEqual(statuses["auth_only"]["reason"], "requires account access")
+
+    def test_lemmy_is_not_a_live_source(self):
+        self.assertNotIn("lemmy", FETCHERS)
+        self.assertNotIn("lemmy", SOURCE_META)
 
     def test_live_feed_projection_has_no_persistence_path(self):
         feed = LiveFeed()
