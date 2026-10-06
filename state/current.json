@@ -1,48 +1,45 @@
 {
   "schema_version": 1,
-  "preferred_referent": "📍 St. Joseph, Missouri — Complete-Stack Benchmark",
-  "protocol": "work.bounded-problem",
-  "goal": "Traverse St. Joseph, Missouri as a real physical/social/technical system. Preserve a bounded first pass, emit working artifacts as each relation opens, compare frozen representations/predictions against deeper real-world evidence, preserve mismatches, and recursively reconcile them without erasing prior passes.",
+  "preferred_referent": "↔ Cross-Layer Handoff Runtime",
+  "protocol": "core.handoff",
+  "goal": "Make the repository's translation/evidence spine executable through one handoff carrier that can move between humans, school operations, software, machines, simulators, and later other connected systems without silently changing the referent or evidence contract.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Open the spatial relation exposed by PASS-0 without forcing it into CAD: establish a georeferenced city-scale representation using the post-freeze official GIS/map surfaces, preserve CRS/source/accuracy boundaries, and use it to select the first subsystem where a new prediction can be frozen before its detailed reality-check evidence is opened.",
+  "next_movement": "Add translation/activation routing above the carrier so a compact human trigger such as James's 'ohayo' can resolve person + current referent + projection and generate valid handoffs, while keeping the same runtime underneath.",
   "walls": [
-    "Do not redefine A/B as the city model, benchmark workflow, or repository.",
-    "Do not retroactively add post-freeze GIS/map evidence to STJ-ART-0001 PASS-0 provenance.",
-    "Do not treat GIS/cartographic geometry as survey/fabrication geometry.",
-    "Do not treat planning documents as evidence of current measured asset condition or capacity.",
-    "Preserve source disagreements instead of forcing one value.",
-    "Do not revise a frozen prediction/representation in place after a reality check; create the next pass and link the mismatch."
+    "Do not redefine A/B as the handoff runtime, workflow engine, task manager, planner, or factory.",
+    "Do not equate a handoff with its task/job/command projection.",
+    "Do not upgrade simulation evidence to physical, measured, inspected, or externally validated evidence.",
+    "Do not make live runtime state replace repository provenance/evidence history.",
+    "Do not force unlike receiving layers to share an evidence kind merely because they share the same outer handoff carrier."
   ],
   "evidence": [
-    "work/projects/st-joseph-complete-stack/README.md",
-    "work/projects/st-joseph-complete-stack/PASS-0/BOUNDARY.md",
-    "work/projects/st-joseph-complete-stack/PASS-0/evidence/sources.json",
-    "work/projects/st-joseph-complete-stack/PASS-0/landscape/artifact.json",
-    "work/projects/st-joseph-complete-stack/PASS-0/landscape/st-joseph-system.dot",
-    "work/projects/st-joseph-complete-stack/PASS-0/landscape/st-joseph-system.svg",
-    "work/projects/st-joseph-complete-stack/REALITY-CHECK.md",
-    "work/projects/st-joseph-complete-stack/REALITY-CHECK/sources.json",
-    "artifacts/GEOSPATIAL.md",
-    "artifacts/GEOSPATIAL_TOOLCHAIN.md"
+    "protocols/core/handoff.md",
+    "runtime/README.md",
+    "runtime/handoff.py",
+    "runtime/engine.py",
+    "runtime/projections.py",
+    "runtime/handoff.schema.json",
+    "runtime/examples/cross_layer.py",
+    "runtime/examples/tiny_factory.py",
+    "network/tests/test_handoff_runtime.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
-    "from": "📍 SOLVE THE WHOLE THING — ARC-AGI-3 100%",
-    "from_state": "research/dives/ARC3-TRACE-001/SOLVE_THE_WHOLE_THING.md",
-    "reason": "Explicit user-directed resume of the Multi-Source State & Reconciliation / resume-evidence build in this window. ARC remains pinned/resumable in TASKS.md."
+    "from": "Online School / St. Joseph traversal",
+    "reason": "The user explicitly backed out of the school implementation layer and generalized the repo into a translation/evidence spine with cross-layer handoffs, then directed implementation of the shared handoff runtime."
   },
   "verified_run": {
-    "benchmark": "St. Joseph Complete-Stack Benchmark",
-    "phase": "PASS-0",
-    "artifact": "STJ-ART-0001",
-    "result": "represented",
+    "benchmark": "Cross-layer Handoff Runtime",
+    "result": "implemented_and_tested",
     "checks": [
-      "20 named system/referent nodes",
-      "42 labeled directed relations",
-      "canonical Graphviz source preserved",
-      "generated SVG view preserved",
-      "PASS-0 evidence boundary frozen before post-freeze GIS sources"
+      "James-style human task, school task, software job, and factory command use the same Handoff carrier",
+      "COMPLETE rejects missing or inadmissible evidence",
+      "dependent handoffs remain WAITING until upstream completion",
+      "event history is append-only",
+      "tiny simulated factory moves 10 demo units through supply → machine → inspection → assembly → shipping",
+      "simulation evidence remains explicitly simulated",
+      "protocol-tests run 608 completed successfully"
     ]
   }
 }
