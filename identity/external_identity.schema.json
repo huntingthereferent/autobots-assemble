@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Continuity External Identity Link",
+  "type": "object",
+  "required": [
+    "person_id",
+    "provider",
+    "provider_subject",
+    "linked_at"
+  ],
+  "properties": {
+    "person_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider_subject": {
+      "type": "string",
+      "minLength": 1
+    },
+    "email": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "display_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "avatar_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "linked_at": {
+      "type": "string"
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}
