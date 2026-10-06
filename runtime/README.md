@@ -100,6 +100,8 @@ A handoff cannot become `COMPLETE` unless every required witness is returned usi
 - `activation.py` — explicit actor+surface activation routes over existing handoff state
 - `orchestrator.py` — generic system registration, routing, automatic execution, and result reconciliation
 - `journal.py` — durable handoff-spec + event journal for restart recovery
+- `service.py` — persistent application service over existing system/runtime contracts
+- `http_server.py` + `http/` — bounded HTTP/HTML entrance
 - `handoff.schema.json` — external serialized handoff shape
 - `examples/cross_layer.py` — same carrier across James/school/software/factory
 - `examples/tiny_factory.py` — sequential simulated production run
@@ -180,3 +182,39 @@ normal movement continues
 ```
 
 The crash-recovery witness specifically covers a process dying after a factory result is durably `COMPLETE` but before the factory records reconciliation. The recovered orchestrator applies the existing result and does not execute that operation twice.
+
+
+## HTTP entrance
+
+`python -m runtime.http_server` starts the shared local entrance on:
+
+`http://127.0.0.1:8040`
+
+Environment:
+- `HOST` — bind host, default `127.0.0.1`;
+- `PORT` — bind port, default `8040`;
+- `ECOSYSTEM_DATA_DIR` — private durable state directory, default `runtime/data/`.
+
+Current API:
+
+```text
+GET  /api/status
+GET  /api/notes
+POST /api/notes
+
+GET  /api/plans
+POST /api/plans
+
+GET  /api/tasks
+POST /api/tasks
+POST /api/tasks/{task_id}/admit
+
+GET  /api/handoffs?actor=&status=
+POST /api/handoffs/{handoff_id}/result
+
+GET  /api/activate?surface=ohayo&actor=james
+```
+
+The HTTP layer does not create a parallel model. It calls the existing Personal Operations, activation, orchestrator, runtime, evidence, and recovery contracts.
+
+The included dashboard exposes Notes, Plans, Tasks, Live Handoffs, and the `ohayo` projection while preserving their boundaries.
