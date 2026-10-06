@@ -89,7 +89,12 @@ async function refreshCalendar() {
   const data = await api("/api/calendar");
   $("#calendar-events").replaceChildren(...data.events.map(function(e) {
     const when = e.starts_at || e.due_at || e.recurrence || "calendar";
-    return item(e.title, when + " · " + e.referent, "");
+    const anchor = e.movement_anchor || "";
+    return item(
+      e.title,
+      when + (anchor ? " · " + anchor : "") + " · " + e.referent,
+      anchor ? '<span class="movement-anchor">' + anchor + '</span>' : ""
+    );
   }));
 }
 
@@ -132,11 +137,13 @@ async function refreshHandoffs() {
   $("#handoffs").replaceChildren(...data.handoffs.map(function(h) {
     const title = (h.metadata && h.metadata.title) || h.required_relation;
     const source = (h.metadata && h.metadata.source_system) || h.from_actor;
-    return item(
+    const el = item(
       title,
       h.to_actor + " · " + h.status + " · " + source,
-      '<span class="status ' + h.status.toLowerCase() + '">' + h.status + "</span>"
+      '<span class="source-chip">' + source + '</span><span class="status ' + h.status.toLowerCase() + '">' + h.status + "</span>"
     );
+    el.classList.add("movement-entry");
+    return el;
   }));
 }
 
@@ -155,7 +162,12 @@ function renderAttention(result) {
 
   $("#attention-calendar").replaceChildren(...calendar.map(function(x) {
     const when = x.starts_at || x.due_at || x.recurrence || "calendar";
-    return item(x.title, when + " · " + x.referent, "");
+    const anchor = x.movement_anchor || "";
+    return item(
+      x.title,
+      when + (anchor ? " · " + anchor : "") + " · " + x.referent,
+      anchor ? '<span class="movement-anchor">' + anchor + '</span>' : ""
+    );
   }));
 
   $("#attention-reminders").replaceChildren(...reminders.map(function(x) {
@@ -255,7 +267,8 @@ $("#calendar-form").addEventListener("submit", async function(event) {
         title: f.get("title"),
         referent: f.get("referent"),
         participants: ["james"],
-        starts_at: f.get("starts_at")
+        starts_at: f.get("starts_at"),
+        movement_anchor: f.get("movement_anchor")
       })
     });
     event.currentTarget.reset();
