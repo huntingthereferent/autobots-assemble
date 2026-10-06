@@ -28,6 +28,10 @@ def build_school_view(
 ) -> dict[str, Any]:
     tasks = [task for task in state.get("tasks", []) if task.get("date") == day]
     worksheets = list(state.get("worksheets", []))
+    shared_tasks = [
+        task for task in tasks
+        if task.get("scope") == "shared" or not task.get("learner_ids")
+    ]
 
     learners = []
     for learner in state.get("learners", []):
@@ -69,6 +73,26 @@ def build_school_view(
             }
         ]
 
+        current_relation = max(
+            relations,
+            key=lambda item: str(item.get("formed_at") or ""),
+            default=None,
+        )
+        recent_observation = observations[-1] if observations else None
+        unfinished = [
+            task for task in learner_tasks
+            if task.get("status") != "done"
+        ]
+        shared_unfinished = [
+            task for task in shared_tasks
+            if task.get("status") != "done"
+            and (
+                not task.get("learner_ids")
+                or learner_id in task.get("learner_ids", [])
+            )
+        ]
+        next_task = (unfinished or shared_unfinished or [None])[0]
+
         learners.append(
             {
                 "id": learner_id,
@@ -80,13 +104,13 @@ def build_school_view(
                 "curriculum_obligations": obligations,
                 "today_tasks": learner_tasks,
                 "artifacts": learner_worksheets,
+                "front": {
+                    "learning_now": current_relation,
+                    "do_next": next_task,
+                    "what_changed": recent_observation,
+                },
             }
         )
-
-    shared_tasks = [
-        task for task in tasks
-        if task.get("scope") == "shared" or not task.get("learner_ids")
-    ]
 
     return {
         "schema_version": 1,

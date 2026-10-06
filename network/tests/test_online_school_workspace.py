@@ -99,6 +99,59 @@ class OnlineSchoolWorkspaceTests(unittest.TestCase):
         self.assertEqual([x["id"] for x in learner["today_tasks"]], ["a-reading"])
         self.assertEqual([x["id"] for x in view["shared_today"]], ["shared-math"])
 
+    def test_front_projection_uses_latest_relation_real_next_work_and_latest_observation(self):
+        kernel = EducationKernel()
+        kernel.observe(
+            Observation.create(
+                person_ref="track_a",
+                referent="multiplication",
+                observed="used equal groups",
+                supports=("equal groups available",),
+            )
+        )
+        latest = kernel.observe(
+            Observation.create(
+                person_ref="track_a",
+                referent="division",
+                observed="shared 12 objects into equal groups",
+                supports=("sharing as division available",),
+            )
+        )
+        view = build_school_view(
+            state=self.state(),
+            day="2026-10-05",
+            kernel=kernel,
+        )
+        learner = next(x for x in view["learners"] if x["id"] == "track_a")
+        self.assertEqual(
+            learner["front"]["learning_now"]["relation_id"],
+            latest.relation_id,
+        )
+        self.assertEqual(
+            learner["front"]["do_next"]["id"],
+            "a-reading",
+        )
+        self.assertEqual(
+            learner["front"]["what_changed"]["observed"],
+            "shared 12 objects into equal groups",
+        )
+
+    def test_front_falls_through_to_shared_real_work_when_no_individual_work_exists(self):
+        state = self.state()
+        state["tasks"] = [
+            task for task in state["tasks"] if task["id"] != "a-reading"
+        ]
+        view = build_school_view(
+            state=state,
+            day="2026-10-05",
+            kernel=EducationKernel(),
+        )
+        learner = next(x for x in view["learners"] if x["id"] == "track_a")
+        self.assertEqual(
+            learner["front"]["do_next"]["id"],
+            "shared-math",
+        )
+
     def test_workspace_declares_kernel_routes_and_visual_template(self):
         server = (APP / "server.py").read_text(encoding="utf-8")
         html = (APP / "index.html").read_text(encoding="utf-8")

@@ -5,26 +5,27 @@
   "template_id": "education_workspace_v1",
   "preserve": [
     "learner-first hierarchy",
-    "stable subject/course orientation",
-    "one obvious current/resumable movement",
-    "today/upcoming close to current work",
-    "recent feedback/evidence close to the movement it changes",
-    "current relation before curriculum obligations",
-    "separate artifact and operating schedule layers",
-    "restrained academically legible density"
+    "reference schools remain witnesses rather than copy contracts",
+    "compressed derived front over traced underlying layers",
+    "stable subject orientation without subject becoming the kernel",
+    "current learning and do-next are visually dominant",
+    "today and recent evidence stay near the current front",
+    "obligations, artifacts and schedule remain reachable but subordinate",
+    "restrained colorful navigation with clear scan hierarchy"
   ],
   "local_additions": [
+    "front projection from current learner relation, real day movement and latest observation",
     "date-scoped school movement",
     "Missouri obligation context",
     "worksheet studio link",
     "manual school activity entry",
-    "evidence-grounded learner relations"
+    "evidence-grounded learner relations",
+    "deep learning details preserve exact traced state behind the compressed surface"
   ],
   "deviations": [
-    "The current embryo does not yet derive a single Continue movement from the learner relation.",
-    "Manual observation entry is still more prominent than the mature academic grammar allows.",
-    "Subjects are present in activities/artifacts but are not yet the stable top-level visual anchors.",
-    "Returned artifact/handoff evidence is not yet automatically projected as recent feedback."
+    "Do-next currently selects from real scheduled movement already in front; the kernel does not yet synthesize a new actuator from the learner relation.",
+    "Recent change currently comes from recorded observations; returned artifact and handoff evidence are not yet automatically converted into observations.",
+    "Needs-to-learn currently projects the loaded curriculum obligations rather than filtering them by reachability from the current relation."
   ],
   "last_reviewed": "2026-10-05"
 }

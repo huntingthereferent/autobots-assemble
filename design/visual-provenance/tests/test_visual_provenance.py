@@ -98,6 +98,29 @@ class VisualProvenanceTests(unittest.TestCase):
         )
         self.assertNotEqual(binding["template_id"], worksheet_binding["template_id"])
 
+    def test_education_workspace_external_schools_are_witnesses_not_copy_contracts(self):
+        template = json.loads(
+            (
+                PROVENANCE
+                / "templates"
+                / "education_workspace_v1.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(template["reference_policy"]["copying"], "forbidden")
+        sources = " ".join(
+            witness["source"]
+            for witness in template["witnesses"]
+            if witness["kind"] == "external_visual"
+        )
+        for domain in (
+            "k12.com",
+            "acellusacademy.com",
+            "time4learning.com",
+            "outschool.com",
+            "homeschoolplanet.com",
+        ):
+            self.assertIn(domain, sources)
+
     def test_day_attention_surface_has_its_own_visual_binding(self):
         binding = json.loads(
             (ROOT / "runtime" / "http" / "visual-provenance.json").read_text(

@@ -7,13 +7,25 @@
 
 The workspace starts from the learner's current evidenced relation. Academic systems contribute orientation, not learner truth.
 
-## Academic witnesses swallowed
+## Visual witnesses swallowed
 
+All external schools/platforms remain **references only, never copy contracts**.
+
+Homeschool / online-school witnesses:
+- K12: familiar access to current school activity, schedules, classes, announcements, and resources.
+- Acellus Academy: immediate re-entry from current class to current position.
+- Time4Learning: simple current-course/activity entry with deeper planning/reporting kept out of the learner's way.
+- Outschool: distinct learner space versus parent space, with schedule and class entry close to the learner.
+- Homeschool Planet: fast color-based person/subject orientation and useful schedule tools without making the planner the learning model.
+
+Academic witnesses:
 - Canvas: course identity, agenda/to-do, recent activity, upcoming work, feedback.
 - Moodle: course overview, activity dates, completion/submission state, simplified scan hierarchy.
 - Blackboard Ultra: persistent courses, calendar, activity stream, messages/feedback orientation.
 - edX: current courses with an obvious direct continuation action.
 - Khan Academy: deeper skill/progress views useful to operators, but progress metrics remain subordinate to actual evidence.
+
+What survives those witnesses is only the useful human-facing relation. Their institutional/product structure is discarded when it does not survive the Education Kernel.
 
 ## Preserve
 

@@ -5,169 +5,206 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="visual-template" content="education_workspace_v1">
   <title>Online School</title>
-  <meta name="description" content="Person-first education workspace for current learner relations, today's movement, curriculum obligations, and learning artifacts.">
+  <meta name="description" content="A natural, evidence-grounded education workspace.">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <main class="shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">Online School</p>
-        <h1>Education workspace</h1>
-        <p class="sub">Start with the person in front. Preserve what came before. Move only from what is evidenced now.</p>
-      </div>
-      <div class="top-actions">
-        <label class="datebox">School day
-          <input id="day" type="date">
-        </label>
-        <a id="worksheet-studio-link" class="button ghost" href="./worksheet.html">Worksheet Studio</a>
+  <div class="app-shell">
+    <header class="app-header">
+      <a class="brand" href="./">
+        <span class="brand-mark">O</span>
+        <span><strong>Online School</strong><small>learn from what is here</small></span>
+      </a>
+      <nav class="main-nav" aria-label="Main">
+        <a href="#now">Now</a>
+        <a href="#today">Today</a>
+        <a href="#learning">Learning</a>
+        <a href="#work">Work</a>
+        <a href="#schedule">Schedule</a>
+      </nav>
+      <div class="header-actions">
+        <label class="day-control"><span>Day</span><input id="day" type="date"></label>
+        <a id="worksheet-studio-link" class="tool-button" href="./worksheet.html">Studio ↗</a>
       </div>
     </header>
 
-    <section class="learner-strip" aria-label="Learners">
-      <div id="learner-tabs" class="learner-tabs"></div>
-      <div class="boundary-note">Grade is context for obligations, not placement.</div>
-    </section>
-
-    <div class="workspace">
-      <section class="primary-column">
-        <section class="panel relation-panel">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Current relation</p>
-              <h2 id="learner-heading">Learner</h2>
-            </div>
-            <span id="grade-context" class="context-chip"></span>
-          </div>
-          <div id="relations" class="relation-list"></div>
-          <p id="no-relations" class="empty-copy" hidden>No current learner relation has been claimed yet. Record what is actually observed.</p>
-        </section>
-
-        <section class="panel">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Reground</p>
-              <h2>Record an observation</h2>
-            </div>
-            <span id="observation-count" class="muted"></span>
-          </div>
-          <form id="observation-form" class="observation-form">
-            <label>Referent
-              <input name="referent" required placeholder="addition across ten, decoding, equal shares…">
-            </label>
-            <label>What happened
-              <textarea name="observed" required rows="3" placeholder="Describe what the learner actually did, said, distinguished, or needed."></textarea>
-            </label>
-            <div class="two-col">
-              <label>Supports
-                <textarea name="supports" rows="2" placeholder="One supported relation per line"></textarea>
-              </label>
-              <label>Contradicts
-                <textarea name="contradicts" rows="2" placeholder="One prior relation contradicted per line"></textarea>
-              </label>
-            </div>
-            <div class="form-actions">
-              <span class="muted">New evidence can change the front without deleting the back.</span>
-              <button class="primary" type="submit">Record + reground</button>
-            </div>
-            <p id="observation-error" class="error" hidden></p>
-          </form>
-        </section>
-
-        <section class="panel">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Today</p>
-              <h2>Learning movement</h2>
-            </div>
-            <span id="today-summary" class="muted"></span>
-          </div>
-          <div id="today-list" class="activity-list"></div>
-          <p id="today-empty" class="empty-copy" hidden>No scheduled movement for this learner on this day.</p>
-          <details class="shared-details">
-            <summary>Shared school movement</summary>
-            <div id="shared-list" class="activity-list compact"></div>
-          </details>
-        </section>
+    <main class="content">
+      <section class="learner-bar">
+        <div id="learner-tabs" class="learner-tabs"></div>
       </section>
 
-      <aside class="secondary-column">
-        <section class="panel">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Knowledge map</p>
-              <h2>Curriculum obligations</h2>
-            </div>
+      <section id="now" class="hero-grid">
+        <article class="now-card">
+          <div class="card-kicker">
+            <span class="pulse-dot"></span>
+            <span>Learning now</span>
           </div>
-          <p class="panel-copy">These are Missouri-aligned obligations in the current grade context. They do not say where the learner is.</p>
-          <div id="obligations" class="obligation-list"></div>
-        </section>
-
-        <section class="panel">
-          <div class="section-head">
-            <div>
-              <p class="eyebrow">Artifacts</p>
-              <h2>Learning evidence surfaces</h2>
-            </div>
-            <a id="create-worksheet-link" href="./worksheet.html" class="text-link">Create</a>
+          <div id="learning-now" class="learning-now"></div>
+          <div id="learning-empty" class="empty-state" hidden>
+            Nothing has to be assumed. Add what you actually notice.
           </div>
-          <div id="artifacts" class="artifact-list"></div>
-          <p id="artifacts-empty" class="empty-copy" hidden>No saved worksheet artifacts are attached to this learner yet.</p>
-        </section>
+          <button id="show-observation" class="quiet-link" type="button">+ What happened?</button>
+        </article>
 
-        <section class="panel provenance-panel">
-          <p class="eyebrow">Kernel boundary</p>
-          <div id="boundaries" class="boundary-list"></div>
-        </section>
-      </aside>
-    </div>
+        <article class="next-card">
+          <div class="card-kicker"><span>Do next</span></div>
+          <div id="do-next" class="do-next"></div>
+          <div class="next-actions">
+            <button id="complete-next" class="primary-action" type="button" hidden>Done</button>
+            <button id="open-schedule" class="secondary-action" type="button">See today</button>
+          </div>
+        </article>
+      </section>
 
-    <section class="panel schedule-panel">
-      <details>
-        <summary>
-          <span>
-            <span class="eyebrow">Operating layer</span>
-            <strong>Daily rhythm + full schedule</strong>
-          </span>
-          <span id="task-total" class="muted"></span>
-        </summary>
-        <div id="rhythm-list" class="rhythm-list"></div>
-        <div class="section-head schedule-head">
-          <h2>Everything scheduled</h2>
-          <button id="add-task" type="button" class="ghost">+ Add activity</button>
+      <section id="today" class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Today</p>
+            <h2>What is in front</h2>
+          </div>
+          <span id="today-summary" class="section-meta"></span>
         </div>
-        <div id="all-tasks" class="activity-list"></div>
+        <div id="today-list" class="timeline"></div>
+        <div id="today-empty" class="empty-line" hidden>Nothing is assigned right now.</div>
+        <details class="shared-toggle">
+          <summary>Shared learning</summary>
+          <div id="shared-list" class="timeline compact"></div>
+        </details>
+      </section>
+
+      <section id="learning" class="split-section">
+        <div class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">What changed</p>
+              <h2>Recent learning</h2>
+            </div>
+            <span id="observation-count" class="section-meta"></span>
+          </div>
+          <div id="recent-change" class="recent-change"></div>
+          <button id="show-observation-2" class="quiet-link" type="button">Add observation</button>
+        </div>
+
+        <div class="section-block">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Still reachable</p>
+              <h2>Needs to learn</h2>
+            </div>
+            <button id="toggle-obligations" class="quiet-link" type="button">Show all</button>
+          </div>
+          <div id="obligations" class="need-list"></div>
+        </div>
+      </section>
+
+      <section id="work" class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Work</p>
+            <h2>Things made along the way</h2>
+          </div>
+          <a id="create-worksheet-link" href="./worksheet.html" class="quiet-link">Create worksheet ↗</a>
+        </div>
+        <div id="artifacts" class="artifact-grid"></div>
+        <div id="artifacts-empty" class="empty-line" hidden>No saved work yet.</div>
+      </section>
+
+      <section id="schedule" class="section-block schedule-block">
+        <details>
+          <summary class="schedule-summary">
+            <span>
+              <span class="eyebrow">Time structure</span>
+              <strong>Schedule</strong>
+            </span>
+            <span id="task-total" class="section-meta"></span>
+          </summary>
+          <div id="rhythm-list" class="rhythm-row"></div>
+          <div class="schedule-tools">
+            <span>Everything scheduled for this day</span>
+            <button id="add-task" class="quiet-link" type="button">+ Add activity</button>
+          </div>
+          <div id="all-tasks" class="timeline"></div>
+        </details>
+      </section>
+
+      <details class="deep-details">
+        <summary>Learning details</summary>
+        <div class="deep-grid">
+          <div>
+            <h3>Current evidence</h3>
+            <div id="all-relations"></div>
+          </div>
+          <div>
+            <h3>Why the page looks this simple</h3>
+            <div id="boundaries" class="boundary-list"></div>
+          </div>
+        </div>
       </details>
-    </section>
+    </main>
+  </div>
 
-    <dialog id="task-dialog">
-      <form id="task-form">
-        <div class="section-head">
-          <div><p class="eyebrow">Local activity</p><h2>Add movement</h2></div>
-          <button id="close-dialog" class="icon-button" type="button" aria-label="Close">×</button>
+  <dialog id="observation-dialog">
+    <form id="observation-form">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">What happened?</p>
+          <h2>Update from what you noticed</h2>
         </div>
-        <label>Activity
-          <input name="title" required placeholder="Library research, experiment, practice…">
-        </label>
+        <button id="close-observation" class="icon-button" type="button">×</button>
+      </div>
+      <label>What were they working with?
+        <input name="referent" required placeholder="making ten, reading a new word, sharing equally…">
+      </label>
+      <label>What did you notice?
+        <textarea name="observed" required rows="4" placeholder="Use normal words. What did they do, say, notice, ask, or need?"></textarea>
+      </label>
+      <details class="advanced-fields">
+        <summary>Optional learning detail</summary>
         <div class="two-col">
-          <label>Planned minutes
-            <input name="planned_minutes" type="number" min="0" max="1440" step="5" value="30">
+          <label>This shows they can…
+            <textarea name="supports" rows="2" placeholder="One thing per line"></textarea>
           </label>
-          <label>Who
-            <select name="learner"></select>
+          <label>This changes what we thought about…
+            <textarea name="contradicts" rows="2" placeholder="One thing per line"></textarea>
           </label>
         </div>
-        <label>Notes
-          <textarea name="notes" rows="3"></textarea>
+      </details>
+      <div class="dialog-actions">
+        <button id="cancel-observation" class="secondary-action" type="button">Cancel</button>
+        <button class="primary-action" type="submit">Save what happened</button>
+      </div>
+      <p id="observation-error" class="error" hidden></p>
+    </form>
+  </dialog>
+
+  <dialog id="task-dialog">
+    <form id="task-form">
+      <div class="dialog-head">
+        <div><p class="eyebrow">Add something</p><h2>Put it in the day</h2></div>
+        <button id="close-dialog" class="icon-button" type="button">×</button>
+      </div>
+      <label>What is it?
+        <input name="title" required placeholder="Library trip, practice, experiment…">
+      </label>
+      <div class="two-col">
+        <label>About how long?
+          <input name="planned_minutes" type="number" min="0" max="1440" step="5" value="30">
         </label>
-        <div class="form-actions">
-          <button id="cancel-task" type="button" class="ghost">Cancel</button>
-          <button class="primary" type="submit">Add activity</button>
-        </div>
-        <p id="task-error" class="error" hidden></p>
-      </form>
-    </dialog>
-  </main>
+        <label>Who?
+          <select name="learner"></select>
+        </label>
+      </div>
+      <label>Anything useful to remember?
+        <textarea name="notes" rows="3"></textarea>
+      </label>
+      <div class="dialog-actions">
+        <button id="cancel-task" type="button" class="secondary-action">Cancel</button>
+        <button class="primary-action" type="submit">Add</button>
+      </div>
+      <p id="task-error" class="error" hidden></p>
+    </form>
+  </dialog>
+
   <script src="./app.js" defer></script>
 </body>
 </html>

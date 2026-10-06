@@ -5,12 +5,52 @@
   "layer": "education_workspace",
   "status": "approved",
   "intent": "A calm person-first education surface. The learner's current evidenced relation determines movement; academic visual grammar supplies stable orientation through subject identity, current work, upcoming movement, recent feedback/evidence, and resumable learning without turning grades, scores, schedules, or course sequence into learner truth.",
+  "reference_policy": {
+    "use": "External schools and learning platforms are visual/interaction witnesses only. Swallow useful relations; do not inherit their product model.",
+    "copying": "forbidden",
+    "forbid": [
+      "brand identity or trademarks",
+      "proprietary wording or assets",
+      "exact page composition",
+      "institutional workflow copied merely because a witness uses it"
+    ]
+  },
   "witnesses": [
     {
       "kind": "internal",
       "source": "companies/online-school/app/index.html",
       "observed_on": "2026-10-05",
       "notes": "Internal witness produced from the education-kernel architecture. Preserve learner-first hierarchy and separation of present relation from obligations."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://www.k12.com/study-resources/how-to-use-k12-platform/",
+      "observed_on": "2026-10-05",
+      "notes": "Reference only, not a copy contract. K12 witness: familiar learner navigation keeps schedules, classes, announcements, resources and current school activity easy to reach."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://www.acellusacademy.com/student-experience/",
+      "observed_on": "2026-10-05",
+      "notes": "Reference only, not a copy contract. Acellus witness: current classes and immediate return to the student's current position make re-entry obvious."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://www.time4learning.com/pages/lp-cinema-series",
+      "observed_on": "2026-10-05",
+      "notes": "Reference only, not a copy contract. Time4Learning witness: learners can enter through current courses/activity cards and parents can keep planning/reporting deeper in their own view."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://support.outschool.com/en/articles/4715673-navigating-the-learner-space-and-the-classroom",
+      "observed_on": "2026-10-05",
+      "notes": "Reference only, not a copy contract. Outschool witness: learner space and parent space are distinct; the learner view keeps schedule, class entry and learner tools close to the person."
+    },
+    {
+      "kind": "external_visual",
+      "source": "https://homeschoolplanet.com/features/",
+      "observed_on": "2026-10-05",
+      "notes": "Reference only, not a copy contract. Homeschool Planet witness: color can provide quick person/subject orientation and schedule tools can remain useful without owning the learning model."
     },
     {
       "kind": "external_visual",

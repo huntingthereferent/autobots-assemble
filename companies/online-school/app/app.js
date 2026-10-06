@@ -2,14 +2,7 @@ const $ = q => document.querySelector(q);
 
 const dayInput = $("#day");
 const learnerTabs = $("#learner-tabs");
-const relationsEl = $("#relations");
-const noRelations = $("#no-relations");
-const obligationsEl = $("#obligations");
-const todayList = $("#today-list");
-const sharedList = $("#shared-list");
-const todayEmpty = $("#today-empty");
-const artifactsEl = $("#artifacts");
-const artifactsEmpty = $("#artifacts-empty");
+const observationDialog = $("#observation-dialog");
 const observationForm = $("#observation-form");
 const observationError = $("#observation-error");
 const taskDialog = $("#task-dialog");
@@ -19,6 +12,7 @@ const taskError = $("#task-error");
 let school = null;
 let state = null;
 let selectedLearnerId = null;
+let showAllObligations = false;
 
 function todayISO() {
   const now = new Date();
@@ -37,161 +31,270 @@ function hours(minutes) {
   return h && m ? `${h}h ${m}m` : h ? `${h}h` : `${m}m`;
 }
 
-function learner() {
+function person() {
   return school?.learners?.find(x => x.id === selectedLearnerId) || school?.learners?.[0] || null;
 }
 
-function renderLearnerTabs() {
-  learnerTabs.replaceChildren(...school.learners.map(person => {
+function subjectFor(text) {
+  const value = String(text || "").toLowerCase();
+  if (/math|add|subtract|multip|divid|fraction|number|money|time|geometry/.test(value)) return "math";
+  if (/read|phon|word|spell|vocab|decod/.test(value)) return "reading";
+  if (/writ|handwriting/.test(value)) return "writing";
+  if (/science|plant|weather|water|experiment/.test(value)) return "science";
+  if (/history|social|missouri|trade|market/.test(value)) return "history";
+  if (/art|creative|draw|paint/.test(value)) return "art";
+  if (/physical|exercise|movement|pe /.test(value)) return "movement";
+  return "learning";
+}
+
+function subjectLabel(text) {
+  const map = {
+    math:"Math", reading:"Reading", writing:"Writing", science:"Science",
+    history:"History", art:"Art", movement:"Movement", learning:"Learning"
+  };
+  return map[subjectFor(text)];
+}
+
+function renderLearners() {
+  learnerTabs.replaceChildren(...school.learners.map(item => {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "learner-tab" + (person.id === selectedLearnerId ? " active" : "");
-    button.innerHTML = `<strong></strong><span></span>`;
-    button.querySelector("strong").textContent = person.display_name;
-    button.querySelector("span").textContent = person.current_relations.length
-      ? `${person.current_relations.length} current relation(s)`
-      : "ground from observation";
-    button.addEventListener("click", () => {
-      selectedLearnerId = person.id;
-      render();
-    });
+    button.className = "learner-pill" + (item.id === selectedLearnerId ? " active" : "");
+    button.innerHTML = `<span class="avatar"></span><span class="learner-copy"><strong></strong><small></small></span>`;
+    button.querySelector(".avatar").textContent = (item.display_name || "?").slice(0,1).toUpperCase();
+    button.querySelector("strong").textContent = item.display_name;
+    const count = item.today_tasks.filter(x => x.status !== "done").length;
+    button.querySelector("small").textContent = count ? `${count} thing${count === 1 ? "" : "s"} today` : "clear for now";
+    button.onclick = () => { selectedLearnerId = item.id; render(); };
     return button;
   }));
 }
 
-function relationCard(relation) {
-  const el = document.createElement("article");
-  el.className = "relation";
-  const supported = relation.supported?.length
-    ? relation.supported.map(x => `<li></li>`).join("")
-    : "";
-  const unsupported = relation.unsupported?.length
-    ? relation.unsupported.map(x => `<li></li>`).join("")
-    : "";
-  el.innerHTML = `
-    <div class="relation-top">
-      <strong class="relation-referent"></strong>
-      <span class="relation-evidence"></span>
-    </div>
-    <div class="relation-grid">
-      <div class="relation-supported" ${supported ? "" : "hidden"}><span>Supported now</span><ul>${supported}</ul></div>
-      <div class="relation-unsupported" ${unsupported ? "" : "hidden"}><span>Not supported now</span><ul>${unsupported}</ul></div>
-    </div>
-  `;
-  el.querySelector(".relation-referent").textContent = relation.referent;
-  el.querySelector(".relation-evidence").textContent = `${relation.evidence_refs?.length || 0} evidence ref(s)`;
-  [...el.querySelectorAll(".relation-supported li")].forEach((node, i) => node.textContent = relation.supported[i]);
-  [...el.querySelectorAll(".relation-unsupported li")].forEach((node, i) => node.textContent = relation.unsupported[i]);
-  return el;
+function renderNow(item) {
+  const front = item.front || {};
+  const learning = front.learning_now;
+  const root = $("#learning-now");
+  root.innerHTML = "";
+  $("#learning-empty").hidden = Boolean(learning);
+
+  if (learning) {
+    const subject = subjectFor(learning.referent);
+    const label = document.createElement("span");
+    label.className = `subject-tag subject-${subject}`;
+    label.textContent = subjectLabel(learning.referent);
+
+    const title = document.createElement("h2");
+    title.textContent = learning.referent;
+
+    root.append(label, title);
+
+    if (learning.supported?.length) {
+      const lead = document.createElement("p");
+      lead.className = "now-lead";
+      lead.textContent = learning.supported[0];
+      root.append(lead);
+    }
+
+    if (learning.unsupported?.length) {
+      const next = document.createElement("div");
+      next.className = "still-working";
+      next.innerHTML = `<span>Still working on</span><strong></strong>`;
+      next.querySelector("strong").textContent = learning.unsupported[0];
+      root.append(next);
+    }
+  }
+
+  const nextTask = front.do_next;
+  const nextRoot = $("#do-next");
+  nextRoot.innerHTML = "";
+  const complete = $("#complete-next");
+
+  if (nextTask) {
+    const subject = subjectFor(nextTask.title + " " + (nextTask.notes || ""));
+    const label = document.createElement("span");
+    label.className = `subject-tag subject-${subject}`;
+    label.textContent = subjectLabel(nextTask.title);
+
+    const title = document.createElement("h2");
+    title.textContent = nextTask.title;
+
+    const note = document.createElement("p");
+    note.className = "next-note";
+    note.textContent = nextTask.notes || "This is the next thing already in front.";
+
+    const meta = document.createElement("div");
+    meta.className = "next-meta";
+    meta.textContent = nextTask.planned_minutes ? `about ${hours(nextTask.planned_minutes)}` : "when ready";
+
+    nextRoot.append(label, title, note, meta);
+    complete.hidden = false;
+    complete.dataset.taskId = nextTask.id;
+  } else {
+    nextRoot.innerHTML = `<h2>Nothing assigned right now.</h2><p class="next-note">Follow what is actually happening.</p>`;
+    complete.hidden = true;
+    complete.dataset.taskId = "";
+  }
 }
 
 function activityRow(task) {
   const row = document.createElement("article");
-  row.className = "activity";
+  const subject = subjectFor(task.title + " " + (task.notes || ""));
+  row.className = `timeline-row subject-edge-${subject}`;
   row.dataset.status = task.status || "todo";
 
-  const check = document.createElement("input");
-  check.type = "checkbox";
-  check.className = "check";
-  check.checked = task.status === "done";
+  const check = document.createElement("button");
+  check.type = "button";
+  check.className = "status-check";
   check.setAttribute("aria-label", `Mark ${task.title} complete`);
-  check.addEventListener("change", async () => {
-    await patchTask(task.id, {status: check.checked ? "done" : "todo"});
-  });
+  check.textContent = task.status === "done" ? "✓" : "";
+  check.onclick = async () => {
+    await patchTask(task.id, {status: task.status === "done" ? "todo" : "done"});
+  };
 
   const body = document.createElement("div");
+  body.className = "timeline-body";
   const title = document.createElement("strong");
   title.textContent = task.title;
-  const meta = document.createElement("div");
-  meta.className = "meta";
-  const relation = task.meta?.curriculum_standard ? ` · ${task.meta.curriculum_standard}` : "";
-  meta.textContent = `${task.scope || "activity"}${relation}`;
-  body.append(title, meta);
-  if (task.notes) {
-    const note = document.createElement("div");
-    note.className = "activity-note";
-    note.textContent = task.notes;
-    body.append(note);
-  }
+  const note = document.createElement("span");
+  note.textContent = task.notes || subjectLabel(task.title);
+  body.append(title, note);
 
   const time = document.createElement("span");
   time.className = "time";
   time.textContent = task.planned_minutes ? hours(task.planned_minutes) : "—";
+
   row.append(check, body, time);
   return row;
 }
 
-function renderRelations(person) {
-  relationsEl.replaceChildren(...person.current_relations.map(relationCard));
-  noRelations.hidden = person.current_relations.length !== 0;
-  $("#observation-count").textContent = `${person.observation_count} observation(s)`;
+function renderToday(item) {
+  const own = item.today_tasks || [];
+  $("#today-list").replaceChildren(...own.map(activityRow));
+  $("#today-empty").hidden = own.length !== 0;
+  $("#shared-list").replaceChildren(...(school.shared_today || []).map(activityRow));
+  const minutes = own.reduce((sum, x) => sum + (Number(x.planned_minutes) || 0), 0);
+  $("#today-summary").textContent = own.length ? `${own.length} · ${hours(minutes)} planned` : "open";
 }
 
-function renderToday(person) {
-  const own = person.today_tasks || [];
-  todayList.replaceChildren(...own.map(activityRow));
-  todayEmpty.hidden = own.length !== 0;
-  sharedList.replaceChildren(...(school.shared_today || []).map(activityRow));
-  const planned = own.reduce((sum, x) => sum + (Number(x.planned_minutes) || 0), 0);
-  $("#today-summary").textContent = `${own.length} movement(s) · ${hours(planned)} planned`;
+function renderRecent(item) {
+  const observation = item.front?.what_changed;
+  const root = $("#recent-change");
+  root.innerHTML = "";
+  $("#observation-count").textContent = `${item.observation_count} observation${item.observation_count === 1 ? "" : "s"}`;
+
+  if (!observation) {
+    root.innerHTML = `<div class="empty-soft">Nothing recorded yet. That is okay—start from what you notice.</div>`;
+    return;
+  }
+
+  const wrap = document.createElement("article");
+  wrap.className = "change-card";
+  wrap.innerHTML = `
+    <span class="change-referent"></span>
+    <p class="change-observed"></p>
+    <div class="change-result"></div>
+  `;
+  wrap.querySelector(".change-referent").textContent = observation.referent;
+  wrap.querySelector(".change-observed").textContent = observation.observed;
+  const result = wrap.querySelector(".change-result");
+  const bits = [
+    ...(observation.supports || []).map(x => `Now: ${x}`),
+    ...(observation.contradicts || []).map(x => `Changed: ${x}`)
+  ];
+  result.textContent = bits.join(" · ");
+  root.append(wrap);
 }
 
-function renderObligations(person) {
-  obligationsEl.replaceChildren(...person.curriculum_obligations.map(target => {
-    const el = document.createElement("article");
-    el.className = "obligation";
-    el.innerHTML = `<div><span class="code"></span><strong></strong></div><p></p>`;
-    el.querySelector(".code").textContent = target.code;
-    el.querySelector("strong").textContent = target.title;
-    el.querySelector("p").textContent = target.description;
-    return el;
+function renderNeeds(item) {
+  const all = item.curriculum_obligations || [];
+  const visible = showAllObligations ? all : all.slice(0, 4);
+  const root = $("#obligations");
+  root.replaceChildren(...visible.map(target => {
+    const row = document.createElement("article");
+    const subject = subjectFor(target.title + " " + target.description);
+    row.className = "need-row";
+    row.innerHTML = `
+      <span class="need-dot subject-bg-${subject}"></span>
+      <div><strong></strong><span></span></div>
+    `;
+    row.querySelector("strong").textContent = target.title;
+    row.querySelector("span").textContent = target.description;
+    return row;
   }));
+  const toggle = $("#toggle-obligations");
+  toggle.hidden = all.length <= 4;
+  toggle.textContent = showAllObligations ? "Show less" : `Show all ${all.length}`;
 }
 
-function renderArtifacts(person) {
-  artifactsEl.replaceChildren(...person.artifacts.map(ws => {
-    const el = document.createElement("a");
-    el.className = "artifact";
-    el.href = "./worksheet.html";
-    el.innerHTML = `<strong></strong><span></span>`;
-    el.querySelector("strong").textContent = ws.title || "Worksheet";
-    const standard = ws.provenance?.standard || ws.knowledge_goal || ws.template || "artifact";
-    el.querySelector("span").textContent = standard;
-    return el;
+function renderArtifacts(item) {
+  const root = $("#artifacts");
+  root.replaceChildren(...(item.artifacts || []).slice(0, 6).map(ws => {
+    const link = document.createElement("a");
+    const subject = subjectFor(ws.subject + " " + ws.title);
+    link.className = "artifact-tile";
+    link.href = "./worksheet.html";
+    link.innerHTML = `
+      <span class="artifact-icon subject-bg-${subject}">↗</span>
+      <strong></strong>
+      <small></small>
+    `;
+    link.querySelector("strong").textContent = ws.title || "Worksheet";
+    link.querySelector("small").textContent = ws.knowledge_goal || subjectLabel(ws.subject || ws.title);
+    return link;
   }));
-  artifactsEmpty.hidden = person.artifacts.length !== 0;
+  $("#artifacts-empty").hidden = Boolean(item.artifacts?.length);
+}
+
+function renderLearningDetails(item) {
+  const root = $("#all-relations");
+  root.innerHTML = "";
+  if (!item.current_relations.length) {
+    root.innerHTML = `<div class="empty-soft">No current relation recorded.</div>`;
+    return;
+  }
+  item.current_relations.forEach(relation => {
+    const block = document.createElement("div");
+    block.className = "detail-relation";
+    block.innerHTML = `<strong></strong><p></p>`;
+    block.querySelector("strong").textContent = relation.referent;
+    const bits = [
+      ...(relation.supported || []).map(x => `available: ${x}`),
+      ...(relation.unsupported || []).map(x => `not yet: ${x}`)
+    ];
+    block.querySelector("p").textContent = bits.join(" · ");
+    root.append(block);
+  });
 }
 
 function renderSchedule() {
   const tasks = (state?.tasks || []).filter(x => x.date === dayInput.value);
   $("#all-tasks").replaceChildren(...tasks.map(activityRow));
-  $("#task-total").textContent = `${tasks.length} scheduled movement(s)`;
-
+  $("#task-total").textContent = `${tasks.length} scheduled`;
   $("#rhythm-list").replaceChildren(...(state?.schedule?.daily_rhythm || []).map(item => {
-    const el = document.createElement("div");
-    el.className = "rhythm-chip";
+    const chip = document.createElement("div");
+    chip.className = "rhythm-chip";
     const when = item.start ? `${item.start}${item.end ? "–" + item.end : ""}` : "";
-    el.innerHTML = when ? `<strong></strong><span></span>` : `<span></span>`;
-    if (when) el.querySelector("strong").textContent = when;
-    el.querySelector("span").textContent = item.label;
-    return el;
+    chip.innerHTML = `<strong></strong><span></span>`;
+    chip.querySelector("strong").textContent = when;
+    chip.querySelector("span").textContent = item.label;
+    return chip;
   }));
 }
 
 function render() {
-  const person = learner();
-  if (!person) return;
+  const item = person();
+  if (!item) return;
 
-  renderLearnerTabs();
-  $("#learner-heading").textContent = person.display_name;
-  $("#grade-context").textContent = person.grade_context ? `Grade ${person.grade_context} obligation context` : "No grade obligation context";
-  renderRelations(person);
-  renderToday(person);
-  renderObligations(person);
-  renderArtifacts(person);
+  renderLearners();
+  renderNow(item);
+  renderToday(item);
+  renderRecent(item);
+  renderNeeds(item);
+  renderArtifacts(item);
+  renderLearningDetails(item);
   renderSchedule();
 
-  const learnerQuery = encodeURIComponent(person.display_name || person.id);
+  const learnerQuery = encodeURIComponent(item.display_name || item.id);
   $("#worksheet-studio-link").href = `./worksheet.html?learner=${learnerQuery}`;
   $("#create-worksheet-link").href = `./worksheet.html?learner=${learnerQuery}`;
 
@@ -205,10 +308,10 @@ function render() {
 async function load() {
   const day = dayInput.value;
   const [schoolResponse, stateResponse] = await Promise.all([
-    fetch(`/api/school?date=${encodeURIComponent(day)}`, {cache: "no-store"}),
-    fetch("/api/state", {cache: "no-store"})
+    fetch(`/api/school?date=${encodeURIComponent(day)}`, {cache:"no-store"}),
+    fetch("/api/state", {cache:"no-store"})
   ]);
-  if (!schoolResponse.ok || !stateResponse.ok) throw new Error("Could not load school workspace");
+  if (!schoolResponse.ok || !stateResponse.ok) throw new Error("Could not load Online School");
   school = await schoolResponse.json();
   state = await stateResponse.json();
 
@@ -226,35 +329,46 @@ async function load() {
 
 async function patchTask(id, patch) {
   const response = await fetch(`/api/tasks/${encodeURIComponent(id)}`, {
-    method: "PATCH",
-    headers: {"Content-Type": "application/json"},
-    body: JSON.stringify(patch)
+    method:"PATCH",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(patch)
   });
-  if (!response.ok) return;
+  if (!response.ok) throw new Error("Could not update activity");
   await load();
 }
+
+function openObservation() {
+  observationError.hidden = true;
+  observationForm.reset();
+  observationDialog.showModal();
+}
+
+$("#show-observation").onclick = openObservation;
+$("#show-observation-2").onclick = openObservation;
+$("#close-observation").onclick = () => observationDialog.close();
+$("#cancel-observation").onclick = () => observationDialog.close();
 
 observationForm.addEventListener("submit", async event => {
   event.preventDefault();
   observationError.hidden = true;
-  const person = learner();
+  const item = person();
   const data = new FormData(observationForm);
   try {
     const response = await fetch("/api/observations", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        learner_id: person.id,
-        referent: data.get("referent"),
-        observed: data.get("observed"),
-        supports: lines(data.get("supports")),
-        contradicts: lines(data.get("contradicts")),
-        provenance: [`online-school:observation:${dayInput.value}`]
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        learner_id:item.id,
+        referent:data.get("referent"),
+        observed:data.get("observed"),
+        supports:lines(data.get("supports")),
+        contradicts:lines(data.get("contradicts")),
+        provenance:[`online-school:observation:${dayInput.value}`]
       })
     });
     const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(body.error || "Could not record observation");
-    observationForm.reset();
+    if (!response.ok) throw new Error(body.error || "Could not save observation");
+    observationDialog.close();
     await load();
   } catch (err) {
     observationError.textContent = err.message;
@@ -262,15 +376,29 @@ observationForm.addEventListener("submit", async event => {
   }
 });
 
-dayInput.addEventListener("change", load);
+$("#complete-next").onclick = async event => {
+  const id = event.currentTarget.dataset.taskId;
+  if (id) await patchTask(id, {status:"done"});
+};
 
-$("#add-task").addEventListener("click", () => {
+$("#open-schedule").onclick = () => {
+  document.querySelector("#today").scrollIntoView({behavior:"smooth", block:"start"});
+};
+
+$("#toggle-obligations").onclick = () => {
+  showAllObligations = !showAllObligations;
+  renderNeeds(person());
+};
+
+dayInput.onchange = load;
+
+$("#add-task").onclick = () => {
   taskError.hidden = true;
   taskForm.reset();
   taskDialog.showModal();
-});
-$("#close-dialog").addEventListener("click", () => taskDialog.close());
-$("#cancel-task").addEventListener("click", () => taskDialog.close());
+};
+$("#close-dialog").onclick = () => taskDialog.close();
+$("#cancel-task").onclick = () => taskDialog.close();
 
 taskForm.addEventListener("submit", async event => {
   event.preventDefault();
@@ -279,16 +407,16 @@ taskForm.addEventListener("submit", async event => {
   const learnerId = data.get("learner");
   try {
     const response = await fetch("/api/tasks", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        date: dayInput.value,
-        title: data.get("title"),
-        planned_minutes: Number(data.get("planned_minutes") || 0),
-        learner_ids: learnerId ? [learnerId] : [],
-        scope: learnerId ? "individual" : "shared",
-        notes: data.get("notes") || "",
-        source: "manual"
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        date:dayInput.value,
+        title:data.get("title"),
+        planned_minutes:Number(data.get("planned_minutes") || 0),
+        learner_ids:learnerId ? [learnerId] : [],
+        scope:learnerId ? "individual" : "shared",
+        notes:data.get("notes") || "",
+        source:"manual"
       })
     });
     const body = await response.json().catch(() => ({}));
@@ -303,7 +431,6 @@ taskForm.addEventListener("submit", async event => {
 
 dayInput.value = todayISO();
 load().catch(err => {
-  $("#learner-heading").textContent = "School workspace unavailable";
-  noRelations.hidden = false;
-  noRelations.textContent = err.message;
+  $("#learning-now").innerHTML = `<h2>Could not load school.</h2><p class="next-note"></p>`;
+  $("#learning-now .next-note").textContent = err.message;
 });
