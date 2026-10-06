@@ -449,6 +449,7 @@ class Handler(BaseHTTPRequestHandler):
                         "placement": learner.get("placement") or {},
                         "current_relations": relations,
                         "observations": observations,
+                        "human_notes": learner.get("human_notes") or [],
                         "tasks": learner_tasks,
                         "worksheets": learner_worksheets,
                         "calendar": calendar_rows,
@@ -709,6 +710,50 @@ class Handler(BaseHTTPRequestHandler):
                 self.api_error(str(exc))
             return
 
+
+
+        if parsed.path == "/api/notes":
+            try:
+                payload = json_body(self)
+                learner_id = str(payload.get("learner_id") or "").strip()
+                author = str(payload.get("author") or "").strip()
+                role = str(payload.get("role") or "parent").strip().lower()
+                note = str(payload.get("note") or "").strip()
+                subject = str(payload.get("subject") or "").strip()
+                standard = str(payload.get("standard") or "").strip()
+                if not learner_id or not author or not note:
+                    raise ValueError("learner_id, author, and note are required")
+                if role not in {"parent", "teacher", "guardian", "tutor", "other"}:
+                    raise ValueError("invalid note role")
+
+                entry = {
+                    "id": "note_" + uuid.uuid4().hex[:12],
+                    "date": date.today().isoformat(),
+                    "author": author,
+                    "role": role,
+                    "note": note,
+                    "subject": subject,
+                    "standard": standard,
+                }
+
+                with LOCK:
+                    state = load_state()
+                    learner = next(
+                        (
+                            item for item in state.get("learners", [])
+                            if str(item.get("id") or "") == learner_id
+                        ),
+                        None,
+                    )
+                    if learner is None:
+                        raise ValueError("unknown learner")
+                    learner.setdefault("human_notes", []).append(entry)
+                    save_state(state)
+
+                self.send_json(entry, 201)
+            except (ValueError, TypeError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
 
         if parsed.path == "/api/progress":
             try:
