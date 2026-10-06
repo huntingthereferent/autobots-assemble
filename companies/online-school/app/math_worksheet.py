@@ -18,6 +18,7 @@ def clean(v: Any) -> str:
 def grade_number(v: Any) -> int | None:
     t=clean(v).lower()
     if not t or t=="auto": return None
+    if t in {"adult","unbounded"}: return 12
     if t in {"k","kg","kindergarten"}: return 0
     m=re.search(r"(\d+)",t)
     return max(0,min(12,int(m.group(1)))) if m else None

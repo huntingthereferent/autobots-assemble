@@ -256,12 +256,19 @@ class Handler(BaseHTTPRequestHandler):
                 payload = json_body(self)
                 name = str(payload.get("display_name") or "").strip()
                 grade = str(payload.get("grade_context") or "").strip()
+                age_raw = payload.get("age")
                 if not name:
                     raise ValueError("name is required")
+                age = None
+                if age_raw not in (None, ""):
+                    age = int(age_raw)
+                    if age < 1 or age > 120:
+                        raise ValueError("age must be between 1 and 120")
                 learner = {
                     "id": "learner_" + uuid.uuid4().hex[:12],
                     "display_name": name,
                     "grade_context": grade,
+                    "age": age,
                 }
                 with LOCK:
                     state = load_state()

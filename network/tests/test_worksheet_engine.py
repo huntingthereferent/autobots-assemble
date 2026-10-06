@@ -93,6 +93,26 @@ class WorksheetEngineTests(unittest.TestCase):
             self.assertTrue(all(n <= 20 for n in nums[:2]))
             self.assertIn("Why:", item["answer"])
 
+    def test_adult_math_mode_removes_child_grade_ceiling(self):
+        worksheet = engine.generate_worksheet(
+            {
+                "template": "arithmetic",
+                "level": "challenge",
+                "title": "Adult Algebra",
+                "learner": "James",
+                "math_prompt": "challenging algebra equations",
+                "math_topic": "algebra",
+                "grade": "adult",
+                "question_type": "short-answer",
+                "count": 3,
+            }
+        )
+        self.assertEqual(
+            worksheet["source"]["resolved_math_spec"]["grade"],
+            12,
+        )
+        self.assertEqual(len(worksheet["items"]), 3)
+
     def test_math_breadth_exceeds_basic_arithmetic(self):
         cases = [
             ("Fractions for 4th grade", "fractions"),

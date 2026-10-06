@@ -22,9 +22,14 @@
           <span>Your name</span>
           <input name="display_name" autocomplete="given-name" maxlength="50" required placeholder="Type your name">
         </label>
-        <label>
-          <span>Your grade</span>
-          <select name="grade_context">
+        <div class="welcome-two">
+          <label>
+            <span>Your age</span>
+            <input name="age" type="number" min="1" max="120" inputmode="numeric" required placeholder="Age">
+          </label>
+          <label>
+            <span>Your grade</span>
+            <select name="grade_context">
             <option value="">Not sure yet</option>
             <option value="1">1st grade</option>
             <option value="2">2nd grade</option>
@@ -39,7 +44,8 @@
             <option value="11">11th grade</option>
             <option value="12">12th grade</option>
           </select>
-        </label>
+          </label>
+        </div>
         <button class="welcome-button" type="submit">Make my space <span>→</span></button>
         <p id="welcome-error" class="form-error" hidden></p>
       </form>
@@ -103,6 +109,29 @@
             <a class="jump-tile tile-make" id="studio-link" href="./worksheet.html"><span>🎨</span><strong>Make</strong><small>create something</small></a>
           </div>
         </aside>
+      </section>
+
+      <section id="academic-lab" class="workspace-section academic-lab" hidden>
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Unbounded</p>
+            <h2>Academic Lab</h2>
+          </div>
+          <a id="academic-print-link" class="small-pill" href="./worksheet.html">Print Studio ↗</a>
+        </div>
+        <p class="academic-copy">Follow any question as far as it goes. These are tools, not lanes.</p>
+        <div class="academic-grid">
+          <button class="academic-tool" data-academic="research" type="button"><span>⌕</span><strong>Research</strong><small>follow a question through sources</small></button>
+          <button class="academic-tool" data-academic="reading" type="button"><span>▤</span><strong>Read</strong><small>articles, books, papers, primary sources</small></button>
+          <button class="academic-tool" data-academic="notes" type="button"><span>✎</span><strong>Notes</strong><small>capture ideas, claims, relations, evidence</small></button>
+          <button class="academic-tool" data-academic="writing" type="button"><span>¶</span><strong>Writing</strong><small>essays, arguments, explanations, reports</small></button>
+          <a class="academic-tool" data-academic="problem-sets" href="./worksheet.html?mode=adult&type=problem-set"><span>∑</span><strong>Problem sets</strong><small>practice, derive, solve, print</small></a>
+          <button class="academic-tool" data-academic="projects" type="button"><span>◇</span><strong>Projects</strong><small>build something that carries the relation</small></button>
+          <button class="academic-tool" data-academic="experiments" type="button"><span>⚗</span><strong>Experiments</strong><small>claim → test → evidence → revision</small></button>
+          <button class="academic-tool" data-academic="sources-citations" type="button"><span>☷</span><strong>Sources</strong><small>citations, bibliography, provenance</small></button>
+          <a class="academic-tool" data-academic="print-worksheets" href="./worksheet.html?mode=adult"><span>▧</span><strong>Print Studio</strong><small>worksheets, reading sheets, custom pages</small></a>
+          <button class="academic-tool" data-academic="artifacts" type="button"><span>⬡</span><strong>Artifacts</strong><small>keep the things made along the way</small></button>
+        </div>
       </section>
 
       <section id="today" class="workspace-section">

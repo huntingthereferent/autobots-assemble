@@ -93,11 +93,40 @@ def build_school_view(
         ]
         next_task = (unfinished or shared_unfinished or [None])[0]
 
+        age_raw = learner.get("age")
+        try:
+            age = int(age_raw) if age_raw not in (None, "") else None
+        except (TypeError, ValueError):
+            age = None
+        adult = age is not None and age >= 18
+
         learners.append(
             {
                 "id": learner_id,
                 "display_name": learner.get("display_name") or learner_id,
                 "grade_context": grade,
+                "age": age,
+                "adult": adult,
+                "presentation_guardrails": {
+                    "age_bounded": not adult,
+                    "grade_bounded": not adult,
+                },
+                "academic_tools": (
+                    [
+                        "research",
+                        "reading",
+                        "notes",
+                        "writing",
+                        "problem-sets",
+                        "projects",
+                        "experiments",
+                        "sources-citations",
+                        "print-worksheets",
+                        "artifacts",
+                    ]
+                    if adult
+                    else []
+                ),
                 "current_relations": relations,
                 "observation_count": len(observations),
                 "recent_observations": observations[-5:],

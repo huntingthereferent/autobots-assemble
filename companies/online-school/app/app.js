@@ -299,8 +299,13 @@ function render() {
   renderLearners();
 
   $("#hello-name").textContent = `Hey, ${item.display_name}!`;
-  const grade = item.grade_context ? `Grade ${item.grade_context} · your space` : "Your space";
+  const grade = item.adult
+    ? `Age ${item.age} · unbounded workspace`
+    : item.grade_context
+      ? `Age ${item.age ?? "?"} · Grade ${item.grade_context} · your space`
+      : `Age ${item.age ?? "?"} · your space`;
   $("#day-greeting").textContent = grade;
+  $("#academic-lab").hidden = !item.adult;
 
   renderFocus(item);
   renderToday(item);
@@ -310,8 +315,10 @@ function render() {
   renderSwitchList();
 
   const learnerName = encodeURIComponent(item.display_name || item.id);
-  $("#studio-link").href = `./worksheet.html?learner=${learnerName}`;
-  $("#create-worksheet-link").href = `./worksheet.html?learner=${learnerName}`;
+  const adultMode = item.adult ? "&mode=adult" : "";
+  $("#studio-link").href = `./worksheet.html?learner=${learnerName}${adultMode}`;
+  $("#create-worksheet-link").href = `./worksheet.html?learner=${learnerName}${adultMode}`;
+  $("#academic-print-link").href = `./worksheet.html?learner=${learnerName}&mode=adult`;
 }
 
 async function load() {
@@ -369,6 +376,7 @@ welcomeForm.addEventListener("submit", async event => {
   try {
     await createLearner({
       display_name:data.get("display_name"),
+      age:data.get("age"),
       grade_context:data.get("grade_context")
     });
     welcomeForm.reset();
@@ -445,6 +453,49 @@ document.querySelectorAll("[data-jump]").forEach(button => {
     } else {
       $("#today").scrollIntoView({behavior:"smooth", block:"start"});
     }
+  };
+});
+
+
+const academicPrompts = {
+  research: "What are you researching?",
+  reading: "What are you reading or trying to understand?",
+  notes: "What are you taking notes on?",
+  writing: "What are you writing?",
+  projects: "What are you building or making?",
+  experiments: "What are you testing?",
+  "sources-citations": "What source trail are you working on?",
+  artifacts: "What are you making or preserving?"
+};
+
+document.querySelectorAll("button[data-academic]").forEach(button => {
+  button.onclick = async () => {
+    const kind = button.dataset.academic;
+    const title = window.prompt(academicPrompts[kind] || "What are you working on?");
+    if (!title?.trim()) return;
+    const item = person();
+    const response = await fetch("/api/tasks", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        date:dayInput.value,
+        title:title.trim(),
+        planned_minutes:null,
+        learner_ids:[item.id],
+        scope:"individual",
+        kind:"academic",
+        notes:`Academic tool: ${kind}`,
+        source:"adult-academic-workspace",
+        meta:{academic_tool:kind, unbounded:true}
+      })
+    });
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      alert(body.error || "Could not add that");
+      return;
+    }
+    await load();
+    $("#today").scrollIntoView({behavior:"smooth", block:"start"});
   };
 });
 

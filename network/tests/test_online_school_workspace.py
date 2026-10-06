@@ -152,6 +152,24 @@ class OnlineSchoolWorkspaceTests(unittest.TestCase):
             "shared-math",
         )
 
+    def test_adult_age_removes_age_and_grade_presentation_guardrails(self):
+        state = self.state()
+        state["learners"] = [
+            {"id": "james", "display_name": "James", "age": 40, "grade_context": ""}
+        ]
+        state["tasks"] = []
+        view = build_school_view(
+            state=state,
+            day="2026-10-05",
+            kernel=EducationKernel(),
+        )
+        learner = view["learners"][0]
+        self.assertTrue(learner["adult"])
+        self.assertFalse(learner["presentation_guardrails"]["age_bounded"])
+        self.assertFalse(learner["presentation_guardrails"]["grade_bounded"])
+        self.assertIn("research", learner["academic_tools"])
+        self.assertIn("print-worksheets", learner["academic_tools"])
+
     def test_workspace_declares_kernel_routes_and_visual_template(self):
         server = (APP / "server.py").read_text(encoding="utf-8")
         html = (APP / "index.html").read_text(encoding="utf-8")
