@@ -55,7 +55,7 @@ DELETE /api/worksheets/{id}
 
 Current generation modes:
 
-- arithmetic, including deterministic variants and mixed operations;
+- math worksheet generation from a natural-language request, with grade/range inference, deterministic variants, worked answer explanations, and addition/subtraction/multiplication/division, fractions, decimals, percent, algebra, geometry, time, money, measurement, place value, comparison, patterns, and word problems;
 - spelling with support / standard / challenge movements;
 - vocabulary from term-definition pairs;
 - reading + thinking from a supplied source passage;

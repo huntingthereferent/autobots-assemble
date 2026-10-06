@@ -5,7 +5,9 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
-ENGINE_PATH = ROOT / "companies" / "online-school" / "app" / "worksheet_engine.py"
+APP = ROOT / "companies" / "online-school" / "app"
+sys.path.insert(0, str(APP))
+ENGINE_PATH = APP / "worksheet_engine.py"
 spec = importlib.util.spec_from_file_location("worksheet_engine_test", ENGINE_PATH)
 engine = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = engine
@@ -71,6 +73,66 @@ class WorksheetEngineTests(unittest.TestCase):
     def test_empty_required_source_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "requires"):
             engine.generate_worksheet({"template": "reading", "passage": ""})
+
+    def test_notegpt_published_example_addition_subtraction_within_20_first_grade(self):
+        ws = engine.generate_worksheet({
+            "template": "arithmetic",
+            "math_prompt": "Addition and subtraction within 20 for 1st grade",
+            "grade": "auto",
+            "math_topic": "auto",
+            "question_type": "mixed",
+            "count": 10,
+            "seed": 9,
+        })
+        spec = ws["source"]["resolved_math_spec"]
+        self.assertEqual(spec["grade"], 1)
+        self.assertEqual(spec["within"], 20)
+        self.assertEqual(len(ws["items"]), 10)
+        for item in ws["items"]:
+            nums = [int(x) for x in __import__("re").findall(r"\d+", item["prompt"])]
+            self.assertTrue(all(n <= 20 for n in nums[:2]))
+            self.assertIn("Why:", item["answer"])
+
+    def test_math_breadth_exceeds_basic_arithmetic(self):
+        cases = [
+            ("Fractions for 4th grade", "fractions"),
+            ("Geometry area and perimeter for 5th grade", "geometry"),
+            ("Money word practice for 2nd grade", "money"),
+            ("One-step algebra equations for 6th grade", "algebra"),
+            ("Decimal practice for 5th grade", "decimals"),
+            ("Word problems for 3rd grade", "word-problems"),
+        ]
+        for prompt, topic in cases:
+            ws = engine.generate_worksheet({
+                "template": "arithmetic",
+                "math_prompt": prompt,
+                "math_topic": "auto",
+                "grade": "auto",
+                "question_type": "short-answer",
+                "count": 5,
+                "seed": 4,
+            })
+            self.assertEqual(ws["source"]["resolved_math_spec"]["topic"], topic)
+            self.assertEqual(len(ws["items"]), 5)
+            self.assertTrue(all("Why:" in item["answer"] for item in ws["items"]))
+
+    def test_math_question_types_are_real_not_labels(self):
+        single = engine.generate_worksheet({
+            "template": "arithmetic",
+            "math_prompt": "fractions for 4th grade",
+            "question_type": "single-choice",
+            "count": 4,
+            "seed": 3,
+        })
+        self.assertTrue(all("A." in item["prompt"] for item in single["items"]))
+        fill = engine.generate_worksheet({
+            "template": "arithmetic",
+            "math_prompt": "addition within 20 for 1st grade",
+            "question_type": "fill-blank",
+            "count": 4,
+            "seed": 3,
+        })
+        self.assertTrue(all("____" in item["prompt"] for item in fill["items"]))
 
 
 if __name__ == "__main__":

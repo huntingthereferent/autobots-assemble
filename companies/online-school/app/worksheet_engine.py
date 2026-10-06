@@ -6,6 +6,8 @@ from typing import Any
 import re
 import uuid
 
+from math_worksheet import generate_math
+
 
 TEMPLATES = (
     "arithmetic",
@@ -80,37 +82,26 @@ def _count(payload: dict[str, Any], default: int) -> int:
 
 
 def _arithmetic(payload: dict[str, Any], rng: Random) -> list[WorksheetItem]:
-    level = _clean(payload.get("level")) or "standard"
-    op = _clean(payload.get("operation")) or "mixed"
-    count = _count(payload, 20)
-    ceilings = {
-        "support": (10, 5),
-        "standard": (50, 12),
-        "challenge": (500, 20),
-    }
-    add_max, mult_max = ceilings.get(level, ceilings["standard"])
-    operations = ["add", "subtract", "multiply", "divide"] if op == "mixed" else [op]
-    items: list[WorksheetItem] = []
-    for _ in range(count):
-        current = rng.choice(operations)
-        if current == "add":
-            a, b = rng.randint(0, add_max), rng.randint(0, add_max)
-            prompt, answer = f"{a} + {b} =", str(a + b)
-        elif current == "subtract":
-            a, b = rng.randint(0, add_max), rng.randint(0, add_max)
-            a, b = max(a, b), min(a, b)
-            prompt, answer = f"{a} − {b} =", str(a - b)
-        elif current == "multiply":
-            a, b = rng.randint(0, mult_max), rng.randint(0, mult_max)
-            prompt, answer = f"{a} × {b} =", str(a * b)
-        elif current == "divide":
-            divisor = rng.randint(1, max(2, mult_max))
-            quotient = rng.randint(1, max(2, mult_max))
-            prompt, answer = f"{divisor * quotient} ÷ {divisor} =", str(quotient)
-        else:
-            raise ValueError(f"unsupported operation: {current}")
-        items.append(WorksheetItem(prompt=prompt, answer=answer, kind="math"))
-    return items
+    normalized = dict(payload)
+    operation = _clean(payload.get("operation"))
+    if operation and operation != "mixed" and not _clean(payload.get("math_topic")):
+        normalized["math_topic"] = {
+            "add": "addition",
+            "subtract": "subtraction",
+            "multiply": "multiplication",
+            "divide": "division",
+        }.get(operation, operation)
+    spec, rows = generate_math(normalized, rng)
+    payload["resolved_math_spec"] = spec
+    return [
+        WorksheetItem(
+            prompt=row["prompt"],
+            answer=row["answer"],
+            kind=row.get("kind", "math"),
+            lines=int(row.get("lines", 1)),
+        )
+        for row in rows
+    ]
 
 
 def _spelling(payload: dict[str, Any], rng: Random) -> list[WorksheetItem]:
@@ -263,7 +254,8 @@ def generate_worksheet(payload: dict[str, Any]) -> dict[str, Any]:
         "handwriting": _handwriting,
         "custom": _custom,
     }
-    items = builders[template]({**payload, "level": level}, rng)
+    working_payload = {**payload, "level": level}
+    items = builders[template](working_payload, rng)
 
     title = _clean(payload.get("title")) or {
         "arithmetic": "Math Practice",
@@ -294,9 +286,13 @@ def generate_worksheet(payload: dict[str, Any]) -> dict[str, Any]:
         "passage": _clean(payload.get("passage")) if template == "reading" else "",
         "items": [item.as_dict() for item in items],
         "source": {
-            key: payload.get(key)
-            for key in ("words", "terms", "copy_text", "custom_items", "operation", "count")
-            if payload.get(key) not in (None, "")
+            key: working_payload.get(key)
+            for key in (
+                "words", "terms", "copy_text", "custom_items", "operation", "count",
+                "math_prompt", "math_topic", "grade", "question_type", "language",
+                "resolved_math_spec",
+            )
+            if working_payload.get(key) not in (None, "")
         },
     }
 
