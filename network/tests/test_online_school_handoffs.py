@@ -60,7 +60,7 @@ class OnlineSchoolHandoffTests(unittest.TestCase):
         task = personal.add_task(
             TaskRecord.create(
                 "Review repo movement",
-                referent="Language Network",
+                referent="Continuity Layer",
                 assignee="james",
             )
         )
