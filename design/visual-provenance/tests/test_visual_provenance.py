@@ -139,8 +139,8 @@ class VisualProvenanceTests(unittest.TestCase):
             html,
         )
         preserve = " ".join(binding["preserve"]).lower()
-        self.assertIn("movement-first hierarchy", preserve)
-        self.assertIn("cross-system feed", preserve)
+        self.assertIn("social-feed hierarchy", preserve)
+        self.assertIn("composer-first participation", preserve)
         self.assertIn("source-system provenance", preserve)
 
     def test_schema_contracts_exist(self):
