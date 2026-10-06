@@ -41,7 +41,7 @@ class EcosystemOrchestratorTests(unittest.TestCase):
         personal_task = personal.add_task(
             TaskRecord.create(
                 "Review current repo movement",
-                referent="Language Network",
+                referent="Continuity Layer",
                 assignee="james",
             )
         )
