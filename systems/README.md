@@ -25,6 +25,7 @@ This allows unlike systems to remain unlike internally while sharing one cross-b
 Examples already present in the ecosystem include:
 - Online School — education operation and schedule/task state;
 - Personal Operations — notes, tasks, and plans;
+- Factory System — order/stage state that generates the next handoff after each reconciliation;
 - simulated factory witnesses — production state/events;
 - future company, research, city, software, machine, or household systems.
 
