@@ -7,6 +7,7 @@ import re
 import uuid
 
 from math_worksheet import generate_math
+from math_space import generate_math_space
 
 
 TEMPLATES = (
@@ -91,7 +92,12 @@ def _arithmetic(payload: dict[str, Any], rng: Random) -> list[WorksheetItem]:
             "multiply": "multiplication",
             "divide": "division",
         }.get(operation, operation)
-    spec, rows = generate_math(normalized, rng)
+    adult_mode = _clean(payload.get("grade")).lower() in {"adult", "unbounded"}
+    advanced_domain = _clean(payload.get("math_domain"))
+    if adult_mode or advanced_domain:
+        spec, rows = generate_math_space(normalized, rng)
+    else:
+        spec, rows = generate_math(normalized, rng)
     payload["resolved_math_spec"] = spec
     return [
         WorksheetItem(
@@ -297,8 +303,8 @@ def generate_worksheet(payload: dict[str, Any]) -> dict[str, Any]:
             key: working_payload.get(key)
             for key in (
                 "words", "terms", "copy_text", "custom_items", "operation", "count",
-                "math_prompt", "math_topic", "grade", "question_type", "language",
-                "resolved_math_spec",
+                "math_prompt", "math_topic", "math_family", "math_domain",
+                "grade", "question_type", "language", "resolved_math_spec",
             )
             if working_payload.get(key) not in (None, "")
         },

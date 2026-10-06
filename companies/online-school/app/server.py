@@ -119,6 +119,53 @@ def adapt_generated_to_learners(generated, state):
     return adapted
 
 
+def adult_required_tasks(day, state):
+    if date.fromisoformat(day).weekday() > 4:
+        return []
+    rows = []
+    blocks = (
+        ("mathematics", 45, "Work through a required mathematics problem set."),
+        ("reading", 30, "Read something substantial and preserve what matters."),
+        ("writing", 30, "Write an explanation, argument, summary, or analysis."),
+        ("science / research", 45, "Investigate a question through evidence and sources."),
+    )
+    for learner in state.get("learners", []):
+        try:
+            age = int(learner.get("age")) if learner.get("age") not in (None, "") else None
+        except (TypeError, ValueError):
+            age = None
+        if age is None or age < 18:
+            continue
+        learner_id = str(learner.get("id") or "")
+        for title, minutes, notes in blocks:
+            rows.append(
+                {
+                    "id": str(
+                        uuid.uuid5(
+                            uuid.NAMESPACE_URL,
+                            f"online-school:adult-required:{day}:{learner_id}:{title}",
+                        )
+                    ),
+                    "date": day,
+                    "title": title,
+                    "category": title.replace(" / ", "-").replace(" ", "-"),
+                    "kind": "instruction",
+                    "scope": "individual",
+                    "learner_ids": [learner_id],
+                    "planned_minutes": minutes,
+                    "status": "todo",
+                    "source": "adult-forced-curriculum",
+                    "notes": notes,
+                    "meta": {
+                        "required": True,
+                        "adult_curriculum": True,
+                        "guardrail": "obligation without age/grade presentation ceiling",
+                    },
+                }
+            )
+    return rows
+
+
 def json_body(handler):
     length = int(handler.headers.get("Content-Length", "0"))
     if length <= 0:
@@ -162,6 +209,7 @@ class Handler(BaseHTTPRequestHandler):
             with LOCK:
                 state = load_state()
                 generated = adapt_generated_to_learners(generated, state)
+                generated.extend(adult_required_tasks(day, state))
                 state["tasks"], _added = merge_generated(
                     state.get("tasks", []),
                     generated,
@@ -221,6 +269,7 @@ class Handler(BaseHTTPRequestHandler):
             with LOCK:
                 state = load_state()
                 generated = adapt_generated_to_learners(generated, state)
+                generated.extend(adult_required_tasks(day, state))
                 state["tasks"], added = merge_generated(state.get("tasks", []), generated)
                 save_state(state)
                 tasks = [t for t in state["tasks"] if t.get("date") == day]
@@ -338,6 +387,15 @@ class Handler(BaseHTTPRequestHandler):
                 with LOCK:
                     state = load_state()
                     generated = adapt_generated_to_learners(generated, state)
+                    cursor = start
+                    adult_rows = []
+                    from datetime import timedelta as _timedelta
+                    current = date.fromisoformat(start)
+                    stop = date.fromisoformat(end)
+                    while current <= stop:
+                        adult_rows.extend(adult_required_tasks(current.isoformat(), state))
+                        current += _timedelta(days=1)
+                    generated.extend(adult_rows)
                     state["tasks"], added = merge_generated(state.get("tasks", []), generated)
                     save_state(state)
                 self.send_json({"added": added, "generated": len(generated), "start": start, "end": end}, 201)

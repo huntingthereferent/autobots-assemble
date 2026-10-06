@@ -107,11 +107,50 @@ class WorksheetEngineTests(unittest.TestCase):
                 "count": 3,
             }
         )
-        self.assertEqual(
-            worksheet["source"]["resolved_math_spec"]["grade"],
-            12,
-        )
+        spec = worksheet["source"]["resolved_math_spec"]
+        self.assertTrue(spec["unbounded"])
+        self.assertEqual(spec["domain"], "algebra")
+        self.assertNotIn("grade", spec)
         self.assertEqual(len(worksheet["items"]), 3)
+
+    def test_unbounded_math_space_generates_across_all_domains(self):
+        domains = (
+            "number","number-theory","algebra","functions","sequences",
+            "exponents-logarithms","geometry","analytic-geometry","trigonometry",
+            "vectors","complex-numbers","linear-algebra","sets-logic",
+            "combinatorics","probability","statistics","calculus",
+            "differential-equations","financial-math",
+        )
+        for domain in domains:
+            ws = engine.generate_worksheet({
+                "template": "arithmetic",
+                "grade": "adult",
+                "math_domain": domain,
+                "math_family": "solve",
+                "count": 2,
+                "seed": 7,
+            })
+            spec = ws["source"]["resolved_math_spec"]
+            self.assertTrue(spec["unbounded"], domain)
+            self.assertEqual(spec["domain"], domain)
+            self.assertEqual(len(ws["items"]), 2)
+            self.assertTrue(all("Why:" in item["answer"] for item in ws["items"]))
+
+    def test_math_space_collapses_domains_into_small_operation_families(self):
+        ws = engine.generate_worksheet({
+            "template": "arithmetic",
+            "grade": "adult",
+            "math_domain": "calculus",
+            "math_family": "transform",
+            "count": 3,
+            "seed": 3,
+        })
+        spec = ws["source"]["resolved_math_spec"]
+        self.assertEqual(
+            set(spec["families"]),
+            {"transform","solve","compare","represent","measure","infer"},
+        )
+        self.assertGreaterEqual(len(spec["domains"]), 19)
 
     def test_math_breadth_exceeds_basic_arithmetic(self):
         cases = [
