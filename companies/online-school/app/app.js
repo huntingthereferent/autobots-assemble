@@ -440,7 +440,7 @@ async function openPlacement(subject) {
 
   if (subject === "mathematics") {
     let currentBand = "";
-    for (const item of section.diagnostic.items || []) {
+    for (const item of (section.diagnostic.items || []).slice(0, 5)) {
       if (item.band !== currentBand) {
         currentBand = item.band;
         const band = document.createElement("div");
