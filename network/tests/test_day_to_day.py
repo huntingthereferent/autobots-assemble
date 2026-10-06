@@ -21,6 +21,15 @@ class DayToDayTests(unittest.TestCase):
         self.assertEqual(len(calendar.events_for("james",now=NOW)),1)
         self.assertEqual(len(calendar.events_for("other",now=NOW)),0)
 
+    def test_calendar_preserves_words_movement_anchor(self):
+        calendar=CalendarStore()
+        event=calendar.add(CalendarEvent.create(
+            "Follow up",referent="conversation / repo",
+            participants=("james",),movement_anchor="reopen",
+            starts_at="2026-10-05T09:30:00-05:00"))
+        self.assertEqual(event.movement_anchor,"REOPEN")
+        self.assertEqual(calendar.events_for("james",now=NOW)[0].movement_anchor,"REOPEN")
+
     def test_attention_combines_live_work_reminder_and_calendar_per_person(self):
         runtime=HandoffRuntime()
         mine=Handoff(handoff_id="mine",referent="repo",from_actor="x",to_actor="james",
