@@ -86,6 +86,8 @@ Every artifact should preserve enough of the following to remain usable downstre
 
 The exact fields vary by artifact family, but the distinctions must survive.
 
+Artifacts participate in natural provenance. An artifact is current inside its own layer, while the evidence, upstream artifacts, transformations, decisions, and producing movement remain reachable behind it. When another layer consumes the artifact, preserve the cross-layer edge rather than flattening both layers into one state model.
+
 ## Artifacts are recursive inputs
 
 A produced artifact is not an endpoint.

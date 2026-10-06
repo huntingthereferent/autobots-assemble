@@ -2,6 +2,8 @@
 
 Visual provenance preserves **why a surface looks the way it looks**.
 
+It is a specialization of the repository's natural-provenance rule: the surface remains the current local object while the visual witnesses, extracted grammar, adaptations, and prior decisions remain reachable behind it as relational ancestry.
+
 It is not a screenshot archive and it is not permission to copy another product. A visual witness is observed, reduced to a reusable visual grammar, and then translated into the local system.
 
 The purpose is to prevent visual drift—especially generic AI-generated interfaces—while preserving source, distinctions, adaptation decisions, and the boundary between inspiration and implementation.

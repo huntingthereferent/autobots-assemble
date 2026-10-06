@@ -18,6 +18,32 @@ The first software surface now exists as a deliberately small HTTP task monitor:
 
 The repo may later add legal formation, enrollment, billing, curriculum products, teachers, broader platform surfaces, or accreditation/compliance work only when those relations become real.
 
+## Education kernel orientation
+
+Online School is currently an embryo around the education kernel. The present software primarily proves transport, artifacts, handoffs, returned evidence, and reconciliation boundaries.
+
+A learner label, name, grade, standard, schedule position, or prior model is context. It does not define the learner's current state.
+
+Each encounter regrounds on what is actually evidenced now:
+
+```text
+person in front
+→ current language / distinctions / relations actually evidenced
+→ reachable next movement
+→ activity / artifact / handoff
+→ returned evidence
+→ reconcile
+→ reground on the person again
+```
+
+Prior observations are not discarded. They remain reachable as natural provenance behind the current learner relation. When present evidence reaches an earlier observation, that evidence can be brought forward and reconciled. Old state is not allowed to override stronger present evidence merely because it came first.
+
+This gives Online School the same repository invariant as the other layers:
+
+> **Local state, continuous provenance.**
+
+The long-term education system should therefore be able to construct a person-specific path from the ground up rather than merely placing a learner into a predefined sequence.
+
 ## Operating shape
 
 ```text

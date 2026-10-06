@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "provenance-link.schema.json",
+  "title": "Cross-layer Provenance Link",
+  "description": "Minimal relational ancestry edge connecting local objects without replacing their local schemas.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provenance_id",
+    "from",
+    "relation",
+    "to"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "provenance_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "from": {
+      "type": "object",
+      "required": [
+        "layer",
+        "ref"
+      ],
+      "properties": {
+        "layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "relation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "to": {
+      "type": "object",
+      "required": [
+        "layer",
+        "ref"
+      ],
+      "properties": {
+        "layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "transformation": {
+      "type": "string"
+    },
+    "survived": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "invalidated": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

@@ -152,6 +152,8 @@ activation projections
 
 The systems retain different local schemas. The shared boundary is the handoff.
 
+This follows the repository provenance invariant: **local state, continuous provenance**. A handoff carries a traceable edge between systems; it does not require either system to surrender its local model. Returned results preserve enough ancestry for the receiving system to reconcile them against its own current state.
+
 
 ## Durable restart recovery
 

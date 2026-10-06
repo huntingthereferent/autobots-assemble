@@ -13,7 +13,8 @@ A protocol may specialize the witness conditions, but it may not silently change
 - [`core/movement.md`](core/movement.md) — make one supported movement.
 - [`core/wall.md`](core/wall.md) — stop without fabricating an edge.
 - [`core/handoff.md`](core/handoff.md) — move work between agents/tools while preserving the referent.
-- [`core/provenance.md`](core/provenance.md) — retain source/witness/parent history.
+- [`core/provenance.md`](core/provenance.md) — preserve natural provenance: local state stays local while relational ancestry remains continuously traceable across layers.
+- [`core/provenance-link.schema.json`](core/provenance-link.schema.json) — optional machine-readable `from → relation → to` ancestry edge for connecting unlike local layers without flattening them.
 
 ## AI protocols
 

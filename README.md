@@ -52,8 +52,14 @@ It is now frozen as evidence. It should be reopened only when a real problem exp
 
 The next broad expansion is toward **integrated physical systems / machines**, where complete-stack traversal must survive non-digital layers without pretending simulation or placeholders are physical witnesses.
 
+## Provenance invariant
+
+**Local state, continuous provenance.**
+
+Every layer keeps its own native state and meaning. Cross-layer continuity comes from preserved relational ancestry, not from forcing unlike systems into one universal schema. See [protocols/core/provenance.md](protocols/core/provenance.md).
+
 ## Core rule
 
 **current referent → required relation → enter required layer → witness/model/build/measure → preserve provenance → return result as valid input → continue**
 
-Do not stop merely because the next dependency belongs to another discipline.
+The current referent stays front-facing; prior movements remain reachable behind it as provenance. Do not stop merely because the next dependency belongs to another discipline.
