@@ -261,14 +261,25 @@ function renderGrownup(item) {
     return row;
   }));
 
-  $("#rhythm-list").replaceChildren(...(state?.schedule?.daily_rhythm || []).map(block => {
+  const calendarRows = (state?.calendar || []).filter(
+    row => row.learner_id === item.id
+  );
+  const scheduleRows = calendarRows.length
+    ? calendarRows
+    : (state?.schedule?.daily_rhythm || []);
+  $("#rhythm-list").replaceChildren(...scheduleRows.map(block => {
     const row = document.createElement("div");
     row.className = "rhythm-row";
     row.innerHTML = "<strong></strong><span></span>";
-    row.querySelector("strong").textContent = block.label;
-    row.querySelector("span").textContent = block.start
-      ? `${block.start}${block.end ? "–" + block.end : ""}`
-      : "flexible";
+    if (calendarRows.length) {
+      row.querySelector("strong").textContent = block.relation;
+      row.querySelector("span").textContent = block.date;
+    } else {
+      row.querySelector("strong").textContent = block.label;
+      row.querySelector("span").textContent = block.start
+        ? String(block.start) + (block.end ? "–" + block.end : "")
+        : "flexible";
+    }
     return row;
   }));
 
@@ -350,10 +361,11 @@ function render() {
 
 async function load() {
   const day = dayInput.value;
-  const [schoolResponse, stateResponse] = await Promise.all([
-    fetch(`/api/school?date=${encodeURIComponent(day)}`, {cache:"no-store"}),
-    fetch("/api/state", {cache:"no-store"})
-  ]);
+  const schoolResponse = await fetch(
+    `/api/school?date=${encodeURIComponent(day)}`,
+    {cache:"no-store"}
+  );
+  const stateResponse = await fetch("/api/state", {cache:"no-store"});
 
   if (!schoolResponse.ok || !stateResponse.ok) {
     throw new Error("Could not open the workspace");
