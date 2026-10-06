@@ -29,3 +29,26 @@ optional rendering through another surface/lens
 - If several meanings remain live and the difference matters, preserve ambiguity and clarify rather than forcing one shape.
 
 English is the first rebuilt language bank. Future languages map into the same neutral shape IDs where the movement actually corresponds.
+
+## Activation routes
+
+Some expressions are deliberately registered as compact entrances into existing ecosystem state.
+
+```text
+surface + actor/context
+→ explicit activation route
+→ current referent + projection + selectors
+→ existing handoff state
+```
+
+Activations are narrower than general language decoding. They do not infer a new meaning from similarity and they do not mutate state merely by being spoken.
+
+The first registered route is:
+
+```text
+"ohayo" + James
+→ James / current day
+→ task queue
+```
+
+See [`activations/`](../activations/README.md) and [`protocols/language/activation.md`](../protocols/language/activation.md).
