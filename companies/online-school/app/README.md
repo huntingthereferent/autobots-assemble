@@ -2,19 +2,19 @@
 
 The first local HTTP website/API for **Online School**.
 
-It began as a deliberately small task monitor and now also carries worksheet artifacts and curriculum-motion proofs. It remains an operating surface, not the education kernel itself. The shared education kernel lives in `systems/education/`; this app supplies school-shaped activities/artifacts/handoffs that can later consume and return learner evidence.
+It began as a deliberately small task monitor. The home surface is now a learner-first education workspace around the shared kernel: current learner relations, observation/regrounding, today's educational movement, curriculum obligations, artifacts, and the underlying operating schedule remain distinct but connected. The shared education kernel still lives in `systems/education/`; this company consumes it rather than redefining it.
 
 ## What it does
 
-- loads the company schedule template;
-- generates recurring school tasks for any weekday;
-- preserves individual and shared task scopes;
-- preserves planned minutes;
-- applies dated weekly themes when available;
-- allows arbitrary one-off tasks;
-- marks tasks complete through the website;
-- persists task state locally;
-- exposes the same task state over HTTP/JSON.
+- enters through a learner rather than through a gradebook or schedule;
+- reads current learner relations from the shared Education Kernel;
+- records observations and immediately regrounds the current learner relation while preserving prior relations as natural provenance;
+- shows Missouri-aligned grade context as obligations without treating grade as learner state;
+- projects today's individual and shared educational movement separately;
+- connects learner context into Worksheet Studio and preserves worksheet provenance;
+- keeps the full recurring schedule available as an operating layer rather than the learner path;
+- preserves planned minutes, dated themes, arbitrary one-off activities, and local completion state;
+- exposes the same school/kernel projection over HTTP/JSON.
 
 ## Run
 
@@ -29,12 +29,14 @@ Open:
 http://127.0.0.1:8030
 ```
 
-Set `HOST` or `PORT` environment variables when needed.
+Set `HOST` or `PORT` environment variables when needed. Set `ONLINE_SCHOOL_DATA_DIR` to run an isolated/private school state directory without touching the default `app/data/` store.
 
 ## HTTP interface
 
 ```text
 GET    /api/state
+GET    /api/school?date=YYYY-MM-DD
+POST   /api/observations
 GET    /api/today?date=YYYY-MM-DD
 GET    /api/tasks?date=&status=&learner=&kind=&scope=
 POST   /api/generate
@@ -51,9 +53,12 @@ DELETE /api/worksheets/{id}
 
 ## Visual provenance
 
-This app participates in the repository visual-provenance layer. `visual-provenance.json` binds Worksheet Studio to the approved `notegpt_math_generator_v1` visual template. The template preserves useful visual grammar from its witness while explicitly excluding brand copying, proprietary assets, exact page composition, and decorative drift.
+This app has separate visual provenance for separate visual layers.
 
-`worksheet.html` also declares the template through `<meta name="visual-template" content="notegpt_math_generator_v1">`, making the rendered surface traceable back to its design witness and adaptation rules.
+- `index.html` declares `education_workspace_v1`: learner first, current evidenced relation before obligations, schedule subordinate to educational state, no gradebook/gamification assumptions. Its local binding is `visual-provenance/education-workspace.json`.
+- `worksheet.html` declares `notegpt_math_generator_v1`: the approved worksheet-generation visual witness derived from the useful grammar of the NoteGPT reference without copying its branding, proprietary assets, wording, or exact page composition. The original Worksheet Studio binding remains in `visual-provenance.json`.
+
+The two surfaces are connected but intentionally do not share one visual template because they perform different relations.
 
 ## Worksheet Studio
 

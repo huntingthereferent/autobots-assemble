@@ -2,103 +2,169 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="visual-template" content="education_workspace_v1">
   <title>Online School</title>
-  <meta name="description" content="A simple HTTP task monitor for the Online School operating schedule.">
+  <meta name="description" content="Person-first education workspace for current learner relations, today's movement, curriculum obligations, and learning artifacts.">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <main class="shell">
-    <header class="top">
+    <header class="topbar">
       <div>
         <p class="eyebrow">Online School</p>
-        <h1>Today’s school</h1>
-        <p class="sub">One place for the whole schedule: individual work, shared lessons, projects, outings, and anything added later.</p>
+        <h1>Education workspace</h1>
+        <p class="sub">Start with the person in front. Preserve what came before. Move only from what is evidenced now.</p>
       </div>
-      <div class="datebox">
-        <label for="day">Day</label>
-        <input id="day" type="date">
+      <div class="top-actions">
+        <label class="datebox">School day
+          <input id="day" type="date">
+        </label>
+        <a id="worksheet-studio-link" class="button ghost" href="./worksheet.html">Worksheet Studio</a>
       </div>
     </header>
 
-    <section class="rhythm" aria-labelledby="rhythm-title">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Daily rhythm</p>
-          <h2 id="rhythm-title">How the day moves</h2>
-        </div>
-      </div>
-      <div id="rhythm-list" class="rhythm-list"></div>
+    <section class="learner-strip" aria-label="Learners">
+      <div id="learner-tabs" class="learner-tabs"></div>
+      <div class="boundary-note">Grade is context for obligations, not placement.</div>
     </section>
 
-    <section class="summary" aria-live="polite">
-      <article><span>Tasks</span><strong id="task-count">0</strong></article>
-      <article><span>Done</span><strong id="done-count">0</strong></article>
-      <article><span>Planned time</span><strong id="planned-time">0h</strong></article>
-      <article><span>Remaining</span><strong id="remaining-time">0h</strong></article>
-    </section>
+    <div class="workspace">
+      <section class="primary-column">
+        <section class="panel relation-panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Current relation</p>
+              <h2 id="learner-heading">Learner</h2>
+            </div>
+            <span id="grade-context" class="context-chip"></span>
+          </div>
+          <div id="relations" class="relation-list"></div>
+          <p id="no-relations" class="empty-copy" hidden>No current learner relation has been claimed yet. Record what is actually observed.</p>
+        </section>
 
-    <section class="toolbar">
-      <div class="filters" role="group" aria-label="Task filters">
-        <button type="button" class="filter active" data-filter="all">All</button>
-        <button type="button" class="filter" data-filter="todo">To do</button>
-        <button type="button" class="filter" data-filter="done">Done</button>
-      </div>
-      <div class="studio-actions">
-        <a class="ghost button-link" href="./worksheet.html">Worksheet Studio</a>
-        <button id="add-task" type="button" class="primary">+ Add task</button>
-      </div>
-    </section>
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Reground</p>
+              <h2>Record an observation</h2>
+            </div>
+            <span id="observation-count" class="muted"></span>
+          </div>
+          <form id="observation-form" class="observation-form">
+            <label>Referent
+              <input name="referent" required placeholder="addition across ten, decoding, equal shares…">
+            </label>
+            <label>What happened
+              <textarea name="observed" required rows="3" placeholder="Describe what the learner actually did, said, distinguished, or needed."></textarea>
+            </label>
+            <div class="two-col">
+              <label>Supports
+                <textarea name="supports" rows="2" placeholder="One supported relation per line"></textarea>
+              </label>
+              <label>Contradicts
+                <textarea name="contradicts" rows="2" placeholder="One prior relation contradicted per line"></textarea>
+              </label>
+            </div>
+            <div class="form-actions">
+              <span class="muted">New evidence can change the front without deleting the back.</span>
+              <button class="primary" type="submit">Record + reground</button>
+            </div>
+            <p id="observation-error" class="error" hidden></p>
+          </form>
+        </section>
 
-    <section>
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Task monitor</p>
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Today</p>
+              <h2>Learning movement</h2>
+            </div>
+            <span id="today-summary" class="muted"></span>
+          </div>
+          <div id="today-list" class="activity-list"></div>
+          <p id="today-empty" class="empty-copy" hidden>No scheduled movement for this learner on this day.</p>
+          <details class="shared-details">
+            <summary>Shared school movement</summary>
+            <div id="shared-list" class="activity-list compact"></div>
+          </details>
+        </section>
+      </section>
+
+      <aside class="secondary-column">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Knowledge map</p>
+              <h2>Curriculum obligations</h2>
+            </div>
+          </div>
+          <p class="panel-copy">These are Missouri-aligned obligations in the current grade context. They do not say where the learner is.</p>
+          <div id="obligations" class="obligation-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">Artifacts</p>
+              <h2>Learning evidence surfaces</h2>
+            </div>
+            <a id="create-worksheet-link" href="./worksheet.html" class="text-link">Create</a>
+          </div>
+          <div id="artifacts" class="artifact-list"></div>
+          <p id="artifacts-empty" class="empty-copy" hidden>No saved worksheet artifacts are attached to this learner yet.</p>
+        </section>
+
+        <section class="panel provenance-panel">
+          <p class="eyebrow">Kernel boundary</p>
+          <div id="boundaries" class="boundary-list"></div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel schedule-panel">
+      <details>
+        <summary>
+          <span>
+            <span class="eyebrow">Operating layer</span>
+            <strong>Daily rhythm + full schedule</strong>
+          </span>
+          <span id="task-total" class="muted"></span>
+        </summary>
+        <div id="rhythm-list" class="rhythm-list"></div>
+        <div class="section-head schedule-head">
           <h2>Everything scheduled</h2>
+          <button id="add-task" type="button" class="ghost">+ Add activity</button>
         </div>
-        <span id="theme" class="theme"></span>
-      </div>
-      <div id="task-list" class="task-list"></div>
-      <p id="empty" class="empty" hidden>No tasks for this view.</p>
+        <div id="all-tasks" class="activity-list"></div>
+      </details>
     </section>
 
     <dialog id="task-dialog">
-      <form id="task-form" method="dialog">
-        <div class="dialog-head">
-          <div>
-            <p class="eyebrow">New task</p>
-            <h2>Add anything</h2>
-          </div>
-          <button id="close-dialog" type="button" class="icon-button" aria-label="Close">×</button>
+      <form id="task-form">
+        <div class="section-head">
+          <div><p class="eyebrow">Local activity</p><h2>Add movement</h2></div>
+          <button id="close-dialog" class="icon-button" type="button" aria-label="Close">×</button>
         </div>
-
-        <label>Task
-          <input name="title" required maxlength="120" placeholder="Library trip, spelling review, experiment…">
+        <label>Activity
+          <input name="title" required placeholder="Library research, experiment, practice…">
         </label>
-
-        <div class="form-grid">
+        <div class="two-col">
           <label>Planned minutes
             <input name="planned_minutes" type="number" min="0" max="1440" step="5" value="30">
           </label>
           <label>Who
-            <select name="learner">
-              <option value="">Shared / everyone</option>
-              <option value="track_a">Learner A</option>
-              <option value="track_b">Learner B</option>
-            </select>
+            <select name="learner"></select>
           </label>
         </div>
-
         <label>Notes
-          <textarea name="notes" rows="3" placeholder="Optional detail"></textarea>
+          <textarea name="notes" rows="3"></textarea>
         </label>
-
-        <p id="form-error" class="error" hidden></p>
-
-        <div class="dialog-actions">
+        <div class="form-actions">
           <button id="cancel-task" type="button" class="ghost">Cancel</button>
-          <button type="submit" class="primary">Add task</button>
+          <button class="primary" type="submit">Add activity</button>
         </div>
+        <p id="task-error" class="error" hidden></p>
       </form>
     </dialog>
   </main>

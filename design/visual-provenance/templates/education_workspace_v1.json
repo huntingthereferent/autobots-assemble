@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "template_id": "education_workspace_v1",
+  "name": "Person-First Education Workspace",
+  "layer": "education_workspace",
+  "status": "approved",
+  "intent": "A calm operational education surface that starts from the learner's current evidenced relations, then exposes today's movement, curriculum obligations, artifacts, and schedule without turning grade or schedule into learner state.",
+  "witnesses": [
+    {
+      "kind": "internal",
+      "source": "companies/online-school/app/index.html",
+      "observed_on": "2026-10-05",
+      "notes": "Internal witness produced from the education-kernel architecture. Preserve learner-first hierarchy, separation of present relation from obligations, and restrained operational density."
+    }
+  ],
+  "grammar": {
+    "layout": {
+      "shape": "learner selector → current relation → observation/regrounding → today movement, with obligations/artifacts secondary",
+      "grouping": "current learner truth, obligations, artifacts, and operating schedule remain visually distinct",
+      "primary_action": "record observation and reground",
+      "secondary_actions": "open worksheet artifact studio or add local activity"
+    },
+    "hierarchy": {
+      "strength": "strong",
+      "sequence": [
+        "learner",
+        "current relation",
+        "reground",
+        "today movement",
+        "curriculum obligations",
+        "artifacts",
+        "schedule"
+      ],
+      "marketing_weight": "none"
+    },
+    "density": "medium-compact",
+    "controls": {
+      "treatment": "conventional inputs with plain labels",
+      "choice_count": "bounded",
+      "advanced_options": "kept outside the current relation unless reached"
+    },
+    "surface": {
+      "decoration": "restrained",
+      "cards": "only where a distinct relation/state boundary exists",
+      "radius": "moderate",
+      "shadows": "none/minimal",
+      "color": "neutral base with one functional accent"
+    },
+    "typography": {
+      "tone": "plain, precise, educational but not childish",
+      "hierarchy": "current relation and referent scan before metrics"
+    },
+    "motion": {
+      "default": "quiet",
+      "rule": "state changes after evidence submission; no decorative motion"
+    }
+  },
+  "avoid": [
+    "conventional LMS gradebook as the primary surface",
+    "gamified mastery bars",
+    "streaks, points, badges, or guilt language",
+    "grade level presented as learner truth",
+    "schedule presented as the learner path",
+    "AI-gradient dashboards",
+    "card-per-field visual fragmentation",
+    "childish decorative school motifs"
+  ],
+  "adaptation_rules": [
+    "Current learner relations must visually precede curriculum obligations.",
+    "Grade context may appear only as obligation/reporting context.",
+    "The observation form must describe evidence, not label the learner.",
+    "Today’s schedule is an actuator layer and remains subordinate to the learner relation.",
+    "Artifacts must retain provenance and be treated as evidence surfaces, not mastery claims.",
+    "Keep the operator surface usable for adults while avoiding institutional LMS assumptions."
+  ],
+  "review": {
+    "confidence": "high",
+    "notes": "Approved first visual template for the Online School education workspace."
+  }
+}

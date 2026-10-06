@@ -14,7 +14,7 @@ The first real operating evidence comes from Dessy's homeschool schedule and les
 - **first operating evidence:** existing home-education schedule and tracker
 - **first service shape:** structured online/home learning program with recurring instruction, projects, reading, movement, and progress tracking
 
-The first software surface now exists as a deliberately small HTTP task monitor: [app/README.md](app/README.md). It loads the operating schedule, generates recurring tasks, accepts arbitrary additional tasks, persists completion state locally, and exposes the same state through JSON endpoints.
+The first software surface has grown from a task monitor into a learner-first education workspace: [app/README.md](app/README.md). It consumes the shared Education Kernel, shows current learner relations separately from curriculum obligations, records observations that reground those relations, projects today's school movement, links durable worksheet artifacts, and keeps the original schedule/task operation available underneath rather than treating it as the learner path.
 
 The repo may later add legal formation, enrollment, billing, curriculum products, teachers, broader platform surfaces, or accreditation/compliance work only when those relations become real.
 
@@ -47,14 +47,19 @@ The long-term education system should therefore be able to construct a person-sp
 ## Operating shape
 
 ```text
-learner
-→ daily school rhythm
-→ subject instruction
-→ guided / independent practice
-→ project / activity
-→ tracked instructional time
-→ progress evidence
-→ next lesson / adjustment
+person in front
+→ current evidenced learner relation
+→ reachable educational movement
+→ activity / artifact / instruction / handoff
+→ returned observation / evidence
+→ reground current learner relation
+↺
+
+around that movement:
+  curriculum / standards → obligations
+  schedule → time/resource structure
+  artifacts → durable evidence surfaces
+  instructional-time record → compliance/operating projection
 ```
 
 ## First schedule

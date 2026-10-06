@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "surface_id": "online_school_education_workspace",
+  "surface_path": "companies/online-school/app/index.html",
+  "template_id": "education_workspace_v1",
+  "preserve": [
+    "learner-first hierarchy",
+    "current relation before curriculum obligations",
+    "observation/regrounding as primary kernel action",
+    "separate artifact and operating schedule layers",
+    "restrained adult-facing operational density"
+  ],
+  "local_additions": [
+    "date-scoped school movement",
+    "Missouri obligation context",
+    "worksheet studio link",
+    "manual school activity entry"
+  ],
+  "deviations": [
+    "The embryo still uses scheduled tasks as its main actuator set while additional educational actuator types are not yet wired."
+  ],
+  "last_reviewed": "2026-10-05"
+}

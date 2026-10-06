@@ -73,4 +73,8 @@ async function loadLibrary(){const r=await fetch("/api/worksheets");const data=a
 function hydrate(){if(!worksheet)return;$("#template").value=worksheet.template||"custom";renderFields();$("#level").value=worksheet.level||"standard";$("#variant").value=worksheet.variant||"A";$("#ws-title").value=worksheet.title||"";$("#knowledge-goal").value=worksheet.knowledge_goal||"";$("#learner").value=worksheet.learner||"";$("#subject").value=worksheet.subject||"";$("#instructions").value=worksheet.instructions||"";$("#page-size").value=worksheet.page_size||"letter";$("#columns").value=String(worksheet.columns||1);$("#seed").value=worksheet.seed||1;$("#answer-key-toggle").checked=worksheet.include_answer_key!==false}
 $("#template").onchange=renderFields;$("#generate-worksheet").onclick=generate;$("#save-worksheet").onclick=save;$("#print-worksheet").onclick=()=>window.print();$("#answer-key-toggle").onchange=()=>{if(worksheet){worksheet.include_answer_key=$("#answer-key-toggle").checked;renderAll()}};$("#columns").onchange=()=>{if(worksheet){worksheet.columns=Number($("#columns").value);renderAll()}};$("#page-size").onchange=()=>{if(worksheet){worksheet.page_size=$("#page-size").value;renderAll()}};
 $("#add-question").onclick=()=>{if(!worksheet)worksheet={...payload(),items:[],title:$("#ws-title").value||"Untitled Worksheet",worksheet_id:""};worksheet.items.push({prompt:"New question",answer:"",kind:"response",lines:2});renderAll()};
-renderFields();loadLibrary();generate();
+renderFields();
+const worksheetParams=new URLSearchParams(window.location.search);
+const learnerParam=worksheetParams.get("learner");
+if(learnerParam)$("#learner").value=learnerParam;
+loadLibrary();generate();

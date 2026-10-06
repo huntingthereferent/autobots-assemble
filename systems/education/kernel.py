@@ -110,6 +110,21 @@ class EducationKernel:
         relation_id = self._current.get((person_ref, referent))
         return self._relations.get(relation_id) if relation_id else None
 
+    def current_for_person(self, person_ref: str) -> tuple[LearnerRelation, ...]:
+        rows = [
+            self._relations[relation_id]
+            for (person, _referent), relation_id in self._current.items()
+            if person == person_ref
+        ]
+        return tuple(sorted(rows, key=lambda item: item.referent.casefold()))
+
+    def observations_for_person(self, person_ref: str) -> tuple[Observation, ...]:
+        rows = [
+            item for item in self._observations.values()
+            if item.person_ref == person_ref
+        ]
+        return tuple(sorted(rows, key=lambda item: item.observed_at))
+
     def relation(self, relation_id: str) -> LearnerRelation:
         return self._relations[relation_id]
 

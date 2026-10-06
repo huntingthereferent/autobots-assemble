@@ -69,6 +69,35 @@ class VisualProvenanceTests(unittest.TestCase):
         self.assertIn("curriculum", additions)
         self.assertIn("homework", additions)
 
+    def test_education_workspace_has_its_own_visual_binding(self):
+        binding = json.loads(
+            (
+                ROOT
+                / "companies"
+                / "online-school"
+                / "app"
+                / "visual-provenance"
+                / "education-workspace.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(binding["template_id"], "education_workspace_v1")
+        surface = ROOT / binding["surface_path"]
+        html = surface.read_text(encoding="utf-8")
+        self.assertIn(
+            '<meta name="visual-template" content="education_workspace_v1">',
+            html,
+        )
+        worksheet_binding = json.loads(
+            (
+                ROOT
+                / "companies"
+                / "online-school"
+                / "app"
+                / "visual-provenance.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertNotEqual(binding["template_id"], worksheet_binding["template_id"])
+
     def test_day_attention_surface_has_its_own_visual_binding(self):
         binding = json.loads(
             (ROOT / "runtime" / "http" / "visual-provenance.json").read_text(

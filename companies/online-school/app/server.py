@@ -1,21 +1,32 @@
 from __future__ import annotations
 
+from dataclasses import asdict
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 import json
+import sys
 import mimetypes
 import os
 import threading
 
+ROOT = Path(__file__).resolve().parent
+REPO_ROOT = ROOT.parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
+from systems.education import EducationKernel, Observation
 from schedule_engine import generate_tasks, load_schedule, load_themes, merge_generated, validate_task
+from school_view import build_school_view
 from worksheet_engine import generate_worksheet, validate_saved_worksheet
 
 
-ROOT = Path(__file__).resolve().parent
-DATA_DIR = ROOT / "data"
+DATA_DIR = Path(
+    os.environ.get("ONLINE_SCHOOL_DATA_DIR", str(ROOT / "data"))
+)
 STATE_PATH = DATA_DIR / "state.json"
+EDUCATION_PATH = DATA_DIR / "education.jsonl"
 HOST = os.environ.get("HOST", "127.0.0.1")
 PORT = int(os.environ.get("PORT", "8030"))
 LOCK = threading.Lock()
@@ -27,8 +38,8 @@ def default_state():
         "tasks": [],
         "worksheets": [],
         "learners": [
-            {"id": "track_a", "display_name": "Learner A"},
-            {"id": "track_b", "display_name": "Learner B"},
+            {"id": "track_a", "display_name": "Learner A", "grade_context": "3"},
+            {"id": "track_b", "display_name": "Learner B", "grade_context": "1"},
         ],
         "settings": {"school_name": "Online School"},
     }
@@ -48,6 +59,10 @@ def save_state(state):
     tmp = STATE_PATH.with_suffix(".tmp")
     tmp.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     tmp.replace(STATE_PATH)
+
+
+def education_kernel():
+    return EducationKernel(EDUCATION_PATH)
 
 
 def json_body(handler):
@@ -81,6 +96,28 @@ class Handler(BaseHTTPRequestHandler):
                 "schedule": load_schedule(),
                 "themes": load_themes(),
             })
+            return
+
+        if parsed.path == "/api/school":
+            day = parse_qs(parsed.query).get("date", [date.today().isoformat()])[0]
+            try:
+                generated = generate_tasks(day, day)
+            except ValueError as exc:
+                self.api_error(str(exc))
+                return
+            with LOCK:
+                state = load_state()
+                state["tasks"], _added = merge_generated(
+                    state.get("tasks", []),
+                    generated,
+                )
+                save_state(state)
+                view = build_school_view(
+                    state=state,
+                    day=day,
+                    kernel=education_kernel(),
+                )
+            self.send_json(view)
             return
 
         if parsed.path == "/api/worksheets":
@@ -157,6 +194,51 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         parsed = urlparse(self.path)
+
+        if parsed.path == "/api/observations":
+            try:
+                payload = json_body(self)
+                learner_id = str(payload.get("learner_id") or "").strip()
+                referent = str(payload.get("referent") or "").strip()
+                observed = str(payload.get("observed") or "").strip()
+                if not learner_id:
+                    raise ValueError("learner_id is required")
+                with LOCK:
+                    state = load_state()
+                    known = {
+                        str(item.get("id") or "")
+                        for item in state.get("learners", [])
+                    }
+                    if learner_id not in known:
+                        raise ValueError("unknown learner")
+                    kernel = education_kernel()
+                    relation = kernel.observe(
+                        Observation.create(
+                            person_ref=learner_id,
+                            referent=referent,
+                            observed=observed,
+                            supports=tuple(
+                                str(x) for x in payload.get("supports") or ()
+                            ),
+                            contradicts=tuple(
+                                str(x) for x in payload.get("contradicts") or ()
+                            ),
+                            support_conditions=tuple(
+                                str(x)
+                                for x in payload.get("support_conditions") or ()
+                            ),
+                            evidence_refs=tuple(
+                                str(x) for x in payload.get("evidence_refs") or ()
+                            ),
+                            provenance=tuple(
+                                str(x) for x in payload.get("provenance") or ()
+                            ),
+                        )
+                    )
+                self.send_json(asdict(relation), 201)
+            except (ValueError, TypeError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
 
         if parsed.path == "/api/generate":
             try:
