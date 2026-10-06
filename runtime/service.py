@@ -226,6 +226,7 @@ class EcosystemService:
                 referent=str(payload.get("referent") or ""),
                 participants=tuple(str(x) for x in payload.get("participants") or ()),
                 kind=str(payload.get("kind") or "event"),
+                movement_anchor=str(payload.get("movement_anchor") or ""),
                 starts_at=str(payload.get("starts_at") or ""),
                 ends_at=str(payload.get("ends_at") or ""),
                 due_at=str(payload.get("due_at") or ""),
