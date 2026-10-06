@@ -28,7 +28,7 @@ The repository is **not A/B itself**. A/B remains the recursively reusable mathe
 - **companies/** — persistent operating organizations that may contain operations, products/services, people, assets, finance, compliance, and work.
 - **artifacts/** — working representations produced by traversal: programs, CAD-like geometry, system landscapes, math models, schematics, BOMs, tests/measurements.
 - **foundation/** — preserved demonstrated evidence.
-- **research/**, **open_source/**, **money/** / **jobs/** — why particular work exists.
+- **research/**, **open_source/**, **money/** — goal/source lanes for work; **jobs/** holds only currently retained external opportunities.
 - **protocols/** — reusable bounded operating contracts.
 - **language/** — interpretation/rendering of human language.
 - **network/** — preserved relation structures.
