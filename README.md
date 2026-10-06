@@ -32,6 +32,7 @@ The repository is **not A/B itself**. A/B remains the recursively reusable mathe
 - **protocols/** — reusable bounded operating contracts.
 - **language/** — interpretation/rendering of human language.
 - **network/** — preserved relation structures.
+- **runtime/** — live cross-layer handoffs, append-only events, derived state, and task/job/command projections.
 - **state/** — current routing pointer.
 - **views/** — read-only/generated projections.
 - **domains/** — specialized adapters only when a distinct domain witness contract is actually needed.
