@@ -76,6 +76,31 @@
 
     <section class="record-section">
       <div class="section-head">
+        <div><p class="eyebrow">Adults around the learner</p><h2>Parent & teacher notes</h2></div>
+      </div>
+      <form id="note-form" class="note-form">
+        <div class="note-grid">
+          <label>Your name<input name="author" required placeholder="Parent / teacher name"></label>
+          <label>Role
+            <select name="role">
+              <option value="parent">Parent</option>
+              <option value="teacher">Teacher</option>
+              <option value="guardian">Guardian</option>
+              <option value="tutor">Tutor</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label>Subject<input name="subject" placeholder="Math, reading, science…"></label>
+          <label>Standard (optional)<input name="standard" placeholder="3.OA.A.1"></label>
+        </div>
+        <label>Note<textarea name="note" required rows="3" placeholder="What did you notice? What can they do? What changed?"></textarea></label>
+        <button type="submit">Add note</button>
+      </form>
+      <div id="human-notes-list" class="record-list"></div>
+    </section>
+
+    <section class="record-section">
+      <div class="section-head">
         <div><p class="eyebrow">Assessment</p><h2>Placement & weekly retests</h2></div>
       </div>
       <div id="placement-record"></div>
