@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 import json
 
-from runtime import Handoff
+from runtime import Handoff, HandoffState
 
 from .model import Note, Plan, TaskRecord, utc_now
 
@@ -24,6 +24,7 @@ class PersonalOperationsStore:
         self._plans: dict[str, Plan] = {}
         self._tasks: dict[str, TaskRecord] = {}
         self._admitted: dict[str, str] = {}
+        self._results: dict[str, dict[str, Any]] = {}
 
         if self.path and self.path.exists():
             for line in self.path.read_text(encoding="utf-8").splitlines():
@@ -43,13 +44,22 @@ class PersonalOperationsStore:
     def _replay(self, event: dict[str, Any]) -> None:
         kind = event["event_type"]
         payload = event["payload"]
+
         if kind == "NOTE_ADDED":
             self._notes[payload["note_id"]] = Note(
-                **{**payload, "tags": tuple(payload.get("tags", ())), "provenance": tuple(payload.get("provenance", ()))}
+                **{
+                    **payload,
+                    "tags": tuple(payload.get("tags", ())),
+                    "provenance": tuple(payload.get("provenance", ())),
+                }
             )
         elif kind == "PLAN_ADDED":
             self._plans[payload["plan_id"]] = Plan(
-                **{**payload, "steps": tuple(payload.get("steps", ())), "provenance": tuple(payload.get("provenance", ()))}
+                **{
+                    **payload,
+                    "steps": tuple(payload.get("steps", ())),
+                    "provenance": tuple(payload.get("provenance", ())),
+                }
             )
         elif kind == "TASK_ADDED":
             admissible = {
@@ -59,7 +69,9 @@ class PersonalOperationsStore:
             self._tasks[payload["task_id"]] = TaskRecord(
                 **{
                     **payload,
-                    "required_witnesses": tuple(payload.get("required_witnesses", ())),
+                    "required_witnesses": tuple(
+                        payload.get("required_witnesses", ())
+                    ),
                     "admissible_evidence": admissible,
                     "boundaries": tuple(payload.get("boundaries", ())),
                     "provenance": tuple(payload.get("provenance", ())),
@@ -67,13 +79,17 @@ class PersonalOperationsStore:
             )
         elif kind == "TASK_ADMITTED":
             self._admitted[payload["task_id"]] = payload["handoff_id"]
+        elif kind == "TASK_RESULT_RECONCILED":
+            self._results[payload["task_id"]] = dict(payload)
 
     def _record(self, event_type: str, payload: dict[str, Any]) -> None:
-        self._append({
-            "event_type": event_type,
-            "occurred_at": utc_now(),
-            "payload": payload,
-        })
+        self._append(
+            {
+                "event_type": event_type,
+                "occurred_at": utc_now(),
+                "payload": payload,
+            }
+        )
 
     def add_note(self, note: Note) -> Note:
         self._record("NOTE_ADDED", asdict(note))
@@ -111,16 +127,17 @@ class PersonalOperationsStore:
     def admitted_handoff_id(self, task_id: str) -> str | None:
         return self._admitted.get(task_id)
 
-    def admit_task(self, task_id: str) -> Handoff:
-        task = self.task(task_id)
-        existing = self._admitted.get(task_id)
-        if existing:
-            raise ValueError(
-                f"task {task_id} already admitted as handoff {existing}"
-            )
+    def task_result(self, task_id: str) -> dict[str, Any] | None:
+        result = self._results.get(task_id)
+        return dict(result) if result is not None else None
 
-        handoff_id = f"personal-{task.task_id}"
-        handoff = Handoff(
+    def _handoff_from_task(
+        self,
+        task: TaskRecord,
+        *,
+        handoff_id: str,
+    ) -> Handoff:
+        return Handoff(
             handoff_id=handoff_id,
             referent=task.referent,
             from_actor="personal-operations",
@@ -144,8 +161,63 @@ class PersonalOperationsStore:
             },
         )
 
+    def admit_task(self, task_id: str) -> Handoff:
+        task = self.task(task_id)
+        existing = self._admitted.get(task_id)
+        if existing:
+            raise ValueError(
+                f"task {task_id} already admitted as handoff {existing}"
+            )
+
+        handoff_id = f"personal-{task.task_id}"
+        handoff = self._handoff_from_task(task, handoff_id=handoff_id)
+
         self._record(
             "TASK_ADMITTED",
             {"task_id": task.task_id, "handoff_id": handoff.handoff_id},
         )
         return handoff
+
+    def admitted_handoff(self, task_id: str) -> Handoff:
+        handoff_id = self._admitted.get(task_id)
+        if handoff_id is None:
+            raise ValueError(f"task {task_id} has not been admitted")
+        return self._handoff_from_task(
+            self.task(task_id),
+            handoff_id=handoff_id,
+        )
+
+    def reconcile_task_result(
+        self,
+        task_id: str,
+        state: HandoffState,
+    ) -> dict[str, Any]:
+        handoff_id = self._admitted.get(task_id)
+        if handoff_id is None:
+            raise ValueError(f"task {task_id} has not been admitted")
+        if state.handoff_id != handoff_id:
+            raise ValueError(
+                f"state {state.handoff_id} does not belong to task {task_id}"
+            )
+
+        payload = {
+            "task_id": task_id,
+            "handoff_id": handoff_id,
+            "status": state.status,
+            "output": dict(state.output),
+            "evidence": [
+                {
+                    "condition": item.condition,
+                    "kind": item.kind,
+                    "source": item.source,
+                    "ref": item.ref,
+                    "note": item.note,
+                    "depth": item.depth,
+                }
+                for item in state.evidence
+            ],
+            "missing_witnesses": list(state.missing_witnesses),
+            "blocked_by": list(state.blocked_by),
+        }
+        self._record("TASK_RESULT_RECONCILED", payload)
+        return self.task_result(task_id)
