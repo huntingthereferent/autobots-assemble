@@ -46,6 +46,25 @@ current referent
 
 A trace is richer than browser history: it preserves the relational reason for movement, source locator, current referent, branch ancestry, admitted evidence/artifacts, and what changed. See [protocols/core/traversal.md](protocols/core/traversal.md).
 
+## Live mixed-feed frontage test
+
+The homepage can project live external movement without persisting the feed contents. The first public, credential-free test adapters are:
+
+- Reddit public RSS;
+- Lemmy public API;
+- Hacker News public API;
+- Reuters YouTube Atom feed;
+- BBC News RSS.
+
+Unavailable providers remain visible as unavailable rather than receiving generated stand-in data. At the current host, Bluesky's public API returns HTTP 403, so it is shown as unavailable.
+
+The frontage exposes two useful views over the same live items:
+
+- **Balanced** — round-robin across sources so high-volume feeds do not erase slower sources;
+- **Latest** — strict cross-source chronology so source-volume collisions remain observable.
+
+Opening an external item records a bounded traversal touch and then opens the original external source. The feed itself remains ephemeral.
+
 ## Start here
 
 1. [COMPLETE_STACK.md](COMPLETE_STACK.md)

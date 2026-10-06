@@ -102,18 +102,40 @@
 
         <section class="stream-header">
           <div>
-            <p class="kicker">Across Continuity</p>
-            <h2>What’s happening</h2>
+            <p class="kicker">Live internet movement</p>
+            <h2>What’s moving right now</h2>
           </div>
-          <div class="stream-tabs">
-            <button class="stream-tab active" data-feed="all">For you</button>
-            <button class="stream-tab" data-feed="current">Current</button>
-            <button class="stream-tab" data-feed="following">Following</button>
+          <button id="refresh-live-feed" class="quiet-button" type="button">Refresh</button>
+        </section>
+
+        <div class="stream-tabs live-tabs" aria-label="Live feed filters">
+          <button class="stream-tab active" data-live-filter="balanced">Balanced</button>
+          <button class="stream-tab" data-live-filter="latest">Latest</button>
+          <button class="stream-tab" data-live-filter="social">Social</button>
+          <button class="stream-tab" data-live-filter="news">News</button>
+          <button class="stream-tab" data-live-filter="video">Video</button>
+          <button class="stream-tab" data-live-filter="community">Community</button>
+        </div>
+
+        <section id="trail-bar" class="trail-bar">
+          <div>
+            <span class="kicker">Current trail</span>
+            <strong id="trail-current">Live mixed feed</strong>
+          </div>
+          <div class="trail-actions">
+            <span id="trail-depth">0 touches</span>
+            <button id="reset-trail" type="button">Reset branch</button>
           </div>
         </section>
 
-        <section id="handoffs" class="feed"></section>
-        <div id="empty-feed" class="empty-state" hidden>No matching movement right now.</div>
+        <section id="live-feed" class="feed live-feed" aria-live="polite"></section>
+        <div id="empty-live-feed" class="empty-state" hidden>No live items match this view.</div>
+
+        <details class="internal-movement">
+          <summary>Continuity internal movement</summary>
+          <section id="handoffs" class="feed"></section>
+          <div id="empty-feed" class="empty-state" hidden>No internal handoffs right now.</div>
+        </details>
       </div>
 
       <aside class="side-column">
@@ -124,6 +146,11 @@
             <h2>Your Continuity</h2>
             <p>One person across linked sign-ins and connected sources.</p>
           </div>
+        </section>
+
+        <section class="side-module">
+          <div class="module-heading"><div><p class="kicker">Live now</p><h2>External sources</h2></div></div>
+          <div id="live-sources" class="live-source-list"></div>
         </section>
 
         <section class="side-module">

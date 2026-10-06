@@ -95,6 +95,11 @@ class Handler(BaseHTTPRequestHandler):
                     })
                     return
 
+                if parsed.path == "/api/live-feed":
+                    force = query.get("force", ["0"])[0] in {"1", "true", "yes"}
+                    self.send_json(SERVICE.live_feed_snapshot(force=force))
+                    return
+
                 if parsed.path.startswith("/api/traces/") and parsed.path.endswith("/ancestry"):
                     trace_id = parsed.path.removeprefix(
                         "/api/traces/"

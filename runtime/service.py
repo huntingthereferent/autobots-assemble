@@ -7,6 +7,7 @@ from typing import Any, Iterable
 
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.engine import HandoffRuntime
+from runtime.external_feed import LiveFeed
 from runtime.handoff import EvidenceRecord, ExecutionResult, SimulatedActor
 from runtime.journal import RuntimeJournal
 from runtime.orchestrator import Orchestrator, SystemBinding
@@ -62,6 +63,7 @@ class EcosystemService:
         self.trace = TraceStore(
             self.data_dir / "traversal.jsonl"
         )
+        self.live_feed = LiveFeed()
         self.orchestrator = Orchestrator(self.runtime)
         self.orchestrator.register_system(
             personal_operations_binding(self.personal)
@@ -255,6 +257,9 @@ class EcosystemService:
 
     def trace_ancestry(self, trace_id: str) -> list[dict[str, Any]]:
         return [asdict(item) for item in self.trace.ancestry(trace_id)]
+
+    def live_feed_snapshot(self, *, force: bool = False) -> dict[str, Any]:
+        return self.live_feed.snapshot(force=force)
 
     def attention(self, *, actor_id: str, now: datetime | None = None) -> dict[str, Any]:
         now = now or datetime.now().astimezone()

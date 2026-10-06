@@ -101,6 +101,7 @@ A handoff cannot become `COMPLETE` unless every required witness is returned usi
 - `orchestrator.py` — generic system registration, routing, automatic execution, and result reconciliation
 - `journal.py` — durable handoff-spec + event journal for restart recovery
 - `trace.py` — append-only relational touch trail for external traversal; stores locators/relations/ancestry, not copied internet state
+- `external_feed.py` — ephemeral read-through aggregation of live public feeds for frontage testing; external items are normalized in memory and not persisted
 - `service.py` — persistent application service over existing system/runtime contracts
 - `http_server.py` + `http/` — bounded HTTP/HTML entrance
 - `handoff.schema.json` — external serialized handoff shape
@@ -222,6 +223,8 @@ POST /api/calendar
 GET  /api/traces?session_id=<optional session>
 POST /api/traces
 GET  /api/traces/{trace_id}/ancestry
+
+GET  /api/live-feed?force=<optional 0|1>
 
 GET  /api/attention?actor=james&at=<optional ISO datetime>
 
