@@ -1,19 +1,18 @@
 {
   "schema_version": 1,
-  "preferred_referent": "🏭 Connected Systems → Running Handoff Ecosystem",
+  "preferred_referent": "♻ Running Ecosystem → Durable Recovery",
   "protocol": "core.handoff",
-  "goal": "Run unlike systems with their own local state through one shared cross-layer handoff carrier: Personal Operations, Online School, and a state-driven Factory System now emit/reconcile handoffs without collapsing their local schemas.",
+  "goal": "Preserve the demonstrated multi-system ecosystem across process restarts: system-local state, outstanding handoffs, origin routing, event/evidence history, and activation projections must recover without duplicating work or silently upgrading evidence.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Derive the common system-adapter interface from the demonstrated systems and build a generic orchestrator that can ask registered systems for ready handoffs, route them through eligible actors/adapters, reconcile results back to the originating system, and preserve all event/evidence boundaries.",
+  "next_movement": "Add durable handoff-spec persistence and orchestrator recovery. Restart a mixed Personal Operations + Online School + Factory run mid-movement, reconstruct outstanding work from persisted state/evidence, continue the factory from the correct stage, preserve human READY handoffs for ohayo, and prove no duplicate handoffs/events are created.",
   "walls": [
-    "Do not redefine A/B as the runtime, orchestrator, system interface, factory, school, planner, or activation layer.",
-    "Do not flatten system-local schemas into the shared Handoff carrier; the carrier exists at boundaries.",
-    "Do not let activations manufacture work; they project supported live handoffs.",
-    "Do not promote notes/plans to tasks or tasks to handoffs without the relevant explicit admission.",
-    "Do not treat school task completion as learner mastery without separate evidence.",
-    "Do not upgrade factory simulation evidence to physical/measurement evidence.",
-    "Do not hard-code downstream factory handoffs before the preceding system state has reconciled."
+    "Do not redefine A/B as the runtime, orchestrator, recovery mechanism, system interface, factory, school, planner, or activation layer.",
+    "Do not flatten system-local schemas into runtime persistence.",
+    "Do not treat an append-only event log as sufficient recovery if the immutable handoff specification needed to interpret those events is missing.",
+    "Do not regenerate an already-issued physical/human handoff as new work merely because the process restarted.",
+    "Do not lose origin-system routing on restart; returned results must reconcile to the system that emitted the handoff.",
+    "Do not upgrade simulation evidence or school completion evidence during replay/recovery."
   ],
   "evidence": [
     "protocols/core/handoff.md",
@@ -45,7 +44,13 @@
     "systems/factory/system.py",
     "systems/factory/simulated.py",
     "systems/factory/example_run.py",
-    "network/tests/test_factory_system.py"
+    "network/tests/test_factory_system.py",
+    "runtime/orchestrator.py",
+    "systems/bindings.py",
+    "network/tests/test_orchestrator.py",
+    "runtime/examples/ecosystem_loop.py",
+    "network/tests/test_full_ecosystem.py",
+    "runtime/examples/full_ecosystem.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
@@ -53,19 +58,17 @@
     "reason": "The user explicitly backed out of the school implementation layer and generalized the repo into a translation/evidence spine with cross-layer handoffs, then directed implementation of the shared handoff runtime."
   },
   "verified_run": {
-    "benchmark": "Connected Systems / Running Factory",
+    "benchmark": "Three-System Orchestrated Ecosystem",
     "result": "implemented_and_locally_tested",
     "checks": [
-      "Personal Operations and Online School retain separate local schemas",
-      "both systems can emit the same shared Handoff carrier",
-      "James ohayo joins school and personal handoffs into one task projection",
-      "Online School completion maps back to a local task patch without claiming mastery",
-      "Factory System generates each next handoff from changed local order state",
-      "blocked factory result does not advance stage",
-      "factory state/event history is append-only and replayable",
-      "10 simulated units move supply → machine → inspect → assemble → ship",
-      "simulation evidence remains marked simulated in both runtime and factory reconciliation",
-      "35 focused cross-system tests passed locally"
+      "Personal Operations, Online School, and Factory run under one generic orchestrator",
+      "17 live handoffs coexist without sharing local schemas",
+      "five factory handoffs execute automatically through registered simulator actors",
+      "factory reaches complete/shipped while human school/personal work remains READY",
+      "James ohayo compresses full ecosystem state to guided reading + current repo task",
+      "human results route back to the system that emitted the handoff",
+      "completed James handoffs disappear from ohayo without completing unrelated school work",
+      "46 focused runtime/system/orchestration tests passed locally"
     ]
   }
 }
