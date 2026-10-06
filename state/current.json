@@ -5,7 +5,7 @@
   "goal": "Test whether Continuity can carry real live movement from unlike external feeds in one frontage without losing source identity, current trail, or external ownership. The feed remains ephemeral; only explicit traversal touches become durable local state.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Use the live frontage to inspect real collisions: source flooding, chronology versus balance, duplicated stories, source identity, card density, branch continuity, and how quickly a person loses the thread while moving among live external items. Change the frontage only from observed failures.",
+  "next_movement": "Use the repaired live frontage to test the remaining collisions: one item having multiple roles at once (provider / publisher / medium / news-social function), duplicate coverage of the same event, and continuation of the trace after the user leaves Continuity for an external site.",
   "walls": [
     "Do not put social networks, news sites, video platforms, forums, or other external feeds inside Continuity as owned state.",
     "Do not persist the mixed feed contents by default.",
@@ -15,6 +15,8 @@
     "Do not erase source identity or external locator during normalization.",
     "Do not turn opening a feed item into work; it creates only a traversal touch unless the user explicitly produces another output.",
     "Do not treat touching or displaying an item as evidence that its claims are true.",
+    "Do not call internal systems external sources.",
+    "Do not bury live movement beneath the area/system directories on the homepage.",
     "Do not redefine A/B as the feed mixer, balancing algorithm, traversal trace, or portal."
   ],
   "evidence": [
@@ -31,12 +33,13 @@
     "runtime/http/site_catalog.json",
     "network/tests/test_external_live_feed.py",
     "network/tests/test_traversal_trace.py",
+    "network/tests/test_frontpage_movement_priority.py",
     "network/tests/test_frontage_projection.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
-    "from": "Continuity → Trace Through External Surfaces",
-    "reason": "The traversal contract is now being exercised against real live internet movement instead of simulated examples. The frontage projects live external items in memory while preserving source identity and recording only explicit touches."
+    "from": "Live mixed-feed build → frontage audit",
+    "reason": "The live feed itself survived unlike sources, but the audit exposed a stale CSS shell and wrong homepage priority. The shell was rebuilt around live movement while human areas and local systems remain available below it."
   },
   "live_test": {
     "observed_at": "2026-10-06",
@@ -57,6 +60,21 @@
     },
     "observed_collision": "Strict chronology was immediately dominated by Lemmy and Hacker News because those sources were publishing every few seconds."
   },
+  "frontpage_audit": {
+    "fixed": [
+      "Removed stale dashboard CSS and replaced it with one portal-first stylesheet matching the current HTML.",
+      "Moved live internet movement above human-area and local-system directories.",
+      "Renamed internal source language to Your systems while reserving External feeds for internet movement.",
+      "Made Current trail sticky and rendered a visible Mixed feed → source breadcrumb as touches accumulate.",
+      "Kept source kinds visually distinct without converting external items into Continuity-owned posts.",
+      "Verified the mobile document does not exceed the viewport; area cards move to a horizontal launcher below the live feed."
+    ],
+    "remaining": [
+      "One external item needs independent provider / publisher / medium / functional roles instead of one flat source_kind.",
+      "Multiple sources covering one real event still appear as separate feed items.",
+      "The website can record departure from Continuity but cannot observe subsequent cross-site navigation without a browser companion/shell."
+    ]
+  },
   "human_areas": {
     "areas": [
       "LEARN",
@@ -75,15 +93,16 @@
     "rule": "Human areas remain entrances for what the person is doing. The mixed external feed is movement through the internet, not another human area."
   },
   "verified_run": {
-    "benchmark": "Live Mixed External Feed",
+    "benchmark": "Frontpage Live-Movement Audit",
     "result": "implemented_and_locally_tested",
     "checks": [
-      "58 real live items fetched in one snapshot from five working public sources.",
-      "Unavailable Bluesky source is surfaced explicitly rather than fabricated.",
-      "Balanced and Latest views use the same external items.",
-      "Opening a live item records a traversal touch and then opens the original source.",
-      "External feed contents remain in-memory only.",
-      "50 focused runtime/traversal/frontage/visual-provenance tests passed."
+      "Live movement renders before the human-area directory.",
+      "External feeds and internal systems have separate visible language.",
+      "Current trail renders before live items and accumulates source breadcrumbs.",
+      "Balanced and Latest continue to project the same ephemeral live items.",
+      "Desktop and mobile screenshots were visually audited after the CSS rewrite.",
+      "Browser measurement showed no real horizontal document overflow.",
+      "53 focused runtime/traversal/frontage/visual-provenance tests passed."
     ]
   }
 }

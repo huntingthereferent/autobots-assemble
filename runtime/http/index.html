@@ -10,14 +10,17 @@
 <body>
   <header class="portal-header">
     <div class="portal-bar">
-      <a class="wordmark" href="#" aria-label="Continuity home">Continuity</a>
+      <a class="wordmark" href="#home" aria-label="Continuity home">Continuity</a>
       <form class="search-shell" id="hub-search">
         <input id="global-search" type="search" autocomplete="off" placeholder="Search your Continuity">
         <button type="submit">Search</button>
       </form>
       <div class="header-actions">
         <button class="quiet-button" type="button">Activity</button>
-        <button id="ohayo" class="identity-button" type="button"><span class="mini-avatar">C</span><span>Your Continuity</span></button>
+        <button id="ohayo" class="identity-button" type="button">
+          <span class="mini-avatar">C</span>
+          <span>Your Continuity</span>
+        </button>
       </div>
     </div>
     <nav class="portal-nav" aria-label="Continuity areas">
@@ -34,12 +37,13 @@
 
   <main class="portal-shell">
     <span id="home" class="anchor-target"></span>
+
     <section class="hero-grid">
       <article class="current-card">
         <div class="current-copy">
-          <p class="kicker">Your world, in one place</p>
+          <p class="kicker">Your Continuity</p>
           <h1>Keep the thread.</h1>
-          <p>People, school, time, work, research, and connected systems can all move through Continuity without losing where anything came from.</p>
+          <p>Move through the internet, your work, your learning, and your systems without losing where you came from or why you moved.</p>
         </div>
         <div class="current-now">
           <span class="now-label">In front now</span>
@@ -57,49 +61,8 @@
       </aside>
     </section>
 
-    <section id="areas" class="area-directory" aria-label="Continuity areas">
-      <div class="directory-heading">
-        <div>
-          <p class="kicker">Enter anywhere</p>
-          <h2>What do you want to do?</h2>
-        </div>
-        <p>Each area is an entrance into the connected repo. Use what exists, manipulate the pieces underneath, or build a reusable tool.</p>
-      </div>
-      <div id="area-grid" class="area-grid" aria-live="polite"></div>
-    </section>
-
-    <section class="source-directory-heading">
-      <div>
-        <p class="kicker">Connected sources</p>
-        <h2>Open a system directly</h2>
-      </div>
-      <p>School, Calendar, Personal Operations, Research, Jobs, and Factory keep their own local state underneath the broader areas.</p>
-    </section>
-
-    <section class="service-directory" aria-label="Connected services">
-      <button class="service-tile" data-source="school"><span class="service-mark">S</span><span><b>School</b><small>Learning, learners, worksheets</small></span></button>
-      <button class="service-tile" data-source="calendar"><span class="service-mark">C</span><span><b>Calendar</b><small>Time, events, routines</small></span></button>
-      <button class="service-tile" data-source="personal"><span class="service-mark">P</span><span><b>Personal</b><small>Notes, plans, day-to-day</small></span></button>
-      <button class="service-tile" data-source="work"><span class="service-mark">W</span><span><b>Work</b><small>Tasks, projects, handoffs</small></span></button>
-      <button class="service-tile" data-source="research"><span class="service-mark">R</span><span><b>Research</b><small>Evidence, questions, findings</small></span></button>
-      <button class="service-tile" data-source="jobs"><span class="service-mark">J</span><span><b>Jobs</b><small>Opportunities and paid work</small></span></button>
-      <button class="service-tile" data-source="factory"><span class="service-mark">F</span><span><b>Factory</b><small>Systems and operations</small></span></button>
-      <button class="service-tile" data-source="all"><span class="service-mark">+</span><span><b>Everything</b><small>All connected sources</small></span></button>
-    </section>
-
     <section class="content-grid">
       <div class="main-stream">
-        <section class="share-card">
-          <div class="avatar">C</div>
-          <div class="share-body">
-            <textarea id="composer-text" placeholder="Share an update with your Continuity"></textarea>
-            <div class="share-footer">
-              <span>Conversation stays conversation until you explicitly turn it into work.</span>
-              <button class="primary" type="button" id="composer-post">Post</button>
-            </div>
-          </div>
-        </section>
-
         <section class="stream-header">
           <div>
             <p class="kicker">Live internet movement</p>
@@ -118,9 +81,11 @@
         </div>
 
         <section id="trail-bar" class="trail-bar">
-          <div>
+          <div class="trail-copy">
             <span class="kicker">Current trail</span>
-            <strong id="trail-current">Live mixed feed</strong>
+            <div id="trail-path" class="trail-path">
+              <span>Live mixed feed</span>
+            </div>
           </div>
           <div class="trail-actions">
             <span id="trail-depth">0 touches</span>
@@ -136,6 +101,17 @@
           <section id="handoffs" class="feed"></section>
           <div id="empty-feed" class="empty-state" hidden>No internal handoffs right now.</div>
         </details>
+
+        <section class="share-card">
+          <div class="avatar">C</div>
+          <div class="share-body">
+            <textarea id="composer-text" placeholder="Share an update with your Continuity"></textarea>
+            <div class="share-footer">
+              <span>Conversation stays conversation until you explicitly turn it into work.</span>
+              <button class="primary" type="button" id="composer-post">Post</button>
+            </div>
+          </div>
+        </section>
       </div>
 
       <aside class="side-column">
@@ -144,22 +120,28 @@
           <div>
             <p class="kicker">Identity</p>
             <h2>Your Continuity</h2>
-            <p>One person across linked sign-ins and connected sources.</p>
+            <p>One person across linked sign-ins, systems, and external movement.</p>
           </div>
         </section>
 
         <section class="side-module">
-          <div class="module-heading"><div><p class="kicker">Live now</p><h2>External sources</h2></div></div>
+          <div class="module-heading">
+            <div><p class="kicker">Live now</p><h2>External feeds</h2></div>
+          </div>
           <div id="live-sources" class="live-source-list"></div>
         </section>
 
         <section class="side-module">
-          <div class="module-heading"><div><p class="kicker">Quick look</p><h2>Connected state</h2></div></div>
+          <div class="module-heading">
+            <div><p class="kicker">Quick look</p><h2>Connected state</h2></div>
+          </div>
           <div id="stats" class="status-grid"></div>
         </section>
 
         <section class="side-module">
-          <div class="module-heading"><div><p class="kicker">Open directly</p><h2>Sources</h2></div></div>
+          <div class="module-heading">
+            <div><p class="kicker">Your systems</p><h2>Open directly</h2></div>
+          </div>
           <div class="source-list">
             <button data-source="school">Online School</button>
             <button data-source="calendar">Calendar</button>
@@ -207,12 +189,48 @@
       </aside>
     </section>
 
+    <section id="areas" class="area-directory" aria-label="Continuity areas">
+      <div class="directory-heading">
+        <div>
+          <p class="kicker">Enter anywhere</p>
+          <h2>Areas</h2>
+        </div>
+        <p>These are entrances into what you want to do, not separate apps.</p>
+      </div>
+      <div id="area-grid" class="area-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="systems-directory">
+      <div class="source-directory-heading">
+        <div>
+          <p class="kicker">Your systems</p>
+          <h2>Local systems under Continuity</h2>
+        </div>
+        <p>School, Calendar, Personal Operations, Research, Jobs, and Factory keep their own state underneath the shared frontage.</p>
+      </div>
+
+      <div class="service-directory" aria-label="Your systems">
+        <button class="service-tile" data-source="school"><span class="service-mark">S</span><span><b>School</b><small>Learning, learners, worksheets</small></span></button>
+        <button class="service-tile" data-source="calendar"><span class="service-mark">C</span><span><b>Calendar</b><small>Time, events, routines</small></span></button>
+        <button class="service-tile" data-source="personal"><span class="service-mark">P</span><span><b>Personal</b><small>Notes, plans, day-to-day</small></span></button>
+        <button class="service-tile" data-source="work"><span class="service-mark">W</span><span><b>Work</b><small>Tasks, projects, handoffs</small></span></button>
+        <button class="service-tile" data-source="research"><span class="service-mark">R</span><span><b>Research</b><small>Evidence, questions, findings</small></span></button>
+        <button class="service-tile" data-source="jobs"><span class="service-mark">J</span><span><b>Jobs</b><small>Opportunities and paid work</small></span></button>
+        <button class="service-tile" data-source="factory"><span class="service-mark">F</span><span><b>Factory</b><small>Systems and operations</small></span></button>
+      </div>
+    </section>
+
     <section hidden>
-      <div id="notes"></div><div id="plans"></div><div id="calendar-events"></div><div id="reminders"></div><div id="tasks"></div>
+      <div id="notes"></div>
+      <div id="plans"></div>
+      <div id="calendar-events"></div>
+      <div id="reminders"></div>
+      <div id="tasks"></div>
     </section>
 
     <p id="error" class="error" hidden></p>
   </main>
+
   <script src="/app.js" defer></script>
 </body>
 </html>

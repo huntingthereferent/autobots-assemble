@@ -204,9 +204,51 @@ function trailState() {
   };
 }
 
+function trailLabels() {
+  try {
+    return JSON.parse(sessionStorage.getItem("continuityTraceLabels") || "[]");
+  } catch (_) {
+    return [];
+  }
+}
+
+function updateTrailAfterTouch(touch, item, depth) {
+  const labels = trailLabels();
+  labels.push({
+    source: item.source_name || item.source_id || "External",
+    label: item.title || item.url
+  });
+  sessionStorage.setItem("continuityTraceLabels", JSON.stringify(labels.slice(-12)));
+  sessionStorage.setItem("continuityTraceParent", touch.trace_id);
+  sessionStorage.setItem("continuityTraceReferent", touch.referent_after || item.title || item.url);
+  sessionStorage.setItem("continuityTraceDepth", String(depth));
+  renderTrail();
+}
+
 function renderTrail() {
   const state = trailState();
-  $("#trail-current").textContent = state.referent;
+  const path = $("#trail-path");
+  const nodes = [];
+
+  const root = document.createElement("span");
+  root.className = "trail-node muted";
+  root.textContent = "Mixed feed";
+  nodes.push(root);
+
+  trailLabels().slice(-3).forEach(function(entry) {
+    const arrow = document.createElement("span");
+    arrow.className = "trail-arrow";
+    arrow.textContent = "→";
+
+    const node = document.createElement("span");
+    node.className = "trail-node";
+    node.title = entry.label || entry.source;
+    node.textContent = entry.source || entry.label;
+
+    nodes.push(arrow, node);
+  });
+
+  path.replaceChildren(...nodes);
   $("#trail-depth").textContent = state.depth + " touch" + (state.depth === 1 ? "" : "es");
 }
 
@@ -214,6 +256,7 @@ function resetTrail() {
   sessionStorage.removeItem("continuityTraceParent");
   sessionStorage.removeItem("continuityTraceReferent");
   sessionStorage.removeItem("continuityTraceDepth");
+  sessionStorage.removeItem("continuityTraceLabels");
   renderTrail();
 }
 
@@ -258,10 +301,7 @@ async function recordLiveTouch(item) {
       method: "POST",
       body: JSON.stringify(payload)
     });
-    sessionStorage.setItem("continuityTraceParent", touch.trace_id);
-    sessionStorage.setItem("continuityTraceReferent", touch.referent_after || item.title || item.url);
-    sessionStorage.setItem("continuityTraceDepth", String(state.depth + 1));
-    renderTrail();
+    updateTrailAfterTouch(touch, item, state.depth + 1);
     refreshStatus().catch(showError);
   } catch (err) {
     if (state.parent && /parent trace does not exist/i.test(err.message || "")) {
@@ -270,10 +310,8 @@ async function recordLiveTouch(item) {
         method: "POST",
         body: JSON.stringify(payload)
       });
-      sessionStorage.setItem("continuityTraceParent", touch.trace_id);
-      sessionStorage.setItem("continuityTraceReferent", touch.referent_after || item.title || item.url);
-      sessionStorage.setItem("continuityTraceDepth", "1");
-      renderTrail();
+      sessionStorage.removeItem("continuityTraceLabels");
+      updateTrailAfterTouch(touch, item, 1);
       return;
     }
     throw err;
