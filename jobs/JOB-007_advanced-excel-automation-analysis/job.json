@@ -1,0 +1,43 @@
+{
+  "id": "JOB-007",
+  "title": "Advanced Excel Automation & Analysis",
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "source_url": "https://www.freelancer.ph/projects/data-analysis/advanced-excel-automation-analysis",
+  "source_project_id": "40747173",
+  "reward_observed": "₹750–1,250 INR / hour",
+  "date_added": "2026-10-03",
+  "status": "blocked",
+  "prototype_status": "tested_logic",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid",
+  "preferred_referent": "📍 External Advanced Excel Automation & Analysis specification",
+  "boundary": "Create a repeatable native-Excel/VBA one-click workflow that cleans same-structure raw files, removes duplicates, handles missing regression rows, normalizes formatting, runs a regression, outputs coefficients/R²/residuals, and rebuilds a dashboard with a residual plot.",
+  "acceptance": "One macro-enabled .xlsm containing all cleaning/regression procedures; automatically refreshed dashboard; end-to-end execution under 30 seconds on about 20,000 rows; and successful tests on client unseen datasets.",
+  "result": "PROTOTYPE PASS — demo replay cleaned 245 raw rows to 233 usable rows, removed 5 duplicates and 7 incomplete regression rows, and independently reconciled R² 0.98953813 with coefficients 1.763978803 (MarketingSpend) and 0.812960824 (Visits). Final VBA execution/runtime and unseen-dataset acceptance remain pending.",
+  "next_movement": "In desktop Microsoft Excel, import RegressionAutomation.bas into the demo workbook, save as .xlsm, run the 20,000-row benchmark fixture, verify elapsed time under 30 seconds, inspect the residual/dashboard output, then test against client unseen datasets when supplied.",
+  "blockers": [
+    "This environment does not execute desktop Excel VBA.",
+    "Final .xlsm packaging requires desktop Excel macro import/save.",
+    "The under-30-second criterion has not been measured in Excel.",
+    "Client unseen datasets are not publicly supplied."
+  ],
+  "evidence": [
+    "Advanced_Excel_Automation_Analysis_Demo.xlsx",
+    "RegressionAutomation.bas",
+    "Regression_20k_Benchmark_Input.csv",
+    "USER_GUIDE.txt",
+    "acceptance_report.txt",
+    "submission.txt",
+    "preview.png"
+  ],
+  "resume_bullets": [
+    "Designed a native Excel/VBA cleaning and multiple-regression pipeline around a bounded external specification.",
+    "Built a settings-driven demo dashboard with coefficients, R-squared, predicted values, residuals, and a residual chart.",
+    "Created a 20,000-row benchmark fixture and an independent regression oracle while preserving unverified VBA/runtime criteria as explicit blockers."
+  ],
+  "notes": [
+    "The workbook is a visual/demo shell; RegressionAutomation.bas must be imported in desktop Excel and saved as .xlsm before final delivery.",
+    "Do not claim the client 20k-row runtime criterion or unseen-dataset criterion as passed until actually measured."
+  ]
+}

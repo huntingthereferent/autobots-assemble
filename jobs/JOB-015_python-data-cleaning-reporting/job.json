@@ -1,0 +1,45 @@
+{
+  "id": "JOB-015",
+  "title": "Python Data Cleaning & Reporting",
+  "source_url": "https://www.freelancer.com/projects/pandas/python-data-cleaning-reporting",
+  "source_project_id": "40739384",
+  "reward_observed": "₹100–400 INR / hour",
+  "status": "blocked",
+  "prototype_status": "complete",
+  "preferred_referent": "📍 External pandas/NumPy data-cleaning specification",
+  "boundary": "Take a supplied raw dataset through reproducible cleaning/preprocessing with pandas/NumPy and SQL where useful, then deliver a clean dataset, documented script/notebook, and concise issue-resolution summary.",
+  "acceptance": "Workflow runs end-to-end without manual intervention; all code blocks execute in under five minutes on a standard laptop; deliver clean CSV/database table, commented code, and Markdown/PDF summary.",
+  "result": "PROTOTYPE PASS — 51,000-row synthetic dirty fixture cleaned to 50,000 unique source records with explicit audit counters, CSV + SQLite outputs, automated tests, and 0.7601-second measured end-to-end runtime in this environment.",
+  "next_movement": "When the client dataset arrives, confirm the business rules for duplicate keys, missing values, date locale and outliers, run profiling first, then apply the demonstrated pipeline and time the complete real-data run.",
+  "blockers": [
+    "Client raw dataset is supplied only at kickoff.",
+    "Client-specific rules for duplicates, missing values, locale and outliers are not public."
+  ],
+  "evidence": [
+    "prototype/README.md",
+    "prototype/cleaner.py",
+    "prototype/generate_fixture.py",
+    "prototype/fixtures/raw_dirty_data.csv",
+    "prototype/output/cleaned_data.csv",
+    "prototype/output/cleaned_data.sqlite",
+    "prototype/output/audit.json",
+    "prototype/output/cleaning_summary.md",
+    "prototype/sql_checks.sql",
+    "prototype/tests/test_cleaner.py",
+    "submission.txt",
+    "acceptance_report.txt"
+  ],
+  "resume_bullets": [
+    "Built a reproducible pandas/NumPy cleaning pipeline with deterministic duplicate resolution, text/date/category normalization, documented median imputation, explicit data-quality flags, CSV/SQLite outputs, and SQL QA checks.",
+    "Validated the pipeline against a 51,000-row dirty fixture: 1,000 duplicate source keys resolved, 50,000 unique outputs, automated end-to-end tests passed, and local measured runtime remained far below the five-minute acceptance ceiling."
+  ],
+  "notes": [
+    "Freelancer listing was open when checked on 2026-10-03.",
+    "Runtime is measured on the current environment, not claimed as a universal standard-laptop benchmark."
+  ],
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "date_added": "2026-10-03",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid"
+}

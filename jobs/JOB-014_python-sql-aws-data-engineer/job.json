@@ -1,0 +1,49 @@
+{
+  "id": "JOB-014",
+  "title": "Data Engineer — Python / SQL / AWS",
+  "source_url": "https://www.freelancer.com/projects/sql/data-engineer-40744784",
+  "source_project_id": "40744784",
+  "reward_observed": "$21 USD / hour average bid observed",
+  "status": "blocked",
+  "prototype_status": "complete",
+  "preferred_referent": "📍 External Python/SQL/AWS data-pipeline specification",
+  "boundary": "Build reproducible Python + SQL transformations around MySQL data and run the pipeline end-to-end in AWS, with version-controlled transformations, single-command reproducibility, monitoring/failure handling, and setup/scheduling/rollback documentation.",
+  "acceptance": "Pipeline runs end-to-end in AWS using provided test data; transformations are version-controlled and reproducible from one command; concise README covers setup, scheduling, and rollback.",
+  "result": "LOCAL ANALOG PASS — reproducible Python/SQL ETL prototype passed end-to-end aggregate and idempotency tests, includes MySQL target SQL, indexes, run-health logging, Docker packaging, one-command Makefile, ECS/Fargate example, CloudWatch logging, scheduling, and rollback docs. Real AWS/MySQL acceptance remains client-dependent.",
+  "next_movement": "When client access is available, profile the real MySQL schema/query plans, map existing views/stored procedures, choose Lambda vs ECS from runtime/data volume, deploy the versioned pipeline, wire production alerts, and run end-to-end with the provided test data.",
+  "blockers": [
+    "Client MySQL schema/test data are not public.",
+    "Client AWS account/runtime target and IAM permissions are unavailable.",
+    "Production monitoring/alert destination and schedule are not specified."
+  ],
+  "evidence": [
+    "prototype/README.md",
+    "prototype/etl/pipeline.py",
+    "prototype/etl/cli.py",
+    "prototype/sql/001_schema_mysql.sql",
+    "prototype/sql/002_transform_mysql.sql",
+    "prototype/tests/test_pipeline.py",
+    "prototype/fixtures/orders.csv",
+    "prototype/Dockerfile",
+    "prototype/docker-compose.yml",
+    "prototype/Makefile",
+    "prototype/aws/ecs-task-definition.example.json",
+    "prototype/aws/eventbridge-schedule.example.txt",
+    "prototype/warehouse.db",
+    "submission.txt",
+    "acceptance_report.txt"
+  ],
+  "resume_bullets": [
+    "Built a reproducible Python/SQL ETL analog with idempotent source upserts, analytics-ready daily aggregates, indexed schema, pipeline health logging, deterministic tests, and single-command execution.",
+    "Prepared MySQL 8 target SQL plus Docker/ECS/Fargate packaging, CloudWatch log configuration, EventBridge scheduling guidance, and rollback documentation; local end-to-end and idempotency tests pass."
+  ],
+  "notes": [
+    "Public listing remained open when rechecked on 2026-10-03.",
+    "Local test harness uses SQLite for zero-dependency verification while production target SQL is MySQL 8; real AWS acceptance is not claimed."
+  ],
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "date_added": "2026-10-03",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid"
+}

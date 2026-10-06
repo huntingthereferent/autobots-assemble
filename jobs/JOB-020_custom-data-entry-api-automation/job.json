@@ -1,0 +1,28 @@
+{
+  "id": "JOB-020",
+  "title": "Custom Data Entry Automation",
+  "source_url": "https://www.freelancer.co.it/projects/api-developmet/custom-data-entry-automation-good",
+  "source_project_id": "40744676",
+  "reward_observed": "$15–25 USD / hour",
+  "status": "blocked",
+  "preferred_referent": "📍 External private-API data-entry automation specification",
+  "boundary": "Turn manual form/spreadsheet inputs into a zero-touch workflow against a proprietary REST-like JSON API, with authentication, validation, error logging, deployment packaging, tests and handoff docs.",
+  "acceptance": "Code posts data accurately against the client sandbox, handles typical/edge cases and failures, runs on the internal server from a deployment script/container, and is clearly documented.",
+  "result": "Blocked on private schema/API keys/sample payloads/sandbox supplied at kickoff.",
+  "next_movement": "When access arrives, freeze the schema/payload mapping, build the API client with validation/idempotency/retries, package it in Docker, run edge/load tests against sandbox, and document configuration/handoff.",
+  "blockers": [
+    "Private schema guide unavailable.",
+    "API keys/sample payloads/sandbox access unavailable.",
+    "Rate limits and authentication details are private."
+  ],
+  "evidence": [],
+  "resume_bullets": [],
+  "notes": [
+    "Freelancer listing was open when checked on 2026-10-03."
+  ],
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "date_added": "2026-10-03",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid"
+}

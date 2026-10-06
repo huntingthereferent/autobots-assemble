@@ -1,0 +1,32 @@
+{
+  "id": "JOB-006",
+  "title": "One-Click Counter and Comparison Tool",
+  "category": "external_bounded_problem",
+  "source_platform": "Freelancer",
+  "source_url": "https://www.freelancer.co.ro/projects/software-development/one-click-counter-comparison-tool",
+  "source_project_id": "40746793",
+  "reward_observed": "₹600–1,500 INR",
+  "date_added": "2026-10-03",
+  "status": "blocked",
+  "prototype_status": "not_started",
+  "submission_status": "not_submitted",
+  "payment_status": "not_paid",
+  "preferred_referent": "📍 External one-click counter/comparison specification",
+  "boundary": "Deliver a one-click counter/comparison tool, but only after the counted object, compared entities, input source, comparison rule, output shape, and target environment are defined.",
+  "acceptance": "Not yet determinable from the public listing because the only functional statement is “I need counter/comparison in one click.”",
+  "result": "BLOCKED — insufficient public specification to construct a falsifiable implementation without inventing the referent.",
+  "next_movement": "Ask the client what is being counted, what is being compared, where inputs come from, what one click should trigger, and what exact output counts as correct.",
+  "blockers": [
+    "Counted object undefined.",
+    "Comparison targets/rule undefined.",
+    "Input source undefined.",
+    "Output contract undefined.",
+    "Target platform/environment undefined."
+  ],
+  "evidence": [],
+  "resume_bullets": [],
+  "notes": [
+    "Public specification rechecked 2026-10-03.",
+    "Do not infer a comparison domain from the skill tags alone."
+  ]
+}
