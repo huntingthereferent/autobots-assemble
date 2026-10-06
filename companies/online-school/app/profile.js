@@ -107,7 +107,7 @@ function render(){
   $("#learner-name").textContent=learner.display_name||"Learner";
   $("#learner-meta").textContent=[
     learner.age ? "Age "+learner.age : "",
-    record.grade_context ? "Grade comparison "+record.grade_context : "No grade comparison selected"
+    comparison?.grade_context ? "Grade comparison "+comparison.grade_context : "No grade comparison selected"
   ].filter(Boolean).join(" · ");
   $("#generated-on").textContent=record.generated_on||"";
   $("#standards-source").textContent=comparison?.source||"";
