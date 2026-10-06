@@ -16,6 +16,7 @@ class CalendarEvent:
     referent: str
     participants: tuple[str, ...] = ()
     kind: str = "event"
+    movement_anchor: str = ""
     starts_at: str = ""
     ends_at: str = ""
     due_at: str = ""
@@ -27,7 +28,7 @@ class CalendarEvent:
 
     @classmethod
     def create(cls, title: str, *, referent: str, participants: tuple[str,...]=(),
-               kind: str="event", starts_at: str="", ends_at: str="", due_at: str="",
+               kind: str="event", movement_anchor: str="", starts_at: str="", ends_at: str="", due_at: str="",
                recurrence: str="none", weekdays: tuple[int,...]=(), notes: str="",
                provenance: tuple[str,...]=()) -> "CalendarEvent":
         if not title.strip() or not referent.strip():
@@ -44,7 +45,7 @@ class CalendarEvent:
                 datetime.fromisoformat(value)
         return cls(new_id("cal"), title.strip(), referent.strip(),
                    tuple(x.strip() for x in participants if x.strip()), kind.strip() or "event",
-                   starts_at.strip(), ends_at.strip(), due_at.strip(), recurrence,
+                   movement_anchor.strip().upper(), starts_at.strip(), ends_at.strip(), due_at.strip(), recurrence,
                    tuple(weekdays), notes.strip(),
                    tuple(x.strip() for x in provenance if x.strip()))
 
