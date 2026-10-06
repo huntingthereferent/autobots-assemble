@@ -4,10 +4,13 @@
 
 Prevent a write from destroying the relation/provenance structure the repository is meant to preserve.
 
+Repository additions are also subject to `ai.james`. Cleanup/removal review is governed separately by `ai.purge`.
+
 ## Before writing
 
 - identify the canonical record being changed;
 - identify whether the write is source, evidence, generated view, protocol, or historical archive;
+- for additions, satisfy the James speaker gate before mutating the repository;
 - preserve the old evidence unless the file is explicitly generated/replaceable;
 - do not move a claim to a stronger status without evidence.
 
