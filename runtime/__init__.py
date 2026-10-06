@@ -33,4 +33,10 @@ __all__ = [
     "ActivationResult",
     "ActivationRoute",
     "run_activation",
+    "SystemEmission",
+    "SystemBinding",
+    "OrchestrationStep",
+    "Orchestrator",
 ]
+
+from .orchestrator import OrchestrationStep, Orchestrator, SystemBinding, SystemEmission
