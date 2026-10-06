@@ -39,6 +39,40 @@ def _many(values) -> list[str]:
     return list(dict.fromkeys(str(x).strip() for x in values or () if str(x).strip()))
 
 
+def _clean_reddit_snippet(value: str) -> str:
+    text = _clean_text(value)
+    text = re.sub(
+        r"\s*submitted by\s+/u/\S+(?:\s+to\s+r/\S+)?\s*",
+        " ",
+        text,
+        flags=re.I,
+    )
+    text = re.sub(r"\s*\[(?:link|comments?)\]\s*", " ", text, flags=re.I)
+    return _clean_text(text)
+
+
+def _clean_reuters_description(value: str) -> str:
+    text = _clean_text(value)
+    promo_markers = (
+        "Keep up with the latest news",
+        "Subscribe:",
+        "Follow Reuters",
+        "Reuters on Facebook",
+        "Reuters on X:",
+        "Reuters on Instagram:",
+        "Join host",
+    )
+    cut = len(text)
+    lowered = text.casefold()
+    for marker in promo_markers:
+        pos = lowered.find(marker.casefold())
+        if pos >= 0:
+            cut = min(cut, pos)
+    text = text[:cut].strip()
+    text = re.sub(r"(?:\s+#[\w-]+){2,}\s*$", "", text).strip()
+    return _clean_text(text)
+
+
 def _iso_from_rss(value: str) -> str:
     if not value:
         return ""
@@ -138,7 +172,9 @@ def fetch_reddit(limit: int = 12) -> list[dict[str, Any]]:
                 published_at=published,
                 author=author.text if author is not None else "",
                 context="r/popular",
-                snippet=content.text if content is not None else "",
+                snippet=_clean_reddit_snippet(
+                    content.text if content is not None else ""
+                ),
             )
         )
     return rows
@@ -226,7 +262,7 @@ def fetch_reuters_youtube(limit: int = 10) -> list[dict[str, Any]]:
                     f"{{{atom}}}author/{{{atom}}}name", default="Reuters"
                 ),
                 context="Reuters",
-                snippet=description,
+                snippet=_clean_reuters_description(description),
             )
         )
     return rows

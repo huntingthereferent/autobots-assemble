@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "preferred_referent": "Continuity → Dense Live Feed / Source Text",
+  "preferred_referent": "Continuity → Dense Live Feed / Clean Source Projection",
   "protocol": "core.traversal",
-  "goal": "Fit substantially more real external movement on screen while preserving more useful source text. Keep source identity and multi-axis relations readable, remove oversized per-item controls, and make the source headline itself the traversal action.",
+  "goal": "Keep the dense live frontage readable by preserving useful source text and relations while removing clear provider transport/UI residue. Only expose controls that have real Continuity behavior.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Continue the dense mixed-feed test without Lemmy. Normalize source-specific transport/UI noise for the remaining providers, preserve useful native text and relations, then test shared-event clustering without merging source claims.",
+  "next_movement": "Test shared-event movement across the remaining live providers without merging source claims. Preserve each witness separately while asking whether multiple BBC/Reuters/Reddit/Hacker News items point to the same current referent.",
   "walls": [
     "Do not put social networks, news sites, video platforms, forums, or other external feeds inside Continuity as owned state.",
     "Do not persist the mixed feed contents by default.",
@@ -40,8 +40,8 @@
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
-    "from": "Multi-Axis Live Feed Identity → dense source frontage",
-    "reason": "The identity model held, but the rendered audit showed too much vertical chrome and too little source material. The feed now spends substantially more viewport on source text, uses clickable headlines instead of large action buttons, and exposes longer provider excerpts."
+    "from": "Dense Live Feed / Source Text → clean source projection",
+    "reason": "The density audit exposed provider transport/UI residue and inert controls. Clear wrapper/promotional text is now removed at the adapter boundary, while useful source wording remains attributed and the original source remains external."
   },
   "live_test": {
     "observed_at": "2026-10-06",
@@ -87,14 +87,16 @@
       "Added Reuters/YouTube media descriptions when the provider feed supplies them.",
       "Reduced hero, stream header, filter, trail, card, and side-rail spacing to increase useful movement per viewport.",
       "Collapsed the mobile intro and trail so the first live items appear materially higher on screen.",
-      "Removed Lemmy from the live mixed-feed source set at user request; historical traversal evidence, if any, remains provenance rather than being rewritten."
+      "Removed Lemmy from the live mixed-feed source set at user request; historical traversal evidence, if any, remains provenance rather than being rewritten.",
+      "Removed inert top-level Search, Post/composer, and Activity controls until they have real Continuity behavior.",
+      "Cleaned Reddit RSS wrapper-only text such as submitted-by / link / comments residue from the dense projection.",
+      "Cleaned Reuters/YouTube promotional and social-tail text while preserving the useful source description.",
+      "On narrow screens, identity chips collapse after two labels so source text keeps horizontal priority."
     ],
     "remaining": [
-      "Longer source excerpts expose provider boilerplate, raw markdown/link syntax, hashtags, and promotional footer text that still need provider-specific cleanup.",
-      "Source role chips are useful but visually crowded on narrow screens.",
       "Multiple sources covering one real event still appear as separate feed items.",
       "The website can record departure from Continuity but cannot observe subsequent cross-site navigation without a browser companion/shell.",
-      "Top-level Search and Post controls are still not backed by full Continuity behavior."
+      "Provider-specific native media relations such as thumbnails/images can still be preserved more richly without reducing text density."
     ]
   },
   "human_areas": {
@@ -115,16 +117,15 @@
     "rule": "Human areas remain entrances for what the person is doing. The mixed external feed is movement through the internet, not another human area."
   },
   "verified_run": {
-    "benchmark": "Dense Live Feed Neutral Audit",
+    "benchmark": "Clean Dense Source Projection",
     "result": "implemented_and_locally_tested",
     "checks": [
-      "Live headline is the traversal action; no large per-item Open source/Watch row remains.",
-      "MAX_SNIPPET is at least 640 characters.",
-      "Reuters YouTube descriptions are projected when present.",
-      "Desktop and mobile before/after renders were visually audited.",
-      "Mobile intro/trail are compact enough that live movement begins materially higher in the viewport.",
-      "Lemmy is absent from the live source adapter registry and working-source list.",
-      "58 focused runtime/traversal/frontage/visual-provenance tests passed."
+      "Reddit RSS wrapper-only text is removed from projected snippets.",
+      "Reuters/YouTube promotional tails are removed while useful descriptions remain.",
+      "Search, Post/composer, and Activity are not presented as live controls.",
+      "Mobile identity chips yield after two labels.",
+      "Lemmy remains absent from the live source registry.",
+      "61 focused runtime/traversal/frontage/visual-provenance tests passed."
     ]
   },
   "density_audit": {

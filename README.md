@@ -76,7 +76,7 @@ For example, a Reuters report carried by YouTube is simultaneously provider=`You
 
 Opening an external item records a bounded traversal touch and then opens the original external source. The feed itself remains ephemeral.
 
-The current frontage favors information density over application-style chrome: live headlines are directly clickable, the separate action-button row is removed, cards use tighter spacing, and bounded source excerpts may carry up to 640 characters. Where a provider exposes useful native text (for example Reuters descriptions in YouTube's Atom feed), that text is preserved in the live projection. Provider boilerplate and markup are not yet fully normalized; that is the next source-quality wall rather than a layout problem.
+The current frontage favors information density over application-style chrome: live headlines are directly clickable, the separate action-button row is removed, cards use tighter spacing, and bounded source excerpts may carry up to 640 characters. Where a provider exposes useful native text (for example Reuters descriptions in YouTube's Atom feed), that text is preserved in the live projection. Provider-specific transport/UI noise is normalized only where the boundary is clear: Reddit's RSS submission/link/comment wrapper is removed when it carries no source content, and Reuters/YouTube promotional/social tails are removed while keeping the useful description. The original external source remains the authority and is still one click away.
 
 ## Start here
 

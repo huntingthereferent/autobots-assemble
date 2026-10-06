@@ -1,7 +1,15 @@
 import unittest
 from unittest.mock import patch
 
-from runtime.external_feed import FETCHERS, MAX_SNIPPET, SOURCE_META, LiveFeed, _item
+from runtime.external_feed import (
+    FETCHERS,
+    MAX_SNIPPET,
+    SOURCE_META,
+    LiveFeed,
+    _clean_reddit_snippet,
+    _clean_reuters_description,
+    _item,
+)
 
 
 def _row(source_id, provider, roles, medium, title, published):
@@ -102,6 +110,20 @@ class ExternalLiveFeedTests(unittest.TestCase):
         )
         self.assertEqual(len(item["snippet"]), MAX_SNIPPET)
         self.assertTrue(item["snippet"].endswith("…"))
+
+    def test_reddit_transport_boilerplate_is_removed(self):
+        raw = "submitted by /u/example to r/pics [link] [comments]"
+        self.assertEqual(_clean_reddit_snippet(raw), "")
+
+    def test_reuters_promotional_tail_is_removed(self):
+        raw = (
+            "A useful source sentence. #news #world "
+            "Keep up with the latest news from around the world: https://reuters.com/"
+        )
+        self.assertEqual(
+            _clean_reuters_description(raw),
+            "A useful source sentence.",
+        )
 
     def test_source_failure_is_visible_and_not_fabricated(self):
         def broken():

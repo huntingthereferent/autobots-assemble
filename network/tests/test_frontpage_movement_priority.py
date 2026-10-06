@@ -34,6 +34,14 @@ class FrontpageMovementPriorityTests(unittest.TestCase):
         self.assertNotIn('open.textContent = "Open source"', app)
         self.assertNotIn('open.textContent = item.medium === "video"', app)
 
+    def test_inert_search_and_post_controls_are_not_presented(self):
+        html = HTML.read_text(encoding="utf-8")
+        self.assertNotIn('id="hub-search"', html)
+        self.assertNotIn('id="global-search"', html)
+        self.assertNotIn('id="composer-post"', html)
+        self.assertNotIn('id="composer-text"', html)
+        self.assertNotIn(">Activity<", html)
+
 
 if __name__ == "__main__":
     unittest.main()

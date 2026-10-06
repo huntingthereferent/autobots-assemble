@@ -973,3 +973,18 @@ html, body { max-width: 100%; overflow-x: hidden; }
   }
   .trail-actions button { white-space: nowrap; }
 }
+
+/* Audit cleanup: only expose controls that are actually live. */
+.portal-bar {
+  grid-template-columns: auto 1fr;
+}
+.header-actions {
+  grid-column: 2;
+  justify-self: end;
+}
+
+@media (max-width: 560px) {
+  .identity-chips .source-chip:nth-child(n+3) {
+    display: none;
+  }
+}
