@@ -43,6 +43,56 @@ function item(title, meta, extra) {
   return el;
 }
 
+function areaCard(area) {
+  const el = document.createElement("article");
+  el.className = "area-card";
+  el.id = "area-" + area.id;
+
+  const heading = document.createElement("div");
+  heading.className = "area-card-heading";
+  const title = document.createElement("h3");
+  title.textContent = area.name;
+  const summary = document.createElement("p");
+  summary.textContent = area.summary;
+  heading.append(title, summary);
+
+  const details = document.createElement("details");
+  details.className = "area-details";
+  const toggle = document.createElement("summary");
+  toggle.textContent = "Open area";
+
+  const fieldsLabel = document.createElement("p");
+  fieldsLabel.className = "area-label";
+  fieldsLabel.textContent = "Fields and entrances";
+  const fields = document.createElement("div");
+  fields.className = "area-chips";
+  (area.entries || []).forEach(function(label) {
+    const chip = document.createElement("span");
+    chip.textContent = label;
+    fields.appendChild(chip);
+  });
+
+  const toolsLabel = document.createElement("p");
+  toolsLabel.className = "area-label";
+  toolsLabel.textContent = "Things you can build here";
+  const builders = document.createElement("div");
+  builders.className = "area-chips builders";
+  (area.builders || []).forEach(function(label) {
+    const chip = document.createElement("span");
+    chip.textContent = label;
+    builders.appendChild(chip);
+  });
+
+  details.append(toggle, fieldsLabel, fields, toolsLabel, builders);
+  el.append(heading, details);
+  return el;
+}
+
+async function refreshAreas() {
+  const data = await api("/site_catalog.json");
+  $("#area-grid").replaceChildren(...(data.areas || []).map(areaCard));
+}
+
 async function refreshStatus() {
   const s = await api("/api/status");
   const p = s.systems["personal-operations"];
@@ -207,6 +257,7 @@ async function activateOhayo() {
 
 async function refreshAll() {
   await Promise.all([
+    refreshAreas(),
     refreshStatus(),
     refreshNotes(),
     refreshPlans(),

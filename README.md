@@ -4,6 +4,29 @@ A social operating portal where people, conversations, time, work, knowledge, an
 
 The homepage is a shared entrance: people log in once, then move across conversations, school, calendar, work, research, jobs, projects, household systems, companies, and future connected sources. Each source keeps its own state and provenance; Continuity keeps the thread intact as movement crosses between them.
 
+## Human areas
+
+The portal does not expose repository folders as its main categories. It collapses the repo into ordinary entrances:
+
+```text
+LEARN
+BUILD
+WORK
+EXPLORE
+CONNECT
+WORLD
+ORGANIZE
+MAKE MONEY
+CREATE
+HEALTH / LIFE
+LIBRARY
+TOOLS
+```
+
+These areas are peers, not a hierarchy with education or production at the center. Each area may expose existing capabilities, let a person manipulate the pieces underneath, and produce reusable tools or outputs. Movement can cross between areas whenever the current referent requires it.
+
+Connected systems such as Online School, Calendar, Personal Operations, Research, Jobs, and Factory remain source systems underneath those areas rather than becoming the site's top-level ontology.
+
 ## Start here
 
 1. [COMPLETE_STACK.md](COMPLETE_STACK.md)

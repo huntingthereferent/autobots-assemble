@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "areas": [
+    {
+      "id": "learn",
+      "name": "Learn",
+      "summary": "Learn anything from the relation in front of you.",
+      "entries": [
+        "School",
+        "Tutoring",
+        "Courses",
+        "Practice",
+        "Math",
+        "Science",
+        "History",
+        "Languages",
+        "Trades",
+        "Professional skills",
+        "Test prep",
+        "Simulations",
+        "Labs",
+        "Research a subject"
+      ],
+      "builders": [
+        "Curriculum builder",
+        "Quiz generator",
+        "Practice tool",
+        "Tutor flow",
+        "Study tool",
+        "Learning simulator"
+      ]
+    },
+    {
+      "id": "build",
+      "name": "Build",
+      "summary": "Turn an idea into something that works.",
+      "entries": [
+        "Software",
+        "Websites",
+        "Apps",
+        "Automation",
+        "Electronics",
+        "Robotics",
+        "Mechanics",
+        "CAD / geometry",
+        "Fabrication",
+        "Manufacturing",
+        "Data systems",
+        "AI tools",
+        "Testing"
+      ],
+      "builders": [
+        "Tool builder",
+        "Prototype workspace",
+        "Test harness",
+        "Pipeline builder",
+        "Simulator",
+        "Automation builder"
+      ]
+    },
+    {
+      "id": "work",
+      "name": "Work",
+      "summary": "Run projects, companies, services, and production.",
+      "entries": [
+        "Projects",
+        "Jobs",
+        "Freelancing",
+        "Companies",
+        "Operations",
+        "Production",
+        "Services",
+        "Customers",
+        "Sales",
+        "Finance",
+        "Inventory",
+        "Logistics",
+        "Compliance",
+        "Hiring"
+      ],
+      "builders": [
+        "Project system",
+        "CRM-like tool",
+        "Production flow",
+        "Intake system",
+        "Dashboard",
+        "Monitor",
+        "Company workflow"
+      ]
+    },
+    {
+      "id": "explore",
+      "name": "Explore",
+      "summary": "Follow questions across fields without choosing the discipline first.",
+      "entries": [
+        "Research",
+        "Academia",
+        "Papers",
+        "Experiments",
+        "Datasets",
+        "Statistics",
+        "Public data",
+        "Biology",
+        "Medicine",
+        "Physics",
+        "Chemistry",
+        "Engineering",
+        "Economics",
+        "Law",
+        "History",
+        "Culture"
+      ],
+      "builders": [
+        "Source collector",
+        "Comparison tool",
+        "Analysis tool",
+        "Experiment tracker",
+        "Visualizer",
+        "Research instrument"
+      ]
+    },
+    {
+      "id": "connect",
+      "name": "Connect",
+      "summary": "People, conversations, groups, and shared movement.",
+      "entries": [
+        "People",
+        "Profiles",
+        "Posts",
+        "Conversations",
+        "Replies",
+        "Groups",
+        "Communities",
+        "Teams",
+        "Collaboration",
+        "Shared projects",
+        "Messaging",
+        "Reactions"
+      ],
+      "builders": [
+        "Shared workspace",
+        "Community tool",
+        "Collaboration flow",
+        "Conversation tool",
+        "Shared project surface"
+      ]
+    },
+    {
+      "id": "world",
+      "name": "World",
+      "summary": "Anchor movement to real geography and public context.",
+      "entries": [
+        "Countries",
+        "Regions / states / provinces",
+        "Cities",
+        "Neighborhoods",
+        "Local places",
+        "Businesses",
+        "Schools",
+        "Institutions",
+        "Infrastructure",
+        "Events",
+        "Travel",
+        "Languages",
+        "Currencies",
+        "Time zones",
+        "Public systems"
+      ],
+      "builders": [
+        "Local-data tool",
+        "Place monitor",
+        "Map/data workspace",
+        "Travel tool",
+        "Public-system explorer"
+      ]
+    },
+    {
+      "id": "organize",
+      "name": "Organize",
+      "summary": "Keep life, time, attention, and responsibilities coherent.",
+      "entries": [
+        "Today",
+        "Calendar",
+        "Reminders",
+        "Routines",
+        "Plans",
+        "Tasks",
+        "Household",
+        "Family",
+        "Appointments",
+        "Goals",
+        "Schedules",
+        "Personal operations"
+      ],
+      "builders": [
+        "Planner",
+        "Tracker",
+        "Routine builder",
+        "Recurring workflow",
+        "Household system",
+        "Personal dashboard"
+      ]
+    },
+    {
+      "id": "money",
+      "name": "Make money",
+      "summary": "Find and operate paths that can produce income.",
+      "entries": [
+        "Jobs",
+        "Contracts",
+        "Gigs",
+        "Products",
+        "Services",
+        "Sales",
+        "Pricing",
+        "Budgets",
+        "Forecasting",
+        "Business ideas",
+        "Competitions",
+        "Grants",
+        "Opportunities"
+      ],
+      "builders": [
+        "Opportunity monitor",
+        "Pricing tool",
+        "Budget tool",
+        "Sales tracker",
+        "Service workflow",
+        "Business model workspace"
+      ]
+    },
+    {
+      "id": "create",
+      "name": "Create",
+      "summary": "Make expressive things and the tools used to make them.",
+      "entries": [
+        "Music",
+        "Writing",
+        "Art",
+        "Photography",
+        "Video",
+        "Animation",
+        "Games",
+        "Storytelling",
+        "Fashion",
+        "Graphic design",
+        "Publishing",
+        "Performance"
+      ],
+      "builders": [
+        "Music tool",
+        "Writing tool",
+        "Creative generator",
+        "Publishing flow",
+        "Media workflow",
+        "Game / story tool"
+      ]
+    },
+    {
+      "id": "life",
+      "name": "Health / Life",
+      "summary": "Personal life support with stronger evidence and safety boundaries where needed.",
+      "entries": [
+        "Fitness",
+        "Nutrition",
+        "Appointments",
+        "Records",
+        "Routines",
+        "Wellness tracking",
+        "Family care",
+        "Accessibility",
+        "Personal goals",
+        "Life admin"
+      ],
+      "builders": [
+        "Tracker",
+        "Care organizer",
+        "Routine tool",
+        "Record viewer",
+        "Goal workspace"
+      ]
+    },
+    {
+      "id": "library",
+      "name": "Library",
+      "summary": "Everything worth keeping and returning to.",
+      "entries": [
+        "Files",
+        "Notes",
+        "Saved conversations",
+        "Research",
+        "Artifacts",
+        "Things built",
+        "Datasets",
+        "Evidence",
+        "Sources",
+        "Project history",
+        "Learning history",
+        "Templates",
+        "Prior versions"
+      ],
+      "builders": [
+        "Collection",
+        "Knowledge view",
+        "Artifact bundle",
+        "Evidence packet",
+        "Reusable template"
+      ]
+    },
+    {
+      "id": "tools",
+      "name": "Tools",
+      "summary": "Use, change, combine, and build tools from the layers underneath.",
+      "entries": [
+        "Your tools",
+        "Public tools",
+        "Shared tools",
+        "Templates",
+        "Automations",
+        "Generators",
+        "Monitors",
+        "Calculators",
+        "Simulators",
+        "Pipelines",
+        "Agents / workflows"
+      ],
+      "builders": [
+        "Connect pieces",
+        "Modify a tool",
+        "Build from scratch",
+        "Save as reusable tool",
+        "Share a tool"
+      ]
+    }
+  ]
+}

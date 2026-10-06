@@ -206,3 +206,85 @@ input, textarea, select {
   .portal-strip { grid-template-columns: repeat(2, 1fr); padding: 8px 10px 2px; }
   .global-search { padding: 10px 10px 2px; }
 }
+
+
+/* Human-area directory: semantic site structure; visual-provenance refinement is deferred. */
+.anchor-target { display: block; position: relative; top: -120px; visibility: hidden; }
+.area-directory { margin: 20px 0 14px; }
+.directory-heading,
+.source-directory-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 12px;
+}
+.directory-heading > p,
+.source-directory-heading > p {
+  max-width: 620px;
+  margin: 0;
+  color: #747c87;
+  font-size: .86rem;
+  line-height: 1.45;
+}
+.area-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.area-card {
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #e2e5e9;
+  border-radius: 16px;
+  padding: 14px;
+  scroll-margin-top: 120px;
+}
+.area-card-heading h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.area-card-heading p {
+  margin: 6px 0 0;
+  color: #747c87;
+  font-size: .8rem;
+  line-height: 1.4;
+}
+.area-details { margin-top: 12px; }
+.area-details summary {
+  width: max-content;
+  color: #4c5561;
+  font-size: .76rem;
+  font-weight: 760;
+}
+.area-label {
+  margin: 13px 0 7px;
+  color: #7a828d;
+  font-size: .66rem;
+  font-weight: 830;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.area-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.area-chips span {
+  border: 1px solid #dfe3e8;
+  border-radius: 999px;
+  padding: 5px 8px;
+  background: #f8f9fa;
+  font-size: .7rem;
+}
+.area-chips.builders span { background: #f0f2f5; font-weight: 680; }
+.source-directory-heading { margin-top: 22px; }
+.portal-nav a.portal-link { text-decoration: none; color: inherit; }
+
+@media (max-width: 900px) {
+  .area-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .directory-heading, .source-directory-heading { align-items: start; flex-direction: column; gap: 6px; }
+}
+@media (max-width: 600px) {
+  .area-grid { grid-template-columns: 1fr; }
+}

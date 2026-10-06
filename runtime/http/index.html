@@ -20,19 +20,20 @@
         <button id="ohayo" class="identity-button" type="button"><span class="mini-avatar">C</span><span>Your Continuity</span></button>
       </div>
     </div>
-    <nav class="portal-nav" aria-label="Connected spaces">
-      <button class="portal-link active" data-source="all">Home</button>
-      <button class="portal-link" data-source="school">School</button>
-      <button class="portal-link" data-source="calendar">Calendar</button>
-      <button class="portal-link" data-source="personal">Personal</button>
-      <button class="portal-link" data-source="research">Research</button>
-      <button class="portal-link" data-source="jobs">Jobs</button>
-      <button class="portal-link" data-source="factory">Factory</button>
-      <button class="portal-link" data-source="all">More</button>
+    <nav class="portal-nav" aria-label="Continuity areas">
+      <a class="portal-link active" href="#home">Home</a>
+      <a class="portal-link" href="#area-learn">Learn</a>
+      <a class="portal-link" href="#area-build">Build</a>
+      <a class="portal-link" href="#area-work">Work</a>
+      <a class="portal-link" href="#area-explore">Explore</a>
+      <a class="portal-link" href="#area-connect">Connect</a>
+      <a class="portal-link" href="#area-world">World</a>
+      <a class="portal-link" href="#areas">More</a>
     </nav>
   </header>
 
   <main class="portal-shell">
+    <span id="home" class="anchor-target"></span>
     <section class="hero-grid">
       <article class="current-card">
         <div class="current-copy">
@@ -54,6 +55,25 @@
         <div id="attention-calendar" class="compact-list"></div>
         <div id="attention-reminders" class="compact-list reminders-list"></div>
       </aside>
+    </section>
+
+    <section id="areas" class="area-directory" aria-label="Continuity areas">
+      <div class="directory-heading">
+        <div>
+          <p class="kicker">Enter anywhere</p>
+          <h2>What do you want to do?</h2>
+        </div>
+        <p>Each area is an entrance into the connected repo. Use what exists, manipulate the pieces underneath, or build a reusable tool.</p>
+      </div>
+      <div id="area-grid" class="area-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="source-directory-heading">
+      <div>
+        <p class="kicker">Connected sources</p>
+        <h2>Open a system directly</h2>
+      </div>
+      <p>School, Calendar, Personal Operations, Research, Jobs, and Factory keep their own local state underneath the broader areas.</p>
     </section>
 
     <section class="service-directory" aria-label="Connected services">
