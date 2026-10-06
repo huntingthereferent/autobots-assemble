@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "activations": [
+    {
+      "activation_id": "ACT-JAMES-OHAYO-001",
+      "surfaces": [
+        "ohayo"
+      ],
+      "actor_id": "james",
+      "referent": "James / current day",
+      "projection": "task_queue",
+      "selectors": {
+        "assignee": "james",
+        "statuses": [
+          "ACTIVE",
+          "READY",
+          "PARTIAL",
+          "BLOCKED",
+          "WAITING"
+        ]
+      },
+      "sources": [
+        "runtime handoff state",
+        "connected systems that emit handoffs assigned to james"
+      ],
+      "boundaries": [
+        "Render tasks, dependencies, and blockers; do not invent a rigid hourly schedule.",
+        "Do not convert notes or observations into tasks unless another supported relation has admitted them as handoffs.",
+        "Do not include completed work in the default morning queue.",
+        "Do not infer household obligations that are not present in current state/evidence."
+      ],
+      "provenance": [
+        "User-defined activation: 'ohayo' enters James's day-to-day.",
+        "James's day is task-oriented because his timing is structured around other people's movement rather than a fixed personal schedule."
+      ]
+    }
+  ]
+}
