@@ -35,7 +35,7 @@ def demo():
     for title, referent in (
         ("Check Online School task monitor", "Online School"),
         ("Review handoff runtime", "Cross-Layer Handoff Runtime"),
-        ("Inspect current repo movement", "Language Network"),
+        ("Inspect current repo movement", "Continuity Layer"),
     ):
         task = personal.add_task(
             TaskRecord.create(
