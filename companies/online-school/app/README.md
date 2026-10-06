@@ -103,3 +103,5 @@ The current schedule explicitly marks the existing guided-reading block with `re
 A returned handoff state is translated back into a **school task patch**. The school remains responsible for applying/persisting its local state.
 
 Task completion does not automatically establish learner mastery.
+
+The generic ecosystem orchestrator can register Online School through `systems.bindings.online_school_binding`. The binding consumes this app's own task provider / handoff adapter / patch path; the orchestrator does not absorb the school task schema.
