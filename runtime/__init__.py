@@ -13,6 +13,12 @@ from .handoff import (
     SimulatedActor,
 )
 from .engine import EventStore, HandoffRuntime
+from .activation import (
+    ActivationRegistry,
+    ActivationResult,
+    ActivationRoute,
+    run_activation,
+)
 
 __all__ = [
     "EvidenceRecord",
@@ -23,4 +29,8 @@ __all__ = [
     "SimulatedActor",
     "EventStore",
     "HandoffRuntime",
+    "ActivationRegistry",
+    "ActivationResult",
+    "ActivationRoute",
+    "run_activation",
 ]
