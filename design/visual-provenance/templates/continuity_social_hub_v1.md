@@ -48,3 +48,19 @@ Avoid:
 - treating Google/GitHub/etc. as separate user silos;
 - using handles or mutable email as the durable person key;
 - interrupting movement with unnecessary profile setup after an existing linked identity is resolved.
+
+## Portal witness — Yahoo! JAPAN
+
+Yahoo! JAPAN is a visual witness for **hub breadth**, not for copying its branding or exact layout.
+
+Preserve the useful relations:
+
+- one homepage can hold many unlike domains without pretending they are one application;
+- global search can sit above the domain structure as a cross-system entrance;
+- high-value/current modules can coexist with a broad service directory;
+- personal status, calendar/time, weather/transit, news, sports, and trends can remain visually distinct while sharing one shell;
+- dense information can still preserve hierarchy through columns, compact modules, headings, and predictable placement.
+
+For Continuity, this means the homepage can combine a social/current feed with portal modules for School, Calendar, Work, Research, Factory, Jobs, and future systems rather than forcing every source into identical feed cards.
+
+Do not copy Yahoo! JAPAN's brand marks, exact spacing, proprietary assets, or page composition. Preserve the **multi-domain portal grammar** only.
