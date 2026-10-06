@@ -50,7 +50,8 @@
         },
         {
           "activity": "guided reading",
-          "minutes": 20
+          "minutes": 20,
+          "responsible_actor": "james"
         },
         {
           "activity": "beginning writing",
