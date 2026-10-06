@@ -9,13 +9,20 @@ from .personal_operations import PersonalOperationsStore
 def factory_binding(
     factory: FactorySystem,
     *,
-    order_ids: tuple[str, ...],
+    order_ids: tuple[str, ...] | None = None,
 ) -> SystemBinding:
     def emit_ready():
         emissions = []
-        for order_id in order_ids:
+        current_ids = (
+            order_ids
+            if order_ids is not None
+            else tuple(order.order_id for order in factory.orders())
+        )
+        for order_id in current_ids:
             order = factory.order(order_id)
             if order.status == "complete":
+                continue
+            if order.status not in {"open"} and not order.pending_handoff_id:
                 continue
             handoff = (
                 factory.pending_handoff(order_id)
