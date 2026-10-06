@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Connected Systems</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Language Network</p>
+        <h1>Connected systems</h1>
+        <p class="sub">Notes stay notes. Tasks enter the runtime only when admitted. Activations compress the live ecosystem into the view you need.</p>
+      </div>
+      <button id="ohayo" class="primary">ohayo</button>
+    </header>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="activation panel">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Activation</p>
+          <h2>James / current day</h2>
+        </div>
+        <span id="activation-note"></span>
+      </div>
+      <div id="ohayo-list" class="stack"></div>
+    </section>
+
+    <section class="grid">
+      <article class="panel">
+        <div class="section-head">
+          <div><p class="eyebrow">Context</p><h2>Notes</h2></div>
+        </div>
+        <form id="note-form" class="form">
+          <textarea name="body" required placeholder="Remember something without turning it into work."></textarea>
+          <input name="referent" placeholder="Referent (optional)">
+          <button class="secondary">Add note</button>
+        </form>
+        <div id="notes" class="stack"></div>
+      </article>
+
+      <article class="panel">
+        <div class="section-head">
+          <div><p class="eyebrow">Possible movement</p><h2>Plans</h2></div>
+        </div>
+        <form id="plan-form" class="form">
+          <input name="title" required placeholder="Plan title">
+          <input name="referent" required placeholder="Referent">
+          <textarea name="steps" placeholder="Steps, one per line"></textarea>
+          <button class="secondary">Add plan</button>
+        </form>
+        <div id="plans" class="stack"></div>
+      </article>
+
+      <article class="panel wide">
+        <div class="section-head">
+          <div><p class="eyebrow">Explicit work</p><h2>Tasks</h2></div>
+        </div>
+        <form id="task-form" class="form task-form">
+          <input name="title" required placeholder="Task">
+          <input name="referent" required placeholder="Referent">
+          <input name="assignee" required value="james" placeholder="Assignee">
+          <button class="secondary">Create local task</button>
+        </form>
+        <div id="tasks" class="stack"></div>
+      </article>
+
+      <article class="panel wide">
+        <div class="section-head">
+          <div><p class="eyebrow">Shared carrier</p><h2>Live handoffs</h2></div>
+        </div>
+        <div id="handoffs" class="stack"></div>
+      </article>
+    </section>
+
+    <p id="error" class="error" hidden></p>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>
