@@ -121,7 +121,7 @@ class VisualProvenanceTests(unittest.TestCase):
         ):
             self.assertIn(domain, sources)
 
-    def test_day_attention_surface_has_its_own_visual_binding(self):
+    def test_runtime_surface_has_social_hub_visual_binding(self):
         binding = json.loads(
             (ROOT / "runtime" / "http" / "visual-provenance.json").read_text(
                 encoding="utf-8"
@@ -139,7 +139,7 @@ class VisualProvenanceTests(unittest.TestCase):
             html,
         )
         preserve = " ".join(binding["preserve"]).lower()
-        self.assertIn("three distinct attention streams", preserve)
+        self.assertIn("movement-first hierarchy", preserve)\n        self.assertIn("cross-system feed", preserve)\n        self.assertIn("source-system provenance", preserve)
 
     def test_schema_contracts_exist(self):
         for name in ("visual-template.schema.json", "surface-binding.schema.json"):
