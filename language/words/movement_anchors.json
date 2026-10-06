@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "layer": "words-movement",
+  "principle": "platform-specific social actions -> reusable movement anchor; anchors describe relation, not content",
+  "anchors": [
+    {
+      "id": "OPEN",
+      "canonical": "open",
+      "definition": "Introduce a referent into an active social surface.",
+      "temporal_role": "start",
+      "likely_next": [
+        "PING",
+        "REPLY",
+        "REACT",
+        "ECHO",
+        "SILENCE"
+      ],
+      "does_not_imply": [
+        "importance",
+        "agreement",
+        "response"
+      ],
+      "surfaces": [
+        "post",
+        "message",
+        "question",
+        "discussion",
+        "comment root"
+      ]
+    },
+    {
+      "id": "PING",
+      "canonical": "direct attention",
+      "definition": "Direct an existing referent toward a named person, group, or audience.",
+      "temporal_role": "attention-edge",
+      "likely_next": [
+        "REPLY",
+        "REACT",
+        "SILENCE",
+        "HANDOFF"
+      ],
+      "does_not_imply": [
+        "obligation",
+        "acceptance",
+        "response"
+      ],
+      "surfaces": [
+        "mention",
+        "@mention",
+        "tag",
+        "direct notify"
+      ]
+    },
+    {
+      "id": "REPLY",
+      "canonical": "reply",
+      "definition": "Return movement to the current referent from another actor or turn.",
+      "temporal_role": "return",
+      "likely_next": [
+        "REPLY",
+        "BRANCH",
+        "REACT",
+        "RESOLVE",
+        "HANDOFF"
+      ],
+      "does_not_imply": [
+        "agreement",
+        "resolution"
+      ],
+      "surfaces": [
+        "reply",
+        "comment reply",
+        "thread reply",
+        "answer turn"
+      ]
+    },
+    {
+      "id": "BRANCH",
+      "canonical": "branch",
+      "definition": "Open a child referent while preserving a reachable parent conversation.",
+      "temporal_role": "split",
+      "likely_next": [
+        "REPLY",
+        "PING",
+        "RESOLVE",
+        "REOPEN"
+      ],
+      "does_not_imply": [
+        "topic abandonment",
+        "parent closure"
+      ],
+      "surfaces": [
+        "thread",
+        "nested comment",
+        "subdiscussion"
+      ]
+    },
+    {
+      "id": "ECHO",
+      "canonical": "echo",
+      "definition": "Carry an existing referent into another audience, context, or surface while preserving source provenance.",
+      "temporal_role": "amplify",
+      "likely_next": [
+        "REACT",
+        "REPLY",
+        "BRANCH",
+        "PING"
+      ],
+      "does_not_imply": [
+        "endorsement",
+        "authorship"
+      ],
+      "surfaces": [
+        "repost",
+        "quote post",
+        "crosspost",
+        "share as post"
+      ]
+    },
+    {
+      "id": "REACT",
+      "canonical": "react",
+      "definition": "Emit a low-cost social signal attached to a referent without a full language turn.",
+      "temporal_role": "signal",
+      "likely_next": [
+        "REPLY",
+        "SILENCE",
+        "RESOLVE",
+        "ECHO"
+      ],
+      "does_not_imply": [
+        "agreement",
+        "completion",
+        "understanding"
+      ],
+      "surfaces": [
+        "reaction",
+        "emoji reaction",
+        "like-like signal"
+      ]
+    },
+    {
+      "id": "HANDOFF",
+      "canonical": "handoff",
+      "definition": "Transfer the next expected movement to another actor, surface, or bounded process.",
+      "temporal_role": "transfer",
+      "likely_next": [
+        "REPLY",
+        "PING",
+        "SILENCE",
+        "RESOLVE"
+      ],
+      "does_not_imply": [
+        "completion",
+        "ownership forever"
+      ],
+      "surfaces": [
+        "assign",
+        "move to issue",
+        "send to person",
+        "pass conversation"
+      ]
+    },
+    {
+      "id": "RESOLVE",
+      "canonical": "resolve",
+      "definition": "Close the active social loop while keeping its lineage and evidence reachable.",
+      "temporal_role": "close",
+      "likely_next": [
+        "REOPEN",
+        "ECHO"
+      ],
+      "does_not_imply": [
+        "deletion",
+        "universal agreement",
+        "permanent closure"
+      ],
+      "surfaces": [
+        "mark answered",
+        "close discussion",
+        "decision recorded"
+      ]
+    },
+    {
+      "id": "SILENCE",
+      "canonical": "silence",
+      "definition": "Preserve that an expected return did not occur within the observed time window.",
+      "temporal_role": "absence-window",
+      "likely_next": [
+        "REOPEN",
+        "HANDOFF",
+        "RESOLVE"
+      ],
+      "does_not_imply": [
+        "rejection",
+        "agreement",
+        "intent",
+        "neglect"
+      ],
+      "surfaces": [
+        "no reply",
+        "unread/no return",
+        "quiet thread"
+      ]
+    },
+    {
+      "id": "REOPEN",
+      "canonical": "reopen",
+      "definition": "Return a quiet or resolved referent to active social movement.",
+      "temporal_role": "restart",
+      "likely_next": [
+        "PING",
+        "REPLY",
+        "BRANCH",
+        "RESOLVE"
+      ],
+      "does_not_imply": [
+        "prior resolution was wrong"
+      ],
+      "surfaces": [
+        "follow-up",
+        "bump",
+        "reopen thread",
+        "new reply after quiet"
+      ]
+    }
+  ],
+  "source_witnesses": [
+    {
+      "system": "X",
+      "relations": [
+        "reply",
+        "mention",
+        "repost",
+        "quote post"
+      ]
+    },
+    {
+      "system": "Reddit",
+      "relations": [
+        "post",
+        "comment reply",
+        "repost/crosspost"
+      ]
+    },
+    {
+      "system": "Slack",
+      "relations": [
+        "mention",
+        "thread reply",
+        "reaction",
+        "activity notification"
+      ]
+    },
+    {
+      "system": "Discord",
+      "relations": [
+        "mention",
+        "reply target",
+        "reaction",
+        "unread/notification attention"
+      ]
+    },
+    {
+      "system": "YouTube",
+      "relations": [
+        "comment",
+        "reply"
+      ]
+    },
+    {
+      "system": "GitHub Discussions",
+      "relations": [
+        "discussion",
+        "answer",
+        "move conversation toward scoped issue/work"
+      ]
+    }
+  ]
+}
