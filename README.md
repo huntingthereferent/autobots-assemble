@@ -1,14 +1,8 @@
 # Continuity Layer
 
-A persistent external operating environment for **complete-stack problem solving**.
+A social operating portal where people, conversations, time, work, knowledge, and connected systems meet in one continuous place without losing where anything came from.
 
-The repository is centered on one practical orientation:
-
-> Given a real problem, keep traversing every required dependency layer until the stack needed for a valid solution is represented, evidenced, realized, or explicitly walled.
-
-"Complete stack" is not full-stack web development. A problem can cross software, mathematics, physics, electronics, mechanics, materials, fabrication, manufacturing, economics, safety, regulation, or any other layer actually required by the referent.
-
-The repository is **not A/B itself**. A/B remains the recursively reusable mathematical operation and witness/evidence contract.
+The homepage is a shared entrance: people log in once, then move across conversations, school, calendar, work, research, jobs, projects, household systems, companies, and future connected sources. Each source keeps its own state and provenance; Continuity keeps the thread intact as movement crosses between them.
 
 ## Start here
 
