@@ -49,3 +49,27 @@ A concrete system should make explicit:
 - what activations/views can project it for humans.
 
 No system is required to use another system's local schema merely because both can exchange handoffs.
+
+## Shared orchestrator binding
+
+`systems/bindings.py` contains the first concrete bindings to the generic runtime orchestrator.
+
+A binding does not replace the system.
+
+It exposes only:
+
+```text
+system local state
+→ emit ready shared handoffs
+
+returned handoff state
+→ reconcile back into system local state
+```
+
+Current demonstrated bindings:
+
+- Personal Operations;
+- Online School;
+- Factory System.
+
+The Online School binding deliberately receives the school's own task provider, handoff adapter, and patch function. The orchestrator therefore does not need to understand the school's task schema.
