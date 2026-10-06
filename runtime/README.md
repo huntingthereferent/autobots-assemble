@@ -99,11 +99,13 @@ A handoff cannot become `COMPLETE` unless every required witness is returned usi
 - `projections.py` — task/job/command projections
 - `activation.py` — explicit actor+surface activation routes over existing handoff state
 - `orchestrator.py` — generic system registration, routing, automatic execution, and result reconciliation
+- `journal.py` — durable handoff-spec + event journal for restart recovery
 - `handoff.schema.json` — external serialized handoff shape
 - `examples/cross_layer.py` — same carrier across James/school/software/factory
 - `examples/tiny_factory.py` — sequential simulated production run
 - `examples/ohayo.py` — James `ohayo` activation over a mixed handoff set
 - `examples/full_ecosystem.py` — Personal Operations + Online School + Factory under one orchestrator
+- `examples/restart_recovery.py` — crash after runtime result, recover without duplicate execution
 
 The examples are witnesses for the runtime shape, not claims about physical production.
 
@@ -147,3 +149,34 @@ activation projections
 ```
 
 The systems retain different local schemas. The shared boundary is the handoff.
+
+
+## Durable restart recovery
+
+`RuntimeJournal` persists both:
+
+- the immutable handoff specification;
+- append-only runtime events.
+
+A submission writes the specification together with its `CREATED` event. Recovery therefore restores **what the handoff means**, not merely its status history.
+
+On restart:
+
+```text
+system-local log/state
++
+runtime handoff specs/events
+        ↓
+reconstruct systems + HandoffRuntime
+        ↓
+systems re-emit same pending handoff IDs
+        ↓
+Orchestrator re-binds origin routing
+        ↓
+READY work remains READY
+terminal runtime results reconcile without re-execution
+        ↓
+normal movement continues
+```
+
+The crash-recovery witness specifically covers a process dying after a factory result is durably `COMPLETE` but before the factory records reconciliation. The recovered orchestrator applies the existing result and does not execute that operation twice.
