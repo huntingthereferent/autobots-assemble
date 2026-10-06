@@ -128,6 +128,17 @@ function render(){
     row(obs.referent||"Observation",(obs.observed||"")+" · "+(obs.formed_at||""))
   ));
 
+  $("#human-notes-list").replaceChildren(...(record.human_notes||[]).slice().reverse().map(note=>{
+    const title=[note.role ? note.role[0].toUpperCase()+note.role.slice(1) : "Adult",note.author].filter(Boolean).join(" · ");
+    const detail=[
+      note.date||"",
+      note.subject||"",
+      note.standard ? "Standard "+note.standard : "",
+      note.note||""
+    ].filter(Boolean).join(" · ");
+    return row(title,detail);
+  }));
+
   const placement=record.placement||{};
   $("#placement-record").replaceChildren(
     row("Placement status: "+(placement.status||"required"),
@@ -177,6 +188,31 @@ $("#learner-select").onchange=event=>{
   loadRecord(event.target.value);
 };
 $("#print-record").onclick=()=>window.print();
+
+$("#note-form").addEventListener("submit",async event=>{
+  event.preventDefault();
+  if(!record?.learner?.id) return;
+  const data=new FormData(event.currentTarget);
+  const response=await fetch("/api/notes",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      learner_id:record.learner.id,
+      author:data.get("author"),
+      role:data.get("role"),
+      subject:data.get("subject"),
+      standard:data.get("standard"),
+      note:data.get("note")
+    })
+  });
+  if(!response.ok){
+    const body=await response.json().catch(()=>({}));
+    alert(body.error||"Could not save note");
+    return;
+  }
+  event.currentTarget.reset();
+  await loadRecord(record.learner.id);
+});
 
 loadLearners().catch(err=>{
   document.body.innerHTML="<p style='padding:24px'>"+err.message+"</p>";
