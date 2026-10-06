@@ -58,7 +58,9 @@ local state B
 
 This allows unlike layers to remain locally correct while later traversal can reconstruct how a current relation crossed those layers.
 
-Visual provenance, artifact provenance, runtime/handoff provenance, research/source provenance, educational evidence, company/operating provenance, and future domain provenance are specializations of this same continuity rule.
+Visual provenance, artifact provenance, runtime/handoff provenance, research/source provenance, external traversal traces, educational evidence, company/operating provenance, and future domain provenance are specializations of this same continuity rule.
+
+External traversal is the case where the touched state remains outside Continuity. The local provenance edge preserves why the external thing was touched, what relation it added, and how movement continued without claiming ownership of the external state. See `traversal.md`.
 
 They may carry different local fields. They must preserve enough ancestry to remain traceable.
 

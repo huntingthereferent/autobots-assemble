@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trace.schema.json",
+  "title": "Continuity Traversal Touch",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "trace_id",
+    "touched_at",
+    "surface_kind",
+    "locator",
+    "referent_before",
+    "relation"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_id": {
+      "type": "string"
+    },
+    "parent_trace_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "touched_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "surface_kind": {
+      "type": "string",
+      "minLength": 1
+    },
+    "locator": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provider": {
+      "type": "string"
+    },
+    "label": {
+      "type": "string"
+    },
+    "referent_before": {
+      "type": "string",
+      "minLength": 1
+    },
+    "relation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "referent_after": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "what_changed": {
+      "type": "string"
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "artifact_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_trace_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,8 +1,10 @@
 # Continuity Layer
 
-A social operating portal where people, conversations, time, work, knowledge, and connected systems meet in one continuous place without losing where anything came from.
+A continuity layer for moving through people, conversations, time, work, knowledge, connected systems, and the wider internet without losing the thread.
 
-The homepage is a shared entrance: people log in once, then move across conversations, school, calendar, work, research, jobs, projects, household systems, companies, and future connected sources. Each source keeps its own state and provenance; Continuity keeps the thread intact as movement crosses between them.
+Continuity does **not** try to put the internet inside itself. People use Continuity while moving through external pages, feeds, searches, videos, forums, maps, marketplaces, job boards, documentation, and tools. Those things stay external; Continuity preserves the relational path through them so the current referent, source, branch, and outputs remain traceable.
+
+The homepage is a shared entrance: people log in once, then move across conversations, school, calendar, work, research, jobs, projects, household systems, companies, and external internet surfaces. Each local system keeps its own state, each external source stays externally owned, and Continuity keeps the thread intact as movement crosses between them.
 
 ## Human areas
 
@@ -26,6 +28,23 @@ TOOLS
 These areas are peers, not a hierarchy with education or production at the center. Each area may expose existing capabilities, let a person manipulate the pieces underneath, and produce reusable tools or outputs. Movement can cross between areas whenever the current referent requires it.
 
 Connected systems such as Online School, Calendar, Personal Operations, Research, Jobs, and Factory remain source systems underneath those areas rather than becoming the site's top-level ontology.
+
+## Traverse the internet without losing the thread
+
+News, social media feeds, search results, videos, forums, documentation, marketplaces, job boards, maps, public data, and external apps are **surfaces Continuity moves through**, not subsystems Continuity tries to recreate.
+
+The core movement is:
+
+```text
+current referent
+→ touch an external thing
+→ preserve why it was touched and what relation it added
+→ move to the next relevant thing
+→ keep the prior path reachable
+↺
+```
+
+A trace is richer than browser history: it preserves the relational reason for movement, source locator, current referent, branch ancestry, admitted evidence/artifacts, and what changed. See [protocols/core/traversal.md](protocols/core/traversal.md).
 
 ## Start here
 

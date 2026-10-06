@@ -332,5 +332,121 @@
         "Share a tool"
       ]
     }
-  ]
+  ],
+  "external_traversal": {
+    "rule": "External state stays external; Continuity preserves the trace of movement through it.",
+    "trace_contract": "protocols/core/traversal.md",
+    "trace_schema": "protocols/core/trace.schema.json",
+    "surfaces": [
+      {
+        "id": "news",
+        "name": "News",
+        "examples": [
+          "news sites",
+          "local reporting",
+          "press releases",
+          "public notices"
+        ]
+      },
+      {
+        "id": "social",
+        "name": "Social feeds",
+        "examples": [
+          "posts",
+          "replies",
+          "profiles",
+          "groups",
+          "community threads"
+        ]
+      },
+      {
+        "id": "search",
+        "name": "Search",
+        "examples": [
+          "web search",
+          "site search",
+          "result pages"
+        ]
+      },
+      {
+        "id": "video",
+        "name": "Video",
+        "examples": [
+          "videos",
+          "channels",
+          "descriptions",
+          "linked sources"
+        ]
+      },
+      {
+        "id": "forums",
+        "name": "Forums / communities",
+        "examples": [
+          "threads",
+          "answers",
+          "comments",
+          "community archives"
+        ]
+      },
+      {
+        "id": "docs",
+        "name": "Documentation",
+        "examples": [
+          "manuals",
+          "API docs",
+          "reference pages",
+          "papers"
+        ]
+      },
+      {
+        "id": "marketplaces",
+        "name": "Marketplaces",
+        "examples": [
+          "products",
+          "services",
+          "listings",
+          "reviews"
+        ]
+      },
+      {
+        "id": "jobs",
+        "name": "Job boards",
+        "examples": [
+          "roles",
+          "contracts",
+          "gigs",
+          "opportunities"
+        ]
+      },
+      {
+        "id": "maps",
+        "name": "Maps / places",
+        "examples": [
+          "businesses",
+          "institutions",
+          "routes",
+          "local places"
+        ]
+      },
+      {
+        "id": "public_data",
+        "name": "Public data",
+        "examples": [
+          "datasets",
+          "government pages",
+          "public APIs",
+          "records"
+        ]
+      },
+      {
+        "id": "external_tools",
+        "name": "External tools / apps",
+        "examples": [
+          "web apps",
+          "connected services",
+          "specialized tools"
+        ]
+      }
+    ]
+  }
 }

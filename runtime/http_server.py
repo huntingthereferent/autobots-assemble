@@ -88,6 +88,22 @@ class Handler(BaseHTTPRequestHandler):
                     self.send_json({"events": SERVICE.list_calendar_events()})
                     return
 
+                if parsed.path == "/api/traces":
+                    session_id = query.get("session_id", [None])[0]
+                    self.send_json({
+                        "touches": SERVICE.list_touches(session_id=session_id)
+                    })
+                    return
+
+                if parsed.path.startswith("/api/traces/") and parsed.path.endswith("/ancestry"):
+                    trace_id = parsed.path.removeprefix(
+                        "/api/traces/"
+                    ).removesuffix("/ancestry").strip("/")
+                    self.send_json({
+                        "touches": SERVICE.trace_ancestry(trace_id)
+                    })
+                    return
+
                 if parsed.path == "/api/attention":
                     actor = query.get("actor", [""])[0]
                     if not actor:
@@ -198,6 +214,13 @@ class Handler(BaseHTTPRequestHandler):
                 if parsed.path == "/api/calendar":
                     self.send_json(
                         SERVICE.add_calendar_event(payload),
+                        201,
+                    )
+                    return
+
+                if parsed.path == "/api/traces":
+                    self.send_json(
+                        SERVICE.add_touch(payload),
                         201,
                     )
                     return

@@ -1,56 +1,41 @@
 {
   "schema_version": 1,
-  "preferred_referent": "Continuity Portal → Human Areas over Connected Sources",
-  "protocol": "core.movement",
-  "goal": "Expose the repo through ordinary human areas while preserving the social portal as the shared entrance. Education, production, research, social interaction, personal organization, money, creativity, world/place context, library, and tool-building remain peer entrances; connected source systems keep their own local state underneath.",
+  "preferred_referent": "Continuity → Trace Through External Surfaces",
+  "protocol": "core.traversal",
+  "goal": "Use Continuity to move through the internet, connected systems, and other external surfaces without getting lost. External things remain external; Continuity records the relational trail of what was touched, why it was touched, what changed, what branch was taken, and where movement went next.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Exercise the human-area catalog against real and simulated movement. Add concrete tools and entrances inside each area only when reached by evidence, while allowing tools and work to cross areas without duplicating source state.",
+  "next_movement": "Connect browser/search/social/news/video/forum/documentation/marketplace/job/map/public-data adapters to the generic traversal trace. Each adapter should emit bounded touch records instead of importing its source into Continuity.",
   "walls": [
-    "Do not redefine A/B as the portal, an area, a source system, School, Words, or the runtime.",
-    "Do not make repository folders the site's top-level human categories.",
-    "Do not make education, production, research, social interaction, or any other one area the site focus.",
-    "Do not turn human-facing areas into sealed disciplines; cross-area movement remains valid.",
-    "Do not flatten source-system state into the area catalog.",
-    "Do not require users to understand A/B, runtime, handoffs, provenance, protocols, or repo taxonomy to use the site.",
-    "Do not treat simulated movement as real human evidence.",
-    "Do not turn countries into a separate architecture; countries are WORLD/place anchors.",
-    "Do not let note creation automatically create a task or handoff.",
-    "Do not let an activation mutate state merely by being requested.",
-    "Do not accept COMPLETE without the handoff's required admissible evidence.",
-    "Do not expose private live Personal Operations state through repository commits."
+    "Do not redefine A/B as Continuity, traversal, the trace store, the portal, or the internet.",
+    "Do not put the internet inside Continuity.",
+    "External state stays external; Continuity preserves the trace of movement through it.",
+    "Do not create a new top-level architecture for every website, feed, content type, or provider.",
+    "Do not confuse browser navigation with relational movement; a touch must preserve why the source mattered to the current referent.",
+    "Do not turn every touch into a task, handoff, plan, reminder, or saved artifact.",
+    "Do not treat touching or reading a source as proof that its claims are true.",
+    "Do not erase source attribution when information crosses layers.",
+    "Do not let old trace ancestry override the current referent.",
+    "Do not make education, production, research, social interaction, news, or any other one surface the site focus.",
+    "Do not treat simulated traversal as real external evidence."
   ],
   "evidence": [
-    "protocols/core/handoff.md",
-    "protocols/core/movement.md",
-    "runtime/README.md",
-    "runtime/handoff.py",
-    "runtime/engine.py",
-    "runtime/projections.py",
-    "runtime/handoff.schema.json",
-    "runtime/activation.py",
-    "runtime/orchestrator.py",
-    "runtime/journal.py",
-    "systems/README.md",
-    "systems/bindings.py",
-    "systems/personal_operations/README.md",
-    "companies/online-school/COMPANY.md",
-    "language/README.md",
     "README.md",
-    "runtime/http/index.html",
-    "runtime/http/app.js",
-    "runtime/http/styles.css",
+    "protocols/core/movement.md",
+    "protocols/core/provenance.md",
+    "protocols/core/traversal.md",
+    "protocols/core/trace.schema.json",
+    "runtime/trace.py",
+    "runtime/service.py",
+    "runtime/http_server.py",
     "runtime/http/site_catalog.json",
-    "network/tests/test_frontage_projection.py",
-    "network/tests/test_ecosystem_service.py",
-    "network/tests/test_activation.py",
-    "network/tests/test_handoff_runtime.py",
-    "network/tests/test_recovery.py"
+    "network/tests/test_traversal_trace.py",
+    "network/tests/test_frontage_projection.py"
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
-    "from": "Portal-first social hub → Human area fill",
-    "reason": "The portal already provided the social shared entrance, but its visible sections were still organized around source systems such as School, Calendar, Research, Jobs, and Factory. The current movement collapses repo outputs into ordinary human areas while retaining those systems underneath as sources."
+    "from": "Continuity Portal → Human Areas over Connected Sources",
+    "reason": "The portal areas remain valid, but external internet content should not be modeled as more internal source systems. Continuity is the layer used while moving through those external surfaces so the relational thread remains traceable."
   },
   "human_areas": {
     "areas": [
@@ -67,17 +52,35 @@
       "LIBRARY",
       "TOOLS"
     ],
-    "rule": "Areas are peer entrances into connected repo capability, not sealed backend categories. Every area may expose existing tools and support building reusable tools from the layers underneath."
+    "rule": "Human areas are entrances for what a person is doing. They are not copies of internet platforms or content categories."
+  },
+  "external_traversal": {
+    "rule": "External state stays external; Continuity preserves the trace of movement through it.",
+    "surfaces": [
+      "NEWS",
+      "SOCIAL FEEDS",
+      "SEARCH",
+      "VIDEO",
+      "FORUMS / COMMUNITIES",
+      "DOCUMENTATION",
+      "MARKETPLACES",
+      "JOB BOARDS",
+      "MAPS / PLACES",
+      "PUBLIC DATA",
+      "EXTERNAL TOOLS / APPS"
+    ],
+    "touch": "A bounded record of an external locator, current referent, relation/reason, ancestry, and what changed.",
+    "trace": "Reachable ancestry of touches that explains how the current referent moved."
   },
   "verified_run": {
-    "benchmark": "Human Area Fill over Portal Hub",
+    "benchmark": "External Traversal Trace",
     "result": "implemented_and_locally_tested",
     "checks": [
-      "The portal remains the social shared entrance.",
-      "Human areas are represented in runtime/http/site_catalog.json.",
-      "Every area exposes fields/entrances and tool-building examples.",
-      "School, Calendar, Personal Operations, Research, Jobs, and Factory remain connected sources underneath.",
-      "Existing live runtime forms, attention projection, feed, handoffs, and source boundaries remain present."
+      "External surfaces are cataloged separately from human areas.",
+      "A generic append-only trace carrier records touches without copying external content.",
+      "Trace ancestry preserves parent movement.",
+      "Recording a touch does not create work or handoffs.",
+      "HTTP endpoints expose trace recording/listing/ancestry for future adapters."
     ]
   }
 }

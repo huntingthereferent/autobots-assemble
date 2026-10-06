@@ -10,6 +10,7 @@ from runtime.engine import HandoffRuntime
 from runtime.handoff import EvidenceRecord, ExecutionResult, SimulatedActor
 from runtime.journal import RuntimeJournal
 from runtime.orchestrator import Orchestrator, SystemBinding
+from runtime.trace import TraceStore, TraversalTouch
 from systems.bindings import personal_operations_binding
 from systems.calendar import CalendarEvent, CalendarStore
 from systems.day_to_day import DayToDayStore, Reminder, attention_projection
@@ -58,6 +59,9 @@ class EcosystemService:
                 self.data_dir / "runtime.jsonl"
             )
         )
+        self.trace = TraceStore(
+            self.data_dir / "traversal.jsonl"
+        )
         self.orchestrator = Orchestrator(self.runtime)
         self.orchestrator.register_system(
             personal_operations_binding(self.personal)
@@ -104,6 +108,7 @@ class EcosystemService:
                 "handoffs": len(snapshot),
                 "by_status": by_status,
                 "events": len(self.runtime.event_store.all()),
+                "touches": len(self.trace.touches()),
             },
         }
 
@@ -240,6 +245,16 @@ class EcosystemService:
 
     def list_calendar_events(self) -> list[dict[str, Any]]:
         return [asdict(item) for item in self.calendar.events()]
+
+    def add_touch(self, payload: dict[str, Any]) -> dict[str, Any]:
+        touch = self.trace.add(TraversalTouch.create(payload))
+        return asdict(touch)
+
+    def list_touches(self, *, session_id: str | None = None) -> list[dict[str, Any]]:
+        return [asdict(item) for item in self.trace.touches(session_id=session_id)]
+
+    def trace_ancestry(self, trace_id: str) -> list[dict[str, Any]]:
+        return [asdict(item) for item in self.trace.ancestry(trace_id)]
 
     def attention(self, *, actor_id: str, now: datetime | None = None) -> dict[str, Any]:
         now = now or datetime.now().astimezone()

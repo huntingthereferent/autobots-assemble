@@ -59,8 +59,10 @@ class FrontageProjectionTests(unittest.TestCase):
 
     def test_human_areas_are_recorded_as_entrances_not_backend_schema(self):
         current = json.loads((ROOT / "state" / "current.json").read_text(encoding="utf-8"))
-        self.assertEqual(current["preferred_referent"], "Continuity Portal → Human Areas over Connected Sources")
-        self.assertIn("not sealed backend categories", current["human_areas"]["rule"])
+        self.assertTrue(current["preferred_referent"].startswith("Continuity"))
+        self.assertIn("entrances", current["human_areas"]["rule"].lower())
+        self.assertIn("LEARN", current["human_areas"]["areas"])
+        self.assertIn("TOOLS", current["human_areas"]["areas"])
 
 
 if __name__ == "__main__":
