@@ -34,6 +34,38 @@ A/B remains the recursively reusable mathematical operation and witness/evidence
 
 This architecture is not A/B. It is a repository organization that preserves repeated applications and their evidence.
 
+## Translator and handoff runtime
+
+The repository is also a durable **translation/evidence spine**. Human language and external state can be translated into a current referent and a bounded handoff without requiring the human-facing interface to expose repository taxonomy.
+
+The live execution path is:
+
+```text
+human / world input
+        ↓
+translation to current referent
+        ↓
+core.handoff contract
+        ↓
+runtime
+        ↓
+human / AI / program / machine / simulator
+        ↓
+result + evidence
+        ↓
+append-only event history
+        ↓
+derived current state
+        ↓
+next eligible handoff
+```
+
+`runtime/` is the first executable realization.
+
+A handoff is not a task. Tasks, software jobs, machine commands, prompts, work orders, and simulator events are projections/adapters over the same carrier.
+
+The repository preserves contracts, provenance, implementations, tests, and durable evidence. The runtime carries what is moving now. Read-only or human-facing projections may be regenerated from that underlying state.
+
 ## Category discipline
 
 All categorization follows [CATEGORY_CONTRACT.md](CATEGORY_CONTRACT.md).
