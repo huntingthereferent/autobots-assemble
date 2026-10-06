@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ET
 
 USER_AGENT = "Continuity/0.1 (live traversal frontage test)"
 CACHE_SECONDS = 45
-MAX_SNIPPET = 320
+MAX_SNIPPET = 640
 
 REDDIT_POPULAR_RSS = "https://www.reddit.com/r/popular/.rss"
 LEMMY_NEW = "https://lemmy.world/api/v3/post/list?sort=New&limit=14"
@@ -234,10 +234,15 @@ def fetch_reuters_youtube(limit: int = 10) -> list[dict[str, Any]]:
     root = ET.fromstring(_fetch(REUTERS_YOUTUBE))
     atom = "http://www.w3.org/2005/Atom"
     yt = "http://www.youtube.com/xml/schemas/2015"
+    media = "http://search.yahoo.com/mrss/"
     rows = []
     for entry in root.findall(f"{{{atom}}}entry")[:limit]:
         link = entry.find(f"{{{atom}}}link")
         video_id = entry.findtext(f"{{{yt}}}videoId", default="")
+        description = entry.findtext(
+            f"{{{media}}}group/{{{media}}}description",
+            default="",
+        )
         rows.append(
             _item(
                 item_id=f"youtube:{video_id}",
@@ -254,6 +259,7 @@ def fetch_reuters_youtube(limit: int = 10) -> list[dict[str, Any]]:
                     f"{{{atom}}}author/{{{atom}}}name", default="Reuters"
                 ),
                 context="Reuters",
+                snippet=description,
             )
         )
     return rows

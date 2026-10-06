@@ -77,6 +77,8 @@ For example, a Reuters report carried by YouTube is simultaneously provider=`You
 
 Opening an external item records a bounded traversal touch and then opens the original external source. The feed itself remains ephemeral.
 
+The current frontage favors information density over application-style chrome: live headlines are directly clickable, the separate action-button row is removed, cards use tighter spacing, and bounded source excerpts may carry up to 640 characters. Where a provider exposes useful native text (for example Reuters descriptions in YouTube's Atom feed), that text is preserved in the live projection. Provider boilerplate and markup are not yet fully normalized; that is the next source-quality wall rather than a layout problem.
+
 ## Start here
 
 1. [COMPLETE_STACK.md](COMPLETE_STACK.md)

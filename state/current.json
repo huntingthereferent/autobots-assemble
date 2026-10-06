@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "preferred_referent": "Continuity → Multi-Axis Live Feed Identity",
+  "preferred_referent": "Continuity → Dense Live Feed / Source Text",
   "protocol": "core.traversal",
-  "goal": "Carry real live movement from unlike external feeds without forcing each item into one category. Preserve provider, publisher, medium, roles, topics, source locator, and traversal ancestry independently so one external item can participate in several valid projections without duplication.",
+  "goal": "Fit substantially more real external movement on screen while preserving more useful source text. Keep source identity and multi-axis relations readable, remove oversized per-item controls, and make the source headline itself the traversal action.",
   "status": "active",
   "result_state": "MOVE",
-  "next_movement": "Preserve more native provider affordances inside the common feed placement without flattening them into generic text cards. Clean provider-specific noise, expose media/thumbnail/discussion relations where available, then test duplicate coverage of the same event without merging source claims.",
+  "next_movement": "Normalize provider-specific source text without reducing density: strip RSS/markdown boilerplate, distinguish useful body text from promotional/footer text, preserve native media/discussion relations, and then test shared-event clustering without merging source claims.",
   "walls": [
     "Do not put social networks, news sites, video platforms, forums, or other external feeds inside Continuity as owned state.",
     "Do not persist the mixed feed contents by default.",
@@ -40,8 +40,8 @@
   ],
   "handoff": {
     "type": "HANDOFF.BOUNDARY",
-    "from": "Frontpage live-movement audit → multi-axis feed identity",
-    "reason": "The audit showed that source_kind forced unlike relations into one category. The live item contract now preserves provider, publisher, medium, roles, and topics independently; frontend filters project those relations rather than duplicating or reclassifying the item."
+    "from": "Multi-Axis Live Feed Identity → dense source frontage",
+    "reason": "The identity model held, but the rendered audit showed too much vertical chrome and too little source material. The feed now spends substantially more viewport on source text, uses clickable headlines instead of large action buttons, and exposes longer provider excerpts."
   },
   "live_test": {
     "observed_at": "2026-10-06",
@@ -82,13 +82,19 @@
       "Made Current trail sticky and rendered a visible Mixed feed → source breadcrumb as touches accumulate.",
       "Kept external source/provider identity visible without converting items into Continuity-owned posts.",
       "Replaced flat source_kind classification with independent provider / publisher / medium / roles / topics.",
-      "News and Video filters can now overlap on one Reuters/YouTube item without duplicating it."
+      "News and Video filters can now overlap on one Reuters/YouTube item without duplicating it.",
+      "Removed the separate large Open source / Watch action row; the live headline itself is now the traversal action.",
+      "Raised bounded source excerpt budget from 320 to 640 characters.",
+      "Added Reuters/YouTube media descriptions when the provider feed supplies them.",
+      "Reduced hero, stream header, filter, trail, card, and side-rail spacing to increase useful movement per viewport.",
+      "Collapsed the mobile intro and trail so the first live items appear materially higher on screen."
     ],
     "remaining": [
-      "Provider-specific content is still flattened too aggressively into generic text cards.",
+      "Longer source excerpts expose provider boilerplate, raw markdown/link syntax, hashtags, and promotional footer text that still need provider-specific cleanup.",
+      "Source role chips are useful but visually crowded on narrow screens.",
       "Multiple sources covering one real event still appear as separate feed items.",
       "The website can record departure from Continuity but cannot observe subsequent cross-site navigation without a browser companion/shell.",
-      "Top-level Search and Post controls are still not backed by real Continuity behavior."
+      "Top-level Search and Post controls are still not backed by full Continuity behavior."
     ]
   },
   "human_areas": {
@@ -109,15 +115,21 @@
     "rule": "Human areas remain entrances for what the person is doing. The mixed external feed is movement through the internet, not another human area."
   },
   "verified_run": {
-    "benchmark": "Multi-Axis Live Feed Identity",
+    "benchmark": "Dense Live Feed Neutral Audit",
     "result": "implemented_and_locally_tested",
     "checks": [
-      "Live items no longer contain source_kind.",
-      "Provider, publisher, medium, roles, and topics are independent fields.",
-      "Reuters-on-YouTube renders visibly as video + news.",
-      "Frontend filters use roles and medium instead of exclusive source category.",
-      "Traversal provenance records provider, publisher, medium, and roles.",
-      "55 focused runtime/traversal/frontage/visual-provenance tests passed."
+      "Live headline is the traversal action; no large per-item Open source/Watch row remains.",
+      "MAX_SNIPPET is at least 640 characters.",
+      "Reuters YouTube descriptions are projected when present.",
+      "Desktop and mobile before/after renders were visually audited.",
+      "Mobile intro/trail are compact enough that live movement begins materially higher in the viewport.",
+      "57 focused runtime/traversal/frontage/visual-provenance tests passed."
     ]
+  },
+  "density_audit": {
+    "result": "denser_without_changing_feed_ownership",
+    "before": "Large per-item action buttons and looser cards spent significant vertical space on chrome.",
+    "after": "Clickable headlines, tighter cards, longer excerpts, and compact trail/header surfaces place substantially more real source movement in the same viewport.",
+    "tradeoff": "The limiting factor is now source-text quality rather than card spacing."
   }
 }

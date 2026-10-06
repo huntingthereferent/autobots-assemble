@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from runtime.external_feed import LiveFeed, _item
+from runtime.external_feed import MAX_SNIPPET, LiveFeed, _item
 
 
 def _row(source_id, provider, roles, medium, title, published):
@@ -85,6 +85,23 @@ class ExternalLiveFeedTests(unittest.TestCase):
         self.assertIn("politics", item["topics"])
         self.assertEqual(item["source_name"], "YouTube · Reuters")
         self.assertNotIn("source_kind", item)
+
+    def test_source_excerpt_budget_is_dense_but_substantive(self):
+        self.assertGreaterEqual(MAX_SNIPPET, 640)
+        long_text = "x" * 900
+        item = _item(
+            item_id="dense:test",
+            source_id="dense",
+            provider="Dense Source",
+            provider_surface="test",
+            medium="article",
+            roles=("news",),
+            title="Dense test",
+            url="https://example.com/dense",
+            snippet=long_text,
+        )
+        self.assertEqual(len(item["snippet"]), MAX_SNIPPET)
+        self.assertTrue(item["snippet"].endswith("…"))
 
     def test_source_failure_is_visible_and_not_fabricated(self):
         def broken():

@@ -28,6 +28,12 @@ class FrontpageMovementPriorityTests(unittest.TestCase):
         self.assertIn("roles.includes(filter)", app)
         self.assertIn('item.medium === "video"', app)
 
+    def test_source_action_is_clickable_title_not_large_button_row(self):
+        app = (ROOT / "runtime" / "http" / "app.js").read_text(encoding="utf-8")
+        self.assertIn('titleLink.className = "live-title-link"', app)
+        self.assertNotIn('open.textContent = "Open source"', app)
+        self.assertNotIn('open.textContent = item.medium === "video"', app)
+
 
 if __name__ == "__main__":
     unittest.main()

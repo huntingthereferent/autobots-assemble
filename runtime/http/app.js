@@ -325,6 +325,18 @@ async function recordLiveTouch(item) {
   }
 }
 
+function openLiveItem(item) {
+  const popup = window.open("about:blank", "_blank");
+  recordLiveTouch(item).catch(showError).finally(function() {
+    if (popup) {
+      popup.opener = null;
+      popup.location = item.url;
+    } else {
+      window.location.href = item.url;
+    }
+  });
+}
+
 function liveFeedCard(item) {
   const article = document.createElement("article");
   article.className = "live-item";
@@ -360,7 +372,14 @@ function liveFeedCard(item) {
 
   const title = document.createElement("h3");
   title.className = "live-title";
-  title.textContent = item.title || "(untitled)";
+  const titleLink = document.createElement("button");
+  titleLink.type = "button";
+  titleLink.className = "live-title-link";
+  titleLink.textContent = item.title || "(untitled)";
+  titleLink.addEventListener("click", function() {
+    openLiveItem(item);
+  });
+  title.appendChild(titleLink);
 
   const byline = document.createElement("div");
   byline.className = "live-byline";
@@ -368,6 +387,9 @@ function liveFeedCard(item) {
   if (item.author) pieces.push(item.author);
   const metrics = metricText(item.metrics);
   if (metrics) pieces.push(metrics);
+  try {
+    pieces.push(new URL(item.url).hostname.replace(/^www\./, ""));
+  } catch (_) {}
   byline.textContent = pieces.join(" · ");
 
   const snippet = document.createElement("p");
@@ -375,34 +397,7 @@ function liveFeedCard(item) {
   snippet.textContent = item.snippet || "";
   snippet.hidden = !item.snippet;
 
-  const actions = document.createElement("div");
-  actions.className = "live-actions";
-  const open = document.createElement("button");
-  open.className = "live-open";
-  open.type = "button";
-  open.textContent = item.medium === "video" ? "Watch" : "Open source";
-  open.addEventListener("click", function() {
-    const popup = window.open("about:blank", "_blank");
-    recordLiveTouch(item).catch(showError).finally(function() {
-      if (popup) {
-        popup.opener = null;
-        popup.location = item.url;
-      } else {
-        window.location.href = item.url;
-      }
-    });
-  });
-
-  const locator = document.createElement("span");
-  locator.className = "live-locator";
-  try {
-    locator.textContent = new URL(item.url).hostname.replace(/^www\./, "");
-  } catch (_) {
-    locator.textContent = item.url;
-  }
-  actions.append(open, locator);
-
-  article.append(head, title, byline, snippet, actions);
+  article.append(head, title, byline, snippet);
   return article;
 }
 
