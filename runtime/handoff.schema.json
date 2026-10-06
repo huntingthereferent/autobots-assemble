@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/language-network/runtime/handoff.schema.json",
+  "title": "Cross-layer Handoff",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "handoff_id",
+    "referent",
+    "from_actor",
+    "to_actor",
+    "required_relation",
+    "inputs",
+    "expected_output",
+    "required_witnesses",
+    "admissible_evidence",
+    "dependencies",
+    "boundaries",
+    "provenance",
+    "metadata"
+  ],
+  "properties": {
+    "handoff_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "referent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "from_actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "to_actor": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_relation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "object"
+    },
+    "expected_output": {
+      "type": "object"
+    },
+    "required_witnesses": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "admissible_evidence": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "boundaries": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "provenance": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "metadata": {
+      "type": "object"
+    }
+  }
+}
