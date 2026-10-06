@@ -18,6 +18,12 @@
       "layer": "education_workspace",
       "status": "approved",
       "path": "design/visual-provenance/templates/education_workspace_v1.json"
+    },
+    {
+      "template_id": "continuity_social_hub_v1",
+      "layer": "ecosystem_social_movement",
+      "status": "approved",
+      "path": "design/visual-provenance/templates/continuity_social_hub_v1.json"
     }
   ]
 }
