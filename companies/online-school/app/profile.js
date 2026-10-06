@@ -1,5 +1,6 @@
 const $ = sel => document.querySelector(sel);
 let record = null;
+let comparison = null;
 
 function statusMeta(status){
   return {
@@ -40,9 +41,12 @@ async function loadLearners(){
 }
 
 async function loadRecord(learnerId){
-  const response=await fetch("/api/record?learner="+encodeURIComponent(learnerId),{cache:"no-store"});
-  if(!response.ok) throw new Error("Could not load learner record");
-  record=await response.json();
+  const recordResponse=await fetch("/api/record?learner="+encodeURIComponent(learnerId),{cache:"no-store"});
+  const comparisonResponse=await fetch("/api/comparison?learner="+encodeURIComponent(learnerId),{cache:"no-store"});
+  if(!recordResponse.ok) throw new Error("Could not load learner record");
+  if(!comparisonResponse.ok) throw new Error("Could not load Missouri comparison");
+  record=await recordResponse.json();
+  comparison=await comparisonResponse.json();
   render();
 }
 
