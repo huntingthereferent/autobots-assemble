@@ -1,4 +1,4 @@
-# Language Network
+# Continuity Layer
 
 A persistent external operating environment for **complete-stack problem solving**.
 
