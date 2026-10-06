@@ -28,7 +28,9 @@ class PersonalOperationsStore:
         if self.path and self.path.exists():
             for line in self.path.read_text(encoding="utf-8").splitlines():
                 if line.strip():
-                    self._replay(json.loads(line))
+                    event = json.loads(line)
+                    self._events.append(event)
+                    self._replay(event)
 
     def _append(self, event: dict[str, Any]) -> None:
         self._events.append(event)
