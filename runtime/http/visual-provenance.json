@@ -4,22 +4,21 @@
   "surface_path": "runtime/http/index.html",
   "template_id": "continuity_social_hub_v1",
   "preserve": [
-    "movement-first hierarchy",
-    "cross-system feed",
-    "thread/reply/return lineage",
+    "social-feed hierarchy",
+    "composer-first participation",
+    "thread/reply lineage",
     "source-system provenance",
-    "movement anchors",
-    "time attached to movement rather than replacing it"
+    "navigation identity and activity context",
+    "time attached to entries without becoming the page structure"
   ],
   "local_additions": [
     "ohayo activation entrance",
-    "Calendar movement anchors",
-    "live handoff state",
-    "supporting notes/plans/tasks/reminders",
+    "live handoff and attention data projected as feed activity",
+    "supporting notes/plans/tasks/reminders behind social-style entry points",
     "future Online School, Factory, research, jobs, and other system sources"
   ],
   "deviations": [
-    "The current implementation still exposes some supporting records in management forms while the unified contextual composer/feed actions are built."
+    "Internal movement anchors remain available to pipes/calendar but are not part of the visible homepage taxonomy."
   ],
   "last_reviewed": "2026-10-06"
 }
