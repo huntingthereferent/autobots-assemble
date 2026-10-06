@@ -10,6 +10,7 @@ import sys
 import mimetypes
 import os
 import threading
+import uuid
 
 ROOT = Path(__file__).resolve().parent
 REPO_ROOT = ROOT.parents[2]
@@ -37,12 +38,41 @@ def default_state():
         "schema_version": 1,
         "tasks": [],
         "worksheets": [],
-        "learners": [
-            {"id": "track_a", "display_name": "Learner A", "grade_context": "3"},
-            {"id": "track_b", "display_name": "Learner B", "grade_context": "1"},
-        ],
+        "learners": [],
         "settings": {"school_name": "Online School"},
     }
+
+
+def normalize_state(state):
+    placeholders = {"track_a", "track_b"}
+    learners = [
+        item
+        for item in state.get("learners", [])
+        if not (
+            str(item.get("id") or "") in placeholders
+            and str(item.get("display_name") or "") in {"Learner A", "Learner B"}
+        )
+    ]
+    state["learners"] = learners
+
+    normalized_tasks = []
+    current_ids = [str(item.get("id") or "") for item in learners]
+    for task in state.get("tasks", []):
+        ids = [str(x) for x in task.get("learner_ids", [])]
+        if (
+            task.get("source") == "schedule_template:individualized_tracks"
+            and ids
+            and set(ids).issubset(placeholders)
+        ):
+            continue
+        if task.get("scope") == "shared":
+            task = dict(task)
+            task["learner_ids"] = [
+                learner_id for learner_id in ids if learner_id not in placeholders
+            ] or current_ids
+        normalized_tasks.append(task)
+    state["tasks"] = normalized_tasks
+    return state
 
 
 def load_state():
@@ -51,7 +81,12 @@ def load_state():
         state = default_state()
         save_state(state)
         return state
-    return json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
+    before = json.dumps(state, sort_keys=True)
+    normalized = normalize_state(state)
+    if json.dumps(normalized, sort_keys=True) != before:
+        save_state(normalized)
+    return normalized
 
 
 def save_state(state):
@@ -63,6 +98,25 @@ def save_state(state):
 
 def education_kernel():
     return EducationKernel(EDUCATION_PATH)
+
+
+def adapt_generated_to_learners(generated, state):
+    learner_ids = {
+        str(item.get("id") or "")
+        for item in state.get("learners", [])
+        if str(item.get("id") or "")
+    }
+    adapted = []
+    for task in generated:
+        task = dict(task)
+        ids = [str(x) for x in task.get("learner_ids", [])]
+        if task.get("scope") == "individual":
+            if not ids or not set(ids).issubset(learner_ids):
+                continue
+        elif task.get("scope") == "shared":
+            task["learner_ids"] = sorted(learner_ids)
+        adapted.append(task)
+    return adapted
 
 
 def json_body(handler):
@@ -107,6 +161,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
             with LOCK:
                 state = load_state()
+                generated = adapt_generated_to_learners(generated, state)
                 state["tasks"], _added = merge_generated(
                     state.get("tasks", []),
                     generated,
@@ -165,6 +220,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
             with LOCK:
                 state = load_state()
+                generated = adapt_generated_to_learners(generated, state)
                 state["tasks"], added = merge_generated(state.get("tasks", []), generated)
                 save_state(state)
                 tasks = [t for t in state["tasks"] if t.get("date") == day]
@@ -194,6 +250,32 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         parsed = urlparse(self.path)
+
+        if parsed.path == "/api/learners":
+            try:
+                payload = json_body(self)
+                name = str(payload.get("display_name") or "").strip()
+                grade = str(payload.get("grade_context") or "").strip()
+                if not name:
+                    raise ValueError("name is required")
+                learner = {
+                    "id": "learner_" + uuid.uuid4().hex[:12],
+                    "display_name": name,
+                    "grade_context": grade,
+                }
+                with LOCK:
+                    state = load_state()
+                    state.setdefault("learners", []).append(learner)
+                    for task in state.get("tasks", []):
+                        if task.get("scope") == "shared":
+                            ids = [str(x) for x in task.get("learner_ids", [])]
+                            if learner["id"] not in ids:
+                                task["learner_ids"] = ids + [learner["id"]]
+                    save_state(state)
+                self.send_json(learner, 201)
+            except (ValueError, TypeError, json.JSONDecodeError) as exc:
+                self.api_error(str(exc))
+            return
 
         if parsed.path == "/api/observations":
             try:
@@ -248,6 +330,7 @@ class Handler(BaseHTTPRequestHandler):
                 generated = generate_tasks(start, end)
                 with LOCK:
                     state = load_state()
+                    generated = adapt_generated_to_learners(generated, state)
                     state["tasks"], added = merge_generated(state.get("tasks", []), generated)
                     save_state(state)
                 self.send_json({"added": added, "generated": len(generated), "start": start, "end": end}, 201)

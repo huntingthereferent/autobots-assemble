@@ -157,6 +157,9 @@ class OnlineSchoolWorkspaceTests(unittest.TestCase):
         html = (APP / "index.html").read_text(encoding="utf-8")
         self.assertIn('"/api/school"', server)
         self.assertIn('"/api/observations"', server)
+        self.assertIn('"/api/learners"', server)
+        self.assertNotIn('"display_name": "Learner A"', server)
+        self.assertNotIn('"display_name": "Learner B"', server)
         self.assertIn(
             '<meta name="visual-template" content="education_workspace_v1">',
             html,

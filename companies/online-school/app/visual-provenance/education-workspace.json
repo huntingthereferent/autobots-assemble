@@ -4,28 +4,28 @@
   "surface_path": "companies/online-school/app/index.html",
   "template_id": "education_workspace_v1",
   "preserve": [
-    "learner-first hierarchy",
+    "person-first entrance with no fake default learner identities",
+    "kid workspace before operator dashboard",
     "reference schools remain witnesses rather than copy contracts",
-    "compressed derived front over traced underlying layers",
-    "stable subject orientation without subject becoming the kernel",
-    "current learning and do-next are visually dominant",
-    "today and recent evidence stay near the current front",
-    "obligations, artifacts and schedule remain reachable but subordinate",
-    "restrained colorful navigation with clear scan hierarchy"
+    "one obvious current thing in front",
+    "playful subject orientation without subject becoming the kernel",
+    "today and saved work stay easy to reach",
+    "requirements, schedule, exact evidence and provenance stay underneath in grown-up details",
+    "friendly empty states do not invent learner state"
   ],
   "local_additions": [
-    "front projection from current learner relation, real day movement and latest observation",
-    "date-scoped school movement",
-    "Missouri obligation context",
-    "worksheet studio link",
-    "manual school activity entry",
-    "evidence-grounded learner relations",
-    "deep learning details preserve exact traced state behind the compressed surface"
+    "first-run name and grade onboarding",
+    "local learner creation",
+    "placeholder learner normalization",
+    "generated schedule work cannot recreate missing placeholder identities",
+    "kid-facing jump tiles for reading, math, exploration and making",
+    "evidence-grounded observations from ordinary language",
+    "grown-up drawer for required curriculum, time structure and deeper evidence"
   ],
   "deviations": [
-    "Do-next currently selects from real scheduled movement already in front; the kernel does not yet synthesize a new actuator from the learner relation.",
-    "Recent change currently comes from recorded observations; returned artifact and handoff evidence are not yet automatically converted into observations.",
-    "Needs-to-learn currently projects the loaded curriculum obligations rather than filtering them by reachability from the current relation."
+    "The current thing in front still comes from real scheduled work when present; the kernel does not yet derive a new actuator from current evidence.",
+    "Grade context can be entered during onboarding, but unsupported grade curriculum paths currently remain empty.",
+    "Returned artifact and handoff evidence are not yet automatically converted into learner observations."
   ],
   "last_reviewed": "2026-10-05"
 }

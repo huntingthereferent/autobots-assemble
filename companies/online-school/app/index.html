@@ -5,204 +5,205 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="visual-template" content="education_workspace_v1">
   <title>Online School</title>
-  <meta name="description" content="A natural, evidence-grounded education workspace.">
+  <meta name="description" content="A kid-first learning workspace.">
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <div class="app-shell">
-    <header class="app-header">
+  <section id="welcome" class="welcome-screen" hidden>
+    <div class="welcome-card">
+      <div class="welcome-orbit orbit-a"></div>
+      <div class="welcome-orbit orbit-b"></div>
+      <div class="welcome-logo">O</div>
+      <p class="tiny-label">Online School</p>
+      <h1>Hi 👋<br>What’s your name?</h1>
+      <p class="welcome-copy">This is your learning space. We’ll start with you, then figure out what belongs in front.</p>
+      <form id="welcome-form" class="welcome-form">
+        <label>
+          <span>Your name</span>
+          <input name="display_name" autocomplete="given-name" maxlength="50" required placeholder="Type your name">
+        </label>
+        <label>
+          <span>Your grade</span>
+          <select name="grade_context">
+            <option value="">Not sure yet</option>
+            <option value="1">1st grade</option>
+            <option value="2">2nd grade</option>
+            <option value="3">3rd grade</option>
+            <option value="4">4th grade</option>
+            <option value="5">5th grade</option>
+            <option value="6">6th grade</option>
+            <option value="7">7th grade</option>
+            <option value="8">8th grade</option>
+            <option value="9">9th grade</option>
+            <option value="10">10th grade</option>
+            <option value="11">11th grade</option>
+            <option value="12">12th grade</option>
+          </select>
+        </label>
+        <button class="welcome-button" type="submit">Make my space <span>→</span></button>
+        <p id="welcome-error" class="form-error" hidden></p>
+      </form>
+    </div>
+  </section>
+
+  <div id="workspace" class="workspace-shell" hidden>
+    <header class="kid-header">
       <a class="brand" href="./">
-        <span class="brand-mark">O</span>
-        <span><strong>Online School</strong><small>learn from what is here</small></span>
+        <span class="brand-bubble">O</span>
+        <strong>Online School</strong>
       </a>
-      <nav class="main-nav" aria-label="Main">
-        <a href="#now">Now</a>
+      <nav class="kid-nav" aria-label="Workspace">
+        <a href="#home" class="active">Home</a>
         <a href="#today">Today</a>
-        <a href="#learning">Learning</a>
-        <a href="#work">Work</a>
-        <a href="#schedule">Schedule</a>
+        <a href="#my-work">My work</a>
       </nav>
-      <div class="header-actions">
-        <label class="day-control"><span>Day</span><input id="day" type="date"></label>
-        <a id="worksheet-studio-link" class="tool-button" href="./worksheet.html">Studio ↗</a>
+      <div class="header-right">
+        <label class="date-pill"><span>📅</span><input id="day" type="date"></label>
+        <button id="profile-button" class="profile-bubble" type="button" aria-label="Switch learner">?</button>
       </div>
     </header>
 
-    <main class="content">
-      <section class="learner-bar">
-        <div id="learner-tabs" class="learner-tabs"></div>
+    <main class="kid-main">
+      <section id="home" class="hello-row">
+        <div>
+          <p id="day-greeting" class="eyebrow">Your space</p>
+          <h1 id="hello-name">Hey!</h1>
+          <p class="hello-copy">Here’s what’s around you today.</p>
+        </div>
+        <div id="learner-tabs" class="learner-switcher"></div>
       </section>
 
-      <section id="now" class="hero-grid">
-        <article class="now-card">
-          <div class="card-kicker">
-            <span class="pulse-dot"></span>
-            <span>Learning now</span>
+      <section class="desk-grid">
+        <article class="focus-card">
+          <div class="focus-top">
+            <span class="spark">✦</span>
+            <span>In front right now</span>
           </div>
-          <div id="learning-now" class="learning-now"></div>
-          <div id="learning-empty" class="empty-state" hidden>
-            Nothing has to be assumed. Add what you actually notice.
+          <div id="focus-content" class="focus-content"></div>
+          <div id="focus-empty" class="focus-empty" hidden>
+            <div class="empty-planet">◌</div>
+            <h2>Nothing is pulling you right now.</h2>
+            <p>You can pick something from today, make something, read, ask a question, or explore.</p>
           </div>
-          <button id="show-observation" class="quiet-link" type="button">+ What happened?</button>
+          <div class="focus-actions">
+            <button id="focus-done" class="big-action" type="button" hidden>Done ✓</button>
+            <button id="focus-tell" class="soft-action" type="button">Tell what happened</button>
+          </div>
         </article>
 
-        <article class="next-card">
-          <div class="card-kicker"><span>Do next</span></div>
-          <div id="do-next" class="do-next"></div>
-          <div class="next-actions">
-            <button id="complete-next" class="primary-action" type="button" hidden>Done</button>
-            <button id="open-schedule" class="secondary-action" type="button">See today</button>
+        <aside class="jump-card">
+          <div class="jump-head">
+            <span>Jump into</span>
+            <span class="squiggle">〰</span>
           </div>
-        </article>
+          <div class="jump-grid">
+            <button class="jump-tile tile-read" data-jump="Reading" type="button"><span>📖</span><strong>Read</strong><small>stories & words</small></button>
+            <button class="jump-tile tile-math" data-jump="Math" type="button"><span>✏️</span><strong>Math</strong><small>numbers & puzzles</small></button>
+            <button class="jump-tile tile-science" data-jump="Science" type="button"><span>🔬</span><strong>Explore</strong><small>science & questions</small></button>
+            <a class="jump-tile tile-make" id="studio-link" href="./worksheet.html"><span>🎨</span><strong>Make</strong><small>create something</small></a>
+          </div>
+        </aside>
       </section>
 
-      <section id="today" class="section-block">
-        <div class="section-heading">
+      <section id="today" class="workspace-section">
+        <div class="section-title">
           <div>
             <p class="eyebrow">Today</p>
-            <h2>What is in front</h2>
+            <h2>Your things</h2>
           </div>
-          <span id="today-summary" class="section-meta"></span>
+          <span id="today-summary" class="section-count"></span>
         </div>
-        <div id="today-list" class="timeline"></div>
-        <div id="today-empty" class="empty-line" hidden>Nothing is assigned right now.</div>
-        <details class="shared-toggle">
-          <summary>Shared learning</summary>
-          <div id="shared-list" class="timeline compact"></div>
+        <div id="today-list" class="task-cards"></div>
+        <div id="today-empty" class="friendly-empty" hidden>You don’t have anything assigned here right now.</div>
+        <details class="shared-box">
+          <summary>Things everyone is doing</summary>
+          <div id="shared-list" class="task-cards mini"></div>
         </details>
       </section>
 
-      <section id="learning" class="split-section">
-        <div class="section-block">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">What changed</p>
-              <h2>Recent learning</h2>
+      <section class="workspace-section color-section">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">Your brain has been busy</p>
+            <h2>Things you’ve noticed</h2>
+          </div>
+          <button id="add-notice" class="small-pill" type="button">+ Add one</button>
+        </div>
+        <div id="recent-change" class="notice-space"></div>
+      </section>
+
+      <section id="my-work" class="workspace-section">
+        <div class="section-title">
+          <div>
+            <p class="eyebrow">My work</p>
+            <h2>Things you’ve made</h2>
+          </div>
+          <a id="create-worksheet-link" class="small-pill" href="./worksheet.html">+ Make something</a>
+        </div>
+        <div id="artifacts" class="creation-grid"></div>
+        <div id="artifacts-empty" class="friendly-empty" hidden>Nothing saved yet. Your creations will show up here.</div>
+      </section>
+
+      <details class="grownup-drawer">
+        <summary><span>⚙️</span> Grown-up stuff</summary>
+        <div class="grownup-grid">
+          <section>
+            <div class="section-title tight">
+              <div><p class="eyebrow">Required</p><h2>School map</h2></div>
             </div>
-            <span id="observation-count" class="section-meta"></span>
-          </div>
-          <div id="recent-change" class="recent-change"></div>
-          <button id="show-observation-2" class="quiet-link" type="button">Add observation</button>
-        </div>
-
-        <div class="section-block">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Still reachable</p>
-              <h2>Needs to learn</h2>
+            <div id="obligations" class="requirement-list"></div>
+          </section>
+          <section>
+            <div class="section-title tight">
+              <div><p class="eyebrow">Time</p><h2>Schedule</h2></div>
             </div>
-            <button id="toggle-obligations" class="quiet-link" type="button">Show all</button>
-          </div>
-          <div id="obligations" class="need-list"></div>
-        </div>
-      </section>
-
-      <section id="work" class="section-block">
-        <div class="section-heading">
-          <div>
-            <p class="eyebrow">Work</p>
-            <h2>Things made along the way</h2>
-          </div>
-          <a id="create-worksheet-link" href="./worksheet.html" class="quiet-link">Create worksheet ↗</a>
-        </div>
-        <div id="artifacts" class="artifact-grid"></div>
-        <div id="artifacts-empty" class="empty-line" hidden>No saved work yet.</div>
-      </section>
-
-      <section id="schedule" class="section-block schedule-block">
-        <details>
-          <summary class="schedule-summary">
-            <span>
-              <span class="eyebrow">Time structure</span>
-              <strong>Schedule</strong>
-            </span>
-            <span id="task-total" class="section-meta"></span>
-          </summary>
-          <div id="rhythm-list" class="rhythm-row"></div>
-          <div class="schedule-tools">
-            <span>Everything scheduled for this day</span>
-            <button id="add-task" class="quiet-link" type="button">+ Add activity</button>
-          </div>
-          <div id="all-tasks" class="timeline"></div>
-        </details>
-      </section>
-
-      <details class="deep-details">
-        <summary>Learning details</summary>
-        <div class="deep-grid">
-          <div>
-            <h3>Current evidence</h3>
-            <div id="all-relations"></div>
-          </div>
-          <div>
-            <h3>Why the page looks this simple</h3>
+            <div id="rhythm-list" class="rhythm-list"></div>
+          </section>
+          <section class="grownup-wide">
+            <div class="section-title tight">
+              <div><p class="eyebrow">Evidence</p><h2>Learning details</h2></div>
+            </div>
+            <div id="all-relations" class="relation-details"></div>
             <div id="boundaries" class="boundary-list"></div>
-          </div>
+          </section>
         </div>
       </details>
     </main>
   </div>
 
-  <dialog id="observation-dialog">
+  <dialog id="observation-dialog" class="kid-dialog">
     <form id="observation-form">
-      <div class="dialog-head">
-        <div>
-          <p class="eyebrow">What happened?</p>
-          <h2>Update from what you noticed</h2>
-        </div>
-        <button id="close-observation" class="icon-button" type="button">×</button>
+      <div class="dialog-top">
+        <div><p class="eyebrow">Tell us</p><h2>What happened?</h2></div>
+        <button id="close-observation" class="round-close" type="button">×</button>
       </div>
-      <label>What were they working with?
-        <input name="referent" required placeholder="making ten, reading a new word, sharing equally…">
+      <label>What were you doing?
+        <input name="referent" required placeholder="reading, fractions, drawing a map…">
       </label>
-      <label>What did you notice?
-        <textarea name="observed" required rows="4" placeholder="Use normal words. What did they do, say, notice, ask, or need?"></textarea>
+      <label>What happened?
+        <textarea name="observed" required rows="4" placeholder="I figured out… / I got stuck on… / I noticed…"></textarea>
       </label>
-      <details class="advanced-fields">
-        <summary>Optional learning detail</summary>
-        <div class="two-col">
-          <label>This shows they can…
-            <textarea name="supports" rows="2" placeholder="One thing per line"></textarea>
-          </label>
-          <label>This changes what we thought about…
-            <textarea name="contradicts" rows="2" placeholder="One thing per line"></textarea>
-          </label>
-        </div>
+      <details class="grownup-fields">
+        <summary>More detail</summary>
+        <label>This shows…
+          <textarea name="supports" rows="2"></textarea>
+        </label>
+        <label>This changed…
+          <textarea name="contradicts" rows="2"></textarea>
+        </label>
       </details>
-      <div class="dialog-actions">
-        <button id="cancel-observation" class="secondary-action" type="button">Cancel</button>
-        <button class="primary-action" type="submit">Save what happened</button>
-      </div>
-      <p id="observation-error" class="error" hidden></p>
+      <button class="big-action" type="submit">Save it</button>
+      <p id="observation-error" class="form-error" hidden></p>
     </form>
   </dialog>
 
-  <dialog id="task-dialog">
-    <form id="task-form">
-      <div class="dialog-head">
-        <div><p class="eyebrow">Add something</p><h2>Put it in the day</h2></div>
-        <button id="close-dialog" class="icon-button" type="button">×</button>
-      </div>
-      <label>What is it?
-        <input name="title" required placeholder="Library trip, practice, experiment…">
-      </label>
-      <div class="two-col">
-        <label>About how long?
-          <input name="planned_minutes" type="number" min="0" max="1440" step="5" value="30">
-        </label>
-        <label>Who?
-          <select name="learner"></select>
-        </label>
-      </div>
-      <label>Anything useful to remember?
-        <textarea name="notes" rows="3"></textarea>
-      </label>
-      <div class="dialog-actions">
-        <button id="cancel-task" type="button" class="secondary-action">Cancel</button>
-        <button class="primary-action" type="submit">Add</button>
-      </div>
-      <p id="task-error" class="error" hidden></p>
-    </form>
+  <dialog id="switch-dialog" class="kid-dialog small-dialog">
+    <div class="dialog-top">
+      <div><p class="eyebrow">Who’s learning?</p><h2>Switch space</h2></div>
+      <button id="close-switch" class="round-close" type="button">×</button>
+    </div>
+    <div id="switch-list" class="switch-list"></div>
+    <button id="add-person" class="soft-action full" type="button">+ Add another learner</button>
   </dialog>
 
   <script src="./app.js" defer></script>
