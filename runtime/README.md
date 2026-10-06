@@ -98,9 +98,52 @@ A handoff cannot become `COMPLETE` unless every required witness is returned usi
 - `engine.py` — append-only event store and runtime
 - `projections.py` — task/job/command projections
 - `activation.py` — explicit actor+surface activation routes over existing handoff state
+- `orchestrator.py` — generic system registration, routing, automatic execution, and result reconciliation
 - `handoff.schema.json` — external serialized handoff shape
 - `examples/cross_layer.py` — same carrier across James/school/software/factory
 - `examples/tiny_factory.py` — sequential simulated production run
 - `examples/ohayo.py` — James `ohayo` activation over a mixed handoff set
+- `examples/full_ecosystem.py` — Personal Operations + Online School + Factory under one orchestrator
 
 The examples are witnesses for the runtime shape, not claims about physical production.
+
+
+## Multi-system orchestration
+
+`Orchestrator` sits above the shared runtime without owning any system's local state.
+
+Each registered system exposes a small boundary:
+
+```text
+emit_ready()
+→ zero or more SystemEmission records
+
+reconcile(emission, returned_handoff_state)
+→ mutate/reconcile only that system's local state
+```
+
+The orchestrator:
+
+1. asks each system what is ready;
+2. submits new handoffs to the shared runtime;
+3. automatically executes handoffs when a registered executable actor exists;
+4. leaves human/unconnected handoffs READY;
+5. routes returned results back to the system that emitted them.
+
+This means an automated factory can continue moving while human work remains visible in projections such as `ohayo`.
+
+The demonstrated full ecosystem currently contains:
+
+```text
+Personal Operations
+Online School
+Factory System
+        ↓
+shared Orchestrator + HandoffRuntime
+        ↓
+human actors / simulated actors
+        ↓
+activation projections
+```
+
+The systems retain different local schemas. The shared boundary is the handoff.
