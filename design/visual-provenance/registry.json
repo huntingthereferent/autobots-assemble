@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "templates": [
+    {
+      "template_id": "notegpt_math_generator_v1",
+      "layer": "worksheet_generation",
+      "status": "approved",
+      "path": "design/visual-provenance/templates/notegpt_math_generator_v1.json"
+    }
+  ]
+}

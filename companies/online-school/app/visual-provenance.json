@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "surface_id": "online_school_worksheet_studio",
+  "surface_path": "companies/online-school/app/worksheet.html",
+  "template_id": "notegpt_math_generator_v1",
+  "preserve": [
+    "single-purpose generator flow",
+    "compact conventional controls",
+    "one obvious generation action",
+    "restrained visual treatment",
+    "print artifact visually distinct from configuration controls"
+  ],
+  "local_additions": [
+    "knowledge goal",
+    "learner and subject context",
+    "support/standard/challenge level",
+    "deterministic seed and variant",
+    "editable questions and answer key",
+    "saved worksheet library",
+    "curriculum and homework movement behind the surface"
+  ],
+  "deviations": [
+    "Online School exposes post-generation editing because worksheets are durable school artifacts.",
+    "Online School preserves curriculum/evidence relations that are not part of the source visual witness."
+  ],
+  "last_reviewed": "2026-10-05"
+}

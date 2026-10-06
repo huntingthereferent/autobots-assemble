@@ -49,6 +49,12 @@ POST   /api/worksheets
 DELETE /api/worksheets/{id}
 ```
 
+## Visual provenance
+
+This app participates in the repository visual-provenance layer. `visual-provenance.json` binds Worksheet Studio to the approved `notegpt_math_generator_v1` visual template. The template preserves useful visual grammar from its witness while explicitly excluding brand copying, proprietary assets, exact page composition, and decorative drift.
+
+`worksheet.html` also declares the template through `<meta name="visual-template" content="notegpt_math_generator_v1">`, making the rendered surface traceable back to its design witness and adaptation rules.
+
 ## Worksheet Studio
 
 `/worksheet.html` is the native printable worksheet authoring surface. It is not a separate product: saved worksheets live in Online School state and remain available to later school/runtime layers.

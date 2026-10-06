@@ -37,6 +37,7 @@ The repository is **not A/B itself**. A/B remains the recursively reusable mathe
 - **activations/** — explicit human-language entrances into current ecosystem state.
 - **state/** — current routing pointer.
 - **views/** — read-only/generated projections.
+- **design/visual-provenance/** — reusable visual witnesses, extracted visual grammar, surface bindings, and web-surface contracts so interfaces preserve visual provenance instead of drifting into generic AI aesthetics.
 - **domains/** — specialized adapters only when a distinct domain witness contract is actually needed.
 
 ## First capability proof

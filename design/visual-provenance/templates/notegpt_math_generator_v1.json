@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "template_id": "notegpt_math_generator_v1",
+  "name": "Clean Math Generator",
+  "layer": "worksheet_generation",
+  "status": "approved",
+  "intent": "A restrained, modern worksheet-generation surface that feels like a practical human-made tool rather than a generic AI dashboard.",
+  "witnesses": [
+    {
+      "kind": "website",
+      "source": "https://notegpt.io/ai-math-worksheet",
+      "observed_on": "2026-10-05",
+      "notes": "Visual witness only. Preserve useful layout grammar and interaction clarity; do not copy branding, copy, proprietary assets, or distinctive implementation details."
+    }
+  ],
+  "grammar": {
+    "layout": {
+      "shape": "single-purpose generator flowing from configuration toward output",
+      "grouping": "controls grouped by the decision they affect",
+      "primary_action": "one obvious generation action",
+      "preview": "worksheet/result is visually subordinate until generation"
+    },
+    "hierarchy": {
+      "strength": "clear",
+      "sequence": [
+        "purpose",
+        "configuration",
+        "generation",
+        "result"
+      ],
+      "marketing_weight": "low inside the tool"
+    },
+    "density": "medium-compact",
+    "controls": {
+      "treatment": "conventional labeled inputs/selects with low-friction scanning",
+      "choice_count": "bounded and explicit",
+      "advanced_options": "visible only when useful"
+    },
+    "surface": {
+      "decoration": "restrained",
+      "cards": "use grouping only when grouping carries meaning",
+      "radius": "moderate, not bubble-like",
+      "shadows": "minimal",
+      "color": "neutral base with one functional accent"
+    },
+    "typography": {
+      "tone": "plain, legible, professional",
+      "hierarchy": "large page purpose, compact labels, readable result content"
+    },
+    "motion": {
+      "default": "quiet",
+      "rule": "animation only when it explains state change"
+    },
+    "print": {
+      "rule": "generated worksheet is the artifact; controls disappear cleanly from print/PDF"
+    }
+  },
+  "avoid": [
+    "generic AI gradient backgrounds",
+    "decorative glow",
+    "icon spam",
+    "excessive rounded cards",
+    "fake futuristic styling",
+    "large empty hero areas inside working tools",
+    "marketing copy mixed into the task flow",
+    "unnecessary animation",
+    "visual elements that do not encode state, hierarchy, or action"
+  ],
+  "adaptation_rules": [
+    "Preserve the fast generator feel while keeping Online School curriculum provenance visible when it materially helps the user.",
+    "Do not imitate NoteGPT branding, logos, wording, proprietary illustrations, or exact page composition.",
+    "Prefer conventional controls over novel controls when both express the same relation.",
+    "Keep editing and saved-library capabilities available without letting them dominate initial generation.",
+    "The worksheet preview must look like a printable educational artifact, not another dashboard card.",
+    "Knowledge-path and evidence features may add depth behind the surface without increasing visual noise."
+  ],
+  "review": {
+    "confidence": "high",
+    "notes": "Approved as the first worksheet-generation visual witness."
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "visual-template.schema.json",
+  "title": "Visual Provenance Template",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "template_id",
+    "name",
+    "layer",
+    "status",
+    "intent",
+    "witnesses",
+    "grammar",
+    "avoid",
+    "adaptation_rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "template_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "layer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "approved",
+        "deprecated"
+      ]
+    },
+    "intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "witnesses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "source",
+          "observed_on"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "website",
+              "app",
+              "document",
+              "image",
+              "physical",
+              "internal"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observed_on": {
+            "type": "string",
+            "format": "date"
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "grammar": {
+      "type": "object",
+      "required": [
+        "layout",
+        "hierarchy",
+        "density",
+        "controls",
+        "surface",
+        "typography"
+      ],
+      "additionalProperties": true
+    },
+    "avoid": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "adaptation_rules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "review": {
+      "type": "object",
+      "properties": {
+        "confidence": {
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
