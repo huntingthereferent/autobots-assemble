@@ -255,3 +255,23 @@ test("100 reports conserve witnesses across domain and nested source projections
   }
   assert.equal(JSON.stringify(rows), before);
 });
+
+test("configured unavailable sources remain nested in their empty domain", () => {
+  const snapshot = {items: [], sources: [{id:"sec", name:"SEC", topics:["markets"], ok:false, error:"Timeout"}]};
+  const layer = context.tickerLayers(snapshot).find(x => x.id === "domain:markets");
+  assert.equal(context.tickerSummary(layer, snapshot).status, "Sources unavailable");
+  const branches = context.tickerSourceBranches(layer, snapshot);
+  assert.equal(branches.length, 1);
+  assert.equal(branches[0].source, snapshot.sources[0]);
+  const card = context.tickerCard(layer, snapshot, new Set());
+  assert.ok(walk(card).some(x => x.textContent === "SEC"));
+  assert.ok(walk(card).some(x => x.textContent === "Timeout"));
+  snapshot.sources[0].ok = true;
+  assert.equal(context.tickerSummary(layer, snapshot).status, "No sampled items");
+});
+
+test("publisher-feed scope remains visible on the native witness card", () => {
+  const card = context.liveFeedCard(row("BBC", {topics:["learning"],
+    topic_basis:{kind:"publisher_feed_scope", feed_url:"https://example.org/education.xml"}}));
+  assert.ok(walk(card).some(x => (x.textContent || "").includes("Coverage: learning · publisher feed scope")));
+});

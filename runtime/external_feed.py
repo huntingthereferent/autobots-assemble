@@ -23,6 +23,37 @@ HN_ITEM = "https://hacker-news.firebaseio.com/v0/item/{item_id}.json"
 REUTERS_YOUTUBE = "https://www.youtube.com/feeds/videos.xml?channel_id=UChqUTb7kYRX8-EiaN3XFrSQ"
 BBC_NEWS_RSS = "https://feeds.bbci.co.uk/news/rss.xml"
 
+# Topic admission follows the publisher's feed scope, never headline guesses.
+REPORT_FEEDS = {
+    "bbc_world": {"name": "BBC World", "publisher": "BBC News",
+        "url": "https://feeds.bbci.co.uk/news/world/rss.xml", "topics": ("world",),
+        "documentation": "https://support.bbc.co.uk/platform/feeds/NewsFeeds.htm"},
+    "bbc_sport": {"name": "BBC Sport", "publisher": "BBC Sport",
+        "url": "https://feeds.bbci.co.uk/sport/rss.xml", "topics": ("sports",),
+        "documentation": "https://www.bbc.co.uk/sport/articles/cqllxj2n4kyo"},
+    "bbc_education": {"name": "BBC Education", "publisher": "BBC News",
+        "url": "https://feeds.bbci.co.uk/news/education/rss.xml", "topics": ("learning",),
+        "documentation": "https://support.bbc.co.uk/platform/feeds/UkNews.htm"},
+    "bls_productivity": {"name": "BLS Productivity and Costs", "publisher": "Bureau of Labor Statistics",
+        "url": "https://www.bls.gov/feed/prod2.rss", "topics": ("industry",),
+        "documentation": "https://www.bls.gov/feed/"},
+    "bls_jobs": {"name": "BLS Job Openings and Labor Turnover", "publisher": "Bureau of Labor Statistics",
+        "url": "https://www.bls.gov/feed/jolts.rss", "topics": ("work",),
+        "documentation": "https://www.bls.gov/feed/"},
+    "sec_releases": {"name": "SEC Press Releases", "publisher": "Securities and Exchange Commission",
+        "url": "https://www.sec.gov/news/pressreleases.rss", "topics": ("markets",),
+        "documentation": "https://www.sec.gov/about/rss-feeds"},
+    "nsf_news": {"name": "NSF Research News", "publisher": "National Science Foundation",
+        "url": "https://www.nsf.gov/rss/rss_www_news.xml", "topics": ("research",),
+        "documentation": "https://www.nsf.gov/rss"},
+    "loc_music": {"name": "Library of Congress Performing Arts", "publisher": "Library of Congress",
+        "url": "https://blogs.loc.gov/music/feed/", "topics": ("culture",),
+        "documentation": "https://blogs.loc.gov/music/"},
+    "cpsc_recalls": {"name": "CPSC Product Recalls", "publisher": "Consumer Product Safety Commission",
+        "url": "https://www.cpsc.gov/Newsroom/CPSC-RSS-Feed/Recalls-RSS", "topics": ("household",),
+        "documentation": "https://www.cpsc.gov/Newsroom/CPSC-RSS-Feed"},
+}
+
 _TAG_RE = re.compile(r"<[^>]+>")
 _SPACE_RE = re.compile(r"\s+")
 
@@ -294,12 +325,59 @@ def fetch_bbc_news(limit: int = 12) -> list[dict[str, Any]]:
     return rows
 
 
+def fetch_report_feed(source_id: str, limit: int = 8) -> list[dict[str, Any]]:
+    """Bounded RSS/Atom reports with explicit publisher-feed scope provenance."""
+    spec = REPORT_FEEDS[source_id]
+    root = ET.fromstring(_fetch(spec["url"], timeout=7))
+    atom = "{http://www.w3.org/2005/Atom}"
+    is_atom = root.tag == atom + "feed"
+    if is_atom:
+        nodes = root.findall(atom + "entry")
+    elif root.tag == "rss":
+        nodes = root.findall("./channel/item")
+    else:
+        raise ValueError("response is not a supported RSS or Atom feed")
+    rows = []
+    for node in nodes[:max(0, limit)]:
+        if is_atom:
+            url = next((link.get("href", "") for link in node.findall(atom + "link")
+                        if link.get("rel", "alternate") == "alternate"), "")
+            title = node.findtext(atom + "title", default="")
+            entry_id = node.findtext(atom + "id", default=url)
+            published = node.findtext(atom + "published", default="") or node.findtext(atom + "updated", default="")
+            snippet = node.findtext(atom + "summary", default="") or node.findtext(atom + "content", default="")
+            author = node.findtext(atom + "author/" + atom + "name", default="")
+            categories = [x.get("term", "") for x in node.findall(atom + "category")]
+        else:
+            url = node.findtext("link", default="")
+            title = node.findtext("title", default="")
+            entry_id = node.findtext("guid", default="") or url
+            published = _iso_from_rss(node.findtext("pubDate", default=""))
+            snippet = node.findtext("description", default="")
+            author = node.findtext("author", default="") or node.findtext("{http://purl.org/dc/elements/1.1/}creator", default="")
+            categories = [x.text or "" for x in node.findall("category")]
+        if not url.startswith(("https://", "http://")):
+            continue
+        row = _item(item_id=f"{source_id}:{entry_id}", source_id=source_id,
+                    provider=spec["publisher"], publisher=spec["publisher"],
+                    provider_surface="report_feed", medium="article", roles=("news",),
+                    topics=spec["topics"], title=title, url=url, published_at=published,
+                    author=author, context=spec["name"], snippet=snippet)
+        row["native_categories"] = _many(categories)
+        row["topic_basis"] = {"kind": "publisher_feed_scope", "feed_url": spec["url"],
+                              "documentation": spec["documentation"], "topics": list(spec["topics"])}
+        rows.append(row)
+    return rows
+
+
 FETCHERS: dict[str, Callable[[], list[dict[str, Any]]]] = {
     "reddit": fetch_reddit,
     "hacker_news": fetch_hacker_news,
     "youtube_reuters": fetch_reuters_youtube,
     "bbc_news": fetch_bbc_news,
 }
+FETCHERS.update({source_id: (lambda key=source_id: fetch_report_feed(key))
+                 for source_id in REPORT_FEEDS})
 
 SOURCE_META = {
     "reddit": {"name": "Reddit", "surface": "social_platform", "access": "public RSS"},
@@ -318,6 +396,11 @@ SOURCE_META = {
         "reason": "public endpoint returns 403 from this host; keep external rather than fabricate data",
     },
 }
+SOURCE_META.update({key: {"name": spec["name"], "surface": "report_feed",
+                         "access": "public RSS / Atom", "feed_url": spec["url"],
+                         "documentation": spec["documentation"],
+                         "topics": list(spec["topics"])}
+                    for key, spec in REPORT_FEEDS.items()})
 
 
 class LiveFeed:
@@ -346,7 +429,7 @@ class LiveFeed:
 
         items: list[dict[str, Any]] = []
         statuses = []
-        with ThreadPoolExecutor(max_workers=len(FETCHERS)) as pool:
+        with ThreadPoolExecutor(max_workers=min(8, max(1, len(FETCHERS)))) as pool:
             future_map = {
                 pool.submit(fetcher): source_id
                 for source_id, fetcher in FETCHERS.items()
@@ -401,3 +484,4 @@ class LiveFeed:
             self._cache = snapshot
             self._cached_at = monotonic()
         return snapshot
+

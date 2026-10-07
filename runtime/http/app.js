@@ -221,7 +221,7 @@ function nativeTickerTopics(item) {
     : [];
 }
 
-function domainTickerLayers(items) {
+function domainTickerLayers(items, sources = []) {
   const layers = [];
   TICKER_DOMAINS.forEach(function(domain) {
     const prefix = domain.id + ":";
@@ -229,7 +229,9 @@ function domainTickerLayers(items) {
       return nativeTickerTopics(item).some(topic => topic === domain.id || topic.startsWith(prefix));
     });
     const rootId = "domain:" + domain.id;
-    layers.push({id: rootId, name: domain.name, items: rows, domain: true});
+    const configured = sources.filter(source => nativeTickerTopics(source)
+      .some(topic => topic === domain.id || topic.startsWith(prefix)));
+    layers.push({id: rootId, name: domain.name, items: rows, domain: true, sources: configured});
     const branches = new Set(domain.children);
     // Source-provided paths add concrete countries, companies, leagues, etc.
     rows.forEach(item => nativeTickerTopics(item).forEach(function(topic) {
@@ -243,6 +245,8 @@ function domainTickerLayers(items) {
       const parentBranch = branch.includes(":") ? branch.slice(0, branch.lastIndexOf(":")) : "";
       layers.push({id: "domain:" + topic, parentId: parentBranch ? "domain:" + prefix + parentBranch : rootId,
         name: branch.split(":").slice(-1)[0], domain: true,
+        sources: configured.filter(source => nativeTickerTopics(source)
+          .some(tag => tag === topic || tag.startsWith(topic + ":"))),
         items: rows.filter(item => nativeTickerTopics(item).some(tag => tag === topic || tag.startsWith(topic + ":")))});
     });
   });
@@ -257,7 +261,7 @@ function tickerLayers(snapshot) {
       return {id: "role:" + role, name: role[0].toUpperCase() + role.slice(1),
         items: items.filter(item => liveItemMatchesFilter(item, role))};
     }),
-    ...domainTickerLayers(items)
+    ...domainTickerLayers(items, snapshot.sources || [])
   ];
   const sources = new Map((snapshot.sources || []).map(source => [source.id, source]));
   items.forEach(function(item) {
@@ -277,9 +281,12 @@ function tickerSummary(layer, snapshot) {
     .filter(entry => Number.isFinite(entry.time)).sort((a, b) => b.time - a.time);
   const sourceCount = new Set(items.map(item => item.source_id)).size;
   const unavailable = layer.source && layer.source.ok === false;
+  const configured = layer.sources || [];
+  const noAvailableSources = configured.length && configured.every(source => source.ok === false);
   const status = unavailable ? "Unavailable" :
     (items.length ? items.length + " witnesses · " + sourceCount + " feeds" :
-      layer.domain ? "No connected witnesses" : "No sampled items");
+      noAvailableSources ? "Sources unavailable" :
+      layer.domain && !configured.length ? "No connected witnesses" : "No sampled items");
   return {
     status,
     latest: dated.length ? dated[0].item : null,
@@ -294,6 +301,10 @@ function tickerSummary(layer, snapshot) {
 function tickerSourceBranches(layer, snapshot) {
   const sources = new Map((snapshot.sources || []).map(source => [source.id, source]));
   const branches = new Map();
+  (layer.sources || []).forEach(function(source) {
+    branches.set(source.id, {id: layer.id + "/source:" + source.id,
+      name: source.name, source, items: []});
+  });
   layer.items.forEach(function(item) {
     if (!branches.has(item.source_id)) {
       branches.set(item.source_id, {id: layer.id + "/source:" + item.source_id,
@@ -504,6 +515,8 @@ async function recordLiveTouch(item) {
       "provider:" + (item.provider || item.source_name || "unknown"),
       item.publisher ? "publisher:" + item.publisher : "",
       item.medium ? "medium:" + item.medium : "",
+      item.topic_basis && item.topic_basis.feed_url ? "coverage-feed:" + item.topic_basis.feed_url : "",
+      ...((item.topics || []).map(function(topic) { return "topic:" + topic; })),
       ...((item.roles || []).map(function(role) { return "role:" + role; })),
       String(item.id || "")
     ].filter(Boolean)
@@ -591,6 +604,9 @@ function liveFeedCard(item) {
   byline.className = "live-byline";
   const pieces = [];
   if (item.author) pieces.push(item.author);
+  if (item.topic_basis && item.topic_basis.kind === "publisher_feed_scope") {
+    pieces.push("Coverage: " + (item.topics || []).join(", ") + " · publisher feed scope");
+  }
   const metrics = metricText(item.metrics);
   if (metrics) pieces.push(metrics);
   try {

@@ -107,11 +107,29 @@ categories they touch. Child totals must not be added as a disjoint partition.
 Generic news roles, provider names and headline keywords do not assign domains.
 Items without domain labels remain reachable in All Feeds and source tickers.
 
-Unconnected domain layers explicitly show No connected witnesses. Most current
-feed adapters do not supply these topic paths yet. Connecting report adapters,
-validating native category mappings, internal-system witnesses, measurement
-units, temporal changes and comparable performance remains separate work; the
-category registry alone does not establish live coverage or rankings. The
+Nine public report feeds now connect the broad domain layers:
+
+| Layer | Report source |
+| --- | --- |
+| World | BBC World |
+| Industry / Factory | BLS Productivity and Costs |
+| Markets | SEC Press Releases |
+| Sports | BBC Sport |
+| Work | BLS Job Openings and Labor Turnover |
+| Learning | BBC Education |
+| Research | NSF Research News |
+| Personal / Household | CPSC Product Recalls |
+| Culture / Social | Library of Congress Performing Arts |
+
+These adapters record their documented publisher feed scope in `topic_basis`,
+including feed and documentation URLs. Cards display this basis. Native titles,
+excerpts, URLs, publication dates, authors and category labels remain separate
+source witnesses. Scope membership does not establish claim-specific subject
+classification, stock prices, sports scores, learner progress or personal tasks.
+Configured sources remain nested even when unavailable or returning no items.
+Unconnected subcategories explicitly show No connected witnesses. Validating
+native category mappings, internal-system witnesses, measurement units,
+temporal changes and comparable performance remains separate work. The
 100-report conservation check is a synthetic test fixture, not live report data.
 
 Shared coverage is grouped only in the browser projection, after balancing and
