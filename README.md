@@ -60,7 +60,7 @@ Unavailable providers remain visible as unavailable rather than receiving genera
 The frontage exposes two useful views over the same live items:
 
 - **Balanced** — round-robin across provider streams so high-volume feeds do not erase slower sources;
-- **Latest** — strict cross-source chronology so source-volume collisions remain observable.
+- **Latest** — cross-source chronology before grouping; groups occupy their first witness's position and retain witness order inside.
 
 Live items do not have one exclusive category. Their identity is relational:
 
@@ -75,6 +75,31 @@ topics[]
 For example, a Reuters report carried by YouTube is simultaneously provider=`YouTube`, publisher=`Reuters`, medium=`video`, and role=`news`. The same item can therefore appear in both News and Video projections without being duplicated.
 
 Opening an external item records a bounded traversal touch and then opens the original external source. The feed itself remains ephemeral.
+
+Shared coverage is grouped only in the browser projection, after balancing and
+role/medium filtering. A group requires either the same HTTP(S) source URL
+(fragment ignored, query preserved, homepages excluded), or the same normalized
+headline across every witness with valid publication times spanning at most 24
+hours. Headline comparison changes only case and whitespace; short headlines
+(under 32 characters or six words) and ellipsis-truncated headlines are excluded.
+The group states its matching basis rather than asserting an agreed event or
+claim. Every contributing card remains visible with its own source identity,
+headline, excerpt, metadata and traversal click target. No item deduplication,
+claim synthesis, durable event ID or feed storage is introduced.
+
+Unresolved: paraphrased reports; different URLs/headlines for the same event;
+Reddit RSS posts whose article URL exists only in the removed transport wrapper;
+redirects and tracking-query variants; missing/invalid dates for headline-only
+matches; repeated generic headlines that pass the length gate. Exact headline
+matching is evidence of related coverage, not proof of event identity. Group
+membership may change with projection order when several competing matches
+exist; groups cannot join through a transitive URL/headline bridge.
+
+Focused checks: `python -m unittest discover -s network/tests -v` and
+`node --test network/tests/test_live_event_grouping.js`. The grouping tests execute
+the browser functions with a small DOM harness and verify witness conservation,
+native click targets, filters, refresh replacement, time bounds and non-transitive
+matching. They do not establish semantic equivalence or live provider availability.
 
 The current frontage favors information density over application-style chrome: live headlines are directly clickable, the separate action-button row is removed, cards use tighter spacing, and bounded source excerpts may carry up to 640 characters. Where a provider exposes useful native text (for example Reuters descriptions in YouTube's Atom feed), that text is preserved in the live projection. Provider-specific transport/UI noise is normalized only where the boundary is clear: Reddit's RSS submission/link/comment wrapper is removed when it carries no source content, and Reuters/YouTube promotional/social tails are removed while keeping the useful description. The original external source remains the authority and is still one click away.
 

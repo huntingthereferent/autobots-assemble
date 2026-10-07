@@ -457,6 +457,62 @@ function liveItemMatchesFilter(item, filter) {
   return roles.includes(filter);
 }
 
+function liveGroupingEvidence(item) {
+  let locator = "";
+  try {
+    const url = new URL(item.url);
+    if (["http:", "https:"].includes(url.protocol) && url.pathname !== "/") {
+      url.hash = "";
+      locator = url.href;
+    }
+  } catch (_) {}
+  const title = String(item.title || "").trim().replace(/\s+/g, " ").toLowerCase();
+  // Truncated or short generic headlines cannot establish a shared referent.
+  const headline = title.length >= 32 && title.split(" ").length >= 6
+    && !title.endsWith("…") ? title : "";
+  const time = item.published_at ? Date.parse(item.published_at) : NaN;
+  return {locator, headline, time};
+}
+
+function groupLiveItems(items) {
+  // A display relationship only: no synthesized headline, claim or durable event.
+  // Require one common witness across the entire group; never chain A~B~C.
+  const groups = [];
+  items.forEach(function(item) {
+    const evidence = liveGroupingEvidence(item);
+    const group = groups.find(function(candidate) {
+      const witnesses = candidate.items.map(liveGroupingEvidence);
+      return (evidence.locator && witnesses.every(function(other) {
+        return other.locator === evidence.locator;
+      })) || (evidence.headline && Number.isFinite(evidence.time)
+        && witnesses.every(function(other) {
+          return other.headline === evidence.headline && Number.isFinite(other.time);
+        }) && Math.max(evidence.time, ...witnesses.map(x => x.time))
+          - Math.min(evidence.time, ...witnesses.map(x => x.time)) <= 86400000);
+    });
+    if (group) group.items.push(item);
+    else groups.push({items: [item]});
+  });
+  return groups;
+}
+
+function liveEventCard(group) {
+  if (group.items.length === 1) return liveFeedCard(group.items[0]);
+  const section = document.createElement("section");
+  section.className = "live-event";
+  const evidence = group.items.map(liveGroupingEvidence);
+  const sameLocator = evidence[0].locator && evidence.every(function(other) {
+    return other.locator === evidence[0].locator;
+  });
+  const label = document.createElement("p");
+  label.className = "live-event-label";
+  label.textContent = group.items.length + " source witnesses · "
+    + (sameLocator ? "shared source URL" : "matching headline within 24h")
+    + " · claims kept separate";
+  section.append(label, ...group.items.map(liveFeedCard));
+  return section;
+}
+
 function renderLiveFeed() {
   const all = liveFeedState.items || [];
   let items;
@@ -469,7 +525,7 @@ function renderLiveFeed() {
       return liveItemMatchesFilter(item, liveFeedFilter);
     }));
   }
-  $("#live-feed").replaceChildren(...items.map(liveFeedCard));
+  $("#live-feed").replaceChildren(...groupLiveItems(items).map(liveEventCard));
   $("#empty-live-feed").hidden = items.length > 0;
   renderLiveSources();
 }

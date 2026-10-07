@@ -1,0 +1,125 @@
+// Run: node --test network/tests/test_live_event_grouping.js
+const {test} = require("node:test");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const vm = require("node:vm");
+const path = require("node:path");
+
+class Element {
+  constructor(tag) { this.tag = tag; this.children = []; this.dataset = {}; this.listeners = {}; }
+  append(...children) { this.children.push(...children); }
+  appendChild(child) { this.append(child); }
+  addEventListener(kind, handler) { this.listeners[kind] = handler; }
+  replaceChildren(...children) { this.children = children; }
+}
+const elements = new Map();
+const document = {
+  createElement: tag => new Element(tag),
+  querySelector: key => {
+    if (!elements.has(key)) elements.set(key, new Element("div"));
+    return elements.get(key);
+  }
+};
+const context = vm.createContext({document, URL, console});
+const app = fs.readFileSync(path.join(__dirname, "../../runtime/http/app.js"), "utf8");
+vm.runInContext(app.slice(0, app.indexOf('$("#ohayo").addEventListener')), context);
+const group = items => context.groupLiveItems(items);
+const title = "City council approves new river bridge construction plan";
+function row(source, overrides = {}) {
+  return {id: source + ":1", source_id: source, source_name: source,
+    title, url: "https://example.org/" + source,
+    published_at: "2026-10-06T12:00:00Z", snippet: source + " separate claim",
+    roles: ["news"], medium: "article", ...overrides};
+}
+function walk(el) { return [el, ...el.children.flatMap(walk)]; }
+
+test("four providers share coverage without altering or discarding witnesses", () => {
+  const rows = ["BBC", "Reuters", "Reddit", "Hacker News"].map(x => row(x));
+  const before = JSON.stringify(rows);
+  const groups = group(rows);
+  assert.equal(groups.length, 1);
+  assert.equal(groups[0].items.length, 4);
+  groups[0].items.forEach((item, i) => assert.equal(item, rows[i]));
+  assert.equal(JSON.stringify(rows), before);
+});
+
+test("shared URL ignores fragment but preserves meaningful query parameters", () => {
+  const a = row("BBC", {url: "https://example.org/story?id=1#top"});
+  const b = row("HN", {title: "Different claim", url: "https://example.org/story?id=1#comments"});
+  assert.equal(group([a, b]).length, 1);
+  assert.equal(group([a, {...b, url: "https://example.org/story?id=2"}]).length, 2);
+});
+
+test("invalid URLs and homepages do not group differing titles", () => {
+  for (const url of ["", "invalid", "javascript:alert(1)", "https://example.org/"]) {
+    assert.equal(group([row("a", {url}), row("b", {url, title: "Different"})]).length, 2);
+  }
+});
+
+test("headline matching tolerates case and whitespace only", () => {
+  assert.equal(group([row("a"), row("b", {title: title.toUpperCase().replace(/ /g, "  ")})]).length, 1);
+  assert.equal(group([row("a"), row("b", {title: title.replace("approves", "rejects")})]).length, 2);
+});
+
+test("short, truncated, missing and paraphrased headlines stay separate", () => {
+  for (const headline of ["", "Breaking news", title + "…"]) {
+    assert.equal(group([row("a", {title: headline}), row("b", {title: headline})]).length, 2);
+  }
+  assert.equal(group([row("a"), row("b", {title: "New bridge approved by the city council today"})]).length, 2);
+});
+
+test("headline grouping requires valid dates and a bounded whole-group span", () => {
+  for (const published_at of ["", "invalid", "2026-10-08T12:00:00Z"]) {
+    assert.equal(group([row("a"), row("b", {published_at})]).length, 2);
+  }
+  assert.equal(group([row("a"), row("b", {published_at: "2026-10-07T12:00:00Z"})]).length, 1);
+  assert.equal(group([
+    row("a"), row("b", {published_at: "2026-10-07T08:00:00Z"}),
+    row("c", {published_at: "2026-10-08T04:00:00Z"})
+  ]).length, 2);
+});
+
+test("URL/headline bridges cannot transitively merge unrelated witnesses", () => {
+  const a = row("a", {url: "https://example.org/story"});
+  const b = row("b", {url: a.url, title: title + " update"});
+  const c = row("c", {title: b.title});
+  assert.equal(group([a, b, c]).length, 2);
+});
+
+test("singletons and groups follow first encounter order without dropping repeated IDs", () => {
+  const rows = [row("a"), row("x", {title: "Unrelated"}), row("b"), row("a")];
+  const groups = group(rows);
+  assert.equal(groups.length, 2);
+  assert.equal(groups[0].items.length, 3);
+  assert.equal(groups[1].items[0], rows[1]);
+});
+
+test("rendered group exposes all source names, claims and native click targets", () => {
+  const rows = ["BBC", "Reuters", "Reddit", "Hacker News"].map(x => row(x));
+  const card = context.liveEventCard(group(rows)[0]);
+  const nodes = walk(card);
+  assert.equal(card.children.length, 5);
+  assert.match(card.children[0].textContent, /matching headline within 24h/);
+  const clicks = [];
+  context.openLiveItem = item => clicks.push(item);
+  for (const row of rows) {
+    assert.ok(nodes.some(x => x.textContent === row.source_name));
+    assert.ok(nodes.some(x => x.textContent === row.snippet));
+  }
+  nodes.filter(x => x.className === "live-title-link").forEach(x => x.listeners.click());
+  assert.deepEqual(clicks, rows);
+});
+
+test("filters operate on witnesses before grouping and refresh replaces ephemeral groups", () => {
+  const rows = [row("BBC"), row("Reuters", {medium: "video"}),
+    row("Reddit", {roles: ["social", "community"]}), row("HN", {roles: ["community"]})];
+  context.rows = rows;
+  vm.runInContext('liveFeedState = {items: rows, sources: []}; liveFeedFilter = "video"; renderLiveFeed();', context);
+  assert.equal(elements.get("#live-feed").children.length, 1);
+  assert.equal(elements.get("#live-feed").children[0].dataset.source, "Reuters");
+  vm.runInContext('liveFeedFilter = "balanced"; renderLiveFeed();', context);
+  assert.equal(elements.get("#live-feed").children[0].children.length, 5);
+  vm.runInContext('liveFeedState = {items: [], sources: []}; renderLiveFeed();', context);
+  assert.equal(elements.get("#live-feed").children.length, 0);
+  assert.equal(elements.get("#empty-live-feed").hidden, false);
+});
