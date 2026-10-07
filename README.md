@@ -89,8 +89,30 @@ Choose tickers supports individual visibility, Show all and Hide all (including
 future providers while Hide all is active). Only display identifiers are saved
 in browser local storage; headlines and other feed content remain ephemeral.
 Open ticker sections survive refresh. Browser-local choices are not yet synced
-between devices or accounts. This first pass covers the connected external feed
-layers; internal systems need their own native witnesses before gaining tickers.
+between devices or accounts.
+
+Broad ticker layers now include World, Industry / Factory, Markets, Sports,
+Work, Learning, Research, Personal / Household and Culture / Social, with 39
+registered subcategories. These are selectable nested entrances; a parent may
+be hidden while a selected child stays visible on its own. Sources nest under
+each domain, retaining native claims and click targets. Open category and
+source branches survive refresh.
+
+Only explicit item topics admit domain membership. For example,
+`sports:results`, `markets:stocks` or `world:countries:usa:missouri` put the same
+report into the relevant overlapping projections; namespaced paths generate
+their concrete ancestry without needing a stored map of every country or city.
+Each parent counts its native witnesses once, independently of how many child
+categories they touch. Child totals must not be added as a disjoint partition.
+Generic news roles, provider names and headline keywords do not assign domains.
+Items without domain labels remain reachable in All Feeds and source tickers.
+
+Unconnected domain layers explicitly show No connected witnesses. Most current
+feed adapters do not supply these topic paths yet. Connecting report adapters,
+validating native category mappings, internal-system witnesses, measurement
+units, temporal changes and comparable performance remains separate work; the
+category registry alone does not establish live coverage or rankings. The
+100-report conservation check is a synthetic test fixture, not live report data.
 
 Shared coverage is grouped only in the browser projection, after balancing and
 role/medium filtering. A group requires either the same HTTP(S) source URL

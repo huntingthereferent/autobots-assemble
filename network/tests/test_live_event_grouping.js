@@ -135,7 +135,8 @@ test("tickers cover every source and overlapping layers without mutating witness
   const snapshot = {items: rows, sources: [{id: "offline", name: "Offline", ok: false}], fetched_at: "2026-10-07T12:00:00Z"};
   const before = JSON.stringify(snapshot);
   const layers = context.tickerLayers(snapshot);
-  assert.equal(layers.length, 9);
+  assert.equal(layers.filter(x => x.id.startsWith("source:")).length, 4);
+  assert.equal(layers.filter(x => x.domain && !x.parentId).length, 9);
   assert.equal(layers.find(x => x.id === "role:news").items.length, 2);
   assert.equal(layers.find(x => x.id === "role:video").items[0], rows[1]);
   assert.equal(layers.find(x => x.id === "source:BBC").items[0], rows[0]);
@@ -188,4 +189,69 @@ test("broken preferences fall back to all tickers and filtering does not alter t
   const all = elements.get("#feed-tickers").children[0];
   assert.match(all.children[0].children[1].textContent, /2 witnesses/);
   assert.equal(elements.get("#live-feed").children.length, 1);
+});
+
+test("broad categories exist without pretending generic news or provider names are domain evidence", () => {
+  const rows = [row("BBC", {title: "Sports stocks factory learning research world household"}),
+    row("sports-provider")];
+  const layers = context.domainTickerLayers(rows);
+  assert.deepEqual(Array.from(layers.filter(x => !x.parentId), x => x.id),
+    ["world", "industry", "markets", "sports", "work", "learning", "research", "household", "culture"].map(x => "domain:" + x));
+  assert.ok(layers.every(layer => layer.items.length === 0));
+  assert.equal(context.tickerSummary(layers[0], {}).status, "No connected witnesses");
+});
+
+test("one explicit witness can cross sports, markets and world without inflating parent counts", () => {
+  const witness = row("report", {topics: ["sports:results", "sports:teams", "markets:stocks", "world:countries:usa:missouri"]});
+  const layers = context.domainTickerLayers([witness]);
+  for (const id of ["domain:sports", "domain:sports:results", "domain:markets",
+    "domain:world", "domain:world:countries", "domain:world:countries:usa",
+    "domain:world:countries:usa:missouri"]) {
+    const layer = layers.find(x => x.id === id);
+    assert.equal(layer.items.length, 1);
+    assert.equal(layer.items[0], witness);
+  }
+  assert.equal(layers.find(x => x.id === "domain:world:countries:usa:missouri").parentId, "domain:world:countries:usa");
+});
+
+test("source nests preserve independent claims and unknown source status", () => {
+  const rows = [row("BBC", {topics: ["industry:production"]}),
+    row("Reuters", {topics: ["industry:production"], snippet: "Conflicting source claim"})];
+  const snapshot = {items: rows, sources: [{id: "BBC", name: "BBC", ok: true}]};
+  const layer = context.domainTickerLayers(rows).find(x => x.id === "domain:industry");
+  const branches = context.tickerSourceBranches(layer, snapshot);
+  assert.equal(branches.length, 2);
+  assert.equal(branches[0].items[0], rows[0]);
+  assert.equal(branches[1].source, undefined);
+  const card = context.tickerCard(layer, snapshot, new Set());
+  assert.equal(walk(card).filter(x => x.className === "live-title-link").length, 2);
+  assert.ok(walk(card).some(x => x.textContent === rows[1].snippet));
+});
+
+test("hiding a parent can promote a chosen child and nested expansion survives refresh", () => {
+  context.rows = [row("BBC", {topics: ["sports:results"]})];
+  vm.runInContext('hiddenTickers = new Set(tickerLayers({items:rows}).map(x=>x.id)); hiddenTickers.delete("domain:sports:results"); liveFeedState={items:rows,sources:[]}; renderTickers();', context);
+  assert.equal(elements.get("#feed-tickers").children.length, 1);
+  assert.equal(elements.get("#feed-tickers").children[0].dataset.ticker, "domain:sports:results");
+  const root = elements.get("#feed-tickers").children[0];
+  const sources = walk(root).find(x => x.className === "ticker-source-nest");
+  root.open = sources.open = true;
+  vm.runInContext('renderTickers();', context);
+  assert.equal(elements.get("#feed-tickers").children[0].open, true);
+  assert.equal(walk(elements.get("#feed-tickers")).find(x => x.className === "ticker-source-nest").open, true);
+});
+
+test("100 reports conserve witnesses across domain and nested source projections", () => {
+  const rows = Array.from({length:100}, (_,i)=>row("source"+i%4,
+    {id:String(i), topics:["research:experiments", "research:findings", "work:projects"]}));
+  const before = JSON.stringify(rows);
+  const layers = context.domainTickerLayers(rows);
+  for (const id of ["domain:research", "domain:work"]) {
+    const layer = layers.find(x => x.id === id);
+    assert.equal(layer.items.length, 100);
+    const nested = context.tickerSourceBranches(layer, {}).flatMap(x => x.items);
+    assert.equal(nested.length, 100);
+    assert.deepEqual(new Set(nested), new Set(rows));
+  }
+  assert.equal(JSON.stringify(rows), before);
 });

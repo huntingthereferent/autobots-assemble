@@ -202,6 +202,53 @@ function saveTickerChoices() {
   catch (_) {}
 }
 
+// Native topic labels admit a witness to a layer; headlines never assign it.
+const TICKER_DOMAINS = [
+  {id: "world", name: "World", children: ["countries", "regions", "cities", "local"]},
+  {id: "industry", name: "Industry / Factory", children: ["sectors", "companies", "production", "deliveries", "operations"]},
+  {id: "markets", name: "Markets", children: ["stocks", "commodities", "currencies", "crypto"]},
+  {id: "sports", name: "Sports", children: ["leagues", "teams", "games", "results", "standings"]},
+  {id: "work", name: "Work", children: ["opportunities", "projects", "tasks", "handoffs"]},
+  {id: "learning", name: "Learning", children: ["learners", "subjects", "assignments", "progress"]},
+  {id: "research", name: "Research", children: ["questions", "experiments", "findings", "boundaries"]},
+  {id: "household", name: "Personal / Household", children: ["calendar", "routines", "reminders", "household"]},
+  {id: "culture", name: "Culture / Social", children: ["communities", "conversations", "music", "video", "events"]}
+];
+
+function nativeTickerTopics(item) {
+  return Array.isArray(item.topics)
+    ? item.topics.filter(topic => typeof topic === "string").map(topic => topic.trim().toLowerCase())
+    : [];
+}
+
+function domainTickerLayers(items) {
+  const layers = [];
+  TICKER_DOMAINS.forEach(function(domain) {
+    const prefix = domain.id + ":";
+    const rows = items.filter(function(item) {
+      return nativeTickerTopics(item).some(topic => topic === domain.id || topic.startsWith(prefix));
+    });
+    const rootId = "domain:" + domain.id;
+    layers.push({id: rootId, name: domain.name, items: rows, domain: true});
+    const branches = new Set(domain.children);
+    // Source-provided paths add concrete countries, companies, leagues, etc.
+    rows.forEach(item => nativeTickerTopics(item).forEach(function(topic) {
+      if (topic.startsWith(prefix) && topic.slice(prefix.length)) {
+        const parts = topic.slice(prefix.length).split(":").filter(Boolean);
+        parts.forEach((_, index) => branches.add(parts.slice(0, index + 1).join(":")));
+      }
+    }));
+    branches.forEach(function(branch) {
+      const topic = prefix + branch;
+      const parentBranch = branch.includes(":") ? branch.slice(0, branch.lastIndexOf(":")) : "";
+      layers.push({id: "domain:" + topic, parentId: parentBranch ? "domain:" + prefix + parentBranch : rootId,
+        name: branch.split(":").slice(-1)[0], domain: true,
+        items: rows.filter(item => nativeTickerTopics(item).some(tag => tag === topic || tag.startsWith(topic + ":")))});
+    });
+  });
+  return layers;
+}
+
 function tickerLayers(snapshot) {
   const items = snapshot.items || [];
   const layers = [
@@ -209,7 +256,8 @@ function tickerLayers(snapshot) {
     ...["news", "social", "video", "community"].map(function(role) {
       return {id: "role:" + role, name: role[0].toUpperCase() + role.slice(1),
         items: items.filter(item => liveItemMatchesFilter(item, role))};
-    })
+    }),
+    ...domainTickerLayers(items)
   ];
   const sources = new Map((snapshot.sources || []).map(source => [source.id, source]));
   items.forEach(function(item) {
@@ -230,7 +278,8 @@ function tickerSummary(layer, snapshot) {
   const sourceCount = new Set(items.map(item => item.source_id)).size;
   const unavailable = layer.source && layer.source.ok === false;
   const status = unavailable ? "Unavailable" :
-    (items.length ? items.length + " witnesses · " + sourceCount + " feeds" : "No sampled items");
+    (items.length ? items.length + " witnesses · " + sourceCount + " feeds" :
+      layer.domain ? "No connected witnesses" : "No sampled items");
   return {
     status,
     latest: dated.length ? dated[0].item : null,
@@ -240,6 +289,69 @@ function tickerSummary(layer, snapshot) {
     undated: items.length - dated.length,
     reason: unavailable ? layer.source.reason || layer.source.error || "Provider unavailable" : ""
   };
+}
+
+function tickerSourceBranches(layer, snapshot) {
+  const sources = new Map((snapshot.sources || []).map(source => [source.id, source]));
+  const branches = new Map();
+  layer.items.forEach(function(item) {
+    if (!branches.has(item.source_id)) {
+      branches.set(item.source_id, {id: layer.id + "/source:" + item.source_id,
+        name: item.source_name || item.source_id || "Unknown source",
+        source: sources.get(item.source_id), items: []});
+    }
+    branches.get(item.source_id).items.push(item);
+  });
+  return [...branches.values()];
+}
+
+function tickerCard(layer, snapshot, openIds, childLayers = []) {
+  const data = tickerSummary(layer, snapshot);
+  const ticker = document.createElement("details");
+  ticker.className = "feed-ticker" + (layer.parentId ? " ticker-child" : "");
+  ticker.dataset.ticker = layer.id;
+  ticker.open = openIds.has(layer.id);
+  const summary = document.createElement("summary");
+  const name = document.createElement("strong");
+  name.textContent = layer.name;
+  const status = document.createElement("span");
+  status.className = "ticker-status";
+  status.textContent = data.status + (layer.items.length ? " · fetched sample" : "");
+  const headline = document.createElement("span");
+  headline.className = "ticker-headline";
+  headline.textContent = data.latest ? data.latest.title : data.reason || "No dated headline";
+  summary.append(name, status, headline);
+  const scope = document.createElement("p");
+  scope.className = "ticker-scope";
+  scope.textContent = "Fetched: " + (data.fetchedAt || "not yet") +
+    (data.from ? " · Published: " + data.from + " → " + data.to : "") +
+    (data.undated ? " · " + data.undated + " undated" : "");
+  ticker.append(summary, scope);
+  childLayers.forEach(child => ticker.append(tickerCard(child, snapshot, openIds,
+    snapshot.tickerChildren ? snapshot.tickerChildren.get(child.id) || [] : [])));
+  // Domain witnesses remain under their native sources, without synthesizing claims.
+  if (layer.domain) {
+    const sources = document.createElement("details");
+    sources.className = "ticker-source-nest";
+    sources.dataset.ticker = layer.id + "/sources";
+    sources.open = openIds.has(sources.dataset.ticker);
+    const label = document.createElement("summary");
+    label.textContent = "Sources · " + tickerSourceBranches(layer, snapshot).length;
+    sources.append(label, ...tickerSourceBranches(layer, snapshot).map(source =>
+      tickerCard(source, snapshot, openIds)));
+    ticker.append(sources);
+  } else ticker.append(...groupLiveItems(layer.items).map(liveEventCard));
+  return ticker;
+}
+
+function openTickerIds(root) {
+  const ids = new Set();
+  function visit(node) {
+    if (node.open && node.dataset && node.dataset.ticker) ids.add(node.dataset.ticker);
+    Array.from(node.children || []).forEach(visit);
+  }
+  visit(root);
+  return ids;
 }
 
 function renderTickers() {
@@ -259,35 +371,23 @@ function renderTickers() {
       saveTickerChoices();
       renderTickers();
     });
-    label.append(checkbox, document.createTextNode(layer.name));
+    label.append(checkbox, document.createTextNode(layer.parentId
+      ? layer.id.slice(7).replace(/:/g, " / ") : layer.name));
     return label;
   });
-  const openIds = new Set(Array.from($("#feed-tickers").children)
-    .filter(node => node.open).map(node => node.dataset.ticker));
-  const tickers = layers.filter(layer => !hiddenTickers.has("*") && !hiddenTickers.has(layer.id)).map(function(layer) {
-    const data = tickerSummary(layer, liveFeedState);
-    const ticker = document.createElement("details");
-    ticker.className = "feed-ticker";
-    ticker.dataset.ticker = layer.id;
-    ticker.open = openIds.has(layer.id);
-    const summary = document.createElement("summary");
-    const name = document.createElement("strong");
-    name.textContent = layer.name;
-    const status = document.createElement("span");
-    status.className = "ticker-status";
-    status.textContent = data.status + " · fetched sample";
-    const headline = document.createElement("span");
-    headline.className = "ticker-headline";
-    headline.textContent = data.latest ? data.latest.title : data.reason || "No dated headline";
-    summary.append(name, status, headline);
-    const scope = document.createElement("p");
-    scope.className = "ticker-scope";
-    scope.textContent = "Fetched: " + (data.fetchedAt || "not yet") +
-      (data.from ? " · Published: " + data.from + " → " + data.to : "") +
-      (data.undated ? " · " + data.undated + " undated" : "");
-    ticker.append(summary, scope, ...groupLiveItems(layer.items).map(liveEventCard));
-    return ticker;
+  const openIds = openTickerIds($("#feed-tickers"));
+  const visible = layers.filter(layer => !hiddenTickers.has("*") && !hiddenTickers.has(layer.id));
+  const visibleIds = new Set(visible.map(layer => layer.id));
+  const children = new Map();
+  visible.forEach(function(layer) {
+    if (layer.parentId && visibleIds.has(layer.parentId)) {
+      if (!children.has(layer.parentId)) children.set(layer.parentId, []);
+      children.get(layer.parentId).push(layer);
+    }
   });
+  const projection = {...liveFeedState, tickerChildren: children};
+  const tickers = visible.filter(layer => !layer.parentId || !visibleIds.has(layer.parentId))
+    .map(layer => tickerCard(layer, projection, openIds, children.get(layer.id) || []));
   $("#ticker-choices").replaceChildren(...choices);
   $("#feed-tickers").replaceChildren(...tickers);
   $("#feed-tickers").hidden = tickers.length === 0;

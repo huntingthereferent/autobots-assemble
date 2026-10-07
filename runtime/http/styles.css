@@ -1009,6 +1009,8 @@ html, body { max-width: 100%; overflow-x: hidden; }
 .ticker-status { color: #56616f; margin-right: 8px; }
 .ticker-headline { overflow-wrap: anywhere; }
 .ticker-scope { margin: 6px; color: #56616f; font-size: .7rem; overflow-wrap: anywhere; }
+.ticker-child, .ticker-source-nest { margin-left: 12px; border-left: 2px solid #dfe3e7; padding-left: 6px; }
+.ticker-source-nest > summary { padding: 6px; font-size: .75rem; cursor: pointer; }
 @media (max-width: 560px) {
   .ticker-headline { display: block; margin-top: 3px; }
 }
