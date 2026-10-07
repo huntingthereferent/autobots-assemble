@@ -234,7 +234,7 @@ function domainTickerLayers(items, sources = []) {
     layers.push({id: rootId, name: domain.name, items: rows, domain: true, sources: configured});
     const branches = new Set(domain.children);
     // Source-provided paths add concrete countries, companies, leagues, etc.
-    rows.forEach(item => nativeTickerTopics(item).forEach(function(topic) {
+    [...rows, ...configured].forEach(item => nativeTickerTopics(item).forEach(function(topic) {
       if (topic.startsWith(prefix) && topic.slice(prefix.length)) {
         const parts = topic.slice(prefix.length).split(":").filter(Boolean);
         parts.forEach((_, index) => branches.add(parts.slice(0, index + 1).join(":")));
@@ -605,6 +605,7 @@ function liveFeedCard(item) {
   const pieces = [];
   if (item.author) pieces.push(item.author);
   if (item.topic_basis && item.topic_basis.kind === "publisher_feed_scope") {
+    if (item.country) pieces.push("Source jurisdiction: " + item.country + " · Language: " + (item.language || "unspecified"));
     pieces.push("Coverage: " + (item.topics || []).join(", ") + " · publisher feed scope");
   }
   const metrics = metricText(item.metrics);

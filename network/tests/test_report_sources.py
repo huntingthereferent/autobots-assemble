@@ -17,7 +17,7 @@ RSS = b"""<rss version="2.0"><channel><title>Source</title>
 
 class ReportSourcesTests(unittest.TestCase):
     def test_registry_covers_nine_domains_with_documented_feed_scope(self):
-        self.assertEqual({topic for spec in REPORT_FEEDS.values() for topic in spec["topics"]},
+        self.assertEqual({topic for spec in REPORT_FEEDS.values() for topic in spec["topics"] if ":" not in topic},
                          {"world", "sports", "learning", "industry", "work", "markets",
                           "research", "culture", "household"})
         for key, spec in REPORT_FEEDS.items():
@@ -59,6 +59,33 @@ class ReportSourcesTests(unittest.TestCase):
         self.assertEqual(item["author"], "Witness author")
         self.assertEqual(item["native_categories"], ["Native topic"])
 
+    def test_country_scope_and_language_survive_without_rewriting_claims(self):
+        body = RSS.replace(b"Original source claim", "Original 日本語 claim".encode())
+        with patch("runtime.external_feed._fetch", return_value=body):
+            for key in ("ca_labour", "au_releases", "de_latest"):
+                row = fetch_report_feed(key)[0]
+                self.assertEqual(row["title"], "Original 日本語 claim")
+                self.assertEqual(row["country_basis"], "publisher_jurisdiction")
+                self.assertEqual(row["language"], "en")
+                self.assertIn("world:countries:" + row["country"].lower(), row["topics"])
+                self.assertEqual(SOURCE_META[key]["country_code"], row["country_code"])
+
+    def test_atom_xhtml_keeps_nested_claim_text(self):
+        body = b'<feed xmlns="http://www.w3.org/2005/Atom"><entry><title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">Payroll <span>July 2026</span></div></title><link href="https://example.org/report"/><summary type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">Original <b>detail</b></div></summary></entry></feed>'
+        with patch("runtime.external_feed._fetch", return_value=body):
+            row = fetch_report_feed("ca_labour")[0]
+        self.assertEqual(row["title"], "Payroll July 2026")
+        self.assertEqual(row["snippet"], "Original detail")
+
+    def test_rdf_rss_preserves_claim_locator_and_dc_date(self):
+        body = b'<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://purl.org/rss/1.0/" xmlns:dc="http://purl.org/dc/elements/1.1/"><item rdf:about="native-id"><title>RBA claim</title><link>https://example.org/report</link><description>Native detail</description><dc:date>2026-10-01T11:30:00+10:00</dc:date><dc:subject>Economy</dc:subject></item></rdf:RDF>'
+        with patch("runtime.external_feed._fetch", return_value=body):
+            row = fetch_report_feed("au_releases")[0]
+        self.assertEqual(row["title"], "RBA claim")
+        self.assertEqual(row["id"], "au_releases:native-id")
+        self.assertEqual(row["published_at"], "2026-10-01T11:30:00+10:00")
+        self.assertEqual(row["native_categories"], ["Economy"])
+
     def test_limit_and_empty_feed_do_not_generate_reports(self):
         with patch("runtime.external_feed._fetch", return_value=RSS):
             self.assertEqual(len(fetch_report_feed("bbc_world", 1)), 1)
@@ -86,7 +113,7 @@ class ReportSourcesTests(unittest.TestCase):
         self.assertFalse(statuses["sec_releases"]["ok"])
         self.assertEqual(statuses["sec_releases"]["topics"], ["markets"])
         self.assertEqual(statuses["sec_releases"]["count"], 0)
-        self.assertEqual(len(snapshot["items"]), 16)
+        self.assertEqual(len(snapshot["items"]), 2 * (len(REPORT_FEEDS) - 1))
         self.assertTrue(all("topic_basis" in item for item in snapshot["items"]))
 
 

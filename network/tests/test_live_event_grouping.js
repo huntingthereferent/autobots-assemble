@@ -275,3 +275,21 @@ test("publisher-feed scope remains visible on the native witness card", () => {
     topic_basis:{kind:"publisher_feed_scope", feed_url:"https://example.org/education.xml"}}));
   assert.ok(walk(card).some(x => (x.textContent || "").includes("Coverage: learning · publisher feed scope")));
 });
+
+
+test("country branches survive unavailable publishers and conserve overlapping witnesses", () => {
+  const sources = [{id: "ca_labour", name: "Statistics Canada", ok: false,
+    topics: ["work", "world:countries:canada"]}];
+  const empty = context.domainTickerLayers([], sources);
+  const country = empty.find(x => x.id === "domain:world:countries:canada");
+  assert.ok(country);
+  assert.equal(context.tickerSummary(country, {}).status, "Sources unavailable");
+  assert.equal(context.tickerSourceBranches(country, {sources}).length, 1);
+  const witness = row("ca_labour", {topics: sources[0].topics, country: "Canada",
+    country_basis: "publisher_jurisdiction", language: "en", topic_basis: {kind:"publisher_feed_scope"}});
+  const layers = context.domainTickerLayers([witness], sources);
+  for (const id of ["domain:work", "domain:world", "domain:world:countries:canada"]) {
+    assert.equal(layers.find(x => x.id === id).items[0], witness);
+  }
+  assert.ok(walk(context.liveFeedCard(witness)).some(x => (x.textContent || "").includes("Source jurisdiction: Canada")));
+});

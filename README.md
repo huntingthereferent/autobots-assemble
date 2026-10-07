@@ -132,6 +132,24 @@ native category mappings, internal-system witnesses, measurement units,
 temporal changes and comparable performance remains separate work. The
 100-report conservation check is a synthetic test fixture, not live report data.
 
+Country-native report connections also include:
+
+| Source jurisdiction | Publisher feeds | Layer scopes |
+| --- | --- | --- |
+| Canada | Statistics Canada manufacturing, labour, education, families/households, science/technology | Industry, Work, Learning, Household, Research |
+| Australia | Reserve Bank of Australia media releases and research papers | Markets, Research |
+| Germany | Deutsche Bundesbank latest releases and discussion papers | Markets, Research |
+
+These English-language feeds additionally enter `world:countries:<country>`.
+`country_basis: publisher_jurisdiction` describes the institution's jurisdiction,
+not an inferred location for every claim. `language` records the selected feed
+edition, not automatic language detection; original text is retained without
+translation. Configured country branches remain present through outages and
+empty samples. Coverage is partial: these three country connections do not fill
+all countries or all categories. Other countries, native-language editions,
+structured statistical series, units and cross-country comparability remain
+unresolved. Official feed documentation is linked in each source's metadata.
+
 Shared coverage is grouped only in the browser projection, after balancing and
 role/medium filtering. A group requires either the same HTTP(S) source URL
 (fragment ignored, query preserved, homepages excluded), or the same normalized

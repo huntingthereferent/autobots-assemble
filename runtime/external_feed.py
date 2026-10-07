@@ -54,6 +54,31 @@ REPORT_FEEDS = {
         "documentation": "https://www.cpsc.gov/Newsroom/CPSC-RSS-Feed"},
 }
 
+
+# Country denotes the publishing institution's jurisdiction, not every claim's geography.
+COUNTRY_REPORT_FEEDS = {
+    "ca_manufacturing": {"name": "Statistics Canada Manufacturing", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/16-eng.atom", "topics": ("industry",)},
+    "ca_labour": {"name": "Statistics Canada Labour", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/14-eng.atom", "topics": ("work",)},
+    "ca_education": {"name": "Statistics Canada Education", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/37-eng.atom", "topics": ("learning",)},
+    "ca_households": {"name": "Statistics Canada Families and Households", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/39-eng.atom", "topics": ("household",)},
+    "ca_science": {"name": "Statistics Canada Science and Technology", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/27-eng.atom", "topics": ("research",)},
+    "au_releases": {"name": "RBA Media Releases", "publisher": "Reserve Bank of Australia", "url": "https://www.rba.gov.au/rss/rss-cb-media-releases.xml", "topics": ("markets",)},
+    "au_research": {"name": "RBA Research Discussion Papers", "publisher": "Reserve Bank of Australia", "url": "https://www.rba.gov.au/rss/rss-cb-rdp.xml", "topics": ("research",)},
+    "de_latest": {"name": "Bundesbank Latest", "publisher": "Deutsche Bundesbank", "url": "https://www.bundesbank.de/service/rss/en/633306/feed.rss", "topics": ("markets",)},
+    "de_research": {"name": "Bundesbank Discussion Papers", "publisher": "Deutsche Bundesbank", "url": "https://www.bundesbank.de/service/rss/en/633292/feed.rss", "topics": ("research",)},
+}
+_COUNTRY_SCOPES = {
+    "ca": ("CA", "Canada", "https://www.statcan.gc.ca/en/sc/rss"),
+    "au": ("AU", "Australia", "https://www.rba.gov.au/updates/rss-feeds.html"),
+    "de": ("DE", "Germany", "https://www.bundesbank.de/en/homepage/rss/deutsche-bundesbank-s-rss-feed-620440"),
+}
+for _key, _spec in COUNTRY_REPORT_FEEDS.items():
+    _code, _country, _documentation = _COUNTRY_SCOPES[_key.split("_")[0]]
+    _spec.update(country_code=_code, country=_country, language="en",
+                 country_basis="publisher_jurisdiction", documentation=_documentation)
+    _spec["topics"] += ("world:countries:" + _country.lower(),)
+REPORT_FEEDS.update(COUNTRY_REPORT_FEEDS)
+
 _TAG_RE = re.compile(r"<[^>]+>")
 _SPACE_RE = re.compile(r"\s+")
 
@@ -330,11 +355,17 @@ def fetch_report_feed(source_id: str, limit: int = 8) -> list[dict[str, Any]]:
     spec = REPORT_FEEDS[source_id]
     root = ET.fromstring(_fetch(spec["url"], timeout=7))
     atom = "{http://www.w3.org/2005/Atom}"
+    rdf = "{http://www.w3.org/1999/02/22-rdf-syntax-ns#}"
+    rss1 = "{http://purl.org/rss/1.0/}"
+    dc = "{http://purl.org/dc/elements/1.1/}"
     is_atom = root.tag == atom + "feed"
+    is_rdf = root.tag == rdf + "RDF"
     if is_atom:
         nodes = root.findall(atom + "entry")
     elif root.tag == "rss":
         nodes = root.findall("./channel/item")
+    elif is_rdf:
+        nodes = root.findall(rss1 + "item")
     else:
         raise ValueError("response is not a supported RSS or Atom feed")
     rows = []
@@ -342,20 +373,25 @@ def fetch_report_feed(source_id: str, limit: int = 8) -> list[dict[str, Any]]:
         if is_atom:
             url = next((link.get("href", "") for link in node.findall(atom + "link")
                         if link.get("rel", "alternate") == "alternate"), "")
-            title = node.findtext(atom + "title", default="")
+            title_node = node.find(atom + "title")
+            title = "".join(title_node.itertext()) if title_node is not None else ""
             entry_id = node.findtext(atom + "id", default=url)
             published = node.findtext(atom + "published", default="") or node.findtext(atom + "updated", default="")
-            snippet = node.findtext(atom + "summary", default="") or node.findtext(atom + "content", default="")
+            snippet_node = node.find(atom + "summary")
+            if snippet_node is None:
+                snippet_node = node.find(atom + "content")
+            snippet = "".join(snippet_node.itertext()) if snippet_node is not None else ""
             author = node.findtext(atom + "author/" + atom + "name", default="")
             categories = [x.get("term", "") for x in node.findall(atom + "category")]
         else:
-            url = node.findtext("link", default="")
-            title = node.findtext("title", default="")
-            entry_id = node.findtext("guid", default="") or url
-            published = _iso_from_rss(node.findtext("pubDate", default=""))
-            snippet = node.findtext("description", default="")
-            author = node.findtext("author", default="") or node.findtext("{http://purl.org/dc/elements/1.1/}creator", default="")
-            categories = [x.text or "" for x in node.findall("category")]
+            prefix = rss1 if is_rdf else ""
+            url = node.findtext(prefix + "link", default="")
+            title = node.findtext(prefix + "title", default="")
+            entry_id = node.findtext(prefix + "guid", default="") or node.get(rdf + "about", "") or url
+            published = _iso_from_rss(node.findtext(prefix + "pubDate", default="")) or node.findtext(dc + "date", default="")
+            snippet = node.findtext(prefix + "description", default="")
+            author = node.findtext(prefix + "author", default="") or node.findtext(dc + "creator", default="")
+            categories = [x.text or "" for x in node.findall(prefix + "category") + node.findall(dc + "subject")]
         if not url.startswith(("https://", "http://")):
             continue
         row = _item(item_id=f"{source_id}:{entry_id}", source_id=source_id,
@@ -364,6 +400,9 @@ def fetch_report_feed(source_id: str, limit: int = 8) -> list[dict[str, Any]]:
                     topics=spec["topics"], title=title, url=url, published_at=published,
                     author=author, context=spec["name"], snippet=snippet)
         row["native_categories"] = _many(categories)
+        for field in ("country_code", "country", "country_basis", "language"):
+            if field in spec:
+                row[field] = spec[field]
         row["topic_basis"] = {"kind": "publisher_feed_scope", "feed_url": spec["url"],
                               "documentation": spec["documentation"], "topics": list(spec["topics"])}
         rows.append(row)
@@ -399,7 +438,8 @@ SOURCE_META = {
 SOURCE_META.update({key: {"name": spec["name"], "surface": "report_feed",
                          "access": "public RSS / Atom", "feed_url": spec["url"],
                          "documentation": spec["documentation"],
-                         "topics": list(spec["topics"])}
+                         "topics": list(spec["topics"]),
+                         **{field: spec[field] for field in ("country_code", "country", "country_basis", "language") if field in spec}}
                     for key, spec in REPORT_FEEDS.items()})
 
 
