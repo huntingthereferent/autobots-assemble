@@ -76,6 +76,22 @@ For example, a Reuters report carried by YouTube is simultaneously provider=`You
 
 Opening an external item records a bounded traversal touch and then opens the original external source. The feed itself remains ephemeral.
 
+The frontpage also offers compact, expandable tickers for every provider and
+the All Feeds, News, Social, Video and Community layers. Each ticker shows the
+latest dated headline, witness count and contributing feed count in the fetched
+sample. Expansion shows publication range, fetch time, undated-item count and
+every original source card. These are bounded sample summaries, not whole-layer
+population totals, performance rankings or merged claims. Layers can overlap.
+Tickers stay independent of the main feed filter so their layer scope stays
+consistent. Unavailable providers remain explicit, and no item is fabricated.
+
+Choose tickers supports individual visibility, Show all and Hide all (including
+future providers while Hide all is active). Only display identifiers are saved
+in browser local storage; headlines and other feed content remain ephemeral.
+Open ticker sections survive refresh. Browser-local choices are not yet synced
+between devices or accounts. This first pass covers the connected external feed
+layers; internal systems need their own native witnesses before gaining tickers.
+
 Shared coverage is grouped only in the browser projection, after balancing and
 role/medium filtering. A group requires either the same HTTP(S) source URL
 (fragment ignored, query preserved, homepages excluded), or the same normalized

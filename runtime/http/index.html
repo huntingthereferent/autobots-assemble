@@ -75,6 +75,17 @@
           <button class="stream-tab" data-live-filter="community">Community</button>
         </div>
 
+        <section class="ticker-panel" aria-label="Feed tickers">
+          <details class="ticker-settings">
+            <summary>Choose tickers</summary>
+            <p>Each ticker covers the fetched sample of its layer. Open it to see every source witness.</p>
+            <div id="ticker-choices" class="ticker-choices"></div>
+            <button id="show-all-tickers" type="button">Show all</button>
+            <button id="hide-all-tickers" type="button">Hide all</button>
+          </details>
+          <div id="feed-tickers" class="feed-tickers"></div>
+        </section>
+
         <section id="trail-bar" class="trail-bar">
           <div class="trail-copy">
             <span class="kicker">Current trail</span>
@@ -219,3 +230,4 @@
   <script src="/app.js" defer></script>
 </body>
 </html>
+

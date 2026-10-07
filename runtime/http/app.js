@@ -186,6 +186,112 @@ async function refreshTasks() {
 
 let liveFeedState = {items: [], sources: [], fetched_at: ""};
 let liveFeedFilter = "balanced";
+const TICKER_PREFERENCE_KEY = "continuityHiddenTickersV1";
+let hiddenTickers = readHiddenTickers();
+
+function readHiddenTickers() {
+  try {
+    const value = JSON.parse(localStorage.getItem(TICKER_PREFERENCE_KEY) || "[]");
+    return new Set(Array.isArray(value) ? value.filter(x => typeof x === "string") : []);
+  } catch (_) { return new Set(); }
+}
+
+function saveTickerChoices() {
+  // Save presentation choices only; feed contents remain in memory.
+  try { localStorage.setItem(TICKER_PREFERENCE_KEY, JSON.stringify([...hiddenTickers])); }
+  catch (_) {}
+}
+
+function tickerLayers(snapshot) {
+  const items = snapshot.items || [];
+  const layers = [
+    {id: "all", name: "All feeds", items},
+    ...["news", "social", "video", "community"].map(function(role) {
+      return {id: "role:" + role, name: role[0].toUpperCase() + role.slice(1),
+        items: items.filter(item => liveItemMatchesFilter(item, role))};
+    })
+  ];
+  const sources = new Map((snapshot.sources || []).map(source => [source.id, source]));
+  items.forEach(function(item) {
+    if (!sources.has(item.source_id)) sources.set(item.source_id,
+      {id: item.source_id, name: item.source_name || item.source_id, ok: null});
+  });
+  sources.forEach(function(source) {
+    layers.push({id: "source:" + source.id, name: source.name,
+      source, items: items.filter(item => item.source_id === source.id)});
+  });
+  return layers;
+}
+
+function tickerSummary(layer, snapshot) {
+  const items = layer.items;
+  const dated = items.map(item => ({item, time: Date.parse(item.published_at)}))
+    .filter(entry => Number.isFinite(entry.time)).sort((a, b) => b.time - a.time);
+  const sourceCount = new Set(items.map(item => item.source_id)).size;
+  const unavailable = layer.source && layer.source.ok === false;
+  const status = unavailable ? "Unavailable" :
+    (items.length ? items.length + " witnesses · " + sourceCount + " feeds" : "No sampled items");
+  return {
+    status,
+    latest: dated.length ? dated[0].item : null,
+    from: dated.length ? dated[dated.length - 1].item.published_at : "",
+    to: dated.length ? dated[0].item.published_at : "",
+    fetchedAt: snapshot.fetched_at || "",
+    undated: items.length - dated.length,
+    reason: unavailable ? layer.source.reason || layer.source.error || "Provider unavailable" : ""
+  };
+}
+
+function renderTickers() {
+  const layers = tickerLayers(liveFeedState);
+  const choices = layers.map(function(layer) {
+    const label = document.createElement("label");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = !hiddenTickers.has("*") && !hiddenTickers.has(layer.id);
+    checkbox.addEventListener("change", function() {
+      if (hiddenTickers.has("*")) {
+        hiddenTickers.delete("*");
+        layers.forEach(other => hiddenTickers.add(other.id));
+      }
+      if (checkbox.checked) hiddenTickers.delete(layer.id);
+      else hiddenTickers.add(layer.id);
+      saveTickerChoices();
+      renderTickers();
+    });
+    label.append(checkbox, document.createTextNode(layer.name));
+    return label;
+  });
+  const openIds = new Set(Array.from($("#feed-tickers").children)
+    .filter(node => node.open).map(node => node.dataset.ticker));
+  const tickers = layers.filter(layer => !hiddenTickers.has("*") && !hiddenTickers.has(layer.id)).map(function(layer) {
+    const data = tickerSummary(layer, liveFeedState);
+    const ticker = document.createElement("details");
+    ticker.className = "feed-ticker";
+    ticker.dataset.ticker = layer.id;
+    ticker.open = openIds.has(layer.id);
+    const summary = document.createElement("summary");
+    const name = document.createElement("strong");
+    name.textContent = layer.name;
+    const status = document.createElement("span");
+    status.className = "ticker-status";
+    status.textContent = data.status + " · fetched sample";
+    const headline = document.createElement("span");
+    headline.className = "ticker-headline";
+    headline.textContent = data.latest ? data.latest.title : data.reason || "No dated headline";
+    summary.append(name, status, headline);
+    const scope = document.createElement("p");
+    scope.className = "ticker-scope";
+    scope.textContent = "Fetched: " + (data.fetchedAt || "not yet") +
+      (data.from ? " · Published: " + data.from + " → " + data.to : "") +
+      (data.undated ? " · " + data.undated + " undated" : "");
+    ticker.append(summary, scope, ...groupLiveItems(layer.items).map(liveEventCard));
+    return ticker;
+  });
+  $("#ticker-choices").replaceChildren(...choices);
+  $("#feed-tickers").replaceChildren(...tickers);
+  $("#feed-tickers").hidden = tickers.length === 0;
+}
 
 function trailSessionId() {
   let value = sessionStorage.getItem("continuityTraceSession");
@@ -528,6 +634,7 @@ function renderLiveFeed() {
   $("#live-feed").replaceChildren(...groupLiveItems(items).map(liveEventCard));
   $("#empty-live-feed").hidden = items.length > 0;
   renderLiveSources();
+  renderTickers();
 }
 
 async function refreshLiveFeed(force = false) {
@@ -625,6 +732,17 @@ async function refreshAll() {
 }
 
 $("#ohayo").addEventListener("click", activateOhayo);
+
+$("#show-all-tickers").addEventListener("click", function() {
+  hiddenTickers.clear();
+  saveTickerChoices();
+  renderTickers();
+});
+$("#hide-all-tickers").addEventListener("click", function() {
+  hiddenTickers.add("*");
+  saveTickerChoices();
+  renderTickers();
+});
 
 document.querySelectorAll("[data-live-filter]").forEach(function(button) {
   button.addEventListener("click", function() {

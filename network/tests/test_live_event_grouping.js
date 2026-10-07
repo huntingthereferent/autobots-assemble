@@ -15,12 +15,18 @@ class Element {
 const elements = new Map();
 const document = {
   createElement: tag => new Element(tag),
+  createTextNode: text => Object.assign(new Element("text"), {textContent: text}),
   querySelector: key => {
     if (!elements.has(key)) elements.set(key, new Element("div"));
     return elements.get(key);
   }
 };
-const context = vm.createContext({document, URL, console});
+const preferences = new Map();
+const localStorage = {
+  getItem: key => preferences.get(key) || null,
+  setItem: (key, value) => preferences.set(key, value)
+};
+const context = vm.createContext({document, URL, console, localStorage});
 const app = fs.readFileSync(path.join(__dirname, "../../runtime/http/app.js"), "utf8");
 vm.runInContext(app.slice(0, app.indexOf('$("#ohayo").addEventListener')), context);
 const group = items => context.groupLiveItems(items);
@@ -122,4 +128,64 @@ test("filters operate on witnesses before grouping and refresh replaces ephemera
   vm.runInContext('liveFeedState = {items: [], sources: []}; renderLiveFeed();', context);
   assert.equal(elements.get("#live-feed").children.length, 0);
   assert.equal(elements.get("#empty-live-feed").hidden, false);
+});
+
+test("tickers cover every source and overlapping layers without mutating witnesses", () => {
+  const rows = [row("BBC"), row("Reuters", {medium: "video"}), row("Reddit", {roles: ["social", "community"]})];
+  const snapshot = {items: rows, sources: [{id: "offline", name: "Offline", ok: false}], fetched_at: "2026-10-07T12:00:00Z"};
+  const before = JSON.stringify(snapshot);
+  const layers = context.tickerLayers(snapshot);
+  assert.equal(layers.length, 9);
+  assert.equal(layers.find(x => x.id === "role:news").items.length, 2);
+  assert.equal(layers.find(x => x.id === "role:video").items[0], rows[1]);
+  assert.equal(layers.find(x => x.id === "source:BBC").items[0], rows[0]);
+  assert.equal(layers.find(x => x.id === "all").items, rows);
+  assert.equal(JSON.stringify(snapshot), before);
+});
+
+test("ticker summary uses date order, preserves unknown dates and distinguishes failure from zero", () => {
+  const rows = [row("a", {published_at: "bad"}), row("b", {published_at: "2026-10-06T10:00:00Z"}), row("c")];
+  const snapshot = {fetched_at: "2026-10-07T12:00:00Z"};
+  const summary = context.tickerSummary({items: rows}, snapshot);
+  assert.equal(summary.latest, rows[2]);
+  assert.equal(summary.undated, 1);
+  assert.equal(summary.fetchedAt, snapshot.fetched_at);
+  assert.match(summary.status, /3 witnesses/);
+  assert.equal(context.tickerSummary({items: [], source: {ok: false}}, snapshot).status, "Unavailable");
+  assert.equal(context.tickerSummary({items: [], source: {ok: true}}, snapshot).status, "No sampled items");
+});
+
+test("ticker expansion exposes all witnesses and retains open state on refresh", () => {
+  context.rows = [row("BBC"), row("Reuters")];
+  vm.runInContext('hiddenTickers.clear(); liveFeedState = {items: rows, sources: []}; renderTickers();', context);
+  const all = elements.get("#feed-tickers").children[0];
+  assert.equal(walk(all).filter(x => x.className === "live-title-link").length, 2);
+  all.open = true;
+  vm.runInContext('renderTickers();', context);
+  assert.equal(elements.get("#feed-tickers").children[0].open, true);
+});
+
+test("ticker choices persist only display identifiers and hide all includes future providers", () => {
+  vm.runInContext('hiddenTickers = new Set(["*"]); saveTickerChoices(); renderTickers();', context);
+  assert.equal(elements.get("#feed-tickers").hidden, true);
+  assert.deepEqual([...context.readHiddenTickers()], ["*"]);
+  assert.equal([...preferences.values()][0], '["*"]');
+  context.rows = [row("new-provider")];
+  vm.runInContext('liveFeedState = {items: rows, sources: []}; renderTickers();', context);
+  assert.equal(elements.get("#feed-tickers").children.length, 0);
+  const firstChoice = elements.get("#ticker-choices").children[0].children[0];
+  firstChoice.checked = true;
+  firstChoice.listeners.change();
+  assert.equal(elements.get("#feed-tickers").children.length, 1);
+  assert.equal(elements.get("#feed-tickers").children[0].dataset.ticker, "all");
+});
+
+test("broken preferences fall back to all tickers and filtering does not alter total layer sample", () => {
+  preferences.set("continuityHiddenTickersV1", "broken");
+  assert.equal(context.readHiddenTickers().size, 0);
+  context.rows = [row("BBC"), row("Reuters", {medium: "video"})];
+  vm.runInContext('hiddenTickers.clear(); liveFeedState = {items: rows, sources: []}; liveFeedFilter = "video"; renderLiveFeed();', context);
+  const all = elements.get("#feed-tickers").children[0];
+  assert.match(all.children[0].children[1].textContent, /2 witnesses/);
+  assert.equal(elements.get("#live-feed").children.length, 1);
 });
