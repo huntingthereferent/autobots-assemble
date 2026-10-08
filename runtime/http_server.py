@@ -23,15 +23,22 @@ DATA_DIR = Path(
 HOST = os.environ.get("HOST", "127.0.0.1")
 PORT = int(os.environ.get("PORT", "8040"))
 LOCK = threading.RLock()
+POOL_ENABLED = os.environ.get("CONTINUITY_AGENT_POOL", "").lower() in {"1", "true", "yes"}
+if POOL_ENABLED and HOST not in {"127.0.0.1", "::1", "localhost"}:
+    raise ValueError("Continuity agent pool is local-only")
+if POOL_ENABLED:
+    from runtime.pool_evaluator import ContinuityPoolEvaluator
+    POOL_EVALUATOR = ContinuityPoolEvaluator(ROOT.parent)
+else:
+    POOL_EVALUATOR = None
 SERVICE = EcosystemService(
     data_dir=DATA_DIR,
     repository_work_file=os.environ.get('CONTINUITY_REPO_WORK_FILE') or None,
+    ab_evaluator=POOL_EVALUATOR,
 )
-POOL_ENABLED = os.environ.get("CONTINUITY_AGENT_POOL", "").lower() in {"1", "true", "yes"}
-if POOL_ENABLED:
-    if HOST not in {"127.0.0.1", "::1", "localhost"}:
-        raise ValueError("Continuity agent pool is local-only")
+if POOL_EVALUATOR is not None:
     from runtime.continuity_pool import connect_pool
+    POOL_EVALUATOR.bind(SERVICE)
     POOL_BOOT = connect_pool(SERVICE, ROOT.parent)
 
 

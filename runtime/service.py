@@ -87,13 +87,15 @@ class EcosystemService:
         self.activations = ActivationRegistry.from_json(
             activation_registry
         )
-        if native_observer is not None and ab_evaluator is not None:
-            raise ValueError('choose either an A/B evaluator or its native observer')
-        evaluated = (NativeABEvaluator(native_observer)
-                     if native_observer is not None else ab_evaluator)
+        native = NativeABEvaluator(native_observer) if native_observer is not None else None
+        if native is not None and ab_evaluator is not None:
+            from runtime.evaluator_router import RoutedEvaluator
+            evaluator = RoutedEvaluator(self.runtime, ab_evaluator, native)
+        else:
+            evaluator = ab_evaluator or native
         self.agent_lineage = AgentLineage(
             self.runtime, self.activations,
-            evaluate=evaluated, admit_closure=closure_admitter,
+            evaluate=evaluator, admit_closure=closure_admitter,
             allow_simulation=False,
         )
         self.agent_bridge = AgentBridge(self.agent_lineage)
@@ -164,6 +166,8 @@ class EcosystemService:
                 "recorded": sum(h.metadata.get("agent_lineage") is True
                                 for h in self.runtime._handoffs.values()),
                 "ab_evaluator_connected": self.agent_lineage.evaluate is not None,
+                "evaluator_actors": sorted(getattr(
+                    self.agent_lineage.evaluate, "supported_actors", ()) or ()),
                 "closure_admitter_connected": self.agent_lineage.admit_closure is not None,
                 "autonomous_worker_running": False,
             },
@@ -175,10 +179,9 @@ class EcosystemService:
                     for t in self.personal.tasks()
                     if any(p.startswith("seed:continuity-agent:") for p in t.provenance)
                 ),
-                "native_ab_connected": any(
-                    e.event_type == "CONTINUITY_POOL_AB"
+                "registered_evaluator": any(
+                    self.agent_lineage.can_evaluate(self.runtime.get(root))
                     for root in self.agent_lineage.roots_for_actor("continuity-agent-pool")
-                    for e in self.runtime.event_store.for_handoff(root)
                 ),
                 "model_backed_worker_running": False,
             },
@@ -188,9 +191,9 @@ class EcosystemService:
                 "factory_registered": "factory" in self.orchestrator._systems,
             },
             "warning": (
-                "Source-linked tasks and transport are not an autonomous A/B evaluator. "
-                "Online School/Factory need registered source state; HTTP service alone "
-                "does not run agents without a connected evaluator."
+                "An A/B evaluator can inspect native evidence, but software editing, "
+                "independent closure and model-backed autonomous execution need "
+                "separately registered capable actors."
             ),
         }
 

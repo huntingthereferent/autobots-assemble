@@ -9,6 +9,8 @@ with projection='agent_lineage'.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from hashlib import sha256
+import json
 from typing import Callable
 from uuid import NAMESPACE_URL, uuid5
 
@@ -27,6 +29,7 @@ class AgentMove:
     closes: tuple[str, ...] = ()
     closure_evidence: tuple[EvidenceRecord, ...] = ()
     closure_birth_referent: str = ""
+    observation_only: bool = False
 
 
 @dataclass(frozen=True)
@@ -290,6 +293,44 @@ class AgentLineage:
             births.append(child_id)
         return LineageStep(born=tuple(births), closed=tuple(closed))
 
+    def can_evaluate(self, agent: Handoff) -> bool:
+        """A registered callback applies only to its advertised owner(s)."""
+        if self.evaluate is None:
+            return False
+        actors = getattr(self.evaluate, "supported_actors", None)
+        owner = self.runtime.get(agent.metadata.get("lineage_root", agent.handoff_id)).from_actor
+        return actors is None or owner.strip().casefold() in actors
+
+    def _observe_only(self, agent: Handoff, decision: AgentMove) -> LineageStep:
+        """Record A/B's real unresolved edge without consuming READY."""
+        if decision.result.status not in {"UNKNOWN", "BLOCKED", "PARTIAL"}:
+            raise ValueError("observation_only must remain unresolved")
+        if (decision.next_referent or decision.closes or decision.closure_evidence
+                or decision.closure_birth_referent):
+            raise ValueError("observation_only cannot request births or closure")
+        if any(e.condition in agent.required_witnesses for e in decision.result.evidence):
+            raise ValueError("observation cannot claim completion witness")
+        payload = {"status": decision.result.status, "output": decision.result.output,
+                   "note": decision.result.note,
+                   "evidence": [asdict(e) for e in decision.result.evidence]}
+        fingerprint = sha256(json.dumps(payload, sort_keys=True, default=str,
+                    separators=(",", ":")).encode("utf-8")).hexdigest()
+        events = self.runtime.event_store.for_handoff(agent.handoff_id)
+        if any(event.event_type == "AGENT_AB_OBSERVED"
+               and event.data.get("fingerprint") == fingerprint for event in events):
+            return LineageStep()
+        before = self.runtime.state(agent.handoff_id)
+        self.runtime.event_store.append(HandoffEvent.create(
+            handoff_id=agent.handoff_id, event_type="AGENT_AB_OBSERVED",
+            actor_id="agent-ab",
+            data={"fingerprint": fingerprint, **payload},
+            evidence=decision.result.evidence,
+            parents=(before.last_event_id,) if before.last_event_id else (),
+        ))
+        if self.runtime.state(agent.handoff_id).status != "READY":
+            raise AssertionError("observational A/B must not consume agent")
+        return LineageStep(executed=(agent.handoff_id,))
+
     def step(self, root: str) -> LineageStep:
         """Process one eligible agent; safe to call again after a restart."""
         members = self._members(root)
@@ -298,15 +339,15 @@ class AgentLineage:
         for agent in members:
             state = self.runtime.state(agent.handoff_id)
             executed: tuple[str, ...] = ()
-            if state.status == "READY" and self.evaluate is not None:
-                # Read-only native observers cannot run before an actual capture.
-                # Leave READY for swallow/observation; do not persist invented UNKNOWN.
+            if state.status == "READY" and self.can_evaluate(agent):
                 ready = getattr(self.evaluate, "has_observation", None)
                 if ready is not None and not ready(agent.handoff_id):
                     continue
                 decision = self.evaluate(agent, state)
                 if not isinstance(decision, AgentMove):
                     raise TypeError("agent evaluator must return AgentMove")
+                if decision.observation_only:
+                    return self._observe_only(agent, decision)
                 if self._CONTROL in decision.result.output:
                     raise ValueError("reserved output key: _agent_lineage")
                 # Fail before STARTED so invalid COMPLETE cannot strand ACTIVE.

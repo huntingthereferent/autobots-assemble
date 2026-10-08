@@ -15,6 +15,7 @@ WATCHED_EVENTS = {
     "CREATED", "STARTED", "RESULT", "REOPENED", "AGENT_LOOP_CLOSED",
     "SWALLOW_ATTEMPT", "SWALLOW_UNRESOLVED", "REFERENCE_ADMITTED",
     "REFERENCE_REJECTED", "REGROUND_ATTEMPT",
+    "AGENT_AB_OBSERVED",
 }
 OPEN_TASK_STATUSES = {"WAITING", "READY", "ACTIVE", "PARTIAL", "BLOCKED", "FAILED", "UNKNOWN"}
 
@@ -28,6 +29,10 @@ def observe(service: "EcosystemService", *, actor_id: str, limit: int = 40) -> d
     actor = actor_id.strip().casefold()
     now = datetime.now(timezone.utc)
     connections = service.connections()
+    connections["agents"]["ab_evaluator_connected"] = any(
+        service.agent_lineage.can_evaluate(service.runtime.get(root))
+        for root in service.agent_lineage.roots_for_actor(actor)
+    )
     brief = service.agent_brief(actor_id=actor_id)
 
     states = service.runtime.snapshot()
@@ -80,7 +85,7 @@ def observe(service: "EcosystemService", *, actor_id: str, limit: int = 40) -> d
             "actor_id": event.actor_id,
             "status": (
                 str(event.data.get("status") or "")
-                if event.event_type == "RESULT" else ""
+                if event.event_type in {"RESULT", "AGENT_AB_OBSERVED"} else ""
             ),
             "evidence_refs": [e.ref for e in event.evidence if e.ref][:6],
         }

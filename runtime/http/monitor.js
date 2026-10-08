@@ -87,10 +87,9 @@ function renderConnections(connections) {
     h = connections.handoff_runtime, s = connections.systems,
     p = connections.continuity_pool || {};
   const rows = [
-    connectionRow("Repository task source", r.available ? "Connected · " + r.eligible_active_rows + " entries" : "Not connected", r.available),
+    ...(ACTOR === "james" ? [connectionRow("James repository tasks", r.available ? "Connected · " + r.eligible_active_rows + " entries" : "Not connected", r.available)] : []),
     connectionRow("Durable event journal", h.durable ? "Connected" : "Not durable", h.durable),
-    connectionRow("Original Continuity tasks", p.original_tasks_admitted ? p.original_tasks_admitted + " admitted" : "Not admitted", Boolean(p.original_tasks_admitted)),
-    connectionRow("Native A/B source loop", p.native_ab_connected ? "Connected" : "Not connected", Boolean(p.native_ab_connected)),
+    ...(ACTOR === "continuity-agent-pool" ? [connectionRow("Original Continuity tasks", p.original_tasks_admitted ? p.original_tasks_admitted + " admitted" : "Not admitted", Boolean(p.original_tasks_admitted))] : []),
     connectionRow("A/B evaluator", a.ab_evaluator_connected ? "Registered" : "Not registered", a.ab_evaluator_connected),
     connectionRow("Closure verifier", a.closure_admitter_connected ? "Registered" : "Not registered", a.closure_admitter_connected),
     connectionRow("Autonomous worker", a.autonomous_worker_running ? "Reported running" : "Not running", a.autonomous_worker_running),
