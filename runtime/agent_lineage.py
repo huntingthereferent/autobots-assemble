@@ -133,7 +133,8 @@ class AgentLineage:
     def seed_for_tasks(self, *, actor_id: str, tasks: tuple[Handoff, ...],
                        route_id: str, referent: str,
                        boundaries: tuple[str, ...] = (),
-                       provenance: tuple[str, ...] = ()) -> str | None:
+                       provenance: tuple[str, ...] = (),
+                       seed_kind: str = "ohayo") -> str | None:
         """One durable root referencing existing admitted work, never new tasks.
 
         Caller must have checked the actor's explicit day-attention route.
@@ -149,7 +150,9 @@ class AgentLineage:
                or task.handoff_id not in self.runtime._handoffs
                for task in tasks):
             raise ValueError("task seed accepts existing handoffs assigned to actor only")
-        root = self._id("ohayo", route_id, actor_id.strip().casefold(), "task-seed")
+        if not seed_kind.strip():
+            raise ValueError("seed_kind must be nonempty")
+        root = self._id(seed_kind, route_id, actor_id.strip().casefold(), "task-seed")
         if root in self.runtime.snapshot():
             return root
         self.runtime.submit(Handoff(
@@ -176,7 +179,7 @@ class AgentLineage:
             ))),
             metadata={"agent_lineage": True, "lineage_root": root,
                       "birth_parent": "", "generation": 1,
-                      "birth_reason": "ohayo_task_seed",
+                      "birth_reason": f"{seed_kind}_task_seed",
                       "activation_id": route_id, "task_owner": actor_id.strip().casefold()},
         ))
         return root

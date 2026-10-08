@@ -161,6 +161,21 @@ class EcosystemService:
                 "closure_admitter_connected": self.agent_lineage.admit_closure is not None,
                 "autonomous_worker_running": False,
             },
+            "continuity_pool": {
+                "original_task_owner": "continuity-agent-pool",
+                "original_tasks_admitted": sum(
+                    t.assignee == "continuity-agent-pool"
+                    and self.personal.admitted_handoff_id(t.task_id) is not None
+                    for t in self.personal.tasks()
+                    if any(p.startswith("seed:continuity-agent:") for p in t.provenance)
+                ),
+                "native_ab_connected": any(
+                    e.event_type == "CONTINUITY_POOL_AB"
+                    for root in self.agent_lineage.roots_for_actor("continuity-agent-pool")
+                    for e in self.runtime.event_store.for_handoff(root)
+                ),
+                "model_backed_worker_running": False,
+            },
             "systems": {
                 "registered": list(self.orchestrator._systems),
                 "online_school_registered": "online-school" in self.orchestrator._systems,

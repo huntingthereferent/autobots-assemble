@@ -27,6 +27,12 @@ SERVICE = EcosystemService(
     data_dir=DATA_DIR,
     repository_work_file=os.environ.get('CONTINUITY_REPO_WORK_FILE') or None,
 )
+POOL_ENABLED = os.environ.get("CONTINUITY_AGENT_POOL", "").lower() in {"1", "true", "yes"}
+if POOL_ENABLED:
+    if HOST not in {"127.0.0.1", "::1", "localhost"}:
+        raise ValueError("Continuity agent pool is local-only")
+    from runtime.continuity_pool import connect_pool
+    POOL_BOOT = connect_pool(SERVICE, ROOT.parent)
 
 
 def read_json(handler):
@@ -76,6 +82,15 @@ class Handler(BaseHTTPRequestHandler):
                         raise ValueError("actor is required")
                     limit = int(query.get("limit", ["40"])[0])
                     self.send_json(SERVICE.monitor(actor_id=actor, limit=limit))
+                    return
+
+                if parsed.path == "/api/agent-pool":
+                    if self.client_address[0] not in {"127.0.0.1", "::1"}:
+                        self.send_json({"error": "agent pool API is loopback-only"}, 403)
+                        return
+                    from runtime.continuity_pool import pool_snapshot
+                    self.send_json({"enabled": POOL_ENABLED,
+                                    **pool_snapshot(SERVICE)})
                     return
 
                 if parsed.path == "/api/connections":

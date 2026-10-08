@@ -1,6 +1,7 @@
 "use strict";
 const $ = (selector) => document.querySelector(selector);
 const POLL_MS = 10000;
+const ACTOR = new URLSearchParams(window.location.search).get("actor") || "continuity-agent-pool";
 let lastPollStarted = false;
 let lastSuccess = 0;
 
@@ -83,10 +84,13 @@ function connectionRow(label, text, connected) {
 }
 function renderConnections(connections) {
   const r = connections.repository_work, a = connections.agents,
-    h = connections.handoff_runtime, s = connections.systems;
+    h = connections.handoff_runtime, s = connections.systems,
+    p = connections.continuity_pool || {};
   const rows = [
     connectionRow("Repository task source", r.available ? "Connected · " + r.eligible_active_rows + " entries" : "Not connected", r.available),
     connectionRow("Durable event journal", h.durable ? "Connected" : "Not durable", h.durable),
+    connectionRow("Original Continuity tasks", p.original_tasks_admitted ? p.original_tasks_admitted + " admitted" : "Not admitted", Boolean(p.original_tasks_admitted)),
+    connectionRow("Native A/B source loop", p.native_ab_connected ? "Connected" : "Not connected", Boolean(p.native_ab_connected)),
     connectionRow("A/B evaluator", a.ab_evaluator_connected ? "Registered" : "Not registered", a.ab_evaluator_connected),
     connectionRow("Closure verifier", a.closure_admitter_connected ? "Registered" : "Not registered", a.closure_admitter_connected),
     connectionRow("Autonomous worker", a.autonomous_worker_running ? "Reported running" : "Not running", a.autonomous_worker_running),
@@ -118,7 +122,7 @@ async function refreshMonitor() {
   lastPollStarted = true;
   $("#connection").textContent = "Checking…";
   try {
-    const response = await fetch("/api/monitor?actor=james", {cache: "no-store"});
+    const response = await fetch("/api/monitor?actor=" + encodeURIComponent(ACTOR), {cache: "no-store"});
     if (!response.ok) throw new Error("Runtime returned HTTP " + response.status);
     const snapshot = await response.json();
     if (!snapshot.read_only) throw new Error("Expected a read-only monitor response");

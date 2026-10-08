@@ -138,7 +138,7 @@ class MonitorTests(unittest.TestCase):
                                      events_before)
                     for path, fragment in [
                         ("/monitor.html", b"Agent monitor"),
-                        ("/monitor.js", b"/api/monitor?actor=james"),
+                        ("/monitor.js", b"continuity-agent-pool"),
                         ("/monitor.css", b".metrics"),
                     ]:
                         with urlopen(base + path, timeout=4) as resp:

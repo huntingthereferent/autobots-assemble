@@ -1,0 +1,142 @@
+{
+  "schema_version": 1,
+  "tasks": [
+    {
+      "seed_id": "finish-continuity-site",
+      "title": "Finish Continuity site",
+      "referent": "Continuity site",
+      "assignee": "continuity-agent-pool",
+      "required_relation": "continue A/B until the site's actually required relations close",
+      "inputs": {
+        "start_reference_kind": "build",
+        "start_reference": "COMPLETE_STACK.md",
+        "surface_path": "runtime/http/index.html",
+        "instruction": "finish the site",
+        "rule": "Use A/B to discover the next required relation. Enter only the layer reached by that relation, resolve that layer's native reference, implement/test the supported movement, then feed the returned state back into A/B."
+      },
+      "expected_output": {
+        "result": "COMPLETE / PARTIAL / WALL",
+        "closed_relations": "list of witnessed site relations closed",
+        "current_state": "next A/B state",
+        "references_used": "native reference packets actually reached",
+        "evidence": "tests / runtime checks / visual witnesses / provenance",
+        "walls": "remaining unresolved boundaries only"
+      },
+      "required_witnesses": [
+        "site movement closed under A/B",
+        "native references preserved",
+        "site regression checks reported"
+      ],
+      "admissible_evidence": {
+        "site movement closed under A/B": ["test", "runtime", "inspection", "agent_trace"],
+        "native references preserved": ["provenance", "agent_trace"],
+        "site regression checks reported": ["test", "runtime", "inspection"]
+      },
+      "boundaries": [
+        "Do not turn finish into a fixed frontend/backend/auth/database/API/settings/billing checklist.",
+        "Do not add a component merely because common apps have one.",
+        "Use build/Complete Stack only to expose required dependencies; use the native reference of each reached layer before invention.",
+        "Do not declare visual completion in place of behavioral/evidence closure.",
+        "For WALL/UNKNOWN, run the outward native-reference pass first; only after that and agent-pool exhaustion may the same unresolved wall reach the James task bridge."
+      ],
+      "notes": "This task is recursive. A supported result becomes the next A/B input until the site reaches evidence closure or an explicit wall."
+    },
+    {
+      "seed_id": "find-things-to-swallow",
+      "title": "Find things to swallow",
+      "referent": "Continuity expansion frontier",
+      "assignee": "continuity-agent-pool",
+      "required_relation": "find external/native systems whose movement Continuity can traverse without absorbing their owned state",
+      "inputs": {
+        "start_reference_kind": "research",
+        "instruction": "find things to swallow",
+        "boundary_role": "swallow-first resolver for WALL/UNKNOWN before later reground or human escalation",
+        "meaning_of_swallow": "Find useful systems, sources, protocols, tools, data surfaces, workflows, or physical/process layers that Continuity can enter in their own shape, preserve provenance through, and connect to the existing A/B/reference/handoff stack.",
+        "selection_rule": "Prefer things with observable movement, a native witness surface, an inspectable contract/interface, and a clear return relation."
+      },
+      "expected_output": {
+        "candidates": "ranked candidate referents with native sources/interfaces",
+        "why_useful": "what new movement/reference/dependency each candidate exposes",
+        "native_shape": "how the candidate represents itself",
+        "connection_path": "how Continuity can traverse it without claiming ownership",
+        "reference_kind": "existing kind or evidence needed for a new admitted native reference",
+        "next_ab": "smallest test that would determine whether to connect it"
+      },
+      "required_witnesses": [
+        "candidate source/interface inspected",
+        "native shape preserved",
+        "connection path and boundary reported"
+      ],
+      "admissible_evidence": {
+        "candidate source/interface inspected": ["source", "documentation", "runtime", "inspection"],
+        "native shape preserved": ["source", "provenance", "agent_trace"],
+        "connection path and boundary reported": ["analysis", "agent_trace", "documentation"]
+      },
+      "boundaries": [
+        "Swallow means traverse/connect, not copy the external system into Continuity.",
+        "Do not prefer a candidate just because it is popular or easy to categorize.",
+        "Do not create a new reference adapter until a real native witness contract is inspected.",
+        "Do not treat discovery snippets as proof.",
+        "Keep source ownership, native terminology, and provenance intact."
+      ],
+      "notes": "This is the expansion task. Its useful output is new traversable movement and native reference evidence, not a long catalog."
+    },
+    {
+      "seed_id": "visual-provenance-min-max",
+      "title": "Visual provenance min/max",
+      "referent": "Continuity frontage visual fit",
+      "assignee": "continuity-agent-pool",
+      "required_relation": "A/B visual density and reference fit until more useful state fits without losing readability, provenance, or native relations",
+      "inputs": {
+        "start_reference_kind": "visual",
+        "surface_path": "runtime/http/index.html",
+        "template_id": "continuity_social_hub_v1",
+        "instruction": "min/max the visual provenance until everything that should fit fits and the page visually closes",
+        "minimize": [
+          "wasted viewport area",
+          "decorative chrome",
+          "oversized controls",
+          "duplicate labels/context",
+          "scroll required before current movement becomes readable"
+        ],
+        "maximize": [
+          "useful witnessed movement visible per viewport",
+          "source/provenance legibility",
+          "current referent clarity",
+          "reachable controls",
+          "stable desktop/mobile fit"
+        ],
+        "loop_rule": "Make one visual relation change at a time, compare before/after against the active visual reference and local binding, keep only improvements, and feed the surviving visual state back into A/B."
+      },
+      "expected_output": {
+        "result": "visual closure / wall / next measurable edge",
+        "before_after": "viewport/render measurements and screenshots where available",
+        "surviving_relations": "visual relations kept after A/B",
+        "rejected_changes": "ideas collapsed or made fit/readability/provenance worse",
+        "binding_updates": "intentional deviations/preserve relations kept current",
+        "next_state": "A/B-ready visual state"
+      },
+      "required_witnesses": [
+        "desktop fit inspected",
+        "mobile fit inspected",
+        "visual provenance binding remains current",
+        "min/max changes compared before and after"
+      ],
+      "admissible_evidence": {
+        "desktop fit inspected": ["screenshot", "browser", "inspection", "measurement"],
+        "mobile fit inspected": ["screenshot", "browser", "inspection", "measurement"],
+        "visual provenance binding remains current": ["provenance", "inspection", "test"],
+        "min/max changes compared before and after": ["measurement", "inspection", "agent_trace", "test"]
+      },
+      "boundaries": [
+        "Do not optimize for prettiness alone; optimize the witnessed visual relation.",
+        "Do not copy branding/trade dress from external visual witnesses.",
+        "Do not re-add inert controls merely to match a reference.",
+        "Do not hide source/provenance to gain density.",
+        "Do not declare closure without checking both desktop and mobile.",
+        "If another relation is required to make the visual surface honest, open that layer instead of faking the visual."
+      ],
+      "notes": "This is iterative visual A/B, not a one-shot redesign. Stop when further changes collapse, regress another witnessed relation, or hit a measurable wall."
+    }
+  ]
+}
