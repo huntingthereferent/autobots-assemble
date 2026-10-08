@@ -62,3 +62,40 @@ The focused test suite checks pure source parsing, source admission,
 explicit Ohayo seed, GET non-mutation, restart idempotency, and separation
 of pinned/frozen work. Verify the live `/api/connections` output and then
 call `POST /api/ohayo` on the device after deployment.
+
+## Live device verification after deployment
+
+Updated worktree: `C:\\Users\\teepa\\continuity-live` at
+`150724b`; old `continuity-sync` working copy and its local edits were
+left untouched. The new runtime process uses
+`127.0.0.1:18540`, with `CONTINUITY_REPO_WORK_FILE` set to the checked-out
+`TASKS.md` and a separate durable data directory.
+
+Observed `GET /api/connections`:
+- `repository_work.configured=true`, `available=true`, 4 active rows;
+- `handoff_runtime.durable=true`;
+- `agents.ab_evaluator_connected=false`,
+  `closure_admitter_connected=false`,
+  `autonomous_worker_running=false`;
+- `systems.online_school_registered=false` and
+  `factory_registered=false`.
+
+Observed `POST /api/ohayo`:
+- first call admitted 4 existing work rows as native handoffs;
+- one READY root agent was born for these references;
+- second call admitted 0 and spawned 0;
+- after process restart, the same 4 tasks and one root were recovered;
+- post-restart Ohayo again admitted 0 and spawned 0.
+
+The portal, JS, status, connections, handoffs, notes, tasks, calendar,
+attention and read-only Ohayo HTTP routes each responded with HTTP 200.
+
+Focused repository-connection tests: **8/8 passed on the authorized
+computer**. JavaScript syntax validation also passed. GitHub Actions
+reports the same two preexisting Online School suite failures; no
+new errors were reported by the new tests.
+
+This is a **connected source and live task-agent handoff**, not yet an
+autonomous evaluator or autonomous worker. The local Python process remains
+available while the host runs; automatic restart after computer reboot is
+not established by this verification.
