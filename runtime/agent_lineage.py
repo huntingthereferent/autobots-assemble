@@ -57,10 +57,11 @@ class AgentLineage:
         runtime: HandoffRuntime,
         registry: ActivationRegistry,
         *,
-        evaluate: Evaluator,
+        evaluate: Evaluator | None = None,
         admit_closure: ClosureAdmitter | None = None,
         boundary: SwallowFirstBoundary | None = None,
         max_births: int = 16,
+        allow_simulation: bool = True,
     ) -> None:
         if max_births < 1:
             raise ValueError("max_births must be positive")
@@ -72,6 +73,7 @@ class AgentLineage:
         self.admit_closure = admit_closure
         self.boundary = boundary
         self.max_births = max_births
+        self.allow_simulation = allow_simulation
 
     @staticmethod
     def _id(*parts: str) -> str:
@@ -84,21 +86,32 @@ class AgentLineage:
             and self.runtime.get(hid).metadata.get("agent_lineage") is True
         )
 
-    def activate(self, surface: str, *, actor_id: str, instance_id: str) -> str | None:
+    def activate(self, surface: str, *, actor_id: str, instance_id: str,
+                 referent: str | None = None) -> str | None:
         """Exactly one agent per explicit activation instance; never mutate ohayo."""
         route = self.registry.resolve(surface, actor_id=actor_id)
         if route is None or route.projection != "agent_lineage":
             return None
         if not instance_id.strip():
             raise ValueError("instance_id is required for replay-safe activation")
-        root = self._id("activation", route.activation_id, actor_id, instance_id)
-        if root not in self.runtime.snapshot():
+        if referent is not None and not referent.strip():
+            raise ValueError("referent cannot be blank")
+        chosen_referent = referent.strip() if referent is not None else route.referent
+        root = self._id("activation", route.activation_id, actor_id.strip().casefold(), instance_id)
+        if root in self.runtime.snapshot():
+            existing = self.runtime.get(root)
+            if existing.referent != chosen_referent:
+                raise ValueError("activation instance already bound to another referent")
+        else:
             self.runtime.submit(Handoff(
-                handoff_id=root, referent=route.referent,
+                handoff_id=root, referent=chosen_referent,
                 from_actor=actor_id, to_actor="agent-ab",
                 required_relation="A/B compare admitted referent",
                 required_witnesses=("movement witness",),
-                admissible_evidence={"movement witness": ("simulation", "measurement", "source")},
+                admissible_evidence={"movement witness": (
+                    ("simulation", "measurement", "source") if self.allow_simulation
+                    else ("measurement", "source")
+                )},
                 boundaries=route.boundaries,
                 provenance=route.provenance,
                 metadata={"agent_lineage": True, "lineage_root": root,
@@ -143,16 +156,17 @@ class AgentLineage:
             target = ancestors.get(target_id)
             if target is None:
                 continue  # No cross-lineage or self-closure.
-            if self.admit_closure is None or not closure_evidence:
-                continue  # Evidence syntax alone never admits closure.
-            if not self.admit_closure(agent, target, closure_evidence):
-                continue
             events = self.runtime.event_store.for_handoff(target_id)
             prior = next((e for e in events if e.event_type == "AGENT_LOOP_CLOSED"), None)
             if prior is not None:
-                # Only the same witness may resume an interrupted birth.
-                if prior.data.get("closed_by") == agent.handoff_id:
+                # A durable admission survives restart even if the verifier is offline.
+                # Only the original closing agent and identical evidence may resume.
+                if prior.data.get("closed_by") == agent.handoff_id and prior.evidence == closure_evidence:
                     approved_closures.append(target_id)
+                continue
+            if self.admit_closure is None or not closure_evidence:
+                continue  # Evidence syntax alone never admits closure.
+            if not self.admit_closure(agent, target, closure_evidence):
                 continue
             parent = events[-1].event_id if events else ""
             self.runtime.event_store.append(HandoffEvent.create(
@@ -220,7 +234,7 @@ class AgentLineage:
         for agent in members:
             state = self.runtime.state(agent.handoff_id)
             executed: tuple[str, ...] = ()
-            if state.status == "READY":
+            if state.status == "READY" and self.evaluate is not None:
                 decision = self.evaluate(agent, state)
                 if not isinstance(decision, AgentMove):
                     raise TypeError("agent evaluator must return AgentMove")
@@ -255,6 +269,67 @@ class AgentLineage:
                     unresolved=applied.unresolved,
                 )
         return LineageStep()
+
+    def submit_move(self, agent_id: str, move: AgentMove, *, actor_id: str) -> LineageStep:
+        """Accept an externally produced A/B result through the durable handoff.
+
+        Neither a JSON result nor a source locator proves an A/B conclusion;
+        descendant loop closure still needs an independent admission callback.
+        """
+        agent = self.runtime.get(agent_id)
+        if agent.metadata.get("agent_lineage") is not True:
+            raise ValueError("target is not an agent-lineage handoff")
+        if not actor_id.strip():
+            raise ValueError("result actor is required")
+        if not isinstance(move, AgentMove):
+            raise TypeError("result must be AgentMove")
+        if self._CONTROL in move.result.output:
+            raise ValueError("reserved lineage output key")
+        state = self.runtime.state(agent_id)
+        if state.status != "READY":
+            raise ValueError(f"agent result already recorded or not ready: {state.status}")
+        if move.result.status == "COMPLETE":
+            self.runtime._validate_complete_evidence(agent, move.result.evidence)
+            witnesses = [e for e in move.result.evidence if e.condition == "movement witness"]
+            if not all(e.ref.strip() and e.source.strip() and
+                       e.depth != "simulated" and e.kind != "simulation" for e in witnesses):
+                raise ValueError("live movement requires non-simulated witness with native ref")
+        control = {
+            "next_referent": move.next_referent,
+            "closes": list(dict.fromkeys(move.closes)),
+            "closure_evidence": [asdict(e) for e in move.closure_evidence],
+            "closure_birth_referent": move.closure_birth_referent,
+        }
+        result = ExecutionResult(
+            status=move.result.status,
+            output={**move.result.output, self._CONTROL: control},
+            evidence=move.result.evidence,
+            note=move.result.note,
+        )
+        # Fail evidence validation before STARTED, so invalid results remain READY.
+        self.runtime.event_store.append(HandoffEvent.create(
+            handoff_id=agent_id, event_type="STARTED", actor_id=actor_id,
+            parents=(state.last_event_id,) if state.last_event_id else (),
+        ))
+        self.runtime.return_result(agent_id, actor_id=actor_id, result=result)
+        if self.boundary is not None and result.status in {"BLOCKED", "UNKNOWN"}:
+            self.boundary.resolve(agent_id)
+        applied = self._apply(agent)
+        return LineageStep(executed=(agent_id,), born=applied.born,
+                           closed=applied.closed, unresolved=applied.unresolved)
+
+    def reconcile_completed(self) -> None:
+        """Resume saved closure/birth transitions; never rerun the evaluator."""
+        roots = set(h.metadata.get("lineage_root") for h in self.runtime._handoffs.values()
+                    if h.metadata.get("agent_lineage") is True)
+        for root in roots:
+            for _ in range(self.max_births + 1):
+                births = 0
+                for agent in self._members(root):
+                    if self.runtime.state(agent.handoff_id).status == "COMPLETE":
+                        births += len(self._apply(agent).born)
+                if births == 0:
+                    break
 
     def run_until_idle(self, root: str, *, max_steps: int = 64) -> tuple[LineageStep, ...]:
         if max_steps <= 0:

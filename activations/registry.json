@@ -35,6 +35,33 @@
         "User-defined activation: 'ohayo' enters James's day-to-day.",
         "James's day is task-oriented because his timing is structured around other people's movement rather than a fixed personal schedule."
       ]
+    },
+    {
+      "activation_id": "ACT-JAMES-AGENT-LINEAGE-001",
+      "surfaces": [
+        "begin comparison"
+      ],
+      "actor_id": "james",
+      "referent": "Current explicitly admitted referent",
+      "projection": "agent_lineage",
+      "selectors": {},
+      "sources": [
+        "explicit caller-supplied referent",
+        "durable handoff lineage",
+        "external A/B evaluation evidence",
+        "separate closure verifier when registered"
+      ],
+      "boundaries": [
+        "Only a POST with explicit actor, activation surface, stable instance ID, and referent can create a lineage.",
+        "No automated A/B comparison exists without a configured evaluator or externally returned result.",
+        "A/B execution COMPLETE does not itself mean the ancestor loop CLOSED.",
+        "Closure requires independent explicit verifier admission and preserved witness evidence.",
+        "UNKNOWN or BLOCKED stays unresolved; do not invent a new agent from a wall.",
+        "The ordinary ohayo day-attention activation remains read-only."
+      ],
+      "provenance": [
+        "User-requested recursive agent birth through witnessed A/B results and independently admitted descendant closures."
+      ]
     }
   ]
 }

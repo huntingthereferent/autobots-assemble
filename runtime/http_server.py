@@ -131,6 +131,16 @@ class Handler(BaseHTTPRequestHandler):
                     )
                     return
 
+                if parsed.path == "/api/agents":
+                    if self.client_address[0] not in {"127.0.0.1", "::1"}:
+                        self.send_json({"error": "agent API is loopback-only"}, 403)
+                        return
+                    root = query.get("root", [""])[0]
+                    if not root:
+                        raise ValueError("root is required")
+                    self.send_json(SERVICE.agent_snapshot(root))
+                    return
+
                 if parsed.path == "/api/activate":
                     surface = query.get("surface", [""])[0]
                     actor = query.get("actor", [""])[0]
@@ -188,6 +198,21 @@ class Handler(BaseHTTPRequestHandler):
         try:
             payload = read_json(self)
             with LOCK:
+                if parsed.path == "/api/agents/activate" or (
+                    parsed.path.startswith("/api/agents/") and parsed.path.endswith("/result")
+                ):
+                    if self.client_address[0] not in {"127.0.0.1", "::1"}:
+                        self.send_json({"error": "agent API is loopback-only"}, 403)
+                        return
+                    if parsed.path == "/api/agents/activate":
+                        self.send_json(SERVICE.activate_agent(payload), 201)
+                        return
+                    agent_id = parsed.path.removeprefix("/api/agents/").removesuffix("/result").strip("/")
+                    if not agent_id:
+                        raise ValueError("agent identifier is required")
+                    self.send_json(SERVICE.agent_result(agent_id, payload))
+                    return
+
                 if parsed.path == "/api/notes":
                     self.send_json(
                         SERVICE.add_note(payload),

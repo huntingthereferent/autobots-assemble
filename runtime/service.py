@@ -6,6 +6,8 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from runtime.activation import ActivationRegistry, run_activation
+from runtime.agent_bridge import AgentBridge
+from runtime.agent_lineage import AgentLineage, Evaluator, ClosureAdmitter
 from runtime.engine import HandoffRuntime
 from runtime.external_feed import LiveFeed
 from runtime.handoff import EvidenceRecord, ExecutionResult, SimulatedActor
@@ -42,6 +44,8 @@ class EcosystemService:
         activation_registry: str | Path = DEFAULT_ACTIVATIONS,
         system_bindings: Iterable[SystemBinding] = (),
         actors: Iterable[SimulatedActor] = (),
+        ab_evaluator: Evaluator | None = None,
+        closure_admitter: ClosureAdmitter | None = None,
     ) -> None:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
@@ -75,6 +79,14 @@ class EcosystemService:
         self.activations = ActivationRegistry.from_json(
             activation_registry
         )
+        self.agent_lineage = AgentLineage(
+            self.runtime, self.activations,
+            evaluate=ab_evaluator, admit_closure=closure_admitter,
+            allow_simulation=False,
+        )
+        self.agent_bridge = AgentBridge(self.agent_lineage)
+        # Resume only already-recorded results. Never run a new comparator at startup.
+        self.agent_lineage.reconcile_completed()
 
         # Re-bind origins and submit any admitted local tasks that predate
         # runtime persistence. Human tasks remain READY without an actor.
@@ -319,6 +331,25 @@ class EcosystemService:
         )
         return rows
 
+    def activate_agent(self, payload: dict[str, Any]) -> dict[str, Any]:
+        activated = self.agent_bridge.activate(payload)
+        if self.agent_lineage.evaluate is not None:
+            self.agent_lineage.run_until_idle(activated["root"])
+            return self.agent_bridge.snapshot(activated["root"])
+        return activated
+
+    def agent_result(self, agent_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        returned = self.agent_bridge.result(agent_id, payload)
+        if self.agent_lineage.evaluate is not None:
+            root = returned["lineage"]["root"]
+            later = self.agent_lineage.run_until_idle(root)
+            returned["continued_steps"] = [asdict(step) for step in later]
+            returned["lineage"] = self.agent_bridge.snapshot(root)
+        return returned
+
+    def agent_snapshot(self, root: str) -> dict[str, Any]:
+        return self.agent_bridge.snapshot(root)
+
     def activate(
         self,
         surface: str,
@@ -334,6 +365,8 @@ class EcosystemService:
                 f"no activation for {surface!r} and actor {actor_id!r}"
             )
 
+        if route.projection == "agent_lineage":
+            raise ValueError("agent lineage requires POST /api/agents/activate")
         result = run_activation(
             route,
             surface=surface,
@@ -365,6 +398,8 @@ class EcosystemService:
         *,
         actor_id: str,
     ) -> dict[str, Any]:
+        if self.runtime.get(handoff_id).metadata.get("agent_lineage") is True:
+            raise ValueError("agent lineage results require POST /api/agents/{id}/result")
         evidence = tuple(
             EvidenceRecord(
                 condition=str(item.get("condition") or ""),
