@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "activations": [
+    {
+      "activation_id": "ACT-AB-LINEAGE-EXAMPLE",
+      "surfaces": ["begin comparison"],
+      "actor_id": "test-operator",
+      "referent": "Example comparison referent",
+      "projection": "agent_lineage",
+      "selectors": {},
+      "sources": ["explicit local simulation"],
+      "boundaries": [
+        "Only explicit opt-in activation routes may create an agent lineage.",
+        "A/B comparison and closure admission must be supplied by a caller.",
+        "Stop when new work is not admitted; do not invent a next referent."
+      ],
+      "provenance": ["Local example of recursive agent birth; no live autonomy claimed."]
+    }
+  ]
+}
