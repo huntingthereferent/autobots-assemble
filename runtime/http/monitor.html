@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Continuity · Agent Monitor</title>
+  <link rel="stylesheet" href="/monitor.css">
+  <script src="/monitor.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="/">Continuity</a>
+      <div class="toolbar">
+        <span id="connection" class="connection" role="status" aria-live="polite">Connecting…</span>
+        <button id="refresh" type="button">Refresh now</button>
+      </div>
+    </header>
+    <main>
+      <section class="introduction">
+        <div>
+          <p class="eyebrow">Continuity / Runtime</p>
+          <h1>Agent monitor</h1>
+          <p class="description">Read-only view of the saved handoffs, agent lineages, event trail and real execution connections.</p>
+        </div>
+        <div class="sync-details">
+          <span>Auto-refresh · 10 seconds while open</span>
+          <span id="checked-at">No response yet</span>
+        </div>
+      </section>
+      <div id="offline-notice" class="offline" role="alert" hidden></div>
+      <section class="verdict" aria-live="polite">
+        <div>
+          <span class="eyebrow">Current movement</span>
+          <h2 id="mode-title">Connecting</h2>
+          <p id="mode-detail">Waiting for the live runtime.</p>
+        </div>
+        <div class="movement-date"><small>Latest recorded event</small><strong id="last-event">—</strong></div>
+      </section>
+      <section class="metrics" aria-label="Current counts">
+        <article class="metric"><span>Agents</span><strong id="n-agents">—</strong><small id="n-agents-sub">Recorded lineages</small></article>
+        <article class="metric"><span>Agent execution</span><strong id="n-active">—</strong><small>STARTED, not proof of a live worker</small></article>
+        <article class="metric"><span>Ready agents</span><strong id="n-ready">—</strong><small>Awaiting evaluation</small></article>
+        <article class="metric"><span>Open tasks</span><strong id="n-tasks">—</strong><small id="n-tasks-sub">Admitted handoffs</small></article>
+        <article class="metric"><span>Closed loops</span><strong id="n-closed">—</strong><small>Witnessed closure events</small></article>
+        <article class="metric"><span>Unresolved</span><strong id="n-unresolved">—</strong><small>Blocked / failed / unknown / partial</small></article>
+      </section>
+      <div class="two-column">
+        <section class="panel">
+          <header><div><span class="eyebrow">Agents</span><h2>Lineage state</h2></div><span id="agent-count" class="muted"></span></header>
+          <div id="agents" class="entries"><p class="empty">Waiting for live data.</p></div>
+        </section>
+        <section class="panel">
+          <header><div><span class="eyebrow">Work</span><h2>Admitted tasks</h2></div><span id="task-count" class="muted"></span></header>
+          <div id="tasks" class="entries"><p class="empty">Waiting for live data.</p></div>
+        </section>
+      </div>
+      <div class="two-column lower">
+        <section class="panel">
+          <header><div><span class="eyebrow">Events</span><h2>Movement history</h2></div><span class="muted">Newest first</span></header>
+          <ol id="events" class="timeline"><li class="empty">Waiting for live data.</li></ol>
+        </section>
+        <section class="panel">
+          <header><div><span class="eyebrow">Connections</span><h2>What is actually attached</h2></div></header>
+          <div id="connections" class="connections"><p class="empty">Waiting for live data.</p></div>
+        </section>
+      </div>
+      <p class="footnote">A READY agent is not an executing worker. The monitor does not launch agents, claim source evidence is independently verified, or send alerts while the page is closed. It only observes the runtime available on this computer.</p>
+    </main>
+  </div>
+</body>
+</html>

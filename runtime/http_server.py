@@ -67,6 +67,17 @@ class Handler(BaseHTTPRequestHandler):
 
         try:
             with LOCK:
+                if parsed.path == "/api/monitor":
+                    if self.client_address[0] not in {"127.0.0.1", "::1"}:
+                        self.send_json({"error": "monitor API is loopback-only"}, 403)
+                        return
+                    actor = query.get("actor", [""])[0]
+                    if not actor:
+                        raise ValueError("actor is required")
+                    limit = int(query.get("limit", ["40"])[0])
+                    self.send_json(SERVICE.monitor(actor_id=actor, limit=limit))
+                    return
+
                 if parsed.path == "/api/connections":
                     self.send_json(SERVICE.connections())
                     return
@@ -167,6 +178,12 @@ class Handler(BaseHTTPRequestHandler):
 
         if parsed.path.startswith("/api/"):
             self.send_json({"error": "not found"}, 404)
+            return
+
+        if parsed.path in {"/monitor.html", "/monitor.js", "/monitor.css"} and (
+            self.client_address[0] not in {"127.0.0.1", "::1"}
+        ):
+            self.send_error(403)
             return
 
         requested = (

@@ -397,6 +397,11 @@ class EcosystemService:
     def agent_snapshot(self, root: str) -> dict[str, Any]:
         return self.agent_bridge.snapshot(root)
 
+    def monitor(self, *, actor_id: str, limit: int = 40) -> dict[str, Any]:
+        """Read-only operational observation. Never invoke Ohayo POST."""
+        from runtime.monitor import observe
+        return observe(self, actor_id=actor_id, limit=limit)
+
     def agent_brief(self, *, actor_id: str) -> dict[str, Any]:
         """Read existing agent lineages with no side effects."""
         roots = self.agent_lineage.roots_for_actor(actor_id)

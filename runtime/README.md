@@ -327,3 +327,31 @@ The front-page Ohayo button sends POST. Page load and passive refresh use
 GET. The source code/runtime still needs to be updated on the actual machine
 and the HTTP process restarted after GitHub changes; a GitHub commit alone
 does not hot-reload a running Python process.
+
+## Live read-only agent monitor
+
+Open `http://127.0.0.1:<PORT>/monitor.html` from the authorized computer,
+or use **Monitor** in the site navigation. This separate compact surface polls
+`GET /api/monitor?actor=james` every 10 seconds **while the page is open**.
+It does not call POST, trigger Ohayo, create tasks, spawn agents or interpret
+a READY handoff as active execution.
+
+The view distinguishes:
+- task handoffs (READY/ACTIVE/COMPLETE/blocked etc.) and their native source;
+- agent generations, birth reasons, loop OPEN/CLOSED and last saved event;
+- recent append-only events with source witness references and timestamps;
+- actual registered connections: repository work, durable journal, A/B evaluator,
+  closure verifier, autonomous worker, Online School and Factory;
+- responding service versus failure to poll; a missed poll shows an offline
+  warning and the last cached snapshot rather than silently displaying old data.
+
+`GET /api/monitor` and monitor assets are loopback-only. This is deliberate:
+the data is not exposed as a public unauthenticated dashboard. On a phone,
+ask ChatGPT for the monitor report through its authorized Desktop Commander
+connection rather than publishing the laptop's local port.
+
+Status `reported_active` means a saved STARTED event, **not** independently
+proven ongoing CPU activity; no heartbeat exists for the A/B evaluator.
+This is observation while connected, not automatic push notifications or
+an always-on remote outage monitor. The monitor cannot keep the computer
+awake or restart a stopped server.
