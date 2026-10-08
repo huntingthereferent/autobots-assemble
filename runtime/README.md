@@ -292,3 +292,38 @@ This activation is not a background daemon or independently verified source
 search. It does not reassign existing human tasks to an autonomous actor, or
 convert unadmitted notes/plans into work. Loopback HTTP is not multi-user
 authentication.
+
+## Repository active-work → admitted handoffs (opt-in)
+
+The project records already-active work in `TASKS.md`. The optional
+`runtime/repository_tasks.py` adapter reads **only active `MOVE` rows**
+in `## Active ALL WORK`, excluding pinned and frozen/evidence work.
+This is a concrete source connection, not a general interpretation engine.
+
+To enable it on the local HTTP runtime, set
+`CONTINUITY_REPO_WORK_FILE` to the absolute path of your checked-out
+`TASKS.md` before starting the process. Without that setting the source
+remains disconnected and the ordinary local tasks continue to work.
+
+`GET /api/connections` reports whether the source is configured and
+available, active row counts, live handoff counts, and which evaluator,
+closure verifier, Online School and Factory bindings are actually registered.
+`GET /api/activate?surface=ohayo&actor=james` reports without changes.
+
+On the explicit `POST /api/ohayo` activation, if James has no agent lineage:
+the adapter admits each eligible recorded work row as a native handoff with
+its original title, link, next movement and source provenance. The existing
+Ohayo rule then seeds exactly **one** agent from those admitted handoffs.
+Repeat requests and restarts preserve identity and do not duplicate work.
+
+This admission is not execution, not a verified ARC solve, and not evidence
+that every repository record belongs to one actor. This configured
+repository-wide work lane is explicitly routed to James for the Ohayo
+entry. Frozen, pinned and historical records do not become obligations.
+New source rows appearing after the agent exists remain visible in the
+read-only source count but are not silently admitted during agent reporting.
+
+The front-page Ohayo button sends POST. Page load and passive refresh use
+GET. The source code/runtime still needs to be updated on the actual machine
+and the HTTP process restarted after GitHub changes; a GitHub commit alone
+does not hot-reload a running Python process.

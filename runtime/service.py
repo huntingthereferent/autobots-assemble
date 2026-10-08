@@ -8,6 +8,7 @@ from typing import Any, Iterable
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.agent_bridge import AgentBridge
 from runtime.agent_lineage import AgentLineage, Evaluator, ClosureAdmitter
+from runtime.repository_tasks import admit_active_work, read_active_work
 from runtime.engine import HandoffRuntime
 from runtime.external_feed import LiveFeed
 from runtime.handoff import EvidenceRecord, ExecutionResult, SimulatedActor
@@ -46,9 +47,14 @@ class EcosystemService:
         actors: Iterable[SimulatedActor] = (),
         ab_evaluator: Evaluator | None = None,
         closure_admitter: ClosureAdmitter | None = None,
+        repository_work_file: str | Path | None = None,
     ) -> None:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
+        self.repository_work_file = (Path(repository_work_file).resolve()
+                                     if repository_work_file is not None else None)
+        if self.repository_work_file is not None and not self.repository_work_file.is_file():
+            raise FileNotFoundError(f"repository work source unavailable: {self.repository_work_file}")
 
         self.personal = PersonalOperationsStore(
             self.data_dir / "personal_operations.jsonl"
@@ -124,6 +130,47 @@ class EcosystemService:
                 "events": len(self.runtime.event_store.all()),
                 "touches": len(self.trace.touches()),
             },
+        }
+
+    def connections(self) -> dict[str, Any]:
+        """Evidence-grounded source and runtime connectivity, not a live-agent claim."""
+        source = self.repository_work_file
+        available = source is not None and source.is_file()
+        candidates = read_active_work(source) if available else ()
+        snapshot = self.runtime.snapshot()
+        return {
+            "repository_work": {
+                "configured": source is not None,
+                "available": available,
+                "source": source.name if source is not None else None,
+                "eligible_active_rows": len(candidates),
+                "admitted_handoffs": sum(
+                    h.metadata.get("source_system") == "repository"
+                    for h in self.runtime._handoffs.values()
+                ),
+                "mode": "explicit_ohayo_admission_only",
+            },
+            "handoff_runtime": {
+                "durable": isinstance(self.runtime.event_store, RuntimeJournal),
+                "recorded_handoffs": len(snapshot),
+            },
+            "agents": {
+                "recorded": sum(h.metadata.get("agent_lineage") is True
+                                for h in self.runtime._handoffs.values()),
+                "ab_evaluator_connected": self.agent_lineage.evaluate is not None,
+                "closure_admitter_connected": self.agent_lineage.admit_closure is not None,
+                "autonomous_worker_running": False,
+            },
+            "systems": {
+                "registered": list(self.orchestrator._systems),
+                "online_school_registered": "online-school" in self.orchestrator._systems,
+                "factory_registered": "factory" in self.orchestrator._systems,
+            },
+            "warning": (
+                "Source-linked tasks and transport are not an autonomous A/B evaluator. "
+                "Online School/Factory need registered source state; HTTP service alone "
+                "does not run agents without a connected evaluator."
+            ),
         }
 
     def step(self):
@@ -399,7 +446,12 @@ class EcosystemService:
         if route is None or route.projection != "day_attention":
             raise KeyError("ohayo day attention not registered for actor")
         spawned: list[str] = []
+        repository_handoffs: tuple[str, ...] = ()
         if not self.agent_lineage.roots_for_actor(actor_id):
+            if self.repository_work_file is not None:
+                repository_handoffs = admit_active_work(
+                    self.runtime, self.repository_work_file, actor_id=actor_id
+                )
             snapshot = self.runtime.snapshot()
             tasks = tuple(
                 self.runtime.get(hid) for hid, state in snapshot.items()
@@ -419,6 +471,8 @@ class EcosystemService:
                         self.agent_lineage.run_until_idle(root)
         report = self.activate("ohayo", actor_id=actor_id)
         report["agent_spawned"] = spawned
+        report["repository_handoffs_admitted"] = list(repository_handoffs)
+        report["repository_work"] = self.connections()["repository_work"]
         if spawned:
             report["agent_note"] = (
                 "One task-lineage agent seeded from existing admitted handoffs; "
@@ -472,6 +526,7 @@ class EcosystemService:
             payload.update(self.agent_brief(actor_id=actor_id))
             payload["agent_spawned"] = []
             payload["agent_note"] = "Read-only report; activation uses POST /api/ohayo."
+            payload["repository_work"] = self.connections()["repository_work"]
         return payload
 
     def return_result(

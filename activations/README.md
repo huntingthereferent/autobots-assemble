@@ -88,3 +88,16 @@ Activations do not create a separate task model.
     → task projection
 
 As school, companies, research, personal operations, software, or other systems emit handoffs for James, ohayo can see them without learning each subsystem's implementation.
+
+## Repository work source
+
+When the runtime is configured with `CONTINUITY_REPO_WORK_FILE`, the explicit
+Ohayo activation can admit existing **active MOVE** rows from the repository
+ledger as first-class handoffs (native source link and row provenance retained).
+They are not created out of notes, pinned entries, frozen foundation records,
+or an inferred calendar. The handoffs are assigned to the James day-attention
+route because that is the explicitly configured repository work lane. If no
+lineage exists, one agent may be seeded from those handoffs.
+
+Without that source configuration, Ohayo retains its previous behavior.
+Read-only GET and passive page loads never admit repository work.

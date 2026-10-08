@@ -825,11 +825,27 @@ async function refreshAttention() {
   } catch (err) { showError(err); }
 }
 
-async function activateOhayo() {
+async function activateOhayo({start = false} = {}) {
   try {
-    const result = await api("/api/activate?surface=ohayo&actor=james");
-    $("#activation-note").textContent = result.note || "";
+    // Passive page loads never create work; explicit button activation may.
+    const result = start
+      ? await api("/api/ohayo", {
+          method: "POST",
+          body: JSON.stringify({actor_id: "james"})
+        })
+      : await api("/api/activate?surface=ohayo&actor=james");
+    const summary = result.agent_summary || {};
+    const counts = "Agents: " + (summary.total || 0) +
+      " · Ready: " + (summary.ready || 0) +
+      " · Complete: " + (summary.complete || 0) +
+      " · Closed loops: " + (summary.closed_loops || 0);
+    const last = (result.agent_activity || []).slice(-2)
+      .map(x => x.event + " · " + x.agent_id).join(" / ");
+    $("#activation-note").textContent =
+      (result.agent_note || result.note || "") + " " + counts +
+      (last ? " · Recent: " + last : "");
     renderAttention(result);
+    if (start) await Promise.all([refreshStatus(), refreshHandoffs()]);
   } catch (err) { showError(err); }
 }
 
@@ -848,7 +864,7 @@ async function refreshAll() {
   ]);
 }
 
-$("#ohayo").addEventListener("click", activateOhayo);
+$("#ohayo").addEventListener("click", () => activateOhayo({start: true}));
 
 $("#show-all-tickers").addEventListener("click", function() {
   hiddenTickers.clear();

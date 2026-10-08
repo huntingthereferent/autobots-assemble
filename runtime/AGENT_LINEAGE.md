@@ -127,3 +127,19 @@ duplicate and a restart reconstructs the existing root.
 If there are no admitted tasks, there is no birth; return an idle report.
 `GET /api/activate?surface=ohayo&actor=james` remains read-only.
 `POST /api/ohayo` is the explicit local activation that can seed work.
+
+## Online-branch active-work bridge
+
+`runtime/repository_tasks.py` connects the repository's explicitly active
+work ledger to the same durable handoff carrier. With
+`CONTINUITY_REPO_WORK_FILE` configured, explicit Ohayo may admit existing
+MOVE rows once, then seed exactly one task agent when no lineage exists.
+No JSON result, pointer, copied report, or Markdown entry itself establishes
+a successful A/B comparison. A source-linked task agent without an evaluator
+remains READY.
+
+`GET /api/connections` separately shows registered and missing live
+connections. This is intentionally different from "all systems are running":
+the generic School and Factory adapters, external A/B and closure evaluator,
+and autonomous worker must each have real source/execution registrations
+before claiming continuous operation.

@@ -23,7 +23,10 @@ DATA_DIR = Path(
 HOST = os.environ.get("HOST", "127.0.0.1")
 PORT = int(os.environ.get("PORT", "8040"))
 LOCK = threading.RLock()
-SERVICE = EcosystemService(data_dir=DATA_DIR)
+SERVICE = EcosystemService(
+    data_dir=DATA_DIR,
+    repository_work_file=os.environ.get('CONTINUITY_REPO_WORK_FILE') or None,
+)
 
 
 def read_json(handler):
@@ -64,6 +67,10 @@ class Handler(BaseHTTPRequestHandler):
 
         try:
             with LOCK:
+                if parsed.path == "/api/connections":
+                    self.send_json(SERVICE.connections())
+                    return
+
                 if parsed.path == "/api/status":
                     self.send_json(SERVICE.status())
                     return
