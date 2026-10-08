@@ -139,14 +139,16 @@ Country-native report connections also include:
 | Canada | Statistics Canada manufacturing, labour, education, families/households, science/technology | Industry, Work, Learning, Household, Research |
 | Australia | Reserve Bank of Australia media releases and research papers | Markets, Research |
 | Germany | Deutsche Bundesbank latest releases and discussion papers | Markets, Research |
+| Japan | Bank of Japan latest releases, Japanese and English editions | Markets |
+| Brazil | Agência Brasil latest news, education and sports, Portuguese edition | World, Learning, Sports |
 
-These English-language feeds additionally enter `world:countries:<country>`.
+These country feeds additionally enter `world:countries:<country>`.
 `country_basis: publisher_jurisdiction` describes the institution's jurisdiction,
 not an inferred location for every claim. `language` records the selected feed
 edition, not automatic language detection; original text is retained without
 translation. Configured country branches remain present through outages and
-empty samples. Coverage is partial: these three country connections do not fill
-all countries or all categories. Other countries, native-language editions,
+empty samples. Coverage is partial: these five country connections do not fill
+all countries or all categories. Other countries, additional native-language editions,
 structured statistical series, units and cross-country comparability remain
 unresolved. Official feed documentation is linked in each source's metadata.
 

@@ -57,6 +57,11 @@ REPORT_FEEDS = {
 
 # Country denotes the publishing institution's jurisdiction, not every claim's geography.
 COUNTRY_REPORT_FEEDS = {
+    "jp_boj_en": {"name": "Bank of Japan Latest (English)", "publisher": "Bank of Japan", "url": "https://www.boj.or.jp/en/rss/whatsnew.xml", "topics": ("markets",), "language": "en", "documentation": "https://www.boj.or.jp/en/whatsnew/"},
+    "jp_boj_ja": {"name": "Bank of Japan Latest (Japanese)", "publisher": "Bank of Japan", "url": "https://www.boj.or.jp/rss/whatsnew.xml", "topics": ("markets",), "language": "ja", "documentation": "https://www.boj.or.jp/whatsnew/"},
+    "br_latest": {"name": "Agência Brasil Latest", "publisher": "Agência Brasil / EBC", "url": "https://agenciabrasil.ebc.com.br/rss/ultimasnoticias/feed.xml", "topics": ("world",), "language": "pt-BR"},
+    "br_education": {"name": "Agência Brasil Education", "publisher": "Agência Brasil / EBC", "url": "https://agenciabrasil.ebc.com.br/rss/educacao/feed.xml", "topics": ("learning",), "language": "pt-BR"},
+    "br_sports": {"name": "Agência Brasil Sports", "publisher": "Agência Brasil / EBC", "url": "https://agenciabrasil.ebc.com.br/rss/esportes/feed.xml", "topics": ("sports",), "language": "pt-BR"},
     "ca_manufacturing": {"name": "Statistics Canada Manufacturing", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/16-eng.atom", "topics": ("industry",)},
     "ca_labour": {"name": "Statistics Canada Labour", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/14-eng.atom", "topics": ("work",)},
     "ca_education": {"name": "Statistics Canada Education", "publisher": "Statistics Canada", "url": "https://www150.statcan.gc.ca/n1/rss/dai-quo/37-eng.atom", "topics": ("learning",)},
@@ -68,14 +73,18 @@ COUNTRY_REPORT_FEEDS = {
     "de_research": {"name": "Bundesbank Discussion Papers", "publisher": "Deutsche Bundesbank", "url": "https://www.bundesbank.de/service/rss/en/633292/feed.rss", "topics": ("research",)},
 }
 _COUNTRY_SCOPES = {
+    "jp": ("JP", "Japan", "https://www.boj.or.jp/en/whatsnew/"),
+    "br": ("BR", "Brazil", "https://agenciabrasil.ebc.com.br/feed/"),
     "ca": ("CA", "Canada", "https://www.statcan.gc.ca/en/sc/rss"),
     "au": ("AU", "Australia", "https://www.rba.gov.au/updates/rss-feeds.html"),
     "de": ("DE", "Germany", "https://www.bundesbank.de/en/homepage/rss/deutsche-bundesbank-s-rss-feed-620440"),
 }
 for _key, _spec in COUNTRY_REPORT_FEEDS.items():
     _code, _country, _documentation = _COUNTRY_SCOPES[_key.split("_")[0]]
-    _spec.update(country_code=_code, country=_country, language="en",
-                 country_basis="publisher_jurisdiction", documentation=_documentation)
+    _spec.update(country_code=_code, country=_country,
+                 country_basis="publisher_jurisdiction")
+    _spec.setdefault("language", "en")
+    _spec.setdefault("documentation", _documentation)
     _spec["topics"] += ("world:countries:" + _country.lower(),)
 REPORT_FEEDS.update(COUNTRY_REPORT_FEEDS)
 

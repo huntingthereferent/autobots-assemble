@@ -70,6 +70,23 @@ class ReportSourcesTests(unittest.TestCase):
                 self.assertIn("world:countries:" + row["country"].lower(), row["topics"])
                 self.assertEqual(SOURCE_META[key]["country_code"], row["country_code"])
 
+    def test_country_editions_preserve_native_text_and_independent_witnesses(self):
+        for key, title, language in [("jp_boj_ja", "日本銀行の発表", "ja"),
+                                     ("br_education", "Educação e ciência", "pt-BR")]:
+            body = RSS.replace(b"Original source claim", title.encode())
+            with patch("runtime.external_feed._fetch", return_value=body):
+                row = fetch_report_feed(key)[0]
+            self.assertEqual(row["title"], title)
+            self.assertEqual(row["language"], language)
+            self.assertEqual(SOURCE_META[key]["language"], language)
+        with patch("runtime.external_feed._fetch", return_value=RSS):
+            english = fetch_report_feed("jp_boj_en")[0]
+            japanese = fetch_report_feed("jp_boj_ja")[0]
+        self.assertNotEqual(english["id"], japanese["id"])
+        self.assertEqual(english["country_code"], japanese["country_code"])
+        self.assertEqual(english["language"], "en")
+        self.assertEqual(japanese["language"], "ja")
+
     def test_atom_xhtml_keeps_nested_claim_text(self):
         body = b'<feed xmlns="http://www.w3.org/2005/Atom"><entry><title type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">Payroll <span>July 2026</span></div></title><link href="https://example.org/report"/><summary type="xhtml"><div xmlns="http://www.w3.org/1999/xhtml">Original <b>detail</b></div></summary></entry></feed>'
         with patch("runtime.external_feed._fetch", return_value=body):
