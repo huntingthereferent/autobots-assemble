@@ -120,6 +120,67 @@ class AgentLineage:
             ))
         return root
 
+    def roots_for_actor(self, actor_id: str) -> tuple[str, ...]:
+        """Only explicitly assigned root lineages; descendants belong to the root."""
+        actor = actor_id.strip().casefold()
+        return tuple(
+            h.handoff_id for h in self.runtime._handoffs.values()
+            if h.metadata.get("agent_lineage") is True
+            and h.metadata.get("lineage_root") == h.handoff_id
+            and h.from_actor.strip().casefold() == actor
+        )
+
+    def seed_for_tasks(self, *, actor_id: str, tasks: tuple[Handoff, ...],
+                       route_id: str, referent: str,
+                       boundaries: tuple[str, ...] = (),
+                       provenance: tuple[str, ...] = ()) -> str | None:
+        """One durable root referencing existing admitted work, never new tasks.
+
+        Caller must have checked the actor's explicit day-attention route.
+        The handoff records task locators and lets a real evaluator move them.
+        """
+        if not actor_id.strip() or not referent.strip() or not route_id.strip():
+            raise ValueError("task seed requires actor, route and referent")
+        if self.roots_for_actor(actor_id):
+            return self.roots_for_actor(actor_id)[0]
+        if not tasks:
+            return None
+        if any(task.to_actor.strip().casefold() != actor_id.strip().casefold()
+               or task.handoff_id not in self.runtime._handoffs
+               for task in tasks):
+            raise ValueError("task seed accepts existing handoffs assigned to actor only")
+        root = self._id("ohayo", route_id, actor_id.strip().casefold(), "task-seed")
+        if root in self.runtime.snapshot():
+            return root
+        self.runtime.submit(Handoff(
+            handoff_id=root,
+            referent=referent,
+            from_actor=actor_id.strip().casefold(),
+            to_actor="agent-ab",
+            required_relation="A/B compare admitted referent",
+            inputs={"task_handoffs": [
+                {"handoff_id": task.handoff_id, "referent": task.referent,
+                 "required_relation": task.required_relation,
+                 "title": str(task.metadata.get("title") or task.referent),
+                 "provenance": list(task.provenance)}
+                for task in tasks
+            ]},
+            required_witnesses=("movement witness",),
+            admissible_evidence={"movement witness": (
+                ("simulation", "measurement", "source") if self.allow_simulation
+                else ("measurement", "source")
+            )},
+            boundaries=boundaries,
+            provenance=tuple(dict.fromkeys((
+                *provenance, *(f"handoff:{task.handoff_id}" for task in tasks)
+            ))),
+            metadata={"agent_lineage": True, "lineage_root": root,
+                      "birth_parent": "", "generation": 1,
+                      "birth_reason": "ohayo_task_seed",
+                      "activation_id": route_id, "task_owner": actor_id.strip().casefold()},
+        ))
+        return root
+
     def _ancestors(self, child: Handoff) -> tuple[Handoff, ...]:
         ancestors: list[Handoff] = []
         parent_id = str(child.metadata.get("birth_parent") or "")

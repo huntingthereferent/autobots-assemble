@@ -198,6 +198,16 @@ class Handler(BaseHTTPRequestHandler):
         try:
             payload = read_json(self)
             with LOCK:
+                if parsed.path == "/api/ohayo":
+                    if self.client_address[0] not in {"127.0.0.1", "::1"}:
+                        self.send_json({"error": "ohayo mutation is loopback-only"}, 403)
+                        return
+                    actor = str(payload.get("actor_id") or "").strip()
+                    if not actor:
+                        raise ValueError("actor_id is required")
+                    self.send_json(SERVICE.ohayo(actor_id=actor))
+                    return
+
                 if parsed.path == "/api/agents/activate" or (
                     parsed.path.startswith("/api/agents/") and parsed.path.endswith("/result")
                 ):

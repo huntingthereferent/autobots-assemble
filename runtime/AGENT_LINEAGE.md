@@ -109,3 +109,21 @@ registered outward-search agents. There is no automatic escalation to James.
 python -m unittest network.tests.test_agent_lineage -v
 python -m unittest network.tests.test_agent_service -v
 ```
+
+## Ohayo overlay — one task agent only when absent
+
+The user-facing day-attention entrance is extended with an agent activity
+projection. `EcosystemService.ohayo(actor_id="james")` reads the durable
+agent lineage first. If any James-owned root exists, it reports its descendants,
+events, loop closures, and current states without changing the lineage.
+
+If **no root exists** and there are already-admitted tasks/handoffs assigned
+to James, it seeds one durable `ohayo_task_seed` root whose input consists
+of native handoff IDs, referents, required relations and provenance. It does
+not claim the tasks have been executed. A real evaluator must return a witnessed
+result before recursion/closure proceeds. A second Ohayo cannot create a
+duplicate and a restart reconstructs the existing root.
+
+If there are no admitted tasks, there is no birth; return an idle report.
+`GET /api/activate?surface=ohayo&actor=james` remains read-only.
+`POST /api/ohayo` is the explicit local activation that can seed work.

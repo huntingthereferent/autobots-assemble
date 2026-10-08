@@ -36,6 +36,37 @@ It does **not** manufacture an hourly calendar because James's current day-to-da
 
 The route is stored in registry.json.
 
+## Ohayo — agent report with one conditional task seed
+
+The recorded entrance still resolves as **James / current day**. The daily
+briefing now also projects the current agent lineages, including agent status,
+new births, closure events, recent movement witnesses, and walls.
+
+```text
+ohayo
+  -> read existing handoffs and agents
+     -> if any James agent lineage exists: REPORT (no new agent)
+     -> if no agents and admitted James handoffs exist:
+           seed ONE READY A/B task agent referencing existing handoff IDs
+           then REPORT
+     -> if neither exists: report idle
+```
+
+An admitted handoff is an existing obligation. Notes, plans, unadmitted tasks,
+calendar entries and news feed items do not become tasks merely because Ohayo
+was said. The seed agent is not a completed A/B comparison: without a connected
+evaluator it stays READY. Its input retains the original task referents and
+handoff provenance. New work discovered later belongs in subsequent witnessed
+movement, not as a duplicate Ohayo root.
+
+The HTTP boundary retains method semantics:
+
+- `GET /api/activate?surface=ohayo&actor=james`: read-only report, never seed.
+- `POST /api/ohayo` with `{"actor_id":"james"}`: perform the report-or-seed
+  activation. It is loopback-only and repeated calls are idempotent.
+- A chat utterance alone does not connect to a running local HTTP process.
+  A speech/ChatGPT integration must call the authorized activation endpoint.
+
 ## Relation to general language
 
 General language decoding remains broader than activations.

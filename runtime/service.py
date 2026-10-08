@@ -350,6 +350,86 @@ class EcosystemService:
     def agent_snapshot(self, root: str) -> dict[str, Any]:
         return self.agent_bridge.snapshot(root)
 
+    def agent_brief(self, *, actor_id: str) -> dict[str, Any]:
+        """Read existing agent lineages with no side effects."""
+        roots = self.agent_lineage.roots_for_actor(actor_id)
+        lineages = [self.agent_bridge.snapshot(root) for root in roots]
+        members = [item for lineage in lineages for item in lineage["agents"]]
+        ids = {item["agent_id"] for item in members}
+        activity = [
+            {
+                "agent_id": event.handoff_id,
+                "event": event.event_type,
+                "at": event.occurred_at,
+                "actor_id": event.actor_id,
+                "evidence_refs": [w.ref for w in event.evidence if w.ref],
+            }
+            for event in self.runtime.event_store.all()
+            if event.handoff_id in ids
+            and event.event_type in {"CREATED", "STARTED", "RESULT", "REOPENED",
+                                     "AGENT_LOOP_CLOSED", "SWALLOW_ATTEMPT",
+                                     "SWALLOW_UNRESOLVED", "REFERENCE_ADMITTED",
+                                     "REFERENCE_REJECTED"}
+        ]
+        return {
+            "agents": members,
+            "agent_roots": list(roots),
+            "agent_summary": {
+                "total": len(members),
+                "ready": sum(item["status"] == "READY" for item in members),
+                "active": sum(item["status"] == "ACTIVE" for item in members),
+                "complete": sum(item["status"] == "COMPLETE" for item in members),
+                "blocked_or_unknown": sum(
+                    item["status"] in {"BLOCKED", "UNKNOWN", "PARTIAL", "FAILED"}
+                    for item in members
+                ),
+                "closed_loops": sum(item["loop_status"] == "CLOSED" for item in members),
+            },
+            "agent_activity": activity[-15:],
+            "agent_evaluator_connected": self.agent_lineage.evaluate is not None,
+        }
+
+    def ohayo(self, *, actor_id: str) -> dict[str, Any]:
+        """Report-first activation; seed exactly one task agent only if none exists.
+
+        Do not admit personal notes/tasks, alter existing task ownership, or
+        treat an available handoff as an executed A/B comparison.
+        """
+        route = self.activations.resolve("ohayo", actor_id=actor_id)
+        if route is None or route.projection != "day_attention":
+            raise KeyError("ohayo day attention not registered for actor")
+        spawned: list[str] = []
+        if not self.agent_lineage.roots_for_actor(actor_id):
+            snapshot = self.runtime.snapshot()
+            tasks = tuple(
+                self.runtime.get(hid) for hid, state in snapshot.items()
+                if self.runtime.get(hid).to_actor.strip().casefold()
+                == actor_id.strip().casefold()
+                and state.status in {"ACTIVE", "READY", "PARTIAL", "BLOCKED", "WAITING"}
+            )
+            if tasks:
+                root = self.agent_lineage.seed_for_tasks(
+                    actor_id=actor_id, tasks=tasks,
+                    route_id=route.activation_id, referent=route.referent,
+                    boundaries=route.boundaries, provenance=route.provenance,
+                )
+                if root is not None:
+                    spawned.append(root)
+                    if self.agent_lineage.evaluate is not None:
+                        self.agent_lineage.run_until_idle(root)
+        report = self.activate("ohayo", actor_id=actor_id)
+        report["agent_spawned"] = spawned
+        if spawned:
+            report["agent_note"] = (
+                "One task-lineage agent seeded from existing admitted handoffs; "
+                "no task execution is implied."
+            )
+        elif not report["agent_roots"]:
+            report["agent_note"] = "No recorded agents or admitted tasks; idle."
+        else:
+            report["agent_note"] = "Existing agents reported; no new agent spawned."
+        return report
+
     def activate(
         self,
         surface: str,
@@ -389,6 +469,9 @@ class EcosystemService:
             payload["reminders"] = attention["reminders"]
             payload["calendar"] = attention["calendar"]
             payload["local_date"] = attention["local_date"]
+            payload.update(self.agent_brief(actor_id=actor_id))
+            payload["agent_spawned"] = []
+            payload["agent_note"] = "Read-only report; activation uses POST /api/ohayo."
         return payload
 
     def return_result(

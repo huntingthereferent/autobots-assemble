@@ -263,8 +263,32 @@ GET  /api/handoffs?actor=&status=
 POST /api/handoffs/{handoff_id}/result
 
 GET  /api/activate?surface=ohayo&actor=james
+POST /api/ohayo (loopback-only; actor_id=james in JSON body)
+GET  /api/agents?root=<lineage_id> (loopback-only)
+POST /api/agents/activate (loopback-only)
+POST /api/agents/<agent_id>/result (loopback-only)
 ```
 
 The HTTP layer does not create a parallel model. It calls the existing Personal Operations, Calendar, Day-to-Day, activation, orchestrator, runtime, evidence, and recovery contracts.
 
 The included dashboard exposes current Day-to-Day attention (live work, Calendar, explicit reminders), Notes, Plans, Tasks, and Live Handoffs while preserving their boundaries. The attention view refreshes quietly and `ohayo` enters that same state explicitly rather than creating a second model.
+
+## Ohayo report-or-seed activation
+
+The everyday Ohayo report now includes `agents`, `agent_summary`,
+`agent_activity`, `agent_roots`, and `agent_note` alongside James's
+admitted tasks, calendar, and reminders. `GET /api/activate` is still
+read-only: it does not create work.
+
+The explicit `POST /api/ohayo` checks current persisted lineages first. If
+there is at least one existing James lineage, it only reports, even if all
+agents have completed. If none exists but admitted handoffs assigned to James
+are waiting, it creates exactly one READY root agent and records their native
+handoff IDs/provenance as input. Otherwise it reports idle. Repeated calls and
+service restarts do not create duplicates. Any configured A/B evaluator can
+advance this new agent; no evaluator means READY and no inferred task result.
+
+This activation is not a background daemon or independently verified source
+search. It does not reassign existing human tasks to an autonomous actor, or
+convert unadmitted notes/plans into work. Loopback HTTP is not multi-user
+authentication.
