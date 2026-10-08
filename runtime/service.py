@@ -8,6 +8,7 @@ from typing import Any, Iterable
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.agent_bridge import AgentBridge
 from runtime.agent_lineage import AgentLineage, Evaluator, ClosureAdmitter
+from runtime.observed_evaluator import NativeABEvaluator, Observer
 from runtime.repository_tasks import admit_active_work, read_active_work
 from runtime.engine import HandoffRuntime
 from runtime.external_feed import LiveFeed
@@ -46,6 +47,7 @@ class EcosystemService:
         system_bindings: Iterable[SystemBinding] = (),
         actors: Iterable[SimulatedActor] = (),
         ab_evaluator: Evaluator | None = None,
+        native_observer: Observer | None = None,
         closure_admitter: ClosureAdmitter | None = None,
         repository_work_file: str | Path | None = None,
     ) -> None:
@@ -85,9 +87,13 @@ class EcosystemService:
         self.activations = ActivationRegistry.from_json(
             activation_registry
         )
+        if native_observer is not None and ab_evaluator is not None:
+            raise ValueError('choose either an A/B evaluator or its native observer')
+        evaluated = (NativeABEvaluator(native_observer)
+                     if native_observer is not None else ab_evaluator)
         self.agent_lineage = AgentLineage(
             self.runtime, self.activations,
-            evaluate=ab_evaluator, admit_closure=closure_admitter,
+            evaluate=evaluated, admit_closure=closure_admitter,
             allow_simulation=False,
         )
         self.agent_bridge = AgentBridge(self.agent_lineage)

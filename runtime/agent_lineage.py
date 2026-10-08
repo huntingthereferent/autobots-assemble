@@ -299,6 +299,11 @@ class AgentLineage:
             state = self.runtime.state(agent.handoff_id)
             executed: tuple[str, ...] = ()
             if state.status == "READY" and self.evaluate is not None:
+                # Read-only native observers cannot run before an actual capture.
+                # Leave READY for swallow/observation; do not persist invented UNKNOWN.
+                ready = getattr(self.evaluate, "has_observation", None)
+                if ready is not None and not ready(agent.handoff_id):
+                    continue
                 decision = self.evaluate(agent, state)
                 if not isinstance(decision, AgentMove):
                     raise TypeError("agent evaluator must return AgentMove")

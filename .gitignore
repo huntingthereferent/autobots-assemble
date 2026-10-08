@@ -23,3 +23,6 @@ systems/factory/data/
 # Ecosystem HTTP runtime/private state
 runtime/data/
 runtime/data-*/
+
+# ARC SDK local downloads from optional native smoke tests
+environment_files/
