@@ -5,6 +5,7 @@ from typing import Callable, Iterable
 
 from .engine import HandoffRuntime
 from .handoff import ExecutionResult, Handoff, HandoffState, SimulatedActor
+from .swallow_first import SwallowFirstBoundary
 
 
 @dataclass(frozen=True)
@@ -34,8 +35,14 @@ class OrchestrationStep:
 class Orchestrator:
     """Route handoffs without owning system-local state."""
 
-    def __init__(self, runtime: HandoffRuntime | None = None) -> None:
+    def __init__(
+        self, runtime: HandoffRuntime | None = None,
+        *, boundary_resolver: SwallowFirstBoundary | None = None,
+    ) -> None:
         self.runtime = runtime or HandoffRuntime()
+        if boundary_resolver and boundary_resolver.runtime is not self.runtime:
+            raise ValueError("boundary resolver must use the orchestrator runtime")
+        self.boundary_resolver = boundary_resolver
         self._systems: dict[str, SystemBinding] = {}
         self._actors: dict[str, SimulatedActor] = {}
         self._origins: dict[str, tuple[SystemBinding, SystemEmission]] = {}
@@ -56,6 +63,11 @@ class Orchestrator:
             return True
         except KeyError:
             return False
+
+    def _resolve_boundary(self, handoff_id: str, state: HandoffState) -> HandoffState:
+        if self.boundary_resolver and state.status in {"BLOCKED", "UNKNOWN"}:
+            return self.boundary_resolver.resolve(handoff_id)
+        return state
 
     def step(self) -> OrchestrationStep:
         submitted: list[str] = []
@@ -97,6 +109,7 @@ class Orchestrator:
                     "FAILED",
                     "UNKNOWN",
                 }:
+                    state = self._resolve_boundary(handoff.handoff_id, state)
                     binding.reconcile(emission, state)
                     reconciled.append(handoff.handoff_id)
                     continue
@@ -110,6 +123,7 @@ class Orchestrator:
                     continue
 
                 state = self.runtime.run(handoff.handoff_id, actor)
+                state = self._resolve_boundary(handoff.handoff_id, state)
                 executed.append(handoff.handoff_id)
                 binding.reconcile(emission, state)
 
@@ -132,6 +146,7 @@ class Orchestrator:
             actor_id=actor_id,
             result=result,
         )
+        state = self._resolve_boundary(handoff_id, state)
         try:
             binding, emission = self._origins[handoff_id]
         except KeyError as exc:

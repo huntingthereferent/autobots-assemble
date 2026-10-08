@@ -114,6 +114,37 @@ A handoff cannot become `COMPLETE` unless every required witness is returned usi
 The examples are witnesses for the runtime shape, not claims about physical production.
 
 
+## Swallow-first boundary adapter (opt-in)
+
+`runtime/swallow_first.py` connects an explicit outward source search and
+external A/B reference comparison to the **existing handoff event stream**.
+When supplied to `Orchestrator(..., boundary_resolver=...)`, UNKNOWN/BLOCKED
+results are sent to the swallow-first boundary before origin reconciliation.
+
+```text
+UNKNOWN / BLOCKED
+  -> registered swallow_agent searches external native sources
+  -> bounded native witness locators (the source stays external)
+  -> registered A/B reference admission compares against exact wall
+  -> evidence-valid worker COMPLETE -> atomic RESULT on SAME handoff -> MOVE
+  -> else remaining reground agents -> SAME wall + appended search evidence
+  -> explicit ready_for_james guard, never automatic human escalation
+```
+
+The journal preserves SWALLOW_ATTEMPT, REFERENCE_ADMITTED/REJECTED,
+REGROUND_ATTEMPT and SWALLOW_UNRESOLVED events alongside the original RESULT.
+A failed candidate never replaces the original wall. An empty/erroring search is
+not proof of outward traversal. A saved attempt/admission is replayed on a
+restart rather than silently repeated.
+
+**Boundary:** This repository does not presently contain the named `ABLoop` or
+`JamesABTaskBridge` from the separate work report. This adapter does **not**
+implement A/B comparison, external browsing, reference research, or automatic
+James task escalation. Those are caller-supplied actors. Any future bridge must
+check `ready_for_james(handoff_id)` and fail closed when no outward search is
+recorded. Configurations that do not register this resolver retain existing
+orchestrator behavior; they must not be described as swallow-first.
+
 ## Multi-system orchestration
 
 `Orchestrator` sits above the shared runtime without owning any system's local state.
