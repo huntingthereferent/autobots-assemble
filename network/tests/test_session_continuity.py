@@ -1,0 +1,70 @@
+"""Static repository contracts; these do not simulate assistant compliance."""
+import json
+from pathlib import Path
+import unittest
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+class SessionContinuityTests(unittest.TestCase):
+    def read(self, path):
+        return (ROOT / path).read_text(encoding="utf-8")
+
+    def test_github_entry_reaches_standing_session_rules(self):
+        self.assertIn("[ENTRY.md](ENTRY.md)", self.read("README.md"))
+        entry = self.read("ENTRY.md")
+        index = json.loads(self.read("protocols/index.json"))["protocols"]
+        session_path = index["ai.session"]["path"]
+        self.assertIn(f"[ai.session]({session_path})", entry)
+        self.assertLess(entry.index(f"({session_path})"),
+                        entry.index("## Entry sequence"))
+        self.assertIn("Load it once per session", entry)
+        self.assertTrue((ROOT / session_path).is_file())
+
+    def test_current_referent_and_protocol_remain_resolvable(self):
+        state = json.loads(self.read("state/current.json"))
+        for field in ("preferred_referent", "goal", "next_movement"):
+            self.assertTrue(state[field], field)
+        index = json.loads(self.read("protocols/index.json"))["protocols"]
+        self.assertIn(state["protocol"], index)
+        self.assertTrue((ROOT / index[state["protocol"]]["path"]).is_file())
+        self.assertIn("If the user gives a new explicit referent, that becomes primary",
+                      self.read("ENTRY.md"))
+
+    def test_recorded_continuity_clauses_are_preserved(self):
+        # Deliberate text contracts: wording changes require reviewing these
+        # assertions. Presence cannot establish runtime or model compliance.
+        session = self.read("protocols/ai/session.md")
+        clauses = {
+            "workflow preference": "James's project/research work stays GitHub-centered.",
+            "explicit override": "A current explicit request may override this preference.",
+            "speaker independent of surface": "The application surface is not evidence of who is speaking.",
+            "existing authority": "Preserve established speaker context and authorization",
+            "mismatch disclosure": "state the mismatch once, plainly and early",
+            "no silent transfer": "Do not silently redirect work to another mode, workspace, or project.",
+            "mode boundary": "This protocol cannot enforce application routing.",
+            "confirmed capability": "Never claim to switch the application mode without a capability and a confirmed result.",
+            "same project": "A different code location does not establish a different project.",
+            "parent correction": "revisit the parent referent before continuing the implementation detail",
+            "correction survives": "Preserve the user's correction in the next movement.",
+            "handoff continuity": "preserve the goal, repository, established authorization, findings and next movement",
+            "continue work": "Continue useful authorized work in the current session",
+        }
+        for rule, clause in clauses.items():
+            with self.subTest(rule=rule):
+                self.assertIn(clause, session)
+        index = json.loads(self.read("protocols/index.json"))["protocols"]
+        self.assertIn("ai.james", session)
+        self.assertTrue((ROOT / index["ai.james"]["path"]).is_file())
+
+    def test_ci_reports_focused_check_before_broad_suite(self):
+        workflow = self.read(".github/workflows/tests.yml")
+        focused = 'python -m unittest discover -s network/tests -p "test_session_continuity.py" -v'
+        broad = 'python -m unittest discover -s network/tests -p "test_*.py"'
+        self.assertLess(workflow.index(focused), workflow.index(broad))
+        self.assertIn("pull_request:", workflow)
+        self.assertIn("push:", workflow)
+
+
+if __name__ == "__main__":
+    unittest.main()

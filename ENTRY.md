@@ -2,6 +2,14 @@
 
 When an AI uses this repository as an extension of the user, do **not** begin by scanning everything and choosing the most interesting layer.
 
+## Standing session rules
+
+Before the entry sequence, read and apply [ai.session](protocols/ai/session.md),
+including speaker continuity, surface boundaries, and parent-referent corrections.
+Load it once per session; its Enter checklist refers back to this sequence, not
+an instruction to recursively reload it. These standing rules apply alongside
+the active referent's protocol, without replacing that referent.
+
 ## Entry sequence
 
 1. Read `COMPLETE_STACK.md`.

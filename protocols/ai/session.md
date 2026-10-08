@@ -36,3 +36,15 @@ For each substantive step:
 ## Exit
 
 Before ending substantial work, leave a recoverable next movement. If repository state changed, update the canonical record or state pointer rather than relying on chat memory alone.
+
+## Verification boundary
+
+`network/tests/test_session_continuity.py` checks the documented entry route,
+active protocol resolution, and preservation of the continuity clauses below
+that entry. CI runs it separately before the broader suite. This is a static
+repository contract check, not evidence of assistant compliance, speaker
+authentication, or application-mode control. The front-page traversal session
+is a browsing trace, not the AI conversation session.
+
+See [verification record](../../state/session-continuity-verification.md) for
+observed gaps and the next movement.

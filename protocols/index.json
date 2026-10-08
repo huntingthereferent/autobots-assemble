@@ -1,5 +1,5 @@
 {
-  "schema_version": 12,
+  "schema_version": 13,
   "outer_contract": "referent -> evidence -> witnesses -> result -> provenance -> continuation",
   "protocols": {
     "core.referent": {
@@ -85,6 +85,10 @@
     "language.activation": {
       "layer": "language",
       "path": "protocols/language/activation.md"
+    },
+    "core.traversal": {
+      "layer": "core",
+      "path": "protocols/core/traversal.md"
     }
   },
   "template": "protocols/TEMPLATE.md"
