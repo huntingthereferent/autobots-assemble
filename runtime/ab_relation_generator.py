@@ -11,6 +11,7 @@ invent mechanisms. Follow-up execution always uses an independent evaluator.
 from __future__ import annotations
 
 from itertools import product
+from hashlib import sha256
 import json
 from typing import Any, Iterable
 
@@ -128,3 +129,125 @@ def derive_relation_constructions(
     return project_candidates(
         fibers, construct, intent=intent, max_candidates=max_candidates,
     )
+
+
+def derive_exploratory_constructions(
+    occurrences: Iterable[ABOccurrence],
+    state: ABInformationState,
+    *,
+    source_locators: Iterable[str],
+    witness_contract: str,
+    horizon: int,
+    intent: str,
+    max_candidates: int = 32,
+    max_scan: int = 4096,
+) -> tuple[ConstructionProposal, ...]:
+    """Cross witnessed A/B continuation classes, with NO category inheritance.
+
+    This is a *hypothesis generator*, not an inverse that preserves known
+    continuation equivalence. The same source relation vocabulary and values
+    are used, but a proposed combination must NOT be realizable entirely
+    inside any one existing continuation fiber. If the old evidence has
+    only one class, there is no witnessed boundary to cross.
+
+    There is deliberately no predicted continuation; all candidates have
+    category=None, are PROPOSED, and require a new independent witness.
+    """
+    if intent not in {"construct", "synthesize", "simulate", "alternatives"}:
+        raise ValueError("exploratory construction needs explicit construction intent")
+    if not 1 <= max_candidates <= 1000 or not 1 <= max_scan <= 100000:
+        raise ValueError("exploratory generation limits must be positive and bounded")
+    group = tuple(occurrences)
+    locators = tuple(source_locators)
+    fibers = inverse_fibers(
+        group, state, source_locators=locators,
+        witness_contract=witness_contract, horizon=horizon,
+    )
+    if len(fibers) < 2:
+        return ()
+    keys = set(dict(group[0].relations))
+    if not keys or len(keys) > 16:
+        raise ValueError("relation dimensions are missing or exceed the safety limit")
+    if any(set(dict(item.relations)) != keys for item in group):
+        raise ValueError("missing relation fields: cannot infer absent values")
+    canonical = tuple(sorted(keys))
+    observed = tuple(dict(item.relations) for item in group)
+    domains = []
+    for name in canonical:
+        values_by_key: dict[str, tuple[Any, int]] = {}
+        for index, row in enumerate(observed):
+            value = row[name]
+            values_by_key.setdefault(_key(value), (value, index))
+        domains.append(tuple(values_by_key[value] for value in sorted(values_by_key)))
+    originals = {_key(row) for row in observed}
+    class_by_source = {
+        index: fiber.category
+        for fiber in fibers for index in fiber.source_indices
+    }
+    in_fiber_values = tuple({
+        name: {_key(observed[index][name]) for index in fiber.source_indices}
+        for name in canonical
+    } for fiber in fibers)
+
+    out: list[ConstructionProposal] = []
+    for scan, components in enumerate(product(*domains), start=1):
+        if scan > max_scan or len(out) >= max_candidates:
+            break
+        relation_values = {
+            name: value for name, (value, _) in zip(canonical, components)
+        }
+        if _key(relation_values) in originals:
+            continue
+        # Only genuine boundary-crossing combinations belong to explore.
+        if any(
+            all(_key(relation_values[name]) in within[name] for name in canonical)
+            for within in in_fiber_values
+        ):
+            continue
+        component_indices = tuple(sorted({
+            index for _value, index in components
+        }))
+        component_sources = {
+            name: locators[index]
+            for name, (_value, index) in zip(canonical, components)
+        }
+        touched_categories = sorted({
+            class_by_source[index] for index in component_indices
+        })
+        if len(touched_categories) < 2:
+            # Source selection did not actually span different categories.
+            continue
+        structure = {
+            "kind": "cross-category-recombination",
+            "relation_values": relation_values,
+            "construction_contract": "UNVERIFIED cross-category hypothesis",
+            "prior_continuation_category": "UNASSIGNED",
+            "requires_independent_observation": True,
+            "source_categories_touched": touched_categories,
+            "component_source_locators": component_sources,
+        }
+        proposal_payload = {
+            "referent": state.referent,
+            "category": None,
+            "source_indices": component_indices,
+            "source_locators": tuple(locators[i] for i in component_indices),
+            "witness_contract": witness_contract,
+            "horizon": horizon,
+            "structure": structure,
+        }
+        identity = sha256(
+            json.dumps(
+                proposal_payload, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")
+        ).hexdigest()
+        out.append(ConstructionProposal(
+            proposal_id=identity,
+            referent=state.referent,
+            category=None,
+            structure=structure,
+            source_indices=component_indices,
+            source_locators=tuple(locators[i] for i in component_indices),
+            witness_contract=witness_contract,
+            horizon=horizon,
+        ))
+    return tuple(out)
