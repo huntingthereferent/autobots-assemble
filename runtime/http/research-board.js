@@ -58,6 +58,80 @@ function questionCard(q) {
   return card;
 }
 
+// Each status lane is a vertically moving, seamless repeat of its actual
+// research questions. The second cycle is decorative only: never an extra
+// question, focus stop, announcement, or research record.
+const laneNames = ["review", "answered", "partial", "open"];
+let laneObservers = [];
+let motionPaused = false;
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+function syncMotionButton() {
+  const button = el("research-motion-toggle");
+  button.disabled = reducedMotion.matches;
+  button.setAttribute("aria-pressed", String(motionPaused));
+  button.textContent = reducedMotion.matches
+    ? "Scrolling off (system setting)"
+    : (motionPaused ? "Resume scrolling" : "Pause scrolling");
+  el("research-columns").classList.toggle("is-motion-paused", motionPaused);
+  document.querySelector(".research-board-page").classList.toggle("is-motion-paused", motionPaused);
+}
+
+function clearLanes() {
+  laneObservers.forEach(observer => observer.disconnect());
+  laneObservers = [];
+  laneNames.forEach(lane => {
+    const track = el("research-" + lane + "-list");
+    track.classList.remove("is-looping");
+    track.replaceChildren();
+    track.style.removeProperty("--research-loop-duration");
+    el("research-" + lane + "-count").textContent = "0";
+  });
+}
+
+function renderVerticalList(lane, questions) {
+  const track = el("research-" + lane + "-list");
+  const count = questions.length;
+  el("research-" + lane + "-count").textContent = String(count);
+
+  if (!count) {
+    track.appendChild(textNode("p", "No questions in this state for the selected checkpoint.", "research-empty"));
+    return;
+  }
+
+  const original = document.createElement("div");
+  original.className = "research-question-cycle";
+  questions.forEach(q => original.appendChild(questionCard(q)));
+  track.appendChild(original);
+
+  // Same cards, repeated only for smooth motion. The duplicate cannot
+  // receive keyboard focus and does not change the source record or totals.
+  const repeated = original.cloneNode(true);
+  repeated.setAttribute("aria-hidden", "true");
+  repeated.setAttribute("inert", "");
+  repeated.inert = true;
+  repeated.querySelectorAll("a, button, [tabindex]").forEach(node => {
+    node.setAttribute("tabindex", "-1");
+  });
+  track.appendChild(repeated);
+
+  const updateDuration = () => {
+    const distance = original.getBoundingClientRect().height;
+    if (distance > 0) {
+      // Consistent slow upward movement, independent of list length.
+      track.style.setProperty("--research-loop-duration",
+        Math.max(24, Math.round(distance / 23)) + "s");
+    }
+  };
+  updateDuration();
+  if (typeof ResizeObserver !== "undefined") {
+    const observer = new ResizeObserver(updateDuration);
+    observer.observe(original);
+    laneObservers.push(observer);
+  }
+  track.classList.add("is-looping");
+}
+
 function renderBoard(data) {
   const choice = el("research-checkpoint");
   knownCheckpoints = data.checkpoints || [];
@@ -70,20 +144,13 @@ function renderBoard(data) {
   choice.value = data.checkpoint?.id || "";
   el("research-note").textContent = data.checkpoint?.note || "";
   el("research-freeze-date").textContent = data.checkpoint?.frozen_date || "";
-  ["review", "answered", "partial", "open"].forEach(lane => {
-    el("research-" + lane + "-list").replaceChildren();
-    el("research-" + lane + "-count").textContent = "0";
-  });
-  const counts = {review:0,answered:0,partial:0,open:0};
+  clearLanes();
+  const byLane = {review:[],answered:[],partial:[],open:[]};
   (data.questions || []).forEach(q => {
     const lane = lanes[q.status];
-    if (!lane) return;
-    el("research-" + lane + "-list").appendChild(questionCard(q));
-    counts[lane] += 1;
+    if (lane) byLane[lane].push(q);
   });
-  for (const [lane,count] of Object.entries(counts)) {
-    el("research-" + lane + "-count").textContent = String(count);
-  }
+  laneNames.forEach(lane => renderVerticalList(lane, byLane[lane]));
 }
 
 async function loadBoard(checkpoint = "") {
@@ -99,10 +166,7 @@ async function loadBoard(checkpoint = "") {
     error.textContent = err.message || String(err);
     error.hidden = false;
     // Never retain stale cards from an older checkpoint after an error.
-    ["review","answered","partial","open"].forEach(lane => {
-      el("research-" + lane + "-list").replaceChildren();
-      el("research-" + lane + "-count").textContent = "0";
-    });
+    clearLanes();
   }
 }
 
@@ -114,5 +178,13 @@ el("research-checkpoint").addEventListener("change", function(event) {
   history.replaceState(null, "", url.pathname + url.search);
   loadBoard(selected);
 });
+el("research-motion-toggle").addEventListener("click", function() {
+  motionPaused = !motionPaused;
+  syncMotionButton();
+});
+if (reducedMotion.addEventListener) {
+  reducedMotion.addEventListener("change", syncMotionButton);
+}
+syncMotionButton();
 const requested = new URLSearchParams(window.location.search).get("checkpoint") || "";
 loadBoard(requested);

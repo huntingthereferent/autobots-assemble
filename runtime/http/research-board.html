@@ -23,27 +23,28 @@
         <label for="research-checkpoint">View checkpoint</label>
         <select id="research-checkpoint" aria-label="Research checkpoint"></select>
         <span id="research-freeze-date"></span>
+        <button id="research-motion-toggle" class="quiet-button research-motion-toggle" type="button" aria-pressed="false">Pause scrolling</button>
       </div>
       <p id="research-note" class="research-note"></p>
-      <p class="research-readonly">Read-only research projection · changes come from versioned evidence records, not board interactions.</p>
+      <p class="research-readonly">Questions move upward in continuous vertical loops. Hover or focus to pause; use Pause scrolling to stop all lists. Read-only research projection.</p>
     </header>
     <div id="research-error" class="error" role="alert" hidden></div>
-    <div class="research-columns" id="research-columns" aria-live="polite">
+    <div class="research-columns" id="research-columns">
       <section class="research-lane" data-lane="review">
         <header><h2>Awaiting review</h2><span class="research-count" id="research-review-count">0</span></header>
-        <p>Frozen questions not yet reconciled.</p><div id="research-review-list" class="research-question-list"></div>
+        <p>Frozen questions not yet reconciled.</p><div class="research-question-window"><div id="research-review-list" class="research-question-track"></div></div>
       </section>
       <section class="research-lane" data-lane="answered">
         <header><h2>Answered</h2><span class="research-count" id="research-answered-count">0</span></header>
-        <p>Witnessed answer for the stated scope.</p><div id="research-answered-list" class="research-question-list"></div>
+        <p>Witnessed answer for the stated scope.</p><div class="research-question-window"><div id="research-answered-list" class="research-question-track"></div></div>
       </section>
       <section class="research-lane" data-lane="partial">
         <header><h2>Partial / Unknown</h2><span class="research-count" id="research-partial-count">0</span></header>
-        <p>Evidence or observation boundary remains.</p><div id="research-partial-list" class="research-question-list"></div>
+        <p>Evidence or observation boundary remains.</p><div class="research-question-window"><div id="research-partial-list" class="research-question-track"></div></div>
       </section>
       <section class="research-lane" data-lane="open">
         <header><h2>Open / Next</h2><span class="research-count" id="research-open-count">0</span></header>
-        <p>New questions derived from recorded findings.</p><div id="research-open-list" class="research-question-list"></div>
+        <p>New questions derived from recorded findings.</p><div class="research-question-window"><div id="research-open-list" class="research-question-track"></div></div>
       </section>
     </div>
   </main>
