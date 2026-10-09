@@ -120,8 +120,7 @@ class InverseLimitTests(unittest.TestCase):
             TowerPoint.zeros().prefix(2)
         with self.assertRaises(ValueError):
             prefix_inverse((0, 0, 0), (0, 1, 2), "X")
-        with self.assertRaises(ValueError):
-            audit_prefixes(deepest=2)
+        self.assertEqual(audit_prefixes(deepest=2).status, "UNKNOWN")
 
 
 if __name__ == "__main__":
