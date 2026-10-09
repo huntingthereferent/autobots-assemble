@@ -1820,11 +1820,76 @@ root-changing construction without
 ever silently identifying the two
 original canonically marked objects.
 
+## Independent central root translation — witnessed pointed paths
+
+[Mathematical report](WINDOW_ROOT_TRANSLATION.md) ·
+[operator implementation](window_root_translation.py) ·
+[14 regression tests](../../network/tests/test_arc_like_window_root_translation.py)
+
+The pointed-arrow contract now admits an independently
+constructed operator `T_r(x)_2=x2+r` (over F3).
+It changes the chosen point but **not** the world's
+A/B transition laws. Because the declared 48-world
+family's increments depend only on x0,x1 and all
+higher couplings are zero, `T_r` commutes with
+both A and B. It also commutes with the earlier
+H shears and R fiber-shifts and has an exact
+three-turn return `T_1^3=id`.
+
+New `TranslationFactor` witnesses coexist
+with exact `ConjugacyFactor` H/R witnesses.
+`OperatorPath` retains their literal sequence;
+`PointedOperator` admits a path only when
+the **source mark is mapped exactly to the target
+mark**. Inversion reverses the factor order,
+while composition requires equal pointed
+middle endpoints.
+
+The previously established 36 nonrooted
+H/R bridges cannot be silently promoted.
+After an **explicit** target re-marking,
+each can be composed with the three
+independent T shifts while preserving the
+original positive-word collision proof.
+Across the verified 48-world family:
+
+- 48×3 = **144** distinct pointed marks
+  at the same original world laws.
+- 144 existing canonical-rooted pair
+  alignments give **432** translated routes.
+- 36 original unrooted alignments give
+  **108** pointed routes after explicit
+  mark transport, never with the original
+  canonical target mark.
+- Total **540** route certificates, without
+  changing the previous 14 full-state
+  versus 16 canonical-root class counts.
+
+The exact new module and test file hashes
+match 14 locally passing tests, alongside
+14 earlier pointed-arrow tests (28 in all)
+against reproduced existing world equations.
+The GitHub workflow now includes the new
+checks; CI result remains separate.
+
+**CLOSED:** A/B central translation symmetry
+and witnessed composition in this **zero
+higher-coupling** family. **UNKNOWN:** whether
+the translation survives nonzero rules that
+read x2 or general infinite state marks.
+
+**Next:** construct the first higher
+coupling that reads x2, then check at what
+depth the previously proved central
+translation stops commuting with B.
+Preserve its scope rather than declaring
+universal closure.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** test an independently constructed root-moving operator against the explicit pointed-arrow contract, retaining its original mark, transported mark, and complete state-map provenance.
+- **Next:** admit a nonzero higher coupling depending on x2, test whether central T_r remains an A/B symmetry, and preserve a concrete first-depth failure witness if not.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
