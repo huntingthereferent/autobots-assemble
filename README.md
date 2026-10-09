@@ -191,6 +191,9 @@ The current frontage favors information density over application-style chrome: l
 
 ## Finite-field transformation systems (ARC-like construction research)
 
+**Engine 1 — bounded inverse mathematical construction:** [contract](work/arc_like_maze/ENGINE_ONE.md) · [implementation](work/arc_like_maze/engine_one.py) · [focused tests](network/tests/test_arc_like_engine_one.py). It constructs successive versions of a changing mathematical engine from witnessed relational requirements using the existing 48-law window and 1–4-coupling grammars. It refuses unsupported equivalence or cross-grammar transitions. This is a mathematical layer, not the factory/runtime or a claim of universal A/B closure.
+
+
 [Mathematical notation and terminology](work/arc_like_maze/TERMINOLOGY.md) distinguishes the two explicitly defined generating transformations **A** and **B** from historical project shorthand. The terms *conjugacy*, *pointed dynamical system*, *composition of generators*, and *centralizer symmetry* refer to specific mathematical claims, not a general-purpose A/B procedure.
 
 The math-first [inverted A/B world-construction experiment](work/arc_like_maze/README.md)
