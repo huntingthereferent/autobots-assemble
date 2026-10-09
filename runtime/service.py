@@ -10,6 +10,7 @@ from runtime.agent_bridge import AgentBridge
 from runtime.agent_lineage import AgentLineage, Evaluator, ClosureAdmitter
 from runtime.observed_evaluator import NativeABEvaluator, Observer
 from runtime.repository_tasks import admit_active_work, read_active_work
+from runtime.daily_checklist import DailyChecklist
 from runtime.engine import HandoffRuntime
 from runtime.external_feed import LiveFeed
 from runtime.handoff import EvidenceRecord, ExecutionResult, SimulatedActor
@@ -58,6 +59,7 @@ class EcosystemService:
         if self.repository_work_file is not None and not self.repository_work_file.is_file():
             raise FileNotFoundError(f"repository work source unavailable: {self.repository_work_file}")
 
+        self.daily_checklist = DailyChecklist(self.data_dir / "daily_checklist.jsonl")
         self.personal = PersonalOperationsStore(
             self.data_dir / "personal_operations.jsonl"
         )
@@ -288,6 +290,15 @@ class EcosystemService:
                 }
             )
         return rows
+
+    def daily_checklist_snapshot(self, *, now: datetime | None = None) -> dict[str, Any]:
+        return self.daily_checklist.snapshot(now=now)
+
+    def add_daily_checklist_item(self, payload: dict[str, Any]) -> dict[str, Any]:
+        return self.daily_checklist.create(str(payload.get("title") or ""))
+
+    def set_daily_checklist_checked(self, item_id: str, *, checked: bool) -> dict[str, Any]:
+        return self.daily_checklist.check(item_id, checked)
 
     def add_reminder(self, payload: dict[str, Any]) -> dict[str, Any]:
         reminder = self.day_to_day.add_reminder(
