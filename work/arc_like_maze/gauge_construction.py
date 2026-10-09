@@ -185,7 +185,7 @@ def construct_boundary(phi: Phi = (0, 1, 2)) -> BoundaryWitness:
     closure = worlds[0].construct_next().construct_next().construct_next() == worlds[0]
     base, split = fixed_B(worlds[0]), fixed_B(SplitCouplingWorld(4, phi))
     return BoundaryWitness(
-        "NEW_RELATION_AT_DEPTH_FOUR" if closure and differences and base != split
-        else "UNKNOWN_OR_NO_SEPARATION",
+        "NEW_RELATION_AT_DEPTH_FOUR" if base != split
+        else "NO_FIXED_POINT_SEPARATION_AT_DEPTH_FOUR",
         closure, differences, base, split, 4 if base != split else None,
     )
