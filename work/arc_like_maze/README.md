@@ -1257,11 +1257,45 @@ marked alignments. No universal A/B stopping point or native ARC solve follows.
 rather than forgetting root gains and witnesses and reintroducing the
 same quotient failure.
 
+## Finite-stem gauges and composite operator normal forms
+
+[Research report](STEMMED_OPERATOR_SYSTEM.md) ·
+[implementation](stemmed_operator_system.py) ·
+[regression tests](../../network/tests/test_arc_like_stemmed_operator_system.py)
+
+The marked gauge/shift construction extends from strictly periodic gauge
+schedules to a **finite gauge stem followed by a repeating tail**.
+Its scalar equation preserves full-state A/B alignment, including the
+explicit marked incoming root. The original witness tail survives a shift
+without being recomputed at ambiguous zero couplings.
+
+Exact algebraic interchange gives a normal form for any finite word in
+the *admitted* language of gauge changes and forward root shifts:
+
+```text
+arbitrary admitted gauge/shift word
+    = total forward shift + combined endpoint gauges
+```
+
+The normal form includes both root marks and the entire ultimately periodic
+scalar witness, not merely a matching process quotient label. Local checks
+tested 12 gauge schedules against 81 rule templates (11,664 composition
+cases), 864 interchange squares and 340 short mixed operator words.
+Nine focused local tests passed with the existing marked-arrow API fixture.
+
+**CLOSED:** this chosen eventually periodic diagonal-gauge system and its
+witness-carrying forward shifts are coherent. **OPEN:** unrestricted rule
+addition and non-diagonal processes. A shift that drops a finite prefix is
+not invertible; the normal form does not claim to restore it.
+
+**Next:** probe an independently justified operator beyond the diagonal
+gauge family, retaining full-state evidence or a precise break witness.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** characterize which further operations on marked process arrows preserve full witnessed alignment; the gauge/shift interchange square is proved only for the specified model.
+- **Next:** examine non-gauge process constructions for witnessed all-depth A/B preservation, including explicit non-equivalence when an operator breaks the current relation.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
