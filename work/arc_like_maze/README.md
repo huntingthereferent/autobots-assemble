@@ -2168,6 +2168,53 @@ order-nine symmetry can be lifted
 again, preserving the actual cyclic
 order and the pointed witness.
 
+## Variable fourth-coordinate quotients — three fifth-coordinate ranks
+
+[Mathematical proof](VARIABLE_FOURTH_LIFT.md) ·
+[exact classifier and pointed conjugacies](variable_fourth_lift.py) ·
+[independent full-matrix audit](variable_fourth_arithmetic_audit.py) ·
+[13 focused tests](../../network/tests/test_arc_like_variable_fourth_lift.py)
+
+The preceding fifth-coordinate theorem fixed
+`Q(w)=w²`. This extension varies every
+nonzero-trace three-entry Q and both normalized
+fourth-coordinate row offsets, producing **162
+order-nine configurations per gain**.
+
+The next 27-state cohomological equation has
+compatibility ranks **5, 6 and 7**. Across
+both gains, 60 configurations admit 81
+fifth-coordinate tables, 48 admit 27, and
+216 admit 9, totaling **8,100 admissible
+configuration/table combinations**.
+
+At rank seven every admissible fifth coupling
+is independent of the preceding coordinate
+and has form `q2(z,y)=a*z+b`; at ranks
+five and six some genuinely y-dependent
+couplings survive.
+
+Independent 81-by-36 finite-field elimination
+proves the rank histogram. Nullspace-basis
+checks show that all admitted fifth
+corrections return after nine turns, with
+**no order-27 example** in this restricted
+family. An explicit signed-cycle certificate
+is retained whenever a proposed correction
+is inconsistent. The marked point and all
+composition exponents remain explicit.
+
+**Closed:** these 324 order-nine fourth
+configurations and prescribed fifth-coordinate
+additive corrections. **Unknown:** the
+previously excluded fourth-coordinate
+rules with zero three-turn trace.
+
+**Next:** analyze the zero-trace lower
+family separately, including its potentially
+disconnected finite graph and the order of
+pointed corrections.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
