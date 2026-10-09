@@ -4,16 +4,20 @@ on:
   pull_request:
     paths:
       - "runtime/ab_construction.py"
+      - "runtime/ab_relation_generator.py"
       - "runtime/ab_world_experiment.py"
       - "runtime/service.py"
       - "network/tests/test_ab_construction.py"
+      - "network/tests/test_ab_generic_construction.py"
       - "network/tests/test_ab_world_experiment.py"
       - "runtime/AB_CONSTRUCTION_DIRECTION.md"
       - ".github/workflows/ab-construction-tests.yml"
   push:
     paths:
       - "runtime/ab_construction.py"
+      - "runtime/ab_relation_generator.py"
       - "network/tests/test_ab_construction.py"
+      - "network/tests/test_ab_generic_construction.py"
       - ".github/workflows/ab-construction-tests.yml"
 
 jobs:
@@ -26,6 +30,8 @@ jobs:
           python-version: "3.12"
       - name: Verify inverse category and nested world construction
         run: python -m unittest discover -s network/tests -p "test_ab_construction.py" -v
+      - name: Verify generic construction across unrelated referents
+        run: python -m unittest discover -s network/tests -p "test_ab_generic_construction.py" -v
       - name: Verify world simulation and category refinement
         run: python -m unittest discover -s network/tests -p "test_ab_world_experiment.py" -v
       - name: Verify original A/B math is unchanged
