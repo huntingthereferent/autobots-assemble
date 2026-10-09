@@ -1,0 +1,34 @@
+name: Mixed pointed centralizer composition
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'work/arc_like_maze/mixed_centralizer_composition.py'
+      - 'work/arc_like_maze/mixed_centralizer_independent_audit.py'
+      - 'network/tests/test_arc_like_mixed_centralizer_composition.py'
+      - 'work/arc_like_maze/pointed_coupling_classification.py'
+      - 'work/arc_like_maze/zero_trace_lift.py'
+      - 'work/arc_like_maze/variable_fourth_lift.py'
+      - '.github/workflows/mixed-centralizer-composition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-commutator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile exact mixed arrow, independent audit, and regressions
+        run: |
+          python -m compileall -q work/arc_like_maze/mixed_centralizer_composition.py work/arc_like_maze/mixed_centralizer_independent_audit.py network/tests/test_arc_like_mixed_centralizer_composition.py
+      - name: Regression of mixed pointed-arrow and noncommuting witnesses
+        run: python -m unittest network.tests.test_arc_like_mixed_centralizer_composition -v
+      - name: Independent full component and commutator audit
+        run: python -m work.arc_like_maze.mixed_centralizer_independent_audit
