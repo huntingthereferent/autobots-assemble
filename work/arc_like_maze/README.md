@@ -2080,11 +2080,93 @@ and check the earliest dimensional
 and signed-cycle obstructions while
 preserving explicit distinguished points.
 
+## Nonlinear fourth-coordinate coupling — centralizer orders three and nine
+
+[Mathematical theorem](HIGHER_COUPLING_LIFT.md) ·
+[symbolic classifier and voltage obstructions](higher_coupling_lift.py) ·
+[16 regression tests](../../network/tests/test_arc_like_higher_coupling_lift.py) ·
+[independent 39,366-case graph audit](higher_coupling_arithmetic_audit.py)
+
+The preceding nonconstant lower-coupling
+construction admits a normalized potential
+`phi(x1,x2)` advancing by one under each
+lower-coordinate generator transition.
+The new independent coupling is an
+**arbitrary** nine-entry rule
+`q1(x1,x2)`, updating the fourth
+state coordinate.
+
+For the specifically declared
+fiber-additive correction translating
+x2 by one and x3 by a function K(x1,x2),
+the commutation equation has a solution
+if and only if
+
+~~~text
+q1(v,z) = Q(phi(v,z)) + k(v).
+~~~
+
+The correction potential is a discrete
+primitive of the resulting quotient
+function Q. Its **three-turn trace**
+decides the actual cyclic order:
+
+- **81** q1 tables yield a centralizer
+  symmetry of order three.
+- **162** yield a commuting but
+  **order-nine** symmetry; the third
+  iterate moves the fourth coordinate.
+- **19,440** admit no commuting
+  correction of the specified form,
+  witnessed by inconsistent signed
+  graph-cycle voltages.
+
+There are exactly **19,683** possible
+q1 tables for each of the 36 previously
+admitted lower-table/gain pairs.
+The counts above follow algebraically
+for each such pair, without assuming
+a universal centralizer classification.
+
+An independently implemented graph
+solver exhaustively classified all
+19,683 q1 tables for each of two
+nonconstant lower systems, one for
+each gain. It also passed **78,732**
+full-state fourth-dimensional
+commutation checks and **39,366**
+cyclic-return checks. Sixteen
+committed regression tests and a
+targeted workflow specify further
+reproducibility; a GitHub CI pass
+has not been confirmed.
+
+The distinguished point in the new
+operator records four coordinates,
+including the higher correction.
+A commuting transformation of order
+nine cannot be silently described
+as a three-turn pointed cycle.
+
+**Closed:** this prescribed nonlinear
+fourth-coordinate coupling and
+fiber-additive centralizer problem.
+**Unknown:** other centralizer
+maps, nonzero couplings reading x3,
+and universal inverse construction.
+
+**Next:** admit a fifth-coordinate
+coupling reading x3 and determine
+whether a fourth-coordinate
+order-nine symmetry can be lifted
+again, preserving the actual cyclic
+order and the pointed witness.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** admit a nonconstant higher-coordinate coupling, solve the next explicit correction equation or retain its signed-cycle obstruction, and preserve the distinguished-point transport.
+- **Next:** admit a nonzero coupling reading x3 and test whether the existing order-nine commuting transformation has a coherent further lift, retaining cyclic order and distinguished-point witnesses.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
