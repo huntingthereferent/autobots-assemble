@@ -1885,11 +1885,68 @@ translation stops commuting with B.
 Preserve its scope rather than declaring
 universal closure.
 
+## Coordinate-translation centralizer of two finite-field generators
+
+[Standard mathematical terminology](TERMINOLOGY.md) ·
+[Centralizer theorem and counterexamples](TRANSLATION_CENTRALIZER.md) ·
+[Exact table criterion](translation_centralizer.py) ·
+[13 regression tests](../../network/tests/test_arc_like_translation_centralizer.py)
+
+The original labels **A** and **B** are retained only as
+the two explicitly defined *generating transformations*.
+Their serialized compositions are documented with
+standard right-to-left functional notation; historical
+project shorthand is not the name of the mathematics.
+
+For the triangular two-predecessor system over
+`F3`, the coordinate translation
+`T_r(x)_2=x2+r` belongs to the **centralizer of the
+generated action** (for nonzero r) if and only if:
+
+~~~text
+q1(u,v+r) = q1(u,v)     for all u,v
+q2(u+r,v) = q2(u,v)     for all u,v
+~~~
+
+Equivalently, q1 is independent of its second
+argument and q2 of its first. The only other
+rules cannot read x2 and impose no condition
+on this particular coordinate translation.
+
+A coupling `q1(u,v)=v` breaks commutation with
+the second generator **first at dimension four**.
+The independent coupling `q2(u,v)=u` breaks
+it **first at dimension five**, even though
+all lower-dimensional checks agree. Nonzero
+couplings `q1(u,v)=u` and `q2(u,v)=v`
+*preserve* the translation symmetry, proving
+that a nonzero higher coupling alone does
+not constitute an obstruction.
+
+The translation subgroup is either
+`{T0,T1,T2}` (order three) or `{T0}`
+(trivial), with an exact table-level
+certificate. The new pointed-system adapter
+refuses a nonidentity translation when its
+commutation certificate fails, and requires
+the chosen point to be transported explicitly.
+
+The 13 tests passed locally against the exact
+newly committed source and test files plus
+a local reproduction of the existing
+two-predecessor dependency. GitHub workflow
+results remain separately verifiable.
+
+**Next:** test a possible higher-coordinate
+correction to a broken translation and
+require an explicit bijective conjugacy
+or a finite periodic-orbit obstruction.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** admit a nonzero higher coupling depending on x2, test whether central T_r remains an A/B symmetry, and preserve a concrete first-depth failure witness if not.
+- **Next:** test whether a correction acting on x3 or x4 can restore a failed centralizer symmetry; preserve first-failure witnesses and use standard transformation-system terminology.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
