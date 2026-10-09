@@ -42,7 +42,7 @@ class ConstructionProposal:
 
     proposal_id: str
     referent: Any
-    category: int
+    category: int | None
     structure: dict[str, Any]
     source_indices: tuple[int, ...]
     source_locators: tuple[str, ...]
@@ -220,6 +220,8 @@ def proposal_from_frame(frame: ABFrame) -> ConstructionProposal:
     changing a candidate while retaining its deterministic proposal ID.
     """
     current = frame.current
+    if current.get("category") is None and current.get("structure", {}).get("kind") != "cross-category-recombination":
+        raise ValueError("unassigned category requires an exploratory proposal")
     if current.get("construction_status") != "PROPOSED":
         raise ValueError("ordinary A/B movements are not construction proposals")
     indices = tuple(current["source_indices"])
