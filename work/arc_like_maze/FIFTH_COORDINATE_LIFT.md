@@ -34,7 +34,7 @@ L(B_lower(v,z,y))-L(v,z,y)
  = q2(z+1,y+w^2)-q2(z,y)
 ```
 
-for all 81 choices of the parameter x0 and the 27 lower-coordinate states, where `B_lower` is induced by B on (v,z,y).
+for all 81 combinations of the three possible x0 parameters and the 27 lower-coordinate states, where `B_lower` is induced by B on (v,z,y).
 
 **Theorem for these two fixed lower systems:** this additive lift exists if and only if
 
