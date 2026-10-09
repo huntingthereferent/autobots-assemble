@@ -1,4 +1,4 @@
-﻿# Desktop research sync — 2026-10-08
+# Desktop research sync — 2026-10-08
 
 This branch preserves the local Continuity work and ARC research prior to loss of desktop access.
 
@@ -16,3 +16,6 @@ Excluded: venv dependencies, downloaded third-party game/environment implementat
 Inversion of A/B source categories has finite-horizon native evidence. The fractal spatial maps are a chosen mathematical model, not a proven native SK48 rule. The proposed construction adapter is a local tested prototype, not production agent integration.
 
 Read the detailed reports inside desktop-evidence-2026-10-08/.
+
+## Additional desktop sources
+The desktop-solve-2026-10-08 directory preserves the separate local ARC solver experiment scripts; desktop-frames-2026-10-08 preserves 22 public-result PNG frame observations. Their provenance remains native evidence, not independent solver claims.

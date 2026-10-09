@@ -1,0 +1,1319 @@
+{
+  "ls20": {
+    "available_actions": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "base_components": [
+      {
+        "color": 0,
+        "size": 3,
+        "x0": 21,
+        "y0": 31,
+        "x1": 22,
+        "y1": 32,
+        "cx2": 43,
+        "cy2": 63
+      },
+      {
+        "color": 1,
+        "size": 1,
+        "x0": 20,
+        "y0": 32,
+        "x1": 20,
+        "y1": 32,
+        "cx2": 40,
+        "cy2": 64
+      },
+      {
+        "color": 1,
+        "size": 1,
+        "x0": 21,
+        "y0": 33,
+        "x1": 21,
+        "y1": 33,
+        "cx2": 42,
+        "cy2": 66
+      },
+      {
+        "color": 3,
+        "size": 892,
+        "x0": 14,
+        "y0": 8,
+        "x1": 53,
+        "y1": 49,
+        "cx2": 67,
+        "cy2": 57
+      },
+      {
+        "color": 4,
+        "size": 100,
+        "x0": 24,
+        "y0": 30,
+        "x1": 33,
+        "y1": 44,
+        "cx2": 57,
+        "cy2": 74
+      },
+      {
+        "color": 4,
+        "size": 2509,
+        "x0": 0,
+        "y0": 0,
+        "x1": 63,
+        "y1": 63,
+        "cx2": 63,
+        "cy2": 63
+      },
+      {
+        "color": 5,
+        "size": 43,
+        "x0": 33,
+        "y0": 9,
+        "x1": 39,
+        "y1": 15,
+        "cx2": 72,
+        "cy2": 24
+      },
+      {
+        "color": 5,
+        "size": 76,
+        "x0": 1,
+        "y0": 53,
+        "x1": 10,
+        "y1": 62,
+        "cx2": 11,
+        "cy2": 115
+      },
+      {
+        "color": 5,
+        "size": 112,
+        "x0": 12,
+        "y0": 60,
+        "x1": 63,
+        "y1": 63,
+        "cx2": 75,
+        "cy2": 123
+      },
+      {
+        "color": 5,
+        "size": 208,
+        "x0": 0,
+        "y0": 0,
+        "x1": 3,
+        "y1": 51,
+        "cx2": 3,
+        "cy2": 51
+      },
+      {
+        "color": 8,
+        "size": 4,
+        "x0": 56,
+        "y0": 61,
+        "x1": 57,
+        "y1": 62,
+        "cx2": 113,
+        "cy2": 123
+      },
+      {
+        "color": 8,
+        "size": 4,
+        "x0": 59,
+        "y0": 61,
+        "x1": 60,
+        "y1": 62,
+        "cx2": 119,
+        "cy2": 123
+      },
+      {
+        "color": 8,
+        "size": 4,
+        "x0": 62,
+        "y0": 61,
+        "x1": 63,
+        "y1": 62,
+        "cx2": 125,
+        "cy2": 123
+      },
+      {
+        "color": 9,
+        "size": 1,
+        "x0": 35,
+        "y0": 13,
+        "x1": 35,
+        "y1": 13,
+        "cx2": 70,
+        "cy2": 26
+      },
+      {
+        "color": 9,
+        "size": 4,
+        "x0": 7,
+        "y0": 59,
+        "x1": 8,
+        "y1": 60,
+        "cx2": 15,
+        "cy2": 119
+      },
+      {
+        "color": 9,
+        "size": 5,
+        "x0": 35,
+        "y0": 11,
+        "x1": 37,
+        "y1": 13,
+        "cx2": 72,
+        "cy2": 24
+      },
+      {
+        "color": 9,
+        "size": 15,
+        "x0": 34,
+        "y0": 47,
+        "x1": 38,
+        "y1": 49,
+        "cx2": 72,
+        "cy2": 96
+      },
+      {
+        "color": 9,
+        "size": 20,
+        "x0": 3,
+        "y0": 55,
+        "x1": 8,
+        "y1": 60,
+        "cx2": 11,
+        "cy2": 115
+      },
+      {
+        "color": 11,
+        "size": 84,
+        "x0": 13,
+        "y0": 61,
+        "x1": 54,
+        "y1": 62,
+        "cx2": 67,
+        "cy2": 123
+      },
+      {
+        "color": 12,
+        "size": 10,
+        "x0": 34,
+        "y0": 45,
+        "x1": 38,
+        "y1": 46,
+        "cx2": 72,
+        "cy2": 91
+      }
+    ],
+    "simple_actions": [
+      {
+        "n": 52,
+        "bbox": [
+          13,
+          40,
+          38,
+          62
+        ],
+        "pairs": {
+          "3->9": 15,
+          "3->12": 10,
+          "9->3": 15,
+          "11->3": 2,
+          "12->3": 10
+        },
+        "action": "ACTION1",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [
+          {
+            "sig": [
+              9,
+              15,
+              5,
+              3
+            ],
+            "dx2": 0,
+            "dy2": -10,
+            "from": [
+              34,
+              47,
+              38,
+              49
+            ],
+            "to": [
+              34,
+              42,
+              38,
+              44
+            ]
+          },
+          {
+            "sig": [
+              12,
+              10,
+              5,
+              2
+            ],
+            "dx2": 0,
+            "dy2": -10,
+            "from": [
+              34,
+              45,
+              38,
+              46
+            ],
+            "to": [
+              34,
+              40,
+              38,
+              41
+            ]
+          }
+        ],
+        "color_delta": {
+          "3": 2
+        }
+      },
+      {
+        "n": 2,
+        "bbox": [
+          13,
+          61,
+          13,
+          62
+        ],
+        "pairs": {
+          "11->3": 2
+        },
+        "action": "ACTION2",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {
+          "3": 2
+        }
+      },
+      {
+        "n": 52,
+        "bbox": [
+          13,
+          45,
+          38,
+          62
+        ],
+        "pairs": {
+          "3->9": 15,
+          "3->12": 10,
+          "9->3": 15,
+          "11->3": 2,
+          "12->3": 10
+        },
+        "action": "ACTION3",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [
+          {
+            "sig": [
+              9,
+              15,
+              5,
+              3
+            ],
+            "dx2": -10,
+            "dy2": 0,
+            "from": [
+              34,
+              47,
+              38,
+              49
+            ],
+            "to": [
+              29,
+              47,
+              33,
+              49
+            ]
+          },
+          {
+            "sig": [
+              12,
+              10,
+              5,
+              2
+            ],
+            "dx2": -10,
+            "dy2": 0,
+            "from": [
+              34,
+              45,
+              38,
+              46
+            ],
+            "to": [
+              29,
+              45,
+              33,
+              46
+            ]
+          }
+        ],
+        "color_delta": {
+          "3": 2
+        }
+      },
+      {
+        "n": 52,
+        "bbox": [
+          13,
+          45,
+          43,
+          62
+        ],
+        "pairs": {
+          "3->9": 15,
+          "3->12": 10,
+          "9->3": 15,
+          "11->3": 2,
+          "12->3": 10
+        },
+        "action": "ACTION4",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [
+          {
+            "sig": [
+              9,
+              15,
+              5,
+              3
+            ],
+            "dx2": 10,
+            "dy2": 0,
+            "from": [
+              34,
+              47,
+              38,
+              49
+            ],
+            "to": [
+              39,
+              47,
+              43,
+              49
+            ]
+          },
+          {
+            "sig": [
+              12,
+              10,
+              5,
+              2
+            ],
+            "dx2": 10,
+            "dy2": 0,
+            "from": [
+              34,
+              45,
+              38,
+              46
+            ],
+            "to": [
+              39,
+              45,
+              43,
+              46
+            ]
+          }
+        ],
+        "color_delta": {
+          "3": 2
+        }
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION5",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION7",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      }
+    ]
+  },
+  "sb26": {
+    "available_actions": [
+      5,
+      6,
+      7
+    ],
+    "base_components": [
+      {
+        "color": 0,
+        "size": 5,
+        "x0": 17,
+        "y0": 24,
+        "x1": 19,
+        "y1": 26,
+        "cx2": 36,
+        "cy2": 50
+      },
+      {
+        "color": 0,
+        "size": 5,
+        "x0": 17,
+        "y0": 33,
+        "x1": 19,
+        "y1": 35,
+        "cx2": 36,
+        "cy2": 68
+      },
+      {
+        "color": 0,
+        "size": 5,
+        "x0": 44,
+        "y0": 24,
+        "x1": 46,
+        "y1": 26,
+        "cx2": 90,
+        "cy2": 50
+      },
+      {
+        "color": 0,
+        "size": 5,
+        "x0": 44,
+        "y0": 33,
+        "x1": 46,
+        "y1": 35,
+        "cx2": 90,
+        "cy2": 68
+      },
+      {
+        "color": 2,
+        "size": 4,
+        "x0": 22,
+        "y0": 29,
+        "x1": 23,
+        "y1": 30,
+        "cx2": 45,
+        "cy2": 59
+      },
+      {
+        "color": 2,
+        "size": 4,
+        "x0": 28,
+        "y0": 29,
+        "x1": 29,
+        "y1": 30,
+        "cx2": 57,
+        "cy2": 59
+      },
+      {
+        "color": 2,
+        "size": 4,
+        "x0": 34,
+        "y0": 29,
+        "x1": 35,
+        "y1": 30,
+        "cx2": 69,
+        "cy2": 59
+      },
+      {
+        "color": 2,
+        "size": 4,
+        "x0": 40,
+        "y0": 29,
+        "x1": 41,
+        "y1": 30,
+        "cx2": 81,
+        "cy2": 59
+      },
+      {
+        "color": 2,
+        "size": 64,
+        "x0": 0,
+        "y0": 53,
+        "x1": 63,
+        "y1": 53,
+        "cx2": 63,
+        "cy2": 106
+      },
+      {
+        "color": 4,
+        "size": 192,
+        "x0": 19,
+        "y0": 26,
+        "x1": 44,
+        "y1": 33,
+        "cx2": 63,
+        "cy2": 59
+      },
+      {
+        "color": 4,
+        "size": 576,
+        "x0": 0,
+        "y0": 54,
+        "x1": 63,
+        "y1": 63,
+        "cx2": 63,
+        "cy2": 117
+      },
+      {
+        "color": 4,
+        "size": 2860,
+        "x0": 0,
+        "y0": 0,
+        "x1": 63,
+        "y1": 52,
+        "cx2": 63,
+        "cy2": 52
+      },
+      {
+        "color": 5,
+        "size": 16,
+        "x0": 19,
+        "y0": 2,
+        "x1": 22,
+        "y1": 5,
+        "cx2": 41,
+        "cy2": 7
+      },
+      {
+        "color": 5,
+        "size": 16,
+        "x0": 26,
+        "y0": 2,
+        "x1": 29,
+        "y1": 5,
+        "cx2": 55,
+        "cy2": 7
+      },
+      {
+        "color": 5,
+        "size": 16,
+        "x0": 33,
+        "y0": 2,
+        "x1": 36,
+        "y1": 5,
+        "cx2": 69,
+        "cy2": 7
+      },
+      {
+        "color": 5,
+        "size": 16,
+        "x0": 40,
+        "y0": 2,
+        "x1": 43,
+        "y1": 5,
+        "cx2": 83,
+        "cy2": 7
+      },
+      {
+        "color": 5,
+        "size": 88,
+        "x0": 17,
+        "y0": 0,
+        "x1": 45,
+        "y1": 7,
+        "cx2": 62,
+        "cy2": 7
+      },
+      {
+        "color": 8,
+        "size": 72,
+        "x0": 18,
+        "y0": 25,
+        "x1": 45,
+        "y1": 34,
+        "cx2": 63,
+        "cy2": 59
+      },
+      {
+        "color": 9,
+        "size": 16,
+        "x0": 34,
+        "y0": 57,
+        "x1": 37,
+        "y1": 60,
+        "cx2": 71,
+        "cy2": 117
+      },
+      {
+        "color": 9,
+        "size": 20,
+        "x0": 18,
+        "y0": 1,
+        "x1": 23,
+        "y1": 6,
+        "cx2": 41,
+        "cy2": 7
+      },
+      {
+        "color": 11,
+        "size": 16,
+        "x0": 42,
+        "y0": 57,
+        "x1": 45,
+        "y1": 60,
+        "cx2": 87,
+        "cy2": 117
+      },
+      {
+        "color": 11,
+        "size": 20,
+        "x0": 32,
+        "y0": 1,
+        "x1": 37,
+        "y1": 6,
+        "cx2": 69,
+        "cy2": 7
+      },
+      {
+        "color": 14,
+        "size": 16,
+        "x0": 18,
+        "y0": 57,
+        "x1": 21,
+        "y1": 60,
+        "cx2": 39,
+        "cy2": 117
+      },
+      {
+        "color": 14,
+        "size": 20,
+        "x0": 25,
+        "y0": 1,
+        "x1": 30,
+        "y1": 6,
+        "cx2": 55,
+        "cy2": 7
+      },
+      {
+        "color": 15,
+        "size": 16,
+        "x0": 26,
+        "y0": 57,
+        "x1": 29,
+        "y1": 60,
+        "cx2": 55,
+        "cy2": 117
+      },
+      {
+        "color": 15,
+        "size": 20,
+        "x0": 39,
+        "y0": 1,
+        "x1": 44,
+        "y1": 6,
+        "cx2": 83,
+        "cy2": 7
+      }
+    ],
+    "simple_actions": [
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION1",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION2",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION3",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION4",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 1,
+        "bbox": [
+          63,
+          53,
+          63,
+          53
+        ],
+        "pairs": {
+          "2->3": 1
+        },
+        "action": "ACTION5",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {
+          "3": 1
+        }
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION7",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      }
+    ]
+  },
+  "vc33": {
+    "available_actions": [
+      6
+    ],
+    "base_components": [
+      {
+        "color": 0,
+        "size": 368,
+        "x0": 52,
+        "y0": 32,
+        "x1": 63,
+        "y1": 63,
+        "cx2": 115,
+        "cy2": 95
+      },
+      {
+        "color": 0,
+        "size": 848,
+        "x0": 32,
+        "y0": 1,
+        "x1": 63,
+        "y1": 27,
+        "cx2": 95,
+        "cy2": 28
+      },
+      {
+        "color": 3,
+        "size": 2580,
+        "x0": 0,
+        "y0": 1,
+        "x1": 51,
+        "y1": 63,
+        "cx2": 51,
+        "cy2": 64
+      },
+      {
+        "color": 4,
+        "size": 16,
+        "x0": 46,
+        "y0": 44,
+        "x1": 49,
+        "y1": 49,
+        "cx2": 95,
+        "cy2": 93
+      },
+      {
+        "color": 5,
+        "size": 72,
+        "x0": 20,
+        "y0": 28,
+        "x1": 37,
+        "y1": 31,
+        "cx2": 57,
+        "cy2": 59
+      },
+      {
+        "color": 5,
+        "size": 96,
+        "x0": 40,
+        "y0": 28,
+        "x1": 63,
+        "y1": 31,
+        "cx2": 103,
+        "cy2": 59
+      },
+      {
+        "color": 7,
+        "size": 64,
+        "x0": 0,
+        "y0": 0,
+        "x1": 63,
+        "y1": 0,
+        "cx2": 63,
+        "cy2": 0
+      },
+      {
+        "color": 9,
+        "size": 16,
+        "x0": 60,
+        "y0": 24,
+        "x1": 63,
+        "y1": 27,
+        "cx2": 123,
+        "cy2": 51
+      },
+      {
+        "color": 9,
+        "size": 16,
+        "x0": 60,
+        "y0": 32,
+        "x1": 63,
+        "y1": 35,
+        "cx2": 123,
+        "cy2": 67
+      },
+      {
+        "color": 11,
+        "size": 8,
+        "x0": 38,
+        "y0": 28,
+        "x1": 39,
+        "y1": 31,
+        "cx2": 77,
+        "cy2": 59
+      },
+      {
+        "color": 11,
+        "size": 12,
+        "x0": 50,
+        "y0": 44,
+        "x1": 51,
+        "y1": 49,
+        "cx2": 101,
+        "cy2": 93
+      }
+    ],
+    "simple_actions": [
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION1",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION2",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION3",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION4",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION5",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION7",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      }
+    ]
+  },
+  "g50t": {
+    "available_actions": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "base_components": [
+      {
+        "color": 0,
+        "size": 1,
+        "x0": 2,
+        "y0": 2,
+        "x1": 2,
+        "y1": 2,
+        "cx2": 4,
+        "cy2": 4
+      },
+      {
+        "color": 0,
+        "size": 25,
+        "x0": 20,
+        "y0": 14,
+        "x1": 24,
+        "y1": 18,
+        "cx2": 44,
+        "cy2": 32
+      },
+      {
+        "color": 0,
+        "size": 331,
+        "x0": 20,
+        "y0": 14,
+        "x1": 38,
+        "y1": 38,
+        "cx2": 58,
+        "cy2": 52
+      },
+      {
+        "color": 0,
+        "size": 2649,
+        "x0": 0,
+        "y0": 0,
+        "x1": 63,
+        "y1": 62,
+        "cx2": 63,
+        "cy2": 62
+      },
+      {
+        "color": 1,
+        "size": 9,
+        "x0": 5,
+        "y0": 1,
+        "x1": 7,
+        "y1": 3,
+        "cx2": 12,
+        "cy2": 4
+      },
+      {
+        "color": 5,
+        "size": 1,
+        "x0": 16,
+        "y0": 10,
+        "x1": 16,
+        "y1": 10,
+        "cx2": 32,
+        "cy2": 20
+      },
+      {
+        "color": 5,
+        "size": 879,
+        "x0": 13,
+        "y0": 7,
+        "x1": 50,
+        "y1": 56,
+        "cx2": 63,
+        "cy2": 63
+      },
+      {
+        "color": 8,
+        "size": 82,
+        "x0": 14,
+        "y0": 9,
+        "x1": 41,
+        "y1": 42,
+        "cx2": 55,
+        "cy2": 51
+      },
+      {
+        "color": 9,
+        "size": 1,
+        "x0": 46,
+        "y0": 52,
+        "x1": 46,
+        "y1": 52,
+        "cx2": 92,
+        "cy2": 104
+      },
+      {
+        "color": 9,
+        "size": 3,
+        "x0": 1,
+        "y0": 5,
+        "x1": 3,
+        "y1": 5,
+        "cx2": 4,
+        "cy2": 10
+      },
+      {
+        "color": 9,
+        "size": 8,
+        "x0": 1,
+        "y0": 1,
+        "x1": 3,
+        "y1": 3,
+        "cx2": 4,
+        "cy2": 4
+      },
+      {
+        "color": 9,
+        "size": 19,
+        "x0": 43,
+        "y0": 49,
+        "x1": 49,
+        "y1": 55,
+        "cx2": 92,
+        "cy2": 104
+      },
+      {
+        "color": 9,
+        "size": 24,
+        "x0": 14,
+        "y0": 8,
+        "x1": 18,
+        "y1": 12,
+        "cx2": 32,
+        "cy2": 20
+      },
+      {
+        "color": 9,
+        "size": 64,
+        "x0": 0,
+        "y0": 63,
+        "x1": 63,
+        "y1": 63,
+        "cx2": 63,
+        "cy2": 126
+      }
+    ],
+    "simple_actions": [
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION1",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 48,
+        "bbox": [
+          14,
+          8,
+          18,
+          18
+        ],
+        "pairs": {
+          "5->9": 24,
+          "9->5": 24
+        },
+        "action": "ACTION2",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [
+          {
+            "sig": [
+              5,
+              1,
+              1,
+              1
+            ],
+            "dx2": 0,
+            "dy2": 12,
+            "from": [
+              16,
+              10,
+              16,
+              10
+            ],
+            "to": [
+              16,
+              16,
+              16,
+              16
+            ]
+          },
+          {
+            "sig": [
+              9,
+              24,
+              5,
+              5
+            ],
+            "dx2": 0,
+            "dy2": 12,
+            "from": [
+              14,
+              8,
+              18,
+              12
+            ],
+            "to": [
+              14,
+              14,
+              18,
+              18
+            ]
+          }
+        ],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION3",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 48,
+        "bbox": [
+          14,
+          8,
+          24,
+          12
+        ],
+        "pairs": {
+          "5->9": 24,
+          "9->5": 24
+        },
+        "action": "ACTION4",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [
+          {
+            "sig": [
+              5,
+              1,
+              1,
+              1
+            ],
+            "dx2": 12,
+            "dy2": 0,
+            "from": [
+              16,
+              10,
+              16,
+              10
+            ],
+            "to": [
+              22,
+              10,
+              22,
+              10
+            ]
+          },
+          {
+            "sig": [
+              9,
+              24,
+              5,
+              5
+            ],
+            "dx2": 12,
+            "dy2": 0,
+            "from": [
+              14,
+              8,
+              18,
+              12
+            ],
+            "to": [
+              20,
+              8,
+              24,
+              12
+            ]
+          }
+        ],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION5",
+        "legal": true,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      },
+      {
+        "n": 0,
+        "bbox": null,
+        "pairs": {},
+        "action": "ACTION7",
+        "legal": false,
+        "levels": 0,
+        "state": "GameState.NOT_FINISHED",
+        "motions": [],
+        "color_delta": {}
+      }
+    ]
+  }
+}
