@@ -125,7 +125,13 @@ class HigherCouplingLiftTests(unittest.TestCase):
         upper=tuple(2*z%3 for v,z in product(range(3),repeat=2))
         previous=NonconstantCouplingSystem(LOWER,1,2,0)
         current=HigherCouplingSystem(LOWER,1,upper)
-        self.assertEqual(current.world(),previous.world())
+        # The two representations use different finite-stem lengths but
+        # define the identical all-depth transformation system.
+        for depth in range(3,7):
+            for state in product(range(3),repeat=depth):
+                for generator in 'AB':
+                    self.assertEqual(current.step(state,generator),
+                                     previous.step(state,generator))
         self.assertEqual(current.analysis.order,3)
         for x in product(range(3),repeat=5):
             for r in range(3):
