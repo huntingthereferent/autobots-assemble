@@ -18,7 +18,9 @@ import json
 import unittest
 
 from runtime.ab_information import ABOccurrence, information_closure
-from runtime.ab_relation_generator import derive_relation_constructions
+from runtime.ab_relation_generator import (
+    derive_relation_constructions, derive_exploratory_constructions,
+)
 from runtime.activation import ActivationRegistry, ActivationRoute, run_activation
 from runtime.handoff import Handoff, HandoffState
 from runtime.repository_tasks import read_active_work, admit_active_work
@@ -399,6 +401,15 @@ class HeldOutCompletionComparisonTests(unittest.TestCase):
             horizon=1, intent="construct",
         )
         self.assertEqual(conservative, ())
+        exploratory = derive_exploratory_constructions(
+            first, state,
+            source_locators=tuple(f"cross-probe:{i}" for i in range(4)),
+            witness_contract="one-call activation route resolution",
+            horizon=1, intent="construct",
+        )
+        self.assertEqual(len(exploratory), 4)
+        self.assertTrue(all(p.category is None and p.status == "PROPOSED"
+                            for p in exploratory))
         names = tuple(sorted(rows[0]))
         values = tuple(tuple(sorted({row[name] for row in rows}))
                        for name in names)
@@ -413,10 +424,22 @@ class HeldOutCompletionComparisonTests(unittest.TestCase):
         goal = ("other", "review")
         self.assertFalse(any(activation_test(row, goal) for row in rows))
         self.assertTrue(any(activation_test(row, goal) for row in crossed))
+        self.assertEqual(
+            {json.dumps(p.structure["relation_values"], sort_keys=True)
+             for p in exploratory},
+            {json.dumps(row, sort_keys=True) for row in crossed},
+        )
+        self.assertTrue(any(
+            activation_test(p.structure["relation_values"], goal)
+            for p in exploratory
+        ))
         print("AB_CONSTRUCTION_CROSS_CATEGORY_COUNTEREXAMPLE " + json.dumps({
             "initial_categories": 2,
             "ab_proof_preserving_proposals": len(conservative),
             "blind_cross_category_proposals": len(crossed),
+            "ab_exploratory_proposals": len(exploratory),
+            "explore_has_native_api_success": True,
+            "explore_inherits_previous_category": False,
             "originals_pass_native_holdout": False,
             "blind_has_native_api_success": True,
             "important": "A/B proof preservation can obstruct valid cross-category constructions",
