@@ -135,6 +135,25 @@ class SplitCouplingWorld:
             result[3] = (state[3] + state[2] * (state[2] - 1)) % 3
         return tuple(result)
 
+    def inverse(self, state: State, action: str) -> State:
+        """Recover every preimage recursively, including the new coupling."""
+        _state(state)
+        if len(state) != self.depth:
+            raise ValueError("state depth mismatch")
+        previous = list(state)
+        if action == "A":
+            previous[0] = (state[0] - 1) % 3
+        elif action == "B":
+            previous[1] = (state[1] - state[0] - 1) % 3
+            previous[2] = (state[2] - self.phi[previous[1]]) % 3
+            if self.depth >= 4:
+                previous[3] = (state[3] - previous[2] * (previous[2] - 1)) % 3
+            for i in range(4, self.depth):
+                previous[i] = (state[i] - previous[i - 1]) % 3
+        else:
+            raise ValueError("unknown A/B operation")
+        return tuple(previous)
+
 
 def fixed_B(world: GaugedWorld | SplitCouplingWorld) -> int:
     """Whole finite-state count, not only the origin-reachable orbit."""
