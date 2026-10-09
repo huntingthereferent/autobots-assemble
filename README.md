@@ -194,12 +194,13 @@ The current frontage favors information density over application-style chrome: l
 The math-first [inverted A/B world-construction experiment](work/arc_like_maze/README.md)
 generates finite candidate transition systems, automatically aligns distinct
 worlds, and now tests construction operators one layer above the state graphs.
-An exhaustive affine scan certifies closure for the 48 reversible transformations
-that preserve the five A/B equivalence classes; a translation supplies an explicit
-counterexample outside that admitted family. This is separate from observing
+An exhaustive affine scan certifies closure for 48 reversible affine maps.
+The nonlinear construction expands this to the full 384 reversible maps preserving
+the same five A/B equivalence classes, with 336 nonaffine transformations.
+This is a scoped mathematical certificate, not universal inverse A/B closure. This is separate from observing
 live ARC-AGI games and does not claim universal inverse A/B closure.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear -v`.
 
 ## Core structure
 
