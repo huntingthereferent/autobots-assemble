@@ -248,11 +248,16 @@ nonlinear state maps and preserves its boundary under shifts. The
 those non-diagonal B laws exactly into nine-entry coupling tables,
 while an independently edited table changes full depth-three B-fixed
 state counts from nine to six. This separates a representation
-expansion from a genuinely inequivalent world.
+expansion from a genuinely inequivalent world. A further deliberately
+bounded 12-world construction now gives **four** complete full-state A/B
+classes, three nonlinear shear representatives per class. At depth three,
+their B-fixed-point signatures are 9, 6, 3, and 0. The shear constructor
+is a three-turn loop within each class; independent support expansion
+moves between inequivalent classes and reaches an explicit scoped wall.
 This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family -v`.
 
 ## Core structure
 
