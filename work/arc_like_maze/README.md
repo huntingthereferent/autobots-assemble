@@ -468,11 +468,110 @@ the five-class relational quotient or require a new relation. A
 closed inverse-limit action system and terminal closure of all
 possible constructions are distinct statements.
 
+## Constructed inverse-limit worlds: nonlinear gauge and a new relation
+
+The next mathematical movement is **construction**, not observation
+or a game mechanic. [Nonlinear gauge construction](gauge_construction.py)
+produces distinct transition laws by a reversible coordinate change.
+
+### Different turns, essentially the same A/B relations
+
+Working over F_3, at every depth d>=3, define the compatible gauge:
+
+~~~text
+G_c(x)_3 = x_3 + c*x_2^2     (if depth >= 4)
+G_c(x)_i = x_i              (otherwise)
+c in {0,1,2}
+~~~
+
+This map is reversible: G_c^-1 = G_-c and G_c G_e = G_(c+e).
+It commutes with every forgetful coordinate projection. Construct
+new action systems, without observing an external world:
+
+~~~text
+A_c = G_c A G_-c
+B_c = G_c B G_-c
+f_(c->e) = G_e G_-c
+~~~
+
+Then for either action T and every depth:
+
+~~~text
+f_(c->e)(T_c(x)) = T_e(f_(c->e)(x))
+pi_d f_(c->e) = f_(c->e) pi_d
+~~~
+
+This is an algebraic all-depth alignment. In the nonzero-phi
+example (0,1,2), c=0,1,2 generate three different B transition
+laws at depth four. The same construction c -> c+1 yields the
+**genuine three-turn world-construction cycle**:
+
+~~~text
+World_0 -> World_1 -> World_2 -> World_0
+~~~
+
+The world laws change at each turn; their A/B relations are
+exactly aligned. At phi=(0,0,0), the three gauge laws can coincide
+at depth four, so changing a parameter alone is **not** proof of
+new behavior. The implementation tests that distinction.
+
+### New relation: a counterexample to universal closure
+
+Construct a different B law at coordinate 3:
+
+~~~text
+Original: B(x)_3  = x_3 + x_2
+Split:    B'(x)_3 = x_3 + x_2*(x_2-1)
+~~~
+
+All other A/B coordinates follow the previous triangular
+construction. The split rule is still reversible, and its
+transitions still commute with every dimensional projection.
+But the two systems are **not** projectively conjugate.
+
+The first counterexample appears at depth four. For phi=(0,1,2),
+the original full four-dimensional state space has **three**
+B-fixed states, versus **six** for the split rule. Every bijective
+A/B conjugacy must preserve the number of B-fixed states.
+At depth three the two worlds are identical, so depth four
+is the first real boundary. No bijective alignment at depth
+four means no projectively compatible all-depth alignment.
+
+This distinguishes a *new relational class* from another
+coordinate representation of an existing class. The zero-phi
+case also retains a fixed-point obstruction despite having
+no distinct depth-four gauge laws.
+
+### Stopping criterion at this construction layer
+
+- **CLOSED within the declared gauge operator:** the three
+  different nonzero-phi world laws are exactly conjugate, and
+  construction returns to the first law on the third turn.
+- **OPEN under unrestricted new construction rules:** the
+  split-coupling rule is a coherent, invertible construction
+  not captured by this gauge equivalence.
+- **UNKNOWN beyond admitted rules:** a universal stopping
+  point would require proving that all allowed construction
+  operations preserve the equivalence, or preserving each new
+  class as it emerges. A closed subfamily is not the end of math.
+
+Run focused regression tests:
+
+~~~bash
+python -m unittest network.tests.test_arc_like_gauge_construction -v
+~~~
+
+These test full-state gauge conjugacy and split reversibility at
+finite depths, lazy inverse-limit prefix alignment, and both
+degenerate/nondegenerate construction cases. The all-depth
+claims above follow from the explicit coordinate equations,
+not from the finite tests alone.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** test which newly admitted construction rules respect the inverse-limit five-class quotient, while keeping universal inverse A/B closure unresolved. Do not mistake compatible infinite construction for a final finite depth.
+- **Next:** specify the next admitted world-construction family and determine whether split coupling introduces additional inequivalent classes. Keep gauge-orbit closure distinct from unrestricted construction.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
