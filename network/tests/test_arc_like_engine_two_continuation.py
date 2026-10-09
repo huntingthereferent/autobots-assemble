@@ -31,6 +31,26 @@ def positive():
 
 
 class EngineTwoActualKernelContinuationTests(unittest.TestCase):
+    def test_constructed_engine_exposes_the_same_real_research_entry(self):
+        left,right=negative()
+        via_engine=left.watch_B_against(right)
+        via_kernel=EngineTwoContinuationKernel.enter(left,right)
+        self.assertEqual(via_engine,via_kernel)
+        self.assertEqual(via_engine.advance(8).status,"UNKNOWN")
+
+    def test_existing_inverse_engine_returns_a_wall_for_window_research_law(self):
+        from work.arc_like_maze.engine_one import (
+            InverseConstructionEngine, Requirements,
+        )
+        current,_=negative()
+        result=current.evolve(
+            InverseConstructionEngine(),
+            Requirements("window48",relation="ROOTED_FULL"),
+        )
+        self.assertEqual(result.status,"WALL")
+        self.assertIsNone(result.engine)
+        self.assertIn("WindowProcess",result.wall)
+
     def test_entry_uses_actual_finite_two_input_processes_and_versions(self):
         left,right=negative()
         w=EngineTwoContinuationKernel.enter(left,right)
