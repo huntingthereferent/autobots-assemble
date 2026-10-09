@@ -276,10 +276,16 @@ The [pointed-arrow contract](work/arc_like_maze/WINDOW_MARKED_ARROWS.md)
 now keeps source and target marks explicit, refuses silent promotion of
 36 origin-moving state maps, and permits explicit target re-marking
 while retaining the previous mark and its positive-word collision.
+The [independent central translation](work/arc_like_maze/WINDOW_ROOT_TRANSLATION.md)
+moves the x2 coordinate through a witnessed three-turn cycle.
+It commutes with A/B and the existing H/R maps in the zero-tail
+48-world family, yielding **540** pointed routes with exact
+mark and factor provenance. It does **not** merge canonically
+incompatible origins or create new world laws.
 This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows network.tests.test_arc_like_window_root_translation -v`.
 
 ## Core structure
 
