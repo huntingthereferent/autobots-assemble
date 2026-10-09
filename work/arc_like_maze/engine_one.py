@@ -23,6 +23,7 @@ from .window_combined import (
     CombinedWorld, classify_pair, family as window_family,
     fixed_word_formula, rooted_conflict,
 )
+from .window_two import WindowProcess
 
 Family = Literal["window48", "coupling_tower"]
 Relation = Literal[
@@ -85,7 +86,7 @@ class RelationWitness:
         return self.kind in ("ROOTED_FULL", "FULL_UNROOTED", "ROOTED_REACHABLE")
 
 
-Law = CombinedWorld | CouplingTower
+Law = CombinedWorld | CouplingTower | WindowProcess
 
 
 @dataclass(frozen=True)
@@ -137,6 +138,16 @@ class ConstructedEngine:
 
     def evolve(self, engine_one: "InverseConstructionEngine", requirement: Requirements) -> "ConstructionResult":
         return engine_one.construct(requirement, previous=self)
+
+    def watch_B_against(self, other: "ConstructedEngine"):
+        """Enter Engine 2's B-only continuation on two explicit window laws.
+
+        The inverse-construction grammar is unchanged. This cannot claim
+        A/B conjugacy or promote a five-coordinate window into Engine 1's
+        previously declared 48-law or coupling-tower search.
+        """
+        from .engine_two_continuation import EngineTwoContinuationKernel
+        return EngineTwoContinuationKernel.enter(self, other)
 
 
 @dataclass(frozen=True)
@@ -282,6 +293,12 @@ class InverseConstructionEngine:
             raise TypeError("construct expects mathematical Requirements")
         if previous is not None and not isinstance(previous, ConstructedEngine):
             raise TypeError("previous must be a ConstructedEngine")
+        if previous is not None and isinstance(previous.law, WindowProcess):
+            return ConstructionResult(
+                "WALL", None, 0, 0, "unchanged inverse-construction grammar",
+                "the two-input WindowProcess is admitted for B-only research, "
+                "not for Engine 1 inverse construction without a new witnessed grammar",
+            )
 
         laws: tuple[Law, ...]
         if required.family == "window48":
