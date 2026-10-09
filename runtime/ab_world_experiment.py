@@ -36,7 +36,7 @@ class SimulationWorld:
 @dataclass(frozen=True)
 class SimulatedTrial:
     proposal_id: str
-    original_category: int
+    original_category: int | None
     source_locators: tuple[str, ...]
     action_path: tuple[Any, ...]
     before: Any
