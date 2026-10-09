@@ -93,6 +93,87 @@ The source locators are supplied by the caller, not verified by the
 inverse operation. The strings in this example are illustrative; they
 must not be claimed as real measurements.
 
+## Two construction directions in the same existing A/B agent
+
+The previous construction generator had one implicit rule: stay within a
+sufficiently witnessed category. That is reasonable for **preserving**
+known finite-horizon behavior but can reject useful new constructions.
+
+The default service call continues to use `mode="preserve"` (unchanged).
+An explicit `mode="explore"` enables cross-category relation proposals,
+still using the **same** `EcosystemService` and A/B source witnesses:
+
+```python
+frames = service.propose_ab_constructions(
+    occurrences=observed_occurrences,
+    state=information_closure(observed_occurrences),
+    source_locators=observed_source_locators,
+    witness_contract="exact tested initial continuation",
+    horizon=1,
+    intent="construct",
+    mode="explore",  # explicitly opt in; the default remains "preserve"
+)
+```
+
+**Preserve** may use the witnessed sufficient proof partition to hold
+necessary relation dimensions fixed. It reports its original observed
+class for the proposal, but makes **no guarantee** about unobserved
+continuations.
+
+**Explore** uses the same observed relation names and values but can
+combine values across distinct continuation fibers. Only genuinely
+cross-category novel tuples are returned; source components retain exact
+locators. Every exploratory proposal has:
+
+```python
+{
+    "category": None,             # no predicted old continuation class
+    "construction_status": "PROPOSED",
+    "structure": {
+        "kind": "cross-category-recombination",
+        "prior_continuation_category": "UNASSIGNED",
+        "requires_independent_observation": True,
+        # relation_values, component_source_locators, and source categories
+    },
+}
+```
+
+The unassigned state is preserved through `frame_for_candidate()` and
+integrity-checked by `proposal_from_frame()`. Simulation trials retain
+`original_category=None`. No agent is spawned, no task is written, and
+simulation-only traces cannot be submitted as native MOVE evidence.
+
+A real in-process example uses the existing activation registry:
+
+- Existing route observations correlate the actor with the assignee:
+  `other/other` or `tester/james`. The only within-class variation is
+  the required relation (study or review).
+- **Preserve** makes no new proposal, because only one unprotected
+  relation dimension varies inside each old proof block.
+- **Explore** produces four source-addressed, category-unassigned
+  combinations, including `tester/other/review`.
+- A separate native `ActivationRegistry.resolve()` then
+  `run_activation()` check can determine whether that combination
+  actually selects the held-out `other/review` handoff.
+
+This is a **controlled fixture** and not production authorization.
+The test establishes an executable counterexample to making
+proof-partition preservation mandatory for every construction task,
+**only once the online test has actually executed**.
+
+The current explorer has strict limitations: it uses only witnessed
+source values, no invented fields, a bounded Cartesian scan and output,
+and deterministic source-locator addressing. It cannot infer external
+permissions, semantic compatibility, native physics, or unseen values.
+Cross-category mixtures may be invalid; a proposed mixture cannot
+inherit the old A/B category.
+
+Re-run:
+
+```sh
+python -m unittest discover -s network/tests -p 'test_ab_exploratory_construction.py' -v
+```
+
 ## General construction from witnessed relations — no custom generator
 
 The original API required a caller-supplied `generator(fiber)`. That tests
