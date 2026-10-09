@@ -100,10 +100,26 @@ This local run is not a GitHub CI result, and bounded enumeration by itself is n
 python -m unittest network.tests.test_arc_like_corrected_translation -v
 ```
 
+## Subsequent extension: arbitrary nonconstant lower coupling
+
+The [complete nine-entry lower-coupling analysis](NONCONSTANT_DRIFT.md)
+extends this **constant-drift** result. Within the same specified
+fiber-additive form of higher-coordinate correction,
+a nonconstant q0 admits an exact centralizing lift precisely
+when its last row is constant and nonzero, its first row
+has zero total sum, and its middle row satisfies
+the opposite-step compatibility equation. An independent
+signed-cycle graph audit agrees on all 39,366 possible
+table-and-gain combinations; 36 admit the lift.
+
+This later theorem neither changes the constant-drift
+formula nor promotes arbitrary conjugacies into the
+restricted centralizer family.
+
 ## Boundary and next referent
 
 **Closed within the declared linear coupling family:** an if-and-only-if existence criterion for a coordinate-prescribed translated lift, a constructive order-three correction in the positive case, and a fiber-fixed-point obstruction in the negative case.
 
 **Not established:** a complete centralizer of either transformation system, arbitrary nonlinear higher couplings, arbitrary distinguished points with infinite nonzero tails, universal inverse construction or native ARC execution.
 
-**Next mathematical referent:** lift this correction from the constant-drift linear family to a nonconstant lower coupling `q0(x0,x1)`. The resulting cohomological equation must be solved or obstructed along complete cycles of the lower-coordinate B action, preserving the exact distinguished point throughout.
+**Next (now resolved for the declared additive-lift class):** consult [the complete nonconstant-coupling theorem](NONCONSTANT_DRIFT.md). The remaining open movement is admitting another nonconstant higher-coordinate coupling and solving its next lifted equation without erasing the distinguished point.
