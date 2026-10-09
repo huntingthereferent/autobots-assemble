@@ -3,8 +3,11 @@ from __future__ import annotations
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Literal
 
+from runtime.ab_information import ABOccurrence, ABInformationState
+from runtime.ab_construction import Generator
+from runtime.ab_loop import ABFrame
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.agent_bridge import AgentBridge
 from runtime.agent_lineage import AgentLineage, Evaluator, ClosureAdmitter
@@ -109,15 +112,15 @@ class EcosystemService:
     def propose_ab_constructions(
         self,
         *,
-        occurrences: Iterable[Any],
-        state: Any,
+        occurrences: Iterable[ABOccurrence],
+        state: ABInformationState,
         source_locators: Iterable[str],
         witness_contract: str,
         horizon: int,
-        generator: Any,
-        intent: str,
+        generator: Generator,
+        intent: Literal["construct", "synthesize", "simulate", "alternatives"],
         max_candidates: int = 32,
-    ) -> tuple[Any, ...]:
+    ) -> tuple[ABFrame, ...]:
         """Opt-in, read-only construction entry for the existing A/B agent.
 
         Returns standard ABFrame values marked PROPOSED. This deliberately
