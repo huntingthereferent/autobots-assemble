@@ -192,11 +192,14 @@ The current frontage favors information density over application-style chrome: l
 ## ARC-like mathematical construction
 
 The math-first [inverted A/B world-construction experiment](work/arc_like_maze/README.md)
-generates finite candidate transition systems, checks aligned relational
-recurrence across different concrete turns, and preserves false-closure
-counterexamples. It is separate from observing live ARC-AGI games and makes no
-claim of terminal/unbounded closure. Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment -v`.
+generates finite candidate transition systems, automatically aligns distinct
+worlds, and now tests construction operators one layer above the state graphs.
+An exhaustive affine scan certifies closure for the 48 reversible transformations
+that preserve the five A/B equivalence classes; a translation supplies an explicit
+counterexample outside that admitted family. This is separate from observing
+live ARC-AGI games and does not claim universal inverse A/B closure.
+Focused tests:
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan -v`.
 
 ## Core structure
 
