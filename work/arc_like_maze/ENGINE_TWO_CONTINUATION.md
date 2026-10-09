@@ -1,10 +1,10 @@
 # Engine 2 — continuation witness re-entry at the repository research boundary
 
-[Actual research entry/exit implementation](engine_two_continuation.py) · [16 focused regression tests](../../network/tests/test_arc_like_engine_two_continuation.py) · [preceding mathematical two-input grammar](window_two.py)
+[Actual research entry/exit implementation](engine_two_continuation.py) · [18 focused regression tests](../../network/tests/test_arc_like_engine_two_continuation.py) · [preceding mathematical two-input grammar](window_two.py)
 
 ## Current referent
 
-The [separate local Engine 2 continuation experiment](ENGINE_ONE.md) established that an inconclusive observation need not trigger an unrelated comparison. A bounded inquiry may instead continue the same admitted transformation, preserving its original domain and the observations already obtained.
+The separate local Engine 2 continuation experiment established that an inconclusive observation need not trigger an unrelated comparison. A bounded inquiry may instead continue the same admitted transformation, preserving its original domain and the observations already obtained.
 
 The locally executed prototype carried the following controls on a declared 81-state, B-invariant fiber of a five-dimensional two-input system:
 
@@ -88,9 +88,9 @@ The positive pair consists of two different laws with matching restricted 27-cyc
 
 **Executed locally:** the preceding self-contained prototype's 17 regression tests were rerun in the working environment and passed. That prototype reproduces the generator rule but does not import the repository's real WindowProcess.
 
-**Committed to the repository:** the new actual-WindowProcess research entry and 16 focused regression tests. Those tests exercise exact kernel entry/exit, real generator calls, the two saved-and-reentered negative/positive controls, source-engine version checks, scope and observation mutation rejection, proof-only status promotion, inverse/periodic cycle outcomes, and the independent Engine 1 construction-grammar wall.
+**Committed to the repository:** the new actual-WindowProcess research entry, a direct `ConstructedEngine.watch_B_against(...)` entrance, an explicit Engine 1 inverse-construction WALL for these window laws, and 18 focused regression tests. Those tests exercise exact kernel entry/exit, real generator calls, the two saved-and-reentered negative/positive controls, source-engine version checks, scope and observation mutation rejection, proof-only status promotion, inverse/periodic cycle outcomes, and the independent Engine 1 construction-grammar wall.
 
-**Verification limit:** a successful GitHub CI run of the new 16-test suite has not yet been observed. The earlier local 17-test success is not presented as execution of the new repository suite.
+**Verification limit:** a successful GitHub CI run of the new 18-test suite has not yet been observed. The earlier local 17-test success is not presented as execution of the new repository suite.
 
 Run from repository root:
 
