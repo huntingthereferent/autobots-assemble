@@ -83,6 +83,39 @@ where the coarsest proof-partition changes test cost, reduces incompatible
 structures, or discovers a necessary relationship the blind control
 cannot preserve under equal budget. No such result has yet been shown.
 
+## A second falsification: proof-preserving construction can be too conservative
+
+The current generic constructor only recombines within witnessed sufficient
+proof blocks. That is sensible when trying to preserve an old observed
+continuation, but it is **not** a complete definition of construction.
+
+A new test uses the *actual* activation registry with four source
+configurations. The native first-step `resolve` result correlates the
+registered actor with an assignee. The only within-block variation is
+required-relation text, so the existing A/B generator offers zero new
+structures: no second freely varying relation within a proof block.
+
+However, Cartesian recombination of the **same witnessed values** can
+propose a previously unseen `tester` route with `other` assignee. The
+independent real `run_activation` acceptance check can verify one such
+candidate for the held-out target `other/review`, while none of the
+original four can serve it.
+
+**This is a designed counterexample, NOT a passed benchmark yet.** When
+executed, it may expose a distinct research boundary:
+
+- To **preserve** a tested equivalence, keep necessary proof-block
+  distinctions and test further continuations.
+- To **construct** a new system, crossing old proof-block boundaries may
+  be useful; such structures have **no predicted old category** and
+  must remain entirely `PROPOSED` until an independent native check.
+- Do not automatically promote an arbitrary cross-block combination
+  to a valid structure or assert new physical behavior.
+
+This finding could require separating *proof-preserving inverse
+expansion* from *cross-boundary exploratory synthesis*, while still
+using the **same A/B evaluator**. It does not warrant a second agent.
+
 ## Execution status / GitHub Actions blocker
 
 The three-arm benchmark and GitHub Actions workflow edits are committed.
@@ -94,7 +127,7 @@ The *new* benchmark workflow **has not executed successfully**, so there is no t
 https://github.com/huntingthereferent/language-network/actions/runs/37893065430
 reported failure with **no recorded job steps**, and its log download returned `BlobNotFound`. GitHub's workflow metadata also showed `runner_id: 0` for the failed job; the runner was never assigned. The specific platform/account cause is not established. Re-running its failed job again resulted in a failure with **no recorded job steps**. The broad `protocol-tests` run at the same time likewise failed with no steps. This does **not** establish any Python assertion failure or prove the cause of the CI blockage.
 
-Another focused run after improving per-task metrics:
+Additional pre-run failures persisted after adding the third baseline and the cross-category counterexample. The check-run API shows two failed annotations per job but no visible step contents; exact cause is still not verified.\n\nAnother focused run after improving per-task metrics:
 https://github.com/huntingthereferent/language-network/actions/runs/37893348278
 also failed without a usable test execution. Do not cite it as test evidence.
 
