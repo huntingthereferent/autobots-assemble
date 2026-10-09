@@ -120,7 +120,7 @@ class EcosystemService:
         source_locators: Iterable[str],
         witness_contract: str,
         horizon: int,
-        generator: Generator,
+        generator: Generator | None = None,
         intent: Literal["construct", "synthesize", "simulate", "alternatives"],
         max_candidates: int = 32,
     ) -> tuple[ABFrame, ...]:
@@ -133,6 +133,23 @@ class EcosystemService:
         from runtime.ab_construction import (
             inverse_fibers, project_candidates, frame_for_candidate,
         )
+
+        if generator is None:
+            # Default construction is derived from witnessed relations.
+            # No referent-specific generator is required or guessed.
+            from runtime.ab_relation_generator import derive_relation_constructions
+
+            return tuple(
+                frame_for_candidate(proposal)
+                for proposal in derive_relation_constructions(
+                    occurrences, state,
+                    source_locators=source_locators,
+                    witness_contract=witness_contract,
+                    horizon=horizon,
+                    intent=intent,
+                    max_candidates=max_candidates,
+                )
+            )
 
         sources = inverse_fibers(
             occurrences, state,
