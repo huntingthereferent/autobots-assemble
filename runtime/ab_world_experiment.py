@@ -62,6 +62,10 @@ class WorldExperiment:
     information: ABInformationState | None
     synthesized: SynthesizedRelation | None
     complete: bool
+    # Only a FULL, repeatable trial set may return the next A/B input.
+    observed_occurrences: tuple[ABOccurrence, ...] = ()
+    observed_locators: tuple[str, ...] = ()
+    unresolved_boundary: str = ""
     evidence_kind: Literal["simulation"] = "simulation"
 
 
@@ -153,7 +157,7 @@ def run_simulation_probe(
                 status = "SIMULATED_MATCH"
             else:
                 status = "SIMULATED_COUNTEREXAMPLE"
-        except (Exception) as exc:
+        except Exception as exc:
             # This is deliberately one UNKNOWN trial rather than a fabricated
             # comparison. No subquotient is promoted from incomplete coverage.
             complete = False
@@ -184,8 +188,20 @@ def run_simulation_probe(
             reason=reason,
         ))
 
-    info = information_closure(observations) if complete else None
-    synthetic = synthesize_continuation_relation(info) if info is not None else None
+    info = None
+    synthetic = None
+    boundary = ""
+    if complete:
+        try:
+            info = information_closure(observations)
+            synthetic = synthesize_continuation_relation(info)
+        except ValueError as exc:
+            # Observed futures may diverge while the currently available
+            # input relations cannot explain them. That is an explicit
+            # vocabulary/contract wall, not permission to invent a relation.
+            boundary = f"witnessed continuation requires missing relation: {exc}"
+    else:
+        boundary = "one or more simulations did not yield repeatable observations"
     return WorldExperiment(
         referent=referent,
         source=world.source,
@@ -195,4 +211,10 @@ def run_simulation_probe(
         information=info,
         synthesized=synthetic,
         complete=complete,
+        observed_occurrences=tuple(observations) if complete and info is not None else (),
+        observed_locators=(
+            tuple(t.trace_locator for t in trial_results)
+            if complete and info is not None else ()
+        ),
+        unresolved_boundary=boundary,
     )
