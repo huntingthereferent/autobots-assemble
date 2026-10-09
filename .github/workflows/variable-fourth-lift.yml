@@ -1,0 +1,30 @@
+name: Variable fourth-coordinate centralizer proof
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'work/arc_like_maze/variable_fourth_lift.py'
+      - 'work/arc_like_maze/variable_fourth_arithmetic_audit.py'
+      - 'network/tests/test_arc_like_variable_fourth_lift.py'
+      - 'work/arc_like_maze/fifth_coordinate_lift.py'
+      - 'work/arc_like_maze/nonconstant_drift.py'
+      - '.github/workflows/variable-fourth-lift.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  finite-field-cohomology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Focused variable fourth-coordinate regression tests
+        run: python -m unittest network.tests.test_arc_like_variable_fourth_lift -v
+      - name: Independent full-matrix rank and order audit
+        run: python -m work.arc_like_maze.variable_fourth_arithmetic_audit
