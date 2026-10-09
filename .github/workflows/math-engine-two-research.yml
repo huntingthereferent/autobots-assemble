@@ -1,0 +1,29 @@
+name: Engine 2 Native Continuation
+
+on:
+  push:
+    paths:
+      - 'work/arc_like_maze/engine_two_research.py'
+      - 'work/arc_like_maze/window_two.py'
+      - 'network/tests/test_arc_like_engine_two_research.py'
+      - '.github/workflows/math-engine-two-research.yml'
+  pull_request:
+    paths:
+      - 'work/arc_like_maze/engine_two_research.py'
+      - 'work/arc_like_maze/window_two.py'
+      - 'network/tests/test_arc_like_engine_two_research.py'
+      - '.github/workflows/math-engine-two-research.yml'
+  workflow_dispatch:
+
+jobs:
+  bounded-continuation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify native B-only continuation and witness reentry
+        run: python -m unittest network.tests.test_arc_like_engine_two_research -v
+      - name: Verify original window mathematics
+        run: python -m unittest network.tests.test_arc_like_window_combined -v
