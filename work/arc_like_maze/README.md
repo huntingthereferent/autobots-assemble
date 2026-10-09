@@ -2,6 +2,12 @@
 
 **Current referent:** construct a mathematical world by reversing the A/B direction, then find where *differing turns preserve the same underlying relations*. This is a new ARC-**like** research artifact, **not** an official ARC environment, native ARC observation, or a proven universal definition of A/B.
 
+## Engine 1 — mathematical construction (current implementation)
+
+[Engine 1 mathematical contract](ENGINE_ONE.md) · [implementation](engine_one.py) · [focused regression tests](../../network/tests/test_arc_like_engine_one.py)
+
+The bounded inverse-construction engine now connects the existing 48-law two-predecessor window grammar to separately scoped 1–4-coupling construction grammars. Mathematical requirements select a concrete transition law, then admitted construction operators produce witnessed **versions of a changing second engine**. Rooted/full-state/nonrooted/projective relationships remain distinct; unsupported cross-grammar movement is WALL. This is **not** the universal inverted A/B engine, an autonomous self-modifying system, or native ARC gameplay. See the contract for exact conditions, evidence, and next referent.
+
 ## Direction
 
 Observation would start with two given states and extract preservation/change/relations. **This experiment starts from proposed relational constraints and constructs candidate states and transitions.** Do not design rooms, objectives, obstacles, user controls, or renderings first. Visual and interactive representations come after a mathematical construction witness.
