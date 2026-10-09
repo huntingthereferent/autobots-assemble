@@ -12,7 +12,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from hashlib import sha256
-from itertools import count
 import json
 from typing import Any, Callable, Iterable, Iterator, Literal, Mapping
 
@@ -147,12 +146,16 @@ def project_candidates(
     active = [True] * len(iters)
     out: list[ConstructionProposal] = []
     known: set[str] = set()
-    while any(active) and len(out) < max_candidates:
+    # Also bound iteration when a generator endlessly repeats one candidate.
+    attempts = 0
+    max_attempts = max_candidates * max(4, len(sources) * 4)
+    while any(active) and len(out) < max_candidates and attempts < max_attempts:
         for i, (fiber, proposals) in enumerate(zip(sources, iters)):
-            if not active[i] or len(out) == max_candidates:
+            if not active[i] or len(out) == max_candidates or attempts >= max_attempts:
                 continue
             try:
                 raw = next(proposals)
+                attempts += 1
             except StopIteration:
                 active[i] = False
                 continue
