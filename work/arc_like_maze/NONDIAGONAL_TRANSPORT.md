@@ -137,7 +137,7 @@ constructed arrows.
 
 An independent finite arithmetic check (separate from the Python
 suite) covered **58,806** concrete conjugacy comparisons,
-**9,801** inverse checks, and **9,801** projection checks
+**9,801** inverse checks, and **9,720** projection checks
 across depths 3–7 for a nontrivial marked-rule example.
 It found no violations, and witnessed two non-native action
 laws at the origin. The exact all-depth statements rely on
