@@ -2001,11 +2001,90 @@ couplings by solving or obstructing the
 correction equation along full orbits of
 the induced lower-coordinate B action.
 
+## Nonconstant coupling — complete cohomological admission criterion
+
+[Mathematical proof](NONCONSTANT_DRIFT.md) ·
+[symbolic potential and signed-cycle obstruction](nonconstant_drift.py) ·
+[16 regression tests](../../network/tests/test_arc_like_nonconstant_drift.py) ·
+[independent exhaustive arithmetic audit](nonconstant_drift_arithmetic_audit.py)
+
+The corrected coordinate translation has now
+been tested for **every** first coupling table
+`q0:F3²→F3`, not merely for constant drift.
+The generating transformations A,B are
+defined explicitly, as in the [standard
+terminology](TERMINOLOGY.md).
+
+For a corrected symmetry translating x2
+and adding fiberwise functions of (x1,x2)
+to x3 and x4, with at least one nonzero
+higher coupling, a potential exists
+**exactly when**:
+
+~~~text
+q0(2,v) = a != 0, same a for each v
+sum_v q0(0,v) = 0 mod 3
+q0(1,v)+q0(0,v-g) = 2a mod 3
+~~~
+
+These conditions imply an explicit
+`phi(v,z)=a^(-1)*z+alpha(v)` on
+the nine lower-coordinate states, satisfying
+the complete set of 27 cohomological
+compatibility equations. That potential
+constructs the corrected order-three
+centralizer action at every dimension.
+
+The obstruction, when present, is a
+**signed-cycle-voltage contradiction**
+in the finite lower-state graph. It
+records two paths with the same endpoints
+but inconsistent required changes of
+the potential. A nonzero last-row drift
+by itself is **insufficient** to guarantee
+repair; the other two conditions are
+essential.
+
+For each gain, of 19,683 possible q0
+tables, precisely **18** admit the
+specified correction and **19,665**
+are obstructed. With both gains this
+gives 36 admissions among **39,366**
+table-and-gain combinations. The
+independent graph solver agrees with
+the symbolic criterion in every case.
+
+Independent arithmetic additionally passed
+699,840 state-level generator commutation
+checks and 1,049,760 corrected
+group-law checks across an admitted
+representative higher-coefficient set,
+dimensions 3–6. The committed
+exhaustive checker covers all eight
+nonzero higher-coefficient pairs, and
+16 focused Python tests are configured
+in the targeted workflow. Its CI
+result must be verified separately.
+
+**CLOSED:** this precise finite-field
+cohomological lifting problem for
+fiber-additive higher-coordinate
+corrections. **UNKNOWN:** arbitrary
+state automorphisms and general
+nonlinear higher rules.
+
+**Next:** construct one independently
+nonconstant higher-coordinate rule,
+derive its own correction equation,
+and check the earliest dimensional
+and signed-cycle obstructions while
+preserving explicit distinguished points.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** solve or obstruct the corrected-translation equation for a nonconstant lower-coordinate coupling by its full finite-state orbit structure, preserving the pointed witness.
+- **Next:** admit a nonconstant higher-coordinate coupling, solve the next explicit correction equation or retain its signed-cycle obstruction, and preserve the distinguished-point transport.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
