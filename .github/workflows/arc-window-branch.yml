@@ -18,6 +18,8 @@ on:
       - 'network/tests/test_arc_like_window_combined.py'
       - 'work/arc_like_maze/window_marked_arrows.py'
       - 'network/tests/test_arc_like_window_marked_arrows.py'
+      - 'work/arc_like_maze/window_root_translation.py'
+      - 'network/tests/test_arc_like_window_root_translation.py'
       - '.github/workflows/arc-window-branch.yml'
   workflow_dispatch:
 
@@ -47,3 +49,5 @@ jobs:
         run: python -m work.arc_like_maze.window_combined_arithmetic_audit
       - name: Explicit pointed A/B arrow and mark-transport regression
         run: python -m unittest network.tests.test_arc_like_window_marked_arrows -v
+      - name: Central A/B root translation and mixed witness regression
+        run: python -m unittest network.tests.test_arc_like_window_root_translation -v
