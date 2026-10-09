@@ -24,6 +24,8 @@ from .marked_operator_system import (
     invert_arrow, transform_arrow,
 )
 from .root_transport import Process, Rule, Witness, find, verify
+from .stemmed_operator_system import StemGauge
+from .marked_operator_system import identical_streams
 
 ObjectKey = tuple[int, Rule, Rule, Rule]
 
@@ -142,6 +144,20 @@ class MissingGaugeBridge:
     def arrow(self) -> MarkedArrow:
         return MarkedArrow(self.source, self.target, self.witness)
 
+    def stem_gauge(self) -> StemGauge:
+        """Exactly reconstruct the witnessed nonperiodic arrow as a gauge.
+
+        Reuse the literal lasso witness: never pick another valid solution.
+        """
+        gauge = StemGauge(self.witness.incoming,
+                          self.witness.head, self.witness.period)
+        candidate = gauge.apply(self.source.process)
+        if not identical_streams(candidate, self.target.process):
+            raise AssertionError("witness gauge does not reach target stream")
+        if self.source.gain * gauge.incoming % 3 != self.target.gain:
+            raise AssertionError("witness gauge loses root gain")
+        return gauge
+
 
 def missing_bridges() -> tuple[MissingGaugeBridge, ...]:
     """Produce exact arrows that a STRICT period-two gauge cannot realize."""
@@ -184,6 +200,7 @@ class MarkedQuotientCertificate:
     gauge_orbit_sizes: tuple[tuple[int, int], ...]
     alignment_class_sizes: tuple[tuple[int, int], ...]
     nonperiodic_bridges: int
+    stem_gauge_bridges_verified: bool
     failure: str | None = None
 
 
@@ -193,6 +210,7 @@ def certify_marked_quotient() -> MarkedQuotientCertificate:
     orbits = gauge_orbits()
     groups = alignment_classes()
     bridges = missing_bridges()
+    stems_verified = all(bridge.stem_gauge() for bridge in bridges)
     hist_gauge = tuple(sorted(Counter(map(len, orbits)).items()))
     hist_classes = tuple(sorted(Counter(map(len, groups)).items()))
     status = "CLOSED_GAUGE_ACTION_INCOMPLETE_FOR_COINDUCTIVE_ARROWS"
@@ -206,5 +224,5 @@ def certify_marked_quotient() -> MarkedQuotientCertificate:
     return MarkedQuotientCertificate(
         status, len(seeds()), len(universe), len(gauges),
         len(orbits), len(groups), hist_gauge, hist_classes,
-        len(bridges), failure
+        len(bridges), bool(stems_verified), failure
     )
