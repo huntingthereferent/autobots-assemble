@@ -3,11 +3,13 @@ from __future__ import annotations
 
 import unittest
 from itertools import product, repeat
+from tempfile import TemporaryDirectory
 
 from runtime.ab_information import (
     ABOccurrence, information_closure, synthesize_continuation_relation,
 )
 from runtime.ab_loop import ABAgent, ABFrame, ABLoop, ABMove
+from runtime.service import EcosystemService
 from runtime.ab_construction import (
     WorldEdge, check_composition, frame_for_candidate,
     inverse_fibers, project_candidates,
@@ -184,6 +186,45 @@ class InverseConstructionTests(unittest.TestCase):
                 fibers(), lambda f: ({"not_json": object()},),
                 intent="construct",
             )
+
+    def test_existing_service_construct_entry_is_read_only(self):
+        with TemporaryDirectory(prefix="ab_construct_service_") as folder:
+            service = EcosystemService(data_dir=folder)
+            before = service.status()["runtime"].copy()
+            frames = service.propose_ab_constructions(
+                occurrences=group(1),
+                state=information_closure(group(1)),
+                source_locators=LOCATORS,
+                witness_contract="synthetic two-chamber forward action tests",
+                horizon=1,
+                generator=lambda fiber: ({"room": fiber.category},),
+                intent="construct",
+            )
+            after = service.status()["runtime"]
+            self.assertEqual(len(frames), 2)
+            self.assertTrue(all(isinstance(frame, ABFrame) for frame in frames))
+            self.assertTrue(all(frame.current["construction_status"] == "PROPOSED"
+                                for frame in frames))
+            self.assertEqual(before, after)
+            self.assertEqual(len(service.agent_lineage.roots_for_actor("james")), 0)
+
+    def test_existing_service_rejects_bad_source_and_mode(self):
+        with TemporaryDirectory(prefix="ab_construct_bad_") as folder:
+            service = EcosystemService(data_dir=folder)
+            params = dict(
+                occurrences=group(1),
+                state=information_closure(group(1)),
+                source_locators=LOCATORS,
+                witness_contract="synthetic chamber",
+                horizon=1,
+                generator=lambda fiber: ({"room": fiber.category},),
+                intent="construct",
+            )
+            with self.assertRaises(ValueError):
+                service.propose_ab_constructions(**{**params, "source_locators": ("", *LOCATORS[1:])})
+            with self.assertRaises(ValueError):
+                service.propose_ab_constructions(**{**params, "intent": "observe"})
+            self.assertFalse(service.runtime.snapshot())
 
     def test_missing_source_is_unknown_not_movement(self):
         edge = WorldEdge((0, 1, 1), "advance", (1, 1, 1))
