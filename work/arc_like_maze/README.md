@@ -1021,11 +1021,160 @@ and further construction. Do not return to endlessly
 adding dimensions to hunt for a finite stopping point.
 
 
+## One layer above processes — which construction operators preserve alignment?
+
+The previous coinductive solver compared two complete, eventually periodic
+coupling-rule streams. Now the referent is **a transformation of those entire
+streams**. It must be well-defined on their A/B equivalence classes, not
+merely reversible on textual rule descriptions.
+
+[process_operators.py](process_operators.py) admits periodically varying
+coordinate gauges with scales \`s_i in {1,2}\`, acting on every
+coordinate \`x_(i+2)\`. A chosen gauge constructs a new coupling stream Q
+from a source stream P by the exact equation
+
+~~~text
+Q_i(s_(i-1)*u) = s_i*P_i(u)          for all i >= 0, u in F_3
+s_(-1) = 1
+~~~
+
+The coordinate map is invertible because each s_i is a unit. The
+equation guarantees exact, full-state, origin-preserving A/B
+conjugacy at every finite depth, with commuting dimensional
+projections. In other words, the transformation changes concrete
+rules but stays inside the coinductively verified relational class.
+
+### Closure of the process-operator layer
+
+Gauge schedules compose by coordinatewise multiplication:
+
+~~~text
+G_s compose G_t = G_(s*t)
+(G_s)^-1 = G_(s^-1)
+G_1 = identity
+~~~
+
+All ultimately periodic unit-gauge sequences form a closed
+group under pointwise multiplication; the same equation proves
+closure algebraically for the class of admissible schedules.
+The implemented, exhausted **period-two subgroup** has four
+members, the four assignments \`(1,1),(1,2),(2,1),(2,2)\`.
+This is a group isomorphic to \`C2 x C2\`.
+
+The test instantiates all 81 strict two-rule repeating
+construction templates, generates their gauge-transformed
+**eventually periodic** streams, and verifies exact
+coinductive A/B alignment for all 324 (81 x 4)
+transformed pairs. It checks all 1,296 (81 x 4 x 4)
+compositions against the directly composed gauge.
+Nontrivial first-rule stems are intentionally preserved:
+the initial input-coordinate scale is 1, whereas later
+scales can vary. It would be incorrect to assume the
+transformation always yields a strict two-rule period again.
+
+A useful distinction: a gauge sends each entire process
+to an equivalent process; consequently it also preserves
+equivalence between *any two* aligned inputs by
+transitivity. The group therefore acts trivially on the
+coinductive equivalence classes, even when it changes
+the concrete rule streams. This is a justified
+**operator-level relational closed loop**, not just a
+finite returned state.
+
+### Operators which do NOT descend to the quotient
+
+Even a reversible operator on process descriptions may
+fail to define a consistent transformation of their
+relational classes.
+
+**1. Shift the rule sequence.** Consider two period-two
+streams with the exact pair of tables:
+
+~~~text
+P = [(0,0,0), (0,0,1)] repeated
+Q = [(0,0,0), (0,1,0)] repeated
+~~~
+
+P and Q admit an all-depth diagonal A/B conjugacy.
+Their first zero rule leaves the next coordinate
+scale free, allowing the later nonzero tables to
+align after their inputs are rescaled.
+
+After moving forward one rule:
+
+~~~text
+shift(P) = [(0,0,1), (0,0,0)] repeated
+shift(Q) = [(0,1,0), (0,0,0)] repeated
+~~~
+
+The leading tables cannot be related by the required
+rooted input scale \`s_-1=1\`. The alignment fails
+at coordinate depth three. On the raw period-two
+descriptions this shift is a reversible involution,
+but it does **not** descend to their coinductive
+diagonal equivalence classes.
+
+**2. Add a fixed coupling term.** Define the reversible
+rule-table operation \`R(P)_i(u)=P_i(u)+u\` mod 3.
+Its third power is the identity on the descriptions.
+Yet
+
+~~~text
+P_i(u) = u          (all i)
+Q_i(u) = -u         (all i)
+
+P ~ Q               (alternating diagonal scales)
+R(P)_i(u) = -u
+R(Q)_i(u) = 0        -> inequivalent at depth three
+~~~
+
+An operator can have a closed algebra on raw rule
+strings and still break the relational quotient.
+**Invertibility is not an alignment witness.**
+
+### Exact stopping criterion and boundary
+
+**CLOSED:** the admitted nonzero coordinate-gauge
+transformations preserve all-depth A/B equivalence,
+are invertible, and are closed under composition.
+Any sequence of these operators remains within
+its starting relational class, even if each
+constructed stream looks different. The four-element
+period-two subgroup has been exhaustively checked.
+
+**OPEN on the same quotient:** unrestricted re-rooting
+by shift and nontrivial pointwise rule addition are
+not globally relation-preserving. They cannot be
+declared admissible to the same operator-level
+quotient without changing or enriching its contract.
+
+**UNKNOWN:** a maximal family of *all* possible
+non-diagonal construction operators, equivalences
+of arbitrary nonperiodic rule oracles, and closure
+of a new enlarged quotient admitting shifts and
+rule additions. Nothing here proves universal
+construction closure for A/B beyond the
+defined mathematical model.
+
+Run:
+
+~~~bash
+python -m unittest network.tests.test_arc_like_process_operators -v
+~~~
+
+**Next referent:** either retain the proven
+gauge-construction quotient as the scoped stopping
+certificate, or construct a richer equivalence
+that handles a shifting root and test it against
+the same counterexamples. Do not erase the
+root boundary by declaring every turn identical.
+
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** audit which transformations of complete construction processes preserve the coinductive quotient, and whether those transformations form a closed operator system. Keep the diagonal and eventually periodic scope explicit.
+- **Next:** investigate a *marked-root* or root-transported process equivalence that may allow shifts, without weakening the existing all-depth A/B witnesses; gauge operators are closed under the current quotient.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
