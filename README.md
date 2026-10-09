@@ -264,12 +264,18 @@ both Fix(B) and Fix(B^3). The first distinguishing
 fixed-point-count word is AABAB (nine versus three fixed states
 at depth three); no shorter word count separates the pair.
 The [36-world extension](work/arc_like_maze/WINDOW_WORD_COLLISION.md)
-now certifies **12 full-state classes**, with 108 aligned
+certifies **12 full-state classes**, with 108 aligned
 ordered pairs and 1,188 invariant-obstructed ordered pairs.
+Completing both edits produces [48 constructed worlds](work/arc_like_maze/WINDOW_COMBINED.md):
+**14 full-state A/B classes, but 16 origin-preserving classes**.
+At two supports the previously separated branches share an exact
+state conjugacy that *moves the origin*, with positive-word witnesses
+proving rooted non-equivalence. A new six-letter word ABABAB separates
+the same branches at two other supports.
 This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined -v`.
 
 ## Core structure
 
