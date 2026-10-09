@@ -6,6 +6,8 @@ domain's *actual behavior* still requires its own witness/evaluator.
 from __future__ import annotations
 
 import unittest
+import json
+from pathlib import Path
 from tempfile import TemporaryDirectory
 
 from runtime.ab_information import ABOccurrence, information_closure
@@ -230,6 +232,42 @@ class GenericConstructionTests(unittest.TestCase):
                 witness_contract="opaque values are unportable",
                 horizon=1, intent="construct",
             )
+
+    def test_native_arc_histories_do_not_license_unseen_mechanics(self):
+        # These are actual archived SK48 alternative action histories.
+        # The finite native suffix tests support one continuation class
+        # *within each phase*, not arbitrary new world mechanics.
+        root = Path(__file__).resolve().parents[2]
+        source = (
+            root / "research" / "arc-agi3" / "desktop-evidence-2026-10-08"
+            / "sk48_l2_directional_phase_cross_source_ab.json"
+        )
+        record = json.loads(source.read_text(encoding="utf-8"))
+        self.assertEqual(record["tested_suffixes"], 64)
+        self.assertEqual(record["same_phase_counterexamples"], [])
+        histories = tuple(record["source_variants"]["1"])
+        self.assertEqual(histories, ([2], [1, 7], [4, 7]))
+        group = tuple(
+            ABOccurrence.create(
+                referent="native-sk48-L2-phase-1",
+                relations={"native_action_history": history},
+                continuation=("equivalent under 64 tested suffixes",),
+            )
+            for history in histories
+        )
+        candidates = derive_relation_constructions(
+            group, information_closure(group),
+            source_locators=tuple(
+                f"repository:sk48_phase_1/source_{i}"
+                for i in range(3)
+            ),
+            witness_contract="native SK48 phase-1; 64 finite suffixes",
+            horizon=3, intent="construct",
+        )
+        self.assertEqual(candidates, ())
+        # Two directions of A/B are present, but the native witnesses only
+        # expose one variable action-history field: no sound recombination
+        # across independent dimensions is available here.
 
     def test_no_novel_structure_when_only_one_relation_varies(self):
         group = (
