@@ -147,5 +147,55 @@ class MathematicalEngineOneTests(unittest.TestCase):
         self.assertEqual(third.history[:len(second.history)], second.history)
 
 
+    def test_engine_one_constructs_second_engine_which_ticks_on_its_own(self):
+        initial = ConstructedEngine(CombinedWorld(0, 0, 0, 0), 0)
+        built = self.builder.construct_cycle(initial)
+        self.assertEqual(built.status, "CONSTRUCTED")
+        first = built.engine
+        self.assertEqual(len(first.cycle.laws), 3)
+        a, b, c = first.tick(), first.tick().tick(), first.tick().tick().tick()
+        self.assertNotEqual(first.law, a.law)
+        self.assertNotEqual(a.law, b.law)
+        self.assertEqual(c.law, first.law)
+        self.assertEqual(c.version, first.version + 3)
+        self.assertEqual([w.kind for w in c.history],
+                         ["ROOTED_FULL"] * 3)
+        self.assertTrue(all(w.source_mark == w.target_mark
+                            for w in c.history))
+
+    def test_engine_two_cannot_tick_without_constructed_update_rule(self):
+        seed = ConstructedEngine(CombinedWorld(0, 0, 0, 0), 0)
+        with self.assertRaisesRegex(ValueError, "no constructed recurrence"):
+            seed.tick()
+
+    def test_tower_class_rotation_does_not_upgrade_dormant_orbits(self):
+        seed = ConstructedEngine(CouplingTower(((0, 0, 0), (0, 0, 0)), 4), 0)
+        constructed = self.builder.construct_cycle(seed)
+        self.assertEqual(constructed.status, "CONSTRUCTED")
+        cycle = constructed.engine.cycle
+        self.assertGreaterEqual(len(cycle.laws), 2)
+        self.assertTrue(all(w.kind == "ROOTED_REACHABLE"
+                            for w in cycle.arrows))
+        running = constructed.engine
+        for _ in range(len(cycle.laws)):
+            running = running.tick()
+        self.assertEqual(running.law, seed.law)
+        self.assertEqual(len(running.history), len(cycle.laws))
+
+    def test_singleton_tower_has_a_real_recurrence_wall(self):
+        # The completely zero one-coupling system is a singleton rooted class.
+        seed = ConstructedEngine(CouplingTower(((0, 0, 0),), 3), 0)
+        result = self.builder.construct_cycle(seed)
+        self.assertEqual(result.status, "WALL")
+        self.assertIsNone(result.engine)
+
+    def test_engine_two_detects_tampered_cycle_phase(self):
+        seed = ConstructedEngine(CombinedWorld(0, 0, 0, 0), 0)
+        good = self.builder.construct_cycle(seed).engine
+        forged = ConstructedEngine(good.law, 0, (), good.cycle, 1)
+        with self.assertRaisesRegex(ValueError, "does not match"):
+            forged.tick()
+
+
 if __name__ == "__main__":
     unittest.main()
