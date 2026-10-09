@@ -8,6 +8,34 @@
 
 The bounded inverse-construction engine now connects the existing 48-law two-predecessor window grammar to separately scoped 1–4-coupling construction grammars. Mathematical requirements select a concrete transition law, then admitted construction operators produce witnessed **versions of a changing second engine**. Rooted/full-state/nonrooted/projective relationships remain distinct; unsupported cross-grammar movement is WALL. This is **not** the universal inverted A/B engine, an autonomous self-modifying system, or native ARC gameplay. See the contract for exact conditions, evidence, and next referent.
 
+## Engine 2 — native continuation witness entry (bounded)
+
+[Research contract](ENGINE_TWO_CONTINUATION.md) ·
+[actual WindowProcess-driven entry and re-entry](engine_two_continuation.py) ·
+[18 focused tests](../../network/tests/test_arc_like_engine_two_continuation.py)
+
+A constructed Engine 2 handoff can now enter an explicitly declared
+five-coordinate two-input WindowProcess B-only WATCH through
+ConstructedEngine.watch_B_against(other). The research entry preserves
+the original 81-state x0=2 invariant fiber, the B transformation,
+complete state-index observations, original engine versions, budgets
+and the result's actual mathematical scope. Re-entry recalculates all
+prior witnesses with the existing WindowProcess.step before continuing.
+
+Budget 8 is UNKNOWN and budget 9 distinguishes the nine-cycle versus
+27-cycle negative control; a separate positive control stays UNKNOWN
+at budget 26 and obtains a verified complete B-intertwiner at budget 27.
+An earlier distinction cannot be erased by matching later counts.
+
+This research entry does **not** extend Engine 1's inverse law-selection
+grammar; sending a WindowProcess research predecessor into that
+construction search returns WALL. It also does not establish A/B
+conjugacy, live background execution or native ARC evaluation.
+
+The independently run local precursor passed 17 tests. The new
+repository integration has 18 committed tests and targeted CI,
+whose execution result still requires verification.
+
 ## Direction
 
 Observation would start with two given states and extract preservation/change/relations. **This experiment starts from proposed relational constraints and constructs candidate states and transitions.** Do not design rooms, objectives, obstacles, user controls, or renderings first. Visual and interactive representations come after a mathematical construction witness.
