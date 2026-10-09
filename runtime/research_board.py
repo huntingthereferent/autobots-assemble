@@ -38,7 +38,7 @@ def load_research_board(
         raise ValueError("unsupported research board index")
     registered = index["checkpoints"]
     ids = [entry.get("id") for entry in registered]
-    if len(set(ids)) != len(ids) or not ids or not all(isinstance(x, str) for x in ids):
+    if not ids or not all(isinstance(x, str) for x in ids) or len(set(ids)) != len(ids):
         raise ValueError("invalid or duplicate checkpoint IDs")
     selected = checkpoint if checkpoint is not None else index.get("current")
     if selected not in ids:
@@ -78,7 +78,7 @@ def load_research_board(
             raise ValueError("invalid witness locator")
         for field in ("derived_from", "next_question_ids"):
             if (not isinstance(row.get(field, []), list) or
-                    not all(isinstance(x, str) for x in row[field])):
+                    not all(isinstance(x, str) for x in row.get(field, []))):
                 raise ValueError("invalid question lineage")
         if row.get("origin") and not _https_link(row["origin"]):
             raise ValueError("invalid question origin")
