@@ -2,6 +2,7 @@
 import unittest
 
 from work.arc_like_maze.math import World, inverse_candidates
+from work.arc_like_maze.nonlinear import nonlinear_lifts
 from work.arc_like_maze.vertical import (
     project, shortest_hidden_loop, verify_alignment_square, verify_extension,
 )
@@ -67,6 +68,23 @@ class VerticalConstructionTests(unittest.TestCase):
     def test_inequivalent_base_cannot_falsely_complete_square(self):
         result = verify_alignment_square(World(3, (0, 1, 0)), World(3, (0, 1, 1)))
         self.assertEqual(result.status, "OPEN")
+
+    def test_hidden_loops_for_all_eight_nonzero_constructed_relations(self):
+        for depth in range(3, 7):
+            for prototype in inverse_candidates():
+                if prototype.phi == (0, 0, 0):
+                    continue
+                result = shortest_hidden_loop(World(depth + 1, prototype.phi))
+                self.assertEqual(result.status, "THREE_TURN_FIBER_LOOP")
+
+    def test_all_384_parameter_constructors_commute_with_depth_extension(self):
+        for operation in nonlinear_lifts():
+            for prototype in inverse_candidates():
+                for depth in range(3, 7):
+                    lower = World(depth, prototype.phi)
+                    before_extend = World(depth + 1, operation(lower).phi)
+                    after_extend = operation(World(depth + 1, lower.phi))
+                    self.assertEqual(before_extend, after_extend)
 
     def test_invalid_projection_and_extension_remain_unknown(self):
         with self.assertRaises(ValueError):
