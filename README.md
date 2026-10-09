@@ -189,6 +189,15 @@ The current frontage favors information density over application-style chrome: l
 6. [capabilities/README.md](capabilities/README.md)
 7. the active work/evidence reached from the current referent
 
+## ARC-like mathematical construction
+
+The math-first [inverted A/B world-construction experiment](work/arc_like_maze/README.md)
+generates finite candidate transition systems, checks aligned relational
+recurrence across different concrete turns, and preserves false-closure
+counterexamples. It is separate from observing live ARC-AGI games and makes no
+claim of terminal/unbounded closure. Focused tests:
+\`python -m unittest network.tests.test_arc_like_inverse_ab -v\`.
+
 ## Core structure
 
 - **Complete Stack** — top-level problem orientation.
