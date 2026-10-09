@@ -212,6 +212,47 @@ def frame_for_candidate(proposal: ConstructionProposal) -> ABFrame:
     )
 
 
+
+def proposal_from_frame(frame: ABFrame) -> ConstructionProposal:
+    """Rebuild and integrity-check an existing proposed ABFrame.
+
+    This is *not* witness validation; it only prevents accidentally
+    changing a candidate while retaining its deterministic proposal ID.
+    """
+    current = frame.current
+    if current.get("construction_status") != "PROPOSED":
+        raise ValueError("ordinary A/B movements are not construction proposals")
+    indices = tuple(current["source_indices"])
+    locators = tuple(current["source_locators"])
+    if not indices or not locators or len(indices) != len(locators):
+        raise ValueError("construction source addresses are incomplete")
+    payload = {
+        "referent": frame.referent,
+        "category": current["category"],
+        "source_indices": indices,
+        "source_locators": locators,
+        "witness_contract": current["witness_contract"],
+        "horizon": current["prediction_horizon"],
+        "structure": current["structure"],
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    expected_id = sha256(encoded.encode("utf-8")).hexdigest()
+    if current.get("proposal_id") != expected_id:
+        raise ValueError("construction proposal identity or provenance changed")
+    if not str(payload["witness_contract"]).strip() or payload["horizon"] < 1:
+        raise ValueError("construction proposal witness contract unavailable")
+    return ConstructionProposal(
+        proposal_id=expected_id,
+        referent=frame.referent,
+        category=current["category"],
+        structure=dict(current["structure"]),
+        source_indices=indices,
+        source_locators=locators,
+        witness_contract=current["witness_contract"],
+        horizon=current["prediction_horizon"],
+    )
+
+
 def check_composition(
     edges: Iterable[WorldEdge],
     *,
