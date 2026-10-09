@@ -150,4 +150,4 @@ A new `DistinguishedSystem` stores a five-coordinate distinguished point with ze
 
 **Not closed:** arbitrary nonlinear corrections using other state coordinates; general centralizer classification; unboundedly many higher-coordinate couplings; universal inverse-construction stopping; native ARC execution.
 
-**Next referent:** admit a second nonconstant higher-coordinate rule and determine when the potential must be lifted another coordinate upward. Preserve the signed-cycle obstruction and pointed conjugacy factors; do not replace the current scope by an unproved universal criterion.
+**Next referent (completed for a specific nonlinear fourth-coordinate grammar):** [the higher-coupling extension](HIGHER_COUPLING_LIFT.md) classifies all nine-entry q1 rules against the admitted lower potential, distinguishing order-three corrections, **order-nine** commuting corrections, and signed-cycle obstructions. The remaining next coordinate is a nonzero coupling reading x3; the two previous theorems keep their separate scopes.
