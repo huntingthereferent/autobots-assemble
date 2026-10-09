@@ -188,4 +188,4 @@ A pointed correction carries a four-digit distinguished point (with zero higher 
 
 **Unknown:** arbitrary nonlinear corrections depending on x3, further nonzero higher-coordinate rules, alternative centralizer actions on obstructed systems, general inverse-construction closure, and native ARC execution.
 
-**Next mathematical referent:** admit a nonzero fifth-coordinate coupling depending on x3 and ask whether an existing order-nine generator requires an additional higher-coordinate correction. Compute the exact obstruction without assuming that the previously established order is preserved.
+**Next mathematical referent (now resolved for the two fixed lower systems):** [the fifth-coordinate extension](FIFTH_COORDINATE_LIFT.md) admits a coupling q2(x2,x3) exactly when it is affine in x2 with an arbitrary x3-only term. Its 27-state compatibility graph has constraint rank five, leaving 81 admitted couplings per gain; the corrected symmetry remains order nine, not 27. Other choices of the preceding fourth-coordinate rule remain unknown.
