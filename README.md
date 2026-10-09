@@ -201,10 +201,13 @@ Cross-dimensional construction now witnesses transition-preserving projections,
 three-turn hidden-fiber cycles, and same-depth alignment squares without treating
 higher and lower worlds as identical. The inverse-limit model proves the declared
 A/B actions remain coherent at every depth and that the nine parameter towers
-retain five projectively compatible relational classes. This is a scoped
+retain five projectively compatible relational classes. A nonlinear gauge now
+constructs three distinct but exactly aligned world laws in a closed cycle;
+a split nonlinear coupling supplies a new class witnessed by different
+B-fixed-state counts at depth four. This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction -v`.
 
 ## Core structure
 
