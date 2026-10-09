@@ -189,8 +189,9 @@ def audit_prefixes(
                     if start.prefix(d) == moved.prefix(d)]
     first_break = next((d for d in range(3, deepest + 1)
                         if start.prefix(d) != moved.prefix(d)), None)
-    false_closure = (max(d for d in equal_depths if first_break is not None and d < first_break)
-                     if any(d < first_break for d in equal_depths) else None)
+    false_closure = (max(d for d in equal_depths if d < first_break)
+                     if first_break is not None and any(d < first_break for d in equal_depths)
+                     else None)
     return FiniteTowerAudit("FINITE_PREFIX_VERIFIED", phi,
                             tuple(range(3, deepest + 1)), edges,
                             false_closure, first_break)
