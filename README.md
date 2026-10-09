@@ -196,7 +196,7 @@ generates finite candidate transition systems, checks aligned relational
 recurrence across different concrete turns, and preserves false-closure
 counterexamples. It is separate from observing live ARC-AGI games and makes no
 claim of terminal/unbounded closure. Focused tests:
-\`python -m unittest network.tests.test_arc_like_inverse_ab -v\`.
+`python -m unittest network.tests.test_arc_like_inverse_ab -v`.
 
 ## Core structure
 
