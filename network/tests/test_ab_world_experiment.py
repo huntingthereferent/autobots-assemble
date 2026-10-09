@@ -131,6 +131,38 @@ class SimulatedWorldExperiments(unittest.TestCase):
         self.assertTrue(all(ref.startswith("simulation://") for f in restored
                             for ref in f.source_locators))
 
+    def test_corrected_categories_generate_next_proposed_layer(self):
+        first = generated()
+        observed = run_simulation_probe(
+            first, world=simulation(), action_path=("advance", "advance")
+        )
+        corrected = inverse_fibers(
+            observed.observed_occurrences, observed.information,
+            source_locators=observed.observed_locators,
+            witness_contract="SIMULATION ONLY: 2-action correction",
+            horizon=2,
+        )
+        second = project_candidates(
+            corrected,
+            lambda fiber: (
+                {"level": 2,
+                 "child": dict(first[i].structure),
+                 "corrected_category": fiber.category}
+                for i in fiber.source_indices
+            ),
+            intent="construct",
+            max_candidates=8,
+        )
+        self.assertEqual(len(corrected), 3)
+        self.assertEqual(len(second), 4)
+        self.assertEqual(set(p.category for p in second), {0, 1, 2})
+        self.assertTrue(all(p.status == "PROPOSED" for p in second))
+        self.assertTrue(all(p.horizon == 2 for p in second))
+        self.assertTrue(all(p.witness_contract.startswith("SIMULATION ONLY")
+                            for p in second))
+        self.assertTrue(all(loc.startswith("simulation://")
+                            for p in second for loc in p.source_locators))
+
     def test_missing_relation_becomes_explicit_wall(self):
         exp = run_simulation_probe(
             generated(),
