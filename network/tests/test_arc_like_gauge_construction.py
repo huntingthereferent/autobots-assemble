@@ -112,10 +112,11 @@ class GaugeConstructionTests(unittest.TestCase):
                     self.assertEqual(w.inverse(w.step(state, action), action), state)
                     self.assertEqual(w.step(w.inverse(state, action), action), state)
 
-    def test_boundary_does_not_claim_difference_for_zero_phi_depth_four(self):
+    def test_zero_phi_has_no_gauge_variation_but_split_still_breaks_relation(self):
         result = construct_boundary((0, 0, 0))
-        self.assertEqual(result.status, "UNKNOWN_OR_NO_SEPARATION")
-        self.assertEqual(result.base_fixed_B, result.split_fixed_B)
+        self.assertEqual(result.status, "NEW_RELATION_AT_DEPTH_FOUR")
+        self.assertFalse(result.three_concrete_B_rules)
+        self.assertEqual((result.base_fixed_B, result.split_fixed_B), (9, 18))
 
     def test_bad_input_rejected(self):
         with self.assertRaises(ValueError):
