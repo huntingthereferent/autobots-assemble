@@ -93,6 +93,100 @@ The source locators are supplied by the caller, not verified by the
 inverse operation. The strings in this example are illustrative; they
 must not be claimed as real measurements.
 
+## The next layer: executed simulation and A/B correction
+
+The construction entry does not itself create native game worlds. For an
+explicitly requested **simulation**, `EcosystemService.simulate_ab_constructions`
+accepts the returned `PROPOSED` frames, checks that their proposal identities
+and source addresses have not changed, then runs a caller-supplied
+`SimulationWorld` (initial state, step function, and observer).
+
+```python
+from runtime.ab_world_experiment import SimulationWorld
+
+# A tiny synthetic chamber model, not an observed real-world mechanic.
+def begin(s):
+    return (s["room"], s["gate0"], s["gate1"])
+
+def advance(s, action):
+    room, gate0, gate1 = s
+    if action != "advance":
+        raise KeyError(action)
+    open_here = gate0 if room == 0 else gate1 if room == 1 else 0
+    return (min(room + 1, 2) if open_here else room, gate0, gate1)
+
+world = SimulationWorld(
+    source="simulation://nested-chambers/v1",
+    initial=begin,
+    step=advance,
+    observe=lambda s: s[0],
+    relations=lambda structure: {
+        "gate0": structure["gate0"],
+        "gate1": structure["gate1"],
+    },
+)
+
+# Frames must come from propose_ab_constructions with matching proposal IDs.
+# They are not native evidence. Each candidate is replayed twice.
+experiment = service.simulate_ab_constructions(
+    frames=frames,
+    world=world,
+    action_path=("advance", "advance"),
+    predict=lambda proposal, actions: (
+        proposal.category, proposal.category
+    ),
+)
+
+# Actual *simulated* continuations, not the user's prediction,
+# determine the new information-minimal A/B partition.
+if experiment.information is not None:
+    new_fibers = inverse_fibers(
+        experiment.observed_occurrences,
+        experiment.information,
+        source_locators=experiment.observed_locators,
+        witness_contract="SIMULATION ONLY: 2-step chamber experiment",
+        horizon=2,
+    )
+```
+
+This diagram now has an executable **synthetic** middle layer:
+
+```
+prior witnessed quotient C₁
+  -> inverse source fiber
+  -> PROPOSED structures
+  -> simulated action sequence (two independent replays)
+  -> compared return traces (MATCH / COUNTEREXAMPLE / UNKNOWN)
+  -> ordinary A/B categories C₂
+  -> corrected inverse fiber for the next *proposal* layer
+```
+
+For four example configurations with two room gates:
+
+- Action horizon 1: two continuation classes. Only the first gate
+  matters for that one-step prediction.
+- Action horizon 2: three continuation classes. The gate in the next
+  room becomes consequential; the predicted second action is wrong in
+  one branch. The counterexample is retained and a new relation is
+  synthesized from the actual simulated returns.
+
+If a trial has no executable rule, cannot be deterministically replayed,
+or gives an unavailable observation, it is `UNKNOWN`, and no quotient is
+returned from the incomplete trial set. If all traces return but the
+available relation vocabulary is insufficient, the `unresolved_boundary`
+records the missing relation rather than inventing an answer.
+
+**Do not confuse** `SIMULATED_MATCH` with `MOVE`. The `simulation://`
+locators are deterministic trial addresses but are never native witness
+locators. `NativeABEvaluator` still rejects simulation for live movement.
+The service wrapper registers no agents and writes no new tasks.
+
+Run the fully online tests with:
+
+```sh
+python -m unittest discover -s network/tests -p 'test_ab_world_experiment.py' -v
+```
+
 ## Mathematical composition gate
 
 For an action-labelled child transition `s --a--> s'` and a proposed
@@ -130,7 +224,7 @@ was universally sufficient.
    agent workflow; invalid predictions remain `PARTIAL`.
 6. `check_composition` is *structural*; the caller is responsible for
    independent native before/after testimony and action identity.
-7. Source locators are not independently validated by this pure module.
+7. Source locators are not independently validated by this pure module;\n   simulated traces have separate simulation-only locators.
 8. Distinct source histories need not produce distinct native states.
 9. Finite ARC phase-equivalence data cannot prove an infinite fractal
    or a universal world generator.
