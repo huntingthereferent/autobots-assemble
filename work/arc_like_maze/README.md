@@ -1664,11 +1664,98 @@ relations separately. A collision of all three
 known word counts must not be treated as an
 automatic alignment.
 
+## Completed two-edit family — full-state equivalence versus rooted history
+
+[Exact mathematical record](WINDOW_COMBINED.md) ·
+[48-world construction and pairwise certificates](window_combined.py) ·
+[15 regression tests](../../network/tests/test_arc_like_window_combined.py) ·
+[independent arithmetic verifier](window_combined_arithmetic_audit.py)
+
+The previously withheld (pulse=1, balanced=1)
+coupling is now admitted, completing a **48-world**
+finite two-predecessor construction:
+four supports × two pulses × two balanced edits
+× three nonlinear shear charts.
+
+The earlier one-letter, three-letter, and five-letter
+fixed-word invariants all collide between pulse-only
+and combined worlds at the same support. A new
+six-letter word, `ABABAB`, separates them at
+the two **middle** support levels:
+
+~~~text
+support k     pulse-only Fix(ABABAB)    combined
+    0                     18               18
+    1                     18                9
+    2                      9                0
+    3                      0                0
+~~~
+
+At k=1,2 this proves full-state inequivalence.
+At k=0,3, the systems are instead exactly
+conjugate by an additional nonlinear state
+translation that *moves the origin*:
+
+~~~text
+R(x0,x1,x2,tail) = (x0,x1+2,x2+f(x1),tail)
+f(1)=2, f(0)=f(2)=0                in F3
+F_(c->d)=H_d R H_(-c)
+~~~
+
+The inverse uses R^-1. Direct substitution
+proves full-state A/B alignment at all
+depths for these two support levels.
+But R sends the zero origin to a different
+state. More strongly, two explicit A/B
+words reach the same state in the source
+rooted world and different states in
+the target. **No rooted conjugacy exists.**
+
+Thus the same 48-world family has two
+provably distinct quotients:
+
+- **14 full-state classes:** 12 classes of
+  three worlds; two classes of six.
+- **16 origin-preserving classes:** 16
+  classes of three worlds.
+
+All 2,304 ordered pairs are certified
+by exact rooted (144) or nonrooted (36)
+state maps, or fixed-word obstructions
+from B (1,728), BBB (288), AABAB (72),
+and ABABAB (36). The 36 nonrooted
+maps have literal root-collision witnesses.
+
+The independently computed finite audit
+checked 311,040 shear conjugacy comparisons,
+103,680 inverse identities, 101,088 projection
+identities, and 768 fixed-word formula checks
+over all 48 worlds through depth six.
+Fifteen new regression tests and a targeted
+GitHub workflow are committed, but they
+must not be labeled CI-passing without
+a confirming run.
+
+**CLOSED:** both full-state and rooted
+classifications for this declared 48-world
+family. **PRESERVED:** the marked
+difference between a conjugacy that
+moves the root and a root-preserving
+alignment. **UNKNOWN:** additional
+unbounded coupling constructions and
+universal inverse A/B closure.
+
+**Next referent:** represent the root-changing
+map as a distinct *marked arrow* with explicit
+source-image mark and literal word collision;
+check composition and prevent its accidental
+use as an origin-preserving equivalence.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** admit the withheld simultaneous pulse-plus-balanced rule, distinguish full-state from origin-rooted equivalence, and search for an exact map or a new labeled-word obstruction rather than promoting colliding signatures to closure.
+- **Next:** carry the origin as a first-class mark in the new nonrooted state maps. Preserve the 36 root-collision witnesses and test arrow composition without treating full-state conjugacy as rooted equivalence.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
