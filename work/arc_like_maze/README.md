@@ -1257,6 +1257,51 @@ marked alignments. No universal A/B stopping point or native ARC solve follows.
 rather than forgetting root gains and witnesses and reintroducing the
 same quotient failure.
 
+## Witness-complete quotient — the missing finite-head arrows
+
+[Research report](MARKED_QUOTIENT.md) ·
+[implementation](marked_quotient.py) ·
+[12 regression tests](../../network/tests/test_arc_like_marked_quotient.py)
+
+The marked gauge/shift interchange work showed that the **witness
+must travel**. The next question is whether the eight period-two
+gauges actually exhaust the diagonal marked equivalences they were
+being used to represent.
+
+We first close all 81 strictly two-rule process templates, each with
+either root gain, under the eight marked boundary gauges. **162 seed
+objects become 270 distinct marked objects:** 108 objects acquire a
+genuine one-rule stem because incoming root gain and periodic gauge
+phase are independent.
+
+The eight operators give **36 exact group-action orbits** of sizes
+2 (one orbit), 4 (three orbits), and 8 (32 orbits). But the previously
+defined full coinductive diagonal A/B witness regards the same 270
+objects as only **34 aligned classes**: one size-2, three size-4,
+28 size-8, and two size-16 classes.
+
+The discrepancy consists of **two verified bridges**, each joining
+two periodic-gauge orbits of eight objects. Their witnesses have a
+finite prelude before their periodic scale, so no strict period-two
+gauge captures them. A concrete bridge has source scales
+`(1,2,2,2,...)`, rather than any `(a,b,a,b,...)`. Those are
+different *operator-level* witnesses even though both
+mathematically preserve marked A/B transitions.
+
+**CLOSED:** all 270 objects are preserved by the eight selected
+gauges; the finite coinductive marked-diagonal partition is complete
+for those objects under that specified equivalence.
+
+**OPEN:** treating the eight-element gauge group as a *complete*
+description of all marked-diagonal arrows. It misses two bridges.
+The next operator-level step is to adjoin these bridges as
+generators and test composition and root-transport provenance
+without silently substituting a new witness.
+
+No universal inverse A/B closure or native ARC result is implied.
+
+
+
 ## Finite-stem gauges and composite operator normal forms
 
 [Research report](STEMMED_OPERATOR_SYSTEM.md) ·
