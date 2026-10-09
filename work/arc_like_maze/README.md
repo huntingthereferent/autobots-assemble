@@ -1525,11 +1525,88 @@ two-input coupling outside the chosen support row.
 Check whether the old invariant suffices to
 separate it or whether a new witness is needed.
 
+## Second independent two-input relation — a word-fixed witness
+
+[Detailed proof and arithmetic audit](WINDOW_BRANCH.md) ·
+[24-world constructor and pairwise certificates](window_branch.py) ·
+[13 regression tests](../../network/tests/test_arc_like_window_branch.py)
+
+The earlier support axis k=0..3 exhausted one selected
+row of `q0(u,v)`. The next actual construction changes
+a **different row**: add one pulse `e` at `q0(0,0)`,
+independently of the support values `q0(2,v)` and
+the non-diagonal shear chart `c`:
+
+~~~text
+q_(k,e,c)(u,v) =
+    [u=2 and v<k]
+  + e*[u=0 and v=0]
+  + c*((v+u+1)^2-v^2)            mod 3
+k in {0,1,2,3}, e in {0,1}, c in {0,1,2}
+~~~
+
+This produces **24 distinct** two-predecessor B laws.
+The old B-fixed state count is **unchanged** by e,
+and so the previous invariant cannot classify the
+new family. The stronger relation witness is the
+action word `BBB`.
+
+For all constructed worlds and every depth d>=3:
+
+~~~text
+#Fix(B)   = (3-k)*3^(d-2)
+#Fix(BBB) = 3^d                if e=0
+            2*3^(d-1)         if e=1
+~~~
+
+At depth three the second count is **27 versus 18**.
+This is a **conjugacy-invariant obstruction** despite
+equal single-B fixed-point counts. For example,
+`BBB` returns the zero origin in the e=0 world but
+changes x2 by one in the e=1 world at k=c=0.
+
+Within each fixed (k,e), the explicit nonlinear
+`H_(target_c-source_c)` gives an invertible
+projectively compatible A/B conjugacy across all
+depths. Different k values are excluded by Fix(B),
+while equal k but different e are excluded by
+Fix(BBB). Therefore the admitted finite family
+contains exactly **eight full-state A/B classes**
+of three concrete laws each.
+
+The constructive axes have separate meanings:
+S (shear) closes after three turns and preserves
+the relation; E (support) or P (pulse) move to
+genuinely different relational classes until their
+declared finite domains reach walls. S, E and P
+commute wherever defined, but a common square is
+not proof that all their arrows are alignments.
+
+Independent arithmetic verified 470,448 shear
+conjugacy comparisons, 156,816 inverse assertions,
+155,520 projection assertions and 156,816 B/BBB
+fixed-count checks through depth seven. Thirteen
+committed Python tests additionally specify exact
+regression witnesses; their CI execution status
+must be verified separately.
+
+**CLOSED:** exactly eight classes for this declared
+24-world family. **OPEN:** sufficiency of Fix(B)
+alone. **UNKNOWN:** completeness of the pair
+(Fix(B),Fix(BBB)) for any wider arbitrary table
+family or universal A/B construction.
+
+**Next:** independently change another q0 entry
+while preserving *both* known word-fixed counts.
+Look for a stronger word invariant or an exact
+non-diagonal alignment rather than assuming that
+colliding invariants imply equivalence.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** admit an independent two-input rule beyond the fixed support row and compare its full-state invariants with the four certified classes; if a count collides, seek a stronger exact relation witness or counterexample, not a guessed equivalence.
+- **Next:** change another two-input coupling entry while holding both Fix(B) and Fix(BBB) unchanged. Find an independently witnessed next obstruction or a constructive full-state alignment; do not infer equivalence from matching finite invariants.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
