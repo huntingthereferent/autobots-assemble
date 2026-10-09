@@ -689,11 +689,174 @@ Reproduce the focused tests:
 python -m unittest network.tests.test_arc_like_coupling_family -v
 ~~~
 
+## Third independent coupling — tested recurrence and finite-depth obstruction
+
+[third_coupling.py](third_coupling.py) generalizes the preceding two-coupling
+construction to independent B rules \`r_i:F_3 -> F_3\` with \`r_i(0)=0\`.
+Each rule has nine possible tables (values at inputs 1 and 2). The
+constructed triangular action is
+
+~~~text
+A(x) = (x_0+1,x_1,x_2,...)
+B(x)_0 = x_0
+B(x)_1 = x_1+x_0+1
+B(x)_i = x_i + r_(i-2)(x_(i-1))          2 <= i < n+2
+B(x)_i = x_i + x_(i-1)                  i >= n+2
+~~~
+
+All calculations use F_3. The first n coupling tables appear at depth n+2.
+Every action is reversible by recovering the prior coordinates from low
+to high. Every projection to a shallower depth commutes with A and B.
+
+### Exhaustive, exact rooted transition-graph comparisons
+
+Instead of pairwise guesses or fixed-point histograms,
+\`rooted_graph\` traverses the entire origin-reachable deterministic
+A/B action graph in canonical breadth-first order. New states get their
+index at first encounter while expanding A before B. Two worlds have
+identical canonical transition-index sequences **iff** there is an exact
+origin-preserving, action-label-preserving bijection of their reachable
+graphs. Different concrete state coordinates are explicitly allowed.
+
+| Independent couplings | Constructed worlds | Rooted A/B classes |
+|---|---:|---:|
+| 1 | 9 | 5 |
+| 2 | 81 | 21 |
+| 3 | 729 | 85 |
+| 4 (stress test) | 6,561 | 341 |
+
+These figures are **exhaustively computed for the declared finite
+families**, not a proof that the apparent recurrence
+\`C(n+1)=4*C(n)+1\` holds for all n.
+
+For three couplings, the complete 729-world partition is:
+
+| Distinct descriptions in each class | Number of classes |
+|---|---:|
+| 81 | 1 |
+| 18 | 4 |
+| 4 | 16 |
+| 8 | 64 |
+| **Total classes** | **85** |
+
+The fifth-coordinate model has reachable-state sizes
+9 (81 constructions), 27 (72), 81 (64), or 243 (512).
+Extending each of those 729 worlds to six coordinates yields
+**the same partition**: no rooted class splits at the next layer.
+The four-coupling stress test gives the class-size distribution
+\`[(729,1),(162,4),(36,16),(8,64),(16,256)]\`.
+
+### Explicit all-depth alignments vs dormant-orbit coincidences
+
+Let \`s_2,s_3,...,s_(n+1)\` each be 1 or 2 in F_3.
+The map that scales coordinate \`x_i\` by \`s_i\`
+(for i>=2, extending the final scale into subsequent coordinates)
+is an exact full-state, projection-compatible A/B conjugacy when
+
+~~~text
+r'_i(s_(i+1)*u) = s_(i+2)*r_i(u)
+~~~
+
+where \`s_1=1\` handles the first unscaled input coordinate.
+This is checked for every related pair in **80 of the 85**
+rooted classes; the coordinate formula proves those maps across
+all subsequent depths. For the remaining five classes, the current
+certificate supports only origin-reachable equivalence across all
+members, **not full-state conjugacy**.
+
+Why? The first zero-valued coupling forces its output coordinate
+to stay zero starting at the origin; every later rule also receives
+zero and becomes unobservable on that orbit. Two worlds can then have
+the same complete origin-reachable A/B graph but different full-space
+B-fixed-state counts: one concrete five-dimensional pair has **81**
+versus **54** fixed states. Do not promote those to the same full
+inverse-limit dynamical system.
+
+### Explicit class rotation and why it isn't a universal stop
+
+Once the exact rooted classes are computed, a chosen constructor
+rotates each class's concrete descriptions. For three couplings,
+the cycles have lengths 81, 18, 4, and 8; every one of the 729
+descriptions moves and returns after
+
+~~~text
+lcm(81,18,4,8) = 648 construction turns
+~~~
+
+This is a valid **closed permutation of the declared rooted
+equivalence classes**. It is a deliberately selected construction
+rule, not a naturally forced next A/B turn. In the four-coupling
+stress family, the analogous rotation order would be
+\`lcm(729,162,36,8,16)=11664\`; this too would be
+closure only for that chosen constructor.
+
+### Stronger stopping result: no universal *finite depth* in this family
+
+There is a direct algebraic obstruction, not merely a trend in the
+class counts. For ANY finite triangular B construction at depth d,
+let \`z(f)\` count the zero inputs of the coupling increment function.
+The total number of B-fixed states in the **full** F_3^d space is
+
+~~~text
+F_d = 3 * product_(i=2 to d-1) z(r_(i-2))
+~~~
+
+The first coordinate of a B-fixed state must be 2; each intermediate
+coordinate is independently restricted to the zero set of the
+coupling feeding the next coordinate, and the final coordinate is
+free (three choices). In particular \`F_d > 0\`.
+
+Now admit either of these independently constructed functions at
+the next coordinate:
+
+~~~text
+zero function:      r_new(u)=0         z(r_new)=3
+identity function:  r_new(u)=u         z(r_new)=1
+
+F_(d+1,zero)     = 3*F_d
+F_(d+1,identity) =   F_d
+~~~
+
+**B-fixed-point counts are preserved by every bijective
+B-equivariant state alignment.** The two extensions therefore
+cannot be the same full-state A/B world, even though they share
+the exact same d-dimensional projection. This argument works at
+every finite depth in the admitted construction family.
+
+Result: **there is no terminal finite dimension under unrestricted
+independent coupling extension.** We can close the operator orbit
+inside an explicitly admitted quotient, but permitting arbitrary
+new couplings always gives us another distinguishable full-state
+construction. This does not prove anything universal about A/B
+outside this model.
+
+### Checks and next movement
+
+Run:
+
+~~~bash
+python -m unittest network.tests.test_arc_like_third_coupling -v
+~~~
+
+The 12 focused tests cover all 729 rooted graphs, unchanged
+classification at depth six, exact scaling maps for 80 classes,
+dormant-orbit/full-space separation, the 648-turn class rotation,
+a fourth-coupling exhaustive stress test (6,561 worlds),
+coordinate inverses/projection, symbolic fixed-point counts,
+and the finite-terminal-depth obstruction.
+
+**Next conceptual boundary:** if the goal is a relationally closed
+world-construction *process*, specify the admissible construction
+operators or the quotient that identifies their movements. Otherwise
+the unrestricted rule family is open by the fixed-point argument.
+Do not keep adding finite dimensions hoping for an accidental
+universal stopping point.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** allow another independently generated coupling in the next coordinate and test whether the 21-class rooted quotient recurs, grows, or changes. Preserve the rooted/full-space distinction. Do not declare universal terminal closure.
+- **Next:** align the admissible construction operators themselves; the fixed-point theorem rules out an unrestricted terminal finite dimension. Keep rooted and full-space equivalence separate.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
