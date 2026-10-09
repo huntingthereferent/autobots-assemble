@@ -27,7 +27,7 @@ jobs:
           python-version: '3.11'
       - name: Compile connected research modules and test
         run: |
-          python -m compileall -q work/arc_like_maze network/tests/test_arc_like_pointed_coupling_classification.py
+          python -m compileall -q work/arc_like_maze/pointed_coupling_classification.py work/arc_like_maze/pointed_coupling_independent_audit.py network/tests/test_arc_like_pointed_coupling_classification.py
       - name: Focused witness-preserving classifier regression
         run: python -m unittest network.tests.test_arc_like_pointed_coupling_classification -v
       - name: Independent 486-configuration full-matrix audit
