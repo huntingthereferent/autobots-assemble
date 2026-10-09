@@ -1210,11 +1210,58 @@ processes with nonempty arbitrary stems is not invertible in general.
 and admissible gauges on marked process objects, preserving both
 composition witnesses and counterexamples to unrestricted operations.
 
+## Marked process operator interchange — gauge × transported shift
+
+[Detailed witness and proof](MARKED_OPERATORS.md) ·
+[implementation](marked_operator_system.py) ·
+[11 regression tests](../../network/tests/test_arc_like_marked_operator_system.py)
+
+**Current referent:** operations on complete eventually periodic A/B construction
+processes, one layer above individual shifting or rescaled worlds.
+
+A **marked arrow** contains both processes, their incoming root gains, and the
+exact coinductively verified scalar alignment. The new construction combines
+two operations:
+
+- A boundary-aware coordinate gauge `U=(u_-1,u_0,u_1,...)` is invertible and
+  acts by explicit A/B conjugacy on every coordinate.
+- A process shift carries the *existing witness tail*, with new incoming scale
+  `s_(k-1)`, instead of resetting the boundary or recomputing a different
+  witness when zero rules permit several choices.
+
+They satisfy a witnessed **interchange square**: shifting and then applying
+shifted gauges agrees with gauging and then shifting, *provided* the source
+gain is transported as `u_(k-1)`. This equality checks both process streams,
+both marked gains, and the entire aligned scalar sequence, not just a quotient
+class or a finite return time.
+
+The eight period-two boundary gauges form a closed `C₂ × C₂ × C₂` group.
+The finite audit checked **5,184** gauge compositions over the 81 two-rule
+templates and **256** gauge/shift squares over one genuine nonidentity
+marked morphism. Eleven local regression tests additionally cover
+stemmed processes, full-state A/B transitions through depth seven,
+composition/inversion, ambiguous witness choice, and known counterexamples
+to unrestricted rule addition.
+
+**CLOSED for the admitted relation:** coordinate gauges preserve exact
+coinductive alignment and commute with *witness-aware marked shifts*.
+The statements extend algebraically to the declared periodic gauge
+schedules and eventually periodic process rules.
+
+**NOT CLOSED as an unrestricted group of all constructions:** plain shift
+of an unmarked process can still break equivalence; arbitrary finite stems
+need not admit inverse shifts; coupling-rule addition still breaks some
+marked alignments. No universal A/B stopping point or native ARC solve follows.
+
+**Next referent:** characterize admissible operators on *marked arrows*,
+rather than forgetting root gains and witnesses and reintroducing the
+same quotient failure.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** check combined marked-root shifts and gauge transformations under composition; the transported shift now has a finite scoped witness, while unrestricted operators remain OPEN.
+- **Next:** characterize which further operations on marked process arrows preserve full witnessed alignment; the gauge/shift interchange square is proved only for the specified model.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
