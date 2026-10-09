@@ -62,8 +62,12 @@ class WindowBranchTests(unittest.TestCase):
         origin=(0,0,0)
         self.assertEqual(before.apply(origin,"BBB"), origin)
         self.assertEqual(after.apply(origin,"BBB"), (0,0,1))
-        self.assertEqual(before.step(origin,"B"),after.step(origin,"B"),
-                         "first transition alone cannot detect the later break")
+        self.assertNotEqual(before.step(origin,"B"), after.step(origin,"B"))
+        # But a different state hides the difference for one B turn:
+        hidden=(0,1,0)
+        self.assertEqual(before.step(hidden,"B"), after.step(hidden,"B"))
+        self.assertNotEqual(before.apply(hidden,"BBB"),
+                            after.apply(hidden,"BBB"))
 
     def test_B_and_BBB_closed_form_on_full_states_depths_three_through_six(self):
         for world in family():
