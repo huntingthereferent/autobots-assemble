@@ -1,0 +1,34 @@
+name: Inverted construction Engine 1 - mathematical witnesses
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'work/arc_like_maze/engine_one.py'
+      - 'network/tests/test_arc_like_engine_one.py'
+      - 'work/arc_like_maze/ENGINE_ONE.md'
+      - 'work/arc_like_maze/window_combined.py'
+      - 'work/arc_like_maze/third_coupling.py'
+      - 'work/arc_like_maze/coupling_family.py'
+      - 'work/arc_like_maze/nondiagonal_transport.py'
+      - '.github/workflows/math-engine-one.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  witnessed-construction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Construct and test changing mathematical engines
+        run: python -m unittest network.tests.test_arc_like_engine_one -v
+      - name: Verify underlying window mathematical classifiers
+        run: python -m unittest network.tests.test_arc_like_window_combined -v
+      - name: Verify independent coupling tower mathematics
+        run: python -m unittest network.tests.test_arc_like_third_coupling -v
