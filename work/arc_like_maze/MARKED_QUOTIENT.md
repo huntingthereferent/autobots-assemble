@@ -116,7 +116,7 @@ family. Its orbit partition is constructive; its coinductive
 classification only compares the 36 orbit representatives, using
 the provable transitivity of exact diagonal alignment.
 
-The 12 new [regression tests](../../network/tests/test_arc_like_marked_quotient.py)
+The 14 new [regression tests](../../network/tests/test_arc_like_marked_quotient.py)
 are designed to verify: 162→270 closure and the 108 new stems; the
 36-orbit gauge action and all 64 ordered gauge compositions on
 every object; 34 full-alignment classes and cross-class witnesses;
@@ -136,6 +136,32 @@ Run the exact committed tests from the repository root:
 python -m unittest network.tests.test_arc_like_marked_quotient -v
 ~~~
 
+## Connection to the existing finite-stem operator extension
+
+The separate [finite-stem operator](stemmed_operator_system.py) already
+admits gauges whose scalar schedule has a finite head before a repeating
+tail. The two bridges above are **not missing** from that enlarged
+operator family. The new `MissingGaugeBridge.stem_gauge()` builds an exact
+`StemGauge` from the already certified arrow's head, period and incoming
+gain. It verifies that the full target process is reached and the marked
+root is preserved. No new alignment is silently chosen.
+
+The regression suite checks that each bridge is reproduced as the actual
+marked arrow by the finite-stem gauge interface, then survives exact
+gauge/shift interchange with its witness transported. Thus we can
+separate three precise levels:
+
+1. **Closed eight-gauge group:** 36 orbits on the 270 objects.
+2. **Complete diagonal marked-equivalence quotient:** 34 classes,
+   which are strictly coarser than the eight-gauge orbits.
+3. **Existing finite-stem gauge extension:** supplies the additional
+   arrows needed to bridge those two quotient differences.
+
+These are statements about complete *marked diagonal* A/B witnesses in
+this finite object universe. They do not imply that every conceivable
+marked-process operator is admitted, or that the finite-stem group is
+exhaustive for arbitrary non-diagonal transformations.
+
 ## The wall and next referent
 
 **CLOSED:** finite eight-gauge action on the 270-object universe, with
@@ -154,8 +180,10 @@ non-diagonal marked A/B conjugacies, admission of new rule tables or
 root operations, and any native ARC solving / universal construction
 stopping principle.
 
-**Next mathematical referent:** treat the two bridges as *generating
-marked arrows* and check whether adding them to the eight periodic
-gauges yields the full 34-class arrow groupoid, preserving source
-and target marks and the literal witness during composition and shift.
-Do not claim arrow completeness from object class counts alone.
+**Next mathematical referent:** test an independently justified
+**non-diagonal** operator on marked A/B process worlds, or provide a
+precise invariant-based counterexample. The finite-stem diagonal
+family already realizes the two missing eight-gauge bridges, so do
+not repeat that solved layer. Do not equate completeness of the
+34-class diagonal marked-object quotient with completeness of
+arbitrary arrow composition or universal A/B closure.
