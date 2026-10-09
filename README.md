@@ -299,10 +299,18 @@ B-fixed invariant fibers obstruct any lift preserving x0,x1
 and translating x2; the first failure is in dimension
 four or five. Thirteen focused tests cover the
 exact construction and pointed factor provenance.
+The [nonconstant lower-coupling theorem](work/arc_like_maze/NONCONSTANT_DRIFT.md)
+then solves the restricted cohomological lifting problem for **every**
+nine-entry q0 table over F3. Of **19,683 tables per gain**, exactly
+**18** admit the specified fiber-additive corrected symmetry.
+An independent signed-cycle graph solver agrees with the algebraic
+criterion across **39,366** table-and-gain cases. The result
+carries explicit pointed conjugacies and nonzero-voltage
+cycle obstructions, without claiming all possible centralizer maps.
 This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows network.tests.test_arc_like_window_root_translation network.tests.test_arc_like_translation_centralizer network.tests.test_arc_like_corrected_translation -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows network.tests.test_arc_like_window_root_translation network.tests.test_arc_like_translation_centralizer network.tests.test_arc_like_corrected_translation network.tests.test_arc_like_nonconstant_drift -v`.
 
 ## Core structure
 
