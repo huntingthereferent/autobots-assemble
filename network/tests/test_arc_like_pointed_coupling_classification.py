@@ -53,7 +53,7 @@ class UnifiedPointedCouplingTests(unittest.TestCase):
                     ranks[r.constraint_rank]+=1
                     branch_counts[r.branch]+=1
         self.assertEqual(branch_counts,{"ZERO_TRACE":162,"NONZERO_TRACE":324})
-        self.assertEqual(ranks,{3:14,4:28,5:100,6:120,7:216})
+        self.assertEqual(ranks,{3:14,4:28,5:100,6:128,7:216})
 
     def test_preserve_zero_trace_available_orders_and_graph_components(self):
         examples=((ZERO_THREE,(3,),1),(ZERO_NINE,(9,),1),
