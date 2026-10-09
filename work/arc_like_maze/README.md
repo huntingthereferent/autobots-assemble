@@ -324,11 +324,155 @@ Tests, from the repository root:
 python -m unittest network.tests.test_arc_like_vertical -v
 ```
 
+## The inverse limit: exact coherence without a last dimension
+
+[`inverse_limit.py`](inverse_limit.py) defines the next mathematical layer,
+rather than drawing or manually programming an ARC-like maze.
+
+### Which state spaces are in the limit?
+
+Here `S_d = F_3^d` denotes the **full** d-coordinate state space for each
+fixed `phi=(0,a,b)`, d >= 3, with the forgetful map `pi_d` dropping the
+newest coordinate. The inverse limit is
+
+```text
+S_infinity(phi) = { (x_0,x_1,...) : each x_i in F_3 }
+pi_d(x_0,...,x_d) = (x_0,...,x_{d-1})
+```
+
+This is the full product of countably many F_3 coordinates. Every finite
+prefix has a compatible extension, and it is independent of a chosen
+finite cut-off. **It is not identical to the set of states reachable by a
+finite A/B word from the origin.** For example, `phi=(0,0,0)` has only
+nine origin-reachable states at every checked depth, even though the full
+spaces still have `3^d` states.
+
+The operations are defined coordinatewise, modulo 3:
+
+```text
+A(x)_0 = x_0+1;           A(x)_i = x_i (i>=1)
+
+B(x)_0 = x_0
+B(x)_1 = x_1+x_0+1
+B(x)_2 = x_2+phi[x_1]
+B(x)_i = x_i+x_(i-1)     (i>=3)
+```
+
+Every output coordinate depends only on a finite input prefix; hence
+the maps are defined at **every** finite depth and on the entire inverse
+limit without guessing an infinite truncation. The same dependence
+proves `pi_d T_(d+1) = T_d pi_d` for both actions, all depths.
+
+Both operations are invertible. The inverse of A subtracts one from
+coordinate zero. The inverse of B recovers, in order:
+
+```text
+x_0 = y_0
+x_1 = y_1-x_0-1
+x_2 = y_2-phi[x_1]
+x_i = y_i-x_(i-1)       (i>=3)
+```
+
+Thus the inverse limit is **closed under A, B, and their inverses**,
+and these maps are continuous homeomorphisms in the product topology.
+This is an exact mathematical statement about these declared rules;
+it is **not** a certificate of periodicity for every infinite state
+or an end to the availability of more coordinates.
+
+### The stronger stopping point is relational, not finite-state
+
+The nine parameter-world towers have exactly **five projectively
+compatible rooted A/B equivalence classes** under the admitted rules:
+the zero vector and four nonzero `+/-` pairs. Necessity follows from
+the already exhaustive rooted depth-3 classification: any family of
+projectively compatible state alignments must restrict to a valid
+depth-3 alignment. Sufficiency holds for every dimension by the
+explicit scaling map below.
+
+Given `s in {1,2}`, `phi' = s*phi (mod 3)`, set
+
+```text
+f_s(x_0,x_1,x_2,x_3,...)
+  = (x_0,x_1,s*x_2,s*x_3,...)
+```
+
+For both actions and every finite coordinate, the equations directly
+give
+
+```text
+f_s(T_phi(x,a)) = T_(s*phi)(f_s(x),a)
+pi_d(f_s(x))    = f_s(pi_d(x))
+```
+
+The inverse is another scaling by `s^-1` in F_3. Thus the
+**same higher-level A/B relation aligns every depth**, even as each
+concrete world acquires new coordinates. The family of projectively
+coherent *parameter equivalence classes* has stopped gaining classes
+in this scope. The unbounded state-space construction itself has **not**
+terminated.
+
+This is compatible with the earlier 384 reversible nonlinear
+**world-parameter** constructors. Those constructors permute the
+well-defined five tower classes but may move between *different*
+classes; they are not automatically state-level conjugacies.
+
+### Explicit false stopping witness
+
+Starting at the infinite zero point with `phi=(0,1,2)`, the word
+`BBB` has a zero projection at depth three but nonzero fourth
+coordinate:
+
+```text
+pi_3(BBB(0,0,...)) = (0,0,0)
+pi_4(BBB(0,0,...)) = (0,0,0,1)
+```
+
+Therefore a closed *finite* path is not necessarily a loop in the
+inverse-limit state. Agreement on N coordinates never certifies
+infinite equality: a later coordinate can still differ.
+
+`TowerPoint` represents a point lazily through a stable digit oracle
+and finite action history. It supplies exact requested prefixes,
+inverse action witnesses, and finite prefix comparisons; it refuses
+to infer equality of arbitrary infinite oracles. The finite
+`audit_prefixes` result is labeled `FINITE_PREFIX_VERIFIED`,
+never an unlimited proof just because tests reached depth eight.
+
+### Proof depth, tested depth, and remaining boundary
+
+**Algebraic all-depth claims (conditional on the declared formula):**
+triangular projection coherence, existence of inverse actions,
+explicit scaling conjugacy, and five projectively compatible classes
+(because all possible distinct classes already fail at depth three).
+
+**Executable checks:** the new focused tests exercise several
+finite depths, arbitrary finite-support initial coordinates, action
+inverses, scaling compatibility, and the `BBB` false-closure
+counterexample. These checks support the implementation but are not
+the sole justification for the algebraic statements.
+
+**Not yet established:** a universal inverse A/B stopping principle;
+a canonical choice of admissible constructions beyond the nine
+`phi` worlds; finite-action reachability of arbitrary infinite
+points; true universal periodicity; an ARC solve or rendered maze.
+
+Run:
+
+```bash
+python -m unittest network.tests.test_arc_like_inverse_limit -v
+```
+
+**Next:** decide, mathematically, which new construction rules are
+admissible at the inverse-limit level, and test whether they preserve
+the five-class relational quotient or require a new relation. A
+closed inverse-limit action system and terminal closure of all
+possible constructions are distinct statements.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** determine whether repeated nontrivial fibers admit a stable higher-order relation under unbounded depth, with an explicit criterion for terminating construction. Do not confuse a three-turn fiber cycle with an end to constructing dimensions.
+- **Next:** test which newly admitted construction rules respect the inverse-limit five-class quotient, while keeping universal inverse A/B closure unresolved. Do not mistake compatible infinite construction for a final finite depth.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
