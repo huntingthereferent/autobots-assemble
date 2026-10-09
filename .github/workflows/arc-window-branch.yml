@@ -10,6 +10,9 @@ on:
       - 'work/arc_like_maze/window_two.py'
       - 'work/arc_like_maze/nondiagonal_transport.py'
       - 'network/tests/test_arc_like_window_branch.py'
+      - 'work/arc_like_maze/window_word_collision.py'
+      - 'work/arc_like_maze/window_word_collision_arithmetic_audit.py'
+      - 'network/tests/test_arc_like_window_word_collision.py'
       - '.github/workflows/arc-window-branch.yml'
   workflow_dispatch:
 
@@ -29,3 +32,7 @@ jobs:
         run: python -m unittest network.tests.test_arc_like_window_branch -v
       - name: Independent arithmetic witnesses
         run: python -m work.arc_like_maze.window_branch_arithmetic_audit
+      - name: Fifth-letter word collision regression tests
+        run: python -m unittest network.tests.test_arc_like_window_word_collision -v
+      - name: Independent 36-world arithmetic witness
+        run: python -m work.arc_like_maze.window_word_collision_arithmetic_audit
