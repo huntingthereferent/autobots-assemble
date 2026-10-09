@@ -1,4 +1,4 @@
-name: ARC-like window branch proof
+name: Finite-field transformation systems - focused proofs
 
 on:
   push:
@@ -20,6 +20,8 @@ on:
       - 'network/tests/test_arc_like_window_marked_arrows.py'
       - 'work/arc_like_maze/window_root_translation.py'
       - 'network/tests/test_arc_like_window_root_translation.py'
+      - 'work/arc_like_maze/translation_centralizer.py'
+      - 'network/tests/test_arc_like_translation_centralizer.py'
       - '.github/workflows/arc-window-branch.yml'
   workflow_dispatch:
 
@@ -51,3 +53,5 @@ jobs:
         run: python -m unittest network.tests.test_arc_like_window_marked_arrows -v
       - name: Central A/B root translation and mixed witness regression
         run: python -m unittest network.tests.test_arc_like_window_root_translation -v
+      - name: Two-predecessor centralizer criterion and dimensional obstructions
+        run: python -m unittest network.tests.test_arc_like_translation_centralizer -v
