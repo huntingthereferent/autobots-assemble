@@ -334,10 +334,18 @@ admitting respectively **81, 27, or 9** fifth-coordinate tables
 per configuration; **8,100 combinations** are admitted overall.
 A separate 81-by-36 matrix audit certifies that all admitted
 corrected transformations retain order nine within this grammar.
+The complementary [zero-trace theorem](work/arc_like_maze/ZERO_TRACE_LIFT.md)
+instead classifies 162 order-three fourth-coordinate configurations,
+including 27-state graphs with three connected components.
+There are **22,410** admitted fifth-coordinate combinations:
+**9,918** permit only order three, **11,304** only order nine, and
+**1,188** permit both, depending on explicitly recorded correction
+constants. Signed-cycle obstructions and distinguished points
+remain separate from the cyclic-order classification.
 This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows network.tests.test_arc_like_window_root_translation network.tests.test_arc_like_translation_centralizer network.tests.test_arc_like_corrected_translation network.tests.test_arc_like_nonconstant_drift network.tests.test_arc_like_higher_coupling_lift network.tests.test_arc_like_fifth_coordinate_lift network.tests.test_arc_like_variable_fourth_lift -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows network.tests.test_arc_like_window_root_translation network.tests.test_arc_like_translation_centralizer network.tests.test_arc_like_corrected_translation network.tests.test_arc_like_nonconstant_drift network.tests.test_arc_like_higher_coupling_lift network.tests.test_arc_like_fifth_coordinate_lift network.tests.test_arc_like_variable_fourth_lift network.tests.test_arc_like_zero_trace_lift -v`.
 
 ## Core structure
 
