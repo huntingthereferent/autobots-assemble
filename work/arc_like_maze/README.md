@@ -1343,11 +1343,69 @@ not invertible; the normal form does not claim to restore it.
 **Next:** probe an independently justified operator beyond the diagonal
 gauge family, retaining full-state evidence or a precise break witness.
 
+## Non-diagonal state construction — closed relation, open old schema
+
+[Mathematical report](NONDIAGONAL_TRANSPORT.md) ·
+[implementation](nondiagonal_transport.py) ·
+[12 focused tests](../../network/tests/test_arc_like_nondiagonal_transport.py)
+
+**Current referent:** The marked finite-stem diagonal system has
+been constructed and its rooted witnesses preserved. Rather
+than repeating the existing diagonal gauges, construct a
+different state-space operation and check both relational
+preservation and its representation boundary.
+
+A nonlinear shear `H_c(x)_2=x_2+c*x_1^2` over `F_3` fixes
+the origin, is invertible, and commutes with all finite-depth
+projections. Conjugating the marked A/B actions by this map
+gives constructed laws `T_c=H_c T H_-c`. The rule `c->c+1`
+generates three **concretely different** B laws with an exact
+three-turn return. Their all-depth relations align via
+`H_(e-c)`; therefore, this is a **valid non-diagonal
+construction**, not a newly inequivalent A/B class.
+
+It also reveals a hard schema boundary: every old
+`Process` has `B(0,0,0)_2=0`, while the sheared construction
+has `B_c(0,0,0)_2=c` for c=1,2 (for both allowed root
+gains). No old table `p_0(x_1)` satisfying `p_0(0)=0`
+can represent those concrete actions. Being outside the
+old description **does not** mean the worlds are
+mathematically non-equivalent: their exact H-conjugacies
+are explicitly known.
+
+The marked-arrow representation now carries this general
+alignment as `H_target * M_witness * H_source^-1`,
+retaining the literal coinductive scalar witness inside
+the overall nonlinear map. Compatible arrows compose
+and invert. Re-rooting transports the marked boundary
+and the original witness tail; arbitrary deleted stems
+are not claimed to be recoverable.
+
+Independent finite arithmetic checked 58,806 conjugacy
+comparisons, 9,801 inverse identities, and 9,801
+projection identities through depth seven for a
+nontrivial marked-rule case. This is different from
+running the 12 committed Python regression tests; those
+tests require explicit execution for a PASS assertion.
+
+**CLOSED** for this chosen three-element shear-conjugacy
+group. **OPEN** for the old process-rule schema.
+**UNKNOWN** whether other admitted non-diagonal
+constructions introduce genuinely new relational
+classes or can be described by a minimal extended
+coupling system.
+
+**Next:** define a justified broader transition-law
+schema that carries the new x0 dependence rather than
+silently suppressing it. Test independent non-diagonal
+operators against it. This remains math-first,
+not an ARC game implementation.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** examine non-gauge process constructions for witnessed all-depth A/B preservation, including explicit non-equivalence when an operator breaks the current relation.
+- **Next:** construct the smallest general transition schema that admits the verified x0-dependent B law; then test which truly independent operations preserve or break the new relation. Preserve the existing all-depth non-diagonal conjugacy as witness, not a new inequivalent class.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
