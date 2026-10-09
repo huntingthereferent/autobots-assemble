@@ -182,7 +182,6 @@ def audit_stemmed() -> StemOperatorAudit:
         failure += 1
     return StemOperatorAudit('CLOSED_STEM_GAUGE_INTERCHANGE',len(gauges),len(templates),checks,squares,failure)
 
-
 @dataclass(frozen=True)
 class GaugeStep:
     source: StemGauge
