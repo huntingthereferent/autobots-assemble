@@ -50,16 +50,49 @@ Planned test assertions imply a **hypothesized** result of **2/6 control** vs **
 
 Test also checks source-address conservation, goal blindness of the generator, equal maximum budgets, no live tasks or lineage mutations, and identical results under a four-evaluation budget (construction only reaches its new proposals after its four witnessed sources).
 
+## Third arm: same witnessed values WITHOUT A/B
+
+The first two-arm comparison cannot attribute any improvement uniquely to
+A/B: construction receives four extra candidate trials.
+
+A stronger control is now committed in the same benchmark:
+
+- **Blind Cartesian recombination:** extracts exactly the same observed
+  relation names and source values, but enumerates their unobserved product
+  without using A/B, information closure, or proof-block restrictions.
+- It receives the same first four witnessed candidates, the same native
+  acceptance checks, the same goals, and the same eight-check cap.
+- The benchmark asserts whether its full candidate inventory matches
+  A/B's inventory, and measures both task acceptance and native evaluation
+  counts. The blind generator does not see the goals.
+
+For **these two binary fixture families**, all three fields cover two
+values and the first-step A/B classes are aligned with one field. Under
+these conditions, naive Cartesian recombination and proof-constrained A/B
+are expected to produce **the same four novel full relation tuples**.
+
+**Critical falsifying control:** If this passes, the expected result
+is that both combinatorial arms can complete 4/6 native API goals at an
+eight-check budget, compared with 2/6 for evidence-only replay. This
+would support only a benefit from *considering combinations*, **not** a
+unique improvement attributable to A/B. Ordering and total evaluation
+costs may differ; these also need actual observed runner output.
+
+We should only claim an A/B-specific benefit after a held-out case
+where the coarsest proof-partition changes test cost, reduces incompatible
+structures, or discovers a necessary relationship the blind control
+cannot preserve under equal budget. No such result has yet been shown.
+
 ## Execution status / GitHub Actions blocker
 
-The benchmark test and GitHub Actions workflow edits are committed.
+The three-arm benchmark and GitHub Actions workflow edits are committed.
 
 A prior focused workflow, **before this benchmark**, passed 67/67 tests:
 https://github.com/huntingthereferent/language-network/actions/runs/37890778461
 
 The *new* benchmark workflow **has not executed successfully**, so there is no trustworthy task-completion result yet. The first new focused run
 https://github.com/huntingthereferent/language-network/actions/runs/37893065430
-reported failure with **no recorded job steps**, and its log download returned `BlobNotFound`. Re-running its failed job again resulted in a failure with **no recorded job steps**. The broad `protocol-tests` run at the same time likewise failed with no steps. This does **not** establish any Python assertion failure or prove the cause of the CI blockage.
+reported failure with **no recorded job steps**, and its log download returned `BlobNotFound`. GitHub's workflow metadata also showed `runner_id: 0` for the failed job; the runner was never assigned. The specific platform/account cause is not established. Re-running its failed job again resulted in a failure with **no recorded job steps**. The broad `protocol-tests` run at the same time likewise failed with no steps. This does **not** establish any Python assertion failure or prove the cause of the CI blockage.
 
 Another focused run after improving per-task metrics:
 https://github.com/huntingthereferent/language-network/actions/runs/37893348278
@@ -71,7 +104,7 @@ When an online runner is available:
 python -m unittest discover -s network/tests -p 'test_ab_construction_comparison.py' -v
 ```
 
-The aggregate test prints a single `AB_CONSTRUCTION_HELD_OUT_COMPARISON` JSON record including six scenario outcomes, both candidate counts, total successful tasks and native API check counts. Review that actual log before recording any completed-task scores.
+The aggregate test prints `AB_CONSTRUCTION_HELD_OUT_COMPARISON` and `AB_CONSTRUCTION_THREE_ARM_CONTROL` JSON records including the six scenario outcomes and three-arm success/evaluation costs. Review that actual log before recording any completed-task scores.
 
 ## Research boundary
 
