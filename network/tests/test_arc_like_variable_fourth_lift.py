@@ -19,8 +19,9 @@ ZERO=(0,)*9
 
 
 def param(rank,gain=1):
-    return FourthCoordinateParameters(
-        gain,Q,{5:P5,6:P6,7:P7}[rank])
+    offsets=({5:P5,6:P6,7:P7} if gain==1 else
+             {5:P5,6:(0,0,1),7:(0,1,0)})
+    return FourthCoordinateParameters(gain,Q,offsets[rank])
 
 
 class VariableFourthTests(unittest.TestCase):
