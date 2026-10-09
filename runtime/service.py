@@ -123,16 +123,34 @@ class EcosystemService:
         generator: Generator | None = None,
         intent: Literal["construct", "synthesize", "simulate", "alternatives"],
         max_candidates: int = 32,
+        mode: Literal["preserve", "explore"] = "preserve",
     ) -> tuple[ABFrame, ...]:
         """Opt-in, read-only construction entry for the existing A/B agent.
 
-        Returns standard ABFrame values marked PROPOSED. This deliberately
-        neither schedules AgentLineage nor admits evidence; the caller must
-        use the ordinary witness-gated evaluator to test each proposal.
+        Returns standard ABFrame values marked PROPOSED. Default preserve\n        retains the original quotient. Explicit explore crosses quotient\n        boundaries but inherits NO continuation category. Neither schedules\n        AgentLineage nor admits evidence; a native witness is still required.
         """
         from runtime.ab_construction import (
             inverse_fibers, project_candidates, frame_for_candidate,
         )
+
+        if mode not in {"preserve", "explore"}:
+            raise ValueError("construction mode must be preserve or explore")
+        if mode == "explore":
+            if generator is not None:
+                raise ValueError("explore mode uses the evidence-derived generator only")
+            from runtime.ab_relation_generator import derive_exploratory_constructions
+
+            return tuple(
+                frame_for_candidate(proposal)
+                for proposal in derive_exploratory_constructions(
+                    occurrences, state,
+                    source_locators=source_locators,
+                    witness_contract=witness_contract,
+                    horizon=horizon,
+                    intent=intent,
+                    max_candidates=max_candidates,
+                )
+            )
 
         if generator is None:
             # Default construction is derived from witnessed relations.
