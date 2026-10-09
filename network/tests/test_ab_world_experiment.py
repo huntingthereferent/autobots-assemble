@@ -112,6 +112,107 @@ class SimulatedWorldExperiments(unittest.TestCase):
         self.assertEqual(experiment.trials[3].source_locators,
                          ("source:room0-open",))
 
+    def test_new_simulated_classes_are_valid_next_ab_input(self):
+        exp = run_simulation_probe(
+            generated(), world=simulation(),
+            action_path=("advance", "advance"),
+        )
+        self.assertTrue(exp.complete)
+        self.assertEqual(len(exp.observed_occurrences), 4)
+        self.assertEqual(len(exp.observed_locators), 4)
+        restored = inverse_fibers(
+            exp.observed_occurrences,
+            exp.information,
+            source_locators=exp.observed_locators,
+            witness_contract="SIMULATION ONLY: nested chambers two actions",
+            horizon=2,
+        )
+        self.assertEqual(tuple(len(f.source_indices) for f in restored), (2, 1, 1))
+        self.assertTrue(all(ref.startswith("simulation://") for f in restored
+                            for ref in f.source_locators))
+
+    def test_missing_relation_becomes_explicit_wall(self):
+        exp = run_simulation_probe(
+            generated(),
+            world=simulation(relations=lambda s: {"gate0": s["gate0"]}),
+            action_path=("advance", "advance"),
+        )
+        self.assertTrue(exp.complete)
+        self.assertIsNone(exp.information)
+        self.assertEqual(exp.observed_occurrences, ())
+        self.assertIn("missing relation", exp.unresolved_boundary)
+
+    def test_existing_service_full_propose_then_simulate_loop(self):
+        base = (
+            ABOccurrence.create(
+                referent="nested-chamber-world",
+                relations={"gate0": 0}, continuation=(0,),
+            ),
+            ABOccurrence.create(
+                referent="nested-chamber-world",
+                relations={"gate0": 1}, continuation=(1,),
+            ),
+        )
+        with TemporaryDirectory(prefix="ab_world_service_") as folder:
+            svc = EcosystemService(data_dir=folder)
+            previous = svc.runtime.snapshot()
+            frames = svc.propose_ab_constructions(
+                occurrences=base,
+                state=information_closure(base),
+                source_locators=("source:closed", "source:open"),
+                witness_contract="prior one-action chamber experiment",
+                horizon=1,
+                generator=lambda f: (
+                    {"room": 0, "gate0": f.category, "gate1": g,
+                     "irrelevant_variant": 2 * f.category + g}
+                    for g in (0, 1)
+                ),
+                intent="construct",
+                max_candidates=4,
+            )
+            exp = svc.simulate_ab_constructions(
+                frames=frames, world=simulation(),
+                action_path=("advance", "advance"),
+                predict=lambda p, a: (p.category, p.category),
+            )
+            self.assertEqual(len(frames), 4)
+            self.assertEqual(len(exp.trials), 4)
+            self.assertEqual(exp.information.continuation_partition,
+                             ((0, 1), (2,), (3,)))
+            self.assertEqual(exp.trials[-1].status, "SIMULATED_COUNTEREXAMPLE")
+            self.assertEqual(previous, svc.runtime.snapshot())
+            self.assertEqual(svc.agent_lineage.roots_for_actor("james"), ())
+
+    def test_existing_service_refuses_tampered_proposal(self):
+        base = (
+            ABOccurrence.create(
+                referent="nested-chamber-world",
+                relations={"gate0": 0}, continuation=(0,),
+            ),
+            ABOccurrence.create(
+                referent="nested-chamber-world",
+                relations={"gate0": 1}, continuation=(1,),
+            ),
+        )
+        from runtime.ab_construction import frame_for_candidate
+        from runtime.ab_loop import ABFrame
+        frame = frame_for_candidate(generated()[0])
+        corrupted = ABFrame(
+            referent=frame.referent, direction=frame.direction,
+            current={**frame.current,
+                     "structure": {**frame.current["structure"], "gate1": 99}},
+            survives=frame.survives, edge=frame.edge,
+            provenance=frame.provenance,
+        )
+        with TemporaryDirectory(prefix="ab_world_bad_") as folder:
+            svc = EcosystemService(data_dir=folder)
+            with self.assertRaises(ValueError):
+                svc.simulate_ab_constructions(
+                    frames=(corrupted,), world=simulation(),
+                    action_path=("advance",),
+                )
+            self.assertEqual(svc.agent_lineage.roots_for_actor("james"), ())
+
     def test_missing_action_is_unknown_and_no_partial_quotient(self):
         experiment = run_simulation_probe(
             generated(), world=simulation(),
