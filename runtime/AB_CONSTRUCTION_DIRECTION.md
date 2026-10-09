@@ -93,6 +93,83 @@ The source locators are supplied by the caller, not verified by the
 inverse operation. The strings in this example are illustrative; they
 must not be claimed as real measurements.
 
+## General construction from witnessed relations — no custom generator
+
+The original API required a caller-supplied `generator(fiber)`. That tests
+the **evaluator** but cannot establish general construction: its design
+knowledge was hidden inside the task-specific generator.
+
+The existing `EcosystemService.propose_ab_constructions` now has an
+**evidence-derived default** when `generator` is omitted:
+
+```python
+frames = service.propose_ab_constructions(
+    occurrences=observed_occurrences,
+    state=information_closure(observed_occurrences),
+    source_locators=observed_source_locators,
+    witness_contract="exact tested continuation contract",
+    horizon=1,
+    intent="construct",  # or "alternatives", "synthesize", "simulate"
+    # No generator=...; use the SAME relation operation for any referent.
+)
+```
+
+The `runtime.ab_relation_generator.derive_relation_constructions`
+operation uses the sufficient *witnessed* A/B proof partition:
+
+1. Find a sufficient relation subset `K` from the existing A/B
+   information closure; hold its values fixed within each proof block.
+2. Identify other relation names whose values varied in **that same
+   proof block**.
+3. Recombine only values actually witnessed for those names. No new
+   relation names, values, physics, rules, or connection types are added.
+4. Skip combinations already present in the witnessed occurrence family.
+5. Store an exact witness locator for each source component and emit
+   **PROPOSED** structures. Limit dimensions, enumerations, and outputs.
+6. Submit candidates to the **same** A/B evaluator using a native
+   observer or explicit controlled simulator. Counterexamples refine
+   the categories; absent behavioral evidence stays **UNKNOWN**.
+
+This is genuinely **independent of relation vocabulary**; the same
+operation is tested with room configurations, workflow conditions,
+interface layout relations, and nested JSON-valued source observations.
+The domain still supplies an independent test of whether its resulting
+structure *functions*. A/B cannot infer unobserved mechanics simply
+because a syntactic recombination is possible.
+
+The domain-neutral structure is:
+
+```python
+{
+    "kind": "relation-recombination",
+    "relation_values": { "... actual relation names ...": "witnessed values" },
+    "construction_contract": "UNVERIFIED candidate; no native observation",
+    "proof_source_names": ["... sufficient relation names ..."],
+    "proof_block_source_indices": [0, 1],
+    "component_source_locators": {"relation_name": "witness:source-id"},
+}
+```
+
+If there are no unobserved combinations to form, construction returns
+**zero candidates**. If relation fields are missing, values are opaque,
+or the source contract is insufficient, it must stop or report the
+missing referent rather than invent one. A tested continuation quotient
+is only valid for its **witnessed action horizon**. Preserving a
+relation subset in an *unobserved combination* is a hypothesis, not a
+theorem of behavioral equivalence.
+
+This tests a **general relational construction primitive**, not yet a
+universal constructor of executable software, games, or physical
+systems. Tests that merely rename fields also do not prove
+cross-domain functionality; independent native behavioral trials are
+still needed.
+
+Focused cross-referent regression:
+
+```sh
+python -m unittest discover -s network/tests -p 'test_ab_generic_construction.py' -v
+```
+
 ## The next layer: executed simulation and A/B correction
 
 The construction entry does not itself create native game worlds. For an
@@ -219,7 +296,7 @@ was universally sufficient.
 2. Every candidate retains the source category, source indices,
    declared source locators, witness contract, and tested horizon.
 3. Generator output is always `PROPOSED`; it carries no `EvidenceRecord`.
-4. Candidate enumeration is bounded by both size and iteration attempts.
+4. Candidate enumeration is bounded by size, dimensions, proof-block scans,\n   and iteration attempts.
 5. An absent actual witness stays `UNKNOWN` or `READY` in the ordinary
    agent workflow; invalid predictions remain `PARTIAL`.
 6. `check_composition` is *structural*; the caller is responsible for
