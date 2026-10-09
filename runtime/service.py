@@ -106,6 +106,42 @@ class EcosystemService:
         # runtime persistence. Human tasks remain READY without an actor.
         self.orchestrator.step()
 
+    def propose_ab_constructions(
+        self,
+        *,
+        occurrences: Iterable[Any],
+        state: Any,
+        source_locators: Iterable[str],
+        witness_contract: str,
+        horizon: int,
+        generator: Any,
+        intent: str,
+        max_candidates: int = 32,
+    ) -> tuple[Any, ...]:
+        """Opt-in, read-only construction entry for the existing A/B agent.
+
+        Returns standard ABFrame values marked PROPOSED. This deliberately
+        neither schedules AgentLineage nor admits evidence; the caller must
+        use the ordinary witness-gated evaluator to test each proposal.
+        """
+        from runtime.ab_construction import (
+            inverse_fibers, project_candidates, frame_for_candidate,
+        )
+
+        sources = inverse_fibers(
+            occurrences, state,
+            source_locators=source_locators,
+            witness_contract=witness_contract,
+            horizon=horizon,
+        )
+        return tuple(
+            frame_for_candidate(proposal)
+            for proposal in project_candidates(
+                sources, generator, intent=intent,
+                max_candidates=max_candidates,
+            )
+        )
+
     def status(self) -> dict[str, Any]:
         snapshot = self.runtime.snapshot()
         by_status: dict[str, int] = {}
