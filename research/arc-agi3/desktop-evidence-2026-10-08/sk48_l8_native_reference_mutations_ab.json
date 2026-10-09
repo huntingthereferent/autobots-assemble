@@ -1,0 +1,863 @@
+{
+  "provenance": "reference-assisted, not blind ARC solution",
+  "native_public_only": true,
+  "baseline": {
+    "win": true,
+    "first_win_at": 24,
+    "clicks": [
+      [
+        3,
+        31,
+        4
+      ],
+      [
+        15,
+        7,
+        28
+      ]
+    ],
+    "native_levels": 8
+  },
+  "entry_sha256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+  "tested": 37,
+  "survivors": [
+    {
+      "kind": "swap",
+      "index": 19,
+      "win": true,
+      "first_win_at": 24,
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ],
+      "native_levels": 8,
+      "path": [
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        2,
+        3,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        6,
+        4,
+        4,
+        4,
+        4,
+        2,
+        3,
+        3,
+        3,
+        1
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 20,
+      "win": true,
+      "first_win_at": 24,
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ],
+      "native_levels": 8,
+      "path": [
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        2,
+        3,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        6,
+        4,
+        4,
+        4,
+        4,
+        3,
+        3,
+        2,
+        3,
+        1
+      ]
+    }
+  ],
+  "all_tests": [
+    {
+      "kind": "delete",
+      "index": 0,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          2,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 1,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          2,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 2,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          14,
+          31,
+          4
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 3,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 4,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 5,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 6,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 7,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 8,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 9,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 10,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 11,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 12,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 13,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 14,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 15,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 16,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 17,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 18,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 19,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 20,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 21,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 22,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "delete",
+      "index": 23,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 1,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          2,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 2,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          4,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          34
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 4,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 5,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 6,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 7,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 10,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 13,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          14,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 14,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          16,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 18,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 19,
+      "win": true,
+      "first_win_at": 24,
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ],
+      "native_levels": 8,
+      "path": [
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        2,
+        3,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        6,
+        4,
+        4,
+        4,
+        4,
+        2,
+        3,
+        3,
+        3,
+        1
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 20,
+      "win": true,
+      "first_win_at": 24,
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ],
+      "native_levels": 8,
+      "path": [
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        2,
+        3,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        6,
+        4,
+        4,
+        4,
+        4,
+        3,
+        3,
+        2,
+        3,
+        1
+      ]
+    },
+    {
+      "kind": "swap",
+      "index": 22,
+      "win": false,
+      "level": 7,
+      "state_name": "NOT_FINISHED",
+      "clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ]
+    }
+  ],
+  "reset_retries": 34
+}

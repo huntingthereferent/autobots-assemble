@@ -1,0 +1,2449 @@
+{
+  "game": "sk48",
+  "level": 2,
+  "history": "0-3 cycles of ACTIONn,ACTION7",
+  "full_horizon3_suffixes": 64,
+  "histories_per_count": 2,
+  "public_root_same": true,
+  "partition_counts": {
+    "((0,), (1,), (2,), (3,))": 64
+  },
+  "within_count_conflicts": [],
+  "native_public_only": true,
+  "no_game_clone": true,
+  "examples": {
+    "111": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:6ca6acf88e7b78c237"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:8622000a74a472ffed"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:8622000a74a472ffed"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:8622000a74a472ffed"
+        ]
+      }
+    },
+    "112": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "113": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:dc945902c31f835183"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ]
+      }
+    },
+    "114": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:394f68864cadea66bc"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:b194924b571b12d893",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ]
+      }
+    },
+    "121": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "122": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "123": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "124": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "131": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:dc945902c31f835183"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ]
+      }
+    },
+    "132": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "133": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:fcb31430cd35932356"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ]
+      }
+    },
+    "134": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "141": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:394f68864cadea66bc"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ]
+      }
+    },
+    "142": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "143": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "144": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:9c5d4ed3d59fc5dd3f"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ]
+      }
+    },
+    "211": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:8dde6194c0236f19fd"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:b194924b571b12d893"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:b194924b571b12d893"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:b194924b571b12d893"
+        ]
+      }
+    },
+    "212": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "213": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:fcb31430cd35932356"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ]
+      }
+    },
+    "214": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:263b40b341b1e29dbb"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ]
+      }
+    },
+    "221": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "222": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "223": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "224": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "231": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ]
+      }
+    },
+    "232": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "233": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "234": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "241": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ]
+      }
+    },
+    "242": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "243": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "244": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ]
+      }
+    },
+    "311": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:dc945902c31f835183"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:9af560f8d3878c960c"
+        ]
+      }
+    },
+    "312": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "313": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:fcb31430cd35932356"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ]
+      }
+    },
+    "314": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "321": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ]
+      }
+    },
+    "322": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "323": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "324": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "331": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:fcb31430cd35932356"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:6004e8822d3367f961"
+        ]
+      }
+    },
+    "332": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "333": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "334": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "341": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "342": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "343": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "344": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb531",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e4",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "411": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:394f68864cadea66bc"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:27957c5395476479bf"
+        ]
+      }
+    },
+    "412": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "413": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "414": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:9c5d4ed3d59fc5dd3f"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ]
+      }
+    },
+    "421": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:263b40b341b1e29dbb"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4a76f215a0866150e7"
+        ]
+      }
+    },
+    "422": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "423": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "424": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ]
+      }
+    },
+    "431": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:71b1f1cf6326cb957c"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:c194b26666f194421c"
+        ]
+      }
+    },
+    "432": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:9a357142c7766bbdb9"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:4bcd764909d6f58673"
+        ]
+      }
+    },
+    "433": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:96d278d2f4e46bb531"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:285a3570c9468741e4"
+        ]
+      }
+    },
+    "434": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:9a357142c7766bbdb9",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:4bcd764909d6f58673",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "441": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:9c5d4ed3d59fc5dd3f"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:9b60b53b34dabb544f"
+        ]
+      }
+    },
+    "442": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:c8e87ef96fddb89354"
+        ]
+      }
+    },
+    "443": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:59a8a28d1abf572ad0"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:582802a68ff65ca083"
+        ]
+      }
+    },
+    "444": {
+      "partition": [
+        [
+          0
+        ],
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ]
+      ],
+      "phase_trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:ededc486e1d8b98a96"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdec",
+          "1:NOT_FINISHED:d289478eadb8f6af37"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad0",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:d289478eadb8f6af37"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca083",
+          "1:NOT_FINISHED:c8e87ef96fddb89354",
+          "1:NOT_FINISHED:d289478eadb8f6af37"
+        ]
+      }
+    }
+  },
+  "elapsed_seconds": 16.83
+}

@@ -1,0 +1,16 @@
+{
+  "family": {
+    "up": 4,
+    "right": 5,
+    "histories": 126
+  },
+  "number_visible_classes": 5,
+  "one_step_actions": [
+    1,
+    2,
+    3,
+    4,
+    7
+  ],
+  "counterexamples": []
+}

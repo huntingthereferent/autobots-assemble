@@ -1,0 +1,18 @@
+from ab_relation_refinement import Witness,ab
+A=Witness("b8e5aebd8004",(("older","290e"),("predecessor","c785"),("level",5)),("f1","f2"))
+B=Witness("b8e5aebd8004",(("older","290e"),("predecessor","1b83"),("level",5)),("g1","g2"))
+x,y=ab(A,B)
+print("CN04",x,y)
+assert x.retained==( ("predecessor","c785"), )
+assert y.retained==( ("predecessor","1b83"), )
+C=Witness("same",(("foo",1),("bar","L"),("noise",9)),"left")
+D=Witness("same",(("foo",1),("bar","R"),("noise",9)),"right")
+u,v=ab(C,D)
+print("RENAMED",u,v)
+assert u.retained==( ("bar","L"), )
+assert v.retained==( ("bar","R"), )
+E=Witness(x,(("context","same"),),"next")
+F=Witness(x,(("context","same"),),"next")
+p,q=ab(E,F)
+assert p==q
+print("PASS generic A/B relation selection and recursive reuse")

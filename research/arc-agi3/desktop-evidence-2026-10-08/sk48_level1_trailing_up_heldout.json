@@ -1,0 +1,131 @@
+{
+  "method": "native public-frame history A/B",
+  "reference": "different counts, no original route",
+  "cases": [
+    {
+      "up": 2,
+      "right": 4,
+      "total": 15,
+      "public_classes": 3,
+      "trailing_classes": 3,
+      "split_trailing": {},
+      "merged_trailing": {},
+      "class_sizes": [
+        10,
+        4,
+        1
+      ],
+      "level_advances": 0
+    },
+    {
+      "up": 4,
+      "right": 4,
+      "total": 70,
+      "public_classes": 5,
+      "trailing_classes": 5,
+      "split_trailing": {},
+      "merged_trailing": {},
+      "class_sizes": [
+        35,
+        20,
+        10,
+        4,
+        1
+      ],
+      "level_advances": 0
+    },
+    {
+      "up": 4,
+      "right": 5,
+      "total": 126,
+      "public_classes": 5,
+      "trailing_classes": 5,
+      "split_trailing": {
+        "0": 5,
+        "1": 4,
+        "2": 3,
+        "3": 2
+      },
+      "merged_trailing": {
+        "d1fc318393f42e2840ff7ca3": [
+          0,
+          1
+        ],
+        "6dec0c0e85d7c5403ccb967f": [
+          0,
+          1,
+          2
+        ],
+        "0a301ed5d28094a239c03648": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "f9d4b4e2eeedd1e87f69eb97": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "class_sizes": [
+        40,
+        35,
+        30,
+        16,
+        5
+      ],
+      "level_advances": 0
+    },
+    {
+      "up": 3,
+      "right": 3,
+      "total": 20,
+      "public_classes": 1,
+      "trailing_classes": 4,
+      "split_trailing": {},
+      "merged_trailing": {
+        "e7b3f477bbd6cf8225ebfa9d": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "class_sizes": [
+        20
+      ],
+      "level_advances": 0
+    },
+    {
+      "up": 2,
+      "right": 5,
+      "total": 21,
+      "public_classes": 3,
+      "trailing_classes": 3,
+      "split_trailing": {
+        "0": 3,
+        "1": 2
+      },
+      "merged_trailing": {
+        "0a301ed5d28094a239c03648": [
+          0,
+          1
+        ],
+        "f9d4b4e2eeedd1e87f69eb97": [
+          0,
+          1,
+          2
+        ]
+      },
+      "class_sizes": [
+        10,
+        8,
+        3
+      ],
+      "level_advances": 0
+    }
+  ]
+}

@@ -29,17 +29,34 @@ function showError(err) {
   showError.timer = setTimeout(() => { errorBox.hidden = true; }, 5000);
 }
 
-function item(title, meta, extra) {
+function stateClass(value) {
+  // Status is external data, never an unescaped HTML attribute.
+  const token = String(value || "local").toLowerCase();
+  return /^[a-z-]+$/.test(token) ? token : "local";
+}
+
+function textMarker(className, value) {
+  const marker = document.createElement("span");
+  marker.className = className;
+  marker.textContent = value == null ? "" : String(value);
+  return marker;
+}
+
+function item(title, meta, extra = null) {
   const el = document.createElement("div");
   el.className = "item";
-  el.innerHTML =
-    '<div class="item-head">' +
-      '<div class="item-title"></div>' +
-      (extra || "") +
-    '</div>' +
-    '<div class="meta"></div>';
-  el.querySelector(".item-title").textContent = title;
-  el.querySelector(".meta").textContent = meta || "";
+  const head = document.createElement("div");
+  head.className = "item-head";
+  const label = document.createElement("div");
+  label.className = "item-title";
+  label.textContent = title == null ? "" : String(title);
+  head.append(label);
+  if (Array.isArray(extra)) head.append(...extra.filter(Boolean));
+  else if (extra instanceof Node) head.append(extra);
+  const description = document.createElement("div");
+  description.className = "meta";
+  description.textContent = meta == null ? "" : String(meta);
+  el.append(head, description);
   return el;
 }
 
@@ -88,10 +105,34 @@ function areaCard(area) {
   return el;
 }
 
+function openRelatedArea() {
+  const hash = decodeURIComponent(location.hash.slice(1));
+  if (!hash.startsWith("area-")) return;
+  const card = document.getElementById(hash);
+  if (!card || !card.classList.contains("area-card")) return;
+  const details = card.querySelector(".area-details");
+  if (details) details.open = true;
+  card.scrollIntoView({block: "start"});
+}
+
 async function refreshAreas() {
   const data = await api("/site_catalog.json");
   $("#area-grid").replaceChildren(...(data.areas || []).map(areaCard));
+  openRelatedArea();
 }
+function updateNavigationState() {
+  const locationHash = location.hash || "#home";
+  const links = [...document.querySelectorAll(".portal-nav .portal-link")];
+  const direct = links.find(link => link.getAttribute("href") === locationHash);
+  const fallback = locationHash.startsWith("#area-")
+    ? links.find(link => link.getAttribute("href") === "#areas") : null;
+  links.forEach(link => link.classList.toggle("active", link === (direct || fallback)));
+}
+window.addEventListener("hashchange", function() {
+  updateNavigationState();
+  openRelatedArea();
+});
+updateNavigationState();
 
 async function refreshStatus() {
   const s = await api("/api/status");
@@ -111,9 +152,11 @@ async function refreshStatus() {
   $("#stats").replaceChildren(...values.map(function(pair) {
     const el = document.createElement("article");
     el.className = "stat";
-    el.innerHTML = "<span></span><strong></strong>";
-    el.querySelector("span").textContent = pair[0];
-    el.querySelector("strong").textContent = pair[1];
+    const name = document.createElement("span");
+    name.textContent = pair[0];
+    const value = document.createElement("strong");
+    value.textContent = pair[1];
+    el.append(name, value);
     return el;
   }));
 }
@@ -144,7 +187,7 @@ async function refreshCalendar() {
     return item(
       e.title,
       when + (anchor ? " · " + anchor : "") + " · " + e.referent,
-      anchor ? '<span class="movement-anchor">' + anchor + '</span>' : ""
+      anchor ? textMarker("movement-anchor", anchor) : null
     );
   }));
 }
@@ -163,8 +206,14 @@ async function refreshTasks() {
     const admitted = Boolean(t.admitted_handoff_id);
     const result = t.result && t.result.status;
     const extra = admitted
-      ? '<span class="status ' + String(result || "ready").toLowerCase() + '">' + (result || "ADMITTED") + "</span>"
-      : '<button class="admit" data-id="' + t.task_id + '">Admit</button>';
+      ? textMarker("status " + stateClass(result || "ready"), result || "ADMITTED")
+      : document.createElement("button");
+    if (!admitted) {
+      extra.type = "button";
+      extra.className = "admit";
+      extra.dataset.id = t.task_id;
+      extra.textContent = "Admit";
+    }
     const el = item(t.title, t.assignee + " · " + t.referent, extra);
     const button = el.querySelector(".admit");
     if (button) {
@@ -186,6 +235,9 @@ async function refreshTasks() {
 
 let liveFeedState = {items: [], sources: [], fetched_at: ""};
 let liveFeedFilter = "balanced";
+let selectedTickerId = "";
+let sourceOnlyId = "";
+let lastRenderedSourceSnapshot = null;
 const TICKER_PREFERENCE_KEY = "continuityHiddenTickersV1";
 let hiddenTickers = readHiddenTickers();
 
@@ -366,6 +418,15 @@ function openTickerIds(root) {
 }
 
 function renderTickers() {
+  const tickerStrip = $("#feed-tickers");
+  const priorTrack = tickerStrip.querySelector(".ticker-marquee-track");
+  const priorWidth = priorTrack ? priorTrack.scrollWidth / 2 : 0;
+  const priorMatrix = priorTrack ? getComputedStyle(priorTrack).transform : "none";
+  const priorX = priorMatrix && priorMatrix !== "none"
+    ? new DOMMatrixReadOnly(priorMatrix).m41 : 0;
+  const progress = priorWidth > 0 ? ((-priorX / priorWidth) % 1 + 1) % 1 : 0;
+  const focusedTicker = tickerStrip.contains(document.activeElement)
+    ? document.activeElement.closest(".ticker-switch")?.dataset.ticker : "";
   const layers = tickerLayers(liveFeedState);
   const choices = layers.map(function(layer) {
     const label = document.createElement("label");
@@ -386,7 +447,7 @@ function renderTickers() {
       ? layer.id.slice(7).replace(/:/g, " / ") : layer.name));
     return label;
   });
-  const openIds = openTickerIds($("#feed-tickers"));
+  const openIds = openTickerIds($("#ticker-expanded"));
   const visible = layers.filter(layer => !hiddenTickers.has("*") && !hiddenTickers.has(layer.id));
   const visibleIds = new Set(visible.map(layer => layer.id));
   const children = new Map();
@@ -397,11 +458,80 @@ function renderTickers() {
     }
   });
   const projection = {...liveFeedState, tickerChildren: children};
-  const tickers = visible.filter(layer => !layer.parentId || !visibleIds.has(layer.parentId))
-    .map(layer => tickerCard(layer, projection, openIds, children.get(layer.id) || []));
+  const roots = visible.filter(layer => !layer.parentId || !visibleIds.has(layer.parentId));
+  const selected = roots.find(layer => layer.id === selectedTickerId);
+  if (!selected) selectedTickerId = "";
+
+  // The moving strip carries the index, not its expanded witness content.
+  // Expanded details must live outside overflow; all native source witnesses survive.
+  const track = document.createElement("div");
+  track.className = "ticker-marquee-track";
+  [false, true].forEach(function(duplicate) {
+    const run = document.createElement("div");
+    run.className = "ticker-marquee-run";
+    if (duplicate) run.setAttribute("aria-hidden", "true");
+    roots.forEach(function(layer) {
+      const data = tickerSummary(layer, liveFeedState);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "ticker-switch";
+      button.dataset.ticker = layer.id;
+      button.setAttribute("aria-controls", "ticker-expanded");
+      button.setAttribute("aria-expanded", String(layer.id === selectedTickerId));
+      if (duplicate) button.tabIndex = -1;
+
+      const label = document.createElement("strong");
+      label.textContent = layer.name;
+      const count = document.createElement("span");
+      count.className = "ticker-switch-count";
+      count.textContent = data.status;
+      const headline = document.createElement("span");
+      headline.className = "ticker-switch-headline";
+      headline.textContent = data.latest ? data.latest.title : data.reason || "";
+      button.title = [layer.name, data.status, headline.textContent].filter(Boolean).join(" · ");
+      button.append(label, count, headline);
+      button.addEventListener("click", function() {
+        selectedTickerId = selectedTickerId === layer.id ? "" : layer.id;
+        renderTickers();
+        const expanded = $("#ticker-expanded");
+        if (!expanded.hidden) expanded.scrollIntoView({block: "nearest"});
+      });
+      run.append(button);
+    });
+    track.append(run);
+  });
+  tickerStrip.replaceChildren(track);
+  tickerStrip.hidden = roots.length === 0;
+  tickerStrip.classList.toggle("has-selection", Boolean(selectedTickerId));
+  const duration = Math.max(45, roots.length * 4.5);
+  track.style.animationDuration = duration + "s";
+  if (progress) track.style.animationDelay = (-progress * duration) + "s";
+  if (focusedTicker) {
+    const next = [...tickerStrip.querySelectorAll(".ticker-marquee-run:first-child .ticker-switch")]
+      .find(button => button.dataset.ticker === focusedTicker);
+    if (next) next.focus({preventScroll: true});
+  }
+
+  const expanded = $("#ticker-expanded");
+  if (selected) {
+    const heading = document.createElement("div");
+    heading.className = "ticker-expanded-heading";
+    const title = document.createElement("strong");
+    title.textContent = selected.name + " / native witnesses";
+    const close = document.createElement("button");
+    close.type = "button";
+    close.textContent = "Close";
+    close.addEventListener("click", function() {
+      selectedTickerId = "";
+      renderTickers();
+    });
+    heading.append(title, close);
+    const card = tickerCard(selected, projection, openIds, children.get(selected.id) || []);
+    card.open = true;
+    expanded.replaceChildren(heading, card);
+  } else expanded.replaceChildren();
+  expanded.hidden = !selected;
   $("#ticker-choices").replaceChildren(...choices);
-  $("#feed-tickers").replaceChildren(...tickers);
-  $("#feed-tickers").hidden = tickers.length === 0;
 }
 
 function trailSessionId() {
@@ -507,9 +637,9 @@ async function recordLiveTouch(item) {
     provider: item.provider || item.source_name || item.source_id || "",
     label: item.title || "",
     referent_before: state.referent,
-    relation: "open live feed item",
+    relation: "external source link activated",
     referent_after: item.title || item.url,
-    what_changed: "moved from the mixed live feed into an external source",
+    what_changed: "external source navigation requested; destination load is not observed by this page",
     provenance: [
       "live-feed:" + (item.source_id || "unknown"),
       "provider:" + (item.provider || item.source_name || "unknown"),
@@ -542,18 +672,6 @@ async function recordLiveTouch(item) {
     }
     throw err;
   }
-}
-
-function openLiveItem(item) {
-  const popup = window.open("about:blank", "_blank");
-  recordLiveTouch(item).catch(showError).finally(function() {
-    if (popup) {
-      popup.opener = null;
-      popup.location = item.url;
-    } else {
-      window.location.href = item.url;
-    }
-  });
 }
 
 function liveFeedCard(item) {
@@ -591,13 +709,20 @@ function liveFeedCard(item) {
 
   const title = document.createElement("h3");
   title.className = "live-title";
-  const titleLink = document.createElement("button");
-  titleLink.type = "button";
+  const href = safeExternalSourceUrl(item.url);
+  const titleLink = document.createElement(href ? "a" : "span");
   titleLink.className = "live-title-link";
   titleLink.textContent = item.title || "(untitled)";
-  titleLink.addEventListener("click", function() {
-    openLiveItem(item);
-  });
+  if (href) {
+    titleLink.href = href;
+    titleLink.target = "_blank";
+    titleLink.rel = "noopener noreferrer";
+    // Source access is native/immediate. Record the witnessed movement
+    // asynchronously; a delayed trace POST must not hold navigation hostage.
+    titleLink.addEventListener("click", function() {
+      recordLiveTouch(item).catch(showError);
+    });
+  }
   title.appendChild(titleLink);
 
   const byline = document.createElement("div");
@@ -624,12 +749,27 @@ function liveFeedCard(item) {
   return article;
 }
 
-function renderLiveSources() {
-  const rows = (liveFeedState.sources || []).map(function(source) {
-    const el = document.createElement("div");
-    el.className = "live-source-status" + (source.ok ? " ok" : " unavailable");
+function safeExternalSourceUrl(value) {
+  try {
+    const url = new URL(value);
+    return (url.protocol === "https:" || url.protocol === "http:") ? url.href : "";
+  } catch (_) { return ""; }
+}
 
-    const copy = document.createElement("div");
+function renderLiveSources() {
+  [$("#live-sources"), $("#mobile-live-sources")].forEach(function(target) {
+  if (!target) return;
+  const priorOpen = new Set([...target.querySelectorAll(".live-source-status[open]")]
+    .map(row => row.dataset.source));
+  const rows = (liveFeedState.sources || []).map(function(source) {
+    const el = document.createElement("details");
+    el.className = "live-source-status" + (source.ok ? " ok" : " unavailable");
+    el.dataset.source = source.id;
+    el.open = priorOpen.has(source.id);
+
+    const head = document.createElement("summary");
+    const copy = document.createElement("span");
+    copy.className = "live-source-copy";
     const name = document.createElement("strong");
     name.textContent = source.name;
     const meta = document.createElement("span");
@@ -637,14 +777,72 @@ function renderLiveSources() {
       ? source.count + " live · " + source.access
       : (source.reason || source.error || "unavailable");
     copy.append(name, meta);
-
     const mark = document.createElement("span");
     mark.className = "source-state";
     mark.textContent = source.ok ? "LIVE" : "—";
-    el.append(copy, mark);
+    head.append(copy, mark);
+
+    const body = document.createElement("div");
+    body.className = "live-source-expanded";
+    const items = (liveFeedState.items || []).filter(item => item.source_id === source.id);
+    if (items.length) {
+      const view = document.createElement("button");
+      view.type = "button";
+      view.className = "source-filter-action";
+      view.textContent = "View in main research feed ↗";
+      view.addEventListener("click", function() {
+        sourceOnlyId = source.id;
+        // A source-specific entrance must not inherit an incompatible role tab.
+        // Latest includes every sampled witness owned by this one provider.
+        liveFeedFilter = "latest";
+        document.querySelectorAll("[data-live-filter]").forEach(function(button) {
+          button.classList.toggle("active", button.dataset.liveFilter === "latest");
+        });
+        renderLiveFeed();
+        $("#research-index").scrollIntoView({block: "start"});
+      });
+      body.append(view);
+      const list = document.createElement("ul");
+      list.className = "native-source-links";
+      items.forEach(function(item) {
+        const li = document.createElement("li");
+        const href = safeExternalSourceUrl(item.url);
+        const link = document.createElement(href ? "a" : "span");
+        link.textContent = item.title || "(untitled source item)";
+        if (href) {
+          link.href = href;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.addEventListener("click", function() { recordLiveTouch(item).catch(showError); });
+        }
+        li.append(link);
+        list.append(li);
+      });
+      body.append(list);
+    } else {
+      const empty = document.createElement("p");
+      empty.textContent = source.reason || source.error || "No fetched source witnesses in this sample.";
+      body.append(empty);
+    }
+    const reference = document.createElement("div");
+    reference.className = "live-source-reference";
+    [[source.feed_url, "Native feed ↗"], [source.documentation, "Provider documentation ↗"]]
+      .forEach(function(pair) {
+        const href = safeExternalSourceUrl(pair[0]);
+        if (!href) return;
+        const link = document.createElement("a");
+        link.href = href;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = pair[1];
+        reference.append(link);
+      });
+    body.append(reference);
+    el.append(head, body);
     return el;
   });
-  $("#live-sources").replaceChildren(...rows);
+  target.replaceChildren(...rows);
+  });
 }
 
 function balancedLiveItems(items) {
@@ -737,7 +935,14 @@ function liveEventCard(group) {
 }
 
 function renderLiveFeed() {
-  const all = liveFeedState.items || [];
+  const all = sourceOnlyId
+    ? (liveFeedState.items || []).filter(item => item.source_id === sourceOnlyId)
+    : (liveFeedState.items || []);
+  const selectedSource = (liveFeedState.sources || []).find(x => x.id === sourceOnlyId);
+  $("#research-index h2").textContent = selectedSource
+    ? selectedSource.name + " / source observations"
+    : "Current source observations";
+  $("#clear-source-filter").hidden = !sourceOnlyId;
   let items;
   if (liveFeedFilter === "balanced") {
     items = balancedLiveItems(all);
@@ -750,8 +955,13 @@ function renderLiveFeed() {
   }
   $("#live-feed").replaceChildren(...groupLiveItems(items).map(liveEventCard));
   $("#empty-live-feed").hidden = items.length > 0;
-  renderLiveSources();
-  renderTickers();
+  // Role/source view changes do not change native tickers or provider coverage.
+  // Keep opened source accordions, keyboard focus, and marquee position stable.
+  if (lastRenderedSourceSnapshot !== liveFeedState) {
+    renderLiveSources();
+    renderTickers();
+    lastRenderedSourceSnapshot = liveFeedState;
+  }
 }
 
 async function refreshLiveFeed(force = false) {
@@ -768,7 +978,7 @@ async function refreshHandoffs() {
     const el = item(
       title,
       h.to_actor + " · " + h.status + " · " + source,
-      '<span class="source-chip">' + source + '</span><span class="status ' + h.status.toLowerCase() + '">' + h.status + "</span>"
+      [textMarker("source-chip", source), textMarker("status " + stateClass(h.status), h.status)]
     );
     el.classList.add("movement-entry");
     return el;
@@ -784,7 +994,7 @@ function renderAttention(result) {
     return item(
       x.title,
       x.status + " · " + x.referent,
-      '<span class="status ' + x.status.toLowerCase() + '">' + x.status + "</span>"
+      textMarker("status " + stateClass(x.status), x.status)
     );
   }));
 
@@ -794,18 +1004,19 @@ function renderAttention(result) {
     return item(
       x.title,
       when + (anchor ? " · " + anchor : "") + " · " + x.referent,
-      anchor ? '<span class="movement-anchor">' + anchor + '</span>' : ""
+      anchor ? textMarker("movement-anchor", anchor) : null
     );
   }));
 
   $("#attention-reminders").replaceChildren(...reminders.map(function(x) {
     const when = x.local_time || x.cadence || "reminder";
-    const el = item(
-      x.text,
-      when + " · " + x.referent,
-      '<button class="ack-reminder" data-id="' + x.id + '">Done today</button>'
-    );
-    el.querySelector(".ack-reminder").addEventListener("click", async function() {
+    const acknowledge = document.createElement("button");
+    acknowledge.type = "button";
+    acknowledge.className = "ack-reminder";
+    acknowledge.dataset.id = x.id;
+    acknowledge.textContent = "Done today";
+    const el = item(x.text, when + " · " + x.referent, acknowledge);
+    acknowledge.addEventListener("click", async function() {
       try {
         await api("/api/reminders/" + encodeURIComponent(x.id) + "/ack", {
           method: "POST",
@@ -865,6 +1076,11 @@ async function refreshAll() {
 }
 
 $("#ohayo").addEventListener("click", () => activateOhayo({start: true}));
+
+$("#clear-source-filter").addEventListener("click", function() {
+  sourceOnlyId = "";
+  renderLiveFeed();
+});
 
 $("#show-all-tickers").addEventListener("click", function() {
   hiddenTickers.clear();

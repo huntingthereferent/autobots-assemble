@@ -1,0 +1,526 @@
+{
+  "date": "2026-10-08",
+  "game_id": "sk48",
+  "method": "public-native ARC SDK staged first-completion integration",
+  "provenance": "Level1 blind independent; Levels2-8 reference-assisted alternatives",
+  "official_ARC_competition_submission": false,
+  "private_engine_access": false,
+  "trials": 3,
+  "native_WINs": 3,
+  "elapsed_seconds": 6.94,
+  "runs": [
+    {
+      "trial": 0,
+      "total_actions_consumed": 284,
+      "native_WIN": true,
+      "stages": [
+        {
+          "level": 1,
+          "selected_route_index": 0,
+          "route_length": 14,
+          "native_actions_consumed": 14,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "62fabd1676c12342a5226899072bd02e21f511974445d30e56fbf7936c98d525",
+          "exit_public_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 1,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 2,
+          "selected_route_index": 1,
+          "route_length": 33,
+          "native_actions_consumed": 33,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "exit_public_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 2,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 3,
+          "selected_route_index": 2,
+          "route_length": 34,
+          "native_actions_consumed": 34,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "exit_public_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 3,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 4,
+          "selected_route_index": 0,
+          "route_length": 27,
+          "native_actions_consumed": 27,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "exit_public_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 4,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 5,
+          "selected_route_index": 4,
+          "route_length": 65,
+          "native_actions_consumed": 65,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "exit_public_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 5,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 6,
+          "selected_route_index": 2,
+          "route_length": 36,
+          "native_actions_consumed": 36,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "exit_public_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "clicks_from_public_pixels": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "native_levels_completed": 6,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 7,
+          "selected_route_index": 2,
+          "route_length": 51,
+          "native_actions_consumed": 51,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "exit_public_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "clicks_from_public_pixels": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels_completed": 7,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 8,
+          "selected_route_index": 1,
+          "route_length": 24,
+          "native_actions_consumed": 24,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "exit_public_SHA256": "58719c6047ea243718d2b1bb921b02b2e1e9dd04b7789cf1084b4d56f6c41069",
+          "clicks_from_public_pixels": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "native_levels_completed": 8,
+          "native_state_name": "WIN"
+        }
+      ]
+    },
+    {
+      "trial": 1,
+      "total_actions_consumed": 282,
+      "native_WIN": true,
+      "stages": [
+        {
+          "level": 1,
+          "selected_route_index": 0,
+          "route_length": 14,
+          "native_actions_consumed": 14,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "62fabd1676c12342a5226899072bd02e21f511974445d30e56fbf7936c98d525",
+          "exit_public_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 1,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 2,
+          "selected_route_index": 2,
+          "route_length": 32,
+          "native_actions_consumed": 32,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "exit_public_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 2,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 3,
+          "selected_route_index": 3,
+          "route_length": 35,
+          "native_actions_consumed": 33,
+          "unused_after_first_completion": 2,
+          "entry_public_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "exit_public_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 3,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 4,
+          "selected_route_index": 1,
+          "route_length": 27,
+          "native_actions_consumed": 27,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "exit_public_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 4,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 5,
+          "selected_route_index": 5,
+          "route_length": 65,
+          "native_actions_consumed": 65,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "exit_public_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 5,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 6,
+          "selected_route_index": 0,
+          "route_length": 36,
+          "native_actions_consumed": 36,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "exit_public_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "clicks_from_public_pixels": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "native_levels_completed": 6,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 7,
+          "selected_route_index": 3,
+          "route_length": 51,
+          "native_actions_consumed": 51,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "exit_public_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "clicks_from_public_pixels": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels_completed": 7,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 8,
+          "selected_route_index": 0,
+          "route_length": 24,
+          "native_actions_consumed": 24,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "exit_public_SHA256": "79b6e18b40ebeada560703c2b3f44c8aff5bb1d4b3498ac0b11bf82eda6a41b6",
+          "clicks_from_public_pixels": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "native_levels_completed": 8,
+          "native_state_name": "WIN"
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "total_actions_consumed": 282,
+      "native_WIN": true,
+      "stages": [
+        {
+          "level": 1,
+          "selected_route_index": 0,
+          "route_length": 14,
+          "native_actions_consumed": 14,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "62fabd1676c12342a5226899072bd02e21f511974445d30e56fbf7936c98d525",
+          "exit_public_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 1,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 2,
+          "selected_route_index": 3,
+          "route_length": 31,
+          "native_actions_consumed": 31,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "exit_public_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 2,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 3,
+          "selected_route_index": 4,
+          "route_length": 35,
+          "native_actions_consumed": 34,
+          "unused_after_first_completion": 1,
+          "entry_public_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "exit_public_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 3,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 4,
+          "selected_route_index": 2,
+          "route_length": 27,
+          "native_actions_consumed": 27,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "exit_public_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 4,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 5,
+          "selected_route_index": 6,
+          "route_length": 65,
+          "native_actions_consumed": 65,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "exit_public_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "clicks_from_public_pixels": [],
+          "native_levels_completed": 5,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 6,
+          "selected_route_index": 1,
+          "route_length": 36,
+          "native_actions_consumed": 36,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "exit_public_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "clicks_from_public_pixels": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "native_levels_completed": 6,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 7,
+          "selected_route_index": 0,
+          "route_length": 51,
+          "native_actions_consumed": 51,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "exit_public_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "clicks_from_public_pixels": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels_completed": 7,
+          "native_state_name": "NOT_FINISHED"
+        },
+        {
+          "level": 8,
+          "selected_route_index": 1,
+          "route_length": 24,
+          "native_actions_consumed": 24,
+          "unused_after_first_completion": 0,
+          "entry_public_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "exit_public_SHA256": "58719c6047ea243718d2b1bb921b02b2e1e9dd04b7789cf1084b4d56f6c41069",
+          "clicks_from_public_pixels": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "native_levels_completed": 8,
+          "native_state_name": "WIN"
+        }
+      ]
+    }
+  ]
+}

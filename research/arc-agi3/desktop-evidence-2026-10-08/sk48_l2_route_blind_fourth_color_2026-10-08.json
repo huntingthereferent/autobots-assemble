@@ -1,0 +1,92 @@
+{
+  "purpose": "cold route-blind final Level2 goal, phase-preserving native A/B",
+  "allowed_inputs": "Level1 entrance, current-run route-blind Level2 partial third-color witness",
+  "saved_L2_solution_loaded": false,
+  "saved_L2_macro_loaded": false,
+  "actual_native_Level2_completion": false,
+  "witness": null,
+  "initial_seed": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    1,
+    1,
+    1,
+    4,
+    3,
+    3,
+    1,
+    4,
+    4,
+    3,
+    3,
+    3,
+    1,
+    4,
+    4,
+    4
+  ],
+  "search_trace": [
+    {
+      "extra_depth": 1,
+      "branch_count": 4,
+      "retained_count": 4,
+      "best_prefix": 3,
+      "native_calls": 188,
+      "elapsed": 0.28
+    },
+    {
+      "extra_depth": 2,
+      "branch_count": 16,
+      "retained_count": 16,
+      "best_prefix": 3,
+      "native_calls": 812,
+      "elapsed": 1.25
+    },
+    {
+      "extra_depth": 3,
+      "branch_count": 64,
+      "retained_count": 64,
+      "best_prefix": 3,
+      "native_calls": 3372,
+      "elapsed": 5.28
+    },
+    {
+      "extra_depth": 4,
+      "branch_count": 256,
+      "retained_count": 70,
+      "best_prefix": 3,
+      "native_calls": 13868,
+      "elapsed": 21.22
+    },
+    {
+      "extra_depth": 5,
+      "branch_count": 280,
+      "retained_count": 70,
+      "best_prefix": 3,
+      "native_calls": 25628,
+      "elapsed": 38.91
+    },
+    {
+      "extra_depth": 6,
+      "branch_count": 280,
+      "retained_count": 70,
+      "best_prefix": 3,
+      "native_calls": 37668,
+      "elapsed": 56.98
+    },
+    {
+      "extra_depth": 7,
+      "branch_count": 280,
+      "retained_count": 70,
+      "best_prefix": 3,
+      "native_calls": 49988,
+      "elapsed": 76.12
+    }
+  ],
+  "calls": 49988,
+  "reset_retries": 1180,
+  "elapsed_seconds": 76.12
+}

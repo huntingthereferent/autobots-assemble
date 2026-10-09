@@ -1,0 +1,377 @@
+{
+  "native_public_only": true,
+  "depth": 5,
+  "all_paths_tested_for_visible_state": 243,
+  "visible_classes": 1,
+  "class_populations": {
+    "(1, 'NOT_FINISHED', '4bcd764909d6f586730b')": 243
+  },
+  "six_action_holdout_sample_count": 24,
+  "six_action_holdout_fingerprints": {
+    "a67e5a5db0056c520a16": 24
+  },
+  "sampled_records": [
+    {
+      "word": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        2,
+        0,
+        1,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        2,
+        2,
+        2,
+        1
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        1,
+        2,
+        2,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        1,
+        0,
+        0,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        0,
+        1,
+        2,
+        1
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        1,
+        2,
+        1,
+        0,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        1,
+        1,
+        0,
+        1
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        1,
+        0,
+        0,
+        1,
+        1
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        1,
+        0,
+        2,
+        1
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        0,
+        0,
+        0,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        1,
+        1,
+        1,
+        0,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        0,
+        0,
+        1,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        0,
+        1,
+        0,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        0,
+        1,
+        2,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        2,
+        1,
+        2,
+        2,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        0,
+        0,
+        0,
+        2
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        1,
+        2,
+        1,
+        0,
+        0
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    },
+    {
+      "word": [
+        0,
+        2,
+        2,
+        0,
+        1
+      ],
+      "before": [
+        1,
+        "NOT_FINISHED",
+        "4bcd764909d6f586730b"
+      ],
+      "signature": "a67e5a5db0056c520a16"
+    }
+  ],
+  "native_calls": 10808,
+  "important": "24 futures sampled, NOT all 243 six-step continuations"
+}

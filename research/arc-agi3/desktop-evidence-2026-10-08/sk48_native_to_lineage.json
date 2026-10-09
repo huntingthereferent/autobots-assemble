@@ -1,0 +1,386 @@
+{
+  "status": "WIN",
+  "levels": 8,
+  "actions": 280,
+  "local_sdk_score": 100.0,
+  "switches": [
+    {
+      "step": 174,
+      "level": 6,
+      "native_changed_pixels": 140,
+      "click": [
+        31,
+        4
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:0809dfe060ff8798eeaa8c6e7453331b3d903dc06a361225ebbf9362b9ef9281",
+      "native_after_ref": "arc://sk48/native-frame/sha256:1f2e84e48dacf8d42802aebaa652414c422c45ff1863a73f153dcb7ec6c8c1bb",
+      "witness_ref": "arc://sk48/native-frame/sha256:1f2e84e48dacf8d42802aebaa652414c422c45ff1863a73f153dcb7ec6c8c1bb",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 4,
+        "levels_completed": 5
+      },
+      "observed_after": {
+        "cell_color": 0,
+        "levels_completed": 5
+      },
+      "executed": true
+    },
+    {
+      "step": 187,
+      "level": 6,
+      "native_changed_pixels": 176,
+      "click": [
+        7,
+        34
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:18bbedf12220a8bb980a346f9d4b7a5e8e3abd0752b718d6d1ddc7b337578c31",
+      "native_after_ref": "arc://sk48/native-frame/sha256:3f4d8bddd59525e74a31028d891d6d2b12fea5faec68f0d13cfa929fe2880466",
+      "witness_ref": "arc://sk48/native-frame/sha256:3f4d8bddd59525e74a31028d891d6d2b12fea5faec68f0d13cfa929fe2880466",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 0,
+        "levels_completed": 5
+      },
+      "observed_after": {
+        "cell_color": 4,
+        "levels_completed": 5
+      },
+      "executed": true
+    },
+    {
+      "step": 202,
+      "level": 6,
+      "native_changed_pixels": 152,
+      "click": [
+        37,
+        4
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:1499945d50c6dcadfca86d6892f83a20cbfc4cabb80936860d76cbbe8845e9f0",
+      "native_after_ref": "arc://sk48/native-frame/sha256:b583f747f3eb75ed44693ee3861ab820e13a85a3f7fe13b7feefacbb3af3a511",
+      "witness_ref": "arc://sk48/native-frame/sha256:b583f747f3eb75ed44693ee3861ab820e13a85a3f7fe13b7feefacbb3af3a511",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 4,
+        "levels_completed": 5
+      },
+      "observed_after": {
+        "cell_color": 0,
+        "levels_completed": 5
+      },
+      "executed": true
+    },
+    {
+      "step": 212,
+      "level": 7,
+      "native_changed_pixels": 152,
+      "click": [
+        31,
+        4
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:6451b174e1edc8c66b57242dff74e7486453a99d38b4f0c7d5ac0754a9791dda",
+      "native_after_ref": "arc://sk48/native-frame/sha256:174b20e07c99803be2e9acce2d737501044aca30951139620ac3a60194e98ad5",
+      "witness_ref": "arc://sk48/native-frame/sha256:174b20e07c99803be2e9acce2d737501044aca30951139620ac3a60194e98ad5",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 222,
+      "level": 7,
+      "native_changed_pixels": 180,
+      "click": [
+        7,
+        28
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:4f9847f35fd909821f8715879fe8c566350f5e439f40ec5cebdeafdb9299726b",
+      "native_after_ref": "arc://sk48/native-frame/sha256:890f9ab9bf824f31aced7f315c004c42c27536f7eab13be49e16a7cb79836492",
+      "witness_ref": "arc://sk48/native-frame/sha256:890f9ab9bf824f31aced7f315c004c42c27536f7eab13be49e16a7cb79836492",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 224,
+      "level": 7,
+      "native_changed_pixels": 180,
+      "click": [
+        37,
+        4
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:432d68e7565a4a5dd45042c1989bb23582a3119b82d5b57fe47245121946eed2",
+      "native_after_ref": "arc://sk48/native-frame/sha256:f21041a5060cc07ea1bf07309e7f0ccbda622bcbbd59cbd9c1314fb265559087",
+      "witness_ref": "arc://sk48/native-frame/sha256:f21041a5060cc07ea1bf07309e7f0ccbda622bcbbd59cbd9c1314fb265559087",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 227,
+      "level": 7,
+      "native_changed_pixels": 168,
+      "click": [
+        7,
+        22
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:54dab616eb4a72b46c28a73e2818cb29f76fced5ab127a3f6cc72b73039a8677",
+      "native_after_ref": "arc://sk48/native-frame/sha256:00445fe08452eb7431db67085f3d2c15745e77e2af469e505268595dd8cd6720",
+      "witness_ref": "arc://sk48/native-frame/sha256:00445fe08452eb7431db67085f3d2c15745e77e2af469e505268595dd8cd6720",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 236,
+      "level": 7,
+      "native_changed_pixels": 188,
+      "click": [
+        31,
+        4
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:85328818782064798026e4ec027330e0d3ace8f2ad62d4d1d0a9f8878cd5515a",
+      "native_after_ref": "arc://sk48/native-frame/sha256:c56b6e855717b9cb295c45dde25543101886d1507b836df9460a8fd58de642d9",
+      "witness_ref": "arc://sk48/native-frame/sha256:c56b6e855717b9cb295c45dde25543101886d1507b836df9460a8fd58de642d9",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 238,
+      "level": 7,
+      "native_changed_pixels": 200,
+      "click": [
+        7,
+        28
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:10a36a9c41d67645838481f4bbd413e9b793f8e22ae76227c7c84ffe11cc0aef",
+      "native_after_ref": "arc://sk48/native-frame/sha256:3d8b17e0e509125ad85a2e8e30ea5430e70a1e868bc2f4e5071e90846953a095",
+      "witness_ref": "arc://sk48/native-frame/sha256:3d8b17e0e509125ad85a2e8e30ea5430e70a1e868bc2f4e5071e90846953a095",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 240,
+      "level": 7,
+      "native_changed_pixels": 200,
+      "click": [
+        31,
+        4
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:1fb60c70769b063b4e39b1440e222ca718d47c38060f04fd4a7188acf12ebbcc",
+      "native_after_ref": "arc://sk48/native-frame/sha256:d6e729495979fac62b208c48c76692a97f3147656aae68d1766afc5a18afea8f",
+      "witness_ref": "arc://sk48/native-frame/sha256:d6e729495979fac62b208c48c76692a97f3147656aae68d1766afc5a18afea8f",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 243,
+      "level": 7,
+      "native_changed_pixels": 208,
+      "click": [
+        7,
+        34
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:1907b2361c3faafb15a71882799fde7fe705179fab6361530562056d2941396a",
+      "native_after_ref": "arc://sk48/native-frame/sha256:d972c44fafc33a79ecffbc3ee0be19fb38be69121e730cc270583112cc5aea70",
+      "witness_ref": "arc://sk48/native-frame/sha256:d972c44fafc33a79ecffbc3ee0be19fb38be69121e730cc270583112cc5aea70",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 0,
+        "levels_completed": 6
+      },
+      "observed_after": {
+        "cell_color": 4,
+        "levels_completed": 6
+      },
+      "executed": true
+    },
+    {
+      "step": 259,
+      "level": 8,
+      "native_changed_pixels": 120,
+      "click": [
+        31,
+        4
+      ],
+      "hypothesized_initial_key": true,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:853c883b3e1183f468d80a8a9924f76f11684ac8d704476f5768526d6b93f29f",
+      "native_after_ref": "arc://sk48/native-frame/sha256:e069ac648b908b7c773e707755914da35b111704e61cfc15cb4c44e2c030506e",
+      "witness_ref": "arc://sk48/native-frame/sha256:e069ac648b908b7c773e707755914da35b111704e61cfc15cb4c44e2c030506e",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 4,
+        "levels_completed": 7
+      },
+      "observed_after": {
+        "cell_color": 0,
+        "levels_completed": 7
+      },
+      "executed": true
+    },
+    {
+      "step": 271,
+      "level": 8,
+      "native_changed_pixels": 132,
+      "click": [
+        7,
+        28
+      ],
+      "hypothesized_initial_key": false,
+      "ab_state": "MOVE",
+      "lineage_status": "COMPLETE",
+      "witnesses": 1,
+      "native_before_ref": "arc://sk48/native-frame/sha256:badafd09d0b8a2e1a8ed2884b7f04e2fbe34936c473affac9caa5d519ab93b40",
+      "native_after_ref": "arc://sk48/native-frame/sha256:f28352ae48edf6714bb2c8290d2b110ae681d9aedbe7bf2829a193374f6daece",
+      "witness_ref": "arc://sk48/native-frame/sha256:f28352ae48edf6714bb2c8290d2b110ae681d9aedbe7bf2829a193374f6daece",
+      "witness_source": "arc-agi-3:sk48:native-sdk-frames",
+      "observed_before": {
+        "cell_color": 0,
+        "levels_completed": 7
+      },
+      "observed_after": {
+        "cell_color": 4,
+        "levels_completed": 7
+      },
+      "executed": true
+    }
+  ],
+  "milestones": [
+    [
+      14,
+      1
+    ],
+    [
+      44,
+      2
+    ],
+    [
+      77,
+      3
+    ],
+    [
+      104,
+      4
+    ],
+    [
+      169,
+      5
+    ],
+    [
+      205,
+      6
+    ],
+    [
+      256,
+      7
+    ],
+    [
+      280,
+      8
+    ]
+  ],
+  "native_move_count": 13,
+  "native_unknown_count": 0,
+  "native_partial_count": 0,
+  "all_switches_executed_once": true,
+  "causal_controller_not_full_solver": true,
+  "direction_actions_from_saved_route": true
+}

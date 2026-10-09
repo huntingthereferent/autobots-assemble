@@ -1,0 +1,537 @@
+{
+  "game": "sk48",
+  "result": "3 cold-L2 integrated native WINs",
+  "L2_provenance": "route-blind, prior public sensor & A/B search principles",
+  "L3toL8_provenance": "reference-assisted prior native witnesses",
+  "native_SDK_only": true,
+  "private_engine_read": false,
+  "old_L2_route_compared_only_after_freeze": true,
+  "new_L2_differs_from_old_positive_reference": true,
+  "cold_L2_direction_actions": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    1,
+    1,
+    1,
+    4,
+    3,
+    3,
+    1,
+    4,
+    4,
+    3,
+    3,
+    3,
+    1,
+    4,
+    4,
+    4,
+    3,
+    3,
+    3,
+    3,
+    1,
+    4,
+    4,
+    4,
+    4
+  ],
+  "cold_L2_fresh_replays": [
+    {
+      "trial": 0,
+      "L1_used": 14,
+      "new_L2_used": 30,
+      "start_frame_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "after_frame_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "native_levels_completed": 2
+    },
+    {
+      "trial": 1,
+      "L1_used": 14,
+      "new_L2_used": 30,
+      "start_frame_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "after_frame_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "native_levels_completed": 2
+    },
+    {
+      "trial": 2,
+      "L1_used": 14,
+      "new_L2_used": 30,
+      "start_frame_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "after_frame_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "native_levels_completed": 2
+    }
+  ],
+  "whole_game_fresh_native_WINS": 3,
+  "runs": [
+    {
+      "trial": 0,
+      "total_native_actions": 280,
+      "native_WIN": true,
+      "stages": [
+        {
+          "stage": 1,
+          "used": 14,
+          "original_candidates": 14,
+          "unused_actions": 0,
+          "entry_SHA256": "62fabd1676c12342a5226899072bd02e21f511974445d30e56fbf7936c98d525",
+          "exit_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "public_control_clicks": [],
+          "native_levels": 1
+        },
+        {
+          "stage": 2,
+          "used": 30,
+          "original_candidates": 30,
+          "unused_actions": 0,
+          "entry_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "exit_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "public_control_clicks": [],
+          "native_levels": 2
+        },
+        {
+          "stage": 3,
+          "used": 33,
+          "original_candidates": 35,
+          "unused_actions": 2,
+          "entry_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "exit_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "public_control_clicks": [],
+          "native_levels": 3
+        },
+        {
+          "stage": 4,
+          "used": 27,
+          "original_candidates": 27,
+          "unused_actions": 0,
+          "entry_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "exit_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "public_control_clicks": [],
+          "native_levels": 4
+        },
+        {
+          "stage": 5,
+          "used": 65,
+          "original_candidates": 65,
+          "unused_actions": 0,
+          "entry_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "exit_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "public_control_clicks": [],
+          "native_levels": 5
+        },
+        {
+          "stage": 6,
+          "used": 36,
+          "original_candidates": 36,
+          "unused_actions": 0,
+          "entry_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "exit_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "public_control_clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "native_levels": 6
+        },
+        {
+          "stage": 7,
+          "used": 51,
+          "original_candidates": 51,
+          "unused_actions": 0,
+          "entry_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "exit_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "public_control_clicks": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7
+        },
+        {
+          "stage": 8,
+          "used": 24,
+          "original_candidates": 24,
+          "unused_actions": 0,
+          "entry_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "exit_SHA256": "79b6e18b40ebeada560703c2b3f44c8aff5bb1d4b3498ac0b11bf82eda6a41b6",
+          "public_control_clicks": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "native_levels": 8
+        }
+      ]
+    },
+    {
+      "trial": 1,
+      "total_native_actions": 281,
+      "native_WIN": true,
+      "stages": [
+        {
+          "stage": 1,
+          "used": 14,
+          "original_candidates": 14,
+          "unused_actions": 0,
+          "entry_SHA256": "62fabd1676c12342a5226899072bd02e21f511974445d30e56fbf7936c98d525",
+          "exit_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "public_control_clicks": [],
+          "native_levels": 1
+        },
+        {
+          "stage": 2,
+          "used": 30,
+          "original_candidates": 30,
+          "unused_actions": 0,
+          "entry_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "exit_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "public_control_clicks": [],
+          "native_levels": 2
+        },
+        {
+          "stage": 3,
+          "used": 34,
+          "original_candidates": 35,
+          "unused_actions": 1,
+          "entry_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "exit_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "public_control_clicks": [],
+          "native_levels": 3
+        },
+        {
+          "stage": 4,
+          "used": 27,
+          "original_candidates": 27,
+          "unused_actions": 0,
+          "entry_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "exit_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "public_control_clicks": [],
+          "native_levels": 4
+        },
+        {
+          "stage": 5,
+          "used": 65,
+          "original_candidates": 65,
+          "unused_actions": 0,
+          "entry_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "exit_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "public_control_clicks": [],
+          "native_levels": 5
+        },
+        {
+          "stage": 6,
+          "used": 36,
+          "original_candidates": 36,
+          "unused_actions": 0,
+          "entry_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "exit_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "public_control_clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "native_levels": 6
+        },
+        {
+          "stage": 7,
+          "used": 51,
+          "original_candidates": 51,
+          "unused_actions": 0,
+          "entry_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "exit_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "public_control_clicks": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7
+        },
+        {
+          "stage": 8,
+          "used": 24,
+          "original_candidates": 24,
+          "unused_actions": 0,
+          "entry_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "exit_SHA256": "58719c6047ea243718d2b1bb921b02b2e1e9dd04b7789cf1084b4d56f6c41069",
+          "public_control_clicks": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "native_levels": 8
+        }
+      ]
+    },
+    {
+      "trial": 2,
+      "total_native_actions": 282,
+      "native_WIN": true,
+      "stages": [
+        {
+          "stage": 1,
+          "used": 14,
+          "original_candidates": 14,
+          "unused_actions": 0,
+          "entry_SHA256": "62fabd1676c12342a5226899072bd02e21f511974445d30e56fbf7936c98d525",
+          "exit_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "public_control_clicks": [],
+          "native_levels": 1
+        },
+        {
+          "stage": 2,
+          "used": 30,
+          "original_candidates": 30,
+          "unused_actions": 0,
+          "entry_SHA256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+          "exit_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "public_control_clicks": [],
+          "native_levels": 2
+        },
+        {
+          "stage": 3,
+          "used": 35,
+          "original_candidates": 35,
+          "unused_actions": 0,
+          "entry_SHA256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+          "exit_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "public_control_clicks": [],
+          "native_levels": 3
+        },
+        {
+          "stage": 4,
+          "used": 27,
+          "original_candidates": 27,
+          "unused_actions": 0,
+          "entry_SHA256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "exit_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "public_control_clicks": [],
+          "native_levels": 4
+        },
+        {
+          "stage": 5,
+          "used": 65,
+          "original_candidates": 65,
+          "unused_actions": 0,
+          "entry_SHA256": "32a1754a30999e08b85b9ad7d81678965cefe3c4893f09c0b1587e404a3a53ab",
+          "exit_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "public_control_clicks": [],
+          "native_levels": 5
+        },
+        {
+          "stage": 6,
+          "used": 36,
+          "original_candidates": 36,
+          "unused_actions": 0,
+          "entry_SHA256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "exit_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "public_control_clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "native_levels": 6
+        },
+        {
+          "stage": 7,
+          "used": 51,
+          "original_candidates": 51,
+          "unused_actions": 0,
+          "entry_SHA256": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "exit_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "public_control_clicks": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7
+        },
+        {
+          "stage": 8,
+          "used": 24,
+          "original_candidates": 24,
+          "unused_actions": 0,
+          "entry_SHA256": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "exit_SHA256": "79b6e18b40ebeada560703c2b3f44c8aff5bb1d4b3498ac0b11bf82eda6a41b6",
+          "public_control_clicks": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "native_levels": 8
+        }
+      ]
+    }
+  ],
+  "elapsed_seconds": 6.75
+}

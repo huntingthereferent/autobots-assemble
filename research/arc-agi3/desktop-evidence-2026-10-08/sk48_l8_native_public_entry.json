@@ -1,0 +1,44 @@
+{
+  "public_only": true,
+  "old_L8_route_loaded": false,
+  "entry_sha": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+  "native_completed_prior": 7,
+  "head_positions": [
+    [
+      5,
+      26,
+      6
+    ],
+    [
+      29,
+      2,
+      15
+    ]
+  ],
+  "first_direction_probes": [
+    {
+      "move": 1,
+      "levels": 7,
+      "changed": 96,
+      "sha": "dfe2f9c7e6348993a334ec0ff152031050681bde938b5eaff2cd8b2289c25d71"
+    },
+    {
+      "move": 2,
+      "levels": 7,
+      "changed": 96,
+      "sha": "cac05955efbc2323dc58f457b32ec7aefb09aae84346ab92be0aeb06fbb7bba9"
+    },
+    {
+      "move": 3,
+      "levels": 7,
+      "changed": 12,
+      "sha": "03f92b3fccf40149f6bb170fe2ee6db48f9396c52b65ca9c91d9e22fcc7acf4c"
+    },
+    {
+      "move": 4,
+      "levels": 7,
+      "changed": 36,
+      "sha": "21d327cc3e9a7db048dcfceab3bbaa4b69791fa2280e5f3f816fc84faead8d26"
+    }
+  ]
+}

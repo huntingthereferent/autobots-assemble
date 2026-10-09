@@ -1,0 +1,2714 @@
+{
+  "histories": [
+    {
+      "history": [],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        4
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1
+      ],
+      "full": "8dde6194c0236f19fd",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4
+      ],
+      "full": "263b40b341b1e29dbb",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        4
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        1
+      ],
+      "full": "263b40b341b1e29dbb",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        2
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        3
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        4
+      ],
+      "full": "b3bfcb50d2051cfdec",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        1
+      ],
+      "full": "6ca6acf88e7b78c237",
+      "field": "7927734ccd16df820a",
+      "sample": "0fcddfb13609943dbd",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        2
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        3
+      ],
+      "full": "dc945902c31f835183",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        4
+      ],
+      "full": "394f68864cadea66bc",
+      "field": "6c0f7dc8f775575ec7",
+      "sample": "ae0f624c07f3b01ab8",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        1
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        4
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        1
+      ],
+      "full": "dc945902c31f835183",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        2
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        3
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        4
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        1
+      ],
+      "full": "394f68864cadea66bc",
+      "field": "6c0f7dc8f775575ec7",
+      "sample": "ae0f624c07f3b01ab8",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        2
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        3
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        4
+      ],
+      "full": "9c5d4ed3d59fc5dd3f",
+      "field": "2ffa3949f30de3d808",
+      "sample": "cb70daa4d97b242a97",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        1
+      ],
+      "full": "8dde6194c0236f19fd",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        3
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        4
+      ],
+      "full": "263b40b341b1e29dbb",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        1
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        4
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        1
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        2
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        4
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        1
+      ],
+      "full": "263b40b341b1e29dbb",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        2
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        3
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        4
+      ],
+      "full": "b3bfcb50d2051cfdec",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        1
+      ],
+      "full": "dc945902c31f835183",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        2
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        3
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        4
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        1
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        2
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        4
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        3,
+        1
+      ],
+      "full": "fcb31430cd35932356",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        3,
+        2
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        3,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        3,
+        4
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        4,
+        1
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        4,
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        4,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        4,
+        4
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        1,
+        1
+      ],
+      "full": "394f68864cadea66bc",
+      "field": "6c0f7dc8f775575ec7",
+      "sample": "ae0f624c07f3b01ab8",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        1,
+        2
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        1,
+        3
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        1,
+        4
+      ],
+      "full": "9c5d4ed3d59fc5dd3f",
+      "field": "2ffa3949f30de3d808",
+      "sample": "cb70daa4d97b242a97",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        2,
+        1
+      ],
+      "full": "263b40b341b1e29dbb",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        2,
+        2
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        2,
+        3
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        2,
+        4
+      ],
+      "full": "b3bfcb50d2051cfdec",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        3,
+        1
+      ],
+      "full": "71b1f1cf6326cb957c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        3,
+        2
+      ],
+      "full": "9a357142c7766bbdb9",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        3,
+        3
+      ],
+      "full": "96d278d2f4e46bb531",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        3,
+        4
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        4,
+        1
+      ],
+      "full": "9c5d4ed3d59fc5dd3f",
+      "field": "2ffa3949f30de3d808",
+      "sample": "cb70daa4d97b242a97",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        4,
+        2
+      ],
+      "full": "b3bfcb50d2051cfdec",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        4,
+        3
+      ],
+      "full": "59a8a28d1abf572ad0",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        4,
+        4,
+        4
+      ],
+      "full": "ededc486e1d8b98a96",
+      "field": "62b45b024918777f64",
+      "sample": "f93f8917568590cf94",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "full": "e297e5a4403fc597ea",
+      "field": "c57267ccd41be863f8",
+      "sample": "baf5cb68a28dc8d897",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        1,
+        2
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        1,
+        3
+      ],
+      "full": "17de25b0fab4cbbe9c",
+      "field": "0e324f62c88fc37ca5",
+      "sample": "b676cd9c946969a12e",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        1,
+        4
+      ],
+      "full": "c684938d78fcfa9f0c",
+      "field": "cbd8ca924aa48f2597",
+      "sample": "d87349b57b9eb80ce8",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        2,
+        1
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        2,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        2,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        2,
+        4
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        3,
+        1
+      ],
+      "full": "17de25b0fab4cbbe9c",
+      "field": "0e324f62c88fc37ca5",
+      "sample": "b676cd9c946969a12e",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        3,
+        2
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        3,
+        3
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        3,
+        4
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        4,
+        1
+      ],
+      "full": "c684938d78fcfa9f0c",
+      "field": "cbd8ca924aa48f2597",
+      "sample": "d87349b57b9eb80ce8",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        4,
+        2
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        4,
+        3
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        1,
+        4,
+        4
+      ],
+      "full": "c575b8d6926700c97a",
+      "field": "a8c2a9b5823007d02b",
+      "sample": "7697522bbc38e1dfca",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        1,
+        1
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        1,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        1,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        1,
+        4
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        2,
+        1
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        2,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        2,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        2,
+        4
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        3,
+        1
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        3,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        3,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        4,
+        1
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        4,
+        2
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        4,
+        3
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        2,
+        4,
+        4
+      ],
+      "full": "c8e87ef96fddb89354",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        1,
+        1
+      ],
+      "full": "17de25b0fab4cbbe9c",
+      "field": "0e324f62c88fc37ca5",
+      "sample": "b676cd9c946969a12e",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        1,
+        2
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        1,
+        3
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        1,
+        4
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        2,
+        1
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        2,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        2,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        2,
+        4
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        3,
+        1
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        3,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        3,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        3,
+        4
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        4,
+        1
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        4,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        4,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        3,
+        4,
+        4
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        1,
+        1
+      ],
+      "full": "c684938d78fcfa9f0c",
+      "field": "cbd8ca924aa48f2597",
+      "sample": "d87349b57b9eb80ce8",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        1,
+        2
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        1,
+        3
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        1,
+        4
+      ],
+      "full": "c575b8d6926700c97a",
+      "field": "a8c2a9b5823007d02b",
+      "sample": "7697522bbc38e1dfca",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        2,
+        1
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        2,
+        2
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        2,
+        3
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        2,
+        4
+      ],
+      "full": "c8e87ef96fddb89354",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        3,
+        1
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        3,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        3,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        3,
+        4
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        4,
+        1
+      ],
+      "full": "c575b8d6926700c97a",
+      "field": "a8c2a9b5823007d02b",
+      "sample": "7697522bbc38e1dfca",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        4,
+        2
+      ],
+      "full": "c8e87ef96fddb89354",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        4,
+        3
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        1,
+        4,
+        4,
+        4
+      ],
+      "full": "a4a025b8d28721a287",
+      "field": "ce657d3723fa8a407a",
+      "sample": "a0cf9f80e838a6c06a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        1,
+        1
+      ],
+      "full": "8622000a74a472ffed",
+      "field": "7927734ccd16df820a",
+      "sample": "0fcddfb13609943dbd",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        1,
+        2
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        1,
+        3
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        1,
+        4
+      ],
+      "full": "27957c5395476479bf",
+      "field": "6c0f7dc8f775575ec7",
+      "sample": "ae0f624c07f3b01ab8",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        2,
+        1
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        2,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        2,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        2,
+        4
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        3,
+        1
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        3,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        3,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        3,
+        4
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        4,
+        1
+      ],
+      "full": "27957c5395476479bf",
+      "field": "6c0f7dc8f775575ec7",
+      "sample": "ae0f624c07f3b01ab8",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        4,
+        2
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        4,
+        3
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        1,
+        4,
+        4
+      ],
+      "full": "9b60b53b34dabb544f",
+      "field": "2ffa3949f30de3d808",
+      "sample": "cb70daa4d97b242a97",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        1,
+        1
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        1,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        1,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        1,
+        4
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        2,
+        1
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        2,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        2,
+        4
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        3,
+        1
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        3,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        3,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        3,
+        4
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        4,
+        1
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        4,
+        2
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        4,
+        3
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        2,
+        4,
+        4
+      ],
+      "full": "c8e87ef96fddb89354",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        1,
+        1
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        1,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        1,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        1,
+        4
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        2,
+        1
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        2,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        2,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        2,
+        4
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        3,
+        1
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        3,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        3,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        3,
+        4
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        4,
+        1
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        4,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        4,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        1,
+        1
+      ],
+      "full": "27957c5395476479bf",
+      "field": "6c0f7dc8f775575ec7",
+      "sample": "ae0f624c07f3b01ab8",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        1,
+        2
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        1,
+        3
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        1,
+        4
+      ],
+      "full": "9b60b53b34dabb544f",
+      "field": "2ffa3949f30de3d808",
+      "sample": "cb70daa4d97b242a97",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        2,
+        1
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        2,
+        2
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        2,
+        3
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        2,
+        4
+      ],
+      "full": "c8e87ef96fddb89354",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        3,
+        1
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        3,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        3,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        3,
+        4
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        4,
+        1
+      ],
+      "full": "9b60b53b34dabb544f",
+      "field": "2ffa3949f30de3d808",
+      "sample": "cb70daa4d97b242a97",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        4,
+        2
+      ],
+      "full": "c8e87ef96fddb89354",
+      "field": "18a02ec2ee26159c3c",
+      "sample": "a6242a56b748d5f531",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        4,
+        3
+      ],
+      "full": "582802a68ff65ca083",
+      "field": "81ba0f21083f5a4896",
+      "sample": "c43c60f9808884936f",
+      "levels": 1
+    },
+    {
+      "history": [
+        2,
+        4,
+        4,
+        4
+      ],
+      "full": "d289478eadb8f6af37",
+      "field": "62b45b024918777f64",
+      "sample": "f93f8917568590cf94",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        1,
+        1
+      ],
+      "full": "17de25b0fab4cbbe9c",
+      "field": "0e324f62c88fc37ca5",
+      "sample": "b676cd9c946969a12e",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        1,
+        2
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        1,
+        3
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        1,
+        4
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        2,
+        1
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        2,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        2,
+        3
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        2,
+        4
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        3,
+        1
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        3,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        3,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        3,
+        4
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        4,
+        1
+      ],
+      "full": "b194924b571b12d893",
+      "field": "09d9d86ed5a5d38b29",
+      "sample": "74f32f2c26344bb4be",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        4,
+        2
+      ],
+      "full": "4bcd764909d6f58673",
+      "field": "c19cf30fd3cfa14056",
+      "sample": "659109067b4aa3eb89",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        4,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        1,
+        4,
+        4
+      ],
+      "full": "4a76f215a0866150e7",
+      "field": "a7dfa80cc54609480b",
+      "sample": "4f2059f3ca13b88e59",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        1,
+        1
+      ],
+      "full": "9af560f8d3878c960c",
+      "field": "d0c9ed13cf6dfa2bc2",
+      "sample": "46ca9ba4896457b410",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        1,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        1,
+        3
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        1,
+        4
+      ],
+      "full": "c194b26666f194421c",
+      "field": "b75db818d26f36523e",
+      "sample": "2161ba04ef07a74f5f",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        2,
+        1
+      ],
+      "full": "6004e8822d3367f961",
+      "field": "aad93be9d35b46e956",
+      "sample": "830557cfb78a18e875",
+      "levels": 1
+    },
+    {
+      "history": [
+        3,
+        2,
+        2,
+        2
+      ],
+      "full": "285a3570c9468741e4",
+      "field": "cd85137aed862ca72b",
+      "sample": "d160a1ce1616504c7a",
+      "levels": 1
+    }
+  ],
+  "native_actions": 4586,
+  "reset_retries": 233,
+  "projection": "frame[y=6..49,x=5..54]"
+}

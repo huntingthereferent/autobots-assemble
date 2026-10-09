@@ -1,0 +1,198 @@
+{
+  "method": "native-public route-blind, prior visual sensor and L1 reference allowed",
+  "saved_L2_solution_loaded": false,
+  "saved_L2_partial_seed_loaded": false,
+  "private_game_state_read": false,
+  "blind_unseen_task_claim": false,
+  "goal_from_public": [
+    8,
+    12,
+    9,
+    14
+  ],
+  "native_L2_root_sha": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+  "record": [
+    {
+      "depth": 1,
+      "native_children": 4,
+      "survivors": 4,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 82,
+      "seconds": 0.12
+    },
+    {
+      "depth": 2,
+      "native_children": 16,
+      "survivors": 16,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 370,
+      "seconds": 0.59
+    },
+    {
+      "depth": 3,
+      "native_children": 64,
+      "survivors": 36,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 1586,
+      "seconds": 2.42
+    },
+    {
+      "depth": 4,
+      "native_children": 144,
+      "survivors": 36,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 4466,
+      "seconds": 6.78
+    },
+    {
+      "depth": 5,
+      "native_children": 144,
+      "survivors": 36,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 7490,
+      "seconds": 11.31
+    },
+    {
+      "depth": 6,
+      "native_children": 144,
+      "survivors": 36,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 10658,
+      "seconds": 15.89
+    },
+    {
+      "depth": 7,
+      "native_children": 143,
+      "survivors": 36,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 13970,
+      "seconds": 20.78
+    },
+    {
+      "depth": 8,
+      "native_children": 144,
+      "survivors": 36,
+      "prefix1_seen": 0,
+      "best_native_prefix": 0,
+      "native_calls": 17426,
+      "seconds": 25.83
+    },
+    {
+      "depth": 9,
+      "native_children": 143,
+      "survivors": 36,
+      "prefix1_seen": 2,
+      "best_native_prefix": 1,
+      "native_calls": 21026,
+      "seconds": 31.02
+    },
+    {
+      "depth": 10,
+      "native_children": 143,
+      "survivors": 36,
+      "prefix1_seen": 8,
+      "best_native_prefix": 1,
+      "native_calls": 24770,
+      "seconds": 36.61
+    },
+    {
+      "depth": 11,
+      "native_children": 144,
+      "survivors": 36,
+      "prefix1_seen": 29,
+      "best_native_prefix": 1,
+      "native_calls": 28658,
+      "seconds": 42.44
+    },
+    {
+      "depth": 12,
+      "native_children": 144,
+      "survivors": 36,
+      "prefix1_seen": 97,
+      "best_native_prefix": 1,
+      "native_calls": 32690,
+      "seconds": 48.36
+    },
+    {
+      "depth": 13,
+      "native_children": 144,
+      "survivors": 36,
+      "prefix1_seen": 197,
+      "best_native_prefix": 1,
+      "native_calls": 36866,
+      "seconds": 54.88
+    }
+  ],
+  "first_color_witness": {
+    "p": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1,
+      1,
+      4
+    ],
+    "score": 2464.67,
+    "prefix": 1,
+    "visible_attached": [
+      8
+    ],
+    "aligned": 1,
+    "next_color": 12,
+    "next_tile": [
+      42,
+      19
+    ],
+    "head_y": 24,
+    "tip_x": 52,
+    "hash": "1e5d40803ed926f9d21ca766dd6ef564b75eedfe312cee167bdc9eb252cb9549",
+    "levels": 1
+  },
+  "second_color_witness": {
+    "p": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1,
+      1,
+      4,
+      3,
+      3,
+      1,
+      4,
+      4
+    ],
+    "score": 4952.67,
+    "prefix": 2,
+    "visible_attached": [
+      8,
+      12
+    ],
+    "aligned": 2,
+    "next_color": 9,
+    "next_tile": [
+      36,
+      13
+    ],
+    "head_y": 18,
+    "tip_x": 52,
+    "hash": "ea213a0d41f9c5acb03f852ee4d049a28bf1ec896787d877d41112ef1faabe50",
+    "levels": 1
+  },
+  "native_calls": 37002,
+  "reset_retries": 1528,
+  "elapsed_seconds": 55.08
+}

@@ -1,0 +1,88 @@
+{
+  "source": "saved positive P8, not blind new solve",
+  "P8": [
+    4,
+    4,
+    6,
+    2,
+    2,
+    4,
+    2,
+    3,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    6,
+    4,
+    4,
+    4,
+    4,
+    3,
+    2,
+    3,
+    3,
+    1
+  ],
+  "native_public_only": true,
+  "trials": [
+    {
+      "trial": 0,
+      "native_levels_completed": 8,
+      "state_name": "WIN",
+      "first_completed_at": 24,
+      "L8_entry_sha": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+      "L8_switch_clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ],
+      "L7_actions": 51,
+      "upstream_consumed": [
+        14,
+        32,
+        33,
+        27,
+        65,
+        36
+      ]
+    },
+    {
+      "trial": 1,
+      "native_levels_completed": 8,
+      "state_name": "WIN",
+      "first_completed_at": 24,
+      "L8_entry_sha": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+      "L8_switch_clicks": [
+        [
+          3,
+          31,
+          4
+        ],
+        [
+          15,
+          7,
+          28
+        ]
+      ],
+      "L7_actions": 51,
+      "upstream_consumed": [
+        14,
+        31,
+        34,
+        27,
+        65,
+        36
+      ]
+    }
+  ]
+}

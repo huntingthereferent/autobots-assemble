@@ -1,0 +1,382 @@
+{
+  "method": "positive reference witness used for scorer audit only",
+  "reference_level2_action_count": 30,
+  "score_comparison": [
+    {
+      "step": 1,
+      "action": 4,
+      "witness_score": -1.62,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 42
+    },
+    {
+      "step": 2,
+      "action": 4,
+      "witness_score": -0.42,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 42
+    },
+    {
+      "step": 3,
+      "action": 4,
+      "witness_score": 0.78,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 42
+    },
+    {
+      "step": 4,
+      "action": 1,
+      "witness_score": 1.86,
+      "best_beam": 1.98,
+      "beam_gap": 0.12,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 36
+    },
+    {
+      "step": 5,
+      "action": 1,
+      "witness_score": 2.94,
+      "best_beam": 3.18,
+      "beam_gap": 0.24,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 30
+    },
+    {
+      "step": 6,
+      "action": 4,
+      "witness_score": 4.14,
+      "best_beam": 25.02,
+      "beam_gap": 20.88,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 30
+    },
+    {
+      "step": 7,
+      "action": 4,
+      "witness_score": 5.34,
+      "best_beam": 30.82,
+      "beam_gap": 25.48,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 30
+    },
+    {
+      "step": 8,
+      "action": 1,
+      "witness_score": 1018.42,
+      "best_beam": 1018.42,
+      "beam_gap": 0.0,
+      "prefix": 1,
+      "seq": [
+        8
+      ],
+      "head_y": 24
+    },
+    {
+      "step": 9,
+      "action": 4,
+      "witness_score": 1018.72,
+      "best_beam": 1018.72,
+      "beam_gap": 0.0,
+      "prefix": 1,
+      "seq": [
+        8
+      ],
+      "head_y": 24
+    },
+    {
+      "step": 10,
+      "action": 3,
+      "witness_score": 1017.52,
+      "best_beam": 1019.8,
+      "beam_gap": 2.28,
+      "prefix": 1,
+      "seq": [
+        8
+      ],
+      "head_y": 24
+    },
+    {
+      "step": 11,
+      "action": 3,
+      "witness_score": 1016.32,
+      "best_beam": 1019.8,
+      "beam_gap": 3.48,
+      "prefix": 1,
+      "seq": [
+        8
+      ],
+      "head_y": 24
+    },
+    {
+      "step": 12,
+      "action": 1,
+      "witness_score": 2029.4,
+      "best_beam": 1019.8,
+      "beam_gap": -1009.6,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 13,
+      "action": 4,
+      "witness_score": 2030.6,
+      "best_beam": 1019.8,
+      "beam_gap": -1010.8,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 14,
+      "action": 4,
+      "witness_score": 2030.9,
+      "best_beam": 1019.8,
+      "beam_gap": -1011.1,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 15,
+      "action": 3,
+      "witness_score": 2029.7,
+      "best_beam": 1019.8,
+      "beam_gap": -1009.9,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 16,
+      "action": 3,
+      "witness_score": 2028.5,
+      "best_beam": 1019.8,
+      "beam_gap": -1008.7,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 17,
+      "action": 3,
+      "witness_score": 2027.3,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 18,
+      "action": 3,
+      "witness_score": 2026.1,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 19,
+      "action": 1,
+      "witness_score": 2039.02,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 2,
+      "seq": [
+        8,
+        12,
+        14,
+        9
+      ],
+      "head_y": 12
+    },
+    {
+      "step": 20,
+      "action": 4,
+      "witness_score": 2040.22,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 2,
+      "seq": [
+        8,
+        12,
+        14,
+        9
+      ],
+      "head_y": 12
+    },
+    {
+      "step": 21,
+      "action": 4,
+      "witness_score": 2041.42,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 2,
+      "seq": [
+        8,
+        12,
+        14,
+        9
+      ],
+      "head_y": 12
+    },
+    {
+      "step": 22,
+      "action": 1,
+      "witness_score": 2026.34,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 6
+    },
+    {
+      "step": 23,
+      "action": 4,
+      "witness_score": 2027.54,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 2,
+      "seq": [
+        8,
+        12
+      ],
+      "head_y": 6
+    },
+    {
+      "step": 24,
+      "action": 2,
+      "witness_score": 3040.62,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 3,
+      "seq": [
+        8,
+        12,
+        9
+      ],
+      "head_y": 12
+    },
+    {
+      "step": 25,
+      "action": 4,
+      "witness_score": 3040.92,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 3,
+      "seq": [
+        8,
+        12,
+        9
+      ],
+      "head_y": 12
+    },
+    {
+      "step": 26,
+      "action": 3,
+      "witness_score": 3039.72,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 3,
+      "seq": [
+        8,
+        12,
+        9
+      ],
+      "head_y": 12
+    },
+    {
+      "step": 27,
+      "action": 3,
+      "witness_score": 3038.52,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 3,
+      "seq": [
+        8,
+        12,
+        9
+      ],
+      "head_y": 12
+    },
+    {
+      "step": 28,
+      "action": 2,
+      "witness_score": 4051.6,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 4,
+      "seq": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 29,
+      "action": 4,
+      "witness_score": 4052.8,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 4,
+      "seq": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "head_y": 18
+    },
+    {
+      "step": 30,
+      "action": 4,
+      "witness_score": -2.82,
+      "best_beam": null,
+      "beam_gap": 0.0,
+      "prefix": 0,
+      "seq": [],
+      "head_y": 42
+    }
+  ]
+}

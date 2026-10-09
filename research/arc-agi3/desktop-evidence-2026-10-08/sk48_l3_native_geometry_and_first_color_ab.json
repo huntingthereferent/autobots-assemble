@@ -1,0 +1,2782 @@
+{
+  "level": 3,
+  "source": "native public SDK",
+  "input_L2": "fresh-verified alternative route",
+  "saved_L3_route_read": false,
+  "geometry": {
+    "reference": [
+      8,
+      12,
+      9,
+      14
+    ]
+  },
+  "search": [
+    {
+      "family": "R_then_U",
+      "R": 1,
+      "U": 1,
+      "path": [
+        4,
+        1
+      ],
+      "actions_executed": 2,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "86f363b6a318eafb15ac2f897f4c8eec07a2ffc310a8205841c37c408d0afa00"
+    },
+    {
+      "family": "U_then_R",
+      "R": 1,
+      "U": 1,
+      "path": [
+        1,
+        4
+      ],
+      "actions_executed": 2,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "86f363b6a318eafb15ac2f897f4c8eec07a2ffc310a8205841c37c408d0afa00"
+    },
+    {
+      "family": "R_then_U",
+      "R": 1,
+      "U": 2,
+      "path": [
+        4,
+        1,
+        1
+      ],
+      "actions_executed": 3,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "8d3bd3071c16686bea9ec442135db833376fc9c248abf2e18309655396afab3a"
+    },
+    {
+      "family": "U_then_R",
+      "R": 1,
+      "U": 2,
+      "path": [
+        1,
+        1,
+        4
+      ],
+      "actions_executed": 3,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "8d3bd3071c16686bea9ec442135db833376fc9c248abf2e18309655396afab3a"
+    },
+    {
+      "family": "R_then_U",
+      "R": 1,
+      "U": 3,
+      "path": [
+        4,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "157ea421375a75cdb4a85db8446c0406ba8e2496c3a63afd4cdbc42e0350c03e"
+    },
+    {
+      "family": "U_then_R",
+      "R": 1,
+      "U": 3,
+      "path": [
+        1,
+        1,
+        1,
+        4
+      ],
+      "actions_executed": 4,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "157ea421375a75cdb4a85db8446c0406ba8e2496c3a63afd4cdbc42e0350c03e"
+    },
+    {
+      "family": "R_then_U",
+      "R": 1,
+      "U": 4,
+      "path": [
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 5,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "404355a11b080f012397e62427faf8f2452bf0fc053148bc3540aa0477c4cd5f"
+    },
+    {
+      "family": "U_then_R",
+      "R": 1,
+      "U": 4,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 1,
+      "U": 5,
+      "path": [
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 5,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "404355a11b080f012397e62427faf8f2452bf0fc053148bc3540aa0477c4cd5f"
+    },
+    {
+      "family": "U_then_R",
+      "R": 1,
+      "U": 5,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 1,
+      "U": 6,
+      "path": [
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 5,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "404355a11b080f012397e62427faf8f2452bf0fc053148bc3540aa0477c4cd5f"
+    },
+    {
+      "family": "U_then_R",
+      "R": 1,
+      "U": 6,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 1,
+      "U": 7,
+      "path": [
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 5,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "404355a11b080f012397e62427faf8f2452bf0fc053148bc3540aa0477c4cd5f"
+    },
+    {
+      "family": "U_then_R",
+      "R": 1,
+      "U": 7,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 2,
+      "U": 1,
+      "path": [
+        4,
+        4,
+        1
+      ],
+      "actions_executed": 3,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "4a341568bbb2dfbdae664d3f9c14c381c9b751c6eac6cc2485c2d9453063aab5"
+    },
+    {
+      "family": "U_then_R",
+      "R": 2,
+      "U": 1,
+      "path": [
+        1,
+        4,
+        4
+      ],
+      "actions_executed": 3,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "4a341568bbb2dfbdae664d3f9c14c381c9b751c6eac6cc2485c2d9453063aab5"
+    },
+    {
+      "family": "R_then_U",
+      "R": 2,
+      "U": 2,
+      "path": [
+        4,
+        4,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "190fcbecbaae8720f2f47c04fc8ba9003b4529648cd2b6cd077ed39e0d755f33"
+    },
+    {
+      "family": "U_then_R",
+      "R": 2,
+      "U": 2,
+      "path": [
+        1,
+        1,
+        4,
+        4
+      ],
+      "actions_executed": 4,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "190fcbecbaae8720f2f47c04fc8ba9003b4529648cd2b6cd077ed39e0d755f33"
+    },
+    {
+      "family": "R_then_U",
+      "R": 2,
+      "U": 3,
+      "path": [
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 5,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "103628906bf0d9ff021c250893631d5049ea40616dd09df528b967ba98e374a8"
+    },
+    {
+      "family": "U_then_R",
+      "R": 2,
+      "U": 3,
+      "path": [
+        1,
+        1,
+        1,
+        4,
+        4
+      ],
+      "actions_executed": 5,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "103628906bf0d9ff021c250893631d5049ea40616dd09df528b967ba98e374a8"
+    },
+    {
+      "family": "R_then_U",
+      "R": 2,
+      "U": 4,
+      "path": [
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 6,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "00524e3192367746c7be741338b9306d19bbe4bb1f4f8514bb0dda4e3f0f916a"
+    },
+    {
+      "family": "U_then_R",
+      "R": 2,
+      "U": 4,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 2,
+      "U": 5,
+      "path": [
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 6,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "00524e3192367746c7be741338b9306d19bbe4bb1f4f8514bb0dda4e3f0f916a"
+    },
+    {
+      "family": "U_then_R",
+      "R": 2,
+      "U": 5,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 2,
+      "U": 6,
+      "path": [
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 6,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "00524e3192367746c7be741338b9306d19bbe4bb1f4f8514bb0dda4e3f0f916a"
+    },
+    {
+      "family": "U_then_R",
+      "R": 2,
+      "U": 6,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 2,
+      "U": 7,
+      "path": [
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 6,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "00524e3192367746c7be741338b9306d19bbe4bb1f4f8514bb0dda4e3f0f916a"
+    },
+    {
+      "family": "U_then_R",
+      "R": 2,
+      "U": 7,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 3,
+      "U": 1,
+      "path": [
+        4,
+        4,
+        4,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "01212087e673ad6418ec9b8625ca711ab5ff5594b949afe3fea4143cfa2192cd"
+    },
+    {
+      "family": "U_then_R",
+      "R": 3,
+      "U": 1,
+      "path": [
+        1,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 4,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "01212087e673ad6418ec9b8625ca711ab5ff5594b949afe3fea4143cfa2192cd"
+    },
+    {
+      "family": "R_then_U",
+      "R": 3,
+      "U": 2,
+      "path": [
+        4,
+        4,
+        4,
+        1,
+        1
+      ],
+      "actions_executed": 5,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "3eb975d01e377b3b07ed6777b465addca1e32af9e4cf567a5369f95cfd80eda1"
+    },
+    {
+      "family": "U_then_R",
+      "R": 3,
+      "U": 2,
+      "path": [
+        1,
+        1,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 5,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "3eb975d01e377b3b07ed6777b465addca1e32af9e4cf567a5369f95cfd80eda1"
+    },
+    {
+      "family": "R_then_U",
+      "R": 3,
+      "U": 3,
+      "path": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 6,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "3eb975d01e377b3b07ed6777b465addca1e32af9e4cf567a5369f95cfd80eda1"
+    },
+    {
+      "family": "U_then_R",
+      "R": 3,
+      "U": 3,
+      "path": [
+        1,
+        1,
+        1,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 6,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "5fd11485cf8dcf3140a999a2da1f49dde9f1de7595824d04414479af0f624825"
+    },
+    {
+      "family": "R_then_U",
+      "R": 3,
+      "U": 4,
+      "path": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 7,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "c07978ba3f0394b8486c1a27fc03c25aaa4fad1c62d87bcc04083626b1f3e35d"
+    },
+    {
+      "family": "U_then_R",
+      "R": 3,
+      "U": 4,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 3,
+      "U": 5,
+      "path": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "c07978ba3f0394b8486c1a27fc03c25aaa4fad1c62d87bcc04083626b1f3e35d"
+    },
+    {
+      "family": "U_then_R",
+      "R": 3,
+      "U": 5,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 3,
+      "U": 6,
+      "path": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 9,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "c07978ba3f0394b8486c1a27fc03c25aaa4fad1c62d87bcc04083626b1f3e35d"
+    },
+    {
+      "family": "U_then_R",
+      "R": 3,
+      "U": 6,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 3,
+      "U": 7,
+      "path": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 10,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "d93821092ead700162cbb5f7c85e55ffcb3f8d669b8c358d397c962c118ca6b6"
+    },
+    {
+      "family": "U_then_R",
+      "R": 3,
+      "U": 7,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 4,
+      "U": 1,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        1
+      ],
+      "actions_executed": 5,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "4fbb4ae24119efce631ae27b60ee35ee550527d190b56c128cd33eaaebc3c487"
+    },
+    {
+      "family": "U_then_R",
+      "R": 4,
+      "U": 1,
+      "path": [
+        1,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 5,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "4fbb4ae24119efce631ae27b60ee35ee550527d190b56c128cd33eaaebc3c487"
+    },
+    {
+      "family": "R_then_U",
+      "R": 4,
+      "U": 2,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        1,
+        1
+      ],
+      "actions_executed": 6,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "d35d462ccfd76f8e5c205e9299cd01ece5b048bc143c6c268e5ae7e5a06abeb3"
+    },
+    {
+      "family": "U_then_R",
+      "R": 4,
+      "U": 2,
+      "path": [
+        1,
+        1,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 6,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "d35d462ccfd76f8e5c205e9299cd01ece5b048bc143c6c268e5ae7e5a06abeb3"
+    },
+    {
+      "family": "R_then_U",
+      "R": 4,
+      "U": 3,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 7,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cf34a9279b31c53baaa2dd268dcdcf493e0c1ceb8781484b44791e28164a07db"
+    },
+    {
+      "family": "U_then_R",
+      "R": 4,
+      "U": 3,
+      "path": [
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 7,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "85d6e96e06807e7bb067aba58d2b418ed4fd63f4eae5452e8bfc189b27c0acb0"
+    },
+    {
+      "family": "R_then_U",
+      "R": 4,
+      "U": 4,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cf34a9279b31c53baaa2dd268dcdcf493e0c1ceb8781484b44791e28164a07db"
+    },
+    {
+      "family": "U_then_R",
+      "R": 4,
+      "U": 4,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 4,
+      "U": 5,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 9,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cf34a9279b31c53baaa2dd268dcdcf493e0c1ceb8781484b44791e28164a07db"
+    },
+    {
+      "family": "U_then_R",
+      "R": 4,
+      "U": 5,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 4,
+      "U": 6,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 10,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "8071b566393e5d8063e19f9b1073da441ee0e4e4dbdfaae7d402214994e73c67"
+    },
+    {
+      "family": "U_then_R",
+      "R": 4,
+      "U": 6,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 4,
+      "U": 7,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 11,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "8071b566393e5d8063e19f9b1073da441ee0e4e4dbdfaae7d402214994e73c67"
+    },
+    {
+      "family": "U_then_R",
+      "R": 4,
+      "U": 7,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 5,
+      "U": 1,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        1
+      ],
+      "actions_executed": 6,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "64c26075a21514ea26810f57202b814d8bade73a77a169d74b6e5848f72f7b03"
+    },
+    {
+      "family": "U_then_R",
+      "R": 5,
+      "U": 1,
+      "path": [
+        1,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 6,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "64c26075a21514ea26810f57202b814d8bade73a77a169d74b6e5848f72f7b03"
+    },
+    {
+      "family": "R_then_U",
+      "R": 5,
+      "U": 2,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1
+      ],
+      "actions_executed": 7,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cd668d1e92d3b72ce79607f18c4ecc3ffb3c96d6ad7ce345fa4972f1a8f874cb"
+    },
+    {
+      "family": "U_then_R",
+      "R": 5,
+      "U": 2,
+      "path": [
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 7,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cd668d1e92d3b72ce79607f18c4ecc3ffb3c96d6ad7ce345fa4972f1a8f874cb"
+    },
+    {
+      "family": "R_then_U",
+      "R": 5,
+      "U": 3,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cd668d1e92d3b72ce79607f18c4ecc3ffb3c96d6ad7ce345fa4972f1a8f874cb"
+    },
+    {
+      "family": "U_then_R",
+      "R": 5,
+      "U": 3,
+      "path": [
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "943204fcab115e6492d7babe97be7e72b63d96f22ed19bc881d7dd8ae455b3d4"
+    },
+    {
+      "family": "R_then_U",
+      "R": 5,
+      "U": 4,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 9,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cd668d1e92d3b72ce79607f18c4ecc3ffb3c96d6ad7ce345fa4972f1a8f874cb"
+    },
+    {
+      "family": "U_then_R",
+      "R": 5,
+      "U": 4,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 5,
+      "U": 5,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 10,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "5d6b161b4d99468035fa143ec7d21b9edc5721c8a936e466c61009f75558c5b2"
+    },
+    {
+      "family": "U_then_R",
+      "R": 5,
+      "U": 5,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 5,
+      "U": 6,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 11,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "5d6b161b4d99468035fa143ec7d21b9edc5721c8a936e466c61009f75558c5b2"
+    },
+    {
+      "family": "U_then_R",
+      "R": 5,
+      "U": 6,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 5,
+      "U": 7,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 12,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "5d6b161b4d99468035fa143ec7d21b9edc5721c8a936e466c61009f75558c5b2"
+    },
+    {
+      "family": "U_then_R",
+      "R": 5,
+      "U": 7,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 6,
+      "U": 1,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1
+      ],
+      "actions_executed": 7,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "167bd77e5848fe8531eae1004ce49bfcc7b086dd2a2c6bdf560dea73e1773916"
+    },
+    {
+      "family": "U_then_R",
+      "R": 6,
+      "U": 1,
+      "path": [
+        1,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 7,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "167bd77e5848fe8531eae1004ce49bfcc7b086dd2a2c6bdf560dea73e1773916"
+    },
+    {
+      "family": "R_then_U",
+      "R": 6,
+      "U": 2,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "03ac55c8b28b74ea831530bbfa13a3deb4eb2bf7825967a58c62b13676929eb9"
+    },
+    {
+      "family": "U_then_R",
+      "R": 6,
+      "U": 2,
+      "path": [
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "03ac55c8b28b74ea831530bbfa13a3deb4eb2bf7825967a58c62b13676929eb9"
+    },
+    {
+      "family": "R_then_U",
+      "R": 6,
+      "U": 3,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 9,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "03ac55c8b28b74ea831530bbfa13a3deb4eb2bf7825967a58c62b13676929eb9"
+    },
+    {
+      "family": "U_then_R",
+      "R": 6,
+      "U": 3,
+      "path": [
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 9,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "cac2c34dce1e72b9ea495adb0f11d994e7a3173d65aad3b14ce7ecc085efd0e2"
+    },
+    {
+      "family": "R_then_U",
+      "R": 6,
+      "U": 4,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 10,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "18acd1360737089a358153c975b7ca7b7927825fb5f390265fae99a42c66c940"
+    },
+    {
+      "family": "U_then_R",
+      "R": 6,
+      "U": 4,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 6,
+      "U": 5,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 11,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "18acd1360737089a358153c975b7ca7b7927825fb5f390265fae99a42c66c940"
+    },
+    {
+      "family": "U_then_R",
+      "R": 6,
+      "U": 5,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 6,
+      "U": 6,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 12,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "18acd1360737089a358153c975b7ca7b7927825fb5f390265fae99a42c66c940"
+    },
+    {
+      "family": "U_then_R",
+      "R": 6,
+      "U": 6,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 6,
+      "U": 7,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 13,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "901f452b2fe1730c26959def48df81b4abea707a1af6b457d52ad794ce36c50e"
+    },
+    {
+      "family": "U_then_R",
+      "R": 6,
+      "U": 7,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 7,
+      "U": 1,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "167bd77e5848fe8531eae1004ce49bfcc7b086dd2a2c6bdf560dea73e1773916"
+    },
+    {
+      "family": "U_then_R",
+      "R": 7,
+      "U": 1,
+      "path": [
+        1,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 8,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "167bd77e5848fe8531eae1004ce49bfcc7b086dd2a2c6bdf560dea73e1773916"
+    },
+    {
+      "family": "R_then_U",
+      "R": 7,
+      "U": 2,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1
+      ],
+      "actions_executed": 9,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "03ac55c8b28b74ea831530bbfa13a3deb4eb2bf7825967a58c62b13676929eb9"
+    },
+    {
+      "family": "U_then_R",
+      "R": 7,
+      "U": 2,
+      "path": [
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 9,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "03ac55c8b28b74ea831530bbfa13a3deb4eb2bf7825967a58c62b13676929eb9"
+    },
+    {
+      "family": "R_then_U",
+      "R": 7,
+      "U": 3,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 10,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "18acd1360737089a358153c975b7ca7b7927825fb5f390265fae99a42c66c940"
+    },
+    {
+      "family": "U_then_R",
+      "R": 7,
+      "U": 3,
+      "path": [
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "actions_executed": 10,
+      "matched": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "e1f8dabbbb65606406001bc4ac7d05e3f4248c2278fad3f3674df951d4a2ce65"
+    },
+    {
+      "family": "R_then_U",
+      "R": 7,
+      "U": 4,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 11,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "18acd1360737089a358153c975b7ca7b7927825fb5f390265fae99a42c66c940"
+    },
+    {
+      "family": "U_then_R",
+      "R": 7,
+      "U": 4,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 7,
+      "U": 5,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 12,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "18acd1360737089a358153c975b7ca7b7927825fb5f390265fae99a42c66c940"
+    },
+    {
+      "family": "U_then_R",
+      "R": 7,
+      "U": 5,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 7,
+      "U": 6,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 13,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "901f452b2fe1730c26959def48df81b4abea707a1af6b457d52ad794ce36c50e"
+    },
+    {
+      "family": "U_then_R",
+      "R": 7,
+      "U": 6,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    },
+    {
+      "family": "R_then_U",
+      "R": 7,
+      "U": 7,
+      "path": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 14,
+      "matched": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "901f452b2fe1730c26959def48df81b4abea707a1af6b457d52ad794ce36c50e"
+    },
+    {
+      "family": "U_then_R",
+      "R": 7,
+      "U": 7,
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "actions_executed": 4,
+      "matched": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "level": 2,
+      "frame": "62507380f1e5edcc85d7b9042ebf12a12591015c14cfd806b7dc7202106b7082"
+    }
+  ]
+}

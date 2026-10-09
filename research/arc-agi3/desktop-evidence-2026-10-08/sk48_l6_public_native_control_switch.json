@@ -1,0 +1,127 @@
+{
+  "source": "native public control click",
+  "saved_L6_route_used": false,
+  "stage_gate": "first native completion",
+  "tests": [
+    {
+      "after_switch_action": null,
+      "click": [
+        31,
+        4
+      ],
+      "public_heads": [
+        [
+          5,
+          26,
+          6
+        ],
+        [
+          29,
+          2,
+          15
+        ]
+      ],
+      "switch_changed_pixels": 104,
+      "total_changed_pixels": 104,
+      "level": 5,
+      "before_sha": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+      "after_sha": "af984bff98844bb1f05fc7415d1ee0ea58278b351ac17729db14bfded220b572"
+    },
+    {
+      "after_switch_action": 1,
+      "click": [
+        31,
+        4
+      ],
+      "public_heads": [
+        [
+          5,
+          26,
+          6
+        ],
+        [
+          29,
+          2,
+          15
+        ]
+      ],
+      "switch_changed_pixels": 104,
+      "total_changed_pixels": 104,
+      "level": 5,
+      "before_sha": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+      "after_sha": "2231b115222cca78a6ba04ac5f32eb5b331f537ecc62ba01a1ab8cffb2da3afa"
+    },
+    {
+      "after_switch_action": 2,
+      "click": [
+        31,
+        4
+      ],
+      "public_heads": [
+        [
+          5,
+          26,
+          6
+        ],
+        [
+          29,
+          2,
+          15
+        ]
+      ],
+      "switch_changed_pixels": 104,
+      "total_changed_pixels": 116,
+      "level": 5,
+      "before_sha": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+      "after_sha": "a3228c26a7cbfb3ffb4245543f28e4f3443018fe6ba56d6b33f472531450a3d5"
+    },
+    {
+      "after_switch_action": 3,
+      "click": [
+        31,
+        4
+      ],
+      "public_heads": [
+        [
+          5,
+          26,
+          6
+        ],
+        [
+          29,
+          2,
+          15
+        ]
+      ],
+      "switch_changed_pixels": 104,
+      "total_changed_pixels": 174,
+      "level": 5,
+      "before_sha": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+      "after_sha": "23ddcc8b45e99b37183829792c610d0802d0ef153f4b7487e8868c501425664c"
+    },
+    {
+      "after_switch_action": 4,
+      "click": [
+        31,
+        4
+      ],
+      "public_heads": [
+        [
+          5,
+          26,
+          6
+        ],
+        [
+          29,
+          2,
+          15
+        ]
+      ],
+      "switch_changed_pixels": 104,
+      "total_changed_pixels": 174,
+      "level": 5,
+      "before_sha": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+      "after_sha": "17802740920707523cf8f010adf94e19f7f5435b00a55696b7cf99d35d0c2edb"
+    }
+  ]
+}

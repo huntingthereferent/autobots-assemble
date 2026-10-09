@@ -1,0 +1,52 @@
+{
+  "entry_level_completed": 6,
+  "stage_consumption": [
+    14,
+    33,
+    33,
+    27,
+    65,
+    36
+  ],
+  "entry_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+  "visible_controls": [
+    [
+      5,
+      26,
+      6
+    ],
+    [
+      29,
+      2,
+      15
+    ]
+  ],
+  "prior_routes_reference_assisted": true,
+  "saved_L7_route_used": false,
+  "immediate_action_probes": [
+    {
+      "direction": 1,
+      "pixel_diff": 96,
+      "level": 6,
+      "sha": "3d67d68576a8fd1720384d7ae22b8b1536b4d8058dc8349588fa411fa70e56f3"
+    },
+    {
+      "direction": 2,
+      "pixel_diff": 96,
+      "level": 6,
+      "sha": "012b169525880f4c99e1e772559affc7a68206c6e96ceef071c7c508e657c3d8"
+    },
+    {
+      "direction": 3,
+      "pixel_diff": 12,
+      "level": 6,
+      "sha": "96372a664a7f285d995e986cd7717f84ef3ef1bdf8313cb06a65f15e545e4dab"
+    },
+    {
+      "direction": 4,
+      "pixel_diff": 12,
+      "level": 6,
+      "sha": "ff3933d2c21d8beb67e767e1f5c508ce4932d257ea58f82868feb3fa7828e6e8"
+    }
+  ]
+}

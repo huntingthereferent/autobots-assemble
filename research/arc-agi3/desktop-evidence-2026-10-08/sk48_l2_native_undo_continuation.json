@@ -1,0 +1,5 @@
+{
+  "action_pairs_tested": 20,
+  "counterexamples": [],
+  "scope": "one undo followed by one move, Level 2 entry state, fresh game per pair"
+}

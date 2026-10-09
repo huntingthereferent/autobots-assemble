@@ -1,0 +1,327 @@
+{
+  "status": "reference-assisted verified Level6 alternative native routes",
+  "public_pixel_control_selection": true,
+  "first_completion_stage_gating": true,
+  "fresh_trials": 6,
+  "passing_routes": 3,
+  "results": [
+    {
+      "swap_index": 1,
+      "route": [
+        4,
+        2,
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        4,
+        2,
+        1,
+        4,
+        2,
+        3,
+        1,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "all_pass": true,
+      "trials": [
+        {
+          "trial": 0,
+          "L1toL5_consumed": [
+            14,
+            32,
+            33,
+            27,
+            65
+          ],
+          "L6_entry_sha256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "L6_first_completion_at": 36,
+          "native_levels_completed": 6,
+          "clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L1toL5_consumed": [
+            14,
+            33,
+            34,
+            27,
+            65
+          ],
+          "L6_entry_sha256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "L6_first_completion_at": 36,
+          "native_levels_completed": 6,
+          "clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "swap_index": 6,
+      "route": [
+        4,
+        4,
+        2,
+        4,
+        6,
+        2,
+        4,
+        2,
+        4,
+        2,
+        1,
+        4,
+        2,
+        3,
+        1,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "all_pass": true,
+      "trials": [
+        {
+          "trial": 0,
+          "L1toL5_consumed": [
+            14,
+            33,
+            33,
+            27,
+            65
+          ],
+          "L6_entry_sha256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "L6_first_completion_at": 36,
+          "native_levels_completed": 6,
+          "clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L1toL5_consumed": [
+            14,
+            32,
+            33,
+            27,
+            65
+          ],
+          "L6_entry_sha256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "L6_first_completion_at": 36,
+          "native_levels_completed": 6,
+          "clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "swap_index": 13,
+      "route": [
+        4,
+        4,
+        2,
+        4,
+        6,
+        2,
+        2,
+        4,
+        4,
+        2,
+        1,
+        4,
+        2,
+        1,
+        3,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "all_pass": true,
+      "trials": [
+        {
+          "trial": 0,
+          "L1toL5_consumed": [
+            14,
+            32,
+            34,
+            27,
+            65
+          ],
+          "L6_entry_sha256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "L6_first_completion_at": 36,
+          "native_levels_completed": 6,
+          "clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L1toL5_consumed": [
+            14,
+            31,
+            34,
+            27,
+            65
+          ],
+          "L6_entry_sha256": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+          "L6_first_completion_at": 36,
+          "native_levels_completed": 6,
+          "clicks": [
+            [
+              5,
+              31,
+              4
+            ],
+            [
+              18,
+              7,
+              34
+            ],
+            [
+              33,
+              37,
+              4
+            ]
+          ],
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "seed_source": "prior native beam witness, not saved Level2 answer",
+  "seed": [
+    4,
+    4,
+    4,
+    1,
+    1,
+    4,
+    4,
+    1
+  ],
+  "method": "exhaustive bounded next-color action search",
+  "native_only": true,
+  "uses_game_clone": false,
+  "found_witnesses": [
+    {
+      "path": [
+        4,
+        4,
+        4,
+        1,
+        1,
+        4,
+        4,
+        1,
+        4,
+        3,
+        3,
+        1
+      ],
+      "additional_actions": 4,
+      "prefix": 2,
+      "colors": [
+        [
+          8,
+          12
+        ]
+      ],
+      "native_level": 1,
+      "target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "frame_sha256": "71fb834241db504103060561bd2ddb2485fd319ba577b6ad654fafabc4f34d9e"
+    }
+  ],
+  "levels": [
+    {
+      "extra_depth": 1,
+      "paths_at_depth": 4,
+      "unique_next": 4,
+      "witnesses": 0,
+      "native_calls": 123,
+      "seconds": 0.14
+    },
+    {
+      "extra_depth": 2,
+      "paths_at_depth": 16,
+      "unique_next": 16,
+      "witnesses": 0,
+      "native_calls": 539,
+      "seconds": 0.77
+    },
+    {
+      "extra_depth": 3,
+      "paths_at_depth": 64,
+      "unique_next": 64,
+      "witnesses": 0,
+      "native_calls": 2267,
+      "seconds": 3.41
+    },
+    {
+      "extra_depth": 4,
+      "paths_at_depth": 256,
+      "unique_next": 250,
+      "witnesses": 1,
+      "native_calls": 9435,
+      "seconds": 14.53
+    }
+  ],
+  "native_calls": 9435,
+  "reset_retries": 340
+}

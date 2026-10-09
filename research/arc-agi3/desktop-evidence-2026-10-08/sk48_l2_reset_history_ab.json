@@ -1,0 +1,93 @@
+{
+  "game": "sk48",
+  "experiment": "previous level 2 action then native reset and same witnessed level 1 path",
+  "used_private_engine": false,
+  "used_clone": false,
+  "results": [
+    {
+      "probe": null,
+      "first_l2_frame": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "second_l2_frame": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "same_l0_frame_after_reset": true,
+      "same_l2_frame_after_reentry": true,
+      "changed_l2_pixels": 0,
+      "changed_box": null,
+      "levels_after_reset": 0
+    },
+    {
+      "probe": 1,
+      "first_l2_frame": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "second_l2_frame": "2545adb673ca85fc89f43baf15d9add7ebd0552a28d5195ab5e5a719a7c9ed3d",
+      "same_l0_frame_after_reset": false,
+      "same_l2_frame_after_reentry": false,
+      "changed_l2_pixels": 196,
+      "changed_box": [
+        5,
+        25,
+        63,
+        53
+      ],
+      "levels_after_reset": 1
+    },
+    {
+      "probe": 2,
+      "first_l2_frame": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "second_l2_frame": "2545adb673ca85fc89f43baf15d9add7ebd0552a28d5195ab5e5a719a7c9ed3d",
+      "same_l0_frame_after_reset": false,
+      "same_l2_frame_after_reentry": false,
+      "changed_l2_pixels": 196,
+      "changed_box": [
+        5,
+        25,
+        63,
+        53
+      ],
+      "levels_after_reset": 1
+    },
+    {
+      "probe": 3,
+      "first_l2_frame": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "second_l2_frame": "2545adb673ca85fc89f43baf15d9add7ebd0552a28d5195ab5e5a719a7c9ed3d",
+      "same_l0_frame_after_reset": false,
+      "same_l2_frame_after_reentry": false,
+      "changed_l2_pixels": 196,
+      "changed_box": [
+        5,
+        25,
+        63,
+        53
+      ],
+      "levels_after_reset": 1
+    },
+    {
+      "probe": 4,
+      "first_l2_frame": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "second_l2_frame": "2545adb673ca85fc89f43baf15d9add7ebd0552a28d5195ab5e5a719a7c9ed3d",
+      "same_l0_frame_after_reset": false,
+      "same_l2_frame_after_reentry": false,
+      "changed_l2_pixels": 196,
+      "changed_box": [
+        5,
+        25,
+        63,
+        53
+      ],
+      "levels_after_reset": 1
+    },
+    {
+      "probe": 7,
+      "first_l2_frame": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+      "second_l2_frame": "2545adb673ca85fc89f43baf15d9add7ebd0552a28d5195ab5e5a719a7c9ed3d",
+      "same_l0_frame_after_reset": false,
+      "same_l2_frame_after_reentry": false,
+      "changed_l2_pixels": 196,
+      "changed_box": [
+        5,
+        25,
+        63,
+        53
+      ],
+      "levels_after_reset": 1
+    }
+  ]
+}

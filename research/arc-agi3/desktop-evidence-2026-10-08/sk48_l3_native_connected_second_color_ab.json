@@ -1,0 +1,6423 @@
+{
+  "native_public_only": true,
+  "saved_L3_route_loaded": false,
+  "first_color_seed": [
+    1,
+    1,
+    1,
+    1,
+    4,
+    4,
+    4
+  ],
+  "programs_enumerated": 252,
+  "tested_distinct": 219,
+  "witnesses": [],
+  "tests": [
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 0,
+      "right": 0,
+      "suffix": [
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "dd7c701d4ab6e60b31f30f73a536bcd56294bf2ebf728671e7c16ce7b0710b31"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 0,
+      "right": 1,
+      "suffix": [
+        2,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5162705f9062e8e0d61c2f507240a6be59268f73c7c6700ed927b02ae3ca03b7"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 0,
+      "right": 1,
+      "suffix": [
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5162705f9062e8e0d61c2f507240a6be59268f73c7c6700ed927b02ae3ca03b7"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 0,
+      "right": 2,
+      "suffix": [
+        2,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "85ce333470115a64cdd5275beba5cd3ca0f7ef46ccd44a8813a81948eb133e18"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 0,
+      "right": 2,
+      "suffix": [
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "85ce333470115a64cdd5275beba5cd3ca0f7ef46ccd44a8813a81948eb133e18"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 0,
+      "right": 3,
+      "suffix": [
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "295b36a63b80e3a5b9612c0bef579ed26ae718f4c25f5226805890bae12ce540"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 0,
+      "right": 3,
+      "suffix": [
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "295b36a63b80e3a5b9612c0bef579ed26ae718f4c25f5226805890bae12ce540"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 0,
+      "right": 4,
+      "suffix": [
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "295b36a63b80e3a5b9612c0bef579ed26ae718f4c25f5226805890bae12ce540"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 0,
+      "right": 4,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "295b36a63b80e3a5b9612c0bef579ed26ae718f4c25f5226805890bae12ce540"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 0,
+      "right": 5,
+      "suffix": [
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 0,
+      "right": 5,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 0,
+      "right": 6,
+      "suffix": [
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 0,
+      "right": 6,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 0,
+      "suffix": [
+        2,
+        3
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "545671ccaa242f518dbd92c14b3d82b32d6e2ec72e33cabae24c0f1ca7342de7"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 0,
+      "suffix": [
+        3,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "55a6460813838df3400f34f5eba574e624af613581989f0744e6fdb7ed9dd972"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        2,
+        3,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7ab1574963090691b0560e2f41690fcf8b59c6db6033380880e2b7edc56dde4c"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        3,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "dfa6e2a7c4fc1bc209fc8941efd254add5a6596885cc68bc26f4834c1f5eb51e"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        3,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7ab1574963090691b0560e2f41690fcf8b59c6db6033380880e2b7edc56dde4c"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        2,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "86c77185dbca1ebf20d85f844b05293f8e6bb0e2dcf0e930f0047f764df5b1bc"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        3,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "011a504ddd7b9e225b0aea678620ab43ca28b6a5ab5830502d81d9ad174fe0b8"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        3,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "86c77185dbca1ebf20d85f844b05293f8e6bb0e2dcf0e930f0047f764df5b1bc"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        2,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "85ce333470115a64cdd5275beba5cd3ca0f7ef46ccd44a8813a81948eb133e18"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        3,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "3fc865ac49f9437ebe1af04d72eb5bdc04fb6717dca1215350221db69ce69702"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "85ce333470115a64cdd5275beba5cd3ca0f7ef46ccd44a8813a81948eb133e18"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        2,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        3,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0c24d409a17fb128f9f613cb01bc1734738a442f0dd9a84d26ca8edcca4824cd"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        2,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        3,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0c24d409a17fb128f9f613cb01bc1734738a442f0dd9a84d26ca8edcca4824cd"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        2,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        3,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0c24d409a17fb128f9f613cb01bc1734738a442f0dd9a84d26ca8edcca4824cd"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 0,
+      "suffix": [
+        2,
+        3,
+        3
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "f014df9ac4e8c78c90ee45e699b521abd680e2527dc2390abfe35a07e8e0df1a"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 0,
+      "suffix": [
+        3,
+        3,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "87e0df1f46bc0eba64bd0694c11a51a22a83cdedcad4548d6a6186787fcd9a78"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        2,
+        3,
+        3,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "b836f13b9de9f851a87d7aecfe18fe32b2cee64e1642dcf5540ab2555afced31"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "a8c91936da40269ea1a89056daee3cb54af569626f19fcbda1f3dd2bc561e632"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        4,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "a8c91936da40269ea1a89056daee3cb54af569626f19fcbda1f3dd2bc561e632"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        2,
+        3,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7ab1574963090691b0560e2f41690fcf8b59c6db6033380880e2b7edc56dde4c"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "dfa6e2a7c4fc1bc209fc8941efd254add5a6596885cc68bc26f4834c1f5eb51e"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7ab1574963090691b0560e2f41690fcf8b59c6db6033380880e2b7edc56dde4c"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        2,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "623ffce42444fb8ebd317b6ddd3bebe984b0cdecdadcaf976492762392ea4fe0"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "3551548fbc4b9d4eb7f8a38d0e4426f2b9cbf287c12335625c43614fda334380"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "623ffce42444fb8ebd317b6ddd3bebe984b0cdecdadcaf976492762392ea4fe0"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d53f092f694fabbefaabbc24e6decc5093c11bf443ba2c798c23fb72ac9463b1"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "c62d06140caed3870c17fb2d7bc8dda1f91bddb88371ad14503af160161ea9af"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d53f092f694fabbefaabbc24e6decc5093c11bf443ba2c798c23fb72ac9463b1"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0c24d409a17fb128f9f613cb01bc1734738a442f0dd9a84d26ca8edcca4824cd"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50ea81d65b0796e053ebd80cf4d9a8b9191fc8642eb4fd9f8a5dd80eedba30cb"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d240739ccfe5e136ce6017f7f5d724cccf762c269b78e853ffec8d084e4bffbc"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5c845ed7b8d00dc5a0c82e0dfdae847e99830f30089dc70ffb8214933dfdd400"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d240739ccfe5e136ce6017f7f5d724cccf762c269b78e853ffec8d084e4bffbc"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 0,
+      "suffix": [
+        2,
+        3,
+        3,
+        3
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "4bc1bd55088269644722387c5b78c38ab31615ee0caa0647b9eb5330492e9c11"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 0,
+      "suffix": [
+        3,
+        3,
+        3,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "4e4a461b7762a6439b242fdc59c452b2409787c39a8504f2884c215787e13aea"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        2,
+        3,
+        3,
+        3,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "f014df9ac4e8c78c90ee45e699b521abd680e2527dc2390abfe35a07e8e0df1a"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "87e0df1f46bc0eba64bd0694c11a51a22a83cdedcad4548d6a6186787fcd9a78"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "87e0df1f46bc0eba64bd0694c11a51a22a83cdedcad4548d6a6186787fcd9a78"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        2,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "c26da884f17114b8a2344357928f7ba07669d98d09d822d37d453890e3ffb1c7"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "83e193f4ed8d66184304e569544c64c6ce7ed02eb100e4f92ad2024de56299df"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "83e193f4ed8d66184304e569544c64c6ce7ed02eb100e4f92ad2024de56299df"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5b6705f2222e7ec3814d90d2a5150989cc98589d7415a10ce24dedf34c9400b5"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "521897c337aa91d79d12e535a2739df3104232929fa1917343325f24454c3d13"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5b6705f2222e7ec3814d90d2a5150989cc98589d7415a10ce24dedf34c9400b5"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "623ffce42444fb8ebd317b6ddd3bebe984b0cdecdadcaf976492762392ea4fe0"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "3551548fbc4b9d4eb7f8a38d0e4426f2b9cbf287c12335625c43614fda334380"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "623ffce42444fb8ebd317b6ddd3bebe984b0cdecdadcaf976492762392ea4fe0"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "6cf01a4c024a0bebee83eb4f17e515d45b23bac94c0c78fd611a6b167a770c39"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "a4742b2ece512c84f9ae1a0306e40ecfbd66da719fbd1324757fa02d67123485"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "6cf01a4c024a0bebee83eb4f17e515d45b23bac94c0c78fd611a6b167a770c39"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d240739ccfe5e136ce6017f7f5d724cccf762c269b78e853ffec8d084e4bffbc"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 1,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        [
+          12
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5c845ed7b8d00dc5a0c82e0dfdae847e99830f30089dc70ffb8214933dfdd400"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 1,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d240739ccfe5e136ce6017f7f5d724cccf762c269b78e853ffec8d084e4bffbc"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 0,
+      "right": 0,
+      "suffix": [
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "97c50cf40216a5cb55ae0d09f515f93db4019e09ed2429d2eab8c8dbbba4ae1c"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 0,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5b60d5573fc335e26a93b967c991f18db892024fcab76b40d22941e165b55466"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 0,
+      "right": 1,
+      "suffix": [
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d78d5cc517497dca7ada5c51c354db18536543c2e0474e014949ff990ffe0294"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 0,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "298f576bf2a44af6f672ccba4ea2b1ae3dd73012afe27884c0e2ffb58e61e685"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 0,
+      "right": 2,
+      "suffix": [
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "a2eb86d7c85d110b58daae7eb694046e553777848e10d6e21cefc1cabf798987"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 0,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "05f74a826b248acb0931fd52d2a1abab66687ad7245ba084a71a9192bbf93dd7"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 0,
+      "right": 3,
+      "suffix": [
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "30acbf257630e66673408376794507ef82c05b3e4b2ee855c017037a04d8fa47"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 0,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2b24f7ba339cedbfa8db9e8102db8b895291bdd269af0d2b6beb76bf6babd4bc"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 0,
+      "right": 4,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ae73a013b7ef4db46a201e7c59f727d795747fe5704cbc8b8b4f042dc1308363"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 0,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2b24f7ba339cedbfa8db9e8102db8b895291bdd269af0d2b6beb76bf6babd4bc"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 0,
+      "right": 5,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ae73a013b7ef4db46a201e7c59f727d795747fe5704cbc8b8b4f042dc1308363"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 0,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2b24f7ba339cedbfa8db9e8102db8b895291bdd269af0d2b6beb76bf6babd4bc"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 0,
+      "right": 6,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ae73a013b7ef4db46a201e7c59f727d795747fe5704cbc8b8b4f042dc1308363"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 0,
+      "suffix": [
+        2,
+        2,
+        3
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "a309e2e5da3f0f9b88bdc91c7cc7231b9cd657768adaf30150625397b4cb418d"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 0,
+      "suffix": [
+        3,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "b664d946bb93532f6c9fc9cfb3eb927e2e6a489803dbbd46b2000bf6ff7c8c75"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        3,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "3b08579b030d008cb678ff804dab30639d180894e2334a6903dbafd71c1f2e28"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        3,
+        2,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d93821092ead700162cbb5f7c85e55ffcb3f8d669b8c358d397c962c118ca6b6"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        3,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "3b08579b030d008cb678ff804dab30639d180894e2334a6903dbafd71c1f2e28"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5b60d5573fc335e26a93b967c991f18db892024fcab76b40d22941e165b55466"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        3,
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "8071b566393e5d8063e19f9b1073da441ee0e4e4dbdfaae7d402214994e73c67"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        3,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d78d5cc517497dca7ada5c51c354db18536543c2e0474e014949ff990ffe0294"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2057cc01fc2edfa79e1b09dabe4faddad8f9b9ebd64a2cdbf257b8a907721917"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        3,
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d4b95e6f6b859fe10d4eeb48871cb8ac65d1a7d6f21ae5781c86884a16184684"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "86544f94cde1149021c348ad9cbc09840ed453f32d93ed325ea6449990123ff6"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2b24f7ba339cedbfa8db9e8102db8b895291bdd269af0d2b6beb76bf6babd4bc"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "901f452b2fe1730c26959def48df81b4abea707a1af6b457d52ad794ce36c50e"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ae73a013b7ef4db46a201e7c59f727d795747fe5704cbc8b8b4f042dc1308363"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2b24f7ba339cedbfa8db9e8102db8b895291bdd269af0d2b6beb76bf6babd4bc"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "901f452b2fe1730c26959def48df81b4abea707a1af6b457d52ad794ce36c50e"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ae73a013b7ef4db46a201e7c59f727d795747fe5704cbc8b8b4f042dc1308363"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "398da0c422e52620214f2019a612043b4e895823675d5bf881a418dd02b2ae8c"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "8aab6f4f4df5457d6b4d9bea51086a576911d4dc34367d651a48f52690067d91"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "227509d839962266172edc4b2e4141b76a49c0413dd724183248f86b0d50ca24"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 0,
+      "suffix": [
+        2,
+        2,
+        3,
+        3
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "c2f7f926869c266aa3c2f79503aa305961450880ce1486fb7a223d02ac1cc793"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 0,
+      "suffix": [
+        3,
+        3,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "53295d20591d8646e77b9681cb210fd79fcfce83d3dc608fabab58ff4f3a6ac7"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "a309e2e5da3f0f9b88bdc91c7cc7231b9cd657768adaf30150625397b4cb418d"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "b664d946bb93532f6c9fc9cfb3eb927e2e6a489803dbbd46b2000bf6ff7c8c75"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        4,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "b664d946bb93532f6c9fc9cfb3eb927e2e6a489803dbbd46b2000bf6ff7c8c75"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "76ec00075684525f8a53208e9927f8aba6632bf0f75a100f28ff5f2881689453"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7d2bdae9f3610d15c9644b977a5f79dc85e40328221b9e7489d024fa06472f65"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "76ec00075684525f8a53208e9927f8aba6632bf0f75a100f28ff5f2881689453"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "eef30d79f323b6126476d158545b766640a61cc9541faf60ab90feab920dcb37"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "eee5325148cc8cc1b7fa1ad369858277a385731ad367adb7b13a20d980232427"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "05dc9623a446aa52a6e122a986587656b53a609392dd8922915c6995d1895cdd"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2057cc01fc2edfa79e1b09dabe4faddad8f9b9ebd64a2cdbf257b8a907721917"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d4b95e6f6b859fe10d4eeb48871cb8ac65d1a7d6f21ae5781c86884a16184684"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "86544f94cde1149021c348ad9cbc09840ed453f32d93ed325ea6449990123ff6"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "398da0c422e52620214f2019a612043b4e895823675d5bf881a418dd02b2ae8c"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "8aab6f4f4df5457d6b4d9bea51086a576911d4dc34367d651a48f52690067d91"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "227509d839962266172edc4b2e4141b76a49c0413dd724183248f86b0d50ca24"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "398da0c422e52620214f2019a612043b4e895823675d5bf881a418dd02b2ae8c"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "8aab6f4f4df5457d6b4d9bea51086a576911d4dc34367d651a48f52690067d91"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "227509d839962266172edc4b2e4141b76a49c0413dd724183248f86b0d50ca24"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 0,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ba4eca92e9289d250de8e2c1e5c7f3d592d20eb7f31bc1e6945baa23d227e596"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 0,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7fb7dabd0b5f3e12a1c7cb572910a2066f0a55e273131fc094255d7ac3fde8e9"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2db83df560c2cb512290f0d6acee210cc2e0376d9f663581a6a7117a240eeaef"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50bbbf08e7db67a28dba0dfe2ef26d167a872a00591bfc62000302d03b3d4466"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50bbbf08e7db67a28dba0dfe2ef26d167a872a00591bfc62000302d03b3d4466"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "37b3c2abbb3eee14de0ecb7543cf98f89a33b89c23c50b2617c6beead255297e"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "c48087c6b3bd78de7095d4bae21156ad51da1ccbf1795d9b57639d402a30e575"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "c48087c6b3bd78de7095d4bae21156ad51da1ccbf1795d9b57639d402a30e575"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "76ec00075684525f8a53208e9927f8aba6632bf0f75a100f28ff5f2881689453"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7d2bdae9f3610d15c9644b977a5f79dc85e40328221b9e7489d024fa06472f65"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "76ec00075684525f8a53208e9927f8aba6632bf0f75a100f28ff5f2881689453"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "35eab9a03df72aae8fa008f400fe265fc5676e6132c51c0fe6d9315311f133ec"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "50df666250a15d98b61c44640067faa84c50bf1ebc0109e7b1fe5d4571399393"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "1ed8937a66644f78a169386605c9f948e6f44af0f445a31a038888b0160259a1"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "1bf31effed33544910f9aab76e23cc0e6b6caf814eb365a773e62e96dd71138a"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "7e40c5fe327939108f13a170cafdb79d5445a564603ca0f97210d623a258b0c0"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "b64b03f363cc0b7bc862f3fdce1ce671997ed67958e797713b1eb3ef41cbf86e"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "398da0c422e52620214f2019a612043b4e895823675d5bf881a418dd02b2ae8c"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 2,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "8aab6f4f4df5457d6b4d9bea51086a576911d4dc34367d651a48f52690067d91"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 2,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          30,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "227509d839962266172edc4b2e4141b76a49c0413dd724183248f86b0d50ca24"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 0,
+      "right": 0,
+      "suffix": [
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "38e3513cf28834e2e51d3faa2272f4539610e12f6e95a43886cde4a1075ce660"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 0,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        2,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "eea7223aa03df47e0f62e2337ff0e201db1da06c4b8a0f89428d0a4cd832dff9"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 0,
+      "right": 1,
+      "suffix": [
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "fed96df43983d1c9796dd6c7db33e560224e807bfe1c72a5cd4c0f022a6acdd5"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 0,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "35849c41ac9764051e9646d918119d8c40c0dee4ddfa54689a89fb978823aee0"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 0,
+      "right": 2,
+      "suffix": [
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ef634c6d8ed87a46eb0154642c33a55577f88595f8cd3baf3eddcbb99bdc549d"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 0,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "444e21fb66ea5b16af04c0b08d38e4f4a46ba4147c7410263e12edb979804fb1"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 0,
+      "right": 3,
+      "suffix": [
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "33afaf088528284ad0037b8d4c379fca547966ff002ff17cb3ace8413e67d8e5"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 0,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "444e21fb66ea5b16af04c0b08d38e4f4a46ba4147c7410263e12edb979804fb1"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 0,
+      "right": 4,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "33afaf088528284ad0037b8d4c379fca547966ff002ff17cb3ace8413e67d8e5"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 0,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "444e21fb66ea5b16af04c0b08d38e4f4a46ba4147c7410263e12edb979804fb1"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 0,
+      "right": 5,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "33afaf088528284ad0037b8d4c379fca547966ff002ff17cb3ace8413e67d8e5"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 0,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0eeeb1afb9398c631c60e51b4dc13b83f8911222bcde464366d69f699fc8c36d"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 0,
+      "right": 6,
+      "suffix": [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "77e46acec445c16bb2766e2a2253902e8905e25f8325d3f96db8a21785411403"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 0,
+      "suffix": [
+        2,
+        2,
+        2,
+        3
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0b850b2ac386681c3b5eca66041470a0a778fc7db1bf7bf3a283b80c9726cf85"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 0,
+      "suffix": [
+        3,
+        2,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "362433c3baaaff00d5b6b31fe1cce10684b90e27e5faab7331ff105b08efac9f"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "38e3513cf28834e2e51d3faa2272f4539610e12f6e95a43886cde4a1075ce660"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        3,
+        2,
+        2,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "62f071517b2117fab2eeaab458a404f37e05bd1647df9f9bf429477100989896"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 1,
+      "right": 1,
+      "suffix": [
+        3,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "38e3513cf28834e2e51d3faa2272f4539610e12f6e95a43886cde4a1075ce660"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "dce3bb5007fd5d61d899fa60446635ac9f469ac6bf2ce198735378f8f3589759"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        3,
+        2,
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "30016c2758cd28e2a1862c0a416cec19479d2b101607a3942f9bee624da7f95e"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 1,
+      "right": 2,
+      "suffix": [
+        3,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "f56d8f8715e51fba4d0c8417547a39027feb901becde864b891387e2140ba653"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "b31bd4c24c7358e158cd68cc037a0b85dc4d32bb97ba6fb2f6a35547aaf1c065"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "c1f75a13f84dd5981d1e9e36e2ee2743c4e9e500ede5484a0e356817e4a291d5"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 1,
+      "right": 3,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "88151116eb9923947885c453dfb7104f23b66a7a406cd19c62e0f3b2628e1b20"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "444e21fb66ea5b16af04c0b08d38e4f4a46ba4147c7410263e12edb979804fb1"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "9c8d2094850fb34c4ec698947e2a626349193ef5abd6317faf79a9e1b45be0dd"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 1,
+      "right": 4,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "33afaf088528284ad0037b8d4c379fca547966ff002ff17cb3ace8413e67d8e5"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0eeeb1afb9398c631c60e51b4dc13b83f8911222bcde464366d69f699fc8c36d"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5692d1389f9bb5e31938b5e8389b91eb57897a3f4d01f5c77ba398c4873dd376"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 1,
+      "right": 5,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "77e46acec445c16bb2766e2a2253902e8905e25f8325d3f96db8a21785411403"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0eeeb1afb9398c631c60e51b4dc13b83f8911222bcde464366d69f699fc8c36d"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5692d1389f9bb5e31938b5e8389b91eb57897a3f4d01f5c77ba398c4873dd376"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 1,
+      "right": 6,
+      "suffix": [
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "77e46acec445c16bb2766e2a2253902e8905e25f8325d3f96db8a21785411403"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 0,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "f8e3db07f4b5c2ffd75f4e95f46c8eb0874377369c6bb8a0742e70cdf89f0e4e"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 0,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "ead5aa6d6c227ec2c66da3140966d7a27cb48757e7062158c41736cc14be39eb"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d54157c71659575c05b2534f5c44f1db67b90226a731a89ca4f5a97ae56c13ef"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "96539331bf56f0eac550a376a8668d409ee3f34b7d8183f3bdb6934ecb6fd5fc"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 2,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "96539331bf56f0eac550a376a8668d409ee3f34b7d8183f3bdb6934ecb6fd5fc"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "3c874b6956522297f4503b64fdeee9135617e602241427a621e8ee8ebd51ee3d"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5f7e13fceab6c9d5625148d55be5ef612ec320e47052fc657d3cd66a8d9fb7ee"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 2,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "3c874b6956522297f4503b64fdeee9135617e602241427a621e8ee8ebd51ee3d"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "dce3bb5007fd5d61d899fa60446635ac9f469ac6bf2ce198735378f8f3589759"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "30016c2758cd28e2a1862c0a416cec19479d2b101607a3942f9bee624da7f95e"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 2,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "f56d8f8715e51fba4d0c8417547a39027feb901becde864b891387e2140ba653"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "1bee0508e38470e206b15842ca2d94a35b0bb8cb7e2935dabed5a7406bc7b119"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0ce2fb24fe4e2cb15fc9892b3ef34ba89c789580e87d2a6de619b5b9b9c4c1c2"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 2,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "f8b3eee1777d7aa9d3eccb4caaa9f227853be03dd994abe001e693dc5b7e7955"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0eeeb1afb9398c631c60e51b4dc13b83f8911222bcde464366d69f699fc8c36d"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5692d1389f9bb5e31938b5e8389b91eb57897a3f4d01f5c77ba398c4873dd376"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 2,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "77e46acec445c16bb2766e2a2253902e8905e25f8325d3f96db8a21785411403"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0eeeb1afb9398c631c60e51b4dc13b83f8911222bcde464366d69f699fc8c36d"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "5692d1389f9bb5e31938b5e8389b91eb57897a3f4d01f5c77ba398c4873dd376"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 2,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "77e46acec445c16bb2766e2a2253902e8905e25f8325d3f96db8a21785411403"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 0,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "da1ec0dbb9efb743282012a53c29646b8a0fd0fdf40855e9e8c611c5301106f1"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 0,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "6c86e5496e6f797dbff92ed9346941b939b475e0eb148b98512a6d6026665374"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0518533e2f1f0c326efa4ec0e0077ae0bc96505564b13a2dedc1ecf028b31dd8"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "78535324a0f0956ba75d4da025b0b864c38a63d2da01bed7d60b146cb6efa1e7"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 3,
+      "right": 1,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "78535324a0f0956ba75d4da025b0b864c38a63d2da01bed7d60b146cb6efa1e7"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "d54157c71659575c05b2534f5c44f1db67b90226a731a89ca4f5a97ae56c13ef"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "96539331bf56f0eac550a376a8668d409ee3f34b7d8183f3bdb6934ecb6fd5fc"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 3,
+      "right": 2,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "96539331bf56f0eac550a376a8668d409ee3f34b7d8183f3bdb6934ecb6fd5fc"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "17f43f64a09d46180687e2a9982a8856d8059d2a9b438399eb17cfaab1827888"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "1912d7d7420a6e7e7cd31d8f155d7b3ddba8f11b2a4e5a2c2374eb388edb1b0b"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 3,
+      "right": 3,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "17f43f64a09d46180687e2a9982a8856d8059d2a9b438399eb17cfaab1827888"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "acbfb11c998d84fda2b87bf4f3725f21ddd942639fc97f05a6588cf411697fb3"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "2d72bd4df5d72c2194815e8fdb6cdf1b0b2bffb4667df55acde201d6d718cf28"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 3,
+      "right": 4,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "cbda8989b50169e75b3791bf51482fbdbd7d587ef2de1f33a08e9dab8b303466"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "1bee0508e38470e206b15842ca2d94a35b0bb8cb7e2935dabed5a7406bc7b119"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "0ce2fb24fe4e2cb15fc9892b3ef34ba89c789580e87d2a6de619b5b9b9c4c1c2"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 3,
+      "right": 5,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "f8b3eee1777d7aa9d3eccb4caaa9f227853be03dd994abe001e693dc5b7e7955"
+    },
+    {
+      "program": "DOWN_then_LEFT_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        2,
+        2,
+        2,
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "a1a1f2d9c6a7cf810180fe6ed90ec8e4d86b1380fe54952fec7146dccb8bc07c"
+    },
+    {
+      "program": "LEFT_then_DOWN_then_RIGHT",
+      "down": 3,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "prefix": 0,
+      "colors": [
+        []
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "706343b9d0471de978953260e9c9bfe8b1bbfcb3eaaeead84284dbeb0acca4f0"
+    },
+    {
+      "program": "LEFT_then_RIGHT_then_DOWN",
+      "down": 3,
+      "left": 3,
+      "right": 6,
+      "suffix": [
+        3,
+        3,
+        3,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        2,
+        2,
+        2
+      ],
+      "prefix": 1,
+      "colors": [
+        [
+          8
+        ]
+      ],
+      "head": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "level": 2,
+      "sha": "9e34f50b5b841f4c1f4c552c1a11473ceed117f2daf9bed7b6ccadd0d33d1e55"
+    }
+  ],
+  "native_calls": 13370,
+  "reset_retries": 219,
+  "elapsed_seconds": 23.72
+}

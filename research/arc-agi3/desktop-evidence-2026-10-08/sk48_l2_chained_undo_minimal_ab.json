@@ -1,0 +1,157 @@
+{
+  "tested": 8,
+  "full_parent_sha_prefix": "9a357142c7766bbd",
+  "direct_action4_sha_prefix": "59a8a28d1abf572a",
+  "minimal_witness_length": 3,
+  "minimal_witness_paths": [
+    [
+      1,
+      2,
+      3
+    ]
+  ],
+  "results": [
+    {
+      "history": [],
+      "cycle_outcomes": [],
+      "fully_appeared_restored": true,
+      "action4": "59a8a28d1abf572a",
+      "different_from_direct": false
+    },
+    {
+      "history": [
+        1
+      ],
+      "cycle_outcomes": [
+        [
+          1,
+          "9a357142c7766bbd",
+          true
+        ]
+      ],
+      "fully_appeared_restored": true,
+      "action4": "59a8a28d1abf572a",
+      "different_from_direct": false
+    },
+    {
+      "history": [
+        2
+      ],
+      "cycle_outcomes": [
+        [
+          2,
+          "9a357142c7766bbd",
+          true
+        ]
+      ],
+      "fully_appeared_restored": true,
+      "action4": "59a8a28d1abf572a",
+      "different_from_direct": false
+    },
+    {
+      "history": [
+        1,
+        2
+      ],
+      "cycle_outcomes": [
+        [
+          1,
+          "9a357142c7766bbd",
+          true
+        ],
+        [
+          2,
+          "9a357142c7766bbd",
+          true
+        ]
+      ],
+      "fully_appeared_restored": true,
+      "action4": "59a8a28d1abf572a",
+      "different_from_direct": false
+    },
+    {
+      "history": [
+        3
+      ],
+      "cycle_outcomes": [
+        [
+          3,
+          "9a357142c7766bbd",
+          true
+        ]
+      ],
+      "fully_appeared_restored": true,
+      "action4": "59a8a28d1abf572a",
+      "different_from_direct": false
+    },
+    {
+      "history": [
+        1,
+        3
+      ],
+      "cycle_outcomes": [
+        [
+          1,
+          "9a357142c7766bbd",
+          true
+        ],
+        [
+          3,
+          "9a357142c7766bbd",
+          true
+        ]
+      ],
+      "fully_appeared_restored": true,
+      "action4": "59a8a28d1abf572a",
+      "different_from_direct": false
+    },
+    {
+      "history": [
+        2,
+        3
+      ],
+      "cycle_outcomes": [
+        [
+          2,
+          "9a357142c7766bbd",
+          true
+        ],
+        [
+          3,
+          "9a357142c7766bbd",
+          true
+        ]
+      ],
+      "fully_appeared_restored": true,
+      "action4": "59a8a28d1abf572a",
+      "different_from_direct": false
+    },
+    {
+      "history": [
+        1,
+        2,
+        3
+      ],
+      "cycle_outcomes": [
+        [
+          1,
+          "9a357142c7766bbd",
+          true
+        ],
+        [
+          2,
+          "9a357142c7766bbd",
+          true
+        ],
+        [
+          3,
+          "9a357142c7766bbd",
+          true
+        ]
+      ],
+      "fully_appeared_restored": true,
+      "action4": "582802a68ff65ca0",
+      "different_from_direct": true
+    }
+  ]
+}

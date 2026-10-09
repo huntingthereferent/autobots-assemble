@@ -1,0 +1,376 @@
+{
+  "game": "sk48",
+  "method": "public-frame movement inferred control + saved directional replay",
+  "no_engine_private_reads": true,
+  "not_independently_solved": true,
+  "runs": [
+    {
+      "trial": 0,
+      "status": "WIN",
+      "levels": 8,
+      "actions": 280,
+      "local_sdk_score": 100.0,
+      "milestones": [
+        {
+          "action": 14,
+          "levels_completed": 1
+        },
+        {
+          "action": 44,
+          "levels_completed": 2
+        },
+        {
+          "action": 77,
+          "levels_completed": 3
+        },
+        {
+          "action": 104,
+          "levels_completed": 4
+        },
+        {
+          "action": 169,
+          "levels_completed": 5
+        },
+        {
+          "action": 205,
+          "levels_completed": 6
+        },
+        {
+          "action": 256,
+          "levels_completed": 7
+        },
+        {
+          "action": 280,
+          "levels_completed": 8
+        }
+      ],
+      "clicks": [
+        {
+          "step": 174,
+          "level": 6,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 187,
+          "level": 6,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            34
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 202,
+          "level": 6,
+          "chosen_key": 1,
+          "coordinate": [
+            37,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 212,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 222,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            28
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 224,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            37,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 227,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            22
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 236,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 238,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            28
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 240,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 243,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            34
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 259,
+          "level": 8,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 271,
+          "level": 8,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            28
+          ],
+          "native_source": "public_frame"
+        }
+      ],
+      "motion_classifications": {
+        "0": 15,
+        "1": 9
+      },
+      "unresolved_initial_control_hypotheses": [
+        {
+          "step": 259,
+          "level": 8
+        }
+      ],
+      "wall": null
+    },
+    {
+      "trial": 1,
+      "status": "WIN",
+      "levels": 8,
+      "actions": 280,
+      "local_sdk_score": 100.0,
+      "milestones": [
+        {
+          "action": 14,
+          "levels_completed": 1
+        },
+        {
+          "action": 44,
+          "levels_completed": 2
+        },
+        {
+          "action": 77,
+          "levels_completed": 3
+        },
+        {
+          "action": 104,
+          "levels_completed": 4
+        },
+        {
+          "action": 169,
+          "levels_completed": 5
+        },
+        {
+          "action": 205,
+          "levels_completed": 6
+        },
+        {
+          "action": 256,
+          "levels_completed": 7
+        },
+        {
+          "action": 280,
+          "levels_completed": 8
+        }
+      ],
+      "clicks": [
+        {
+          "step": 174,
+          "level": 6,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 187,
+          "level": 6,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            34
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 202,
+          "level": 6,
+          "chosen_key": 1,
+          "coordinate": [
+            37,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 212,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 222,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            28
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 224,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            37,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 227,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            22
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 236,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 238,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            28
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 240,
+          "level": 7,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 243,
+          "level": 7,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            34
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 259,
+          "level": 8,
+          "chosen_key": 1,
+          "coordinate": [
+            31,
+            4
+          ],
+          "native_source": "public_frame"
+        },
+        {
+          "step": 271,
+          "level": 8,
+          "chosen_key": 0,
+          "coordinate": [
+            7,
+            28
+          ],
+          "native_source": "public_frame"
+        }
+      ],
+      "motion_classifications": {
+        "0": 15,
+        "1": 9
+      },
+      "unresolved_initial_control_hypotheses": [
+        {
+          "step": 259,
+          "level": 8
+        }
+      ],
+      "wall": null
+    }
+  ]
+}

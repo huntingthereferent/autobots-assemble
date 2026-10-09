@@ -1,0 +1,1823 @@
+{
+  "method": "native positive-reference action intervention",
+  "source": "saved route, NOT blind discovery",
+  "root_hash": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+  "baseline": {
+    "success": true,
+    "first_completion": 36,
+    "switches": [
+      [
+        5,
+        31,
+        4
+      ],
+      [
+        18,
+        7,
+        34
+      ],
+      [
+        33,
+        37,
+        4
+      ]
+    ],
+    "level": 6
+  },
+  "tested": 60,
+  "winners": [
+    {
+      "type": "swap",
+      "index": 1,
+      "edited_from": 4,
+      "path": [
+        4,
+        2,
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        4,
+        2,
+        1,
+        4,
+        2,
+        3,
+        1,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "success": true,
+      "first_completion": 36,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ],
+      "level": 6
+    },
+    {
+      "type": "swap",
+      "index": 6,
+      "edited_from": 2,
+      "path": [
+        4,
+        4,
+        2,
+        4,
+        6,
+        2,
+        4,
+        2,
+        4,
+        2,
+        1,
+        4,
+        2,
+        3,
+        1,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "success": true,
+      "first_completion": 36,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ],
+      "level": 6
+    },
+    {
+      "type": "swap",
+      "index": 13,
+      "edited_from": 3,
+      "path": [
+        4,
+        4,
+        2,
+        4,
+        6,
+        2,
+        2,
+        4,
+        4,
+        2,
+        1,
+        4,
+        2,
+        1,
+        3,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "success": true,
+      "first_completion": 36,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ],
+      "level": 6
+    }
+  ],
+  "tests": [
+    {
+      "type": "delete",
+      "index": 0,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          4,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 1,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          4,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 2,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          4,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          28
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 3,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          4,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 4,
+      "edited_from": 6,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          17,
+          31,
+          4
+        ],
+        [
+          32,
+          7,
+          34
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 5,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 6,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 7,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          31,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 8,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          31,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 9,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 10,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 11,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 12,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 13,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 14,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 15,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 16,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 17,
+      "edited_from": 6,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          32,
+          7,
+          34
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 18,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 19,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 20,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 21,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 22,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 23,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 24,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 25,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 26,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 27,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 28,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 29,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 30,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 31,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 32,
+      "edited_from": 6,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 33,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 34,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "delete",
+      "index": 35,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 1,
+      "edited_from": 4,
+      "path": [
+        4,
+        2,
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        4,
+        2,
+        1,
+        4,
+        2,
+        3,
+        1,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "success": true,
+      "first_completion": 36,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ],
+      "level": 6
+    },
+    {
+      "type": "swap",
+      "index": 2,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 3,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          4,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 4,
+      "edited_from": 6,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          6,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 6,
+      "edited_from": 2,
+      "path": [
+        4,
+        4,
+        2,
+        4,
+        6,
+        2,
+        4,
+        2,
+        4,
+        2,
+        1,
+        4,
+        2,
+        3,
+        1,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "success": true,
+      "first_completion": 36,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ],
+      "level": 6
+    },
+    {
+      "type": "swap",
+      "index": 8,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          31,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 9,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 10,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 11,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 12,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 13,
+      "edited_from": 3,
+      "path": [
+        4,
+        4,
+        2,
+        4,
+        6,
+        2,
+        2,
+        4,
+        4,
+        2,
+        1,
+        4,
+        2,
+        1,
+        3,
+        3,
+        2,
+        6,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        4,
+        1,
+        3,
+        1,
+        4,
+        6,
+        2,
+        2,
+        2
+      ],
+      "success": true,
+      "first_completion": 36,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ],
+      "level": 6
+    },
+    {
+      "type": "swap",
+      "index": 14,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 15,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 16,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          17,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 17,
+      "edited_from": 6,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          19,
+          7,
+          34
+        ],
+        [
+          33,
+          43,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 20,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 24,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 26,
+      "edited_from": 2,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 27,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 28,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 29,
+      "edited_from": 3,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 30,
+      "edited_from": 1,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          33,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 31,
+      "edited_from": 4,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          32,
+          37,
+          4
+        ]
+      ]
+    },
+    {
+      "type": "swap",
+      "index": 32,
+      "edited_from": 6,
+      "path": null,
+      "success": false,
+      "level": 5,
+      "switches": [
+        [
+          5,
+          31,
+          4
+        ],
+        [
+          18,
+          7,
+          34
+        ],
+        [
+          34,
+          37,
+          4
+        ]
+      ]
+    }
+  ],
+  "native_calls": 12647,
+  "reset_retries": 56,
+  "seconds": 23.42
+}

@@ -1,0 +1,567 @@
+{
+  "experiment": 3,
+  "X0": {
+    "nodes": {
+      "00": {
+        "type": "source",
+        "value": 0,
+        "source": "fixture:binary-square:00"
+      },
+      "01": {
+        "type": "source",
+        "value": 1,
+        "source": "fixture:binary-square:01"
+      },
+      "10": {
+        "type": "source",
+        "value": 1,
+        "source": "fixture:binary-square:10"
+      },
+      "11": {
+        "type": "source",
+        "value": 0,
+        "source": "fixture:binary-square:11"
+      }
+    },
+    "source_relations": {
+      "b0": {
+        "negative": "00",
+        "positive": "01",
+        "kind": "b",
+        "orientation": "0->1"
+      },
+      "b1": {
+        "negative": "10",
+        "positive": "11",
+        "kind": "b",
+        "orientation": "0->1"
+      },
+      "a0": {
+        "negative": "00",
+        "positive": "10",
+        "kind": "a",
+        "orientation": "0->1"
+      },
+      "a1": {
+        "negative": "01",
+        "positive": "11",
+        "kind": "a",
+        "orientation": "0->1"
+      }
+    },
+    "current": [
+      "00",
+      "01",
+      "10",
+      "11"
+    ],
+    "history": [],
+    "outcome": "INPUT_EVIDENCE"
+  },
+  "outside_choices_between_calls": [],
+  "outside_initial_choices": [
+    "same square values",
+    "four directed native source edges",
+    "integer subtraction",
+    "explicit source-edge admission only",
+    "inspect all ordered pairs of current nodes"
+  ],
+  "future_schedule": null,
+  "X1": {
+    "nodes": {
+      "00": {
+        "type": "source",
+        "value": 0,
+        "source": "fixture:binary-square:00"
+      },
+      "01": {
+        "type": "source",
+        "value": 1,
+        "source": "fixture:binary-square:01"
+      },
+      "10": {
+        "type": "source",
+        "value": 1,
+        "source": "fixture:binary-square:10"
+      },
+      "11": {
+        "type": "source",
+        "value": 0,
+        "source": "fixture:binary-square:11"
+      },
+      "d4": {
+        "type": "difference",
+        "value": 1,
+        "positive": "01",
+        "negative": "00",
+        "support": {
+          "kind": "b",
+          "source_edge": "b0"
+        }
+      },
+      "d5": {
+        "type": "difference",
+        "value": 1,
+        "positive": "10",
+        "negative": "00",
+        "support": {
+          "kind": "a",
+          "source_edge": "a0"
+        }
+      },
+      "d6": {
+        "type": "difference",
+        "value": -1,
+        "positive": "11",
+        "negative": "01",
+        "support": {
+          "kind": "a",
+          "source_edge": "a1"
+        }
+      },
+      "d7": {
+        "type": "difference",
+        "value": -1,
+        "positive": "11",
+        "negative": "10",
+        "support": {
+          "kind": "b",
+          "source_edge": "b1"
+        }
+      }
+    },
+    "source_relations": {
+      "b0": {
+        "negative": "00",
+        "positive": "01",
+        "kind": "b",
+        "orientation": "0->1"
+      },
+      "b1": {
+        "negative": "10",
+        "positive": "11",
+        "kind": "b",
+        "orientation": "0->1"
+      },
+      "a0": {
+        "negative": "00",
+        "positive": "10",
+        "kind": "a",
+        "orientation": "0->1"
+      },
+      "a1": {
+        "negative": "01",
+        "positive": "11",
+        "kind": "a",
+        "orientation": "0->1"
+      }
+    },
+    "current": [
+      "d4",
+      "d5",
+      "d6",
+      "d7"
+    ],
+    "history": [
+      {
+        "input_current": [
+          "00",
+          "01",
+          "10",
+          "11"
+        ],
+        "inspected": [
+          {
+            "negative": "00",
+            "positive": "01",
+            "support": [
+              {
+                "kind": "b",
+                "source_edge": "b0"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "00",
+            "positive": "10",
+            "support": [
+              {
+                "kind": "a",
+                "source_edge": "a0"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "00",
+            "positive": "11",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "01",
+            "positive": "00",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "01",
+            "positive": "10",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "01",
+            "positive": "11",
+            "support": [
+              {
+                "kind": "a",
+                "source_edge": "a1"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "10",
+            "positive": "00",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "10",
+            "positive": "01",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "10",
+            "positive": "11",
+            "support": [
+              {
+                "kind": "b",
+                "source_edge": "b1"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "11",
+            "positive": "00",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "11",
+            "positive": "01",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "11",
+            "positive": "10",
+            "support": [],
+            "decision": "no supported directed relation"
+          }
+        ]
+      }
+    ],
+    "outcome": "SUPPORTED_MOVEMENT"
+  },
+  "X1_directly_admissible": true,
+  "X2": {
+    "nodes": {
+      "00": {
+        "type": "source",
+        "value": 0,
+        "source": "fixture:binary-square:00"
+      },
+      "01": {
+        "type": "source",
+        "value": 1,
+        "source": "fixture:binary-square:01"
+      },
+      "10": {
+        "type": "source",
+        "value": 1,
+        "source": "fixture:binary-square:10"
+      },
+      "11": {
+        "type": "source",
+        "value": 0,
+        "source": "fixture:binary-square:11"
+      },
+      "d4": {
+        "type": "difference",
+        "value": 1,
+        "positive": "01",
+        "negative": "00",
+        "support": {
+          "kind": "b",
+          "source_edge": "b0"
+        }
+      },
+      "d5": {
+        "type": "difference",
+        "value": 1,
+        "positive": "10",
+        "negative": "00",
+        "support": {
+          "kind": "a",
+          "source_edge": "a0"
+        }
+      },
+      "d6": {
+        "type": "difference",
+        "value": -1,
+        "positive": "11",
+        "negative": "01",
+        "support": {
+          "kind": "a",
+          "source_edge": "a1"
+        }
+      },
+      "d7": {
+        "type": "difference",
+        "value": -1,
+        "positive": "11",
+        "negative": "10",
+        "support": {
+          "kind": "b",
+          "source_edge": "b1"
+        }
+      }
+    },
+    "source_relations": {
+      "b0": {
+        "negative": "00",
+        "positive": "01",
+        "kind": "b",
+        "orientation": "0->1"
+      },
+      "b1": {
+        "negative": "10",
+        "positive": "11",
+        "kind": "b",
+        "orientation": "0->1"
+      },
+      "a0": {
+        "negative": "00",
+        "positive": "10",
+        "kind": "a",
+        "orientation": "0->1"
+      },
+      "a1": {
+        "negative": "01",
+        "positive": "11",
+        "kind": "a",
+        "orientation": "0->1"
+      }
+    },
+    "current": [],
+    "history": [
+      {
+        "input_current": [
+          "00",
+          "01",
+          "10",
+          "11"
+        ],
+        "inspected": [
+          {
+            "negative": "00",
+            "positive": "01",
+            "support": [
+              {
+                "kind": "b",
+                "source_edge": "b0"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "00",
+            "positive": "10",
+            "support": [
+              {
+                "kind": "a",
+                "source_edge": "a0"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "00",
+            "positive": "11",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "01",
+            "positive": "00",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "01",
+            "positive": "10",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "01",
+            "positive": "11",
+            "support": [
+              {
+                "kind": "a",
+                "source_edge": "a1"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "10",
+            "positive": "00",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "10",
+            "positive": "01",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "10",
+            "positive": "11",
+            "support": [
+              {
+                "kind": "b",
+                "source_edge": "b1"
+              }
+            ],
+            "decision": "admitted"
+          },
+          {
+            "negative": "11",
+            "positive": "00",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "11",
+            "positive": "01",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "11",
+            "positive": "10",
+            "support": [],
+            "decision": "no supported directed relation"
+          }
+        ]
+      },
+      {
+        "input_current": [
+          "d4",
+          "d5",
+          "d6",
+          "d7"
+        ],
+        "inspected": [
+          {
+            "negative": "d4",
+            "positive": "d5",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d4",
+            "positive": "d6",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d4",
+            "positive": "d7",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d5",
+            "positive": "d4",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d5",
+            "positive": "d6",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d5",
+            "positive": "d7",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d6",
+            "positive": "d4",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d6",
+            "positive": "d5",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d6",
+            "positive": "d7",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d7",
+            "positive": "d4",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d7",
+            "positive": "d5",
+            "support": [],
+            "decision": "no supported directed relation"
+          },
+          {
+            "negative": "d7",
+            "positive": "d6",
+            "support": [],
+            "decision": "no supported directed relation"
+          }
+        ]
+      }
+    ],
+    "outcome": "UNKNOWN"
+  },
+  "X1_values": [
+    1,
+    1,
+    -1,
+    -1
+  ],
+  "X2_values": [],
+  "result": "UNKNOWN",
+  "first_unsupported_relation": "No current-node pair has a supported directed relation; see inspected pairs.",
+  "checks": "arithmetic, signed relational proofs, source retention, unchanged inputs",
+  "untested": [
+    "other fixtures",
+    "third call",
+    "missing/partial support",
+    "earned zero",
+    "malformed inputs"
+  ]
+}

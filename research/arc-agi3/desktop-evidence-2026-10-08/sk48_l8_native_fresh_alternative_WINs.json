@@ -1,0 +1,188 @@
+{
+  "provenance": "reference-assisted native all-level WIN with alternative Level8 routes",
+  "native_public_only": true,
+  "total_fresh_trials": 4,
+  "passing_routes": 2,
+  "results": [
+    {
+      "swap_index": 19,
+      "L8_route": [
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        2,
+        3,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        6,
+        4,
+        4,
+        4,
+        4,
+        2,
+        3,
+        3,
+        3,
+        1
+      ],
+      "both_fresh_WINS": true,
+      "trials": [
+        {
+          "trial": 0,
+          "upstream_consumed": [
+            14,
+            32,
+            33,
+            27,
+            65,
+            36
+          ],
+          "L7_consumed": 51,
+          "L8_native_WIN_at": 24,
+          "native_levels_completed": 8,
+          "state": "WIN",
+          "L8_entry_sha": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "L8_control_clicks": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "upstream_consumed": [
+            14,
+            31,
+            34,
+            27,
+            65,
+            36
+          ],
+          "L7_consumed": 51,
+          "L8_native_WIN_at": 24,
+          "native_levels_completed": 8,
+          "state": "WIN",
+          "L8_entry_sha": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "L8_control_clicks": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "passed": true
+        }
+      ]
+    },
+    {
+      "swap_index": 20,
+      "L8_route": [
+        4,
+        4,
+        6,
+        2,
+        2,
+        4,
+        2,
+        3,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        6,
+        4,
+        4,
+        4,
+        4,
+        3,
+        3,
+        2,
+        3,
+        1
+      ],
+      "both_fresh_WINS": true,
+      "trials": [
+        {
+          "trial": 0,
+          "upstream_consumed": [
+            14,
+            31,
+            34,
+            27,
+            65,
+            36
+          ],
+          "L7_consumed": 51,
+          "L8_native_WIN_at": 24,
+          "native_levels_completed": 8,
+          "state": "WIN",
+          "L8_entry_sha": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "L8_control_clicks": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "upstream_consumed": [
+            14,
+            33,
+            35,
+            27,
+            65,
+            36
+          ],
+          "L7_consumed": 51,
+          "L8_native_WIN_at": 24,
+          "native_levels_completed": 8,
+          "state": "WIN",
+          "L8_entry_sha": "9dc6e2c9f28e9c9c3f9a3f91c2e1f8325e7e5d91d9a2155a9df548401766e66a",
+          "L8_control_clicks": [
+            [
+              3,
+              31,
+              4
+            ],
+            [
+              15,
+              7,
+              28
+            ]
+          ],
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

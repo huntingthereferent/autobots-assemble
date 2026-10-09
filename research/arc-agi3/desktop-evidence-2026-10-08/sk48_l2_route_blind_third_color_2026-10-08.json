@@ -1,0 +1,159 @@
+{
+  "source": "route-blind public-native A/B continuation from newly generated second-color witness",
+  "prior_saved_positive_l2_read": false,
+  "prior_seed_partial_route_read": false,
+  "native_third_color_found": true,
+  "seed": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    1,
+    1,
+    1,
+    4,
+    3,
+    3,
+    1,
+    4,
+    4
+  ],
+  "first_third_color": {
+    "p": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1,
+      1,
+      4,
+      3,
+      3,
+      1,
+      4,
+      4,
+      3,
+      3,
+      3,
+      1,
+      4,
+      4,
+      4
+    ],
+    "prefix": 3,
+    "goal": [
+      8,
+      12,
+      9,
+      14
+    ],
+    "next": 14,
+    "x_y_target": [
+      30,
+      7
+    ],
+    "head_y": 12,
+    "tip": 52,
+    "score": 2958.583,
+    "hash": "e0cd5558024584e7f82130f9ec213fe42c575db5d5158ac00dc4cea5f33149ea",
+    "levels": 1
+  },
+  "best_observed": {
+    "p": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      1,
+      1,
+      1,
+      4,
+      3,
+      3,
+      1,
+      4,
+      4,
+      3,
+      3,
+      3,
+      1,
+      4,
+      4,
+      4
+    ],
+    "prefix": 3,
+    "goal": [
+      8,
+      12,
+      9,
+      14
+    ],
+    "next": 14,
+    "x_y_target": [
+      30,
+      7
+    ],
+    "head_y": 12,
+    "tip": 52,
+    "score": 2958.583,
+    "hash": "e0cd5558024584e7f82130f9ec213fe42c575db5d5158ac00dc4cea5f33149ea",
+    "levels": 1
+  },
+  "milestones": [
+    {
+      "extra_depth": 1,
+      "children": 4,
+      "retained": 4,
+      "highest_prefix": 2,
+      "native_actions_including_replay": 153,
+      "elapsed_s": 0.22
+    },
+    {
+      "extra_depth": 2,
+      "children": 16,
+      "retained": 16,
+      "highest_prefix": 2,
+      "native_actions_including_replay": 665,
+      "elapsed_s": 0.95
+    },
+    {
+      "extra_depth": 3,
+      "children": 64,
+      "retained": 64,
+      "highest_prefix": 2,
+      "native_actions_including_replay": 2777,
+      "elapsed_s": 3.94
+    },
+    {
+      "extra_depth": 4,
+      "children": 256,
+      "retained": 64,
+      "highest_prefix": 2,
+      "native_actions_including_replay": 11481,
+      "elapsed_s": 16.31
+    },
+    {
+      "extra_depth": 5,
+      "children": 256,
+      "retained": 64,
+      "highest_prefix": 2,
+      "native_actions_including_replay": 20441,
+      "elapsed_s": 29.0
+    },
+    {
+      "extra_depth": 6,
+      "children": 256,
+      "retained": 64,
+      "highest_prefix": 2,
+      "native_actions_including_replay": 29657,
+      "elapsed_s": 42.5
+    }
+  ],
+  "native_calls": 31433,
+  "reset_retries": 900,
+  "elapsed_seconds": 45.16
+}

@@ -28,7 +28,14 @@ if POOL_ENABLED and HOST not in {"127.0.0.1", "::1", "localhost"}:
     raise ValueError("Continuity agent pool is local-only")
 if POOL_ENABLED:
     from runtime.pool_evaluator import ContinuityPoolEvaluator
-    POOL_EVALUATOR = ContinuityPoolEvaluator(ROOT.parent)
+    from runtime.ollama_ab import OllamaABDriver
+    LOCAL_MODEL = os.environ.get('CONTINUITY_LOCAL_MODEL', '').strip()
+    MODEL_DRIVER = OllamaABDriver(
+        ROOT.parent,
+        model=LOCAL_MODEL,
+        endpoint=os.environ.get('CONTINUITY_LOCAL_OLLAMA_ENDPOINT', 'http://127.0.0.1:11434'),
+    ) if LOCAL_MODEL else None
+    POOL_EVALUATOR = ContinuityPoolEvaluator(ROOT.parent, model_driver=MODEL_DRIVER)
 else:
     POOL_EVALUATOR = None
 SERVICE = EcosystemService(

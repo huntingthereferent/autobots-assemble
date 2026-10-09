@@ -1,0 +1,385 @@
+{
+  "native_public_only": true,
+  "old_L3_route_loaded": false,
+  "samples": [
+    {
+      "path": [],
+      "level": 2,
+      "aligned": 0,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "colors": [
+        []
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        []
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        []
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        []
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 1,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 1,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 1,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        2
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 1,
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        3
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        []
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        4
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 1,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        1
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 1,
+      "head": [
+        [
+          5,
+          18,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        3,
+        2
+      ],
+      "level": 2,
+      "aligned": 0,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "colors": [
+        []
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        3,
+        3,
+        2
+      ],
+      "level": 2,
+      "aligned": 0,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "colors": [
+        []
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        2,
+        4
+      ],
+      "level": 2,
+      "aligned": 1,
+      "connected": 1,
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          8
+        ]
+      ]
+    },
+    {
+      "path": [
+        1,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4,
+        3,
+        2,
+        4
+      ],
+      "level": 2,
+      "aligned": 0,
+      "connected": 0,
+      "head": [
+        [
+          5,
+          24,
+          6
+        ]
+      ],
+      "colors": [
+        [
+          12
+        ]
+      ]
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "source_variants": {
+    "0": [
+      [],
+      [
+        7
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "1": [
+      [
+        2
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        4,
+        7
+      ]
+    ],
+    "2": [
+      [
+        2,
+        2
+      ],
+      [
+        1,
+        7,
+        1,
+        7
+      ],
+      [
+        4,
+        7,
+        4,
+        7
+      ]
+    ],
+    "3": [
+      [
+        2,
+        2,
+        2
+      ],
+      [
+        1,
+        7,
+        1,
+        7,
+        1,
+        7
+      ],
+      [
+        4,
+        7,
+        4,
+        7,
+        4,
+        7
+      ]
+    ]
+  },
+  "tested_suffixes": 64,
+  "suffix_length": 3,
+  "native_no_private_engine": true,
+  "same_phase_counterexamples": [],
+  "continuation_partition_counts": {
+    "((0,), (1,), (2,), (3,))": 64
+  },
+  "native_calls": 16703,
+  "reset_retries": 767,
+  "examples": [
+    {
+      "suffix": [
+        1,
+        1,
+        1
+      ],
+      "trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c6f",
+          "1:NOT_FINISHED:8dde6194c0236f19fd72",
+          "1:NOT_FINISHED:6ca6acf88e7b78c23736"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c6f",
+          "1:NOT_FINISHED:8dde6194c0236f19fd72",
+          "1:NOT_FINISHED:8622000a74a472ffedc4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c6f",
+          "1:NOT_FINISHED:b194924b571b12d893fa",
+          "1:NOT_FINISHED:8622000a74a472ffedc4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421cf0",
+          "1:NOT_FINISHED:b194924b571b12d893fa",
+          "1:NOT_FINISHED:8622000a74a472ffedc4"
+        ]
+      }
+    },
+    {
+      "suffix": [
+        1,
+        4,
+        4
+      ],
+      "trajectories": {
+        "0": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c6f",
+          "1:NOT_FINISHED:263b40b341b1e29dbb41",
+          "1:NOT_FINISHED:9c5d4ed3d59fc5dd3f0a"
+        ],
+        "1": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c6f",
+          "1:NOT_FINISHED:263b40b341b1e29dbb41",
+          "1:NOT_FINISHED:9b60b53b34dabb544f53"
+        ],
+        "2": [
+          "1:NOT_FINISHED:71b1f1cf6326cb957c6f",
+          "1:NOT_FINISHED:4a76f215a0866150e769",
+          "1:NOT_FINISHED:9b60b53b34dabb544f53"
+        ],
+        "3": [
+          "1:NOT_FINISHED:c194b26666f194421cf0",
+          "1:NOT_FINISHED:4a76f215a0866150e769",
+          "1:NOT_FINISHED:9b60b53b34dabb544f53"
+        ]
+      }
+    },
+    {
+      "suffix": [
+        2,
+        4,
+        4
+      ],
+      "trajectories": {
+        "0": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9dc",
+          "1:NOT_FINISHED:59a8a28d1abf572ad08b",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdecf6"
+        ],
+        "1": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9dc",
+          "1:NOT_FINISHED:59a8a28d1abf572ad08b",
+          "1:NOT_FINISHED:c8e87ef96fddb89354a4"
+        ],
+        "2": [
+          "1:NOT_FINISHED:9a357142c7766bbdb9dc",
+          "1:NOT_FINISHED:582802a68ff65ca08397",
+          "1:NOT_FINISHED:c8e87ef96fddb89354a4"
+        ],
+        "3": [
+          "1:NOT_FINISHED:4bcd764909d6f586730b",
+          "1:NOT_FINISHED:582802a68ff65ca08397",
+          "1:NOT_FINISHED:c8e87ef96fddb89354a4"
+        ]
+      }
+    },
+    {
+      "suffix": [
+        3,
+        4,
+        4
+      ],
+      "trajectories": {
+        "0": [
+          "1:NOT_FINISHED:96d278d2f4e46bb5318a",
+          "1:NOT_FINISHED:9a357142c7766bbdb9dc",
+          "1:NOT_FINISHED:59a8a28d1abf572ad08b"
+        ],
+        "1": [
+          "1:NOT_FINISHED:96d278d2f4e46bb5318a",
+          "1:NOT_FINISHED:9a357142c7766bbdb9dc",
+          "1:NOT_FINISHED:582802a68ff65ca08397"
+        ],
+        "2": [
+          "1:NOT_FINISHED:96d278d2f4e46bb5318a",
+          "1:NOT_FINISHED:4bcd764909d6f586730b",
+          "1:NOT_FINISHED:582802a68ff65ca08397"
+        ],
+        "3": [
+          "1:NOT_FINISHED:285a3570c9468741e44b",
+          "1:NOT_FINISHED:4bcd764909d6f586730b",
+          "1:NOT_FINISHED:582802a68ff65ca08397"
+        ]
+      }
+    },
+    {
+      "suffix": [
+        4,
+        4,
+        4
+      ],
+      "trajectories": {
+        "0": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad08b",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdecf6",
+          "1:NOT_FINISHED:ededc486e1d8b98a9673"
+        ],
+        "1": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad08b",
+          "1:NOT_FINISHED:b3bfcb50d2051cfdecf6",
+          "1:NOT_FINISHED:d289478eadb8f6af37d3"
+        ],
+        "2": [
+          "1:NOT_FINISHED:59a8a28d1abf572ad08b",
+          "1:NOT_FINISHED:c8e87ef96fddb89354a4",
+          "1:NOT_FINISHED:d289478eadb8f6af37d3"
+        ],
+        "3": [
+          "1:NOT_FINISHED:582802a68ff65ca08397",
+          "1:NOT_FINISHED:c8e87ef96fddb89354a4",
+          "1:NOT_FINISHED:d289478eadb8f6af37d3"
+        ]
+      }
+    }
+  ],
+  "elapsed_seconds": 24.33
+}

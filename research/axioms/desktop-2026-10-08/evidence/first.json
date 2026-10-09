@@ -1,0 +1,379 @@
+{
+  "candidate_scope": "bounded native integer finite differences; not general A/B identification",
+  "outside_choices": [
+    "complete binary-square fixture",
+    "axis names and binary domain",
+    "orientation 0->1",
+    "integer subtraction",
+    "process every remaining axis"
+  ],
+  "outside_choices_between_calls": [],
+  "X0": {
+    "rule": "exact integer subtraction along every retained binary axis, oriented 0->1",
+    "nodes": {
+      "s00": {
+        "kind": "source",
+        "value": 0,
+        "source": "fixture:binary-square:00"
+      },
+      "s01": {
+        "kind": "source",
+        "value": 1,
+        "source": "fixture:binary-square:01"
+      },
+      "s10": {
+        "kind": "source",
+        "value": 1,
+        "source": "fixture:binary-square:10"
+      },
+      "s11": {
+        "kind": "source",
+        "value": 0,
+        "source": "fixture:binary-square:11"
+      }
+    },
+    "tables": [
+      {
+        "axes": [
+          "a",
+          "b"
+        ],
+        "cells": {
+          "00": "s00",
+          "01": "s01",
+          "10": "s10",
+          "11": "s11"
+        },
+        "route": []
+      }
+    ],
+    "history": [],
+    "outcome": "INPUT_EVIDENCE",
+    "reasons": []
+  },
+  "X1": {
+    "rule": "exact integer subtraction along every retained binary axis, oriented 0->1",
+    "nodes": {
+      "s00": {
+        "kind": "source",
+        "value": 0,
+        "source": "fixture:binary-square:00"
+      },
+      "s01": {
+        "kind": "source",
+        "value": 1,
+        "source": "fixture:binary-square:01"
+      },
+      "s10": {
+        "kind": "source",
+        "value": 1,
+        "source": "fixture:binary-square:10"
+      },
+      "s11": {
+        "kind": "source",
+        "value": 0,
+        "source": "fixture:binary-square:11"
+      },
+      "d4": {
+        "kind": "difference",
+        "value": 1,
+        "positive": "s10",
+        "negative": "s00",
+        "axis": "a",
+        "orientation": "0->1",
+        "remaining_coordinate": "0"
+      },
+      "d5": {
+        "kind": "difference",
+        "value": -1,
+        "positive": "s11",
+        "negative": "s01",
+        "axis": "a",
+        "orientation": "0->1",
+        "remaining_coordinate": "1"
+      },
+      "d6": {
+        "kind": "difference",
+        "value": 1,
+        "positive": "s01",
+        "negative": "s00",
+        "axis": "b",
+        "orientation": "0->1",
+        "remaining_coordinate": "0"
+      },
+      "d7": {
+        "kind": "difference",
+        "value": -1,
+        "positive": "s11",
+        "negative": "s10",
+        "axis": "b",
+        "orientation": "0->1",
+        "remaining_coordinate": "1"
+      }
+    },
+    "tables": [
+      {
+        "axes": [
+          "b"
+        ],
+        "cells": {
+          "0": "d4",
+          "1": "d5"
+        },
+        "route": [
+          "a"
+        ]
+      },
+      {
+        "axes": [
+          "a"
+        ],
+        "cells": {
+          "0": "d6",
+          "1": "d7"
+        },
+        "route": [
+          "b"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "input_tables": [
+          {
+            "axes": [
+              "a",
+              "b"
+            ],
+            "cells": {
+              "00": "s00",
+              "01": "s01",
+              "10": "s10",
+              "11": "s11"
+            },
+            "route": []
+          }
+        ],
+        "input_outcome": "INPUT_EVIDENCE",
+        "native_rule": "exact integer subtraction along every retained binary axis, oriented 0->1",
+        "output_outcome": "SUPPORTED_MOVEMENT"
+      }
+    ],
+    "outcome": "SUPPORTED_MOVEMENT",
+    "reasons": []
+  },
+  "X1_directly_admissible": true,
+  "X2": {
+    "rule": "exact integer subtraction along every retained binary axis, oriented 0->1",
+    "nodes": {
+      "s00": {
+        "kind": "source",
+        "value": 0,
+        "source": "fixture:binary-square:00"
+      },
+      "s01": {
+        "kind": "source",
+        "value": 1,
+        "source": "fixture:binary-square:01"
+      },
+      "s10": {
+        "kind": "source",
+        "value": 1,
+        "source": "fixture:binary-square:10"
+      },
+      "s11": {
+        "kind": "source",
+        "value": 0,
+        "source": "fixture:binary-square:11"
+      },
+      "d4": {
+        "kind": "difference",
+        "value": 1,
+        "positive": "s10",
+        "negative": "s00",
+        "axis": "a",
+        "orientation": "0->1",
+        "remaining_coordinate": "0"
+      },
+      "d5": {
+        "kind": "difference",
+        "value": -1,
+        "positive": "s11",
+        "negative": "s01",
+        "axis": "a",
+        "orientation": "0->1",
+        "remaining_coordinate": "1"
+      },
+      "d6": {
+        "kind": "difference",
+        "value": 1,
+        "positive": "s01",
+        "negative": "s00",
+        "axis": "b",
+        "orientation": "0->1",
+        "remaining_coordinate": "0"
+      },
+      "d7": {
+        "kind": "difference",
+        "value": -1,
+        "positive": "s11",
+        "negative": "s10",
+        "axis": "b",
+        "orientation": "0->1",
+        "remaining_coordinate": "1"
+      },
+      "d8": {
+        "kind": "difference",
+        "value": -2,
+        "positive": "d5",
+        "negative": "d4",
+        "axis": "b",
+        "orientation": "0->1",
+        "remaining_coordinate": ""
+      },
+      "d9": {
+        "kind": "difference",
+        "value": -2,
+        "positive": "d7",
+        "negative": "d6",
+        "axis": "a",
+        "orientation": "0->1",
+        "remaining_coordinate": ""
+      }
+    },
+    "tables": [
+      {
+        "axes": [],
+        "cells": {
+          "": "d8"
+        },
+        "route": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "axes": [],
+        "cells": {
+          "": "d9"
+        },
+        "route": [
+          "b",
+          "a"
+        ]
+      }
+    ],
+    "history": [
+      {
+        "input_tables": [
+          {
+            "axes": [
+              "a",
+              "b"
+            ],
+            "cells": {
+              "00": "s00",
+              "01": "s01",
+              "10": "s10",
+              "11": "s11"
+            },
+            "route": []
+          }
+        ],
+        "input_outcome": "INPUT_EVIDENCE",
+        "native_rule": "exact integer subtraction along every retained binary axis, oriented 0->1",
+        "output_outcome": "SUPPORTED_MOVEMENT"
+      },
+      {
+        "input_tables": [
+          {
+            "axes": [
+              "b"
+            ],
+            "cells": {
+              "0": "d4",
+              "1": "d5"
+            },
+            "route": [
+              "a"
+            ]
+          },
+          {
+            "axes": [
+              "a"
+            ],
+            "cells": {
+              "0": "d6",
+              "1": "d7"
+            },
+            "route": [
+              "b"
+            ]
+          }
+        ],
+        "input_outcome": "SUPPORTED_MOVEMENT",
+        "native_rule": "exact integer subtraction along every retained binary axis, oriented 0->1",
+        "output_outcome": "SUPPORTED_MOVEMENT"
+      }
+    ],
+    "outcome": "SUPPORTED_MOVEMENT",
+    "reasons": []
+  },
+  "result": "SUPPORTED_TWO_STEP_NATIVE_MOVEMENT",
+  "first_missing_relation": null,
+  "X1_values": [
+    {
+      "axes": [
+        "b"
+      ],
+      "route": [
+        "a"
+      ],
+      "values": {
+        "0": 1,
+        "1": -1
+      }
+    },
+    {
+      "axes": [
+        "a"
+      ],
+      "route": [
+        "b"
+      ],
+      "values": {
+        "0": 1,
+        "1": -1
+      }
+    }
+  ],
+  "X2_values": [
+    {
+      "axes": [],
+      "route": [
+        "a",
+        "b"
+      ],
+      "values": {
+        "": -2
+      }
+    },
+    {
+      "axes": [],
+      "route": [
+        "b",
+        "a"
+      ],
+      "values": {
+        "": -2
+      }
+    }
+  ],
+  "evidence_checks": "source values, both comparison routes and signed parent references retained; derived values checked",
+  "untested": [
+    "other fixtures",
+    "third call",
+    "unknown/zero/error branches",
+    "general distinction discovery"
+  ]
+}

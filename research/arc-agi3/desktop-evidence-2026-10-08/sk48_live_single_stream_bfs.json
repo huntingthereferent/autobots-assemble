@@ -1,0 +1,216 @@
+{
+  "game": "sk48",
+  "method": "single live instance, RESET and public verified replay; no game clones",
+  "used_private_game_state": false,
+  "loaded_saved_route": false,
+  "levels": [
+    {
+      "depth": 1,
+      "frontier": 1,
+      "new_unique_visible": 3,
+      "total_unique": 4,
+      "expanded_edges": 4,
+      "native_actions_including_resets_and_replays": 8,
+      "elapsed_seconds": 0.02,
+      "movement": {
+        "changed": 3,
+        "no_visible_change": 1
+      }
+    },
+    {
+      "depth": 2,
+      "frontier": 3,
+      "new_unique_visible": 4,
+      "total_unique": 8,
+      "expanded_edges": 16,
+      "native_actions_including_resets_and_replays": 44,
+      "elapsed_seconds": 0.05,
+      "movement": {
+        "changed": 9,
+        "no_visible_change": 3
+      }
+    },
+    {
+      "depth": 3,
+      "frontier": 4,
+      "new_unique_visible": 5,
+      "total_unique": 13,
+      "expanded_edges": 32,
+      "native_actions_including_resets_and_replays": 108,
+      "elapsed_seconds": 0.09,
+      "movement": {
+        "changed": 14,
+        "no_visible_change": 2
+      }
+    },
+    {
+      "depth": 4,
+      "frontier": 5,
+      "new_unique_visible": 12,
+      "total_unique": 25,
+      "expanded_edges": 52,
+      "native_actions_including_resets_and_replays": 208,
+      "elapsed_seconds": 0.19,
+      "movement": {
+        "changed": 20
+      }
+    },
+    {
+      "depth": 5,
+      "frontier": 12,
+      "new_unique_visible": 12,
+      "total_unique": 37,
+      "expanded_edges": 100,
+      "native_actions_including_resets_and_replays": 496,
+      "elapsed_seconds": 0.52,
+      "movement": {
+        "no_visible_change": 8,
+        "changed": 40
+      }
+    },
+    {
+      "depth": 6,
+      "frontier": 12,
+      "new_unique_visible": 9,
+      "total_unique": 46,
+      "expanded_edges": 148,
+      "native_actions_including_resets_and_replays": 832,
+      "elapsed_seconds": 0.91,
+      "movement": {
+        "changed": 39,
+        "no_visible_change": 9
+      }
+    },
+    {
+      "depth": 7,
+      "frontier": 9,
+      "new_unique_visible": 27,
+      "total_unique": 73,
+      "expanded_edges": 184,
+      "native_actions_including_resets_and_replays": 1120,
+      "elapsed_seconds": 1.19,
+      "movement": {
+        "changed": 36
+      }
+    },
+    {
+      "depth": 8,
+      "frontier": 27,
+      "new_unique_visible": 35,
+      "total_unique": 108,
+      "expanded_edges": 292,
+      "native_actions_including_resets_and_replays": 2092,
+      "elapsed_seconds": 2.14,
+      "movement": {
+        "no_visible_change": 25,
+        "changed": 83
+      }
+    },
+    {
+      "depth": 9,
+      "frontier": 35,
+      "new_unique_visible": 47,
+      "total_unique": 155,
+      "expanded_edges": 432,
+      "native_actions_including_resets_and_replays": 3492,
+      "elapsed_seconds": 3.47,
+      "movement": {
+        "changed": 124,
+        "no_visible_change": 16
+      }
+    },
+    {
+      "depth": 10,
+      "frontier": 47,
+      "new_unique_visible": 120,
+      "total_unique": 275,
+      "expanded_edges": 620,
+      "native_actions_including_resets_and_replays": 5560,
+      "elapsed_seconds": 5.7,
+      "movement": {
+        "changed": 188
+      }
+    },
+    {
+      "depth": 11,
+      "frontier": 120,
+      "new_unique_visible": 130,
+      "total_unique": 405,
+      "expanded_edges": 1100,
+      "native_actions_including_resets_and_replays": 11320,
+      "elapsed_seconds": 11.11,
+      "movement": {
+        "changed": 392,
+        "no_visible_change": 88
+      }
+    },
+    {
+      "depth": 12,
+      "frontier": 130,
+      "new_unique_visible": 140,
+      "total_unique": 545,
+      "expanded_edges": 1620,
+      "native_actions_including_resets_and_replays": 18080,
+      "elapsed_seconds": 17.52,
+      "movement": {
+        "changed": 450,
+        "no_visible_change": 70
+      }
+    },
+    {
+      "depth": 13,
+      "frontier": 140,
+      "new_unique_visible": 393,
+      "total_unique": 938,
+      "expanded_edges": 2180,
+      "native_actions_including_resets_and_replays": 25920,
+      "elapsed_seconds": 25.5,
+      "movement": {
+        "changed": 560
+      }
+    },
+    {
+      "depth": 14,
+      "frontier": 393,
+      "new_unique_visible": 93,
+      "total_unique": 1031,
+      "expanded_edges": 2488,
+      "native_actions_including_resets_and_replays": 30540,
+      "elapsed_seconds": 30.22,
+      "movement": {
+        "no_visible_change": 64,
+        "changed": 244
+      }
+    }
+  ],
+  "distinct_public_states": 1031,
+  "native_actions": 30540,
+  "expanded_edges": 2488,
+  "replay_failures": [],
+  "solution": {
+    "path": [
+      1,
+      1,
+      1,
+      4,
+      4,
+      4,
+      4,
+      3,
+      2,
+      2,
+      4,
+      3,
+      1,
+      4
+    ],
+    "actions_to_complete": 14,
+    "levels_completed": 1,
+    "game_state": "NOT_FINISHED",
+    "native_before_sha256": "157fcba687c39cdc60b3d730963d94de02fb74a8f243af40b0c3d01dff691283",
+    "native_after_sha256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1",
+    "new_native_action": 4,
+    "local_sdk_score": 1.1082750219270499e-05
+  },
+  "elapsed_seconds": 30.22
+}

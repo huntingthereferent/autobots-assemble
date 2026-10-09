@@ -1,0 +1,102 @@
+{
+  "method": "native public observations only",
+  "parent": "1|NOT_FINISHED|9a357142c7766bbd",
+  "events": [
+    {
+      "action": "PRE1",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": ""
+    },
+    {
+      "action": "1",
+      "key": "1|NOT_FINISHED|71b1f1cf6326cb95",
+      "matches_parent": false,
+      "note": ""
+    },
+    {
+      "action": "7",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": "after 1"
+    },
+    {
+      "action": "PRE2",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": ""
+    },
+    {
+      "action": "2",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": ""
+    },
+    {
+      "action": "7",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": "after 2"
+    },
+    {
+      "action": "PRE3",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": ""
+    },
+    {
+      "action": "3",
+      "key": "1|NOT_FINISHED|96d278d2f4e46bb5",
+      "matches_parent": false,
+      "note": ""
+    },
+    {
+      "action": "7",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": "after 3"
+    },
+    {
+      "action": "PRE4",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": ""
+    },
+    {
+      "action": "4",
+      "key": "1|NOT_FINISHED|582802a68ff65ca0",
+      "matches_parent": false,
+      "note": ""
+    },
+    {
+      "action": "7",
+      "key": "1|NOT_FINISHED|4bcd764909d6f586",
+      "matches_parent": false,
+      "note": "after 4"
+    },
+    {
+      "action": "RESET",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": "attempt 1"
+    },
+    {
+      "action": "RESET",
+      "key": "0|NOT_FINISHED|62fabd1676c12342",
+      "matches_parent": false,
+      "note": "attempt 2"
+    },
+    {
+      "action": "L1_REPLAY",
+      "key": "1|NOT_FINISHED|9a357142c7766bbd",
+      "matches_parent": true,
+      "note": ""
+    },
+    {
+      "action": "FRESH_ACTION4",
+      "key": "1|NOT_FINISHED|59a8a28d1abf572a",
+      "matches_parent": false,
+      "note": ""
+    }
+  ]
+}

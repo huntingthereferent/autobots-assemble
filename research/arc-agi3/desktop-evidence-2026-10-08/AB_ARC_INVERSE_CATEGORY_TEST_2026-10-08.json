@@ -1,0 +1,109 @@
+{
+  "status": "tested mathematical inversion of existing category witness",
+  "source_fixture": "test_ab_relation_synthesis.py CD82-shaped witness, not a fresh native ARC run",
+  "native_game_invoked": false,
+  "proven_witness_inverse": {
+    "continuation_classes": 4,
+    "proof_blocks": 8,
+    "occurrences": 11,
+    "class_to_proof_block_indices": {
+      "0": [
+        0,
+        1
+      ],
+      "1": [
+        2
+      ],
+      "2": [
+        3,
+        4,
+        6,
+        7
+      ],
+      "3": [
+        5
+      ]
+    },
+    "class_to_occurrences": {
+      "0": [
+        0,
+        1
+      ],
+      "1": [
+        2
+      ],
+      "2": [
+        3,
+        4,
+        6,
+        7,
+        9,
+        10
+      ],
+      "3": [
+        5,
+        8
+      ]
+    },
+    "checked_right_and_left_incidence": true
+  },
+  "family_factorization": {
+    "DC22_core": [],
+    "CD82_core": [
+      "prev_action1"
+    ],
+    "shared_residual": [
+      [
+        "prev_action2"
+      ],
+      [
+        "prev_obs1"
+      ],
+      [
+        "prev_obs2"
+      ]
+    ]
+  },
+  "hypothetical_contracting_generator": {
+    "assumption": "two contracting branches x/3 and (x+2)/3; NOT observed in ARC",
+    "depth_counts": [
+      {
+        "depth": 1,
+        "branches": 2,
+        "segment_width": 0.3333333333333333,
+        "total_length": 0.6666666666666666
+      },
+      {
+        "depth": 2,
+        "branches": 4,
+        "segment_width": 0.1111111111111111,
+        "total_length": 0.4444444444444444
+      },
+      {
+        "depth": 3,
+        "branches": 8,
+        "segment_width": 0.037037037037037035,
+        "total_length": 0.2962962962962962
+      },
+      {
+        "depth": 4,
+        "branches": 16,
+        "segment_width": 0.012345679012345678,
+        "total_length": 0.19753086419753083
+      },
+      {
+        "depth": 5,
+        "branches": 32,
+        "segment_width": 0.00411522633744856,
+        "total_length": 0.13168724279835387
+      },
+      {
+        "depth": 6,
+        "branches": 64,
+        "segment_width": 0.0013717421124828531,
+        "total_length": 0.08779149519890257
+      }
+    ],
+    "not_an_ARC_mechanic": true
+  }
+}

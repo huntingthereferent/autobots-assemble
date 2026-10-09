@@ -1,0 +1,24 @@
+{
+  "integration": "real native SDK frames into existing EcosystemService / AgentLineage",
+  "good": {
+    "status": "COMPLETE",
+    "ab": "MOVE",
+    "evidence": 1
+  },
+  "mismatched_prediction": {
+    "status": "PARTIAL",
+    "prediction_matched": false,
+    "evidence": 0
+  },
+  "missing_witness": {
+    "status": "READY",
+    "evidence": 0
+  },
+  "native_phase_probe": {
+    "same_public_frame": true,
+    "agent_status": "UNKNOWN"
+  },
+  "no_repo_changes": true,
+  "real_arc_witness": true,
+  "meaning": "native comparator does not promote unobserved inverse constructions"
+}

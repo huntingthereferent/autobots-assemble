@@ -59,7 +59,23 @@ existing evaluators through **one** callback. Unscoped arbitrary A/B
 callbacks cannot register in that combined mode.
 
 The HTTP server currently registers the original Continuity pool evaluator
-only. ARC has **no live capture provider registered in HTTP**. Trusted
+only. With `CONTINUITY_LOCAL_MODEL=qwen3:4b-instruct` and a loopback Ollama
+server, that same evaluator also requests one generative A/B source-selection
+move and executes a bounded, read-only native source inspection. The proposed
+move and independently measured file/hash witness enter the existing
+`AGENT_AB_OBSERVED` event. The original tasks remain READY: this is neither
+code editing nor autonomous completion. Without that env flag, the existing
+native-only behavior is unchanged. If inference is unavailable, an explicit
+UNKNOWN observation is recorded instead of fabricating movement.
+
+Local Windows canary launch scripts:
+`E:\Ollama\start-ollama.ps1` and `E:\Ollama\start-continuity-local-ai.ps1`.
+The canary uses a separate journal and port 18541; it does not rewrite the
+existing port 18540 journal. `network/tests/test_ollama_ab.py` verifies that
+the model-selected source is actually read, traversal escapes are rejected,
+and the same agent lineage receives the movement.
+
+ARC has **no live capture provider registered in HTTP**. Trusted
 in-process callers can supply a native observer to the same service as the
 scoped task evaluator; no HTTP endpoint accepts captures. This does not
 start an ARC game, website editor, or autonomous model worker.

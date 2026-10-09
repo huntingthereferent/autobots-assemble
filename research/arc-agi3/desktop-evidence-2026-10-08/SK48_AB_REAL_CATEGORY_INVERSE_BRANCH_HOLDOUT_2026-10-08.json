@@ -1,0 +1,907 @@
+{
+  "source": "native SK48 category, 3 observed phase1 alternative witnesses",
+  "projection": "compose witnessed phase1 alternatives without saved win paths",
+  "older_horizon": 3,
+  "new_holdout_horizon": 4,
+  "suffixes": [
+    [
+      1,
+      1,
+      1,
+      1
+    ],
+    [
+      2,
+      2,
+      2,
+      2
+    ],
+    [
+      3,
+      3,
+      3,
+      3
+    ],
+    [
+      4,
+      4,
+      4,
+      4
+    ],
+    [
+      1,
+      2,
+      3,
+      4
+    ],
+    [
+      4,
+      3,
+      2,
+      1
+    ],
+    [
+      1,
+      4,
+      1,
+      4
+    ],
+    [
+      4,
+      1,
+      4,
+      1
+    ],
+    [
+      1,
+      3,
+      3,
+      1
+    ],
+    [
+      3,
+      3,
+      4,
+      1
+    ],
+    [
+      4,
+      3,
+      1,
+      4
+    ],
+    [
+      2,
+      3,
+      2,
+      2
+    ],
+    [
+      3,
+      3,
+      3,
+      2
+    ],
+    [
+      1,
+      1,
+      2,
+      4
+    ],
+    [
+      1,
+      4,
+      2,
+      3
+    ],
+    [
+      4,
+      4,
+      3,
+      2
+    ],
+    [
+      3,
+      4,
+      4,
+      2
+    ],
+    [
+      1,
+      4,
+      3,
+      4
+    ],
+    [
+      3,
+      3,
+      4,
+      4
+    ],
+    [
+      2,
+      3,
+      4,
+      2
+    ]
+  ],
+  "summary": {
+    "0": {
+      "tested": 1,
+      "agreed": 1,
+      "split": 0
+    },
+    "1": {
+      "tested": 3,
+      "agreed": 3,
+      "split": 0
+    },
+    "2": {
+      "tested": 9,
+      "agreed": 9,
+      "split": 0
+    },
+    "3": {
+      "tested": 27,
+      "agreed": 27,
+      "split": 0
+    }
+  },
+  "branches": [
+    {
+      "depth": 0,
+      "symbol": [],
+      "history": [],
+      "root_preserved": true,
+      "matched_categories": [
+        0
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 1,
+      "symbol": [
+        0
+      ],
+      "history": [
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        1
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 1,
+      "symbol": [
+        1
+      ],
+      "history": [
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        1
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 1,
+      "symbol": [
+        2
+      ],
+      "history": [
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        1
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        0,
+        0
+      ],
+      "history": [
+        2,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        0,
+        1
+      ],
+      "history": [
+        2,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        0,
+        2
+      ],
+      "history": [
+        2,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        1,
+        0
+      ],
+      "history": [
+        1,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        1,
+        1
+      ],
+      "history": [
+        1,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        1,
+        2
+      ],
+      "history": [
+        1,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        2,
+        0
+      ],
+      "history": [
+        4,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        2,
+        1
+      ],
+      "history": [
+        4,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 2,
+      "symbol": [
+        2,
+        2
+      ],
+      "history": [
+        4,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        2
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        0,
+        0
+      ],
+      "history": [
+        2,
+        2,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        0,
+        1
+      ],
+      "history": [
+        2,
+        2,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        0,
+        2
+      ],
+      "history": [
+        2,
+        2,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        1,
+        0
+      ],
+      "history": [
+        2,
+        1,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        1,
+        1
+      ],
+      "history": [
+        2,
+        1,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        1,
+        2
+      ],
+      "history": [
+        2,
+        1,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        2,
+        0
+      ],
+      "history": [
+        2,
+        4,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        2,
+        1
+      ],
+      "history": [
+        2,
+        4,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        0,
+        2,
+        2
+      ],
+      "history": [
+        2,
+        4,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        0,
+        0
+      ],
+      "history": [
+        1,
+        7,
+        2,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        0,
+        1
+      ],
+      "history": [
+        1,
+        7,
+        2,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        0,
+        2
+      ],
+      "history": [
+        1,
+        7,
+        2,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        1,
+        0
+      ],
+      "history": [
+        1,
+        7,
+        1,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        1,
+        1
+      ],
+      "history": [
+        1,
+        7,
+        1,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        1,
+        2
+      ],
+      "history": [
+        1,
+        7,
+        1,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        2,
+        0
+      ],
+      "history": [
+        1,
+        7,
+        4,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        2,
+        1
+      ],
+      "history": [
+        1,
+        7,
+        4,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        1,
+        2,
+        2
+      ],
+      "history": [
+        1,
+        7,
+        4,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        0,
+        0
+      ],
+      "history": [
+        4,
+        7,
+        2,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        0,
+        1
+      ],
+      "history": [
+        4,
+        7,
+        2,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        0,
+        2
+      ],
+      "history": [
+        4,
+        7,
+        2,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        1,
+        0
+      ],
+      "history": [
+        4,
+        7,
+        1,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        1,
+        1
+      ],
+      "history": [
+        4,
+        7,
+        1,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        1,
+        2
+      ],
+      "history": [
+        4,
+        7,
+        1,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        2,
+        0
+      ],
+      "history": [
+        4,
+        7,
+        4,
+        7,
+        2
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        2,
+        1
+      ],
+      "history": [
+        4,
+        7,
+        4,
+        7,
+        1,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    },
+    {
+      "depth": 3,
+      "symbol": [
+        2,
+        2,
+        2
+      ],
+      "history": [
+        4,
+        7,
+        4,
+        7,
+        4,
+        7
+      ],
+      "root_preserved": true,
+      "matched_categories": [
+        3
+      ],
+      "first_counterexample": null
+    }
+  ],
+  "counterexamples": [],
+  "native_calls": 21928,
+  "reset_retries": 918,
+  "not_unseen_game": true,
+  "no_native_fractal_claim": true
+}

@@ -1,0 +1,40 @@
+{
+  "tests": [
+    {
+      "action": 1,
+      "reset_attempts_required": 2,
+      "restored_identical_entry": true,
+      "levels_after_replay": 1,
+      "initial_l2_sha256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1"
+    },
+    {
+      "action": 2,
+      "reset_attempts_required": 2,
+      "restored_identical_entry": true,
+      "levels_after_replay": 1,
+      "initial_l2_sha256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1"
+    },
+    {
+      "action": 3,
+      "reset_attempts_required": 2,
+      "restored_identical_entry": true,
+      "levels_after_replay": 1,
+      "initial_l2_sha256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1"
+    },
+    {
+      "action": 4,
+      "reset_attempts_required": 2,
+      "restored_identical_entry": true,
+      "levels_after_replay": 1,
+      "initial_l2_sha256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1"
+    },
+    {
+      "action": 7,
+      "reset_attempts_required": 2,
+      "restored_identical_entry": true,
+      "levels_after_replay": 1,
+      "initial_l2_sha256": "9a357142c7766bbdb9dcc0f31847b0dba7ffc924c2d7fb249c54b00d54e1f8c1"
+    }
+  ],
+  "all_pass": true
+}

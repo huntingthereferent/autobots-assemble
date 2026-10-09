@@ -1,0 +1,230 @@
+{
+  "level3_from_fresh_replay": true,
+  "L2_alternate_route": [
+    4,
+    4,
+    4,
+    1,
+    1,
+    4,
+    4,
+    1,
+    4,
+    3,
+    3,
+    1,
+    4,
+    4,
+    3,
+    3,
+    3,
+    3,
+    1,
+    4,
+    4,
+    1,
+    4,
+    2,
+    4,
+    4,
+    3,
+    3,
+    2,
+    4,
+    4
+  ],
+  "saved_reference_route_used": false,
+  "native_public_only": true,
+  "probes": [
+    {
+      "action": null,
+      "native_level": 2,
+      "entry_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "entry_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "after_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_best_prefix": 0,
+      "changed_pixels": 0,
+      "changed_box": null,
+      "entry_sha256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "after_sha256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334"
+    },
+    {
+      "action": 1,
+      "native_level": 2,
+      "entry_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "entry_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "after_heads": [
+        [
+          5,
+          36,
+          6
+        ]
+      ],
+      "after_best_prefix": 0,
+      "changed_pixels": 96,
+      "changed_box": [
+        5,
+        36,
+        16,
+        47
+      ],
+      "entry_sha256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "after_sha256": "9fa8aace85d06f8e7cfdf85fb5e7f9a795b4ee0b152fe7205ad3fb6a48211785"
+    },
+    {
+      "action": 2,
+      "native_level": 2,
+      "entry_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "entry_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "after_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_best_prefix": 0,
+      "changed_pixels": 0,
+      "changed_box": null,
+      "entry_sha256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "after_sha256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334"
+    },
+    {
+      "action": 3,
+      "native_level": 2,
+      "entry_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "entry_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "after_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_best_prefix": 0,
+      "changed_pixels": 12,
+      "changed_box": [
+        11,
+        44,
+        16,
+        45
+      ],
+      "entry_sha256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "after_sha256": "cb1fca6dc8c9e23cc6325b0e8c8af1877747754c65a472be088eff35a125aa92"
+    },
+    {
+      "action": 4,
+      "native_level": 2,
+      "entry_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "entry_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_target": [
+        8,
+        12,
+        9,
+        14
+      ],
+      "after_heads": [
+        [
+          5,
+          42,
+          6
+        ]
+      ],
+      "after_best_prefix": 0,
+      "changed_pixels": 12,
+      "changed_box": [
+        17,
+        44,
+        22,
+        45
+      ],
+      "entry_sha256": "7c7c422d6cacbdd9b4a7af5eb11fe5193c7b37c824f89dd776a7e7519917a334",
+      "after_sha256": "38b4069a1a76a66b8355a463a35a29fed27e1b10ebc39c54f43a791f9fc43eb5"
+    }
+  ]
+}

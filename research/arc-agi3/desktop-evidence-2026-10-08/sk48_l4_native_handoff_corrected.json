@@ -1,0 +1,155 @@
+{
+  "game": "sk48",
+  "test": "native first-completion handoff across Levels1-4",
+  "uses_private_engine": false,
+  "reference_assisted_L4_mutations": true,
+  "swaps_tested": 3,
+  "fresh_trials": 6,
+  "all_pass": true,
+  "results": [
+    {
+      "swap_index": 7,
+      "complete": true,
+      "native_trials": [
+        {
+          "trial": 0,
+          "L2_index": 0,
+          "L3_index": 0,
+          "consumed": [
+            14,
+            32,
+            33,
+            27
+          ],
+          "input_route_lengths": [
+            14,
+            32,
+            33,
+            27
+          ],
+          "trimmed_L3_tail": 0,
+          "L4_entry_sha256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "levels_completed": 4,
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L2_index": 1,
+          "L3_index": 1,
+          "consumed": [
+            14,
+            33,
+            33,
+            27
+          ],
+          "input_route_lengths": [
+            14,
+            33,
+            34,
+            27
+          ],
+          "trimmed_L3_tail": 1,
+          "L4_entry_sha256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "levels_completed": 4,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "swap_index": 8,
+      "complete": true,
+      "native_trials": [
+        {
+          "trial": 0,
+          "L2_index": 1,
+          "L3_index": 1,
+          "consumed": [
+            14,
+            33,
+            33,
+            27
+          ],
+          "input_route_lengths": [
+            14,
+            33,
+            34,
+            27
+          ],
+          "trimmed_L3_tail": 1,
+          "L4_entry_sha256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "levels_completed": 4,
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L2_index": 2,
+          "L3_index": 2,
+          "consumed": [
+            14,
+            32,
+            34,
+            27
+          ],
+          "input_route_lengths": [
+            14,
+            32,
+            34,
+            27
+          ],
+          "trimmed_L3_tail": 0,
+          "L4_entry_sha256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "levels_completed": 4,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "swap_index": 14,
+      "complete": true,
+      "native_trials": [
+        {
+          "trial": 0,
+          "L2_index": 2,
+          "L3_index": 2,
+          "consumed": [
+            14,
+            32,
+            34,
+            27
+          ],
+          "input_route_lengths": [
+            14,
+            32,
+            34,
+            27
+          ],
+          "trimmed_L3_tail": 0,
+          "L4_entry_sha256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "levels_completed": 4,
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L2_index": 3,
+          "L3_index": 3,
+          "consumed": [
+            14,
+            31,
+            33,
+            27
+          ],
+          "input_route_lengths": [
+            14,
+            31,
+            35,
+            27
+          ],
+          "trimmed_L3_tail": 2,
+          "L4_entry_sha256": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "levels_completed": 4,
+          "passed": true
+        }
+      ]
+    }
+  ]
+}

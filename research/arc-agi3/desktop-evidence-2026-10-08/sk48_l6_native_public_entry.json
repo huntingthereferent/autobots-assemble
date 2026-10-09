@@ -1,0 +1,38 @@
+{
+  "native_levels_completed": 5,
+  "entry_via_new_7way_verified_L5_alternative": true,
+  "entry_sha": "9b190480212bb01f8732c6f56d7910f15d0a845b2f4ae42bc12886bfee11b060",
+  "stage_consumed_actions": [
+    14,
+    31,
+    33,
+    27,
+    65
+  ],
+  "action_probes": [
+    {
+      "action": 1,
+      "level": 5,
+      "pixel_changes": 96,
+      "native_sha": "d430bec23c211127d0411359469f8b89f738799a0a1853fc73408c24afed4066"
+    },
+    {
+      "action": 2,
+      "level": 5,
+      "pixel_changes": 96,
+      "native_sha": "2e521bc224b36d8f4c6af2f89a5b2bbcfd68c6018ea46fddcdb0e527dc07e141"
+    },
+    {
+      "action": 3,
+      "level": 5,
+      "pixel_changes": 12,
+      "native_sha": "2ab5b4dfee372d4e92e14dde05d284e7877f73060a2ccec73d61c1ec717da77b"
+    },
+    {
+      "action": 4,
+      "level": 5,
+      "pixel_changes": 12,
+      "native_sha": "aab6e6bbccccbf04a31b11c69956f4052d5486465e2b7d40b95f12074bdc8ded"
+    }
+  ]
+}

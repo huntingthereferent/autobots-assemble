@@ -1,0 +1,700 @@
+{
+  "source": "reference-assisted Level7 native alternative routes",
+  "public_native_only": true,
+  "fresh_trial_count": 8,
+  "passing_routes": 4,
+  "routes": [
+    {
+      "swap_index": 0,
+      "route": [
+        1,
+        4,
+        4,
+        4,
+        2,
+        4,
+        6,
+        4,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        6,
+        1,
+        6,
+        1,
+        3,
+        6,
+        4,
+        4,
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        6,
+        2,
+        6,
+        2,
+        6,
+        2,
+        2,
+        6,
+        3,
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4
+      ],
+      "fresh_trials": [
+        {
+          "trial": 0,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            32,
+            33,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            31,
+            34,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        }
+      ],
+      "all_pass": true
+    },
+    {
+      "swap_index": 7,
+      "route": [
+        4,
+        1,
+        4,
+        4,
+        2,
+        4,
+        6,
+        2,
+        4,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        6,
+        1,
+        6,
+        1,
+        3,
+        6,
+        4,
+        4,
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        6,
+        2,
+        6,
+        2,
+        6,
+        2,
+        2,
+        6,
+        3,
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4
+      ],
+      "fresh_trials": [
+        {
+          "trial": 0,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            31,
+            34,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            33,
+            35,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        }
+      ],
+      "all_pass": true
+    },
+    {
+      "swap_index": 23,
+      "route": [
+        4,
+        1,
+        4,
+        4,
+        2,
+        4,
+        6,
+        4,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        6,
+        1,
+        6,
+        1,
+        3,
+        6,
+        4,
+        3,
+        4,
+        3,
+        3,
+        2,
+        4,
+        4,
+        6,
+        2,
+        6,
+        2,
+        6,
+        2,
+        2,
+        6,
+        3,
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4
+      ],
+      "fresh_trials": [
+        {
+          "trial": 0,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            33,
+            35,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            32,
+            35,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        }
+      ],
+      "all_pass": true
+    },
+    {
+      "swap_index": 27,
+      "route": [
+        4,
+        1,
+        4,
+        4,
+        2,
+        4,
+        6,
+        4,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        6,
+        1,
+        6,
+        1,
+        3,
+        6,
+        4,
+        4,
+        3,
+        3,
+        3,
+        4,
+        2,
+        4,
+        6,
+        2,
+        6,
+        2,
+        6,
+        2,
+        2,
+        6,
+        3,
+        3,
+        3,
+        3,
+        2,
+        4,
+        4,
+        1,
+        1,
+        1,
+        4,
+        4,
+        4
+      ],
+      "fresh_trials": [
+        {
+          "trial": 0,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            32,
+            35,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "L7_root_sha": "9a4fa9fee242d0742dbab22c5da0f3781ce269423dff20db18ea32e8141aa86a",
+          "upstream_stage_consumed": [
+            14,
+            34,
+            34,
+            27,
+            65,
+            36
+          ],
+          "L7_actions_until_completion": 51,
+          "switches": [
+            [
+              7,
+              31,
+              4
+            ],
+            [
+              17,
+              7,
+              28
+            ],
+            [
+              19,
+              37,
+              4
+            ],
+            [
+              22,
+              7,
+              22
+            ],
+            [
+              31,
+              31,
+              4
+            ],
+            [
+              33,
+              7,
+              28
+            ],
+            [
+              35,
+              31,
+              4
+            ],
+            [
+              38,
+              7,
+              34
+            ]
+          ],
+          "native_levels": 7,
+          "passed": true
+        }
+      ],
+      "all_pass": true
+    }
+  ]
+}

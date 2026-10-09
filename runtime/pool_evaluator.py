@@ -25,9 +25,10 @@ SOURCES = {
 class ContinuityPoolEvaluator:
     supported_actors = frozenset({"continuity-agent-pool"})
 
-    def __init__(self, repo: Path) -> None:
+    def __init__(self, repo: Path, *, model_driver=None) -> None:
         self.repo = repo.resolve()
         self.service = None
+        self.model_driver = model_driver
 
     def bind(self, service) -> None:
         if self.service is not None and self.service is not service:
@@ -153,6 +154,48 @@ class ContinuityPoolEvaluator:
             "task_results": "NOT_EXECUTED",
             "model_actor": "NOT_REGISTERED",
         }
+        if self.model_driver is not None:
+            # An unchanged source relation must not replay generative inference
+            # or create fresh observations merely because elapsed time differs.
+            for event in reversed(self.service.runtime.event_store.for_handoff(
+                    agent.handoff_id)):
+                if event.event_type != "AGENT_AB_OBSERVED":
+                    continue
+                prior = event.data.get("output") or {}
+                if (prior.get("model_actor") == self.model_driver.model
+                        and prior.get("task_source_relations") == matched
+                        and prior.get("generative_ab_movement") is not None):
+                    return AgentMove(
+                        result=ExecutionResult(
+                            status="UNKNOWN", output=prior, evidence=event.evidence,
+                            note=event.data.get("note", "Reused native model observation"),
+                        ), observation_only=True,
+                    )
+            try:
+                available = tuple(dict.fromkeys(
+                    source["source"] for item in matched
+                    for source in item["native_sources"]
+                ))
+                movement, model_evidence = self.model_driver.observe(
+                    referent=agent.referent, available=available,
+                    task_context=tuple({
+                        "title": task.title,
+                        "referent": task.referent,
+                        "required_relation": task.required_relation,
+                        "native_sources": SOURCES[seed],
+                        "required_witnesses": list(task.required_witnesses),
+                        "boundaries": list(task.boundaries),
+                    } for task, seed in items),
+                )
+                outcome["model_actor"] = self.model_driver.model
+                outcome["generative_ab_movement"] = movement
+                evidence = (*evidence, *model_evidence)
+            except Exception as exc:
+                outcome["model_actor"] = "UNAVAILABLE"
+                outcome["generative_ab_movement"] = {
+                    "state": "UNKNOWN", "error": type(exc).__name__,
+                    "edge": "local inference not available; task remains READY",
+                }
         return AgentMove(
             result=ExecutionResult(
                 status="UNKNOWN", output=outcome, evidence=evidence,

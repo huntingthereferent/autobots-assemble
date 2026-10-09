@@ -1,0 +1,17 @@
+{
+  "native_replays": 2,
+  "public_frame_identical": true,
+  "forward_suffix": [
+    1,
+    1,
+    1
+  ],
+  "prior_witness_prediction_matched": true,
+  "future_traces_distinct": true,
+  "existing_agent_status": "COMPLETE",
+  "ab_state": "MOVE",
+  "surviving_state": "same public frame",
+  "changed_relation": "witnessed three-step native continuation",
+  "witness_kind": "measurement",
+  "repo_modified": false
+}

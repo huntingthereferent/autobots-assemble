@@ -7,19 +7,20 @@
   <title>Continuity</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
-<body>
+<body class="research-edition">
   <header class="portal-header">
     <div class="portal-bar">
       <a class="wordmark" href="#home" aria-label="Continuity home">Continuity</a>
       <div class="header-actions">
-        <button id="ohayo" class="identity-button" type="button">
-          <span class="mini-avatar">C</span>
-          <span>Your Continuity</span>
+        <button id="ohayo" class="identity-button" type="button" title="Explicitly start James daily operations" aria-label="Start James daily operations">
+          <span class="mini-avatar" aria-hidden="true">▶</span>
+          <span>Start daily ops</span>
         </button>
       </div>
     </div>
     <nav class="portal-nav" aria-label="Continuity areas">
-      <a class="portal-link active" href="#home">Home</a>
+      <a class="portal-link active" href="#home">Overview</a>
+      <a class="portal-link" href="#research-index">Source index</a>
       <a class="portal-link" href="/monitor.html">Monitor</a>
       <a class="portal-link" href="#area-learn">Learn</a>
       <a class="portal-link" href="#area-build">Build</a>
@@ -27,7 +28,7 @@
       <a class="portal-link" href="#area-explore">Explore</a>
       <a class="portal-link" href="#area-connect">Connect</a>
       <a class="portal-link" href="#area-world">World</a>
-      <a class="portal-link" href="#areas">More</a>
+      <a class="portal-link" href="#areas">Systems index</a>
     </nav>
   </header>
 
@@ -37,20 +38,21 @@
     <section class="hero-grid">
       <article class="current-card">
         <div class="current-copy">
-          <p class="kicker">Your Continuity</p>
-          <h1>Keep the thread.</h1>
-          <p>Move through the internet, your work, your learning, and your systems without losing where you came from or why you moved.</p>
+          <p class="kicker">Continuity / current research index</p>
+          <h1>Start anywhere. Follow the work.</h1>
+          <p>Trace current sources, open questions, and work across systems. Each line keeps its context, provenance, and return path.</p>
+          <nav class="research-shortcuts" aria-label="Research entrances"><a href="#research-index">Source record ↗</a><a href="/monitor.html">Agent monitor ↗</a><a href="#areas">System directory ↗</a></nav>
         </div>
         <div class="current-now">
-          <span class="now-label">In front now</span>
+          <span class="now-label">Current work / in front now</span>
           <div id="attention-tasks" class="compact-list"></div>
         </div>
       </article>
 
       <aside class="today-card">
         <div class="module-heading">
-          <div><p class="kicker">Today</p><h2>Time & attention</h2></div>
-          <span id="activation-note"></span>
+          <div><p class="kicker">Working context</p><h2>Time & attention</h2></div>
+          <details class="activation-disclosure"><summary>Agent note</summary><span id="activation-note"></span></details>
         </div>
         <div id="attention-calendar" class="compact-list"></div>
         <div id="attention-reminders" class="compact-list reminders-list"></div>
@@ -59,12 +61,15 @@
 
     <section class="content-grid">
       <div class="main-stream">
-        <section class="stream-header">
+        <section id="research-index" class="stream-header">
           <div>
-            <p class="kicker">Live internet movement</p>
-            <h2>What’s moving right now</h2>
+            <p class="kicker">Research record / live source movement</p>
+            <h2>Current source observations</h2>
           </div>
-          <button id="refresh-live-feed" class="quiet-button" type="button">Refresh</button>
+          <div class="feed-heading-actions">
+            <button id="clear-source-filter" class="quiet-button" type="button" hidden>All sources</button>
+            <button id="refresh-live-feed" class="quiet-button" type="button">Refresh</button>
+          </div>
         </section>
 
         <div class="stream-tabs live-tabs" aria-label="Live feed filters">
@@ -78,18 +83,24 @@
 
         <section class="ticker-panel" aria-label="Feed tickers">
           <details class="ticker-settings">
-            <summary>Choose tickers</summary>
+            <summary>Index layers / choose tickers</summary>
             <p>Each ticker covers the fetched sample of its layer. Open it to see every source witness.</p>
             <div id="ticker-choices" class="ticker-choices"></div>
             <button id="show-all-tickers" type="button">Show all</button>
             <button id="hide-all-tickers" type="button">Hide all</button>
           </details>
-          <div id="feed-tickers" class="feed-tickers"></div>
+          <div id="feed-tickers" class="feed-tickers" aria-label="Moving source and domain tickers"></div>
+          <section id="ticker-expanded" class="ticker-expanded" aria-label="Selected ticker witnesses" hidden></section>
         </section>
+
+        <details class="mobile-source-chooser">
+          <summary>External feeds / open source index</summary>
+          <div id="mobile-live-sources" class="live-source-list"></div>
+        </details>
 
         <section id="trail-bar" class="trail-bar">
           <div class="trail-copy">
-            <span class="kicker">Current trail</span>
+            <span class="kicker">Current source trail</span>
             <div id="trail-path" class="trail-path">
               <span>Live mixed feed</span>
             </div>
@@ -123,29 +134,29 @@
 
         <section class="side-module">
           <div class="module-heading">
-            <div><p class="kicker">Live now</p><h2>External feeds</h2></div>
+            <div><p class="kicker">Source coverage</p><h2>External feeds</h2></div>
           </div>
           <div id="live-sources" class="live-source-list"></div>
         </section>
 
         <section class="side-module">
           <div class="module-heading">
-            <div><p class="kicker">Quick look</p><h2>Connected state</h2></div>
+            <div><p class="kicker">Recorded state</p><h2>Connected state</h2></div>
           </div>
           <div id="stats" class="status-grid"></div>
         </section>
 
         <section class="side-module">
           <div class="module-heading">
-            <div><p class="kicker">Your systems</p><h2>Open directly</h2></div>
+            <div><p class="kicker">Your systems</p><h2>Related area entrances</h2></div>
           </div>
           <div class="source-list">
-            <button data-source="school">Online School</button>
-            <button data-source="calendar">Calendar</button>
-            <button data-source="personal">Personal Operations</button>
-            <button data-source="research">Research</button>
-            <button data-source="jobs">Jobs</button>
-            <button data-source="factory">Factory</button>
+            <a data-related-system="school" href="#area-learn">Online School</a>
+            <a data-related-system="calendar" href="#area-organize">Calendar</a>
+            <a data-related-system="personal" href="#area-organize">Personal Operations</a>
+            <a data-related-system="research" href="#area-explore">Research</a>
+            <a data-related-system="jobs" href="#area-work">Jobs</a>
+            <a data-related-system="factory" href="#area-build">Factory</a>
           </div>
         </section>
 
@@ -189,10 +200,10 @@
     <section id="areas" class="area-directory" aria-label="Continuity areas">
       <div class="directory-heading">
         <div>
-          <p class="kicker">Enter anywhere</p>
+          <p class="kicker">Research / connected domains</p>
           <h2>Areas</h2>
         </div>
-        <p>These are entrances into what you want to do, not separate apps.</p>
+        <p>Each area is an entrance into connected work, not a separate application.</p>
       </div>
       <div id="area-grid" class="area-grid" aria-live="polite"></div>
     </section>
@@ -200,20 +211,20 @@
     <section class="systems-directory">
       <div class="source-directory-heading">
         <div>
-          <p class="kicker">Your systems</p>
+          <p class="kicker">Your systems / area index</p>
           <h2>Local systems under Continuity</h2>
         </div>
-        <p>School, Calendar, Personal Operations, Research, Jobs, and Factory keep their own state underneath the shared frontage.</p>
+        <p>Open a related area index for each system. These are reference entrances, not separate application pages.</p>
       </div>
 
       <div class="service-directory" aria-label="Your systems">
-        <button class="service-tile" data-source="school"><span class="service-mark">S</span><span><b>School</b><small>Learning, learners, worksheets</small></span></button>
-        <button class="service-tile" data-source="calendar"><span class="service-mark">C</span><span><b>Calendar</b><small>Time, events, routines</small></span></button>
-        <button class="service-tile" data-source="personal"><span class="service-mark">P</span><span><b>Personal</b><small>Notes, plans, day-to-day</small></span></button>
-        <button class="service-tile" data-source="work"><span class="service-mark">W</span><span><b>Work</b><small>Tasks, projects, handoffs</small></span></button>
-        <button class="service-tile" data-source="research"><span class="service-mark">R</span><span><b>Research</b><small>Evidence, questions, findings</small></span></button>
-        <button class="service-tile" data-source="jobs"><span class="service-mark">J</span><span><b>Jobs</b><small>Opportunities and paid work</small></span></button>
-        <button class="service-tile" data-source="factory"><span class="service-mark">F</span><span><b>Factory</b><small>Systems and operations</small></span></button>
+        <a class="service-tile" data-related-system="school" href="#area-learn"><span class="service-mark">S</span><span><b>School</b><small>Learning, learners, worksheets</small></span></a>
+        <a class="service-tile" data-related-system="calendar" href="#area-organize"><span class="service-mark">C</span><span><b>Calendar</b><small>Time, events, routines</small></span></a>
+        <a class="service-tile" data-related-system="personal" href="#area-organize"><span class="service-mark">P</span><span><b>Personal</b><small>Notes, plans, day-to-day</small></span></a>
+        <a class="service-tile" data-related-system="work" href="#area-work"><span class="service-mark">W</span><span><b>Work</b><small>Tasks, projects, handoffs</small></span></a>
+        <a class="service-tile" data-related-system="research" href="#area-explore"><span class="service-mark">R</span><span><b>Research</b><small>Evidence, questions, findings</small></span></a>
+        <a class="service-tile" data-related-system="jobs" href="#area-work"><span class="service-mark">J</span><span><b>Jobs</b><small>Opportunities and paid work</small></span></a>
+        <a class="service-tile" data-related-system="factory" href="#area-build"><span class="service-mark">F</span><span><b>Factory</b><small>Systems and operations</small></span></a>
       </div>
     </section>
 

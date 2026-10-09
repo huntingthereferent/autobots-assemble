@@ -1,0 +1,165 @@
+{
+  "source": "A/B permutations of prior positive Level4 action order",
+  "native_SDK_only": true,
+  "tested_alternatives": 3,
+  "fresh_trials": 6,
+  "passed": 0,
+  "witnesses": [
+    {
+      "swap_index": 7,
+      "actions": [
+        1,
+        1,
+        3,
+        4,
+        1,
+        4,
+        1,
+        3,
+        1,
+        2,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        1,
+        1,
+        3,
+        3,
+        1,
+        4,
+        2,
+        3,
+        1
+      ],
+      "first_completion": 27,
+      "fresh_trials": [
+        {
+          "trial": 0,
+          "level4_entry": 3,
+          "entered_level5_at_action": 27,
+          "native_level": 4,
+          "start_frame_sha": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "level4_entry": 3,
+          "entered_level5_at_action": null,
+          "native_level": 3,
+          "start_frame_sha": "fc1af49b5d6ca84f0ffd709022e1bf9a9fc85ac4290e7b0f17ceba2a1c560938",
+          "passed": false
+        }
+      ],
+      "passed": false
+    },
+    {
+      "swap_index": 8,
+      "actions": [
+        1,
+        1,
+        3,
+        4,
+        1,
+        4,
+        1,
+        1,
+        2,
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        4,
+        4,
+        4,
+        1,
+        1,
+        3,
+        3,
+        1,
+        4,
+        2,
+        3,
+        1
+      ],
+      "first_completion": 27,
+      "fresh_trials": [
+        {
+          "trial": 0,
+          "level4_entry": 3,
+          "entered_level5_at_action": null,
+          "native_level": 3,
+          "start_frame_sha": "fc1af49b5d6ca84f0ffd709022e1bf9a9fc85ac4290e7b0f17ceba2a1c560938",
+          "passed": false
+        },
+        {
+          "trial": 1,
+          "level4_entry": 3,
+          "entered_level5_at_action": 27,
+          "native_level": 4,
+          "start_frame_sha": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "passed": true
+        }
+      ],
+      "passed": false
+    },
+    {
+      "swap_index": 14,
+      "actions": [
+        1,
+        1,
+        3,
+        4,
+        1,
+        4,
+        1,
+        1,
+        3,
+        2,
+        3,
+        3,
+        2,
+        2,
+        4,
+        2,
+        4,
+        4,
+        1,
+        1,
+        3,
+        3,
+        1,
+        4,
+        2,
+        3,
+        1
+      ],
+      "first_completion": 27,
+      "fresh_trials": [
+        {
+          "trial": 0,
+          "level4_entry": 3,
+          "entered_level5_at_action": 27,
+          "native_level": 4,
+          "start_frame_sha": "4ea7e6e712f045e45031bc685e3b76e60792b826142b0ad5c5ba6d3986741ae6",
+          "passed": true
+        },
+        {
+          "trial": 1,
+          "level4_entry": 3,
+          "entered_level5_at_action": null,
+          "native_level": 3,
+          "start_frame_sha": "820a751e2c2b9279cc4b1bcea374b68179756830bfe3a00289546cfaf2277587",
+          "passed": false
+        }
+      ],
+      "passed": false
+    }
+  ]
+}

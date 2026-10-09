@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "template_id": "continuity_research_index_v1",
+  "name": "Continuity research index (current frontage lens)",
+  "layer": "ecosystem_research_presentation",
+  "status": "candidate",
+  "parent_template": "continuity_social_hub_v1",
+  "intent": "Current research-first visual treatment of the existing portal/feed frontage. Changes priority, density, and tone, not source ownership, A/B semantics, or systems architecture.",
+  "native_witnesses": [
+    {
+      "source": "runtime/http/index.html",
+      "observed_on": "2026-10-08",
+      "observation": "Homepage presents current/attention hero ahead of external feed and nested source tickers."
+    },
+    {
+      "source": "runtime/http/styles.css",
+      "observed_on": "2026-10-08",
+      "observation": "Rounded social-product cards, pills, and gray background coexist with already compact feed/source density."
+    },
+    {
+      "source": "design/visual-provenance/templates/continuity_social_hub_v1.json",
+      "observed_on": "2026-10-08",
+      "observation": "Approved multi-domain and social-feed parent template with provenance and preserved source ownership."
+    }
+  ],
+  "comparison": {
+    "A": "Personal portal foregrounded by Keep the thread, identity, day/time; live research record appears below.",
+    "B": "Research index foregrounded by work, source observations, compact reference navigation and subdued archival editorial type.",
+    "survives": [
+      "all native source witnesses",
+      "source filters and ticker layers",
+      "current-trail branching and resets",
+      "system entry points",
+      "day/attention context",
+      "identity actions",
+      "inline source titles",
+      "swallow-first/internal handoffs"
+    ],
+    "changed": [
+      "masthead wording",
+      "research access links",
+      "visible source heading",
+      "density and typography",
+      "flat source panels",
+      "sidebar visual order"
+    ],
+    "unknown": [
+      "live provider availability and user-specific login state",
+      "authoritative researcher grouping until native report witnesses exist"
+    ]
+  },
+  "design_constraints": [
+    "No fake report counts, simulated live research, or invented claim merges",
+    "No new global A/B navigation taxonomy",
+    "Live feeds remain ephemeral and source lines remain distinct",
+    "Existing social-hub template remains approved beneath the new presentation",
+    "Narrow screen keeps the source index readable without sideways page scroll"
+  ]
+}

@@ -1,0 +1,17 @@
+[
+  {
+    "Algorithm": "SHA256",
+    "Hash": "515D9E4FF54773DDA91AA52879FC24AD92EB907CE4EC298CDC454F59192AC12D",
+    "Path": "E:\\axioms\\two_step.py"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "2E8158AA425E058A2D590C3444A451A5F4881E8D481B7C7D003308C2D94FBCB7",
+    "Path": "E:\\axioms\\evidence\\first.json"
+  },
+  {
+    "Algorithm": "SHA256",
+    "Hash": "92E7158389E56CE579DF39ED5882B584DDA1FF0FA4AE477D7DEF52A1164A3F6B",
+    "Path": "E:\\axioms\\REPORT.md"
+  }
+]
