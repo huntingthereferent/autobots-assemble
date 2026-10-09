@@ -156,6 +156,81 @@ class GenericConstructionTests(unittest.TestCase):
                 )
                 self.assertEqual(len(next_fibers), 4)
 
+    def test_nested_dicts_lists_and_boolean_relations_use_same_generator(self):
+        # Unlike the three binary referents, this one carries genuinely
+        # heterogeneous JSON values and non-numeric category labels.
+        group = []
+        for route in ("automatic", "manual"):
+            for variant in (False, True):
+                group.append(ABOccurrence.create(
+                    referent="document-review",
+                    relations={
+                        "route": route,
+                        "recipients": ["owner", "legal"] if variant else ["owner"],
+                        "policy": {"audit_required": variant, "level": None},
+                    },
+                    continuation=(route,),
+                ))
+        observations = tuple(group)
+        result = derive_relation_constructions(
+            observations, information_closure(observations),
+            source_locators=tuple(f"review-source:{i}" for i in range(4)),
+            witness_contract="only initial routing tested",
+            horizon=1, intent="construct",
+        )
+        self.assertEqual(len(result), 4)
+        for p in result:
+            relations = p.structure["relation_values"]
+            self.assertIn(relations["route"], ("automatic", "manual"))
+            self.assertIsNone(relations["policy"]["level"])
+            self.assertNotEqual(
+                len(relations["recipients"]) == 2,
+                relations["policy"]["audit_required"],
+            )
+            self.assertEqual(p.witness_contract, "only initial routing tested")
+            self.assertEqual(p.status, "PROPOSED")
+
+    def test_single_category_can_expose_multiple_relation_dimensions(self):
+        observations = tuple(
+            ABOccurrence.create(
+                referent="three-options",
+                relations={"shape": i, "color": f"c{i}"},
+                continuation="same tested future",
+            )
+            for i in range(3)
+        )
+        result = derive_relation_constructions(
+            observations, information_closure(observations),
+            source_locators=("s:0", "s:1", "s:2"),
+            witness_contract="one equal finite-horizon continuation",
+            horizon=1, intent="alternatives", max_candidates=20,
+        )
+        self.assertEqual(len(result), 6)
+        self.assertTrue(all(p.category == 0 for p in result))
+        self.assertTrue(all(p.structure["proof_source_names"] == [] for p in result))
+
+    def test_nonportable_relation_values_are_rejected_not_fabricated(self):
+        value = object()
+        group = (
+            ABOccurrence.create(
+                referent="opaque",
+                relations={"x": value, "y": 0},
+                continuation="same",
+            ),
+            ABOccurrence.create(
+                referent="opaque",
+                relations={"x": 1, "y": 1},
+                continuation="same",
+            ),
+        )
+        with self.assertRaises(TypeError):
+            derive_relation_constructions(
+                group, information_closure(group),
+                source_locators=("opaque:0", "opaque:1"),
+                witness_contract="opaque values are unportable",
+                horizon=1, intent="construct",
+            )
+
     def test_no_novel_structure_when_only_one_relation_varies(self):
         group = (
             ABOccurrence.create(
