@@ -29,6 +29,7 @@ from .fifth_coordinate_lift import BASE
 from .nonconstant_drift import solve_potential
 
 F3=(0,1,2)
+ZERO=(0,)*9
 State=tuple[int,...]
 Vertex=tuple[int,int,int]
 VERTICES=tuple(product(F3,repeat=3))
