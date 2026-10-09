@@ -96,6 +96,8 @@ tau = h(0)+h(1)+h(2) = a^-1 * sum_w Q(w)   (mod 3).
 
 The trace is independent of the initial (v,z), and adding a constant to h cannot change it: three copies of that constant vanish in F3.
 
+**Dimensional qualification:** when the order is nine, that order first appears in dimension **four**, where x3 is present. The same transformation projected onto the three-coordinate system has order three. The coherent infinite-dimensional transformation has order nine, since its fourth-coordinate projection does.
+
 Therefore:
 
 - If `tau=0`, the corrected generator C has **order three**.
