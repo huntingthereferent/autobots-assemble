@@ -233,6 +233,7 @@ Environment:
 Current API:
 
 ```text
+GET  /api/research-board?checkpoint=<optional registered checkpoint> (read-only)
 GET  /api/status
 GET  /api/notes
 POST /api/notes
@@ -355,3 +356,18 @@ proven ongoing CPU activity; no heartbeat exists for the A/B evaluator.
 This is observation while connected, not automatic push notifications or
 an always-on remote outage monitor. The monitor cannot keep the computer
 awake or restart a stopped server.
+
+## Research question board
+
+The Research Questions link opens `/research-board.html`. Its read-only
+`GET /api/research-board` response projects the checkpoint named in
+`research/questions/index.json`. The returned snapshot is loaded from an
+explicitly registered local file, never an arbitrary query-supplied path.
+
+The original research questions are frozen in a separate checkpoint JSON.
+A reconciliation pass must create a **new** checkpoint and advance the index;
+it must not overwrite a frozen file, claim an answer without evidence and
+scope, or turn an UNKNOWN into inferred equivalence. Checkpoints are
+Git-versioned research outputs, not task state or a new evaluator.
+
+[Record contract](../research/questions/README.md).

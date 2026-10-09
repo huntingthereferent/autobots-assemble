@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Research Questions · Continuity</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/research-board.css">
+</head>
+<body>
+  <header class="portal-header">
+    <div class="portal-bar board-top">
+      <a class="wordmark" href="/">Continuity</a>
+      <a class="quiet-button board-home" href="/">← Back to home</a>
+    </div>
+  </header>
+  <main class="portal-shell research-board-page">
+    <header class="research-intro">
+      <p class="kicker">Research / Question records</p>
+      <h1>Research Question Board</h1>
+      <p>Freeze the question. Record the witness. Keep what is unresolved. Derive the next question without overwriting the earlier one.</p>
+      <div class="research-toolbar">
+        <label for="research-checkpoint">View checkpoint</label>
+        <select id="research-checkpoint" aria-label="Research checkpoint"></select>
+        <span id="research-freeze-date"></span>
+      </div>
+      <p id="research-note" class="research-note"></p>
+      <p class="research-readonly">Read-only research projection · changes come from versioned evidence records, not board interactions.</p>
+    </header>
+    <div id="research-error" class="error" role="alert" hidden></div>
+    <div class="research-columns" id="research-columns" aria-live="polite">
+      <section class="research-lane" data-lane="review">
+        <header><h2>Awaiting review</h2><span class="research-count" id="research-review-count">0</span></header>
+        <p>Frozen questions not yet reconciled.</p><div id="research-review-list" class="research-question-list"></div>
+      </section>
+      <section class="research-lane" data-lane="answered">
+        <header><h2>Answered</h2><span class="research-count" id="research-answered-count">0</span></header>
+        <p>Witnessed answer for the stated scope.</p><div id="research-answered-list" class="research-question-list"></div>
+      </section>
+      <section class="research-lane" data-lane="partial">
+        <header><h2>Partial / Unknown</h2><span class="research-count" id="research-partial-count">0</span></header>
+        <p>Evidence or observation boundary remains.</p><div id="research-partial-list" class="research-question-list"></div>
+      </section>
+      <section class="research-lane" data-lane="open">
+        <header><h2>Open / Next</h2><span class="research-count" id="research-open-count">0</span></header>
+        <p>New questions derived from recorded findings.</p><div id="research-open-list" class="research-question-list"></div>
+      </section>
+    </div>
+  </main>
+  <script src="/research-board.js" defer></script>
+</body>
+</html>

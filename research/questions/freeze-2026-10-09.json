@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "checkpoint_id": "freeze-2026-10-09",
+  "frozen_date": "2026-10-09",
+  "title": "Research question freeze — before reconciliation",
+  "note": "Original public research questions preserved unchanged. Findings published since these questions were written have not yet been reconciled into answers. REVIEW is not a conclusion about the mathematics.",
+  "questions": [
+    {
+      "id": "Q-001",
+      "question": "Which state relations survive a change of representation?",
+      "status": "REVIEW",
+      "answer": "",
+      "scope": "",
+      "boundary": "Awaiting a question-by-question evidence audit.",
+      "witnesses": [],
+      "derived_from": [],
+      "next_question_ids": [],
+      "origin": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/RESEARCH.md#questions-still-open"
+    },
+    {
+      "id": "Q-002",
+      "question": "How does an agent discover a dependency it cannot yet observe?",
+      "status": "REVIEW",
+      "answer": "",
+      "scope": "",
+      "boundary": "Awaiting a question-by-question evidence audit.",
+      "witnesses": [],
+      "derived_from": [],
+      "next_question_ids": [],
+      "origin": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/RESEARCH.md#questions-still-open"
+    },
+    {
+      "id": "Q-003",
+      "question": "When can successful local rules be promoted beyond one environment?",
+      "status": "REVIEW",
+      "answer": "",
+      "scope": "",
+      "boundary": "Awaiting a question-by-question evidence audit.",
+      "witnesses": [],
+      "derived_from": [],
+      "next_question_ids": [],
+      "origin": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/RESEARCH.md#questions-still-open"
+    },
+    {
+      "id": "Q-004",
+      "question": "What is the smallest interface that exposes autonomous failure clearly?",
+      "status": "REVIEW",
+      "answer": "",
+      "scope": "",
+      "boundary": "Awaiting a question-by-question evidence audit.",
+      "witnesses": [],
+      "derived_from": [],
+      "next_question_ids": [],
+      "origin": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/RESEARCH.md#questions-still-open"
+    },
+    {
+      "id": "Q-005",
+      "question": "Can construction generate useful candidates without smuggling in their solution?",
+      "status": "REVIEW",
+      "answer": "",
+      "scope": "",
+      "boundary": "Awaiting a question-by-question evidence audit.",
+      "witnesses": [],
+      "derived_from": [],
+      "next_question_ids": [],
+      "origin": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/RESEARCH.md#questions-still-open"
+    },
+    {
+      "id": "Q-006",
+      "question": "What data must survive when work crosses independent systems?",
+      "status": "REVIEW",
+      "answer": "",
+      "scope": "",
+      "boundary": "Awaiting a question-by-question evidence audit.",
+      "witnesses": [],
+      "derived_from": [],
+      "next_question_ids": [],
+      "origin": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/RESEARCH.md#questions-still-open"
+    }
+  ]
+}

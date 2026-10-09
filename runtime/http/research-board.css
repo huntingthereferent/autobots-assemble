@@ -1,0 +1,30 @@
+
+.board-top {display:flex;justify-content:space-between;gap:16px}
+.board-home {display:inline-flex;align-items:center;text-decoration:none;padding:8px 14px}
+.research-board-page {padding-bottom:60px}
+.research-intro {padding:26px 0 20px;max-width:950px}
+.research-intro h1 {font-family:Georgia,'Times New Roman',serif;font-size:clamp(1.5rem,3vw,2.3rem);letter-spacing:-.025em}
+.research-intro > p {color:#57616d;font-size:.9rem;line-height:1.6}
+.research-toolbar {display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:18px 0 10px}
+.research-toolbar label {font-size:.8rem;font-weight:800}
+.research-toolbar select {min-width:230px;max-width:100%;padding:10px 12px;border:1px solid #cbd3d9;border-radius:6px;background:white;color:#171a1f}
+#research-freeze-date {font-family:Consolas,monospace;color:#62707b;font-size:.78rem}
+.research-intro .research-readonly {font-size:.74rem;color:#697681}
+.research-columns {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.research-lane {min-width:0;padding:14px;border:1px solid #d9dfe5;border-radius:8px;background:#f8f9fa}
+.research-lane > header {display:flex;justify-content:space-between;align-items:center;gap:8px}
+.research-lane h2 {font-family:Georgia,'Times New Roman',serif;font-size:1.08rem}
+.research-lane > p {color:#606b75;font-size:.73rem;line-height:1.5;margin:7px 0 13px}
+.research-count {font-size:.8rem;font-variant-numeric:tabular-nums;color:#52616b;background:#e9edf0;border-radius:5px;padding:4px 8px}
+.research-question-list {display:grid;align-content:start;gap:10px}
+.research-question {background:white;border:1px solid #dce1e5;border-radius:6px;padding:12px;overflow-wrap:anywhere}
+.research-question-id {font:700 .71rem Consolas,monospace;color:#60717b}
+.research-question h3 {font-size:.87rem;line-height:1.4;margin:8px 0}
+.research-question p {font-size:.76rem;line-height:1.55;margin:7px 0}
+.research-question .state {font-weight:800;font-size:.69rem;letter-spacing:.06em;color:#374957}
+.research-question .detail-label {font-weight:750}
+.research-question a {font-size:.74rem;color:#284e65;text-underline-offset:2px}
+.research-refs {display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.research-lineage {font: .7rem Consolas,monospace;color:#6a757d}
+@media(max-width:1100px){.research-columns{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.research-columns{grid-template-columns:1fr}.research-intro{padding-top:16px}}

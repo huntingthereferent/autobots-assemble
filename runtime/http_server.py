@@ -10,6 +10,7 @@ import os
 import threading
 
 from runtime.service import EcosystemService
+from runtime.research_board import load_research_board
 
 
 ROOT = Path(__file__).resolve().parent
@@ -98,6 +99,11 @@ class Handler(BaseHTTPRequestHandler):
                     from runtime.continuity_pool import pool_snapshot
                     self.send_json({"enabled": POOL_ENABLED,
                                     **pool_snapshot(SERVICE)})
+                    return
+
+                if parsed.path == "/api/research-board":
+                    checkpoint = query.get("checkpoint", [None])[0]
+                    self.send_json(load_research_board(checkpoint=checkpoint))
                     return
 
                 if parsed.path == "/api/connections":

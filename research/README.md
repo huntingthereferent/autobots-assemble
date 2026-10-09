@@ -43,3 +43,12 @@ A dive can be paused indefinitely and resumed later.
 ## Boundary
 
 Research outputs do not enter `jobs/` merely because they look useful. Crossing into money/jobs requires an explicit handoff.
+
+## Research questions and checkpoint board
+
+[Research question records](questions/README.md) freeze the questions of a
+specific research pass. The site displays the registered checkpoint as a
+read-only research board. Subsequent reconciliations append a new checkpoint
+with witnessed ANSWERED/PARTIAL/UNKNOWN outcomes, preserve old questions and
+source locators, and derive next questions from actual findings. The display
+is not the authority that decides a mathematical relationship.

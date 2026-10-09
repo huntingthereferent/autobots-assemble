@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "current": "freeze-2026-10-09",
+  "checkpoints": [
+    {
+      "id": "freeze-2026-10-09",
+      "file": "freeze-2026-10-09.json",
+      "label": "9 Oct 2026 · Initial question freeze",
+      "source_ref": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/RESEARCH.md#questions-still-open"
+    }
+  ]
+}
