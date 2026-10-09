@@ -291,10 +291,18 @@ and q2 independent of its first. Couplings reading the
 translated coordinate give exact obstructions, first
 at dimension four or five; merely being nonzero
 does **not** break the symmetry.
+The subsequent [compensated translation theorem](work/arc_like_maze/CORRECTED_TRANSLATION.md)
+proves that a higher-coordinate correction *can* restore an
+order-three centralizer action when the x2 drift is nonzero.
+If that drift vanishes and a higher coefficient remains,
+B-fixed invariant fibers obstruct any lift preserving x0,x1
+and translating x2; the first failure is in dimension
+four or five. Thirteen focused tests cover the
+exact construction and pointed factor provenance.
 This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows network.tests.test_arc_like_window_root_translation network.tests.test_arc_like_translation_centralizer -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport network.tests.test_arc_like_window_two network.tests.test_arc_like_window_family network.tests.test_arc_like_window_branch network.tests.test_arc_like_window_word_collision network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_marked_arrows network.tests.test_arc_like_window_root_translation network.tests.test_arc_like_translation_centralizer network.tests.test_arc_like_corrected_translation -v`.
 
 ## Core structure
 
