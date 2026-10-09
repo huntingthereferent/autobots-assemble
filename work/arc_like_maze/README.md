@@ -92,13 +92,13 @@ python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc
 
 This extends the same construction experiment without changing A/B or the
 native ARC observer. Here a *construction turn* is an operation on the
-relation parameter \`phi=(0,a,b)\`, not a player action. The A/B transition
+relation parameter `phi=(0,a,b)`, not a player action. The A/B transition
 graphs of those produced worlds are still compared with the existing
-\`discover_alignment\` evidence contract.
+`discover_alignment` evidence contract.
 
 For the nine constructed 3D worlds, the exact rooted A/B classes were
 exhaustively classified as the zero vector and four nonzero pairs
-\`(a,b) ~ (2a,2b)\` in F_3. Distinct concrete worlds may therefore preserve
+`(a,b) ~ (2a,2b)` in F_3. Distinct concrete worlds may therefore preserve
 the same A/B structure. To promote a construction operator C to the quotient,
 the **next-layer compatibility** requirement is:
 
@@ -106,14 +106,14 @@ the **next-layer compatibility** requirement is:
 W ~ W'   implies   C(W) ~ C(W')
 ~~~
 
-It is different from requiring each individual edge \`W -> C(W)\` to stay
+It is different from requiring each individual edge `W -> C(W)` to stay
 in its original class. A valid construction can move between classes while
 maintaining a reproducible, mathematically well-defined *relation between
 classes*. Do not conflate these levels.
 
 ### Nontrivial closed construction cycle
 
-The shear rule \`H(a,b)=(a,a+b)\` (mod 3) produces:
+The shear rule `H(a,b)=(a,a+b)` (mod 3) produces:
 
 ~~~text
 (0,1,0) -> (0,1,1) -> (0,1,2) -> (0,1,0)
@@ -121,16 +121,16 @@ The shear rule \`H(a,b)=(a,a+b)\` (mod 3) produces:
 
 The first three worlds occupy **three distinct A/B equivalence classes**;
 they are not falsely declared equivalent. However, the *construction rule*
-is unchanged throughout and \`H^3(a,b)=(a,b+3a)=(a,b)\` for every parameter.
+is unchanged throughout and `H^3(a,b)=(a,b+3a)=(a,b)` for every parameter.
 Thus we have an exact, nontrivial loop at the construction layer, with
-different intermediate turns. \`SCALE\`, \`SHEAR\`, and \`SWAP\` together
+different intermediate turns. `SCALE`, `SHEAR`, and `SWAP` together
 preserve the quotient (zero plus four nonzero classes), yielding two closed
 strongly connected components of sizes one and four.
 
 ### Full affine boundary: exhaust, don't guess
 
-[\`affine_scan.py\`](affine_scan.py) enumerates all F_3-affine maps
-\`v -> Mv+t\` on the two relation coordinates:
+[`affine_scan.py`](affine_scan.py) enumerates all F_3-affine maps
+`v -> Mv+t` on the two relation coordinates:
 
 | Witness | Count |
 |---|---:|
@@ -140,7 +140,7 @@ strongly connected components of sizes one and four.
 | Reversible quotient-compatible maps | 48 |
 | Distinct induced quotient permutations | 24 |
 
-Exactly the 48 invertible **linear** maps (\`t=0\`) preserve the
+Exactly the 48 invertible **linear** maps (`t=0`) preserve the
 original A/B classes among all reversible affine maps. They compose
 within the admitted 48; the resulting maps on the four nonzero
 equivalence classes yield all 24 permutations of those classes,
@@ -150,9 +150,9 @@ for the declared reversible affine constructor family.
 Mathematically: there are 8 choices for the first nonzero matrix
 column and 6 choices for an independent second column, giving 48
 invertible matrices; 9 translations give 432 reversible affine maps.
-If \`t=0\`, scalar-equivalent points stay scalar-equivalent. If
-\`t!=0\`, let \`v=M^{-1}t\`; then the equivalent inputs \`v\` and \`-v\`
-map to \`2t\` and \`0\`, which are *not* equivalent. Therefore no
+If `t=0`, scalar-equivalent points stay scalar-equivalent. If
+`t!=0`, let `v=M^{-1}t`; then the equivalent inputs `v` and `-v`
+map to `2t` and `0`, which are *not* equivalent. Therefore no
 nonzero translation can be admitted as a reversible class-preserving
 constructor. The 48 linear maps form a group under composition,
 and their induced quotient actions are closed under composition.
@@ -164,19 +164,19 @@ mathematical referents requiring new witnesses.
 
 ### Boundary: when a constructor destroys the alignment
 
-For example, translation \`T(a,b)=(a+1,b)\` maps the initially aligned
-pair \`(1,0) ~ (2,0)\` to \`(2,0)\` and \`(0,0)\`, respectively.
+For example, translation `T(a,b)=(a+1,b)` maps the initially aligned
+pair `(1,0) ~ (2,0)` to `(2,0)` and `(0,0)`, respectively.
 The old A/B quotient no longer determines a unique successor class.
-The algorithm reports \`OPEN_AB_QUOTIENT\` with two action-word
+The algorithm reports `OPEN_AB_QUOTIENT` with two action-word
 counterexamples for each broken pair; refining the quotient under
 this extra operator produces **nine singleton classes**. A finite
 parameter orbit still exists, but the earlier meaningful relational
 compression has been lost. Do not promote this to the same closure.
 
-[\`operators.py\`](operators.py) records constructed transitions,
+[`operators.py`](operators.py) records constructed transitions,
 exact A/B counterexamples, quotient congruence failures, partition
 refinement and closed strongly connected quotient components. Empty
-inputs or bounded search exhaustion remain \`UNKNOWN\` rather than
+inputs or bounded search exhaustion remain `UNKNOWN` rather than
 inventing a proof.
 
 Reproduce all focused tests from the repository root:
