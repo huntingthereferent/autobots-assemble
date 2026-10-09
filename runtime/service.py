@@ -6,7 +6,10 @@ from pathlib import Path
 from typing import Any, Iterable, Literal
 
 from runtime.ab_information import ABOccurrence, ABInformationState
-from runtime.ab_construction import Generator
+from runtime.ab_construction import Generator, proposal_from_frame
+from runtime.ab_world_experiment import (
+    Predictor, SimulationWorld, WorldExperiment, run_simulation_probe,
+)
 from runtime.ab_loop import ABFrame
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.agent_bridge import AgentBridge
@@ -143,6 +146,30 @@ class EcosystemService:
                 sources, generator, intent=intent,
                 max_candidates=max_candidates,
             )
+        )
+
+    def simulate_ab_constructions(
+        self,
+        *,
+        frames: Iterable[ABFrame],
+        world: SimulationWorld,
+        action_path: Iterable[Any],
+        predict: Predictor | None = None,
+        max_candidates: int = 128,
+    ) -> WorldExperiment:
+        """Observe explicit synthetic world trials; do not admit native MOVE.
+
+        Only exact, unchanged PROPOSED ABFrames can enter. The executable
+        simulator is supplied by the caller and stays entirely separate
+        from AgentLineage, durable tasks and native evidence providers.
+        Its repeatable returned traces are passed to existing A/B math.
+        """
+        return run_simulation_probe(
+            tuple(proposal_from_frame(frame) for frame in frames),
+            world=world,
+            action_path=action_path,
+            predict=predict,
+            max_candidates=max_candidates,
         )
 
     def status(self) -> dict[str, Any]:
