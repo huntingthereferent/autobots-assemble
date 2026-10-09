@@ -237,10 +237,17 @@ and commute with transported shifts; mixed operator words normalize to one
 forward shift and combined endpoint gauges. Local focused tests check 12
 stemmed gauges, 11,664 compositions, 864 interchange squares, and 340 short
 mixed operator words, without declaring any erased process prefix recoverable. Arbitrarily long matching prefixes are not
-treated as an all-depth certificate. This is a scoped
+treated as an all-depth certificate. The non-diagonal marked-world extension now explicitly conjugates A/B
+by `H_c(x)_2=x_2+c*x_1^2`, producing three different concrete laws
+that remain fully aligned at every dimension. Two cannot be encoded
+as an old one-variable `Process` B coupling: this is a failure of the
+old representation, **not** evidence of A/B inequivalence. The model
+transports the original coinductive marked-arrow witness through the
+nonlinear state maps and preserves its boundary under shifts.
+This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient network.tests.test_arc_like_nondiagonal_transport -v`.
 
 ## Core structure
 
