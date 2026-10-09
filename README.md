@@ -212,10 +212,14 @@ The chosen rooted-class permutations cycle after 36 and 648 turns
 respectively, but these do not imply full-state equivalence when dormant
 coordinates never move on the origin orbit. A fixed-point-count theorem
 now rules out a terminal **finite depth** if arbitrary independent
-coupling extensions remain admissible. This is a scoped
+coupling extensions remain admissible. The coinductive process layer
+compares complete repeating construction-rule streams across every depth:
+81 two-turn templates form 34 diagonal A/B process classes, with four
+nontrivial templates closed under a one-turn shift. Arbitrarily long
+matching prefixes are not treated as an all-depth certificate. This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family -v`.
 
 ## Core structure
 
