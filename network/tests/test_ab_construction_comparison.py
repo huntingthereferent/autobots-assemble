@@ -11,6 +11,7 @@ No external accounts, live work, or native ARC engine are invoked.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from itertools import product
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import json
@@ -160,6 +161,47 @@ def options_from_shared_sources(domain: str):
     return rows, witnessed, state, proposals
 
 
+def blind_cartesian_options(domain: str) -> tuple[dict[str, str], ...]:
+    """Naive non-A/B recombination from the EXACT SAME witnessed values.
+
+    No forward quotient and no proof-block restriction. The generator
+    cannot inspect held-out goals or native acceptance behavior.
+    """
+    rows = witnessed_rows(domain)
+    names = tuple(sorted(rows[0]))
+    values = tuple(
+        tuple(sorted(set(row[name] for row in rows))) for name in names
+    )
+    originals = {json.dumps(row, sort_keys=True) for row in rows}
+    novel = tuple(
+        dict(zip(names, valueset))
+        for valueset in product(*values)
+        if json.dumps(dict(zip(names, valueset)), sort_keys=True) not in originals
+    )
+    return novel
+
+
+def blind_comparison(domain: str, goal: tuple[str, str], *,
+                     max_checks: int = MAX_CHECKS) -> Result:
+    """One additional non-A/B search baseline under identical API cap."""
+    if not 1 <= max_checks <= MAX_CHECKS:
+        raise ValueError("bounded equal holdout-check budget required")
+    rows = witnessed_rows(domain)
+    novel = blind_cartesian_options(domain)
+    winner = None
+    checks = 0
+    for row in (*rows, *novel)[:max_checks]:
+        checks += 1
+        if NATIVE[domain](row, goal):
+            winner = tuple(sorted(row.items()))
+            break
+    return Result(
+        arm="blind_cartesian", domain=domain, goal=goal,
+        success=winner is not None, calls=checks,
+        winner=winner, proposals_in_inventory=len(novel),
+    )
+
+
 @dataclass(frozen=True)
 class Result:
     arm: str
@@ -272,6 +314,58 @@ class HeldOutCompletionComparisonTests(unittest.TestCase):
                     tuple(p.proposal_id for p in options_from_shared_sources(domain)[3]),
                     first,
                 )
+
+
+    def test_non_ab_cartesian_baseline_has_same_novel_candidate_coverage(self):
+        """A/B is NOT entitled to a win just for making combinations."""
+        for domain in self.GOALS:
+            originals, _observed, _state, proposals = options_from_shared_sources(domain)
+            inverse_set = {
+                json.dumps(p.structure["relation_values"], sort_keys=True)
+                for p in proposals
+            }
+            blind_set = {
+                json.dumps(candidate, sort_keys=True)
+                for candidate in blind_cartesian_options(domain)
+            }
+            self.assertEqual(len(originals), 4)
+            self.assertEqual(len(inverse_set), 4)
+            self.assertEqual(inverse_set, blind_set)
+
+    def test_cartesian_can_also_finish_recombination_goals(self):
+        """Measure whether the observed gain is A/B-specific or merely search."""
+        results = []
+        for domain, goals in self.GOALS.items():
+            for label, goal in goals.items():
+                original, inverse = compare(domain, goal)
+                blind = blind_comparison(domain, goal)
+                results.append((label, original, inverse, blind))
+                self.assertEqual(blind.proposals_in_inventory, 4)
+                self.assertEqual(blind.success, inverse.success)
+                self.assertLessEqual(blind.calls, MAX_CHECKS)
+                if label == "unreachable":
+                    self.assertFalse(blind.success)
+                if label == "already_witnessed":
+                    self.assertEqual(blind.calls, original.calls)
+                if label == "requires_new":
+                    self.assertTrue(blind.success)
+                    self.assertFalse(original.success)
+        self.assertEqual(sum(x[1].success for x in results), 2)
+        self.assertEqual(sum(x[2].success for x in results), 4)
+        self.assertEqual(sum(x[3].success for x in results), 4)
+        print("AB_CONSTRUCTION_THREE_ARM_CONTROL " + json.dumps({
+            "evidence_only_api_successes": sum(x[1].success for x in results),
+            "ab_construction_api_successes": sum(x[2].success for x in results),
+            "blind_cartesian_api_successes": sum(x[3].success for x in results),
+            "control_meaning": "No A/B-specific lift over blind Cartesian at full 8-check budget",
+            "costs": {
+                "evidence_only": sum(x[1].calls for x in results),
+                "ab_construction": sum(x[2].calls for x in results),
+                "blind_cartesian": sum(x[3].calls for x in results),
+            },
+            "predeclared_fixtures": True,
+            "native_interface": "isolated in-process; not external work",
+        }, sort_keys=True), flush=True)
 
     def test_equal_evaluation_budget_cap(self):
         for domain, goal_set in self.GOALS.items():
