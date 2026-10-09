@@ -1382,7 +1382,7 @@ and the original witness tail; arbitrary deleted stems
 are not claimed to be recoverable.
 
 Independent finite arithmetic checked 58,806 conjugacy
-comparisons, 9,801 inverse identities, and 9,801
+comparisons, 9,801 inverse identities, and 9,720
 projection identities through depth seven for a
 nontrivial marked-rule case. This is different from
 running the 12 committed Python regression tests; those
