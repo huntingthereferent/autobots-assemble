@@ -46,11 +46,53 @@ Run from repository root:
 python -m unittest network.tests.test_arc_like_inverse_ab -v
 ~~~
 
+## Automatic alignment and finite closure — constructed witness
+
+The original `math.py` accepted a hand-written alignment. The new
+[`alignment.py`](alignment.py) discovers rooted A/B correspondence directly
+from generated transition graphs. Starting with the paired origins, it follows
+both action labels; deterministic reachability forces every next image.
+If two action words refer to the same source state but distinct target
+states (or vice versa), it returns `OPEN` with those two words as an
+explicit counterexample. If bounded exploration runs out, it returns
+`UNKNOWN`, not false non-equivalence.
+
+All nine 3D candidate relations `phi=(0,a,b)` have been classified by
+that discovery process into **five** equivalence classes:
+`(0,0,0)` alone, and the four paired classes
+`[(0,0,1),(0,0,2)]`, `[(0,1,0),(0,2,0)]`,
+`[(0,1,1),(0,2,2)]`, `[(0,1,2),(0,2,1)]`.
+Concrete states often differ, but the labeled A/B transitions correspond.
+
+An explicit **inverse-construction operator** transforms
+`phi -> 2 phi (mod 3)`. It acts on the generated structure, not on
+an observed ARC frame. Since multiplication by 2 is invertible and
+`2*2=1 (mod 3)`, this operator permutes all nine candidates in one
+fixed point and four two-cycles. `certify_finite_family` checks **every**
+allowed family member and its entire reachable transition graph, also
+requiring the successor to stay within the family and the constructor
+to permute all its members. For that precisely declared finite family,
+the result `CLOSED_FOR_DECLARED_FAMILY` is a justified stopping
+certificate under indefinitely repeated applications of **that**
+construction rule.
+
+The certificate is **not** evidence that every inverted A/B extension
+is closed. Raising the dimension, selecting a different nonlinear
+construction, or adding operators changes the admitted family and can
+break this alignment. No ARC solve, native observation, live agent,
+rendered maze, or universal stopping theorem is implied.
+
+Run from the repository root:
+
+~~~bash
+python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment -v
+~~~
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** generate and test alignments as outputs of the construction process, not manually supplied maps; then seek an invariant proving closure across *all* permitted future extensions. Keep the project math-first.
+- **Next:** widen the declared inverse-construction operator family and find which relational recurrences survive *all* admitted operators, rather than just the finite scaling orbit. Keep the project math-first.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
