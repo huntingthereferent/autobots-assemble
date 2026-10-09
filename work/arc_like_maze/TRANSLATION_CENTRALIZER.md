@@ -101,4 +101,4 @@ python -m unittest network.tests.test_arc_like_translation_centralizer -v
 
 **Not proved:** universal conjugacy classification, existence or nonexistence of other centralizer elements, an unrestricted stopping theorem or native ARC puzzle completion.
 
-**Next:** determine whether an x2-translation that ceases to commute can be repaired by a simultaneous, explicitly constructed translation of x3 or x4. Search for a cohomological consistency obstruction using the periods of the generating transformations, retaining the pointed mark and exact intertwining map rather than assuming repair is always possible.
+**Next (completed for a scoped linear family):** the [corrected higher-coordinate translation theorem](CORRECTED_TRANSLATION.md) constructs an exact order-three centralizer action when the lower x2 drift is nonzero, and supplies a fixed-fiber obstruction in dimensions four or five when that drift vanishes and a higher linear coupling is nonzero. These are different systems; the present theorem on the uncorrected translation remains unchanged. The next unproved case is nonconstant lower-coordinate drift.
