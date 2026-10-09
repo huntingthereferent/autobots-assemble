@@ -367,6 +367,61 @@ class HeldOutCompletionComparisonTests(unittest.TestCase):
             "native_interface": "isolated in-process; not external work",
         }, sort_keys=True), flush=True)
 
+
+    def test_category_locked_constructor_can_miss_native_valid_combinations(self):
+        """Falsification: preserving an old proof block can obstruct new work.
+
+        The initial first-step witnesses correlate route actor and assignee,
+        but they show no original route which both resolves as tester AND
+        selects the unrelated 'other' target. Under the old one-step
+        equivalence, crossing that pair is not permitted by the constructor;
+        a blind candidate can still be tested against the *real* registry.
+        """
+        rows = tuple({
+            "route_actor": actor,
+            "selector_assignee": "other" if actor == "other" else "james",
+            "selector_relation": relation,
+        } for actor in ("other", "tester")
+          for relation in ("study", "review"))
+        first = tuple(
+            ABOccurrence.create(
+                referent="activation-cross-category-holdout",
+                relations=dict(row),
+                continuation=(int(row["route_actor"] == "tester"),),
+            ) for row in rows
+        )
+        state = information_closure(first)
+        self.assertEqual(len(state.continuation_partition), 2)
+        conservative = derive_relation_constructions(
+            first, state,
+            source_locators=tuple(f"cross-probe:{i}" for i in range(4)),
+            witness_contract="one-call activation route resolution",
+            horizon=1, intent="construct",
+        )
+        self.assertEqual(conservative, ())
+        names = tuple(sorted(rows[0]))
+        values = tuple(tuple(sorted({row[name] for row in rows}))
+                       for name in names)
+        witnessed = {json.dumps(row, sort_keys=True) for row in rows}
+        crossed = tuple(
+            dict(zip(names, value_tuple))
+            for value_tuple in product(*values)
+            if json.dumps(dict(zip(names, value_tuple)), sort_keys=True)
+               not in witnessed
+        )
+        self.assertEqual(len(crossed), 4)
+        goal = ("other", "review")
+        self.assertFalse(any(activation_test(row, goal) for row in rows))
+        self.assertTrue(any(activation_test(row, goal) for row in crossed))
+        print("AB_CONSTRUCTION_CROSS_CATEGORY_COUNTEREXAMPLE " + json.dumps({
+            "initial_categories": 2,
+            "ab_proof_preserving_proposals": len(conservative),
+            "blind_cross_category_proposals": len(crossed),
+            "originals_pass_native_holdout": False,
+            "blind_has_native_api_success": True,
+            "important": "A/B proof preservation can obstruct valid cross-category constructions",
+        }, sort_keys=True), flush=True)
+
     def test_equal_evaluation_budget_cap(self):
         for domain, goal_set in self.GOALS.items():
             for goal in goal_set.values():
