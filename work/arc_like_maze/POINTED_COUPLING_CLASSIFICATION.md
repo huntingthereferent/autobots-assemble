@@ -105,7 +105,7 @@ Those transformations have the same `CouplingLaw`, but **different `SelectedSymm
 
 ## Independent verification and its boundary
 
-The executable [independent full-matrix audit](pointed_coupling_independent_audit.py) imports none of the branch classifiers, the adapter or the interpreter. It constructs the **81 equations in 36 unknowns** for each of all **486** fourth-coordinate configurations, computes each `F3) nullspace, separates the genuine q2 basis from independent correction-component gauge vectors, and checks all three- or nine-turn trace equations on the lower state space.
+The executable [independent full-matrix audit](pointed_coupling_independent_audit.py) imports none of the branch classifiers, the adapter or the interpreter. It constructs the **81 equations in 36 unknowns** for each of all **486** fourth-coordinate configurations, computes each F3 nullspace, separates the genuine q2 basis from independent correction-component gauge vectors, and checks all three- or nine-turn trace equations on the lower state space.
 
 Its expected mathematical certificate is:
 
