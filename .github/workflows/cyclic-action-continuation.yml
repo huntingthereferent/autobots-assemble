@@ -1,0 +1,30 @@
+name: Cyclic Action Engine native continuation witnesses
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'work/arc_like_maze/cyclic_action_continuation.py'
+      - 'work/arc_like_maze/engine_one.py'
+      - 'work/arc_like_maze/window_two.py'
+      - 'network/tests/test_arc_like_cyclic_action_continuation.py'
+      - '.github/workflows/cyclic-action-continuation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  continuation-reentry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile Cyclic Action Engine research entry and focused tests
+        run: |
+          python -m compileall -q work/arc_like_maze/cyclic_action_continuation.py network/tests/test_arc_like_cyclic_action_continuation.py
+      - name: Test native WindowProcess reentry and outcome boundaries
+        run: python -m unittest network.tests.test_arc_like_cyclic_action_continuation -v

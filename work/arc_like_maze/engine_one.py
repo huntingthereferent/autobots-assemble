@@ -91,7 +91,7 @@ Law = CombinedWorld | CouplingTower | WindowProcess
 
 @dataclass(frozen=True)
 class ConstructionCycle:
-    """Engine 2's independently executable, witnessed mathematical recurrence."""
+    """Independently executable, witnessed mathematical recurrence."""
     laws: tuple[Law, ...]
     arrows: tuple[RelationWitness, ...]
     scope: str
@@ -110,7 +110,7 @@ class ConstructionCycle:
 
 @dataclass(frozen=True)
 class ConstructedEngine:
-    """A version of Engine 2. Changing its law requires another certified turn."""
+    """A constructed changing-law object. Law changes require certified turns."""
     law: Law
     version: int
     history: tuple[RelationWitness, ...] = ()
@@ -118,7 +118,7 @@ class ConstructedEngine:
     phase: int = 0
 
     def tick(self) -> "ConstructedEngine":
-        """Run Engine 2's admitted operator without consulting Engine 1 again."""
+        """Run the admitted update without consulting the inverse constructor again."""
         if self.cycle is None:
             raise ValueError("no constructed recurrence; Engine 1 must witness one")
         if self.phase not in range(len(self.cycle.laws)) or self.cycle.laws[self.phase] != self.law:
@@ -140,14 +140,14 @@ class ConstructedEngine:
         return engine_one.construct(requirement, previous=self)
 
     def watch_B_against(self, other: "ConstructedEngine"):
-        """Enter Engine 2's B-only continuation on two explicit window laws.
+        """Enter the Cyclic Action Engine's B-only continuation on two explicit window laws.
 
         The inverse-construction grammar is unchanged. This cannot claim
         A/B conjugacy or promote a five-coordinate window into Engine 1's
         previously declared 48-law or coupling-tower search.
         """
-        from .engine_two_continuation import EngineTwoContinuationKernel
-        return EngineTwoContinuationKernel.enter(self, other)
+        from .cyclic_action_continuation import CyclicActionContinuation
+        return CyclicActionContinuation.enter(self, other)
 
 
 @dataclass(frozen=True)
@@ -279,7 +279,7 @@ def _tower_witness(source: CouplingTower, target: CouplingTower) -> RelationWitn
 
 
 class InverseConstructionEngine:
-    """Engine 1: inverse search followed by witnessed change of Engine 2.
+    """Inverse search followed by witnessed changing-law construction.
 
     Search is exhaustive in the *declared finite family*, not across all A/B.
     Default selection: fewest admitted construction operations, then stable
@@ -394,7 +394,7 @@ class InverseConstructionEngine:
 
 
     def construct_cycle(self, seed: ConstructedEngine) -> ConstructionResult:
-        """Engine 1 builds an executable Engine 2 update law with its witnesses.
+        """Construct an executable changing-law recurrence with its witnesses.
 
         Window family: exact three-turn shear (full-state pointed conjugacy).
         Coupling towers: the existing rooted-class permutation; it can have

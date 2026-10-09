@@ -1,10 +1,10 @@
-# Engine 2 — continuation witness re-entry at the repository research boundary
+# Cyclic Action Engine — continuation witness re-entry at the repository research boundary
 
-[Actual research entry/exit implementation](engine_two_continuation.py) · [18 focused regression tests](../../network/tests/test_arc_like_engine_two_continuation.py) · [preceding mathematical two-input grammar](window_two.py)
+[Actual research entry/exit implementation](cyclic_action_continuation.py) · [18 focused regression tests](../../network/tests/test_arc_like_cyclic_action_continuation.py) · [preceding mathematical two-input grammar](window_two.py)
 
 ## Current referent
 
-The separate local Engine 2 continuation experiment established that an inconclusive observation need not trigger an unrelated comparison. A bounded inquiry may instead continue the same admitted transformation, preserving its original domain and the observations already obtained.
+The separate local Cyclic Action Engine continuation experiment established that an inconclusive observation need not trigger an unrelated comparison. A bounded inquiry may instead continue the same admitted transformation, preserving its original domain and the observations already obtained.
 
 The locally executed prototype carried the following controls on a declared 81-state, B-invariant fiber of a five-dimensional two-input system:
 
@@ -13,19 +13,19 @@ The locally executed prototype carried the following controls on a declared 81-s
 - At budget 27, a separate positive control constructs and verifies a bijection intertwining the two restricted B-actions. At budget 26 its outcome remains **UNKNOWN**.
 - At budget 27, the negative control has equal fixed counts again, but its earlier ninth-step distinction remains stored.
 
-The new task is to verify these controls **through the repository's own research entry/re-entry/exit route**, using the actual generator implementation and existing Engine 2 handoff objects, not a second hand-written transformation.
+The new task is to verify these controls **through the repository's own research entry/re-entry/exit route**, using the actual generator implementation and existing Cyclic Action Engine handoff objects, not a second hand-written transformation.
 
 ## Entrances and boundaries
 
-The committed [EngineTwoContinuationKernel](engine_two_continuation.py) exposes:
+The committed [CyclicActionContinuation](cyclic_action_continuation.py) exposes:
 
 ~~~python
-witness = EngineTwoContinuationKernel.enter(left_engine, right_engine)
+witness = CyclicActionContinuation.enter(left_engine, right_engine)
 saved = witness.advance(8).snapshot()
-reentered = EngineTwoContinuationKernel.reenter(
+reentered = CyclicActionContinuation.reenter(
     saved, left_engine=left_engine, right_engine=right_engine
 )
-result = EngineTwoContinuationKernel.exit(reentered.advance(9))
+result = CyclicActionContinuation.exit(reentered.advance(9))
 ~~~
 
 Each input is an actual [ConstructedEngine](engine_one.py) object. Its law must be an actual [WindowProcess](window_two.py) carrying exactly three two-input coupling tables and the explicit zero higher tail. The research entry calls **WindowProcess.step** for every B transition; it does **not** copy the B arithmetic into another production module.
@@ -95,13 +95,20 @@ The positive pair consists of two different laws with matching restricted 27-cyc
 Run from repository root:
 
 ~~~bash
-python -m unittest network.tests.test_arc_like_engine_two_continuation -v
+python -m unittest network.tests.test_arc_like_cyclic_action_continuation -v
 ~~~
 
 ## Current result and next referent
 
-**INTEGRATED AT A BOUNDED RESEARCH ENTRY:** a typed reproducible Engine 2 continuation path now accepts existing ConstructedEngine handoffs with explicitly declared WindowProcess laws, stores and replays native generator observations, and returns UNKNOWN, a distinguishing invariant, or a verified B-only equivalence without changing the watch.
+**INTEGRATED AT A BOUNDED RESEARCH ENTRY:** a typed reproducible Cyclic Action Engine continuation path now accepts existing ConstructedEngine handoffs with explicitly declared WindowProcess laws, stores and replays native generator observations, and returns UNKNOWN, a distinguishing invariant, or a verified B-only equivalence without changing the watch.
 
 **NOT INTEGRATED:** an autonomous global runtime routing mechanism, external event persistence, the original unpublished experiment's tests, unrestricted domain selection, a simultaneous A/B conjugacy engine, autonomous mathematical grammar invention, or native ARC execution.
 
 **Next mathematical boundary:** align this typed continuation witness with the repository's persistent research/event handoff contract. Require explicit source/identity, observation ancestry, budget history and domain coverage; test recovery after an actual persisted handoff while preserving the stronger/smaller relation scope. Do not merge it with within-law selected-symmetry composition unless a proven conjugacy establishes the appropriate transport.
+
+## Saved-witness compatibility
+
+The serialized schema identifier retains its originally issued version value
+for reproducible re-entry; it is **not** the engine's public name. The old
+Python module names remain as compatibility imports only. Public documents,
+entry points, and workflows use **Cyclic Action Engine**.
