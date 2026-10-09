@@ -3,8 +3,14 @@ from __future__ import annotations
 from dataclasses import asdict
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Literal
 
+from runtime.ab_information import ABOccurrence, ABInformationState
+from runtime.ab_construction import Generator, proposal_from_frame
+from runtime.ab_world_experiment import (
+    Predictor, SimulationWorld, WorldExperiment, run_simulation_probe,
+)
+from runtime.ab_loop import ABFrame
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.agent_bridge import AgentBridge
 from runtime.agent_lineage import AgentLineage, Evaluator, ClosureAdmitter
@@ -105,6 +111,101 @@ class EcosystemService:
         # Re-bind origins and submit any admitted local tasks that predate
         # runtime persistence. Human tasks remain READY without an actor.
         self.orchestrator.step()
+
+    def propose_ab_constructions(
+        self,
+        *,
+        occurrences: Iterable[ABOccurrence],
+        state: ABInformationState,
+        source_locators: Iterable[str],
+        witness_contract: str,
+        horizon: int,
+        generator: Generator | None = None,
+        intent: Literal["construct", "synthesize", "simulate", "alternatives"],
+        max_candidates: int = 32,
+        mode: Literal["preserve", "explore"] = "preserve",
+    ) -> tuple[ABFrame, ...]:
+        """Opt-in, read-only construction entry for the existing A/B agent.
+
+        Returns standard ABFrame values marked PROPOSED. Default preserve\n        retains the original quotient. Explicit explore crosses quotient\n        boundaries but inherits NO continuation category. Neither schedules\n        AgentLineage nor admits evidence; a native witness is still required.
+        """
+        from runtime.ab_construction import (
+            inverse_fibers, project_candidates, frame_for_candidate,
+        )
+
+        if mode not in {"preserve", "explore"}:
+            raise ValueError("construction mode must be preserve or explore")
+        if mode == "explore":
+            if generator is not None:
+                raise ValueError("explore mode uses the evidence-derived generator only")
+            from runtime.ab_relation_generator import derive_exploratory_constructions
+
+            return tuple(
+                frame_for_candidate(proposal)
+                for proposal in derive_exploratory_constructions(
+                    occurrences, state,
+                    source_locators=source_locators,
+                    witness_contract=witness_contract,
+                    horizon=horizon,
+                    intent=intent,
+                    max_candidates=max_candidates,
+                )
+            )
+
+        if generator is None:
+            # Default construction is derived from witnessed relations.
+            # No referent-specific generator is required or guessed.
+            from runtime.ab_relation_generator import derive_relation_constructions
+
+            return tuple(
+                frame_for_candidate(proposal)
+                for proposal in derive_relation_constructions(
+                    occurrences, state,
+                    source_locators=source_locators,
+                    witness_contract=witness_contract,
+                    horizon=horizon,
+                    intent=intent,
+                    max_candidates=max_candidates,
+                )
+            )
+
+        sources = inverse_fibers(
+            occurrences, state,
+            source_locators=source_locators,
+            witness_contract=witness_contract,
+            horizon=horizon,
+        )
+        return tuple(
+            frame_for_candidate(proposal)
+            for proposal in project_candidates(
+                sources, generator, intent=intent,
+                max_candidates=max_candidates,
+            )
+        )
+
+    def simulate_ab_constructions(
+        self,
+        *,
+        frames: Iterable[ABFrame],
+        world: SimulationWorld,
+        action_path: Iterable[Any],
+        predict: Predictor | None = None,
+        max_candidates: int = 128,
+    ) -> WorldExperiment:
+        """Observe explicit synthetic world trials; do not admit native MOVE.
+
+        Only exact, unchanged PROPOSED ABFrames can enter. The executable
+        simulator is supplied by the caller and stays entirely separate
+        from AgentLineage, durable tasks and native evidence providers.
+        Its repeatable returned traces are passed to existing A/B math.
+        """
+        return run_simulation_probe(
+            tuple(proposal_from_frame(frame) for frame in frames),
+            world=world,
+            action_path=action_path,
+            predict=predict,
+            max_candidates=max_candidates,
+        )
 
     def status(self) -> dict[str, Any]:
         snapshot = self.runtime.snapshot()
