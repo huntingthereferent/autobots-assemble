@@ -197,10 +197,13 @@ worlds, and now tests construction operators one layer above the state graphs.
 An exhaustive affine scan certifies closure for 48 reversible affine maps.
 The nonlinear construction expands this to the full 384 reversible maps preserving
 the same five A/B equivalence classes, with 336 nonaffine transformations.
+Cross-dimensional construction now witnesses transition-preserving projections,
+three-turn hidden-fiber cycles, and same-depth alignment squares without treating
+higher and lower worlds as identical.
 This is a scoped mathematical certificate, not universal inverse A/B closure. This is separate from observing
 live ARC-AGI games and does not claim universal inverse A/B closure.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical -v`.
 
 ## Core structure
 
