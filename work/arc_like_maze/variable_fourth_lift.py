@@ -286,6 +286,7 @@ class FifthCouplingAnalysis:
     obstruction:CycleObstruction|None
 
 
+@lru_cache(maxsize=4096)
 def classify(p:FourthCoordinateParameters,
              fifth:tuple[int,...])->FifthCouplingAnalysis:
     rank,components,basis=linear_certificate(p)
