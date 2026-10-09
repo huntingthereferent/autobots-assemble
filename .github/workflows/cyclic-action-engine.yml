@@ -1,18 +1,18 @@
-name: Engine 2 Native Continuation
+name: Cyclic Action Engine Native Continuation
 
 on:
   push:
     paths:
-      - 'work/arc_like_maze/engine_two_research.py'
+      - 'work/arc_like_maze/cyclic_action_engine.py'
       - 'work/arc_like_maze/window_two.py'
-      - 'network/tests/test_arc_like_engine_two_research.py'
-      - '.github/workflows/math-engine-two-research.yml'
+      - 'network/tests/test_arc_like_cyclic_action_engine.py'
+      - '.github/workflows/cyclic-action-engine.yml'
   pull_request:
     paths:
-      - 'work/arc_like_maze/engine_two_research.py'
+      - 'work/arc_like_maze/cyclic_action_engine.py'
       - 'work/arc_like_maze/window_two.py'
-      - 'network/tests/test_arc_like_engine_two_research.py'
-      - '.github/workflows/math-engine-two-research.yml'
+      - 'network/tests/test_arc_like_cyclic_action_engine.py'
+      - '.github/workflows/cyclic-action-engine.yml'
   workflow_dispatch:
 
 jobs:
@@ -24,6 +24,6 @@ jobs:
         with:
           python-version: '3.11'
       - name: Verify native B-only continuation and witness reentry
-        run: python -m unittest network.tests.test_arc_like_engine_two_research -v
+        run: python -m unittest network.tests.test_arc_like_cyclic_action_engine -v
       - name: Verify original window mathematics
         run: python -m unittest network.tests.test_arc_like_window_combined -v

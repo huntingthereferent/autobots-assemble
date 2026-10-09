@@ -1,9 +1,9 @@
-"""Tests at Engine 2's public mathematical research entry/exit points."""
+"""Tests at Cyclic Action Engine's public mathematical research entry/exit points."""
 import json
 import unittest
 from itertools import product
 
-from work.arc_like_maze.engine_two_research import Engine2ResearchKernel
+from work.arc_like_maze.cyclic_action_engine import CyclicActionEngine
 from work.arc_like_maze.window_two import WindowProcess
 
 F3 = range(3)
@@ -14,12 +14,12 @@ DOUBLE = tuple((2*v) % 3 for v in CARRY3)
 W9 = WindowProcess(1, (CARRY2, ZERO), (ZERO,))
 W27 = WindowProcess(1, (CARRY2, CARRY3), (ZERO,))
 W27S = WindowProcess(1, (CARRY2, DOUBLE), (ZERO,))
-FIBER = Engine2ResearchKernel.fiber(5)
+FIBER = CyclicActionEngine.fiber(5)
 
 
 class ResearchKernelContinuationTests(unittest.TestCase):
     def setUp(self):
-        self.kernel = Engine2ResearchKernel()
+        self.kernel = CyclicActionEngine()
 
     def test_eight_is_unknown_nine_is_distinguished(self):
         early = self.kernel.start(W9, W27, FIBER, 8)
@@ -101,6 +101,13 @@ class ResearchKernelContinuationTests(unittest.TestCase):
         record = self.kernel.start(W9, W27, FIBER, 8)
         with self.assertRaises(ValueError):
             self.kernel.resume(record.serialize(), 7)
+
+    def test_historical_import_compatibility(self):
+        from work.arc_like_maze.engine_two_research import Engine2ResearchKernel
+        from work.arc_like_maze.engine_two_continuation import EngineTwoContinuationKernel
+        from work.arc_like_maze.cyclic_action_continuation import CyclicActionContinuation
+        self.assertIs(Engine2ResearchKernel, CyclicActionEngine)
+        self.assertIs(EngineTwoContinuationKernel, CyclicActionContinuation)
 
     def test_short_equal_fixed_point_counts_never_imply_equivalence(self):
         result = self.kernel.start(W27, W27S, FIBER, 9)

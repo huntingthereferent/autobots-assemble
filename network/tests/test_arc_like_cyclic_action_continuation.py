@@ -1,12 +1,12 @@
-"""Engine 2 continuation witnesses through ACTUAL ConstructedEngine/WindowProcess."""
+"""Cyclic Action Engine continuation witnesses through ACTUAL ConstructedEngine/WindowProcess."""
 import json
 import unittest
 from itertools import product
 
 from work.arc_like_maze.engine_one import ConstructedEngine
 from work.arc_like_maze.window_two import WindowProcess
-from work.arc_like_maze.engine_two_continuation import (
-    EngineTwoContinuationKernel, ContinuationWitness, FIBER,
+from work.arc_like_maze.cyclic_action_continuation import (
+    CyclicActionContinuation, ContinuationWitness, FIBER,
     _permutation, _cycles, _intertwiner, _fixed,
 )
 
@@ -34,7 +34,7 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
     def test_constructed_engine_exposes_the_same_real_research_entry(self):
         left,right=negative()
         via_engine=left.watch_B_against(right)
-        via_kernel=EngineTwoContinuationKernel.enter(left,right)
+        via_kernel=CyclicActionContinuation.enter(left,right)
         self.assertEqual(via_engine,via_kernel)
         self.assertEqual(via_engine.advance(8).status,"UNKNOWN")
 
@@ -53,7 +53,7 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
 
     def test_entry_uses_actual_finite_two_input_processes_and_versions(self):
         left,right=negative()
-        w=EngineTwoContinuationKernel.enter(left,right)
+        w=CyclicActionContinuation.enter(left,right)
         self.assertIsInstance(w.left,WindowProcess)
         self.assertEqual(w.summary()['source_engine_versions'],(4,5))
         self.assertEqual(len(FIBER),81)
@@ -67,7 +67,7 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
             self.assertNotIn(left.step(s,'A'),FIBER)
 
     def test_negative_exact_81_state_cycle_structure(self):
-        w=EngineTwoContinuationKernel.enter(*negative())
+        w=CyclicActionContinuation.enter(*negative())
         a,b=_permutation(w.left),_permutation(w.right)
         self.assertEqual(sorted(len(x) for x in _cycles(a)),[9]*9)
         self.assertEqual(sorted(len(x) for x in _cycles(b)),[27]*3)
@@ -76,13 +76,13 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
 
     def test_budget_eight_reenters_and_budget_nine_distinguishes(self):
         l,r=negative()
-        first=EngineTwoContinuationKernel.enter(l,r).advance(8)
+        first=CyclicActionContinuation.enter(l,r).advance(8)
         self.assertEqual(first.status,'UNKNOWN')
         self.assertEqual(first.budgets,(8,))
         self.assertEqual(len(first.observations),8)
         self.assertTrue(all(len(o.left_fixed)==len(o.right_fixed)==0
                             for o in first.observations))
-        resumed=EngineTwoContinuationKernel.reenter(
+        resumed=CyclicActionContinuation.reenter(
             first.snapshot(),left_engine=l,right_engine=r)
         final=resumed.advance(9)
         self.assertEqual(final.status,'DISTINGUISHED')
@@ -91,11 +91,11 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
         self.assertEqual(final.budgets,(8,9))
         self.assertEqual((len(final.observations[8].left_fixed),
                           len(final.observations[8].right_fixed)),(81,0))
-        self.assertEqual(EngineTwoContinuationKernel.exit(final)['status'],
+        self.assertEqual(CyclicActionContinuation.exit(final)['status'],
                          'DISTINGUISHED')
 
     def test_late_matching_counts_do_not_erase_first_obstruction(self):
-        first=EngineTwoContinuationKernel.enter(*negative()).advance(9)
+        first=CyclicActionContinuation.enter(*negative()).advance(9)
         after=first.advance(27,audit_after_distinction=True)
         self.assertEqual(after.status,'DISTINGUISHED')
         self.assertEqual(after.distinguishing_depth,9)
@@ -106,10 +106,10 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
 
     def test_positive_budget_26_is_unknown_then_verified_b_only_at_27(self):
         left,right=positive()
-        initial=EngineTwoContinuationKernel.enter(left,right).advance(26)
+        initial=CyclicActionContinuation.enter(left,right).advance(26)
         self.assertEqual(initial.status,'UNKNOWN')
         self.assertIsNone(initial.bijection)
-        next_w=EngineTwoContinuationKernel.reenter(
+        next_w=CyclicActionContinuation.reenter(
             initial.snapshot(),left_engine=left,right_engine=right).advance(27)
         self.assertEqual(next_w.observations[:26],initial.observations)
         self.assertEqual(next_w.budgets,(26,27))
@@ -118,11 +118,11 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
         p,q=_permutation(next_w.left),_permutation(next_w.right)
         self.assertTrue(all(next_w.bijection[p[i]]==q[next_w.bijection[i]]
                             for i in range(81)))
-        self.assertEqual(EngineTwoContinuationKernel.exit(next_w)[
+        self.assertEqual(CyclicActionContinuation.exit(next_w)[
             'does_not_establish'],'simultaneous A/B conjugacy')
 
     def test_constructed_positive_intertwiner_is_not_just_matching_counts(self):
-        w=EngineTwoContinuationKernel.enter(*positive())
+        w=CyclicActionContinuation.enter(*positive())
         p,q=_permutation(w.left),_permutation(w.right)
         h=_intertwiner(p,q)
         self.assertNotEqual(h,tuple(range(81)))
@@ -131,14 +131,14 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
         self.assertEqual(w.advance(8).status,'UNKNOWN')
 
     def test_changed_law_fails_reentry_with_original_source_metadata(self):
-        w=EngineTwoContinuationKernel.enter(*negative()).advance(8)
+        w=CyclicActionContinuation.enter(*negative()).advance(8)
         payload=json.loads(w.snapshot())
         payload['right']['stem'][2][3]=2
         with self.assertRaises(ValueError):
             ContinuationWitness.reenter(json.dumps(payload))
 
     def test_changed_observation_and_missing_depth_fail_reentry(self):
-        w=EngineTwoContinuationKernel.enter(*negative()).advance(8)
+        w=CyclicActionContinuation.enter(*negative()).advance(8)
         payload=json.loads(w.snapshot())
         payload['observations'][0]['left_fixed']=[0]
         with self.assertRaises(ValueError):
@@ -149,7 +149,7 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
             ContinuationWitness.reenter(json.dumps(payload))
 
     def test_declared_fiber_generator_and_schema_cannot_be_upgraded_to_AB(self):
-        w=EngineTwoContinuationKernel.enter(*positive()).advance(8)
+        w=CyclicActionContinuation.enter(*positive()).advance(8)
         for key,value in (('relation','SIMULTANEOUS_AB'),('generator','AB'),
                           ('schema','unknown-schema'),('domain',[])):
             payload=json.loads(w.snapshot())
@@ -159,7 +159,7 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
 
     def test_original_constructed_engine_version_is_not_silently_replaced(self):
         l,r=negative()
-        w=EngineTwoContinuationKernel.enter(l,r).advance(8)
+        w=CyclicActionContinuation.enter(l,r).advance(8)
         with self.assertRaises(ValueError):
             ContinuationWitness.reenter(w.snapshot(),
                 left_engine=engine(ZERO,99),right_engine=r)
@@ -168,7 +168,7 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
                 left_engine=l,right_engine=engine(SPIKE_11,7))
 
     def test_unknown_cannot_be_forged_into_positive_conclusion(self):
-        w=EngineTwoContinuationKernel.enter(*positive()).advance(26)
+        w=CyclicActionContinuation.enter(*positive()).advance(26)
         d=json.loads(w.snapshot())
         d['status']='EQUIVALENT_FOR_B_ONLY'
         with self.assertRaises(ValueError):
@@ -180,15 +180,15 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
             ContinuationWitness.reenter(json.dumps(d))
 
     def test_terminal_decision_stops_except_explicit_negative_audit(self):
-        negative_w=EngineTwoContinuationKernel.enter(*negative()).advance(9)
+        negative_w=CyclicActionContinuation.enter(*negative()).advance(9)
         with self.assertRaises(ValueError):
             negative_w.advance(27)
-        positive_w=EngineTwoContinuationKernel.enter(*positive()).advance(27)
+        positive_w=CyclicActionContinuation.enter(*positive()).advance(27)
         with self.assertRaises(ValueError):
             positive_w.advance(28,audit_after_distinction=True)
 
     def test_no_budget_rewind_or_boolean_budget(self):
-        w=EngineTwoContinuationKernel.enter(*negative()).advance(8)
+        w=CyclicActionContinuation.enter(*negative()).advance(8)
         with self.assertRaises(ValueError):
             w.advance(7)
         with self.assertRaises(ValueError):
@@ -196,7 +196,7 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
         self.assertEqual(w.advance(8),w)
 
     def test_full_243_state_conclusion_is_not_inferred(self):
-        w=EngineTwoContinuationKernel.enter(*negative()).advance(9)
+        w=CyclicActionContinuation.enter(*negative()).advance(9)
         allstates=tuple(product(F3,repeat=5))
         self.assertEqual(len(allstates),243)
         self.assertEqual(len(FIBER),81)
@@ -209,20 +209,20 @@ class EngineTwoActualKernelContinuationTests(unittest.TestCase):
         from work.arc_like_maze.window_combined import CombinedWorld
         l,r=negative()
         with self.assertRaises(TypeError):
-            EngineTwoContinuationKernel.enter(ConstructedEngine(
+            CyclicActionContinuation.enter(ConstructedEngine(
                 CombinedWorld(0,0,0,0),0),r)
         with self.assertRaises(ValueError):
-            EngineTwoContinuationKernel.enter(ConstructedEngine(
+            CyclicActionContinuation.enter(ConstructedEngine(
                 WindowProcess(1,(Q0,Q1),(ZERO,)),0),r)
         with self.assertRaises(ValueError):
-            EngineTwoContinuationKernel.enter(ConstructedEngine(
+            CyclicActionContinuation.enter(ConstructedEngine(
                 WindowProcess(1,(Q0,Q1,SPIKE_10),(Q0,)),0),r)
 
     def test_exit_requires_the_actual_verified_witness(self):
         with self.assertRaises(TypeError):
-            EngineTwoContinuationKernel.exit({'status':'DISTINGUISHED'})
-        w=EngineTwoContinuationKernel.enter(*negative()).advance(8)
-        out=EngineTwoContinuationKernel.exit(w)
+            CyclicActionContinuation.exit({'status':'DISTINGUISHED'})
+        w=CyclicActionContinuation.enter(*negative()).advance(8)
+        out=CyclicActionContinuation.exit(w)
         self.assertEqual(out['status'],'UNKNOWN')
         self.assertIsNone(out['distinguishing_depth'])
         self.assertFalse(out['bijection_verified'])

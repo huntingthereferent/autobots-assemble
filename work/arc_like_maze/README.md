@@ -8,13 +8,13 @@
 
 The bounded inverse-construction engine now connects the existing 48-law two-predecessor window grammar to separately scoped 1–4-coupling construction grammars. Mathematical requirements select a concrete transition law, then admitted construction operators produce witnessed **versions of a changing second engine**. Rooted/full-state/nonrooted/projective relationships remain distinct; unsupported cross-grammar movement is WALL. This is **not** the universal inverted A/B engine, an autonomous self-modifying system, or native ARC gameplay. See the contract for exact conditions, evidence, and next referent.
 
-## Engine 2 — native continuation witness entry (bounded)
+## Cyclic Action Engine — native continuation witness entry (bounded)
 
-[Research contract](ENGINE_TWO_CONTINUATION.md) ·
-[actual WindowProcess-driven entry and re-entry](engine_two_continuation.py) ·
-[18 focused tests](../../network/tests/test_arc_like_engine_two_continuation.py)
+[Mathematical shape](CYCLIC_ACTION_ENGINE.md) · [continuation witness contract](CYCLIC_ACTION_CONTINUATION.md) ·
+[actual WindowProcess-driven entry and re-entry](cyclic_action_continuation.py) ·
+[18 focused tests](../../network/tests/test_arc_like_cyclic_action_continuation.py)
 
-A constructed Engine 2 handoff can now enter an explicitly declared
+A constructed mathematical handoff can now enter an explicitly declared
 five-coordinate two-input WindowProcess B-only WATCH through
 ConstructedEngine.watch_B_against(other). The research entry preserves
 the original 81-state x0=2 invariant fiber, the B transformation,

@@ -33,22 +33,22 @@ Inv_F(R) = { W in F : W satisfies every equation in R }.
 No uniqueness is asserted. Engine 1 exhausts the declared family, then
 selects the first candidate in documented family order for an initial version.
 
-For a changing Engine 2 with law W, only an **admitted construction path**
+For a changing constructed law W, only an **admitted construction path**
 W --C1--> ... --Cn--> W' qualifies for a successor. The search checks the
 mathematical relation between W and W' *and* preserves the evidence of each
 intermediate edge, not just a single endpoint status.
 
 ~~~text
-engine2(version n, law W, witnesses P)
+constructed_law(version n, law W, witnesses P)
   + equation and relation requirements R
   -> Engine 1 inverse search over an explicitly admitted grammar
   -> verified path and mathematical witnesses
-  -> engine2(version n+1, law W', previous P + witnesses)
+  -> constructed_law(version n+1, law W', previous P + witnesses)
        OR explicit WALL
 ~~~
 
 Engine 1 itself is the stable inverse-construction and evidence-admission
-mechanism for this bounded implementation. Engine 2 is the concrete
+mechanism for this declared implementation. The resulting law is the concrete
 mathematical transformation system, with evolving transition law A/B.
 The output can enter the same operation again, preserving its witnesses.
 
@@ -91,15 +91,15 @@ Other jumps are not automatically admitted.
 A candidate is never treated as proven equivalent merely because two
 selected invariants happen to match.
 
-### Engine 1 constructs an executable Engine 2 recurrence
+### Inverse construction of an executable changing-law recurrence
 
-After selecting a law, Engine 1 can call its own `construct_cycle(seed)` to construct a *witnessed*, independently executable recurrence for Engine 2. Engine 2 then calls `tick()` without calling Engine 1 each turn. Its transition law changes, its previous witnesses remain reachable, and the cycle returns only after its proven period.
+After selecting a law, Engine 1 can call its own `construct_cycle(seed)` to construct a *witnessed*, independently executable changing-law recurrence. The result calls `tick()` without calling Engine 1 each turn. Its transition law changes, its previous witnesses remain reachable, and the cycle returns only after its proven period.
 
 - In the 48-law window family, this is the proved **three-turn nonlinear shear**: three concretely different transition laws, each step with full-state, origin-preserving conjugacy.
 - In the triangular coupling towers, this is the existing **chosen finite rooted-class rotation**. Some turns have full-state diagonal witnesses; dormant-root turns are only origin-reachable equivalences. No full-state claim is silently promoted.
 - A singleton rooted class is a **WALL** for a nontrivial class-rotation cycle.
 
-This is a construction of *one bounded changing Engine 2*, not an unrestricted self-modifying engine. The periodic update law is itself part of the returned mathematical object, rather than requiring James to manually choose a new law each turn.
+This is construction of *one declared changing-law recurrence*, not an unrestricted self-modifying engine. The periodic update law is itself part of the returned mathematical object, rather than requiring James to manually choose a new law each turn.
 
 ### Selection
 
@@ -146,9 +146,9 @@ assert after_one_turn.law != cyclic.engine.law
 assert after_one_turn.tick().tick().law == cyclic.engine.law
 ~~~
 
-## Engine 2 native B-continuation research entry
+## Cyclic Action Engine native B-continuation entry
 
-The [separate continuation witness contract](ENGINE_TWO_CONTINUATION.md)
+The [separate continuation witness contract](CYCLIC_ACTION_CONTINUATION.md)
 uses actual five-coordinate [WindowProcess](window_two.py) laws and
 the existing ConstructedEngine handoff:
 
@@ -169,15 +169,15 @@ It verifies and replays every earlier periodic-count observation and
 keeps UNKNOWN distinct from witnessed B-only nonconjugacy or B-only
 conjugacy. It makes no simultaneous A/B claim.
 
-This is an **Engine 2 research entrance**, not an additional Engine 1
+This is a **Cyclic Action Engine research entrance**, not an additional Engine 1
 inverse-construction grammar. InverseConstructionEngine.construct
 returns **WALL** if supplied one of these WindowProcess research laws as
 its predecessor; it does not coerce it into the 48-law or
 coupling-tower construction families. The input laws are explicitly
 constructed, not claimed to originate from the old Engine 1 grammar.
 
-[Focused 18-test regression](../../network/tests/test_arc_like_engine_two_continuation.py)
-and [dedicated workflow](../../.github/workflows/engine-two-continuation.yml)
+[Focused 18-test regression](../../network/tests/test_arc_like_cyclic_action_continuation.py)
+and [dedicated workflow](../../.github/workflows/cyclic-action-continuation.yml)
 are committed. Local proof-of-concept tests passed previously;
 a successful run of the new repository test module must be confirmed
 independently.
@@ -190,11 +190,11 @@ construction paths, and explicit walls when the relation is unsupported.
 
 **Does not establish:** arbitrary inverse A/B, automatic selection of
 unlimited new operator grammars, a universal mathematical update theorem,
-a live background executor or an unrestricted self-extending Engine 2, live ARC execution, or
+a live background executor or an unrestricted self-extending mathematical system, live ARC execution, or
 customer-ready reports.
 
 **Next referent:** provide an independently proved *inter-grammar*
 constructor, or an independently justified rule for admitting new
 construction operators. Test its witness contract before allowing
-Engine 2 to cross that mathematical boundary. Do not invent a connector
+the constructed law to cross that mathematical boundary. Do not invent a connector
 by calling different finite families "the same".
