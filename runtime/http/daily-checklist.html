@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily tasks</title><link rel="stylesheet" href="/styles.css">
+<style>
+.daily-page{width:min(900px,calc(100% - 30px));margin:24px auto 60px}
+.daily-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.daily-head h1{font-family:Georgia,serif}
+.daily-form{display:flex;gap:10px;margin:22px 0}
+.daily-form input{flex:1;min-width:0;padding:12px;border:1px solid #cbd3d9;border-radius:8px}
+.daily-form button{padding:9px 20px}
+.daily-list{list-style:none;padding:0;margin:0}
+.daily-item{display:flex;gap:12px;align-items:start;background:#fff;border-bottom:1px solid #e6eaef;padding:16px}
+.daily-item input{margin-top:4px;width:18px;height:18px;accent-color:#304b59}
+.daily-title{font-weight:700;font-size:.91rem}
+.daily-detail,.daily-meta{font-size:.75rem;color:#66727d;line-height:1.5;margin:5px 0}
+.daily-meta a{margin-left:8px}
+.daily-item.done .daily-title{text-decoration:line-through;color:#77848d}
+.daily-note{font-size:.75rem;color:#68727c;margin:15px 0}
+#daily-error{color:#a32b2b}
+</style></head>
+<body>
+<main class="daily-page">
+<div class="daily-head"><h1>Daily tasks</h1><a href="/">Home ↗</a></div>
+<p>Unchecked work carries forward until finished. Checked items remain today and leave the active list tomorrow. History is preserved.</p>
+<p id="daily-stats" aria-live="polite">Loading…</p>
+<form id="daily-form" class="daily-form"><input name="title" maxlength="280" required aria-label="Add task" placeholder="Add task"><button class="secondary">Add</button></form>
+<p id="daily-error" role="alert" hidden></p><ul class="daily-list" id="daily-list"></ul>
+<p class="daily-note">Checking a claim item means the follow-up task was marked done. It does not establish a scientific result.</p>
+</main>
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+async function api(path, options){
+  const resp=await fetch(path,{cache:"no-store",headers:{"Content-Type":"application/json"},...options});
+  const data=await resp.json().catch(()=>({}));
+  if(!resp.ok)throw Error(data.error || "Checklist request failed");
+  return data;
+}
+function alertError(err){$("#daily-error").textContent=String(err.message||err);$("#daily-error").hidden=false;}
+function row(task){
+  const li=document.createElement("li");li.className="daily-item"+(task.checked?" done":"");
+  const cb=document.createElement("input");cb.type="checkbox";cb.checked=task.checked;
+  cb.setAttribute("aria-label","Done: "+task.title);
+  const body=document.createElement("div");body.style.flex="1";
+  const title=document.createElement("div");title.className="daily-title";title.textContent=task.title;body.append(title);
+  if(task.detail){const p=document.createElement("p");p.className="daily-detail";p.textContent=task.detail;body.append(p);}
+  const meta=document.createElement("div");meta.className="daily-meta";
+  meta.textContent=task.claim_id||(task.kind==="project"?"Research project":"Personal task");
+  if(task.source){try{const url=new URL(task.source);
+    if(url.protocol==="https:"){const a=document.createElement("a");a.textContent="Source ↗";a.href=url.href;a.target="_blank";a.rel="noopener noreferrer";meta.append(a);}
+  }catch(_){}}
+  if(task.checked){meta.append(document.createTextNode(" · Checked today"));}
+  body.append(meta);li.append(cb,body);
+  cb.addEventListener("change",async()=>{
+    cb.disabled=true;
+    try{await api("/api/daily-checklist/"+encodeURIComponent(task.id)+"/check",{method:"POST",body:JSON.stringify({checked:cb.checked})});await refresh();}
+    catch(e){cb.checked=task.checked;cb.disabled=false;alertError(e);}
+  });
+  return li;
+}
+async function refresh(){
+  try{
+    const data=await api("/api/daily-checklist");
+    $("#daily-stats").textContent=data.pending+" open · "+data.checked_today+" checked today · "+data.local_date;
+    $("#daily-list").replaceChildren(...data.items.map(row));
+    if(!data.items.length){const li=document.createElement("li");li.textContent="No unfinished tasks.";$("#daily-list").append(li);}
+    $("#daily-form").hidden=false;
+  }catch(e){$("#daily-form").hidden=true;alertError(e);}
+}
+$("#daily-form").addEventListener("submit",async e=>{
+ e.preventDefault();const form=e.currentTarget;const title=String(new FormData(form).get("title")||"").trim();
+ if(!title)return;
+ try{await api("/api/daily-checklist",{method:"POST",body:JSON.stringify({title})});form.reset();await refresh();}
+ catch(err){alertError(err);}
+});
+refresh();setInterval(refresh,60000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh();});
+</script>
+</body></html>
