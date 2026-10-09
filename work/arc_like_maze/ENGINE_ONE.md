@@ -146,6 +146,42 @@ assert after_one_turn.law != cyclic.engine.law
 assert after_one_turn.tick().tick().law == cyclic.engine.law
 ~~~
 
+## Engine 2 native B-continuation research entry
+
+The [separate continuation witness contract](ENGINE_TWO_CONTINUATION.md)
+uses actual five-coordinate [WindowProcess](window_two.py) laws and
+the existing ConstructedEngine handoff:
+
+~~~python
+from work.arc_like_maze.engine_one import ConstructedEngine
+from work.arc_like_maze.window_two import WindowProcess
+
+left = ConstructedEngine(WindowProcess(1, (q0, q1, q2_left), (zero,)), 0)
+right = ConstructedEngine(WindowProcess(1, (q0, q1, q2_right), (zero,)), 0)
+witness = left.watch_B_against(right)
+saved = witness.advance(8).snapshot()
+reentered = witness.reenter(saved, left_engine=left, right_engine=right)
+~~~
+
+The watch_B_against method admits only the declared 81-state
+B-invariant fiber with the existing three-rule/zero-tail window grammar.
+It verifies and replays every earlier periodic-count observation and
+keeps UNKNOWN distinct from witnessed B-only nonconjugacy or B-only
+conjugacy. It makes no simultaneous A/B claim.
+
+This is an **Engine 2 research entrance**, not an additional Engine 1
+inverse-construction grammar. InverseConstructionEngine.construct
+returns **WALL** if supplied one of these WindowProcess research laws as
+its predecessor; it does not coerce it into the 48-law or
+coupling-tower construction families. The input laws are explicitly
+constructed, not claimed to originate from the old Engine 1 grammar.
+
+[Focused 18-test regression](../../network/tests/test_arc_like_engine_two_continuation.py)
+and [dedicated workflow](../../.github/workflows/engine-two-continuation.yml)
+are committed. Local proof-of-concept tests passed previously;
+a successful run of the new repository test module must be confirmed
+independently.
+
 ## Verified versus unknown
 
 **Implemented:** an inverse search over two explicit existing
