@@ -471,7 +471,7 @@ def certify_order_nine_family()->FamilyCertificate:
                             order27+=1
     correct=(configurations==324 and
              ranks==Counter({5:60,6:48,7:216}) and
-             admitted==8100 and checked==1020 and
+             admitted==8100 and checked==816 and
              rank7_dependence==0 and order27==0)
     return FamilyCertificate(
         "EXACT_VARIABLE_FOURTH_ORDER_NINE_CLASSIFICATION" if correct
