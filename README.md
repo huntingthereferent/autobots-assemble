@@ -215,11 +215,15 @@ now rules out a terminal **finite depth** if arbitrary independent
 coupling extensions remain admissible. The coinductive process layer
 compares complete repeating construction-rule streams across every depth:
 81 two-turn templates form 34 diagonal A/B process classes, with four
-nontrivial templates closed under a one-turn shift. Arbitrarily long
-matching prefixes are not treated as an all-depth certificate. This is a scoped
+nontrivial templates closed under a one-turn shift. The process-operator layer
+now certifies a four-element period-two coordinate-gauge group: all 324
+template-to-gauge alignments and 1,296 gauge compositions survive. Re-rooting
+by shifting, or adding the same coupling table to both processes, can break
+previously valid equivalence despite being reversible on rule descriptions.
+Arbitrarily long matching prefixes are not treated as an all-depth certificate. This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators -v`.
 
 ## Core structure
 
