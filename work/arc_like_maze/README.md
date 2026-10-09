@@ -1170,11 +1170,51 @@ the same counterexamples. Do not erase the
 root boundary by declaring every turn identical.
 
 
+## Root transport — preserving the relation when the process shifts
+
+**Current referent:** process-level A/B equivalence under shifted coupling-rule
+templates. The former coinductive comparison fixed the incoming scale to 1.
+That condition is valid at the original root but can fail after a simultaneous
+rule shift, even when the full underlying alignment previously existed.
+
+**Construction:** [root_transport.py](root_transport.py) shares the existing
+`PeriodicProcess` and `next_scales` API. Its separately named boundary-aware
+witness carries `b=s_(k-1)` when both processes shift by `k` rules. A marked
+world explicitly changes the first B boundary coupling to
+`B_g(x)_1=x_1+g(x_0+1)`; marking is essential—merely changing the boundary
+witness does not conjugate the old unmarked worlds.
+
+**Evidence:** exact coinductive lasso checks, full-state marked A/B transition
+comparisons at finite depths, explicit witness composition/inversion, a
+75-rule delayed break, and complete pairwise comparison of the 81 strict
+two-phase rule templates. Allowing transported boundary scales gives
+**23 classes** (sizes 1×1, 4×2, 18×4) instead of the original
+root-normalized **34**. Simultaneous one-step shift acts on the 23-class
+quotient with **five fixed classes and nine two-class cycles**. The
+root-transport prototype's **14 focused regression tests** check
+these conditions.
+
+**Preserved boundary:** This is a new marked-root representation, not an
+identity between shifted unmarked states or a claim about arbitrary
+nonperiodic, non-diagonal, or native ARC behavior. Reversible addition of
+coupling terms can still break the marked equivalence. Plain shift on
+processes with nonempty arbitrary stems is not invertible in general.
+
+**Artifacts:** [research report](ROOT_TRANSPORT.md),
+[implementation](root_transport.py), and
+[tests](../../network/tests/test_arc_like_root_transport.py).
+
+**Reproduction:** `python -m unittest network.tests.test_arc_like_root_transport -v`
+
+**Next referent:** test the combined action of boundary-aware shifts
+and admissible gauges on marked process objects, preserving both
+composition witnesses and counterexamples to unrestricted operations.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** investigate a *marked-root* or root-transported process equivalence that may allow shifts, without weakening the existing all-depth A/B witnesses; gauge operators are closed under the current quotient.
+- **Next:** check combined marked-root shifts and gauge transformations under composition; the transported shift now has a finite scoped witness, while unrestricted operators remain OPEN.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
