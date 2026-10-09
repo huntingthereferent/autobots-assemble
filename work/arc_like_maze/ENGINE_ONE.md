@@ -154,7 +154,7 @@ construction paths, and explicit walls when the relation is unsupported.
 
 **Does not establish:** arbitrary inverse A/B, automatic selection of
 unlimited new operator grammars, a universal mathematical update theorem,
-an already autonomous/self-sustaining Engine 2, live ARC execution, or
+a live background executor or an unrestricted self-extending Engine 2, live ARC execution, or
 customer-ready reports.
 
 **Next referent:** provide an independently proved *inter-grammar*
