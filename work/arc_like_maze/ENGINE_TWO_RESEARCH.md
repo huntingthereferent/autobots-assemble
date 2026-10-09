@@ -43,6 +43,10 @@ later = kernel.resume(early.serialize(), 9, expected_question_id=early.record['q
 assert later.status == 'DISTINGUISHED_B_ACTIONS'
 ```
 
+## Current Engine 1 handoff gap
+
+The existing `engine_one.py` still exposes the older `ConstructedEngine.evolve(engine_one, ...)` path that calls Engine 1 again for subsequent law changes. This kernel does **not** call it and does not claim that the legacy handoff architecture has been corrected. The independent research entry/exit path is verified here; a full one-shot construction-and-handoff contract remains separate work.
+
 ## Boundary and next referent
 
 The tested example has nine B-cycles of length 9 versus three B-cycles of length 27 on the declared **81-state B-invariant carrier**; the whole 243-state space has different earliest distinguishing behavior. This bounded kernel is not a proof of general A/B closure, automatic research-question selection, arbitrary new space grammars, or native ARC execution.
