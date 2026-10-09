@@ -258,11 +258,77 @@ inverse A/B stopping point; the new required construction referent is
 the extension of these relations to arbitrary depth or new state-space
 constraints without presupposing the five-class quotient.
 
+## Cross-depth construction — same relation, new concrete turns
+
+[`vertical.py`](vertical.py) continues the mathematical construction
+across depth rather than pretending the worlds are identical.
+
+For a state x at depth d+1, let `pi_d(x)` discard the final coordinate.
+The A/B actions are triangular: an existing coordinate never depends on
+a later coordinate. Therefore (algebraically, for all admitted depths)
+
+```text
+pi_d(T_{d+1}(x,a)) = T_d(pi_d(x),a)  for a in {A,B}
+```
+
+This is a **transition-preserving projection**, generally *not* the
+bijective whole-world alignment used to identify same-depth equivalents.
+The actual reachable fibers are exhaustively checked for each of the nine
+parameter constructions at depths 3->4, 4->5, 5->6, 6->7.
+
+| Projection | Nonzero-phi reachable states | New-coordinate fiber | Shortest hidden return word |
+|---|---:|---:|---|
+| 3->4 | 27->81 | 3 | `BBB` |
+| 4->5 | 81->243 | 3 | `ABABBAB` |
+| 5->6 | 243->729 | 3 | `BABABAABAAB` |
+| 6->7 | 729->2187 | 3 | `ABBBAABBB` |
+
+Each reported word returns the **entire projected state** to its origin
+while moving the new coordinate. Applying the *same word* three
+consecutive times produces three different higher-dimensional states
+and then returns to the exact full origin: a concrete **three-turn
+hidden-fiber loop**. The words vary by depth, yet each witnesses the
+same relation. This behavior was checked for all eight nonzero-phi
+candidate worlds at each tested depth.
+
+**Honest zero-relation exception:** `phi=(0,0,0)` has only nine reachable
+states at every tested depth. Its new fiber has size **one**; no hidden
+coordinate motion can be inferred simply from the existence of another
+formal coordinate. Thus do not claim that every extension adds three
+reachable alternatives.
+
+Aligned same-depth world pairs also preserve the **vertical alignment
+square**: independently discovered A/B alignments at depths d and d+1
+commute with the forgetful projection. Pairs from different A/B classes
+are rejected as alignment failures. Separately, all 384 admitted
+nonlinear **parameter constructors** commute with adding the next
+coordinate:
+
+```text
+extend(C(W_d)) = C(extend(W_d))
+```
+
+That last identity concerns parameter-world construction, **not** proof
+that all such operators align states across inequivalent classes.
+
+The tested stopping point here is the **three-turn loop within each
+nontrivial fiber**. It is not a terminal stopping depth: a higher
+dimension may add another fiber, so finite recurring alignment does
+not by itself end unrestricted construction. Determining a terminal
+relational fixed point needs an explicit admitted extension class and
+proof that the next construction adds no distinct relation.
+
+Tests, from the repository root:
+
+```bash
+python -m unittest network.tests.test_arc_like_vertical -v
+```
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** test higher-depth constructors and new relations that do not presuppose the finite five-class quotient. Preserve bounded witnessed equivalence separately from universal closure. Keep the project math-first.
+- **Next:** determine whether repeated nontrivial fibers admit a stable higher-order relation under unbounded depth, with an explicit criterion for terminating construction. Do not confuse a three-turn fiber cycle with an end to constructing dimensions.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
