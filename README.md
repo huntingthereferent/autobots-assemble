@@ -227,8 +227,12 @@ The underlying fixed-root API is unchanged, and arbitrary rule addition still
 breaks equivalence. The marked-operator layer now verifies that boundary-aware
 coordinate gauges compose and commute with witness-carrying shifts: eight
 period-two gauges, 5,184 composition checks, 256 interchange squares, and
-11 focused tests. This is operator-level coherence, not a universal shift
-group or unbounded A/B closure. Finite-stem diagonal gauges now also compose
+11 focused tests. A marked-quotient audit now distinguishes **36**
+eight-gauge orbits from **34** coinductively aligned classes of **270**
+marked process objects. Two finite-head witnesses bridge the difference,
+and the existing stemmed-gauge system realizes both without losing the
+original marked-arrow witness. This is operator-level coherence, not a
+universal shift group or unbounded A/B closure. Finite-stem diagonal gauges now also compose
 and commute with transported shifts; mixed operator words normalize to one
 forward shift and combined endpoint gauges. Local focused tests check 12
 stemmed gauges, 11,664 compositions, 864 interchange squares, and 340 short
@@ -236,7 +240,7 @@ mixed operator words, without declaring any erased process prefix recoverable. A
 treated as an all-depth certificate. This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family network.tests.test_arc_like_process_operators network.tests.test_arc_like_root_transport network.tests.test_arc_like_marked_operator_system network.tests.test_arc_like_stemmed_operator_system network.tests.test_arc_like_marked_quotient -v`.
 
 ## Core structure
 
