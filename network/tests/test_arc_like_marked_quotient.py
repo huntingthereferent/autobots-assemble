@@ -12,7 +12,11 @@ from work.arc_like_maze.marked_operator_system import (
     BoundaryGauge, MarkedObject, MarkedArrow, same_arrow,
     invert_arrow, compose_arrows, transform_arrow, shift_arrow, interchange,
 )
-from work.arc_like_maze.root_transport import Process, verify_marked_pair
+from work.arc_like_maze.root_transport import Process, Witness, verify_marked_pair
+from work.arc_like_maze.stemmed_operator_system import (
+    StemGauge, gauge_arrow, interchange_stem, same_gauge,
+)
+from work.arc_like_maze.marked_operator_system import identical_streams
 
 
 class MarkedQuotientTests(unittest.TestCase):
@@ -121,6 +125,32 @@ class MarkedQuotientTests(unittest.TestCase):
             for turns in (0, 1, 2, 3, 5):
                 self.assertTrue(interchange(arrow, g, h, turns))
 
+    def test_stem_gauge_realizes_each_nonperiodic_bridge_exactly(self):
+        for bridge in self.bridges:
+            gauge = bridge.stem_gauge()
+            self.assertTrue(gauge.stem)
+            self.assertEqual(gauge.incoming, bridge.witness.incoming)
+            self.assertTrue(all(gauge.scale(i) == bridge.witness.scale(i)
+                                for i in range(50)))
+            self.assertEqual(bridge.source.gain * gauge.incoming % 3,
+                             bridge.target.gain)
+            self.assertTrue(identical_streams(gauge.apply(bridge.source.process),
+                                              bridge.target.process))
+            source = bridge.source
+            identity = MarkedArrow(source, source,
+                                   Witness("ALIGNED", 1, (), (1,)))
+            reconstructed = gauge_arrow(identity, StemGauge.periodic(1, 1),
+                                        gauge)
+            self.assertTrue(same_arrow(reconstructed, bridge.arrow()))
+
+    def test_bridge_stem_gauges_transport_through_shift(self):
+        u = StemGauge(2, (2, 1), (1, 2))
+        v = StemGauge(1, (1,), (2, 1))
+        for bridge in self.bridges:
+            arrow = bridge.arrow()
+            for turns in (0, 1, 2, 5):
+                self.assertTrue(interchange_stem(arrow, u, v, turns))
+
     def test_certificate_reports_both_quotients_without_conflation(self):
         cert = certify_marked_quotient()
         self.assertEqual(cert.status,
@@ -132,6 +162,7 @@ class MarkedQuotientTests(unittest.TestCase):
         self.assertEqual(cert.gauge_orbit_sizes, ((2, 1), (4, 3), (8, 32)))
         self.assertEqual(cert.alignment_class_sizes,
                          ((2, 1), (4, 3), (8, 28), (16, 2)))
+        self.assertTrue(cert.stem_gauge_bridges_verified)
 
     def test_out_of_scope_canonical_shapes_are_rejected(self):
         r = (0, 1, 2)
