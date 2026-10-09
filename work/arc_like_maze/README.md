@@ -1751,11 +1751,80 @@ source-image mark and literal word collision;
 check composition and prevent its accidental
 use as an origin-preserving equivalence.
 
+## Pointed A/B arrows — the origin is an actual witness
+
+[Mathematical record](WINDOW_MARKED_ARROWS.md) ·
+[pointed-arrow implementation](window_marked_arrows.py) ·
+[14 focused regression tests](../../network/tests/test_arc_like_window_marked_arrows.py)
+
+The 48-world result exposed **36 full-state
+conjugacies that do not preserve the original
+marked zero state**. The operator layer now
+represents these as `StateArrow` objects whose
+endpoints are `PointedWorld(world, mark)`
+objects, with the literal H/R map factors
+retained through inversion and composition.
+
+Promotion to a `MarkedArrow` requires the
+checked equality
+
+~~~text
+F(source.mark) = target.mark
+~~~
+
+All 144 direct canonical-origin conjugacies
+pass this check. The 36 other full-state
+conjugacies explicitly fail it. The new
+`transport_target_mark` is a separate
+mathematical operation: it creates a **new
+pointed target**, retaining the previous
+target zero mark and the positive-word
+root collision proving the originals
+were not rooted-equivalent.
+
+For a pulse-only to combined transition
+at support 0 or 3, the target changes from
+the original mark `(0,0,0)` to the
+transported mark `(0,2,d)`, where d is
+the target shear chart. No existing
+world law changes, and no earlier
+rooted incompatibility is overwritten.
+
+Of 2,304 ordered world pairs, 2,124
+are still obstructed; 144 directly admit
+a marked arrow; 36 require explicit
+target re-marking. All 180 admitted
+marked arrows have tested inverses
+and compositional mark conservation.
+The two original full-state quotient
+counts remain **14 unmarked classes
+versus 16 canonical-root classes**.
+
+The exact new module and test bytes
+match their locally tested Git blobs.
+Fourteen focused tests passed in a
+local reproduction of the existing
+coordinate laws; the GitHub workflow
+must independently confirm repository
+integration before claiming CI passed.
+
+**CLOSED:** explicit mark conservation,
+witness-preserving inversion and
+composition for this declared family.
+**WALL:** a moved origin is not the same
+pointed world. **UNKNOWN:** general
+marks and non-H/R state operators.
+
+**Next:** admit a separate witnessed
+root-changing construction without
+ever silently identifying the two
+original canonically marked objects.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** carry the origin as a first-class mark in the new nonrooted state maps. Preserve the 36 root-collision witnesses and test arrow composition without treating full-state conjugacy as rooted equivalence.
+- **Next:** test an independently constructed root-moving operator against the explicit pointed-arrow contract, retaining its original mark, transported mark, and complete state-map provenance.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
