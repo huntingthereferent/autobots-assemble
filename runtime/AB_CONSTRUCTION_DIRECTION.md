@@ -68,6 +68,27 @@ proposals = project_candidates(
 frame = frame_for_candidate(proposals[0])  # ordinary ABFrame; still PROPOSED
 ```
 
+The existing `EcosystemService` also exposes the same explicitly requested
+operation without requiring direct imports of the mathematical adapter:
+
+```python
+# service is an existing EcosystemService instance.
+frames = service.propose_ab_constructions(
+    occurrences=occurrences,
+    state=state,
+    source_locators=("experiment://room/blocked", "experiment://room/open"),
+    witness_contract="one witnessed action at room gate",
+    horizon=1,
+    generator=lambda fiber: ({"kind": "nested-room", "from_class": fiber.category},),
+    intent="construct",
+    max_candidates=4,
+)
+```
+
+These returned `ABFrame` objects are for subsequent A/B evaluation. This
+service entry is read-only: it creates no task, agent lineage, evidence record,
+or native movement by itself. It is a Python runtime entry, not an HTTP endpoint.
+
 The source locators are supplied by the caller, not verified by the
 inverse operation. The strings in this example are illustrative; they
 must not be claimed as real measurements.
@@ -100,7 +121,7 @@ was universally sufficient.
 
 ## Boundaries
 
-1. `runtime.ab_information` and `runtime.ab_loop` are unchanged.
+1. `runtime.ab_information`, `runtime.ab_loop` and `AgentLineage` are unchanged.
 2. Every candidate retains the source category, source indices,
    declared source locators, witness contract, and tested horizon.
 3. Generator output is always `PROPOSED`; it carries no `EvidenceRecord`.
@@ -124,4 +145,5 @@ native observer capable of independently witnessing action-conditioned
 continuation differences, including visually identical phase changes.
 
 The user-facing application, website, game generator and live agent
-activation routes have **not** been changed by this adapter.
+activation routes have **not** been changed by this adapter. The opt-in
+Python `EcosystemService` method is the reachable entry point.
