@@ -191,11 +191,78 @@ family-closure and quotient-compatibility contracts. Do not render a
 maze or claim the universal stopping point until those rules have
 their own witnesses.
 
+## Nonlinear construction — maximal reversible closure at this layer
+
+The previous affine certificate was not the maximum set of reversible
+construction moves preserving the observed nine-world A/B quotient.
+[nonlinear.py](nonlinear.py) generates **all bijections** of those nine
+constructed worlds respecting the five witnessed A/B-equivalence classes.
+
+Given the exact A/B classes `[1,2,2,2,2]`, one singleton must be fixed.
+Four two-point classes may be permuted independently, and each paired
+class may independently reverse its orientation. Consequently the maximal
+reversible group *for this finite quotient* has size
+
+```text
+4! × (2!)^4 = 24 × 16 = 384
+```
+
+This is the finite wreath-product structure `C2 wr S4`.
+Of its 384 maps, 48 are the affine maps already admitted; the other
+336 are genuinely **nonaffine** permutations of constructed world
+parameters. Each induced map of the five quotient classes fixes the
+singleton and permutes the other four. Thus there are 24 different
+quotient motions, with 16 underlying ways to realize any one quotient
+motion. These new choices do **not** create new quotient classes.
+They create different concrete construction turns that align to the
+same relational structure.
+
+Examples:
+
+- **Nonaffine pair flip:** exchange just the two worlds in one aligned
+  pair. It is not affine and its square is the identity, but its
+  quotient action is the identity throughout.
+- **Four-class cycle:** an admissible constructed-world permutation
+  cycles the four nonzero quotient classes and returns on the fourth
+  turn. Intermediate worlds occupy different classes, but the same
+  construction law persists.
+- **Many-to-one sink:** map every world to the zero-class world.
+  This still respects equivalence but is *not* invertible, so it
+  is not a reversible closed-loop certificate.
+- **Translation:** maps formerly equivalent inputs to inequivalent
+  outputs and remains **outside** the old quotient.
+
+The verification independently enumerates all `9! = 362,880`
+bijections, finding precisely the 384 constructed by the generator.
+All `384 × 384 = 147,456` pairwise compositions are checked for
+membership in the admitted group. Every generated world map preserves
+the A/B alignment between the members of each equivalence pair.
+
+**Higher-depth test:** at depths 3, 4, 5, and 6, the *within-depth*
+nine-parameter families were classified into the same five relative
+A/B classes. This is bounded evidence, **not** an unbounded depth
+theorem. A three-dimensional world has 27 states and its
+four-dimensional extension has 81; they are **not** related by the
+bijective rooted state alignment required here. Do not mistake
+stable quotient shape for equivalence across dimensions.
+
+Run:
+
+```bash
+python -m unittest network.tests.test_arc_like_nonlinear -v
+```
+
+**Current stopping point:** maximal reversible nonlinear permutations
+for the declared finite nine-world quotient. **Not** a universal
+inverse A/B stopping point; the new required construction referent is
+the extension of these relations to arbitrary depth or new state-space
+constraints without presupposing the five-class quotient.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** test explicitly defined non-affine or higher-depth constructors for new witnesses; the full invertible affine family now has a scoped closure certificate. Keep the project math-first.
+- **Next:** test higher-depth constructors and new relations that do not presuppose the finite five-class quotient. Preserve bounded witnessed equivalence separately from universal closure. Keep the project math-first.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
