@@ -205,12 +205,17 @@ retain five projectively compatible relational classes. A nonlinear gauge now
 constructs three distinct but exactly aligned world laws in a closed cycle;
 a split nonlinear coupling supplies a new class witnessed by different
 B-fixed-state counts at depth four. The next inverse construction enumerates
-81 two-coupling worlds into 21 exact *origin-rooted* A/B classes and builds a
-36-turn permutation within those classes. Rooted equivalence does not
-imply full-state equivalence when the old orbit never visits the new coupling. This is a scoped
+81 two-coupling worlds into 21 exact *origin-rooted* A/B classes.
+The third independent coupling constructs 729 worlds and 85 rooted classes;
+a fourth-coupling stress test reaches 6,561 worlds and 341 classes.
+The chosen rooted-class permutations cycle after 36 and 648 turns
+respectively, but these do not imply full-state equivalence when dormant
+coordinates never move on the origin orbit. A fixed-point-count theorem
+now rules out a terminal **finite depth** if arbitrary independent
+coupling extensions remain admissible. This is a scoped
 mathematical result, not universal inverse A/B closure or native ARC execution.
 Focused tests:
-`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family -v`.
+`python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_operators network.tests.test_arc_like_affine_scan network.tests.test_arc_like_nonlinear network.tests.test_arc_like_vertical network.tests.test_arc_like_inverse_limit network.tests.test_arc_like_gauge_construction network.tests.test_arc_like_coupling_family network.tests.test_arc_like_third_coupling -v`.
 
 ## Core structure
 
