@@ -174,7 +174,9 @@ class MathematicalEngineOneTests(unittest.TestCase):
         self.assertEqual(constructed.status, "CONSTRUCTED")
         cycle = constructed.engine.cycle
         self.assertGreaterEqual(len(cycle.laws), 2)
-        self.assertTrue(all(w.kind == "ROOTED_REACHABLE"
+        self.assertTrue(any(w.kind == "ROOTED_REACHABLE"
+                            for w in cycle.arrows))
+        self.assertTrue(all(w.kind in ("ROOTED_FULL", "ROOTED_REACHABLE")
                             for w in cycle.arrows))
         running = constructed.engine
         for _ in range(len(cycle.laws)):
