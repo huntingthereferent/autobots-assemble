@@ -16,6 +16,8 @@ on:
       - 'work/arc_like_maze/window_combined.py'
       - 'work/arc_like_maze/window_combined_arithmetic_audit.py'
       - 'network/tests/test_arc_like_window_combined.py'
+      - 'work/arc_like_maze/window_marked_arrows.py'
+      - 'network/tests/test_arc_like_window_marked_arrows.py'
       - '.github/workflows/arc-window-branch.yml'
   workflow_dispatch:
 
@@ -43,3 +45,5 @@ jobs:
         run: python -m unittest network.tests.test_arc_like_window_combined -v
       - name: Independent full-state and rooted-class audit
         run: python -m work.arc_like_maze.window_combined_arithmetic_audit
+      - name: Explicit pointed A/B arrow and mark-transport regression
+        run: python -m unittest network.tests.test_arc_like_window_marked_arrows -v
