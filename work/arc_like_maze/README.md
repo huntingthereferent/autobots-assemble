@@ -1261,7 +1261,7 @@ same quotient failure.
 
 [Research report](MARKED_QUOTIENT.md) ·
 [implementation](marked_quotient.py) ·
-[12 regression tests](../../network/tests/test_arc_like_marked_quotient.py)
+[14 regression tests](../../network/tests/test_arc_like_marked_quotient.py)
 
 The marked gauge/shift interchange work showed that the **witness
 must travel**. The next question is whether the eight period-two
@@ -1292,11 +1292,18 @@ mathematically preserve marked A/B transitions.
 gauges; the finite coinductive marked-diagonal partition is complete
 for those objects under that specified equivalence.
 
-**OPEN:** treating the eight-element gauge group as a *complete*
-description of all marked-diagonal arrows. It misses two bridges.
-The next operator-level step is to adjoin these bridges as
-generators and test composition and root-transport provenance
-without silently substituting a new witness.
+**OPEN:** treating the eight-element periodic gauge group as
+a *complete* description of all marked-diagonal arrows. It misses
+two finite-head bridges. **Those bridges are already admitted by
+the separate finite-stem gauge system below.** The new
+`MissingGaugeBridge.stem_gauge()` produces each exact finite-stem
+operator from its original certified witness, verifying full
+process equality and the root mark; new regression checks exercise
+gauge-arrow realization and witness-preserving shifts.
+
+**Next:** independently admit or reject a **non-diagonal** operator
+using a full-state witness or a concrete obstruction. Do not
+revisit the solved finite-head diagonal bridge layer.
 
 No universal inverse A/B closure or native ARC result is implied.
 
