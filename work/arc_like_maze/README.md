@@ -852,11 +852,180 @@ the unrestricted rule family is open by the fixed-point argument.
 Do not keep adding finite dimensions hoping for an accidental
 universal stopping point.
 
+## One layer above worlds — closed A/B construction processes
+
+A count of reachable states, a finite dimensional return, or a chosen
+rotation of parameter descriptions does not establish that construction
+itself has closed. We now construct and compare **entire unbounded
+sequences of coupling relations**, with the declared scope explicit.
+
+[process_alignment.py](process_alignment.py) represents a process as
+a finite stem of F_3 coupling tables followed by a nonempty repeating
+sequence. For a process P with rules (p_0,p_1,...), its depth-d
+world applies p_i at the coordinate x_(i+2). Every finite world
+is a projection of the full infinite rule-generated system.
+This is a mathematical blueprint, not a player action or an ARC solve.
+
+### Same relation through different turns
+
+Two processes P and Q have a **projectively compatible diagonal
+A/B alignment** if there is a sequence of nonzero scalars
+s_0,s_1,... in F_3, with s_(-1)=1, such that
+
+~~~text
+q_i(s_(i-1) * u) = s_i * p_i(u)     for all i >= 0, all u in F_3
+~~~
+
+Define the whole-state map
+
+~~~text
+F(x_0,x_1,x_2,x_3,...) =
+  (x_0,x_1,s_0*x_2,s_1*x_3,...)
+~~~
+
+These equations guarantee for EVERY dimension
+
+~~~text
+F(A_P(x)) = A_Q(F(x))
+F(B_P(x)) = B_Q(F(x))
+pi_d(F(x)) = F(pi_d(x))
+~~~
+
+and F is invertible because every s_i is nonzero. This is full
+coordinate-space equivalence, **not just matching behavior on the
+orbit reached from the origin**.
+
+For example, let r_+(u)=u and r_-(u)=-u, modulo 3.
+The two repeating constructions are
+
+~~~text
+P:  r_+, r_-, r_+, r_-, ...
+Q:  r_-, r_+, r_-, r_+, ...
+s:    2,   1,   2,   1, ...
+~~~
+
+Every coupling rule changes after one process shift, but the
+indefinite A/B relations align. After two shifts the original
+rule blueprint returns. Both adjacent phases have explicit
+all-depth compatible alignments. Thus this is a **genuine
+two-turn closed construction-process orbit** even though the
+intermediate world template differs.
+
+Important distinction: shifting a rule *template* re-roots
+the construction process. It is not itself the projection
+of an already constructed higher-dimensional state.
+
+### Finite certificate for an infinite process
+
+For eventually periodic P and Q, the diagonal equations can
+be decided using only a **finite automaton**.
+
+After both finite stems end, the rule-pair has period
+L=lcm(period(P),period(Q)). Each proof state contains:
+
+~~~text
+(periodic phase in 0..L-1, previous coordinate scale in {1,2})
+~~~
+
+There are at most 2L states. A transition is admitted only
+when the next scalar satisfies the A/B equation for all
+three inputs. Repeatedly discard states with no viable
+successor (a greatest fixed point), then connect the finite
+stem to the surviving states. If a path remains, a repeated
+finite automaton state gives a **lasso**: a finite scalar
+prefix followed by an exact scalar cycle. Repeating that
+finite state proves the alignment for *all future*
+dimensions, by induction—not by extrapolating a finite test.
+
+If no path survives, the finite branching relation supplies
+a finite-coordinate counterexample and reports the first
+depth where no admitted diagonal alignment remains.
+This is an **OPEN_DIAGONAL_ALIGNMENT**, not a proof that no
+more general non-diagonal state conjugacy could exist.
+
+For example, two processes can agree on their first 75
+couplings and fail at coordinate depth **78** when a
+new nonlinear rule is introduced. Finite prefix agreement
+is not an infinite closure certificate.
+
+The lasso verifier checks that the rule phases and previous
+scalar all recur together; a false, truncated, or
+self-inconsistent proposed lasso is rejected.
+
+### Exhaustive two-rule process classification
+
+[process_family.py](process_family.py) enumerates all
+9×9 two-phase repeating process templates formed from
+the nine allowed tables r(0)=0:
+
+| Constructed templates | Diagonal process classes | Shift-closed templates |
+|---:|---:|---:|
+| 81 | 34 | 13 |
+
+Exact class-size distribution:
+
+| Descriptions per process class | Classes | Descriptions |
+|---|---:|---:|
+| 1 | 1 | 1 |
+| 2 | 26 | 52 |
+| 4 | 7 | 28 |
+
+Nine of the 13 shift-closed templates simply repeat the
+same rule every turn. **Four alternate two genuinely
+different but aligned rules.** The process-level
+classification uses the *all-depth* coinductive criterion,
+so it is not interchangeable with the earlier
+finite-dimensional rooted graph partitions (5, 21, 85,
+341).
+
+The periodic shift-orbit certificate explicitly checks
+every distinct neighboring template pair in the cycle;
+a single aligned edge is not enough. A nonperiodic
+finite stem is currently marked UNKNOWN for a
+cycle starting at the initial template, rather than
+being silently promoted to periodic closure.
+
+Run both focused test suites from the repository root:
+
+~~~bash
+python -m unittest network.tests.test_arc_like_process_alignment network.tests.test_arc_like_process_family -v
+~~~
+
+### The actual stopping boundary reached
+
+**CLOSED:** a repeating construction process has a fully
+verified cyclic orbit of templates, with exact all-depth
+diagonal A/B conjugacies along *every* edge of the orbit.
+States and concrete coupling laws can keep changing
+while their higher-order relationship is established.
+
+**OPEN in this quotient:** other freely admitted rule
+sequences, such as alternating a linear rule with a
+nonlinear rule, fail the diagonal alignment. The older
+B-fixed-point theorem independently shows why
+arbitrary finite-dimensional extensions cannot share
+one terminal finite state-space class.
+
+**UNKNOWN beyond this contract:** nonperiodic or
+arbitrary-oracle processes, non-diagonal conjugacies,
+and a universal criterion for which mathematical
+construction rules should be admitted. This is a
+scoped **process-level loop**, not a universal theorem
+that no new A/B relation can ever be constructed.
+
+Next mathematical referent: specify a justified family
+of permissible *process transformations* (rather than
+one chosen shift), and test whether the resulting
+relational quotient is itself closed under composition
+and further construction. Do not return to endlessly
+adding dimensions to hunt for a finite stopping point.
+
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** align the admissible construction operators themselves; the fixed-point theorem rules out an unrestricted terminal finite dimension. Keep rooted and full-space equivalence separate.
+- **Next:** audit which transformations of complete construction processes preserve the coinductive quotient, and whether those transformations form a closed operator system. Keep the diagonal and eventually periodic scope explicit.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
