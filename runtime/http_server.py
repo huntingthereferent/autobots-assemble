@@ -122,6 +122,13 @@ class Handler(BaseHTTPRequestHandler):
                     self.send_json({"plans": SERVICE.list_plans()})
                     return
 
+                if parsed.path == "/api/daily-checklist":
+                    if self.client_address[0] not in {"127.0.0.1", "::1"}:
+                        self.send_json({"error": "private checklist is loopback-only"}, 403)
+                        return
+                    self.send_json(SERVICE.daily_checklist_snapshot())
+                    return
+
                 if parsed.path == "/api/tasks":
                     self.send_json({"tasks": SERVICE.list_tasks()})
                     return
@@ -287,6 +294,28 @@ class Handler(BaseHTTPRequestHandler):
                         SERVICE.add_plan(payload),
                         201,
                     )
+                    return
+
+                if parsed.path == "/api/daily-checklist" or (
+                    parsed.path.startswith("/api/daily-checklist/")
+                    and parsed.path.endswith("/check")
+                ):
+                    if self.client_address[0] not in {"127.0.0.1", "::1"}:
+                        self.send_json({"error": "private checklist writes are loopback-only"}, 403)
+                        return
+                    if parsed.path == "/api/daily-checklist":
+                        self.send_json(SERVICE.add_daily_checklist_item(payload), 201)
+                        return
+                    item_id = parsed.path.removeprefix(
+                        "/api/daily-checklist/"
+                    ).removesuffix("/check").strip("/")
+                    if not item_id:
+                        raise ValueError("checklist ID required")
+                    if not isinstance(payload.get("checked"), bool):
+                        raise ValueError("checked must be boolean")
+                    self.send_json(SERVICE.set_daily_checklist_checked(
+                        item_id, checked=payload["checked"]
+                    ))
                     return
 
                 if parsed.path == "/api/tasks":
