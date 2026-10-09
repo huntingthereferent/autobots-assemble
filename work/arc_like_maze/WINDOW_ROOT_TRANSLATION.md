@@ -1,4 +1,4 @@
-# Inverted A/B — Independent root-moving central translation
+# Central coordinate-translation symmetry of a pointed finite-field transformation system
 
 ## Current referent
 
@@ -89,6 +89,22 @@ Run:
 ```bash
 python -m unittest network.tests.test_arc_like_window_root_translation network.tests.test_arc_like_window_marked_arrows -v
 ```
+
+## Subsequent centralizer criterion: scope sharpened
+
+The [two-predecessor centralizer theorem](TRANSLATION_CENTRALIZER.md)
+generalizes this zero-higher-coupling symmetry exactly.
+A nonzero higher rule does **not** necessarily destroy it.
+For the coordinate shift of x2, the full generating action
+commutes with the translation precisely when q1 is
+independent of its second input and q2 independent of
+its first. If q1 reads x2, the first obstruction is
+in dimension four; if only q2 reads x2, the first
+obstruction is in dimension five.
+
+That theorem is a separate later result. It does
+not retroactively broaden the 48-world zero-tail
+certificate or erase any previously recorded mark.
 
 ## Wall, preservation, next referent
 
