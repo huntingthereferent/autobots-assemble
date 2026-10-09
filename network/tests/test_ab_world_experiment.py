@@ -80,10 +80,10 @@ class SimulatedWorldExperiments(unittest.TestCase):
         self.assertEqual([x.status for x in experiment.trials],
                          ["SIMULATED_MATCH"] * 4)
         self.assertEqual([x.observed for x in experiment.trials],
-                         [(0,), (0,), (1,), (1,)])
+                         [(0,), (1,), (0,), (1,)])
         self.assertEqual(
             [tuple(b) for b in experiment.information.continuation_partition],
-            [(0, 1), (2, 3)],
+            [(0, 2), (1, 3)],
         )
         self.assertEqual(len(experiment.information.proofs), 1)
         self.assertIn(("gate0",), experiment.information.proofs[0].sources)
@@ -97,13 +97,13 @@ class SimulatedWorldExperiments(unittest.TestCase):
         )
         self.assertTrue(experiment.complete)
         self.assertEqual([x.observed for x in experiment.trials],
-                         [(0, 0), (0, 0), (1, 1), (1, 2)])
+                         [(0, 0), (1, 1), (0, 0), (1, 2)])
         self.assertEqual([x.status for x in experiment.trials],
                          ["SIMULATED_MATCH", "SIMULATED_MATCH",
                           "SIMULATED_MATCH", "SIMULATED_COUNTEREXAMPLE"])
         self.assertEqual(
             experiment.information.continuation_partition,
-            ((0, 1), (2,), (3,)),
+            ((0, 2), (1,), (3,)),
         )
         self.assertIsNotNone(experiment.synthesized)
         self.assertEqual(len(experiment.synthesized.proof_partition), 4)
@@ -178,7 +178,7 @@ class SimulatedWorldExperiments(unittest.TestCase):
             self.assertEqual(len(frames), 4)
             self.assertEqual(len(exp.trials), 4)
             self.assertEqual(exp.information.continuation_partition,
-                             ((0, 1), (2,), (3,)))
+                             ((0, 2), (1,), (3,)))
             self.assertEqual(exp.trials[-1].status, "SIMULATED_COUNTEREXAMPLE")
             self.assertEqual(previous, svc.runtime.snapshot())
             self.assertEqual(svc.agent_lineage.roots_for_actor("james"), ())
@@ -293,7 +293,7 @@ class SimulatedWorldExperiments(unittest.TestCase):
         exp = run_simulation_probe(same, world=simulation(),
                                    action_path=("advance",))
         self.assertEqual(exp.information.continuation_partition,
-                         ((0, 1), (2, 3)))
+                         ((0, 2), (1, 3)))
         self.assertEqual(len({t.proposal_id for t in exp.trials}), 4)
         self.assertEqual(len({t.trace_locator for t in exp.trials}), 4)
 
