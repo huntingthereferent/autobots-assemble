@@ -1942,11 +1942,70 @@ correction to a broken translation and
 require an explicit bijective conjugacy
 or a finite periodic-orbit obstruction.
 
+## Compensated coordinate translation — exact symmetry or fiber obstruction
+
+[Proof and counterexamples](CORRECTED_TRANSLATION.md) ·
+[finite-field construction](corrected_translation.py) ·
+[13 focused tests](../../network/tests/test_arc_like_corrected_translation.py)
+
+The uncorrected coordinate translation `x2 -> x2+r`
+can fail to belong to the centralizer of the two
+generating transformations when a higher coupling
+reads `x2`. This does **not** automatically mean
+no corrected symmetry exists.
+
+In the declared linear family `B(x2)=x2+a`,
+`B(x3)=x3+b*x2`, `B(x4)=x4+c*x2`
+(with all further increments zero), the exact
+answer depends on the lower-coordinate drift:
+
+- If `a != 0`, define
+  `K_r(z)=a^(-1)*(r*z+binom(r,2))`.
+  The map translating x2 by r and translating
+  x3 by b*K_r(x2) and x4 by c*K_r(x2)
+  **commutes with both generators**, is
+  invertible at every depth and defines
+  an order-three centralizer action.
+- If `a=0` and `b=c=0`, the original
+  coordinate translation is already central.
+- If `a=0` with a nonzero higher
+  coefficient, an explicit B-fixed-fiber
+  mismatch blocks *any* equivariant lift
+  that preserves x0,x1 and adds r to x2.
+  The first obstruction occurs in dimension
+  **four** when b is nonzero, or **five**
+  when only c is nonzero.
+
+The fixed-fiber obstruction concerns the
+prescribed class of lifts, not all conceivable
+state conjugacies. The pointed-system
+implementation requires a full five-coordinate
+distinguished point and retains individual
+correction factors through inverses and
+composition.
+
+The exact new source and regression files
+match **13 locally passing Python tests**,
+executed against a local copy of the existing
+two-predecessor interpreter. GitHub CI
+status remains a separate verification.
+
+**Closed:** this declared linear centralizer
+lifting problem with either a constructive
+conjugacy or exact fixed-fiber obstruction.
+**Unknown:** the corresponding cohomological
+equation when `q0(x0,x1)` is nonconstant.
+
+**Next:** test nonconstant lower-coordinate
+couplings by solving or obstructing the
+correction equation along full orbits of
+the induced lower-coordinate B action.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** test whether a correction acting on x3 or x4 can restore a failed centralizer symmetry; preserve first-failure witnesses and use standard transformation-system terminology.
+- **Next:** solve or obstruct the corrected-translation equation for a nonconstant lower-coordinate coupling by its full finite-state orbit structure, preserving the pointed witness.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
