@@ -204,7 +204,6 @@ def rotation(groups: tuple[tuple[CouplingTower, ...], ...]) -> dict[CouplingTowe
     return {world: group[(i+1)%len(group)]
             for group in groups for i,world in enumerate(group)}
 
-
 @dataclass(frozen=True)
 class ExtensionObstruction:
     """Two permitted one-coordinate constructions with distinct B invariants."""
