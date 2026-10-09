@@ -2215,6 +2215,61 @@ family separately, including its potentially
 disconnected finite graph and the order of
 pointed corrections.
 
+## Zero-trace fourth-coordinate systems — fifth-coordinate cyclic order
+
+[Complete mathematical classification](ZERO_TRACE_LIFT.md) ·
+[exact cohomology and pointed maps](zero_trace_lift.py) ·
+[independent 81-by-36 matrix audit](zero_trace_arithmetic_audit.py) ·
+[13 regression tests](../../network/tests/test_arc_like_zero_trace_lift.py)
+
+The complementary zero-trace quotient
+functions Q, together with two normalized
+row offsets, give **81 fourth-coordinate
+systems for each gain**. Their lower
+commuting transformation has exact
+order three.
+
+The next fifth-coordinate additive
+correction is a potential on a
+27-state graph with **81 compatibility
+equations**. Unlike the preceding
+nonzero-trace family, its graph
+may have **one or three connected
+components**. Each component contributes
+an independently selectable correction
+constant.
+
+Across all 162 configurations, ranks
+3, 4, 5, and 6 occur and there are
+**22,410 admitted fifth-coordinate
+coupling combinations**. Their
+available orders divide into:
+
+- 9,918 combinations admitting **only
+  order three**.
+- 11,304 admitting **only order nine**.
+- 1,188 admitting **both orders** by
+  different valid correction constants
+  on the *same* transformation system.
+
+The two independent GF3 calculations
+agree on every component/rank category,
+including all **624 coupling basis
+directions**, **198 gauge directions**,
+and **22,194 three-turn trace checks**.
+
+The signed-cycle obstructions remain
+literal, and the admitted maps transport
+five-coordinate distinguished points.
+This does **not** classify arbitrary
+centralizer symmetries.
+
+**Next:** connect the zero-trace and
+nonzero-trace classifiers behind one
+witness-preserving mathematical interface,
+without flattening coupling admission,
+component gauge and possible cyclic orders.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
