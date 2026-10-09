@@ -91,6 +91,16 @@ Other jumps are not automatically admitted.
 A candidate is never treated as proven equivalent merely because two
 selected invariants happen to match.
 
+### Engine 1 constructs an executable Engine 2 recurrence
+
+After selecting a law, Engine 1 can call its own `construct_cycle(seed)` to construct a *witnessed*, independently executable recurrence for Engine 2. Engine 2 then calls `tick()` without calling Engine 1 each turn. Its transition law changes, its previous witnesses remain reachable, and the cycle returns only after its proven period.
+
+- In the 48-law window family, this is the proved **three-turn nonlinear shear**: three concretely different transition laws, each step with full-state, origin-preserving conjugacy.
+- In the triangular coupling towers, this is the existing **chosen finite rooted-class rotation**. Some turns have full-state diagonal witnesses; dormant-root turns are only origin-reachable equivalences. No full-state claim is silently promoted.
+- A singleton rooted class is a **WALL** for a nontrivial class-rotation cycle.
+
+This is a construction of *one bounded changing Engine 2*, not an unrestricted self-modifying engine. The periodic update law is itself part of the returned mathematical object, rather than requiring James to manually choose a new law each turn.
+
 ### Selection
 
 A next engine is selected by **fewest admitted construction operations**,
@@ -127,6 +137,13 @@ assert next_result.status == "CONSTRUCTED"
 assert next_result.engine.history[-1].kind == "FULL_UNROOTED"
 assert next_result.engine.history[-1].source_mark == (0, 0, 0)
 assert next_result.engine.history[-1].target_mark != (0, 0, 0)
+
+# Engine 1 also constructs a self-ticking mathematical recurrence.
+cyclic = builder.construct_cycle(first)
+assert cyclic.status == "CONSTRUCTED"
+after_one_turn = cyclic.engine.tick()
+assert after_one_turn.law != cyclic.engine.law
+assert after_one_turn.tick().tick().law == cyclic.engine.law
 ~~~
 
 ## Verified versus unknown
