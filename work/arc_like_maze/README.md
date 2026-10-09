@@ -1602,11 +1602,73 @@ Look for a stronger word invariant or an exact
 non-diagonal alignment rather than assuming that
 colliding invariants imply equivalence.
 
+## Third independent two-input relation — five-letter word obstruction
+
+[Mathematical proof](WINDOW_WORD_COLLISION.md) ·
+[36-world construction and exact classifier](window_word_collision.py) ·
+[14 regression tests](../../network/tests/test_arc_like_window_word_collision.py) ·
+[independent arithmetic audit](window_word_collision_arithmetic_audit.py)
+
+The first additional coupling after the 24-world branch is
+a *balanced* edit outside the old support row:
+
+~~~text
+q0(1,0) += 1
+q0(1,1) -= 1                        (mod 3)
+~~~
+
+The edits preserve both previously established
+invariants, **Fix(B)** and **Fix(BBB)**. A
+shortest distinguishing fixed-point-count word is
+`AABAB`, whose depth-three fixed-state count
+changes **9 → 3**. Exhaustive enumeration shows
+no different fixed-point count for any A/B word
+of length one to four in the compared worlds.
+This is minimal for *fixed-word counts*, not
+for all possible trajectory observations.
+
+Constructing across the four support levels, three
+shear charts, and three explicitly admitted
+pulse/balance branches yields **36 distinct full-state
+A/B laws**. Their relation quotient is exactly
+**12 classes of three worlds each**. Every ordered
+pair is classified with an explicit shear witness
+(108 pairs) or a word-fixed obstruction from B
+(972), BBB (144), or AABAB (72).
+
+The balanced edit and the previous pulse edit are
+competing extensions of the ordinary world. The
+simultaneous (pulse=1, balanced=1) construction
+remains explicitly **UNKNOWN**, rather than
+silently adding it to the same quotient.
+
+The independent arithmetic audit checked 705,672
+state conjugacy comparisons, 235,224 inverse
+identities, 233,280 projection identities and
+540 word-formula checks over complete state
+spaces through dimension seven. Fourteen Python
+tests and a targeted GitHub workflow were added;
+CI success must be observed separately.
+
+**CLOSED:** these twelve full-state classes in
+the declared 36-world family and their exact
+all-depth non-diagonal shear witnesses.
+**OPEN:** sufficiency of the earlier two-word
+signature; AABAB provides its counterexample.
+**UNKNOWN:** the withheld combined pulse/balance
+edit and arbitrary further couplings.
+
+**Next referent:** construct the withheld (1,1)
+branch and test full-state *and rooted* A/B
+relations separately. A collision of all three
+known word counts must not be treated as an
+automatic alignment.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** change another two-input coupling entry while holding both Fix(B) and Fix(BBB) unchanged. Find an independently witnessed next obstruction or a constructive full-state alignment; do not infer equivalence from matching finite invariants.
+- **Next:** admit the withheld simultaneous pulse-plus-balanced rule, distinguish full-state from origin-rooted equivalence, and search for an exact map or a new labeled-word obstruction rather than promoting colliding signatures to closure.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
