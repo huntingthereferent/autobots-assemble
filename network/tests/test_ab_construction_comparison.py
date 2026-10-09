@@ -301,6 +301,27 @@ class HeldOutCompletionComparisonTests(unittest.TestCase):
             sum(b.calls for _, _, _, b in overall),
             sum(a.calls for _, _, a, _ in overall),
         )
+        print("AB_CONSTRUCTION_HELD_OUT_COMPARISON " + json.dumps({
+            "source": "local-native-api-fixtures",
+            "baseline": "evidence-only replay, NOT every possible standard A/B planner",
+            "holdout_budget_per_arm": MAX_CHECKS,
+            "cases": [
+                {
+                    "domain": domain,
+                    "goal_class": label,
+                    "evidence_only_success": a.success,
+                    "construction_success": b.success,
+                    "evidence_only_checks": a.calls,
+                    "construction_checks": b.calls,
+                }
+                for domain, label, a, b in overall
+            ],
+            "baseline_completed": sum(a.success for _, _, a, _ in overall),
+            "construction_completed": sum(b.success for _, _, _, b in overall),
+            "baseline_checks": sum(a.calls for _, _, a, _ in overall),
+            "construction_checks": sum(b.calls for _, _, _, b in overall),
+            "native_api_observations_not_external_live_work": True,
+        }, sort_keys=True), flush=True)
 
     def test_real_code_and_state_are_untouched(self):
         with TemporaryDirectory(prefix="compare_state_") as temp:
