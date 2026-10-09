@@ -220,8 +220,15 @@ class GenericConstructionTests(unittest.TestCase):
             derive(*domain, max_scan_per_block=0)
 
     def test_intent_required_even_without_user_generator(self):
+        domain = DOMAINS[0]
+        group, locators = examples(*domain)
         with self.assertRaises(ValueError):
-            derive(*DOMAINS[0], intent="observe")
+            derive_relation_constructions(
+                group, information_closure(group),
+                source_locators=locators,
+                witness_contract="one-step witnessed category",
+                horizon=1, intent="observe",
+            )
 
     def test_service_uses_no_caller_written_generator(self):
         for domain in DOMAINS:
