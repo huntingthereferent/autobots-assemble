@@ -30,6 +30,9 @@ on:
       - 'work/arc_like_maze/higher_coupling_lift.py'
       - 'work/arc_like_maze/higher_coupling_arithmetic_audit.py'
       - 'network/tests/test_arc_like_higher_coupling_lift.py'
+      - 'work/arc_like_maze/fifth_coordinate_lift.py'
+      - 'work/arc_like_maze/fifth_coordinate_arithmetic_audit.py'
+      - 'network/tests/test_arc_like_fifth_coordinate_lift.py'
       - '.github/workflows/arc-window-branch.yml'
   workflow_dispatch:
 
@@ -73,3 +76,7 @@ jobs:
         run: python -m unittest network.tests.test_arc_like_higher_coupling_lift -v
       - name: Independent 39366-case voltage-graph and cyclic-order audit
         run: python -m work.arc_like_maze.higher_coupling_arithmetic_audit
+      - name: Fifth-coordinate 27-state rank and pointed order-nine lift regression
+        run: python -m unittest network.tests.test_arc_like_fifth_coordinate_lift -v
+      - name: Independent fifth-coordinate 39366-case signed-graph audit
+        run: python -m work.arc_like_maze.fifth_coordinate_arithmetic_audit
