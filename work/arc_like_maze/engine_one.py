@@ -17,7 +17,7 @@ from typing import Literal
 
 from .third_coupling import (
     CouplingTower, construct_family, count_fixed_B_formula,
-    projective_scaling, rooted_graph,
+    projective_scaling, rooted_graph, classify_rooted,
 )
 from .window_combined import (
     CombinedWorld, classify_pair, family as window_family,
@@ -89,11 +89,45 @@ Law = CombinedWorld | CouplingTower
 
 
 @dataclass(frozen=True)
+class ConstructionCycle:
+    """Engine 2's independently executable, witnessed mathematical recurrence."""
+    laws: tuple[Law, ...]
+    arrows: tuple[RelationWitness, ...]
+    scope: str
+
+    def __post_init__(self) -> None:
+        if len(self.laws) < 2 or len(self.laws) != len(self.arrows):
+            raise ValueError("a witnessed cycle needs two or more laws and one arrow per turn")
+        if len(set(self.laws)) != len(self.laws):
+            raise ValueError("cycle laws must differ until the witnessed return")
+        for i, arrow in enumerate(self.arrows):
+            if arrow.source != repr(self.laws[i]):
+                raise ValueError("cycle witness source is not the selected law")
+            if arrow.target != repr(self.laws[(i + 1) % len(self.laws)]):
+                raise ValueError("cycle witness target is not the next law")
+
+
+@dataclass(frozen=True)
 class ConstructedEngine:
     """A version of Engine 2. Changing its law requires another certified turn."""
     law: Law
     version: int
     history: tuple[RelationWitness, ...] = ()
+    cycle: ConstructionCycle | None = None
+    phase: int = 0
+
+    def tick(self) -> "ConstructedEngine":
+        """Run Engine 2's admitted operator without consulting Engine 1 again."""
+        if self.cycle is None:
+            raise ValueError("no constructed recurrence; Engine 1 must witness one")
+        if self.phase not in range(len(self.cycle.laws)) or self.cycle.laws[self.phase] != self.law:
+            raise ValueError("engine version does not match its witnessed recurrence phase")
+        next_phase = (self.phase + 1) % len(self.cycle.laws)
+        return ConstructedEngine(
+            self.cycle.laws[next_phase], self.version + 1,
+            self.history + (self.cycle.arrows[self.phase],),
+            self.cycle, next_phase,
+        )
 
     def step(self, state: tuple[int, ...], generator: str) -> tuple[int, ...]:
         return self.law.step(state, generator)
@@ -339,4 +373,67 @@ class InverseConstructionEngine:
             considered, len(options),
             "fewest admitted operations (" + str(distance) +
             "); stable family order; all intermediate witnesses retained",
+        )
+
+
+    def construct_cycle(self, seed: ConstructedEngine) -> ConstructionResult:
+        """Engine 1 builds an executable Engine 2 update law with its witnesses.
+
+        Window family: exact three-turn shear (full-state pointed conjugacy).
+        Coupling towers: the existing rooted-class permutation; it can have
+        dormant, origin-reachable-only alignments. Neither is universal closure.
+        """
+        if not isinstance(seed, ConstructedEngine):
+            raise TypeError("construct_cycle needs a constructed mathematical engine")
+        law = seed.law
+        if isinstance(law, CombinedWorld):
+            members = (law, law.shear_next(), law.shear_next().shear_next())
+            if members[2].shear_next() != law:
+                raise AssertionError("shear cycle failed its closure identity")
+            arrows = tuple(_window_witness(a, b) for a, b in zip(
+                members, members[1:] + members[:1]
+            ))
+            if any(w.kind != "ROOTED_FULL" for w in arrows):
+                raise AssertionError("proposed shear recurrence lacks pointed conjugacy")
+            scope = "48-law window: exact three-turn origin-preserving shear cycle"
+            examined = 48
+        else:
+            # Existing classification supplies a CHOSEN class-rotation
+            # constructor. It may not be full-state conjugacy when an
+            # origin-dormant coupling masks higher state behavior.
+            groups = classify_rooted(construct_family(len(law.rules), depth=law.depth))
+            group = next((g for g in groups if law in g), None)
+            if group is None:
+                raise AssertionError("source tower missing from native classification")
+            if len(group) == 1:
+                return ConstructionResult(
+                    "WALL", None, len(groups), 0, "witnessed rooted-class rotation",
+                    "this constructed law is a singleton rooted class; no changing cycle",
+                )
+            start = group.index(law)
+            members = group[start:] + group[:start]
+            arrows_list = []
+            for a, b in zip(members, members[1:] + members[:1]):
+                if rooted_graph(a) != rooted_graph(b):
+                    raise AssertionError("class rotation crossed a rooted-graph boundary")
+                scaling = projective_scaling(a, b)
+                kind = "ROOTED_FULL" if scaling is not None else "ROOTED_REACHABLE"
+                evidence = (
+                    ("projectively coherent full-state diagonal scaling " + repr(scaling))
+                    if scaling is not None else
+                    "same complete rooted orbit; full-space conjugacy UNKNOWN"
+                )
+                arrows_list.append(RelationWitness(
+                    kind, repr(a), repr(b), (evidence, "declared rooted-class rotation"),
+                    a.origin, b.origin,
+                ))
+            arrows = tuple(arrows_list)
+            scope = "coupling-tower: chosen finite rooted-class rotation"
+            examined = len(groups)
+        cycle = ConstructionCycle(tuple(members), arrows, scope)
+        return ConstructionResult(
+            "CONSTRUCTED",
+            ConstructedEngine(law, seed.version, seed.history, cycle, 0),
+            examined, len(members),
+            "witnessed finite construction cycle; no universal stopping claim",
         )
