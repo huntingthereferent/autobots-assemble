@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/PROVENANCE.md",
+  "note": "Checklist tasks are not evidence that the linked claims are verified.",
+  "items": [
+    {
+      "id": "claim-arc-01",
+      "claim_id": "ARC-01",
+      "title": "Release independently checkable SK48 8/8 run evidence",
+      "detail": "Replays, 280-action trace, reset conditions, scoring.",
+      "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/PROVENANCE.md#arc-native-game-experiments",
+      "kind": "claim"
+    },
+    {
+      "id": "claim-arc-02",
+      "claim_id": "ARC-02",
+      "title": "Release independently checkable LS20 7/7 run evidence",
+      "detail": "Replays, 309-action trace, reset conditions, scoring.",
+      "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/PROVENANCE.md#arc-native-game-experiments",
+      "kind": "claim"
+    },
+    {
+      "id": "claim-arc-03",
+      "claim_id": "ARC-03",
+      "title": "Release FT09 frame-run and off-trajectory recovery evidence",
+      "detail": "Rendered input, replay scripts, 75/81/76-action runs.",
+      "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/SELECTED_WORK.md#01--interactive-environments",
+      "kind": "claim"
+    },
+    {
+      "id": "claim-agent-01",
+      "claim_id": "AGENT-01",
+      "title": "Reproduce and publish the Qwen 3 4B source-read canary",
+      "detail": "Input, outputs, environment, source SHA-256 and limitations.",
+      "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/PROVENANCE.md#local-qwen--orchestration-canary",
+      "kind": "claim"
+    },
+    {
+      "id": "claim-sys-01",
+      "claim_id": "SYS-01",
+      "title": "Release reproducible cross-system orchestration checks",
+      "detail": "Task state, source ancestry, agent handoff, restart recovery.",
+      "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/PROJECTS.md#cross-system-orchestration--runtime",
+      "kind": "claim"
+    },
+    {
+      "id": "claim-math-01",
+      "claim_id": "MATH-01",
+      "title": "Publish finite-state conjugacy code, witnesses and regression tests",
+      "detail": "Exact law, 81-state fiber, intertwiner, 13/13 and 17/17 cases.",
+      "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/docs/FINITE_STATE_CONJUGACY.md",
+      "kind": "claim"
+    },
+    {
+      "id": "claim-stack-01",
+      "claim_id": "STACK-01",
+      "title": "Build and demonstrate the planned end-to-end public-data service",
+      "detail": "Not shipped: working API/UI/DB, deployment and acceptance tests.",
+      "source": "https://github.com/huntingthereferent/jamesmuneoka/blob/e675196e1f2a1fc37bd2ee199b918360e71fd76c/PROJECTS.md#complete-public-data-service",
+      "kind": "claim"
+    },
+    {
+      "id": "project-inverted-arc-release",
+      "claim_id": "",
+      "title": "Re-solve ARC using a new inverted A/B mathematical solver",
+      "detail": "Release new solver, complete action logs, negative results and replays; do not re-label earlier runs.",
+      "source": "https://github.com/huntingthereferent/language-network/blob/main/work/arc_like_maze/README.md",
+      "kind": "project"
+    }
+  ]
+}
