@@ -11,6 +11,7 @@ on:
       - "network/tests/test_ab_generic_construction.py"
       - "network/tests/test_ab_native_subsystems.py"
       - "network/tests/test_ab_construction_comparison.py"
+      - "network/tests/test_ab_exploratory_construction.py"
       - "network/tests/test_ab_world_experiment.py"
       - "runtime/AB_CONSTRUCTION_DIRECTION.md"
       - ".github/workflows/ab-construction-tests.yml"
@@ -22,6 +23,7 @@ on:
       - "network/tests/test_ab_generic_construction.py"
       - "network/tests/test_ab_native_subsystems.py"
       - "network/tests/test_ab_construction_comparison.py"
+      - "network/tests/test_ab_exploratory_construction.py"
       - ".github/workflows/ab-construction-tests.yml"
 
 jobs:
@@ -38,6 +40,8 @@ jobs:
         run: python -m unittest discover -s network/tests -p "test_ab_generic_construction.py" -v
       - name: Test generic construction against two native Continuity APIs
         run: python -m unittest discover -s network/tests -p "test_ab_native_subsystems.py" -v
+      - name: Verify unclassified cross-category exploration and native API witness gate
+        run: python -m unittest discover -s network/tests -p "test_ab_exploratory_construction.py" -v
       - name: Compare held-out real API task completion against evidence-only A/B
         run: python -m unittest discover -s network/tests -p "test_ab_construction_comparison.py" -v
       - name: Verify world simulation and category refinement
