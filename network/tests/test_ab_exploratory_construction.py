@@ -132,10 +132,15 @@ class ExplorationTests(unittest.TestCase):
             self.assertTrue(
                 set(p.structure["component_source_locators"].values()).issubset(sources)
             )
-            self.assertTrue(
-                {dict(witnessed()[i].relations)[name]
-                 for i in p.source_indices for name in ["route_actor"]}
-            )
+            # A witness locator must supply the EXACT value claimed,
+            # not merely belong to the set of existing source addresses.
+            for field, ref in p.structure["component_source_locators"].items():
+                index = int(ref.rsplit(":", 1)[1])
+                self.assertIn(index, p.source_indices)
+                self.assertEqual(
+                    dict(witnessed()[index].relations)[field],
+                    p.structure["relation_values"][field],
+                )
 
     def test_explore_mode_is_read_only_on_existing_service(self):
         o = witnessed()
