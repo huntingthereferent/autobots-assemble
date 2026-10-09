@@ -167,7 +167,8 @@ the full two-predecessor grammar.
 ## Evidence and reproducibility
 
 [Implementation](window_branch.py) ·
-[13 focused regression tests](../../network/tests/test_arc_like_window_branch.py)
+[13 focused regression tests](../../network/tests/test_arc_like_window_branch.py) ·
+[independent self-contained arithmetic checker](window_branch_arithmetic_audit.py)
 
 An **independent** arithmetic implementation of these
 coordinate formulas (not a GitHub CI run) exhaustively
@@ -202,6 +203,7 @@ Run from the repository root:
 
 ~~~bash
 python -m unittest network.tests.test_arc_like_window_branch -v
+python -m work.arc_like_maze.window_branch_arithmetic_audit
 ~~~
 
 ## Current boundary and next referent
