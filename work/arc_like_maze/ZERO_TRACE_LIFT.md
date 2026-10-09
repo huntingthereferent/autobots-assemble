@@ -170,4 +170,4 @@ The [independent executable audit](zero_trace_arithmetic_audit.py) records the d
 
 **UNKNOWN:** zero-trace fourth-coordinate systems for all previously admitted q0 beyond the two fixed exemplars; general nonlinear higher-coordinate corrections; alternative centralizer maps outside this additive triangular form; universal inverse-construction stopping and native ARC execution.
 
-**NEXT:** compare zero-trace and nonzero-trace families through a single witness-preserving classification interface. It must report four independent properties—coupling admission, component count, possible cyclic orders, and mark transport—rather than collapsing them into one status. Only then should additional higher-coordinate rules be admitted.
+**NEXT (completed as an interface):** [the pointed coupling classifier](POINTED_COUPLING_CLASSIFICATION.md) preserves all four properties separately across the two previously proved trace families, retaining the literal signed-cycle witness and the selected correction-component constants. Further centralizer compositions remain a separate mathematical question and require an explicit commuting or intertwining map.
