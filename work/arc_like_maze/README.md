@@ -1461,11 +1461,75 @@ two-input couplings under witnessed full-state A/B
 equivalence, keeping the conjugated shear family
 separate from truly new rule classes.
 
+## A constructed full-state family — four classes, three turns each
+
+[Mathematical proof and independent audit](WINDOW_FAMILY.md) ·
+[construction and exact relation certificates](window_family.py) ·
+[13 regression tests](../../network/tests/test_arc_like_window_family.py)
+
+The next bounded two-input construction separates **relation-preserving
+movement** from genuinely **new relations** without treating every
+description as a distinct class. The family fixes the root gain
+at one and sets all couplings beyond x2 to zero. For
+k in {0,1,2,3} define a q0 increment D_k(u,v)=1 when
+u=2 and v<k, otherwise zero. For c in F3 conjugate that
+world by the non-diagonal H_c shear:
+
+~~~text
+q_(k,c)(u,v) = D_k(u,v)+c*((v+u+1)^2-v^2)    (mod 3)
+~~~
+
+There are 12 distinct concrete q0 tables. The mapping
+H_(e-c) explicitly conjugates any two worlds with
+the same k at **every** dimension. It fixes the root
+and preserves all coordinate projections.
+
+At depth three the four k levels have B-fixed
+state counts **9, 6, 3, and 0**. Those quantities
+must be preserved by any bijective B-labeled
+state correspondence. Consequently the 12
+constructed worlds divide into exactly **four
+full-state A/B classes**, three aligned worlds
+per class. This is stronger than a rooted-orbit
+classification and does not require assuming
+all state maps are diagonal.
+
+Two independent construction operators now
+make the distinction operational:
+
+- Shear S: (k,c)→(k,c+1 mod3) is an exact three-turn
+  cycle preserving the class; all three laws are
+  concretely different.
+- Support E: (k,c)→(k+1,c) for k<3 changes the
+  class at every turn, with a new fixed-point count.
+  E commutes with S wherever both are defined.
+  At k=3, E reaches an explicit **WALL**, not a
+  forced return to an unrelated class.
+
+The inverse and projection laws remain exact
+because the coupling is triangular. The independent
+finite implementation checked 235,224 conjugacy
+assertions and 233,280 projection assertions
+through depth seven, with no failures. The new
+13-test Python module is committed but is not
+recorded as CI-passing without a runner.
+
+**CLOSED:** the selected 12-world family under S.
+**OPEN:** attempts to identify its four distinct
+full-state classes.
+**UNKNOWN:** arbitrary nine-entry coupling
+tables and nonzero couplings in later coordinates.
+
+**Next referent:** construct an independent
+two-input coupling outside the chosen support row.
+Check whether the old invariant suffices to
+separate it or whether a new witness is needed.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** compare a justified finite family of two-input rules through exact full-state A/B witnesses. Test whether the proven shear orbit and independent fixed-point-breaking coupling land in distinct classes, without presuming universal inverse A/B closure.
+- **Next:** admit an independent two-input rule beyond the fixed support row and compare its full-state invariants with the four certified classes; if a count collides, seek a stronger exact relation witness or counterexample, not a guessed equivalence.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
