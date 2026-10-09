@@ -2270,11 +2270,70 @@ witness-preserving mathematical interface,
 without flattening coupling admission,
 component gauge and possible cyclic orders.
 
+## Pointed coupling classification — one interface, distinct mathematical witnesses
+
+[Mathematical record](POINTED_COUPLING_CLASSIFICATION.md) ·
+[common classifier and pointed-arrow implementation](pointed_coupling_classification.py) ·
+[independent 81-by-36 matrix reconciliation](pointed_coupling_independent_audit.py) ·
+[14 focused regression tests](../../network/tests/test_arc_like_pointed_coupling_classification.py)
+
+The preceding **zero-trace and nonzero-trace**
+fifth-coordinate classifications now share
+one witness-preserving operator interface.
+An underlying `CouplingLaw`, an
+`AdmissionCertificate`, an explicitly
+chosen `SelectedSymmetry`, and a
+`PointedConjugacy` are different
+mathematical objects.
+
+The classifier retains separately:
+- the original **signed-cycle obstruction**
+  or complete 27-state corrected potential;
+- graph-component count, constraint rank and
+  number of admitted fifth couplings;
+- actual available **cyclic orders**;
+- the selected correction-component constants,
+  explicit distinguished points and ordered
+  composition factors.
+
+The two established families cover **486**
+fourth-coordinate configurations, **30,510**
+admitted (configuration, fifth coupling)
+combinations and **468 one-component plus
+18 three-component** compatibility graphs.
+Of the admitted combinations, 9,918 allow
+only order three, 19,404 only order nine,
+and 1,188 both orders with different
+chosen correction witnesses. These are
+not counts of conjugacy classes.
+
+The committed independent full-matrix
+checker reconstructs all 486 compatibility
+systems without importing the common
+classifier and checks the cyclic-order
+trace basis. Fourteen focused tests
+cover the interface and old proof
+objects. **A new GitHub Actions test
+run has not yet been confirmed.**
+
+**Closed:** admission/cyclic-order/pointed
+provenance integration for the two scoped
+families. **Unknown:** general centralizers,
+other coupling grammars and native ARC execution.
+
+**Next:** test composition of distinct
+selected centralizer generators only when
+an explicit compatible pointed arrow
+and full algebraic commutation witness
+exist; otherwise retain the composition
+wall rather than combining corrections
+by matching their underlying law alone.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** admit a nonzero coupling reading x3 and test whether the existing order-nine commuting transformation has a coherent further lift, retaining cyclic order and distinguished-point witnesses.
+- **Next:** investigate composition across distinctly selected pointed centralizer symmetries with explicit intervening conjugacy witnesses; never infer compatibility solely from an identical underlying coupling law.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
