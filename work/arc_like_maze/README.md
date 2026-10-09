@@ -1401,11 +1401,71 @@ silently suppressing it. Test independent non-diagonal
 operators against it. This remains math-first,
 not an ARC game implementation.
 
+## Two-predecessor construction: preserve alignment, expose new relation
+
+[Detailed mathematical record](WINDOW_TWO.md) ·
+[standalone rule engine](window_two.py) ·
+[12 regression tests](../../network/tests/test_arc_like_window_two.py)
+
+The non-diagonal shear `H_c(x)_2=x_2+c*x_1²` showed the old
+one-input coupling representation was too narrow. The smallest
+**bounded-width extension needed for this witness** allows a
+nine-entry `q_i(u,v)` table for each B-coordinate increment:
+
+~~~text
+B(x)_(i+2) = x_(i+2) + q_i(x_i,x_(i+1))
+~~~
+
+The old native `p_i(v)` embeds as `q_i(u,v)=p_i(v)`,
+and the earlier nonlinear shear compiles *directly* to two
+finite-prefix tables plus the unchanged eventually periodic tail:
+
+~~~text
+q_0(u,v)=p_0(v)+c*((v+g*(u+1))²-v²)
+q_1(u,v)=p_1(v-c*u²)
+q_i(u,v)=p_i(v), i>=2
+~~~
+
+The standalone transition engine does not rely on the
+previous coordinate-shear implementation at runtime.
+By triangular dependence, every such B update is
+reversible and commutes with all coordinate projections.
+The former shear-conjugate worlds therefore remain
+**equivalent, now expressible within the enlarged grammar**.
+
+A separate single-entry construction `q_0(2,0):0→1`
+on the zero-coupling world with root gain one changes
+the number of **full depth-three B-fixed states
+from 9 to 6**. That invariant rules out *every* bijective
+action-label A/B conjugacy; it is **a genuinely new
+relation**, not another representation of the same world.
+
+Independent arithmetic verified 117,612 exact compiled
+transition matches, 235,224 inverse identities and
+116,640 projection identities across full finite states
+at depths 3–7. These are not Python CI results.
+Twelve Python regression tests are committed to
+reproduce the extended-schema construction and
+witness boundaries.
+
+**CLOSED:** admitted triangular two-input actions are
+invertible and dimensionally coherent; existing sheared
+A/B arrows retain exact alignment when recompiled.
+
+**OPEN:** treating all independently generated two-input
+rules as equivalent; the fixed-point counterexample
+explicitly breaks such a claim.
+
+**Next:** classify a finite justified collection of
+two-input couplings under witnessed full-state A/B
+equivalence, keeping the conjugated shear family
+separate from truly new rule classes.
+
 ## Boundary and next movement
 
 - **Evidence depth:** mathematical model + executable finite checks, not empirical ARC performance.
 - **Preserved:** candidate source rule, labeled transition graph, proposed alignment, full reachable-state witness, counterexample on break.
 - **Unknown:** an A/B-general inverse-construction definition, a canonical alignment generator, a sound unbounded stopping theorem, an ARC-like gameplay realization.
-- **Next:** construct the smallest general transition schema that admits the verified x0-dependent B law; then test which truly independent operations preserve or break the new relation. Preserve the existing all-depth non-diagonal conjugacy as witness, not a new inequivalent class.
+- **Next:** compare a justified finite family of two-input rules through exact full-state A/B witnesses. Test whether the proven shear orbit and independent fixed-point-breaking coupling land in distinct classes, without presuming universal inverse A/B closure.
 
 Related but separate: [runtime/ARC_NATIVE_OBSERVATIONS.md](../../runtime/ARC_NATIVE_OBSERVATIONS.md) captures observed native ARC moves; it does not generate these worlds. Repository-wide A/B evidence boundaries remain in [AB_CONTRACT.md](../../AB_CONTRACT.md).
