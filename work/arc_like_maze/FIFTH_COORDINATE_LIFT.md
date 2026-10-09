@@ -95,4 +95,4 @@ python -m work.arc_like_maze.fifth_coordinate_arithmetic_audit
 
 **Not proved:** all higher-coupling centralizers, all choices of previous nonlinear q1, any unrestricted order-27 lifting theorem, universal inverse-construction closure, or native ARC gameplay.
 
-**Next referent:** vary the previous fourth-coordinate function Q, preserving its actual order and lower potential, and check whether the fifth-coordinate admission rank changes. Retain the complete voltage-graph witness and the explicitly transported distinguished point.
+**Next referent (completed for order-nine fourth-coordinate laws):** the [variable fourth-coordinate theorem](VARIABLE_FOURTH_LIFT.md) classifies all 324 configurations obtained by varying Q and its normalized row offsets with nonzero trace. Fifth-coordinate admissibility ranks are 5, 6 or 7; all admitted additive corrections retain exact order nine. The remaining new referent is the separately excluded zero-trace, order-three fourth-coordinate family.
