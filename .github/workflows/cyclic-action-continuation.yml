@@ -5,9 +5,14 @@ on:
     branches: [main]
     paths:
       - 'work/arc_like_maze/cyclic_action_continuation.py'
+      - 'work/arc_like_maze/continuity_handoff.py'
       - 'work/arc_like_maze/engine_one.py'
       - 'work/arc_like_maze/window_two.py'
+      - 'runtime/handoff.py'
+      - 'runtime/engine.py'
+      - 'runtime/journal.py'
       - 'network/tests/test_arc_like_cyclic_action_continuation.py'
+      - 'network/tests/test_arc_like_continuity_handoff.py'
       - '.github/workflows/cyclic-action-continuation.yml'
   workflow_dispatch:
 
@@ -23,8 +28,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Compile Cyclic Action Engine research entry and focused tests
+      - name: Compile native research and cross-system handoff modules
         run: |
-          python -m compileall -q work/arc_like_maze/cyclic_action_continuation.py network/tests/test_arc_like_cyclic_action_continuation.py
-      - name: Test native WindowProcess reentry and outcome boundaries
-        run: python -m unittest network.tests.test_arc_like_cyclic_action_continuation -v
+          python -m compileall -q work/arc_like_maze/cyclic_action_continuation.py work/arc_like_maze/continuity_handoff.py runtime/engine.py network/tests/test_arc_like_cyclic_action_continuation.py network/tests/test_arc_like_continuity_handoff.py
+      - name: Test native WindowProcess reentry and persistent Continuity handoffs
+        run: python -m unittest network.tests.test_arc_like_cyclic_action_continuation network.tests.test_arc_like_continuity_handoff -v
