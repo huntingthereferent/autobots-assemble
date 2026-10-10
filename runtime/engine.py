@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, replace
 from pathlib import Path
-from typing import Iterable
+from typing import Callable, Iterable
 import json
 
 from .handoff import (
@@ -53,11 +53,22 @@ class HandoffRuntime:
 
     def __init__(self, *, event_store: EventStore | None = None) -> None:
         self.event_store = event_store or EventStore()
+        self._evidence_verifiers: dict[
+            str, Callable[[Handoff, ExecutionResult], None]
+        ] = {}
         restored = getattr(self.event_store, "handoffs", lambda: ())()
         self._handoffs: dict[str, Handoff] = {
             handoff.handoff_id: handoff
             for handoff in restored
         }
+
+    def register_evidence_verifier(
+        self, verifier_id: str, verifier: Callable[[Handoff, ExecutionResult], None]
+    ) -> None:
+        """Register a native verifier without embedding domain rules in runtime."""
+        if not verifier_id.strip() or verifier_id in self._evidence_verifiers:
+            raise ValueError("evidence verifier must be named and unique")
+        self._evidence_verifiers[verifier_id] = verifier
 
     def submit(self, handoff: Handoff) -> HandoffState:
         if handoff.handoff_id in self._handoffs:
@@ -175,6 +186,18 @@ class HandoffRuntime:
             )
         if result.status == "COMPLETE":
             self._validate_complete_evidence(handoff, result.evidence)
+
+        # A caller-provided evidence label is not itself a native witness.
+        # Namespaced claims must be checked by their source adapter, for ALL
+        # outcomes (including UNKNOWN/BLOCKED), before an event is persisted.
+        verifier_id = handoff.metadata.get("native_evidence_verifier")
+        if verifier_id is not None:
+            if not isinstance(verifier_id, str) or not verifier_id.strip():
+                raise ValueError("invalid native evidence verifier id")
+            verifier = self._evidence_verifiers.get(verifier_id)
+            if verifier is None:
+                raise ValueError("native evidence verifier not registered: " + verifier_id)
+            verifier(handoff, result)
 
         parent = current.last_event_id
         self.event_store.append(
