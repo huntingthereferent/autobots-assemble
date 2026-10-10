@@ -112,3 +112,47 @@ The serialized schema identifier retains its originally issued version value
 for reproducible re-entry; it is **not** the engine's public name. The old
 Python module names remain as compatibility imports only. Public documents,
 entry points, and workflows use **Cyclic Action Engine**.
+
+## Continuity native-witness handoff (bounded interoperability test)
+
+The [Continuity handoff adapter](continuity_handoff.py) joins the existing
+Cyclic Action Engine witness to the **existing** HandoffRuntime and
+RuntimeJournal. No new mathematical transition code or general-purpose runtime
+has been introduced.
+
+1. The source adapter writes the original `ContinuationWitness.snapshot()`
+   to a content-addressed, source-owned witness archive. The journal stores
+   the reference and original mathematical source identity, not the full
+   observation arrays.
+2. HandoffRuntime requires the named native verifier for this family of
+   handoffs and invokes it before accepting **any** result, including UNKNOWN.
+   Ordinary handoffs continue to use the existing evidence contract.
+3. The adapter calls `CyclicActionContinuation.reenter()`, which replays the
+   original WindowProcess rules, validates the saved budgets and observations,
+   and checks the exact restricted-B domain and mathematical outcome.
+4. A positive result may complete only the requested `B_ONLY_CONJUGACY`;
+   the negative result may complete only `B_ONLY_NONCONJUGACY`.
+   UNKNOWN remains UNKNOWN. `SIMULTANEOUS_AB_CONJUGACY` is BLOCKED even
+   after an exact restricted-B conjugacy.
+5. Persisted results are reverified with `recover()` after a journal restart.
+   A bare journal state is a recorded report, not a fresh mathematical proof.
+   A missing or altered witness must stop verified recovery.
+6. A continuation after UNKNOWN links the previous handoff as provenance,
+   **not as a COMPLETE dependency**. The original observations and budget
+   ancestry must survive before the new mathematical witness is admitted.
+
+This is **not** a general assertion that arbitrary runtime consumers can
+bypass `recover()` safely. The verification boundary applies to native
+handoffs registered with the adapter, and consumers must use that boundary
+rather than interpreting unverified journal fields as proof. The source
+fingerprint and archive digest detect local mismatch; neither authenticates a
+hostile writer with control of both archive and journal.
+
+Focused native regression:
+
+~~~bash
+python -m unittest network.tests.test_arc_like_cyclic_action_continuation network.tests.test_arc_like_continuity_handoff -v
+~~~
+
+The [workflow](../../.github/workflows/cyclic-action-continuation.yml)
+runs both native test modules when these integration files change.
