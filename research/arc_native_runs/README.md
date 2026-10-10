@@ -25,6 +25,10 @@ python research/arc_native_runs/replay_saved_paths.py ls20
 python research/arc_native_runs/replay_saved_paths.py sk48
 ```
 
+**FT09 causal solver source:** [Visible-frame causal agent](ft09_visible_causal_agent.py) reconstructed from the archived local implementation, with only the absolute Windows vendor path removed and the runnable loop placed under `__main__`. It derives actions from observed frames rather than consuming the saved route; its local claims have not been reproduced in this transfer environment. Requires the ARC-AGI-3-Agents package on `PYTHONPATH`.
+
+**Independent negative controls:** [Autonomous public-frame trial outcomes](AUTONOMOUS_TRIALS.md) report SK48, LS20, and AR25 trials that did not win. Different actor/policy, different result.
+
 **Archived replay script sources:** [LS20 replay transcription](original_ls20_complete_replay.py) · [SK48 replay transcription](original_sk48_complete_replay.py). Their action tuples were checked against the uploaded archive's saved route data. These are source transcriptions rather than byte-for-byte uploads; the original archive retains the source files. The SK48 script reads engine-private controller data.
 
 The exact SDK dependencies and permitted engine interfaces must be supplied. **These commands were not executed in this artifact transfer environment.** A route is a reproducible input; independent verification requires executing it against a compatible native SDK and retaining actual outputs/scorecards.
