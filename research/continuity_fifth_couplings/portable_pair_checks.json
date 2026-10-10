@@ -1,0 +1,12 @@
+{
+  "declared_laws": 19683,
+  "R_S_positive_orbits": 1098,
+  "incomplete_four_fingerprint_groups": 738,
+  "ambiguous_fingerprint_groups": 222,
+  "fully_checked_between_orbit_pairs": 621,
+  "candidate_origin_images_exhausted": 150903,
+  "extra_conjugacies_between_R_S_orbits": 0,
+  "verified_full_conjugacy_classes": 1098,
+  "independent_of_new_complete_four_feature_catalog": true,
+  "runtime_seconds": 5.269
+}
