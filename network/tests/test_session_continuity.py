@@ -57,6 +57,34 @@ class SessionContinuityTests(unittest.TestCase):
         self.assertIn("ai.james", session)
         self.assertTrue((ROOT / index["ai.james"]["path"]).is_file())
 
+    def test_language_first_and_scalpel_precision_survive_entry(self):
+        # Static source contract only: wording does not prove model behavior.
+        entry = self.read("ENTRY.md")
+        session = self.read("protocols/ai/session.md")
+        self.assertIn("including language-first precision, drift control", entry)
+        self.assertIn("At every reached layer, decompress the referent", entry)
+        self.assertIn("Mathematics remains a human formal language.", entry)
+        clauses = {
+            "thought boundary": "This does **not** claim that language precedes thought.",
+            "math is language": "**Mathematics is a human formal language.**",
+            "scope of language first": "before choosing or expanding a formal representation",
+            "every boundary": "at every layer and again at every boundary",
+            "not one-way": 'Do not impose a one-way "language then mathematics" ontology.',
+            "scoped mathematics": "objects, domains, operations,",
+            "no grand declaration": "grand declarations",
+            "witness categories": "physically",
+            "no A/B recasting": "neither this session protocol nor Continuity software redefines it",
+            "drift audit": "## Drift check before movement",
+            "no invented external goal": "Have I added an unrequested destination",
+            "human burden": "Do not place the repeated burden of",
+            "correction constrains behavior": "as a constraint on subsequent behavior",
+        }
+        for rule, wording in clauses.items():
+            with self.subTest(rule=rule):
+                self.assertIn(wording, session)
+        self.assertIn("Static repository contracts", self.read(
+            "network/tests/test_session_continuity.py"))
+
     def test_ci_reports_focused_check_before_broad_suite(self):
         workflow = self.read(".github/workflows/tests.yml")
         focused = 'python -m unittest discover -s network/tests -p "test_session_continuity.py" -v'
