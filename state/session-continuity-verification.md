@@ -45,3 +45,40 @@ are outside this session-contract change; the broad suite was not rerun locally.
 Next movement: inspect the new focused CI step, then separately witness an actual
 host/session handoff before claiming runtime continuity. Preserve the existing
 frontage referent rather than replacing it with this verification record.
+
+## Session language/precision amendment — 2026-10-10
+
+**Referent:** The user corrected repeated assistant drift. Shared research
+begins with communicable language at **every** reached layer, because humans
+cannot transfer thoughts directly and mathematics itself is a human formal
+language. This is a rule for communication and evidence precision, not a
+declaration of a universal physical or cognitive law.
+
+**Canonical changes:**
+- `protocols/ai/session.md`: added language-first precision at every layer
+  and a five-question self-check against unrequested reorientation.
+- `ENTRY.md`: now routes entry through that standing discipline before any
+  mathematical formalization or implementation.
+- `network/tests/test_session_continuity.py`: added a static regression
+  contract for the clauses and their reachability from ENTRY.
+
+**Scope preserved:** No changes to the A/B mathematical definition in
+`AB_CONTRACT.md`, no new engine or workflow, no change to the unrelated
+frontage referent in `state/current.json`. The rules do not imply language
+precedes thought, mathematics is separate from language, formalized results
+are physical results, or that any final declaration must be made.
+
+**Verification:** The GitHub workflow's focused session continuity check
+passed at commit `ed2b0c4864c6cde897ff1e56697d79337ef57796`:
+https://github.com/huntingthereferent/language-network/actions/runs/38094299234 .
+This static check proves only that the source protocol clauses and entry
+links exist; it does **not** demonstrate the assistant will obey them in a
+future conversation. The larger protocol suite remained in progress when
+this addendum was written; its earlier failures must not be silently promoted
+to success.
+
+**Next referent:** In an actual subsequent research move, check whether the
+assistant can restate the current referent accurately, preserve native
+mathematical scope, refrain from inserting a destination, and retain the
+correction over a real session handoff. Record observed behavior separately
+from these static source checks.
