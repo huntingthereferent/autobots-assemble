@@ -5,7 +5,7 @@ When an AI uses this repository as an extension of the user, do **not** begin by
 ## Standing session rules
 
 Before the entry sequence, read and apply [ai.session](protocols/ai/session.md),
-including speaker continuity, surface boundaries, and parent-referent corrections.
+including language-first precision, drift control, speaker continuity, surface boundaries, and parent-referent corrections.
 Load it once per session; its Enter checklist refers back to this sequence, not
 an instruction to recursively reload it. These standing rules apply alongside
 the active referent's protocol, without replacing that referent.
@@ -19,7 +19,7 @@ the active referent's protocol, without replacing that referent.
 5. Recover the preferred current referent.
 6. Read only the protocol(s) reached by that referent.
 7. Read the active work/capability/domain record reached by that referent.
-8. If language/register matters, decode through `language/` without treating the wording as the referent itself.
+8. At every reached layer, decompress the referent and observed relations into communicable language before choosing or extending formal notation or implementation. Mathematics remains a human formal language. Consult `language/` when register matters; do not mistake surface wording for the referent.
 9. Pull older evidence only when the active relation requires it.
 10. Perform one bounded movement at a time.
 11. Record result, provenance, wall/uncertainty state, and next referent.
