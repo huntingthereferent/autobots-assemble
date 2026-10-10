@@ -1,0 +1,1302 @@
+{
+  "scope": "fixed gain-one q0, k=0, q2=0, zero tail; source Q=(1,0,2)",
+  "reference_case": {
+    "source": [
+      1,
+      0,
+      2
+    ],
+    "target": [
+      0,
+      2,
+      1
+    ],
+    "h_scale": 1,
+    "h_potential": [
+      0,
+      2,
+      1,
+      2,
+      1,
+      0,
+      2,
+      1,
+      0
+    ],
+    "fourth_correction": 2,
+    "source_components": 3,
+    "target_components": 3,
+    "source_component_permutation": [
+      2,
+      0,
+      1
+    ],
+    "target_canonical_permutation": [
+      0,
+      1,
+      2
+    ],
+    "target_corrected_permutation": [
+      2,
+      0,
+      1
+    ],
+    "source_pair_constants": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "target_gauge_constants": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1
+      ]
+    ],
+    "noncommuting_states": 162,
+    "noncommuting_states_after_transport": 162,
+    "commutator_transport_failures": 0,
+    "decomposition_failures": 0,
+    "original_generators_failures": 0,
+    "witness": {
+      "state_source": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "state_target": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "first_after_second_source": [
+        0,
+        0,
+        2,
+        2,
+        0
+      ],
+      "second_after_first_source": [
+        0,
+        0,
+        2,
+        2,
+        1
+      ],
+      "first_after_second_target": [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "second_after_first_target": [
+        0,
+        0,
+        2,
+        0,
+        1
+      ],
+      "commutator_source": [
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      "transported_commutator": [
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    }
+  },
+  "all_zero_trace_targets": [
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        0,
+        0,
+        0
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        2,
+        2,
+        2,
+        2,
+        0,
+        2,
+        2,
+        0
+      ],
+      "fourth_correction": 2,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        0,
+        1,
+        2
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          1,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          1,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        0,
+        1,
+        2
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      "fourth_correction": 2,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        0,
+        1,
+        2
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        0,
+        2,
+        1
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        2,
+        1,
+        2,
+        1,
+        0,
+        2,
+        1,
+        0
+      ],
+      "fourth_correction": 2,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        0,
+        1,
+        2
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          0,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        1,
+        0,
+        2
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "fourth_correction": 0,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        1,
+        1,
+        1
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0
+      ],
+      "fourth_correction": 0,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          0,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        1,
+        2,
+        0
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0
+      ],
+      "fourth_correction": 0,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          1,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          1,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        2,
+        0,
+        1
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        1,
+        1,
+        1,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "fourth_correction": 1,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        1,
+        2,
+        0
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          0,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        2,
+        1,
+        0
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        0,
+        1,
+        2,
+        0
+      ],
+      "fourth_correction": 1,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        1,
+        2,
+        0
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          1,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          1,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    },
+    {
+      "source": [
+        1,
+        0,
+        2
+      ],
+      "target": [
+        2,
+        2,
+        2
+      ],
+      "h_scale": 1,
+      "h_potential": [
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "fourth_correction": 1,
+      "source_components": 3,
+      "target_components": 3,
+      "source_component_permutation": [
+        2,
+        0,
+        1
+      ],
+      "target_canonical_permutation": [
+        1,
+        2,
+        0
+      ],
+      "target_corrected_permutation": [
+        2,
+        0,
+        1
+      ],
+      "source_pair_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "target_gauge_constants": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "noncommuting_states": 162,
+      "noncommuting_states_after_transport": 162,
+      "commutator_transport_failures": 0,
+      "decomposition_failures": 0,
+      "original_generators_failures": 0,
+      "witness": {
+        "state_source": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "state_target": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "first_after_second_source": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_source": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "first_after_second_target": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "second_after_first_target": [
+          0,
+          0,
+          2,
+          2,
+          1
+        ],
+        "commutator_source": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "transported_commutator": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      }
+    }
+  ],
+  "status": "EXACT_MIXED_COMMUTATOR_TRANSPORT_IN_DECLARED_QUOTIENT_FAMILY",
+  "tests": "12 new local + 17 older = 29 passing",
+  "limitations": [
+    "not a universal centralizer theorem",
+    "not a new Engine 1 implementation",
+    "not a GitHub CI result"
+  ]
+}

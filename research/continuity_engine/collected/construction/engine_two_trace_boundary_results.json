@@ -1,0 +1,81 @@
+{
+  "watch": "B^n fixed-point count and lower centralizer cyclic order",
+  "same_base_q0": [
+    0,
+    1,
+    2,
+    0,
+    2,
+    1,
+    1,
+    1,
+    1
+  ],
+  "same_gain": 1,
+  "same_offsets": [
+    0,
+    0,
+    0
+  ],
+  "same_fifth_coupling": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "before": {
+    "quotient": [
+      0,
+      0,
+      0
+    ],
+    "trace": 0,
+    "symmetry_order": 3,
+    "fixed": {
+      "B^1": 0,
+      "B^3": 243,
+      "B^9": 243
+    }
+  },
+  "after": {
+    "quotient": [
+      0,
+      0,
+      1
+    ],
+    "trace": 1,
+    "symmetry_order": 9,
+    "fixed": {
+      "B^1": 0,
+      "B^3": 0,
+      "B^9": 243
+    }
+  },
+  "one_entry_changed": "Q(2): 0 -> 1",
+  "number_of_states": 243,
+  "root_word_witness": {
+    "word": "BBB",
+    "before_image": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "after_image": [
+      0,
+      0,
+      0,
+      1,
+      0
+    ]
+  },
+  "native_full_state_obstruction": "Fix(BBB) differs, 243 vs 0: no labeled A/B full-state conjugacy",
+  "inherited_scope": "two selected admissible fifth-coordinate families, F3^5 only; no claimed universal bridge",
+  "status": "WITNESSED_BOUNDARY"
+}

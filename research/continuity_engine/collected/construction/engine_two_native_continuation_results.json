@@ -1,0 +1,1081 @@
+{
+  "scope": "two-input triangular window law on F3^5; B-invariant x0=0 fiber",
+  "fiber": {
+    "cardinality": 81,
+    "B_cycles_world_9": {
+      "9": 9
+    },
+    "B_cycles_world_27": {
+      "27": 3
+    }
+  },
+  "prefix_budget_eight": {
+    "status": "UNKNOWN_BUDGET",
+    "conclusion": "no invariant distinction yet; no full-cycle witness; must not infer equivalence",
+    "carrier_size": 81,
+    "carrier_constraint": "x0=0, preserved by B; not by A",
+    "source": {
+      "name": "nine-turn lower carry; no third carry",
+      "q0": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "q1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "target": {
+      "name": "nine-turn lower carry; nonzero third carry",
+      "q0": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "q1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "operation": "B successive composition",
+    "budget": 8,
+    "witnesses": [
+      {
+        "power": 1,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 2,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 3,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 4,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 5,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 6,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 7,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 8,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      }
+    ],
+    "simultaneous_A_B": "UNKNOWN: fiber is not A-invariant; B-only investigation"
+  },
+  "first_distinction": {
+    "status": "DISTINGUISHED_B_ACTIONS",
+    "conclusion": "Fix(B^9) cardinalities differ: no B-preserving bijection",
+    "carrier_size": 81,
+    "carrier_constraint": "x0=0, preserved by B; not by A",
+    "source": {
+      "name": "nine-turn lower carry; no third carry",
+      "q0": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "q1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "target": {
+      "name": "nine-turn lower carry; nonzero third carry",
+      "q0": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "q1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "operation": "B successive composition",
+    "budget": 9,
+    "witnesses": [
+      {
+        "power": 1,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 2,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 3,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 4,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 5,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 6,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 7,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 8,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 9,
+        "left_fixed": 81,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "is_distinguishing": true
+      }
+    ],
+    "simultaneous_A_B": "UNKNOWN: fiber is not A-invariant; B-only investigation"
+  },
+  "positive_control": {
+    "status": "B_ONLY_CONJUGACY_WITNESSED",
+    "conclusion": "both B^27 are identity; explicit 81-state bijection intertwines B",
+    "carrier_size": 81,
+    "carrier_constraint": "x0=0, preserved by B; not by A",
+    "source": {
+      "name": "nine-turn lower carry; nonzero third carry",
+      "q0": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "q1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    "target": {
+      "name": "scaled third carry",
+      "q0": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        1
+      ],
+      "q1": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    "operation": "B successive composition",
+    "budget": 27,
+    "witnesses": [
+      {
+        "power": 1,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 2,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 3,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 4,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 5,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          1,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          1,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 6,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 7,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 8,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          2,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          2,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 9,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 10,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          0,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 11,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          0,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          0,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 12,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          1,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 13,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          1,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 14,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          1,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          1,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 15,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          2,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 16,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          2,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          2,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 17,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          2,
+          1,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 18,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          0,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 19,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          0,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          0,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 20,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          0,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          0,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 21,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          1,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 22,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          1,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          1,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 23,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          1,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          1,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 24,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          0,
+          2,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          2,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 25,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          1,
+          2,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          1,
+          2,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 26,
+        "left_fixed": 0,
+        "right_fixed": 0,
+        "root_left": [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        "root_right": [
+          0,
+          2,
+          2,
+          1,
+          0
+        ],
+        "is_distinguishing": false
+      },
+      {
+        "power": 27,
+        "left_fixed": 81,
+        "right_fixed": 81,
+        "root_left": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "root_right": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "is_distinguishing": false
+      }
+    ],
+    "simultaneous_A_B": "UNKNOWN: fiber is not A-invariant; B-only investigation"
+  },
+  "full_carrier_qualification": {
+    "full_states": 243,
+    "first_divergence": 3,
+    "warning": "Do not promote the fiber n=9 first distinction to full F3^5; full carrier distinguishes at n=3."
+  },
+  "report": "a native B-continuation; not an autonomous grammar selector or universal ARC result"
+}
