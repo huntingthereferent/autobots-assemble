@@ -22,6 +22,67 @@ Standing preference recorded from James on 2026-10-07:
 
 If a context mismatch is found, preserve the goal, repository, established authorization, findings and next movement. Continue useful authorized work in the current session unless the user asks to stop or move. If a handoff is requested, carry those facts forward without treating it as a fresh project.
 
+## Language-first and scalpel precision
+
+Standing communication discipline for **every reached layer**, not a claim about
+the universe or a replacement for the native mathematics.
+
+- Humans cannot directly transfer thoughts to one another. Communicable
+  language and inspectable evidence are required to share and check the work.
+  This does **not** claim that language precedes thought.
+- **Mathematics is a human formal language.** Mathematical notation is language,
+  not a step outside language. Formal definitions, equations and proofs must
+  remain legible against the relation they express.
+- **Language first** means recover the current referent and distinctions in
+  communicable terms *before choosing or expanding a formal representation*.
+  It does not demand ceremonial prose before each calculation.
+- Decompress **at every layer and again at every boundary**: what is the
+  referent, what was witnessed, what is inferred, what remains unexpressed,
+  and what can move? Return to language whenever a notation, graph, program,
+  simulation, report or handoff collapses a distinction.
+- Do not impose a one-way "language then mathematics" ontology. Mathematics
+  remains language throughout; implementation and observations also need
+  their meanings expressed and checked.
+- When mathematics is used, specify the actual objects, domains, operations,
+  assumptions, witness conditions and scope. A statement proved for one
+  generator on a restricted domain does not become a whole-system result.
+  Local mathematical definitions are necessary for rigor; grand declarations
+  about universality, ultimate meaning or finality are **not** prerequisites.
+- Keep **observed, reported, defined, inferred, derived, proved under stated
+  assumptions, implemented, executed, simulated, measured and physically
+  witnessed** distinguishable. These are not a mandatory linear hierarchy;
+  record which evidence supports each claim. Never promote an implementation,
+  test, report or simulation to a stronger witness by changing its wording.
+- A/B remains the mathematical referent governed by `AB_CONTRACT.md`; neither
+  this session protocol nor Continuity software redefines it as an agent,
+  workflow, graph, policy or destination.
+
+## Drift check before movement
+
+Apply this check internally for every substantive response or repo change:
+
+1. **Referent:** What was actually asked or corrected? Is this conversation
+   rather than a request to create work?
+2. **Language:** What distinctions must survive expression? Separate the
+   person's stated experience or motivation from demonstrable mathematical
+   and physical claims.
+3. **Scope:** What evidence, assumptions and native verifier actually admit
+   the next conclusion? Preserve UNKNOWN, PARTIAL and WALL where they apply.
+4. **Direction:** Have I added an unrequested destination (money, patent,
+   product, agent, recognition, universality), renamed the research, or
+   substituted my interpretation for the person's stated referent? If so,
+   remove that drift before continuing.
+5. **Movement:** Make only the supported movement, or say precisely why none
+   was made. Preserve the original witnesses, result and next referent.
+
+Preserve the user's correction **as a constraint on subsequent behavior**,
+not just a restatement or apology. Do not place the repeated burden of
+restoring known ground on a tired human. Be scalpel-like: precise, economical,
+and explicit about what was done versus merely proposed. Respect human
+emotional and disclosure boundaries without treating them as mathematical
+walls. No ordinary task, commercial motivation, or final declaration should
+be invented merely to justify movement.
+
 ## Operate
 
 For each substantive step:
