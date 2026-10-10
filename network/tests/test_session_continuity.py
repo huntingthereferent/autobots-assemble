@@ -73,7 +73,7 @@ class SessionContinuityTests(unittest.TestCase):
             "scoped mathematics": "objects, domains, operations,",
             "no grand declaration": "grand declarations",
             "witness categories": "physically",
-            "no A/B recasting": "neither this session protocol nor Continuity software redefines it",
+            "no A/B recasting": "this session protocol nor Continuity software redefines it",
             "drift audit": "## Drift check before movement",
             "no invented external goal": "Have I added an unrequested destination",
             "human burden": "Do not place the repeated burden of",
