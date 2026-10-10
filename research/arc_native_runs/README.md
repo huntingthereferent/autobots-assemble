@@ -25,6 +25,8 @@ python research/arc_native_runs/replay_saved_paths.py ls20
 python research/arc_native_runs/replay_saved_paths.py sk48
 ```
 
+**Archived replay script sources:** [LS20 replay transcription](original_ls20_complete_replay.py) · [SK48 replay transcription](original_sk48_complete_replay.py). Their action tuples were checked against the uploaded archive's saved route data. These are source transcriptions rather than byte-for-byte uploads; the original archive retains the source files. The SK48 script reads engine-private controller data.
+
 The exact SDK dependencies and permitted engine interfaces must be supplied. **These commands were not executed in this artifact transfer environment.** A route is a reproducible input; independent verification requires executing it against a compatible native SDK and retaining actual outputs/scorecards.
 
 The SK48 route depends on game-private objects in the archived replay and may not execute under other SDK versions. It should not be represented as a general public-only controller.
