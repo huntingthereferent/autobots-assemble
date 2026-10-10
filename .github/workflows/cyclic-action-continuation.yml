@@ -33,3 +33,5 @@ jobs:
           python -m compileall -q work/arc_like_maze/cyclic_action_continuation.py work/arc_like_maze/continuity_handoff.py runtime/engine.py network/tests/test_arc_like_cyclic_action_continuation.py network/tests/test_arc_like_continuity_handoff.py
       - name: Test native WindowProcess reentry and persistent Continuity handoffs
         run: python -m unittest network.tests.test_arc_like_cyclic_action_continuation network.tests.test_arc_like_continuity_handoff -v
+      - name: Check existing handoff, recovery and orchestration regressions
+        run: python -m unittest network.tests.test_handoff_runtime network.tests.test_recovery network.tests.test_orchestrator -v
