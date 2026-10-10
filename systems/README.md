@@ -76,3 +76,43 @@ Current demonstrated bindings:
 - Factory System.
 
 The Online School binding deliberately receives the school's own task provider, handoff adapter, and patch function. The orchestrator therefore does not need to understand the school's task schema.
+
+## Unlike-system continuity witness — mathematical research and simulated Factory
+
+The [native cross-system regression](../network/tests/test_continuity_unlike_systems.py)
+runs the existing Cyclic Action Engine and FactorySystem over the **same**
+HandoffRuntime with RuntimeJournal persistence. The systems retain separate
+source-owned evidence: the mathematical witness is re-entered through its
+native verifier; Factory owns stage/order events and admits simulator results
+only as `simulation` / `simulated` evidence.
+
+The focused witness checks that:
+
+- mathematical UNKNOWN and Factory stage continuation survive the same
+  journal restart without duplicate earlier factory execution;
+- a restriction to B-conjugacy on the 81-state invariant fiber is not
+  promoted to full A/B conjugacy when Factory completes;
+- mathematical evidence does not satisfy a Factory stage's required witness,
+  and Factory simulation output cannot forge native mathematical verification;
+- Factory's five simulated stages leave the stage evidence **simulated**,
+  even when the order's local simulation state says `shipped`.
+
+The native mathematical engine, Factory order model, and shared carrier are
+not merged into one ontology. This is bounded interoperability evidence,
+not a proof of arbitrary representation independence or physical production.
+
+**Remaining boundary:** the generic Factory evidence contract checks
+declared condition/kind, not independent authenticity of arbitrary supplier,
+machine, measurement or carrier sources. Real-world production evidence
+needs a source-specific admission/verification contract before it can be
+treated as physically witnessed. A `COMPLETE` simulated stage is not proof
+of physical manufacture or shipment.
+
+Reproduce with the real repository modules:
+
+~~~bash
+python -m unittest network.tests.test_arc_like_cyclic_action_continuation network.tests.test_arc_like_continuity_handoff network.tests.test_continuity_unlike_systems network.tests.test_handoff_runtime network.tests.test_recovery network.tests.test_orchestrator -v
+~~~
+
+The dedicated Cyclic Action Engine GitHub Actions workflow checks these
+suites; the larger protocol suite is a separate verification boundary.
