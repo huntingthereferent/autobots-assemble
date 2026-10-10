@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
   "description": "Original binary bundles preserved exactly, not installed as runtime modules",
-  "total_archive_count": 16,
-  "continuity_research_bundles": 15,
+  "total_archive_count": 17,
+  "continuity_research_bundles": 16,
   "adjacent_prototypes": 1,
-  "total_bytes": 780414,
+  "total_bytes": 784242,
   "files": [
     {
       "filename": "CYCLIC_ACTION_CONJUGACY_EXPERIMENT.zip",
@@ -133,6 +133,15 @@
       "git_blob_sha1": "6f5889af396885a3d75d04047c054ab5a4639f50",
       "sha256": "af4159f6fa2e0227fe5ebc1dc0422034162656e112107df94138e03a55d02cf2",
       "role": "adjacent prototype"
+    },
+    {
+      "filename": "run_only.zip",
+      "original_relative_path": "continuity_engine_work/run_only.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/continuity_engine_work/run_only.zip",
+      "bytes": 3828,
+      "git_blob_sha1": "dd27674af4727ba7d708e99e29d1a649b94fbe45",
+      "sha256": "398a197dc5bbb0618cd57561df42bd2142859bfa029fe0eb9d7c6ceab03d907f",
+      "role": "historical Continuity/Cyclic research bundle"
     }
   ]
 }

@@ -27,14 +27,14 @@ class OriginalArchiveIntegrityTests(unittest.TestCase):
     def test_manifest_covers_all_original_archives(self):
         files = self.manifest["files"]
         self.assertEqual(self.manifest["schema_version"], 1)
-        self.assertEqual(self.manifest["total_archive_count"], 16)
-        self.assertEqual(self.manifest["continuity_research_bundles"], 15)
+        self.assertEqual(self.manifest["total_archive_count"], 17)
+        self.assertEqual(self.manifest["continuity_research_bundles"], 16)
         self.assertEqual(self.manifest["adjacent_prototypes"], 1)
-        self.assertEqual(len(files), 16)
+        self.assertEqual(len(files), 17)
         paths = [x["path"] for x in files]
         self.assertEqual(len(paths), len(set(paths)))
         self.assertEqual(sum(x["bytes"] for x in files), self.manifest["total_bytes"])
-        self.assertEqual(self.manifest["total_bytes"], 780414)
+        self.assertEqual(self.manifest["total_bytes"], 784242)
 
     def test_original_archive_bytes_and_zip_crc(self):
         for item in self.manifest["files"]:
