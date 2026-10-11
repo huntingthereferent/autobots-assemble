@@ -2,7 +2,7 @@
 
 ## What A/B is
 
-A/B is **language for recognizing, describing, and continuing relationships in movement**. The referent is the relationship through the step; it is not itself a theorem, equation, notation system, or a specific mathematical operation. See the [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) for the language-first correction, the same-referent/other-side distinction, and the proposed two-step of material coupling.
+A/B is **language for recognizing, describing, and continuing relationships in movement**. The referent is the relationship through the step; it is not itself a theorem, equation, notation system, or a specific mathematical operation. See [A/B — Language and the Referent](AB_LANGUAGE.md) for why the language remains primitive and open to a moving referent, and the [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) for the conversational corrections and physical two-step hypothesis.
 
 Mathematics is a human formal language. Particular A/B-labeled generators, inverse constructions, and correspondence proofs in this repository are **formal mathematical representations** of specified relations, with their own state spaces, assumptions, witnesses, and scope. Do not mistake a result proved for a particular finite transformation family for a definition or universal proof of A/B.
 
