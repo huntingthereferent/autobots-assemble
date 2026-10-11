@@ -40,7 +40,7 @@ James Muneoka's contribution is centered on observation and ordinary-language ex
 
 An individual mathematical problem can be solved. A mechanism can be constructed, measured, improved, or rejected. A description can be revised when the referent has changed. None requires declaring the relational language itself complete.
 
-Keeping A/B primitive is not avoiding precision. **It prevents the result of one investigation from being mistaken for the boundary of every future one.**
+**Precision begins with the lens.** A/B starts by locating the referent in motion and keeping its relationships intelligible before fixing them in a particular description. Its primitive form lets that precision move with the referent—across changes in language, perspective, and representation—without confusing any one account of it with the thing being examined.
 
 ---
 
