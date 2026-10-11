@@ -2,6 +2,8 @@
 
 **Current referent:** construct a mathematical world by reversing the A/B direction, then find where *differing turns preserve the same underlying relations*. This is a new ARC-**like** research artifact, **not** an official ARC environment, native ARC observation, or a proven universal definition of A/B.
 
+**Human-facing boundary:** [The Antechamber Protocol — The Steppers](https://thestepps.wordpress.com/) separately addresses expectations and personal questions that can arise around encountering A/B. It does not change the mathematical definition, supply a human purpose, or establish a psychological sequence. The research remains open to inspection without requiring agreement or continued participation.
+
 ## Engine 1 — mathematical construction (current implementation)
 
 [Engine 1 mathematical contract](ENGINE_ONE.md) · [implementation](engine_one.py) · [focused regression tests](../../network/tests/test_arc_like_engine_one.py)
