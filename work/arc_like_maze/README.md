@@ -38,6 +38,10 @@ The independently run local precursor passed 17 tests. The new
 repository integration has 18 committed tests and targeted CI,
 whose execution result still requires verification.
 
+## Finite relational probe — independently chosen mathematical questions
+
+[Research scope, results, and walls](RELATION_PROBE.md) · [probe implementation](relation_probe.py) · [focused tests](../../network/tests/test_arc_like_relation_probe.py). A bounded probe selects endpoint-equality questions from native rooted-alignment counterexample witnesses. The observed nine-system family yields five rooted-reachable classes using two or three queries per member. An outside-family control can imitate a known class, so the result is *conditional*, not evidence of general membership or open-ended chatbot capability.
+
 ## Direction
 
 Observation would start with two given states and extract preservation/change/relations. **This experiment starts from proposed relational constraints and constructs candidate states and transitions.** Do not design rooms, objectives, obstacles, user controls, or renderings first. Visual and interactive representations come after a mathematical construction witness.
