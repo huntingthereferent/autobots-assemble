@@ -3,6 +3,7 @@ from __future__ import annotations
 from runtime.orchestrator import SystemBinding, SystemEmission
 
 from .factory import FactorySystem
+from .factory.simulated import FactorySimulationAdmission
 from .personal_operations import PersonalOperationsStore
 
 
@@ -10,6 +11,7 @@ def factory_binding(
     factory: FactorySystem,
     *,
     order_ids: tuple[str, ...] | None = None,
+    simulation_admission: FactorySimulationAdmission | None = None,
 ) -> SystemBinding:
     def emit_ready():
         emissions = []
@@ -34,7 +36,10 @@ def factory_binding(
                     SystemEmission(
                         system_id="factory",
                         local_ref=order_id,
-                        handoff=handoff,
+                        handoff=(
+                            simulation_admission.admit(handoff)
+                            if simulation_admission is not None else handoff
+                        ),
                     )
                 )
         return tuple(emissions)
