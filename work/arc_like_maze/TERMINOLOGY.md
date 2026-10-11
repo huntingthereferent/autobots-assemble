@@ -2,9 +2,9 @@
 
 ## Scope
 
-This repository contains a construction experiment originally described with the user's **A/B shorthand**. That phrase is historical provenance, not the mathematical name of every object or implementation.
+The [A/B Ground Record — Current Note (2026-10-11)](../../AB_Ground_Record_Current_Note_2026-10-11.md) describes A/B as **relational language**, not as a mathematical equation, operation, or credential. This document gives terminology for **specific finite-field formalizations** of selected relationships. Historically, the project's A/B expression was carried into generator labels and filenames; that historical use must not make the formal objects a definition of A/B itself.
 
-Use established terminology in new research reports, test descriptions, equations, and summaries:
+Use established terminology in new mathematical research reports, test descriptions, equations, and summaries:
 
 | Former conversational shorthand | Preferred mathematical terminology |
 |---|---|

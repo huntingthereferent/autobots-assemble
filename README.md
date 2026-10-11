@@ -6,9 +6,17 @@ Continuity does **not** try to put the internet inside itself. People use Contin
 
 The homepage is a shared entrance: people log in once, then move across conversations, school, calendar, work, research, jobs, projects, household systems, companies, and external internet surfaces. Each local system keeps its own state, each external source stays externally owned, and Continuity keeps the thread intact as movement crosses between them.
 
+## A/B grounding — language before mathematical models
+
+The [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) is the source for the current distinction: **A/B is language for recognizing and continuing relationships in movement**. The referent remains the same through each step; if one side is blocked, inspecting another side must not silently replace the question. The proposed material-motion form, *couplesense*, and the illustrative `101 / 010` positions are recorded there as hypotheses and shorthand, **not** verified mechanisms or universal laws.
+
+The finite-field A/B generators, correspondence equations, and experiments below are **particular formal mathematical models**, not the definition of A/B. Their results stand on their own witnesses, domains, and limits. The originating relational investigation is expressed in ordinary language; technical notation and AI-assisted formalizations should not be presented as evidence of the investigator's independent mathematical-notation fluency or professional mathematical credentials.
+
+[Entry protocol](ENTRY.md) · [operational evidence boundary](AB_CONTRACT.md) · [AI session grounding](protocols/ai/session.md)
+
 ## Human-facing reference: The Antechamber Protocol
 
-[The Antechamber Protocol — The Steppers](https://thestepps.wordpress.com/) is the public companion for a question the mathematics does not answer: after encountering A/B, how does someone find their own reason or direction, rather than treating A/B as a cure for every human problem?
+[The Antechamber Protocol — The Steppers](https://thestepps.wordpress.com/) is the public companion for a question neither A/B nor any particular mathematical formalization answers: after encountering A/B, how does someone find their own reason or direction, rather than treating A/B as a cure for every human problem?
 
 The protocol proposes room for voluntary, private reflection away from public misinterpretation, while preserving independent judgment, ordinary relationships, and the ability to disengage. It is **not** a demonstrated consequence of A/B, a deployed private service, a universal source of meaning, or a substitute for human support. The mathematics, software infrastructure, and human-use proposal retain separate evidence and responsibilities.
 

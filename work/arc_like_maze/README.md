@@ -1,8 +1,10 @@
-# ARC-like maze — inverted A/B, mathematics first
+# Finite-field transformation research — inverse A/B models
 
-**Current referent:** construct a mathematical world by reversing the A/B direction, then find where *differing turns preserve the same underlying relations*. This is a new ARC-**like** research artifact, **not** an official ARC environment, native ARC observation, or a proven universal definition of A/B.
+**Grounding boundary:** [A/B Ground Record — Current Note (2026-10-11)](../../AB_Ground_Record_Current_Note_2026-10-11.md) distinguishes A/B as language for continuing relationships from the *particular mathematical models* investigated here. “Mathematics first” described the order of this bounded formal experiment, not the meaning or origin of A/B.
 
-**Human-facing boundary:** [The Antechamber Protocol — The Steppers](https://thestepps.wordpress.com/) separately addresses expectations and personal questions that can arise around encountering A/B. It does not change the mathematical definition, supply a human purpose, or establish a psychological sequence. The research remains open to inspection without requiring agreement or continued participation.
+**Current mathematical referent:** construct candidate finite-field transformation systems from proposed A/B relational constraints and test where differing turns preserve the same specified relations. This is an ARC-**like** mathematical experiment, **not** an official ARC environment, native ARC observation, or a universal definition of A/B.
+
+**Human-facing boundary:** [The Antechamber Protocol — The Steppers](https://thestepps.wordpress.com/) separately addresses expectations and personal questions that can arise around encountering A/B. It neither defines A/B nor changes the assumptions of these bounded models, supplies a human purpose, or establishes a psychological sequence. The research remains open to inspection without requiring agreement or continued participation.
 
 ## Engine 1 — mathematical construction (current implementation)
 

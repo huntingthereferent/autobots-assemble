@@ -4,7 +4,7 @@
 
 Can an independently executing mathematical process select its next discriminating observation from A/B relationships, rather than relying on a language model to select each move?
 
-This experiment concerns **a nine-member finite construction grammar**, not a deployed chatbot, a general A/B solver, a claim about physical systems, or a definition of A/B itself. The standalone precursor was `ab_chatbot_relation_probe.py` (2026-10-11); the integrated version reuses the repository's native [`math.py`](math.py) and [`alignment.py`](alignment.py) rather than maintaining duplicate transformation laws.
+The [A/B Ground Record — Current Note](../../AB_Ground_Record_Current_Note_2026-10-11.md) keeps A/B as language for continuing relationships; the finite transformations below are a **mathematical translation of a selected question**, not A/B itself. This experiment concerns **a nine-member finite construction grammar**, not a deployed chatbot, a general A/B solver, a claim about physical systems, or a definition of A/B itself. The standalone precursor was `ab_chatbot_relation_probe.py` (2026-10-11); the integrated version reuses the repository's native [`math.py`](math.py) and [`alignment.py`](alignment.py) rather than maintaining duplicate transformation laws.
 
 ## Operation and witness
 

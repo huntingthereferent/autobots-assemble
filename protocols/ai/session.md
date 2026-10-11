@@ -53,9 +53,16 @@ the universe or a replacement for the native mathematics.
   witnessed** distinguishable. These are not a mandatory linear hierarchy;
   record which evidence supports each claim. Never promote an implementation,
   test, report or simulation to a stronger witness by changing its wording.
-- A/B remains the mathematical referent governed by `AB_CONTRACT.md`; neither
-  this session protocol nor Continuity software redefines it as an agent,
+- A/B remains the **language-level referent for continuing observed relationships**
+  described in the [A/B Ground Record](../../AB_Ground_Record_Current_Note_2026-10-11.md) and bounded
+  for repository operations by `AB_CONTRACT.md`. Formal mathematical generators,
+  equations, and correspondence checks are *particular translations*, not A/B itself;
+  neither this session protocol nor Continuity software redefines it as an agent,
   workflow, graph, policy or destination.
+- Before resuming a technical continuation, recover the same active referent;
+  do not let the repository's default project pointer override the person's
+  explicit conversation. If the current side stalls, inspecting another side
+  must preserve the original question and applicable witness contract.
 
 ## Drift check before movement
 

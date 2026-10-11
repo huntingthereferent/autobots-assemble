@@ -18,7 +18,7 @@ The field boundary never becomes an excuse to stop.
 
 ## A/B relation
 
-A/B remains the recursively reusable mathematical operation and witness/evidence contract.
+A/B is **language for observing, describing, and continuing relationships in movement**; the same referent must survive each step. The [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) documents this correction. Mathematical A/B generators and constructions are particular formal models that require their own assumptions, proof obligations, and scope. The operational witness/evidence contract below preserves continuity; it does not define A/B as mathematics.
 
 Complete Stack is an application orientation over problems.
 
