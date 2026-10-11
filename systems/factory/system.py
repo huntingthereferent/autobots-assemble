@@ -15,41 +15,44 @@ def utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+# No native physical source adapters are connected in this execution path.
+# Advertise only simulation evidence until a physical source verifier exists.
+# A report labeled "carrier_record" is not proof that a carrier was contacted.
 STAGES = (
     {
         "name": "supply",
         "actor": "supplier-sim",
         "relation": "supply material",
         "witness": "material supplied",
-        "evidence": ("simulation", "supplier_record", "human_report"),
+        "evidence": ("simulation",),
     },
     {
         "name": "machine",
         "actor": "machine-sim",
         "relation": "machine feature",
         "witness": "machining operation completed",
-        "evidence": ("simulation", "machine_telemetry"),
+        "evidence": ("simulation",),
     },
     {
         "name": "inspect",
         "actor": "inspection-sim",
         "relation": "inspect output",
         "witness": "inspection completed",
-        "evidence": ("simulation", "measurement", "inspection_record"),
+        "evidence": ("simulation",),
     },
     {
         "name": "assemble",
         "actor": "assembly-sim",
         "relation": "assemble product",
         "witness": "assembly completed",
-        "evidence": ("simulation", "machine_telemetry", "human_report"),
+        "evidence": ("simulation",),
     },
     {
         "name": "ship",
         "actor": "shipping-sim",
         "relation": "ship product",
         "witness": "shipment recorded",
-        "evidence": ("simulation", "carrier_record", "human_report"),
+        "evidence": ("simulation",),
     },
 )
 
