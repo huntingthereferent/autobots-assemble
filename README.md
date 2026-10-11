@@ -6,6 +6,12 @@ Continuity does **not** try to put the internet inside itself. People use Contin
 
 The homepage is a shared entrance: people log in once, then move across conversations, school, calendar, work, research, jobs, projects, household systems, companies, and external internet surfaces. Each local system keeps its own state, each external source stays externally owned, and Continuity keeps the thread intact as movement crosses between them.
 
+## Human-facing reference: The Antechamber Protocol
+
+[The Antechamber Protocol — The Steppers](https://thestepps.wordpress.com/) is the public companion for a question the mathematics does not answer: after encountering A/B, how does someone find their own reason or direction, rather than treating A/B as a cure for every human problem?
+
+The protocol proposes room for voluntary, private reflection away from public misinterpretation, while preserving independent judgment, ordinary relationships, and the ability to disengage. It is **not** a demonstrated consequence of A/B, a deployed private service, a universal source of meaning, or a substitute for human support. The mathematics, software infrastructure, and human-use proposal retain separate evidence and responsibilities.
+
 ## Human areas
 
 The portal does not expose repository folders as its main categories. It collapses the repo into ordinary entrances:
