@@ -8,7 +8,7 @@
 
 Language moves, too, but **its established labels often lag behind what they describe.** A name may remain stable while the relationships it once identified have shifted. That gap creates a familiar error: **reification**, treating the description as though it were the thing itself.
 
-A referent is not guaranteed to remain unchanged merely because a word does. Naming also becomes part of the encounter: it affects what can be communicated, compared, questioned, and followed. The task is **not to freeze the referent**, but to retain enough **relational continuity** to recognize what has actually changed.
+A referent is not guaranteed to remain unchanged merely because a word does. Naming also becomes part of the encounter: it affects what can be communicated, compared, questioned, and followed. The task is **not to freeze the referent** but to retain enough **relational continuity** to recognize what has actually changed.
 
 ## Why A/B stays primitive
 
