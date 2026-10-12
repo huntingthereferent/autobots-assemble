@@ -37,3 +37,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Seed-first multi-goal coupling
 
 [2026-10-12 scoped evidence](SEED_FIRST_GOAL_COUPLING_2026-10-12.md), [finite executable](finite_seed_first.py), and [finite checks](test_finite_seed_first.py) show a case where compatible paths can be joined before greedy extension despite incompatible independently completed extensions. The integrated chatbot remains a separate local package.
+
+
+## Post-extension portfolio (2026-10-12)
+
+[Scoped experiment and evidence](POST_EXTENSION_PORTFOLIO_2026-10-12.md) · [standalone finite comparator](finite_post_extension_portfolio.py) · [four independent finite checks](test_finite_post_extension_portfolio.py). The comparison preserves two goals while improving locally admitted edges from 40 to 42 under the stated changed-law pair. The complete pinned-observer chatbot remains a separate local package.
