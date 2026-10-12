@@ -27,3 +27,8 @@ Local executed verification for the expanded package: 9 new tests, plus 30 + 28 
 ## Next completed bounded experiment
 
 See [Backtracked goal extension (2026-10-12)](BACKTRACKED_GOAL_2026-10-12.md), the [runnable standalone witness](bounded_backtracked_goal.py), and its [independent tests](test_bounded_backtracked_goal.py). This branch explores compatible path prefixes beyond the two greedy priorities, then checks whether the selected union can be extended. The complete chatbot implementation remains a separate local package.
+
+
+## Completed-extension portfolio
+
+See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [standalone compatible-subset evaluator](finite_extension_portfolio.py), and [finite verification tests](test_finite_extension_portfolio.py). Independent complete extensions may be incompatible: joint goals are not counted unless a single chosen partial pairing carries them. The full integrated chatbot remains a separate local package.
