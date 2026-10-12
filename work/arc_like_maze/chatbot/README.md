@@ -52,3 +52,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Controlled search-policy benchmark (2026-10-12)
 
 [Scoped evidence and decision](POLICY_BENCHMARK_2026-10-12.md) · [standalone record checker](finite_policy_benchmark_record.py) · [record checker tests](test_finite_policy_benchmark_record.py). Eighteen paired finite comparisons preserve fixed-order selection as the default: no observed guided goal wins, one fixed admitted-edge win, two fixed observation-cost wins. The full executed benchmark and its detailed JSON live in the separate complete chatbot archive.
+
+
+## Required-edge evidence prefilter (2026-10-12)
+
+[Finite checker](finite_required_edge_guard.py) · [four finite tests](test_finite_required_edge_guard.py) · [scoped research record](REQUIRED_EDGE_PREFILTER_2026-10-12.md). An explicit must-admit-edge task can disqualify two already-contradicted seed pairings before full extension, while preserving nine other alternatives. The opt-in integrated chatbot is in the separate 108-file local archive; default search policy is unchanged.
