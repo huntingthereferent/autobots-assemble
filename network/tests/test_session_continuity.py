@@ -85,6 +85,25 @@ class SessionContinuityTests(unittest.TestCase):
         self.assertIn("Static repository contracts", self.read(
             "network/tests/test_session_continuity.py"))
 
+    def test_neutral_audit_and_referent_continuity_are_grounded(self):
+        # Static wording check, not evidence that any AI executed an audit.
+        session = self.read("protocols/ai/session.md")
+        referent = self.read("protocols/core/referent.md")
+        self.assertIn("## Neutral audit — same referent, verified scope", session)
+        for clause in (
+            "reported tests from independently rerun tests",
+            "A passing suite does not establish completeness",
+            "Do not invent a reproduction",
+            "Equal endpoints or answers do not imply equal questions",
+            "Repair at the smallest justified layer",
+            "Neutrality is neither automatic agreement nor blanket skepticism",
+        ):
+            with self.subTest(clause=clause):
+                self.assertIn(clause, session)
+        self.assertIn("## Audit / correction continuity", referent)
+        self.assertIn("An audit, failed test, or corrected interpretation", referent)
+        self.assertIn("[AI session protocol](../ai/session.md)", referent)
+
     def test_ci_reports_focused_check_before_broad_suite(self):
         workflow = self.read(".github/workflows/tests.yml")
         focused = 'python -m unittest discover -s network/tests -p "test_session_continuity.py" -v'
