@@ -22,6 +22,10 @@ Preserve the old referent as evidence. Record the new referent and the reason/wi
 
 If several candidate referents exist and no witness selects one, preserve the current referent and record \`UNKNOWN\` rather than choosing by convenience.
 
+## Audit / correction continuity
+
+An audit, failed test, or corrected interpretation does not by itself authorize changing the referent. Preserve the original question or claim; the evidence actually inspected or run; whether a failure was reproduced, merely reported, or remains UNKNOWN; the scope of any defect; and the smallest warranted next movement. An identical answer or endpoint does not make two questions, histories, or sources identical. Apply the standing neutral-audit and evidence-scope discipline in [AI session protocol](../ai/session.md) when the current task is evaluative.
+
 ## Continuation
 
 The selected referent is valid input to this same protocol on the next movement.
