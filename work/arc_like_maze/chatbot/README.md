@@ -47,3 +47,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Conflict-guided continuation (2026-10-12)
 
 [Finite witness](finite_conflict_guidance.py) · [four standalone tests](test_finite_conflict_guidance.py) · [scoped research record](CONFLICT_GUIDANCE_2026-10-12.md). This checks a rejected A/B edge from one partial pairing that becomes admitted under another without claiming the two complete pairings can be fused. Equal-budget negative results and separate local chatbot evidence are recorded explicitly.
+
+
+## Controlled search-policy benchmark (2026-10-12)
+
+[Scoped evidence and decision](POLICY_BENCHMARK_2026-10-12.md) · [standalone record checker](finite_policy_benchmark_record.py) · [record checker tests](test_finite_policy_benchmark_record.py). Eighteen paired finite comparisons preserve fixed-order selection as the default: no observed guided goal wins, one fixed admitted-edge win, two fixed observation-cost wins. The full executed benchmark and its detailed JSON live in the separate complete chatbot archive.
