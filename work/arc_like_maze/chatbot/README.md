@@ -32,3 +32,8 @@ See [Backtracked goal extension (2026-10-12)](BACKTRACKED_GOAL_2026-10-12.md), t
 ## Completed-extension portfolio
 
 See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [standalone compatible-subset evaluator](finite_extension_portfolio.py), and [finite verification tests](test_finite_extension_portfolio.py). Independent complete extensions may be incompatible: joint goals are not counted unless a single chosen partial pairing carries them. The full integrated chatbot remains a separate local package.
+
+
+## Seed-first multi-goal coupling
+
+[2026-10-12 scoped evidence](SEED_FIRST_GOAL_COUPLING_2026-10-12.md), [finite executable](finite_seed_first.py), and [finite checks](test_finite_seed_first.py) show a case where compatible paths can be joined before greedy extension despite incompatible independently completed extensions. The integrated chatbot remains a separate local package.
