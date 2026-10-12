@@ -22,3 +22,8 @@ Local executed verification for the expanded package: 9 new tests, plus 30 + 28 
 **Evidence boundary:** Only two greedy priorities are compared. Neither exhaustive maximality, arbitrary-language learning, nor physical coupling has been established. Different candidate goal images remain separate; root-restricted agreement never silently becomes whole-system equivalence.
 
 **Next movement:** Bounded backtracking beyond two preset priorities, using replayable edge-conflict witnesses and explicit observation budgets. Preserve this experiment's scope and results as evidence rather than overwriting the current Continuity project pointer.
+
+
+## Next completed bounded experiment
+
+See [Backtracked goal extension (2026-10-12)](BACKTRACKED_GOAL_2026-10-12.md), the [runnable standalone witness](bounded_backtracked_goal.py), and its [independent tests](test_bounded_backtracked_goal.py). This branch explores compatible path prefixes beyond the two greedy priorities, then checks whether the selected union can be extended. The complete chatbot implementation remains a separate local package.
