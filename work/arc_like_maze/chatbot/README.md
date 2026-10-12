@@ -42,3 +42,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Post-extension portfolio (2026-10-12)
 
 [Scoped experiment and evidence](POST_EXTENSION_PORTFOLIO_2026-10-12.md) · [standalone finite comparator](finite_post_extension_portfolio.py) · [four independent finite checks](test_finite_post_extension_portfolio.py). The comparison preserves two goals while improving locally admitted edges from 40 to 42 under the stated changed-law pair. The complete pinned-observer chatbot remains a separate local package.
+
+
+## Conflict-guided continuation (2026-10-12)
+
+[Finite witness](finite_conflict_guidance.py) · [four standalone tests](test_finite_conflict_guidance.py) · [scoped research record](CONFLICT_GUIDANCE_2026-10-12.md). This checks a rejected A/B edge from one partial pairing that becomes admitted under another without claiming the two complete pairings can be fused. Equal-budget negative results and separate local chatbot evidence are recorded explicitly.
