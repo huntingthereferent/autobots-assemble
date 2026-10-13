@@ -23,3 +23,9 @@ Rendering creates no network movement.
 Retain the person, the active referent and what changed during a detour when re-expressing a movement. Register conversion does not license a fictional change in identity or a stronger mathematical/scientific claim. James's actual jokes, swearing, feelings and correction remain his words; a normalized rephrasing is explicitly a rendering, **not** a direct quote.
 
 [Regrounding](../../language/REGROUNDING.md) recovers the relationship without deleting the branch. The renderer alone does not prove that a person understood, agreed or intended the returned expression.
+
+## Speaker and quotation continuity
+
+Retain the person, the active referent and what changed during a detour when re-expressing a movement. Register conversion does not license a fictional change in identity or a stronger mathematical/scientific claim. James's actual jokes, swearing, feelings and correction remain his words; a normalized rephrasing is explicitly a rendering, **not** a direct quote.
+
+[Regrounding](../../language/REGROUNDING.md) recovers the relationship without deleting the branch. The renderer alone does not prove that a person understood, agreed or intended the returned expression.
