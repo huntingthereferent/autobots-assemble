@@ -31,7 +31,8 @@ Mathematical symbols in individual experiments refer to those experiments' **exp
 - [Evidence and provenance rules](protocols/core/provenance.md)
 - [Complete-stack experiments](COMPLETE_STACK.md)
 - [Language area — regrounding, conversation, pragmatic meaning and handoffs](language/README.md)
-- [Regrounding and surfing — James's observation in his own words](language/REGROUNDING.md)
+- [Human Drift — James's dated language and corrections, September–October](language/HUMAN_DRIFT.md)
+- [Regrounding — bringing acquired observations back into relation](language/REGROUNDING.md)
 
 Each technical project contains its own reproduction details where available. The software and formal notation were developed with generative-AI assistance; source availability and tests should be evaluated at their documented scope.
 
