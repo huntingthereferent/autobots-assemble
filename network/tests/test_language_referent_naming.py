@@ -14,6 +14,32 @@ class LanguageReferentNamingTests(unittest.TestCase):
         for name in ("LANGUAGE_REFERENT_CONTRACT.md", "LANGUAGE_REFERENT_GROUND_2026-10-13.md"):
             self.assertTrue((ROOT / name).is_file())
 
+    def test_regrounding_kept_across_language_surfaces(self):
+        ground = (ROOT / "language/REGROUNDING.md").read_text(encoding="utf-8")
+        index = (ROOT / "language/README.md").read_text(encoding="utf-8")
+        self.assertIn("yes surfing :)", ground)
+        self.assertIn("the same referent", ground.lower())
+        self.assertIn("James is James at every layer", index)
+        for path in (
+            "LANGUAGE_REFERENT.md",
+            "language/README.md",
+            "language/SHAPE_CONTRACT.md",
+            "language/PRAGMATICS.md",
+            "language/english/README.md",
+            "language/english/decoder.md",
+            "language/english/renderer.md",
+            "language/english/operator_phrases.md",
+            "language/english/handoff.md",
+            "language/words/README.md",
+            "language/handoff/README.md",
+            "protocols/language/decode.md",
+            "protocols/language/render.md",
+            "protocols/ai/session.md",
+        ):
+            with self.subTest(path=path):
+                text = (ROOT / path).read_text(encoding="utf-8")
+                self.assertIn("REGROUNDING.md", text)
+
     def test_legacy_runtime_imports_remain_compatible(self):
         self.assertIs(ab_loop.ABFrame, referent_traversal.ReferentFrame)
         self.assertIs(ab_loop.ABMove, referent_traversal.ReferentMove)
