@@ -82,3 +82,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Exact owner pins and deliberate re-pinning (2026-10-13)
 
 [Standalone finite owner/snapshot identity model](finite_owner_pin_identity.py) · [five pure tests](test_finite_owner_pin_identity.py) · [scoped evidence and limits](EXACT_OWNER_PIN_2026-10-13.md). Explicit locally issued owner pins prevent a task from inheriting a previous owner's result after object/snapshot/revision substitution. An explicit re-pin creates a new task referent; source labels and digests do not authenticate remote providers. Full 145-file HTTP-pinned integration is packaged separately, not committed wholesale.
+
+
+## Cross-pin historical revision comparison (2026-10-13)
+
+[Independently runnable finite word comparison](finite_cross_pin_relation.py) · [five finite tests](test_finite_cross_pin_relation.py) · [bounded evidence and limitations](CROSS_PIN_COMPARISON_2026-10-13.md). The full local 153-file chatbot now compares explicitly requested rooted word relations across two independently pinned owner snapshots, with fresh new-version observation and complete cached replay. GitHub carries only the standalone finite counterpart and research record, not the entire HTTP-pinned chatbot.
