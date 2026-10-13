@@ -1,7 +1,7 @@
 # JOB-019 — Browser Automation for Real Estate Data Migration
 
 <!-- REVIEW_NAV_START -->
-[← JOB-018 — Excel Quotation Automation Tool](../JOB-018_excel-quotation-automation-tool/JOB.md) · [Job Index](../../JOBS.md) · [JOB-020 — Custom Data Entry Automation →](../JOB-020_custom-data-entry-api-automation/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-020 — Custom Data Entry Automation →](../JOB-020_custom-data-entry-api-automation/JOB.md)
 <!-- REVIEW_NAV_END -->
 
 - **Source:** https://www.vn.freelancer.com/projects/rpa-development/browser-automation-for-real-estate
@@ -41,5 +41,5 @@ On access, map one row to the real IDX workflow, define duplicate identity and s
 - No evidence files recorded yet.
 
 <!-- REVIEW_NAV_START -->
-[← JOB-018 — Excel Quotation Automation Tool](../JOB-018_excel-quotation-automation-tool/JOB.md) · [Job Index](../../JOBS.md) · [JOB-020 — Custom Data Entry Automation →](../JOB-020_custom-data-entry-api-automation/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-020 — Custom Data Entry Automation →](../JOB-020_custom-data-entry-api-automation/JOB.md)
 <!-- REVIEW_NAV_END -->
