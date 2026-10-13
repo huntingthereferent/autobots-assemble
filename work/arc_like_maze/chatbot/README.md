@@ -57,3 +57,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Required-edge evidence prefilter (2026-10-12)
 
 [Finite checker](finite_required_edge_guard.py) · [four finite tests](test_finite_required_edge_guard.py) · [scoped research record](REQUIRED_EDGE_PREFILTER_2026-10-12.md). An explicit must-admit-edge task can disqualify two already-contradicted seed pairings before full extension, while preserving nine other alternatives. The opt-in integrated chatbot is in the separate 108-file local archive; default search policy is unchanged.
+
+
+## Explicit task contracts (2026-10-12)
+
+[Finite explicit task checker](finite_explicit_task.py) · [four finite tests](test_finite_explicit_task.py) · [scoped record](EXPLICIT_TASK_CONTRACT_2026-10-12.md). Only caller-declared task requirements are admitted; goals alone never imply must-admit edges. The integrated HTTP-pinned task session remains in the separate 115-file local archive, and the old default search policy is preserved.
