@@ -49,6 +49,6 @@ That is the practical closure test used throughout this repository.
 
 ## Returning from a branch
 
-[Regrounding](language/REGROUNDING.md) is a conversational correction and orientation practice, not an extra mathematical operator or a promise that a relation always returns. Retain an observed branch, correct a mistaken interpretation, and resume the **same** referent if evidence allows. A human conversation may reground informally; a finite mathematical continuation still needs its specific witness.
+The [Human Drift chronology](language/HUMAN_DRIFT.md) documents James moving through different descriptions since September in order to correct a conversation that repeatedly misunderstood his referent. Preserve the original wording and date of each correction as provenance rather than rewriting all examples as synonyms. [Regrounding](language/REGROUNDING.md) is a conversational correction and orientation practice, not an extra mathematical operator or a promise that a relation always returns. Retain an observed branch, correct a mistaken interpretation, and resume the **same** referent if evidence allows. A human conversation may reground informally; a finite mathematical continuation still needs its specific witness.
 
 One person, many registers: James's humor, directness, feeling and technical questions do not imply different author identities. Preserve the original utterance and distinguish verbatim speech from AI paraphrase when attribution matters.
