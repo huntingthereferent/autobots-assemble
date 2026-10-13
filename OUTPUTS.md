@@ -2,7 +2,7 @@
 
 > AUTO-GENERATED from current retained job records.
 
-- Jobs recorded: 18
+- Jobs recorded: 17
 - Tested/completed enough to verify: 4
 - Submitted/accepted: 0
 - Paid: 0
@@ -23,6 +23,5 @@
 - JOB-013 — Automate Monthly Report Scraping — blocked — PROTOTYPE PASS — official Texas source targets were mapped; a synthetic District 5/6 Excel pipeline, configurable credit arithmetic, two-column SQLite export, schedule parser fixture, and automated parser/SQLite tests were built. Filing-ready PDF/schema mapping remains client-dependent.
 - JOB-014 — Data Engineer — Python / SQL / AWS — blocked — LOCAL ANALOG PASS — reproducible Python/SQL ETL prototype passed end-to-end aggregate and idempotency tests, includes MySQL target SQL, indexes, run-health logging, Docker packaging, one-command Makefile, ECS/Fargate example, CloudWatch logging, scheduling, and rollback docs. Real AWS/MySQL acceptance remains client-dependent.
 - JOB-015 — Python Data Cleaning & Reporting — blocked — PROTOTYPE PASS — 51,000-row synthetic dirty fixture cleaned to 50,000 unique source records with explicit audit counters, CSV + SQLite outputs, automated tests, and 0.7601-second measured end-to-end runtime in this environment.
-- JOB-019 — Browser Automation for Real Estate Data Migration — blocked — Blocked on client Google Sheet and authenticated myRealPage workflow; architecture can be prototyped locally but actual migration cannot be verified without access.
 - JOB-020 — Custom Data Entry Automation — blocked — Blocked on private schema/API keys/sample payloads/sandbox supplied at kickoff.
 - JOB-021 — Add Noon & Extra Scrapers -- 2 — blocked — Blocked — the two files to fix and the working reference file are hidden from the public listing, and Apify account/runtime access is required for the stated acceptance test.
