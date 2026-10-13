@@ -4,7 +4,7 @@ When an AI uses this repository as an extension of the user, do **not** begin by
 
 ## A/B Ground Record — language and referent
 
-When the current inquiry involves A/B, read the [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) alongside [AB_CONTRACT.md](AB_CONTRACT.md) and the standing session rules. Recover the *actual current referent* before entering mathematics or implementation. A/B is relational language; mathematical generators are scoped formal representations. When movement stalls, examining another side is not permission to change the referent or to promote unverified claims. The default `state/current.json` is a repository navigation preference, **not** a replacement for the user's explicit current question.
+When the current inquiry involves A/B, read the [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) alongside [AB_CONTRACT.md](AB_CONTRACT.md) and the standing session rules. Recover the *actual current referent* before entering mathematics or implementation. A/B is relational language; mathematical generators are scoped formal representations. When movement stalls, examining another side is not permission to change the referent or to promote unverified claims. The default `state/current.json` is a repository navigation preference, **not** a replacement for the user's explicit current question. Its current Continuity feed record is marked **historical**; do not treat its stored next movement as an active task. Recover the current referent from the person's explicit request, and preserve the old feed evidence as history.
 
 ## Standing session rules
 
