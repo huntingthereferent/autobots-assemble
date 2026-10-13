@@ -97,3 +97,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Explicit tasks from a previously joined witness (2026-10-13)
 
 [Standalone finite consumer](finite_joint_task_consumer.py) · [six independent finite tests](test_finite_joint_task_consumer.py) · [scoped evidence record](JOINT_EVIDENCE_TASK_2026-10-13.md). A new task may check declared goals, edges, paths and destination identities **only** against the prior admitted partial join, without inventing source transitions. The full integrated HTTP-pinned 169-file chatbot is preserved separately; the GitHub sidecar is not its source-owner authentication mechanism.
+
+
+## Fingerprint-bound joint evidence tasks (2026-10-13)
+
+[Independent finite witness checker](finite_join_fingerprint.py) · [six finite tests](test_finite_join_fingerprint.py) · [scope and reproduction](JOIN_WITNESS_FINGERPRINT_2026-10-13.md). The full local 177-file integrated chatbot binds a task to the exact audited joint mapping and compares multiple candidate joins without importing missing edges or combining separate successes. The standalone checker does not authenticate HTTP owner origins.
