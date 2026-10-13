@@ -40,6 +40,28 @@ class LanguageReferentNamingTests(unittest.TestCase):
                 text = (ROOT / path).read_text(encoding="utf-8")
                 self.assertIn("REGROUNDING.md", text)
 
+    def test_human_drift_preserves_dated_quotes_and_distinctions(self):
+        timeline = (ROOT / "language/HUMAN_DRIFT.md").read_text(encoding="utf-8")
+        language_index = (ROOT / "language/README.md").read_text(encoding="utf-8")
+        regrounding = (ROOT / "language/REGROUNDING.md").read_text(encoding="utf-8")
+        for quote in (
+            "Grounding and oscillating should be the same here",
+            "it not where did we start its more how do we merge this acquird data with the start",
+            'yes if ever you "DONT KNOW" just reground :)',
+            'we are talking about "HUMAN DRIFT"',
+            "i was moving around your missunderstand essentially",
+        ):
+            with self.subTest(quote=quote):
+                self.assertIn(quote, timeline)
+        self.assertIn("### September 18", timeline)
+        self.assertIn("### September 25", timeline)
+        self.assertIn("### September 29", timeline)
+        self.assertIn("### October 13", timeline)
+        self.assertIn("HUMAN_DRIFT.md", language_index)
+        self.assertIn("HUMAN_DRIFT.md", regrounding)
+        self.assertIn("Regrounding", regrounding)
+        self.assertIn("Surfing was one image", regrounding)
+
     def test_legacy_runtime_imports_remain_compatible(self):
         self.assertIs(ab_loop.ABFrame, referent_traversal.ReferentFrame)
         self.assertIs(ab_loop.ABMove, referent_traversal.ReferentMove)
