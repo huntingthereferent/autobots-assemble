@@ -1,6 +1,6 @@
 """Opt-in, witness-gated agent lineage over the existing handoff runtime.
 
-This is orchestration, NOT an implementation of A/B. ``evaluate`` and
+This is orchestration, NOT a definition of the language referent. ``evaluate`` and
 ``admit_closure`` are supplied by a real comparator or a marked simulation.
 The original activation registry remains a read-only projection for its
 existing routes. Routes intended to start a lineage must explicitly opt in
@@ -22,7 +22,7 @@ from .swallow_first import SwallowFirstBoundary
 
 @dataclass(frozen=True)
 class AgentMove:
-    """Caller-supplied comparison result; none of these strings prove A/B."""
+    """Caller-supplied comparison result; none of these strings prove the language referent."""
 
     result: ExecutionResult
     next_referent: str = ""
@@ -302,7 +302,7 @@ class AgentLineage:
         return actors is None or owner.strip().casefold() in actors
 
     def _observe_only(self, agent: Handoff, decision: AgentMove) -> LineageStep:
-        """Record A/B's real unresolved edge without consuming READY."""
+        """Record the referent's actual unresolved edge without consuming READY."""
         if decision.result.status not in {"UNKNOWN", "BLOCKED", "PARTIAL"}:
             raise ValueError("observation_only must remain unresolved")
         if (decision.next_referent or decision.closes or decision.closure_evidence
@@ -328,7 +328,7 @@ class AgentLineage:
             parents=(before.last_event_id,) if before.last_event_id else (),
         ))
         if self.runtime.state(agent.handoff_id).status != "READY":
-            raise AssertionError("observational A/B must not consume agent")
+            raise AssertionError("observational evaluation must not consume agent")
         return LineageStep(executed=(agent.handoff_id,))
 
     def step(self, root: str) -> LineageStep:
@@ -381,9 +381,9 @@ class AgentLineage:
         return LineageStep()
 
     def submit_move(self, agent_id: str, move: AgentMove, *, actor_id: str) -> LineageStep:
-        """Accept an externally produced A/B result through the durable handoff.
+        """Accept an externally produced referent result through the durable handoff.
 
-        Neither a JSON result nor a source locator proves an A/B conclusion;
+        Neither a JSON result nor a source locator proves a broader referent conclusion;
         descendant loop closure still needs an independent admission callback.
         """
         agent = self.runtime.get(agent_id)

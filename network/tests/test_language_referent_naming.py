@@ -2,6 +2,7 @@
 import unittest
 from pathlib import Path
 from runtime import ab_loop, ab_information, referent_traversal, evidence_refinement
+from runtime.observed_evaluator import NativeABEvaluator, NativeReferentEvaluator
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -20,6 +21,7 @@ class LanguageReferentNamingTests(unittest.TestCase):
         self.assertIs(ab_information.ABOccurrence, evidence_refinement.EvidenceOccurrence)
         self.assertIs(ab_information.ABProof, evidence_refinement.EvidenceProof)
         self.assertIs(ab_information.ABInformationState, evidence_refinement.EvidenceRefinementState)
+        self.assertIs(NativeABEvaluator, NativeReferentEvaluator)
 
 if __name__ == "__main__":
     unittest.main()

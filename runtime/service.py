@@ -8,7 +8,7 @@ from typing import Any, Iterable
 from runtime.activation import ActivationRegistry, run_activation
 from runtime.agent_bridge import AgentBridge
 from runtime.agent_lineage import AgentLineage, Evaluator, ClosureAdmitter
-from runtime.observed_evaluator import NativeABEvaluator, Observer
+from runtime.observed_evaluator import NativeReferentEvaluator, Observer
 from runtime.repository_tasks import admit_active_work, read_active_work
 from runtime.daily_checklist import DailyChecklist
 from runtime.engine import HandoffRuntime
@@ -93,7 +93,7 @@ class EcosystemService:
         if referent_evaluator is not None and ab_evaluator is not None and referent_evaluator is not ab_evaluator:
             raise ValueError("conflicting evaluator bindings")
         selected_evaluator = referent_evaluator if referent_evaluator is not None else ab_evaluator
-        native = NativeABEvaluator(native_observer) if native_observer is not None else None
+        native = NativeReferentEvaluator(native_observer) if native_observer is not None else None
         if native is not None and selected_evaluator is not None:
             from runtime.evaluator_router import RoutedEvaluator
             evaluator = RoutedEvaluator(self.runtime, selected_evaluator, native)

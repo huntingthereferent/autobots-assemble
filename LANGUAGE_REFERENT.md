@@ -31,3 +31,19 @@ When the investigation reaches a specified mathematical or software task, use th
 **Primary account:** [Language and Observation](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) preserves James's direct words, including swearing and corrections, separately from AI-assisted prose.
 
 **Grounding:** [Current naming and scope note](LANGUAGE_REFERENT_GROUND_2026-10-13.md) · [historical A/B language page](AB_LANGUAGE.md) · [historical ground record](AB_Ground_Record_Current_Note_2026-10-11.md) · [formal finite mathematics](work/arc_like_maze/README.md) · [entry](ENTRY.md).
+
+## Stable names and compatibility
+
+For new explanatory writing, use **language referent**. For generic implementation entry points, use **referent traversal**, **evidence refinement**, **referent evaluator**, and **work views**. Historical names stay reachable to avoid breaking callers or erasing provenance:
+
+| Canonical location | Historical compatibility location |
+| --- | --- |
+| `LANGUAGE_REFERENT.md` | `AB_LANGUAGE.md` |
+| `LANGUAGE_REFERENT_CONTRACT.md` | `AB_CONTRACT.md` |
+| `LANGUAGE_REFERENT_GROUND_2026-10-13.md` | `AB_Ground_Record_Current_Note_2026-10-11.md` (historical record) |
+| `runtime/referent_traversal.py` | `runtime/ab_loop.py` |
+| `runtime/evidence_refinement.py` | `runtime/ab_information.py` |
+| `tools/generate_work_views.py` | `tools/generate_ab_views.py` |
+| `NativeReferentEvaluator` | `NativeABEvaluator` (import alias) |
+
+Persisted keys and event references whose historical spelling includes `ab_` remain readable for compatibility. Existing mathematical generators `A` and `B`, their word compositions, and source filenames identifying a specific prior proof remain mathematical/historical evidence, not alternate names for the whole investigation. Do not rewrite original direct quotations.

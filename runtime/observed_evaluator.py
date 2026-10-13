@@ -1,4 +1,4 @@
-"""Native-witness A/B evaluator using the existing lineage contract.
+"""Native-witness referent evaluator using the existing lineage contract.
 
 Reuses James's existing AgentMove, Handoff, and AgentLineage contracts.
 This is a comparator, not a separate agent or an actuator.
@@ -53,8 +53,8 @@ def compare_observations(before: Mapping[str, Any], after: Mapping[str, Any]) ->
     return survived, changed
 
 
-class NativeABEvaluator:
-    """Adapter for EcosystemService(ab_evaluator=...) / AgentLineage.evaluate.
+class NativeReferentEvaluator:
+    """Adapter for EcosystemService(referent_evaluator=...) / AgentLineage.evaluate.
 
     Observer must NOT perform an uncontrolled non-idempotent action inside
     evaluate: it reads witnessed native transitions from the relevant provider.
@@ -78,7 +78,7 @@ class NativeABEvaluator:
 
     def __call__(self, handoff: Handoff, state: HandoffState) -> AgentMove:
         if state.status != "READY":
-            return self.unresolved("not a READY A/B movement", state="UNKNOWN")
+            return self.unresolved("not a READY referent movement", state="UNKNOWN")
         try:
             observation = self.observe(handoff, state)
         except Exception as exc:
@@ -152,7 +152,11 @@ class NativeABEvaluator:
                 status="COMPLETE",
                 evidence=(witness,),
                 output={"ab_state": "MOVE", **comparison},
-                note="native A/B movement verified",
+                note="native referent movement verified",
             ),
             next_referent=observation.next_referent,
         )
+
+
+# Compatibility name for older imports. Persisted `ab_state` output remains stable.
+NativeABEvaluator = NativeReferentEvaluator

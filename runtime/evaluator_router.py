@@ -1,7 +1,7 @@
 """One existing AgentLineage.evaluate; route native evidence by task owner.
 
 No new agent, event journal, executor, or comparison semantics are created.
-The owner-scoped task A/B and independently captured native transitions
+The owner-scoped task referent and independently captured native transitions
 share the same callback and preserve their own evidence/witness contracts.
 """
 from __future__ import annotations
@@ -15,13 +15,13 @@ class RoutedEvaluator:
     def __init__(self, runtime: Any, primary: Any, native: NativeABEvaluator) -> None:
         actors = getattr(primary, "supported_actors", None)
         if not actors:
-            raise ValueError("combined A/B registration requires explicit primary actor scope")
+            raise ValueError("combined referent registration requires explicit primary actor scope")
         self.runtime = runtime
         self.primary = primary
         self.native = native
         self.primary_actors = frozenset(str(actor).strip().casefold() for actor in actors)
         if not all(self.primary_actors):
-            raise ValueError("primary A/B actors must be nonblank")
+            raise ValueError("primary referent actors must be nonblank")
 
     def _primary_for(self, handoff: Any) -> bool:
         # Ancestor and descendant movements share the original root owner.

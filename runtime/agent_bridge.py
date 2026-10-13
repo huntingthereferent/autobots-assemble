@@ -1,6 +1,6 @@
-"""Service transport for externally supplied A/B movement and lineage state.
+"""Service transport for externally supplied referent movement and lineage state.
 
-This transports witnesses and closure claims; it is not a mathematical A/B
+This transports witnesses and closure claims; it is not a finite mathematical
 implementation and does not certify arbitrary caller-supplied evidence.
 """
 from __future__ import annotations
