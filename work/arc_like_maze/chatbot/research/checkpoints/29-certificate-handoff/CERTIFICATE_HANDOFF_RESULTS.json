@@ -1,0 +1,24 @@
+{
+  "checkpoint": 29,
+  "experiment": "cross-invocation route-certificate reference",
+  "independent_remote_authentication": false,
+  "receiver_replay_calls": 2,
+  "receiver_status": "HANDOFF_FRESHLY_REVALIDATED",
+  "receiver_tasks": {
+    "a": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+    "b": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+    "unproved": "ROUTE_TASK_REQUIREMENTS_UNPROVED"
+  },
+  "receiver_usable": [
+    "a",
+    "b"
+  ],
+  "revocation_status": "HANDOFF_REAUDIT_UNPROVED",
+  "revoked_receipt_not_usable": true,
+  "sender_replay_calls": 2,
+  "sender_status": "HANDOFF_REFERENCE_ISSUED",
+  "source_observations_unchanged_before_revocation": true,
+  "subsequent_invocation": "HANDOFF_FRESHLY_REVALIDATED",
+  "subsequent_replay_calls": 2,
+  "task_requirements_not_in_receipt": true
+}

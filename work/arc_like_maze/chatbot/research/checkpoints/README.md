@@ -11,5 +11,6 @@ Each numbered folder represents one bounded question and its surviving evidence.
 - [**26 — Route-specific task**](26-route-bound-task/README.md) — Eight source/evidence files
 - [**27 — Multi-task dependencies**](27-multi-task-dependency/README.md) — Integrated archive remains separate
 - [**28 — Shared fresh route certificate**](28-shared-route-certificate/README.md) — Integrated source and finite reference; 35 completed targeted checks
+- [**29 — Cross-invocation certificate handoff**](29-certificate-handoff/README.md) — Fresh revalidation contract, eight source/evidence files
 
 [Research overview](../README.md)

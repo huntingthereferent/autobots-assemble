@@ -6,24 +6,25 @@ The chatbot follows relationships admitted by witnessed transitions and exact so
 
 ## Current checkpoint
 
-**CP-0028 · Shared fresh route certificate across tasks** · 2026-10-13 · witnessed
+**CP-0029 · Cross-invocation certificate handoff** · 2026-10-13 · witnessed
 
-One fresh route certificate can serve multiple independently declared tasks in a bounded on-demand owner-backed audit.
+A portable historical route receipt can be freshly revalidated for independently declared tasks in a later invocation.
 
-**Observed:** Two distinct left-route tasks shared one two-pass owner-backed route audit, completed independently, and retained separate task fingerprints. A right-only edge remained unproved on the left route.
+**Observed:** A new receiving invocation re-audited the exact pinned route twice, independently completed two tasks and withheld one missing edge. Another invocation replayed again; revoked pins rejected the old receipt.
 
-**Preserved:** Exact owner/source pin audits, separate task obligations, no cross-route edge borrowing, cached tasks not fresh, and zero new source observations.
+**Preserved:** Exact source pins and route fingerprints, separate task obligations, no borrowing from another route, zero new owner-edge observations, and prior checkpoint evidence.
 
-**Boundary:** Reuse applies only within one invocation and exact pinned route identity. The owner-backed runtime is in the local ZIP; GitHub's standalone finite reference does not authenticate owners.
+**Boundary:** The portable receipt is historical evidence, not an authenticated authority. Owner checks remain in-process, and each receiving invocation must freshly replay its route.
 
-**Verification record:** 35/35 (targeted). Local test execution is distinct from GitHub CI and from independent reproduction.
+**Verification record:** 67/67 (targeted). Local test execution is distinct from GitHub CI and from independent reproduction.
 
-**Next possible movement:** Test a separately specified cross-invocation certificate handoff that revalidates source identity and never inherits another task's obligations or stale status.
+**Next possible movement:** Investigate separately verifiable owner and source-pin attestations for an independent-process receiver; withhold proof when identity cannot be authenticated.
 
 ## Recent checkpoints
 
 | CP | Change | Evidence |
 | --- | --- | --- |
+| [CP-0029](checkpoints/CP-0029.json) | Cross-invocation certificate handoff | [research/checkpoints/29-certificate-handoff/record.md](research/checkpoints/29-certificate-handoff/record.md) |
 | [CP-0028](checkpoints/CP-0028.json) | Shared fresh route certificate across tasks | [research/checkpoints/28-shared-route-certificate/record.md](research/checkpoints/28-shared-route-certificate/record.md) |
 | [CP-0027](checkpoints/CP-0027.json) | Multi-task source dependency propagation | [MULTI_TASK_DEPENDENCY_2026-10-13.md](MULTI_TASK_DEPENDENCY_2026-10-13.md) |
 

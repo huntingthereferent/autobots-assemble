@@ -1,0 +1,29 @@
+{
+  "archive": {
+    "availability": "conversation-local",
+    "files": 273,
+    "name": "ab_chatbot_cross_invocation_handoff_2026-10-13.zip",
+    "sha256": "c5342039a5f9f93b2f7ec01eb4130893a7f3b52d6e10e9057b597fd475ca8fb1"
+  },
+  "boundary": "The portable receipt is historical evidence, not an authenticated authority. Owner checks remain in-process, and each receiving invocation must freshly replay its route.",
+  "cp": 29,
+  "date": "2026-10-13",
+  "next": "Investigate separately verifiable owner and source-pin attestations for an independent-process receiver; withhold proof when identity cannot be authenticated.",
+  "observation": "A new receiving invocation re-audited the exact pinned route twice, independently completed two tasks and withheld one missing edge. Another invocation replayed again; revoked pins rejected the old receipt.",
+  "preserved": "Exact source pins and route fingerprints, separate task obligations, no borrowing from another route, zero new owner-edge observations, and prior checkpoint evidence.",
+  "record": "research/checkpoints/29-certificate-handoff/record.md",
+  "reproduction": [
+    "python -m unittest -q test_finite_certificate_handoff.FiniteHandoffTests",
+    "python finite_certificate_handoff.py"
+  ],
+  "source": "finite_certificate_handoff.py",
+  "status": "witnessed",
+  "summary": "A portable historical route receipt can be freshly revalidated for independently declared tasks in a later invocation.",
+  "tests": {
+    "executed": 67,
+    "passed": 67,
+    "scope": "targeted"
+  },
+  "tests_path": "test_finite_certificate_handoff.py",
+  "title": "Cross-invocation certificate handoff"
+}
