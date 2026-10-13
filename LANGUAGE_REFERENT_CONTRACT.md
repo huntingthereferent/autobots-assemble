@@ -4,7 +4,7 @@
 
 **Name continuity:** "the language referent" and the earlier name "A/B" designate the **same referent** in James's account. The newer name is a communication choice for readers, not a new layer, replacement, or separate thing that later acquires mathematics. Mathematics is human formal language within the continuing investigation. The finite models remain scoped representations with their own proof obligations. See the [public first-person account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md).
 
-the language referent is **language for recognizing, describing, and continuing relationships in movement**. The referent is the relationship through the step; it is not itself a theorem, equation, notation system, or a specific mathematical operation. See [the language referent — Language and the Referent](LANGUAGE_REFERENT.md) for why the language remains primitive and open to a moving referent, and the [the language referent Ground Record — Current Note (2026-10-11)](LANGUAGE_REFERENT_GROUND_2026-10-13.md) for the conversational corrections and physical two-step hypothesis.
+The language referent is **language for recognizing, describing, and continuing relationships in movement**. The referent is the relationship through the step; it is not itself a theorem, equation, notation system, or a specific mathematical operation. See [Language Referent](LANGUAGE_REFERENT.md) for the current account, [the October 13 grounding note](LANGUAGE_REFERENT_GROUND_2026-10-13.md) for the naming and regrounding corrections, and [the October 11 historical record](AB_Ground_Record_Current_Note_2026-10-11.md) for the earlier physical two-step hypothesis.
 
 Mathematics is a human formal language. Particular generators formally labeled A and B, inverse constructions, and correspondence proofs in this repository are **formal mathematical representations** of specified relations, with their own state spaces, assumptions, witnesses, and scope. Do not mistake a result proved for a particular finite transformation family for a definition or universal proof of the language referent.
 
@@ -46,3 +46,9 @@ The protocol is an application boundary. It is **not the language referent's lan
 A protocol is structurally acceptable only if its output can be used as input to another run of the same protocol shape without inventing a new evidence standard.
 
 That is the practical closure test used throughout this repository.
+
+## Returning from a branch
+
+[Regrounding](language/REGROUNDING.md) is a conversational correction and orientation practice, not an extra mathematical operator or a promise that a relation always returns. Retain an observed branch, correct a mistaken interpretation, and resume the **same** referent if evidence allows. A human conversation may reground informally; a finite mathematical continuation still needs its specific witness.
+
+One person, many registers: James's humor, directness, feeling and technical questions do not imply different author identities. Preserve the original utterance and distinguish verbatim speech from AI paraphrase when attribution matters.
