@@ -1,18 +1,19 @@
 # Language — Same Referent, Different Surfaces
 
-[Language Referent](../LANGUAGE_REFERENT.md) · [Regrounding and surfing](REGROUNDING.md) · [James's language report](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
+[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [James's language report](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
 
 **James is James at every layer.** A conversation, a mathematical description, an English decoder, a social interaction, and a technical handoff can follow the same referent without turning him into a different speaker or converting every observation into code.
 
 The **language referent** is the same thing historically called **A/B**. Mathematics is itself human formal language, already within the inquiry; a finite system with explicitly named generators `A` and `B` is one specified mathematical model, not the definition of the language referent.
 
-James's correction was **regrounding**, not "fixing humans." People already move naturally across situations, memories, words and feelings. With more places to branch, we may travel farther from what we were following than intended. His image was *surfing*: move with it, recognize drift, and recover the relationship rather than stopping the wave. See [Regrounding](REGROUNDING.md) for the direct quotations and the distinctions behind this.
+**Human Drift** is the current subject. James used *oscillating, grounding, chain reaction, drift control, regrounding, swallowing, branching,* and *surfing* while moving around misunderstandings in conversation, not as interchangeable definitions. The sequence matters: a changed description can correct a lost relationship and incorporate what was learned along the detour. [Human Drift](HUMAN_DRIFT.md) preserves the dated quotations from September to October. [Regrounding](REGROUNDING.md) describes an available response, while *surfing* remains one example James used.
 
 ## One relationship, several places to encounter it
 
 | Place | What belongs here | What must survive |
 | --- | --- | --- |
-| [Regrounding](REGROUNDING.md) | Outward observation, absorbed context, returning from a branch, speech and silence, the surfing image | The actual referent and the person's own words |
+| [Human Drift](HUMAN_DRIFT.md) | Dated movement in James's own words, including his corrections of AI misunderstandings | What changed from one explanation to the next, not a list of synonyms |
+| [Regrounding](REGROUNDING.md) | Responding to drift by relating acquired observations to the earlier referent | The branch and its gains, not merely a rewind |
 | [Pragmatics](PRAGMATICS.md) | Tone, joking, intensity, hesitation, swearing, care and register | Social meaning without cleaning the person into a machine |
 | [Shape contract](SHAPE_CONTRACT.md) | Provisional operational handles for particular utterances | Ambiguity, scope, and the original expression |
 | [English](english/README.md) | Candidate readings, decoder, renderer and context-dependent operator phrases | The difference between a conversational observation and a work command |
