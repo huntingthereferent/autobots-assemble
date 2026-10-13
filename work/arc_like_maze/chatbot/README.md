@@ -62,3 +62,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Explicit task contracts (2026-10-12)
 
 [Finite explicit task checker](finite_explicit_task.py) · [four finite tests](test_finite_explicit_task.py) · [scoped record](EXPLICIT_TASK_CONTRACT_2026-10-12.md). Only caller-declared task requirements are admitted; goals alone never imply must-admit edges. The integrated HTTP-pinned task session remains in the separate 115-file local archive, and the old default search policy is preserved.
+
+
+## Multiple explicit required edges (2026-10-12)
+
+[Standalone finite conjunction checker](finite_multi_required.py) · [four finite tests](test_finite_multi_required.py) · [bounded research handoff](MULTI_REQUIRED_EDGES_2026-10-12.md). Two explicit edge requirements can reject different seed pairings and must be proved **together** by a single extension. A bounded failure remains REQUIREMENTS_UNPROVED, never a global no-solution theorem. Full pinned-owner integration is in the separately preserved 122-file local package.
