@@ -47,7 +47,8 @@ class EcosystemService:
         activation_registry: str | Path = DEFAULT_ACTIVATIONS,
         system_bindings: Iterable[SystemBinding] = (),
         actors: Iterable[SimulatedActor] = (),
-        ab_evaluator: Evaluator | None = None,
+        referent_evaluator: Evaluator | None = None,
+        ab_evaluator: Evaluator | None = None,  # compatibility alias
         native_observer: Observer | None = None,
         closure_admitter: ClosureAdmitter | None = None,
         repository_work_file: str | Path | None = None,
@@ -89,12 +90,15 @@ class EcosystemService:
         self.activations = ActivationRegistry.from_json(
             activation_registry
         )
+        if referent_evaluator is not None and ab_evaluator is not None and referent_evaluator is not ab_evaluator:
+            raise ValueError("conflicting evaluator bindings")
+        selected_evaluator = referent_evaluator if referent_evaluator is not None else ab_evaluator
         native = NativeABEvaluator(native_observer) if native_observer is not None else None
-        if native is not None and ab_evaluator is not None:
+        if native is not None and selected_evaluator is not None:
             from runtime.evaluator_router import RoutedEvaluator
-            evaluator = RoutedEvaluator(self.runtime, ab_evaluator, native)
+            evaluator = RoutedEvaluator(self.runtime, selected_evaluator, native)
         else:
-            evaluator = ab_evaluator or native
+            evaluator = selected_evaluator or native
         self.agent_lineage = AgentLineage(
             self.runtime, self.activations,
             evaluate=evaluator, admit_closure=closure_admitter,
@@ -167,7 +171,8 @@ class EcosystemService:
             "agents": {
                 "recorded": sum(h.metadata.get("agent_lineage") is True
                                 for h in self.runtime._handoffs.values()),
-                "ab_evaluator_connected": self.agent_lineage.evaluate is not None,
+                "referent_evaluator_connected": self.agent_lineage.evaluate is not None,
+                "ab_evaluator_connected": self.agent_lineage.evaluate is not None,  # legacy API
                 "evaluator_actors": sorted(getattr(
                     self.agent_lineage.evaluate, "supported_actors", ()) or ()),
                 "closure_admitter_connected": self.agent_lineage.admit_closure is not None,
@@ -193,7 +198,7 @@ class EcosystemService:
                 "factory_registered": "factory" in self.orchestrator._systems,
             },
             "warning": (
-                "An A/B evaluator can inspect native evidence, but software editing, "
+                "A referent evaluator can inspect native evidence, but software editing, "
                 "independent closure and model-backed autonomous execution need "
                 "separately registered capable actors."
             ),
@@ -480,7 +485,7 @@ class EcosystemService:
         """Report-first activation; seed exactly one task agent only if none exists.
 
         Do not admit personal notes/tasks, alter existing task ownership, or
-        treat an available handoff as an executed A/B comparison.
+        treat an available handoff as an executed referent comparison.
         """
         route = self.activations.resolve("ohayo", actor_id=actor_id)
         if route is None or route.projection != "day_attention":
