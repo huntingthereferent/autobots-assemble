@@ -1,7 +1,7 @@
 # JOB-018 — Excel Quotation Automation Tool
 
 <!-- REVIEW_NAV_START -->
-[← JOB-017 — Financial Transaction Excel Consolidation](../JOB-017_financial-transaction-excel-consolidation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
 <!-- REVIEW_NAV_END -->
 
 - **Source:** https://www.dk.freelancer.com/projects/data-management/excel-quotation-automation-tool
@@ -39,5 +39,5 @@ Build a self-contained Excel prototype with customer/code lookup, product lines,
 - No evidence files recorded yet.
 
 <!-- REVIEW_NAV_START -->
-[← JOB-017 — Financial Transaction Excel Consolidation](../JOB-017_financial-transaction-excel-consolidation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
 <!-- REVIEW_NAV_END -->
