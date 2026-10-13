@@ -69,6 +69,14 @@ The [language area](../../language/README.md) and [regrounding record](../../lan
 
 Regrounding doesn't force every casual interaction through a software workflow. In technical work, keep native evidence contracts, authorization gates and exact proof limits; in conversation, the right return may simply be correcting what the other person meant.
 
+## Regrounding across human and technical surfaces
+
+The [language area](../../language/README.md) and [regrounding record](../../language/REGROUNDING.md) preserve James's correction: **reground humans, don't claim to fix them**. His image was *surfing*—continue through the movement, retain what a branch revealed, and recover the relationship if the conversation travels farther than intended. This does not establish a physical oscillation, a mathematical operator, or a universal account of past human language.
+
+**James remains James across layers.** A precise proof question, a playful exchange, blunt correction, emotional expression, silence and an engineering handoff are not separate author identities. Preserve actual words (including profanity when directly quoting), scope and tone. Distinguish his statements from AI-authored interpretations; do not attribute polished prose or purported intentions to him as verbatim testimony.
+
+Regrounding doesn't force every casual interaction through a software workflow. In technical work, keep native evidence contracts, authorization gates and exact proof limits; in conversation, the right return may simply be correcting what the other person meant.
+
 ## Neutral audit — same referent, verified scope
 
 Apply this when the user asks for an audit or when a technical conclusion depends on evidence. Do not impose a long report on ordinary conversation.
