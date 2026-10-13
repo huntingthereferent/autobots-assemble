@@ -87,3 +87,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Cross-pin historical revision comparison (2026-10-13)
 
 [Independently runnable finite word comparison](finite_cross_pin_relation.py) · [five finite tests](test_finite_cross_pin_relation.py) · [bounded evidence and limitations](CROSS_PIN_COMPARISON_2026-10-13.md). The full local 153-file chatbot now compares explicitly requested rooted word relations across two independently pinned owner snapshots, with fresh new-version observation and complete cached replay. GitHub carries only the standalone finite counterpart and research record, not the entire HTTP-pinned chatbot.
+
+
+## Joint cross-pin rooted histories (2026-10-13)
+
+[Standalone finite join checker](finite_cross_pin_join.py) · [five independent finite tests](test_finite_cross_pin_join.py) · [bounded evidence and scope](JOINT_CROSS_PIN_2026-10-13.md). Two independently pinned revisions may support a **partial joint correspondence of actually witnessed paths**; incompatible source or target assignments return exact replayable collision words. The integrated 161-file HTTP-pinned chatbot is a separate artifact, not silently committed to GitHub.
