@@ -3,7 +3,8 @@
   "preferred_referent": "Continuity → Dense Live Feed / Clean Source Projection",
   "protocol": "core.traversal",
   "goal": "Keep the dense live frontage readable by preserving useful source text and relations while removing clear provider transport/UI residue. Only expose controls that have real Continuity behavior.",
-  "status": "active",
+  "status": "historical",
+  "routing_note": "Historical Continuity live-feed continuation, retained as evidence. This pointer does not designate the currently active research project and must not override the user\u0027s explicit current referent. Recover the current referent from the active conversation using ENTRY.md.",
   "result_state": "MOVE",
   "next_movement": "Test shared-event movement across the remaining live providers without merging source claims. Preserve each witness separately while asking whether multiple BBC/Reuters/Reddit/Hacker News items point to the same current referent.",
   "walls": [
