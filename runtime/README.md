@@ -24,9 +24,9 @@ next eligible handoff
 
 ## Boundary
 
-The runtime is **not A/B**.
+The runtime is **not the language referent**.
 
-A/B remains the recursively reusable mathematical operation and witness/evidence contract described in `AB_CONTRACT.md`.
+The [language referent](../LANGUAGE_REFERENT.md), historically called A/B, is the continuing inquiry, not an operation implemented by this runtime. The [evidence contract](../LANGUAGE_REFERENT_CONTRACT.md) governs specific bounded software movements. Mathematics is a human formal language within the same investigation.
 
 The runtime is an implementation layer that carries bounded work between unlike actors while preserving:
 
@@ -117,7 +117,7 @@ The examples are witnesses for the runtime shape, not claims about physical prod
 ## Swallow-first boundary adapter (opt-in)
 
 `runtime/swallow_first.py` connects an explicit outward source search and
-external A/B reference comparison to the **existing handoff event stream**.
+external referent-evidence comparison to the **existing handoff event stream**.
 When supplied to `Orchestrator(..., boundary_resolver=...)`, UNKNOWN/BLOCKED
 results are sent to the swallow-first boundary before origin reconciliation.
 
@@ -125,7 +125,7 @@ results are sent to the swallow-first boundary before origin reconciliation.
 UNKNOWN / BLOCKED
   -> registered swallow_agent searches external native sources
   -> bounded native witness locators (the source stays external)
-  -> registered A/B reference admission compares against exact wall
+  -> registered referent-evidence admission compares against exact wall
   -> evidence-valid worker COMPLETE -> atomic RESULT on SAME handoff -> MOVE
   -> else remaining reground agents -> SAME wall + appended search evidence
   -> explicit ready_for_james guard, never automatic human escalation
@@ -139,7 +139,7 @@ restart rather than silently repeated.
 
 **Boundary:** This repository does not presently contain the named `ABLoop` or
 `JamesABTaskBridge` from the separate work report. This adapter does **not**
-implement A/B comparison, external browsing, reference research, or automatic
+implement referent comparison, external browsing, reference research, or automatic
 James task escalation. Those are caller-supplied actors. Any future bridge must
 check `ready_for_james(handoff_id)` and fail closed when no outward search is
 recorded. Configurations that do not register this resolver retain existing
@@ -286,7 +286,7 @@ there is at least one existing James lineage, it only reports, even if all
 agents have completed. If none exists but admitted handoffs assigned to James
 are waiting, it creates exactly one READY root agent and records their native
 handoff IDs/provenance as input. Otherwise it reports idle. Repeated calls and
-service restarts do not create duplicates. Any configured A/B evaluator can
+service restarts do not create duplicates. Any configured referent evaluator can
 advance this new agent; no evaluator means READY and no inferred task result.
 
 This activation is not a background daemon or independently verified source
@@ -341,7 +341,7 @@ The view distinguishes:
 - task handoffs (READY/ACTIVE/COMPLETE/blocked etc.) and their native source;
 - agent generations, birth reasons, loop OPEN/CLOSED and last saved event;
 - recent append-only events with source witness references and timestamps;
-- actual registered connections: repository work, durable journal, A/B evaluator,
+- actual registered connections: repository work, durable journal, referent evaluator,
   closure verifier, autonomous worker, Online School and Factory;
 - responding service versus failure to poll; a missed poll shows an offline
   warning and the last cached snapshot rather than silently displaying old data.
@@ -352,7 +352,7 @@ ask ChatGPT for the monitor report through its authorized Desktop Commander
 connection rather than publishing the laptop's local port.
 
 Status `reported_active` means a saved STARTED event, **not** independently
-proven ongoing CPU activity; no heartbeat exists for the A/B evaluator.
+proven ongoing CPU activity; no heartbeat exists for the referent evaluator.
 This is observation while connected, not automatic push notifications or
 an always-on remote outage monitor. The monitor cannot keep the computer
 awake or restart a stopped server.
