@@ -1,31 +1,38 @@
-# Research and experiments
+# Research and engineering experiments
 
-This repository preserves investigations by James Muneoka, including work developed with AI-assisted coding and mathematical formalization. It is a **working research record**, not a single finished application, public platform, or universal theory.
+**James Muneoka · Independent research · AI-assisted software construction**
 
-Some experiments have reproducible results. Others are prototypes, hypotheses, counterexamples, or earlier directions. A retained artifact shows **what was tried**; it does not establish **what is currently being pursued**.
+An inspectable collection of code, mathematical experiments, system prototypes, and test records. The projects address different questions; they are not parts of a claimed universal theory or one finished platform.
 
-## Explore the work
+## Selected work
 
-| Area | Starting point | Boundary |
-| --- | --- | --- |
-| Language and relational questions | [A/B: language and the referent](AB_LANGUAGE.md) · [Language layer](language/README.md) | Language-level observations are not theorems about all communication. |
-| Finite mathematical constructions | [Finite-field A/B models](work/arc_like_maze/README.md) | Results apply to declared models, domains, and witnesses. |
-| Finite chatbot investigations | [Chatbot experiments](work/arc_like_maze/chatbot/README.md) | Standalone GitHub tests and separately preserved local integrations must not be conflated with a general autonomous solver. |
-| ARC game evidence | [Native ARC saved runs](research/arc_native_runs/README.md) | Saved actions and source-assisted runs do not establish independent first-contact solving. |
-| Software and systems experiments | [Capabilities](capabilities/README.md) · [Complete Stack record](COMPLETE_STACK.md) | A recorded prototype or model is not automatically a deployed or physical system. |
+| Area | What to inspect |
+| --- | --- |
+| **Finite-state mathematics** | [Constructed transformation systems](work/arc_like_maze/README.md) — finite-field models, inverse construction, correspondence tests, and counterexamples |
+| **Experimental chatbot** | [Finite chatbot research](work/arc_like_maze/chatbot/README.md) — candidate correspondences, task requirements, witness binding, and bounded verification |
+| **Interactive environments** | [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
+| **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
+| **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
 
-## How to read a result
+## What the records show
 
-Start with the question the experiment actually tested. Check its inputs, assumptions, witness or test evidence, and explicit limits. A failure can be evidence; an untested generalization is not.
+Experiments are kept with their source, stated assumptions, tests, outputs, and known limits where those materials exist. A runnable example, a locally reported result, a simulated system, and a deployed application are different forms of evidence.
 
-The language-level A/B investigation is distinct from the **A** and **B** operators defined inside particular finite mathematical models. Formal notation or AI-assisted implementation should not be mistaken for a universal conclusion about the original observation.
+The research includes exploratory code, completed bounded experiments, failed approaches, and ideas that were not continued. Their presence in Git history is **a record of work**, not a claim that every branch remains an active project.
 
-For reproducibility and research navigation, see the [AI/research entry protocol](ENTRY.md), [A/B evidence boundary](AB_CONTRACT.md), and [provenance protocol](protocols/core/provenance.md). Test commands and reproduction conditions belong with each experiment.
+Mathematical symbols in individual experiments refer to those experiments' **explicitly defined operators and domains**. A result demonstrated in one model is not automatically a result about other models or the physical world.
 
-## About the name and historical material
+## Navigate and reproduce
 
-`language-network` is a historical repository address. Earlier language investigations motivated that name, but the repository subsequently accumulated other, separate experiments. The original early-language chronology and any claim that every language reduces to unchanging basic communicators require their own original evidence; they are not assumed here.
+- [Research protocols and technical entry](ENTRY.md)
+- [Evidence and provenance rules](protocols/core/provenance.md)
+- [Complete-stack experiments](COMPLETE_STACK.md)
+- [Earlier language investigations](language/README.md)
 
-The former broad **Continuity Layer** frontage, external-feed integrations, and associated website explorations were experiments in what could be connected and presented. Keeping their code and history does **not** make them the repository's current product, purpose, or promised launch.
+Each technical project contains its own reproduction details where available. The software and formal notation were developed with generative-AI assistance; source availability and tests should be evaluated at their documented scope.
 
-The [previous detailed README](https://github.com/huntingthereferent/language-network/blob/4eae9ee936b4f3bf1efa21bf591d5574605b8a15/README.md) remains available as a historical snapshot. Git history and individual research records preserve prior questions and outcomes without requiring the front page to present them all as current work.
+## Historical context
+
+The repository address, `language-network`, comes from an earlier language experiment and no longer describes every project here. An experimental web frontage and external-feed integrations were also built to investigate what could be connected. Those experiments are retained as history, **not presented as a current product**.
+
+[Previous detailed front page](https://github.com/huntingthereferent/language-network/blob/4eae9ee936b4f3bf1efa21bf591d5574605b8a15/README.md) · [James's public project index](https://github.com/huntingthereferent/huntingthereferent)
