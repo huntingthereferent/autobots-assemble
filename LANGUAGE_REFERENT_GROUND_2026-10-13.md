@@ -20,7 +20,7 @@ These quotations are verbatim from the October 13 conversation. Other prose is e
 
 **Related:** [canonical language name](LANGUAGE_REFERENT.md) · [evidence contract](LANGUAGE_REFERENT_CONTRACT.md) · [language account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) · [finite mathematics](work/arc_like_maze/README.md).
 
-## Regrounding and surfing — conversation continuation
+## Human Drift — correction to the surfing example
 
 James corrected the assistant's phrase "fix the world" to **reground** instead. His exact wording:
 
@@ -28,6 +28,6 @@ James corrected the assistant's phrase "fix the world" to **reground** instead. 
 
 > yes surfing :)
 
-These are unedited quotations. The statement about historical human speech is a personal observation, not an independently verified history of language. The surfing analogy means staying with movement while retaining a place to recover the relationship, rather than stopping the movement or claiming a periodic physical oscillation.
+These are unedited quotations. The statement about historical human speech is a personal observation, not an independently verified history of language. James then corrected the assistant for treating *surfing* as the research subject. He named that subject **Human Drift** and noted that his changes of wording since September were moves around the assistant's repeated misunderstandings. The [dated movement record](language/HUMAN_DRIFT.md) preserves those earlier expressions. Regrounding includes integrating newly acquired observations with the original relationship, not merely going back to where the conversation started.
 
 **Across layers:** James remains the same speaker in ordinary conversation, humor, emotional expression, observation, mathematical inquiry and technical work. Each layer may need different evidence; a change of representational form is not a change of referent or person. See [Regrounding](language/REGROUNDING.md) and the [language area](language/README.md).
