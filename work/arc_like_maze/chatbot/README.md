@@ -112,3 +112,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Selected edge transport across distinct owner scopes (2026-10-13)
 
 [Independent finite four-law checker](finite_cross_scope_transport.py) · [six tests](test_finite_cross_scope_transport.py) · [scope, source and results](CROSS_SCOPE_TRANSPORT_2026-10-13.md). Distinct pinned local owners can yield one newly witnessed labeled commuting square only after explicit OLD and NEW endpoint maps and separate recipient-side transition observation. One square is not full source equivalence. Full 193-file owner-bound chatbot remains in a separate local archive.
+
+
+## Two-hop transport of one selected finite edge (2026-10-13)
+
+[Standalone six-law finite checker](finite_two_hop_transport.py) · [six independent tests](test_finite_two_hop_transport.py) · [evidence and limits](TWO_HOP_TRANSPORT_2026-10-13.md). Two separately observed recipient-side commuting squares across three distinct pinned source pairs yield one new six-state/five-edge derived witness; base joins remain unchanged. The complete 201-file owner-bound chatbot is available in the separate local archive, not committed wholesale to GitHub.
