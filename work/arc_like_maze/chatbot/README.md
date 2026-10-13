@@ -117,3 +117,17 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Two-hop transport of one selected finite edge (2026-10-13)
 
 [Standalone six-law finite checker](finite_two_hop_transport.py) · [six independent tests](test_finite_two_hop_transport.py) · [evidence and limits](TWO_HOP_TRANSPORT_2026-10-13.md). Two separately observed recipient-side commuting squares across three distinct pinned source pairs yield one new six-state/five-edge derived witness; base joins remain unchanged. The complete 201-file owner-bound chatbot is available in the separate local archive, not committed wholesale to GitHub.
+
+
+## Continuation after two-hop — route evidence and change propagation (2026-10-13)
+
+The next six recorded steps, **21–26**, are indexed in [chatbot continuation provenance](PROVENANCE.md). They retain separate original witnesses rather than silently rewriting the two-hop result:
+
+- **21: Two-route comparison.** Two separately witnessed chains can disagree on the image of the same donor endpoint; the mapping conflict is recorded without invalidating either route.
+- **22: Source-change propagation.** On invocation, changed source pins/observations withdraw affected route evidence; unchanged pinned historical revisions may survive a newer owner head.
+- **23: Source-replacement recovery.** A newly pinned replacement earns its own observations and may either agree with or conflict with the surviving route.
+- **24: Selective propagation across comparisons.** Only comparisons depending on changed scopes are selected for re-audit; untouched results remain cached, not proof-for-use.
+- **25: Selective refresh inside a comparison.** Only the affected route is replayed for an update; a usable combined comparison still requires a full two-route audit.
+- **26: Route-specific task consumption.** An explicitly bound task checks only its selected, currently replayed route and never borrows obligations from another route.
+
+These six stages are **locally executed integrated extensions, not six newly committed standalone mathematical source suites**. Their complete archives, filenames, SHA-256 hashes, reproducible commands, and recorded test counts are listed in [PROVENANCE.md](PROVENANCE.md). The latest locally preserved package has **249 files**. This GitHub README and index do not imply that the complete integrated code or its local test execution is already in the repository.
