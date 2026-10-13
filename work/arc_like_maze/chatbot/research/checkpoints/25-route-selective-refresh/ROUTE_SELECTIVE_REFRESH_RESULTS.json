@@ -1,0 +1,188 @@
+{
+  "case": "selective route-level replay within existing two-route comparison",
+  "explicit_full_use": {
+    "additional_observations": 0,
+    "audited": [
+      "left",
+      "right"
+    ],
+    "changed": [],
+    "comparison_proof_for_use": true,
+    "current_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "historical_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "routes": [
+      {
+        "fresh": true,
+        "mode": "REPLAYED",
+        "name": "left",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      },
+      {
+        "fresh": true,
+        "mode": "REPLAYED",
+        "name": "right",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      }
+    ],
+    "skipped": [],
+    "status": "COMPARISON_FULLY_WITNESSED"
+  },
+  "new_head_historical_snapshot_survives": {
+    "additional_observations": 0,
+    "audited": [
+      "right"
+    ],
+    "changed": [
+      {
+        "causes": [
+          "SOURCE_HEAD_ADVANCED"
+        ],
+        "scope": "right_middle"
+      }
+    ],
+    "comparison_proof_for_use": false,
+    "current_comparison": null,
+    "historical_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "routes": [
+      {
+        "fresh": false,
+        "mode": "CACHED_NOT_REPLAYED",
+        "name": "left",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      },
+      {
+        "fresh": true,
+        "mode": "REPLAYED",
+        "name": "right",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      }
+    ],
+    "skipped": [
+      "left"
+    ],
+    "status": "COMPARISON_REQUIRES_FULL_AUDIT"
+  },
+  "revoked_full_use": {
+    "additional_observations": 0,
+    "audited": [
+      "left",
+      "right"
+    ],
+    "changed": [],
+    "comparison_proof_for_use": false,
+    "current_comparison": "ROUTE_EVIDENCE_UNPROVED",
+    "historical_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "routes": [
+      {
+        "fresh": false,
+        "mode": "REPLAYED",
+        "name": "left",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      },
+      {
+        "fresh": false,
+        "mode": "REPLAYED",
+        "name": "right",
+        "outcome": "OWNER_PIN_UNPROVED"
+      }
+    ],
+    "skipped": [],
+    "status": "COMPARISON_WITHDRAWN"
+  },
+  "right_middle_revoked": {
+    "additional_observations": 0,
+    "audited": [
+      "right"
+    ],
+    "changed": [
+      {
+        "causes": [
+          "OWNER_BINDING_CHANGED"
+        ],
+        "scope": "right_middle"
+      }
+    ],
+    "comparison_proof_for_use": false,
+    "current_comparison": null,
+    "historical_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "routes": [
+      {
+        "fresh": false,
+        "mode": "CACHED_NOT_REPLAYED",
+        "name": "left",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      },
+      {
+        "fresh": true,
+        "mode": "REPLAYED",
+        "name": "right",
+        "outcome": "OWNER_PIN_UNPROVED"
+      }
+    ],
+    "skipped": [
+      "left"
+    ],
+    "status": "COMPARISON_WITHDRAWN"
+  },
+  "shared_final_revoked": {
+    "additional_observations": 0,
+    "audited": [
+      "left",
+      "right"
+    ],
+    "changed": [
+      {
+        "causes": [
+          "OWNER_BINDING_CHANGED"
+        ],
+        "scope": "final"
+      }
+    ],
+    "comparison_proof_for_use": false,
+    "current_comparison": null,
+    "historical_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "routes": [
+      {
+        "fresh": true,
+        "mode": "REPLAYED",
+        "name": "left",
+        "outcome": "OWNER_PIN_UNPROVED"
+      },
+      {
+        "fresh": true,
+        "mode": "REPLAYED",
+        "name": "right",
+        "outcome": "OWNER_PIN_UNPROVED"
+      }
+    ],
+    "skipped": [],
+    "status": "COMPARISON_WITHDRAWN"
+  },
+  "stable": {
+    "additional_observations": 0,
+    "audited": [],
+    "changed": [],
+    "comparison_proof_for_use": false,
+    "current_comparison": null,
+    "historical_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "routes": [
+      {
+        "fresh": false,
+        "mode": "CACHED_NOT_REPLAYED",
+        "name": "left",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      },
+      {
+        "fresh": false,
+        "mode": "CACHED_NOT_REPLAYED",
+        "name": "right",
+        "outcome": "TWO_HOP_CHAIN_WITNESSED"
+      }
+    ],
+    "skipped": [
+      "left",
+      "right"
+    ],
+    "status": "COMPARISON_CACHED_NOT_REPLAYED"
+  }
+}

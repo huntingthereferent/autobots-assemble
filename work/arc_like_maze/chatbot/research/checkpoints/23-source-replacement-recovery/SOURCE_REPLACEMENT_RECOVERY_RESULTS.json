@@ -1,0 +1,175 @@
+{
+  "scope": "two independent locally owner-pinned source pairs; on-demand recovery",
+  "cases": [
+    {
+      "replacement": "matching-route",
+      "original_historical_status": "ROUTE_COMPOSED_MAP_CONFLICT",
+      "old_right_pin_revoked": true,
+      "old_route_after_change": "WITHDRAWN",
+      "unaffected_left_route": "PRESERVED",
+      "recovery_status": "RECOVERY_AGREEMENT_WITNESSED",
+      "new_comparison": "ROUTES_AGREE_ON_SELECTED_EDGE",
+      "new_right_witness_fingerprint": "bd08494f4451a09a326dd4f2852697428f756c7ac7ff4cfc699069949c240446",
+      "new_right_pairs": 6,
+      "new_right_edges": 5,
+      "counts_before_recovery": [
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "counts_after_recovery": [
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "comparison_revisit_status": "RECOVERY_AGREEMENT_WITNESSED",
+      "counts_after_revisit": [
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "replacement_registry_new": true,
+      "replacement_owner_sources_new": true,
+      "historical_current_is_separate": true
+    },
+    {
+      "replacement": "conflicting-route",
+      "original_historical_status": "ROUTE_COMPOSED_MAP_CONFLICT",
+      "old_right_pin_revoked": true,
+      "old_route_after_change": "WITHDRAWN",
+      "unaffected_left_route": "PRESERVED",
+      "recovery_status": "RECOVERY_CONFLICT_WITNESSED",
+      "new_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+      "new_right_witness_fingerprint": "7e6fd4e3362f237dcf1ae0292d9a9e69d791ed76224239b7f684aea84b3ae30c",
+      "new_right_pairs": 6,
+      "new_right_edges": 5,
+      "counts_before_recovery": [
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "counts_after_recovery": [
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "comparison_revisit_status": "RECOVERY_CONFLICT_WITNESSED",
+      "counts_after_revisit": [
+        [
+          3,
+          3
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          5,
+          5
+        ],
+        [
+          6,
+          6
+        ]
+      ],
+      "replacement_registry_new": true,
+      "replacement_owner_sources_new": true,
+      "historical_current_is_separate": true
+    }
+  ],
+  "limits": [
+    "not remote identity authentication",
+    "not automatic source monitoring",
+    "not global source correspondence",
+    "historical route evidence not transferred"
+  ]
+}

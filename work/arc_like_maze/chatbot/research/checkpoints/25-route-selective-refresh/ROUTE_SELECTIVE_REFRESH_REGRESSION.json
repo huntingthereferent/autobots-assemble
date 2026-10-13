@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-13",
+  "executions": 106,
+  "passed": 106,
+  "new": 22,
+  "regressions": 84,
+  "suites": [
+    {
+      "name": "test_ab_chatbot_route_selective_refresh.RouteSelectiveTests",
+      "completed": true,
+      "passed": 14
+    },
+    {
+      "name": "test_finite_route_refresh_dependency.SelectiveFiniteTests",
+      "completed": true,
+      "passed": 8
+    },
+    {
+      "name": "test_ab_chatbot_selective_propagation.SelectivePortfolioTests",
+      "completed": true,
+      "passed": 9
+    },
+    {
+      "name": "test_ab_chatbot_source_change_propagation.ChangePropagationTests",
+      "completed": true,
+      "passed": 13
+    },
+    {
+      "name": "test_ab_chatbot_two_route_comparison.TwoRouteTests",
+      "completed": true,
+      "passed": 12
+    },
+    {
+      "name": "test_ab_chatbot_source_replacement_recovery.SourceReplacementRecoveryTests",
+      "completed": true,
+      "passed": 13
+    },
+    {
+      "name": "test_ab_chatbot_two_hop_transport.TwoHopTransportTests",
+      "completed": true,
+      "passed": 14
+    },
+    {
+      "name": "test_ab_chatbot_cross_scope_transport.CrossScopeTransportTests",
+      "completed": true,
+      "passed": 12
+    },
+    {
+      "name": "test_ab_chatbot_joint_evidence_task.JointEvidenceTaskTests",
+      "completed": true,
+      "passed": 11
+    }
+  ],
+  "excluded": [
+    "An earlier combined runner timed out; unfinished work not counted.",
+    "A nonexistent RecoveryTests class invocation failed without executing recovery tests; corrected complete class run is counted."
+  ],
+  "full_historical_suite_ran": false,
+  "github_ci_verified": false
+}

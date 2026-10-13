@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-13",
+  "result": "101 targeted tests passed in nine individually completed module runs",
+  "suites": [
+    {"module": "test_ab_chatbot_source_change_propagation.ChangePropagationTests", "passed": 13, "new": true},
+    {"module": "test_finite_source_change_propagation.FiniteSourceChangeTests", "passed": 6, "new": true},
+    {"module": "test_ab_chatbot_two_route_comparison.TwoRouteTests", "passed": 12},
+    {"module": "test_ab_chatbot_two_hop_transport.TwoHopTransportTests", "passed": 14},
+    {"module": "test_ab_chatbot_cross_scope_transport.CrossScopeTransportTests", "passed": 12},
+    {"module": "test_ab_chatbot_cross_pin_join.JoinCrossPinTests", "passed": 10},
+    {"module": "test_ab_chatbot_owner_pin_contract.ExactOwnerTests", "passed": 10},
+    {"module": "test_ab_chatbot_joint_evidence_task.JointEvidenceTaskTests", "passed": 11},
+    {"module": "test_ab_chatbot_explicit_evidence_transfer.ExplicitTransferTests", "passed": 13}
+  ],
+  "new_test_cases": 19,
+  "total_completed_passed": 101,
+  "unfinished_grouped_runner_excluded": true,
+  "initial_new_test_errors_repaired_and_retested": true,
+  "full_historical_suite_completed": false,
+  "github_ci_verified": false,
+  "repo_modified": false
+}

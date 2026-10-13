@@ -1,0 +1,67 @@
+{
+  "stable": {
+    "audited": [],
+    "skipped": [
+      "portfolio_0",
+      "portfolio_1"
+    ],
+    "changed": [],
+    "records": [
+      {
+        "name": "portfolio_0",
+        "mode": "CACHED_NOT_REPLAYED",
+        "outcome": "BASELINE_WITNESSED",
+        "fresh_proof": false
+      },
+      {
+        "name": "portfolio_1",
+        "mode": "CACHED_NOT_REPLAYED",
+        "outcome": "BASELINE_WITNESSED",
+        "fresh_proof": false
+      }
+    ],
+    "new_observations": false
+  },
+  "revoked_only_first": {
+    "audited": [
+      "portfolio_0"
+    ],
+    "skipped": [
+      "portfolio_1"
+    ],
+    "changed": [
+      [
+        "portfolio_0",
+        "right_middle",
+        [
+          "OWNER_BINDING_CHANGED"
+        ]
+      ]
+    ],
+    "records": [
+      {
+        "name": "portfolio_0",
+        "mode": "REPLAYED",
+        "outcome": "COMPARISON_WITHDRAWN",
+        "fresh_proof": true
+      },
+      {
+        "name": "portfolio_1",
+        "mode": "CACHED_NOT_REPLAYED",
+        "outcome": "BASELINE_WITNESSED",
+        "fresh_proof": false
+      }
+    ],
+    "new_observations": false
+  },
+  "explicit_proof_for_other": {
+    "name": "portfolio_1",
+    "outcome": "COMPARISON_PRESERVED",
+    "mode": "REPLAYED",
+    "fresh_proof": true
+  },
+  "number_of_audits": {
+    "portfolio_0": 2,
+    "portfolio_1": 2
+  }
+}
