@@ -38,7 +38,7 @@ The shape preserves continuation. The modifiers preserve the social surface inst
 
 ## Keep the person with the words
 
-[Regrounding](REGROUNDING.md) returns from a branch while preserving what happened there. Pragmatic tags are not a substitute for that record. In particular:
+[Human Drift](HUMAN_DRIFT.md) traces James's original quotations as he changed language around misunderstandings. [Regrounding](REGROUNDING.md) relates acquired observations to the original referent while preserving what happened on the branch. Do not flatten the dated utterances into one canonical paraphrase. Pragmatic tags are not a substitute for that record. In particular:
 
 - A direct quote remains **verbatim**, including James's swearing, shorthand and jokes; an edited rendering is explicitly labeled a rendering.
 - A blunt correction can coexist with care, humor, and technical precision. Do not infer a different speaker, character, intent or consent from a change of register.
