@@ -24,13 +24,13 @@ The operators `A` and `B` in a specified finite transformation system remain val
 
 Outward observation is not merely comparing one object at a time with James. The observations can intersect, be swallowed into other contexts, and change the relations subsequently noticed. Silence and speech can each help or hurt depending on the actual interaction. Participation, emotion, playful communication, and technical correction are all observed within the inquiry rather than assigned to separate versions of the person.
 
-## Regrounding and surfing
+## Human Drift and regrounding
 
-James corrected a proposed goal of "fixing" how people communicate: he meant **regrounding**. In his observation, people already move naturally among relationships in conversation; more available directions can carry someone farther than they intended. His image is **surfing**—following the movement while recovering orientation when the relation drifts.
+James later named the subject **Human Drift**. He had already tried *oscillating*, *chain reaction*, *drift control*, *regrounding*, and other expressions since September while working around the assistant's misunderstandings. The words did not constitute static synonyms. His different explanations were attempts to preserve one relationship while each correction added information. *Surfing* was one example, not the research subject. See [dated quotations and their movement](language/HUMAN_DRIFT.md).
 
 A branch need not be discarded to return. We can keep what it exposed, identify which relationship was actually being followed, and continue without declaring a new referent each time the description changes. This is a way James describes his own experience, not a proven historical account of how all humans once spoke or a mathematical model of oscillation.
 
-[The language area's regrounding record](language/REGROUNDING.md) preserves his exact phrasing and connects this observation to pragmatics, the English shape bank, social movement, handoffs and technical scope. **The same person speaks across those surfaces.** His playfulness, care, sharpness, swearing, silence and precise technical correction aren't separate identities to be reconstructed for different pages.
+[The Human Drift record](language/HUMAN_DRIFT.md) preserves his dated words and corrections; [regrounding](language/REGROUNDING.md) preserves his account of returning from drift. Together they show his phrasing and connects this observation to pragmatics, the English shape bank, social movement, handoffs and technical scope. **The same person speaks across those surfaces.** His playfulness, care, sharpness, swearing, silence and precise technical correction aren't separate identities to be reconstructed for different pages.
 
 ## Study and verification
 
