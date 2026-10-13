@@ -11,7 +11,7 @@ It is frozen at the current verified boundary. Do not continue adding generic pr
 
 This is the reusable implementation foundation beneath arbitrary program realizations.
 
-A/B remains the recursively reusable mathematical operation. This file does **not** redefine A/B as software, a workflow, or a factory.
+The **language referent** (formerly called A/B) is the continuing inquiry. Mathematics is itself human language; a particular formal operation or recursively reusable software contract does not define the referent. This foundation is software evidence, not a replacement for that inquiry.
 
 The software problem is narrower:
 
@@ -121,7 +121,7 @@ Acceptance:
 - execution produces a common evidence record;
 - a realized output remains usable as input to another admitted operation when its contract matches.
 
-That last condition is the software witness most directly aligned with recursive reuse without claiming that the software kernel *is* A/B.
+That last condition is the software witness most directly aligned with recursive reuse without claiming that the software kernel *is* the language referent.
 
 ## What this replaces
 
@@ -219,7 +219,7 @@ The software layer must preserve:
 - value provenance;
 - an explicit bound or stop condition.
 
-This is evidence that realized outputs can remain usable under repeated application. It is not a claim that the runtime itself is A/B.
+This is evidence that realized outputs can remain usable under repeated application. It is not a claim that the runtime itself is the language referent.
 
 
 ### Witness 4 — bounded recurrence
