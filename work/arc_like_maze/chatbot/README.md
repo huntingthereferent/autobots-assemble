@@ -102,3 +102,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Fingerprint-bound joint evidence tasks (2026-10-13)
 
 [Independent finite witness checker](finite_join_fingerprint.py) · [six finite tests](test_finite_join_fingerprint.py) · [scope and reproduction](JOIN_WITNESS_FINGERPRINT_2026-10-13.md). The full local 177-file integrated chatbot binds a task to the exact audited joint mapping and compares multiple candidate joins without importing missing edges or combining separate successes. The standalone checker does not authenticate HTTP owner origins.
+
+
+## Explicit witnessed donor-edge transfer (2026-10-13)
+
+[Standalone finite transfer oracle](finite_explicit_join_transfer.py) · [five finite tests](test_finite_explicit_join_transfer.py) · [research and evidence scope](EXPLICIT_JOIN_TRANSFER_2026-10-13.md). Under the SAME pinned source referents, one already-observed rooted donor edge may be selected to create a new derived partial correspondence without altering either original join. A conflicting subsequent edge is rejected with a word-equality witness. Full 185-file HTTP-pinned integration is a separately packaged local artifact.
