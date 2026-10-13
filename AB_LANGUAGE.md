@@ -1,4 +1,4 @@
-# A/B — Language and the Referent
+# Language Referent — Language and the Referent
 
 > **Historical name:** This page retains the original A/B terminology. The canonical reader-facing entry is [Language Referent](LANGUAGE_REFERENT.md). They name **the same referent**; finite operators called A and B keep their locally defined mathematical meaning.
 
@@ -12,7 +12,7 @@ Language moves, too, but **its established labels often lag behind what they des
 
 A referent is not guaranteed to remain unchanged merely because a word does. Naming also becomes part of the encounter: it affects what can be communicated, compared, questioned, and followed. The task is **not to freeze the referent** but to retain enough **relational continuity** to recognize what has actually changed.
 
-## Why A/B stays primitive
+## Why the language referent stays open
 
 **Naming clarification — October 13, 2026:** *The language referent* is a reader-facing name for the **same referent** previously called A/B. It is not a second object, a replacement theory, or a boundary separating language from mathematics. James uses the clearer name so a reader doesn't confuse the continuing investigation with the specific finite mathematical generators labeled A and B. Naming supplies a reference that can be revisited and corrected without freezing what is observed.
 
