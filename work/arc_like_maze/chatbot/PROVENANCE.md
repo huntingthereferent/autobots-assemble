@@ -1,6 +1,6 @@
-# Finite chatbot — continuation and provenance (October 13, 2026)
+# Finite chatbot — checkpoint provenance (October 13, 2026)
 
-This is a trace of the finite mathematical chatbot's **stages 20–26**, following the [research index](README.md). The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
+This is a trace of the finite mathematical chatbot's **stages 20–27**, following the [research index](research/README.md). The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
 
 ## Witness sequence
 
@@ -30,13 +30,17 @@ Each archive below was verified as readable. Each successive archive adds **eigh
 | 25 | `2ef7351439cde7413a6ebc49d9122e322f72fbdd82d40625396d9a84621e7da9` |
 | 26 | `cbcab83b747e644aa3759ce8a6feb9a8cbdb195ea16f2c016725dbbdb5e856fd` |
 
-**Where the evidence is:** These integrated ZIPs were generated and supplied in the working conversation and are not GitHub repository files or GitHub Releases. Hashes are integrity identifiers, not download links. In a locally extracted Stage 26 ZIP, the individual dated READMEs, demos, `*_RESULTS.json`, `*_REGRESSION.json`, `finite_*.py`, `ab_chatbot_*.py`, and `test_*.py` supply the runnable implementation and stage-specific observations. The latest task's relevant reproduction commands are:
+**Current source locations:** [Checkpoint index](research/checkpoints/README.md) is the calm entry point. Stages **21–26** now have their eight individually recovered code/evidence files in matching GitHub folders, with `README.md` for navigation and `record.md` for the dated report. The original Stage 20 integrated 201-file baseline and Stage 27 integrated archive are still separate local ZIPs; the smaller original GitHub finite references remain available.
+
+Archive hashes below are integrity identifiers, **not** download links. A clean GitHub checkout does not yet contain the full Stage 20 integrated baseline needed to run every later owner-backed adapter. The locally preserved Stage 26 ZIP contains the complete 249-file flat package. To reproduce its latest task after extracting it:
 
 ```sh
 python -m unittest -q test_ab_chatbot_route_bound_task.RouteBoundTaskTests
 python -m unittest -q test_finite_single_route_task.FiniteSingleRouteTests
 python run_route_bound_task_demo.py
 ```
+
+The [finite checkpoint workflow](https://github.com/huntingthereferent/autobots-assemble/actions/workflows/chatbot-finite-checkpoints.yml) separately executes the six GitHub finite reference tests; those runs must not be conflated with full integrated test verification.
 
 The independently executable finite reference models know their declared complete finite laws; they do not authenticate the integrated HTTP-backed owner's identity. The owner-pinned integrated adapters replay their own witnessed observations. When a route changes or its proof is revoked, a previous success is preserved **as history**, not current proof. Skipping an unchanged dependency is a cache decision, not an independently reverified theorem.
 
