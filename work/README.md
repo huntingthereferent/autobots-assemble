@@ -2,7 +2,7 @@
 
 `work/` contains concrete problems and realizations.
 
-It is not the definition of A/B and it is not the top-level architecture.
+It does not define the [language referent](../LANGUAGE_REFERENT.md), historically called A/B, and it is not the top-level architecture.
 
 The repository-wide orientation is [Complete Stack](../COMPLETE_STACK.md): follow the current problem through every dependency layer it actually requires.
 
