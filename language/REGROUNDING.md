@@ -1,8 +1,8 @@
-# Regrounding — Continue Without Losing the Referent
+# Regrounding — A Response Within Human Drift
 
 *Language area · conversation-grounded note · 2026-10-13*
 
-[Language area](README.md) · [Canonical referent](../LANGUAGE_REFERENT.md) · [James's unedited speech in context](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
+[Human Drift and its dated quotations](HUMAN_DRIFT.md) · [Language area](README.md) · [Canonical referent](../LANGUAGE_REFERENT.md) · [James's unedited speech in context](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
 
 ## Where this came from
 
@@ -12,7 +12,7 @@
 
 These are James's exact words, not edited quotations. The observation about how people used to talk is his framing, not an independently established historical claim.
 
-The correction was to the idea of *fixing* communication. People already move between conversation, activity, memory, feeling, humor, disagreement and technical questions. More available subjects and surfaces can allow a conversation to range farther, sometimes farther than its participants wanted. James calls the useful response **regrounding**. Surfing is his image for it: move with the conversation while keeping enough orientation to recover what is being followed. It is not a demand to stop the movement or travel only in a straight line.
+The correction was to the idea of *fixing* communication. People already move between conversation, activity, memory, feeling, humor, disagreement and technical questions. More available subjects and surfaces can allow a conversation to range farther, sometimes farther than its participants wanted. James calls the useful response **regrounding**. Surfing was one image he used for it, not the subject itself. The subject is **Human Drift**: the relationship between movement, misunderstanding, acquired observations, and attempts to recover what was being followed. It is not a demand to stop the movement or travel only in a straight line.
 
 ## The continuing relationship
 
@@ -26,9 +26,9 @@ Neither speech nor silence is automatically the solution. Each can help or hurt 
 
 A useful return keeps these distinctions available, without treating them as mandatory conversational stages:
 
-1. **Where were we?** Recover the person or project's actual referent and the relationship being followed.
+1. **What relationship was being followed?** Recover the referent without treating the first utterance as a complete or permanently correct account.
 2. **Where did we travel?** Keep the branch, observation, correction, or change in perspective; don't erase it merely because it wasn't the intended destination.
-3. **What is still connected?** Name what survived, what changed, and what may have become uncertain. A familiar word alone is not proof of the same meaning.
+3. **How does the acquired data meet the earlier relation?** Preserve what survived, what changed, and what the branch taught us. This is not merely a rewind to the first sentence.
 4. **Where do we continue?** Resume from the recovered relationship. Another branch remains possible; the return isn't a command to stop exploring.
 
 In casual conversation this may take one sentence: *No, I meant regrounding, not fixing people.* In mathematics it may require checking whether an explicitly specified correspondence really preserves an operation. The activity differs; the referent is not split into a "human" version and a "mathematical" version.
@@ -55,4 +55,4 @@ Names help people return, correct and study what they are following. They don't 
 
 The documents under `language/` describe these different surfaces. They do **not** claim to implement general human understanding, authenticate someone's identity from prose, or prove a universal mechanism of language.
 
-**Same James. Same referent. Different moments and levels of precision. Reground where needed; keep surfing.**
+**Same James, same referent across different expressions. Human Drift is the subject; regrounding is an available response. Surfing was one example, not a new law or the name of the research.**
