@@ -35,7 +35,7 @@ else:
 SERVICE = EcosystemService(
     data_dir=DATA_DIR,
     repository_work_file=os.environ.get('CONTINUITY_REPO_WORK_FILE') or None,
-    ab_evaluator=POOL_EVALUATOR,
+    referent_evaluator=POOL_EVALUATOR,
 )
 if POOL_EVALUATOR is not None:
     from runtime.continuity_pool import connect_pool
