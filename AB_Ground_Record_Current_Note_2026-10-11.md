@@ -1,10 +1,10 @@
-# A/B Ground Record — Current Note
+# Language Referent — Ground Record (historical A/B name)
 
 > **Historical edition (2026-10-11):** See [Language Referent — Current Naming and Scope](LANGUAGE_REFERENT_GROUND_2026-10-13.md) for the October 13 clarification. This historical note and its evidence remain unchanged below.
 
 **Date:** 2026-10-11  
 **Status:** Conversation-grounded clarification; engineering hypothesis remains unverified  
-**Referent:** A/B as language for observing and expressing continuing relational movement (the step), and a possible material/motion realization of that language-level referent
+**Referent:** The language referent (historically A/B) as language for observing and expressing continuing relational movement (the step), and a possible material/motion realization of that language-level referent
 
 > **Provenance of this repository edition:** Adapted from the locally saved `AB_Ground_Record_Current_Note_2026-10-11.md` after the explicit request to reconcile GitHub wording with that note. This is a *grounding statement*, not a new mathematical proof or a claim that the proposed physical mechanism has been built. The original local draft remains historical source evidence.
 
