@@ -1,0 +1,29 @@
+{
+  "archive": {
+    "availability": "conversation-local",
+    "files": 281,
+    "name": "ab_chatbot_independent_process_identity_2026-10-13.zip",
+    "sha256": "ec6ffe68eb7b1ae955745b04206c4ee6f7e77e2cdf9062b011447ad3522bc7c4"
+  },
+  "boundary": "The independently running signer and verifier use ephemeral pre-enrolled synthetic Ed25519 keys. This does not establish a real external owner's identity, key custody or trust enrollment. Full owner runtime remains in a separate ZIP.",
+  "cp": 30,
+  "date": "2026-10-13",
+  "next": "Test independently governed trust-anchor enrollment, key rotation and challenge-use accounting across processes; withhold proof where a signer authority cannot be established.",
+  "observation": "A distinct verifier process validated three signed, challenge-bound source scopes against separately pinned keys before a fresh two-pass owner-backed receipt audit. Independent tasks stayed separate; substituted keys and stale sources failed closed.",
+  "preserved": "Previous 273 archive entries unchanged; each task keeps its own route obligations, prior receipts are historical only, missing edges remain unproved, and no new source observations were created.",
+  "record": "research/checkpoints/30-independent-process-identity/record.md",
+  "reproduction": [
+    "python -m unittest -q test_finite_process_attestation.ProcessAttestationTests",
+    "python -m unittest -q test_finite_certificate_handoff.FiniteHandoffTests"
+  ],
+  "source": "finite_process_attestation.py",
+  "status": "witnessed",
+  "summary": "Challenge-bound Ed25519 source attestations can be checked in a separate process, followed by mandatory fresh owner-backed route proof for independently declared tasks.",
+  "tests": {
+    "executed": 100,
+    "passed": 100,
+    "scope": "targeted"
+  },
+  "tests_path": "test_finite_process_attestation.py",
+  "title": "Independent-process source attestations"
+}

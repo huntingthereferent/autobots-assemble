@@ -6,24 +6,25 @@ The chatbot follows relationships admitted by witnessed transitions and exact so
 
 ## Current checkpoint
 
-**CP-0029 · Cross-invocation certificate handoff** · 2026-10-13 · witnessed
+**CP-0030 · Independent-process source attestations** · 2026-10-13 · witnessed
 
-A portable historical route receipt can be freshly revalidated for independently declared tasks in a later invocation.
+Challenge-bound Ed25519 source attestations can be checked in a separate process, followed by mandatory fresh owner-backed route proof for independently declared tasks.
 
-**Observed:** A new receiving invocation re-audited the exact pinned route twice, independently completed two tasks and withheld one missing edge. Another invocation replayed again; revoked pins rejected the old receipt.
+**Observed:** A distinct verifier process validated three signed, challenge-bound source scopes against separately pinned keys before a fresh two-pass owner-backed receipt audit. Independent tasks stayed separate; substituted keys and stale sources failed closed.
 
-**Preserved:** Exact source pins and route fingerprints, separate task obligations, no borrowing from another route, zero new owner-edge observations, and prior checkpoint evidence.
+**Preserved:** Previous 273 archive entries unchanged; each task keeps its own route obligations, prior receipts are historical only, missing edges remain unproved, and no new source observations were created.
 
-**Boundary:** The portable receipt is historical evidence, not an authenticated authority. Owner checks remain in-process, and each receiving invocation must freshly replay its route.
+**Boundary:** The independently running signer and verifier use ephemeral pre-enrolled synthetic Ed25519 keys. This does not establish a real external owner's identity, key custody or trust enrollment. Full owner runtime remains in a separate ZIP.
 
-**Verification record:** 67/67 (targeted). Local test execution is distinct from GitHub CI and from independent reproduction.
+**Verification record:** 100/100 (targeted). Local test execution is distinct from GitHub CI and from independent reproduction.
 
-**Next possible movement:** Investigate separately verifiable owner and source-pin attestations for an independent-process receiver; withhold proof when identity cannot be authenticated.
+**Next possible movement:** Test independently governed trust-anchor enrollment, key rotation and challenge-use accounting across processes; withhold proof where a signer authority cannot be established.
 
 ## Recent checkpoints
 
 | CP | Change | Evidence |
 | --- | --- | --- |
+| [CP-0030](checkpoints/CP-0030.json) | Independent-process source attestations | [research/checkpoints/30-independent-process-identity/record.md](research/checkpoints/30-independent-process-identity/record.md) |
 | [CP-0029](checkpoints/CP-0029.json) | Cross-invocation certificate handoff | [research/checkpoints/29-certificate-handoff/record.md](research/checkpoints/29-certificate-handoff/record.md) |
 | [CP-0028](checkpoints/CP-0028.json) | Shared fresh route certificate across tasks | [research/checkpoints/28-shared-route-certificate/record.md](research/checkpoints/28-shared-route-certificate/record.md) |
 | [CP-0027](checkpoints/CP-0027.json) | Multi-task source dependency propagation | [MULTI_TASK_DEPENDENCY_2026-10-13.md](MULTI_TASK_DEPENDENCY_2026-10-13.md) |

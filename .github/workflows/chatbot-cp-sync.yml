@@ -33,3 +33,11 @@ jobs:
         run: |
           python -m unittest -q test_finite_certificate_handoff.FiniteHandoffTests
           python finite_certificate_handoff.py
+
+      - name: Install Ed25519 verifier dependency
+        run: python -m pip install --disable-pip-version-check 'cryptography>=45,<47'
+      - name: Check independent-process signed scopes (finite)
+        working-directory: work/arc_like_maze/chatbot
+        run: |
+          python -m unittest -q test_finite_process_attestation.ProcessAttestationTests
+          python -m unittest -q test_finite_certificate_handoff.FiniteHandoffTests

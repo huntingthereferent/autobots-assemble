@@ -1,6 +1,6 @@
 # Finite chatbot — checkpoint provenance (October 13, 2026)
 
-This is a trace of the finite mathematical chatbot's **stages 20–29**, following the [research index](research/README.md). The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
+This is a trace of the finite mathematical chatbot's **stages 20–30**, following the [research index](research/README.md). The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
 
 ## Witness sequence
 
@@ -71,6 +71,14 @@ An explicitly issued portable receipt records the already-audited selected route
 
 **Complete integrated handoff:** `ab_chatbot_cross_invocation_handoff_2026-10-13.zip` · 273 files · SHA-256 `c5342039a5f9f93b2f7ec01eb4130893a7f3b52d6e10e9057b597fd475ca8fb1`. All 265 CP-28 archive entries remain byte-for-byte unchanged. **67/67 completed targeted tests:** 16 new owner-bound, 16 independent finite, 13 CP-28 owner-bound, 14 CP-28 finite, and 8 CP-27 finite. The historical full suite is not claimed. The integrated owner runtime still requires the conversation-local baseline; GitHub finite reference checks do not authenticate independent processes.
 
+## Stage 30 · Independent-process source attestations (October 13, 2026)
+
+[Scoped record, executable signer/verifier, integrated adapter, tests, and exact observations](research/checkpoints/30-independent-process-identity/README.md).
+
+This stage adds three separately pinned synthetic Ed25519 source-scope keys. A signer subprocess produces receiver-challenge-bound attestations for the donor, middle and final source digests, chosen route fingerprint and witnessed route digest. A separate verifier subprocess uses a receiver-provided public-key trust map, never keys embedded in the bundle. Only after all three signatures pass does the CP-29 receiver perform its own fresh two-pass route audit and independently evaluate each task's obligations. Two left-route tasks complete, a right-only required edge remains unproved, and no new source observations are made. Altered keys/signatures, stale source evidence or changed challenge cannot authorize new tasks.
+
+**Complete integrated archive:** `ab_chatbot_independent_process_identity_2026-10-13.zip` · 281 files · SHA-256 `ec6ffe68eb7b1ae955745b04206c4ee6f7e77e2cdf9062b011447ad3522bc7c4`. All 273 CP-29 archive entries are preserved byte-for-byte. **100/100 completed targeted tests**: 16 new owner-backed, 17 new finite signer/verifier, 16 CP-29 owner-backed, 16 CP-29 finite, 13 CP-28 owner-backed, 14 CP-28 finite, and 8 CP-27 finite, counted from completed suites. One combined historical run stalled and is excluded. The finite GitHub tests require the Python `cryptography` package. External trust-anchor enrollment, true owner identity, key management, durable nonce replay protection, and full historical suite are not claimed.
+
 <!-- CHATBOT-CP-LEDGER:BEGIN -->
 ## Checkpoint output ledger (harness-maintained)
 
@@ -81,12 +89,13 @@ Each row is derived from an explicit CP manifest. The record links are repositor
 | [CP-0027](checkpoints/CP-0027.json) · 2026-10-13 | **Multi-task source dependency propagation** — Separate route-bound tasks share a dependency network while preserving independent task evidence. | Each task keeps its own obligations and exact pinned source identity. Unaffected tasks stay cached until explicit proof-for-use. | 127/127 (targeted); [MULTI_TASK_DEPENDENCY_2026-10-13.md](MULTI_TASK_DEPENDENCY_2026-10-13.md) | `ab_chatbot_multi_task_dependency_2026-10-13.zip` · 257 files · conversation-local |
 | [CP-0028](checkpoints/CP-0028.json) · 2026-10-13 | **Shared fresh route certificate across tasks** — One fresh route certificate can serve multiple independently declared tasks in a bounded on-demand owner-backed audit. | Exact owner/source pin audits, separate task obligations, no cross-route edge borrowing, cached tasks not fresh, and zero new source observations. | 35/35 (targeted); [research/checkpoints/28-shared-route-certificate/record.md](research/checkpoints/28-shared-route-certificate/record.md) | `ab_chatbot_shared_route_certificate_2026-10-13.zip` · 265 files · conversation-local |
 | [CP-0029](checkpoints/CP-0029.json) · 2026-10-13 | **Cross-invocation certificate handoff** — A portable historical route receipt can be freshly revalidated for independently declared tasks in a later invocation. | Exact source pins and route fingerprints, separate task obligations, no borrowing from another route, zero new owner-edge observations, and prior checkpoint evidence. | 67/67 (targeted); [research/checkpoints/29-certificate-handoff/record.md](research/checkpoints/29-certificate-handoff/record.md) | `ab_chatbot_cross_invocation_handoff_2026-10-13.zip` · 273 files · conversation-local |
+| [CP-0030](checkpoints/CP-0030.json) · 2026-10-13 | **Independent-process source attestations** — Challenge-bound Ed25519 source attestations can be checked in a separate process, followed by mandatory fresh owner-backed route proof for independently declared tasks. | Previous 273 archive entries unchanged; each task keeps its own route obligations, prior receipts are historical only, missing edges remain unproved, and no new source observations were created. | 100/100 (targeted); [research/checkpoints/30-independent-process-identity/record.md](research/checkpoints/30-independent-process-identity/record.md) | `ab_chatbot_independent_process_identity_2026-10-13.zip` · 281 files · conversation-local |
 
 ### Latest checkpoint reproduction
 
+- `python -m unittest -q test_finite_process_attestation.ProcessAttestationTests`
 - `python -m unittest -q test_finite_certificate_handoff.FiniteHandoffTests`
-- `python finite_certificate_handoff.py`
 
-Latest archive SHA-256: `c5342039a5f9f93b2f7ec01eb4130893a7f3b52d6e10e9057b597fd475ca8fb1`
+Latest archive SHA-256: `ec6ffe68eb7b1ae955745b04206c4ee6f7e77e2cdf9062b011447ad3522bc7c4`
 
 <!-- CHATBOT-CP-LEDGER:END -->

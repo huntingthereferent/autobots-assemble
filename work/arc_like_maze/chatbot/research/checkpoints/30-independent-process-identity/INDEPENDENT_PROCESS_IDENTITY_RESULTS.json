@@ -1,0 +1,31 @@
+{
+  "checkpoint": 30,
+  "deployed_trust_bootstrap_verified": false,
+  "experiment": "independent-process synthetic owner-scope attestations",
+  "later_replay_calls": 2,
+  "no_new_observations": true,
+  "real_world_owner_authenticated": false,
+  "reused_signed_bundle_reaudited": "INDEPENDENT_PROCESS_FRESHLY_VERIFIED",
+  "scope_count": 3,
+  "scopes": [
+    "donor",
+    "middle",
+    "final"
+  ],
+  "signer_separate_process": true,
+  "source_revoked_status": "ATTESTATION_CLAIM_MISMATCH",
+  "valid_replay_calls": 2,
+  "valid_status": "INDEPENDENT_PROCESS_FRESHLY_VERIFIED",
+  "valid_tasks": {
+    "a": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+    "b": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+    "bad": "ROUTE_TASK_REQUIREMENTS_UNPROVED"
+  },
+  "valid_usable": [
+    "a",
+    "b"
+  ],
+  "verifier_separate_process": true,
+  "wrong_challenge": "INDEPENDENT_PROCESS_INVALID_REQUEST",
+  "wrong_pinned_key": "ATTESTATION_SIGNATURE_UNPROVED"
+}
