@@ -1,7 +1,7 @@
 # JOB-017 — Financial Transaction Excel Consolidation
 
 <!-- REVIEW_NAV_START -->
-[← JOB-016 — One-Site Text Scraper Automation](../JOB-016_one-site-text-scraper-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
 <!-- REVIEW_NAV_END -->
 
 - **Source:** https://www.freelancer.com/projects/data-analysis/financial-transaction-excel
@@ -39,5 +39,5 @@ Build a synthetic multi-file sales consolidation prototype with dedupe/date/curr
 - No evidence files recorded yet.
 
 <!-- REVIEW_NAV_START -->
-[← JOB-016 — One-Site Text Scraper Automation](../JOB-016_one-site-text-scraper-automation/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
 <!-- REVIEW_NAV_END -->
