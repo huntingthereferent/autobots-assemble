@@ -93,7 +93,7 @@ The same output anchor remains valid input to the same movement bank on the next
 
 ## A branch can travel farther than intended
 
-James calls the useful conversational response **regrounding**. The [language record](../REGROUNDING.md) preserves his surfing image: follow movement, but keep enough orientation to return to the continuing relation. `BRANCH`, `REPLY`, `SILENCE` and `REOPEN` can document **specific platform-visible actions**. They do not, by themselves, prove how a person understood those actions or how far a conversation moved in their mind.
+James names the larger conversational subject **Human Drift**. His [dated words](../HUMAN_DRIFT.md) show him changing examples across September–October to move around an assistant's misunderstanding. **Regrounding** is one response, and *surfing* was one example. The [regrounding record](../REGROUNDING.md) preserves the distinction: relate newly acquired observations to the earlier referent instead of deleting them. `BRANCH`, `REPLY`, `SILENCE` and `REOPEN` can document **specific platform-visible actions**. They do not, by themselves, prove how a person understood those actions or how far a conversation moved in their mind.
 
 A quiet participant may have observed more than the platform shows. No reply can help or hurt; the `SILENCE` anchor only records the *lack of an expected return during a stated window*, not that person's intention, emotional response, or agreement. Regrounding is a human-language practice here, not a new platform event ID or an automated return.
 
