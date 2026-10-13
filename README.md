@@ -30,7 +30,8 @@ Mathematical symbols in individual experiments refer to those experiments' **exp
 - [Historical A/B ground record](AB_Ground_Record_Current_Note_2026-10-11.md) — preserved October 11 wording and observations
 - [Evidence and provenance rules](protocols/core/provenance.md)
 - [Complete-stack experiments](COMPLETE_STACK.md)
-- [Earlier language investigations](language/README.md)
+- [Language area — regrounding, conversation, pragmatic meaning and handoffs](language/README.md)
+- [Regrounding and surfing — James's observation in his own words](language/REGROUNDING.md)
 
 Each technical project contains its own reproduction details where available. The software and formal notation were developed with generative-AI assistance; source availability and tests should be evaluated at their documented scope.
 
