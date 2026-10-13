@@ -77,3 +77,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Explicit local-owner provenance (2026-10-12)
 
 [Finite source-scope checker](finite_provenance_scope.py) · [four pure tests](test_finite_provenance_scope.py) · [evidence record and boundaries](PROVENANCE_CONTRACT_2026-10-12.md). The integrated local chatbot requires live verified owner bindings for explicit per-source proof demands, and downgrades previously witnessed labels if an owner binding is withdrawn. The full 137-file HTTP-pinned integration is a separate local archive; this GitHub sidecar is NOT remote-source authentication or the complete chatbot.
+
+
+## Exact owner pins and deliberate re-pinning (2026-10-13)
+
+[Standalone finite owner/snapshot identity model](finite_owner_pin_identity.py) · [five pure tests](test_finite_owner_pin_identity.py) · [scoped evidence and limits](EXACT_OWNER_PIN_2026-10-13.md). Explicit locally issued owner pins prevent a task from inheriting a previous owner's result after object/snapshot/revision substitution. An explicit re-pin creates a new task referent; source labels and digests do not authenticate remote providers. Full 145-file HTTP-pinned integration is packaged separately, not committed wholesale.
