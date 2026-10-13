@@ -1,7 +1,7 @@
 # JOB-020 — Custom Data Entry Automation
 
 <!-- REVIEW_NAV_START -->
-[← JOB-019 — Browser Automation for Real Estate Data Migration](../JOB-019_browser-automation-real-estate-migration/JOB.md) · [Job Index](../../JOBS.md) · [JOB-021 — Add Noon & Extra Scrapers -- 2 →](../JOB-021_noon-extra-apify-scrapers/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-021 — Add Noon & Extra Scrapers -- 2 →](../JOB-021_noon-extra-apify-scrapers/JOB.md)
 <!-- REVIEW_NAV_END -->
 
 - **Source:** https://www.freelancer.co.it/projects/api-developmet/custom-data-entry-automation-good
@@ -41,5 +41,5 @@ When access arrives, freeze the schema/payload mapping, build the API client wit
 - No evidence files recorded yet.
 
 <!-- REVIEW_NAV_START -->
-[← JOB-019 — Browser Automation for Real Estate Data Migration](../JOB-019_browser-automation-real-estate-migration/JOB.md) · [Job Index](../../JOBS.md) · [JOB-021 — Add Noon & Extra Scrapers -- 2 →](../JOB-021_noon-extra-apify-scrapers/JOB.md)
+[← JOB-015 — Python Data Cleaning & Reporting](../JOB-015_python-data-cleaning-reporting/JOB.md) · [Job Index](../../JOBS.md) · [JOB-021 — Add Noon & Extra Scrapers -- 2 →](../JOB-021_noon-extra-apify-scrapers/JOB.md)
 <!-- REVIEW_NAV_END -->
