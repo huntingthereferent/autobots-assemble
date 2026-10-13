@@ -23,7 +23,7 @@ class ABGroundingTests(unittest.TestCase):
             "A/B:      0 1 0",
             "couplesense",
             "demonstrable **two-step**",
-            "not a universal binary complement law",
+            "not a definition of A/B, a universal binary complement law",
             "engineering hypothesis remains unverified",
         ):
             with self.subTest(clause=clause):
