@@ -1,4 +1,4 @@
-# Migration — v0.17 task environment → A/B-constrained Continuity Layer
+# Historical migration — v0.17 task environment → Continuity Layer
 
 ## Why the repository changed
 
@@ -18,7 +18,7 @@ The rebuild makes the **protocol/network layer primary** and keeps jobs as one a
 
 ## Added
 
-- explicit A/B boundary document;
+- historical A/B boundary document (now [Language Referent Evidence Contract](LANGUAGE_REFERENT_CONTRACT.md));
 - AI entry protocol;
 - reusable referent/evidence/movement/wall/handoff/provenance protocols;
 - AI session and repository-write protocols;
