@@ -1,0 +1,29 @@
+{
+  "archive": {
+    "availability": "conversation-local",
+    "files": 257,
+    "name": "ab_chatbot_multi_task_dependency_2026-10-13.zip",
+    "sha256": "03e3a0b89fb477b14c6b09e769e0d3515a004ebe9bf116f677cda86ea65c7a94"
+  },
+  "boundary": "Tasks skipped by dependency selection retain historical results, not currently replayed proof. The complete integrated owner-bound chatbot is in a separate archive; the standalone finite checker does not authenticate owners.",
+  "cp": 27,
+  "date": "2026-10-13",
+  "next": "Explore whether one freshly audited route certificate can be reused by multiple independent tasks without merging their requirements.",
+  "observation": "A changed middle source re-audits only tasks that depend on that source; shared donor or final source changes reach every dependent task.",
+  "preserved": "Each task keeps its own obligations and exact pinned source identity. Unaffected tasks stay cached until explicit proof-for-use.",
+  "record": "MULTI_TASK_DEPENDENCY_2026-10-13.md",
+  "reproduction": [
+    "python -m unittest -q test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests",
+    "python finite_multi_task_dependency.py"
+  ],
+  "source": "finite_multi_task_dependency.py",
+  "status": "witnessed",
+  "summary": "Separate route-bound tasks share a dependency network while preserving independent task evidence.",
+  "tests": {
+    "executed": 127,
+    "passed": 127,
+    "scope": "targeted"
+  },
+  "tests_path": "test_finite_multi_task_dependency.py",
+  "title": "Multi-task source dependency propagation"
+}

@@ -54,3 +54,21 @@ The independently executable finite reference models know their declared complet
 The full owner-bound integrated chatbot adds a task-to-source incidence ledger: two tasks can depend on the left route while one depends on the right; a middle-source change selects only tasks using that middle; a shared source change selects all dependent tasks. Tasks that were not replayed remain historical/cached, and a task must freshly replay its own route before its obligations count as current evidence. A changed declaration or moving source blocks freshness rather than inheriting an earlier success.
 
 **Local integrated handoff:** `ab_chatbot_multi_task_dependency_2026-10-13.zip` · 257 files · SHA-256 `03e3a0b89fb477b14c6b09e769e0d3515a004ebe9bf116f677cda86ea65c7a94`. All 249 predecessor entries unchanged. **127 completed targeted tests**: 27 new (19 live owner-bound + 8 independent finite) and 100 regressions. The full historical suite was not completed and no new GitHub CI result is asserted. The integrated owner-backed code and demo are in the local archive; the GitHub code here is the separately runnable finite reference.
+
+<!-- CHATBOT-CP-LEDGER:BEGIN -->
+## Checkpoint output ledger (harness-maintained)
+
+Each row is derived from an explicit CP manifest. The record links are repository evidence indexes; archive filenames below are identifiers, not download links. A CP manifest is not, by itself, independent verification of its claims.
+
+| CP | Observed movement | Survives | Verification | Archive |
+| --- | --- | --- | --- | --- |
+| [CP-0027](checkpoints/CP-0027.json) · 2026-10-13 | **Multi-task source dependency propagation** — Separate route-bound tasks share a dependency network while preserving independent task evidence. | Each task keeps its own obligations and exact pinned source identity. Unaffected tasks stay cached until explicit proof-for-use. | 127/127 (targeted); [MULTI_TASK_DEPENDENCY_2026-10-13.md](MULTI_TASK_DEPENDENCY_2026-10-13.md) | `ab_chatbot_multi_task_dependency_2026-10-13.zip` · 257 files · conversation-local |
+
+### Latest checkpoint reproduction
+
+- `python -m unittest -q test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests`
+- `python finite_multi_task_dependency.py`
+
+Latest archive SHA-256: `03e3a0b89fb477b14c6b09e769e0d3515a004ebe9bf116f677cda86ea65c7a94`
+
+<!-- CHATBOT-CP-LEDGER:END -->

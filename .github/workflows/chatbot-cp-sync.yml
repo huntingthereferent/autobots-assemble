@@ -1,0 +1,22 @@
+name: Chatbot checkpoint views
+on:
+  push:
+    paths:
+      - 'work/arc_like_maze/chatbot/**'
+      - '.github/workflows/chatbot-cp-sync.yml'
+  pull_request:
+    paths:
+      - 'work/arc_like_maze/chatbot/**'
+      - '.github/workflows/chatbot-cp-sync.yml'
+jobs:
+  cp-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check chatbot CP About Me and provenance views
+        run: python work/arc_like_maze/chatbot/checkpoints/cp_record.py check
+      - name: Exercise CP recording and rejection cases
+        run: python -m unittest -q work.arc_like_maze.chatbot.checkpoints.test_cp_record

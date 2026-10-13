@@ -60,3 +60,7 @@ A substantive AI response or repo mutation should leave recoverable:
 - broaden scope merely because more data exists; crossing disciplines is valid only when the current referent actually requires it.
 
 If the user gives a new explicit referent, that becomes primary unless it conflicts with an explicit safety or authority boundary.
+
+## Chatbot checkpoint handoff
+
+When the active referent is the finite chatbot and a checkpoint is completed, read and apply the [chatbot CP output contract](work/arc_like_maze/chatbot/checkpoints/HARNESS.md) before handoff. Record one CP manifest and update the chatbot-specific [About Me](work/arc_like_maze/chatbot/ABOUT_ME.md) and [provenance](work/arc_like_maze/chatbot/PROVENANCE.md) together. Do not change any personal profile, invent observations, or claim automated background execution.
