@@ -72,3 +72,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Mixed typed obligations (2026-10-12)
 
 [Standalone finite checker](finite_mixed_contract.py) · [five finite tests](test_finite_mixed_contract.py) · [scope and evidence](MIXED_TASK_OBLIGATIONS_2026-10-12.md). The integrated local chatbot now checks required edges, exact rooted path histories, and destination identities as separate proof obligations, all on a single replay-audited pairing. The 129-file snapshot-backed chatbot and per-trial evidence are preserved as a separate local package; existing Continuity project pointers are unchanged.
+
+
+## Explicit local-owner provenance (2026-10-12)
+
+[Finite source-scope checker](finite_provenance_scope.py) · [four pure tests](test_finite_provenance_scope.py) · [evidence record and boundaries](PROVENANCE_CONTRACT_2026-10-12.md). The integrated local chatbot requires live verified owner bindings for explicit per-source proof demands, and downgrades previously witnessed labels if an owner binding is withdrawn. The full 137-file HTTP-pinned integration is a separate local archive; this GitHub sidecar is NOT remote-source authentication or the complete chatbot.
