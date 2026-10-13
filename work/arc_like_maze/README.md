@@ -1,6 +1,6 @@
-# Finite-field transformation research — inverse A/B models
+# Finite-field transformation research — inverse models
 
-**Grounding boundary:** [A/B Ground Record — Current Note (2026-10-11)](../../AB_Ground_Record_Current_Note_2026-10-11.md) distinguishes A/B as language for continuing relationships from the *particular mathematical models* investigated here. “Mathematics first” described the order of this bounded formal experiment, not the meaning or origin of A/B.
+**Grounding boundary:** [Language Referent](../../LANGUAGE_REFERENT.md) is the canonical name for the same inquiry historically called A/B. Its [evidence contract](../../LANGUAGE_REFERENT_CONTRACT.md) and [original October 11 record](../../AB_Ground_Record_Current_Note_2026-10-11.md) distinguish that continuing referent from the **specific finite mathematical operators** defined in this directory. “Mathematics first” described the order of this bounded formal experiment, not the meaning or origin of A/B.
 
 **Current mathematical referent:** construct candidate finite-field transformation systems from proposed A/B relational constraints and test where differing turns preserve the same specified relations. This is an ARC-**like** mathematical experiment, **not** an official ARC environment, native ARC observation, or a universal definition of A/B.
 

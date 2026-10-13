@@ -2,7 +2,7 @@
 
 ## Scope
 
-The [A/B Ground Record — Current Note (2026-10-11)](../../AB_Ground_Record_Current_Note_2026-10-11.md) describes A/B as **relational language**, not as a mathematical equation, operation, or credential. This document gives terminology for **specific finite-field formalizations** of selected relationships. Historically, the project's A/B expression was carried into generator labels and filenames; that historical use must not make the formal objects a definition of A/B itself.
+[Language Referent](../../LANGUAGE_REFERENT.md) is the canonical name for the same inquiry historically called A/B. The [original October 11 record](../../AB_Ground_Record_Current_Note_2026-10-11.md) describes it as **relational language**, not as a specific mathematical equation, operation, or credential. This document gives terminology for **specific finite-field formalizations** of selected relationships. Historically, the project's A/B expression was carried into generator labels and filenames; that historical use must not make the formal objects a definition of A/B itself.
 
 Use established terminology in new mathematical research reports, test descriptions, equations, and summaries:
 
