@@ -21,3 +21,11 @@ Required spine:
 See `packet.schema.json`.
 
 A receiver validates the packet before resuming. It does not blindly inherit the sender's conclusions.
+
+## Regrounding across the handoff
+
+The [language referent](../../LANGUAGE_REFERENT.md) survives a change of speaker, tool or file only when the current relation is recovered, not merely because the packet repeats the same word. Preserve the actual correction and the path traveled when they matter. A branch need not be erased in order to return.
+
+For human attribution, carry an exact quotation and mark AI-authored interpretation separately; changing tone or technical register cannot silently rewrite the speaker. James's playfulness, frustration, swearing, care and mathematical questions are not separate authored identities. See [Regrounding](../REGROUNDING.md).
+
+The packet doesn't establish the receiver's understanding, actor identity, or consent. Validate actual evidence and authorization within the target system.
