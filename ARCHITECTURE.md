@@ -28,11 +28,11 @@ FOUNDATION
 capability / read-only views
 ```
 
-## A/B boundary
+## Language-referent boundary
 
-A/B remains the recursively reusable mathematical operation and witness/evidence contract.
+The language referent, previously called A/B, is the same continuing inquiry. It is **not defined as a recursively reusable mathematical operation**. Mathematics is human formal language; individual finite generators and witness contracts make particular questions checkable without redefining the referent.
 
-This architecture is not A/B. It is a repository organization that preserves repeated applications and their evidence.
+This architecture is not the language referent. It is a repository organization that preserves evidence and supports bounded applications.
 
 ## Translator and handoff runtime
 

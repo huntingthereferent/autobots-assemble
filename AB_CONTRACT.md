@@ -1,5 +1,7 @@
 # A/B Contract Boundary
 
+> **Legacy filename:** The active reader-facing contract is [Language Referent — Evidence Contract](LANGUAGE_REFERENT_CONTRACT.md). This historical name and the new name identify the same referent. This copy remains available for existing references and regression checks.
+
 ## What A/B is
 
 **Name continuity:** "the language referent" and "A/B" designate the **same referent** in James's account. The newer name is a communication choice for readers, not a new layer, replacement, or separate thing that later acquires mathematics. Mathematics is human formal language within the continuing investigation. The finite models remain scoped representations with their own proof obligations. See the [public first-person account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md).

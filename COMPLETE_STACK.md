@@ -16,13 +16,13 @@ A research problem may open into mathematics, simulation, instrumentation, fabri
 
 The field boundary never becomes an excuse to stop.
 
-## A/B relation
+## Language referent
 
-A/B is **language for observing, describing, and continuing relationships in movement**; the same referent must survive each step. The [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) documents this correction. Mathematical A/B generators and constructions are particular formal models that require their own assumptions, proof obligations, and scope. The operational witness/evidence contract below preserves continuity; it does not define A/B as mathematics.
+The **language referent** (historically called A/B) concerns observing, describing and continuing relationships in movement; this is the same referent across both names. See [Language Referent](LANGUAGE_REFERENT.md) and the [current naming note](LANGUAGE_REFERENT_GROUND_2026-10-13.md). Mathematics is a human formal language participating in this inquiry. Particular generators labeled A and B and their constructions are scoped models with explicit assumptions and proofs, not the definition of the entire referent. The operational evidence contract below preserves continuity without taking ownership of the referent.
 
 Complete Stack is an application orientation over problems.
 
-Do not redefine A/B as:
+Do not redefine the language referent as:
 - this repository;
 - a workflow;
 - a software runtime;

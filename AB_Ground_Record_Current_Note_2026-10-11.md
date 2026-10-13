@@ -1,5 +1,7 @@
 # A/B Ground Record — Current Note
 
+> **Historical edition (2026-10-11):** See [Language Referent — Current Naming and Scope](LANGUAGE_REFERENT_GROUND_2026-10-13.md) for the October 13 clarification. This historical note and its evidence remain unchanged below.
+
 **Date:** 2026-10-11  
 **Status:** Conversation-grounded clarification; engineering hypothesis remains unverified  
 **Referent:** A/B as language for observing and expressing continuing relational movement (the step), and a possible material/motion realization of that language-level referent

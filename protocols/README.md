@@ -1,6 +1,6 @@
 # Protocol Network
 
-Protocols are reusable operational contracts. They all share the same A/B-constrained outer shape:
+Protocols are reusable operational contracts. They share a referent-preserving evidence contract (formerly labeled A/B-constrained):
 
 **referent → evidence → witnesses → result → provenance → continuation**
 

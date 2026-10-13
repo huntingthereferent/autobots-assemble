@@ -1,4 +1,4 @@
-# Category Contract — A/B-Ordered Classification
+# Category Contract — Referent-First Classification
 
 Categories exist to keep a traversed stack recoverable.
 
@@ -36,7 +36,7 @@ artifact
 
 Then each child may be decomposed again under a new explicit local axis.
 
-## A/B category movement
+## Referent-first category movement
 
 A category is admitted from a parent only when the current relation supports it:
 

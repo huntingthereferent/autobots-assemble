@@ -2,11 +2,11 @@
 
 When an AI uses this repository as an extension of the user, do **not** begin by scanning everything and choosing the most interesting layer.
 
-## A/B Ground Record — language and referent
+## Language Referent — ground and continuity
 
 **Terminology / referent preservation:** When James says "the language referent," he means the **same referent** previously called A/B. Do not split the two names into separate subjects or claim that mathematics arrives later as an independent thing: mathematics is a human formal language already participating in the investigation. Distinguish the referent from any *particular* finite formalization, not from mathematics as language. The [verbatim conversation excerpts in his language report](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) help recover how and why he corrected that wording.
 
-When the current inquiry involves A/B, read the [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) alongside [AB_CONTRACT.md](AB_CONTRACT.md) and the standing session rules. Recover the *actual current referent* before entering mathematics or implementation. A/B is relational language; mathematical generators are scoped formal representations. When movement stalls, examining another side is not permission to change the referent or to promote unverified claims. The default `state/current.json` is a repository navigation preference, **not** a replacement for the user's explicit current question. Its current Continuity feed record is marked **historical**; do not treat its stored next movement as an active task. Recover the current referent from the person's explicit request, and preserve the old feed evidence as history.
+When the current inquiry involves the language referent (historically called A/B), read [Language Referent](LANGUAGE_REFERENT.md), the [current naming/ground note](LANGUAGE_REFERENT_GROUND_2026-10-13.md), [Language Referent — Evidence Contract](LANGUAGE_REFERENT_CONTRACT.md), and the standing session rules. Consult the [October 11 historical record](AB_Ground_Record_Current_Note_2026-10-11.md) when the current relation reaches that evidence. Recover the *actual current referent* before entering mathematics or implementation. The language referent is the same referent previously called A/B. Mathematics is human language within the inquiry; formally labeled finite generators are scoped mathematical representations, not a second referent. When movement stalls, examining another side is not permission to change the referent or to promote unverified claims. The default `state/current.json` is a repository navigation preference, **not** a replacement for the user's explicit current question. Its current Continuity feed record is marked **historical**; do not treat its stored next movement as an active task. Recover the current referent from the person's explicit request, and preserve the old feed evidence as history.
 
 ## Standing session rules
 
@@ -20,7 +20,7 @@ the active referent's protocol, without replacing that referent.
 
 1. Read `COMPLETE_STACK.md`.
 2. Read `CATEGORY_CONTRACT.md`.
-3. Read `AB_CONTRACT.md`.
+3. Read `LANGUAGE_REFERENT_CONTRACT.md`.
 4. Read `state/current.json`.
 5. Recover the preferred current referent.
 6. Read only the protocol(s) reached by that referent.
@@ -51,7 +51,7 @@ A substantive AI response or repo mutation should leave recoverable:
 
 ## Do not
 
-- turn A/B into the implementation layer;
+- turn the language referent into an implementation layer;
 - infer a missing relation because an older layer looks similar;
 - treat surface wording as permanent meaning;
 - let a read-only view mutate the underlying evidence/network;

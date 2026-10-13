@@ -1,5 +1,7 @@
 # A/B — Language and the Referent
 
+> **Historical name:** This page retains the original A/B terminology. The canonical reader-facing entry is [Language Referent](LANGUAGE_REFERENT.md). They name **the same referent**; finite operators called A and B keep their locally defined mathematical meaning.
+
 > **A primitive relational language, deliberately open to movement.** Not a completed theory, a universal equation, or a replacement for another discipline.
 
 ## The referent is in motion

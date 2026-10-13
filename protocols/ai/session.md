@@ -53,10 +53,7 @@ the universe or a replacement for the native mathematics.
   witnessed** distinguishable. These are not a mandatory linear hierarchy;
   record which evidence supports each claim. Never promote an implementation,
   test, report or simulation to a stronger witness by changing its wording.
-- A/B remains the **language-level referent for continuing observed relationships**
-  described in the [A/B Ground Record](../../AB_Ground_Record_Current_Note_2026-10-11.md) and bounded
-  for repository operations by `AB_CONTRACT.md`. Formal mathematical generators,
-  equations, and correspondence checks are *particular translations*, not A/B itself;
+- The **language referent** is the same referent historically named A/B. Read the [canonical language reference](../../LANGUAGE_REFERENT.md), the [current naming ground](../../LANGUAGE_REFERENT_GROUND_2026-10-13.md), and [evidence contract](../../LANGUAGE_REFERENT_CONTRACT.md). Mathematics is already human language within this inquiry. Formal generators, equations and correspondence checks are scoped expressions of particular questions;
   neither this session protocol nor Continuity software redefines it as an agent,
   workflow, graph, policy or destination.
 - Before resuming a technical continuation, recover the same active referent;
@@ -72,7 +69,7 @@ Apply this when the user asks for an audit or when a technical conclusion depend
 - **State a neutral, scoped verdict.** Separate what is supported, contradicted, partially supported, reported, and UNKNOWN. State uncertainty instead of flattering the work or dismissing it because it is new or unconventional.
 - **Inspect evidence at its actual level.** Distinguish reading code from executing it; reported tests from independently rerun tests; local deterministic tests from CI, external trials, deployment, and physical measurement. Give test counts, commands, source/version, and coverage only when witnessed. A passing suite does not establish completeness, mathematical universality, or source authenticity.
 - **Test claims against their boundaries.** Check assumptions, domain, original question, origin, action labels, source ownership, revisions, missing observations, negative controls, and counterexamples as relevant. A matching identifier or digest is not independently authenticated provenance. Do not invent a reproduction or claim a defect is confirmed without a concrete witness.
-- **Localize defects.** Name the exact implementation or reasoning boundary, expected versus observed behavior, and severity *within its actual use*. Separate a software/provenance defect from the correctness of a bounded mathematical theorem and from the broader A/B referent.
+- **Localize defects.** Name the exact implementation or reasoning boundary, expected versus observed behavior, and severity *within its actual use*. Separate a software/provenance defect from the correctness of a bounded mathematical theorem and from the broader language referent.
 - **Preserve question lineage and corrections.** Equal endpoints or answers do not imply equal questions, histories, witnesses, or identities. A later clarification may correct an earlier interpretation without retroactively changing what was asked or observed.
 - **Repair at the smallest justified layer.** Prefer a specific regression test and targeted correction to inventing a replacement engine, expanding mathematical scope, or changing the referent. Preserve passing evidence and prior records.
 - **Leave a recoverable audit result:** current referent → scoped verdict → evidence actually inspected/run → witnesses and negative cases → defect or WALL/UNKNOWN → smallest supported correction → next warranted movement. Use compact prose unless the inquiry needs a full report.
