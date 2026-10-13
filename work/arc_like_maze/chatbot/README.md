@@ -131,3 +131,8 @@ The next six recorded steps, **21–26**, are indexed in [chatbot continuation p
 - **26: Route-specific task consumption.** An explicitly bound task checks only its selected, currently replayed route and never borrows obligations from another route.
 
 These six stages are **locally executed integrated extensions, not six newly committed standalone mathematical source suites**. Their complete archives, filenames, SHA-256 hashes, reproducible commands, and recorded test counts are listed in [PROVENANCE.md](PROVENANCE.md). The latest locally preserved package has **249 files**. This GitHub README and index do not imply that the complete integrated code or its local test execution is already in the repository.
+
+
+## Multi-task source dependency propagation (2026-10-13)
+
+[Stage 27 evidence](MULTI_TASK_DEPENDENCY_2026-10-13.md) · [independent finite dependency model](finite_multi_task_dependency.py) · [eight finite tests](test_finite_multi_task_dependency.py) · [full stage index](PROVENANCE.md). Multiple exact route-bound tasks form a shared source-dependency graph. Changed middle-source evidence re-audits only dependent tasks; changed shared donor/final evidence reaches all of them. Cached tasks are never presented as freshly verified proof. The complete 257-file owner-bound integrated chatbot is packaged separately; this GitHub finite sidecar does not authenticate its source owners.

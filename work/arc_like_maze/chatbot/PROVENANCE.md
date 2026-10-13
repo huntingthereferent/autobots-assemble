@@ -41,3 +41,12 @@ python run_route_bound_task_demo.py
 The independently executable finite reference models know their declared complete finite laws; they do not authenticate the integrated HTTP-backed owner's identity. The owner-pinned integrated adapters replay their own witnessed observations. When a route changes or its proof is revoked, a previous success is preserved **as history**, not current proof. Skipping an unchanged dependency is a cache decision, not an independently reverified theorem.
 
 **Next possible test:** A shared dependency graph for several route-specific tasks responding to the same external changes. Not implemented by these records. This page records completed movement; it does not predeclare the next result.
+
+
+## Stage 27 · Multi-task source dependency propagation (October 13, 2026)
+
+[Bounded evidence and reproduction](MULTI_TASK_DEPENDENCY_2026-10-13.md) · [standalone pure finite dependency checker](finite_multi_task_dependency.py) · [eight finite tests](test_finite_multi_task_dependency.py).
+
+The full owner-bound integrated chatbot adds a task-to-source incidence ledger: two tasks can depend on the left route while one depends on the right; a middle-source change selects only tasks using that middle; a shared source change selects all dependent tasks. Tasks that were not replayed remain historical/cached, and a task must freshly replay its own route before its obligations count as current evidence. A changed declaration or moving source blocks freshness rather than inheriting an earlier success.
+
+**Local integrated handoff:** `ab_chatbot_multi_task_dependency_2026-10-13.zip` · 257 files · SHA-256 `03e3a0b89fb477b14c6b09e769e0d3515a004ebe9bf116f677cda86ea65c7a94`. All 249 predecessor entries unchanged. **127 completed targeted tests**: 27 new (19 live owner-bound + 8 independent finite) and 100 regressions. The full historical suite was not completed and no new GitHub CI result is asserted. The integrated owner-backed code and demo are in the local archive; the GitHub code here is the separately runnable finite reference.
