@@ -12,6 +12,12 @@ A referent is not guaranteed to remain unchanged merely because a word does. Nam
 
 ## Why A/B stays primitive
 
+**Naming clarification — October 13, 2026:** *The language referent* is a reader-facing name for the **same referent** previously called A/B. It is not a second object, a replacement theory, or a boundary separating language from mathematics. James uses the clearer name so a reader doesn't confuse the continuing investigation with the specific finite mathematical generators labeled A and B. Naming supplies a reference that can be revisited and corrected without freezing what is observed.
+
+Mathematics is itself human language; saying we "need mathematics to understand" the referent already puts language, mathematics, and understanding into relation. Discussing and correcting that sentence is itself another observation of the same referent, not a newly created second referent. Particular formal proofs still need their exact domains and witnesses; this conversational observation is not a universal theorem.
+
+[James's language and observation report, with unedited quotations](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) preserves the direct speech behind this correction.
+
 A/B is language for approaching those moving relationships. Human beings cannot directly hand one another an unexpressed thought; investigation needs ways to express, examine, and revise what is being encountered.
 
 **Its looseness serves a function.** A/B is not assigned a final mathematical object, fixed route, privileged scale, or particular machine. It remains free to **decompress** a compressed expression into its relevant relationships, **compress** a detailed relation into language that can travel, and shift perspective or representation as the subject demands.
