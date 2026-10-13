@@ -19,10 +19,12 @@ class OpenSourceArchitectureTests(unittest.TestCase):
         self.assertIn("`open_source/`", arch)
         self.assertIn("`money/` and `jobs/`", arch)
 
-    def test_open_source_registry_is_separate_from_jobs(self):
-        reg = json.loads((ROOT / "open_source" / "contributions" / "index.json").read_text(encoding="utf-8"))
-        self.assertEqual(reg["next_id"], 1)
-        self.assertEqual(reg["contributions"], [])
+    def test_contribution_contract_without_empty_registry(self):
+        schema = json.loads((ROOT / "open_source" / "contributions" / "schema.json").read_text(encoding="utf-8"))
+        self.assertEqual(schema["title"], "Open Source Contribution Record")
+        self.assertIn("upstream_repository", schema["required"])
+        template = (ROOT / "open_source" / "contributions" / "CONTRIBUTION_TEMPLATE.md").read_text(encoding="utf-8")
+        self.assertIn("**Upstream repository:**", template)
         protocol = (ROOT / "protocols" / "open_source" / "contribution.md").read_text(encoding="utf-8")
         self.assertIn("merged ≠ paid", protocol)
 
