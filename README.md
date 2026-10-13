@@ -24,7 +24,10 @@ Mathematical symbols in individual experiments refer to those experiments' **exp
 
 ## Navigate and reproduce
 
-- [Research protocols and technical entry](ENTRY.md)
+- [ENTRY.md](ENTRY.md) — research protocols and technical entry
+- [Language Referent](LANGUAGE_REFERENT.md) — canonical reader-facing name for the inquiry historically called A/B
+- [Language Referent — Evidence Contract](LANGUAGE_REFERENT_CONTRACT.md) — scoped evidence, correction, and proof boundaries
+- [Historical A/B ground record](AB_Ground_Record_Current_Note_2026-10-11.md) — preserved October 11 wording and observations
 - [Evidence and provenance rules](protocols/core/provenance.md)
 - [Complete-stack experiments](COMPLETE_STACK.md)
 - [Earlier language investigations](language/README.md)
