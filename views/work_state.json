@@ -1,8 +1,8 @@
 {
-  "jobs": 16,
+  "jobs": 15,
   "protocol_results": {
     "MOVE": 4,
-    "WALL": 12,
+    "WALL": 11,
     "UNKNOWN": 0,
     "PARTIAL": 0
   }
