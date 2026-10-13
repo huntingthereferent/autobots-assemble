@@ -35,3 +35,11 @@ Do not turn:
 - continue into submit;
 - a wall into failure;
 - a narrower referent into a broader claim.
+
+## Preserve the actual voice
+
+The speaker is not replaced when the target register changes. James may be humorous, emotionally expressive, blunt, profane and mathematically precise in the same inquiry. Choosing a formal rendering must not turn his observation into a stronger scientific claim; choosing a casual rendering must not invent his slang, feelings or consent.
+
+Preserve unedited direct quotations when documenting what was actually said. A different rendering is **paraphrase or re-expression**, not an authentic replacement quote. Preserve uncertainty, branch provenance and the [regrounding relationship](../REGROUNDING.md).
+
+The renderer is a scoped tool. It doesn't implement the full language referent or prove that the original interaction's meaning was preserved.
