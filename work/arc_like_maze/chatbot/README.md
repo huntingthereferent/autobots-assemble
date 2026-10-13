@@ -92,3 +92,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Joint cross-pin rooted histories (2026-10-13)
 
 [Standalone finite join checker](finite_cross_pin_join.py) · [five independent finite tests](test_finite_cross_pin_join.py) · [bounded evidence and scope](JOINT_CROSS_PIN_2026-10-13.md). Two independently pinned revisions may support a **partial joint correspondence of actually witnessed paths**; incompatible source or target assignments return exact replayable collision words. The integrated 161-file HTTP-pinned chatbot is a separate artifact, not silently committed to GitHub.
+
+
+## Explicit tasks from a previously joined witness (2026-10-13)
+
+[Standalone finite consumer](finite_joint_task_consumer.py) · [six independent finite tests](test_finite_joint_task_consumer.py) · [scoped evidence record](JOINT_EVIDENCE_TASK_2026-10-13.md). A new task may check declared goals, edges, paths and destination identities **only** against the prior admitted partial join, without inventing source transitions. The full integrated HTTP-pinned 169-file chatbot is preserved separately; the GitHub sidecar is not its source-owner authentication mechanism.
