@@ -33,6 +33,6 @@ Each technical project contains its own reproduction details where available. Th
 
 ## Historical context
 
-The repository address, `language-network`, comes from an earlier language experiment and no longer describes every project here. An experimental web frontage and external-feed integrations were also built to investigate what could be connected. Those experiments are retained as history, **not presented as a current product**.
+This repository was previously named `language-network` and is now `autobots-assemble`. The former name came from an earlier language experiment; neither name defines the scope of every project here. An experimental web frontage and external-feed integrations were also built to investigate what could be connected. Those experiments are retained as history, **not presented as a current product**.
 
-[Previous detailed front page](https://github.com/huntingthereferent/language-network/blob/4eae9ee936b4f3bf1efa21bf591d5574605b8a15/README.md) · [James's public project index](https://github.com/huntingthereferent/huntingthereferent)
+[Previous detailed front page](https://github.com/huntingthereferent/autobots-assemble/blob/4eae9ee936b4f3bf1efa21bf591d5574605b8a15/README.md) · [James's public project index](https://github.com/huntingthereferent/huntingthereferent)
