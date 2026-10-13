@@ -1,0 +1,44 @@
+name: chatbot finite checkpoints
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'work/arc_like_maze/chatbot/**'
+      - '.github/workflows/chatbot-finite-checkpoints.yml'
+  pull_request:
+    paths:
+      - 'work/arc_like_maze/chatbot/**'
+      - '.github/workflows/chatbot-finite-checkpoints.yml'
+  workflow_dispatch:
+
+jobs:
+  finite-checkpoint:
+    name: Checkpoint ${{ matrix.checkpoint }} — finite verification
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {checkpoint: '21', module: test_finite_two_route_comparison}
+          - {checkpoint: '22', module: test_finite_source_change_propagation}
+          - {checkpoint: '23', module: test_finite_source_replacement_recovery}
+          - {checkpoint: '24', module: test_finite_selective_dependency}
+          - {checkpoint: '25', module: test_finite_route_refresh_dependency}
+          - {checkpoint: '26', module: test_finite_single_route_task}
+    defaults:
+      run:
+        working-directory: work/arc_like_maze/chatbot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run finite reference test for checkpoint ${{ matrix.checkpoint }}
+        env:
+          PYTHONPATH: '.:research/checkpoints/21-two-route-comparison:research/checkpoints/22-source-change-propagation:research/checkpoints/23-source-replacement-recovery:research/checkpoints/24-selective-propagation:research/checkpoints/25-route-selective-refresh:research/checkpoints/26-route-bound-task'
+        run: python -m unittest -q ${{ matrix.module }}
+
+# These six jobs verify the independently runnable finite reference modules.
+# The historical full integrated owner-backed source in Stage 20 remains an
+# archive outside GitHub; this workflow does not assert integrated tests passed.
