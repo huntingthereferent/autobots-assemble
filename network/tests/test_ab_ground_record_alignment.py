@@ -1,4 +1,4 @@
-"""Keep A/B language-level Ground Record separate from bounded formal models.
+"""Keep the historical ground distinct from bounded mathematics and canonical naming.
 
 This is a static repository contract check, not proof of mathematical or
 physical truth or proof of AI behavior outside the files under inspection.
@@ -33,18 +33,16 @@ class ABGroundingTests(unittest.TestCase):
         for path in (
             "README.md",
             "ENTRY.md",
+            "AB_LANGUAGE.md",
             "AB_CONTRACT.md",
-            "COMPLETE_STACK.md",
-            "protocols/ai/session.md",
-            "work/arc_like_maze/README.md",
-            "work/arc_like_maze/TERMINOLOGY.md",
-            "work/arc_like_maze/RELATION_PROBE.md",
+            "LANGUAGE_REFERENT_GROUND_2026-10-13.md",
         ):
             with self.subTest(path=path):
                 self.assertIn(NOTE, self.read(path))
-        contract = self.read("AB_CONTRACT.md")
+        contract = self.read("LANGUAGE_REFERENT_CONTRACT.md")
+        self.assertIn("same referent", self.read("LANGUAGE_REFERENT.md"))
         self.assertIn("language for recognizing, describing, and continuing relationships", contract)
-        self.assertIn("Particular A/B-labeled generators", contract)
+        self.assertIn("Particular generators formally labeled A and B", contract)
         self.assertIn("**formal mathematical representations**", contract)
         self.assertNotIn("A/B is the recursively reusable mathematical operation.", contract)
         self.assertNotIn("A/B remains the recursively reusable mathematical operation", self.read("COMPLETE_STACK.md"))
