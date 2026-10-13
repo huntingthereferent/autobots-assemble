@@ -1,7 +1,7 @@
 """Swallow-first boundary on the existing durable handoff event stream.
 
-This is an adapter around the A/B comparison/admission implementation, not
-an implementation of A/B mathematics or an autonomous external search tool.
+This is an adapter for bounded referent-evidence comparison/admission, not
+a definition of the language referent or an autonomous external search tool.
 All outward traversal and comparison are supplied by registered actors.
 """
 from __future__ import annotations
@@ -31,7 +31,7 @@ class SwallowReport:
 
 @dataclass(frozen=True)
 class ReferenceAdmission:
-    """Decision returned by the external A/B comparison/admission layer."""
+    """Decision returned by the external referent-evidence comparison/admission layer."""
     admitted: bool
     reference_id: str = ""
     evidence: tuple[EvidenceRecord, ...] = ()
