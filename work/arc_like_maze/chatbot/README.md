@@ -107,3 +107,8 @@ See the [2026-10-12 experiment](COMPLETED_EXTENSION_PORTFOLIO_2026-10-12.md), [s
 ## Explicit witnessed donor-edge transfer (2026-10-13)
 
 [Standalone finite transfer oracle](finite_explicit_join_transfer.py) · [five finite tests](test_finite_explicit_join_transfer.py) · [research and evidence scope](EXPLICIT_JOIN_TRANSFER_2026-10-13.md). Under the SAME pinned source referents, one already-observed rooted donor edge may be selected to create a new derived partial correspondence without altering either original join. A conflicting subsequent edge is rejected with a word-equality witness. Full 185-file HTTP-pinned integration is a separately packaged local artifact.
+
+
+## Selected edge transport across distinct owner scopes (2026-10-13)
+
+[Independent finite four-law checker](finite_cross_scope_transport.py) · [six tests](test_finite_cross_scope_transport.py) · [scope, source and results](CROSS_SCOPE_TRANSPORT_2026-10-13.md). Distinct pinned local owners can yield one newly witnessed labeled commuting square only after explicit OLD and NEW endpoint maps and separate recipient-side transition observation. One square is not full source equivalence. Full 193-file owner-bound chatbot remains in a separate local archive.
