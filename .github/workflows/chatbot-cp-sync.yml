@@ -20,3 +20,10 @@ jobs:
         run: python work/arc_like_maze/chatbot/checkpoints/cp_record.py check
       - name: Exercise CP recording and rejection cases
         run: python -m unittest -q work.arc_like_maze.chatbot.checkpoints.test_cp_record
+
+      - name: Check latest finite shared-route certificate reference
+        working-directory: work/arc_like_maze/chatbot
+        run: |
+          python -m unittest -q test_finite_shared_route_certificate.SharedFiniteTests
+          python -m unittest -q test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests
+          python finite_shared_route_certificate.py

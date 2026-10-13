@@ -1,0 +1,14 @@
+{
+  "stage": 28,
+  "date": "2026-10-13",
+  "scope": "completed targeted local runs, not entire historical suite",
+  "completed": [
+    {"suite": "test_ab_chatbot_shared_route_certificates.SharedRouteTaskTests", "passed": 13, "executed": 13, "kind": "live in-process owner-pinned integration"},
+    {"suite": "test_finite_shared_route_certificate.SharedFiniteTests", "passed": 14, "executed": 14, "kind": "standalone complete-law finite reference"},
+    {"suite": "test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests", "passed": 8, "executed": 8, "kind": "CP-0027 finite regression"}
+  ],
+  "passed": 35,
+  "executed": 35,
+  "observations_added": 0,
+  "excluded": "One broader combined historical-suite invocation stalled and one standalone CP-0027 integrated suite invocation timed out; neither counted as a pass."
+}

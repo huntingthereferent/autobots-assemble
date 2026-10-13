@@ -14,9 +14,10 @@ The same ongoing chatbot investigation, recorded one checkpoint at a time. A/B l
 | [25](checkpoints/25-route-selective-refresh/README.md) | Route-selective refresh | A changed route can be rechecked without replaying its unaffected neighbor. |
 | [26](checkpoints/26-route-bound-task/README.md) | Route-specific task | A task checks only its selected route, even if the other route is withdrawn. |
 | [27](checkpoints/27-multi-task-dependency/README.md) | Multi-task dependencies | Finite dependency selector |
+| [28](checkpoints/28-shared-route-certificate/README.md) | Shared route certificate | One fresh route audit serves distinct task requirements; 35 targeted checks |
 
 Open a checkpoint to see its **record, code, tests, demonstration, and result files**. Reports retain their stated scope: historical targeted tests are not a full CI pass; hashes are identifiers, not authentication.
 
-**Source boundary:** Stages 21–26 have their eight individual patch-recovered source/evidence files here. Stage 20's full 201-file local baseline is preserved in the original archive, but its entire integrated package is not yet committed to GitHub. Stage 27 has its independently published finite reference in the parent directory. Consequently the complete integrated Stage 26 runtime still needs its baseline to execute from a clean GitHub checkout.
+**Source boundary:** Stages 21–26 have their eight individual patch-recovered source/evidence files here. Stage 20's full 201-file local baseline is preserved in the original archive, but its entire integrated package is not yet committed to GitHub. Stages 27–28 have independently published finite references in the parent directory; the CP-28 checkpoint folder also includes its integrated adapter and tests. Consequently the integrated owner-backed stages still need that baseline to execute from a clean GitHub checkout.
 
 [Full provenance and archive hashes](../PROVENANCE.md) · [Earlier research index](../research-history.md) · [Language referent](../../../../LANGUAGE_REFERENT.md)

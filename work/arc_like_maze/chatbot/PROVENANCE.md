@@ -1,6 +1,6 @@
 # Finite chatbot — checkpoint provenance (October 13, 2026)
 
-This is a trace of the finite mathematical chatbot's **stages 20–27**, following the [research index](research/README.md). The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
+This is a trace of the finite mathematical chatbot's **stages 20–28**, following the [research index](research/README.md). The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
 
 ## Witness sequence
 
@@ -55,6 +55,14 @@ The full owner-bound integrated chatbot adds a task-to-source incidence ledger: 
 
 **Local integrated handoff:** `ab_chatbot_multi_task_dependency_2026-10-13.zip` · 257 files · SHA-256 `03e3a0b89fb477b14c6b09e769e0d3515a004ebe9bf116f677cda86ea65c7a94`. All 249 predecessor entries unchanged. **127 completed targeted tests**: 27 new (19 live owner-bound + 8 independent finite) and 100 regressions. The full historical suite was not completed and no new GitHub CI result is asserted. The integrated owner-backed code and demo are in the local archive; the GitHub code here is the separately runnable finite reference.
 
+## Stage 28 · Shared fresh route certificate across tasks (October 13, 2026)
+
+[Bounded experiment, runnable integrated adapter, demonstrations, tests and regression record](research/checkpoints/28-shared-route-certificate/README.md).
+
+In the locally reconstructed 257-file CP-27 owner-backed package, CP-28 groups independently declared tasks by identical selected route object and exact route fingerprint. Each selected route is checked twice, once per batch, and its current certificate is consumed by separate task obligations. Two left tasks jointly require 2 underlying route replay calls instead of 4, with separate task fingerprints. A missing left-route edge remains unproved even if the right route admits it. Unselected tasks remain historical rather than freshly verified. Zero new owner observations.
+
+The CP-28 complete local ZIP has 265 files; all 257 CP-27 entry contents are unchanged. **35/35 completed targeted tests**: 13 new owner-backed, 14 new complete-law finite reference, and 8 prior finite regressions. Broad combined historical tests and a separate CP-27 integration suite timed out and are excluded. The ZIP remains conversation-local; the GitHub checkpoint folder includes the eight new source/evidence files but lacks the original Stage-20 runtime baseline needed for the full owner-backed execution from a clean checkout. See the checkpoint ledger below for the archive hash. The standalone GitHub reference does not authenticate owners or prove general equivalence.
+
 <!-- CHATBOT-CP-LEDGER:BEGIN -->
 ## Checkpoint output ledger (harness-maintained)
 
@@ -63,12 +71,13 @@ Each row is derived from an explicit CP manifest. The record links are repositor
 | CP | Observed movement | Survives | Verification | Archive |
 | --- | --- | --- | --- | --- |
 | [CP-0027](checkpoints/CP-0027.json) · 2026-10-13 | **Multi-task source dependency propagation** — Separate route-bound tasks share a dependency network while preserving independent task evidence. | Each task keeps its own obligations and exact pinned source identity. Unaffected tasks stay cached until explicit proof-for-use. | 127/127 (targeted); [MULTI_TASK_DEPENDENCY_2026-10-13.md](MULTI_TASK_DEPENDENCY_2026-10-13.md) | `ab_chatbot_multi_task_dependency_2026-10-13.zip` · 257 files · conversation-local |
+| [CP-0028](checkpoints/CP-0028.json) · 2026-10-13 | **Shared fresh route certificate across tasks** — One fresh route certificate can serve multiple independently declared tasks in a bounded on-demand owner-backed audit. | Exact owner/source pin audits, separate task obligations, no cross-route edge borrowing, cached tasks not fresh, and zero new source observations. | 35/35 (targeted); [research/checkpoints/28-shared-route-certificate/record.md](research/checkpoints/28-shared-route-certificate/record.md) | `ab_chatbot_shared_route_certificate_2026-10-13.zip` · 265 files · conversation-local |
 
 ### Latest checkpoint reproduction
 
-- `python -m unittest -q test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests`
-- `python finite_multi_task_dependency.py`
+- `python -m unittest -q test_finite_shared_route_certificate.SharedFiniteTests`
+- `python finite_shared_route_certificate.py`
 
-Latest archive SHA-256: `03e3a0b89fb477b14c6b09e769e0d3515a004ebe9bf116f677cda86ea65c7a94`
+Latest archive SHA-256: `be9175a086083b7aaf108ebb1493052e62a8ba0a3cc8ba23b454a45ef78f1315`
 
 <!-- CHATBOT-CP-LEDGER:END -->

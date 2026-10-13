@@ -1,0 +1,29 @@
+{
+  "archive": {
+    "availability": "conversation-local",
+    "files": 265,
+    "name": "ab_chatbot_shared_route_certificate_2026-10-13.zip",
+    "sha256": "be9175a086083b7aaf108ebb1493052e62a8ba0a3cc8ba23b454a45ef78f1315"
+  },
+  "boundary": "Reuse applies only within one invocation and exact pinned route identity. The owner-backed runtime is in the local ZIP; GitHub's standalone finite reference does not authenticate owners.",
+  "cp": 28,
+  "date": "2026-10-13",
+  "next": "Test a separately specified cross-invocation certificate handoff that revalidates source identity and never inherits another task's obligations or stale status.",
+  "observation": "Two distinct left-route tasks shared one two-pass owner-backed route audit, completed independently, and retained separate task fingerprints. A right-only edge remained unproved on the left route.",
+  "preserved": "Exact owner/source pin audits, separate task obligations, no cross-route edge borrowing, cached tasks not fresh, and zero new source observations.",
+  "record": "research/checkpoints/28-shared-route-certificate/record.md",
+  "reproduction": [
+    "python -m unittest -q test_finite_shared_route_certificate.SharedFiniteTests",
+    "python finite_shared_route_certificate.py"
+  ],
+  "source": "finite_shared_route_certificate.py",
+  "status": "witnessed",
+  "summary": "One fresh route certificate can serve multiple independently declared tasks in a bounded on-demand owner-backed audit.",
+  "tests": {
+    "executed": 35,
+    "passed": 35,
+    "scope": "targeted"
+  },
+  "tests_path": "test_finite_shared_route_certificate.py",
+  "title": "Shared fresh route certificate across tasks"
+}

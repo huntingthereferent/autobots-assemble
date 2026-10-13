@@ -6,24 +6,25 @@ The chatbot follows relationships admitted by witnessed transitions and exact so
 
 ## Current checkpoint
 
-**CP-0027 · Multi-task source dependency propagation** · 2026-10-13 · witnessed
+**CP-0028 · Shared fresh route certificate across tasks** · 2026-10-13 · witnessed
 
-Separate route-bound tasks share a dependency network while preserving independent task evidence.
+One fresh route certificate can serve multiple independently declared tasks in a bounded on-demand owner-backed audit.
 
-**Observed:** A changed middle source re-audits only tasks that depend on that source; shared donor or final source changes reach every dependent task.
+**Observed:** Two distinct left-route tasks shared one two-pass owner-backed route audit, completed independently, and retained separate task fingerprints. A right-only edge remained unproved on the left route.
 
-**Preserved:** Each task keeps its own obligations and exact pinned source identity. Unaffected tasks stay cached until explicit proof-for-use.
+**Preserved:** Exact owner/source pin audits, separate task obligations, no cross-route edge borrowing, cached tasks not fresh, and zero new source observations.
 
-**Boundary:** Tasks skipped by dependency selection retain historical results, not currently replayed proof. The complete integrated owner-bound chatbot is in a separate archive; the standalone finite checker does not authenticate owners.
+**Boundary:** Reuse applies only within one invocation and exact pinned route identity. The owner-backed runtime is in the local ZIP; GitHub's standalone finite reference does not authenticate owners.
 
-**Verification record:** 127/127 (targeted). Local test execution is distinct from GitHub CI and from independent reproduction.
+**Verification record:** 35/35 (targeted). Local test execution is distinct from GitHub CI and from independent reproduction.
 
-**Next possible movement:** Explore whether one freshly audited route certificate can be reused by multiple independent tasks without merging their requirements.
+**Next possible movement:** Test a separately specified cross-invocation certificate handoff that revalidates source identity and never inherits another task's obligations or stale status.
 
 ## Recent checkpoints
 
 | CP | Change | Evidence |
 | --- | --- | --- |
+| [CP-0028](checkpoints/CP-0028.json) | Shared fresh route certificate across tasks | [research/checkpoints/28-shared-route-certificate/record.md](research/checkpoints/28-shared-route-certificate/record.md) |
 | [CP-0027](checkpoints/CP-0027.json) | Multi-task source dependency propagation | [MULTI_TASK_DEPENDENCY_2026-10-13.md](MULTI_TASK_DEPENDENCY_2026-10-13.md) |
 
 ## Follow the record
