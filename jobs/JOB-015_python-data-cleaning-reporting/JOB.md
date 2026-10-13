@@ -1,7 +1,7 @@
 # JOB-015 — Python Data Cleaning & Reporting
 
 <!-- REVIEW_NAV_START -->
-[← JOB-014 — Data Engineer — Python / SQL / AWS](../JOB-014_python-sql-aws-data-engineer/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
+[← JOB-014 — Data Engineer — Python / SQL / AWS](../JOB-014_python-sql-aws-data-engineer/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
 <!-- REVIEW_NAV_END -->
 
 - **Source:** https://www.freelancer.com/projects/pandas/python-data-cleaning-reporting
@@ -51,5 +51,5 @@ When the client dataset arrives, confirm the business rules for duplicate keys, 
 - `acceptance_report.txt`
 
 <!-- REVIEW_NAV_START -->
-[← JOB-014 — Data Engineer — Python / SQL / AWS](../JOB-014_python-sql-aws-data-engineer/JOB.md) · [Job Index](../../JOBS.md) · [JOB-018 — Excel Quotation Automation Tool →](../JOB-018_excel-quotation-automation-tool/JOB.md)
+[← JOB-014 — Data Engineer — Python / SQL / AWS](../JOB-014_python-sql-aws-data-engineer/JOB.md) · [Job Index](../../JOBS.md) · [JOB-019 — Browser Automation for Real Estate Data Migration →](../JOB-019_browser-automation-real-estate-migration/JOB.md)
 <!-- REVIEW_NAV_END -->
