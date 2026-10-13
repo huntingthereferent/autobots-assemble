@@ -2,7 +2,7 @@
 
 These are short phrases the user can use as **movement operators** without needing to remember formal protocol names.
 
-They are language surfaces, not new definitions of A/B.
+They are language surfaces, not new definitions of the **language referent** (historically A/B).
 
 ## `swallow X`
 
@@ -54,3 +54,13 @@ This is deliberately stronger than “summarize” or “explain.” It asks the
 - caveman/telegraphic: “open thing. show parts. connect parts.”
 
 If a phrase like “rip this apart” is clearly being used as critique, the decoder may choose a different shape. Context still resolves the surface.
+
+## A phrase is not always an operator
+
+The `swallow X` operator above is explicitly about **repository layer absorption**. James also describes *swallowing observations* outward across situations and people. That conversational meaning doesn't trigger `LAYER.ABSORB`. Resolve the active referent before assigning an operational command.
+
+Likewise, *regrounding* and *surfing* come from his description of continuing a conversation while recovering orientation. They are not automatically new executable shape IDs, forced returns, or evidence of a physical oscillation.
+
+> yes surfing :)
+
+Verbatim James, October 13, 2026. See [Regrounding](../REGROUNDING.md). A direct quote must remain recognizable when moving between the plain, playful and technical surfaces.
