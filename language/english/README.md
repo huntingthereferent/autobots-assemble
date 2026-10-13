@@ -26,7 +26,7 @@ See:
 
 ## James is the same speaker in every register
 
-The [language referent](../../LANGUAGE_REFERENT.md) is the same referent historically called A/B. The [regrounding record](../REGROUNDING.md) explains why a name helps recover a relation when a conversation branches farther than intended.
+The [language referent](../../LANGUAGE_REFERENT.md) is the same referent historically called A/B. The [Human Drift record](../HUMAN_DRIFT.md) shows James varying his wording to move around an AI's changing misunderstandings. The [regrounding record](../REGROUNDING.md) explains how new observations meet the earlier referent rather than being deleted by a return. Register names must not turn those distinct utterances into interchangeable synonyms.
 
 The register bank is a **candidate surface index**, not a personality generator. It cannot tell whether someone was being gentle, angry, playful, or precise merely by labeling them "casual" or "technical." Nor does a different register imply a different James. Preserve the original words when attribution matters, including swearing and humor; any normalized expression is a labeled rendering rather than a purported quote.
 
