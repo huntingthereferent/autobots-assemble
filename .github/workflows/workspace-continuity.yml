@@ -9,9 +9,11 @@ on:
       - "network/tests/test_correspondence_worker_handoff.py"
       - "network/tests/test_workstation_monitor.py"
       - "network/tests/test_workstation_http.py"
+      - "network/tests/test_workstation_two_processes.py"
       - "runtime/http/workstation.*"
       - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
+      - "runtime/examples/workstation_two_processes.py"
       - ".github/workflows/workspace-continuity.yml"
   pull_request:
     paths:
@@ -21,9 +23,11 @@ on:
       - "network/tests/test_correspondence_worker_handoff.py"
       - "network/tests/test_workstation_monitor.py"
       - "network/tests/test_workstation_http.py"
+      - "network/tests/test_workstation_two_processes.py"
       - "runtime/http/workstation.*"
       - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
+      - "runtime/examples/workstation_two_processes.py"
       - ".github/workflows/workspace-continuity.yml"
 
 jobs:
@@ -34,7 +38,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Verify lane continuity, source editions and executable prefilter
-        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http
-      - name: Reproduce first worker handoff demo
+      - name: Verify workstation, source editions, and two unlike worker computations
+        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http network.tests.test_workstation_two_processes
+      - name: Reproduce finite worker handoff
         run: python -m runtime.examples.correspondence_worker
+      - name: Reproduce two-process workstation in isolated ephemeral CI state
+        run: python -m runtime.examples.workstation_two_processes --data-dir /tmp/ci-workstation-two-processes --execute

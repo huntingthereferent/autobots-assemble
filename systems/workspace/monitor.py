@@ -70,7 +70,7 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
     jobs = []
     for handoff in runtime._handoffs.values():
         metadata = handoff.metadata
-        if metadata.get("source_system") != "process-workstation":
+        if metadata.get("source_system") != "process-workstation" and metadata.get("workstation_worker") is not True:
             continue
         state = runtime.state(handoff.handoff_id)
         worker_id = str(metadata.get("worker_id") or "")
@@ -94,6 +94,8 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
             "title": metadata.get("title") or handoff.required_relation,
             "referent": handoff.referent,
             "required_relation": handoff.required_relation,
+            "source_system": metadata.get("source_system"),
+            "realization": "simulated" if metadata.get("source_system") == "factory" else "computed",
             "actor_id": handoff.to_actor,
             "status": state.status,
             "source_state": source_state,
