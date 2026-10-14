@@ -1,8 +1,8 @@
-# Chatbot — About Me
+# Finite Correspondence Research — About Me
 
-This page belongs to the **finite mathematical chatbot research harness**, not to the researcher’s personal profile.
+This page belongs to the **finite correspondence research checkpoint harness**, not to the researcher’s personal profile. A chatbot is one possible application, not the name of this research.
 
-The chatbot follows relationships admitted by witnessed transitions and exact source conditions. Changes may come from the surrounding systems; the chatbot checks their effects when invoked. It does not require independent goals or continuous monitoring to do this.
+The research follows relations admitted by witnessed finite transitions and exact source conditions. Changes may come from surrounding systems and are checked when invoked; independent goals or continuous monitoring are not required.
 
 ## Current checkpoint
 
