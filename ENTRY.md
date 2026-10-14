@@ -61,9 +61,15 @@ A substantive AI response or repo mutation should leave recoverable:
 
 If the user gives a new explicit referent, that becomes primary unless it conflicts with an explicit safety or authority boundary.
 
-## Chatbot checkpoint handoff
+## Finite correspondence checkpoint handoff
 
-When the active referent is finite correspondence research (historically located at `chatbot/`) and a checkpoint is completed, read and apply the [chatbot CP output contract](work/arc_like_maze/chatbot/checkpoints/HARNESS.md) before handoff. Record one CP manifest and update the chatbot-specific [About Me](work/arc_like_maze/chatbot/ABOUT_ME.md) and [provenance](work/arc_like_maze/chatbot/PROVENANCE.md) together. Do not change any personal profile, invent observations, or claim automated background execution.
+When the active referent is finite correspondence research (historically located at `chatbot/`) and a checkpoint is completed, read and apply the [finite correspondence CP output contract](work/arc_like_maze/chatbot/checkpoints/HARNESS.md) before handoff. Record one CP manifest and update the research-specific [About Me](work/arc_like_maze/chatbot/ABOUT_ME.md) and [provenance](work/arc_like_maze/chatbot/PROVENANCE.md) together. Do not change any personal profile, invent observations, or claim automated background execution.
+
+## Reader-facing research naming and completion boundaries
+
+Use **Finite Correspondence Research** for the investigation, **Finite Correspondence Process** for the bounded implementation, and **Correspondence Worker** only for an explicitly admitted worker role. Do not reuse retired product labels in prose, headings, user-facing summaries, or handoffs. The historical paths in links, scripts, manifests, code symbols, and archival records must remain unchanged for compatibility.
+
+Describe an observed result only within its verified scope. Avoid promotional framing, launch language, or implying that a research checkpoint, working copy, or tested component is a finished product. A local PASS does not establish full integration, deployment, or production readiness.
 
 ## Finite correspondence process / workstation naming
 
