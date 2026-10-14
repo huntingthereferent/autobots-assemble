@@ -1,6 +1,6 @@
 # Language — Same Referent, Different Surfaces
 
-[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [James's language report](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
+[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [Felt POV / Reading Provenance](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) · [James's language report](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
 
 **James is James at every layer.** A conversation, a mathematical description, an English decoder, a social interaction, and a technical handoff can follow the same referent without turning him into a different speaker or converting every observation into code.
 
@@ -14,6 +14,7 @@ The **language referent** is the same thing historically called **A/B**. Mathema
 | --- | --- | --- |
 | [Human Drift](HUMAN_DRIFT.md) | Dated movement in James's own words, including his corrections of AI misunderstandings | What changed from one explanation to the next, not a list of synonyms |
 | [Regrounding](REGROUNDING.md) | Responding to drift by relating acquired observations to the earlier referent | The branch and its gains, not merely a rewind |
+| [Felt POV / Reading Provenance](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) | October 14 first-person report: language-evoked feeling without an actual change of referent; reading and generative AI as preferred surfaces | Preserve exact words, observed correction, reported feeling, and uncertainty separately |
 | [Pragmatics](PRAGMATICS.md) | Tone, joking, intensity, hesitation, swearing, care and register | Social meaning without cleaning the person into a machine |
 | [Shape contract](SHAPE_CONTRACT.md) | Provisional operational handles for particular utterances | Ambiguity, scope, and the original expression |
 | [English](english/README.md) | Candidate readings, decoder, renderer and context-dependent operator phrases | The difference between a conversational observation and a work command |
