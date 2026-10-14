@@ -1,0 +1,60 @@
+{
+  "status": "PASSED",
+  "tests_passed": 113,
+  "modules": [
+    {
+      "suite": "test_ab_chatbot_two_route_comparison.TwoRouteTests",
+      "count": 12,
+      "role": "new integration"
+    },
+    {
+      "suite": "test_finite_two_route_comparison.FiniteRouteTests",
+      "count": 7,
+      "role": "new finite reference"
+    },
+    {
+      "suite": "test_ab_chatbot_two_hop_transport.TwoHopTransportTests",
+      "count": 14,
+      "role": "existing two-hop"
+    },
+    {
+      "suite": "test_ab_chatbot_cross_scope_transport.CrossScopeTransportTests",
+      "count": 12,
+      "role": "existing cross-scope"
+    },
+    {
+      "suite": "test_ab_chatbot_joint_evidence_task.JointEvidenceTaskTests",
+      "count": 11,
+      "role": "existing joint task"
+    },
+    {
+      "suite": "test_ab_chatbot_cross_pin_join.JoinCrossPinTests",
+      "count": 10,
+      "role": "existing join"
+    },
+    {
+      "suite": "test_ab_chatbot_explicit_evidence_transfer.ExplicitTransferTests",
+      "count": 13,
+      "role": "existing same-pin transfer"
+    },
+    {
+      "suite": "test_ab_chatbot_cross_pin_comparison.CrossPinTests",
+      "count": 10,
+      "role": "existing cross-pin comparison"
+    },
+    {
+      "suite": "test_ab_chatbot_owner_pin_contract.ExactOwnerTests",
+      "count": 10,
+      "role": "existing exact owner"
+    },
+    {
+      "suite": "test_ab_chatbot_provenance_contract.ProvenanceContractTests",
+      "count": 14,
+      "role": "existing provenance"
+    }
+  ],
+  "executions": "Each named suite successfully completed via unittest; initial commands with invalid class names excluded",
+  "full_historical_suite": "NOT_RUN_TO_COMPLETION",
+  "github_ci": "NOT_CHECKED",
+  "notes": "Freshly compared routes preserve individual link certificates and demand no new observations on repeated checks"
+}

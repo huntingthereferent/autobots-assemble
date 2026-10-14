@@ -1,0 +1,42 @@
+{
+  "goals_only": {
+    "status": "GOALS_CARRIED_WITNESSED",
+    "required_edge": null,
+    "goal_count": 2,
+    "candidate_evaluations": 11,
+    "owner_observations": [
+      28,
+      18
+    ],
+    "task_hash": "16de5f5efe3d212fc75c7116078ac2ec1838f7b5fd97fcce2f4f2b4b172b8712"
+  },
+  "explicit_edge": {
+    "status": "PARTIAL_GOALS_WITNESSED",
+    "required_edge": [
+      [
+        0,
+        0,
+        0
+      ],
+      "B"
+    ],
+    "goal_count": 1,
+    "candidate_evaluations": 9,
+    "owner_observations": [
+      26,
+      18
+    ],
+    "task_hash": "716b17e2768860110fccf69fecd13ab49a7b079cfa744d89e905491e66264cdc"
+  },
+  "ambiguous": {
+    "status": "UNKNOWN_TASK",
+    "required_edge": null,
+    "goal_count": 0,
+    "candidate_evaluations": 0,
+    "owner_observations": [
+      0,
+      0
+    ],
+    "task_hash": null
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-13",
+  "complete_runs": [
+    {
+      "module": "test_ab_chatbot_cross_pin_join.JoinCrossPinTests",
+      "passed": 10
+    },
+    {
+      "module": "test_finite_cross_pin_join",
+      "passed": 5
+    },
+    {
+      "module": "test_ab_chatbot_cross_pin_comparison.CrossPinTests",
+      "passed": 10
+    },
+    {
+      "module": "test_ab_chatbot_owner_pin_contract",
+      "passed": 10
+    },
+    {
+      "module": "test_ab_chatbot_provenance_contract",
+      "passed": 14
+    },
+    {
+      "module": "test_ab_chatbot_rule_change",
+      "passed": 14
+    },
+    {
+      "module": "test_ab_chatbot_mixed_obligations",
+      "passed": 12
+    },
+    {
+      "module": "test_ab_chatbot_language_bridge",
+      "passed": 35
+    }
+  ],
+  "passed_total": 110,
+  "full_historical_suite_completed": false,
+  "github_ci_verified": false,
+  "partial_group_run": "An unbounded grouped run was interrupted after three completed modules; remaining were rerun separately."
+}

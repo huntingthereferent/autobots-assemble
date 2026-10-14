@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-13",
+  "status": "completed targeted runs",
+  "tests_passed": 100,
+  "new_tests": 25,
+  "regression_tests": 75,
+  "completed_modules": [
+    {"module": "test_ab_chatbot_route_bound_task.RouteBoundTaskTests", "passed": 18},
+    {"module": "test_finite_single_route_task.FiniteSingleRouteTests", "passed": 7},
+    {"module": "test_ab_chatbot_route_selective_refresh.RouteSelectiveTests", "passed": 14},
+    {"module": "test_ab_chatbot_two_route_comparison.TwoRouteTests", "passed": 12},
+    {"module": "test_ab_chatbot_source_change_propagation.ChangePropagationTests", "passed": 13},
+    {"module": "test_ab_chatbot_two_hop_transport.TwoHopTransportTests", "passed": 14},
+    {"module": "test_ab_chatbot_owner_pin_contract.ExactOwnerTests", "passed": 10},
+    {"module": "test_ab_chatbot_cross_scope_transport.CrossScopeTransportTests", "passed": 12}
+  ],
+  "excluded": ["Misnamed SourceChangeTests class: no valid tests executed", "Incomplete earlier grouped run that stalled in previous joint-evidence task module"],
+  "full_historical_suite": "not run to completion",
+  "github_ci": "not verified",
+  "github_write": "not attempted; research artifact is local"
+}

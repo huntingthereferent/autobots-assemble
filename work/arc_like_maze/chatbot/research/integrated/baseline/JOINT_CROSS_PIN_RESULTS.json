@@ -1,0 +1,151 @@
+{
+  "compatible": {
+    "old_phi": [
+      0,
+      0,
+      0
+    ],
+    "new_phi": [
+      0,
+      1,
+      2
+    ],
+    "words": [
+      "A",
+      "BAA"
+    ],
+    "initial_zero_budget_status": "SEARCHING",
+    "status": "JOINT_PARTIAL_CORRESPONDENCE_WITNESSED",
+    "zero_read_replay_status": "JOINT_PARTIAL_CORRESPONDENCE_WITNESSED",
+    "old_revision": 0,
+    "new_revision": 1,
+    "observed_old": 4,
+    "observed_new": 4,
+    "state_pairs": 5,
+    "admitted_edges": 4,
+    "obstruction": null,
+    "finite_reference_agrees": true,
+    "cache_objects_distinct": true
+  },
+  "source_collision": {
+    "old_phi": [
+      0,
+      0,
+      0
+    ],
+    "new_phi": [
+      0,
+      1,
+      2
+    ],
+    "words": [
+      "A",
+      "BAB"
+    ],
+    "initial_zero_budget_status": "SEARCHING",
+    "status": "JOINT_RELATION_CONFLICT_WITNESSED",
+    "zero_read_replay_status": "JOINT_RELATION_CONFLICT_WITNESSED",
+    "old_revision": 0,
+    "new_revision": 1,
+    "observed_old": 4,
+    "observed_new": 4,
+    "state_pairs": 0,
+    "admitted_edges": 0,
+    "obstruction": {
+      "cause": "SOURCE_STATE_CONFLICT",
+      "old_words": [
+        "A",
+        "BAB"
+      ],
+      "old_endpoints": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0
+        ]
+      ],
+      "new_endpoints": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ],
+      "old_equal": true,
+      "new_equal": false
+    },
+    "finite_reference_agrees": true,
+    "cache_objects_distinct": true
+  },
+  "target_collision": {
+    "old_phi": [
+      0,
+      0,
+      1
+    ],
+    "new_phi": [
+      0,
+      0,
+      0
+    ],
+    "words": [
+      "B",
+      "ABBABA"
+    ],
+    "initial_zero_budget_status": "SEARCHING",
+    "status": "JOINT_RELATION_CONFLICT_WITNESSED",
+    "zero_read_replay_status": "JOINT_RELATION_CONFLICT_WITNESSED",
+    "old_revision": 0,
+    "new_revision": 1,
+    "observed_old": 7,
+    "observed_new": 7,
+    "state_pairs": 0,
+    "admitted_edges": 0,
+    "obstruction": {
+      "cause": "TARGET_STATE_CONFLICT",
+      "old_words": [
+        "B",
+        "ABBABA"
+      ],
+      "old_endpoints": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "new_endpoints": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "old_equal": false,
+      "new_equal": true
+    },
+    "finite_reference_agrees": true,
+    "cache_objects_distinct": true
+  },
+  "scope": "Finite separately pinned local owner histories, no full conjugacy or off-path edge claims."
+}

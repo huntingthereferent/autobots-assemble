@@ -1,0 +1,792 @@
+[
+  {
+    "fixed": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        1,
+        0,
+        1
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "fixed",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 41,
+      "excluded": 13,
+      "paired": 27,
+      "trials": 3,
+      "observed_old": 54,
+      "observed_new": 54,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BBBB",
+        "BAABA",
+        "ABAABB"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          "B"
+        ],
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "BBBB"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    },
+    "guided": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        1,
+        0,
+        1
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "guided",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 41,
+      "excluded": 13,
+      "paired": 27,
+      "trials": 3,
+      "observed_old": 54,
+      "observed_new": 54,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BBBB",
+        "BAABA",
+        "ABAABB"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          "B"
+        ],
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "BBBB"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 2
+    }
+  },
+  {
+    "fixed": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        1,
+        0,
+        1
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "fixed",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 41,
+      "excluded": 13,
+      "paired": 27,
+      "trials": 3,
+      "observed_old": 54,
+      "observed_new": 54,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "AAABB",
+        "ABAABB"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "ABAABB"
+        ],
+        [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          "ABAA"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    },
+    "guided": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        1,
+        0,
+        1
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "guided",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 41,
+      "excluded": 13,
+      "paired": 27,
+      "trials": 3,
+      "observed_old": 54,
+      "observed_new": 54,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "AAABB",
+        "ABAABB"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "ABAABB"
+        ],
+        [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            2,
+            1
+          ],
+          "ABAA"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 2
+    }
+  },
+  {
+    "fixed": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        0,
+        0,
+        0
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "fixed",
+      "status": "PARTIAL_GOALS_WITNESSED",
+      "completed": 1,
+      "admitted": 15,
+      "excluded": 3,
+      "paired": 9,
+      "trials": 3,
+      "observed_old": 28,
+      "observed_new": 18,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BAAA",
+        "AABAB"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "B"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    },
+    "guided": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        0,
+        0,
+        0
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "guided",
+      "status": "PARTIAL_GOALS_WITNESSED",
+      "completed": 1,
+      "admitted": 15,
+      "excluded": 3,
+      "paired": 9,
+      "trials": 3,
+      "observed_old": 28,
+      "observed_new": 18,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BAAA",
+        "AABAB"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "B"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 2
+    }
+  },
+  {
+    "fixed": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        0,
+        0,
+        0
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "fixed",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 13,
+      "excluded": 5,
+      "paired": 9,
+      "trials": 3,
+      "observed_old": 26,
+      "observed_new": 18,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "ABAA",
+        "ABBABA"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "ABBABA"
+        ],
+        [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            2,
+            0
+          ],
+          "ABAA"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    },
+    "guided": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        0,
+        0,
+        0
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "guided",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 13,
+      "excluded": 5,
+      "paired": 9,
+      "trials": 3,
+      "observed_old": 28,
+      "observed_new": 18,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "ABAA",
+        "ABBABA"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "ABBABA"
+        ],
+        [
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            2,
+            0
+          ],
+          "ABAA"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 2
+    }
+  },
+  {
+    "fixed": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        0,
+        1,
+        0
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "fixed",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 42,
+      "excluded": 12,
+      "paired": 27,
+      "trials": 3,
+      "observed_old": 54,
+      "observed_new": 54,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BBBB",
+        "AABAB",
+        "BBABAA"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "B"
+        ],
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          "BBBB"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    },
+    "guided": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        0,
+        1,
+        0
+      ],
+      "goals": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          1,
+          1
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "guided",
+      "status": "GOALS_CARRIED_WITNESSED",
+      "completed": 2,
+      "admitted": 42,
+      "excluded": 12,
+      "paired": 27,
+      "trials": 3,
+      "observed_old": 54,
+      "observed_new": 54,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BBBB",
+        "AABAB",
+        "BBABAA"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          "B"
+        ],
+        [
+          [
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            1
+          ],
+          "BBBB"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    }
+  },
+  {
+    "fixed": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        2,
+        1,
+        0
+      ],
+      "goals": [
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "fixed",
+      "status": "PARTIAL_GOALS_WITNESSED",
+      "completed": 1,
+      "admitted": 11,
+      "excluded": 7,
+      "paired": 9,
+      "trials": 3,
+      "observed_old": 28,
+      "observed_new": 32,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BAAAA"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            2
+          ],
+          "BA"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    },
+    "guided": {
+      "law_old": [
+        0,
+        0,
+        1
+      ],
+      "law_new": [
+        2,
+        1,
+        0
+      ],
+      "goals": [
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ],
+      "trial_budget": 3,
+      "policy": "guided",
+      "status": "PARTIAL_GOALS_WITNESSED",
+      "completed": 1,
+      "admitted": 11,
+      "excluded": 7,
+      "paired": 9,
+      "trials": 3,
+      "observed_old": 28,
+      "observed_new": 32,
+      "candidate_pool_truncated": true,
+      "selected_words": [
+        "BAAAA"
+      ],
+      "selected_goal_words": [
+        [
+          [
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            2
+          ],
+          "BA"
+        ]
+      ],
+      "replay_verified": true,
+      "witness_guided_attempts": 0
+    }
+  }
+]

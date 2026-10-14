@@ -1,0 +1,537 @@
+[
+  {
+    "case": "two_compatible_edges",
+    "task_status": "PARTIAL_GOALS_WITNESSED",
+    "goals_carried": 1,
+    "selected_words": [
+      "BB",
+      "ABAA"
+    ],
+    "candidates_before": 11,
+    "candidates_after": 9,
+    "rejected_seed_certificates": 2,
+    "certificate_actions": [
+      {
+        "words": [
+          "ABAA",
+          "ABBABA"
+        ],
+        "required_state": [
+          0,
+          0,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          0,
+          1,
+          0
+        ],
+        "observed_new_target": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "words": [
+          "ABBABA"
+        ],
+        "required_state": [
+          0,
+          0,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          0,
+          1,
+          0
+        ],
+        "observed_new_target": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "unproved_by_candidate": [
+      {
+        "words": [
+          "ABAA",
+          "AAABB",
+          "BAAAB"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "ABAA",
+          "BAAAB"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "AAABB",
+          "BAAAB"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "ABAA",
+          "AAABB"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "BB",
+          "ABAA"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "AAABB"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "BAAAB"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "ABAA"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "BB"
+        ],
+        "missing": []
+      }
+    ],
+    "observed_old": 26,
+    "observed_new": 18,
+    "fingerprint": "63f3ddfd174ba0e7b3a32f77db179982c18db6b6c20933e7fe64301d2e85bd11"
+  },
+  {
+    "case": "distinct_conflicts",
+    "task_status": "PARTIAL_GOALS_WITNESSED",
+    "goals_carried": 1,
+    "selected_words": [
+      "ABAA"
+    ],
+    "candidates_before": 11,
+    "candidates_after": 7,
+    "rejected_seed_certificates": 4,
+    "certificate_actions": [
+      {
+        "words": [
+          "ABAA",
+          "ABBABA"
+        ],
+        "required_state": [
+          0,
+          0,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          0,
+          1,
+          0
+        ],
+        "observed_new_target": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "words": [
+          "ABAA",
+          "AAABB",
+          "BAAAB"
+        ],
+        "required_state": [
+          1,
+          2,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          1,
+          1,
+          1
+        ],
+        "observed_new_target": [
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "words": [
+          "ABAA",
+          "BAAAB"
+        ],
+        "required_state": [
+          1,
+          2,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          1,
+          1,
+          1
+        ],
+        "observed_new_target": [
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "words": [
+          "ABBABA"
+        ],
+        "required_state": [
+          0,
+          0,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          0,
+          1,
+          0
+        ],
+        "observed_new_target": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "unproved_by_candidate": [
+      {
+        "words": [
+          "AAABB",
+          "BAAAB"
+        ],
+        "missing": [
+          [
+            [
+              1,
+              2,
+              0
+            ],
+            "B"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "ABAA",
+          "AAABB"
+        ],
+        "missing": [
+          [
+            [
+              1,
+              2,
+              0
+            ],
+            "B"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "BB",
+          "ABAA"
+        ],
+        "missing": [
+          [
+            [
+              1,
+              2,
+              0
+            ],
+            "B"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "AAABB"
+        ],
+        "missing": [
+          [
+            [
+              1,
+              2,
+              0
+            ],
+            "B"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "BAAAB"
+        ],
+        "missing": [
+          [
+            [
+              1,
+              2,
+              0
+            ],
+            "B"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "ABAA"
+        ],
+        "missing": []
+      },
+      {
+        "words": [
+          "BB"
+        ],
+        "missing": [
+          [
+            [
+              1,
+              2,
+              0
+            ],
+            "B"
+          ]
+        ]
+      }
+    ],
+    "observed_old": 26,
+    "observed_new": 18,
+    "fingerprint": "e51d26a5b87ea91eb2fdbd0354201fcbf1356f112c8b62b48a029a5106f59841"
+  },
+  {
+    "case": "conjunction_unproved",
+    "task_status": "REQUIREMENTS_UNPROVED",
+    "goals_carried": null,
+    "selected_words": null,
+    "candidates_before": 11,
+    "candidates_after": 9,
+    "rejected_seed_certificates": 2,
+    "certificate_actions": [
+      {
+        "words": [
+          "ABAA",
+          "ABBABA"
+        ],
+        "required_state": [
+          0,
+          0,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          0,
+          1,
+          0
+        ],
+        "observed_new_target": [
+          0,
+          1,
+          0
+        ]
+      },
+      {
+        "words": [
+          "ABBABA"
+        ],
+        "required_state": [
+          0,
+          0,
+          0
+        ],
+        "required_action": "B",
+        "cause": "TARGET_COLLISION",
+        "observed_old_target": [
+          0,
+          1,
+          0
+        ],
+        "observed_new_target": [
+          0,
+          1,
+          0
+        ]
+      }
+    ],
+    "unproved_by_candidate": [
+      {
+        "words": [
+          "ABAA",
+          "AAABB",
+          "BAAAB"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "ABAA",
+          "BAAAB"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "AAABB",
+          "BAAAB"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "ABAA",
+          "AAABB"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "BB",
+          "ABAA"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "AAABB"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "BAAAB"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "ABAA"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      },
+      {
+        "words": [
+          "BB"
+        ],
+        "missing": [
+          [
+            [
+              0,
+              0,
+              1
+            ],
+            "A"
+          ]
+        ]
+      }
+    ],
+    "observed_old": 26,
+    "observed_new": 18,
+    "fingerprint": "fb93de314a4638f87d964a55aa2ad363e184b4a7c70021cf021cd7665bffe07f"
+  }
+]

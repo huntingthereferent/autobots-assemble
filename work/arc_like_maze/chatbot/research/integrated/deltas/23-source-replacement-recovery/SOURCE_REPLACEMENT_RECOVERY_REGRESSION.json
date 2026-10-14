@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-13",
+  "modules": [
+    {
+      "module": "test_ab_chatbot_source_replacement_recovery.SourceReplacementRecoveryTests",
+      "passed": 13
+    },
+    {
+      "module": "test_finite_source_replacement_recovery.FiniteReplacementTests",
+      "passed": 7
+    },
+    {
+      "module": "test_ab_chatbot_two_route_comparison.TwoRouteTests + test_ab_chatbot_source_change_propagation.ChangePropagationTests",
+      "passed": 25
+    },
+    {
+      "module": "test_ab_chatbot_two_hop_transport.TwoHopTransportTests + test_ab_chatbot_cross_scope_transport.CrossScopeTransportTests",
+      "passed": 26
+    },
+    {
+      "module": "test_ab_chatbot_owner_pin_contract + test_ab_chatbot_joint_evidence_task",
+      "passed": 21
+    }
+  ],
+  "completed_passes": 92,
+  "new_tests": 20,
+  "regressions": 72,
+  "not_counted": "One incorrect class invocation; corrected modules subsequently passed.",
+  "limitations": [
+    "not full historical suite",
+    "not GitHub CI"
+  ]
+}

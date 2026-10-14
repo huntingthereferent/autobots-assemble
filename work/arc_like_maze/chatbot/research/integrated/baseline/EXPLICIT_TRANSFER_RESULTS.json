@@ -1,0 +1,86 @@
+{
+  "transfer": {
+    "status": "TRANSFER_PARTIAL_CORRESPONDENCE_WITNESSED",
+    "state_pairs": 6,
+    "admitted_edges": 5,
+    "selected_edge": [
+      [
+        1,
+        0,
+        0
+      ],
+      "B"
+    ],
+    "digest": "156f49ab3e60c09589deb73e60a43f0e2d30d175e7b088fd2f7b876766fee9d6"
+  },
+  "task": {
+    "status": "TASK_COMPLETED_ON_TRANSFER_WITNESS",
+    "checks": [
+      [
+        "EDGE",
+        [
+          [
+            1,
+            1,
+            0
+          ],
+          "A"
+        ],
+        true
+      ],
+      [
+        "EDGE",
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          "B"
+        ],
+        true
+      ]
+    ]
+  },
+  "conflicting_batch": {
+    "status": "TRANSFER_STATE_CONFLICT",
+    "obstruction": {
+      "cause": "SOURCE_STATE_CONFLICT",
+      "source_state": [
+        1,
+        2,
+        0
+      ],
+      "action": "B",
+      "conflicting_old": [
+        1,
+        1,
+        0
+      ],
+      "conflicting_new": [
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ],
+      "retained_word": "BA",
+      "donor_word": "ABB",
+      "old_equal": true,
+      "new_equal": false
+    }
+  },
+  "owner_observations_before": [
+    6,
+    6
+  ],
+  "owner_observations_after": [
+    6,
+    6
+  ]
+}

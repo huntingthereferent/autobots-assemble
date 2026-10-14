@@ -1,0 +1,28 @@
+name: finite correspondence integrated archive
+on:
+  push:
+    paths:
+      - 'work/arc_like_maze/chatbot/research/integrated/**'
+      - '.github/workflows/finite-correspondence-integrated.yml'
+  pull_request:
+    paths:
+      - 'work/arc_like_maze/chatbot/research/integrated/**'
+      - '.github/workflows/finite-correspondence-integrated.yml'
+  workflow_dispatch:
+
+jobs:
+  verify-reconstruction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python work/arc_like_maze/chatbot/research/integrated/verify.py
+      - run: python work/arc_like_maze/chatbot/research/integrated/assemble.py --stage 30 --out "$RUNNER_TEMP/cp30"
+      - name: Check exactly scoped finite results
+        working-directory: ${{ runner.temp }}/cp30
+        run: |
+          python -m pip install 'cryptography>=45,<47'
+          python -m unittest -q test_finite_two_hop_transport test_finite_single_route_task test_finite_multi_task_dependency test_finite_shared_route_certificate test_finite_certificate_handoff test_finite_process_attestation

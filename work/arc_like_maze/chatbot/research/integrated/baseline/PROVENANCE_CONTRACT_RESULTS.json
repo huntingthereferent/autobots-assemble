@@ -1,0 +1,83 @@
+[
+  {
+    "declared_proofs": [
+      [
+        "old",
+        "LOCAL_OWNER_VERIFIED",
+        "LOCAL_OWNER_VERIFIED",
+        true
+      ],
+      [
+        "new",
+        "LOCAL_OWNER_VERIFIED",
+        "LOCAL_OWNER_VERIFIED",
+        true
+      ]
+    ],
+    "goals": 2,
+    "label": "both_local",
+    "observed_new": 18,
+    "observed_old": 28,
+    "status": "GOALS_CARRIED_WITNESSED"
+  },
+  {
+    "declared_proofs": [
+      [
+        "old",
+        "LOCAL_OWNER_VERIFIED",
+        "LOCAL_OWNER_VERIFIED",
+        true
+      ],
+      [
+        "new",
+        "LOCAL_OWNER_VERIFIED",
+        "REMOTE_ORIGIN_UNVERIFIED",
+        false
+      ]
+    ],
+    "goals": 0,
+    "label": "new_unverified",
+    "observed_new": 0,
+    "observed_old": 0,
+    "status": "PROVENANCE_UNPROVED"
+  },
+  {
+    "declared_proofs": [
+      [
+        "old",
+        "LOCAL_OWNER_VERIFIED",
+        "LOCAL_OWNER_VERIFIED",
+        true
+      ]
+    ],
+    "goals": 2,
+    "label": "old_only_remote_new",
+    "observed_new": 18,
+    "observed_old": 28,
+    "status": "GOALS_CARRIED_REMOTE_REPORTED"
+  },
+  {
+    "after_owner_removed": "GOALS_CARRIED_REMOTE_REPORTED",
+    "declared_proofs": [
+      [
+        "old",
+        "LOCAL_OWNER_VERIFIED",
+        "LOCAL_OWNER_VERIFIED",
+        true
+      ]
+    ],
+    "goals": 2,
+    "label": "binding_revocation",
+    "observed_new": 18,
+    "observed_old": 28,
+    "status": "GOALS_CARRIED_WITNESSED"
+  },
+  {
+    "declared_proofs": [],
+    "goals": 0,
+    "label": "unrecognized_words",
+    "observed_new": 0,
+    "observed_old": 0,
+    "status": "UNKNOWN_TASK"
+  }
+]

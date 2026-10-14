@@ -1,0 +1,61 @@
+{
+  "tests_passed": 99,
+  "completed_modules": 9,
+  "full_historical_suite_completed": false,
+  "modules": [
+    {
+      "module": "test_ab_chatbot_joint_witness_binding.ExactJointWitnessTests",
+      "tests_passed": 12,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_finite_join_fingerprint.FiniteFingerprintTests",
+      "tests_passed": 6,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_ab_chatbot_joint_evidence_task.JointEvidenceTaskTests",
+      "tests_passed": 11,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_ab_chatbot_cross_pin_join.JoinCrossPinTests",
+      "tests_passed": 10,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_ab_chatbot_cross_pin_comparison.CrossPinTests",
+      "tests_passed": 10,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_ab_chatbot_owner_pin_contract.ExactOwnerTests",
+      "tests_passed": 10,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_ab_chatbot_provenance_contract.ProvenanceContractTests",
+      "tests_passed": 14,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_ab_chatbot_mixed_obligations.MixedTests",
+      "tests_passed": 12,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    },
+    {
+      "module": "test_ab_chatbot_rule_change.RuleChangeTests",
+      "tests_passed": 14,
+      "status": "PASS",
+      "execution": "completed separate module run"
+    }
+  ]
+}

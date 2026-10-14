@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-13",
+  "focused_tests": {
+    "integrated_module_total": 23,
+    "new_tests": 13,
+    "fixture_tests_imported": 10,
+    "standalone_oracle": 5
+  },
+  "completed_prior_module_runs": {
+    "test_ab_chatbot_joint_witness_binding": 22,
+    "test_ab_chatbot_joint_evidence_task": 11,
+    "test_ab_chatbot_cross_pin_join": 20,
+    "test_ab_chatbot_cross_pin_comparison": 10,
+    "test_ab_chatbot_owner_pin_contract": 10
+  },
+  "complete_test_executions_across_runs": 101,
+  "distinct_all_historical_suite_claimed": false,
+  "interrupted_regressions": [
+    "test_ab_chatbot_provenance_contract",
+    "test_ab_chatbot_mixed_obligations"
+  ],
+  "full_historical_suite_complete": false,
+  "github_ci_verified": false
+}

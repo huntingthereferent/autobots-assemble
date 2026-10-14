@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-13",
+  "scope": "Distinct targeted test classes and separately completed modules; not full historical suite or CI",
+  "completed": [
+    {"name":"test_ab_chatbot_joint_evidence_task.JointEvidenceTaskTests","tests":11,"status":"PASS"},
+    {"name":"test_finite_joint_task_consumer.FiniteJointTaskConsumerTests","tests":6,"status":"PASS"},
+    {"name":"test_ab_chatbot_cross_pin_join.JoinCrossPinTests","tests":10,"status":"PASS"},
+    {"name":"test_ab_chatbot_cross_pin_comparison.CrossPinTests","tests":10,"status":"PASS"},
+    {"name":"test_ab_chatbot_owner_pin_contract","tests":10,"status":"PASS"},
+    {"name":"test_ab_chatbot_provenance_contract.ProvenanceContractTests","tests":14,"status":"PASS"},
+    {"name":"test_ab_chatbot_mixed_obligations.MixedTests","tests":12,"status":"PASS"},
+    {"name":"test_ab_chatbot_language_bridge.LanguageBridgeTests+EdgeBudgetTests","tests":35,"status":"PASS"},
+    {"name":"test_ab_chatbot_rule_change.RuleChangeTests","tests":14,"status":"PASS"}
+  ],
+  "distinct_completed_tests": 122,
+  "unfinished": ["An attempted larger sequential regression command exceeded the tool execution window after five completed runs; the remaining tests were rerun in smaller completed commands."],
+  "ci_verified": false,
+  "full_historical_suite_verified": false
+}

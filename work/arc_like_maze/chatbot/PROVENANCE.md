@@ -1,5 +1,9 @@
 # Finite Correspondence Research — checkpoint provenance (October 13, 2026)
 
+<!-- integrated-cp20-cp30-source-recovered -->
+**Current integrated-source location:** [Restored CP20–CP30 historical baseline and deltas](research/integrated/README.md), with hash-checked reconstruction of the original 201-file CP20 archive through the 281-file CP30 archive. The original separate ZIPs remain historical integrity evidence; their recovered source can now be rebuilt from this Git checkout. This source restoration does **not** assert that every owner-backed integrated regression test has passed.
+
+
 This is a trace of the finite correspondence investigation's **stages 20–30**, following the [research index](research/README.md). Historical code and archive identifiers remain unchanged for provenance and compatibility; they do not define the subject of this research. The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
 
 ## Witness sequence

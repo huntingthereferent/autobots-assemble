@@ -1,0 +1,46 @@
+{
+  "completed_test_executions": 103,
+  "new_tests": 18,
+  "overlap_present": true,
+  "full_suite_complete": false,
+  "github_ci_verified": false,
+  "modules": [
+    {
+      "module": "test_ab_chatbot_cross_scope_transport",
+      "completed": true,
+      "passed": 22,
+      "new_tests": 12,
+      "inherited_fixture_tests": 10
+    },
+    {
+      "module": "test_finite_cross_scope_transport",
+      "completed": true,
+      "passed": 6
+    },
+    {
+      "module": "test_ab_chatbot_explicit_evidence_transfer",
+      "completed": true,
+      "passed": 23,
+      "evidence": "individual completed Python unittest run in current turn"
+    },
+    {
+      "module": "test_ab_chatbot_joint_witness_binding",
+      "completed": true,
+      "passed": 22,
+      "evidence": "individual completed Python unittest run in current turn"
+    },
+    {
+      "module": "test_ab_chatbot_cross_pin_join",
+      "completed": true,
+      "passed": 20,
+      "evidence": "individual completed Python unittest run in current turn"
+    },
+    {
+      "module": "test_ab_chatbot_owner_pin_contract",
+      "completed": true,
+      "passed": 10,
+      "evidence": "individual completed Python unittest run in current turn"
+    }
+  ],
+  "interrupted_run": "the multi-module command completed 3 modules and timed out before all later modules; only separately confirmed completions are counted"
+}
