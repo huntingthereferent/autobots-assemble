@@ -13,7 +13,7 @@ Finite research on **witnessed correspondences and their continuation**: how com
 - [Provenance and archive identities](PROVENANCE.md) — reported local results and their limits.
 - [Stage 26 original archived source](PROVENANCE.md#archive-identity-sha-256) — see the archive hash and handoff notes.
 
-Checkpoints 21–26 are in compact folders with their individual records, code and evidence. CP-28 through CP-30 also have compact evidence folders with owner-backed adapters, tests, demonstrations and standalone finite references. Their integration depends on the earlier Stage 20 baseline, which remains a separate local archive until that package is published in full. Tests described in research notes are historical reports, not a fresh claim of GitHub CI.
+Checkpoints 21–26 are in compact folders with their individual records, code and evidence. CP-28 through CP-30 also have compact evidence folders with owner-backed adapters, tests, demonstrations and standalone finite references. Their integrated CP20–CP30 source is now preserved in [the reconstructed GitHub source archive](research/integrated/README.md), with hash-checked recovery from the 201-file Stage 20 baseline. The scoped GitHub archive workflow has passed; the complete historical owner-backed regression suite remains a separate verification boundary.
 
 The language referent remains the same inquiry once called A/B; finite A/B generators here are just particular declared mathematical experiments.
 

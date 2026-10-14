@@ -102,3 +102,7 @@ with a native-reverified COMPLETE job for the **exact selected fingerprint**.
 It is an append-only local selection for future *manual* work, not a new CP,
 automatic job admission, source merge, deployment, or general validation.
 The read-only viewer displays stale preferences instead of silently falling back.
+
+## Recovered CP20–CP30 source copies
+
+[Integrated correspondence source edition](INTEGRATED_CORRESPONDENCE_SOURCE.md) now permits explicit, hash-verified copying of historical CP20–CP30 source into an isolated private workstation edition. This is source-only; no historical job is imported, executed, or promoted into a current worker capability. The separate finite prefilter worker remains the only admitted correspondence operation until a native integrated adapter is implemented and checked.

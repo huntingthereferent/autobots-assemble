@@ -4,6 +4,8 @@ on:
     paths:
       - 'work/arc_like_maze/chatbot/research/integrated/**'
       - '.github/workflows/finite-correspondence-integrated.yml'
+      - 'systems/workspace/integrated_source.py'
+      - 'network/tests/test_integrated_source_workstation.py'
   pull_request:
     paths:
       - 'work/arc_like_maze/chatbot/research/integrated/**'
@@ -26,3 +28,24 @@ jobs:
         run: |
           python -m pip install 'cryptography>=45,<47'
           python -m unittest -q test_finite_two_hop_transport test_finite_single_route_task test_finite_multi_task_dependency test_finite_shared_route_certificate test_finite_certificate_handoff test_finite_process_attestation
+
+  wider-finite-and-owner-samples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify historical bytes and reconstruct CP30
+        run: |
+          python work/arc_like_maze/chatbot/research/integrated/verify.py
+          python work/arc_like_maze/chatbot/research/integrated/assemble.py --stage 30 --out "$RUNNER_TEMP/cp30"
+      - name: Run all 28 standalone finite test modules and three scoped owner-backed checks
+        working-directory: ${{ runner.temp }}/cp30
+        run: |
+          python -m pip install 'cryptography>=45,<47'
+          python -m unittest -q $(find . -maxdepth 1 -name 'test_finite_*.py' -printf '%f\n' | sed 's/\.py$//' | sort)
+          python -m unittest -q test_ab_chatbot_two_hop_transport.TwoHopTransportTests.test_two_separate_links_and_three_independent_scopes test_ab_chatbot_certificate_handoff.HandoffOwnerTests.test_issue_then_new_call_replays_twice test_ab_chatbot_independent_process_identity.IndependentProcessIdentityTests.test_success_two_tasks_one_fresh_route_audit
+      - name: Check private CP30 source-copy boundary
+        run: python -m unittest -v network.tests.test_integrated_source_workstation

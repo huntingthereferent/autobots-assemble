@@ -12,7 +12,7 @@ These names distinguish **subject**, **implementation** and **assigned role**. T
 
 ## Present execution boundary
 
-The research includes finite route/correspondence operations, exact task requirements, selective refresh, evidence handoffs, and separate-process signature verification through CP-0030. The full owner-backed integrated archive remains **conversation-local**; its older Stage-20 baseline is not wholly available in a clean repository checkout. The standalone finite references are narrower implementations. Do not imply that a copy of this directory is an integrated runnable worker.
+The research includes finite route/correspondence operations, exact task requirements, selective refresh, evidence handoffs, and separate-process signature verification through CP-0030. The recovered owner-backed CP20–CP30 integrated source is now [published on `main`](research/integrated/README.md) and reconstructable from a clean checkout with checked hashes. Standalone finite references remain narrower implementations. Historical availability and selected tests do not by themselves establish a production-ready integrated worker or a full historical regression pass.
 
 The process is not the wider language referent historically called A/B. Labelled finite `A` and `B` operators are scoped to their particular declared mathematical models. The existing `GoalAgent`, `ab_chatbot_*`, `chatbot/`, archive, and manifest identifiers remain unchanged as *historical/source identifiers*, not as the research's present name.
 
@@ -40,4 +40,4 @@ A copied version is **not** automatically a verified worker, a transferred mathe
 
 [Correspondence Worker — finite prefilter handoff](../../../../systems/workspace/CORRESPONDENCE_HANDOFF.md) now demonstrates a selected, copied edition executing the **standalone** required-edge prefilter through the existing HandoffRuntime. A separate verifier recomputes the finite results and checks the selected source fingerprint before accepting a result. This does **not** establish full CP-0030 owner-backed correspondence, autonomous programming ability, or any physical factory operation. A `COMPLETE` result means only the declared prefilter calculation was independently replayed.
 
-[Workstation copy/branch contract](../../../../systems/workspace/WORKSTATION.md) · [Checkpoint provenance](PROVENANCE.md)
+[Workstation copy/branch contract](../../../../systems/workspace/WORKSTATION.md) · [Recover an integrated CP20–CP30 workstation source edition](../../../../systems/workspace/INTEGRATED_CORRESPONDENCE_SOURCE.md) · [Checkpoint provenance](PROVENANCE.md)
