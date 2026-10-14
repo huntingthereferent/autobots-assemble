@@ -105,7 +105,7 @@ class CheckpointHarnessTests(unittest.TestCase):
 
     def test_research_name_is_not_a_chatbot_application(self):
         about = (self.root/'ABOUT_ME.md').read_text()
-        self.assertTrue(about.startswith('# Finite Correspondence Research — About Me\\n'))
+        self.assertTrue(about.startswith('# Finite Correspondence Research — About Me\n'))
         self.assertIn('A chatbot is one possible application, not the name of this research.', about)
         self.assertIn('witnessed finite transitions', about)
 
