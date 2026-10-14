@@ -22,6 +22,12 @@ Standing preference recorded from James on 2026-10-07:
 
 If a context mismatch is found, preserve the goal, repository, established authorization, findings and next movement. Continue useful authorized work in the current session unless the user asks to stop or move. If a handoff is requested, carry those facts forward without treating it as a fresh project.
 
+## Research naming and maturity
+
+When discussing the finite correspondence work, use its current names: **Finite Correspondence Research** (investigation), **Finite Correspondence Process** (bounded executable implementation), and **Correspondence Worker** (specifically assigned role). Avoid retired product labels in prose, headings and summaries. Preserve historical folder paths, code identifiers, archive names and direct quotations unchanged when they are needed for compatibility or provenance.
+
+Keep status modest and exact: experimental code, a witnessed bounded checkpoint, a tested integration, a deployed system, and a finished product are different claims. Do not suggest launch, completeness or readiness without evidence establishing that scope. This applies even when a local test or checkpoint passes.
+
 ## Language-first and scalpel precision
 
 Standing communication discipline for **every reached layer**, not a claim about
