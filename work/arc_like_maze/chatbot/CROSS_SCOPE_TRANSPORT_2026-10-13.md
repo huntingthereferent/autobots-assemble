@@ -1,6 +1,6 @@
 # Selected cross-scope intertwining transport — October 13, 2026
 
-**Current referent.** A finite extension to the *same existing mathematical A/B chatbot*, checking whether a selected edge independently observed under one owner-pinned source pair can be mapped to a **different owner-pinned source pair** by an explicitly declared *two-sided state correspondence*. This is a limited mathematical result for finite operators, not a definition of A/B as relational language.
+**Current referent.** A finite extension to the *same existing mathematical finite A/B correspondence process*, checking whether a selected edge independently observed under one owner-pinned source pair can be mapped to a **different owner-pinned source pair** by an explicitly declared *two-sided state correspondence*. This is a limited mathematical result for finite operators, not a definition of A/B as relational language.
 
 ## Four local pinned finite laws
 

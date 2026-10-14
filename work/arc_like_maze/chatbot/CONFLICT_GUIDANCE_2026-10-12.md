@@ -1,4 +1,4 @@
-# Conflict-guided finite chatbot continuation — 2026-10-12
+# Conflict-guided finite correspondence process continuation — 2026-10-12
 
 **Referent.** Under two explicitly specified finite A/B-labeled transformation laws, can an excluded labeled edge in one witnessed rooted pairing be admitted under a *different*, independently verified partial pairing? A/B is the language-level relation under investigation; these letters are specific finite generators only.
 
@@ -19,7 +19,7 @@ Run from this directory:
 
 The four finite-law tests passed in the local package. This GitHub sidecar uses fully given transformation laws, not the integrated snapshot owner, remote provenance or language bridge.
 
-## Full local chatbot implementation
+## Full local correspondence process implementation
 
 The integrated source in ab_chatbot_conflict_guided_2026-10-12.zip (SHA-256 dd353e2e39025c1474b9712be3a2378a9f50babdf97d39979ad3ee0a98ed0072) preserves all 84 predecessor files unchanged. It adds the ConflictGuidedPortfolio with the existing BranchDiscoverer -> PathUnionAgent -> UnionEdgeExtender, 10 focused tests, demo, finite reference and verification notes; 91 files total. The ZIP is a conversation artifact and has NOT been copied wholesale to this repo.
 

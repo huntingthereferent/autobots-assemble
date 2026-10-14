@@ -1,6 +1,6 @@
 # Cross-pin comparison of two finite owner revisions — 2026-10-13
 
-**Current referent:** Extend the existing A/B finite mathematical chatbot to compare **explicitly requested word relations** under two *independently owner-pinned revision snapshots*. Replaying a relation at a new revision is a **new witness**; copying historical labels, metadata, or cached transitions into the new snapshot is not evidence. The language-level A/B referent is not defined by these two finite mathematical generators.
+**Current referent:** Extend the existing finite A/B correspondence process to compare **explicitly requested word relations** under two *independently owner-pinned revision snapshots*. Replaying a relation at a new revision is a **new witness**; copying historical labels, metadata, or cached transitions into the new snapshot is not evidence. The language-level A/B referent is not defined by these two finite mathematical generators.
 
 ## Witness and exact boundary
 
@@ -22,11 +22,11 @@ A pair consists of distinct explicit A/B words of length <=12; 1..8 pairs; both 
 
 The full 153-file local source package `ab_chatbot_cross_pin_comparison_2026-10-13.zip` (SHA-256 `ca428238c2e4cfd90da874cfafc67fe334a2590201cb84001034147a42ffe728`) preserves **all 145 predecessor files byte-for-byte**. It adds `ab_chatbot_cross_pin_comparison.py` with live local pin validation and zero-read replay; 10 new tests; an independent finite word-relation implementation and 5 tests; runnable demo; README and machine-readable test/evidence records.
 
-Completed local modules: 10 new integration + 5 standalone finite + 10 owner pin + 14 provenance + 14 rule-change + 12 mixed obligation + 35 language bridge = **100 passing tests**. Full historical suite not rerun; GitHub CI not verified. This record does not claim that the full integrated chatbot has been committed to GitHub.
+Completed local modules: 10 new integration + 5 standalone finite + 10 owner pin + 14 provenance + 14 rule-change + 12 mixed obligation + 35 language bridge = **100 passing tests**. Full historical suite not rerun; GitHub CI not verified. This record does not claim that the full integrated correspondence process has been committed to GitHub.
 
 ## GitHub standalone finite reference
 
-The executable finite checker uses the previously committed `finite_goal_priority.Law`, and reproduces both positive and negative word equalities without depending on the chatbot's observation bookkeeping:
+The executable finite checker uses the previously committed `finite_goal_priority.Law`, and reproduces both positive and negative word equalities without depending on the process's observation bookkeeping:
 
     cd work/arc_like_maze/chatbot
     python finite_cross_pin_relation.py

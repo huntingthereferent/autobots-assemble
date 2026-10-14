@@ -1,6 +1,6 @@
 # Exact pinned owner referents — October 13, 2026
 
-**Current referent:** Continue the existing finite mathematical A/B chatbot with an *explicitly chosen exact owner* provenance requirement, not a source-reported identity or a claim of uninterrupted continuity. A/B is the language of relational movement; the finite A/B-labeled operators here are separate scoped mathematics.
+**Current referent:** Continue the existing finite A/B correspondence process with an *explicitly chosen exact owner* provenance requirement, not a source-reported identity or a claim of uninterrupted continuity. A/B is the language of relational movement; the finite A/B-labeled operators here are separate scoped mathematics.
 
 ## Integrated in-process result
 
@@ -23,7 +23,7 @@ Using separate live pinned local finite owners (original phi=(0,0,1), changed ph
 
 ## Local full archive
 
-`ab_chatbot_exact_owner_pin_2026-10-13.zip` SHA-256 `73265683ab53f7c8175ac15e66d49acc127b0aace97ece6cab534325244b6216`, **145 files**, all previous **137 files preserved byte-for-byte**. New files include integrated owner-pin module, test module, standalone finite model and five tests, runnable demo, JSON example and regression evidence, and README. This full HTTP-pinned chatbot is in the local archive; **it is not being asserted to exist entirely in GitHub**.
+`ab_chatbot_exact_owner_pin_2026-10-13.zip` SHA-256 `73265683ab53f7c8175ac15e66d49acc127b0aace97ece6cab534325244b6216`, **145 files**, all previous **137 files preserved byte-for-byte**. New files include integrated owner-pin module, test module, standalone finite model and five tests, runnable demo, JSON example and regression evidence, and README. This full HTTP-pinned correspondence process is in the local archive; **it is not being asserted to exist entirely in GitHub**.
 
 ## Executable GitHub standalone model
 

@@ -2,9 +2,9 @@
 
 **Current referent.** Compare completed finite A/B-labeled rooted extension results before choosing a continuation, without conflating *individual* task success with a valid *combined* relation. Formal A and B are the specified finite operators, not a universal definition of A/B.
 
-## Local integrated chatbot result
+## Local integrated correspondence process result
 
-The full local chatbot (not yet wholly committed to GitHub) adds \`ab_chatbot_extension_portfolio.py\`, \`test_ab_chatbot_extension_portfolio.py\`, and \`run_extension_portfolio_demo.py\`. It uses existing pinned \`BacktrackedGoalExtender\` results; zero-read replays precede selection. In the source law phi=(0,0,1) and target law phi=(0,0,0), two independently completed candidates carry goals (0,1,0) and (0,1,1), respectively. Their full rooted pairings conflict, so a portfolio cannot legitimately claim both goals under a single chosen pairing.
+The full local integrated implementation (not yet wholly committed to GitHub) adds \`ab_chatbot_extension_portfolio.py\`, \`test_ab_chatbot_extension_portfolio.py\`, and \`run_extension_portfolio_demo.py\`. It uses existing pinned \`BacktrackedGoalExtender\` results; zero-read replays precede selection. In the source law phi=(0,0,1) and target law phi=(0,0,0), two independently completed candidates carry goals (0,1,0) and (0,1,1), respectively. Their full rooted pairings conflict, so a portfolio cannot legitimately claim both goals under a single chosen pairing.
 
 - Candidate A: 9 paired states, 15 admitted edges.
 - Candidate B: 9 paired states, 12 admitted edges.
