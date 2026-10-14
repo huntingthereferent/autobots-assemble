@@ -1,4 +1,4 @@
-"""Deterministic checkpoint -> chatbot About Me and Provenance views.
+"""Deterministic checkpoint -> finite correspondence research views.
 
 Stdlib only. Does not create, authenticate, or publish checkpoint evidence.
 Invoked by the research harness when it has already completed a checkpoint.
@@ -113,9 +113,9 @@ def about(ms):
         raise CheckpointError('at least one checkpoint required')
     last=ms[-1]
     lines=[
-        '# Chatbot — About Me', '',
-        'This page belongs to the **finite mathematical chatbot research harness**, not to the researcher’s personal profile.', '',
-        'The chatbot follows relationships admitted by witnessed transitions and exact source conditions. Changes may come from the surrounding systems; the chatbot checks their effects when invoked. It does not require independent goals or continuous monitoring to do this.', '',
+        '# Finite Correspondence Research — About Me', '',
+        'This page belongs to the **finite correspondence research checkpoint harness**, not to the researcher’s personal profile. A chatbot is one possible application, not the name of this research.', '',
+        'The research follows relations admitted by witnessed finite transitions and exact source conditions. Changes may come from surrounding systems and are checked when invoked; independent goals or continuous monitoring are not required.', '',
         '## Current checkpoint', '',
         f"**CP-{last['cp']:04d} · {last['title']}** · {last['date']} · {last['status']}", '',
         last['summary'], '',
