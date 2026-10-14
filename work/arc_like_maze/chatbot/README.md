@@ -1,6 +1,6 @@
-# Finite chatbot research
+# Finite Correspondence Research
 
-A small research index for the ongoing finite correspondence chatbot. Each experiment has its own question, source, tests and evidence.
+Finite research on **witnessed correspondences and their continuation**: how compatible relations can be admitted, transported, compared, withdrawn, revalidated, and used by independently declared tasks. Each experiment has its own question, source, tests and evidence. A chatbot was an early application label, **not** the definition of this branch.
 
 **[Open the checkpoint index →](research/checkpoints/README.md)**
 
@@ -15,6 +15,6 @@ The language referent remains the same inquiry once called A/B; finite A/B gener
 
 ## Checkpoint output
 
-[Chatbot About Me](ABOUT_ME.md) · [Provenance](PROVENANCE.md) · [CP handoff contract](checkpoints/HARNESS.md).
+[Research About Me](ABOUT_ME.md) · [Provenance](PROVENANCE.md) · [CP handoff contract](checkpoints/HARNESS.md).
 
-Each new checkpoint produces one manifest. The harness renders both chatbot pages from that record, and a GitHub check rejects missing or inconsistent output. This never modifies a personal About Me.
+Each new checkpoint produces one manifest. The harness renders both research checkpoint pages from that record, and a GitHub check rejects missing or inconsistent output. This never modifies James's personal About Me. Historical `chatbot` directory names, code names and ZIP filenames remain as compatible evidence identifiers; they do not define the research subject.
