@@ -1,6 +1,6 @@
-# Finite chatbot — checkpoint provenance (October 13, 2026)
+# Finite Correspondence Research — checkpoint provenance (October 13, 2026)
 
-This is a trace of the finite mathematical chatbot's **stages 20–30**, following the [research index](research/README.md). The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
+This is a trace of the finite correspondence investigation's **stages 20–30**, following the [research index](research/README.md). Historical filenames retain `chatbot` only as the original implementation/archive label; a chatbot is not the definition of this work. The declared A/B-labeled finite generators are experiment-specific operators; they do not define the language referent. These records preserve what was observed and how to revisit it. The source systems and their environment do not need to initiate autonomous goals for relations to be checked on the next invocation.
 
 ## Witness sequence
 
