@@ -127,12 +127,43 @@ def _generic(handoff: Handoff, state: HandoffState) -> Inspection:
     }
 
 
+
+def _cp30_route_fixture(handoff: Handoff, state: HandoffState) -> Inspection:
+    """Inspect synthetic CP30 route/task report only; never replay from UI."""
+    request=handoff.inputs
+    output=state.output.get("report",{})
+    if not isinstance(output,dict):output={}
+    rows=[]
+    statuses=dict(output.get("task_statuses") or [])
+    for task in request.get("tasks",[]):
+        rows.append(_row(task.get("name","?"),
+              f"{task.get('state')} {task.get('action')} -> {statuses.get(task.get('name'),'not recorded')}"))
+    return {
+        "kind":"cp30-synthetic-route-audit",
+        "title":"CP30 fresh route and exact task fixture",
+        "scope":"Recovered CP30 owner/pin simulation; no external owner enrollment",
+        "inputs":[_row("Selected route",request.get("route")),
+                  _row("Scenario",request.get("scenario")),
+                  _row("Declared task count",len(rows))],
+        "outputs":[_row("Receiver verdict",output.get("receive_status","not recorded")),
+                   _row("Fresh route audit calls",output.get("replay_calls","not recorded")),
+                   _row("Usable fixture tasks",output.get("usable",[])),
+                   *rows],
+        "notes":[
+          "These owners, keys and source pins are synthetic research fixtures.",
+          "A completed computation can contain individual unproved task obligations.",
+          "Two audit calls are source-owned fixture replay, not live external audits.",
+          "Dashboard reports saved evidence; it does not re-execute source.",
+        ],
+    }
+
 # Names come from the existing *native evidence verifier* contracts. Mapping
 # to an inspector never registers, invokes or replaces those verifiers.
 DEFAULT_INSPECTORS: dict[str, Inspector] = {
     "finite-correspondence-prefilter-v1": _finite,
     "workstation.factory.machine.simulation.v1": _factory_machine,
     "integrated-cp30-three-scope-attestation-v1": _integrated_cp30,
+    "integrated-cp30-synthetic-route-audit-v1": _cp30_route_fixture,
 }
 
 

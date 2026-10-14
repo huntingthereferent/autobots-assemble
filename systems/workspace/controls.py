@@ -22,6 +22,8 @@ from .factory_machine_bridge import (FactoryMachineSimulationBridge,
 from .integrated_source import WORKER_ID as INTEGRATED_ID
 from .integrated_attestation_bridge import IntegratedCP30Bridge
 from .integrated_attestation_verifier import validate_request
+from .integrated_route_bridge import IntegratedRouteBridge, VERIFIER as ROUTE_VERIFIER
+from .integrated_route_verifier import validate_route_request
 
 KNOWN_WORKERS = frozenset((FINITE_ID, FACTORY_ID))
 FINITE_FILES = frozenset(("finite_goal_priority.py", "finite_required_edge_guard.py"))
@@ -138,14 +140,58 @@ def admit_integrated(*, data_dir: str | Path, version_id: str,
             "source_fingerprint": h.metadata["edition_fingerprint"]}
 
 
-def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str):
+def prepare_integrated_route(*, data_dir: str | Path, version_id: str,
+                             inputs_file: str | Path) -> dict[str, Any]:
+    """Read-only check of one CP30 synthetic exact-task request."""
+    file=Path(inputs_file)
+    if not file.is_file() or file.stat().st_size > 4096:
+        raise ValueError("CP30 synthetic route request must be JSON <=4 KiB")
+    inputs=validate_route_request(json.loads(file.read_text(encoding="utf-8")))
+    root=_data_root(data_dir)
+    desk=ProcessWorkstation(root / "workstation")
+    info=desk.inspect(worker_id=INTEGRATED_ID,version_id=version_id)
+    _, provenance=desk._read(INTEGRATED_ID,version_id)
+    if provenance["source_locator"] != "repo:work/arc_like_maze/chatbot/research/integrated/MANIFEST.json#CP-30":
+        raise ValueError("CP30 integrated original edition required")
+    return {"worker_id":INTEGRATED_ID,"version_id":version_id,
+            "source_fingerprint":info["current_fingerprint"],"inputs":inputs,
+            "operation":"cp30-synthetic-selected-route-audit", "admitted":False,
+            "executed":False,"real_world_owners":False}
+
+
+def admit_integrated_route(*, data_dir: str | Path, version_id: str,
+                           inputs_file: str | Path, job_id: str, confirm_admit: str,
+                           from_actor: str, lane_id: str = "") -> dict[str, Any]:
+    """Explicitly admit one exact CP30 synthetic owner/pin fixture job."""
+    _safe_id(job_id)
+    if confirm_admit != job_id:
+        raise PermissionError("--confirm-admit must match the exact CP30 route job ID")
+    report=prepare_integrated_route(data_dir=data_dir,version_id=version_id,
+                                    inputs_file=inputs_file)
+    root=_data_root(data_dir)
+    runtime=_runtime(root)
+    bridge=IntegratedRouteBridge(runtime=runtime,
+                                 workstation=ProcessWorkstation(root/"workstation"))
+    h=bridge.admit(version_id=version_id,inputs=report["inputs"],
+                   job_id=job_id,from_actor=from_actor,lane_id=lane_id)
+    return {"job_id":h.handoff_id,"version_id":version_id,"worker_id":INTEGRATED_ID,
+            "status":runtime.state(job_id).status,"executed":False,
+            "source_fingerprint":h.metadata["edition_fingerprint"]}
+
+
+def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
+            verifier: str | None = None):
     desk = ProcessWorkstation(root / "workstation")
     if worker_id == FINITE_ID:
         return CorrespondenceWorkBridge(runtime=runtime, workstation=desk)
     if worker_id == FACTORY_ID:
         return FactoryMachineSimulationBridge(runtime=runtime, workstation=desk)
     if worker_id == INTEGRATED_ID:
-        return IntegratedCP30Bridge(runtime=runtime, workstation=desk)
+        if verifier == ROUTE_VERIFIER:
+            return IntegratedRouteBridge(runtime=runtime,workstation=desk)
+        if verifier == "integrated-cp30-three-scope-attestation-v1":
+            return IntegratedCP30Bridge(runtime=runtime, workstation=desk)
+        raise ValueError("unsupported integrated CP30 verifier")
     raise ValueError("job does not belong to a supported workstation worker")
 
 
@@ -179,7 +225,7 @@ def run_job(*, data_dir: str | Path, job_id: str,
     worker = handoff.metadata.get("worker_id")
     if worker not in EXECUTABLE_WORKERS:
         raise ValueError("not a supported workstation job")
-    bridge = _bridge(runtime, root, worker)
+    bridge = _bridge(runtime, root, worker, handoff.metadata.get("native_evidence_verifier"))
     state = runtime.state(job_id)
     if worker in (FINITE_ID, INTEGRATED_ID):
         if handoff.metadata.get("source_system") != "process-workstation":
@@ -223,7 +269,8 @@ def reverify_job(*, data_dir: str | Path, job_id: str) -> dict[str, Any]:
     root = _data_root(data_dir)
     runtime = _runtime(root)
     h = runtime.get(job_id)
-    bridge = _bridge(runtime, root, h.metadata.get("worker_id"))
+    bridge = _bridge(runtime, root, h.metadata.get("worker_id"),
+                     h.metadata.get("native_evidence_verifier"))
     bridge.reverify(job_id)
     return {"job_id": job_id, "status": runtime.state(job_id).status,
             "reverified": True, "executed": False}
@@ -343,6 +390,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--confirm-admit", required=True)
     p.add_argument("--from-actor", required=True)
     p.add_argument("--lane", default="")
+    p = modes.add_parser("prepare-cp30-route", help="Read-only synthetic route task check")
+    p.add_argument("--version", required=True)
+    p.add_argument("--inputs-file", type=Path, required=True)
+    p = modes.add_parser("admit-cp30-route", help="Admit exactly one CP30 synthetic route task")
+    p.add_argument("--version", required=True)
+    p.add_argument("--inputs-file", type=Path, required=True)
+    p.add_argument("--job-id", required=True)
+    p.add_argument("--confirm-admit", required=True)
+    p.add_argument("--from-actor", required=True)
+    p.add_argument("--lane", default="")
     p = modes.add_parser("inspect", help="Read-only recorded job")
     p.add_argument("--job-id", required=True)
     p = modes.add_parser("execute", help="Explicitly run selected ready job")
@@ -393,6 +450,14 @@ def main(argv: list[str] | None = None) -> int:
                    inputs_file=opts["inputs_file"], job_id=opts["job_id"],
                    confirm_admit=opts["confirm_admit"],
                    from_actor=opts["from_actor"], lane_id=opts["lane"])
+    elif action == "prepare-cp30-route":
+        result = prepare_integrated_route(data_dir=data,version_id=opts["version"],
+                                          inputs_file=opts["inputs_file"])
+    elif action == "admit-cp30-route":
+        result = admit_integrated_route(data_dir=data,version_id=opts["version"],
+                 inputs_file=opts["inputs_file"],job_id=opts["job_id"],
+                 confirm_admit=opts["confirm_admit"],from_actor=opts["from_actor"],
+                 lane_id=opts["lane"])
     elif action == "prepare-preferred":
         result = prepare_preferred(data_dir=data, worker_id=opts["worker"],
                                    inputs_file=opts["inputs_file"])

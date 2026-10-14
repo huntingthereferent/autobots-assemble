@@ -114,3 +114,13 @@ unchanged; a branch can be independently tested. The dashboard shows the exact
 recorded verdict but never authenticates people, enrollment, or the fresh
 owner-backed route audit. Current preferred-version promotion remains scoped
 to its two existing worker operations and is not generalized by this adapter.
+
+
+## Recovered CP30 selected-route task worker (synthetic only)
+
+The [CP30 route-fixture execution contract](INTEGRATED_CP30_ROUTE.md)
+uses source-pinned recovered CP30 code to check a synthetic owner's fresh
+selected-route audit and per-task required edges. Admission, execution, and
+verification remain separate. Results are rechecked against an independently
+assembled copy of the canonical historical source, not live external owners.
+Historical checkpoint evidence is not promoted to a new observation.
