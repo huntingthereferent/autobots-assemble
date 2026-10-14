@@ -51,7 +51,8 @@ def make_handler(data_dir: str | Path):
                 try:
                     runtime = HandoffRuntime(event_store=RuntimeJournal(data / "runtime.jsonl"))
                     self._json(200, workstation_snapshot(root=data / "workstation", runtime=runtime,
-                                                         workspace_journal=data / "workspace.jsonl"))
+                                                         workspace_journal=data / "workspace.jsonl",
+                                                         preferred_journal=data / "preferred_editions.jsonl"))
                 except (OSError, ValueError, TypeError, KeyError):
                     # A changing or unreadable journal is an explicit error, not an empty station.
                     self._json(503, {"error": "workstation state unavailable; no result was inferred"})

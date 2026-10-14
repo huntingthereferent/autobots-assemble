@@ -15,6 +15,7 @@ from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
 from .workstation import ProcessWorkstation, _safe_id
 from .finite_verifier import validate_inputs
+from .promotion import PreferredEditions, compare_editions, preference_view
 from .process_handoff import (CorrespondenceWorkBridge, WORKER_ID as FINITE_ID)
 from .factory_machine_bridge import (FactoryMachineSimulationBridge,
                                      WORKER_ID as FACTORY_ID)
@@ -187,6 +188,67 @@ def reverify_job(*, data_dir: str | Path, job_id: str) -> dict[str, Any]:
             "reverified": True, "executed": False}
 
 
+
+
+def compare_versions(*, data_dir: str | Path, worker_id: str,
+                     left_version: str, right_version: str) -> dict[str, Any]:
+    """Read-only source comparison; never inherits results from either copy."""
+    return compare_editions(ProcessWorkstation(_data_root(data_dir) / "workstation"),
+                            worker_id=worker_id, left_version=left_version,
+                            right_version=right_version)
+
+
+def preferred_versions(*, data_dir: str | Path) -> list[dict]:
+    """Read-only selections, retaining stale source warnings."""
+    root = _data_root(data_dir)
+    return preference_view(PreferredEditions(root / "preferred_editions.jsonl"),
+                           ProcessWorkstation(root / "workstation"))
+
+
+def promote_edition(*, data_dir: str | Path, worker_id: str, version_id: str,
+                    supporting_job_id: str, confirm_version: str,
+                    confirm_fingerprint: str, actor_id: str) -> dict:
+    """Choose edition for FUTURE explicit work, only after exact native job replay.
+
+    The selected edition is not deployed or automatically admitted; the job's
+    native verifier proves only its declared operation, not general capability.
+    """
+    if worker_id not in KNOWN_WORKERS:
+        raise ValueError("unsupported process selection")
+    _safe_id(version_id)
+    _safe_id(supporting_job_id)
+    _safe_id(actor_id)
+    if confirm_version != version_id:
+        raise PermissionError("--confirm-version must equal the exact chosen version")
+    root = _data_root(data_dir)
+    desk = ProcessWorkstation(root / "workstation")
+    before = desk.inspect(worker_id=worker_id, version_id=version_id)
+    fingerprint = before["current_fingerprint"]
+    if confirm_fingerprint != fingerprint:
+        raise PermissionError("--confirm-fingerprint must equal full current source hash")
+    runtime = _runtime(root)
+    handoff = runtime.get(supporting_job_id)
+    state = runtime.state(supporting_job_id)
+    md = handoff.metadata
+    if (state.status != "COMPLETE" or md.get("worker_id") != worker_id or
+            md.get("worker_version") != version_id or
+            md.get("edition_fingerprint") != fingerprint or
+            md.get("native_evidence_verifier") not in (
+                "finite-correspondence-prefilter-v1", "workstation.factory.machine.simulation.v1") or
+            not (md.get("source_system") == "process-workstation" or
+                 md.get("workstation_worker") is True)):
+        raise ValueError("completed native job on this exact worker edition required")
+    # Reverify using the original native process-specific verifier; no worker run.
+    _bridge(runtime, root, worker_id).reverify(supporting_job_id)
+    after = desk.inspect(worker_id=worker_id, version_id=version_id)
+    if after["current_fingerprint"] != fingerprint:
+        raise ValueError("selected edition source changed during revalidation")
+    return PreferredEditions(root / "preferred_editions.jsonl").select(
+        worker_id=worker_id, version_id=version_id,
+        source_fingerprint=fingerprint, supporting_job_id=supporting_job_id,
+        required_relation=handoff.required_relation,
+        native_verifier=md["native_evidence_verifier"], actor_id=actor_id)
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Local explicit Process Workstation controls")
     parser.add_argument("--data-dir", type=Path, required=True)
@@ -209,6 +271,18 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--confirm-execute", required=True)
     p = modes.add_parser("reverify", help="Replay native verifier, no execution")
     p.add_argument("--job-id", required=True)
+    p = modes.add_parser("compare", help="Read-only current-source edition diff")
+    p.add_argument("--worker", required=True)
+    p.add_argument("--left-version", required=True)
+    p.add_argument("--right-version", required=True)
+    modes.add_parser("preferred", help="Read-only selected editions with stale warnings")
+    p = modes.add_parser("promote", help="Explicit evidence-gated preferred edition selection")
+    p.add_argument("--worker", required=True)
+    p.add_argument("--version", required=True)
+    p.add_argument("--supporting-job", required=True)
+    p.add_argument("--confirm-version", required=True)
+    p.add_argument("--confirm-fingerprint", required=True)
+    p.add_argument("--actor", required=True)
     args = parser.parse_args(argv)
     opts = vars(args)
     data = opts.pop("data_dir")
@@ -226,8 +300,18 @@ def main(argv: list[str] | None = None) -> int:
     elif action == "execute":
         result = run_job(data_dir=data, job_id=opts["job_id"],
                          confirm_execute=opts["confirm_execute"])
-    else:
+    elif action == "reverify":
         result = reverify_job(data_dir=data, job_id=opts["job_id"])
+    elif action == "compare":
+        result = compare_versions(data_dir=data, worker_id=opts["worker"],
+                 left_version=opts["left_version"], right_version=opts["right_version"])
+    elif action == "preferred":
+        result = preferred_versions(data_dir=data)
+    else:
+        result = promote_edition(data_dir=data, worker_id=opts["worker"],
+                 version_id=opts["version"], supporting_job_id=opts["supporting_job"],
+                 confirm_version=opts["confirm_version"],
+                 confirm_fingerprint=opts["confirm_fingerprint"], actor_id=opts["actor"])
     print(json.dumps(result, sort_keys=True, indent=2))
     return 0
 

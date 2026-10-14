@@ -83,3 +83,12 @@ python -m unittest -v network.tests.test_workspace_continuity
 ```
 
 The next bounded movement is an explicitly admitted bridge to existing handoffs, if and only if a lane reaches work requiring an actor; do not auto-admit ordinary observations or creative exploration.
+
+## Version comparison and explicit preferred edition
+
+[Version comparison and promotion controls](PREFERRED_EDITIONS.md) compare actual
+source inventories across two worker editions. A preference is accepted only
+with a native-reverified COMPLETE job for the **exact selected fingerprint**.
+It is an append-only local selection for future *manual* work, not a new CP,
+automatic job admission, source merge, deployment, or general validation.
+The read-only viewer displays stale preferences instead of silently falling back.

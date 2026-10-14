@@ -13,6 +13,7 @@ from .workstation import ProcessWorkstation, _safe_id
 from .store import WorkspaceStore
 from .projection import workspace_view
 from .inspections import inspect_handoff
+from .promotion import PreferredEditions, preference_view
 
 
 def _editions(workstation: ProcessWorkstation) -> list[dict[str, Any]]:
@@ -59,7 +60,8 @@ def _editions(workstation: ProcessWorkstation) -> list[dict[str, Any]]:
 
 
 def workstation_snapshot(*, root: str | Path, runtime: Any,
-                         workspace_journal: str | Path | None = None) -> dict[str, Any]:
+                         workspace_journal: str | Path | None = None,
+                         preferred_journal: str | Path | None = None) -> dict[str, Any]:
     """Project registered process editions and only genuinely admitted workstation work.
 
     The payload is intended for an authorized, loopback-only viewer. It never
@@ -127,6 +129,8 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
         "runtime_execution_connected_by_view": False,
         "notes": "COMPLETE means a recorded result; this page does not reverify native sources or prove an active process.",
         "editions": editions,
+        "preferred": preference_view(PreferredEditions(preferred_journal), desk)
+                     if preferred_journal is not None else [],
         "jobs": jobs,
         "workspace": lanes,
         "counts": {"workers": len({e["worker_id"] for e in editions}),

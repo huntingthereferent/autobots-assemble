@@ -51,6 +51,22 @@
           <p class="minor">Local source execution runs selected trusted Python. Interpreter isolation is not a security sandbox. Factory source jobs must first be emitted by FactorySystem; this page does not manufacture them.</p>
         </div>
       </section>
+      <section class="panel control-panel" aria-label="Compare and select worker editions">
+        <header><div><p class="eyebrow">Source selection · explicit control</p><h2>Compare and select editions</h2></div><small>No automatic promotion or execution</small></header>
+        <div class="control-body">
+          <p class="minor">Compare source files by hash, then use a completed, native-reverified job for the exact selected edition. A preferred version does not replace the original or inherit proof from a different version.</p>
+          <div id="preferred-editions" class="entries"><p class="empty">No preferred editions recorded.</p></div>
+          <div class="control-fields">
+            <label for="compare-left">Left edition<select id="compare-left"><option value="">Select edition</option></select></label>
+            <label for="compare-right">Right edition<select id="compare-right"><option value="">Select comparison edition</option></select></label>
+            <label for="promote-job">Supporting completed job<select id="promote-job"><option value="">Select exact native job</option></select></label>
+          </div>
+          <p id="promotion-note" class="minor">Select two versions of the same worker to compare.</p>
+          <pre id="promotion-command" class="control-command">No command selected.</pre>
+          <button id="promotion-copy" type="button" disabled>Copy local commands</button>
+          <p class="minor">Only the local terminal can perform this explicit selection. The comparison shows source differences; it does not certify new behavior. Selection has no scheduling or deployment effect.</p>
+        </div>
+      </section>
       <div class="columns lower">
         <section class="panel"><header><div><p class="eyebrow">Continuity</p><h2>Lane return points</h2></div><small id="lane-label">Source-owned</small></header><div id="lanes" class="entries"><p class="empty">Checking workspace…</p></div></section>
         <section class="panel"><header><div><p class="eyebrow">Evidence</p><h2>How to read the station</h2></div></header>

@@ -107,6 +107,7 @@ function render(data) {
   updateFilters([...data.editions.map(x => x.worker_id), ...data.jobs.map(x => x.worker_id)]);
   renderFiltered();
   renderControls();
+  renderPromotion();
 }
 function renderFiltered() {
   if (!current) return;
@@ -210,6 +211,57 @@ $("#control-copy").addEventListener("click", async () => {
   } catch (_error) {
     $("#control-note").textContent = "Clipboard unavailable. Select the command text to copy manually.";
   }
+});
+
+function renderPromotion() {
+  if (!current) return;
+  const leftEl = $("#compare-left"), rightEl = $("#compare-right"), jobEl = $("#promote-job");
+  const oldLeft = leftEl.value, oldRight = rightEl.value, oldJob = jobEl.value;
+  const versions = current.editions.filter(x => x.state === "AVAILABLE");
+  leftEl.replaceChildren(option("", "Choose first edition"), ...versions.map(x =>
+    option(x.worker_id + "/" + x.version_id, x.worker_id + " / " + x.version_id)));
+  leftEl.value = versions.some(x => x.worker_id + "/" + x.version_id === oldLeft) ? oldLeft : "";
+  const worker = leftEl.value.split("/")[0];
+  const eligible = versions.filter(x => x.worker_id === worker && x.worker_id + "/" + x.version_id !== leftEl.value);
+  rightEl.replaceChildren(option("", "Choose second edition"), ...eligible.map(x => option(x.worker_id + "/" + x.version_id, x.version_id)));
+  rightEl.value = eligible.some(x => x.worker_id + "/" + x.version_id === oldRight) ? oldRight : "";
+  const jobs = current.jobs.filter(x => x.worker_id + "/" + x.version_id === leftEl.value && x.status === "COMPLETE" && x.source_state === "MATCHES_ADMISSION");
+  jobEl.replaceChildren(option("", "Choose supporting job"), ...jobs.map(x => option(x.job_id, x.job_id)));
+  jobEl.value = jobs.some(x => x.job_id === oldJob) ? oldJob : "";
+  const left = versions.find(x => x.worker_id + "/" + x.version_id === leftEl.value);
+  const right = versions.find(x => x.worker_id + "/" + x.version_id === rightEl.value);
+  const job = jobs.find(x => x.job_id === jobEl.value);
+  const prefix = "python -m systems.workspace.controls --data-dir runtime/data ";
+  const commands = [];
+  if (left && right) commands.push(prefix + "compare --worker " + left.worker_id + " --left-version " + left.version_id + " --right-version " + right.version_id);
+  if (left && job) commands.push(prefix + "reverify --job-id " + job.job_id + "\n" +
+    prefix + "promote --worker " + left.worker_id + " --version " + left.version_id +
+    " --supporting-job " + job.job_id + " --confirm-version " + left.version_id +
+    " --confirm-fingerprint " + left.current_fingerprint + " --actor local-operator");
+  $("#promotion-command").textContent = commands.join("\n") || "Select two editions to compare or a completed job for selection.";
+  $("#promotion-copy").disabled = !commands.length;
+  $("#promotion-note").textContent = job ? "Native re-verification happens in the local CLI; recorded COMPLETE alone is insufficient."
+    : left ? "Select a second edition for comparison or a completed job for evidence-gated selection."
+    : "Select an edition to start.";
+  const items = (current.preferred || []).map(x => {
+    const item = el("article", "entry");
+    const line = el("div", "line");
+    line.append(el("strong", "name", x.worker_id + " / " + x.version_id), status(x.source_state));
+    item.append(line, el("p", "minor", "Supported by job " + x.supporting_job_id + " · " + x.required_relation),
+                el("p", "minor", "One native-reverified job; not deployment or proof of other capabilities."));
+    return item;
+  });
+  put("#preferred-editions", items, "No preferred editions have been explicitly selected.");
+}
+$("#compare-left").addEventListener("change", renderPromotion);
+$("#compare-right").addEventListener("change", renderPromotion);
+$("#promote-job").addEventListener("change", renderPromotion);
+$("#promotion-copy").addEventListener("click", async () => {
+  const value = $("#promotion-command").textContent;
+  if (!value.startsWith("python -m systems.workspace.controls ")) return;
+  try { await navigator.clipboard.writeText(value);
+        $("#promotion-note").textContent = "Copied for local review. No edition was selected or executed.";
+  } catch (_error) { $("#promotion-note").textContent = "Copy unavailable; select the commands manually."; }
 });
 
 async function refresh() {
