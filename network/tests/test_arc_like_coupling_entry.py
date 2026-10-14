@@ -30,7 +30,7 @@ class CouplingEntryTests(unittest.TestCase):
         project = self.read("work/arc_like_maze/README.md")
         self.assertIn("](coupling_family.py)", project)
         self.assertTrue((ROOT / "work/arc_like_maze/coupling_family.py").is_file())
-        self.assertIn("network.tests.test_arc_like_coupling_family", readme)
+        self.assertIn("network.tests.test_arc_like_coupling_family", project)
         entry = self.read("ENTRY.md")
         self.assertIn("If the user gives a new explicit referent, that becomes primary", entry)
         for field in ("current referent", "goal / definition of solved",
@@ -40,14 +40,17 @@ class CouplingEntryTests(unittest.TestCase):
             self.assertIn(field, entry)
 
     def test_entry_claims_keep_rooted_and_execution_boundaries(self):
-        readme = self.read("README.md")
-        section = readme.split("## ARC-like mathematical construction", 1)[1].split("## Core structure", 1)[0]
+        project_text = self.read("work/arc_like_maze/README.md")
+        section = project_text.split(
+            "### Rooted A/B classifications: 81 constructions, 21 classes", 1
+        )[1].split("## Third independent coupling", 1)[0]
         section = " ".join(section.split())
-        for claim in ("81 two-coupling worlds", "21 exact *origin-rooted*",
-                      "36", "do not imply full-state equivalence",
-                      "not universal inverse A/B closure or native ARC execution"):
+        for claim in ("**81** parameter worlds", "**21** equivalence classes",
+                      "origin-reachable", "36 turns", "chosen construction rule",
+                      "not a claim that all pairs are conjugate",
+                      "not an assertion that every world individually has 36 distinct forms"):
             self.assertIn(claim, section)
-        project = " ".join(self.read("work/arc_like_maze/README.md").split())
+        project = " ".join(project_text.split())
         for boundary in ("origin-reachable", "chosen construction rule",
                          "not an assertion that every world individually has 36 distinct forms"):
             self.assertIn(boundary, project)

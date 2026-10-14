@@ -11,7 +11,7 @@ from math import lcm
 
 from .process_alignment import (
     Rule, PeriodicProcess as Process, next_scales,
-    IDENTITY, NEGATIVE, ZERO,
+    IDENTITY, NEGATIVE, NONLINEAR, ZERO,
 )
 
 @dataclass(frozen=True)

@@ -189,7 +189,9 @@ class VariableFourthTests(unittest.TestCase):
         for gain in (True,0,3):
             with self.assertRaises(ValueError):
                 FourthCoordinateParameters(gain,Q,P5)
-        for q in ((0,0),(0,0,1),(0,0,True)):
+        # (0,0,1) is valid: its quotient sum is nonzero in F3.
+        self.assertEqual(FourthCoordinateParameters(1,Q,P5).quotient,Q)
+        for q in ((0,0),(0,0,0),(0,0,True)):
             with self.assertRaises(ValueError):
                 FourthCoordinateParameters(1,q,P5)
         with self.assertRaises(ValueError):

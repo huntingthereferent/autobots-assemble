@@ -4,6 +4,7 @@ from dataclasses import asdict
 from typing import Any
 
 from systems.education import EducationKernel
+from missouri_comparison import build_comparison
 
 
 DEFAULT_GRADE_CONTEXT = {
@@ -36,6 +37,11 @@ def build_school_view(
     for learner in state.get("learners", []):
         learner_id = str(learner.get("id") or "")
         grade = learner_grade_context(learner)
+        # External grade obligations are a read-only planning projection,
+        # never evidence of what the learner currently knows.
+        curriculum = build_comparison(
+            state=state, learner={**learner, "grade_context": grade}
+        )
         relations = [asdict(item) for item in kernel.current_for_person(learner_id)]
         observations = [
             asdict(item) for item in kernel.observations_for_person(learner_id)
@@ -93,6 +99,7 @@ def build_school_view(
                 "id": learner_id,
                 "display_name": learner.get("display_name") or learner_id,
                 "grade_context": grade,
+                "curriculum_obligations": curriculum["standards"],
                 "age": age,
                 "adult": adult,
                 "presentation_guardrails": {
