@@ -26,3 +26,6 @@ runtime/data-*/
 
 # ARC SDK local downloads from optional native smoke tests
 environment_files/
+
+# Private experimental copies and mutable process editions
+systems/workspace/data/

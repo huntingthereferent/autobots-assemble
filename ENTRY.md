@@ -63,4 +63,8 @@ If the user gives a new explicit referent, that becomes primary unless it confli
 
 ## Chatbot checkpoint handoff
 
-When the active referent is the finite chatbot and a checkpoint is completed, read and apply the [chatbot CP output contract](work/arc_like_maze/chatbot/checkpoints/HARNESS.md) before handoff. Record one CP manifest and update the chatbot-specific [About Me](work/arc_like_maze/chatbot/ABOUT_ME.md) and [provenance](work/arc_like_maze/chatbot/PROVENANCE.md) together. Do not change any personal profile, invent observations, or claim automated background execution.
+When the active referent is finite correspondence research (historically located at `chatbot/`) and a checkpoint is completed, read and apply the [chatbot CP output contract](work/arc_like_maze/chatbot/checkpoints/HARNESS.md) before handoff. Record one CP manifest and update the chatbot-specific [About Me](work/arc_like_maze/chatbot/ABOUT_ME.md) and [provenance](work/arc_like_maze/chatbot/PROVENANCE.md) together. Do not change any personal profile, invent observations, or claim automated background execution.
+
+## Finite correspondence process / workstation naming
+
+Use [Finite Correspondence Research](work/arc_like_maze/chatbot/README.md) for the mathematical investigation, [Finite Correspondence Process](work/arc_like_maze/chatbot/PROCESS.md) for its bounded executable implementation, and **Correspondence Worker** for its role in an explicitly admitted job. The [reusable workstation](systems/workspace/WORKSTATION.md) can copy, modify and branch implementations without redefining their research or inheriting original test results. Do not substitute the generic AI-agent label for these distinctions.

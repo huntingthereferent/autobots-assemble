@@ -2,6 +2,8 @@
 
 This contract applies **only** when the current referent is this finite correspondence research branch. It connects each completed CP to the branch's own [About Me](../ABOUT_ME.md) and [Provenance](../PROVENANCE.md). **Never write to James's personal GitHub profile.** Any user-facing application is separate from this branch's research identity.
 
+The [Finite Correspondence Process](../PROCESS.md) names the bounded implementation; a Correspondence Worker is that process only when explicitly assigned work through an admitted boundary. Neither title changes existing CP identifiers, evidence standards, or this research branch's identity.
+
 A CP is not a marketing summary or a request for proof of the complete language referent. Record the current observation, changed relations, what survives, the exact wall/unknown state, the actual tests, and the next supported movement. Distinguish the local integrated owner-backed implementation from standalone finite GitHub references.
 
 ## Harness exit sequence (required after a completed CP)

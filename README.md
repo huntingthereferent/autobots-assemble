@@ -10,10 +10,11 @@ An inspectable collection of code, mathematical experiments, system prototypes, 
 | --- | --- |
 | **Finite-state mathematics** | [Constructed transformation systems](work/arc_like_maze/README.md) — finite-field models, inverse construction, correspondence tests, and counterexamples |
 | **Finite correspondence research** | [Checkpoint research](work/arc_like_maze/chatbot/README.md) — witnessed correspondences, selected routes, source-change propagation, task requirements, and bounded evidence verification |
+| **Finite Correspondence Process** | [Executable process and worker role](work/arc_like_maze/chatbot/PROCESS.md) — distinguishes the bounded process from research and its potential workstation assignment; not a general AI agent |
 | **Interactive environments** | [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
 | **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
 | **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
-| **Workspace continuity (initial)** | [Resumable lanes and return points](systems/workspace/README.md) — independent work threads, explicit cross-lane links, and a local read-only projection; no automatic task admission |
+| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Process Workstation](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no automatic task admission or execution |
 
 ## What the records show
 

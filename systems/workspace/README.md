@@ -52,6 +52,10 @@ print(workspace_view(store, actor_id="james"))
 
 This example is illustrative and **does not assert** that those projects currently share the depicted interface.
 
+## Worker source editions — reusable process workstation
+
+The [Process Workstation](WORKSTATION.md) now adds an **opt-in local copy, inspect, and branch facility** for worker implementation source. It preserves a source inventory and independent editions; modifying a copy cannot rewrite its origin or earlier versions. This supports the [Finite Correspondence Process](../../work/arc_like_maze/chatbot/PROCESS.md) first but is not restricted to it or to chatbot applications. Copying source does **not** itself execute, validate, deploy, or register a worker with the runtime.
+
 ## Current witness / limits
 
 The new focused regression tests cover independent lane movement, connection without state merging, unstructured exploratory lanes, focus switching, read-only person-scoped views, return points, restart replay, provenance ancestors, and corrupted-data rejection.
