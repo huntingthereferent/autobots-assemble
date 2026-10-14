@@ -1,6 +1,6 @@
 # Process Workstation — private copies and branching
 
-The workstation belongs to the reusable [Workspace Continuity system](README.md), not to any one chatbot, finite process, factory, or future implementation. It is a place to **copy, alter, inspect, and branch** worker *source implementations* while preserving the canonical origin.
+The workstation belongs to the reusable [Workspace Continuity system](README.md), not to any one research project, finite process, factory, or future implementation. It is a place to **copy, alter, inspect, and branch** worker *source implementations* while preserving the canonical origin.
 
 **Vocabulary:** Finite Correspondence Research = investigation; Finite Correspondence Process = executable implementation; Correspondence Worker = the role of one implementation carrying a bounded job. The name *worker* does not imply an AI agent.
 
