@@ -34,6 +34,23 @@
         <section class="panel"><header><div><p class="eyebrow">Source</p><h2>Worker editions</h2></div><small id="edition-label">—</small></header><div id="editions" class="entries"><p class="empty">Checking local editions…</p></div></section>
         <section class="panel"><header><div><p class="eyebrow">Execution records</p><h2>Assigned jobs</h2></div><small id="job-label">—</small></header><div id="jobs" class="entries"><p class="empty">Checking admitted work…</p></div></section>
       </div>
+      <section class="panel control-panel" aria-label="Local work controls">
+        <header><div><p class="eyebrow">Explicit control boundary</p><h2>Prepare an operation</h2></div><small>Commands only · this page never runs them</small></header>
+        <div class="control-body">
+          <p class="minor">Select an existing local source edition or job. The preview below prepares exact local commands; only running the commands yourself can admit or execute work. No browser POST routes are added.</p>
+          <div class="control-fields">
+            <label for="control-edition">Worker version<select id="control-edition"><option value="">Choose an edition</option></select></label>
+            <label for="control-action">Operation<select id="control-action"><option value="prepare">Prepare / admit finite job</option><option value="job">Inspect / execute recorded job</option></select></label>
+            <label for="control-job">Existing job<select id="control-job"><option value="">Choose recorded job</option></select></label>
+            <label for="control-new-job">New finite job ID<input id="control-new-job" value="finite-local-002" maxlength="80" spellcheck="false"></label>
+          </div>
+          <p id="control-note" class="minor" role="status">Select an edition to prepare commands.</p>
+          <pre id="control-command" class="control-command">No command selected.</pre>
+          <button id="control-copy" type="button" disabled>Copy commands</button>
+          <details class="detail"><summary>Finite job input example (save as runtime/data/finite-inputs.json)</summary><pre>{"old_phi":[0,0,1],"new_phi":[0,0,0],"candidate_words":[["ABAA","ABBABA"],["ABAA","AAABB","BAAAB"]],"required_state":[0,0,0],"required_action":"B"}</pre></details>
+          <p class="minor">Local source execution runs selected trusted Python. Interpreter isolation is not a security sandbox. Factory source jobs must first be emitted by FactorySystem; this page does not manufacture them.</p>
+        </div>
+      </section>
       <div class="columns lower">
         <section class="panel"><header><div><p class="eyebrow">Continuity</p><h2>Lane return points</h2></div><small id="lane-label">Source-owned</small></header><div id="lanes" class="entries"><p class="empty">Checking workspace…</p></div></section>
         <section class="panel"><header><div><p class="eyebrow">Evidence</p><h2>How to read the station</h2></div></header>

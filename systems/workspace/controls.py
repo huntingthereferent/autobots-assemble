@@ -1,0 +1,236 @@
+"""Explicit local workstation control entrance, separate from the GET-only viewer.
+
+No hidden scheduler, no listening control API, no automatic execution. Only
+source-pinned finite prefilter jobs and already-emitted Factory machine-stage
+simulation handoffs can be acted upon. Running selected Python is NOT sandboxed.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any
+
+from runtime.engine import HandoffRuntime
+from runtime.journal import RuntimeJournal
+from .workstation import ProcessWorkstation, _safe_id
+from .finite_verifier import validate_inputs
+from .process_handoff import (CorrespondenceWorkBridge, WORKER_ID as FINITE_ID)
+from .factory_machine_bridge import (FactoryMachineSimulationBridge,
+                                     WORKER_ID as FACTORY_ID)
+
+KNOWN_WORKERS = frozenset((FINITE_ID, FACTORY_ID))
+FINITE_FILES = frozenset(("finite_goal_priority.py", "finite_required_edge_guard.py"))
+
+
+def _data_root(path: str | Path) -> Path:
+    root = Path(path).resolve()
+    # Runtime data must be a separate directory, never the repository itself.
+    repo = Path(__file__).resolve().parents[2]
+    if root == repo or repo.is_relative_to(root):
+        raise ValueError("data directory cannot contain the source repository")
+    return root
+
+
+def _runtime(root: Path) -> HandoffRuntime:
+    return HandoffRuntime(event_store=RuntimeJournal(root / "runtime.jsonl"))
+
+
+def _inputs(path: str | Path) -> dict:
+    file = Path(path)
+    if not file.is_file() or file.stat().st_size > 16384:
+        raise ValueError("finite inputs must be an existing JSON file of at most 16 KiB")
+    return validate_inputs(json.loads(file.read_text(encoding="utf-8")))
+
+
+def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
+            inputs_file: str | Path | None = None) -> dict[str, Any]:
+    """Read-only validation and selected-edition report; no journal or subprocess."""
+    if worker_id not in KNOWN_WORKERS:
+        raise ValueError("unsupported workstation process")
+    _safe_id(version_id)
+    root = _data_root(data_dir)
+    desk = ProcessWorkstation(root / "workstation")
+    info = desk.inspect(worker_id=worker_id, version_id=version_id)
+    if worker_id == FINITE_ID:
+        if inputs_file is None:
+            raise ValueError("finite job preparation requires --inputs-file")
+        required = FINITE_FILES
+        payload = _inputs(inputs_file)
+    else:
+        if inputs_file is not None:
+            raise ValueError("Factory admission comes from FactorySystem, not arbitrary JSON")
+        required = frozenset(("factory_machine_worker.py",))
+        payload = None
+    files = desk._inventory_edition(Path(info["path"]))
+    if not required.issubset(files):
+        raise ValueError("edition missing required source modules")
+    return {"worker_id": worker_id, "version_id": version_id,
+            "fingerprint": info["current_fingerprint"],
+            "source_modified_from_copy": bool(info["modified"] or info["added"] or info["deleted"]),
+            "operation": "finite-required-edge-prefilter" if worker_id == FINITE_ID
+                         else "existing-factory-machine-simulation",
+            "inputs": payload,
+            "admitted": False, "executed": False,
+            "note": "Preparation is read-only. Inspect trusted edition source before local execution."}
+
+
+def admit_finite(*, data_dir: str | Path, version_id: str,
+                 inputs_file: str | Path, job_id: str, confirm_admit: str,
+                 from_actor: str, lane_id: str = "") -> dict[str, Any]:
+    """Explicit and version-pinned admission; never runs the selected source."""
+    _safe_id(job_id)
+    if confirm_admit != job_id:
+        raise PermissionError("--confirm-admit must match the exact new job ID")
+    if not isinstance(from_actor, str) or not from_actor.strip():
+        raise ValueError("from-actor required")
+    report = prepare(data_dir=data_dir, worker_id=FINITE_ID,
+                     version_id=version_id, inputs_file=inputs_file)
+    root = _data_root(data_dir)
+    runtime = _runtime(root)
+    bridge = CorrespondenceWorkBridge(runtime=runtime,
+                                     workstation=ProcessWorkstation(root / "workstation"))
+    h = bridge.admit(version_id=version_id, inputs=report["inputs"],
+                     from_actor=from_actor, lane_id=lane_id, job_id=job_id)
+    return {"job_id": h.handoff_id, "worker_id": FINITE_ID,
+            "version_id": version_id, "status": runtime.state(job_id).status,
+            "source_fingerprint": h.metadata["edition_fingerprint"],
+            "executed": False}
+
+
+def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str):
+    desk = ProcessWorkstation(root / "workstation")
+    if worker_id == FINITE_ID:
+        return CorrespondenceWorkBridge(runtime=runtime, workstation=desk)
+    if worker_id == FACTORY_ID:
+        return FactoryMachineSimulationBridge(runtime=runtime, workstation=desk)
+    raise ValueError("job does not belong to a supported workstation worker")
+
+
+def job_view(*, data_dir: str | Path, job_id: str) -> dict[str, Any]:
+    """Read-only exact-job view. Does not reverify previously recorded sources."""
+    root = _data_root(data_dir)
+    runtime = _runtime(root)
+    h = runtime.get(job_id)
+    worker = h.metadata.get("worker_id")
+    if worker not in KNOWN_WORKERS or not (
+        h.metadata.get("source_system") == "process-workstation" or
+        h.metadata.get("workstation_worker") is True
+    ):
+        raise ValueError("job is not a registered workstation handoff")
+    from .monitor import workstation_snapshot
+    snapshot = workstation_snapshot(root=root / "workstation", runtime=runtime)
+    for job in snapshot["jobs"]:
+        if job["job_id"] == job_id:
+            return job
+    raise ValueError("admitted job not visible in workstation")
+
+
+def run_job(*, data_dir: str | Path, job_id: str,
+            confirm_execute: str) -> dict[str, Any]:
+    """Explicit, exact-ID execution or replay-safe recovery, no bulk activation."""
+    if confirm_execute != job_id:
+        raise PermissionError("--confirm-execute must match the exact job ID")
+    root = _data_root(data_dir)
+    runtime = _runtime(root)
+    handoff = runtime.get(job_id)
+    worker = handoff.metadata.get("worker_id")
+    if worker not in KNOWN_WORKERS:
+        raise ValueError("not a supported workstation job")
+    bridge = _bridge(runtime, root, worker)
+    state = runtime.state(job_id)
+    if worker == FINITE_ID:
+        if handoff.metadata.get("source_system") != "process-workstation":
+            raise ValueError("finite worker job source does not match")
+        if state.status == "READY":
+            bridge.execute(job_id, allow_local_execution=True)
+        elif state.status != "COMPLETE":
+            raise ValueError("unresolved finite job requires a separate recovery decision")
+        bridge.reverify(job_id)
+    else:
+        if handoff.metadata.get("source_system") != "factory" or handoff.metadata.get("workstation_worker") is not True:
+            raise ValueError("not a workstation Factory stage")
+        # Factory owns the order state: recover result and reconcile at most once.
+        from systems.factory.system import FactorySystem
+        factory_path = root / "factory_orders.jsonl"
+        if not factory_path.is_file():
+            raise ValueError("Factory local order journal is missing")
+        factory = FactorySystem(factory_path)
+        order_id = handoff.metadata.get("order_id")
+        order = factory.order(order_id)
+        if state.status == "READY":
+            if order.pending_handoff_id != job_id or order.stage_index != 1:
+                raise ValueError("Factory machine job is not the pending source-owned stage")
+            bridge.execute(job_id, allow_local_execution=True)
+        elif state.status != "COMPLETE":
+            raise ValueError("unresolved Factory stage requires separate recovery")
+        bridge.reverify(job_id)
+        order = factory.order(order_id)
+        if order.pending_handoff_id == job_id and order.stage_index == 1:
+            factory.reconcile(order_id, handoff=factory.pending_handoff(order_id),
+                              state=runtime.state(job_id))
+        elif order.stage_index < 2:
+            raise ValueError("Factory local stage is not aligned with recorded result")
+    return {"job_id": job_id, "worker_id": worker,
+            "status": runtime.state(job_id).status,
+            "reverified": True,
+            "note": "Completed jobs reverify without another subprocess execution."}
+
+
+def reverify_job(*, data_dir: str | Path, job_id: str) -> dict[str, Any]:
+    root = _data_root(data_dir)
+    runtime = _runtime(root)
+    h = runtime.get(job_id)
+    bridge = _bridge(runtime, root, h.metadata.get("worker_id"))
+    bridge.reverify(job_id)
+    return {"job_id": job_id, "status": runtime.state(job_id).status,
+            "reverified": True, "executed": False}
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description="Local explicit Process Workstation controls")
+    parser.add_argument("--data-dir", type=Path, required=True)
+    modes = parser.add_subparsers(dest="action", required=True)
+    p = modes.add_parser("prepare", help="Read-only edition/inputs check")
+    p.add_argument("--worker", required=True)
+    p.add_argument("--version", required=True)
+    p.add_argument("--inputs-file", type=Path)
+    p = modes.add_parser("admit-finite", help="Only explicit finite prefilter admission")
+    p.add_argument("--version", required=True)
+    p.add_argument("--inputs-file", type=Path, required=True)
+    p.add_argument("--job-id", required=True)
+    p.add_argument("--confirm-admit", required=True)
+    p.add_argument("--from-actor", required=True)
+    p.add_argument("--lane", default="")
+    p = modes.add_parser("inspect", help="Read-only recorded job")
+    p.add_argument("--job-id", required=True)
+    p = modes.add_parser("execute", help="Explicitly run selected ready job")
+    p.add_argument("--job-id", required=True)
+    p.add_argument("--confirm-execute", required=True)
+    p = modes.add_parser("reverify", help="Replay native verifier, no execution")
+    p.add_argument("--job-id", required=True)
+    args = parser.parse_args(argv)
+    opts = vars(args)
+    data = opts.pop("data_dir")
+    action = opts.pop("action")
+    if action == "prepare":
+        result = prepare(data_dir=data, worker_id=opts["worker"],
+                         version_id=opts["version"], inputs_file=opts["inputs_file"])
+    elif action == "admit-finite":
+        result = admit_finite(data_dir=data, version_id=opts["version"],
+                    inputs_file=opts["inputs_file"], job_id=opts["job_id"],
+                    confirm_admit=opts["confirm_admit"],
+                    from_actor=opts["from_actor"], lane_id=opts["lane"])
+    elif action == "inspect":
+        result = job_view(data_dir=data, job_id=opts["job_id"])
+    elif action == "execute":
+        result = run_job(data_dir=data, job_id=opts["job_id"],
+                         confirm_execute=opts["confirm_execute"])
+    else:
+        result = reverify_job(data_dir=data, job_id=opts["job_id"])
+    print(json.dumps(result, sort_keys=True, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

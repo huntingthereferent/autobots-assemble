@@ -60,6 +60,16 @@ The [local two-process setup](TWO_PROCESS_WORKSTATION.md) creates real version-p
 
 The [read-only inspection adapters](INSPECTION_PANELS.md) render one shared workstation UI with process-specific panels: finite candidate prefilter verdicts, Factory machine-stage simulated outputs, and a generic fallback for other workers. A panel reads recorded native state and never replays a verifier or creates work.
 
+## Explicit local controls (separate from the viewer)
+
+[Local workstation controls](WORKSTATION_CONTROLS.md) now support read-only
+edition/input preparation, exact-ID admitted finite prefilter jobs, explicit
+single-job execution, and native re-verification of completed recorded results.
+The dashboard merely selects versions and displays local commands; it has **no
+POST endpoint** and never starts a worker. Factory machine stages still require
+a source-owned Factory handoff. Neither copying nor preparing a process creates
+work automatically.
+
 ## Current witness / limits
 
 The new focused regression tests cover independent lane movement, connection without state merging, unstructured exploratory lanes, focus switching, read-only person-scoped views, return points, restart replay, provenance ancestors, and corrupted-data rejection.

@@ -45,7 +45,8 @@ function renderEd(edition) {
   return card;
 }
 function inspectionPanel(report) {
-  // Process-specific fields are data, not executable behavior.
+  // Process-specific fields are provided as data by a registered native
+  // inspector. This generic renderer never evaluates or interprets them.
   const panel = el("details", "detail inspection");
   panel.append(el("summary", "", "Inspect · " + report.title));
   panel.append(el("p", "minor", report.scope));
@@ -105,6 +106,7 @@ function render(data) {
   }
   updateFilters([...data.editions.map(x => x.worker_id), ...data.jobs.map(x => x.worker_id)]);
   renderFiltered();
+  renderControls();
 }
 function renderFiltered() {
   if (!current) return;
@@ -120,6 +122,96 @@ function renderFiltered() {
   $("#lane-label").textContent = lanes.length + " lanes";
   $("#selection-note").textContent = (worker || choice) ? "Filtered local records" : "Showing recorded local state";
 }
+const ID_PATTERN = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$/;
+const FINITE = "finite-correspondence-process";
+const FACTORY = "factory-machine-simulation-process";
+function option(value, label) {
+  const item = el("option", "", label);
+  item.value = value;
+  return item;
+}
+function renderControls() {
+  if (!current) return;
+  const editionEl = $("#control-edition"), old = editionEl.value;
+  const available = current.editions.filter(x => x.state === "AVAILABLE");
+  editionEl.replaceChildren(option("", "Choose an edition"),
+    ...available.map(x => option(x.worker_id + "/" + x.version_id, x.worker_id + " / " + x.version_id)));
+  editionEl.value = available.some(x => x.worker_id + "/" + x.version_id === old) ? old : "";
+  updateControlJobs();
+}
+function updateControlJobs() {
+  if (!current) return;
+  const selected = $("#control-edition").value, jobEl = $("#control-job"), oldJob = jobEl.value;
+  const jobs = current.jobs.filter(x => x.worker_id + "/" + x.version_id === selected);
+  jobEl.replaceChildren(option("", "Choose recorded job"),
+    ...jobs.map(x => option(x.job_id, x.job_id + " · " + x.status)));
+  jobEl.value = jobs.some(x => x.job_id === oldJob) ? oldJob : "";
+  updateControlCommand();
+}
+function updateControlCommand() {
+  const edition = $("#control-edition").value, action = $("#control-action").value;
+  const parts = edition.split("/");
+  const worker = parts[0], version = parts[1];
+  const selected = current && current.editions.find(x => x.worker_id === worker && x.version_id === version);
+  let note = "Select a worker edition.", commands = "No command selected.";
+  const prefix = "python -m systems.workspace.controls --data-dir runtime/data ";
+  $("#control-job").disabled = action !== "job";
+  $("#control-new-job").disabled = action !== "prepare";
+  if (selected && ID_PATTERN.test(worker) && ID_PATTERN.test(version)) {
+    if (selected.source_modified) {
+      note = "Selected edition changed from its source copy. Review its files before trusting execution.";
+    } else note = "Commands are for the authorized local terminal, never sent by this page.";
+    if (action === "prepare") {
+      if (worker === FINITE) {
+        const id = $("#control-new-job").value.trim();
+        if (!ID_PATTERN.test(id)) {
+          note = "Choose a simple job ID (letters, numbers, dots, dashes or underscore).";
+          commands = "Invalid job ID.";
+        } else {
+          commands = prefix + "prepare --worker " + worker + " --version " + version + " --inputs-file runtime/data/finite-inputs.json\n" +
+            prefix + "admit-finite --version " + version + " --inputs-file runtime/data/finite-inputs.json --job-id " + id +
+            " --confirm-admit " + id + " --from-actor local-operator\n" +
+            "# After admission, inspect this job and explicitly authorize execution below.";
+        }
+      } else {
+        note = "Factory stages must originate in FactorySystem; use the recorded job operation.";
+        commands = "No arbitrary Factory admission is available.";
+      }
+    } else {
+      const jobId = $("#control-job").value;
+      const job = current.jobs.find(x => x.job_id === jobId && x.worker_id === worker && x.version_id === version);
+      if (!job || !ID_PATTERN.test(jobId)) {
+        note = "Choose a recorded job for this exact edition.";
+        commands = "No recorded job selected.";
+      } else {
+        commands = prefix + "inspect --job-id " + jobId + "\n" +
+          (job.status === "COMPLETE" ? prefix + "reverify --job-id " + jobId :
+            job.status === "READY" && job.source_state === "MATCHES_ADMISSION" ?
+              prefix + "execute --job-id " + jobId + " --confirm-execute " + jobId :
+              "# Job is not ready for execution; inspect its recorded wall first.");
+        if (job.source_state !== "MATCHES_ADMISSION") note = "Source is not pinned to the visible edition; execution must not proceed.";
+      }
+    }
+  }
+  $("#control-note").textContent = note;
+  $("#control-command").textContent = commands;
+  $("#control-copy").disabled = !commands.startsWith(prefix);
+}
+$("#control-edition").addEventListener("change", updateControlJobs);
+$("#control-action").addEventListener("change", updateControlCommand);
+$("#control-job").addEventListener("change", updateControlCommand);
+$("#control-new-job").addEventListener("input", updateControlCommand);
+$("#control-copy").addEventListener("click", async () => {
+  const command = $("#control-command").textContent;
+  if (!command.startsWith("python -m systems.workspace.controls ")) return;
+  try {
+    await navigator.clipboard.writeText(command);
+    $("#control-note").textContent = "Copied for local terminal review; no job was admitted or run.";
+  } catch (_error) {
+    $("#control-note").textContent = "Clipboard unavailable. Select the command text to copy manually.";
+  }
+});
+
 async function refresh() {
   if (updating) return;
   updating = true;
