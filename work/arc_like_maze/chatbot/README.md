@@ -1,6 +1,6 @@
 # Finite Correspondence Research
 
-Finite research on **witnessed correspondences and their continuation**: how compatible relations can be admitted, transported, compared, withdrawn, revalidated, and used by independently declared tasks. Each experiment has its own question, source, tests and evidence. A chatbot was an early application label, **not** the definition of this branch.
+Finite research on **witnessed correspondences and their continuation**: how compatible relations can be admitted, transported, compared, withdrawn, revalidated, and used by independently declared tasks. Each experiment has its own question, source, tests and evidence. The research is defined by its witnessed correspondences and explicit evidence conditions, not by any particular interface or product.
 
 **[Open the checkpoint index →](research/checkpoints/README.md)**
 
