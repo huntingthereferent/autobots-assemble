@@ -1,6 +1,6 @@
 # Checkpoint output contract — finite correspondence research
 
-This contract applies **only** when the current referent is this finite correspondence research branch. It connects each completed CP to the branch's own [About Me](../ABOUT_ME.md) and [Provenance](../PROVENANCE.md). **Never write to James's personal GitHub profile.** A chatbot is an optional application, not the research identity.
+This contract applies **only** when the current referent is this finite correspondence research branch. It connects each completed CP to the branch's own [About Me](../ABOUT_ME.md) and [Provenance](../PROVENANCE.md). **Never write to James's personal GitHub profile.** Any user-facing application is separate from this branch's research identity.
 
 A CP is not a marketing summary or a request for proof of the complete language referent. Record the current observation, changed relations, what survives, the exact wall/unknown state, the actual tests, and the next supported movement. Distinguish the local integrated owner-backed implementation from standalone finite GitHub references.
 
