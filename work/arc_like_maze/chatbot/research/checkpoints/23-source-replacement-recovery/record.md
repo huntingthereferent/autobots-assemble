@@ -1,6 +1,6 @@
-# A/B chatbot — independently pinned source replacement recovery
+# finite A/B correspondence process — independently pinned source replacement recovery
 
-**Date:** 2026-10-13. **Scope:** Bounded finite A/B-labeled mathematical chatbot. A/B as relational language is not equated with these specific finite transition generators.
+**Date:** 2026-10-13. **Scope:** Bounded finite A/B-labeled mathematical correspondence process. A/B as relational language is not equated with these specific finite transition generators.
 
 ## What was added
 

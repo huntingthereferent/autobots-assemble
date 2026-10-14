@@ -1,6 +1,6 @@
 # Stage 29 — Cross-invocation route-certificate handoff (October 13, 2026)
 
-**Referent.** Continue the owner-pinned finite chatbot from CP-0028. Does an earlier selected-route certificate survive a move into a new caller invocation without borrowing the earlier task's obligations or treating historical proof as current? The A/B labels remain local operators in an experiment; the language referent is not reduced to them.
+**Referent.** Continue the owner-pinned finite correspondence process from CP-0028. Does an earlier selected-route certificate survive a move into a new caller invocation without borrowing the earlier task's obligations or treating historical proof as current? The A/B labels remain local operators in an experiment; the language referent is not reduced to them.
 
 ## Witnessed local result
 
@@ -38,6 +38,6 @@ python -m unittest -q test_ab_chatbot_certificate_handoff.HandoffOwnerTests test
 
 The complete Stage-29 ZIP contains 273 entries: **all 265 Stage-28 original contents remain byte-for-byte identical**, with exactly eight CP-29 files appended: integrated handoff, owner-backed tests, finite reference, finite tests, executable demo, recorded result, regression accounting and this record. The Stage-28 ZIP is not overwritten.
 
-The compact GitHub CP-29 folder exposes the eight new source/evidence files. The integrated CP-29 code still depends on the original Stage-20 local owner-backed baseline that is not fully published on GitHub; a clean GitHub checkout alone does **not** reproduce the full integration test. The independent finite reference is additionally available in the parent chatbot directory for GitHub CI.
+The compact GitHub CP-29 folder exposes the eight new source/evidence files. The integrated CP-29 code still depends on the original Stage-20 local owner-backed baseline that is not fully published on GitHub; a clean GitHub checkout alone does **not** reproduce the full integration test. The independent finite reference is additionally available in the parent correspondence process directory for GitHub CI.
 
 **Next supported experiment:** A truly independent-process receiving boundary would require explicit independently verifiable owner credentials and source pin attestations. Test a minimal export/import identity contract and demonstrate failure against source substitution before claiming that broader transfer; do not treat a SHA-256 receipt as an authentication token.

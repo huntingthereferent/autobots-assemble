@@ -1,6 +1,6 @@
-# A/B finite chatbot: selective propagation across independent certificates
+# finite A/B correspondence process: selective propagation across independent certificates
 
-**October 13, 2026.** This is an additive orchestration layer on the **same existing** finite A/B chatbot. It does not create autonomy, infer an environment, or replace the mathematical engines. The caller invokes `advance()` when the surrounding sources move. A/B as relational language is not equated with the finite operators A/B in this test.
+**October 13, 2026.** This is an additive orchestration layer on the **same existing** finite A/B correspondence process. It does not create autonomy, infer an environment, or replace the mathematical engines. The caller invokes `advance()` when the surrounding sources move. A/B as relational language is not equated with the finite operators A/B in this test.
 
 ## Why it was added
 

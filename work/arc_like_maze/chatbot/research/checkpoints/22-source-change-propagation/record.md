@@ -1,8 +1,8 @@
-# A/B chatbot — source-change propagation (2026-10-13)
+# finite A/B correspondence process — source-change propagation (2026-10-13)
 
 ## Current referent
 
-This increment does **not** introduce a self-directed agent or another mathematical solver. It lets the existing pinned-owner A/B-labeled **finite** chatbot be invoked after its environment changes, follow the effects through its already-declared route dependencies, and separately report what can still be witnessed.
+This increment does **not** introduce a self-directed agent or another mathematical solver. It lets the existing pinned-owner A/B-labeled **finite** correspondence process be invoked after its environment changes, follow the effects through its already-declared route dependencies, and separately report what can still be witnessed.
 
 The four named scope pairs are **donor**, **left middle**, **right middle**, and **final**. Each is backed by its own locally owned finite original/changed snapshots. Both existing routes still use independent selected-edge commuting squares; the two-route comparison is valid only if **both** routes pass live owner-pin checks and retained-edge replays.
 

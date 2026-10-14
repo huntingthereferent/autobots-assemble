@@ -1,4 +1,4 @@
-# A/B finite chatbot — selective replay inside a two-route comparison
+# finite A/B correspondence process — selective replay inside a two-route comparison
 
 **October 13, 2026. Additive opt-in implementation.** The language-level A/B research referent is not defined by these explicitly specified finite action generators.
 

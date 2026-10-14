@@ -1,6 +1,6 @@
-# A/B chatbot — exact route-bound task consumption (2026-10-13)
+# finite A/B correspondence process — exact route-bound task consumption (2026-10-13)
 
-**Current research referent.** Continue the existing finite mathematical A/B chatbot while respecting the observation that useful movement can come from its surroundings, not from autonomous goals. This experiment adds **one explicitly declared task bound to one named, already observed two-hop route** within a historical two-route comparison. A/B as relational language is not defined by these finite mathematical generators.
+**Current research referent.** Continue the existing finite A/B correspondence process while respecting the observation that useful movement can come from its surroundings, not from autonomous goals. This experiment adds **one explicitly declared task bound to one named, already observed two-hop route** within a historical two-route comparison. A/B as relational language is not defined by these finite mathematical generators.
 
 ## What has been independently witnessed
 
@@ -49,7 +49,7 @@ The separate `finite_single_route_task.py` knows the complete declared finite la
 
 ## Boundaries
 
-- The chatbot continues when **invoked**; it does not poll autonomously.
+- The correspondence process continues when **invoked**; it does not poll autonomously.
 - A route-specific task can succeed even if the unrelated route is withdrawn, but it **does not establish agreement between routes**.
 - No unobserved edge can satisfy a task. No task may assemble independently available obligations from different routes unless a new separate witness legitimately joins them.
 - An exact source pin, version, mapping and cached observation used by the route remains subject to the old verifier's audits and failure walls.

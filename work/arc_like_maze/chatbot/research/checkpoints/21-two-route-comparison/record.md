@@ -2,7 +2,7 @@
 
 ## Purpose and referent
 
-Continue the **same finite mathematical A/B chatbot**. Compare two already evidenced two-link routes from the *same exact pinned donor sources* to the *same exact pinned final sources*, via **different independently pinned middle source pairs**. The question is whether the explicitly composed OLD and NEW endpoint maps agree on **one named donor labeled transition**. No unobserved edges are admitted, and neither route's prior certificate is rewritten.
+Continue the **same finite A/B correspondence process**. Compare two already evidenced two-link routes from the *same exact pinned donor sources* to the *same exact pinned final sources*, via **different independently pinned middle source pairs**. The question is whether the explicitly composed OLD and NEW endpoint maps agree on **one named donor labeled transition**. No unobserved edges are admitted, and neither route's prior certificate is rewritten.
 
 A/B at the language/research level is not defined by the two formal A/B-labeled operators in this scoped 27-state fixture.
 
