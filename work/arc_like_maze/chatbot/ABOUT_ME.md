@@ -1,6 +1,6 @@
 # Finite Correspondence Research — About Me
 
-This page belongs to the **finite correspondence research checkpoint harness**, not to the researcher’s personal profile. A chatbot is one possible application, not the name of this research.
+This page belongs to the **finite correspondence research checkpoint harness**, not to the researcher’s personal profile. Its subject is evidence-bound correspondence, independent of any particular application.
 
 The research follows relations admitted by witnessed finite transitions and exact source conditions. Changes may come from surrounding systems and are checked when invoked; independent goals or continuous monitoring are not required.
 
