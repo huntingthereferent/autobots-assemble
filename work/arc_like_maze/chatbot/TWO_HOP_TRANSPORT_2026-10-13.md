@@ -1,6 +1,6 @@
 # Two-hop selected finite transport — 2026-10-13
 
-**Referent:** Extend the existing A/B mathematical chatbot by explicitly witnessing a chain of TWO selected commuting squares across three separately owner-pinned source pairs. A/B as language is not defined by these finite A/B-labeled mathematical generators.
+**Referent:** Extend the existing finite A/B correspondence process by explicitly witnessing a chain of TWO selected commuting squares across three separately owner-pinned source pairs. A/B as language is not defined by these finite A/B-labeled mathematical generators.
 
 ## Distinct scope pairs (old phi -> new phi)
 
@@ -32,7 +32,7 @@ Standalone finite reproduction from work/arc_like_maze/chatbot:
     python finite_two_hop_transport.py
     python -m unittest -q test_finite_two_hop_transport.TwoHopFiniteTests
 
-The standalone checker imports the existing finite_cross_scope_transport and finite_cross_pin_join, knows all six finite laws, and **cannot authenticate HTTP owner identities or prove how remote observations were obtained**. The integrated chatbot checks in-process local owner binding and retains exact history and source revision walls.
+The standalone checker imports the existing finite_cross_scope_transport and finite_cross_pin_join, knows all six finite laws, and **cannot authenticate HTTP owner identities or prove how remote observations were obtained**. The integrated correspondence process checks in-process local owner binding and retains exact history and source revision walls.
 
 **Boundary:** This proves two selected scoped commuting squares, not all-state intertwining, unrestricted transport, general agency, or a physical A/B mechanism. The active unrelated Continuity pointer state/current.json is unchanged.
 

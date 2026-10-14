@@ -1,4 +1,4 @@
-# Finite chatbot: compare goal-seed unions after extension (2026-10-12)
+# finite correspondence process: compare goal-seed unions after extension (2026-10-12)
 
 **Current referent:** Within fully specified finite A/B-labeled generators, compare several *compatible root-path unions* by the relation that survives after admitted-edge exploration. This is a mathematical experiment, not a claim that A/B language is a finite state machine or that a physical couplesense mechanism has been realized.
 
@@ -20,7 +20,7 @@ From work/arc_like_maze/chatbot:
 
 The standalone witness uses checked-in finite_goal_priority.py and finite_seed_first.py. Four finite tests passed in a separate local run using a law-equivalent mirror of those dependencies. GitHub CI has not been checked.
 
-## Integrated local chatbot
+## integrated local correspondence process
 
 Separate downloadable package ab_chatbot_post_extension_portfolio_2026-10-12.zip (SHA-256 f7323f2093ffae27e6988cbfbb4676ce9d949f463176d0c8d5a7a72c12f49ff1), containing 84 files with all prior 73 files byte-for-byte unchanged. Its new PostExtensionPortfolio reuses the pinned BranchDiscoverer, PathUnionAgent and UnionEdgeExtender. It audits each complete candidate on every final read and retains remote-source status rather than upgrading it.
 

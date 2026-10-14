@@ -1,6 +1,6 @@
 # Evidence-preserving candidate prefilter — 2026-10-12
 
-**Referent:** In a finite mathematical chatbot, does a previously witnessed A/B-labeled transition provide a sound way to reject a candidate *before* full extension? Yes, but only relative to a **declared must-admit-edge task** and fixed, independently replayable seed state assignments. An exclusion from another pairing does not globally forbid an edge.
+**Referent:** In a finite correspondence process, does a previously witnessed A/B-labeled transition provide a sound way to reject a candidate *before* full extension? Yes, but only relative to a **declared must-admit-edge task** and fixed, independently replayable seed state assignments. An exclusion from another pairing does not globally forbid an edge.
 
 ## Local integrated experiment
 
@@ -15,14 +15,14 @@ Original law phi=(0,0,1), changed law phi=(0,0,0), root (0,0,0), requested goals
 
 ## GitHub standalone finite oracle
 
-The repository's finite_required_edge_guard.py reconstructs eleven already-discovered candidate seed word tuples directly under the declared complete laws and checks which can satisfy the root B preservation requirement without changing their paired seeds. Four standalone finite tests reproduce **2 exclusions / 9 not contradicted**. This standalone program is a finite mathematical checker; it does not execute the source-pinned local chatbot.
+The repository's finite_required_edge_guard.py reconstructs eleven already-discovered candidate seed word tuples directly under the declared complete laws and checks which can satisfy the root B preservation requirement without changing their paired seeds. Four standalone finite tests reproduce **2 exclusions / 9 not contradicted**. This standalone program is a finite mathematical checker; it does not execute the source-pinned local integrated correspondence process.
 
 Run in this directory:
 
     python finite_required_edge_guard.py
     python -m unittest -q test_finite_required_edge_guard.py
 
-## Full local chatbot
+## full local integrated implementation
 
 The separate artifact ab_chatbot_required_edge_prefilter_2026-10-12.zip (SHA256 65aaa31530d98eed3eaee8568d14c3a0186a3371896a5e261aa10b5c240bb73a) includes 108 files, leaving all previous 101 files byte-for-byte unchanged. Added integrated module, 8 tests, standalone finite oracle and 4 tests, demo, JSON record, and reproduction README. Default policy remains fixed-order; the required-edge prefilter is an *opt-in contract*.
 

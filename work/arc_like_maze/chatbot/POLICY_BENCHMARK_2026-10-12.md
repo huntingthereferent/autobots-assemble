@@ -1,4 +1,4 @@
-# Finite chatbot policy benchmark — 2026-10-12
+# finite correspondence process policy benchmark — 2026-10-12
 
 **Referent:** Does prioritizing already-witnessed rejected A/B-labeled transitions improve the next trial compared with fixed-order candidate search? Formal A and B are only particular finite transformations of 27 states, not a definition of A/B's language-level referent.
 
@@ -18,7 +18,7 @@ Concrete controls:
 - Original phi=(0,0,1), changed phi=(1,0,1), goals (0,1,0) and (0,1,1), trial cap 4: 2/2 goals for both, **42 fixed** vs **41 guided** admitted transitions; 108 observed owner transitions each.
 - Original phi=(0,0,1), changed phi=(0,0,0), goals (0,1,1) and (0,2,0), caps 3 and 4: 2/2 goals and 13 admitted edges for both, but **44 fixed** vs **46 guided** observed transitions. Selected goal words coincide.
 
-**Evidence:** The snapshot-backed local benchmark replayed every winning goal word and every admitted selected edge against independent finite law computations, also verifying partial pairing injectivity. It completed three separate budget segments. The combined and per-run machine-readable JSON are in the separate packaged chatbot artifact `ab_chatbot_policy_benchmark_2026-10-12.zip` (SHA-256: `85bafe4f59d91b890453bcd468f4e538eb152640ecfe4a25d8ec598691385767`), 101 files, preserving all 91 predecessor files byte-for-byte. The full benchmarking implementation is in that package, not silently present in GitHub.
+**Evidence:** The snapshot-backed local benchmark replayed every winning goal word and every admitted selected edge against independent finite law computations, also verifying partial pairing injectivity. It completed three separate budget segments. The combined and per-run machine-readable JSON are in the separate packaged correspondence process artifact `ab_chatbot_policy_benchmark_2026-10-12.zip` (SHA-256: `85bafe4f59d91b890453bcd468f4e538eb152640ecfe4a25d8ec598691385767`), 101 files, preserving all 91 predecessor files byte-for-byte. The full benchmarking implementation is in that package, not silently present in GitHub.
 
 Local regression verification: 4 benchmark tests, 10 conflict-guidance, 25 post-extension portfolio, 12 seed-first extension, 15 union extension, 4 previous finite guidance = **70 passed across separately completed module runs**. A separate GitHub-file-style finite summary checker has **3 local tests** for row totals and independent replay of selected goal words. The larger historical suite and GitHub CI were not rerun/verified.
 

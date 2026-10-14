@@ -1,10 +1,10 @@
-# Explicit provenance requirements — finite chatbot research record (2026-10-12)
+# Explicit provenance requirements — finite correspondence process research record (2026-10-12)
 
 **Active referent:** Preserve the distinction between a valid finite A/B-labeled mathematical correspondence and the separately declared requirement that its evidence originate from a currently verified local owner. A/B remains language for relationships through movement; the generators studied here are only a specified 27-state mathematical example.
 
 ## Explicit new task dimension
 
-The integrated chatbot's new `ProvenanceTaskSession` accepts a strict structured key:
+The integrated correspondence process's new `ProvenanceTaskSession` accepts a strict structured key:
 
     {"goals":[[0,1,1],[0,2,0]],
      "required_provenance":{"old":"LOCAL_OWNER_VERIFIED","new":"LOCAL_OWNER_VERIFIED"}}
@@ -31,7 +31,7 @@ A pinned version change returns UNKNOWN_VERSION. A tampered retained edge still 
 
 ## Deliverables and reproducibility
 
-The **full snapshot-backed chatbot** is packaged as `ab_chatbot_explicit_provenance_2026-10-12.zip`, SHA-256 `9681985b3d6cf466f612dcc3d1a25c7d3b9d919544be5533f55d7a5a32db808f`. It has 137 files, preserving all 129 predecessor files byte-for-byte. It adds the integrated source, 14 tests, runnable demo, detailed JSON result, regression record and the source-scope checker.
+The **full snapshot-backed correspondence process** is packaged as `ab_chatbot_explicit_provenance_2026-10-12.zip`, SHA-256 `9681985b3d6cf466f612dcc3d1a25c7d3b9d919544be5533f55d7a5a32db808f`. It has 137 files, preserving all 129 predecessor files byte-for-byte. It adds the integrated source, 14 tests, runnable demo, detailed JSON result, regression record and the source-scope checker.
 
 The **GitHub** sidecar is only `finite_provenance_scope.py`, `test_finite_provenance_scope.py`, and this research record. To replay its 4 pure tests:
 
@@ -39,6 +39,6 @@ The **GitHub** sidecar is only `finite_provenance_scope.py`, `test_finite_proven
     python finite_provenance_scope.py
     python -m unittest -q test_finite_provenance_scope.py
 
-Crucial boundary: the standalone Python verifier accepts trusted in-process handles as input. It cannot independently authenticate source objects or prove HTTP data origin. Actual local proof in the full chatbot depends on the existing `LanguageBridge._scope` with a live owner-bound loopback and independently replayed cached transition values. Neither finite replay nor a user-supplied source identifier authenticates a third-party system.
+Crucial boundary: the standalone Python verifier accepts trusted in-process handles as input. It cannot independently authenticate source objects or prove HTTP data origin. Actual local proof in the full correspondence process depends on the existing `LanguageBridge._scope` with a live owner-bound loopback and independently replayed cached transition values. Neither finite replay nor a user-supplied source identifier authenticates a third-party system.
 
 **Next:** Investigate requests for a *specific pinned local owner* and explicitly re-pinned evidence history. A new owner or revision should be a new evidence referent, not an automatic continuity or source-equivalence assertion. No universal physical A/B or unrestricted AI claim. `state/current.json` retains the separate Continuity project.

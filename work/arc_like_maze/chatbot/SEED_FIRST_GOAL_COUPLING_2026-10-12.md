@@ -19,7 +19,7 @@ Old law phi=(0,0,1); changed law phi=(0,0,0); root (0,0,0). Requested goals (0,1
 
 This deterministic standalone witness uses the existing checked-in finite_goal_priority Law and bounded_backtracked_goal, finite_extension_portfolio helpers. Five finite tests passed locally using an equivalent copy of the defined Law formula. GitHub CI has not been verified.
 
-## Integrated local chatbot
+## integrated local correspondence process
 
 The separate 73-file local archive ab_chatbot_seed_first_extension_2026-10-12.zip (SHA-256 b256d673ffd56dbc65d5e7caf73934ffee7080909158255106bd8d0e025e84c8) preserves all 68 predecessor files byte-for-byte and adds the integrated SeedFirstGoalExtender, tests, demo, and result records. It composes the existing BranchDiscoverer, PathUnionAgent, and UnionEdgeExtender with pinned evidence and replay.
 
