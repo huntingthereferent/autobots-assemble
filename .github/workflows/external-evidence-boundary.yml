@@ -1,0 +1,98 @@
+name: external-source evidence boundary
+on:
+  push:
+    paths:
+      - 'systems/workspace/external_evidence.py'
+      - 'systems/workspace/github_observation.py'
+      - 'systems/workspace/external_route_mapping.py'
+      - 'systems/workspace/external_source_continuity.py'
+      - 'systems/workspace/native_owner_observation.py'
+      - 'systems/workspace/external_native_binding.py'
+      - 'systems/workspace/external_authority_binding.py'
+      - 'systems/workspace/independent_authority_source.py'
+      - 'systems/workspace/source_origin_authority.py'
+      - 'systems/workspace/live_source_preflight.py'
+      - 'systems/workspace/EXTERNAL_ROUTE_MAPPING.md'
+      - 'systems/workspace/EXTERNAL_SOURCE_CONTINUITY.md'
+      - 'systems/workspace/NATIVE_OWNER_OBSERVATION.md'
+      - 'systems/workspace/EXTERNAL_NATIVE_BINDING.md'
+      - 'systems/workspace/EXTERNAL_AUTHORITY_BINDING.md'
+      - 'systems/workspace/INDEPENDENT_AUTHORITY_SOURCE.md'
+      - 'systems/workspace/SOURCE_ORIGIN_AUTHORITY.md'
+      - 'systems/workspace/LIVE_SOURCE_PREFLIGHT.md'
+      - 'systems/workspace/GITHUB_OBSERVATION.md'
+      - 'systems/workspace/EXTERNAL_EVIDENCE_BOUNDARY.md'
+      - 'network/tests/test_external_evidence.py'
+      - 'network/tests/test_github_observation.py'
+      - 'network/tests/test_external_route_mapping.py'
+      - 'network/tests/test_external_source_continuity.py'
+      - 'network/tests/test_native_owner_observation.py'
+      - 'network/tests/test_external_native_binding.py'
+      - 'network/tests/test_external_authority_binding.py'
+      - 'network/tests/test_independent_authority_source.py'
+      - 'network/tests/test_source_origin_authority.py'
+      - 'network/tests/test_live_source_preflight.py'
+      - 'runtime/examples/native_cp30_owner.py'
+      - '.github/workflows/external-evidence-boundary.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/external_evidence.py'
+      - 'systems/workspace/github_observation.py'
+      - 'systems/workspace/external_route_mapping.py'
+      - 'systems/workspace/external_source_continuity.py'
+      - 'systems/workspace/native_owner_observation.py'
+      - 'systems/workspace/external_native_binding.py'
+      - 'systems/workspace/external_authority_binding.py'
+      - 'systems/workspace/independent_authority_source.py'
+      - 'systems/workspace/source_origin_authority.py'
+      - 'systems/workspace/live_source_preflight.py'
+      - 'systems/workspace/EXTERNAL_ROUTE_MAPPING.md'
+      - 'systems/workspace/EXTERNAL_SOURCE_CONTINUITY.md'
+      - 'systems/workspace/NATIVE_OWNER_OBSERVATION.md'
+      - 'systems/workspace/EXTERNAL_NATIVE_BINDING.md'
+      - 'systems/workspace/EXTERNAL_AUTHORITY_BINDING.md'
+      - 'systems/workspace/INDEPENDENT_AUTHORITY_SOURCE.md'
+      - 'systems/workspace/SOURCE_ORIGIN_AUTHORITY.md'
+      - 'systems/workspace/LIVE_SOURCE_PREFLIGHT.md'
+      - 'systems/workspace/GITHUB_OBSERVATION.md'
+      - 'systems/workspace/EXTERNAL_EVIDENCE_BOUNDARY.md'
+      - 'network/tests/test_external_evidence.py'
+      - 'network/tests/test_github_observation.py'
+      - 'network/tests/test_external_route_mapping.py'
+      - 'network/tests/test_external_source_continuity.py'
+      - 'network/tests/test_native_owner_observation.py'
+      - 'network/tests/test_external_native_binding.py'
+      - 'network/tests/test_external_authority_binding.py'
+      - 'network/tests/test_independent_authority_source.py'
+      - 'network/tests/test_source_origin_authority.py'
+      - 'network/tests/test_live_source_preflight.py'
+      - 'runtime/examples/native_cp30_owner.py'
+      - '.github/workflows/external-evidence-boundary.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install exact supported Ed25519 dependency range
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Assemble native CP30 for owner-contract rejection test
+        run: python work/arc_like_maze/chatbot/research/integrated/assemble.py --stage 30 --out "$RUNNER_TEMP/cp30-native"
+      - name: Verify key enrollment, public observation, finite declaration mapping and native refusal
+        env:
+          CP30_NATIVE_SOURCE_DIR: ${{ runner.temp }}/cp30-native
+        run: python -m unittest -v network.tests.test_external_evidence network.tests.test_github_observation network.tests.test_external_route_mapping network.tests.test_external_source_continuity network.tests.test_native_owner_observation network.tests.test_external_native_binding network.tests.test_external_authority_binding network.tests.test_independent_authority_source network.tests.test_source_origin_authority network.tests.test_live_source_preflight
+      - name: Empty external-source preflight remains blocked with no network or writes
+        run: python -m systems.workspace.live_source_preflight --data-dir "$RUNNER_TEMP/preflight-empty" readiness
+      - name: Empty observer does not initiate any source check or job
+        run: python -m systems.workspace.external_evidence --data-dir "$RUNNER_TEMP/source-evidence-empty" status
+      - name: Exercise CP30 native-local owner capture and explicit two-pass audit
+        env:
+          CP30_NATIVE_SOURCE_DIR: ${{ runner.temp }}/cp30-native
+        run: |
+          python -m runtime.examples.native_cp30_owner --native-source-dir "$CP30_NATIVE_SOURCE_DIR"
+          python -m runtime.examples.native_cp30_owner --native-source-dir "$CP30_NATIVE_SOURCE_DIR" --audit
