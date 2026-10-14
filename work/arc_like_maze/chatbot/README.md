@@ -25,4 +25,4 @@ The language referent remains the same inquiry once called A/B; finite A/B gener
 
 [Research About Me](ABOUT_ME.md) · [Provenance](PROVENANCE.md) · [CP handoff contract](checkpoints/HARNESS.md).
 
-Each new checkpoint produces one manifest. The harness renders both research checkpoint pages from that record, and a GitHub check rejects missing or inconsistent output. This never modifies James's personal About Me. Historical `chatbot` directory names, code names and ZIP filenames remain as compatible evidence identifiers; they do not define the research subject.
+Each new checkpoint produces one manifest. The harness renders both research checkpoint pages from that record, and a GitHub check rejects missing or inconsistent output. This never modifies James's personal About Me. Existing historical directory paths, source identifiers, and archive filenames remain unchanged for compatibility and provenance. They do not define the current research name or imply a finished application.
