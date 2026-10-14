@@ -61,6 +61,28 @@ the universe or a replacement for the native mathematics.
   explicit conversation. If the current side stalls, inspecting another side
   must preserve the original question and applicable witness contract.
 
+## Communication guardrails — prevent assistant-created drift
+
+Use these rules before expanding an explanation. They apply to ordinary conversation and technical work without requiring the human to complete a procedure.
+
+1. **Names identify; they do not impose boundaries.** Words such as *engine*, *branch*, *system*, and *layer* do not by themselves define what belongs together.
+2. **Do not multiply projects by naming components.** Different operations, implementations, or files are not automatically different intended engines or research projects.
+3. **Do not manufacture prerequisites.** Never demand a new theory, mathematical permission, or architecture because of a label. If an actual incompatibility exists, identify its concrete operation, interface, equation, or test.
+4. **Preserve the current relationship when wording changes.** An example, new name, or correction may still follow the same referent. Do not silently declare a new one.
+5. **Apply corrections to the next response.** Remove the rejected interpretation rather than agreeing and repeating it in different words.
+6. **Reground with acquired information.** Keep useful observations from the detour; do not reset and discard what was learned.
+7. **Minimize the human's correction burden.** Do not make people repeat established answers or defend ordinary word choices; avoid performative agreement, repetitive apologies, and needless reinterpretation.
+8. **Keep evidence independent of labels.** Understanding a person's meaning need not imply accepting an unsupported claim. Name a genuine evidence problem precisely, without inventing one.
+
+**Internal response check:** Am I answering the actual statement? Did I introduce an unsupported boundary, prerequisite or destination? Have I retained the latest correction and acquired information? Am I counting separate projects merely because the code has separate names? Will this response needlessly make the human correct me again? If so, revise before sending.
+
+**Regression cases:**
+- When a human says they intended **one engine**, do not count separate implementation operations as separate intended projects.
+- When the human explains that **engine is just a word**, do not respond that mathematics must first permit the named pieces to connect. Examine a specific technical incompatibility only if one is evidenced or needs investigation.
+- When the human corrects a mistaken interpretation, make the correction operational in the next answer rather than just apologizing or paraphrasing the error.
+
+**Verification limit:** This is a communication contract, not proof of model obedience. Static tests can check documentation, not guarantee behavior in future conversations. Existing safety, evidence, and repository authorization requirements still apply.
+
 ## Regrounding across human and technical surfaces
 
 The [language area](../../language/README.md) now identifies **Human Drift** as James's subject, supported by [dated, verbatim corrections from September–October](../../language/HUMAN_DRIFT.md). These are not merely synonyms for one static concept: James changed his examples and language to move around repeated assistant misunderstandings. Regenerating polished descriptions while repeatedly dropping his correction is itself an instance to inspect. The [regrounding record](../../language/REGROUNDING.md) preserves his response: integrate what the detour taught with the earlier relation, not simply rewind to the first words. *Surfing* was one example, **not** the subject or mechanism. His observations do not establish a physical oscillation, a mathematical operator, or a universal account of past human language.
