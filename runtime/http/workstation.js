@@ -44,6 +44,27 @@ function renderEd(edition) {
   } else card.append(el("p", "meta", "Manifest/source inventory could not be read."));
   return card;
 }
+function inspectionPanel(report) {
+  // Process-specific fields are data, not executable behavior.
+  const panel = el("details", "detail inspection");
+  panel.append(el("summary", "", "Inspect · " + report.title));
+  panel.append(el("p", "minor", report.scope));
+  for (const [label, rows] of [["Declared inputs", report.inputs], ["Recorded outputs", report.outputs]]) {
+    const block = el("section", "inspect-section");
+    block.append(el("h3", "", label));
+    const list = el("dl", "inspect-grid");
+    for (const row of rows) {
+      list.append(el("dt", "", row.label), el("dd", "", row.value));
+    }
+    if (!rows.length) block.append(el("p", "minor", "No fields recorded."));
+    else block.append(list);
+    panel.append(block);
+  }
+  const notes = el("ul", "inspect-notes");
+  for (const note of report.notes) notes.append(el("li", "", note));
+  panel.append(notes);
+  return panel;
+}
 function renderJob(job) {
   const card = el("article", "entry"), head = el("div", "line");
   head.append(el("strong", "name", job.title), status(job.status));
@@ -54,6 +75,7 @@ function renderJob(job) {
   card.append(foot);
   if (job.lane_refs.length) card.append(el("p", "minor", "Workspace lane: " + job.lane_refs.join(", ")));
   if (job.missing_witnesses.length) card.append(el("p", "minor", "Missing: " + job.missing_witnesses.join(", ")));
+  if (job.inspection) card.append(inspectionPanel(job.inspection));
   card.append(detail("Result and evidence", {result: job.result, evidence: job.evidence, source_at_admission: job.edition_fingerprint}));
   card.append(detail("Recorded event trail", job.events));
   return card;

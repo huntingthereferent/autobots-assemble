@@ -56,6 +56,10 @@ This example is illustrative and **does not assert** that those projects current
 
 The [local two-process setup](TWO_PROCESS_WORKSTATION.md) creates real version-pinned finite computation and simulated Factory machine-stage jobs in the **same** private runtime journal, with source-owned native verification and the read-only workstation viewer. It is opt-in (`--execute`); running the viewer alone never creates or executes a worker. Both jobs remain separate by their native realization and evidence scopes.
 
+## Native worker inspection
+
+The [read-only inspection adapters](INSPECTION_PANELS.md) render one shared workstation UI with process-specific panels: finite candidate prefilter verdicts, Factory machine-stage simulated outputs, and a generic fallback for other workers. A panel reads recorded native state and never replays a verifier or creates work.
+
 ## Current witness / limits
 
 The new focused regression tests cover independent lane movement, connection without state merging, unstructured exploratory lanes, focus switching, read-only person-scoped views, return points, restart replay, provenance ancestors, and corrupted-data rejection.

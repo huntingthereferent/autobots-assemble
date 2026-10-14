@@ -42,4 +42,4 @@ Re-running the **same command** recovers those records and rechecks their native
 python -m unittest -v network.tests.test_workstation_two_processes network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http network.tests.test_process_workstation network.tests.test_workspace_continuity
 ```
 
-Next bounded move: add worker-specific control/inspection panels as *adapters* over this same workspace view, not assumptions baked into its generic UI.
+Next bounded move: extend process-specific **controls** only when separately authorized. The [native inspection panels](INSPECTION_PANELS.md) now show the two recorded process types through the existing read-only workstation GUI.

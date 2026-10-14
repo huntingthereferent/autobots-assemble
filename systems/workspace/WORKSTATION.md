@@ -62,3 +62,7 @@ This local source-version facility is the first construction step, not a running
 A separately started local viewer reuses the **same** private worker editions and `RuntimeJournal`, rather than inventing a second scheduler. Run `python -m systems.workspace.view_server --data-dir runtime/data --port 8051` from the repository root, then open `http://127.0.0.1:8051/workstation.html`. It projects every recognized process edition and admitted `source_system=process-workstation` job, regardless of worker family, with source-change checks, result evidence and event trails. An empty station stays empty; there are no sample jobs or automatic worker launches.
 
 Read-only status is **not** native re-verification or proof of a currently executing process. The [viewer implementation](monitor.py) never modifies process copies or emits handoffs. To demonstrate a populated station, the first explicit [Correspondence Worker bridge](CORRESPONDENCE_HANDOFF.md) can admit and execute a task into the same `runtime/data/runtime.jsonl` only when invoked separately by an authorized caller. [Viewer details](README.md#local-workstation-viewer).
+
+## Inspect recorded jobs without executing them
+
+[Native inspection panels](INSPECTION_PANELS.md) display finite required-edge prefilter verdicts and simulated Factory machine output through one common workstation GUI. These are **recorded** observations only; source editions, verifiers, and execution controls remain separate.

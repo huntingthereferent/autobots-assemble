@@ -12,6 +12,7 @@ from typing import Any
 from .workstation import ProcessWorkstation, _safe_id
 from .store import WorkspaceStore
 from .projection import workspace_view
+from .inspections import inspect_handoff
 
 
 def _editions(workstation: ProcessWorkstation) -> list[dict[str, Any]]:
@@ -105,6 +106,7 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
             "lane_refs": [p.removeprefix("workspace-lane:") for p in handoff.provenance
                           if p.startswith("workspace-lane:")],
             "result": state.output,
+            "inspection": inspect_handoff(handoff, state),
             "evidence": [asdict(item) for item in state.evidence],
             "verification": "recorded-not-reverified" if state.status == "COMPLETE"
                             else "not-complete",

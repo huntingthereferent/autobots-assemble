@@ -10,6 +10,7 @@ on:
       - "network/tests/test_workstation_monitor.py"
       - "network/tests/test_workstation_http.py"
       - "network/tests/test_workstation_two_processes.py"
+      - "network/tests/test_workstation_inspections.py"
       - "runtime/http/workstation.*"
       - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
@@ -24,6 +25,7 @@ on:
       - "network/tests/test_workstation_monitor.py"
       - "network/tests/test_workstation_http.py"
       - "network/tests/test_workstation_two_processes.py"
+      - "network/tests/test_workstation_inspections.py"
       - "runtime/http/workstation.*"
       - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
@@ -39,7 +41,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Verify workstation, source editions, and two unlike worker computations
-        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http network.tests.test_workstation_two_processes
+        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http network.tests.test_workstation_two_processes network.tests.test_workstation_inspections
       - name: Reproduce finite worker handoff
         run: python -m runtime.examples.correspondence_worker
       - name: Reproduce two-process workstation in isolated ephemeral CI state
