@@ -1,6 +1,6 @@
-# Finite chatbot research
+# Finite Correspondence Research
 
-The same ongoing chatbot investigation, recorded one checkpoint at a time. A/B labels here are scoped finite generators, not a replacement name for the language referent.
+The ongoing investigation of **finite witnessed correspondence**, recorded one checkpoint at a time. It examines exact transformations and evidence-dependent continuation, rather than assuming a conversational interface or autonomous chatbot. A/B labels here are scoped finite generators, not a replacement name for the language referent.
 
 ## Checkpoints
 
