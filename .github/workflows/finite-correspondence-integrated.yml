@@ -49,3 +49,7 @@ jobs:
           python -m unittest -q test_ab_chatbot_two_hop_transport.TwoHopTransportTests.test_two_separate_links_and_three_independent_scopes test_ab_chatbot_certificate_handoff.HandoffOwnerTests.test_issue_then_new_call_replays_twice test_ab_chatbot_independent_process_identity.IndependentProcessIdentityTests.test_success_two_tasks_one_fresh_route_audit
       - name: Check private CP30 source-copy boundary
         run: python -m unittest -v network.tests.test_integrated_source_workstation
+      - name: Copy actual merged CP20 and CP30 into isolated workstation editions
+        run: |
+          python -m systems.workspace.integrated_source --data-dir "$RUNNER_TEMP/checked-editions" --stage 20 --version cp20-check --copy
+          python -m systems.workspace.integrated_source --data-dir "$RUNNER_TEMP/checked-editions" --stage 30 --version cp30-check --copy

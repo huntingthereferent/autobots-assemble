@@ -125,10 +125,14 @@ class ProcessWorkstation:
             if tmp.exists():
                 shutil.rmtree(tmp)
 
-    def copy_source(self, source: str | Path, *, worker_id: str, version_id: str) -> dict[str, Any]:
-        """Copy an explicitly chosen tree; no automatic discovery or execution."""
+    def copy_source(self, source: str | Path, *, worker_id: str, version_id: str,
+                    source_locator: str | None = None) -> dict[str, Any]:
+        """Copy a chosen tree; optional stable provenance locator, never execution."""
+        locator = str(Path(source).resolve()) if source_locator is None else source_locator
+        if not isinstance(locator, str) or not locator.strip() or any(x in locator for x in "\r\n"):
+            raise ValueError("source locator must be nonempty single-line text")
         return self._fork(source=Path(source), worker_id=worker_id, version_id=version_id,
-                          parent_version=None, source_locator=str(Path(source).resolve()))
+                          parent_version=None, source_locator=locator)
 
     def branch(self, *, worker_id: str, parent_version: str, version_id: str) -> dict[str, Any]:
         """Fork the current files of an earlier private edition into a new one."""

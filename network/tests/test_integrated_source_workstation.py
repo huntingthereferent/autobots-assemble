@@ -52,6 +52,9 @@ class IntegratedSourceTests(unittest.TestCase):
         edition=desk.inspect(worker_id=WORKER_ID,version_id="cp30")
         self.assertEqual(edition["current_fingerprint"],result["source_fingerprint"])
         self.assertEqual(edition["modified"],[])
+        provenance=json.loads((self.private / "workstation" / WORKER_ID / "cp30/_worker_version.json").read_text())
+        self.assertEqual(provenance["source_locator"],
+                         "repo:work/arc_like_maze/chatbot/research/integrated/MANIFEST.json#CP-30")
         self.assertFalse((self.private / "runtime.jsonl").exists())
         self.assertEqual((self.integrated / "baseline/source_000.py").read_bytes(),
                          (self.private / "workstation" / WORKER_ID / "cp30/source_000.py").read_bytes())

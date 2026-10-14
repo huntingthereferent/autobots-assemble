@@ -32,4 +32,4 @@ python -m unittest -q test_finite_two_hop_transport test_finite_single_route_tas
 
 ## Private workstation source editions
 
-The [Process Workstation source-copy entry](../../../../../../systems/workspace/INTEGRATED_CORRESPONDENCE_SOURCE.md) independently checks the published manifest and copies any selected CP20–CP30 reconstructed flat source into a new, isolated local edition. It makes **no execution, agent, or owner-authentication claim** and does not change historical source. A separate native task adapter is required before admitting an integrated worker job.
+The [Process Workstation source-copy entry](../../../../../systems/workspace/INTEGRATED_CORRESPONDENCE_SOURCE.md) independently checks the published manifest and copies any selected CP20–CP30 reconstructed flat source into a new, isolated local edition. It makes **no execution, agent, or owner-authentication claim** and does not change historical source. A separate native task adapter is required before admitting an integrated worker job.

@@ -19,7 +19,7 @@ The language referent remains the same inquiry once called A/B; finite A/B gener
 
 ## Executable implementation and worker role
 
-**[Finite Correspondence Process](PROCESS.md)** names the bounded executable implementation supported by these records. **Correspondence Worker** names its role when an implementation is assigned explicit work in the [reusable Process Workstation](../../../../systems/workspace/WORKSTATION.md). Neither term asserts artificial intelligence or unrestricted autonomy. The workstation can keep editable, independently branched source copies; each modified copy needs its own tests and witnesses before it can be treated as verified. Research evidence and checkpoint history stay in their canonical locations.
+**[Finite Correspondence Process](PROCESS.md)** names the bounded executable implementation supported by these records. **Correspondence Worker** names its role when an implementation is assigned explicit work in the [reusable Process Workstation](../../../systems/workspace/WORKSTATION.md). Neither term asserts artificial intelligence or unrestricted autonomy. The workstation can keep editable, independently branched source copies; each modified copy needs its own tests and witnesses before it can be treated as verified. Research evidence and checkpoint history stay in their canonical locations.
 
 ## Checkpoint output
 

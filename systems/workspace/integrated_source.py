@@ -76,7 +76,8 @@ def copy_integrated_source(*, repo_root: str | Path, data_dir: str | Path,
         staged.mkdir()
         for filename, (payload, _) in source["files"].items():
             (staged / filename).write_bytes(payload)
-        copied = desk.copy_source(staged, worker_id=WORKER_ID, version_id=version_id)
+        copied = desk.copy_source(staged, worker_id=WORKER_ID, version_id=version_id,
+                                  source_locator=f"repo:{MANIFEST_REL.as_posix()}#CP-{stage}")
     if copied["source_fingerprint"] != source["fingerprint"]:
         raise ValueError("integrated edition fingerprint differs from verified historical bytes")
     return {"worker_id": WORKER_ID, "version_id": version_id,
