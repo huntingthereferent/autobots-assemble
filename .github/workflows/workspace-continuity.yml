@@ -7,6 +7,10 @@ on:
       - "network/tests/test_workspace_continuity.py"
       - "network/tests/test_process_workstation.py"
       - "network/tests/test_correspondence_worker_handoff.py"
+      - "network/tests/test_workstation_monitor.py"
+      - "network/tests/test_workstation_http.py"
+      - "runtime/http/workstation.*"
+      - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
       - ".github/workflows/workspace-continuity.yml"
   pull_request:
@@ -15,6 +19,10 @@ on:
       - "network/tests/test_workspace_continuity.py"
       - "network/tests/test_process_workstation.py"
       - "network/tests/test_correspondence_worker_handoff.py"
+      - "network/tests/test_workstation_monitor.py"
+      - "network/tests/test_workstation_http.py"
+      - "runtime/http/workstation.*"
+      - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
       - ".github/workflows/workspace-continuity.yml"
 
@@ -27,6 +35,6 @@ jobs:
         with:
           python-version: "3.12"
       - name: Verify lane continuity, source editions and executable prefilter
-        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff
+        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http
       - name: Reproduce first worker handoff demo
         run: python -m runtime.examples.correspondence_worker

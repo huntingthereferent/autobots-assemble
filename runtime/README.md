@@ -375,3 +375,7 @@ scope, or turn an UNKNOWN into inferred equivalence. Checkpoints are
 Git-versioned research outputs, not task state or a new evaluator.
 
 [Record contract](../research/questions/README.md).
+
+## Separate read-only workstation viewer
+
+The reusable [Process Workstation](../systems/workspace/README.md) has a local viewer at `http://127.0.0.1:8051/workstation.html`. Run `python -m systems.workspace.view_server --data-dir runtime/data --port 8051` to start it explicitly. This small **HTTP reader**, not another execution runtime, reloads the same `RuntimeJournal` on each `GET /api/workstation`, displays source editions, admitted jobs, historical results and evidence, and exposes **no** job-execution or task-admission endpoint. It does not run automatically with `runtime.http_server` or seed any example tasks. Both services must use the same `ECOSYSTEM_DATA_DIR` if that default is overridden. This viewer is strictly local-only, not an authentication system.
