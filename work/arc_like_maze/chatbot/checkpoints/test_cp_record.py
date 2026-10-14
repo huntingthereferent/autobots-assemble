@@ -103,10 +103,10 @@ class CheckpointHarnessTests(unittest.TestCase):
         self.assertEqual(cp.check(self.root),1)
         self.assertIn('Historical CPs remain here.',(self.root/'PROVENANCE.md').read_text())
 
-    def test_research_name_is_not_a_chatbot_application(self):
+    def test_research_name_is_application_independent(self):
         about = (self.root/'ABOUT_ME.md').read_text()
         self.assertTrue(about.startswith('# Finite Correspondence Research — About Me\n'))
-        self.assertIn('A chatbot is one possible application, not the name of this research.', about)
+        self.assertIn('Its subject is evidence-bound correspondence, independent of any particular application.', about)
         self.assertIn('witnessed finite transitions', about)
 
     def test_no_implicit_claim_of_current_proof(self):
