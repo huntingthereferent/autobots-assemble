@@ -9,7 +9,7 @@ An inspectable collection of code, mathematical experiments, system prototypes, 
 | Area | What to inspect |
 | --- | --- |
 | **Finite-state mathematics** | [Constructed transformation systems](work/arc_like_maze/README.md) — finite-field models, inverse construction, correspondence tests, and counterexamples |
-| **Experimental chatbot** | [Finite chatbot research](work/arc_like_maze/chatbot/README.md) — candidate correspondences, task requirements, witness binding, and bounded verification |
+| **Finite correspondence research** | [Checkpoint research](work/arc_like_maze/chatbot/README.md) — witnessed correspondences, selected routes, source-change propagation, task requirements, and bounded evidence verification |
 | **Interactive environments** | [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
 | **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
 | **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
