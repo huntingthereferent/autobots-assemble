@@ -126,6 +126,7 @@ function renderFiltered() {
 }
 const ID_PATTERN = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,79}$/;
 const FINITE = "finite-correspondence-process";
+const INTEGRATED = "finite-correspondence-integrated";
 const FACTORY = "factory-machine-simulation-process";
 function option(value, label) {
   const item = el("option", "", label);
@@ -174,6 +175,19 @@ function updateControlCommand() {
             prefix + "admit-finite --version " + version + " --inputs-file runtime/data/finite-inputs.json --job-id " + id +
             " --confirm-admit " + id + " --from-actor local-operator\n" +
             "# After admission, inspect this job and explicitly authorize execution below.";
+        }
+      } else if (worker === INTEGRATED) {
+        const id = $("#control-new-job").value.trim();
+        if (!ID_PATTERN.test(id)) {
+          note = "Enter a simple job ID for this bounded CP30 signature check.";
+          commands = "Invalid job ID.";
+        } else {
+          commands = prefix + "prepare --worker " + worker + " --version " + version +
+            " --inputs-file runtime/data/cp30-attestation-input.json\n" +
+            prefix + "admit-integrated --version " + version +
+            " --inputs-file runtime/data/cp30-attestation-input.json --job-id " + id +
+            " --confirm-admit " + id + " --from-actor local-operator\n" +
+            "# Review supplied public key trust anchors. A signed claim is not real-world owner identity.";
         }
       } else {
         note = "Factory stages must originate in FactorySystem; use the recorded job operation.";
@@ -235,13 +249,14 @@ function renderPromotion() {
   const prefix = "python -m systems.workspace.controls --data-dir runtime/data ";
   const commands = [];
   if (left && right) commands.push(prefix + "compare --worker " + left.worker_id + " --left-version " + left.version_id + " --right-version " + right.version_id);
-  if (left && job) commands.push(prefix + "reverify --job-id " + job.job_id + "\n" +
+  if (left && job && left.worker_id !== INTEGRATED) commands.push(prefix + "reverify --job-id " + job.job_id + "\n" +
     prefix + "promote --worker " + left.worker_id + " --version " + left.version_id +
     " --supporting-job " + job.job_id + " --confirm-version " + left.version_id +
     " --confirm-fingerprint " + left.current_fingerprint + " --actor local-operator");
   $("#promotion-command").textContent = commands.join("\n") || "Select two editions to compare or a completed job for selection.";
   $("#promotion-copy").disabled = !commands.length;
-  $("#promotion-note").textContent = job ? "Native re-verification happens in the local CLI; recorded COMPLETE alone is insufficient."
+  $("#promotion-note").textContent = job && left && left.worker_id === INTEGRATED ? "CP30 signature checks do not establish general integrated-route capability for promotion."
+    : job ? "Native re-verification happens in the local CLI; recorded COMPLETE alone is insufficient."
     : left ? "Select a second edition for comparison or a completed job for evidence-gated selection."
     : "Select an edition to start.";
   const items = (current.preferred || []).map(x => {

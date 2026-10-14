@@ -12,13 +12,14 @@ on:
       - "network/tests/test_workstation_two_processes.py"
       - "network/tests/test_workstation_inspections.py"
       - "network/tests/test_workstation_controls.py"
+      - "network/tests/test_integrated_cp30_handoff.py"
       - "network/tests/test_workstation_promotion.py"
-      - "network/tests/test_integrated_source_workstation.py"
       - "network/tests/test_workstation_selected_admission.py"
       - "runtime/http/workstation.*"
       - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
       - "runtime/examples/workstation_two_processes.py"
+      - "runtime/examples/integrated_cp30_attestation.py"
       - ".github/workflows/workspace-continuity.yml"
   pull_request:
     paths:
@@ -31,13 +32,14 @@ on:
       - "network/tests/test_workstation_two_processes.py"
       - "network/tests/test_workstation_inspections.py"
       - "network/tests/test_workstation_controls.py"
+      - "network/tests/test_integrated_cp30_handoff.py"
       - "network/tests/test_workstation_promotion.py"
-      - "network/tests/test_integrated_source_workstation.py"
       - "network/tests/test_workstation_selected_admission.py"
       - "runtime/http/workstation.*"
       - "runtime/http/index.html"
       - "runtime/examples/correspondence_worker.py"
       - "runtime/examples/workstation_two_processes.py"
+      - "runtime/examples/integrated_cp30_attestation.py"
       - ".github/workflows/workspace-continuity.yml"
 
 jobs:
@@ -48,9 +50,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install CP30 Ed25519 verification dependency
+        run: python -m pip install 'cryptography>=45,<47'
       - name: Verify workstation, source editions, and two unlike worker computations
-        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http network.tests.test_workstation_two_processes network.tests.test_workstation_inspections network.tests.test_workstation_controls network.tests.test_workstation_promotion network.tests.test_workstation_selected_admission
+        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff network.tests.test_workstation_monitor network.tests.test_workstation_http network.tests.test_workstation_two_processes network.tests.test_workstation_inspections network.tests.test_workstation_controls network.tests.test_workstation_promotion network.tests.test_workstation_selected_admission network.tests.test_integrated_cp30_handoff
       - name: Reproduce finite worker handoff
         run: python -m runtime.examples.correspondence_worker
       - name: Reproduce two-process workstation in isolated ephemeral CI state
         run: python -m runtime.examples.workstation_two_processes --data-dir /tmp/ci-workstation-two-processes --execute
+      - name: Reproduce trusted local CP30 signature worker in ephemeral CI state
+        run: python -m runtime.examples.integrated_cp30_attestation --data-dir /tmp/ci-integrated-cp30 --execute

@@ -103,6 +103,14 @@ It is an append-only local selection for future *manual* work, not a new CP,
 automatic job admission, source merge, deployment, or general validation.
 The read-only viewer displays stale preferences instead of silently falling back.
 
-## Recovered CP20–CP30 source copies
+## Integrated CP30 verifier worker
 
-[Integrated correspondence source edition](INTEGRATED_CORRESPONDENCE_SOURCE.md) now permits explicit, hash-verified copying of historical CP20–CP30 source into an isolated private workstation edition. This is source-only; no historical job is imported, executed, or promoted into a current worker capability. The separate finite prefilter worker remains the only admitted correspondence operation until a native integrated adapter is implemented and checked.
+The [CP30 three-scope signature-check adapter](INTEGRATED_CP30_HANDOFF.md)
+allows an explicitly copied, source-pinned **281-file historical CP30 edition**
+to check a caller-supplied challenge-bound Ed25519 scope bundle in a local child
+process. A separate host-owned native verifier recomputes the exact signature
+verdict before any RESULT enters `HandoffRuntime`. The original source stays
+unchanged; a branch can be independently tested. The dashboard shows the exact
+recorded verdict but never authenticates people, enrollment, or the fresh
+owner-backed route audit. Current preferred-version promotion remains scoped
+to its two existing worker operations and is not generalized by this adapter.

@@ -99,7 +99,9 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
             "required_relation": handoff.required_relation,
             "source_system": metadata.get("source_system"),
             "preferred_selection_event": metadata.get("preferred_selection_event"),
-            "realization": "simulated" if metadata.get("source_system") == "factory" else "computed",
+            "realization": "simulated" if metadata.get("source_system") == "factory"
+                           else "cryptographic-check" if metadata.get("native_evidence_verifier") == "integrated-cp30-three-scope-attestation-v1"
+                           else "computed",
             "actor_id": handoff.to_actor,
             "status": state.status,
             "source_state": source_state,

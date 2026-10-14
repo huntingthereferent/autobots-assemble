@@ -7,9 +7,10 @@ New process types supply a named projector without changing the common UI.
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
-from typing import Any, TYPE_CHECKING
-from runtime.handoff import Handoff
+from typing import Any
 
+from runtime.handoff import Handoff
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from runtime.handoff import HandoffState
 
@@ -30,10 +31,12 @@ def _finite(handoff: Handoff, state: HandoffState) -> Inspection:
         outputs = []
     comparison = []
     for n, words in enumerate(candidates):
-        # Persisted input may be inspected without re-running the validator.
+        # The inputs were admitted by the finite input validator, but the
+        # persisted record can be inspected without executing that validator.
+        label = f"Candidate {n + 1}"
         seeds = ", ".join(str(x) for x in words) if isinstance(words, (list, tuple)) else "not recorded"
         verdict = str(outputs[n]) if n < len(outputs) else "not recorded"
-        comparison.append(_row(f"Candidate {n + 1}", f"{seeds} → {verdict}"))
+        comparison.append(_row(label, f"{seeds} → {verdict}"))
     return {
         "kind": "finite-prefilter", "title": "Finite required-edge inspection",
         "scope": "Finite correspondence prefilter computation (recorded)",
@@ -78,6 +81,33 @@ def _factory_machine(handoff: Handoff, state: HandoffState) -> Inspection:
     }
 
 
+def _integrated_cp30(handoff: Handoff, state: HandoffState) -> Inspection:
+    """Display recorded signature check, not an independently enrolled owner."""
+    e = handoff.inputs.get("expect", {})
+    output = state.output if isinstance(state.output, dict) else {}
+    return {
+        "kind": "integrated-cp30-attestation",
+        "title": "Integrated CP30 signed-scope verification",
+        "scope": "Three cryptographic signatures checked against caller-supplied keys",
+        "inputs": [
+            _row("Route", e.get("route", "not recorded")),
+            _row("Challenge", e.get("challenge", "not recorded")),
+            _row("Route fingerprint", e.get("fingerprint", "not recorded")),
+            _row("Expected scopes", "donor, middle, final"),
+        ],
+        "outputs": [
+            _row("Signature verdict", output.get("signature_verdict", "not recorded")),
+            _row("Verified key scopes", ", ".join(output.get("verified_scopes", [])) or "none"),
+        ],
+        "notes": [
+            "The three public keys are caller-supplied, not independently enrolled identities.",
+            "Valid signatures do not establish a fresh CP30 route audit or human owner identity.",
+            "COMPLETE means this bounded computation finished, including negative verdicts.",
+            "The dashboard displays persisted evidence and does not reverify it.",
+        ],
+    }
+
+
 def _generic(handoff: Handoff, state: HandoffState) -> Inspection:
     return {
         "kind": "generic-handoff", "title": "Recorded job inspection",
@@ -97,11 +127,12 @@ def _generic(handoff: Handoff, state: HandoffState) -> Inspection:
     }
 
 
-# This maps existing native evidence verifier IDs to display-only projectors.
-# No evidence verifier is installed, invoked or replaced by these entries.
+# Names come from the existing *native evidence verifier* contracts. Mapping
+# to an inspector never registers, invokes or replaces those verifiers.
 DEFAULT_INSPECTORS: dict[str, Inspector] = {
     "finite-correspondence-prefilter-v1": _finite,
     "workstation.factory.machine.simulation.v1": _factory_machine,
+    "integrated-cp30-three-scope-attestation-v1": _integrated_cp30,
 }
 
 
@@ -112,6 +143,8 @@ def inspect_handoff(handoff: Handoff, state: HandoffState, *,
     key = handoff.metadata.get("native_evidence_verifier")
     renderer = registry.get(key) if isinstance(key, str) else None
     report = renderer(handoff, state) if renderer is not None else _generic(handoff, state)
+    # The shared viewer accepts only a display contract, never executable
+    # instructions or an inferred verification result.
     expected = {"kind", "title", "scope", "inputs", "outputs", "notes"}
     if not isinstance(report, dict) or set(report) != expected:
         raise ValueError("inspection adapter returned invalid report shape")

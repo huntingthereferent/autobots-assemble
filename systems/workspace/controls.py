@@ -19,9 +19,13 @@ from .promotion import PreferredEditions, compare_editions, preference_view
 from .process_handoff import (CorrespondenceWorkBridge, WORKER_ID as FINITE_ID)
 from .factory_machine_bridge import (FactoryMachineSimulationBridge,
                                      WORKER_ID as FACTORY_ID)
+from .integrated_source import WORKER_ID as INTEGRATED_ID
+from .integrated_attestation_bridge import IntegratedCP30Bridge
+from .integrated_attestation_verifier import validate_request
 
 KNOWN_WORKERS = frozenset((FINITE_ID, FACTORY_ID))
 FINITE_FILES = frozenset(("finite_goal_priority.py", "finite_required_edge_guard.py"))
+EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID}
 
 
 def _data_root(path: str | Path) -> Path:
@@ -44,10 +48,18 @@ def _inputs(path: str | Path) -> dict:
     return validate_inputs(json.loads(file.read_text(encoding="utf-8")))
 
 
+
+def _cp30_inputs(path: str | Path) -> dict:
+    p = Path(path)
+    if not p.is_file() or p.stat().st_size > 18000:
+        raise ValueError("CP30 verifier inputs must be existing JSON <=18 KiB")
+    return validate_request(json.loads(p.read_text(encoding="utf-8")))
+
+
 def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             inputs_file: str | Path | None = None) -> dict[str, Any]:
     """Read-only validation and selected-edition report; no journal or subprocess."""
-    if worker_id not in KNOWN_WORKERS:
+    if worker_id not in EXECUTABLE_WORKERS:
         raise ValueError("unsupported workstation process")
     _safe_id(version_id)
     root = _data_root(data_dir)
@@ -58,6 +70,11 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             raise ValueError("finite job preparation requires --inputs-file")
         required = FINITE_FILES
         payload = _inputs(inputs_file)
+    elif worker_id == INTEGRATED_ID:
+        if inputs_file is None:
+            raise ValueError("CP30 signature verification requires --inputs-file")
+        required = frozenset(("finite_process_attestation.py",))
+        payload = _cp30_inputs(inputs_file)
     else:
         if inputs_file is not None:
             raise ValueError("Factory admission comes from FactorySystem, not arbitrary JSON")
@@ -70,6 +87,7 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             "fingerprint": info["current_fingerprint"],
             "source_modified_from_copy": bool(info["modified"] or info["added"] or info["deleted"]),
             "operation": "finite-required-edge-prefilter" if worker_id == FINITE_ID
+                         else "integrated-cp30-ed25519-verification" if worker_id == INTEGRATED_ID
                          else "existing-factory-machine-simulation",
             "inputs": payload,
             "admitted": False, "executed": False,
@@ -99,12 +117,35 @@ def admit_finite(*, data_dir: str | Path, version_id: str,
             "executed": False}
 
 
+
+def admit_integrated(*, data_dir: str | Path, version_id: str,
+                     inputs_file: str | Path, job_id: str, confirm_admit: str,
+                     from_actor: str, lane_id: str = "") -> dict[str, Any]:
+    """Explicit CP30 signature-check admission; never runs the copied code."""
+    _safe_id(job_id)
+    if confirm_admit != job_id:
+        raise PermissionError("--confirm-admit must match the exact CP30 job ID")
+    report = prepare(data_dir=data_dir, worker_id=INTEGRATED_ID,
+                     version_id=version_id, inputs_file=inputs_file)
+    root = _data_root(data_dir)
+    runtime = _runtime(root)
+    bridge = IntegratedCP30Bridge(runtime=runtime,
+                                  workstation=ProcessWorkstation(root / "workstation"))
+    h = bridge.admit(version_id=version_id, inputs=report["inputs"],
+                     from_actor=from_actor, job_id=job_id, lane_id=lane_id)
+    return {"job_id": job_id, "worker_id": INTEGRATED_ID, "version_id": version_id,
+            "status": runtime.state(job_id).status, "executed": False,
+            "source_fingerprint": h.metadata["edition_fingerprint"]}
+
+
 def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str):
     desk = ProcessWorkstation(root / "workstation")
     if worker_id == FINITE_ID:
         return CorrespondenceWorkBridge(runtime=runtime, workstation=desk)
     if worker_id == FACTORY_ID:
         return FactoryMachineSimulationBridge(runtime=runtime, workstation=desk)
+    if worker_id == INTEGRATED_ID:
+        return IntegratedCP30Bridge(runtime=runtime, workstation=desk)
     raise ValueError("job does not belong to a supported workstation worker")
 
 
@@ -114,7 +155,7 @@ def job_view(*, data_dir: str | Path, job_id: str) -> dict[str, Any]:
     runtime = _runtime(root)
     h = runtime.get(job_id)
     worker = h.metadata.get("worker_id")
-    if worker not in KNOWN_WORKERS or not (
+    if worker not in EXECUTABLE_WORKERS or not (
         h.metadata.get("source_system") == "process-workstation" or
         h.metadata.get("workstation_worker") is True
     ):
@@ -136,13 +177,13 @@ def run_job(*, data_dir: str | Path, job_id: str,
     runtime = _runtime(root)
     handoff = runtime.get(job_id)
     worker = handoff.metadata.get("worker_id")
-    if worker not in KNOWN_WORKERS:
+    if worker not in EXECUTABLE_WORKERS:
         raise ValueError("not a supported workstation job")
     bridge = _bridge(runtime, root, worker)
     state = runtime.state(job_id)
-    if worker == FINITE_ID:
+    if worker in (FINITE_ID, INTEGRATED_ID):
         if handoff.metadata.get("source_system") != "process-workstation":
-            raise ValueError("finite worker job source does not match")
+            raise ValueError("selected local worker job source does not match")
         if state.status == "READY":
             bridge.execute(job_id, allow_local_execution=True)
         elif state.status != "COMPLETE":
@@ -295,6 +336,13 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--confirm-admit", required=True)
     p.add_argument("--from-actor", required=True)
     p.add_argument("--lane", default="")
+    p = modes.add_parser("admit-integrated", help="Admit one CP30 Ed25519 check, no execution")
+    p.add_argument("--version", required=True)
+    p.add_argument("--inputs-file", type=Path, required=True)
+    p.add_argument("--job-id", required=True)
+    p.add_argument("--confirm-admit", required=True)
+    p.add_argument("--from-actor", required=True)
+    p.add_argument("--lane", default="")
     p = modes.add_parser("inspect", help="Read-only recorded job")
     p.add_argument("--job-id", required=True)
     p = modes.add_parser("execute", help="Explicitly run selected ready job")
@@ -340,6 +388,11 @@ def main(argv: list[str] | None = None) -> int:
                     inputs_file=opts["inputs_file"], job_id=opts["job_id"],
                     confirm_admit=opts["confirm_admit"],
                     from_actor=opts["from_actor"], lane_id=opts["lane"])
+    elif action == "admit-integrated":
+        result = admit_integrated(data_dir=data, version_id=opts["version"],
+                   inputs_file=opts["inputs_file"], job_id=opts["job_id"],
+                   confirm_admit=opts["confirm_admit"],
+                   from_actor=opts["from_actor"], lane_id=opts["lane"])
     elif action == "prepare-preferred":
         result = prepare_preferred(data_dir=data, worker_id=opts["worker"],
                                    inputs_file=opts["inputs_file"])
