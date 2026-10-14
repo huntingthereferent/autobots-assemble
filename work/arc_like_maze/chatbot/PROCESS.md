@@ -14,7 +14,7 @@ These names distinguish **subject**, **implementation** and **assigned role**. T
 
 The research includes finite route/correspondence operations, exact task requirements, selective refresh, evidence handoffs, and separate-process signature verification through CP-0030. The recovered owner-backed CP20–CP30 integrated source is now [published on `main`](research/integrated/README.md) and reconstructable from a clean checkout with checked hashes. Standalone finite references remain narrower implementations. Historical availability and selected tests do not by themselves establish a production-ready integrated worker or a full historical regression pass.
 
-The process is not the wider language referent historically called A/B. Labelled finite `A` and `B` operators are scoped to their particular declared mathematical models. The existing `GoalAgent`, `ab_chatbot_*`, `chatbot/`, archive, and manifest identifiers remain unchanged as *historical/source identifiers*, not as the research's present name.
+The process is not the wider language referent historically called A/B. Labelled finite `A` and `B` operators are scoped to their particular declared mathematical models. Existing historical source symbols, directory paths, archive filenames, and manifest identifiers remain unchanged for compatibility and provenance. None should be used as the research's current reader-facing name or treated as evidence of product completion.
 
 ## In the workstation
 
