@@ -8,7 +8,7 @@ These names distinguish **subject**, **implementation** and **assigned role**. T
 | --- | --- | --- |
 | Finite Correspondence Research | Mathematical questions, assumptions, checkpoints, witnesses, regressions, and provenance | [Research entry](README.md) and [checkpoint index](research/README.md) |
 | Finite Correspondence Process | Executable finite operations whose capabilities are supported by research witnesses | Existing `finite_*.py`, archived integrated sources, and selected adapters |
-| Correspondence Worker | One process instance/copy given a specifically admitted job | [Workspace workstation](../../../../systems/workspace/WORKSTATION.md) plus the existing handoff runtime, when connected |
+| Correspondence Worker | One process instance/copy given a specifically admitted job | [Workspace workstation](../../../../systems/workspace/WORKSTATION.md) plus the existing handoff runtime, with a single bounded prefilter connection |
 
 ## Present execution boundary
 
@@ -35,5 +35,9 @@ Finite Correspondence Process (working copy)
 ```
 
 A copied version is **not** automatically a verified worker, a transferred mathematical witness, a registered executor, or a production deployment. To use it for a task, preserve its exact source dependencies, independently run its native tests and evidence checks, then explicitly connect it to the common [handoff runtime](../../../../runtime/README.md). Promotion or merging back to the original research requires a separate reviewed operation.
+
+## First executing worker role
+
+[Correspondence Worker — finite prefilter handoff](../../../../systems/workspace/CORRESPONDENCE_HANDOFF.md) now demonstrates a selected, copied edition executing the **standalone** required-edge prefilter through the existing HandoffRuntime. A separate verifier recomputes the finite results and checks the selected source fingerprint before accepting a result. This does **not** establish full CP-0030 owner-backed correspondence, autonomous programming ability, or any physical factory operation. A `COMPLETE` result means only the declared prefilter calculation was independently replayed.
 
 [Workstation copy/branch contract](../../../../systems/workspace/WORKSTATION.md) · [Checkpoint provenance](PROVENANCE.md)

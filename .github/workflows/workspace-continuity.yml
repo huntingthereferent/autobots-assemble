@@ -6,12 +6,16 @@ on:
       - "systems/workspace/**"
       - "network/tests/test_workspace_continuity.py"
       - "network/tests/test_process_workstation.py"
+      - "network/tests/test_correspondence_worker_handoff.py"
+      - "runtime/examples/correspondence_worker.py"
       - ".github/workflows/workspace-continuity.yml"
   pull_request:
     paths:
       - "systems/workspace/**"
       - "network/tests/test_workspace_continuity.py"
       - "network/tests/test_process_workstation.py"
+      - "network/tests/test_correspondence_worker_handoff.py"
+      - "runtime/examples/correspondence_worker.py"
       - ".github/workflows/workspace-continuity.yml"
 
 jobs:
@@ -22,5 +26,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Verify lane continuity and source-preserving worker versions
-        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation
+      - name: Verify lane continuity, source editions and executable prefilter
+        run: python -m unittest -v network.tests.test_workspace_continuity network.tests.test_process_workstation network.tests.test_correspondence_worker_handoff
+      - name: Reproduce first worker handoff demo
+        run: python -m runtime.examples.correspondence_worker

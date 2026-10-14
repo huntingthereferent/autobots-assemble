@@ -14,7 +14,9 @@ An inspectable collection of code, mathematical experiments, system prototypes, 
 | **Interactive environments** | [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
 | **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
 | **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
-| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Process Workstation](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no automatic task admission or execution |
+| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Process Workstation](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no implicit task admission; one explicitly authorized finite prefilter work handoff is demonstrated |
+
+**First bounded worker connection:** [Correspondence Worker handoff](systems/workspace/CORRESPONDENCE_HANDOFF.md) — explicitly selected source edition, child-process finite prefilter, independent native replay, and durable HandoffRuntime result. Not a general AI agent or full owner-backed process.
 
 ## What the records show
 

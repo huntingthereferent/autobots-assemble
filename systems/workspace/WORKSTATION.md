@@ -45,14 +45,14 @@ The source path above is a placeholder. Select real, authorized source before us
 
 ## Execution and evidence are separate
 
-The workstation currently **does not run copied processes**, compile them, assign handoffs, autonomously edit code, verify arbitrary mathematical conclusions, operate physical equipment, or promote experiments into their original sources.
+The source-copy workstation itself **does not automatically run or assign processes**. The first optional [Correspondence Worker handoff adapter](CORRESPONDENCE_HANDOFF.md) connects a chosen edition to the **existing** `runtime/HandoffRuntime`. Its only implemented capability is a declared finite required-edge prefilter, executed locally in a subprocess with independent native mathematical replay before `COMPLETE` is recorded. Explicit admission and `allow_local_execution=True` are both required.
 
-A future work station can connect an edition to the **existing** `runtime/HandoffRuntime` after checking capabilities, dependencies, required witnesses and task admission. That bridge must preserve source ownership and the worker-specific verifier, not invent a second general-purpose scheduler. No cloned test report or original CP evidence may be treated as a test pass for modified code without re-execution.
+The adapter does not operate physical equipment, authenticate remote source owners, autonomously edit code, import the full CP-0030 owner-backed archive, or promote experiments into original research. No cloned test report or old CP evidence becomes a test pass for changed code without re-execution.
 
 Reproduction:
 
 ```bash
-python -m unittest -v network.tests.test_process_workstation network.tests.test_workspace_continuity
+python -m unittest -v network.tests.test_process_workstation network.tests.test_workspace_continuity network.tests.test_correspondence_worker_handoff
 ```
 
 This local source-version facility is the first construction step, not a running AI-worker factory.

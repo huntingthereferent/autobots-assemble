@@ -54,7 +54,7 @@ This example is illustrative and **does not assert** that those projects current
 
 ## Worker source editions — reusable process workstation
 
-The [Process Workstation](WORKSTATION.md) now adds an **opt-in local copy, inspect, and branch facility** for worker implementation source. It preserves a source inventory and independent editions; modifying a copy cannot rewrite its origin or earlier versions. This supports the [Finite Correspondence Process](../../work/arc_like_maze/chatbot/PROCESS.md) first but is not restricted to it or to chatbot applications. Copying source does **not** itself execute, validate, deploy, or register a worker with the runtime.
+The [Process Workstation](WORKSTATION.md) now adds an **opt-in local copy, inspect, and branch facility** for worker implementation source. It preserves a source inventory and independent editions; modifying a copy cannot rewrite its origin or earlier versions. This supports the [Finite Correspondence Process](../../work/arc_like_maze/chatbot/PROCESS.md) first but is not restricted to it or to chatbot applications. Copying source does **not** itself execute, validate, deploy, or register a worker with the runtime. The optional [Correspondence Worker handoff](CORRESPONDENCE_HANDOFF.md) now adds **one** explicitly admitted, version-pinned finite prefilter computation, running a selected trusted copy in a child process and independently replaying its finite result against the shared `HandoffRuntime`. It is not a general-purpose autonomous worker.
 
 ## Current witness / limits
 

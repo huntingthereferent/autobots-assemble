@@ -40,6 +40,10 @@ The runtime is an implementation layer that carries bounded work between unlike 
 - boundaries;
 - provenance.
 
+## Optional Correspondence Worker computation
+
+The [Process Workstation adapter](../systems/workspace/CORRESPONDENCE_HANDOFF.md) uses this existing handoff runtime to carry **one explicit Finite Correspondence Process prefilter job**, with the selected worker edition's source fingerprint, local child-process execution, independent native replay, and restart re-verification. Neither the runtime's scheduler nor its event vocabulary is duplicated. This is a bounded computation, not an AI agent, CP-0030 owner identity, or a physical factory action.
+
 ## Durable vs live
 
 The repository and runtime have different jobs.
