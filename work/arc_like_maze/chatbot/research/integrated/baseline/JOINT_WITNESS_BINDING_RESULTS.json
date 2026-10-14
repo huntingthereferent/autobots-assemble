@@ -1,0 +1,68 @@
+{
+  "baseline": {
+    "first_join": {
+      "status": "JOINT_PARTIAL_CORRESPONDENCE_WITNESSED",
+      "states": 5,
+      "edges": 4
+    },
+    "second_join": {
+      "status": "JOINT_PARTIAL_CORRESPONDENCE_WITNESSED",
+      "states": 5,
+      "edges": 4
+    }
+  },
+  "one_completed": {
+    "status": "TASK_COMPLETED_BY_INDEPENDENT_WITNESS",
+    "completed_by": [
+      "join_A_BAA"
+    ],
+    "candidates": [
+      {
+        "label": "join_A_BAA",
+        "status": "TASK_COMPLETED_ON_JOINT_WITNESS",
+        "admitted": 1,
+        "required": 1,
+        "expected_digest": "6982248d281d616b60ee15f899a7253c6e5cf04ddb52cad7bf81d0801dc2e8e4",
+        "observed_digest": "6982248d281d616b60ee15f899a7253c6e5cf04ddb52cad7bf81d0801dc2e8e4"
+      },
+      {
+        "label": "join_B_ABB",
+        "status": "TASK_REQUIREMENTS_UNPROVED",
+        "admitted": 0,
+        "required": 1,
+        "expected_digest": "2b1bcc78ba753fba7ef7dd88e654332e7b5d65c62bc905c0ce2c46bf95c3a843",
+        "observed_digest": "2b1bcc78ba753fba7ef7dd88e654332e7b5d65c62bc905c0ce2c46bf95c3a843"
+      }
+    ]
+  },
+  "not_combined": {
+    "status": "TASK_UNPROVED_ACROSS_TESTED_WITNESSES",
+    "completed_by": [],
+    "candidates": [
+      {
+        "label": "join_A_BAA",
+        "status": "TASK_REQUIREMENTS_UNPROVED",
+        "admitted": 1,
+        "required": 2,
+        "expected_digest": "6982248d281d616b60ee15f899a7253c6e5cf04ddb52cad7bf81d0801dc2e8e4",
+        "observed_digest": "6982248d281d616b60ee15f899a7253c6e5cf04ddb52cad7bf81d0801dc2e8e4"
+      },
+      {
+        "label": "join_B_ABB",
+        "status": "TASK_REQUIREMENTS_UNPROVED",
+        "admitted": 1,
+        "required": 2,
+        "expected_digest": "2b1bcc78ba753fba7ef7dd88e654332e7b5d65c62bc905c0ce2c46bf95c3a843",
+        "observed_digest": "2b1bcc78ba753fba7ef7dd88e654332e7b5d65c62bc905c0ce2c46bf95c3a843"
+      }
+    ]
+  },
+  "old_new_owner_observations_before_task": [
+    6,
+    6
+  ],
+  "old_new_owner_observations_after_task": [
+    6,
+    6
+  ]
+}

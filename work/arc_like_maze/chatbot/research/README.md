@@ -1,5 +1,9 @@
 # Finite Correspondence Research
 
+<!-- integrated-cp20-cp30-source-recovered -->
+**Current integrated-source location:** [Restored CP20–CP30 historical baseline and deltas](integrated/README.md), with hash-checked reconstruction of the original 201-file CP20 archive through the 281-file CP30 archive. The original separate ZIPs remain historical integrity evidence; their recovered source can now be rebuilt from this Git checkout. This source restoration does **not** assert that every owner-backed integrated regression test has passed.
+
+
 The ongoing investigation of **finite witnessed correspondence**, recorded one checkpoint at a time. It examines exact transformations and evidence-dependent continuation, without presupposing a conversational interface or autonomous application. A/B labels here are scoped finite generators, not a replacement name for the language referent.
 
 ## Checkpoints

@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-12",
+  "scope": "Nine separately completed module runs; not the complete historical suite",
+  "passed": 137,
+  "modules": [
+    {
+      "module": "test_ab_chatbot_provenance_contract.py",
+      "tests": 14,
+      "status": "PASS"
+    },
+    {
+      "module": "test_finite_provenance_scope.py",
+      "tests": 4,
+      "status": "PASS"
+    },
+    {
+      "module": "test_ab_chatbot_mixed_obligations.py",
+      "tests": 12,
+      "status": "PASS"
+    },
+    {
+      "module": "test_ab_chatbot_multi_required.py",
+      "tests": 13,
+      "status": "PASS"
+    },
+    {
+      "module": "test_ab_chatbot_task_contract.py",
+      "tests": 11,
+      "status": "PASS"
+    },
+    {
+      "module": "test_ab_chatbot_language_bridge.py",
+      "tests": 35,
+      "status": "PASS"
+    },
+    {
+      "module": "test_ab_chatbot_evidence_prefilter.py",
+      "tests": 8,
+      "status": "PASS"
+    },
+    {
+      "module": "test_ab_chatbot_post_extension_portfolio.py",
+      "tests": 25,
+      "status": "PASS"
+    },
+    {
+      "module": "test_ab_chatbot_union_extension.py",
+      "tests": 15,
+      "status": "PASS"
+    }
+  ]
+}

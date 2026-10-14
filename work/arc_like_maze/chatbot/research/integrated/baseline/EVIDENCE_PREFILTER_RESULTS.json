@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-12",
+  "scope": "finite 27-state laws and explicit must-admit root B edge",
+  "old_law": [
+    0,
+    0,
+    1
+  ],
+  "new_law": [
+    0,
+    0,
+    0
+  ],
+  "goals": [
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      2,
+      0
+    ]
+  ],
+  "required_edge": [
+    [
+      0,
+      0,
+      0
+    ],
+    "B"
+  ],
+  "baseline": {
+    "trials": 11,
+    "eligible_goal_count": 1,
+    "observed_old": 28,
+    "observed_new": 18
+  },
+  "guarded": {
+    "trials": 9,
+    "certified_candidate_exclusions": 2,
+    "eligible_goal_count": 1,
+    "observed_old": 26,
+    "observed_new": 18
+  },
+  "tests_completed": {
+    "integrated": 8,
+    "standalone": 4,
+    "legacy_conflict_guided": 10,
+    "legacy_post_extension": 25
+  },
+  "limits": [
+    "task-conditional pruning only",
+    "candidate-pool bounded",
+    "not full historical regression",
+    "no universal impossibility"
+  ]
+}

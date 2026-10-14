@@ -1,0 +1,79 @@
+{
+  "fresh_initial_observations": 0,
+  "new_observed": 7,
+  "new_revision": 1,
+  "old_and_new_cache_disjoint": true,
+  "old_observed": 7,
+  "old_revision": 0,
+  "prior_pin_remains_historical": true,
+  "relations": [
+    {
+      "new_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "new_equal": true,
+      "old_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "old_equal": true,
+      "words": [
+        "",
+        "AAA"
+      ]
+    },
+    {
+      "new_endpoints": [
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ],
+      "new_equal": false,
+      "old_endpoints": [
+        [
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "old_equal": true,
+      "words": [
+        "BA",
+        "ABB"
+      ]
+    }
+  ],
+  "scope": "Explicit finite action-word comparison; local in-process source owner only.",
+  "status": "RELATION_CHANGED_WITNESSED",
+  "status_after_replay": "RELATION_CHANGED_WITNESSED",
+  "zero_new_budget_result": "SEARCHING"
+}

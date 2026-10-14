@@ -1,0 +1,58 @@
+{
+  "checkpoint": 30,
+  "date": "2026-10-13",
+  "excluded_incomplete_executions": [
+    "one all-in-one historical combined command stalled before returning a tally",
+    "one attempted multi-suite serial runner timed out; its partial output not counted"
+  ],
+  "executed": 100,
+  "full_historical_suite_completed": false,
+  "independent_real_world_owner_identity_proven": false,
+  "passed": 100,
+  "scope": "targeted, independently completed local suites",
+  "suites": [
+    {
+      "executed": 16,
+      "outcome": "passed (33.44 s in isolated run)",
+      "passed": 16,
+      "suite": "test_ab_chatbot_independent_process_identity.IndependentProcessIdentityTests"
+    },
+    {
+      "executed": 17,
+      "outcome": "passed (2.075 s isolated run)",
+      "passed": 17,
+      "suite": "test_finite_process_attestation.ProcessAttestationTests"
+    },
+    {
+      "executed": 16,
+      "outcome": "passed isolated run",
+      "passed": 16,
+      "suite": "test_ab_chatbot_certificate_handoff.HandoffOwnerTests"
+    },
+    {
+      "executed": 16,
+      "outcome": "passed isolated run",
+      "passed": 16,
+      "suite": "test_finite_certificate_handoff.FiniteHandoffTests"
+    },
+    {
+      "executed": 13,
+      "outcome": "passed isolated run",
+      "passed": 13,
+      "suite": "test_ab_chatbot_shared_route_certificates.SharedRouteTaskTests"
+    },
+    {
+      "executed": 14,
+      "outcome": "passed isolated run",
+      "passed": 14,
+      "suite": "test_finite_shared_route_certificate.SharedFiniteTests"
+    },
+    {
+      "executed": 8,
+      "outcome": "passed isolated run",
+      "passed": 8,
+      "suite": "test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests"
+    }
+  ],
+  "trust_bootstrap_verified": false
+}

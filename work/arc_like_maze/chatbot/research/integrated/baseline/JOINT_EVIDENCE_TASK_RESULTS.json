@@ -1,0 +1,188 @@
+{
+  "completed": {
+    "words": [
+      "A",
+      "BAA"
+    ],
+    "first_zero_read_status": "SEARCHING",
+    "joint_status": "JOINT_PARTIAL_CORRESPONDENCE_WITNESSED",
+    "joint_state_pairs": 5,
+    "joint_admitted_edges": 4,
+    "owner_observations_before_tasks": [
+      4,
+      4
+    ],
+    "owner_observations_after_tasks": [
+      4,
+      4
+    ],
+    "extra_observations": 0,
+    "tasks": [
+      {
+        "status": "TASK_COMPLETED_ON_JOINT_WITNESS",
+        "fingerprint": "f1625f9c0f3f20a252ebd01e331a29c631a2ea8e49a3402845c809fd9d15e7c6",
+        "obligations": [
+          {
+            "kind": "GOAL",
+            "requirement": "((1, 0, 0),)",
+            "admitted": true,
+            "witness": "((1, 0, 0), (1, 0, 0))"
+          },
+          {
+            "kind": "GOAL",
+            "requirement": "((2, 1, 0),)",
+            "admitted": true,
+            "witness": "((2, 1, 0), (2, 1, 0))"
+          },
+          {
+            "kind": "EDGE",
+            "requirement": "((0, 0, 0), 'A')",
+            "admitted": true,
+            "witness": "((0, 0, 0), 'A', (1, 0, 0), (0, 0, 0), (1, 0, 0))"
+          },
+          {
+            "kind": "EDGE",
+            "requirement": "((1, 1, 0), 'A')",
+            "admitted": true,
+            "witness": "((1, 1, 0), 'A', (2, 1, 0), (1, 1, 0), (2, 1, 0))"
+          },
+          {
+            "kind": "PATH",
+            "requirement": "('BAA', (2, 1, 0), (2, 1, 0))",
+            "admitted": true,
+            "witness": "(((0, 0, 0), 'B', (0, 1, 0), (0, 0, 0), (0, 1, 0)), ((0, 1, 0), 'A', (1, 1, 0), (0, 1, 0), (1, 1, 0)), ((1, 1, 0), 'A', (2, 1, 0), (1, 1, 0), (2, 1, 0)))"
+          },
+          {
+            "kind": "DESTINATION",
+            "requirement": "((1, 0, 0), (1, 0, 0))",
+            "admitted": true,
+            "witness": "((1, 0, 0), (1, 0, 0))"
+          }
+        ],
+        "goals_carried": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ]
+          ],
+          [
+            [
+              2,
+              1,
+              0
+            ],
+            [
+              2,
+              1,
+              0
+            ]
+          ]
+        ],
+        "joint_obstruction": null
+      },
+      {
+        "status": "TASK_REQUIREMENTS_UNPROVED",
+        "fingerprint": "26a456f9bb65c82a97778657a2cc941fb6363937b046941b86e22a3ba6bc3542",
+        "obligations": [
+          {
+            "kind": "GOAL",
+            "requirement": "((1, 0, 0),)",
+            "admitted": true,
+            "witness": "((1, 0, 0), (1, 0, 0))"
+          },
+          {
+            "kind": "EDGE",
+            "requirement": "((1, 0, 0), 'B')",
+            "admitted": false,
+            "witness": "()"
+          }
+        ],
+        "goals_carried": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ]
+          ]
+        ],
+        "joint_obstruction": null
+      },
+      {
+        "status": "TASK_REQUIREMENTS_UNPROVED",
+        "fingerprint": "50fc799eb4624d01c11508b9076e66e4b17450623be6491463fff576ae36b248",
+        "obligations": [
+          {
+            "kind": "GOAL",
+            "requirement": "((1, 0, 0),)",
+            "admitted": true,
+            "witness": "((1, 0, 0), (1, 0, 0))"
+          },
+          {
+            "kind": "PATH",
+            "requirement": "('AB', (1, 1, 0), (1, 1, 0))",
+            "admitted": false,
+            "witness": "()"
+          }
+        ],
+        "goals_carried": [
+          [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ]
+          ]
+        ],
+        "joint_obstruction": null
+      }
+    ]
+  },
+  "collision": {
+    "words": [
+      "A",
+      "BAB"
+    ],
+    "first_zero_read_status": "SEARCHING",
+    "joint_status": "JOINT_RELATION_CONFLICT_WITNESSED",
+    "joint_state_pairs": 0,
+    "joint_admitted_edges": 0,
+    "owner_observations_before_tasks": [
+      4,
+      4
+    ],
+    "owner_observations_after_tasks": [
+      4,
+      4
+    ],
+    "extra_observations": 0,
+    "tasks": [
+      {
+        "status": "JOINT_RELATION_CONFLICT_WITNESSED",
+        "fingerprint": "c0db0776799e91b6c9dbfe79124800906f4f0b6577381b052e1d0b10dfe26b42",
+        "obligations": [],
+        "goals_carried": [],
+        "joint_obstruction": "HistoryCollision(cause='SOURCE_STATE_CONFLICT', previous_word='A', incoming_word='BAB', old_endpoints=((1, 0, 0), (1, 0, 0)), new_endpoints=((1, 0, 0), (1, 0, 1)), old_equal=True, new_equal=False)"
+      }
+    ]
+  },
+  "independent_finite_reference": "TASK_COMPLETED_ON_JOINT_WITNESS",
+  "scope": "Already independently pinned and observed partial correspondence; no unobserved edge admitted."
+}

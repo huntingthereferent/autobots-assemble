@@ -1,0 +1,700 @@
+[
+  {
+    "candidate_checks": [
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA",
+          "ABBABA"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA",
+          "AAABB",
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA",
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "AAABB",
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA",
+          "AAABB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABBABA"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "BB",
+          "ABAA"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "AAABB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "BB"
+        ]
+      }
+    ],
+    "case": "all_three_types",
+    "contract_fingerprint": "0b5dff20d03b8cd909dcdf76eaec1b3f75ab7748ff25a144d29e7147f11fa326",
+    "goals_carried": 2,
+    "observed_new": 18,
+    "observed_old": 28,
+    "selected_words": [
+      "ABAA",
+      "ABBABA"
+    ],
+    "status": "GOALS_CARRIED_WITNESSED"
+  },
+  {
+    "candidate_checks": [
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA",
+          "AAABB",
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA",
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "AAABB",
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA",
+          "AAABB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "BB",
+          "ABAA"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "AAABB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "BAAAB"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "ABAA"
+        ]
+      },
+      {
+        "checks": [
+          {
+            "detail": "Admitted labeled transition",
+            "satisfied": true,
+            "type": "EDGE"
+          },
+          {
+            "detail": "Destination pairing absent or different",
+            "satisfied": false,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Mapped state and rooted history agree",
+            "satisfied": true,
+            "type": "DESTINATION"
+          },
+          {
+            "detail": "Every path edge and both endpoint identities replayed",
+            "satisfied": true,
+            "type": "PATH"
+          },
+          {
+            "detail": "Complete required rooted path is not admitted by this pairing",
+            "satisfied": false,
+            "type": "PATH"
+          }
+        ],
+        "words": [
+          "BB"
+        ]
+      }
+    ],
+    "case": "incompatible_requirements",
+    "contract_fingerprint": "2e60e5480624eb854485f0740d478a5328ecadb4a61dc272aff509cc38d06a04",
+    "goals_carried": 0,
+    "observed_new": 18,
+    "observed_old": 26,
+    "selected_words": null,
+    "status": "REQUIREMENTS_UNPROVED"
+  },
+  {
+    "candidate_checks": [],
+    "case": "inconsistent_task",
+    "contract_fingerprint": null,
+    "goals_carried": 0,
+    "observed_new": 0,
+    "observed_old": 0,
+    "selected_words": null,
+    "status": "INCONSISTENT_TASK"
+  },
+  {
+    "candidate_checks": [],
+    "case": "ambiguous_task",
+    "contract_fingerprint": null,
+    "goals_carried": 0,
+    "observed_new": 0,
+    "observed_old": 0,
+    "selected_words": null,
+    "status": "UNKNOWN_TASK"
+  }
+]

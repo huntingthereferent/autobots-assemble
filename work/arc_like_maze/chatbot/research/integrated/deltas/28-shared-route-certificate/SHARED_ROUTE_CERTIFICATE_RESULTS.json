@@ -1,0 +1,21 @@
+{
+  "experiment": "shared fresh route certificate across independent tasks",
+  "invocation": "explicit on-demand",
+  "local_integrated": true,
+  "observations_unchanged": true,
+  "route_replay_calls": {
+    "left": 2,
+    "right": 2
+  },
+  "separate_task_fingerprints": true,
+  "shared_left_certificate": true,
+  "source_observations_added": 0,
+  "stage": 28,
+  "task_status": {
+    "left_a": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+    "left_b": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+    "left_unproved": "ROUTE_TASK_REQUIREMENTS_UNPROVED",
+    "right_a": "TASK_COMPLETED_ON_SELECTED_ROUTE"
+  },
+  "unique_route_audits": 2
+}

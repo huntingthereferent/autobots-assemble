@@ -1,0 +1,10 @@
+A/B FINITE CHATBOT - CONFLICT GUIDED LOCAL VERIFICATION 2026-10-12
+focused conflict-guidance: 10/10 PASSED
+finite oracle: 4/4 PASSED
+unchanged seed-first module: 12/12 PASSED
+selected edge-extension, union and portfolio controls: 5/5 PASSED
+broader legacy group: INCOMPLETE: timeouts; no claim of full regression
+same trial budget: fixed vs guided (3): 41 vs 41 admitted edges; each 2/2 goals
+same trial budget: fixed vs guided (4): 42 vs 41 admitted edges; each 2/2 goals
+source validation: stale/revised and tampered cache revoke prior guidance
+GitHub update: NOT asserted by this package builder

@@ -1,0 +1,433 @@
+{
+  "experiment": "Multi-route task dependency propagation",
+  "date": "2026-10-13",
+  "method": "on-demand real owner/snapshot audits; no background polling",
+  "dependencies": [
+    [
+      "source_01",
+      [
+        [
+          "left_a",
+          "donor"
+        ],
+        [
+          "left_b",
+          "donor"
+        ],
+        [
+          "right_a",
+          "donor"
+        ]
+      ]
+    ],
+    [
+      "source_02",
+      [
+        [
+          "left_a",
+          "middle"
+        ],
+        [
+          "left_b",
+          "middle"
+        ]
+      ]
+    ],
+    [
+      "source_03",
+      [
+        [
+          "left_a",
+          "final"
+        ],
+        [
+          "left_b",
+          "final"
+        ],
+        [
+          "right_a",
+          "final"
+        ]
+      ]
+    ],
+    [
+      "source_04",
+      [
+        [
+          "right_a",
+          "middle"
+        ]
+      ]
+    ]
+  ],
+  "baseline": {
+    "status": "BASELINE_AUDITED",
+    "epoch": 0,
+    "changed_sources": [],
+    "audited": [
+      "left_a",
+      "left_b",
+      "right_a"
+    ],
+    "cached": [],
+    "tasks": {
+      "left_a": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "REPLAYED",
+        "fresh": true,
+        "proof_for_use": true,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "left_b": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "REPLAYED",
+        "fresh": true,
+        "proof_for_use": true,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "right_a": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "REPLAYED",
+        "fresh": true,
+        "proof_for_use": true,
+        "sources": [
+          "source_01",
+          "source_04",
+          "source_03"
+        ]
+      }
+    },
+    "observations_before": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ],
+    "observations_after": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ]
+  },
+  "no_change": {
+    "status": "TASKS_CACHED_NOT_REPLAYED",
+    "epoch": 1,
+    "changed_sources": [],
+    "audited": [],
+    "cached": [
+      "left_a",
+      "left_b",
+      "right_a"
+    ],
+    "tasks": {
+      "left_a": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "CACHED_NOT_REPLAYED",
+        "fresh": false,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "left_b": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "CACHED_NOT_REPLAYED",
+        "fresh": false,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "right_a": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "CACHED_NOT_REPLAYED",
+        "fresh": false,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_04",
+          "source_03"
+        ]
+      }
+    },
+    "observations_before": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ],
+    "observations_after": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ]
+  },
+  "right_middle_revocation": {
+    "status": "TASKS_WITHDRAWN_OR_UNPROVED",
+    "epoch": 2,
+    "changed_sources": [
+      "source_04"
+    ],
+    "audited": [
+      "right_a"
+    ],
+    "cached": [
+      "left_a",
+      "left_b"
+    ],
+    "tasks": {
+      "left_a": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "CACHED_NOT_REPLAYED",
+        "fresh": false,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "left_b": {
+        "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+        "mode": "CACHED_NOT_REPLAYED",
+        "fresh": false,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "right_a": {
+        "status": "OWNER_PIN_UNPROVED",
+        "mode": "REPLAYED",
+        "fresh": true,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_04",
+          "source_03"
+        ]
+      }
+    },
+    "observations_before": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ],
+    "observations_after": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ]
+  },
+  "left_task_explicit_use": {
+    "status": "TASK_COMPLETED_ON_SELECTED_ROUTE",
+    "proof_for_use": true
+  },
+  "shared_final_revision_change": {
+    "status": "TASKS_WITHDRAWN_OR_UNPROVED",
+    "epoch": 4,
+    "changed_sources": [
+      "source_03"
+    ],
+    "audited": [
+      "left_a",
+      "left_b",
+      "right_a"
+    ],
+    "cached": [],
+    "tasks": {
+      "left_a": {
+        "status": "UNKNOWN_VERSION",
+        "mode": "REPLAYED",
+        "fresh": true,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "left_b": {
+        "status": "UNKNOWN_VERSION",
+        "mode": "REPLAYED",
+        "fresh": true,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_02",
+          "source_03"
+        ]
+      },
+      "right_a": {
+        "status": "OWNER_PIN_UNPROVED",
+        "mode": "REPLAYED",
+        "fresh": true,
+        "proof_for_use": false,
+        "sources": [
+          "source_01",
+          "source_04",
+          "source_03"
+        ]
+      }
+    },
+    "observations_before": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ],
+    "observations_after": [
+      [
+        "source_01",
+        3,
+        3
+      ],
+      [
+        "source_02",
+        5,
+        5
+      ],
+      [
+        "source_03",
+        6,
+        6
+      ],
+      [
+        "source_04",
+        5,
+        5
+      ]
+    ]
+  },
+  "task_results_are_not_merged": true
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "module": "test_ab_chatbot_owner_pin_contract",
+    "exit": 0,
+    "elapsed": 8.77,
+    "output": "----------------------------------------------------------------------\nRan 10 tests in 7.617s\n\nOK\n"
+  },
+  {
+    "module": "test_ab_chatbot_provenance_contract",
+    "exit": 0,
+    "elapsed": 10.84,
+    "output": "----------------------------------------------------------------------\nRan 14 tests in 9.757s\n\nOK\n"
+  },
+  {
+    "module": "test_ab_chatbot_mixed_obligations",
+    "exit": 0,
+    "elapsed": 9.89,
+    "output": "----------------------------------------------------------------------\nRan 12 tests in 8.719s\n\nOK\n"
+  },
+  {
+    "module": "test_ab_chatbot_multi_required",
+    "exit": 0,
+    "elapsed": 12.97,
+    "output": "----------------------------------------------------------------------\nRan 13 tests in 11.845s\n\nOK\n"
+  },
+  {
+    "module": "test_ab_chatbot_task_contract",
+    "exit": 0,
+    "elapsed": 6.87,
+    "output": "----------------------------------------------------------------------\nRan 11 tests in 6.148s\n\nOK\n"
+  },
+  {
+    "module": "test_ab_chatbot_language_bridge",
+    "exit": 0,
+    "elapsed": 18.49,
+    "output": "----------------------------------------------------------------------\nRan 35 tests in 17.685s\n\nOK\n"
+  },
+  {
+    "module": "test_ab_chatbot_evidence_prefilter",
+    "exit": 0,
+    "elapsed": 9.4,
+    "output": "----------------------------------------------------------------------\nRan 8 tests in 8.704s\n\nOK\n"
+  },
+  {
+    "module": "test_finite_provenance_scope",
+    "exit": 0,
+    "elapsed": 0.67,
+    "output": "----------------------------------------------------------------------\nRan 4 tests in 0.000s\n\nOK\n"
+  }
+]

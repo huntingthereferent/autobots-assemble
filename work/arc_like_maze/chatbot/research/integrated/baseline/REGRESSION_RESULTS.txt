@@ -1,0 +1,26 @@
+Local completed unittest modules (2026-10-12)
+================================================
+
+test_ab_chatbot_branch_discovery.py: 13/13 passed
+test_ab_chatbot_clarification_bridge.py: 21/21 passed
+test_ab_chatbot_discovered_correspondence.py: 11/11 passed
+test_ab_chatbot_evidence_decision.py: 8/8 passed
+test_ab_chatbot_goal_agent.py: 14/14 passed
+test_ab_chatbot_goal_selected_restrictions.py: 15/15 passed
+test_ab_chatbot_goal_transport.py: 11/11 passed
+test_ab_chatbot_http_snapshot.py: 16/16 passed
+test_ab_chatbot_incremental_correspondence.py: 14/14 passed
+test_ab_chatbot_language_bridge.py: 35/35 passed
+test_ab_chatbot_paraphrase_bridge.py: 19/19 passed
+test_ab_chatbot_path_union.py: 15/15 passed
+test_ab_chatbot_pinned_identity.py: 14/14 passed
+test_ab_chatbot_question_lineage.py: 25/25 passed
+test_ab_chatbot_restricted_rule_transport.py: 15/15 passed
+test_ab_chatbot_rule_change.py: 14/14 passed
+test_ab_chatbot_stability_witness.py: 14/14 passed
+test_ab_chatbot_structural_witness.py: 13/13 passed
+test_ab_chatbot_union_extension.py: 15/15 passed
+test_ab_chatbot_witness_transport.py: 10/10 passed
+
+TOTAL: 312/312 across 20 modules
+All listed modules completed in successful independent runs. Interrupted grouped invocations excluded.

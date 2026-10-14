@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-13",
+  "new_integration": {
+    "module": "test_ab_chatbot_selective_propagation.SelectivePortfolioTests",
+    "passed": 9
+  },
+  "new_finite": {
+    "module": "test_finite_selective_dependency.DependencyPlanningTests",
+    "passed": 6
+  },
+  "regressions": [
+    {
+      "module": "test_ab_chatbot_source_change_propagation.ChangePropagationTests + test_ab_chatbot_two_route_comparison.TwoRouteTests",
+      "passed": 25
+    },
+    {
+      "module": "test_ab_chatbot_two_hop_transport.TwoHopTransportTests",
+      "passed": 14
+    },
+    {
+      "module": "test_ab_chatbot_source_replacement_recovery.SourceReplacementRecoveryTests",
+      "passed": 13
+    },
+    {
+      "module": "test_ab_chatbot_cross_scope_transport",
+      "passed": 22,
+      "imported_fixture_overlap": true
+    },
+    {
+      "module": "test_ab_chatbot_owner_pin_contract.ExactOwnerTests",
+      "passed": 10
+    }
+  ],
+  "completed_test_executions": 99,
+  "full_historical_suite_completed": false,
+  "github_ci_verified": false,
+  "grouped_timeout_excluded": true,
+  "source_files_modified_from_predecessor": 0
+}

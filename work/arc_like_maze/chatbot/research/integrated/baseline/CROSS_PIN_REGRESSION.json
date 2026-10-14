@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-13",
+  "full_historical_suite": "not run to completion",
+  "github_ci": "not verified",
+  "new": {
+    "test_ab_chatbot_cross_pin_comparison": 10,
+    "test_finite_cross_pin_relation": 5
+  },
+  "note": "All named modules ran separately except new tests combined; no timeout run counted.",
+  "total_completed_tests": 100,
+  "unchanged": {
+    "test_ab_chatbot_language_bridge": 35,
+    "test_ab_chatbot_mixed_obligations": 12,
+    "test_ab_chatbot_owner_pin_contract": 10,
+    "test_ab_chatbot_provenance_contract": 14,
+    "test_ab_chatbot_rule_change": 14
+  }
+}

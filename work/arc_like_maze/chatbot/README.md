@@ -1,5 +1,9 @@
 # Finite Correspondence Research
 
+<!-- integrated-cp20-cp30-source-recovered -->
+**Current integrated-source location:** [Restored CP20–CP30 historical baseline and deltas](research/integrated/README.md), with hash-checked reconstruction of the original 201-file CP20 archive through the 281-file CP30 archive. The original separate ZIPs remain historical integrity evidence; their recovered source can now be rebuilt from this Git checkout. This source restoration does **not** assert that every owner-backed integrated regression test has passed.
+
+
 Finite research on **witnessed correspondences and their continuation**: how compatible relations can be admitted, transported, compared, withdrawn, revalidated, and used by independently declared tasks. Each experiment has its own question, source, tests and evidence. The research is defined by its witnessed correspondences and explicit evidence conditions, not by any particular interface or product.
 
 **[Open the checkpoint index →](research/checkpoints/README.md)**

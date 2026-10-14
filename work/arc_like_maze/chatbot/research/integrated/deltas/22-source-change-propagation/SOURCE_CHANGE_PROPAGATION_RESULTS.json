@@ -1,0 +1,442 @@
+{
+  "unchanged": {
+    "initial_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "propagation_status": "COMPARISON_PRESERVED",
+    "left_route": "PRESERVED",
+    "right_route": "PRESERVED",
+    "comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "changed_scopes": [],
+    "affected_routes": [],
+    "observations_before": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "observations_after": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "new_observations_from_refresh": 0,
+    "historical_comparison_kept": true,
+    "current_disagreements": [
+      [
+        0,
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            2
+          ]
+        ]
+      ],
+      [
+        1,
+        [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            2
+          ]
+        ],
+        [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            2,
+            2
+          ]
+        ]
+      ],
+      [
+        2,
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            2
+          ]
+        ]
+      ],
+      [
+        3,
+        [
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            1,
+            2,
+            2
+          ]
+        ],
+        [
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            0,
+            2,
+            1
+          ]
+        ]
+      ]
+    ]
+  },
+  "right_pin_revoked": {
+    "initial_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "propagation_status": "COMPARISON_WITHDRAWN",
+    "left_route": "PRESERVED",
+    "right_route": "WITHDRAWN",
+    "comparison": "ROUTE_EVIDENCE_UNPROVED",
+    "changed_scopes": [
+      {
+        "scope": "right_middle",
+        "causes": [
+          "OWNER_BINDING_CHANGED"
+        ]
+      }
+    ],
+    "affected_routes": [
+      "right"
+    ],
+    "observations_before": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "observations_after": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "new_observations_from_refresh": 0,
+    "historical_comparison_kept": true,
+    "current_disagreements": []
+  },
+  "owner_head_advanced": {
+    "initial_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "propagation_status": "COMPARISON_PRESERVED",
+    "left_route": "PRESERVED",
+    "right_route": "PRESERVED",
+    "comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "changed_scopes": [
+      {
+        "scope": "right_middle",
+        "causes": [
+          "SOURCE_HEAD_ADVANCED"
+        ]
+      }
+    ],
+    "affected_routes": [
+      "right"
+    ],
+    "observations_before": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "observations_after": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "new_observations_from_refresh": 0,
+    "historical_comparison_kept": true,
+    "current_disagreements": [
+      [
+        0,
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            2
+          ]
+        ]
+      ],
+      [
+        1,
+        [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            1,
+            2,
+            2
+          ]
+        ],
+        [
+          [
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            2,
+            2
+          ]
+        ]
+      ],
+      [
+        2,
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            2
+          ]
+        ]
+      ],
+      [
+        3,
+        [
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            1,
+            2,
+            2
+          ]
+        ],
+        [
+          [
+            1,
+            2,
+            1
+          ],
+          [
+            0,
+            2,
+            1
+          ]
+        ]
+      ]
+    ]
+  },
+  "shared_final_revoked": {
+    "initial_comparison": "ROUTE_COMPOSED_MAP_CONFLICT",
+    "propagation_status": "COMPARISON_WITHDRAWN",
+    "left_route": "WITHDRAWN",
+    "right_route": "WITHDRAWN",
+    "comparison": "ROUTE_EVIDENCE_UNPROVED",
+    "changed_scopes": [
+      {
+        "scope": "final",
+        "causes": [
+          "OWNER_BINDING_CHANGED"
+        ]
+      }
+    ],
+    "affected_routes": [
+      "left",
+      "right"
+    ],
+    "observations_before": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "observations_after": [
+      [
+        3,
+        3
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        6
+      ]
+    ],
+    "new_observations_from_refresh": 0,
+    "historical_comparison_kept": true,
+    "current_disagreements": []
+  },
+  "scope": "four live in-process owner-pinned pairs; explicit on-demand replay, no autonomous watching",
+  "historical_evidence": "preserved separately from live result; no re-pin or transport inferred"
+}

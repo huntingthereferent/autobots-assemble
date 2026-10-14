@@ -1,0 +1,18 @@
+{
+  "initial_status": "GOALS_CARRIED_WITNESSED",
+  "initial_edges": [
+    28,
+    18
+  ],
+  "previous_version": {
+    "revision": 0,
+    "digest": "d310eb8eed3f3e26f2b7631cab07d77b8deacd0c7a36e1120b167b117e57a202"
+  },
+  "inherited_old_pin_status": "OWNER_PIN_UNPROVED",
+  "re_pinned_status": "SEARCHING",
+  "new_pin_has_predecessor": true,
+  "fresh_old_observations": 0,
+  "historic_old_observations": 28,
+  "repeated_pin_token": false,
+  "note": "Local identity/revision bookkeeping only; no remote-origin authentication."
+}

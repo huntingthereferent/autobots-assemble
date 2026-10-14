@@ -1,0 +1,9 @@
+2026-10-12 — observed local test runs (not GitHub CI)
+PASS: python -m unittest -q test_ab_chatbot_seed_first_extension — 12 tests
+PASS: python -m unittest -q test_finite_seed_first (local finite Law mirror) — 5 tests
+PASS: python -m unittest -q test_ab_chatbot_alternative_extension — 9 tests
+PASS: python -m unittest -q test_ab_chatbot_backtracked_extension — 9 tests
+PASS: python -m unittest -q test_ab_chatbot_branch_discovery — 13 tests
+PASS: python -m unittest -q test_ab_chatbot_extension_portfolio — 10 tests
+INTERRUPTED: grouped remaining regression run including test_ab_chatbot_path_union — not counted
+Full old suite: NOT COMPLETE. Previous 330/330 belongs to earlier package, not this build.

@@ -1,0 +1,70 @@
+{
+  "stage": 27,
+  "date": "2026-10-13",
+  "status": "completed targeted tests",
+  "tests_passed": 127,
+  "new_tests": 27,
+  "regressions": 100,
+  "modules": [
+    {
+      "module": "test_ab_chatbot_multi_task_dependency.MultiRouteTaskDependencyTests",
+      "passed": 19,
+      "kind": "new integration"
+    },
+    {
+      "module": "test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests",
+      "passed": 8,
+      "kind": "new finite"
+    },
+    {
+      "module": "test_ab_chatbot_route_bound_task.RouteBoundTaskTests",
+      "passed": 18,
+      "kind": "regression"
+    },
+    {
+      "module": "test_ab_chatbot_route_selective_refresh.RouteSelectiveTests",
+      "passed": 14,
+      "kind": "regression"
+    },
+    {
+      "module": "test_ab_chatbot_two_route_comparison.TwoRouteTests",
+      "passed": 12,
+      "kind": "regression"
+    },
+    {
+      "module": "test_ab_chatbot_source_change_propagation.ChangePropagationTests",
+      "passed": 13,
+      "kind": "regression"
+    },
+    {
+      "module": "test_ab_chatbot_two_hop_transport.TwoHopTransportTests",
+      "passed": 14,
+      "kind": "regression"
+    },
+    {
+      "module": "test_ab_chatbot_cross_scope_transport.CrossScopeTransportTests",
+      "passed": 12,
+      "kind": "regression"
+    },
+    {
+      "module": "test_ab_chatbot_owner_pin_contract.ExactOwnerTests",
+      "passed": 10,
+      "kind": "regression"
+    },
+    {
+      "module": "test_finite_single_route_task.FiniteSingleRouteTests",
+      "passed": 7,
+      "kind": "regression"
+    }
+  ],
+  "excluded_runs": [
+    "Earlier combined regression orchestration exceeded execution limit; only separately completed runs counted.",
+    "A failing preliminary test for source-object substitution was fixed and rerun before reporting completion.",
+    "Pre-audit declaration drift was distinguished from movement during audit; corrected test rerun."
+  ],
+  "full_historical_suite": "not rerun",
+  "github_ci": "not verified",
+  "no_new_transition_observations_in_demo": true,
+  "archive_predecessor_file_count": 249,
+  "archive_new_file_count": 257
+}

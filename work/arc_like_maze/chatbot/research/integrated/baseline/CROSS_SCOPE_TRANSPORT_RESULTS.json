@@ -1,0 +1,213 @@
+{
+  "scope": "different owner objects, separate registries, four separately pinned snapshots",
+  "recipient_laws": [
+    [
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      1,
+      2
+    ]
+  ],
+  "donor_laws": [
+    [
+      0,
+      0,
+      1
+    ],
+    [
+      1,
+      0,
+      1
+    ]
+  ],
+  "selected_donor_edge": [
+    [
+      1,
+      0,
+      0
+    ],
+    "B"
+  ],
+  "declared_old_transport": [
+    {
+      "donor": [
+        1,
+        0,
+        0
+      ],
+      "recipient": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "donor": [
+        1,
+        2,
+        0
+      ],
+      "recipient": [
+        1,
+        2,
+        0
+      ]
+    }
+  ],
+  "declared_new_transport": [
+    {
+      "donor": [
+        1,
+        0,
+        0
+      ],
+      "recipient": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "donor": [
+        1,
+        2,
+        1
+      ],
+      "recipient": [
+        1,
+        2,
+        0
+      ]
+    }
+  ],
+  "observations_before": [
+    4,
+    4,
+    3,
+    3
+  ],
+  "observations_after": [
+    5,
+    5,
+    3,
+    3
+  ],
+  "new_recipient_observations": [
+    1,
+    1
+  ],
+  "new_donor_observations": [
+    0,
+    0
+  ],
+  "success": {
+    "status": "CROSS_SCOPE_INTERTWINING_WITNESSED",
+    "paired_states": 6,
+    "admitted_edges": 5,
+    "selected_square": [
+      [
+        [
+          1,
+          0,
+          0
+        ],
+        "B",
+        [
+          1,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          1
+        ]
+      ],
+      [
+        [
+          1,
+          0,
+          0
+        ],
+        "B",
+        [
+          1,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          0
+        ]
+      ],
+      [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          0
+        ]
+      ]
+    ],
+    "derived_fingerprint": "9bb656f6d1dbfb71eae4b51cd4c46a7962c969299976215acb1e04e881c535cd"
+  },
+  "negative": {
+    "status": "TRANSPORT_INTERTWINING_CONFLICT",
+    "obstruction": [
+      [
+        [
+          1,
+          2,
+          0
+        ],
+        [
+          1,
+          2,
+          0
+        ]
+      ],
+      [
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          1,
+          2,
+          0
+        ]
+      ]
+    ]
+  },
+  "source_claim_limit": "local in-process verified owner binding; no remote authentication or whole-system equivalence"
+}

@@ -1,0 +1,16 @@
+{
+  "checkpoint": 29,
+  "command": "python -m unittest -q test_ab_chatbot_certificate_handoff.HandoffOwnerTests test_finite_certificate_handoff.FiniteHandoffTests test_ab_chatbot_shared_route_certificates.SharedRouteTaskTests test_finite_shared_route_certificate.SharedFiniteTests test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests",
+  "date": "2026-10-13",
+  "executed": 67,
+  "not_claimed": "Full 265-file historical test suite or GitHub CI; no independent remote process identity verification.",
+  "passed": 67,
+  "scope": "local targeted",
+  "tests": {
+    "test_ab_chatbot_certificate_handoff.HandoffOwnerTests": 16,
+    "test_ab_chatbot_shared_route_certificates.SharedRouteTaskTests": 13,
+    "test_finite_certificate_handoff.FiniteHandoffTests": 16,
+    "test_finite_multi_task_dependency.FiniteMultiTaskDependencyTests": 8,
+    "test_finite_shared_route_certificate.SharedFiniteTests": 14
+  }
+}

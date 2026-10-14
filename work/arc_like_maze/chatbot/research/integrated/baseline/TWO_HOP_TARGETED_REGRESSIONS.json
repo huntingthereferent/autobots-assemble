@@ -1,0 +1,45 @@
+{
+  "status": "TARGETED_COMPLETED",
+  "focused_integration": 14,
+  "standalone_finite": 6,
+  "adjacent_suites": [
+    {
+      "module": "test_ab_chatbot_cross_scope_transport.CrossScopeTransportTests",
+      "pass": true,
+      "seconds": 13.22,
+      "last": "----------------------------------------------------------------------\nRan 12 tests in 10.394s\n\nOK\n",
+      "test_count": 12
+    },
+    {
+      "module": "test_ab_chatbot_joint_evidence_task.JointEvidenceTaskTests",
+      "pass": true,
+      "seconds": 14.15,
+      "last": "----------------------------------------------------------------------\nRan 11 tests in 3.327s\n\nOK\n",
+      "test_count": 11
+    },
+    {
+      "module": "test_ab_chatbot_explicit_evidence_transfer.ExplicitTransferTests",
+      "pass": true,
+      "seconds": 15.35,
+      "last": "----------------------------------------------------------------------\nRan 13 tests in 2.126s\n\nOK\n",
+      "test_count": 13
+    },
+    {
+      "module": "test_ab_chatbot_cross_pin_join.JoinCrossPinTests",
+      "pass": true,
+      "seconds": 10.79,
+      "last": "----------------------------------------------------------------------\nRan 10 tests in 6.420s\n\nOK\n",
+      "test_count": 10
+    },
+    {
+      "module": "test_ab_chatbot_owner_pin_contract.ExactOwnerTests",
+      "pass": true,
+      "seconds": 21.87,
+      "last": "----------------------------------------------------------------------\nRan 10 tests in 9.935s\n\nOK\n",
+      "test_count": 10
+    }
+  ],
+  "total_passed": 76,
+  "full_historical_suite": "NOT_RUN",
+  "github_ci": "NOT_VERIFIED"
+}
