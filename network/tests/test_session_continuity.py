@@ -85,6 +85,34 @@ class SessionContinuityTests(unittest.TestCase):
         self.assertIn("Static repository contracts", self.read(
             "network/tests/test_session_continuity.py"))
 
+    def test_communication_guardrails_retain_actual_referent(self):
+        # Static text contract, not a simulated assistant response.
+        entry = self.read("ENTRY.md")
+        session = self.read("protocols/ai/session.md")
+        self.assertIn("[ai.session](protocols/ai/session.md)", entry)
+        section = session.split(
+            "## Communication guardrails — prevent assistant-created drift", 1
+        )[1].split("## Regrounding across human and technical surfaces", 1)[0]
+        clauses = (
+            "Names identify; they do not impose boundaries.",
+            "Do not multiply projects by naming components.",
+            "Do not manufacture prerequisites.",
+            "Preserve the current relationship when wording changes.",
+            "Apply corrections to the next response.",
+            "Reground with acquired information.",
+            "Minimize the human's correction burden.",
+            "Keep evidence independent of labels.",
+            "revise before sending",
+            "one engine",
+            "engine is just a word",
+            "mathematics must first permit",
+            "not proof of model obedience",
+        )
+        for clause in clauses:
+            with self.subTest(clause=clause):
+                self.assertIn(clause, section)
+        self.assertEqual(section.count("- When "), 3)
+
     def test_neutral_audit_and_referent_continuity_are_grounded(self):
         # Static wording check, not evidence that any AI executed an audit.
         session = self.read("protocols/ai/session.md")
