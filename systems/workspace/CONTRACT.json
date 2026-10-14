@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "owner": "systems.workspace",
+  "purpose": "source-preserving, independently resumable lane continuity",
+  "canonical_events": ["LANE_OPENED", "LANE_MOVED", "LANES_CONNECTED", "FOCUS_SET"],
+  "invariants": [
+    "source-owned project state stays in its native system",
+    "lane movement does not move any other lane",
+    "a cross-lane relation transfers neither work nor evidence authority",
+    "focus is an optional pointer, not a priority or task",
+    "journal replay requires source-local movement ancestry",
+    "read-only projection never admits or creates work"
+  ],
+  "implementation": {
+    "journal": "systems/workspace/store.py",
+    "projection": "systems/workspace/projection.py",
+    "test": "network/tests/test_workspace_continuity.py"
+  },
+  "scope": "local module, no runtime or service integration"
+}

@@ -28,6 +28,7 @@ Examples already present in the ecosystem include:
 - Personal Operations — notes, tasks, and plans;
 - Calendar — dated/recurring time relations without automatically becoming work;
 - Day-to-Day — person-facing attention projection over live work, explicit reminders, and Calendar;
+- [Workspace Continuity](workspace/README.md) — initial, source-preserving lane journal and read-only return-point projection; no automatic task emission;
 - Factory System — order/stage state that generates the next handoff after each reconciliation;
 - simulated factory witnesses — production state/events;
 - future company, research, city, software, machine, or household systems.

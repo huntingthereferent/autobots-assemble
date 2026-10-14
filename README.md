@@ -13,6 +13,7 @@ An inspectable collection of code, mathematical experiments, system prototypes, 
 | **Interactive environments** | [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
 | **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
 | **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
+| **Workspace continuity (initial)** | [Resumable lanes and return points](systems/workspace/README.md) — independent work threads, explicit cross-lane links, and a local read-only projection; no automatic task admission |
 
 ## What the records show
 
