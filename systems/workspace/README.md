@@ -4,7 +4,7 @@ A small operating-state system for returning to different developing threads of 
 
 ## Canonical placement
 
-`systems/workspace/` owns only the **workspace's** append-only lane events. It does not own the research, chatbot, factory, education, creative files, notes, or household records it references.
+`systems/workspace/` owns only the **workspace's** append-only lane events. It does not own the correspondence research, factory, education, creative files, notes, or household records it references.
 
 ```text
 source-owned research / factory / school / creative work / other systems
@@ -38,7 +38,7 @@ These events are append-only JSONL when a private journal path is supplied. Even
 from systems.workspace import WorkspaceStore, workspace_view
 
 store = WorkspaceStore("/private/path/workspace.jsonl")
-store.open_lane("research", label="Research", referent="finite chatbot",
+store.open_lane("research", label="Research", referent="finite correspondence research",
                 actor_id="james", sources=("work/arc_like_maze/chatbot/README.md",))
 store.open_lane("factory", label="Factory", referent="physical system",
                 actor_id="james", sources=("systems/factory/README.md",))
