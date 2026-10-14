@@ -1,6 +1,6 @@
 # Mixed typed task obligations — finite witness, October 12, 2026
 
-**Current referent:** The A/B chatbot's explicit task contract should separately preserve a required transition, an exact rooted action-word history, and a destination-state identity. A/B is relational language at the research level; the A/B-labeled operations in this experiment are **specific finite mathematical generators**, not a universal definition.
+**Current referent:** The finite A/B correspondence process's explicit task contract should separately preserve a required transition, an exact rooted action-word history, and a destination-state identity. A/B is relational language at the research level; the A/B-labeled operations in this experiment are **specific finite mathematical generators**, not a universal definition.
 
 ## Distinct witness contracts
 
@@ -29,7 +29,7 @@ Run from `work/arc_like_maze/chatbot`:
     python finite_mixed_contract.py
     python -m unittest -q test_finite_mixed_contract.py
 
-The standalone finite checker imports the already committed `finite_goal_priority.py` and `finite_conflict_guidance.py`. Its five tests passed locally and replay each admitted edge against the explicit two finite laws. **It is not the complete HTTP-pinned integrated chatbot**, and GitHub CI has not been verified.
+The standalone finite checker imports the already committed `finite_goal_priority.py` and `finite_conflict_guidance.py`. Its five tests passed locally and replay each admitted edge against the explicit two finite laws. **It is not the complete HTTP-pinned integrated correspondence process**, and GitHub CI has not been verified.
 
 ## Full local artifact and test scope
 
@@ -39,4 +39,4 @@ Completed local test runs: **12 mixed + 5 finite + 13 multi-edge + 11 explicit-t
 
 **Limits:** Search is bounded, the admitted graph is selection-dependent, and no complete-system conjugacy, universal mathematical theorem, unrestricted language understanding or physical coupling is inferred. Keep the distinct source-provenance claims and obligation verdicts intact. Leave `state/current.json` for the separate active Continuity project.
 
-**Next warranted movement:** Explore explicit witness-provenance requirements separately from destination/path declarations, plus held-out tests for obligation mix and observation-cost sensitivity. Same chatbot, no replacement engine.
+**Next warranted movement:** Explore explicit witness-provenance requirements separately from destination/path declarations, plus held-out tests for obligation mix and observation-cost sensitivity. Same correspondence process, no replacement engine.

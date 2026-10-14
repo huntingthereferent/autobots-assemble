@@ -1,8 +1,8 @@
 # Explicit finite task contract — 2026-10-12
 
-**Question:** Can a task supply a finite A/B-labeled *must-admit edge* as an explicit requirement without the chatbot silently constructing one from its goals or vague wording?
+**Question:** Can a task supply a finite A/B-labeled *must-admit edge* as an explicit requirement without the process silently constructing one from its goals or vague wording?
 
-**Scoped answer:** Yes, for exact admitted text grammar or an explicit structured schema. The full snapshot-backed local chatbot adds immutable task declarations and routes goals-only to the existing PostExtensionPortfolio; it routes an explicit single must-admit edge to the existing RequiredEdgePortfolio. Parsed text is a declaration, **not** a mathematical witness, source-authenticated provenance claim, or universal interpretation of language.
+**Scoped answer:** Yes, for exact admitted text grammar or an explicit structured schema. The full snapshot-backed local integrated correspondence process adds immutable task declarations and routes goals-only to the existing PostExtensionPortfolio; it routes an explicit single must-admit edge to the existing RequiredEdgePortfolio. Parsed text is a declaration, **not** a mathematical witness, source-authenticated provenance claim, or universal interpretation of language.
 
 Supported text forms:
 
@@ -29,7 +29,7 @@ The 2/2 and 1/2 are **different task contracts**, not a performance comparison. 
 
 **Local verification:** 11 new integrated task tests and 4 separate standalone finite tests. Relevant unchanged module runs: existing required-edge prefilter 8, post-extension portfolio 25, seed-first extension 12, language bridge 35, conflict-guided portfolio 10, path union 15. **120 completed tests** in separate runs. A grouped run stalled; full historical regressions and GitHub CI are not asserted.
 
-Full **115-file** local package: ab_chatbot_explicit_task_contract_2026-10-12.zip, SHA-256 **269d2c2f22dd99567d70a515fca5686ffee5b4a5c7e43674cab18f7537f061dd**. All 108 files from its predecessor were checked byte-for-byte unchanged. This archive has the integrated code, demo, both test modules and EXPLICIT_TASK_RESULTS.json; the entire chatbot is **not copied into GitHub**.
+Full **115-file** local package: ab_chatbot_explicit_task_contract_2026-10-12.zip, SHA-256 **269d2c2f22dd99567d70a515fca5686ffee5b4a5c7e43674cab18f7537f061dd**. All 108 files from its predecessor were checked byte-for-byte unchanged. This archive has the integrated code, demo, both test modules and EXPLICIT_TASK_RESULTS.json; the entire correspondence process is **not copied into GitHub**.
 
 ## GitHub standalone finite checker
 

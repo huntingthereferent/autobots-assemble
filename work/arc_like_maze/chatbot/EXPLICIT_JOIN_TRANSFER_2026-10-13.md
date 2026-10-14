@@ -1,6 +1,6 @@
 # Explicit finite edge transfer between independently witnessed joins — 2026-10-13
 
-**Current referent:** Continue the existing A/B mathematical chatbot by allowing an *explicit, selected* donor edge, already witnessed on the **same pinned original/new owner snapshots**, to enter a NEW derived partial relation. A/B at the research level is language for tracing relational movement; the operators in this example are merely declared finite generators.
+**Current referent:** Continue the existing finite A/B correspondence process by allowing an *explicit, selected* donor edge, already witnessed on the **same pinned original/new owner snapshots**, to enter a NEW derived partial relation. A/B at the research level is language for tracing relational movement; the operators in this example are merely declared finite generators.
 
 ## Reproduced result
 
@@ -16,7 +16,7 @@ The added `ab_chatbot_explicit_evidence_transfer.py` preserves the unchanged ear
 
 Source revisions, revoked pins, tampered cached edges, and mismatched fingerprints withhold completion. A digest or owner label does not authenticate a remote system.
 
-**Critical limitation:** This establishes permitted composition of compatible observed partial relations over the **exact same pinned sources**, not arbitrary evidence transport between *different versions or different owners*. A separate transport proof would be needed for that. The full **185-file** snapshot-backed chatbot archive is in the conversation; GitHub contains this smaller independent finite oracle only. Archive SHA-256: `849a7b15969b31481e18fb882ab2c20815e0e85beacfa7847485eca86ffa2657`, preserving all 177 predecessor files byte-for-byte.
+**Critical limitation:** This establishes permitted composition of compatible observed partial relations over the **exact same pinned sources**, not arbitrary evidence transport between *different versions or different owners*. A separate transport proof would be needed for that. The full **185-file** snapshot-backed correspondence process archive is in the conversation; GitHub contains this smaller independent finite oracle only. Archive SHA-256: `849a7b15969b31481e18fb882ab2c20815e0e85beacfa7847485eca86ffa2657`, preserving all 177 predecessor files byte-for-byte.
 
 ## Reproduction
 

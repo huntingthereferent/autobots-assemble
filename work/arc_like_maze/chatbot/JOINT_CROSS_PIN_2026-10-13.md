@@ -1,6 +1,6 @@
 # Joint rooted histories across separately pinned revisions — October 13, 2026
 
-**Current referent:** Can the current finite mathematical A/B chatbot join several independently replayed action-word histories into a single partial state correspondence **without assuming unobserved edges**? Under the declared source laws, yes precisely when their recorded prefix-state pair assignments are mutually injective and agree on shared states.
+**Current referent:** Can the current finite A/B correspondence process join several independently replayed action-word histories into a single partial state correspondence **without assuming unobserved edges**? Under the declared source laws, yes precisely when their recorded prefix-state pair assignments are mutually injective and agree on shared states.
 
 The in-process integration is `ab_chatbot_cross_pin_join.py` in the separately attached full Python archive. It composes the preexisting pinned-owner `CrossPinComparison`: every explicit word is independently replayed in the old and new owner-held historical snapshots, with version checks, owner pins, retained-edge re-audits and bounded observation. It then checks the union of prefix-state pairs and admits **only actual traversed labeled transitions**. No greedy extension or unconstrained transport is performed.
 

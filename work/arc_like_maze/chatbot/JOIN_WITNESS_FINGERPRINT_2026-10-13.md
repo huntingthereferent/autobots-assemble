@@ -1,6 +1,6 @@
 # Exact joined-witness fingerprints and independent task comparisons — 2026-10-13
 
-**Current referent.** Extend the current finite mathematical A/B chatbot to bind an explicit goal/edge/path/destination task to the exact **already audited** join it consumes, and compare a common task against independently witnessed alternative joins **without combining them**. A/B remains language for tracing relationships in movement; the finite operators A and B are only declared test generators.
+**Current referent.** Extend the current finite A/B correspondence process to bind an explicit goal/edge/path/destination task to the exact **already audited** join it consumes, and compare a common task against independently witnessed alternative joins **without combining them**. A/B remains language for tracing relationships in movement; the finite operators A and B are only declared test generators.
 
 ## Executed integrated result
 
