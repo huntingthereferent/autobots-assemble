@@ -70,6 +70,16 @@ POST endpoint** and never starts a worker. Factory machine stages still require
 a source-owned Factory handoff. Neither copying nor preparing a process creates
 work automatically.
 
+## Preferred edition -> future bounded job
+
+The [preferred-job admission contract](PREFERRED_JOB_ADMISSION.md) rechecks the recorded
+preferred source fingerprint and the original native supporting job before a
+**new and explicitly confirmed** job can be admitted. It records the exact
+preference event on the new handoff. Admission creates READY without executing.
+Finite prefilter inputs must be provided explicitly; Factory admissions must
+attach to an already-emitted source-owned pending machine stage. A changed
+source or replaced selection fails closed; a preference is never a scheduler.
+
 ## Current witness / limits
 
 The new focused regression tests cover independent lane movement, connection without state merging, unstructured exploratory lanes, focus switching, read-only person-scoped views, return points, restart replay, provenance ancestors, and corrupted-data rejection.

@@ -50,7 +50,8 @@ class FactoryMachineSimulationBridge:
             raise ValueError('required machine simulator source unavailable')
         return root
 
-    def admit(self, handoff: Handoff, *, version_id: str) -> Handoff:
+    def admit(self, handoff: Handoff, *, version_id: str,
+              selection_event_id: str | None = None) -> Handoff:
         """Accept only an actual emitted Factory machine stage, never an arbitrary job."""
         self.native._check_handoff(handoff)
         if handoff.metadata.get('stage') != 'machine':
@@ -66,9 +67,11 @@ class FactoryMachineSimulationBridge:
             'worker_id': WORKER_ID,
             'worker_version': version_id,
             'edition_fingerprint': info['current_fingerprint'],
+            **({'preferred_selection_event': selection_event_id} if selection_event_id else {}),
         }, provenance=(*marked.provenance,
                       f'worker-edition:{WORKER_ID}:{version_id}',
                       f'source-fingerprint:{info["current_fingerprint"]}',
+                      *((f'preferred-selection:{selection_event_id}',) if selection_event_id else ()),
                       'workspace-lane:factory-simulation'))
         self.runtime.submit(marked)
         return marked

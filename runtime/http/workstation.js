@@ -76,6 +76,7 @@ function renderJob(job) {
   card.append(foot);
   if (job.lane_refs.length) card.append(el("p", "minor", "Workspace lane: " + job.lane_refs.join(", ")));
   if (job.missing_witnesses.length) card.append(el("p", "minor", "Missing: " + job.missing_witnesses.join(", ")));
+  if (job.preferred_selection_event) card.append(el("p", "code", "Preferred selection used: " + job.preferred_selection_event));
   if (job.inspection) card.append(inspectionPanel(job.inspection));
   card.append(detail("Result and evidence", {result: job.result, evidence: job.evidence, source_at_admission: job.edition_fingerprint}));
   card.append(detail("Recorded event trail", job.events));
@@ -252,7 +253,46 @@ function renderPromotion() {
     return item;
   });
   put("#preferred-editions", items, "No preferred editions have been explicitly selected.");
+  renderNextPreferred();
 }
+function renderNextPreferred() {
+  if (!current) return;
+  const selected = (current.preferred || []).filter(x => x.source_state === "MATCHES_SELECTION");
+  const jobId = $("#preferred-new-job").value.trim();
+  const prefix = "python -m systems.workspace.controls --data-dir runtime/data ";
+  const finite = selected.find(x => x.worker_id === FINITE);
+  const factory = selected.find(x => x.worker_id === FACTORY);
+  const cmds = [];
+  const notes = [];
+  if (finite) {
+    cmds.push(prefix + "prepare-preferred --worker " + FINITE + " --inputs-file runtime/data/finite-inputs.json");
+    if (ID_PATTERN.test(jobId)) {
+      cmds.push(prefix + "admit-preferred-finite --inputs-file runtime/data/finite-inputs.json --job-id " + jobId +
+        " --confirm-admit " + jobId + " --confirm-selection " + finite.event_id + " --from-actor local-operator");
+      notes.push("Finite: job admission creates READY, not an executed result.");
+    } else notes.push("Finite: enter a valid new job ID to prepare an exact admission command.");
+  }
+  if (factory) {
+    cmds.push(prefix + "prepare-preferred --worker " + FACTORY);
+    notes.push("Factory: the pending machine-stage ID must come from FactorySystem before admission; no order is invented here.");
+  }
+  if ((current.preferred || []).some(x => x.source_state !== "MATCHES_SELECTION")) {
+    notes.push("A stale or unavailable selection cannot be used to admit future work.");
+  }
+  $("#preferred-new-command").textContent = cmds.join("\n") || "No current verified-source selection available.";
+  $("#preferred-new-note").textContent = notes.join(" ") || "Select an edition with a completed, reverified supporting job first.";
+  $("#preferred-new-copy").disabled = !cmds.length;
+}
+$("#preferred-new-job").addEventListener("input", renderNextPreferred);
+$("#preferred-new-copy").addEventListener("click", async () => {
+  const value = $("#preferred-new-command").textContent;
+  if (!value.startsWith("python -m systems.workspace.controls ")) return;
+  try { await navigator.clipboard.writeText(value);
+    $("#preferred-new-note").textContent = "Copied for local review. No new job was admitted or executed.";
+  } catch (_error) {
+    $("#preferred-new-note").textContent = "Clipboard unavailable; select the text manually.";
+  }
+});
 $("#compare-left").addEventListener("change", renderPromotion);
 $("#compare-right").addEventListener("change", renderPromotion);
 $("#promote-job").addEventListener("change", renderPromotion);

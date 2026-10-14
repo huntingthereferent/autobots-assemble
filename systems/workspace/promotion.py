@@ -131,6 +131,7 @@ def preference_view(store: PreferredEditions, desk: ProcessWorkstation) -> list[
         except (OSError, KeyError, ValueError, TypeError):
             source_state = "EDITION_UNAVAILABLE"
         items.append({"worker_id": worker_id, "version_id": row["version_id"],
+                      "event_id": row["event_id"],
                       "source_fingerprint": row["source_fingerprint"],
                       "supporting_job_id": row["supporting_job_id"],
                       "required_relation": row["required_relation"],

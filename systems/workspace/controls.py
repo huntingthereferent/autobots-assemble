@@ -249,6 +249,37 @@ def promote_edition(*, data_dir: str | Path, worker_id: str, version_id: str,
         required_relation=handoff.required_relation,
         native_verifier=md["native_evidence_verifier"], actor_id=actor_id)
 
+def prepare_preferred(*, data_dir: str | Path, worker_id: str,
+                      inputs_file: str | Path | None = None) -> dict:
+    """Read-only supporting-job recheck and current edition preparation."""
+    from .selected_admission import checked_selection
+    root = _data_root(data_dir)
+    row = checked_selection(data_dir=root, worker_id=worker_id)
+    report = prepare(data_dir=root, worker_id=worker_id,
+                     version_id=row['version_id'], inputs_file=inputs_file)
+    return {**report, **row}
+
+
+def admit_selected_finite(*, data_dir: str | Path, inputs_file: str | Path,
+                          job_id: str, confirm_admit: str,
+                          confirm_selection: str, from_actor: str,
+                          lane_id: str = '') -> dict:
+    from .selected_admission import admit_preferred_finite
+    root = _data_root(data_dir)
+    return admit_preferred_finite(data_dir=root, inputs=_inputs(inputs_file),
+               job_id=job_id, confirm_admit=confirm_admit,
+               confirm_selection=confirm_selection,
+               from_actor=from_actor, lane_id=lane_id)
+
+
+def admit_selected_factory(*, data_dir: str | Path, order_id: str,
+                           confirm_handoff: str, confirm_selection: str) -> dict:
+    from .selected_admission import admit_preferred_factory
+    return admit_preferred_factory(data_dir=_data_root(data_dir), order_id=order_id,
+                                  confirm_handoff=confirm_handoff,
+                                  confirm_selection=confirm_selection)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Local explicit Process Workstation controls")
     parser.add_argument("--data-dir", type=Path, required=True)
@@ -283,6 +314,20 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--confirm-version", required=True)
     p.add_argument("--confirm-fingerprint", required=True)
     p.add_argument("--actor", required=True)
+    p = modes.add_parser("prepare-preferred", help="Read-only selected-source and supporting-job check")
+    p.add_argument("--worker", required=True)
+    p.add_argument("--inputs-file", type=Path)
+    p = modes.add_parser("admit-preferred-finite", help="Admit one new job on selected finite edition")
+    p.add_argument("--inputs-file", type=Path, required=True)
+    p.add_argument("--job-id", required=True)
+    p.add_argument("--confirm-admit", required=True)
+    p.add_argument("--confirm-selection", required=True)
+    p.add_argument("--from-actor", required=True)
+    p.add_argument("--lane", default="")
+    p = modes.add_parser("admit-preferred-factory", help="Bind an existing pending Factory machine stage")
+    p.add_argument("--order-id", required=True)
+    p.add_argument("--confirm-handoff", required=True)
+    p.add_argument("--confirm-selection", required=True)
     args = parser.parse_args(argv)
     opts = vars(args)
     data = opts.pop("data_dir")
@@ -295,6 +340,18 @@ def main(argv: list[str] | None = None) -> int:
                     inputs_file=opts["inputs_file"], job_id=opts["job_id"],
                     confirm_admit=opts["confirm_admit"],
                     from_actor=opts["from_actor"], lane_id=opts["lane"])
+    elif action == "prepare-preferred":
+        result = prepare_preferred(data_dir=data, worker_id=opts["worker"],
+                                   inputs_file=opts["inputs_file"])
+    elif action == "admit-preferred-finite":
+        result = admit_selected_finite(data_dir=data, inputs_file=opts["inputs_file"],
+                         job_id=opts["job_id"], confirm_admit=opts["confirm_admit"],
+                         confirm_selection=opts["confirm_selection"],
+                         from_actor=opts["from_actor"], lane_id=opts["lane"])
+    elif action == "admit-preferred-factory":
+        result = admit_selected_factory(data_dir=data, order_id=opts["order_id"],
+                    confirm_handoff=opts["confirm_handoff"],
+                    confirm_selection=opts["confirm_selection"])
     elif action == "inspect":
         result = job_view(data_dir=data, job_id=opts["job_id"])
     elif action == "execute":

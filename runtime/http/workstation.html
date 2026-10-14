@@ -64,6 +64,11 @@
           <p id="promotion-note" class="minor">Select two versions of the same worker to compare.</p>
           <pre id="promotion-command" class="control-command">No command selected.</pre>
           <button id="promotion-copy" type="button" disabled>Copy local commands</button>
+          <div class="control-grid"><label for="preferred-new-job">Next finite job ID<input type="text" id="preferred-new-job" maxlength="80" placeholder="next-job-002" autocomplete="off"></label></div>
+          <p id="preferred-new-note" class="minor">A preferred version never starts a new job until separately admitted.</p>
+          <pre id="preferred-new-command" class="control-command">Select a preferred edition above.</pre>
+          <button id="preferred-new-copy" type="button" disabled>Copy new-job commands</button>
+          <p class="minor">This new-job command uses the exact selection event and creates READY only. Execution is a separate explicit action in the terminal. Factory requires an independently emitted native pending handoff.</p>
           <p class="minor">Only the local terminal can perform this explicit selection. The comparison shows source differences; it does not certify new behavior. Selection has no scheduling or deployment effect.</p>
         </div>
       </section>

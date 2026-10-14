@@ -78,7 +78,8 @@ class CorrespondenceWorkBridge:
         return edition
 
     def admit(self, *, version_id: str, inputs: dict, from_actor: str,
-              lane_id: str = "", job_id: str | None = None) -> Handoff:
+              lane_id: str = "", job_id: str | None = None,
+              selection_event_id: str | None = None) -> Handoff:
         """An explicit call admits one job. Merely copying a version never does."""
         if not isinstance(from_actor,str) or not from_actor.strip():
             raise ValueError("from_actor required")
@@ -99,6 +100,7 @@ class CorrespondenceWorkBridge:
             expected_output={"kind":"finite-prefilter-v1", "verdicts":"one per candidate"},
             required_witnesses=(WITNESS,),admissible_evidence={WITNESS:("computation",)},
             provenance=(f"worker-edition:{WORKER_ID}:{version_id}",f"source-fingerprint:{fingerprint}",
+                        *((f"preferred-selection:{selection_event_id}",) if selection_event_id else ()),
                         *((f"workspace-lane:{lane_id}",) if lane_id else ())),
             boundaries=("NOT_CONTRADICTED is not a proven admitted edge.",
                         "UNDECIDED is not a successful correspondence.",
@@ -106,7 +108,8 @@ class CorrespondenceWorkBridge:
                         "Worker subprocess is not an OS security sandbox."),
             metadata={"title":"Finite required-edge prefilter", "source_system":"process-workstation",
                       "native_evidence_verifier":VERIFIER,"worker_id":WORKER_ID,
-                      "worker_version":version_id,"edition_fingerprint":fingerprint},
+                      "worker_version":version_id,"edition_fingerprint":fingerprint,
+                      **({"preferred_selection_event": selection_event_id} if selection_event_id else {})},
         )
         self.runtime.submit(handoff)
         return handoff
