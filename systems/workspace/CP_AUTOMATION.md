@@ -92,3 +92,31 @@ coordinator window. Other jobs in the same workstation cannot advance it.
   not publish ZIP payloads, patient information or simulated clinical claims.
 - For live workstation status, run against the correct `runtime/data` folder on
   an authorized machine. No private workstation state is stored in GitHub.
+## First domain-native worker: NIH Phase 1 synthetic temporal scope
+
+The [NIH scope worker bridge](nih_scope_bridge.py) adds the first **CP-specific**
+source-pinned workstation operation. It validates a finite **synthetic** timeline
+and independently checks which observations were knowable at a declared cutoff.
+This only witnesses `NIH-P1-SCOPE` (research intake and leakage example), **not**
+a clinical diagnosis, biomedical ontology, NIH submission, or Phase 1 packet.
+The worker's `PASS` means the declared as-known-at fixture is consistent with
+the source-independent native verifier. It never promotes any future-information
+claim to present evidence.
+
+From the repository root, on a trusted local checkout:
+
+```bash
+python -m systems.workspace.cp_motion --data-dir runtime/data admit-research
+python -m systems.workspace.nih_scope_cli --data-dir runtime/data copy --version scope-v1 --confirm-copy
+python -m systems.workspace.nih_scope_cli --data-dir runtime/data prepare --version scope-v1 --inputs-file network/tests/fixtures/nih_scope_example.json
+python -m systems.workspace.nih_scope_cli --data-dir runtime/data admit --version scope-v1 --inputs-file network/tests/fixtures/nih_scope_example.json --job-id nih-scope-001 --confirm-admit nih-scope-001 --from-actor local-review
+python -m systems.workspace.coordinator_window --data-dir runtime/data bind-job --lane nih --slot cp-nih-p1-scope --job-id nih-scope-001 --worker-id nih-temporal-scope --version scope-v1
+python -m systems.workspace.coordinator_window --data-dir runtime/data run-linked --lane nih --slot cp-nih-p1-scope --confirm-execute nih-scope-001
+python -m systems.workspace.cp_motion --data-dir runtime/data handoff --markdown --reverify
+```
+
+The separate copy, preparation, admission, binding and exact-ID execution are
+intentional. Intake itself does **not** execute the scope worker. A source edit
+invalidates the admitted job; a synthetic success never meets Phase 2 or
+external award requirements. All private edition and journal files stay outside
+GitHub. Reproduce: `python -m unittest -v network.tests.test_nih_scope_worker`.

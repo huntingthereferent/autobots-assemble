@@ -24,10 +24,13 @@ from .integrated_attestation_bridge import IntegratedCP30Bridge
 from .integrated_attestation_verifier import validate_request
 from .integrated_route_bridge import IntegratedRouteBridge, VERIFIER as ROUTE_VERIFIER
 from .integrated_route_verifier import validate_route_request
+from .nih_scope_bridge import NIHScopeBridge, WORKER_ID as NIH_SCOPE_ID
+from .nih_scope_native import validate_scope, VERIFIER as NIH_SCOPE_VERIFIER
+from .nih_scope_bridge import SOURCE_FILE as NIH_SCOPE_SOURCE_FILE
 
 KNOWN_WORKERS = frozenset((FINITE_ID, FACTORY_ID))
 FINITE_FILES = frozenset(("finite_goal_priority.py", "finite_required_edge_guard.py"))
-EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID}
+EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID, NIH_SCOPE_ID}
 
 
 def _data_root(path: str | Path) -> Path:
@@ -77,6 +80,14 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             raise ValueError("CP30 signature verification requires --inputs-file")
         required = frozenset(("finite_process_attestation.py",))
         payload = _cp30_inputs(inputs_file)
+    elif worker_id == NIH_SCOPE_ID:
+        if inputs_file is None:
+            raise ValueError("NIH synthetic scope preparation requires --inputs-file")
+        file = Path(inputs_file)
+        if not file.is_file() or file.stat().st_size > 16384:
+            raise ValueError("NIH scope inputs require bounded JSON <=16 KiB")
+        required = frozenset((NIH_SCOPE_SOURCE_FILE,))
+        payload = validate_scope(json.loads(file.read_text(encoding="utf-8")))
     else:
         if inputs_file is not None:
             raise ValueError("Factory admission comes from FactorySystem, not arbitrary JSON")
@@ -90,6 +101,7 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             "source_modified_from_copy": bool(info["modified"] or info["added"] or info["deleted"]),
             "operation": "finite-required-edge-prefilter" if worker_id == FINITE_ID
                          else "integrated-cp30-ed25519-verification" if worker_id == INTEGRATED_ID
+                         else "nih-p1-synthetic-temporal-scope" if worker_id == NIH_SCOPE_ID
                          else "existing-factory-machine-simulation",
             "inputs": payload,
             "admitted": False, "executed": False,
@@ -186,6 +198,10 @@ def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
         return CorrespondenceWorkBridge(runtime=runtime, workstation=desk)
     if worker_id == FACTORY_ID:
         return FactoryMachineSimulationBridge(runtime=runtime, workstation=desk)
+    if worker_id == NIH_SCOPE_ID:
+        if verifier != NIH_SCOPE_VERIFIER:
+            raise ValueError("unsupported NIH scope verifier")
+        return NIHScopeBridge(runtime=runtime, workstation=desk)
     if worker_id == INTEGRATED_ID:
         if verifier == ROUTE_VERIFIER:
             return IntegratedRouteBridge(runtime=runtime,workstation=desk)
@@ -227,7 +243,7 @@ def run_job(*, data_dir: str | Path, job_id: str,
         raise ValueError("not a supported workstation job")
     bridge = _bridge(runtime, root, worker, handoff.metadata.get("native_evidence_verifier"))
     state = runtime.state(job_id)
-    if worker in (FINITE_ID, INTEGRATED_ID):
+    if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID):
         if handoff.metadata.get("source_system") != "process-workstation":
             raise ValueError("selected local worker job source does not match")
         if state.status == "READY":

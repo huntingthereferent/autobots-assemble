@@ -5,6 +5,11 @@ on:
     paths:
       - 'systems/workspace/coordinator_window.py'
       - 'systems/workspace/cp_motion.py'
+      - 'systems/workspace/nih_scope_*.py'
+      - 'systems/workspace/nih_scope_worker_source/**'
+      - 'network/tests/test_nih_scope_worker.py'
+      - 'network/tests/fixtures/nih_scope_example.json'
+      - 'systems/workspace/controls.py'
       - 'systems/workspace/CP_AUTOMATION.md'
       - 'network/tests/test_coordinator_window.py'
       - 'network/tests/test_cp_motion.py'
@@ -26,8 +31,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install existing CP30 cryptographic verification dependency
+        run: python -m pip install 'cryptography>=45,<47'
       - name: Test native workstation coordinator, CP graph and negative controls
-        run: python -m unittest -v network.tests.test_coordinator_window network.tests.test_cp_motion
+        run: python -m unittest -v network.tests.test_coordinator_window network.tests.test_cp_motion network.tests.test_nih_scope_worker
       - name: Check deterministic intake and verify nothing executes
         run: |
           export CP_DIR="$(mktemp -d)"
