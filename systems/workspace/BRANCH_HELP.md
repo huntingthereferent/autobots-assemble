@@ -35,6 +35,8 @@ python -m systems.workspace.branch_help --data-dir runtime/data status
 
 `finite-inputs.json` must match the existing finite prefilter input schema. The helper's `NOT_CONTRADICTED` verdict **does not** prove an admitted edge or a game checkpoint. Never silently treat worker edition birth as model-agent activation or job completion.
 
+To combine opening and source-native admission in **one explicit invocation**, add `--admit-registered --parent-version base --inputs-file finite-inputs.json` to the matching `open` command. Unmatched `game-engine-build` remains `OPEN_UNSTAFFED` even with that option. Source-native worker execution still requires its own exact-ID authorization.
+
 The new helper operation is **invocation-driven**. Native source types and permissions must be explicitly registered to actually staff future GAME BUILD/WITNESS openings. No generic AI model invocation, automatic code generation, GitHub job execution, or autonomous multi-worker development loop is connected by this CP movement. The value is preserving a genuine, independently verified child relation before generalizing execution.
 
 Reproduce with:
