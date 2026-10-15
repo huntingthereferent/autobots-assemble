@@ -280,7 +280,17 @@ def main(argv=None):
         native=freshly_reverify_linked_jobs(index,args.window,native,
                     lambda job_id: reverify_job(data_dir=root,job_id=job_id))
     packet=one_cp_handoff(index,args.window,native,reverified=args.reverify,artifact_dir=args.artifact_dir)
-    print(handoff_markdown(packet) if args.markdown else json.dumps(packet,indent=2))
+    # Helper openings live in the SAME native journal; the coordinator only views them.
+    from .branch_help import help_summary
+    packet['help_openings']=help_summary(root)
+    rendered=handoff_markdown(packet)
+    if packet['help_openings']:
+        rendered+='\n## Unfinished-branch help openings\n\n'
+        for opening in packet['help_openings']:
+            rendered+=(f"- **{opening['parent_lane']}/{opening['parent_slot']}**: "
+                      f"{opening['capability']} — {opening['state']} "
+                      f"({opening['opening_id']})\n")
+    print(rendered if args.markdown else json.dumps(packet,indent=2))
     return 0
 
 
