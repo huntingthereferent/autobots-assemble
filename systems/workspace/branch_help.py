@@ -88,6 +88,29 @@ def open_help(*, data_dir: str | Path, lane: str, slot: str, capability: str,
     return help_status(runtime, oid)
 
 
+
+def open_and_staff_known(*, data_dir: str | Path, lane: str, slot: str,
+                         capability: str, opening_key: str, reason: str,
+                         parent_version: str | None = None,
+                         inputs_file: str | Path | None = None,
+                         allow_native_admission: bool = False) -> dict:
+    """One intake invocation can birth a *registered* helper; never run it.
+
+    Unknown capabilities remain OPEN_UNSTAFFED. Admission to the known native
+    worker requires exact source-version and native input declarations.
+    """
+    opened = open_help(data_dir=data_dir, lane=lane, slot=slot,
+                       capability=capability, opening_key=opening_key, reason=reason)
+    if not allow_native_admission or capability not in _SUPPORTED:
+        return opened
+    if not parent_version or inputs_file is None:
+        raise ValueError('registered helper admission needs source version and input file')
+    if capability == CAP_FINITE:
+        return staff_finite(data_dir=data_dir, opening_id=opened['opening_id'],
+                            parent_version=parent_version, inputs_file=inputs_file)
+    raise ValueError('capability registered without a native admission adapter')
+
+
 def staff_finite(*, data_dir: str | Path, opening_id: str,
                  parent_version: str, inputs_file: str | Path) -> dict:
     """Branch a real finite edition and admit exactly one bounded worker job.
@@ -203,6 +226,9 @@ def main(argv=None):
     p.add_argument('--lane',required=True);p.add_argument('--slot',required=True)
     p.add_argument('--capability',required=True);p.add_argument('--key',required=True)
     p.add_argument('--reason',required=True)
+    p.add_argument('--admit-registered', action='store_true', help='opt in to native helper branch and admission')
+    p.add_argument('--parent-version', help='existing trusted parent worker edition')
+    p.add_argument('--inputs-file', help='source-native bounded request')
     p=sub.add_parser('staff-finite')
     p.add_argument('--opening-id',required=True);p.add_argument('--parent-version',required=True)
     p.add_argument('--inputs-file',required=True)
@@ -211,8 +237,10 @@ def main(argv=None):
     sub.add_parser('status')
     args=ap.parse_args(argv)
     if args.command=='open':
-        row=open_help(data_dir=args.data_dir,lane=args.lane,slot=args.slot,
-                      capability=args.capability,opening_key=args.key,reason=args.reason)
+        row=open_and_staff_known(data_dir=args.data_dir,lane=args.lane,slot=args.slot,
+                                 capability=args.capability,opening_key=args.key,reason=args.reason,
+                                 parent_version=args.parent_version,inputs_file=args.inputs_file,
+                                 allow_native_admission=args.admit_registered)
     elif args.command=='staff-finite':
         row=staff_finite(data_dir=args.data_dir,opening_id=args.opening_id,
                          parent_version=args.parent_version,inputs_file=args.inputs_file)
