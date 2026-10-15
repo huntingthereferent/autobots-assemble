@@ -120,3 +120,34 @@ intentional. Intake itself does **not** execute the scope worker. A source edit
 invalidates the admitted job; a synthetic success never meets Phase 2 or
 external award requirements. All private edition and journal files stay outside
 GitHub. Reproduce: `python -m unittest -v network.tests.test_nih_scope_worker`.
+
+## Second CP-native worker: NIH Phase 1 RDF temporal mapping
+
+[NIH ontology worker](nih_ontology_bridge.py) consumes an **exact already-admitted,
+COMPLETE and freshly reverified** `NIH-P1-SCOPE` workstation job. Its isolated
+source constructs parseable RDF/Turtle representing validity intervals,
+knowledge availability, provenance sources, and a synthetic Biolink information
+entity relation. The independent host verifier creates an expected RDF graph
+from the verified parent and checks complete triple-set equivalence. This
+witnesses ONLY the narrow `NIH-P1-ONTOLOGY` mapping contract, not full OWL
+reasoning or validation against a production biomedical terminology system.
+
+On a trusted clone with `rdflib>=7,<8` and `cryptography>=45,<47` installed,
+after the documented `nih-scope-001` job has been bound, executed and verified:
+
+```bash
+python -m systems.workspace.nih_ontology_cli --data-dir runtime/data copy --version ontology-v1 --confirm-copy
+python -m systems.workspace.nih_ontology_cli --data-dir runtime/data prepare --version ontology-v1 --inputs-file network/tests/fixtures/nih_ontology_example.json
+python -m systems.workspace.nih_ontology_cli --data-dir runtime/data admit --version ontology-v1 --inputs-file network/tests/fixtures/nih_ontology_example.json --job-id nih-ontology-001 --confirm-admit nih-ontology-001 --from-actor local-review
+python -m systems.workspace.coordinator_window --data-dir runtime/data bind-job --lane nih --slot cp-nih-p1-ontology --job-id nih-ontology-001 --worker-id nih-temporal-ontology --version ontology-v1
+python -m systems.workspace.coordinator_window --data-dir runtime/data run-linked --lane nih --slot cp-nih-p1-ontology --confirm-execute nih-ontology-001
+python -m systems.workspace.cp_motion --data-dir runtime/data handoff --markdown --reverify
+```
+
+The synthetic mapping stores future-known observations as evidence but marks
+`eligibleAtQuery=false`; future observations cannot be promoted to current
+knowledge merely because they appear in RDF. Parent scope source changes,
+wrong provenance, malformed Turtle, forged graph triples and altered local
+worker editions all block fresh verification. No medical claims, NIH awards,
+or submission status can be inferred. Game W13 remains a separate lane and
+Phase 2 test execution retains its local game-engine gate.
