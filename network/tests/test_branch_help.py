@@ -8,7 +8,7 @@ import unittest
 from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
 from systems.workspace.branch_help import (open_help, staff_finite, verify_return,
-                                           help_summary, CAP_FINITE, CAP_GAME)
+                                           help_summary, open_and_staff_known, CAP_FINITE, CAP_GAME)
 from systems.workspace.coordinator_window import CoordinatorIndex
 from systems.workspace.cp_motion import admit_research, one_cp_handoff
 from systems.workspace.workstation import ProcessWorkstation
@@ -71,6 +71,26 @@ class BranchHelpTests(unittest.TestCase):
         # A finite-predicate helper is NOT a game-native witness.
         packet=one_cp_handoff(self.index,'complete-stack',{'jobs':[]})
         self.assertNotIn('GAME-W13-WORLDS',packet['cp_automation']['witnessed'])
+    def test_one_invocation_can_open_and_admit_a_registered_helper(self):
+        args=dict(data_dir=self.data,lane='game',slot='cp-game-w13-worlds',
+                  capability=CAP_FINITE,opening_key='one-step',
+                  reason='A bounded finite preflight is needed',
+                  parent_version='base',inputs_file=self.inputs,
+                  allow_native_admission=True)
+        first=open_and_staff_known(**args)
+        self.assertEqual(first['state'],'ASSIGNED_NOT_VERIFIED')
+        self.assertEqual(first,open_and_staff_known(**args))
+        self.assertEqual(self.runtime().state(first['child']['job_id']).status,'READY')
+        self.assertNotIn('STARTED',(self.data/'runtime.jsonl').read_text())
+
+    def test_unmatched_capability_does_not_birth_a_fake_worker(self):
+        first=open_and_staff_known(data_dir=self.data,lane='game',slot='cp-game-w13-worlds',
+              capability=CAP_GAME,opening_key='need-game-builder',reason='Need game BUILD',
+              parent_version='base',inputs_file=self.inputs,allow_native_admission=True)
+        self.assertEqual(first['state'],'OPEN_UNSTAFFED')
+        self.assertFalse(first['registered_capability'])
+        self.assertEqual(len(self.runtime()._handoffs),1)
+
     def test_restarts_and_repeated_calls_never_birth_duplicate_helpers(self):
         first=self.open();oid=first['opening_id']
         self.assertEqual(first,self.open())
