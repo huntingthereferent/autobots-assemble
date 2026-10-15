@@ -1,0 +1,11 @@
+{
+  "kind": "synthetic-temporal-reasoning/v1",
+  "synthetic": true,
+  "ontology_job_id": "ontology-job",
+  "functional_predicates": ["has-status", "has-result"],
+  "cases": [
+    {"id": "before-result", "known_at": "2026-01-04", "target_at": "2026-01-04"},
+    {"id": "after-result", "known_at": "2026-01-06", "target_at": "2026-01-04"},
+    {"id": "after-validity", "known_at": "2026-01-11", "target_at": "2026-01-11"}
+  ]
+}
