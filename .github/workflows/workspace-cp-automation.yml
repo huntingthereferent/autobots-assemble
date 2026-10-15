@@ -4,6 +4,9 @@ on:
   push:
     paths:
       - 'systems/workspace/coordinator_window.py'
+      - 'systems/workspace/branch_help.py'
+      - 'systems/workspace/BRANCH_HELP.md'
+      - 'network/tests/test_branch_help.py'
       - 'systems/workspace/cp_motion.py'
       - 'systems/workspace/nih_scope_*.py'
       - 'systems/workspace/nih_scope_worker_source/**'
@@ -42,7 +45,7 @@ jobs:
       - name: Install existing CP30 cryptographic verification dependency
         run: python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8'
       - name: Test native workstation coordinator, CP graph and negative controls
-        run: python -m unittest -v network.tests.test_coordinator_window network.tests.test_cp_motion network.tests.test_nih_scope_worker network.tests.test_nih_ontology_worker network.tests.test_nih_reasoning_worker
+        run: python -m unittest -v network.tests.test_coordinator_window network.tests.test_cp_motion network.tests.test_nih_scope_worker network.tests.test_nih_ontology_worker network.tests.test_nih_reasoning_worker network.tests.test_branch_help
       - name: Check deterministic intake and verify nothing executes
         run: |
           export CP_DIR="$(mktemp -d)"
