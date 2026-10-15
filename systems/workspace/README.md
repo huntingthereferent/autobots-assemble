@@ -136,3 +136,7 @@ The [synthetic NIH temporal scope worker](CP_AUTOMATION.md#first-domain-native-w
 The [NIH-P1-ONTOLOGY RDF-mapping worker](CP_AUTOMATION.md#second-cp-native-worker-nih-phase-1-rdf-temporal-mapping) depends on an exact freshly reverified scope worker, uses the existing job journal and verifier path, and does not perform clinical or OWL-entailment reasoning.
 
 The [NIH-P1-REASONING native worker](CP_AUTOMATION.md#third-cp-native-worker-nih-phase-1-rdf-temporal-reasoning) consumes verified RDF and performs bounded synthetic time-window and explicitly declared conflict checks with a separate native verifier, leaving clinical and Phase 2 claims unwitnessed.
+
+## Help openings on unfinished CPs
+
+[Branch help](BRANCH_HELP.md) connects a need on an unfinished CP to the existing RuntimeJournal and workstation's source `branch()`. With an exact registered native capability, it can copy a child worker edition, admit one bounded existing worker job, and return native-reverified evidence without upgrading the parent checkpoint. An unmatched need (including game-engine building until a game worker is registered) remains visible as `OPEN_UNSTAFFED`. Nothing runs automatically or creates a generic model agent.
