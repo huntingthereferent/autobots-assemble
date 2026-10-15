@@ -151,3 +151,40 @@ wrong provenance, malformed Turtle, forged graph triples and altered local
 worker editions all block fresh verification. No medical claims, NIH awards,
 or submission status can be inferred. Game W13 remains a separate lane and
 Phase 2 test execution retains its local game-engine gate.
+
+## Third CP-native worker: NIH Phase 1 RDF temporal reasoning
+
+[NIH reasoning worker](nih_reasoning_bridge.py) executes a *bounded, synthetic*
+RDF graph query against an exact `NIH-P1-ONTOLOGY` job. That job must already
+be COMPLETE and freshly verifiable against its `NIH-P1-SCOPE` ancestor. The
+reasoning worker parses the parent's Turtle and evaluates multiple dates:
+which observations were valid at the target date, which were actually knowable
+at a named knowledge cutoff, which were not applicable, and which *declared*
+functional-predicate observations directly conflict. No unspecified clinical
+predicate is assumed functional.
+
+The host-side native verifier independently replays those queries from the
+original scope observations (not from the child worker's algorithm), checks the
+parent RDF graph against its independently built expected graph, and rejects
+future-data leaks, forged conflicting claims, unverified ancestors, tampered
+editions, and mismatched job metadata.
+
+On a trusted checkout with `rdflib>=7,<8` and `cryptography>=45,<47`, after
+the documented `scope-job` and `ontology-job` (or equivalent source-owned job
+IDs) are already admitted, completed, linked, and natively reverified:
+
+```bash
+python -m systems.workspace.nih_reasoning_cli --data-dir runtime/data copy --version reasoning-v1 --confirm-copy
+python -m systems.workspace.nih_reasoning_cli --data-dir runtime/data prepare --version reasoning-v1 --inputs-file network/tests/fixtures/nih_reasoning_example.json
+python -m systems.workspace.nih_reasoning_cli --data-dir runtime/data admit --version reasoning-v1 --inputs-file network/tests/fixtures/nih_reasoning_example.json --job-id reasoning-job --confirm-admit reasoning-job --from-actor local-review
+python -m systems.workspace.coordinator_window --data-dir runtime/data bind-job --lane nih --slot cp-nih-p1-reasoning --job-id reasoning-job --worker-id nih-temporal-reasoning --version reasoning-v1
+python -m systems.workspace.coordinator_window --data-dir runtime/data run-linked --lane nih --slot cp-nih-p1-reasoning --confirm-execute reasoning-job
+python -m systems.workspace.cp_motion --data-dir runtime/data handoff --markdown --reverify
+```
+
+The example request contains the exact parent job ID `ontology-job`; replace
+it with the actual pinned ID if different. Successful native verification can
+advance `NIH-P1-REASONING` and open `NIH-P1-PACKET` and
+`NIH-P2-PROTOTYPE` to further *work*, not automatically execute them.
+The independent GAME W13 lane and the local Phase 2 test gate do not change.
+This is not production OWL entailment, biomedical correctness, or NIH approval.
