@@ -1,0 +1,38 @@
+name: workspace-cp-automation
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/coordinator_window.py'
+      - 'systems/workspace/cp_motion.py'
+      - 'systems/workspace/CP_AUTOMATION.md'
+      - 'network/tests/test_coordinator_window.py'
+      - 'network/tests/test_cp_motion.py'
+      - '.github/workflows/workspace-cp-automation.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/coordinator_window.py'
+      - 'systems/workspace/cp_motion.py'
+      - 'systems/workspace/CP_AUTOMATION.md'
+      - 'network/tests/test_coordinator_window.py'
+      - 'network/tests/test_cp_motion.py'
+      - '.github/workflows/workspace-cp-automation.yml'
+
+jobs:
+  cp-frontier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test native workstation coordinator, CP graph and negative controls
+        run: python -m unittest -v network.tests.test_coordinator_window network.tests.test_cp_motion
+      - name: Check deterministic intake and verify nothing executes
+        run: |
+          export CP_DIR="$(mktemp -d)"
+          python -m systems.workspace.cp_motion --data-dir "$CP_DIR" admit-research
+          python -m systems.workspace.cp_motion --data-dir "$CP_DIR" handoff --markdown > "$CP_DIR/handoff.md"
+          grep -q 'NIH-P1-SCOPE' "$CP_DIR/handoff.md"
+          grep -q 'GAME-W13-WORLDS' "$CP_DIR/handoff.md"
+          test ! -e "$CP_DIR/runtime.jsonl"
