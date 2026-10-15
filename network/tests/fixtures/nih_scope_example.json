@@ -1,0 +1,13 @@
+{
+  "kind": "temporal-scope/v1",
+  "synthetic": true,
+  "case_id": "fictional-result-availability",
+  "application": "clinical-sequence",
+  "question": "Which observations were knowable when the fictional decision occurred?",
+  "query_at": "2026-01-04",
+  "target_at": "2026-01-04",
+  "observations": [
+    {"id":"prior-note","subject":"fictional-case","predicate":"has-status","object":"baseline-status","valid_from":"2026-01-01","valid_to":"2026-01-10","known_at":"2026-01-01","source_ref":"fixture-baseline"},
+    {"id":"delayed-result","subject":"fictional-case","predicate":"has-result","object":"fictional-result","valid_from":"2026-01-03","valid_to":"2026-01-10","known_at":"2026-01-05","source_ref":"fixture-laboratory"}
+  ]
+}
