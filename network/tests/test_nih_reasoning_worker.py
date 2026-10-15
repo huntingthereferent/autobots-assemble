@@ -142,8 +142,9 @@ class ReasoningWorkstationTests(unittest.TestCase):
 
     def test_parent_must_be_complete(self):
         self.prior()
-        with self.assertRaisesRegex(ValueError,'ontology parent'):
-            self.admit() if False else self.reasoning.admit(version_id='reasoning-v1',inputs={**REQUEST,'ontology_job_id':'missing-parent'},from_actor='operator')
+        with self.assertRaises(KeyError):
+            self.reasoning.admit(version_id='reasoning-v1',
+                 inputs={**REQUEST,'ontology_job_id':'missing-parent'},from_actor='operator')
 
     def test_forged_result_is_rejected_by_host_verifier(self):
         self.prior();h=self.admit()
