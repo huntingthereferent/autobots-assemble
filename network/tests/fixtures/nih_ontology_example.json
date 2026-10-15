@@ -1,0 +1,7 @@
+{
+  "kind": "synthetic-temporal-ontology/v1",
+  "synthetic": true,
+  "mapping_id": "synthetic-one",
+  "scope_job_id": "nih-scope-001",
+  "format": "turtle"
+}
