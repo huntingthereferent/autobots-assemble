@@ -19,8 +19,9 @@ from .coordinator_window import CoordinatorIndex, _id
 from .workstation import ProcessWorkstation
 
 CAP_FINITE = 'finite-required-edge-prefilter'
-CAP_GAME = 'game-engine-build'
-_SUPPORTED = {CAP_FINITE}
+CAP_GAME = 'game-engine-build'  # autonomous model-backed coding still unsupported
+CAP_W13 = 'game-w13-world-composition'  # bounded native game composition helper
+_SUPPORTED = {CAP_FINITE, CAP_W13}
 _OPENING_TYPE = 'cp-worker-help-opening'
 
 
@@ -108,6 +109,9 @@ def open_and_staff_known(*, data_dir: str | Path, lane: str, slot: str,
     if capability == CAP_FINITE:
         return staff_finite(data_dir=data_dir, opening_id=opened['opening_id'],
                             parent_version=parent_version, inputs_file=inputs_file)
+    if capability == CAP_W13:
+        return staff_w13(data_dir=data_dir, opening_id=opened['opening_id'],
+                          parent_version=parent_version, inputs_file=inputs_file)
     raise ValueError('capability registered without a native admission adapter')
 
 
@@ -164,6 +168,64 @@ def staff_finite(*, data_dir: str | Path, opening_id: str,
     return help_status(runtime, opening_id)
 
 
+
+def staff_w13(*, data_dir: str | Path, opening_id: str,
+              parent_version: str, inputs_file: str | Path) -> dict:
+    """Branch the registered native W13 *composition* worker; never run it.
+
+    A completed child proves ONLY multi-world composition. Full game ENGINE
+    authoring remains an unsupported separate capability.
+    """
+    from .game_w13_bridge import WORKER_ID, GameW13Bridge
+    from .game_w13_native import validate_request, expected_report
+    _, runtime, desk = _load(data_dir)
+    h = _original(runtime, opening_id)
+    if h.inputs['capability'] != CAP_W13:
+        raise ValueError('opening has no registered W13 composition adapter')
+    already = _assignment(runtime, opening_id)
+    if already:
+        return help_status(runtime, opening_id)
+    parent_version = _id(parent_version)
+    source = desk.inspect(worker_id=WORKER_ID, version_id=parent_version)
+    file=Path(inputs_file)
+    if not file.is_file() or file.stat().st_size>16384:
+        raise ValueError('W13 helper inputs missing or oversized')
+    payload=validate_request(json.loads(file.read_text(encoding='utf8')))
+    expected_report(payload)
+    child_version='help-'+opening_id[-20:]
+    child_job='help-job-'+opening_id[-20:]
+    try:
+        child=desk.branch(worker_id=WORKER_ID,parent_version=parent_version,
+                          version_id=child_version)
+    except FileExistsError:
+        _, original=desk._read(WORKER_ID,child_version)
+        _, parent=desk._read(WORKER_ID,parent_version)
+        if original['parent_version']!=parent_version or original['source_locator']!=parent['source_locator']:
+            raise ValueError('W13 helper source version collision')
+        child=desk.inspect(worker_id=WORKER_ID,version_id=child_version)
+    if child.get('source_fingerprint',child.get('current_fingerprint'))!=source['current_fingerprint']:
+        raise ValueError('W13 helper differs from parent edition at birth')
+    if child_job in runtime.snapshot():
+        prev=runtime.get(child_job)
+        if (prev.metadata.get('worker_id')!=WORKER_ID or
+            prev.metadata.get('worker_version')!=child_version or
+            prev.metadata.get('edition_fingerprint')!=source['current_fingerprint'] or
+            prev.inputs!=payload):
+            raise ValueError('conflicting recovered W13 helper job')
+    else:
+        runtime=HandoffRuntime(event_store=RuntimeJournal(Path(data_dir)/'runtime.jsonl'))
+        GameW13Bridge(runtime=runtime,workstation=desk).admit(
+            version_id=child_version,inputs=payload,from_actor='cp-help-coordinator',
+            job_id=child_job,lane_id=h.inputs['lane'])
+    runtime=HandoffRuntime(event_store=RuntimeJournal(Path(data_dir)/'runtime.jsonl'))
+    runtime.event_store.append(HandoffEvent.create(
+        handoff_id=opening_id,event_type='HELP_ASSIGNED',actor_id='cp-help-coordinator',
+        data={'job_id':child_job,'worker_id':WORKER_ID,'version_id':child_version,
+              'fingerprint':source['current_fingerprint'],'parent_version':parent_version},
+        parents=(runtime.state(opening_id).last_event_id,)))
+    return help_status(runtime,opening_id)
+
+
 def verify_return(*, data_dir: str | Path, opening_id: str) -> dict:
     """Returns verified finite worker computation, never promotes parent CP."""
     from .controls import reverify_job, job_view
@@ -188,7 +250,7 @@ def verify_return(*, data_dir: str | Path, opening_id: str) -> dict:
         runtime.event_store.append(HandoffEvent.create(
             handoff_id=opening_id,event_type='HELP_RETURNED',actor_id='cp-help-coordinator',
             data={'job_id':assigned['job_id'], 'native_verifier_confirmed':True,
-                  'claim_scope':'finite prefilter computation only'},
+                  'claim_scope':('game W13 composition candidate only' if assigned['worker_id']=='game-w13-world-builder' else 'finite prefilter computation only')},
             parents=(runtime.state(opening_id).last_event_id,)))
     return help_status(HandoffRuntime(event_store=RuntimeJournal(Path(data_dir)/'runtime.jsonl')),
                        opening_id)
@@ -207,7 +269,7 @@ def help_status(runtime: HandoffRuntime, opening_id: str) -> dict:
                    else 'OPEN_UNSTAFFED',
             'registered_capability':h.inputs['capability'] in _SUPPORTED,
             'child':a, 'parent_cp_witnessed':False,
-            'note':'Returned finite computation is not a parent-domain proof.'}
+            'note':'Returned bounded computation is not a parent CP proof or an autonomous coding agent.'}
 
 
 def help_summary(data_dir: str | Path) -> list[dict]:
@@ -229,6 +291,9 @@ def main(argv=None):
     p.add_argument('--admit-registered', action='store_true', help='opt in to native helper branch and admission')
     p.add_argument('--parent-version', help='existing trusted parent worker edition')
     p.add_argument('--inputs-file', help='source-native bounded request')
+    p=sub.add_parser('staff-w13')
+    p.add_argument('--opening-id',required=True);p.add_argument('--parent-version',required=True)
+    p.add_argument('--inputs-file',required=True)
     p=sub.add_parser('staff-finite')
     p.add_argument('--opening-id',required=True);p.add_argument('--parent-version',required=True)
     p.add_argument('--inputs-file',required=True)
@@ -241,6 +306,9 @@ def main(argv=None):
                                  capability=args.capability,opening_key=args.key,reason=args.reason,
                                  parent_version=args.parent_version,inputs_file=args.inputs_file,
                                  allow_native_admission=args.admit_registered)
+    elif args.command=='staff-w13':
+        row=staff_w13(data_dir=args.data_dir,opening_id=args.opening_id,
+                       parent_version=args.parent_version,inputs_file=args.inputs_file)
     elif args.command=='staff-finite':
         row=staff_finite(data_dir=args.data_dir,opening_id=args.opening_id,
                          parent_version=args.parent_version,inputs_file=args.inputs_file)
