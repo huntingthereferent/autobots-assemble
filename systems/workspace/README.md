@@ -128,3 +128,7 @@ Historical checkpoint evidence is not promoted to a new observation.
 ## One-window CP automation (bounded)
 
 The [CP automation contract](CP_AUTOMATION.md) and `cp_motion.py` add a checkpoint dependency frontier *over the existing Process Workstation*. An admitted research problem exposes admissible checkpoints; actual jobs retain native admission, source versions, verifiers, and journal status. Planned CP slots can later bind to an exact already-admitted job through a hash-linked coordinator event; neither that binding nor a status request executes a worker. Start with `python -m systems.workspace.cp_motion --data-dir runtime/data admit-research` and then `python -m systems.workspace.cp_motion --data-dir runtime/data handoff --markdown`. Phase 2 testing's game-engine prerequisite is a local Complete Stack policy, not an NIH competition rule. Existing historical CP30 or game evidence never becomes a new CP-native proof merely by being indexed.
+
+## First CP-native scope worker
+
+The [synthetic NIH temporal scope worker](CP_AUTOMATION.md#first-domain-native-worker-nih-phase-1-synthetic-temporal-scope) uses the **existing** workstation, journal, explicit controls, source copies, and native verification. It provides only the exact `NIH-P1-SCOPE` checkpoint evidence; it does not schedule other workers or convert historical CP30 operations into biomedical reasoning.
