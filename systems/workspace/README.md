@@ -134,3 +134,5 @@ The [CP automation contract](CP_AUTOMATION.md) and `cp_motion.py` add a checkpoi
 The [synthetic NIH temporal scope worker](CP_AUTOMATION.md#first-domain-native-worker-nih-phase-1-synthetic-temporal-scope) uses the **existing** workstation, journal, explicit controls, source copies, and native verification. It provides only the exact `NIH-P1-SCOPE` checkpoint evidence; it does not schedule other workers or convert historical CP30 operations into biomedical reasoning.
 
 The [NIH-P1-ONTOLOGY RDF-mapping worker](CP_AUTOMATION.md#second-cp-native-worker-nih-phase-1-rdf-temporal-mapping) depends on an exact freshly reverified scope worker, uses the existing job journal and verifier path, and does not perform clinical or OWL-entailment reasoning.
+
+The [NIH-P1-REASONING native worker](CP_AUTOMATION.md#third-cp-native-worker-nih-phase-1-rdf-temporal-reasoning) consumes verified RDF and performs bounded synthetic time-window and explicitly declared conflict checks with a separate native verifier, leaving clinical and Phase 2 claims unwitnessed.
