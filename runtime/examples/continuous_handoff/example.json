@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "referent": "Produce a bounded, inspectable summary from a source-owned dataset",
+  "source_node": "SOURCE_A",
+  "target_node": "TARGET_B",
+  "nodes": [
+    {
+      "id": "SOURCE_A",
+      "owner": "data-owner",
+      "source_ref": "source://dataset/edition-1"
+    },
+    {
+      "id": "NORMALIZED_P",
+      "owner": "parser-owner",
+      "source_ref": "candidate://parser-p/output"
+    },
+    {
+      "id": "NORMALIZED_R",
+      "owner": "parser-owner",
+      "source_ref": "candidate://parser-r/output"
+    },
+    {
+      "id": "TARGET_B",
+      "owner": "report-owner",
+      "source_ref": "requirement://report/edition-1"
+    }
+  ],
+  "candidates": [
+    {
+      "id": "P",
+      "from": "SOURCE_A",
+      "to": "NORMALIZED_P",
+      "relation": "parse_and_validate",
+      "required_conditions": [
+        "schema_preserved",
+        "source_identified"
+      ],
+      "handoff_id": null,
+      "assumptions": [
+        "Input is parseable by parser P"
+      ]
+    },
+    {
+      "id": "Q",
+      "from": "NORMALIZED_P",
+      "to": "TARGET_B",
+      "relation": "aggregate_report",
+      "required_conditions": [
+        "report_matches_input"
+      ],
+      "handoff_id": null
+    },
+    {
+      "id": "R",
+      "from": "SOURCE_A",
+      "to": "NORMALIZED_R",
+      "relation": "alternative_parse",
+      "required_conditions": [
+        "schema_preserved"
+      ],
+      "handoff_id": null
+    },
+    {
+      "id": "S",
+      "from": "NORMALIZED_R",
+      "to": "TARGET_B",
+      "relation": "alternative_aggregate",
+      "required_conditions": [
+        "report_matches_input"
+      ],
+      "handoff_id": null
+    }
+  ],
+  "observations": [
+    {
+      "id": "demo-obs-P1",
+      "edge_id": "P",
+      "condition": "schema_preserved",
+      "source_ref": "source://dataset/edition-1",
+      "witness_ref": "fixture://p-schema",
+      "reported_outcome": "SUPPORTED"
+    },
+    {
+      "id": "demo-obs-P2",
+      "edge_id": "P",
+      "condition": "source_identified",
+      "source_ref": "source://dataset/edition-1",
+      "witness_ref": "fixture://p-source",
+      "reported_outcome": "SUPPORTED"
+    },
+    {
+      "id": "demo-obs-Q1",
+      "edge_id": "Q",
+      "condition": "report_matches_input",
+      "source_ref": "candidate://parser-p/output",
+      "witness_ref": "fixture://q-report",
+      "reported_outcome": "SUPPORTED"
+    }
+  ]
+}

@@ -22,6 +22,8 @@ derived state
 next eligible handoff
 ```
 
+[Continuous Handoff — observational determination](../language/handoff/CONTINUOUS_HANDOFF.md) extends the **explanation** of existing handoffs and preserved provenance; its [read-only example](examples/continuous_handoff/README.md) does not replace or mutate this runtime.
+
 ## Boundary
 
 The runtime is **not the language referent**.
