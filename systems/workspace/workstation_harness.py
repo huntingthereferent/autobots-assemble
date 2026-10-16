@@ -115,7 +115,10 @@ class WorkstationContinuationHarness:
         oid = "whobs-" + _hash(lane_id, kind, relation, capability, witness_ref)
         runtime = self._runtime()
         lane_hid = self._handoff_id(lane_id)
-        handoff = runtime.get(lane_hid)
+        try:
+            handoff = runtime.get(lane_hid)
+        except KeyError as exc:
+            raise ValueError("unknown workstation continuation lane") from exc
         if handoff.metadata.get("source_system") != _LANE or handoff.metadata.get("lane_id") != lane_id:
             raise ValueError("not a workstation continuation lane")
         for event in runtime.event_store.for_handoff(lane_hid):
@@ -255,3 +258,52 @@ class WorkstationContinuationHarness:
         return {"born_coordination_lanes": born, "open_unstaffed": opened,
                 "proposals_considered": len(proposals),
                 "execution_started": False, "native_checkpoint_pass": False}
+
+    def admit_native_help(self, coordination_handoff_id: str, *,
+                          parent_version: str | None = None,
+                          inputs_file: str | Path | None = None,
+                          allow_native_admission: bool = False) -> dict:
+        """Connect a BIRTH lane to the *existing* source-owned CP helper controls.
+
+        This explicitly invoked operation is not native execution or a parent CP
+        witness. Only a single-parent lane mapped to an existing domain CP is
+        eligible. Unregistered capabilities remain OPEN_UNSTAFFED.
+        """
+        from .branch_help import open_and_staff_known
+        runtime = self._runtime()
+        handoff = runtime.get(_nonblank(coordination_handoff_id, "coordination ID"))
+        meta = handoff.metadata
+        if meta.get("source_system") != _LANE or not meta.get("birth_proposal_id"):
+            raise ValueError("source is not a derived continuation lane")
+        parents = meta.get("parents") or []
+        if len(parents) != 1 or not meta.get("cp_lane") or not meta.get("cp_slot"):
+            raise ValueError("native CP helper requires one domain-bound parent")
+        capability = handoff.inputs.get("requested_capability")
+        opening_key = "wh-" + meta["birth_proposal_id"]
+        assigned = open_and_staff_known(
+            data_dir=self.data_dir, lane=meta["cp_lane"], slot=meta["cp_slot"],
+            capability=capability, opening_key=opening_key,
+            reason="Witnessed workstation branch: " + handoff.referent,
+            parent_version=parent_version, inputs_file=inputs_file,
+            allow_native_admission=allow_native_admission,
+        )
+        child_job = assigned.get("child")
+        if child_job:
+            events = runtime.event_store.for_handoff(handoff.handoff_id)
+            expected = {"opening_id": assigned["opening_id"],
+                        "job_id": child_job["job_id"]}
+            recorded = [e for e in events if e.event_type == "WORKSTATION_NATIVE_HELP_ASSIGNED"]
+            if recorded and any(e.data != expected for e in recorded):
+                raise ValueError("conflicting native assignment")
+            if not recorded:
+                state = runtime.state(handoff.handoff_id)
+                runtime.event_store.append(HandoffEvent.create(
+                    handoff_id=handoff.handoff_id,
+                    event_type="WORKSTATION_NATIVE_HELP_ASSIGNED",
+                    actor_id="workstation-continuation",
+                    data=expected,
+                    parents=(state.last_event_id,) if state.last_event_id else (),
+                ))
+        return {"coordination_handoff_id": handoff.handoff_id,
+                "native_help": assigned, "execution_started": False,
+                "native_checkpoint_pass": False}
