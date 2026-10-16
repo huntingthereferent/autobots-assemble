@@ -24,6 +24,9 @@ if CP30_ROOT.is_dir() and str(CP30_ROOT) not in sys.path:
 @unittest.skipUnless((CP30_ROOT / "test_ab_chatbot_route_bound_task.py").is_file(),
                      "reconstructed native CP30 source required")
 class B5NativeOwnerTests(unittest.TestCase):
+    def make_b4(self, providers=None):
+        return b4_fixture.WorkstationB4Tests.make_b4(self, providers)
+
     def setUp(self):
         b4_fixture.WorkstationB4Tests.setUp(self)
         self.b4.derive_next(self.lane_id)
