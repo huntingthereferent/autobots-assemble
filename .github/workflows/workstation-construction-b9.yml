@@ -30,6 +30,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install native workstation dependencies
+        run: python -m pip install 'cryptography>=45,<47'
       - name: Verify B9 candidate construction and source boundaries
         run: |
           python - <<'PY'
