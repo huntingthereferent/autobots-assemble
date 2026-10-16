@@ -159,6 +159,30 @@ class B9EventBridgeTests(unittest.TestCase):
         self.assertFalse(bridge.projection(request)["whole_route_verified"])
         self.assertEqual(journal.projection(request)["source_evidence"], [])
 
+    def test_shared_candidate_has_separate_observational_route_histories(self):
+        # The same middle candidate can connect to two distinct downstream
+        # possibilities; observing one never verifies the other route.
+        alternate = self.graph.candidate(
+            self.goal, "alternative downstream relation",
+            provenance="proposed:alternative", path_role="ALTERNATIVE",
+        )
+        self.graph.propose_connection(
+            self.middle, alternate, reason="shared middle may serve another path"
+        )
+        other_route = (self.leaf, self.middle, alternate, self.goal)
+        bridge, journal = self.make()
+        first = self.prepare(bridge)
+        second = self.prepare(bridge, route=other_route)
+        self.assertNotEqual(first, second)
+        self.assertEqual(self.actions, [])
+        self.emit(journal, first)
+        self.assertEqual(bridge.projection(first)["state"], "CROSSED")
+        self.assertEqual(bridge.projection(second)["state"], "OPEN")
+        self.assertEqual(bridge.projection(second)["route"], other_route)
+        self.assertEqual(self.actions, [("z-native", "v1")])
+        self.assertFalse(bridge.projection(first)["whole_route_verified"])
+        self.assertFalse(bridge.projection(second)["whole_route_verified"])
+
     def test_nonexistent_route_and_unhinted_candidate_rejected(self):
         bridge, journal = self.make()
         with self.assertRaisesRegex(ValueError, "not present"):
