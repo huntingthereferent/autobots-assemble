@@ -4,6 +4,7 @@ on:
     paths:
       - 'systems/workspace/b18_coordinated_observed_journal.py'
       - 'systems/workspace/b11_native_local_delivery.py'
+      - 'systems/workspace/b12_b3_native_delivery.py'
       - 'network/tests/test_b18_coordinated_observed_journal.py'
       - 'systems/workspace/B18_COORDINATED_OBSERVED_NATIVE.md'
       - '.github/workflows/workstation-b18-coordinated-observed-native.yml'
@@ -11,6 +12,7 @@ on:
     paths:
       - 'systems/workspace/b18_coordinated_observed_journal.py'
       - 'systems/workspace/b11_native_local_delivery.py'
+      - 'systems/workspace/b12_b3_native_delivery.py'
       - 'network/tests/test_b18_coordinated_observed_journal.py'
       - 'systems/workspace/B18_COORDINATED_OBSERVED_NATIVE.md'
       - '.github/workflows/workstation-b18-coordinated-observed-native.yml'
