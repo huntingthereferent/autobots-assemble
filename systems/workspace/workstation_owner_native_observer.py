@@ -16,6 +16,7 @@ import re
 from runtime.handoff import HandoffEvent
 from .workstation_native_feedback import canonical_digest
 from .workstation_return_continuation import _DERIVED
+from .workstation_continuation import _identifier
 
 _RESULT_EVENT = "WORKSTATION_OWNER_NATIVE_LOCAL_TASK_AUDITED"
 _BOUND_CAP = "owner-native-correspondence-witness"
@@ -84,11 +85,16 @@ class WorkstationOwnerNativeObserver:
                      if o.id == row.get("observation_id")]
         if len(originals) != 1 or not self.b4.verify_observation(originals[0]):
             raise ValueError("B4 source-derived relation no longer freshly witnessed")
+        expected_opening = _identifier(
+            "BIRTH", lane.metadata["lane_id"], originals[0].id,
+            _BOUND_CAP, move.relation)
         openings = [e for e in events
                     if e.event_type == "WORKSTATION_HELP_OPEN"
-                    and e.data.get("capability") == _BOUND_CAP]
+                    and e.data.get("capability") == _BOUND_CAP
+                    and e.data.get("proposal_id") == expected_opening
+                    and e.data.get("kind") == "OPEN_UNSTAFFED"]
         if len(openings) != 1:
-            raise ValueError("the native observation need is not recorded as unstaffed")
+            raise ValueError("exact owner-native observation need not recorded as unstaffed")
 
         # This is the actual source-native CP30 observer, not a JSON mock.
         report = observe_native_owners(
@@ -116,7 +122,15 @@ class WorkstationOwnerNativeObserver:
         if self.verify_candidate_binding(view, task_name, report) is not True:
             raise ValueError("finite candidate has no separately bound native owner task")
 
-        return view, move, candidate_index, report, lane
+        # Source owner observation may perform an opt-in native audit. Reopen
+        # the original job and relation gate afterward, before persistence.
+        renewed = self.b4._view(lane_handoff_id)
+        if (renewed.output_sha256 != view.output_sha256
+                or renewed.evidence_sha256 != view.evidence_sha256
+                or renewed.source_fingerprint != view.source_fingerprint
+                or self.b4._candidate(renewed) != move):
+            raise ValueError("source or admitted relation changed during native audit")
+        return renewed, move, candidate_index, report, lane
 
     def inspect(self, lane_handoff_id: str, *, task_name: str) -> dict:
         """No journal writes; actual native CP30 double-capture and audit."""
