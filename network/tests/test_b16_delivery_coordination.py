@@ -268,8 +268,11 @@ class B16NativeDeliveryConcurrencyTests(unittest.TestCase):
             str(self.fixture.envelope_path), success=False,
         )
         self.assertIn("revoked", stderr)
-        self.assertFalse(any(e.event_type == START for e in
-                             self.fixture.host().b12.delivery.journal.for_handoff(req)))
+        # Read the persisted journal without constructing a revoked B13
+        # host, which itself must fail the active-operator-policy gate.
+        from runtime.journal import RuntimeJournal
+        raw = RuntimeJournal(self.observed)
+        self.assertFalse(any(e.event_type == START for e in raw.for_handoff(req)))
 
 
 if __name__ == "__main__":
