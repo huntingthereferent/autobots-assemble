@@ -1,0 +1,67 @@
+name: workstation-b13-offline-owner-delivery
+on:
+  push:
+    paths:
+      - 'systems/workspace/b13_offline_owner_delivery.py'
+      - 'network/tests/test_b13_offline_owner_delivery.py'
+      - 'systems/workspace/B13_OFFLINE_OWNER_DELIVERY.md'
+      - '.github/workflows/workstation-b13-offline-owner-delivery.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/b13_offline_owner_delivery.py'
+      - 'network/tests/test_b13_offline_owner_delivery.py'
+      - 'systems/workspace/B13_OFFLINE_OWNER_DELIVERY.md'
+      - '.github/workflows/workstation-b13-offline-owner-delivery.yml'
+  workflow_dispatch:
+
+jobs:
+  offline-native-delivery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install native Ed25519 verification dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Require 17 B13 native cross-process trials without skips
+        run: |
+          python - <<'PY'
+          import unittest
+          from network.tests import test_b13_offline_owner_delivery
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_b13_offline_owner_delivery)
+          if suite.countTestCases() != 17:
+              raise SystemExit(f'expected 17 B13 trials, observed {suite.countTestCases()}')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('B13 offline source-owned delivery failed')
+          PY
+      - name: Preserve existing B12, B11, B10 native integration
+        run: |
+          python -m unittest -v \
+            network.tests.test_b12_b3_native_delivery \
+            network.tests.test_b11_native_local_delivery \
+            network.tests.test_b9_event_bridge \
+            network.tests.test_observed_event_journal \
+            network.tests.test_observed_event_journal_native
+      - name: Preserve 73 original B9 construction tests
+        run: |
+          python - <<'PY'
+          import importlib, unittest
+          names = (
+              'network.tests.test_workstation_construction',
+              'network.tests.test_workstation_construction_frontier',
+              'network.tests.test_workstation_construction_scale',
+              'network.tests.test_workstation_construction_route_scope',
+          )
+          suite = unittest.TestSuite(
+              unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(name))
+              for name in names
+          )
+          if suite.countTestCases() != 73:
+              raise SystemExit('B9 native construction count changed')
+          result = unittest.TextTestRunner(verbosity=1).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('original B9 construction regressions failed')
+          PY
