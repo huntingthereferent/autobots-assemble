@@ -10,6 +10,8 @@ on:
       - "systems/workspace/workstation_return_continuation.py"
       - "systems/workspace/workstation_owner_native_observer.py"
       - "network/tests/test_workstation_owner_native_observer.py"
+      - "network/tests/test_workstation_owner_source_wall.py"
+      - "systems/workspace/workstation_owner_source_wall.py"
       - "systems/workspace/workstation_native_feedback.py"
       - ".github/workflows/workstation-continuation-b2.yml"
   pull_request:
@@ -22,6 +24,8 @@ on:
       - "systems/workspace/workstation_return_continuation.py"
       - "systems/workspace/workstation_owner_native_observer.py"
       - "network/tests/test_workstation_owner_native_observer.py"
+      - "network/tests/test_workstation_owner_source_wall.py"
+      - "systems/workspace/workstation_owner_source_wall.py"
       - "systems/workspace/workstation_native_feedback.py"
       - ".github/workflows/workstation-continuation-b2.yml"
   workflow_dispatch:
@@ -51,5 +55,5 @@ jobs:
         env:
           CP30_NATIVE_SOURCE_DIR: /tmp/workstation-b5-cp30-native
         run: |
-          python -m unittest -v network.tests.test_workstation_owner_native_observer network.tests.test_native_owner_observation
+          python -m unittest -v network.tests.test_workstation_owner_native_observer network.tests.test_workstation_owner_source_wall network.tests.test_native_owner_observation
 
