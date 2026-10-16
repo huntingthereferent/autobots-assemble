@@ -55,6 +55,34 @@ class ObservedEventJournal(RuntimeJournal):
         self.max_attempts = max_attempts
         self._processing = False
         super().__init__(path)
+        # Only replay LOCAL_PASS events for which no reaction was journaled.
+        # The source adapter remains separately authorized, and any START
+        # without OBSERVED remains blocked rather than running twice.
+        self.recover_pending()
+
+    def recover_pending(self) -> tuple[str, ...]:
+        """Resume durable local results interrupted *before* native attempt start.
+
+        This is single-writer recovery. An unfinished START is intentionally not
+        replayed: it may have caused a real external effect before crashing.
+        """
+        recovered: list[str] = []
+        for trigger in tuple(self._events):
+            if trigger.event_type != LOCAL_PASS:
+                continue
+            # Completion is local to the claimed relation, not to the assistant's
+            # decision or a copied success label.
+            relation = self._handoffs[trigger.handoff_id].required_relation
+            prior = self.for_handoff(trigger.handoff_id)
+            if any(e.event_type == OBSERVED and
+                   relation in e.data.get('relations_admitted', ()) for e in prior):
+                continue
+            if any(e.event_type in (START, OBSERVED, OPEN, STOP) and
+                   e.data.get('trigger_id') == trigger.event_id for e in prior):
+                continue
+            self._react(trigger)
+            recovered.append(trigger.event_id)
+        return tuple(recovered)
 
     def append(self, event: HandoffEvent) -> HandoffEvent:
         if event.event_type in (START, OBSERVED, OPEN, STOP):

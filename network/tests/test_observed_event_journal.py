@@ -117,6 +117,46 @@ class ObservedJournalTests(unittest.TestCase):
         self.assertEqual(j2.projection('fixture-handoff')['state'],'RECOVERY_REQUIRED')
         self.assertEqual(j2.for_handoff('fixture-handoff')[-1].event_type,STOP)
 
+    def test_restart_recovers_durable_pass_without_started_attempt(self):
+        _, j = self.make(self.adapter())
+        persisted = HandoffEvent.create(handoff_id='fixture-handoff',
+            event_type=LOCAL_PASS, actor_id='local-test-runner', data={'suite':'ok'})
+        # Crash window: durable journal write committed, hook never entered.
+        RuntimeJournal.append(j, persisted)
+        self.assertEqual(self.executed, [])
+        _, reopened = self.make(self.adapter())
+        self.assertEqual(self.executed, ['ci-native'])
+        self.assertEqual(reopened.projection('fixture-handoff')['state'], 'CROSSED')
+        self.assertEqual(len(reopened.recover_pending()), 0)
+        _, reopened_again = self.make(self.adapter())
+        self.assertEqual(self.executed, ['ci-native'])
+        self.assertEqual(reopened_again.projection('fixture-handoff')['state'], 'CROSSED')
+
+    def test_restart_does_not_replay_interrupted_external_action(self):
+        _, j = self.make(self.adapter())
+        persisted = HandoffEvent.create(handoff_id='fixture-handoff',
+            event_type=LOCAL_PASS, actor_id='local-test-runner', data={'suite':'ok'})
+        RuntimeJournal.append(j, persisted)
+        RuntimeJournal.append(j, HandoffEvent.create(
+            handoff_id='fixture-handoff',event_type=START,actor_id='observed-continuation',
+            data={'name':'ci-native','edition':'rev1', 'trigger_id': persisted.event_id}))
+        _, reopened = self.make(self.adapter())
+        self.assertEqual(self.executed, [])
+        self.assertEqual(reopened.projection('fixture-handoff')['state'], 'RECOVERY_REQUIRED')
+
+    def test_restart_rejects_unverified_durable_pass(self):
+        _, j = self.make(self.adapter())
+        persisted = HandoffEvent.create(handoff_id='fixture-handoff',
+            event_type=LOCAL_PASS, actor_id='impostor', data={'suite':'ok'})
+        RuntimeJournal.append(j, persisted)
+        _, reopened = self.make(self.adapter())
+        self.assertEqual(self.executed, [])
+        self.assertEqual(reopened.projection('fixture-handoff')['state'], 'OPEN')
+        self.assertEqual(reopened.for_handoff('fixture-handoff')[-1].event_type, OPEN)
+        _, reopened_again = self.make(self.adapter())
+        self.assertEqual(self.executed, [])
+        self.assertEqual(sum(e.event_type==OPEN for e in reopened_again.for_handoff('fixture-handoff')),1)
+
     def test_attempt_bound_keeps_remaining_open(self):
         rt,j = self.make(self.adapter(name='a-broken',raw='RAISE'), self.adapter(), attempts=1)
         self.local(j)
