@@ -78,3 +78,19 @@ worker or a game checkpoint PASS. Its optional `admit_native_help` route
 reuses existing exact-source worker admission without silently executing code.
 The pass is invocation-driven; real native observation providers and autonomous
 coding-worker execution remain separate prerequisites.
+
+
+## Native return-driven next movement (B3–B4)
+
+The [B3 native feedback](WORKSTATION_NATIVE_FEEDBACK_B3.md) adapter executes an
+explicitly admitted finite worker only through existing native source-owned
+controls, verifies its return, and records it in the original coordination lane.
+The [B4 continuation](WORKSTATION_RETURN_CONTINUATION_B4.md) layer can
+independently re-verify that return, derive a bounded source-sensitive next
+observation, and request a further lane through the same workstation harness.
+
+The current finite domain provider correctly leaves `NOT_CONTRADICTED` as an
+**owner-native observation need**, not a proven edge. There is no registered
+owner-native worker for that opening; no autonomous coding agent or full W13
+game WITNESS is claimed. Native return and relation evidence must be checked
+again on each pass before opening work. The original A/B lanes are preserved.
