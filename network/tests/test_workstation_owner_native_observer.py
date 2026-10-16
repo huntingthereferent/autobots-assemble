@@ -52,9 +52,10 @@ class B5NativeOwnerTests(unittest.TestCase):
         def fixture_binding(view, task_name, report):
             return bool(self.allowed_bind and view.worker_id == WORKER_ID
                         and view.result["verdicts"]
-                        and view.result["verdicts"][0] != "CONTRADICTED"
+                        and any(v != "CONTRADICTED" for v in view.result["verdicts"])
                         and task_name == "admitted"
-                        and report["route"] == "left"
+                        and report["route"] == self.tasks["admitted"].route_name
+                        and report["route_fingerprint"] == self.tasks["admitted"].expected
                         and report["local_owner_pins_verified"])
         return WorkstationOwnerNativeObserver(
             self.b4, native_source_root=CP30_ROOT,
