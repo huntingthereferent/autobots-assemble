@@ -1,0 +1,39 @@
+name: Main Referent Continuation Trial
+on:
+  push:
+    paths:
+      - 'systems/workspace/main_referent_selector.py'
+      - 'network/tests/test_main_referent_selector.py'
+      - 'systems/workspace/observed_event_journal.py'
+      - 'network/tests/test_observed_event_journal.py'
+      - 'network/tests/test_observed_event_journal_native.py'
+      - '.github/workflows/main-referent-selector.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/main_referent_selector.py'
+      - 'network/tests/test_main_referent_selector.py'
+      - 'systems/workspace/observed_event_journal.py'
+      - 'network/tests/test_observed_event_journal.py'
+      - 'network/tests/test_observed_event_journal_native.py'
+      - '.github/workflows/main-referent-selector.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-trial:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned native worker dependencies
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Test real B3 execution through the observed event hook
+        run: |
+          python -m unittest -v \
+            network.tests.test_main_referent_selector \
+            network.tests.test_observed_event_journal \
+            network.tests.test_observed_event_journal_native
+          cd runtime/examples/continuous_handoff
+          python -m unittest -v test_reference.py
