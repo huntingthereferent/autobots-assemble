@@ -39,11 +39,11 @@ owning operator API entry points**, while preserving B16's command behavior.
 
 ## Verification
 
-`workstation-b17-native-api-coordination` requires **14 direct API cases**,
+`workstation-b17-native-api-coordination` requires **15 direct API cases**,
 including stale Python host objects created before request registration,
 cross-object signing and delivery, concurrent threads attempting the same
 source-owned native result, B14 policy mutation blocked by a held native
-session, thread-local reentrancy vs real inter-thread lock contention,
+session, thread-local reentrancy vs real inter-thread lock contention,\nPOSIX forked-child rejection of inherited thread-local lock authority,
 recovery of signed LOCAL_PASS only after acquiring the journal locks,
 and immediate revocation enforcement.
 
