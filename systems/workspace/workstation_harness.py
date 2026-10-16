@@ -279,6 +279,17 @@ class WorkstationContinuationHarness:
         if len(parents) != 1 or not meta.get("cp_lane") or not meta.get("cp_slot"):
             raise ValueError("native CP helper requires one domain-bound parent")
         capability = handoff.inputs.get("requested_capability")
+        observation_ids = handoff.inputs.get("source_observation_ids") or []
+        if len(observation_ids) != 1:
+            raise ValueError("native CP help requires one source observation")
+        _, _, _, observations, _ = self._snapshot()
+        matches = [o for o in observations if o.id == observation_ids[0]]
+        if (len(matches) != 1 or matches[0].kind != "BRANCH"
+                or matches[0].lane_id != parents[0]
+                or matches[0].capability != capability
+                or matches[0].relation != handoff.referent
+                or not self.verify_observation(matches[0])):
+            raise ValueError("native help source observation not freshly verified")
         opening_key = "wh-" + meta["birth_proposal_id"]
         assigned = open_and_staff_known(
             data_dir=self.data_dir, lane=meta["cp_lane"], slot=meta["cp_slot"],
