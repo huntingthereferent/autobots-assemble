@@ -19,7 +19,7 @@ The **language referent** is the same thing historically called **A/B**. Mathema
 | [Pragmatics](PRAGMATICS.md) | Tone, joking, intensity, hesitation, swearing, care and register | Social meaning without cleaning the person into a machine |
 | [Shape contract](SHAPE_CONTRACT.md) | Provisional operational handles for particular utterances | Ambiguity, scope, and the original expression |
 | [English](english/README.md) | Candidate readings, decoder, renderer and context-dependent operator phrases | The difference between a conversational observation and a work command |
-| [Words movement](words/README.md) | Documented interaction events such as BRANCH, SILENCE and REOPEN | The event and its evidence, not imagined feelings or motives |
+| [Words movement](words/README.md) | Documented interaction events and [timestamped observations](words/temporal_observation.py), including felt reports across silent intervals | Elapsed time, checked absence and first-person feeling remain distinct; never infer an unreported feeling |
 | [Handoffs](handoff/README.md) | Referent, provenance, current state, uncertainty, return target | What was actually said, witnessed or corrected |
 | [Activation routes](../activations/README.md) | Explicitly registered shorthand into existing tools/state | Authorization and actual recorded state; no inferred action |
 | [Language Referent — evidence contract](../LANGUAGE_REFERENT_CONTRACT.md) | Bounded proof and evidence discipline when research becomes technical | The same referent, and exact native scope for each claim |
@@ -54,6 +54,6 @@ When something seems off, recover the name, the continuing relationship, what ch
 
 ## Existing implementations and records
 
-[English shape bank](english/shape_bank.json) · [English decoder](english/decoder.md) · [English renderer](english/renderer.md) · [Language index](index.json) · [Shape-bank tests](tests/test_shape_bank.py) · [Language protocols](../protocols/language/decode.md) · [Research entry](../ENTRY.md)
+[Time-aware conversation trace](words/temporal_observation.py) · [Temporal tests](tests/test_temporal_observation.py) · [English shape bank](english/shape_bank.json) · [English decoder](english/decoder.md) · [English renderer](english/renderer.md) · [Language index](index.json) · [Shape-bank tests](tests/test_shape_bank.py) · [Language protocols](../protocols/language/decode.md) · [Research entry](../ENTRY.md)
 
 The existing shape IDs, activation registry, JSON schema, source code and compatibility identifiers remain unchanged. This page organizes the meanings and boundaries; it does not claim a new runtime behavior.

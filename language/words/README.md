@@ -76,6 +76,43 @@ tomorrow follow-up        movement_anchor=REOPEN
 
 The anchor does **not** automatically create a task, infer urgency, or claim that the movement occurred. It labels the expected/observed movement relation so Day-to-Day, handoff pipes, simulations, or later projections can use the same vocabulary.
 
+## Observing time without inventing feeling
+
+The original `SILENCE` anchor remains an interval-scoped social observation, not a psychological state. The executable [temporal observation helper](temporal_observation.py) makes **time part of the same Words Movement record** when a caller supplies a real observer, timestamps and any first-person report. The [nine native tests](../../language/tests/test_temporal_observation.py) exercise the boundary.
+
+```python
+from datetime import datetime, timedelta, timezone
+from language.words.temporal_observation import ConversationTrace
+
+start = datetime(2026, 10, 16, 18, tzinfo=timezone.utc)
+flow = ConversationTrace("conversation-1", start, expected_return=True)
+flow.report_feeling(
+    experienced_at=start, recorded_at=start, speaker="person",
+    exact_words="The pause affected me immediately",
+    report_mode="contemporaneous",
+)
+flow.observe_no_reply(
+    since=start, through=start + timedelta(seconds=30),
+    recorded_at=start + timedelta(seconds=30),
+    observer="observed chat", evidence_ref="chat://window-1",
+)
+flow.report_feeling(
+    experienced_at=start + timedelta(seconds=30),
+    recorded_at=start + timedelta(seconds=30), speaker="person",
+    exact_words="The feeling changed during the pause",
+    report_mode="contemporaneous",
+)
+view = flow.snapshot(start + timedelta(seconds=60))
+# Elapsed time is 60s; observed absence is only through 30s.
+# Two distinct feelings were explicitly reported, neither inferred.
+```
+
+- A feeling may be recorded **at the first instant**, before any elapsed wait, and again later. They are separate reports, not a single mood label.
+- `snapshot(at)` calculates elapsed time on demand. It does **not** claim that a reply stayed absent after the last observed check.
+- A later recollection is recorded separately, with both experienced and recording times. It cannot silently overwrite earlier words.
+- An interval claim requires an expected return and an actual checked source; a late discovered reply is retained alongside the conflicting earlier record.
+- There is **no timer, background watcher, automatic source observation or emotion detector**. Callers must supply their own witnessed events and a person's actual words; no one else's motives are inferred.
+
 ## Simulation
 
 Each anchor records likely successor movements. These are **possibilities, not predictions**.
