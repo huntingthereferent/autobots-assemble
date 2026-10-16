@@ -1,0 +1,28 @@
+name: Main Referent Continuation Trial
+on:
+  push:
+    paths:
+      - 'systems/workspace/main_referent_selector.py'
+      - 'network/tests/test_main_referent_selector.py'
+      - '.github/workflows/main-referent-selector.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/main_referent_selector.py'
+      - 'network/tests/test_main_referent_selector.py'
+      - '.github/workflows/main-referent-selector.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-trial:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Test observed continuation on repository source
+        run: |
+          python -m unittest -v network.tests.test_main_referent_selector
+          cd runtime/examples/continuous_handoff
+          python -m unittest -v test_reference.py
