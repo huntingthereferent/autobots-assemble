@@ -31,6 +31,12 @@ components. Its direct `deliver` method encloses exact-handoff Ed25519
 admission, duplicate detection and event append in one journal lease and
 reconstructs the journal from durable records first.
 
+B12's direct native `deliver` also takes the same observed-journal lease
+and refreshes its persisted B10 request **before** constructing an Ed25519
+proof, invoking its externally provided signer callback, and delegating to
+B11. This closes the stale-lookup path that the actual B3 test discovered
+when a B12 service existed before another one prepared its request.
+
 These locks are the same physical B16 observed-journal sidecar locks. B13/B14
 already hold the operator trust and observed locks during their entry and
 reenter the same observed lease within that owning thread. A different
