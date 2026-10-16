@@ -95,6 +95,19 @@ class WorkstationReturnContinuation:
                 or not lane.metadata.get("birth_proposal_id")
                 or len(lane.metadata.get("parents") or ()) != 1):
             raise ValueError("native return source must be an existing single-parent child lane")
+        # A once-accepted B2 source cannot be reused after its authority
+        # disappears. Recheck the exact parent observation, not its label.
+        source_ids = lane.inputs.get("source_observation_ids")
+        _, _, _, original_observations, _ = self.harness._snapshot()
+        original = [o for o in original_observations
+                    if o.id in (source_ids or ())]
+        if (len(source_ids or ()) != 1 or len(original) != 1
+                or original[0].kind != "BRANCH"
+                or original[0].lane_id != lane.metadata["parents"][0]
+                or original[0].capability != lane.inputs.get("requested_capability")
+                or original[0].relation != lane.referent
+                or not self.base_verify_observation(original[0])):
+            raise ValueError("original parent movement is not freshly witnessed")
         events = runtime.event_store.for_handoff(lane_handoff_id)
         assigned = [e for e in events if e.event_type == _ASSIGN_EVENT]
         returned = [e for e in events if e.event_type == _RETURN_EVENT]
