@@ -25,4 +25,6 @@ jobs:
           python -m unittest discover -s network/tests -p "test_repository_connections.py" -v
           python -m unittest discover -s network/tests -p "test_agent_monitor.py" -v
       - run: python -m unittest discover -s network/tests -p "test_*.py"
+      - name: Verify Continuous Handoff read-only reference
+        run: python -m unittest discover -s runtime/examples/continuous_handoff -p "test_reference.py" -v
       - run: python -m unittest discover -s language/tests -p "test_*.py"
