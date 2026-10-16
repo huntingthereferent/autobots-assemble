@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict
 import json
+from systems.workspace.b16_delivery_coordination import coordinated_operator_entry
 from pathlib import Path
 
 from systems.workspace.b12_b3_native_delivery import SOURCE_NAME
@@ -63,77 +64,79 @@ def main(argv: list[str] | None = None) -> int:
     deliver.add_argument("--signed-envelope", required=True, type=Path)
 
     args = ap.parse_args(argv)
-    if args.area == "pin":
-        ledger = OperatorPinLedger(args.trust_ledger)
-        if args.pin_action == "status":
-            result = {
-                "source_name": args.source_name,
-                "source_edition": args.source_edition,
-                "current_public_key_sha256":
-                    ledger.current(args.source_name, args.source_edition),
-                "operator_source_identity_authenticated": False,
-            }
-        elif args.pin_action in ("enroll", "rotate"):
-            public = load_operator_pin(
-                args.public_key, expected_sha256=args.expected_public_key_sha256,
-            )
-            if len(public) != 32:
-                raise ValueError("invalid raw public key bytes")
-            if args.pin_action == "enroll":
-                result = ledger.enroll(
-                    source_name=args.source_name, source_edition=args.source_edition,
-                    pin_sha256=args.expected_public_key_sha256,
-                    operator_ref=args.operator_ref, verification_ref=args.verification_ref,
-                    confirm_pin_sha256=args.confirm_new_sha256,
+    # Lock BEFORE constructing the native journal: constructors perform
+    # recovery that may invoke a live native observation.
+    with coordinated_operator_entry(trust_ledger=args.trust_ledger, observed_journal=args.observed_journal if args.area == 'native' else None):
+        if args.area == "pin":
+            ledger = OperatorPinLedger(args.trust_ledger)
+            if args.pin_action == "status":
+                result = {
+                    "source_name": args.source_name,
+                    "source_edition": args.source_edition,
+                    "current_public_key_sha256":
+                        ledger.current(args.source_name, args.source_edition),
+                    "operator_source_identity_authenticated": False,
+                }
+            elif args.pin_action in ("enroll", "rotate"):
+                public = load_operator_pin(
+                    args.public_key, expected_sha256=args.expected_public_key_sha256,
                 )
+                if len(public) != 32:
+                    raise ValueError("invalid raw public key bytes")
+                if args.pin_action == "enroll":
+                    result = ledger.enroll(
+                        source_name=args.source_name, source_edition=args.source_edition,
+                        pin_sha256=args.expected_public_key_sha256,
+                        operator_ref=args.operator_ref, verification_ref=args.verification_ref,
+                        confirm_pin_sha256=args.confirm_new_sha256,
+                    )
+                else:
+                    result = ledger.rotate(
+                        source_name=args.source_name, source_edition=args.source_edition,
+                        prior_sha256=args.confirm_prior_sha256,
+                        new_pin_sha256=args.expected_public_key_sha256,
+                        operator_ref=args.operator_ref, verification_ref=args.verification_ref,
+                        confirm_prior_sha256=args.confirm_prior_sha256,
+                        confirm_new_sha256=args.confirm_new_sha256,
+                    )
             else:
-                result = ledger.rotate(
+                result = ledger.revoke(
                     source_name=args.source_name, source_edition=args.source_edition,
-                    prior_sha256=args.confirm_prior_sha256,
-                    new_pin_sha256=args.expected_public_key_sha256,
+                    pin_sha256=args.confirm_prior_sha256,
                     operator_ref=args.operator_ref, verification_ref=args.verification_ref,
-                    confirm_prior_sha256=args.confirm_prior_sha256,
-                    confirm_new_sha256=args.confirm_new_sha256,
+                    confirm_pin_sha256=args.confirm_prior_sha256,
                 )
         else:
-            result = ledger.revoke(
-                source_name=args.source_name, source_edition=args.source_edition,
-                pin_sha256=args.confirm_prior_sha256,
-                operator_ref=args.operator_ref, verification_ref=args.verification_ref,
-                confirm_pin_sha256=args.confirm_prior_sha256,
+            host = B14OperatorTrustedDelivery(
+                trust_ledger_path=args.trust_ledger,
+                public_key_path=args.pinned_public_key,
+                expected_public_key_sha256=args.expected_public_key_sha256,
+                construction_dir=args.construction_dir,
+                native_data_dir=args.native_data_dir,
+                observed_journal_path=args.observed_journal,
+                lane_handoff_id=args.lane_id, opening_id=args.opening_id,
+                job_id=args.job_id, confirm_source_job=args.confirm_source_job,
             )
-    else:
-        host = B14OperatorTrustedDelivery(
-            trust_ledger_path=args.trust_ledger,
-            public_key_path=args.pinned_public_key,
-            expected_public_key_sha256=args.expected_public_key_sha256,
-            construction_dir=args.construction_dir,
-            native_data_dir=args.native_data_dir,
-            observed_journal_path=args.observed_journal,
-            lane_handoff_id=args.lane_id, opening_id=args.opening_id,
-            job_id=args.job_id, confirm_source_job=args.confirm_source_job,
-        )
-        if args.native_action == "prepare":
-            result = {"request_id": host.prepare(
-                goal_id=args.goal_id, candidate_id=args.candidate_id,
-                route=tuple(args.route_node),
-            ), "private_key_loaded": False, "local_pass_emitted": False}
-        elif args.native_action == "signing-request":
-            result = host.signing_request(args.request_id)
-        else:
-            event = host.deliver(
-                request_id=args.request_id,
-                confirm_request=args.confirm_request,
-                approved=args.approve_native_delivery,
-                signed_envelope=load_signed_envelope(args.signed_envelope),
-            )
-            result = {"request_id": event.handoff_id, "event_id": event.event_id,
-                      "state": host.host.b12.bridge.projection(event.handoff_id)["state"],
-                      "whole_route_verified": False, "native_B3_reexecuted": False,
-                      "private_key_loaded": False}
-    print(json.dumps(result, sort_keys=True, ensure_ascii=False))
-    return 0
-
+            if args.native_action == "prepare":
+                result = {"request_id": host.prepare(
+                    goal_id=args.goal_id, candidate_id=args.candidate_id,
+                    route=tuple(args.route_node),
+                ), "private_key_loaded": False, "local_pass_emitted": False}
+            elif args.native_action == "signing-request":
+                result = host.signing_request(args.request_id)
+            else:
+                event = host.deliver(
+                    request_id=args.request_id,
+                    confirm_request=args.confirm_request,
+                    approved=args.approve_native_delivery,
+                    signed_envelope=load_signed_envelope(args.signed_envelope),
+                )
+                result = {"request_id": event.handoff_id, "event_id": event.event_id,
+                          "state": host.host.b12.bridge.projection(event.handoff_id)["state"],
+                          "whole_route_verified": False, "native_B3_reexecuted": False,
+                          "private_key_loaded": False}
+        print(json.dumps(result, sort_keys=True, ensure_ascii=False))
+        return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
