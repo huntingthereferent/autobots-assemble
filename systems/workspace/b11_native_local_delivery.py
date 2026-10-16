@@ -25,7 +25,10 @@ from systems.workspace.b9_continuation_bridge import (
     BRIDGE_SOURCE, B9ContinuationBridge, scoped_local_verifier,
 )
 from systems.workspace.observed_event_journal import (
-    LOCAL_PASS, ObservedEventJournal, SourceAdapter,
+    LOCAL_PASS, SourceAdapter,
+)
+from systems.workspace.b18_coordinated_observed_journal import (
+    B18CoordinatedBridge, B18CoordinatedObservedJournal,
 )
 from systems.workspace.workstation_construction import WorkstationConstruction
 
@@ -160,11 +163,11 @@ class SourceOwnedLocalDelivery:
             pinned_public_keys=pinned_public_keys,
             verify_native_current=verify_native_current,
         )
-        self.journal = ObservedEventJournal(
+        self.journal = B18CoordinatedObservedJournal(
             journal_path, adapters=adapters, max_attempts=max_attempts,
             verify_local_pass=scoped_local_verifier(construction, self.admission.verify),
         )
-        self.bridge = B9ContinuationBridge(construction, self.journal)
+        self.bridge = B18CoordinatedBridge(construction, self.journal)
 
     def deliver(self, proof: NativeLocalProof, *, signature_hex: str) -> HandoffEvent:
         """Native source delivery; idempotent for an identical signed proof.
@@ -173,31 +176,35 @@ class SourceOwnedLocalDelivery:
         recoverable by ObservedEventJournal if the process dies before its
         native attempt starts. A started attempt still needs reconciliation.
         """
-        payload = {
-            "protocol": PROTOCOL,
-            "receipt": asdict(proof) if isinstance(proof, NativeLocalProof) else {},
-            "signature": signature_hex,
-        }
-        event_id = "evt_b11_" + sha256(
-            json.dumps(payload, sort_keys=True, ensure_ascii=False,
-                       separators=(",", ":"), allow_nan=False).encode("utf-8")
-        ).hexdigest()
-        event = HandoffEvent(
-            event_id=event_id, handoff_id=proof.handoff_id,
-            event_type=LOCAL_PASS, actor_id=ACTOR, occurred_at=utc_now(),
-            data=payload,
-        )
-        try:
-            handoff = HandoffRuntime(event_store=self.journal).get(proof.handoff_id)
-        except KeyError as exc:
-            raise ValueError("B11 proof targets an unregistered handoff") from exc
-        if not self.journal.verify_local_pass(handoff, event):
-            raise ValueError("source-owned local proof was not independently admitted")
-        existing = [e for e in self.journal.for_handoff(proof.handoff_id)
-                    if e.event_id == event_id]
-        if existing:
-            if (len(existing) != 1 or existing[0].event_type != LOCAL_PASS
-                    or existing[0].actor_id != ACTOR or existing[0].data != payload):
-                raise ValueError("conflicting durable local proof identity")
-            return existing[0]
-        return self.journal.append(event)
+        # B18 makes B11's direct low-level entrance coordinate with B13/B14.
+        # The entire receipt check / duplicate check / append is one lease.
+        with self.journal.coordinated():
+            self.journal._reload_locked()
+            payload = {
+                "protocol": PROTOCOL,
+                "receipt": asdict(proof) if isinstance(proof, NativeLocalProof) else {},
+                "signature": signature_hex,
+            }
+            event_id = "evt_b11_" + sha256(
+                json.dumps(payload, sort_keys=True, ensure_ascii=False,
+                           separators=(",", ":"), allow_nan=False).encode("utf-8")
+            ).hexdigest()
+            event = HandoffEvent(
+                event_id=event_id, handoff_id=proof.handoff_id,
+                event_type=LOCAL_PASS, actor_id=ACTOR, occurred_at=utc_now(),
+                data=payload,
+            )
+            try:
+                handoff = HandoffRuntime(event_store=self.journal).get(proof.handoff_id)
+            except KeyError as exc:
+                raise ValueError("B11 proof targets an unregistered handoff") from exc
+            if not self.journal.verify_local_pass(handoff, event):
+                raise ValueError("source-owned local proof was not independently admitted")
+            existing = [e for e in self.journal.for_handoff(proof.handoff_id)
+                        if e.event_id == event_id]
+            if existing:
+                if (len(existing) != 1 or existing[0].event_type != LOCAL_PASS
+                        or existing[0].actor_id != ACTOR or existing[0].data != payload):
+                    raise ValueError("conflicting durable local proof identity")
+                return existing[0]
+            return self.journal.append(event)
