@@ -233,23 +233,27 @@ class B12B3LocalDelivery:
         """
         if allow_native_local_delivery is not True or confirm_request != request_id:
             raise PermissionError("explicit exact B10 request delivery approval required")
+        # B18: direct B12 adapter entry must read the current on-disk
+        # B10 request under the same lock used by B11 and B13/B14.
         self._check_pin()
-        handoff = HandoffRuntime(event_store=self.delivery.journal).get(request_id)
-        if (handoff.metadata.get("source_locator") != self.source_locator
-                or handoff.required_relation != RELATION
-                or handoff.metadata.get("continuation_source_binding") !=
-                   {"name": SOURCE_NAME, "edition": self.edition}):
-            raise ValueError("prepared request differs from this source owner's B3 binding")
-        current = self.source.inspect()
-        proof = NativeLocalProof(
-            handoff_id=request_id, source_name=SOURCE_NAME,
-            source_edition=self.edition, required_relation=RELATION,
-            candidate_spec_sha256=handoff.metadata["candidate_spec_sha256"],
-            source_locator=self.source_locator,
-            native_receipt_ref=current.native_receipt_ref,
-            native_receipt_sha256=current.native_receipt_sha256,
-        )
-        signature = self.sign_native_proof(canonical_proof_bytes(proof))
-        if not isinstance(signature, bytes) or len(signature) != 64:
-            raise ValueError("native source signer must return one Ed25519 signature")
-        return self.delivery.deliver(proof, signature_hex=signature.hex())
+        with self.delivery.journal.coordinated():
+            self.delivery.journal._reload_locked()
+            handoff = HandoffRuntime(event_store=self.delivery.journal).get(request_id)
+            if (handoff.metadata.get("source_locator") != self.source_locator
+                    or handoff.required_relation != RELATION
+                    or handoff.metadata.get("continuation_source_binding") !=
+                       {"name": SOURCE_NAME, "edition": self.edition}):
+                raise ValueError("prepared request differs from this source owner's B3 binding")
+            current = self.source.inspect()
+            proof = NativeLocalProof(
+                handoff_id=request_id, source_name=SOURCE_NAME,
+                source_edition=self.edition, required_relation=RELATION,
+                candidate_spec_sha256=handoff.metadata["candidate_spec_sha256"],
+                source_locator=self.source_locator,
+                native_receipt_ref=current.native_receipt_ref,
+                native_receipt_sha256=current.native_receipt_sha256,
+            )
+            signature = self.sign_native_proof(canonical_proof_bytes(proof))
+            if not isinstance(signature, bytes) or len(signature) != 64:
+                raise ValueError("native source signer must return one Ed25519 signature")
+            return self.delivery.deliver(proof, signature_hex=signature.hex())
