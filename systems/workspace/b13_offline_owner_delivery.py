@@ -16,7 +16,7 @@ from hashlib import sha256
 import argparse
 import json
 from pathlib import Path
-from typing import Any, Callable, Mapping
+from typing import Any, Mapping
 
 from runtime.engine import HandoffRuntime
 from systems.workspace.b11_native_local_delivery import (
@@ -77,7 +77,7 @@ class B13OfflineOwnerDelivery:
                  lane_handoff_id: str, opening_id: str, job_id: str,
                  public_key: bytes, expected_public_key_sha256: str,
                  confirm_source_job: str,
-                 verify_operator_pin_current: Callable[[], bool] | None = None):
+                 operator_trust_ledger_path: str | Path):
         if (not isinstance(public_key, bytes) or len(public_key) != 32
                 or not isinstance(expected_public_key_sha256, str)
                 or sha256(public_key).hexdigest() != expected_public_key_sha256):
@@ -90,11 +90,37 @@ class B13OfflineOwnerDelivery:
         if (Path(observed_journal_path).resolve()
                 == (Path(native_data_dir) / "runtime.jsonl").resolve()):
             raise ValueError("B13 observed journal must be separate from native B3 source")
+        from .b14_operator_pin_ledger import OperatorPinLedger
+        # Import at construction time to preserve B13/B14 module load order.
+        # Every B13 host, not only the newer B14 CLI, requires the actual
+        # current operator policy. No optional trust-check callback remains.
+        if operator_trust_ledger_path is None:
+            raise PermissionError("B15 requires an operator trust ledger")
+        supplied_trust_path = Path(operator_trust_ledger_path)
+        # Do not resolve away a symlink before OperatorPinLedger performs its
+        # own no-symlink check. Trust policy aliases are not accepted.
+        if supplied_trust_path.is_symlink():
+            raise ValueError("B13 operator trust ledger must not be a symlink")
+        trust_path = supplied_trust_path.resolve()
+        scoped_paths = (
+            trust_path, Path(observed_journal_path).resolve(),
+            (Path(native_data_dir) / "runtime.jsonl").resolve(),
+            (Path(construction_dir) / "runtime.jsonl").resolve(),
+        )
+        if len(set(scoped_paths)) != len(scoped_paths):
+            raise ValueError("operator trust ledger must be separate from native and delivery journals")
+        self.trust = OperatorPinLedger(trust_path)
         self.construction = WorkstationConstruction(construction_dir)
         self.source = B3NativeLocalSource(
             data_dir=native_data_dir, lane_handoff_id=lane_handoff_id,
             opening_id=opening_id, job_id=job_id,
         )
+
+        edition = self.source.inspect().edition_fingerprint
+        self.trust.require_current(SOURCE_NAME, edition, expected_public_key_sha256)
+
+        def current_trust() -> bool:
+            return self.trust.is_current(SOURCE_NAME, edition, expected_public_key_sha256)
 
         def no_private_key_here(_: bytes) -> bytes:
             raise PermissionError("B13 never signs: use a source-owned external signer")
@@ -106,7 +132,7 @@ class B13OfflineOwnerDelivery:
             pinned_public_key=public_key,
             sign_native_proof=no_private_key_here,
             confirm_source_job=confirm_source_job,
-            verify_operator_pin_current=verify_operator_pin_current,
+            verify_operator_pin_current=current_trust,
         )
 
     def prepare(self, *, goal_id: str, candidate_id: str,
@@ -176,6 +202,7 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         description="B13 explicit B3 native-owner signing handoff (never signs or runs jobs)"
     )
+    ap.add_argument("--trust-ledger", required=True, type=Path)
     ap.add_argument("--construction-dir", required=True, type=Path)
     ap.add_argument("--native-data-dir", required=True, type=Path)
     ap.add_argument("--observed-journal", required=True, type=Path)
@@ -212,6 +239,7 @@ def main(argv: list[str] | None = None) -> int:
         public_key=key,
         expected_public_key_sha256=args.expected_public_key_sha256,
         confirm_source_job=args.confirm_source_job,
+        operator_trust_ledger_path=args.trust_ledger,
     )
     if args.action == "inspect":
         report = host.source.inspect()

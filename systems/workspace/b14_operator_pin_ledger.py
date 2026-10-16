@@ -244,9 +244,8 @@ class B14OperatorTrustedDelivery:
             raise ValueError("operator trust, key, native, construction and observed histories must be separate")
         self.trust.require_current(SOURCE_NAME, edition, expected_public_key_sha256)
 
-        def current_trust() -> bool:
-            return self.trust.is_current(SOURCE_NAME, edition, expected_public_key_sha256)
-
+        # The B13 constructor now directly reads the same mandatory
+        # operator policy, rather than accepting a substitute callback.
         self.host = B13OfflineOwnerDelivery(
             construction_dir=construction_dir, native_data_dir=native_data_dir,
             observed_journal_path=observed_journal_path,
@@ -254,7 +253,7 @@ class B14OperatorTrustedDelivery:
             job_id=job_id, public_key=public_key,
             expected_public_key_sha256=expected_public_key_sha256,
             confirm_source_job=confirm_source_job,
-            verify_operator_pin_current=current_trust,
+            operator_trust_ledger_path=trust_ledger_path,
         )
 
     def prepare(self, *, goal_id: str, candidate_id: str, route: tuple[str, ...]) -> str:

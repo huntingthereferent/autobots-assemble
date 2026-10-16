@@ -13,9 +13,9 @@ The operational movement is:
 1. A source-owning host already has an explicitly admitted/completed B3
    native job, one original B2 lane, opening and persisted native return.
 2. An operator independently provisions **raw 32-byte Ed25519 public key**
-   bytes and supplies a separately confirmed SHA-256 fingerprint of those
-   bytes (not copied from the signed response). This pin is a trust decision,
-   never a source hint or identity automatically established by B13.
+   bytes, a separately confirmed SHA-256 fingerprint, and an **actively
+   enrolled B14 operator trust ledger**. Since B15, public bytes and a
+   matching fingerprint alone never authorize B13 delivery.
 3. `prepare` creates an inert B10 candidate/route request. The selected
    B9 source suggestion must match the existing native B3 worker edition,
    job locator and exactly one candidate relation.
@@ -36,6 +36,7 @@ The operational movement is:
 
 ```text
 python -m systems.workspace.b13_offline_owner_delivery
+  --trust-ledger <actively-enrolled-B14-operator-policy.jsonl>
   --construction-dir <existing-B9-construction-data>
   --native-data-dir <existing-B3-native-workstation-data>
   --observed-journal <separate-B10-B11-journal>
@@ -106,9 +107,19 @@ CI must also preserve the native B12/B11/B10 suites and the original
   signer fixture**; no production source-owner identity is created here.
 - This tool is invoked directly by an operator. There is **no daemon,
   background watcher, automatic credential enrollment or ChatGPT controller**.
-- B13 refuses to use the original B3 source runtime journal as the B10\n  delivery journal, preserving distinct append-only evidence histories.\n- The original native journals remain single-writer. There is no
+- B13 refuses to use the original B3 source runtime journal as the B10
+  delivery journal, preserving distinct append-only evidence histories.
+- The original native journals remain single-writer. There is no
   concurrency-safe delivery protocol, external-effect reconciliation, or
   durable transaction spanning B9 and B10.
 - Native B3 result verification is bounded to the finite computation.
   An observed candidate does not prove a completed route, an external
   CP30 owner/candidate relation, or any cross-lane join.
+
+## B15 mandatory operator-policy contract
+
+The older B13 CLI now requires `--trust-ledger` and checks the currently
+active pin, including on restarts. Direct Python callers constructing
+`B13OfflineOwnerDelivery` must provide `operator_trust_ledger_path`.
+Calls without that policy fail closed rather than continuing with a
+key-only trust decision. Refer to `B15_MANDATORY_OPERATOR_TRUST.md`.
