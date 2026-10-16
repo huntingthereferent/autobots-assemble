@@ -105,3 +105,13 @@ record the bounded local result in the same `RuntimeJournal`; it cannot
 fabricate real external owner identities, a full correspondence witness,
 or a general autonomous bot. Without a source-owned live callback, the
 `owner-native-correspondence-witness` need stays unstaffed.
+
+## Preserving unresolved owner–candidate relationships (B6)
+
+The [B6 owner–source wall](WORKSTATION_OWNER_SOURCE_B6.md) examines the
+source-bound B4 movement and B5 live native-local CP30 task audit, then records
+an **unresolved evidence relationship** in the existing `RuntimeJournal`.
+A local task audit is not an independently authenticated binding to the
+finite-prefilter candidate. The journal preserves why no new bot, source edge,
+or connecting lane may be admitted. Future passes can recheck the same source
+without duplicating the wall or overwriting ancestors.
