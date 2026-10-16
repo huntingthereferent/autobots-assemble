@@ -66,3 +66,52 @@ Read-only status is **not** native re-verification or proof of a currently execu
 ## Inspect recorded jobs without executing them
 
 [Native inspection panels](INSPECTION_PANELS.md) display finite required-edge prefilter verdicts and simulated Factory machine output through one common workstation GUI. These are **recorded** observations only; source editions, verifiers, and execution controls remain separate.
+
+## Journal-backed continuation harness (B2 candidate)
+
+The review-branch [Workstation continuation B2](WORKSTATION_CONTINUATION_B2.md)
+uses the existing `RuntimeJournal` and `HandoffRuntime` to record independent
+lane openings, witness-gated movement proposals, recoverable derived coordination
+lanes, and separately verified cross-lane connection proposals. It does not
+replace this source-copy workstation. A coordination lane is NOT a running
+worker or a game checkpoint PASS. Its optional `admit_native_help` route
+reuses existing exact-source worker admission without silently executing code.
+The pass is invocation-driven; real native observation providers and autonomous
+coding-worker execution remain separate prerequisites.
+
+
+## Native return-driven next movement (B3–B4)
+
+The [B3 native feedback](WORKSTATION_NATIVE_FEEDBACK_B3.md) adapter executes an
+explicitly admitted finite worker only through existing native source-owned
+controls, verifies its return, and records it in the original coordination lane.
+The [B4 continuation](WORKSTATION_RETURN_CONTINUATION_B4.md) layer can
+independently re-verify that return, derive a bounded source-sensitive next
+observation, and request a further lane through the same workstation harness.
+
+The current finite domain provider correctly leaves `NOT_CONTRADICTED` as an
+**owner-native observation need**, not a proven edge. There is no registered
+owner-native worker for that opening; no autonomous coding agent or full W13
+game WITNESS is claimed. Native return and relation evidence must be checked
+again on each pass before opening work. The original A/B lanes are preserved.
+
+## Native-local owner observation for an unstaffed B4 lane (B5)
+
+The [B5 native-owner adapter](WORKSTATION_OWNER_NATIVE_B5.md) uses existing
+`native_owner_observation.observe_native_owners` and the B4 source-bound
+return to check a selected **live CP30 source-owner task**, subject to an
+explicit source-provided candidate-to-task binding and native audit. It can
+record the bounded local result in the same `RuntimeJournal`; it cannot
+fabricate real external owner identities, a full correspondence witness,
+or a general autonomous bot. Without a source-owned live callback, the
+`owner-native-correspondence-witness` need stays unstaffed.
+
+## Preserving unresolved owner–candidate relationships (B6)
+
+The [B6 owner–source wall](WORKSTATION_OWNER_SOURCE_B6.md) examines the
+source-bound B4 movement and B5 live native-local CP30 task audit, then records
+an **unresolved evidence relationship** in the existing `RuntimeJournal`.
+A local task audit is not an independently authenticated binding to the
+finite-prefilter candidate. The journal preserves why no new bot, source edge,
+or connecting lane may be admitted. Future passes can recheck the same source
+without duplicating the wall or overwriting ancestors.
