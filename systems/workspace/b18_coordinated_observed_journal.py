@@ -17,6 +17,7 @@ from typing import Iterator
 
 from runtime.handoff import Handoff, HandoffEvent
 from runtime.journal import RuntimeJournal
+from systems.workspace.b9_continuation_bridge import B9ContinuationBridge
 from systems.workspace.b16_delivery_coordination import coordinated_operator_entry
 from systems.workspace.observed_event_journal import ObservedEventJournal
 
@@ -74,3 +75,27 @@ class B18CoordinatedObservedJournal(ObservedEventJournal):
         with self.coordinated():
             self._reload_locked()
             return ObservedEventJournal.append(self, event)
+
+
+class B18CoordinatedBridge(B9ContinuationBridge):
+    """B9 route request/projection using the same lower-level observed lease."""
+
+    def __init__(self, construction, journal: B18CoordinatedObservedJournal):
+        if not isinstance(journal, B18CoordinatedObservedJournal):
+            raise TypeError("B18 bridge requires a coordinated observed journal")
+        super().__init__(construction, journal)
+
+    def prepare(self, goal_id: str, candidate_id: str, *,
+                route: tuple[str, ...], worker_id: str,
+                edition_ref: str, source_locator: str) -> str:
+        with self.journal.coordinated():
+            self.journal._reload_locked()
+            return super().prepare(
+                goal_id, candidate_id, route=route, worker_id=worker_id,
+                edition_ref=edition_ref, source_locator=source_locator,
+            )
+
+    def projection(self, handoff_id: str) -> dict:
+        with self.journal.coordinated():
+            self.journal._reload_locked()
+            return super().projection(handoff_id)
