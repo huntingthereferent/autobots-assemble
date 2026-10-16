@@ -97,7 +97,7 @@ def coordinated_operator_entry(*, trust_ledger: str | Path,
     if observed_journal is not None:
         paths.append(_lock_path(observed_journal))
     if len(set(paths)) != len(paths):
-        raise ValueError("B16 operator trust and observed journal must be different")
+        raise ValueError("B16 operator trust and observed journal must be separate (different paths)")
     requested = frozenset(paths)
     held = getattr(_OPERATOR_SESSION, "held", None)
     if held is not None:
