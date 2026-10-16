@@ -197,7 +197,7 @@ class WorkstationContinuationHarness:
             parents=(state.last_event_id,) if state.last_event_id else ()))
         return True
 
-    def tick(self) -> dict:
+    def tick(self, *, verify_observation: Callable[[Observation], bool] | None = None) -> dict:
         """One *invoked* move; allocate coordination lanes, NEVER execute workers.
 
         A matching native capability is only a proposal to staff a later job.
@@ -208,7 +208,7 @@ class WorkstationContinuationHarness:
         proposals = propose_movements(
             lanes=lanes, observations=observations,
             worker_editions=self.worker_editions,
-            verify_observation=self.verify_observation,
+            verify_observation=verify_observation or self.verify_observation,
             verify_connection=self.verify_connection,
             admitted_proposal_ids=admitted,
             max_new_lanes=self.max_new_lanes,
