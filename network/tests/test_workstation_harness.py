@@ -231,6 +231,20 @@ class WorkstationHarnessIntegrationTests(unittest.TestCase):
         self.assertFalse(result["execution_started"])
         self.assertFalse(result["native_checkpoint_pass"])
 
+    def test_revoked_witness_cannot_admit_native_help_after_birth(self):
+        self.harness.seed_lane("scoped-revoked", "previously witnessed",
+                               cp_lane="game", cp_slot="cp-game-w13-worlds")
+        self.harness.observe(lane_id="scoped-revoked", kind="BRANCH",
+                             relation="new direction", witness_ref="native:once",
+                             capability="finite-required-edge-prefilter")
+        self.allowed.add("native:once")
+        born = self.harness.tick()["born_coordination_lanes"][0]
+        self.allowed.remove("native:once")
+        before = (self.data / "runtime.jsonl").read_bytes()
+        with self.assertRaisesRegex(ValueError, "freshly verified"):
+            self.harness.admit_native_help(born, allow_native_admission=True)
+        self.assertEqual(before, (self.data / "runtime.jsonl").read_bytes())
+
     def test_unscope_lane_cannot_claim_native_cp_admission(self):
         self.branch()
         self.allowed.add("native:branch-1")
