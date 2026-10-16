@@ -8,6 +8,8 @@ on:
       - "network/tests/test_workstation_native_feedback_integration.py"
       - "network/tests/test_workstation_return_continuation.py"
       - "systems/workspace/workstation_return_continuation.py"
+      - "systems/workspace/workstation_owner_native_observer.py"
+      - "network/tests/test_workstation_owner_native_observer.py"
       - "systems/workspace/workstation_native_feedback.py"
       - ".github/workflows/workstation-continuation-b2.yml"
   pull_request:
@@ -18,6 +20,8 @@ on:
       - "network/tests/test_workstation_native_feedback_integration.py"
       - "network/tests/test_workstation_return_continuation.py"
       - "systems/workspace/workstation_return_continuation.py"
+      - "systems/workspace/workstation_owner_native_observer.py"
+      - "network/tests/test_workstation_owner_native_observer.py"
       - "systems/workspace/workstation_native_feedback.py"
       - ".github/workflows/workstation-continuation-b2.yml"
   workflow_dispatch:
@@ -40,3 +44,12 @@ jobs:
         run: |
           python -m unittest -v network.tests.test_workstation_harness network.tests.test_workstation_native_feedback_integration network.tests.test_workstation_return_continuation
           python -m unittest -v network.tests.test_agent_lineage network.tests.test_branch_help
+      - name: Reconstruct original CP30 native modules from preserved source
+        run: |
+          python work/arc_like_maze/chatbot/research/integrated/assemble.py --stage 30 --out /tmp/workstation-b5-cp30-native
+      - name: Verify live CP30 owner-task B5 bridge and native regressions
+        env:
+          CP30_NATIVE_SOURCE_DIR: /tmp/workstation-b5-cp30-native
+        run: |
+          python -m unittest -v network.tests.test_workstation_owner_native_observer network.tests.test_native_owner_observation
+
