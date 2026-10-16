@@ -180,6 +180,24 @@ class B15MandatoryTrustTests(unittest.TestCase):
         self.assertEqual(reopened.projection(request)["state"], "OPEN")
         self.assertFalse(any(x.event_type == START for x in reopened.for_handoff(request)))
 
+    def test_policy_journal_symlink_does_not_bypass_current_policy(self):
+        self.complete()
+        alias = self.fx.root / "operator-policy-alias.jsonl"
+        alias.symlink_to(self.fixture.trust_path)
+        with self.assertRaisesRegex(ValueError, "must not be a symlink"):
+            B13OfflineOwnerDelivery(
+                construction_dir=self.fx.graph.data_dir,
+                native_data_dir=self.fx.native.data,
+                observed_journal_path=self.fx.root / "observed.jsonl",
+                lane_handoff_id=self.fx.source.lane_id,
+                opening_id=self.fx.source.opening_id,
+                job_id=self.fx.source.job_id,
+                public_key=self.fx.public,
+                expected_public_key_sha256=self.fixture.pin_digest,
+                confirm_source_job=self.fx.source.job_id,
+                operator_trust_ledger_path=alias,
+            )
+
     def test_separate_operator_and_delivery_journals_remain_required(self):
         self.complete()
         self.fixture.trust_path.unlink()
