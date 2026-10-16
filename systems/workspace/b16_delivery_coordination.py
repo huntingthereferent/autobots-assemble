@@ -15,6 +15,7 @@ from contextlib import ExitStack, contextmanager
 import os
 from pathlib import Path
 import stat
+from threading import local
 from typing import Iterator
 
 
@@ -74,6 +75,12 @@ def _exclusive_file(path: Path) -> Iterator[None]:
         os.close(fd)
 
 
+# Reentrancy is per thread only. A second thread must take the real OS lock,
+# including if its owner is in this same process. Nested callers may reuse
+# already-held locks but may not extend the set and invert lock ordering.
+_OPERATOR_SESSION = local()
+
+
 @contextmanager
 def coordinated_operator_entry(*, trust_ledger: str | Path,
                                observed_journal: str | Path | None = None) -> Iterator[None]:
@@ -90,8 +97,25 @@ def coordinated_operator_entry(*, trust_ledger: str | Path,
     if observed_journal is not None:
         paths.append(_lock_path(observed_journal))
     if len(set(paths)) != len(paths):
-        raise ValueError("B16 operator trust and observed journal must be different")
+        raise ValueError("B16 operator trust and observed journal must be separate (different paths)")
+    requested = frozenset(paths)
+    held = getattr(_OPERATOR_SESSION, "held", None)
+    # POSIX fork copies thread-local variables. A child MUST NOT treat the
+    # parent's lock ownership as its own: it has to acquire a new OS lease.
+    if getattr(_OPERATOR_SESSION, "pid", None) != os.getpid():
+        held = None
+    if held is not None:
+        if not requested.issubset(held):
+            raise RuntimeError("B17 nested coordination cannot extend a held lock set")
+        yield
+        return
     with ExitStack() as stack:
         for path in sorted(paths):
             stack.enter_context(_exclusive_file(path))
-        yield
+        _OPERATOR_SESSION.held = requested
+        _OPERATOR_SESSION.pid = os.getpid()
+        try:
+            yield
+        finally:
+            del _OPERATOR_SESSION.held
+            del _OPERATOR_SESSION.pid

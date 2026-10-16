@@ -1,0 +1,75 @@
+name: workstation-b17-native-api-coordination
+on:
+  push:
+    paths:
+      - 'systems/workspace/b16_delivery_coordination.py'
+      - 'systems/workspace/b13_offline_owner_delivery.py'
+      - 'systems/workspace/b14_operator_pin_ledger.py'
+      - 'network/tests/test_b17_native_api_coordination.py'
+      - 'systems/workspace/B17_NATIVE_API_COORDINATION.md'
+      - '.github/workflows/workstation-b17-native-api-coordination.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/b16_delivery_coordination.py'
+      - 'systems/workspace/b13_offline_owner_delivery.py'
+      - 'systems/workspace/b14_operator_pin_ledger.py'
+      - 'network/tests/test_b17_native_api_coordination.py'
+      - 'systems/workspace/B17_NATIVE_API_COORDINATION.md'
+      - '.github/workflows/workstation-b17-native-api-coordination.yml'
+  workflow_dispatch:
+
+jobs:
+  native-api-coordination:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install native Ed25519 verification library
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Require 15 direct API B17 tests with no skips
+        run: |
+          python - <<'PY'
+          import unittest
+          from network.tests import test_b17_native_api_coordination
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_b17_native_api_coordination)
+          if suite.countTestCases() != 15:
+              raise SystemExit(f'expected 15 B17 cases, got {suite.countTestCases()}')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('B17 direct native API coordination failed')
+          PY
+      - name: Preserve B16 B15 B14 B13 B12 B11 B10 native and journal regression
+        run: |
+          python -m unittest -v \
+            network.tests.test_b16_delivery_coordination \
+            network.tests.test_b15_mandatory_operator_trust \
+            network.tests.test_b14_operator_pin_ledger \
+            network.tests.test_b13_offline_owner_delivery \
+            network.tests.test_b12_b3_native_delivery \
+            network.tests.test_b11_native_local_delivery \
+            network.tests.test_b9_event_bridge \
+            network.tests.test_observed_event_journal \
+            network.tests.test_observed_event_journal_native
+      - name: Preserve original 73 B9 construction tests
+        run: |
+          python - <<'PY'
+          import importlib, unittest
+          names = (
+              'network.tests.test_workstation_construction',
+              'network.tests.test_workstation_construction_frontier',
+              'network.tests.test_workstation_construction_scale',
+              'network.tests.test_workstation_construction_route_scope',
+          )
+          suite = unittest.TestSuite(
+              unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(name))
+              for name in names
+          )
+          if suite.countTestCases() != 73:
+              raise SystemExit('B9 construction suite count changed')
+          result = unittest.TextTestRunner(verbosity=1).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('B9 construction regressions failed')
+          PY

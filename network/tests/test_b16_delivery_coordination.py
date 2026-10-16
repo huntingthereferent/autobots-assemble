@@ -33,28 +33,33 @@ class B16CoordinationPrimitiveTests(unittest.TestCase):
             with coordinated_operator_entry(trust_ledger=None):
                 pass
 
-    def test_policy_file_lock_is_exclusive(self):
+    def test_policy_file_lock_is_reentrant_on_owning_thread(self):
         with coordinated_operator_entry(trust_ledger=self.trust):
-            with self.assertRaisesRegex(PermissionError, "busy"):
-                with coordinated_operator_entry(trust_ledger=self.trust):
-                    pass
+            # B17 preserves CLI outer leases while direct API calls reenter.
+            with coordinated_operator_entry(trust_ledger=self.trust):
+                self.assertTrue(_lock_path(self.trust).exists())
 
     def test_different_policies_same_observed_journal_exclude_each_other(self):
+        from concurrent.futures import ThreadPoolExecutor
         other = self.root / "other-policy.jsonl"
+        def competing_thread():
+            with coordinated_operator_entry(trust_ledger=other,
+                                            observed_journal=self.observed):
+                return "unexpectedly acquired"
         with coordinated_operator_entry(trust_ledger=self.trust,
                                         observed_journal=self.observed):
-            with self.assertRaisesRegex(PermissionError, "busy"):
-                with coordinated_operator_entry(trust_ledger=other,
-                                                observed_journal=self.observed):
-                    pass
+            with ThreadPoolExecutor(max_workers=1) as pool:
+                with self.assertRaisesRegex(PermissionError, "busy"):
+                    pool.submit(competing_thread).result()
 
     def test_cross_entry_lock_order_never_changes_with_argument_order(self):
         one = self.root / "z-trust"
         two = self.root / "a-observed"
         with coordinated_operator_entry(trust_ledger=one, observed_journal=two):
-            with self.assertRaises(PermissionError):
-                with coordinated_operator_entry(trust_ledger=two, observed_journal=one):
-                    pass
+            # Both path sets are already held, independent of their order.
+            with coordinated_operator_entry(trust_ledger=two, observed_journal=one):
+                self.assertTrue(_lock_path(one).exists())
+                self.assertTrue(_lock_path(two).exists())
 
     def test_shared_trust_and_observed_path_is_rejected(self):
         with self.assertRaisesRegex(ValueError, "different"):

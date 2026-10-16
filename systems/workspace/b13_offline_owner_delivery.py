@@ -110,36 +110,59 @@ class B13OfflineOwnerDelivery:
         )
         if len(set(scoped_paths)) != len(scoped_paths):
             raise ValueError("operator trust ledger must be separate from native and delivery journals")
-        self.trust = OperatorPinLedger(trust_path)
-        self.construction = WorkstationConstruction(construction_dir)
-        self.source = B3NativeLocalSource(
-            data_dir=native_data_dir, lane_handoff_id=lane_handoff_id,
-            opening_id=opening_id, job_id=job_id,
+        self._trust_path = trust_path
+        self._observed_path = Path(observed_journal_path)
+        # Constructor replay may start an already-authorized native attempt.
+        # B17 takes the same B16 lock used by the CLI BEFORE opening a journal.
+        with self._session():
+            self.trust = OperatorPinLedger(trust_path)
+            self.construction = WorkstationConstruction(construction_dir)
+            self.source = B3NativeLocalSource(
+                data_dir=native_data_dir, lane_handoff_id=lane_handoff_id,
+                opening_id=opening_id, job_id=job_id,
+            )
+            edition = self.source.inspect().edition_fingerprint
+            self.trust.require_current(SOURCE_NAME, edition, expected_public_key_sha256)
+
+            def current_trust() -> bool:
+                return self.trust.is_current(SOURCE_NAME, edition, expected_public_key_sha256)
+
+            def no_private_key_here(_: bytes) -> bytes:
+                raise PermissionError("B13 never signs: use a source-owned external signer")
+
+            self._native_params = dict(
+                construction=self.construction,
+                observed_journal_path=observed_journal_path,
+                source=self.source,
+                pinned_public_key=public_key,
+                sign_native_proof=no_private_key_here,
+                confirm_source_job=confirm_source_job,
+                verify_operator_pin_current=current_trust,
+            )
+            self._refresh()
+
+    def _session(self):
+        """Reuse a CLI lease or acquire the same two locks for direct callers."""
+        return coordinated_operator_entry(
+            trust_ledger=self._trust_path,
+            observed_journal=self._observed_path,
         )
 
-        edition = self.source.inspect().edition_fingerprint
-        self.trust.require_current(SOURCE_NAME, edition, expected_public_key_sha256)
+    def _refresh(self) -> None:
+        """Reload durable B10/B11 state while the caller owns BOTH locks.
 
-        def current_trust() -> bool:
-            return self.trust.is_current(SOURCE_NAME, edition, expected_public_key_sha256)
-
-        def no_private_key_here(_: bytes) -> bytes:
-            raise PermissionError("B13 never signs: use a source-owned external signer")
-
-        self.b12 = B12B3LocalDelivery(
-            construction=self.construction,
-            observed_journal_path=observed_journal_path,
-            source=self.source,
-            pinned_public_key=public_key,
-            sign_native_proof=no_private_key_here,
-            confirm_source_job=confirm_source_job,
-            verify_operator_pin_current=current_trust,
-        )
+        An object instantiated before another process wrote a LOCAL_PASS
+        must not continue against its stale in-memory journal. Recovery is
+        permitted only inside the coordination lease.
+        """
+        self.b12 = B12B3LocalDelivery(**self._native_params)
 
     def prepare(self, *, goal_id: str, candidate_id: str,
                 route: tuple[str, ...]) -> str:
         """Register ONE inert B10 request with a source-owned B3 adapter."""
-        return self.b12.prepare(goal_id, candidate_id, route=route)
+        with self._session():
+            self._refresh()
+            return self.b12.prepare(goal_id, candidate_id, route=route)
 
     def _current_proof(self, request_id: str) -> NativeLocalProof:
         handoff = HandoffRuntime(event_store=self.b12.delivery.journal).get(request_id)
@@ -163,17 +186,19 @@ class B13OfflineOwnerDelivery:
 
         This emits a request, never a signature, LOCAL_PASS, or worker attempt.
         """
-        self.b12._check_pin()
-        proof = self._current_proof(request_id)
-        raw = canonical_proof_bytes(proof)
-        return {
-            "protocol": PROTOCOL,
-            "receipt": asdict(proof),
-            "canonical_bytes_hex": raw.hex(),
-            "canonical_sha256": sha256(raw).hexdigest(),
-            "signing_required_externally": True,
-            "signature_provided": False,
-        }
+        with self._session():
+            self._refresh()
+            self.b12._check_pin()
+            proof = self._current_proof(request_id)
+            raw = canonical_proof_bytes(proof)
+            return {
+                "protocol": PROTOCOL,
+                "receipt": asdict(proof),
+                "canonical_bytes_hex": raw.hex(),
+                "canonical_sha256": sha256(raw).hexdigest(),
+                "signing_required_externally": True,
+                "signature_provided": False,
+            }
 
     def deliver(self, *, request_id: str, confirm_request: str,
                 approved: bool, signed_envelope: Mapping[str, Any]):
@@ -183,20 +208,22 @@ class B13OfflineOwnerDelivery:
         edition, candidate, or old native result must fail closed. The signed
         envelope cannot select or enroll its own public key.
         """
-        if approved is not True or confirm_request != request_id:
-            raise PermissionError("explicit exact request delivery approval required")
-        self.b12._check_pin()
-        if (not isinstance(signed_envelope, Mapping)
-                or set(signed_envelope) != {"protocol", "receipt", "signature"}
-                or signed_envelope["protocol"] != PROTOCOL
-                or not isinstance(signed_envelope["receipt"], dict)):
-            raise ValueError("B11 signed envelope required")
-        proof = self._current_proof(request_id)
-        if signed_envelope["receipt"] != asdict(proof):
-            raise ValueError("signed proof differs from freshly verified B3 source")
-        return self.b12.delivery.deliver(
-            proof, signature_hex=signed_envelope["signature"],
-        )
+        with self._session():
+            self._refresh()
+            if approved is not True or confirm_request != request_id:
+                raise PermissionError("explicit exact request delivery approval required")
+            self.b12._check_pin()
+            if (not isinstance(signed_envelope, Mapping)
+                    or set(signed_envelope) != {"protocol", "receipt", "signature"}
+                    or signed_envelope["protocol"] != PROTOCOL
+                    or not isinstance(signed_envelope["receipt"], dict)):
+                raise ValueError("B11 signed envelope required")
+            proof = self._current_proof(request_id)
+            if signed_envelope["receipt"] != asdict(proof):
+                raise ValueError("signed proof differs from freshly verified B3 source")
+            return self.b12.delivery.deliver(
+                proof, signature_hex=signed_envelope["signature"],
+            )
 
 
 def main(argv: list[str] | None = None) -> int:
