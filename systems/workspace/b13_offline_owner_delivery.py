@@ -16,7 +16,7 @@ from hashlib import sha256
 import argparse
 import json
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 from runtime.engine import HandoffRuntime
 from systems.workspace.b11_native_local_delivery import (
@@ -76,7 +76,8 @@ class B13OfflineOwnerDelivery:
                  native_data_dir: str | Path, observed_journal_path: str | Path,
                  lane_handoff_id: str, opening_id: str, job_id: str,
                  public_key: bytes, expected_public_key_sha256: str,
-                 confirm_source_job: str):
+                 confirm_source_job: str,
+                 verify_operator_pin_current: Callable[[], bool] | None = None):
         if (not isinstance(public_key, bytes) or len(public_key) != 32
                 or not isinstance(expected_public_key_sha256, str)
                 or sha256(public_key).hexdigest() != expected_public_key_sha256):
@@ -105,6 +106,7 @@ class B13OfflineOwnerDelivery:
             pinned_public_key=public_key,
             sign_native_proof=no_private_key_here,
             confirm_source_job=confirm_source_job,
+            verify_operator_pin_current=verify_operator_pin_current,
         )
 
     def prepare(self, *, goal_id: str, candidate_id: str,
@@ -134,6 +136,7 @@ class B13OfflineOwnerDelivery:
 
         This emits a request, never a signature, LOCAL_PASS, or worker attempt.
         """
+        self.b12._check_pin()
         proof = self._current_proof(request_id)
         raw = canonical_proof_bytes(proof)
         return {
@@ -155,6 +158,7 @@ class B13OfflineOwnerDelivery:
         """
         if approved is not True or confirm_request != request_id:
             raise PermissionError("explicit exact request delivery approval required")
+        self.b12._check_pin()
         if (not isinstance(signed_envelope, Mapping)
                 or set(signed_envelope) != {"protocol", "receipt", "signature"}
                 or signed_envelope["protocol"] != PROTOCOL
