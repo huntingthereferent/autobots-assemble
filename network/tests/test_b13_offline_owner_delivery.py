@@ -100,6 +100,24 @@ class B13OfflineSourceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.host(digest="0" * 64)
 
+    def test_delivery_journal_cannot_be_original_b3_source_journal(self):
+        self.execute_b3()
+        original = self.fx.native.data / "runtime.jsonl"
+        before = original.read_bytes()
+        with self.assertRaisesRegex(ValueError, "separate from native B3"):
+            B13OfflineOwnerDelivery(
+                construction_dir=self.fx.graph.data_dir,
+                native_data_dir=self.fx.native.data,
+                observed_journal_path=original,
+                lane_handoff_id=self.fx.source.lane_id,
+                opening_id=self.fx.source.opening_id,
+                job_id=self.fx.source.job_id,
+                public_key=self.fx.public,
+                expected_public_key_sha256=self.pin_digest,
+                confirm_source_job=self.fx.source.job_id,
+            )
+        self.assertEqual(original.read_bytes(), before)
+
     def test_public_pin_cannot_be_supplied_as_symlink(self):
         self.execute_b3()
         symlink = self.fx.root / "symlink-key"
