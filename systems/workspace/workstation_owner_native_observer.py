@@ -20,7 +20,7 @@ from .workstation_return_continuation import _DERIVED
 _RESULT_EVENT = "WORKSTATION_OWNER_NATIVE_LOCAL_TASK_AUDITED"
 _BOUND_CAP = "owner-native-correspondence-witness"
 _CANDIDATE = re.compile(
-    r"Acquire owner-native evidence for unresolved candidate ([0-9]+) of job (.+)\\Z"
+    r"Acquire owner-native evidence for unresolved candidate ([0-9]+) of job (.+)\Z"
 )
 
 
