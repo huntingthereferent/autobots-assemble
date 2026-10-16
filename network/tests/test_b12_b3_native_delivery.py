@@ -18,6 +18,7 @@ from systems.workspace.b12_b3_native_delivery import (
     B12B3LocalDelivery, B3NativeLocalSource, RELATION, SOURCE_NAME,
 )
 from systems.workspace.workstation_construction import WorkstationConstruction
+from systems.workspace.process_handoff import WORKER_ID
 from systems.workspace.observed_event_journal import LOCAL_PASS, START, OBSERVED
 
 
@@ -86,7 +87,7 @@ class B12NativeB3SourceTests(unittest.TestCase):
     def test_source_refuses_worker_that_has_not_executed(self):
         with self.assertRaises(ValueError):
             self.source.inspect()
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
 
     def test_original_native_return_rechecked_without_new_worker_execution(self):
         self.complete_native()
@@ -105,7 +106,7 @@ class B12NativeB3SourceTests(unittest.TestCase):
         source_journal = self.native.data / "runtime.jsonl"
         service = self.make()
         req = service.prepare(self.goal, self.candidate, route=self.route)
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
         self.assertEqual(service.bridge.projection(req)["state"], "OPEN")
         old = source_journal.read_bytes()
         service.deliver(req, confirm_request=req, allow_native_local_delivery=True)
@@ -125,7 +126,7 @@ class B12NativeB3SourceTests(unittest.TestCase):
         self.complete_native()
         service = self.make()
         req = service.prepare(self.goal, self.candidate, route=self.route)
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
         self.assertEqual(service.bridge.projection(req)["state"], "OPEN")
 
     def test_exact_request_and_explicit_delivery_authorization_required(self):
@@ -136,14 +137,14 @@ class B12NativeB3SourceTests(unittest.TestCase):
             service.deliver(req, confirm_request=req)
         with self.assertRaises(PermissionError):
             service.deliver(req, confirm_request="wrong", allow_native_local_delivery=True)
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
         self.assertEqual(service.bridge.projection(req)["state"], "OPEN")
 
     def test_exact_native_source_job_authorization_required(self):
         self.complete_native()
         with self.assertRaises(PermissionError):
             self.make(confirm="someone-else")
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
 
     def test_malformed_signer_callback_or_signature_fails_closed(self):
         self.complete_native()
@@ -192,7 +193,7 @@ class B12NativeB3SourceTests(unittest.TestCase):
         )
         with self.assertRaisesRegex(ValueError, "not present"):
             service.prepare(self.goal, alternative, route=(alternative, self.goal))
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
 
     def test_wrong_candidate_relation_fails_before_signing(self):
         self.complete_native()
@@ -207,7 +208,7 @@ class B12NativeB3SourceTests(unittest.TestCase):
         service = self.make()
         with self.assertRaisesRegex(ValueError, "does not claim"):
             service.prepare(self.goal, other, route=(other, self.goal))
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
 
     def test_source_edition_mutation_revokes_live_B3_result(self):
         self.complete_native()
@@ -215,13 +216,13 @@ class B12NativeB3SourceTests(unittest.TestCase):
         req = service.prepare(self.goal, self.candidate, route=self.route)
         job = self.native.runtime().get(self.native.job_id)
         version = job.metadata["worker_version"]
-        folder, _ = self.native.desk._read("finite-required-edge-prefilter", version)
+        folder, _ = self.native.desk._read(WORKER_ID, version)
         file = folder / "finite_required_edge_guard.py"
         file.write_text(file.read_text(encoding="utf8") + "\n# post-verification change\n",
                         encoding="utf8")
         with self.assertRaises(ValueError):
             service.deliver(req, confirm_request=req, allow_native_local_delivery=True)
-        self.assertEqual(self.calls, [])
+        self.assertEqual(self.calls, 0)
         self.assertEqual(service.bridge.projection(req)["state"], "OPEN")
 
     def test_source_cannot_be_rebound_to_other_native_edition(self):
