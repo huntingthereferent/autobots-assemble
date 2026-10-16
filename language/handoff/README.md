@@ -20,6 +20,8 @@ Required spine:
 
 See `packet.schema.json`.
 
+[Continuous Handoff — observational determination](CONTINUOUS_HANDOFF.md) describes how backward construction and branch openings can continue without deciding the evidence; native observational layers determine what is supported. [Runnable read-only example](../../runtime/examples/continuous_handoff/README.md).
+
 A receiver validates the packet before resuming. It does not blindly inherit the sender's conclusions.
 
 ## Regrounding across the handoff

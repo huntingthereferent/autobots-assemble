@@ -14,7 +14,8 @@ An inspectable collection of code, mathematical experiments, system prototypes, 
 | **Interactive environments** | [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
 | **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
 | **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
-| **CP automation** | [One-window CP frontier](systems/workspace/CP_AUTOMATION.md) — declared dependencies over the existing workstation; native worker evidence remains authoritative |\n| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Process Workstation](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no implicit task admission; one explicitly authorized finite prefilter work handoff is demonstrated |
+| **CP automation** | [One-window CP frontier](systems/workspace/CP_AUTOMATION.md) — declared dependencies over the existing workstation; native worker evidence remains authoritative |
+| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Process Workstation](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no implicit task admission; one explicitly authorized finite prefilter work handoff is demonstrated |
 
 **First bounded worker connection:** [Correspondence Worker handoff](systems/workspace/CORRESPONDENCE_HANDOFF.md) — explicitly selected source edition, child-process finite prefilter, independent native replay, and durable HandoffRuntime result. Not a general AI agent or full owner-backed process.
 
@@ -33,6 +34,7 @@ Mathematical symbols in individual experiments refer to those experiments' **exp
 - [Language Referent — Evidence Contract](LANGUAGE_REFERENT_CONTRACT.md) — scoped evidence, correction, and proof boundaries
 - [Historical A/B ground record](AB_Ground_Record_Current_Note_2026-10-11.md) — preserved October 11 wording and observations
 - [Evidence and provenance rules](protocols/core/provenance.md)
+- [Continuous Handoff — observational determination](language/handoff/CONTINUOUS_HANDOFF.md) · [runnable read-only reference](runtime/examples/continuous_handoff/README.md)
 - [Complete-stack experiments](COMPLETE_STACK.md)
 - [Language area — regrounding, conversation, pragmatic meaning and handoffs](language/README.md)
 - [Human Drift — James's dated language and corrections, September–October](language/HUMAN_DRIFT.md)
