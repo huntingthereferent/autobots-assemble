@@ -96,7 +96,12 @@ class B13OfflineOwnerDelivery:
         # current operator policy. No optional trust-check callback remains.
         if operator_trust_ledger_path is None:
             raise PermissionError("B15 requires an operator trust ledger")
-        trust_path = Path(operator_trust_ledger_path).resolve()
+        supplied_trust_path = Path(operator_trust_ledger_path)
+        # Do not resolve away a symlink before OperatorPinLedger performs its
+        # own no-symlink check. Trust policy aliases are not accepted.
+        if supplied_trust_path.is_symlink():
+            raise ValueError("B13 operator trust ledger must not be a symlink")
+        trust_path = supplied_trust_path.resolve()
         scoped_paths = (
             trust_path, Path(observed_journal_path).resolve(),
             (Path(native_data_dir) / "runtime.jsonl").resolve(),
