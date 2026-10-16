@@ -11,6 +11,7 @@ from hashlib import sha256
 import json
 import os
 from pathlib import Path
+from .b16_delivery_coordination import coordinated_operator_entry
 
 from .b12_b3_native_delivery import B3NativeLocalSource, SOURCE_NAME
 from .b13_offline_owner_delivery import B13OfflineOwnerDelivery, load_operator_pin
@@ -139,50 +140,52 @@ class OperatorPinLedger:
     def _append(self, kind: str, *, source_name: str, source_edition: str,
                 pin_sha256: str, prior_sha256: str | None,
                 operator_ref: str, verification_ref: str) -> dict:
-        if (not all(_valid_id(x) for x in (
-                source_name, source_edition, operator_ref, verification_ref))
-                or not _valid_digest(pin_sha256)
-                or (prior_sha256 is not None and not _valid_digest(prior_sha256))):
-            raise ValueError("exact operator pin admission fields required")
-        rows, active = self._read()
-        key = (source_name, source_edition)
-        old = active.get(key)
-        used = {x["pin_sha256"] for x in rows
-                if (x["source_name"], x["source_edition"]) == key}
-        if kind == "ENROLL":
-            if old is not None or prior_sha256 is not None or pin_sha256 in used:
-                raise ValueError("pin already active or historically enrolled")
-        elif kind == "ROTATE":
-            if old is None or old != prior_sha256 or pin_sha256 in used:
-                raise ValueError("pin rotation must replace the confirmed active pin")
-        elif kind == "REVOKE":
-            if old is None or old != prior_sha256 or pin_sha256 != old:
-                raise ValueError("pin revocation must confirm the exact active pin")
-        else:
-            raise ValueError("unknown pin ledger operation")
-        data = {
-            "schema": SCHEMA, "sequence": len(rows) + 1,
-            "previous_hash": rows[-1]["record_hash"] if rows else None,
-            "kind": kind, "source_name": source_name,
-            "source_edition": source_edition, "pin_sha256": pin_sha256,
-            "prior_sha256": prior_sha256, "operator_ref": operator_ref,
-            "verification_ref": verification_ref,
-        }
-        row = {**data, "record_hash": sha256(_canonical(data)).hexdigest()}
-        self.path.parent.mkdir(parents=True, exist_ok=True)
-        if self.path.is_symlink():
-            raise ValueError("operator pin journal cannot be a symlink")
-        flags = os.O_WRONLY | os.O_APPEND | os.O_CREAT
-        if hasattr(os, "O_NOFOLLOW"):
-            flags |= os.O_NOFOLLOW
-        fd = os.open(self.path, flags, 0o600)
-        try:
-            os.write(fd, _canonical(row) + b"\n")
-            os.fsync(fd)
-        finally:
-            os.close(fd)
-        self._read()
-        return row
+        # Direct policy API calls now share the same B16 lock as both CLIs.
+        with coordinated_operator_entry(trust_ledger=self.path):
+            if (not all(_valid_id(x) for x in (
+                    source_name, source_edition, operator_ref, verification_ref))
+                    or not _valid_digest(pin_sha256)
+                    or (prior_sha256 is not None and not _valid_digest(prior_sha256))):
+                raise ValueError("exact operator pin admission fields required")
+            rows, active = self._read()
+            key = (source_name, source_edition)
+            old = active.get(key)
+            used = {x["pin_sha256"] for x in rows
+                    if (x["source_name"], x["source_edition"]) == key}
+            if kind == "ENROLL":
+                if old is not None or prior_sha256 is not None or pin_sha256 in used:
+                    raise ValueError("pin already active or historically enrolled")
+            elif kind == "ROTATE":
+                if old is None or old != prior_sha256 or pin_sha256 in used:
+                    raise ValueError("pin rotation must replace the confirmed active pin")
+            elif kind == "REVOKE":
+                if old is None or old != prior_sha256 or pin_sha256 != old:
+                    raise ValueError("pin revocation must confirm the exact active pin")
+            else:
+                raise ValueError("unknown pin ledger operation")
+            data = {
+                "schema": SCHEMA, "sequence": len(rows) + 1,
+                "previous_hash": rows[-1]["record_hash"] if rows else None,
+                "kind": kind, "source_name": source_name,
+                "source_edition": source_edition, "pin_sha256": pin_sha256,
+                "prior_sha256": prior_sha256, "operator_ref": operator_ref,
+                "verification_ref": verification_ref,
+            }
+            row = {**data, "record_hash": sha256(_canonical(data)).hexdigest()}
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            if self.path.is_symlink():
+                raise ValueError("operator pin journal cannot be a symlink")
+            flags = os.O_WRONLY | os.O_APPEND | os.O_CREAT
+            if hasattr(os, "O_NOFOLLOW"):
+                flags |= os.O_NOFOLLOW
+            fd = os.open(self.path, flags, 0o600)
+            try:
+                os.write(fd, _canonical(row) + b"\n")
+                os.fsync(fd)
+            finally:
+                os.close(fd)
+            self._read()
+            return row
 
     def enroll(self, *, source_name: str, source_edition: str, pin_sha256: str,
                operator_ref: str, verification_ref: str,
@@ -225,47 +228,46 @@ class B14OperatorTrustedDelivery:
                  observed_journal_path: str | Path,
                  lane_handoff_id: str, opening_id: str, job_id: str,
                  confirm_source_job: str):
-        self.trust = OperatorPinLedger(trust_ledger_path)
-        public_key = load_operator_pin(
-            public_key_path, expected_sha256=expected_public_key_sha256,
-        )
-        source = B3NativeLocalSource(
-            data_dir=native_data_dir, lane_handoff_id=lane_handoff_id,
-            opening_id=opening_id, job_id=job_id,
-        )
-        edition = source.inspect().edition_fingerprint
-        paths = [
-            Path(trust_ledger_path).resolve(), Path(observed_journal_path).resolve(),
-            (Path(native_data_dir) / "runtime.jsonl").resolve(),
-            (Path(construction_dir) / "runtime.jsonl").resolve(),
-            Path(public_key_path).resolve(),
-        ]
-        if len(set(paths)) != len(paths):
-            raise ValueError("operator trust, key, native, construction and observed histories must be separate")
-        self.trust.require_current(SOURCE_NAME, edition, expected_public_key_sha256)
+        with coordinated_operator_entry(
+                trust_ledger=trust_ledger_path, observed_journal=observed_journal_path):
+            self.trust = OperatorPinLedger(trust_ledger_path)
+            public_key = load_operator_pin(
+                public_key_path, expected_sha256=expected_public_key_sha256,
+            )
+            source = B3NativeLocalSource(
+                data_dir=native_data_dir, lane_handoff_id=lane_handoff_id,
+                opening_id=opening_id, job_id=job_id,
+            )
+            edition = source.inspect().edition_fingerprint
+            paths = [
+                Path(trust_ledger_path).resolve(), Path(observed_journal_path).resolve(),
+                (Path(native_data_dir) / "runtime.jsonl").resolve(),
+                (Path(construction_dir) / "runtime.jsonl").resolve(),
+                Path(public_key_path).resolve(),
+            ]
+            if len(set(paths)) != len(paths):
+                raise ValueError("operator trust, key, native, construction and observed histories must be separate")
+            self.trust.require_current(SOURCE_NAME, edition, expected_public_key_sha256)
 
-        # The B13 constructor now directly reads the same mandatory
-        # operator policy, rather than accepting a substitute callback.
-        self.host = B13OfflineOwnerDelivery(
-            construction_dir=construction_dir, native_data_dir=native_data_dir,
-            observed_journal_path=observed_journal_path,
-            lane_handoff_id=lane_handoff_id, opening_id=opening_id,
-            job_id=job_id, public_key=public_key,
-            expected_public_key_sha256=expected_public_key_sha256,
-            confirm_source_job=confirm_source_job,
-            operator_trust_ledger_path=trust_ledger_path,
-        )
+            # The B13 constructor now directly reads the same mandatory
+            # operator policy, rather than accepting a substitute callback.
+            self.host = B13OfflineOwnerDelivery(
+                construction_dir=construction_dir, native_data_dir=native_data_dir,
+                observed_journal_path=observed_journal_path,
+                lane_handoff_id=lane_handoff_id, opening_id=opening_id,
+                job_id=job_id, public_key=public_key,
+                expected_public_key_sha256=expected_public_key_sha256,
+                confirm_source_job=confirm_source_job,
+                operator_trust_ledger_path=trust_ledger_path,
+            )
 
     def prepare(self, *, goal_id: str, candidate_id: str, route: tuple[str, ...]) -> str:
-        self.host.b12._check_pin()
         return self.host.prepare(goal_id=goal_id, candidate_id=candidate_id, route=route)
 
     def signing_request(self, request_id: str) -> dict:
-        self.host.b12._check_pin()
         return self.host.signing_request(request_id)
 
     def deliver(self, *, request_id: str, confirm_request: str,
                 approved: bool, signed_envelope: dict):
-        self.host.b12._check_pin()
         return self.host.deliver(request_id=request_id, confirm_request=confirm_request,
                                  approved=approved, signed_envelope=signed_envelope)
