@@ -16,6 +16,7 @@ from hashlib import sha256
 import argparse
 import json
 from pathlib import Path
+from systems.workspace.b16_delivery_coordination import coordinated_operator_entry
 from typing import Any, Mapping
 
 from runtime.engine import HandoffRuntime
@@ -226,48 +227,50 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--approve-native-delivery", action="store_true")
     p.add_argument("--signed-envelope", type=Path, required=True)
     args = ap.parse_args(argv)
-    key = load_operator_pin(
-        args.pinned_public_key, expected_sha256=args.expected_public_key_sha256,
-    )
-    host = B13OfflineOwnerDelivery(
-        construction_dir=args.construction_dir,
-        native_data_dir=args.native_data_dir,
-        observed_journal_path=args.observed_journal,
-        lane_handoff_id=args.lane_id,
-        opening_id=args.opening_id,
-        job_id=args.job_id,
-        public_key=key,
-        expected_public_key_sha256=args.expected_public_key_sha256,
-        confirm_source_job=args.confirm_source_job,
-        operator_trust_ledger_path=args.trust_ledger,
-    )
-    if args.action == "inspect":
-        report = host.source.inspect()
-        result = {"source": asdict(report), "native_worker_executed_now": False,
-                  "private_key_loaded": False, "journal_modified_by_delivery": False}
-    elif args.action == "prepare":
-        result = {"request_id": host.prepare(
-            goal_id=args.goal_id, candidate_id=args.candidate_id,
-            route=tuple(args.route_node),
-        ), "native_worker_executed_now": False,
-            "local_pass_emitted": False, "private_key_loaded": False}
-    elif args.action == "signing-request":
-        result = host.signing_request(args.request_id)
-    else:
-        envelope = load_signed_envelope(args.signed_envelope)
-        event = host.deliver(
-            request_id=args.request_id,
-            confirm_request=args.confirm_request,
-            approved=args.approve_native_delivery,
-            signed_envelope=envelope,
+    # Lock BEFORE constructing the native journal: constructors perform
+    # recovery that may invoke a live native observation.
+    with coordinated_operator_entry(trust_ledger=args.trust_ledger, observed_journal=args.observed_journal):
+        key = load_operator_pin(
+            args.pinned_public_key, expected_sha256=args.expected_public_key_sha256,
         )
-        result = {"event_id": event.event_id, "request_id": event.handoff_id,
-                  "state": host.b12.bridge.projection(event.handoff_id)["state"],
-                  "whole_route_verified": False,
-                  "native_b3_worker_executed_now": False}
-    print(json.dumps(result, sort_keys=True, ensure_ascii=False))
-    return 0
-
+        host = B13OfflineOwnerDelivery(
+            construction_dir=args.construction_dir,
+            native_data_dir=args.native_data_dir,
+            observed_journal_path=args.observed_journal,
+            lane_handoff_id=args.lane_id,
+            opening_id=args.opening_id,
+            job_id=args.job_id,
+            public_key=key,
+            expected_public_key_sha256=args.expected_public_key_sha256,
+            confirm_source_job=args.confirm_source_job,
+            operator_trust_ledger_path=args.trust_ledger,
+        )
+        if args.action == "inspect":
+            report = host.source.inspect()
+            result = {"source": asdict(report), "native_worker_executed_now": False,
+                      "private_key_loaded": False, "journal_modified_by_delivery": False}
+        elif args.action == "prepare":
+            result = {"request_id": host.prepare(
+                goal_id=args.goal_id, candidate_id=args.candidate_id,
+                route=tuple(args.route_node),
+            ), "native_worker_executed_now": False,
+                "local_pass_emitted": False, "private_key_loaded": False}
+        elif args.action == "signing-request":
+            result = host.signing_request(args.request_id)
+        else:
+            envelope = load_signed_envelope(args.signed_envelope)
+            event = host.deliver(
+                request_id=args.request_id,
+                confirm_request=args.confirm_request,
+                approved=args.approve_native_delivery,
+                signed_envelope=envelope,
+            )
+            result = {"event_id": event.event_id, "request_id": event.handoff_id,
+                      "state": host.b12.bridge.projection(event.handoff_id)["state"],
+                      "whole_route_verified": False,
+                      "native_b3_worker_executed_now": False}
+        print(json.dumps(result, sort_keys=True, ensure_ascii=False))
+        return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
