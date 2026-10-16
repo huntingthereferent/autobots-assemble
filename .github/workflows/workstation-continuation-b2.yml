@@ -1,8 +1,12 @@
 name: workstation-continuation-b2
 on:
   push:
-    branches:
-      - feature/workstation-continuation-b2-20261015
+    paths:
+      - "systems/workspace/workstation_continuation.py"
+      - "systems/workspace/workstation_harness.py"
+      - "network/tests/test_workstation_harness.py"
+      - ".github/workflows/workstation-continuation-b2.yml"
+  pull_request:
     paths:
       - "systems/workspace/workstation_continuation.py"
       - "systems/workspace/workstation_harness.py"
