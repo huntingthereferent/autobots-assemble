@@ -202,7 +202,10 @@ class WorkstationReturnContinuation:
         if not observation.witness_ref.startswith(_PREFIX):
             return bool(self.base_verify_observation(observation))
         runtime = self.harness._runtime()
-        lane_hid = self.harness._handoff_id(observation.lane_id)
+        try:
+            lane_hid = self.harness._resolve_lane(runtime, observation.lane_id).handoff_id
+        except ValueError:
+            return False
         matching = [e for e in runtime.event_store.for_handoff(lane_hid)
                     if e.event_type == _DERIVED
                     and e.data.get("observation_id") == observation.id]
