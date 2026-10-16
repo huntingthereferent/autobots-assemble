@@ -33,9 +33,23 @@ class B13OfflineSourceTests(unittest.TestCase):
         self.pin_file = self.fx.root / "owner-public.raw"
         self.pin_file.write_bytes(self.fx.public)
         self.pin_digest = sha256(self.fx.public).hexdigest()
+        # Test-only operator enrollment: the public pin and matching digest
+        # are fixture inputs, not evidence of any real source owner's identity.
+        from systems.workspace.b14_operator_pin_ledger import OperatorPinLedger
+        self.trust_path = self.fx.root / "b13-test-operator-trust.jsonl"
+        self.trust = OperatorPinLedger(self.trust_path)
+        self.trust.enroll(
+            source_name="finite-source-native",
+            source_edition=self.fx.edition,
+            pin_sha256=self.pin_digest,
+            operator_ref="ephemeral-test-operator",
+            verification_ref="fixture-only-external-check",
+            confirm_pin_sha256=self.pin_digest,
+        )
         self.envelope_path = self.fx.root / "signed-envelope.json"
         self.cli_base = [
             sys.executable, "-m", "systems.workspace.b13_offline_owner_delivery",
+            "--trust-ledger", str(self.trust_path),
             "--construction-dir", str(self.fx.graph.data_dir),
             "--native-data-dir", str(self.fx.native.data),
             "--observed-journal", str(self.fx.root / "observed.jsonl"),
@@ -61,6 +75,7 @@ class B13OfflineSourceTests(unittest.TestCase):
             public_key=self.fx.public,
             expected_public_key_sha256=self.pin_digest if digest is None else digest,
             confirm_source_job=self.fx.source.job_id,
+            operator_trust_ledger_path=self.trust_path,
         )
 
     def request(self, host):
@@ -115,6 +130,7 @@ class B13OfflineSourceTests(unittest.TestCase):
                 public_key=self.fx.public,
                 expected_public_key_sha256=self.pin_digest,
                 confirm_source_job=self.fx.source.job_id,
+                operator_trust_ledger_path=self.trust_path,
             )
         self.assertEqual(original.read_bytes(), before)
 
