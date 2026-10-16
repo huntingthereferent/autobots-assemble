@@ -100,6 +100,10 @@ def coordinated_operator_entry(*, trust_ledger: str | Path,
         raise ValueError("B16 operator trust and observed journal must be separate (different paths)")
     requested = frozenset(paths)
     held = getattr(_OPERATOR_SESSION, "held", None)
+    # POSIX fork copies thread-local variables. A child MUST NOT treat the
+    # parent's lock ownership as its own: it has to acquire a new OS lease.
+    if getattr(_OPERATOR_SESSION, "pid", None) != os.getpid():
+        held = None
     if held is not None:
         if not requested.issubset(held):
             raise RuntimeError("B17 nested coordination cannot extend a held lock set")
@@ -109,7 +113,9 @@ def coordinated_operator_entry(*, trust_ledger: str | Path,
         for path in sorted(paths):
             stack.enter_context(_exclusive_file(path))
         _OPERATOR_SESSION.held = requested
+        _OPERATOR_SESSION.pid = os.getpid()
         try:
             yield
         finally:
             del _OPERATOR_SESSION.held
+            del _OPERATOR_SESSION.pid
