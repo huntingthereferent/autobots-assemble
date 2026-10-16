@@ -144,7 +144,8 @@ class B12B3LocalDelivery:
                  source: B3NativeLocalSource,
                  pinned_public_key: bytes,
                  sign_native_proof: Callable[[bytes], bytes],
-                 confirm_source_job: str):
+                 confirm_source_job: str,
+                 verify_operator_pin_current: Callable[[], bool] | None = None):
         if not isinstance(source, B3NativeLocalSource):
             raise TypeError("existing source-owned B3 native binding required")
         if not isinstance(construction, WorkstationConstruction):
@@ -158,6 +159,10 @@ class B12B3LocalDelivery:
         self.edition = snapshot.edition_fingerprint
         self.source_locator = "b3-native://" + source.job_id
         self.sign_native_proof = sign_native_proof
+        if verify_operator_pin_current is not None and not callable(verify_operator_pin_current):
+            raise TypeError("current operator pin verifier must be callable")
+        self._verify_operator_pin_current = verify_operator_pin_current
+        self._check_pin()
         adapter = SourceAdapter(
             Capability(SOURCE_NAME, self.edition, (RELATION,), True),
             self._execute_read_only, self._observe_again,
@@ -171,12 +176,21 @@ class B12B3LocalDelivery:
         )
         self.bridge = self.delivery.bridge
 
+    def _check_pin(self) -> None:
+        # Optional B14 check for existing B12 callers. Called again inside
+        # B11's independent verifier, including journal startup/recovery.
+        if (self._verify_operator_pin_current is not None
+                and self._verify_operator_pin_current() is not True):
+            raise PermissionError("source-owner signing pin is not currently authorized")
+
     def _execute_read_only(self, cap: Capability) -> B3ObservedReturn:
+        self._check_pin()
         if (cap.name, cap.edition) != (SOURCE_NAME, self.edition):
             raise ValueError("source adapter called with wrong registered edition")
         return self.source.inspect()  # no native subprocess, reverify only
 
     def _observe_again(self, cap: Capability, returned: object) -> Witness:
+        self._check_pin()
         fresh = self.source.inspect()
         accepted = (isinstance(returned, B3ObservedReturn)
                     and fresh == returned
@@ -189,6 +203,7 @@ class B12B3LocalDelivery:
         )
 
     def _current_native_proof(self, proof: NativeLocalProof) -> bool:
+        self._check_pin()
         current = self.source.inspect()
         return (
             proof.source_name == SOURCE_NAME
@@ -203,6 +218,7 @@ class B12B3LocalDelivery:
     def prepare(self, goal_id: str, candidate_id: str,
                 *, route: tuple[str, ...]) -> str:
         """Only a matching B9 source suggestion can prepare the inert request."""
+        self._check_pin()
         return self.bridge.prepare(
             goal_id, candidate_id, route=route, worker_id=SOURCE_NAME,
             edition_ref=self.edition, source_locator=self.source_locator,
@@ -217,6 +233,7 @@ class B12B3LocalDelivery:
         """
         if allow_native_local_delivery is not True or confirm_request != request_id:
             raise PermissionError("explicit exact B10 request delivery approval required")
+        self._check_pin()
         handoff = HandoffRuntime(event_store=self.delivery.journal).get(request_id)
         if (handoff.metadata.get("source_locator") != self.source_locator
                 or handoff.required_relation != RELATION
