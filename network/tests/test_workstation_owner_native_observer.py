@@ -68,7 +68,9 @@ class B5NativeOwnerTests(unittest.TestCase):
             self.lane_id, task_name="admitted", allow_native_record=True)
         self.assertTrue(result.recorded_new_event)
         self.assertEqual(result.status, "NATIVE_LOCAL_TASK_AUDITED_NOT_EXTERNAL_PROOF")
-        self.assertEqual(result.candidate_index, next(\n            i for i, v in enumerate(self.harness._runtime().state(self.job_id).output["verdicts"])\n            if v != "CONTRADICTED"))
+        self.assertEqual(result.candidate_index, next(
+            i for i, v in enumerate(self.harness._runtime().state(self.job_id).output["verdicts"])
+            if v != "CONTRADICTED"))
         self.assertEqual(len(self.harness._runtime().event_store.all()), before + 1)
         row = self.observer.recorded(self.lane_id)[0]
         self.assertEqual(row["job_id"], self.job_id)
