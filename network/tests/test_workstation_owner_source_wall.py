@@ -12,6 +12,8 @@ from network.tests import test_workstation_owner_native_observer as fixture
 from systems.workspace.workstation_owner_source_wall import OwnerCandidateWall, WALL
 
 
+@unittest.skipUnless((fixture.CP30_ROOT / "test_ab_chatbot_route_bound_task.py").is_file(),
+                     "reconstructed native CP30 source required")
 class B6WallTests(unittest.TestCase):
     def make_b4(self, providers=None):
         return fixture.B5NativeOwnerTests.make_b4(self, providers)
