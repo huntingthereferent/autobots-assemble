@@ -83,6 +83,12 @@ class B13OfflineOwnerDelivery:
             raise ValueError("public key must be independently pinned by the operator")
         if confirm_source_job != job_id:
             raise PermissionError("operator must confirm the exact source-owned native job")
+        # B10 already separates the observed journal from B9 construction.
+        # Keep it separate from the ORIGINAL B3 runtime as well; mixing the
+        # two append-only event schemas would corrupt the source/proof boundary.
+        if (Path(observed_journal_path).resolve()
+                == (Path(native_data_dir) / "runtime.jsonl").resolve()):
+            raise ValueError("B13 observed journal must be separate from native B3 source")
         self.construction = WorkstationConstruction(construction_dir)
         self.source = B3NativeLocalSource(
             data_dir=native_data_dir, lane_handoff_id=lane_handoff_id,
