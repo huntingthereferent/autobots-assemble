@@ -165,5 +165,80 @@ class WorkstationHarnessIntegrationTests(unittest.TestCase):
         self.assertIn(self.harness._handoff_id("B"), original.snapshot())
 
 
+    def test_native_helper_admission_uses_existing_workstation_controls(self):
+        import json
+        import shutil
+        from systems.workspace.coordinator_window import CoordinatorIndex
+        from systems.workspace.cp_motion import admit_research
+        from systems.workspace.workstation import ProcessWorkstation
+        from systems.workspace.process_handoff import WORKER_ID
+
+        repo = Path(__file__).resolve().parents[2]
+        upstream = repo / "work" / "arc_like_maze" / "chatbot"
+        source = self.data / "selected-source"
+        source.mkdir()
+        for name in ("finite_goal_priority.py", "finite_required_edge_guard.py"):
+            shutil.copyfile(upstream / name, source / name)
+        desk = ProcessWorkstation(self.data / "workstation")
+        desk.copy_source(source, worker_id=WORKER_ID, version_id="base")
+        index = CoordinatorIndex(self.data / "coordinator-windows.jsonl")
+        admit_research(index)
+        inputs = self.data / "native-inputs.json"
+        inputs.write_text(json.dumps({
+            "old_phi": [0, 0, 1], "new_phi": [0, 0, 0],
+            "candidate_words": [["ABAA", "ABBABA"], ["ABAA", "AAABB", "BAAAB"]],
+            "required_state": [0, 0, 0], "required_action": "B"
+        }))
+        self.harness.seed_lane("scoped-A", "bounded source need",
+                               cp_lane="game", cp_slot="cp-game-w13-worlds")
+        self.branch("scoped-A", ref="native:scoped-A")
+        self.allowed.add("native:scoped-A")
+        lane_hid = self.harness.tick()["born_coordination_lanes"][0]
+        first = self.harness.admit_native_help(
+            lane_hid, parent_version="base", inputs_file=inputs,
+            allow_native_admission=True)
+        help_row = first["native_help"]
+        self.assertEqual(help_row["state"], "ASSIGNED_NOT_VERIFIED")
+        job = help_row["child"]["job_id"]
+        self.assertEqual(self.native().state(job).status, "READY")
+        self.assertFalse(first["execution_started"])
+        self.assertFalse(first["native_checkpoint_pass"])
+        before = (self.data / "runtime.jsonl").read_bytes()
+        self.assertEqual(first, self.harness.admit_native_help(
+            lane_hid, parent_version="base", inputs_file=inputs,
+            allow_native_admission=True))
+        self.assertEqual(before, (self.data / "runtime.jsonl").read_bytes())
+        self.assertNotIn("STARTED", (self.data / "runtime.jsonl").read_text())
+        events = self.native().event_store.for_handoff(lane_hid)
+        self.assertEqual(sum(x.event_type == "WORKSTATION_NATIVE_HELP_ASSIGNED"
+                             for x in events), 1)
+
+    def test_unregistered_game_worker_is_not_fabricated_by_native_dispatch(self):
+        self.harness.seed_lane("scoped-game", "bounded game need",
+                               cp_lane="game", cp_slot="cp-game-w13-worlds")
+        from systems.workspace.coordinator_window import CoordinatorIndex
+        from systems.workspace.cp_motion import admit_research
+        admit_research(CoordinatorIndex(self.data / "coordinator-windows.jsonl"))
+        harness = self.make(workers={"game-engine-build": "candidate-not-native"})
+        harness.observe(lane_id="scoped-game", kind="BRANCH",
+                        relation="build next game world",
+                        witness_ref="native:game", capability="game-engine-build")
+        self.allowed.add("native:game")
+        lane_hid = harness.tick()["born_coordination_lanes"][0]
+        result = harness.admit_native_help(lane_hid, allow_native_admission=True)
+        self.assertEqual(result["native_help"]["state"], "OPEN_UNSTAFFED")
+        self.assertFalse(result["native_help"]["registered_capability"])
+        self.assertFalse(result["execution_started"])
+        self.assertFalse(result["native_checkpoint_pass"])
+
+    def test_unscope_lane_cannot_claim_native_cp_admission(self):
+        self.branch()
+        self.allowed.add("native:branch-1")
+        born = self.harness.tick()["born_coordination_lanes"][0]
+        with self.assertRaisesRegex(ValueError, "domain-bound"):
+            self.harness.admit_native_help(born, allow_native_admission=True)
+
+
+
 if __name__ == "__main__":
     unittest.main()
