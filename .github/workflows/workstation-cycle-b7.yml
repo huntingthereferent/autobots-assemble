@@ -1,0 +1,35 @@
+name: workstation-cycle-b7
+on:
+  push:
+    paths:
+      - "systems/workspace/workstation_cycle.py"
+      - "network/tests/test_workstation_cycle_*.py"
+      - ".github/workflows/workstation-cycle-b7.yml"
+      - "systems/workspace/WORKSTATION_CYCLE_B7.md"
+  pull_request:
+    paths:
+      - "systems/workspace/workstation_cycle.py"
+      - "network/tests/test_workstation_cycle_*.py"
+      - ".github/workflows/workstation-cycle-b7.yml"
+  workflow_dispatch:
+
+jobs:
+  native-continuation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install canonical native dependencies
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Verify real B3 worker and B4 before B7
+        run: |
+          python -m unittest -v \
+            network.tests.test_workstation_native_feedback_integration \
+            network.tests.test_workstation_return_continuation \
+            network.tests.test_workstation_cycle_repo_native
+      - name: Verify B7 journal integrity and bounded continuation
+        run: |
+          python -m unittest -v network.tests.test_workstation_cycle_bounds
