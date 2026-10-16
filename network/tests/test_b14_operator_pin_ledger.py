@@ -18,6 +18,7 @@ from systems.workspace.b14_operator_pin_ledger import (
     OperatorPinLedger, B14OperatorTrustedDelivery,
 )
 from systems.workspace.observed_event_journal import LOCAL_PASS, START
+from runtime.engine import HandoffRuntime
 
 
 NAME = "finite-source-native"
@@ -272,6 +273,36 @@ class B14RealB3TrustTests(unittest.TestCase):
         self.assertEqual(host.host.b12.bridge.projection(req)["state"], "OPEN")
         self.assertFalse(any(x.event_type == LOCAL_PASS for x in
                              host.host.b12.delivery.journal.for_handoff(req)))
+
+    def test_recovery_refuses_signed_local_pass_revoked_before_native_start(self):
+        from runtime.handoff import HandoffEvent
+        from runtime.journal import RuntimeJournal
+        from systems.workspace.b11_native_local_delivery import ACTOR
+        from systems.workspace.observed_event_journal import ObservedEventJournal
+
+        self.enroll()
+        host = self.host()
+        req = self.prepare(host)
+        signed = self.envelope(host.signing_request(req))
+        journal = host.host.b12.delivery.journal
+        # Model an abrupt exit AFTER durable LOCAL_PASS, BEFORE B10 START.
+        pending = HandoffEvent.create(
+            handoff_id=req, event_type=LOCAL_PASS, actor_id=ACTOR, data=signed,
+        )
+        RuntimeJournal.append(journal, pending)
+        self.assertFalse(any(e.event_type == START for e in journal.for_handoff(req)))
+        self.revoke()
+        # A fresh journal replay MUST consult the current trust ledger, not
+        # blindly trust the historical signed bytes.
+        reopened = ObservedEventJournal(
+            journal.path, adapters=journal.adapters,
+            verify_local_pass=journal.verify_local_pass,
+        )
+        self.assertEqual(reopened.projection(req)["state"], "OPEN")
+        self.assertFalse(any(e.event_type == START for e in reopened.for_handoff(req)))
+        self.assertFalse(host.host.b12.delivery.admission.verify(
+            HandoffRuntime(event_store=reopened).get(req), pending
+        ))
 
     def test_revoked_key_rejects_new_host_even_if_public_bytes_still_exist(self):
         self.enroll()
