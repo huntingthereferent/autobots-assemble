@@ -165,7 +165,7 @@ class B9EventBridgeTests(unittest.TestCase):
             self.prepare(bridge, route=(self.middle, self.goal))
         with self.assertRaisesRegex(ValueError, "not present"):
             self.prepare(bridge, locator="source://changed")
-        with self.assertRaisesRegex(ValueError, "not present"):
+        with self.assertRaisesRegex(ValueError, "does not claim"):
             bridge.prepare(self.goal, self.leaf, route=self.route,
                            worker_id="z-native", edition_ref="v1",
                            source_locator="source://native-v1")
@@ -276,10 +276,12 @@ class B9EventBridgeTests(unittest.TestCase):
             B9ContinuationBridge(self.graph, observed)
 
     def test_source_binding_malformed_fails_closed(self):
-        bridge, journal = self.make()
-        request = self.prepare(bridge)
-        # A separate malformed spec would need an independent trusted event to
-        # reach the journal; the reactor must still refuse its bad binding.
+        # This tests the reactor's binding filter itself, even if some other
+        # caller's local-result verifier were permissive.
+        journal = ObservedEventJournal(
+            self.data / "raw-binding.jsonl",
+            adapters=(self.adapter,), verify_local_pass=lambda h, e: True,
+        )
         bad = Handoff(
             handoff_id="malformed-binding", referent="x",
             from_actor="test", to_actor="test",
@@ -288,10 +290,12 @@ class B9EventBridgeTests(unittest.TestCase):
         )
         HandoffRuntime(event_store=journal).submit(bad)
         journal.append(HandoffEvent.create(
-            handoff_id=bad.handoff_id, event_type=LOCAL_PASS, actor_id="impostor"
+            handoff_id=bad.handoff_id, event_type=LOCAL_PASS, actor_id="test"
         ))
         self.assertEqual(self.actions, [])
-        self.assertEqual(journal.projection(request)["state"], "OPEN")
+        self.assertEqual(journal.projection(bad.handoff_id)["state"], "OPEN")
+        self.assertEqual(journal.for_handoff(bad.handoff_id)[-1].data["cause"],
+                         "invalid source edition binding")
 
     def test_callback_failure_is_not_authorization(self):
         def failing(handoff, event):
@@ -301,6 +305,114 @@ class B9EventBridgeTests(unittest.TestCase):
         self.emit(journal, request)
         self.assertEqual(self.actions, [])
         self.assertEqual(journal.projection(request)["state"], "OPEN")
+
+
+class RealB9NativeBridgeTests(unittest.TestCase):
+    """One actual B3 subprocess with independent native-return reverification."""
+
+    def setUp(self):
+        from network.tests.test_workstation_native_feedback_integration import (
+            RealNativeFeedbackTests,
+        )
+        from systems.workspace.branch_help import verify_return
+        from systems.workspace.workstation_native_feedback import canonical_digest
+
+        self.native = RealNativeFeedbackTests(
+            "test_true_native_worker_executes_and_return_is_recorded_on_original_lane"
+        )
+        self.native.setUp()
+        self.addCleanup(self.native.doCleanups)
+        self.folder = TemporaryDirectory()
+        self.addCleanup(self.folder.cleanup)
+        self.data = Path(self.folder.name)
+        self.graph = WorkstationConstruction(self.data / "construction")
+        self.goal = self.graph.goal("Observe real B3 native worker", provenance="user:goal")
+        self.candidate = self.graph.candidate(
+            self.goal, "source-owned native finite return reverified",
+            provenance="candidate:b3",
+        )
+        self.route = (self.candidate, self.goal)
+        job = self.native.runtime().get(self.native.job_id)
+        self.edition = job.metadata["edition_fingerprint"]
+        self.graph.suggest_source(
+            self.candidate, worker_id="finite-source-native",
+            edition_ref=self.edition,
+            source_locator="native-b3:" + self.native.job_id,
+            reason="proposed B3 source requires native recheck",
+        )
+        self.calls = 0
+        relation = "source-owned native finite return reverified"
+
+        def execute(cap):
+            self.calls += 1
+            return self.native.feedback.advance(
+                self.native.lane_id, confirm_execute=self.native.job_id,
+                allow_local_execution=True,
+            )
+
+        def observe(cap, returned):
+            state = self.native.runtime().state(self.native.job_id)
+            native_checked = verify_return(
+                data_dir=self.native.harness.data_dir, opening_id=returned.opening_id
+            )
+            valid = (
+                native_checked.get("state") == "RETURN_RECORDED_REVERIFY_BEFORE_USE"
+                and native_checked.get("child", {}).get("job_id") == self.native.job_id
+                and returned.job_id == self.native.job_id
+                and returned.coordination_handoff_id == self.native.lane_id
+                and state.status == "COMPLETE"
+                and canonical_digest(state.output) == returned.output_sha256
+                and canonical_digest(
+                    [getattr(e, "__dict__", {}) for e in state.evidence]
+                ) == returned.evidence_sha256
+                and self.native.runtime().get(self.native.job_id).metadata.get(
+                    "edition_fingerprint"
+                ) == cap.edition
+                and not returned.checkpoint_pass
+            )
+            return Witness(
+                "SUPPORTED" if valid else "UNKNOWN",
+                cap.edition, (relation,) if valid else (),
+                "native-b3://" + self.native.job_id if valid else "", valid,
+            )
+
+        adapter = SourceAdapter(
+            Capability("finite-source-native", self.edition, (relation,), True),
+            execute, observe,
+        )
+        self.journal = ObservedEventJournal(
+            self.data / "observed.jsonl", adapters=(adapter,),
+            verify_local_pass=scoped_local_verifier(
+                self.graph, lambda h, e: (
+                    e.actor_id == "b3-native-local-trial"
+                    and e.data.get("test-local-proof") == "verified"
+                ),
+            ),
+        )
+        self.bridge = B9ContinuationBridge(self.graph, self.journal)
+
+    def test_native_b3_subprocess_crosses_only_candidate_relation(self):
+        request = self.bridge.prepare(
+            self.goal, self.candidate, route=self.route,
+            worker_id="finite-source-native", edition_ref=self.edition,
+            source_locator="native-b3:" + self.native.job_id,
+        )
+        self.assertEqual(self.calls, 0)
+        self.assertEqual(self.native.runtime().state(self.native.job_id).status, "READY")
+        self.journal.append(HandoffEvent.create(
+            handoff_id=request, event_type=LOCAL_PASS,
+            actor_id="b3-native-local-trial", data={"test-local-proof": "verified"},
+        ))
+        self.assertEqual(self.calls, 1)
+        self.assertEqual(self.native.runtime().state(self.native.job_id).status, "COMPLETE")
+        self.assertEqual(self.bridge.projection(request)["state"], "CROSSED")
+        self.assertFalse(self.bridge.projection(request)["whole_route_verified"])
+        self.assertFalse(self.graph.next_construction_handoffs(self.goal)["whole_chain_verified"])
+        self.journal.append(HandoffEvent.create(
+            handoff_id=request, event_type=LOCAL_PASS,
+            actor_id="b3-native-local-trial", data={"test-local-proof": "verified"},
+        ))
+        self.assertEqual(self.calls, 1)
 
 
 if __name__ == "__main__":
