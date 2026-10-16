@@ -108,6 +108,9 @@ def scoped_local_verifier(
         except Exception:
             return False
 
+    # Scope identity is a guard against accidentally wiring a generic local
+    # result verifier into a B9 attempt journal. It is not an owner signature.
+    verify._b9_construction_path = construction.data_dir.resolve()
     return verify
 
 
@@ -122,6 +125,9 @@ class B9ContinuationBridge:
             raise TypeError("the real observed event journal is required")
         if journal.path.resolve() == (construction.data_dir / "runtime.jsonl").resolve():
             raise ValueError("construction and attempt journals must be separate")
+        if (getattr(journal.verify_local_pass, "_b9_construction_path", None)
+                != construction.data_dir.resolve()):
+            raise ValueError("B9-scoped independent local-result verifier is required")
         self.construction = construction
         self.journal = journal
 
