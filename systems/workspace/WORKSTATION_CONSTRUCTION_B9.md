@@ -140,19 +140,21 @@ executable B3/B8 job.
 - The existing JSONL store is not a concurrent-writer lock or a signature
   scheme; a multi-process host must supply those protections separately.
 
-## Scope of this candidate
+## B9 repository verification and scope
 
-This is an **additive B9 local candidate**: production repository source is
-not edited. The included local runtime's `journal.py`, `handoff.py` and `engine.py`, plus
-B2 `workstation_harness.py` and `workstation_continuation.py`, match the blob
-hashes on GitHub `main` as checked on 2026-10-16. The local `engine.py` was replaced by a byte-identical copy of the actual
-canonical engine on `main` (Git blob `7525ed8788fb4c668c0d2d12ad34fd89a1f1927a`).
-The 73 local tests now use the canonical runtime sources. The repository
-overlay is prepared for independent GitHub CI, which has **not yet run**.
+B9 originated as an additive local candidate with the canonical runtime sources.
+Its source and 73 construction tests were merged into GitHub `main` in
+[PR #30](https://github.com/huntingthereferent/autobots-assemble/pull/30)
+at merge commit `aebe6ab5bc05ba07bcea27f31976e851dedfb204`.
+Native [B9 construction CI](https://github.com/huntingthereferent/autobots-assemble/actions/runs/38903000870)
+passed the 73 B9 tests, the B2/B7 regression tests, and the canonical
+Continuous Handoff reference tests. Post-merge workspace-continuity and
+protocol suites also passed on that exact merge commit.
 
-The test `verify_native_receipt` callback is explicitly a local **fixture**;
-no test claims independent source-owner verification. The construction and
-journal isolation behavior is what local tests establish.
+The test `verify_native_receipt` callback is still an explicit fixture;
+B9 construction or hash comparison does not authenticate a source owner or
+prove a proposed route. The separately scoped B10 continuation trial is
+described in `B9_OBSERVED_CONTINUATION_BRIDGE.md` and does not modify that rule.
 
 ## Local reproduction
 
