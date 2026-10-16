@@ -1,6 +1,6 @@
 # Language — Same Referent, Different Surfaces
 
-[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [Felt POV / Reading Provenance](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) · [October 15 communication / handoff writing](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/FINDING_WORDS_WITHOUT_LOSING_THE_REFERENT_2026-10-15.md) · [James's language report](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
+[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [Separations](SEPARATIONS.md) · [Felt POV / Reading Provenance](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) · [October 15 communication / handoff writing](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/FINDING_WORDS_WITHOUT_LOSING_THE_REFERENT_2026-10-15.md) · [James's language report](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
 
 **James is James at every layer.** A conversation, a mathematical description, an English decoder, a social interaction, and a technical handoff can follow the same referent without turning him into a different speaker or converting every observation into code.
 
