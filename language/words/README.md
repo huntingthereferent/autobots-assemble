@@ -97,4 +97,6 @@ James names the larger conversational subject **Human Drift**. His [dated words]
 
 A quiet participant may have observed more than the platform shows. No reply can help or hurt; the `SILENCE` anchor only records the *lack of an expected return during a stated window*, not that person's intention, emotional response, or agreement. Regrounding is a human-language practice here, not a new platform event ID or an automated return.
 
+**Time is not only event order.** A person may experience a pause immediately, and that experience may shift while the platform still records no reply. The `SILENCE` anchor describes a bounded observable absence; it cannot represent a continuous felt response or recover how that response changed. If the lived sequence matters, preserve the first contemporaneous account, later observations, and later recollection separately, when available. See [Human Drift — October 16](../HUMAN_DRIFT.md#october-16--silence-changes-with-time-even-without-words). This does not add a new movement type or claim another person's intention.
+
 James's outward observations may intersect across many situations. This social-action bank is a narrow representation of witnessed interface mechanics, not a substitute for his description or for the [canonical language referent](../../LANGUAGE_REFERENT.md).
