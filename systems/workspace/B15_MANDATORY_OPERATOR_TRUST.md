@@ -64,9 +64,9 @@ fails instead of silently operating with no live revocation policy.
 
 ## Verification boundary
 
-The new B15 suite checks fourteen cases against an existing *real B3 native
+The new B15 suite checks fifteen cases against an existing *real B3 native
 subprocess fixture*: old CLI with no trust path, old API with no policy,
-unprovisioned/revoked/rotated key, stale B13 instance, journal-path collisions,
+unprovisioned/revoked/rotated key, stale B13 instance, journal-path collisions, symlinked trust-policy files,
 signed LOCAL_PASS replay after revocation and a valid cross-process
 prepare/sign/deliver with an operator-enrolled ephemeral test public key.
 
