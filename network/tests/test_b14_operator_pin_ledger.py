@@ -329,5 +329,125 @@ class B14RealB3TrustTests(unittest.TestCase):
         self.assertFalse(self.trust.is_current(NAME, "b" * 64, self.digest))
 
 
+class B14OperatorCliTests(unittest.TestCase):
+    """Exercise operator CLI in separate processes with an actual B3 result."""
+
+    def setUp(self):
+        import sys
+        from network.tests.test_b13_offline_owner_delivery import B13OfflineSourceTests
+        self.fixture = B13OfflineSourceTests(
+            "test_cross_process_prepare_external_sign_deliver_native"
+        )
+        self.fixture.setUp()
+        self.addCleanup(self.fixture.doCleanups)
+        self.fixture.execute_b3()
+        self.fx = self.fixture.fx
+        self.path = self.fx.root / "trust-ledger.jsonl"
+        self.root_cmd = [
+            sys.executable, "-m", "systems.workspace.b14_operator_cli",
+            "--trust-ledger", str(self.path),
+        ]
+        self.pin_cmd = [
+            "pin", "--source-edition", self.fx.edition,
+        ]
+        self.native_cmd = [
+            "native",
+            "--construction-dir", str(self.fx.graph.data_dir),
+            "--native-data-dir", str(self.fx.native.data),
+            "--observed-journal", str(self.fx.root / "observed.jsonl"),
+            "--lane-id", self.fx.source.lane_id,
+            "--opening-id", self.fx.source.opening_id,
+            "--job-id", self.fx.source.job_id,
+            "--confirm-source-job", self.fx.source.job_id,
+            "--pinned-public-key", str(self.fixture.pin_file),
+            "--expected-public-key-sha256", self.fixture.pin_digest,
+        ]
+
+    def cmd(self, *args, success=True):
+        import subprocess
+        result = subprocess.run(
+            [*self.root_cmd, *args], capture_output=True, text=True,
+            timeout=20, cwd=Path(__file__).resolve().parents[2],
+        )
+        if success:
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            return json.loads(result.stdout)
+        self.assertNotEqual(result.returncode, 0)
+        return result.stderr
+
+    def enroll(self):
+        return self.cmd(*self.pin_cmd, "enroll",
+                        "--public-key", str(self.fixture.pin_file),
+                        "--expected-public-key-sha256", self.fixture.pin_digest,
+                        "--confirm-new-sha256", self.fixture.pin_digest,
+                        "--operator-ref", "test-operator",
+                        "--verification-ref", "external-public-pin-checked")
+
+    def test_pin_cli_never_infers_enrollment_from_public_file(self):
+        initial = self.cmd(*self.pin_cmd, "status")
+        self.assertIsNone(initial["current_public_key_sha256"])
+        self.assertFalse(initial["operator_source_identity_authenticated"])
+        with self.assertRaises(AssertionError):
+            self.cmd(*self.native_cmd, "prepare", "--goal-id", self.fx.goal,
+                     "--candidate-id", self.fx.candidate,
+                     "--route-node", self.fx.candidate, "--route-node", self.fx.goal)
+        self.enroll()
+        self.assertEqual(self.cmd(*self.pin_cmd, "status")["current_public_key_sha256"],
+                         self.fixture.pin_digest)
+
+    def test_cli_external_signature_delivery_then_revocation_blocks_more(self):
+        self.enroll()
+        prepared = self.cmd(
+            *self.native_cmd, "prepare", "--goal-id", self.fx.goal,
+            "--candidate-id", self.fx.candidate,
+            "--route-node", self.fx.candidate, "--route-node", self.fx.goal,
+        )
+        request = prepared["request_id"]
+        unsigned = self.cmd(*self.native_cmd, "signing-request", "--request-id", request)
+        signature = self.fx.signer.sign(
+            bytes.fromhex(unsigned["canonical_bytes_hex"])
+        ).hex()
+        response = self.fx.root / "b14-owner-signed.json"
+        response.write_text(json.dumps({
+            "protocol": PROTOCOL, "receipt": unsigned["receipt"],
+            "signature": signature,
+        }), encoding="utf8")
+        report = self.cmd(*self.native_cmd, "deliver", "--request-id", request,
+                          "--confirm-request", request, "--approve-native-delivery",
+                          "--signed-envelope", str(response))
+        self.assertEqual(report["state"], "CROSSED")
+        self.assertFalse(report["private_key_loaded"])
+        self.assertFalse(report["native_B3_reexecuted"])
+        self.cmd(*self.pin_cmd, "revoke",
+                 "--confirm-prior-sha256", self.fixture.pin_digest,
+                 "--operator-ref", "test-operator",
+                 "--verification-ref", "test-revocation")
+        self.assertIsNone(self.cmd(*self.pin_cmd, "status")["current_public_key_sha256"])
+        self.cmd(*self.native_cmd, "signing-request",
+                 "--request-id", request, success=False)
+
+    def test_cli_rotation_replaces_old_key_without_automatic_owner_enrollment(self):
+        self.enroll()
+        other = Ed25519PrivateKey.generate()
+        raw = other.public_key().public_bytes(
+            serialization.Encoding.Raw, serialization.PublicFormat.Raw,
+        )
+        newdigest = sha256(raw).hexdigest()
+        path = self.fx.root / "next-public.raw"
+        path.write_bytes(raw)
+        self.cmd(*self.pin_cmd, "rotate", "--public-key", str(path),
+                 "--expected-public-key-sha256", newdigest,
+                 "--confirm-new-sha256", newdigest,
+                 "--confirm-prior-sha256", self.fixture.pin_digest,
+                 "--operator-ref", "test-operator",
+                 "--verification-ref", "external-rotation-checked")
+        self.assertEqual(
+            self.cmd(*self.pin_cmd, "status")["current_public_key_sha256"], newdigest
+        )
+        self.cmd(*self.native_cmd, "prepare", "--goal-id", self.fx.goal,
+                 "--candidate-id", self.fx.candidate, "--route-node", self.fx.candidate,
+                 "--route-node", self.fx.goal, success=False)
+
+
 if __name__ == "__main__":
     unittest.main()
