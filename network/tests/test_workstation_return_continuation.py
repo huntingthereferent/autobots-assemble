@@ -75,6 +75,26 @@ class WorkstationB4Tests(unittest.TestCase):
         self.assertFalse(result["native_checkpoint_pass"])
         self.assertEqual(self.b4.next_pass()["born_coordination_lanes"], [])
 
+    def test_next_child_can_open_its_own_observation_without_rewriting_parent(self):
+        self.harness.worker_editions["owner-native-correspondence-witness"] = "candidate-edition"
+        self.b4.derive_next(self.lane_id)
+        result = self.b4.next_pass()
+        child_handoff_id = result["born_coordination_lanes"][0]
+        child = self.harness._runtime().get(child_handoff_id)
+        parent_before = len(self.harness._runtime().event_store.for_handoff(self.lane_id))
+        observation_id = self.harness.observe(
+            lane_id=child.metadata["lane_id"],
+            kind="BRANCH", relation="separate child-observed hypothesis",
+            capability="finite-required-edge-prefilter",
+            witness_ref="fixture:unproved-child-hypothesis",
+        )
+        self.assertTrue(observation_id.startswith("whobs-"))
+        self.assertEqual(len(self.harness._runtime().event_store.for_handoff(self.lane_id)),
+                         parent_before)
+        self.assertFalse(self.b4.verify_observation(
+            next(o for o in self.harness._snapshot()[3] if o.id == observation_id)))
+        self.assertEqual(self.b4.next_pass()["born_coordination_lanes"], [])
+
     def test_next_relations_are_rechecked_and_revocation_prevents_new_lane(self):
         self.harness.worker_editions["owner-native-correspondence-witness"] = "candidate-edition"
         self.b4.derive_next(self.lane_id)
