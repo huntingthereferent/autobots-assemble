@@ -1,0 +1,64 @@
+name: workstation-b11-native-local-delivery
+on:
+  push:
+    paths:
+      - 'systems/workspace/b11_native_local_delivery.py'
+      - 'network/tests/test_b11_native_local_delivery.py'
+      - 'systems/workspace/B11_NATIVE_LOCAL_DELIVERY.md'
+      - '.github/workflows/workstation-b11-native-local-delivery.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/b11_native_local_delivery.py'
+      - 'network/tests/test_b11_native_local_delivery.py'
+      - '.github/workflows/workstation-b11-native-local-delivery.yml'
+  workflow_dispatch:
+
+jobs:
+  source-owned-local-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install required native signature verification library
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Check exactly 19 B11 proof and delivery cases with no skips
+        run: |
+          python - <<'PY'
+          import unittest
+          from network.tests import test_b11_native_local_delivery
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_b11_native_local_delivery)
+          if suite.countTestCases() != 19:
+              raise SystemExit(f'expected 19 B11 cases, found {suite.countTestCases()}')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('B11 native local delivery failed or skipped')
+          PY
+      - name: Preserve B10 scoped bridge and native B3 regressions
+        run: |
+          python -m unittest -v \
+            network.tests.test_b9_event_bridge \
+            network.tests.test_observed_event_journal \
+            network.tests.test_observed_event_journal_native
+      - name: Preserve original 73 B9 construction cases
+        run: |
+          python - <<'PY'
+          import importlib, unittest
+          names = (
+              'network.tests.test_workstation_construction',
+              'network.tests.test_workstation_construction_frontier',
+              'network.tests.test_workstation_construction_scale',
+              'network.tests.test_workstation_construction_route_scope',
+          )
+          suite = unittest.TestSuite(
+              unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(name))
+              for name in names
+          )
+          if suite.countTestCases() != 73:
+              raise SystemExit('B9 construction suite count changed')
+          result = unittest.TextTestRunner(verbosity=1).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('B9 construction regressions failed')
+          PY
