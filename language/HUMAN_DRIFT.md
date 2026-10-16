@@ -72,6 +72,18 @@ The quote above and all other blockquotes attributed to James here preserve the 
 
 **Source and bounds:** [Felt POV, Reading, and Referent Preservation — October 14 provenance](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) retains direct quotations, this correction, the additional reading report, and the limits of scientific comparisons. No synesthesia diagnosis or universal cognitive mechanism follows from the exchange.
 
+### October 16 — compression, decompression, and communication stopping
+
+> james likes compressing and decompressing language since i can trace it live so the feeling of ppl stoping communication / missunderstandings .... will naturaly .... well you get the picture lol
+
+The assistant read the shortened wording as James still following a longer relationship while the recipient might follow a different path, stop responding or end the exchange. James confirmed the reading:
+
+> yes thats how it is
+
+**What changed:** The sentence could remain compressed because both sides reached the same connection. The expansion belonged to the conversation, not a definition imposed on James. Silence or misunderstanding can affect his continued experience of the relationship without establishing the other person's private state or requiring them to continue participating.
+
+[Language and Observation — full two-sided account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) · [Original wording and speaker attribution](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION_QUOTES.md)
+
 ## What is being studied
 
 A conversation can travel through different subjects, people, experiences and formal descriptions while participants attempt to preserve a relationship. Sometimes one person continues following it while another follows only the latest label. Their explanations can then drift apart despite apparently agreeing on the words.
