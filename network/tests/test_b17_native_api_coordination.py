@@ -9,6 +9,7 @@ from __future__ import annotations
 from concurrent.futures import ThreadPoolExecutor
 from hashlib import sha256
 import json
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from threading import Barrier, Thread
@@ -242,6 +243,46 @@ class B17NativeAPICoordinationTests(unittest.TestCase):
                          approved=True, signed_envelope=signed)
         self.assertFalse(any(e.event_type == START for e in
                              RuntimeJournal(self.fx.root / "observed.jsonl").for_handoff(request)))
+
+    def test_posix_fork_cannot_inherit_parent_lock_authority(self):
+        # A forked process inherits threading.local contents on POSIX.
+        # That must never authorize it to reenter a parent's B16 lease.
+        if not hasattr(os, "fork"):
+            return  # no POSIX fork on this platform; CI runs on Ubuntu
+        read_fd, write_fd = os.pipe()
+        try:
+            with coordinated_operator_entry(
+                    trust_ledger=self.fixture.trust_path,
+                    observed_journal=self.fx.root / "observed.jsonl"):
+                pid = os.fork()
+                if pid == 0:
+                    os.close(read_fd)
+                    try:
+                        with coordinated_operator_entry(
+                                trust_ledger=self.fixture.trust_path,
+                                observed_journal=self.fx.root / "observed.jsonl"):
+                            result = b"unsafe-inherited-lock"
+                    except PermissionError:
+                        result = b"blocked"
+                    except Exception:
+                        result = b"unexpected-error"
+                    try:
+                        os.write(write_fd, result)
+                    finally:
+                        os.close(write_fd)
+                        os._exit(0)
+                os.close(write_fd)
+                write_fd = -1
+                result = os.read(read_fd, 64)
+                waited, status = os.waitpid(pid, 0)
+                self.assertEqual(waited, pid)
+                self.assertTrue(os.WIFEXITED(status))
+                self.assertEqual(os.WEXITSTATUS(status), 0)
+                self.assertEqual(result, b"blocked")
+        finally:
+            os.close(read_fd)
+            if write_fd >= 0:
+                os.close(write_fd)
 
     def test_direct_policy_ledger_persists_exact_sequence(self):
         initial = self.fixture.trust.history()
