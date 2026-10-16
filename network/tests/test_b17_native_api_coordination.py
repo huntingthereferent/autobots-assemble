@@ -124,7 +124,7 @@ class B17NativeAPICoordinationTests(unittest.TestCase):
                 future = pool.submit(self.prepare, host)
                 with self.assertRaisesRegex(PermissionError, "busy"):
                     future.result()
-        self.assertEqual(host.b12.delivery.journal.all()[-1].event_type, "CREATED") if False else None
+        self.assertFalse((self.fx.root / "observed.jsonl").exists())
 
     def test_direct_operator_policy_revoke_blocked_by_native_session(self):
         with coordinated_operator_entry(trust_ledger=self.fixture.trust_path,
