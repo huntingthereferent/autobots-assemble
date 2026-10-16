@@ -66,3 +66,15 @@ Read-only status is **not** native re-verification or proof of a currently execu
 ## Inspect recorded jobs without executing them
 
 [Native inspection panels](INSPECTION_PANELS.md) display finite required-edge prefilter verdicts and simulated Factory machine output through one common workstation GUI. These are **recorded** observations only; source editions, verifiers, and execution controls remain separate.
+
+## Journal-backed continuation harness (B2 candidate)
+
+The review-branch [Workstation continuation B2](WORKSTATION_CONTINUATION_B2.md)
+uses the existing `RuntimeJournal` and `HandoffRuntime` to record independent
+lane openings, witness-gated movement proposals, recoverable derived coordination
+lanes, and separately verified cross-lane connection proposals. It does not
+replace this source-copy workstation. A coordination lane is NOT a running
+worker or a game checkpoint PASS. Its optional `admit_native_help` route
+reuses existing exact-source worker admission without silently executing code.
+The pass is invocation-driven; real native observation providers and autonomous
+coding-worker execution remain separate prerequisites.
