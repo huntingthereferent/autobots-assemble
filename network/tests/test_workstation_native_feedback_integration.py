@@ -120,10 +120,8 @@ class RealNativeFeedbackTests(unittest.TestCase):
         self.assertEqual(self.feedback.historical_returns(self.lane_id), ())
 
     def test_changed_worker_source_cannot_report_verified_return(self):
-        source, _ = self.desk._read(WORKER_ID, "help-" + self.harness._runtime().get(
-            self.lane_id).metadata["birth_proposal_id"][-20:])
-        # Resolve actual child edition from source-owned admission, not from
-        # an assumed relation with a generated proposal identifier.
+        # Resolve actual child edition from source-owned admission, never
+        # assume a generated proposal identifier names a native source edition.
         assignment = self.harness.admit_native_help(self.lane_id)["native_help"]["child"]
         edition, _ = self.desk._read(WORKER_ID, assignment["version_id"])
         changed = edition / "finite_required_edge_guard.py"
