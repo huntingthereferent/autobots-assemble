@@ -187,13 +187,30 @@ class B11SourceOwnedDeliveryTests(unittest.TestCase):
         delivery = self.make()
         request = self.prepare(delivery)
         proof = self.proof(request)
-        other = self.graph.candidate(
-            self.goal, "other source requirement", provenance="another:branch",
+        # Two registered routes share the exact same intermediate candidate.
+        # A signature for route A cannot be replayed into route B.
+        alternate = self.graph.candidate(
+            self.goal, "alternative downstream route",
+            provenance="another:branch", path_role="ALTERNATIVE",
         )
-        changed = NativeLocalProof(**{**asdict(proof), "handoff_id": other})
+        self.graph.propose_connection(
+            self.middle, alternate, reason="possible alternative, not a join"
+        )
+        alternate_request = delivery.bridge.prepare(
+            self.goal, self.middle,
+            route=(self.leaf, self.middle, alternate, self.goal),
+            worker_id="native-owner", edition_ref="sha-v1",
+            source_locator="native-source://one",
+        )
+        self.assertNotEqual(request, alternate_request)
+        changed = NativeLocalProof(**{
+            **asdict(proof), "handoff_id": alternate_request
+        })
         with self.assertRaisesRegex(ValueError, "not independently admitted"):
             delivery.deliver(changed, signature_hex=self.sign(proof))
         self.assertEqual(self.calls, [])
+        self.assertEqual(delivery.bridge.projection(request)["state"], "OPEN")
+        self.assertEqual(delivery.bridge.projection(alternate_request)["state"], "OPEN")
 
     def test_tampering_the_native_receipt_digest_rejected(self):
         delivery = self.make()
