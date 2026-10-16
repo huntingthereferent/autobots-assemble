@@ -87,7 +87,7 @@ natural identity or the external origin of a key.
 
 ## Native verification
 
-The 16 B13 tests use the actual existing repository B3 native subprocess
+The 17 B13 tests use the actual existing repository B3 native subprocess
 with its previously admitted source edition and saved B2 lane result. They
 exercise separate CLI invocations for `prepare`, `signing-request` and
 `deliver`, an external ephemeral test signer outside the CLI, and the
@@ -106,7 +106,7 @@ CI must also preserve the native B12/B11/B10 suites and the original
   signer fixture**; no production source-owner identity is created here.
 - This tool is invoked directly by an operator. There is **no daemon,
   background watcher, automatic credential enrollment or ChatGPT controller**.
-- The original native journals remain single-writer. There is no
+- B13 refuses to use the original B3 source runtime journal as the B10\n  delivery journal, preserving distinct append-only evidence histories.\n- The original native journals remain single-writer. There is no
   concurrency-safe delivery protocol, external-effect reconciliation, or
   durable transaction spanning B9 and B10.
 - Native B3 result verification is bounded to the finite computation.
