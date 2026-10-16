@@ -19,11 +19,15 @@ from systems.workspace.b12_b3_native_delivery import (
 )
 from systems.workspace.workstation_construction import WorkstationConstruction
 from systems.workspace.observed_event_journal import LOCAL_PASS, START, OBSERVED
-from network.tests.test_workstation_native_feedback_integration import RealNativeFeedbackTests
 
 
 class B12NativeB3SourceTests(unittest.TestCase):
     def setUp(self):
+        # Import inside setup so unittest does not collect B3's own TestCase
+        # as part of the B12 suite. Those tests run in their native suite.
+        from network.tests.test_workstation_native_feedback_integration import (
+            RealNativeFeedbackTests,
+        )
         self.native = RealNativeFeedbackTests(
             "test_true_native_worker_executes_and_return_is_recorded_on_original_lane"
         )
