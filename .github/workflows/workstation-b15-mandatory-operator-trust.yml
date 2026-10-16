@@ -29,14 +29,14 @@ jobs:
           python-version: '3.12'
       - name: Install native signature verification dependency
         run: python -m pip install 'cryptography>=45,<47'
-      - name: Require exactly 14 B15 legacy-entrance trust cases without skips
+      - name: Require exactly 15 B15 legacy-entrance trust cases without skips
         run: |
           python - <<'PY'
           import unittest
           from network.tests import test_b15_mandatory_operator_trust
           suite = unittest.defaultTestLoader.loadTestsFromModule(test_b15_mandatory_operator_trust)
-          if suite.countTestCases() != 14:
-              raise SystemExit(f'expected 14 B15 tests, got {suite.countTestCases()}')
+          if suite.countTestCases() != 15:
+              raise SystemExit(f'expected 15 B15 tests, got {suite.countTestCases()}')
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           if not result.wasSuccessful() or result.skipped:
               raise SystemExit('B15 mandatory trust suite failed')
