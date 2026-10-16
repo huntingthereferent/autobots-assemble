@@ -1,0 +1,67 @@
+name: workstation-b9-observed-bridge
+on:
+  push:
+    paths:
+      - 'systems/workspace/b9_continuation_bridge.py'
+      - 'systems/workspace/observed_event_journal.py'
+      - 'network/tests/test_b9_event_bridge.py'
+      - 'network/tests/test_observed_event_journal.py'
+      - 'network/tests/test_observed_event_journal_native.py'
+      - '.github/workflows/workstation-b9-observed-bridge.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/b9_continuation_bridge.py'
+      - 'systems/workspace/observed_event_journal.py'
+      - 'network/tests/test_b9_event_bridge.py'
+      - 'network/tests/test_observed_event_journal.py'
+      - 'network/tests/test_observed_event_journal_native.py'
+      - '.github/workflows/workstation-b9-observed-bridge.yml'
+  workflow_dispatch:
+
+jobs:
+  scoped-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install native feedback verification dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Check exactly 19 new bridge cases with no skips
+        run: |
+          python - <<'PY'
+          import unittest
+          from network.tests import test_b9_event_bridge
+          suite = unittest.defaultTestLoader.loadTestsFromModule(test_b9_event_bridge)
+          count = suite.countTestCases()
+          if count != 19:
+              raise SystemExit(f'expected 19 B10 bridge tests, got {count}')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('B10 scoped bridge did not pass independently')
+          PY
+      - name: Preserve existing observed event journal and real native B3 feedback
+        run: |
+          python -m unittest -v network.tests.test_observed_event_journal network.tests.test_observed_event_journal_native
+      - name: Preserve 73 original B9 construction tests
+        run: |
+          python - <<'PY'
+          import importlib, unittest
+          names = (
+              'network.tests.test_workstation_construction',
+              'network.tests.test_workstation_construction_frontier',
+              'network.tests.test_workstation_construction_scale',
+              'network.tests.test_workstation_construction_route_scope',
+          )
+          suite = unittest.TestSuite(
+              unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(name))
+              for name in names
+          )
+          if suite.countTestCases() != 73:
+              raise SystemExit('B9 construction test count changed')
+          result = unittest.TextTestRunner(verbosity=1).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('B9 regression suite failed')
+          PY
