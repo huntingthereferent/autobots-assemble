@@ -47,7 +47,7 @@ A revoked, rotated or corrupted pin therefore cannot admit an old signed
 receipt or trigger a new native attempt merely because a B13 object already
 exists. Original B10 restart rules still protect uncertain external effects.
 
-B9 route construction stays a proposal. Native B3 finite computation and
+B9 route construction stays a proposal. The independent B11 restart test persists a valid signed LOCAL_PASS before\nsource revocation and verifies that replay refuses to start its native adapter.\n\nNative B3 finite computation and
 source-owner signature do not verify the whole route, parent CP or cross-lane
 owner mapping. Historic events are retained and are not rewritten by revocation.
 
@@ -93,7 +93,7 @@ B11 response is supplied to the delivery command.
 
 ## Verification and remaining walls
 
-The dedicated B14 CI requires **25 tests**: operator policy transitions and
+The dedicated B14 CI requires **26 tests**: operator policy transitions and
 tamper rejection, live revoked-key attempts, source-edition scoping, real
 native B3 signed delivery, and the CLI running in separate processes.
 It also preserves the B13/B12/B11/B10 native suites and the original 73 B9
