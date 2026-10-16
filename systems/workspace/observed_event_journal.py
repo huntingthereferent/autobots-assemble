@@ -125,6 +125,17 @@ class ObservedEventJournal(RuntimeJournal):
         # source joins require their own independently observed handoff.
         subject = handoff.handoff_id
         relation = handoff.required_relation
+        # B9 bridge requests pin ONE source edition. An authorized source with
+        # the same claimed relation but a different identity is NOT interchangeable.
+        # Ordinary, non-B9 handoffs preserve their prior multi-source behavior.
+        binding = handoff.metadata.get('continuation_source_binding')
+        if binding is not None and (
+                not isinstance(binding, dict) or set(binding) != {'name', 'edition'}
+                or any(not isinstance(binding[k], str) or not binding[k]
+                       for k in ('name', 'edition'))):
+            self._emit(subject, OPEN, {'cause': 'invalid source edition binding',
+                                       'trigger_id': trigger.event_id})
+            return
         existing = self.for_handoff(subject)
         begun = {(e.data['name'], e.data['edition']) for e in existing if e.event_type == START}
         resolved = {(e.data['name'], e.data['edition']) for e in existing if e.event_type == OBSERVED}
@@ -141,6 +152,9 @@ class ObservedEventJournal(RuntimeJournal):
             begun = {(e.data['name'], e.data['edition']) for e in existing if e.event_type == START}
             eligible = [a for a in self.adapters if a.capability.authorized
                         and relation in a.capability.claims
+                        and (binding is None or
+                             (a.capability.name == binding['name']
+                              and a.capability.edition == binding['edition']))
                         and (a.capability.name, a.capability.edition) not in begun]
             if not eligible:
                 self._emit(subject, OPEN, {'cause': 'no further authorized source editions',
