@@ -71,6 +71,16 @@ class WorkstationContinuationHarness:
     def _handoff_id(lane_id: str) -> str:
         return "whlane-" + _hash(lane_id)
 
+    @staticmethod
+    def _resolve_lane(runtime: HandoffRuntime, lane_id: str) -> Handoff:
+        """Look up either a seeded lane or a witnessed derived child by identity."""
+        matches = [h for h in runtime._handoffs.values()
+                   if h.metadata.get("source_system") == _LANE
+                   and h.metadata.get("lane_id") == lane_id]
+        if len(matches) != 1:
+            raise ValueError("unknown or ambiguous workstation continuation lane")
+        return matches[0]
+
     def seed_lane(self, lane_id: str, referent: str, *,
                   cp_lane: str = "", cp_slot: str = "") -> str:
         """Explicitly admit initial A/B or other source-owned lane identities."""
@@ -114,13 +124,8 @@ class WorkstationContinuationHarness:
             raise ValueError("relation observation cannot assign a capability")
         oid = "whobs-" + _hash(lane_id, kind, relation, capability, witness_ref)
         runtime = self._runtime()
-        lane_hid = self._handoff_id(lane_id)
-        try:
-            handoff = runtime.get(lane_hid)
-        except KeyError as exc:
-            raise ValueError("unknown workstation continuation lane") from exc
-        if handoff.metadata.get("source_system") != _LANE or handoff.metadata.get("lane_id") != lane_id:
-            raise ValueError("not a workstation continuation lane")
+        handoff = self._resolve_lane(runtime, lane_id)
+        lane_hid = handoff.handoff_id
         for event in runtime.event_store.for_handoff(lane_hid):
             if event.event_type == _OBS and event.data.get("observation_id") == oid:
                 expected = {"observation_id": oid, "kind": kind,
@@ -185,7 +190,7 @@ class WorkstationContinuationHarness:
                 "execution_started": False, "native_checkpoint_pass": False}
 
     def _record_opening(self, runtime: HandoffRuntime, parent_id: str, proposal: Proposal) -> bool:
-        hid = self._handoff_id(parent_id)
+        hid = self._resolve_lane(runtime, parent_id).handoff_id
         prior = runtime.event_store.for_handoff(hid)
         if any(e.event_type == _OPEN and e.data.get("proposal_id") == proposal.id for e in prior):
             return False
