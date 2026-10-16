@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import unittest
 
-from network.tests.test_workstation_native_feedback_integration import RealNativeFeedbackTests
+from network.tests import test_workstation_native_feedback_integration as native_fixture
 from systems.workspace.workstation_return_continuation import (
     WorkstationReturnContinuation, NextMovement, finite_prefilter_next)
 from systems.workspace.process_handoff import WORKER_ID
@@ -17,8 +17,8 @@ from systems.workspace.finite_verifier import verdicts
 
 class WorkstationB4Tests(unittest.TestCase):
     def setUp(self):
-        RealNativeFeedbackTests.setUp(self)
-        self.receipt = RealNativeFeedbackTests.advance(self)
+        native_fixture.RealNativeFeedbackTests.setUp(self)
+        self.receipt = native_fixture.RealNativeFeedbackTests.advance(self)
         self.assertTrue(self.receipt.recorded_new_event)
         self.provider = {WORKER_ID: finite_prefilter_next}
         self.allow_next = True
@@ -65,10 +65,10 @@ class WorkstationB4Tests(unittest.TestCase):
         self.assertEqual(self.harness.tick()["born_coordination_lanes"], [])
         result = self.b4.next_pass()
         self.assertEqual(len(result["born_coordination_lanes"]), 1)
-        next_lane = self.runtime().get(result["born_coordination_lanes"][0])
+        next_lane = self.harness._runtime().get(result["born_coordination_lanes"][0])
         self.assertEqual(next_lane.metadata["parents"],
-                         [self.runtime().get(self.lane_id).metadata["lane_id"]])
-        self.assertEqual(self.runtime().state(next_lane.handoff_id).status, "READY")
+                         [self.harness._runtime().get(self.lane_id).metadata["lane_id"]])
+        self.assertEqual(self.harness._runtime().state(next_lane.handoff_id).status, "READY")
         self.assertEqual(next_lane.inputs["requested_capability"],
                          "owner-native-correspondence-witness")
         self.assertFalse(result["execution_started"])
@@ -128,7 +128,7 @@ class WorkstationB4Tests(unittest.TestCase):
 
     def test_orphan_claim_without_admitted_derivation_cannot_create_lane(self):
         self.harness.observe(
-            lane_id=self.runtime().get(self.lane_id).metadata["lane_id"],
+            lane_id=self.harness._runtime().get(self.lane_id).metadata["lane_id"],
             kind="BRANCH", relation="forged derivation", capability="owner-native-correspondence-witness",
             witness_ref="native-return:" + "a"*64)
         self.harness.worker_editions["owner-native-correspondence-witness"] = "candidate"
