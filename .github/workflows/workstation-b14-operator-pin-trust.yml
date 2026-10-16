@@ -31,14 +31,14 @@ jobs:
           python-version: '3.12'
       - name: Install native Ed25519 validation dependency
         run: python -m pip install 'cryptography>=45,<47'
-      - name: Require exactly 25 B14 pin lifecycle and native subprocess cases
+      - name: Require exactly 26 B14 pin lifecycle and native subprocess cases
         run: |
           python - <<'PY'
           import unittest
           from network.tests import test_b14_operator_pin_ledger
           suite = unittest.defaultTestLoader.loadTestsFromModule(test_b14_operator_pin_ledger)
-          if suite.countTestCases() != 25:
-              raise SystemExit(f'expected 25 B14 cases, got {suite.countTestCases()}')
+          if suite.countTestCases() != 26:
+              raise SystemExit(f'expected 26 B14 cases, got {suite.countTestCases()}')
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           if not result.wasSuccessful() or result.skipped:
               raise SystemExit('B14 operator pin trust tests failed or skipped')
