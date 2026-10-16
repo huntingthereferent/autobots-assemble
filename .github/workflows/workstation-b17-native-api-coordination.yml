@@ -29,14 +29,14 @@ jobs:
           python-version: '3.12'
       - name: Install native Ed25519 verification library
         run: python -m pip install 'cryptography>=45,<47'
-      - name: Require 14 direct API B17 tests with no skips
+      - name: Require 15 direct API B17 tests with no skips
         run: |
           python - <<'PY'
           import unittest
           from network.tests import test_b17_native_api_coordination
           suite = unittest.defaultTestLoader.loadTestsFromModule(test_b17_native_api_coordination)
-          if suite.countTestCases() != 14:
-              raise SystemExit(f'expected 14 B17 cases, got {suite.countTestCases()}')
+          if suite.countTestCases() != 15:
+              raise SystemExit(f'expected 15 B17 cases, got {suite.countTestCases()}')
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           if not result.wasSuccessful() or result.skipped:
               raise SystemExit('B17 direct native API coordination failed')
