@@ -94,3 +94,14 @@ The current finite domain provider correctly leaves `NOT_CONTRADICTED` as an
 owner-native worker for that opening; no autonomous coding agent or full W13
 game WITNESS is claimed. Native return and relation evidence must be checked
 again on each pass before opening work. The original A/B lanes are preserved.
+
+## Native-local owner observation for an unstaffed B4 lane (B5)
+
+The [B5 native-owner adapter](WORKSTATION_OWNER_NATIVE_B5.md) uses existing
+`native_owner_observation.observe_native_owners` and the B4 source-bound
+return to check a selected **live CP30 source-owner task**, subject to an
+explicit source-provided candidate-to-task binding and native audit. It can
+record the bounded local result in the same `RuntimeJournal`; it cannot
+fabricate real external owner identities, a full correspondence witness,
+or a general autonomous bot. Without a source-owned live callback, the
+`owner-native-correspondence-witness` need stays unstaffed.
