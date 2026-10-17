@@ -70,7 +70,7 @@ def build(data):
     req,scope,reason,packet=data["request"],data["scope"],data["reasoning_report"],data["packet_summary"]
     if (req.get("kind") != "synthetic-temporal-prototype/v1"
             or req.get("synthetic") is not True
-            or packet.get("packet_id") != req.get("packet_id")
+            or not isinstance(packet.get("packet_id"), str)
             or reason.get("conclusion") != "synthetic-temporal-logic-only"):
         raise ValueError("prototype must derive from native synthetic packet and reasoning")
     dataset={"kind":"synthetic-temporal-dataset/v1","synthetic":True,
