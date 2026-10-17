@@ -84,7 +84,9 @@ class NIHPrototypeBridge:
     def __init__(self,*,runtime:HandoffRuntime,workstation:ProcessWorkstation):
         self.runtime,self.workstation=runtime,workstation
         self.packet_bridge=NIHPacketBridge(runtime=runtime,workstation=workstation)
-        self.reason_bridge=NIHReasoningBridge(runtime=runtime,workstation=workstation)
+        # PacketBridge already owns the exact reasoning -> ontology -> scope
+        # verifier chain. Reuse it; duplicate verifier registration is forbidden.
+        self.reason_bridge=self.packet_bridge.reasoning_bridge
         runtime.register_evidence_verifier(VERIFIER,self._verify)
 
     def _parents(self,request):
