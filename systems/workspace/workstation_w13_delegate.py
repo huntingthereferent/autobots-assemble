@@ -67,8 +67,8 @@ def restore_continuation(evidence_dir: Path, data_dir: Path) -> dict:
     finally:
         local_archive.unlink(missing_ok=True)
         local_checksum.unlink(missing_ok=True)
-    if unpacked != report.get("inherited_archive_sha256") and not unpacked:
-        raise ValueError("native source fingerprint missing")
+    if not isinstance(unpacked, str) or len(unpacked) != 64:
+        raise ValueError("native archive fingerprint missing")
     return report
 
 
@@ -122,15 +122,26 @@ def delegate_w13(*, data_dir: Path, output_dir: Path) -> dict:
                     capability=CAPABILITY)
     created = harness.tick()
     born = created["born_coordination_lanes"]
-    if len(born) != 1 or created["execution_started"] is not False:
-        raise ValueError("W13 B2 coordination did not open one native branch")
+    if created["execution_started"] is not False:
+        raise ValueError("B2 unexpectedly ran native source without admission")
+    if not born:
+        # Restart: recover the already-born same source-referent branch.
+        children = [h.handoff_id for h in harness._runtime()._handoffs.values()
+                    if h.metadata.get("source_system") == "workstation-continuation-lane/v1"
+                    and h.metadata.get("birth_proposal_id")
+                    and h.metadata.get("parents") == ["A"]
+                    and h.referent == RELATION]
+        born = children
+    if len(born) != 1:
+        raise ValueError("W13 B2 coordination did not resolve one native branch")
     admitted = harness.admit_native_help(
         born[0], parent_version=PARENT_VERSION,
         inputs_file=INPUTS, allow_native_admission=True)
     native_help = admitted["native_help"]
     child = native_help.get("child") or {}
     job = child.get("job_id")
-    if native_help["state"] != "ASSIGNED_NOT_VERIFIED" or not job:
+    if native_help["state"] not in (
+            "ASSIGNED_NOT_VERIFIED", "RETURN_RECORDED_REVERIFY_BEFORE_USE") or not job:
         raise ValueError("no actual W13 source-owned native helper assigned")
     if child.get("worker_id") != WORKER_ID:
         raise ValueError("assigned worker is not the original W13 source family")
@@ -138,8 +149,8 @@ def delegate_w13(*, data_dir: Path, output_dir: Path) -> dict:
                                          verify_return=verify_return)
     returned = feedback.advance(
         born[0], confirm_execute=job, allow_local_execution=True)
-    if not returned.recorded_new_event or returned.job_id != job:
-        raise ValueError("bounded native helper did not return a new recorded result")
+    if returned.job_id != job:
+        raise ValueError("bounded native helper did not return an exact verified result")
     checked = reverify_job(data_dir=data_dir, job_id=job)
     if checked.get("status") != "COMPLETE" or not checked["reverified"]:
         raise ValueError("W13 native delegated result did not independently reverify")
@@ -171,6 +182,7 @@ def delegate_w13(*, data_dir: Path, output_dir: Path) -> dict:
         "native_evidence_sha256": returned.evidence_sha256,
         "delegated_subprocess_completed": True,
         "verified_native_return_recorded": True,
+        "new_return_event": returned.recorded_new_event,
         "repeat_did_not_execute": True,
         "original_AB_lanes_present": {"A", "B"}.issubset(
             {item["id"] for item in harness.inspect()["lanes"]}),
