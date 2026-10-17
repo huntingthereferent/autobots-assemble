@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "description": "Original binary bundles preserved exactly, not installed as runtime modules",
+  "total_archive_count": 17,
+  "continuity_research_bundles": 16,
+  "adjacent_prototypes": 1,
+  "total_bytes": 784242,
+  "files": [
+    {
+      "filename": "CYCLIC_ACTION_CONJUGACY_EXPERIMENT.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/CYCLIC_ACTION_CONJUGACY_EXPERIMENT.zip",
+      "bytes": 11576,
+      "git_blob_sha1": "05a8a88c2fa579f0490ebda9e848648927d1bd9b",
+      "sha256": "852ff142bda868c37313462bb84f3b808318b5944f0fd56887c38322e11e1e17",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "CYCLIC_ACTION_FIFTH_COUPLING_EXPERIMENT.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/CYCLIC_ACTION_FIFTH_COUPLING_EXPERIMENT.zip",
+      "bytes": 14291,
+      "git_blob_sha1": "83da1d4e6a5210114729680776350768bcfc9a58",
+      "sha256": "ffed972f73a71b0163a81beea7c8788b8b0eb066b375b55fbd708f34d3c38230",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "CYCLIC_ACTION_STABILIZER_CORRESPONDENCE_EXPERIMENT.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/CYCLIC_ACTION_STABILIZER_CORRESPONDENCE_EXPERIMENT.zip",
+      "bytes": 15544,
+      "git_blob_sha1": "1c01696c67659f5e6145f33e73dafc646e52cb8d",
+      "sha256": "7e75d4c8ac57037f1e94e34059ca3b38f35c8862f3a5262e2b039a0c2ac5deb8",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "CYCLIC_ACTION_Y_DEPENDENT_EXPERIMENT.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/CYCLIC_ACTION_Y_DEPENDENT_EXPERIMENT.zip",
+      "bytes": 17013,
+      "git_blob_sha1": "2c69544fca3df05bc06acf9994242627eb53a87c",
+      "sha256": "f97ab120386324f70ca5a0ee972b2b9131b9dcf845b485dc73b1714470d7ec8d",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_A_Invariant_Integration.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_A_Invariant_Integration.zip",
+      "bytes": 79075,
+      "git_blob_sha1": "4ea53690ec7dad57dd445996c5ccc76c3d1bd703",
+      "sha256": "aee48dee736bdad85fa19d6fdcc098b358415a55df062b5daa0a7e6311929999",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_All_Fifth_Couplings_1098_Classes.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_All_Fifth_Couplings_1098_Classes.zip",
+      "bytes": 101456,
+      "git_blob_sha1": "84d31cccda685069cb2e0ef754881872ed65eab7",
+      "sha256": "928b031bdfb89a48419dbe94d55af0353cc29acb33787f847b7d5774c3b9d367",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_Board_Integration.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_Board_Integration.zip",
+      "bytes": 13286,
+      "git_blob_sha1": "9bc7275bba21fba52737f0296f241f4c9c4aa47a",
+      "sha256": "b8bca6d765c2f77159fbdf11b381a3735057b324d0d08ceb071bca224e991531",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_Cross_Scope_Handoff.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_Cross_Scope_Handoff.zip",
+      "bytes": 61162,
+      "git_blob_sha1": "8f62b882e42c235e2a164037015cd51dd7a481c0",
+      "sha256": "4d4855baae64cfe24eec7a29a1a2d87b1221aa705614e352c65c8f771af9d5e6",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_E_Drive_Repo_Ready.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_E_Drive_Repo_Ready.zip",
+      "bytes": 66527,
+      "git_blob_sha1": "0a99d6391f9c0ce00ff6cbf769d4ea34313c62bf",
+      "sha256": "35551cbd1f9dc254d7868b6bb722a574c5d4926f109a76275c7e9199bbe1db06",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_Full_AB_Correspondence_Integration.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_Full_AB_Correspondence_Integration.zip",
+      "bytes": 31214,
+      "git_blob_sha1": "a337efcb663c8b4d10cc3687505e6ca891baa25f",
+      "sha256": "977fb2ddd9fea2bc9c316caf8b7387129384efb690114312d5c13b9eb1c35711",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_Invariant_Intersections.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_Invariant_Intersections.zip",
+      "bytes": 117424,
+      "git_blob_sha1": "b6cdd2b9d62f9560d7d7d6f267b2adf8e8f162de",
+      "sha256": "94a0193f7644989bd782bb60871283b812615ca8c393991438f2b94d2bd97ea0",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "Continuity_Engine_Orbit_Incidence_39_Class_Integration.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/Continuity_Engine_Orbit_Incidence_39_Class_Integration.zip",
+      "bytes": 207563,
+      "git_blob_sha1": "be3d849351861d33df5bc676b23faabcf2c3b4de",
+      "sha256": "7c56331fe7f21f9f1b8ece67a378df47dcf5d70acf470221bfcf31b5afc20e11",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "ENGINE_TWO_parallel_quotient_experiment.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/ENGINE_TWO_parallel_quotient_experiment.zip",
+      "bytes": 15231,
+      "git_blob_sha1": "10da8f726c866c9c245e4f55e4d1d0e7e6d2ae64",
+      "sha256": "e0d5f4110d101fe21cca8a9a010dfadb686773499486a79337e9a698093dd98c",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "ENGINE_TWO_transported_commutator_experiment.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/ENGINE_TWO_transported_commutator_experiment.zip",
+      "bytes": 9089,
+      "git_blob_sha1": "2ce8cbc2ff469e646e972b0104337b74d00bb7df",
+      "sha256": "2fe94fc8cfcc0246883e09dfb35204b72dda4ebb9b90bf4f5336d3c7dc999589",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "continuity_engine_prototype.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/continuity_engine_prototype.zip",
+      "bytes": 5294,
+      "git_blob_sha1": "ddba8e1a980f29fb67fc83721e5dbb697311048f",
+      "sha256": "c5a8e71956e4381d20347ebea526d9377b66b540203ac27a25d391e32bde2470",
+      "role": "historical Continuity/Cyclic research bundle"
+    },
+    {
+      "filename": "factory_store_bridge_prototype.zip",
+      "path": "research/continuity_engine/collected/adjacent_prototypes/factory_store_bridge_prototype.zip",
+      "bytes": 14669,
+      "git_blob_sha1": "6f5889af396885a3d75d04047c054ab5a4639f50",
+      "sha256": "af4159f6fa2e0227fe5ebc1dc0422034162656e112107df94138e03a55d02cf2",
+      "role": "adjacent prototype"
+    },
+    {
+      "filename": "run_only.zip",
+      "original_relative_path": "continuity_engine_work/run_only.zip",
+      "path": "research/continuity_engine/collected/archive_bundles/continuity_engine_work/run_only.zip",
+      "bytes": 3828,
+      "git_blob_sha1": "dd27674af4727ba7d708e99e29d1a649b94fbe45",
+      "sha256": "398a197dc5bbb0618cd57561df42bd2142859bfa029fe0eb9d7c6ceab03d907f",
+      "role": "historical Continuity/Cyclic research bundle"
+    }
+  ]
+}

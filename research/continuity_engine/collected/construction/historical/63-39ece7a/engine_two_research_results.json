@@ -1,0 +1,578 @@
+{
+  "cases": [
+    {
+      "request": "AUTO",
+      "selection_reason": "AUTO: rooted relation + complete fixed-B when bounded + concrete labeled arrows",
+      "status": "WATCHED_DIFFERENCE",
+      "source_rules": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "target_rules": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "parent_id": null,
+      "readings": [
+        {
+          "watch": "rooted A/B continuation",
+          "status": "ROOTED_EQUIVALENT",
+          "before_reachable": 9,
+          "after_reachable": 9,
+          "correspondence_size": 9,
+          "unresolved": [],
+          "omissions": [
+            "root-reachable isomorphism is not full-state conjugacy"
+          ]
+        },
+        {
+          "status": "BOUNDARY",
+          "width": 2,
+          "before_fixed_B": 27,
+          "after_fixed_B": 9,
+          "lost": 18,
+          "gained": 0,
+          "surviving": 9,
+          "survival_relation_pairs": 9,
+          "omissions": [
+            "identity correspondence is only for a B-fixed membership WATCH",
+            "does not establish complete labeled A/B conjugacy"
+          ],
+          "unresolved": [
+            0,
+            0
+          ],
+          "delta_s": -18,
+          "parent_witness": null,
+          "watch": "complete-space B-fixed membership"
+        },
+        {
+          "watch": "labeled generator tables",
+          "status": "LABELED_ARROWS_DIFFER",
+          "changed_A": 0,
+          "changed_B": 54,
+          "total_carrier_states": 81,
+          "sample_changes": [
+            [
+              [
+                0,
+                0,
+                1,
+                0
+              ],
+              "B",
+              [
+                0,
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                1,
+                1
+              ],
+              "B",
+              [
+                0,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                1,
+                1,
+                2
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                1,
+                2
+              ],
+              "B",
+              [
+                0,
+                1,
+                1,
+                2
+              ],
+              [
+                0,
+                1,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                2,
+                0
+              ],
+              "B",
+              [
+                0,
+                1,
+                2,
+                0
+              ],
+              [
+                0,
+                1,
+                2,
+                2
+              ]
+            ]
+          ],
+          "unresolved": [],
+          "omissions": [
+            "changes in concrete generator tables do not disprove an abstract conjugacy"
+          ]
+        }
+      ],
+      "unresolved": [],
+      "remainder": [
+        "rooted continuation matches but complete-space B-fixed distinction differs",
+        "pointwise arrows differ although rooted dynamics admit a bijective alignment"
+      ]
+    },
+    {
+      "request": "AUTO",
+      "selection_reason": "AUTO: rooted relation + complete fixed-B when bounded + concrete labeled arrows",
+      "status": "WATCHED_DIFFERENCE",
+      "source_rules": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "target_rules": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          2,
+          1
+        ]
+      ],
+      "parent_id": null,
+      "readings": [
+        {
+          "watch": "rooted A/B continuation",
+          "status": "ROOTED_EQUIVALENT",
+          "before_reachable": 81,
+          "after_reachable": 81,
+          "correspondence_size": 81,
+          "unresolved": [],
+          "omissions": [
+            "root-reachable isomorphism is not full-state conjugacy"
+          ]
+        },
+        {
+          "status": "EARNED_ZERO_FOR_FIXED_B_WATCH",
+          "width": 2,
+          "before_fixed_B": 3,
+          "after_fixed_B": 3,
+          "lost": 0,
+          "gained": 0,
+          "surviving": 3,
+          "survival_relation_pairs": 3,
+          "omissions": [
+            "identity correspondence is only for a B-fixed membership WATCH",
+            "does not establish complete labeled A/B conjugacy"
+          ],
+          "unresolved": [
+            0,
+            0
+          ],
+          "delta_s": 0,
+          "parent_witness": null,
+          "watch": "complete-space B-fixed membership"
+        },
+        {
+          "watch": "labeled generator tables",
+          "status": "LABELED_ARROWS_DIFFER",
+          "changed_A": 0,
+          "changed_B": 54,
+          "total_carrier_states": 81,
+          "sample_changes": [
+            [
+              [
+                0,
+                0,
+                1,
+                0
+              ],
+              "B",
+              [
+                0,
+                1,
+                1,
+                1
+              ],
+              [
+                0,
+                1,
+                1,
+                2
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                1,
+                1
+              ],
+              "B",
+              [
+                0,
+                1,
+                1,
+                2
+              ],
+              [
+                0,
+                1,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                1,
+                2
+              ],
+              "B",
+              [
+                0,
+                1,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                2,
+                0
+              ],
+              "B",
+              [
+                0,
+                1,
+                2,
+                2
+              ],
+              [
+                0,
+                1,
+                2,
+                1
+              ]
+            ]
+          ],
+          "unresolved": [],
+          "omissions": [
+            "changes in concrete generator tables do not disprove an abstract conjugacy"
+          ]
+        }
+      ],
+      "unresolved": [],
+      "remainder": [
+        "pointwise arrows differ although rooted dynamics admit a bijective alignment"
+      ]
+    },
+    {
+      "request": "PROJECTION",
+      "selection_reason": "dimension change: test admitted extension and full projection squares",
+      "status": "EARNED_LOCAL_PRESERVATION",
+      "source_rules": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "target_rules": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "parent_id": 0,
+      "readings": [
+        {
+          "status": "PROJECTION_PRESERVED",
+          "watch": "dimension-dropping projection",
+          "native_rule": "all A/B and inverse generator squares checked on complete target carrier",
+          "source_depth": 4,
+          "target_depth": 5,
+          "new_coordinate_fiber": 3,
+          "checked_state_actions": 486,
+          "unresolved": [],
+          "omissions": [
+            "three-to-one state projection is NOT bijective conjugacy",
+            "projection preserves transitions, not all higher-coordinate distinctions"
+          ]
+        }
+      ],
+      "unresolved": [],
+      "remainder": []
+    },
+    {
+      "request": "AUTO",
+      "selection_reason": "AUTO: rooted relation + complete fixed-B when bounded + concrete labeled arrows",
+      "status": "WATCHED_DIFFERENCE",
+      "source_rules": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          0,
+          0
+        ]
+      ],
+      "target_rules": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          0,
+          1,
+          2
+        ]
+      ],
+      "parent_id": 2,
+      "readings": [
+        {
+          "watch": "rooted A/B continuation",
+          "status": "ROOTED_EQUIVALENT",
+          "before_reachable": 9,
+          "after_reachable": 9,
+          "correspondence_size": 9,
+          "unresolved": [],
+          "omissions": [
+            "root-reachable isomorphism is not full-state conjugacy"
+          ]
+        },
+        {
+          "status": "BOUNDARY",
+          "width": 3,
+          "before_fixed_B": 27,
+          "after_fixed_B": 9,
+          "lost": 18,
+          "gained": 0,
+          "surviving": 9,
+          "survival_relation_pairs": 9,
+          "omissions": [
+            "identity correspondence is only for a B-fixed membership WATCH",
+            "does not establish complete labeled A/B conjugacy"
+          ],
+          "unresolved": [
+            0,
+            0
+          ],
+          "delta_s": -18,
+          "parent_witness": null,
+          "watch": "complete-space B-fixed membership"
+        },
+        {
+          "watch": "labeled generator tables",
+          "status": "LABELED_ARROWS_DIFFER",
+          "changed_A": 0,
+          "changed_B": 162,
+          "total_carrier_states": 243,
+          "sample_changes": [
+            [
+              [
+                0,
+                0,
+                0,
+                1,
+                0
+              ],
+              "B",
+              [
+                0,
+                1,
+                0,
+                1,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                1,
+                1
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0,
+                1,
+                1
+              ],
+              "B",
+              [
+                0,
+                1,
+                0,
+                1,
+                1
+              ],
+              [
+                0,
+                1,
+                0,
+                1,
+                2
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0,
+                1,
+                2
+              ],
+              "B",
+              [
+                0,
+                1,
+                0,
+                1,
+                2
+              ],
+              [
+                0,
+                1,
+                0,
+                1,
+                0
+              ]
+            ],
+            [
+              [
+                0,
+                0,
+                0,
+                2,
+                0
+              ],
+              "B",
+              [
+                0,
+                1,
+                0,
+                2,
+                0
+              ],
+              [
+                0,
+                1,
+                0,
+                2,
+                2
+              ]
+            ]
+          ],
+          "unresolved": [],
+          "omissions": [
+            "changes in concrete generator tables do not disprove an abstract conjugacy"
+          ]
+        }
+      ],
+      "unresolved": [],
+      "remainder": [
+        "rooted continuation matches but complete-space B-fixed distinction differs",
+        "pointwise arrows differ although rooted dynamics admit a bijective alignment"
+      ]
+    }
+  ],
+  "engine_one_calls": 0,
+  "scope": "Finite F3 CouplingLaw; distinct native WATCHes and witnessed one-step extensions"
+}

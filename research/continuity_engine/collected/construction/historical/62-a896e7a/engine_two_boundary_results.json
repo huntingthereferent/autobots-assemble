@@ -1,0 +1,345 @@
+{
+  "spaces": [
+    {
+      "width": 1,
+      "descriptions": 9,
+      "rooted_classes": 5,
+      "distribution": [
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          4
+        ]
+      ],
+      "fixed_B_counts": [
+        [
+          3,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "certificate": "EXHAUSTIVE_ROOTED_GRAPH_FOR_DECLARED_FAMILY"
+    },
+    {
+      "width": 2,
+      "descriptions": 81,
+      "rooted_classes": 21,
+      "distribution": [
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          16
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "fixed_B_counts": [
+        [
+          3,
+          16
+        ],
+        [
+          6,
+          32
+        ],
+        [
+          9,
+          8
+        ],
+        [
+          12,
+          16
+        ],
+        [
+          18,
+          8
+        ],
+        [
+          27,
+          1
+        ]
+      ],
+      "certificate": "EXHAUSTIVE_ROOTED_GRAPH_FOR_DECLARED_FAMILY"
+    },
+    {
+      "width": 3,
+      "descriptions": 729,
+      "rooted_classes": 85,
+      "distribution": [
+        [
+          4,
+          16
+        ],
+        [
+          8,
+          64
+        ],
+        [
+          18,
+          4
+        ],
+        [
+          81,
+          1
+        ]
+      ],
+      "fixed_B_counts": [
+        [
+          3,
+          64
+        ],
+        [
+          6,
+          192
+        ],
+        [
+          9,
+          48
+        ],
+        [
+          12,
+          192
+        ],
+        [
+          18,
+          96
+        ],
+        [
+          24,
+          64
+        ],
+        [
+          27,
+          12
+        ],
+        [
+          36,
+          48
+        ],
+        [
+          54,
+          12
+        ],
+        [
+          81,
+          1
+        ]
+      ],
+      "certificate": "EXHAUSTIVE_ROOTED_GRAPH_FOR_DECLARED_FAMILY"
+    },
+    {
+      "width": 4,
+      "descriptions": 6561,
+      "rooted_classes": 341,
+      "distribution": [
+        [
+          8,
+          64
+        ],
+        [
+          16,
+          256
+        ],
+        [
+          36,
+          16
+        ],
+        [
+          162,
+          4
+        ],
+        [
+          729,
+          1
+        ]
+      ],
+      "fixed_B_counts": [
+        [
+          3,
+          256
+        ],
+        [
+          6,
+          1024
+        ],
+        [
+          9,
+          256
+        ],
+        [
+          12,
+          1536
+        ],
+        [
+          18,
+          768
+        ],
+        [
+          24,
+          1024
+        ],
+        [
+          27,
+          96
+        ],
+        [
+          36,
+          768
+        ],
+        [
+          48,
+          256
+        ],
+        [
+          54,
+          192
+        ],
+        [
+          72,
+          256
+        ],
+        [
+          81,
+          16
+        ],
+        [
+          108,
+          96
+        ],
+        [
+          162,
+          16
+        ],
+        [
+          243,
+          1
+        ]
+      ],
+      "certificate": "EXHAUSTIVE_ROOTED_GRAPH_FOR_DECLARED_FAMILY"
+    }
+  ],
+  "witnesses": [
+    {
+      "status": "BOUNDARY",
+      "width": 2,
+      "before_fixed_B": 9,
+      "after_fixed_B": 3,
+      "lost": 6,
+      "gained": 0,
+      "surviving": 3,
+      "survival_relation_pairs": 3,
+      "omissions": [
+        "only complete-space B-fixed membership is watched",
+        "state-coordinate identity does not establish A/B conjugacy"
+      ],
+      "unresolved": [
+        0,
+        0
+      ],
+      "delta_s": -6,
+      "parent_witness": null,
+      "watch": "B-fixed-state membership in complete F3 state carrier"
+    },
+    {
+      "status": "BOUNDARY",
+      "width": 3,
+      "before_fixed_B": 9,
+      "after_fixed_B": 3,
+      "lost": 6,
+      "gained": 0,
+      "surviving": 3,
+      "survival_relation_pairs": 3,
+      "omissions": [
+        "only complete-space B-fixed membership is watched",
+        "state-coordinate identity does not establish A/B conjugacy"
+      ],
+      "unresolved": [
+        0,
+        0
+      ],
+      "delta_s": -6,
+      "parent_witness": 0,
+      "watch": "B-fixed-state membership in complete F3 state carrier"
+    },
+    {
+      "status": "BOUNDARY",
+      "width": 4,
+      "before_fixed_B": 9,
+      "after_fixed_B": 3,
+      "lost": 6,
+      "gained": 0,
+      "surviving": 3,
+      "survival_relation_pairs": 3,
+      "omissions": [
+        "only complete-space B-fixed membership is watched",
+        "state-coordinate identity does not establish A/B conjugacy"
+      ],
+      "unresolved": [
+        0,
+        0
+      ],
+      "delta_s": -6,
+      "parent_witness": 1,
+      "watch": "B-fixed-state membership in complete F3 state carrier"
+    },
+    {
+      "status": "BOUNDARY",
+      "width": 5,
+      "before_fixed_B": 9,
+      "after_fixed_B": 3,
+      "lost": 6,
+      "gained": 0,
+      "surviving": 3,
+      "survival_relation_pairs": 3,
+      "omissions": [
+        "only complete-space B-fixed membership is watched",
+        "state-coordinate identity does not establish A/B conjugacy"
+      ],
+      "unresolved": [
+        0,
+        0
+      ],
+      "delta_s": -6,
+      "parent_witness": 2,
+      "watch": "B-fixed-state membership in complete F3 state carrier"
+    },
+    {
+      "status": "EARNED_ZERO_FOR_FIXED_B_WATCH",
+      "width": 2,
+      "before_fixed_B": 3,
+      "after_fixed_B": 3,
+      "lost": 0,
+      "gained": 0,
+      "surviving": 3,
+      "survival_relation_pairs": 3,
+      "omissions": [
+        "only complete-space B-fixed membership is watched",
+        "state-coordinate identity does not establish A/B conjugacy"
+      ],
+      "unresolved": [
+        0,
+        0
+      ],
+      "delta_s": 0,
+      "parent_witness": null,
+      "watch": "B-fixed-state membership in complete F3 state carrier"
+    }
+  ],
+  "engine_one_calls": 0,
+  "scope": "Finite F3 triangular coupling families; rooted-class and full-space fixed-B WATCH remain distinct"
+}
