@@ -21,7 +21,7 @@ from .nih_ontology_bridge import NIHOntologyBridge, copy_ontology_source, WORKER
 from .nih_reasoning_bridge import NIHReasoningBridge, copy_reasoning_source, WORKER_ID as REASON_WORKER
 from .coordinator_window import (CoordinatorIndex, from_existing_workstation,
                                  freshly_reverify_linked_jobs, run_exact_linked_job)
-from .cp_motion import admit_research, one_cp_handoff
+from .cp_motion import admit_research, one_cp_handoff, workstation_cp_view
 
 ROOT = Path(__file__).resolve().parents[2]
 INPUTS = ROOT / "network/tests/fixtures"
@@ -115,7 +115,9 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False):
             raise ValueError("game browser evidence did not return to original job")
     else:
         browser = None
-    view = from_existing_workstation(data)
+    # CP provenance belongs to the immutable submitted handoff, not a
+    # successful result or a generic UI snapshot.
+    view = workstation_cp_view(data)
     verified = freshly_reverify_linked_jobs(
         index, WINDOW, view, lambda job_id: reverify_job(data_dir=data, job_id=job_id))
     packet = one_cp_handoff(index, WINDOW, verified, reverified=True)
