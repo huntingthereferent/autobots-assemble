@@ -111,6 +111,14 @@ class ChatGPTRunLaneTests(unittest.TestCase):
             self.assertIn("simulated native execution fault", result["error"])
             self.assertEqual(result["action_count"], 0)
 
+    def test_budget_is_enforced_at_native_step_boundary(self):
+        env = FakeEnvironment()
+        observer = ObservedArc(env, max_actions=1)
+        observer.step(SimpleNamespace(name="ACTION6"))
+        with self.assertRaisesRegex(RuntimeError, "budget reached"):
+            observer.step(SimpleNamespace(name="ACTION6"))
+        self.assertEqual(len(env.actions), 1)
+
     def test_observer_does_not_execute_without_worker(self):
         env = FakeEnvironment()
         observer = ObservedArc(env)
