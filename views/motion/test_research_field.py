@@ -32,17 +32,15 @@ class ResearchMovementFieldTests(unittest.TestCase):
         self.assertNotIn("JAMES MUNEOKA",svg)
         self.assertNotIn("<script",svg)
 
-    def test_missing_arc_source_is_not_presented_as_a_move(self):
-        original=snapshot()
-        original["arc"]["state"]="UNKNOWN"
-        with patch("views.motion.research_field.snapshot",return_value=original):
-            with self.assertRaises(ValueError):
-                # The trusted data projection, not unverified caller literals.
-                # Corrupted snapshot must be rejected by output boundary.
-                from views.motion.research_field import snapshot as source_read
-                value=source_read()
-                if value["arc"]["state"]!="MOVE_WITH_WALL":
-                    raise ValueError("Arc original result changed")
+    def test_arc_and_w13_witness_cannot_be_silently_upgraded(self):
+        data=snapshot()
+        data["arc"]["state"]="UNKNOWN"
+        with self.assertRaises(ValueError):
+            render(data)
+        data=snapshot()
+        data["w13"]["verdict"]="W13 NOT CHECKED"
+        with self.assertRaises(ValueError):
+            render(data)
 
     def test_cannot_render_mathematical_paths_without_witness(self):
         data=snapshot()
