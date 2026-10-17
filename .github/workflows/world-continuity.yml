@@ -44,5 +44,24 @@ jobs:
             echo "No new observation output."
           else
             git commit -m "Observe public world sources in existing continuity view"
-            git push
+            # Preserve unrelated concurrent changes without force-pushing.
+            # A conflict or a changed native adapter must fail closed.
+            for attempt in 1 2 3; do
+              git fetch origin main
+              if git diff --name-only HEAD origin/main | grep -E '^(work/projects/public-data-monitor/app/|views/world-continuity/render\.py|views/world-continuity/test_render\.py)' ; then
+                echo "Native observation source changed during this run; require a new fetch."
+                exit 1
+              fi
+              if ! git rebase origin/main; then
+                git rebase --abort
+                echo "Concurrent output or source conflict; preserving previously committed evidence."
+                exit 1
+              fi
+              if git push origin HEAD:main; then
+                exit 0
+              fi
+              sleep 2
+            done
+            echo "Could not publish after bounded retries; previously committed observation remains."
+            exit 1
           fi
