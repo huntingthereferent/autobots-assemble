@@ -322,11 +322,11 @@ $("#promotion-copy").addEventListener("click", async () => {
 
 // Research is a source-owned READ-ONLY projection. No research file is a job.
 let researchShown = 80;
-function researchLink(path, label) {
+function researchLink(path, label, line) {
   const safe = /^[a-zA-Z0-9._/-]{1,260}$/.test(path) && !path.includes("..");
   const item = el(safe ? "a" : "span", "code", label || path);
   if (safe) {
-    item.href = "https://github.com/huntingthereferent/autobots-assemble/blob/main/" + path.split("/").map(encodeURIComponent).join("/");
+    item.href = "https://github.com/huntingthereferent/autobots-assemble/blob/main/" + path.split("/").map(encodeURIComponent).join("/") + (Number.isInteger(line) && line > 0 ? "#L" + line : "");
     item.target = "_blank";
     item.rel = "noopener noreferrer";
   }
@@ -354,6 +354,9 @@ function renderResearch() {
   if (mode==="inventory") {
     entries=research.sections.filter(x=>!active||x.name===active)
       .flatMap(x=>x.paths.map(path=>({path,section:x.name})));
+  } else if (mode==="documented_walls" || mode==="documented_moves") {
+    const kind = mode==="documented_walls" ? "DOCUMENTED_WALL" : "DOCUMENTED_MOVEMENT";
+    entries=research.documented_marks.filter(x=>(!active||x.section===active) && x.kind===kind);
   } else if (mode==="walls") {
     entries=research.source_records.filter(x=>!active||x.section===active)
       .flatMap(x=>x.walls.map((statement,i)=>({...x,statement,index:i})));
@@ -365,6 +368,12 @@ function renderResearch() {
     const card=el("article","entry research-entry");
     if (mode==="inventory") {
       card.append(researchLink(row.path),el("p","meta",row.section+" · indexed source only"));
+      return card;
+    }
+    if (mode==="documented_walls" || mode==="documented_moves") {
+      card.append(el("strong","name",row.heading),
+        el("p","meta",row.section+" · documented source heading, not native verification"),
+        researchLink(row.path,row.path+" · line "+row.line,row.line));
       return card;
     }
     const head=el("div","line");
