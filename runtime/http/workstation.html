@@ -16,12 +16,32 @@
     </header>
     <main>
       <section class="intro">
-        <div><p class="eyebrow">Work · Process workstation</p><h1>Where the work can branch.</h1>
+        <div><p class="eyebrow">Research · Workstation</p><h1>Following the work, not a job counter.</h1>
           <p>Observe separate worker versions, their admitted jobs, native evidence and return points. One shared station; no worker owns the interface.</p>
         </div>
         <div class="intro-note"><strong>Read-only observation</strong><span>No job admission, editing or execution from this page.</span><small id="checked-at">Not connected yet</small></div>
       </section>
       <div class="notice" id="notice" role="alert" hidden></div>
+      <section class="panel research-panel" id="research-observations" aria-label="All source-owned research evidence">
+        <header><div><p class="eyebrow">Research continuity · original source records</p><h2>Movements, walls and preserved research</h2></div>
+          <small id="research-label">Reading repository source…</small></header>
+        <p class="research-intro">A month of original mathematics, ARC research, game-world witness records, checkpoints, language corrections and workstation source. Research is <b>not</b> reduced to admitted runtime jobs. Files are indexed without claiming that every file was a witnessed movement.</p>
+        <div class="research-stats">
+          <span><strong id="research-sources">—</strong> source files indexed</span>
+          <span><strong id="research-records">—</strong> structured records</span>
+          <span><strong id="research-moves">—</strong> explicit MOVE states</span>
+          <span><strong id="research-walls">—</strong> explicit wall entries</span>
+        </div>
+        <div class="tools research-controls">
+          <label for="research-section">Research source</label>
+          <select id="research-section"><option value="">All source systems</option></select>
+          <label for="research-view">Show</label>
+          <select id="research-view"><option value="observations">Structured original observations</option><option value="walls">Explicit unresolved walls</option><option value="inventory">Full indexed source files</option></select>
+          <span id="research-note" class="selection-note">Source-owned, not synthetic events</span>
+        </div>
+        <div id="research-record-list" class="entries research-entries"><p class="empty">Reading original research evidence…</p></div>
+        <p class="research-footnote">The records keep their own statuses and evidence boundaries. Local worker jobs remain in the separate execution section. Uncommitted conversations, inaccessible ZIPs and private journals cannot be reconstructed from these files.</p>
+      </section>
       <section class="summary" aria-label="Workstation counts">
         <article><span>Processes</span><strong id="count-workers">—</strong><small>Independent worker families</small></article>
         <article><span>Working copies</span><strong id="count-editions">—</strong><small>Isolated source editions</small></article>
