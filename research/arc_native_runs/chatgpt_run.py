@@ -50,14 +50,17 @@ class ObservedArc:
     A capture does not independently certify the policy, its motives, or
     frame ownership. The underlying official SDK remains the environment.
     """
-    def __init__(self, environment: Any):
+    def __init__(self, environment: Any, max_actions: int = 200):
         self.environment = environment
+        self.max_actions = max_actions
         self.transitions: list[dict[str, Any]] = []
 
     def __getattr__(self, name: str) -> Any:
         return getattr(self.environment, name)
 
     def step(self, action: Any, *args: Any, **kwargs: Any) -> Any:
+        if len(self.transitions) >= self.max_actions:
+            raise RuntimeError("native ARC action budget reached")
         before = getattr(self.environment, "observation_space", None)
         after = self.environment.step(action, *args, **kwargs)
         supplied_data = kwargs.get("data", args[0] if args else None)
@@ -143,7 +146,7 @@ def run(
         arcade_factory = lambda: Arcade(operation_mode=OperationMode.OFFLINE)
     arc = arcade_factory()
     env = arc.make(game.lower())
-    observed = ObservedArc(env)
+    observed = ObservedArc(env, max_actions=budget)
     agent = make_policy(policy, game.lower(), budget, model, observed, policy_class=policy_class)
     failure = None
     try:
