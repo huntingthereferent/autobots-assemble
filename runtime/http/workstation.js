@@ -351,7 +351,17 @@ function renderResearch() {
   select.value = research.sections.some(x=>x.name===selected) ? selected : "";
   const active=select.value, mode=$("#research-view").value;
   let entries=[];
-  if (mode==="inventory") {
+  if (mode==="all_moves_walls") {
+    // Display only originally recorded evidence. Titles/labels are not new events.
+    entries=[
+      ...research.documented_marks.filter(x=>!active||x.section===active),
+      ...research.source_records.filter(x=>!active||x.section===active)
+        .flatMap(x=>[
+          ...(["MOVE","MOVE_WITH_WALL"].includes(x.state) ? [{...x,source_marker:"STRUCTURED_MOVEMENT"}] : []),
+          ...x.walls.map((statement,index)=>({...x,source_marker:"STRUCTURED_WALL",statement,index}))
+        ])
+    ].sort((a,b)=>a.path.localeCompare(b.path)||((a.line||0)-(b.line||0)));
+  } else if (mode==="inventory") {
     entries=research.sections.filter(x=>!active||x.name===active)
       .flatMap(x=>x.paths.map(path=>({path,section:x.name})));
   } else if (mode==="documented_walls" || mode==="documented_moves") {
@@ -370,7 +380,8 @@ function renderResearch() {
       card.append(researchLink(row.path),el("p","meta",row.section+" · indexed source only"));
       return card;
     }
-    if (mode==="documented_walls" || mode==="documented_moves") {
+    if (mode==="documented_walls" || mode==="documented_moves" ||
+        (mode==="all_moves_walls" && row.heading)) {
       card.append(el("strong","name",row.heading),
         el("p","meta",row.section+" · documented source heading, not native verification"),
         researchLink(row.path,row.path+" · line "+row.line,row.line));
@@ -379,7 +390,8 @@ function renderResearch() {
     const head=el("div","line");
     head.append(el("strong","name",row.title),status(row.state));
     card.append(head,el("p","meta",row.kind+" · "+row.section),researchLink(row.path));
-    if (mode==="walls") card.append(el("p","research-wall",row.statement));
+    if (mode==="walls" || (mode==="all_moves_walls" && row.source_marker==="STRUCTURED_WALL"))
+      card.append(el("p","research-wall",row.statement));
     else {
       if (row.walls.length) card.append(el("p","minor",row.walls.length+" source-recorded unresolved conditions"));
       if (row.boundary) card.append(el("p","minor","Boundary: "+row.boundary));
