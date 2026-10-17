@@ -8,4 +8,8 @@ Human-language interpretation/rendering belongs in `language/`.
 
 Capability/resume/credibility summaries belong here or beside their source evidence when tightly scoped.
 
+## Visual presentations
+
+- [GitHub visual provenance concept](visual-provenance/README.md) — illustrative, source-linked README visualization of observation, separate histories, witness boundaries, and continuation; **not a live evidence feed**.
+
 The former generic `lenses/` package was removed because its responsibilities are now covered by these explicit layers.
