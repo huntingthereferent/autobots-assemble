@@ -1,0 +1,61 @@
+name: REA A/B inverse relation experiment
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.github/workflows/rea-swallow-match.yml'
+  pull_request:
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.github/workflows/rea-swallow-match.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  match-version-relations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Create control and experimental REA source editions
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/match_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/version_matching_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptApplicationVersionKeys.ab-swallow.test.ts
+      - name: Install original pinned REA dependencies
+        working-directory: experiments/rea-swallow/upstream
+        run: npm ci --no-audit --no-fund
+      - name: Original REA matcher native tests and independent oracle
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          REA_AB_MATCH_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/matching-control.json" npx --no-install vitest run src/domain/javascript/javascriptApplicationVersionKeys.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts src/domain/javascript/javascriptApplicationVersionComparison.test.ts src/domain/javascript/javascriptApplicationVersionRelationshipUncertainty.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/matching-control.log"
+      - name: Apply second genuine source transformation
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/match_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          git -C experiments/rea-swallow/upstream diff --stat
+          git -C experiments/rea-swallow/upstream diff > experiments/rea-swallow/results/matching-source.patch
+      - name: Changed REA matcher same native tests and independent oracle
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          REA_AB_MATCH_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/matching-experimental.json" npx --no-install vitest run src/domain/javascript/javascriptApplicationVersionKeys.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts src/domain/javascript/javascriptApplicationVersionComparison.test.ts src/domain/javascript/javascriptApplicationVersionRelationshipUncertainty.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/matching-experimental.log"
+      - name: Verify original and transformed pair relations exactly
+        run: |
+          cmp experiments/rea-swallow/results/matching-control.json experiments/rea-swallow/results/matching-experimental.json
+          sha256sum experiments/rea-swallow/results/matching-*.json
+      - name: Retain source patch and mathematical test outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-matching-a-b-reciprocal-candidates
+          path: experiments/rea-swallow/results/
+          retention-days: 14
+          if-no-files-found: warn
