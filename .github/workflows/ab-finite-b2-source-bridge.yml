@@ -1,0 +1,121 @@
+name: Finite native A/B source to existing B2
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/ab_finite_b2_bridge.py'
+      - 'network/tests/test_ab_finite_b2_bridge.py'
+      - '.github/workflows/ab-finite-b2-source-bridge.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/ab_finite_b2_bridge.py'
+      - 'network/tests/test_ab_finite_b2_bridge.py'
+      - '.github/workflows/ab-finite-b2-source-bridge.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  source-native-b2-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Use existing source-native workstation dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Real native finite processes -> existing B2 journal
+        run: |
+          python -m unittest -v \
+            network.tests.test_ab_relational_cluster \
+            network.tests.test_ab_finite_b2_bridge \
+            network.tests.test_workstation_harness
+
+  bridge-original-owner-witness:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == github.repository_owner
+    needs: source-native-b2-tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ORIGIN_RUN: '39041948830'
+      ORIGIN_SHA: '3cbe1c6e127201ba4813515489c4b631830acc67'
+      ORIGIN_ARTIFACT_ID: '12104188291'
+      ORIGIN_ARTIFACT_DIGEST: 'sha256:44dd39de524f60e07bde58ec4d7428bb6e2650ec8ff8ccade68eff0c7ba0d61d'
+      ORIGIN_HEAD: 'aab29ac65f4c9897290d0074679f092050a49d83e41061fd9b27db3bba693007'
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Check original owner-run finite source and immutable artifact digest
+        run: |
+          python - <<'PY'
+          import json, os
+          from urllib.request import urlopen, Request
+          repo=os.environ["GITHUB_REPOSITORY"]
+          headers={"Accept":"application/vnd.github+json",
+                   "Authorization":"Bearer "+os.environ["GH_TOKEN"],
+                   "X-GitHub-Api-Version":"2022-11-28",
+                   "User-Agent":"source-owned-finite-B2"}
+          def get(path):
+              with urlopen(Request("https://api.github.com/repos/"+repo+"/"+path,
+                                   headers=headers),timeout=20) as r:
+                  return json.load(r)
+          run=get("actions/runs/"+os.environ["ORIGIN_RUN"])
+          if (run.get("status")!="completed" or run.get("conclusion")!="success"
+              or run.get("head_sha")!=os.environ["ORIGIN_SHA"]
+              or run.get("head_branch")!="main" or run.get("event")!="push"
+              or run.get("name")!="A/B Relational Cluster Movement"
+              or run.get("head_repository",{}).get("full_name")!=repo
+              or run.get("actor",{}).get("login")!=os.environ["GITHUB_REPOSITORY_OWNER"]):
+              raise SystemExit("source-owner worker run not authenticated")
+          candidates=get("actions/runs/"+os.environ["ORIGIN_RUN"]+"/artifacts?per_page=100")["artifacts"]
+          expected="finite-ab-full-frontier-"+os.environ["ORIGIN_RUN"]+"-1"
+          found=[a for a in candidates if
+                 a["id"]==int(os.environ["ORIGIN_ARTIFACT_ID"])
+                 and a["name"]==expected
+                 and a["digest"]==os.environ["ORIGIN_ARTIFACT_DIGEST"]
+                 and not a["expired"]]
+          if len(found)!=1:
+              raise SystemExit("exact original finite source journal artifact missing")
+          print("Authenticated completed native mathematical worker and exact journal artifact")
+          PY
+      - name: Recover only the authentic prior finite mathematical journal
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ env.ORIGIN_RUN }}
+          name: finite-ab-full-frontier-39041948830-1
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/finite-native-source/
+      - name: Connect native finite relations into existing B2 RuntimeJournal
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/finite-b2-handoff"
+          root="$RUNNER_TEMP/finite-workstation"
+          mkdir -p "$out"
+          python -m systems.workspace.ab_finite_b2_bridge \
+            --source-journal "$RUNNER_TEMP/finite-native-source/ab_relational_cluster.jsonl" \
+            --source-head "$ORIGIN_HEAD" \
+            --data-dir "$root" \
+            --output "$out/bridge-result.json" \
+            --origin "owner-run:$ORIGIN_RUN;source-worker:finite-ab-relational-cluster"
+          tar -czf "$out/workstation-with-native-evidence.tar.gz" -C "$root" runtime.jsonl finite-sources
+          sha256sum "$out/workstation-with-native-evidence.tar.gz" > "$out/workstation-with-native-evidence.sha256"
+          cp "$RUNNER_TEMP/finite-native-source/observations.json" "$out/original-native-summary.json"
+      - name: Preserve source-native bridge and original workstation handoffs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: finite-ab-b2-bridge-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/finite-b2-handoff/
+          if-no-files-found: warn
+          retention-days: 30
