@@ -1,0 +1,101 @@
+name: workstation-w13-independent-witness
+on:
+  push:
+    paths:
+      - 'network/witness_w13_independent.py'
+      - 'network/tests/test_game_w13_independent_witness.py'
+      - 'network/browser_w13_independent_witness.py'
+      - 'systems/workspace/WITNESS_W13_INDEPENDENT_VERDICT.md'
+      - '.github/workflows/workstation-w13-independent-witness.yml'
+  pull_request:
+    paths:
+      - 'network/witness_w13_independent.py'
+      - 'network/tests/test_game_w13_independent_witness.py'
+      - 'network/browser_w13_independent_witness.py'
+      - 'systems/workspace/WITNESS_W13_INDEPENDENT_VERDICT.md'
+      - '.github/workflows/workstation-w13-independent-witness.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  independent-w13-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Require original W12 tests and 26 independent W13 WITNESS tests, no skips
+        run: |
+          python - <<'PY'
+          import importlib, unittest
+          names = ('network.tests.test_game_construction',
+                   'network.tests.test_game_receipt_compatibility',
+                   'network.tests.test_game_w13_independent_witness')
+          suites = [unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(s)) for s in names]
+          counts = [s.countTestCases() for s in suites]
+          if counts != [11, 21, 26]:
+              raise SystemExit(f'W12 preservation or W13 WITNESS test scope changed: {counts}')
+          result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(suites))
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('WITNESS native/source-bound tests failed')
+          PY
+      - name: Retrieve prior actual BUILD browser exports from original merge run
+        uses: actions/download-artifact@v4
+        with:
+          name: w13-build-chromium-evidence
+          run-id: 38999614131
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: original_w13_build_evidence
+      - name: Independently inspect original BUILD browser exports and reject its altered files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from network.witness_w13_independent import independent_w13_replay, strict_json
+          root = Path('original_w13_build_evidence')
+          positive = root / 'w13_browser_positive.json'
+          if not positive.is_file() or not (root/'w13_browser_complete.png').is_file():
+              raise SystemExit('missing original BUILD Chromium export or screenshot')
+          proof = independent_w13_replay(strict_json(positive.read_text(encoding='utf8')))
+          if not proof['solved'] or proof['boundaries_checked'] != 1:
+              raise SystemExit('WITNESS rejected original BUILD browser positive')
+          negative = sorted(root.glob('w13_rejected_*.json'))
+          if len(negative) != 4:
+              raise SystemExit(f'expected four original BUILD altered exports; saw {len(negative)}')
+          for sample in negative:
+              try:
+                  independent_w13_replay(strict_json(sample.read_text(encoding='utf8')))
+              except ValueError:
+                  print(f'WITNESS rejected original BUILD artifact: {sample.name}')
+              else:
+                  raise SystemExit(f'WITNESS accepted forged BUILD artifact {sample.name}')
+          print('Original BUILD Chromium evidence: 1 accepted, 4 rejected independently')
+          PY
+      - name: Install real Chromium for independent WITNESS interactions
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Require eight independent actual browser WITNESS scenarios
+        run: |
+          python - <<'PY'
+          import unittest
+          from network import browser_w13_independent_witness
+          suite = unittest.defaultTestLoader.loadTestsFromModule(browser_w13_independent_witness)
+          if suite.countTestCases() != 8:
+              raise SystemExit(f'exact eight Chromium WITNESS cases required: {suite.countTestCases()}')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('independent W13 browser proof or adversarial check failed')
+          PY
+      - name: Preserve WITNESS browser evidence as separate artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w13-independent-witness-chromium-evidence
+          path: witness_w13_observations/
+          if-no-files-found: warn
+          retention-days: 30
