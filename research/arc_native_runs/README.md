@@ -14,6 +14,12 @@ These three JSON documents contain actual saved action sequences from the upload
 
 The [archived local SK48 causal report](https://github.com/huntingthereferent/huntingthereferent/blob/main/ARC_EVIDENCE.md) explicitly marked its 280-action runs `not_independently_solved`. Source-assisted and replay evidence must not be promoted into independent autonomous-game capability.
 
+## Mathematical feasibility boundary — no agent required
+
+[**Observation sufficiency theorem and synthetic counterexample**](OBSERVATION_SUFFICIENCY_PROOF.md) · [Pure-Python finite checker](observation_sufficiency.py) · [Six offline tests](../../network/tests/test_arc_observation_sufficiency.py).
+
+This separate research lane proves a criterion for when the current observable state can support exact deterministic A/B transitions and gives a history-dependent counterexample. It does **not** run ARC, change game policies, reuse winning action routes, or prove a new ARC win. A native game-specific witness remains open. This mathematical work is independent of the paused, more expensive ChatGPT Run agent experiment.
+
 ## Replay interface
 
 [Replay source](replay_saved_paths.py) drives ARC's native `Arcade`/ `GameAction` SDK with the saved routes and compares actual returns to recorded milestones:
