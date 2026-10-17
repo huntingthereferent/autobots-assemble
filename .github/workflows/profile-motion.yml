@@ -22,6 +22,8 @@ on:
       - 'views/motion/atlas_dashboard.py'
       - 'views/motion/test_atlas_dashboard.py'
       - 'views/traces/registry.json'
+      - 'systems/workspace/research_observatory.py'
+      - 'network/tests/test_research_observatory.py'
       - 'views/traces/internet-map.json'
       - 'views/motion/convergence-receipt.json'
       - 'views/motion/convergence.py'
@@ -29,7 +31,6 @@ on:
       - 'views/traces/convergence_focus.py'
       - 'views/traces/test_convergence_focus.py'
       - 'views/world-continuity/latest.json'
-      - 'views/work_state.json'
       - 'work/arc_like_maze/math.py'
       - '.github/workflows/profile-motion.yml'
   workflow_dispatch:
@@ -65,7 +66,7 @@ jobs:
           from pathlib import Path
           import xml.etree.ElementTree as ET
           paths=list(Path("views/motion").glob("*-motion.svg"))
-          assert len(paths)==4
+          assert len(paths)==3
           paths.append(Path('views/motion/atlas-dashboard.svg'))
           for p in paths:
               ET.parse(p)
@@ -79,7 +80,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add views/motion/finite-motion.svg views/motion/workstation-motion.svg views/motion/world-motion.svg views/motion/convergence-motion.svg views/motion/convergence-receipt.json views/motion/atlas-dashboard.svg
+          git add views/motion/finite-motion.svg views/motion/world-motion.svg views/motion/convergence-motion.svg views/motion/convergence-receipt.json views/motion/atlas-dashboard.svg
           if git diff --cached --quiet; then echo "No SVG change"; exit 0; fi
           git commit -m "Render motion from source-owned observations"
           for attempt in 1 2 3; do
