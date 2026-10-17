@@ -3,6 +3,8 @@
 > **Current profile-wide A/B visual:** [James's public visual provenance map](https://github.com/huntingthereferent/huntingthereferent/blob/main/VISUAL_PROVENANCE.md). It carries the same continuing inquiry through writing, games, mathematics, interactive environments, the workstation and software while linking each context to its own evidence.
 >
 > The image below is the earlier static technical preview. The public profile map is the broader reader-facing entry, not a second evidence authority.
+>
+> A separate [world-observation view](../world-continuity/README.md) now renders **actual collected public data** using the already-existing source adapters. Its evidence is limited to the precise source IDs and scoped metadata relationships shown.
 
 ![James Muneoka — illustrative visual provenance](preview.svg)
 
