@@ -1,0 +1,16 @@
+{
+  "contract": "game-built-room-v1",
+  "world_id": "third-room",
+  "spec": {
+    "width": 5,
+    "height": 4,
+    "start": [
+      0,
+      1
+    ],
+    "target": [
+      3,
+      2
+    ]
+  }
+}
