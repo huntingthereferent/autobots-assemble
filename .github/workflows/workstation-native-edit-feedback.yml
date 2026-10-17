@@ -1,0 +1,58 @@
+name: Workstation native edit feedback
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/workstation_edit_cycle.py'
+      - 'systems/workspace/factory_edit_proposer.py'
+      - 'systems/workspace/factory_edit_verifier.py'
+      - 'network/tests/test_workstation_edit_cycle.py'
+      - '.github/workflows/workstation-native-edit-feedback.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/workstation_edit_cycle.py'
+      - 'systems/workspace/factory_edit_proposer.py'
+      - 'systems/workspace/factory_edit_verifier.py'
+      - 'network/tests/test_workstation_edit_cycle.py'
+      - '.github/workflows/workstation-native-edit-feedback.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  native-edition-edit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Native worker produces real edit; workstation verifies and branches
+        run: python -m unittest -v network.tests.test_process_workstation network.tests.test_workstation_edit_cycle
+      - name: Preserve one bounded edit/verification witness from actual source
+        shell: bash
+        run: |
+          set -euo pipefail
+          d="$RUNNER_TEMP/workstation-native-edits"
+          mkdir -p "$d"
+          python -m systems.workspace.workstation_edit_cycle --data-dir "$d" --run-id gha --execute --output "$d/receipt.json" > "$d/stdout.json"
+          python - "$d/receipt.json" <<'PY'
+          import json,sys
+          from pathlib import Path
+          p=Path(sys.argv[1])
+          r=json.loads(p.read_text())
+          assert r["outcome"]=="ACCEPTED_EDITION"
+          assert r["successor_created"] and r["initial_observation"]["returncode"]==4
+          assert r["independent_recheck"]["returncode"]==0 and r["proposal_worker_pid"]>0
+          print("Native witness: original defect -> subprocess proposal -> edited copy -> independently checked successor")
+          PY
+      - name: Attach bounded local witness (no private workstation files)
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-source-edit-witness-${{ github.run_id }}
+          path: ${{ runner.temp }}/workstation-native-edits/receipt.json
+          retention-days: 14
