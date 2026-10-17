@@ -42,7 +42,9 @@ class LiveTraceSourceTests(unittest.TestCase):
         self.assertTrue(any(x["source_type"]=="CHECKPOINT" and "CP-0030" in x["path"]
                             for x in data["records"]))
         self.assertTrue(any(x["kind"]=="source-recorded-wall" for x in data["walls"]))
-        self.assertNotIn("synthetic",json.dumps(data["records"]).lower())
+        self.assertFalse(any(x["source_type"]=="SYNTHETIC" for x in data["records"]))
+        # A source-authored limitation may legitimately say "synthetic" (CP30 key evidence).
+        self.assertTrue(any("synthetic" in x["boundary"].lower() for x in data["records"]))
 
     def test_bad_record_source_rejected(self):
         with self.assertRaises(ValueError):
