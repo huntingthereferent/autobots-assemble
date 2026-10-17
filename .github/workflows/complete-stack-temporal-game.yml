@@ -4,6 +4,9 @@ on:
     paths:
       - 'systems/workspace/nih_temporal_game_stack.py'
       - 'systems/workspace/nih_packet_*.py'
+      - 'systems/workspace/nih_prototype_*.py'
+      - 'systems/workspace/nih_prototype_worker_source/**'
+      - 'network/tests/fixtures/nih_prototype_example.json'
       - 'systems/workspace/nih_packet_worker_source/**'
       - 'systems/workspace/controls.py'
       - 'network/tests/fixtures/nih_packet_example.json'
@@ -14,6 +17,9 @@ on:
     paths:
       - 'systems/workspace/nih_temporal_game_stack.py'
       - 'systems/workspace/nih_packet_*.py'
+      - 'systems/workspace/nih_prototype_*.py'
+      - 'systems/workspace/nih_prototype_worker_source/**'
+      - 'network/tests/fixtures/nih_prototype_example.json'
       - 'systems/workspace/nih_packet_worker_source/**'
       - 'systems/workspace/controls.py'
       - 'network/tests/fixtures/nih_packet_example.json'
@@ -53,7 +59,8 @@ jobs:
             --data-dir "$RUNNER_TEMP/complete-stack-workstation" \
             --output-dir "$RUNNER_TEMP/complete-stack-artifacts" \
             --browser-witness \
-            --build-packet
+            --build-packet \
+            --build-prototype
           python - <<'PY'
           import json, os
           from pathlib import Path
@@ -62,7 +69,15 @@ jobs:
           assert result["game_browser_witness"]=="PASS"
           assert result["phase_2_test"]=="BLOCKED"
           assert result["one_native_workstation"] and result["synthetic_only"]
-          assert len(result["witnessed_nih_phase_1"])==4
+          assert len(result["witnessed_nih_phase_1"])==5
+          assert result["phase_2_prototype"]=="WITNESSED"
+          assert result["prototype_native_witness"]=="PASS"
+          assert result["prototype_hidden_queries"]>=1
+          assert result["prototype_static_leakage_examples"]>=1
+          assert result["phase_2_game_test"]=="BLOCKED"
+          assert "NIH-P2-PROTOTYPE" not in result["phase_2_test_blocked_by"]
+          assert (source/"temporal_query.py").is_file()
+          assert (source/"temporal_dataset.json").is_file()
           assert result["packet_native_witness"]=="PASS"
           assert result["next_prototype"]=="NIH-P2-PROTOTYPE"
           assert result["official_submission"] is False
@@ -75,7 +90,7 @@ jobs:
             runtime.jsonl coordinator-windows.jsonl workstation world-request.json
           sha256sum "$RUNNER_TEMP/complete-stack-artifacts/shared-native-workstation.tar.gz" \
             > "$RUNNER_TEMP/complete-stack-artifacts/shared-native-workstation.sha256"
-      - name: Publish built Phase 1 packet, temporal evidence, new playable game and shared journal
+      - name: Publish runnable Phase 2 temporal prototype, Phase 1 evidence, game and shared journal
         if: always()
         uses: actions/upload-artifact@v4
         with:
