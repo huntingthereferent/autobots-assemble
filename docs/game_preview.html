@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Game Construction v0 — Playable Witness</title>
+<style>
+:root{color-scheme:dark} body{margin:0;background:#10151c;color:#e3e9f2;font:16px system-ui,Arial,sans-serif} main{max-width:650px;margin:24px auto;padding:20px} h1{font-size:1.5rem} p{line-height:1.5;color:#bbc6d5}.arena{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;max-width:480px;margin:20px auto}.cell{aspect-ratio:1;display:grid;place-items:center;border-radius:12px;border:1px solid #536171;background:#263141;font-size:2rem}.player{background:#244c70}.target{background:#44412b} .controls{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.controls button{border:1px solid #77899f;background:#243447;color:#fff;border-radius:9px;padding:13px 20px;font-size:16px;cursor:pointer}button:focus-visible{outline:3px solid #fafafa} .status{font-weight:600;min-height:26px;text-align:center} details{margin-top:22px} code{color:#98d4fc} footer{color:#b1c1d1;font-size:.9rem;margin-top:18px}
+</style></head><body><main>
+<h1>Game Construction — v0 playable witness</h1>
+<p>A bounded demonstration: walk beside the object and interact. This world is intentionally tiny. It tests whether the same state transitions can be observed in a browser and replayed locally in Python.</p>
+<div class="arena" role="img" aria-label="4 by 3 room. Player is blue; object is yellow." id="arena"></div>
+<div class="status" id="status" aria-live="polite"></div>
+<div class="controls"><button data-action="up">↑ Up</button><button data-action="left">← Left</button><button data-action="down">↓ Down</button><button data-action="right">→ Right</button><button data-action="interact">Interact</button><button id="reset">Reset</button><button id="export">Export receipt</button></div>
+<details><summary>Observation log</summary><pre id="log" aria-live="polite"></pre></details>
+<footer>Keys: arrows / WASD to move, Enter or Space to interact. Export saves a JSON observation receipt; a separate native Python replay can check it. The browser cannot independently certify its own honesty.</footer>
+</main><script>
+'use strict';
+const VERSION='game-construction-v0';
+const arena=document.getElementById('arena'),status=document.getElementById('status'),log=document.getElementById('log');
+let state,actions,observations;
+const clone=o=>JSON.parse(JSON.stringify(o));
+function transition(action){
+  const prev=clone(state);let verdict;
+  const delta={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0],interact:[0,0]};
+  if(!Object.prototype.hasOwnProperty.call(delta,action)) return;
+  if(action==='interact'){
+    if(state.collected) verdict='already-collected';
+    else if(Math.abs(2-state.x)+Math.abs(1-state.y)===1){state.collected=true;verdict='collected';}
+    else verdict='out-of-reach';
+  }else{
+    const [dx,dy]=delta[action],x=state.x+dx,y=state.y+dy;
+    if(x<0||x>=4||y<0||y>=3) verdict='blocked-by-boundary';
+    else{state.x=x;state.y=y;verdict='moved';}
+  }
+  state.turns++;actions.push(action);
+  observations.push({action,before:prev,after:clone(state),verdict});
+  status.textContent=state.collected?'Object collected — witnessed locally':`Turn ${state.turns}: ${verdict}`;
+  log.textContent=JSON.stringify(observations,null,2);draw();
+}
+function draw(){arena.replaceChildren();for(let y=0;y<3;y++){for(let x=0;x<4;x++){
+  const cell=document.createElement('div');cell.className='cell';
+  if(x===2&&y===1&&!state.collected){cell.textContent='✦';cell.classList.add('target')}
+  if(x===state.x&&y===state.y){cell.textContent='●';cell.classList.add('player')}
+  arena.appendChild(cell);
+}}}
+function reset(){state={x:0,y:1,collected:false,turns:0};actions=[];observations=[];status.textContent='Start at (0,1); object at (2,1)';log.textContent='[]';draw()}
+for(const b of document.querySelectorAll('button[data-action]')) b.addEventListener('click',()=>transition(b.dataset.action));
+document.getElementById('reset').addEventListener('click',reset);
+document.getElementById('export').addEventListener('click',()=>{
+  const payload=JSON.stringify({version:VERSION,spec:{width:4,height:3,start:[0,1],target:[2,1]},actions,observations,final:clone(state)},null,2)+'\n';
+  const url=URL.createObjectURL(new Blob([payload],{type:'application/json'}));
+  const anchor=document.createElement('a');anchor.href=url;anchor.download='game_browser_receipt.json';anchor.click();
+  URL.revokeObjectURL(url);
+});
+document.addEventListener('keydown',event=>{
+  if(event.target instanceof HTMLButtonElement) return;
+  const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',Enter:'interact',' ':'interact'};
+  const action=map[event.key];if(action){event.preventDefault();transition(action)}
+});reset();
+</script></body></html>
