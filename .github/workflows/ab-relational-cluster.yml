@@ -1,0 +1,41 @@
+name: A/B Relational Cluster Movement
+
+on:
+  pull_request:
+    paths:
+      - "systems/workspace/ab_relational_cluster.py"
+      - "systems/workspace/AB_RELATIONAL_CLUSTER.md"
+      - "network/tests/test_ab_relational_cluster.py"
+      - "work/arc_like_maze/math.py"
+      - ".github/workflows/ab-relational-cluster.yml"
+  push:
+    branches: [main]
+    paths:
+      - "systems/workspace/ab_relational_cluster.py"
+      - "systems/workspace/AB_RELATIONAL_CLUSTER.md"
+      - "network/tests/test_ab_relational_cluster.py"
+      - "work/arc_like_maze/math.py"
+      - ".github/workflows/ab-relational-cluster.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  witness-ab-motion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test real A/B branch, connection, and restart observations
+        run: python -m unittest -v network.tests.test_ab_relational_cluster
+      - name: Independent CLI reproduction of three successive waves
+        run: |
+          scratch="$(mktemp -d)"
+          python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch"
+          python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch"
+          python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch"
+          python -m systems.workspace.ab_relational_cluster --inspect --data-dir "$scratch"
