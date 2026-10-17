@@ -1,0 +1,59 @@
+{
+  "actions": [
+    "right",
+    "interact"
+  ],
+  "final": {
+    "collected": true,
+    "turns": 2,
+    "x": 1,
+    "y": 1
+  },
+  "observations": [
+    {
+      "action": "right",
+      "after": {
+        "collected": false,
+        "turns": 1,
+        "x": 1,
+        "y": 1
+      },
+      "before": {
+        "collected": false,
+        "turns": 0,
+        "x": 0,
+        "y": 1
+      },
+      "verdict": "moved"
+    },
+    {
+      "action": "interact",
+      "after": {
+        "collected": true,
+        "turns": 2,
+        "x": 1,
+        "y": 1
+      },
+      "before": {
+        "collected": false,
+        "turns": 1,
+        "x": 1,
+        "y": 1
+      },
+      "verdict": "collected"
+    }
+  ],
+  "spec": {
+    "height": 3,
+    "start": [
+      0,
+      1
+    ],
+    "target": [
+      2,
+      1
+    ],
+    "width": 4
+  },
+  "version": "game-construction-v0"
+}
