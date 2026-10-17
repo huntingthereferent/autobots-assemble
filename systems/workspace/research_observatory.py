@@ -169,12 +169,12 @@ def research_snapshot(root:Path=ROOT)->dict:
                 raise ValueError("bad pinned walls")
             historical=(rel=="state/current.json")
             records.append(_record(rel,"HISTORICAL_POINTER" if historical else "PIN",
-                                   _bounded_text(data.get("preferred_referent"),"referent"),
+                                   _bounded_text(data.get("preferred_referent") or data.get("preferred_referent_at_pin") or data.get("pin_id"),"referent"),
                                    state or "UNCLASSIFIED",
                                    wall=tuple(field) if not historical else (),
                                    boundary="Historical non-current pointer; 'walls' are preserved guardrails" if historical
-                                   else _bounded_text(data.get("pin_reason"),"pin reason"),
-                                   next_step=_bounded_text(data.get("resume_from") or data.get("next_movement"),"next"),
+                                   else _bounded_text(data.get("pin_reason") or data.get("credential_boundary") or data.get("note"),"pin boundary"),
+                                   next_step=_bounded_text(data.get("resume_from") or data.get("next_movement") or data.get("dependency"),"next"),
                                    scope="Pinned or historical original; not a presently assigned task"))
             if not historical:
                 walls+=len(field)
