@@ -109,6 +109,7 @@ function render(data) {
   renderFiltered();
   renderControls();
   renderPromotion();
+  renderResearch();
 }
 function renderFiltered() {
   if (!current) return;
@@ -318,6 +319,88 @@ $("#promotion-copy").addEventListener("click", async () => {
         $("#promotion-note").textContent = "Copied for local review. No edition was selected or executed.";
   } catch (_error) { $("#promotion-note").textContent = "Copy unavailable; select the commands manually."; }
 });
+
+// Research is a source-owned READ-ONLY projection. No research file is a job.
+let researchShown = 80;
+function researchLink(path, label, line) {
+  const safe = /^[a-zA-Z0-9._/-]{1,260}$/.test(path) && !path.includes("..");
+  const item = el(safe ? "a" : "span", "code", label || path);
+  if (safe) {
+    item.href = "https://github.com/huntingthereferent/autobots-assemble/blob/main/" + path.split("/").map(encodeURIComponent).join("/") + (Number.isInteger(line) && line > 0 ? "#L" + line : "");
+    item.target = "_blank";
+    item.rel = "noopener noreferrer";
+  }
+  return item;
+}
+function renderResearch() {
+  if (!current || !current.research) return;
+  const research = current.research;
+  if (research.schema !== "workstation-research-continuity/v1") {
+    $("#research-record-list").replaceChildren(el("p","empty","Unknown research source version"));
+    return;
+  }
+  const totals = research.totals;
+  for (const [key, value] of Object.entries({
+      sources:totals.source_files, records:totals.structured_records,
+      moves:totals.explicit_move_states, walls:totals.explicit_wall_entries})) {
+    $("#research-" + key).textContent = String(value);
+  }
+  const select = $("#research-section"), selected=select.value;
+  select.replaceChildren(option("", "All research systems"),
+    ...research.sections.map(x=>option(x.name, x.name+" ("+x.source_count+")")));
+  select.value = research.sections.some(x=>x.name===selected) ? selected : "";
+  const active=select.value, mode=$("#research-view").value;
+  let entries=[];
+  if (mode==="inventory") {
+    entries=research.sections.filter(x=>!active||x.name===active)
+      .flatMap(x=>x.paths.map(path=>({path,section:x.name})));
+  } else if (mode==="documented_walls" || mode==="documented_moves") {
+    const kind = mode==="documented_walls" ? "DOCUMENTED_WALL" : "DOCUMENTED_MOVEMENT";
+    entries=research.documented_marks.filter(x=>(!active||x.section===active) && x.kind===kind);
+  } else if (mode==="walls") {
+    entries=research.source_records.filter(x=>!active||x.section===active)
+      .flatMap(x=>x.walls.map((statement,i)=>({...x,statement,index:i})));
+  } else {
+    entries=research.source_records.filter(x=>!active||x.section===active);
+  }
+  const shown=entries.slice(0,researchShown);
+  const nodes=shown.map(row=>{
+    const card=el("article","entry research-entry");
+    if (mode==="inventory") {
+      card.append(researchLink(row.path),el("p","meta",row.section+" · indexed source only"));
+      return card;
+    }
+    if (mode==="documented_walls" || mode==="documented_moves") {
+      card.append(el("strong","name",row.heading),
+        el("p","meta",row.section+" · documented source heading, not native verification"),
+        researchLink(row.path,row.path+" · line "+row.line,row.line));
+      return card;
+    }
+    const head=el("div","line");
+    head.append(el("strong","name",row.title),status(row.state));
+    card.append(head,el("p","meta",row.kind+" · "+row.section),researchLink(row.path));
+    if (mode==="walls") card.append(el("p","research-wall",row.statement));
+    else {
+      if (row.walls.length) card.append(el("p","minor",row.walls.length+" source-recorded unresolved conditions"));
+      if (row.boundary) card.append(el("p","minor","Boundary: "+row.boundary));
+      if (row.next) card.append(el("p","minor","Next recorded movement: "+row.next));
+      card.append(el("p","minor",row.scope));
+      if (row.walls.length) card.append(detail("Read original walls",row.walls));
+    }
+    return card;
+  });
+  if (entries.length>researchShown) {
+    const more=el("button","research-more","Show more source records ("+(entries.length-researchShown)+" remaining)");
+    more.type="button";
+    more.addEventListener("click",()=>{researchShown+=80;renderResearch();});
+    nodes.push(more);
+  }
+  put("#research-record-list",nodes,"No records of this kind in the selected source. Not the same as no research.");
+  $("#research-label").textContent=research.sections.length+" original source areas";
+  $("#research-note").textContent=shown.length+" of "+entries.length+" source entries · "+mode;
+}
+$("#research-section").addEventListener("change",()=>{researchShown=80;renderResearch();});
+$("#research-view").addEventListener("change",()=>{researchShown=80;renderResearch();});
 
 async function refresh() {
   if (updating) return;

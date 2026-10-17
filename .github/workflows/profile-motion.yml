@@ -6,8 +6,13 @@ on:
       - 'views/motion/**'
       - 'views/traces/convergence_focus.py'
       - 'views/traces/test_convergence_focus.py'
+      - 'systems/workspace/research_observatory.py'
+      - 'network/tests/test_research_observatory.py'
       - 'views/motion/atlas_dashboard.py'
       - 'views/motion/test_atlas_dashboard.py'
+      - 'research/dives/**'
+      - 'work/arc_like_maze/chatbot/checkpoints/**'
+      - 'state/pins/**'
       - '.github/workflows/profile-motion.yml'
   push:
     branches: [main]
@@ -48,7 +53,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Native mathematics and source-projection tests
-        run: python -m unittest -v views.motion.test_render views.motion.test_convergence views.traces.test_convergence_focus views.motion.test_atlas_dashboard
+        run: python -m unittest -v views.motion.test_render views.motion.test_convergence views.traces.test_convergence_focus views.motion.test_atlas_dashboard network.tests.test_research_observatory network.tests.test_workstation_monitor network.tests.test_workstation_http
       - name: Generate source-linked animations and native confluence
         run: |
           python -m views.motion.render

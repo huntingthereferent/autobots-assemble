@@ -14,6 +14,7 @@ from .store import WorkspaceStore
 from .projection import workspace_view
 from .inspections import inspect_handoff
 from .promotion import PreferredEditions, preference_view
+from .research_observatory import research_snapshot
 
 
 def _editions(workstation: ProcessWorkstation) -> list[dict[str, Any]]:
@@ -132,6 +133,7 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
         "runtime_execution_connected_by_view": False,
         "notes": "COMPLETE means a recorded result; this page does not reverify native sources or prove an active process.",
         "editions": editions,
+        "research": research_snapshot(),
         "preferred": preference_view(PreferredEditions(preferred_journal), desk)
                      if preferred_journal is not None else [],
         "jobs": jobs,

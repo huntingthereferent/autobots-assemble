@@ -21,6 +21,16 @@ source-owned research / factory / school / creative work / other systems
 
 The general rules stay at [`protocols/core/provenance.md`](../../protocols/core/provenance.md), cross-system work remains under [`runtime/`](../../runtime/README.md), and current person-facing attention remains under [`systems/day_to_day/`](../day_to_day/README.md). The workspace is **not** a new orchestrator and does not change `state/current.json` or `TASKS.md`.
 
+## Research-wide observation
+
+[Original research source observer](research_observatory.py) reads the available repository sources and presents them in the existing workstation. It preserves mathematics, ARC experiments, CP checkpoints, W13 records, language writing, implementation files, and test files with their original source paths.
+
+The research panel distinguishes structured results from plain source inventory. Exact source-recorded MOVE states and explicitly listed walls can be counted, while unstructured documents are never converted into completed jobs or artificial witness events. Historical pinned records remain historical. Private journals and unavailable archive material are outside this source index.
+
+The local read-only workstation API now includes a research section; the original process job journal remains independent. The public hero draws its actual finite A/B paths from original mathematics, not from the older job summary.
+
+Test with `python -m unittest -v network.tests.test_research_observatory`.
+
 ## Native records
 
 - `LANE_OPENED` — stable lane identity, ordinary name, current referent, actor, canonical source locators.
