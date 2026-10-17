@@ -1,0 +1,174 @@
+# Recover an independently witnessed native W13 state in a later GitHub
+# runner. A verified frontier opens a durable source-owned help opening; no
+# downstream job is executed without its own source/authorization contract.
+name: workstation-w13-cross-run-continuation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/native_job_requests/w13/continue-w13-39025574748.json'
+  workflow_run:
+    workflows: [workstation-w13-owner-merged-one-shot]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: w13-cross-run-continuation-${{ github.event_name }}-${{ github.event.workflow_run.id || '39025574748' }}
+  cancel-in-progress: false
+
+jobs:
+  continue-original-w13:
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == github.repository_owner) ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.event == 'push' &&
+       github.event.workflow_run.actor.login == github.repository_owner)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      SOURCE_RUN_ID: ${{ github.event.workflow_run.id || '39025574748' }}
+      BOOTSTRAP_REQUEST: systems/workspace/native_job_requests/w13/continue-w13-39025574748.json
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout coordinator and preserved native verifier
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Python for existing native verifier
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Authenticate source run and exact artifact via GitHub evidence
+        id: source
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/w13-continuation-output"
+          printf 'OUTPUT_DIR=%s\n' "$RUNNER_TEMP/w13-continuation-output" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import json,os,re,subprocess
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          repo=os.environ['GITHUB_REPOSITORY']
+          token=os.environ['GH_TOKEN']
+          run_id=int(os.environ['SOURCE_RUN_ID'])
+          if (os.environ['GITHUB_ACTOR']!=os.environ['GITHUB_REPOSITORY_OWNER']
+                  and os.environ['GITHUB_EVENT_NAME']=='push'):
+              raise SystemExit('bootstrap must be owner-merged')
+          if os.environ['GITHUB_EVENT_NAME']=='push':
+              request_path=Path(os.environ['BOOTSTRAP_REQUEST'])
+              expected={
+                  'contract':'game-w13-cross-run-bootstrap-v1',
+                  'source_run_id':39025574748,
+                  'source_artifact_id':12098716155,
+                  'source_head_sha':'1c28c44f655c3794fd64eb0b2ab822bebc9db2b2',
+                  'source_artifact_digest':'sha256:543c08f9f9f5cb1eee47b0ab21535e759495c6e7318dc5e06f3519f27f4dfcfa',
+                  'parent_job_id':'game-w13-github-001',
+                  'parent_cp':'GAME-W13-WORLDS',
+                  'continuation':'restore-original-native-journal-and-open-one-native-next-cp-help'}
+              sha=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+              parents=subprocess.check_output(['git','rev-list','--parents','-n','1',sha],text=True).split()
+              if len(parents)!=3:
+                  raise SystemExit('bootstrap must enter through two-parent protected-main merge')
+              changed=subprocess.check_output([
+                  'git','diff','--name-status',parents[1],sha,'--',
+                  'systems/workspace/native_job_requests/w13/continue-w13-39025574748.json'
+              ],text=True).strip()
+              if (changed!='A\t'+str(request_path) or
+                      json.loads(request_path.read_text())!=expected or
+                      run_id!=expected['source_run_id']):
+                  raise SystemExit('not a single exact source-pinned W13 bootstrap')
+          def fetch(route):
+              req=Request(f'https://api.github.com/repos/{repo}/{route}',headers={
+                  'Authorization':f'Bearer {token}',
+                  'Accept':'application/vnd.github+json',
+                  'X-GitHub-Api-Version':'2022-11-28',
+                  'User-Agent':'autobots-w13-native-journal-continuation'})
+              with urlopen(req,timeout=20) as response:
+                  return json.load(response)
+          run=fetch(f'actions/runs/{run_id}')
+          if (run['name']!='workstation-w13-owner-merged-one-shot'
+                  or run['head_repository']['full_name']!=repo
+                  or run['event']!='push'
+                  or run['head_branch']!='main'
+                  or run['status']!='completed' or run['conclusion']!='success'
+                  or run['actor']['login']!=os.environ['GITHUB_REPOSITORY_OWNER']):
+              raise SystemExit('source W13 native run is not original authorized successful main job')
+          if os.environ['GITHUB_EVENT_NAME']=='workflow_run':
+              event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())['workflow_run']
+              if (event['id']!=run_id or event['head_sha']!=run['head_sha']
+                      or event['run_attempt']!=run['run_attempt']):
+                  raise SystemExit('workflow_run event does not match real source run')
+          artifacts=fetch(f'actions/runs/{run_id}/artifacts?per_page=100')['artifacts']
+          name=f'w13-owner-merged-native-{run_id}-{run["run_attempt"]}'
+          matched=[a for a in artifacts if a['name']==name and
+                   a.get('workflow_run',{}).get('id')==run_id]
+          if len(matched)!=1 or matched[0]['expired']:
+              raise SystemExit('native W13 source artifact is missing, ambiguous or expired')
+          a=matched[0]
+          if not re.fullmatch(r'sha256:[0-9a-f]{64}',str(a.get('digest',''))):
+              raise SystemExit('source archive has no trusted digest')
+          if run_id==39025574748 and (
+                  run['head_sha']!='1c28c44f655c3794fd64eb0b2ab822bebc9db2b2'
+                  or a['id']!=12098716155
+                  or a['digest']!='sha256:543c08f9f9f5cb1eee47b0ab21535e759495c6e7318dc5e06f3519f27f4dfcfa'):
+              raise SystemExit('known native W13 witness source changed')
+          origin={
+              'repository':repo, 'workflow':run['name'],
+              'run_id':run_id, 'attempt':run['run_attempt'],
+              'head_sha':run['head_sha'],'event':run['event'],
+              'branch':run['head_branch'],'actor':run['actor']['login'],
+              'conclusion':run['conclusion'],'artifact_id':a['id'],
+              'digest':a['digest'],'artifact_expired':a['expired'],
+          }
+          out=Path(os.environ['RUNNER_TEMP'])/'w13-continuation-output'
+          (out/'source-binding.json').write_text(json.dumps(origin,sort_keys=True,indent=2)+'\n')
+          with Path(os.environ['GITHUB_OUTPUT']).open('a') as f:
+              f.write(f'run_id={run_id}\nartifact_name={name}\n')
+          print(f'AUTHORIZED W13 PARENT RUN {run_id} ARTIFACT {a["id"]}: SOURCE BOUND')
+          PY
+
+      - name: Download exact original native journal artifact from prior runner
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ steps.source.outputs.run_id }}
+          name: ${{ steps.source.outputs.artifact_name }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/w13-original-evidence
+
+      - name: Preserve independent replay dependency
+        run: python -m pip install 'cryptography>=45,<47'
+
+      - name: Resume native journal and branch on freshly verified next checkpoint
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.github_w13_continuation \
+            --artifact-dir "$RUNNER_TEMP/w13-original-evidence" \
+            --data-dir "$RUNNER_TEMP/w13-inherited-runtime" \
+            --output-dir "$RUNNER_TEMP/w13-continuation-output" \
+            --source-binding "$RUNNER_TEMP/w13-continuation-output/source-binding.json"
+          tar -czf "$RUNNER_TEMP/w13-continuation-output/continued-runtime.tar.gz" \
+            -C "$RUNNER_TEMP/w13-inherited-runtime" \
+            workstation runtime.jsonl coordinator-windows.jsonl
+          sha256sum "$RUNNER_TEMP/w13-continuation-output/continued-runtime.tar.gz" \
+            > "$RUNNER_TEMP/w13-continuation-output/continued-runtime.sha256"
+
+      - name: Publish source-pinned state plus the next unstaffed branch
+        uses: actions/upload-artifact@v4
+        with:
+          name: w13-continued-state-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/w13-continuation-output/
+          if-no-files-found: error
+          retention-days: 30
