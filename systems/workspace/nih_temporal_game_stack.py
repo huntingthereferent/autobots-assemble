@@ -143,6 +143,8 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False, pac
     packet = one_cp_handoff(index, WINDOW, verified, reverified=True)
     graph = packet["cp_automation"]
     required = {"NIH-P1-SCOPE", "NIH-P1-ONTOLOGY", "NIH-P1-REASONING"}
+    if packet_build:
+        required.add("NIH-P1-PACKET")
     if not required.issubset(set(graph["witnessed"])):
         raise ValueError("real temporal scope->ontology->reasoning did not advance in CP graph")
     if packet_build:
