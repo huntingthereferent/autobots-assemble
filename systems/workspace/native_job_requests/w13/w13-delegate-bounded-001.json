@@ -1,0 +1,17 @@
+{
+  "contract": "workstation-w13-native-bounded-delegation-v1",
+  "referent": "continue creation by delegating actual source-owned W13 game work through existing workstation B2/B3",
+  "source_continuation_run_id": 39027647611,
+  "source_continuation_artifact_id": 12098779457,
+  "source_continuation_digest": "sha256:bdd56c2a5204b24296033b2ff73a8d8ebcc79081e648273a6ca7a159e1bcbd98",
+  "source_continuation_head": "47d1468b064b545caa9d16797fc0ad42a316d2c2",
+  "parent_native_job": "game-w13-github-001",
+  "worker_git_blob": "54d847dadda9b5fd10297e2e88ee65bea9be2ad1",
+  "fixture_git_blob": "645819b70f022feee7b54e764f3d438c8e45f4c1",
+  "helper_capability": "game-w13-native-two-room",
+  "target": "one-exact-source-owned-W13-two-world-helper-subprocess",
+  "authorize_admission": true,
+  "authorize_execution": true,
+  "execution_scope": "one-idempotent-bounded-helper-delegation-through-existing-workstation",
+  "activation": "one-new-owner-merged-protected-main-request"
+}
