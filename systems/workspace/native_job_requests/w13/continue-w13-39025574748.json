@@ -1,0 +1,10 @@
+{
+  "contract": "game-w13-cross-run-bootstrap-v1",
+  "source_run_id": 39025574748,
+  "source_artifact_id": 12098716155,
+  "source_head_sha": "1c28c44f655c3794fd64eb0b2ab822bebc9db2b2",
+  "source_artifact_digest": "sha256:543c08f9f9f5cb1eee47b0ab21535e759495c6e7318dc5e06f3519f27f4dfcfa",
+  "parent_job_id": "game-w13-github-001",
+  "parent_cp": "GAME-W13-WORLDS",
+  "continuation": "restore-original-native-journal-and-open-one-native-next-cp-help"
+}
