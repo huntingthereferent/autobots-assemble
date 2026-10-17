@@ -21,6 +21,14 @@ def evaluate(nodes: list[str], relations: list[dict], *,
         raise ValueError("invalid native identifiers")
     if type(relations) is not list or len(relations)>4096:
         raise ValueError("bounded native relation set required")
+    if split is not None:
+        if (type(split) is not dict or set(split)!={"endpoints","reason","witness"}
+            or type(split["endpoints"]) is not list or len(split["endpoints"])!=2
+            or any(type(x) is not str or not x for x in split["endpoints"])
+            or len(set(split["endpoints"]))!=2
+            or type(split["reason"]) is not str or not split["reason"].strip()
+            or type(split["witness"]) is not str or not split["witness"].strip()):
+            raise ValueError("malformed independently explained split")
     graph=defaultdict(set)
     reverse=defaultdict(set)
     seen=set()
