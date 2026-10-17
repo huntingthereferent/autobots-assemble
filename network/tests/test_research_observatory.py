@@ -20,15 +20,16 @@ class OriginalResearchTests(unittest.TestCase):
                             for x in source["source_records"]))
         self.assertTrue(any(x["kind"]=="EXPERIMENT" and "FM-002" in x["path"]
                             for x in source["source_records"]))
-        self.assertTrue(any("WORLD_W13_MOVEMENT_01.md" in row["paths"]
-                            for row in source["sections"]) is False) if False else None
         self.assertTrue(any("systems/workspace/WORLD_W13_MOVEMENT_01.md" in row["paths"]
                             for row in source["sections"]))
         self.assertTrue(any("language/SEPARATIONS.md" in row["paths"]
                             for row in source["sections"]))
         self.assertTrue(any("network/tests/test_arc_like_inverse_ab.py" in row["paths"]
                             for row in source["sections"]))
-        self.assertTrue(any("full available repository source" not in x for x in source["caveats"]))
+        self.assertGreater(source["totals"]["documented_wall_headings"],0)
+        self.assertGreater(source["totals"]["documented_movement_headings"],0)
+        self.assertTrue(any("systems/workspace/WORLD_W13_MOVEMENT_01.md"==x["path"]
+                            for x in source["documented_marks"]))
 
     def test_explicit_status_not_filename_or_pretend_test_pass(self):
         with TemporaryDirectory() as d:
@@ -46,6 +47,8 @@ class OriginalResearchTests(unittest.TestCase):
             self.assertEqual(report["totals"]["explicit_wall_entries"],1)
             self.assertEqual(report["totals"]["structured_records"],1)
             self.assertEqual(report["totals"]["source_files"],2)
+            self.assertEqual(report["totals"]["documented_wall_headings"],1)
+            self.assertEqual(report["totals"]["documented_movement_headings"],0)
             self.assertNotIn(file.as_posix(),[x["path"] for x in report["source_records"]])
             self.assertFalse((root/"runtime/data").exists())
 
