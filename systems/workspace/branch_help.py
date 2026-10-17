@@ -148,6 +148,8 @@ def staff_w13_native(*, data_dir: str | Path, opening_id: str,
                 history.get('source_locator') != provenance.get('source_locator')):
             raise ValueError('W13 helper source edition collision')
         child = desk.inspect(worker_id=WORKER_ID, version_id=child_version)
+    # branch() returns a copy receipt; inspect() checks live edition bytes.
+    child = desk.inspect(worker_id=WORKER_ID, version_id=child_version)
     if (child.get('source_fingerprint', child.get('current_fingerprint'))
             != original['current_fingerprint'] or
             child.get('current_fingerprint') != original['current_fingerprint']):
