@@ -1,0 +1,65 @@
+{
+  "evidence_depth": "executed-local-simulation",
+  "final": {
+    "collected": true,
+    "turns": 2,
+    "x": 1,
+    "y": 1
+  },
+  "head_hash": "e1b0cecc1c78a7db19f87afa7b283e5c1b9d88e6eee2c8959c28fde07758e874",
+  "root_hash": "014e42555cda9fd5caacfe3065025cb1a5586901856b814305d8a0d7d810861c",
+  "solved": true,
+  "spec": {
+    "height": 3,
+    "start": [
+      0,
+      1
+    ],
+    "target": [
+      2,
+      1
+    ],
+    "width": 4
+  },
+  "steps": [
+    {
+      "action": "right",
+      "after": {
+        "collected": false,
+        "turns": 1,
+        "x": 1,
+        "y": 1
+      },
+      "before": {
+        "collected": false,
+        "turns": 0,
+        "x": 0,
+        "y": 1
+      },
+      "hash": "65c716ffa4aefad2ca183ff5ac5d4a55be9a4889d509b9ca37680f0e8a9f0a74",
+      "previous_hash": "014e42555cda9fd5caacfe3065025cb1a5586901856b814305d8a0d7d810861c",
+      "step": 1,
+      "verdict": "moved"
+    },
+    {
+      "action": "interact",
+      "after": {
+        "collected": true,
+        "turns": 2,
+        "x": 1,
+        "y": 1
+      },
+      "before": {
+        "collected": false,
+        "turns": 1,
+        "x": 1,
+        "y": 1
+      },
+      "hash": "e1b0cecc1c78a7db19f87afa7b283e5c1b9d88e6eee2c8959c28fde07758e874",
+      "previous_hash": "65c716ffa4aefad2ca183ff5ac5d4a55be9a4889d509b9ca37680f0e8a9f0a74",
+      "step": 2,
+      "verdict": "collected"
+    }
+  ],
+  "version": "game-construction-v0"
+}
