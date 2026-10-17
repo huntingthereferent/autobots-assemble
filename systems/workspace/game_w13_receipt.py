@@ -169,7 +169,9 @@ def build_reference_receipt(actions: list[str]) -> dict[str, Any]:
     records = []
     for world, seq, trace in zip(WORLDS, segments, traces):
         records.append({
-            "id": world["id"], "version": w12.VERSION, "spec": world["spec"],
+            "id": world["id"], "version": w12.VERSION,
+            # Never expose mutable WORLDS source dictionaries to test fixtures.
+            "spec": json.loads(canonical(world["spec"])),
             "actions": list(seq),
             "observations": [
                 {k: row[k] for k in ("action", "before", "after", "verdict")}
