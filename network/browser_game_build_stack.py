@@ -71,19 +71,28 @@ class GameBuilderBrowserWitness(unittest.TestCase):
         self.assertEqual(page.locator("#turns").inner_text(),"Turns: 0")
 
     def test_04_real_browser_witness_returns_to_original_build_job(self):
+        import subprocess, sys
         from runtime.engine import HandoffRuntime
         from runtime.journal import RuntimeJournal
-        from systems.workspace.game_build_browser_witness import witness, EVENT
+        from systems.workspace.game_build_browser_witness import EVENT
         station=self.data/"station-0"
         output=self.data/"room-0"
-        first=witness(data_dir=station,output_dir=output)
+        def invoke():
+            # A real separate browser WITNESS process, never nested in BUILD's
+            # or the test suite's Playwright event loop.
+            completed=subprocess.run(
+                [sys.executable,"-m","systems.workspace.game_build_browser_witness",
+                 "--data-dir",str(station),"--output-dir",str(output)],
+                cwd=ROOT,check=True,capture_output=True,text=True,timeout=45)
+            return json.loads(completed.stdout)
+        first=invoke()
         self.assertTrue(first["native_journal_browser_return_recorded"])
         self.assertTrue(first["new_browser_event"])
         runtime=HandoffRuntime(event_store=RuntimeJournal(station/"runtime.jsonl"))
         returns=[e for e in runtime.event_store.for_handoff(first["job_id"])
                  if e.event_type==EVENT]
         self.assertEqual(len(returns),1)
-        repeated=witness(data_dir=station,output_dir=output)
+        repeated=invoke()
         self.assertFalse(repeated["new_browser_event"])
 
     def test_03_second_new_world_keyboard_controls_and_reset(self):
