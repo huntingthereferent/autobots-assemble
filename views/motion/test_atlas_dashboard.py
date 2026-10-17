@@ -1,77 +1,58 @@
-"""Regression tests: atlas animation depends on real source-owned state."""
-import json
+"""Source-native trace hero and original workstation research projection."""
+import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
-import unittest
 from unittest.mock import patch
 import xml.etree.ElementTree as ET
 
-from views.motion.atlas_dashboard import snapshot, dashboard, generate, ROOT, _load
+from views.motion.atlas_dashboard import dashboard, generate, native_paths, snapshot
+from systems.workspace.research_observatory import ROOT, research_snapshot
 
 
 class AtlasDashboardTests(unittest.TestCase):
-    def test_current_sources_compose_validated_cinematic_atlas(self):
+    def test_source_native_paths_and_research_are_presented_without_decoration(self):
         data=snapshot()
-        self.assertEqual(sum(n for _,n in data["category_counts"]),data["source_count"])
-        self.assertGreaterEqual(data["sampled_probes"],1)
+        self.assertEqual(data["research"]["schema"],"workstation-research-continuity/v1")
+        self.assertGreater(data["research"]["totals"]["structured_records"],0)
+        self.assertGreater(data["research"]["totals"]["explicit_wall_entries"],0)
+        self.assertEqual(data["native"]["routes"][0]["states"][-1],data["native"]["target"])
+        self.assertEqual(data["native"]["routes"][1]["states"][-1],data["native"]["target"])
         image=dashboard(data)
         ET.fromstring(image)
-        self.assertIn("JAMES",image)
-        self.assertIn("MUNEOKA",image)
-        self.assertIn("NATIVE FINITE TRACE",image)
-        self.assertIn(data["finite"]["left_word"],image)
-        self.assertIn(data["finite"]["right_word"],image)
-        self.assertIn("NOT JOINED",image)
-        self.assertIn("NOT ALL ACTIVE",image)
+        self.assertIn("HUNTING",image)
+        self.assertIn("THE REFERENT",image)
+        self.assertIn("ORIGINAL RESEARCH",image)
+        self.assertIn("EXPLICIT MOVES",image)
+        self.assertIn("RECORDED WALLS",image)
+        self.assertNotIn("10 DOMAINS",image)
+        self.assertNotIn("NOT JOINED",image)
+        self.assertNotIn("CANDIDATE FEEDS",image)
+        self.assertNotIn("JAMES",image)
+        self.assertNotIn("MUNEOKA",image)
+        self.assertNotIn("WORKSTATION 15",image)
+        self.assertIn("@keyframes",image)
         self.assertIn("prefers-reduced-motion",image)
-        self.assertIn("@keyframes spin",image)
         self.assertNotIn("<script",image)
 
-    def test_missing_source_is_not_zero(self):
-        before=_load
-        def no_source(rel):
-            result=before(rel)
-            if rel=="views/traces/internet-map.json":
-                result["probes"]=None
-            return result
-        with patch("views.motion.atlas_dashboard._load",side_effect=no_source):
+    def test_verification_cannot_be_bypassed_with_unmatched_path(self):
+        data=snapshot()
+        data["native"]["routes"][0]["states"][-1]=[0,0,0]
+        with self.assertRaises(ValueError):
+            dashboard(data)
+        with patch("views.motion.atlas_dashboard._independent_step",return_value=(2,2,2)):
             with self.assertRaises(ValueError):
-                snapshot()
+                native_paths()
 
-    def test_changed_mathematical_receipt_must_be_rejected(self):
-        original=_load
-        def modified(rel):
-            result=original(rel)
-            if rel=="views/motion/convergence-receipt.json":
-                result["target"]=[0,0,0]
-            return result
-        with patch("views.motion.atlas_dashboard._load",side_effect=modified):
-            with self.assertRaises(ValueError):
-                snapshot()
-
-    def test_false_no_token_traffic_claim_fails(self):
-        original=_load
-        def bad(rel):
-            result=original(rel)
-            if rel=="views/traces/internet-map.json":
-                result["traffic_state"]="SOURCE_MEASURED"
-            return result
-        with patch("views.motion.atlas_dashboard._load",side_effect=bad):
-            with self.assertRaises(ValueError):
-                snapshot()
-
-    def test_render_writes_only_generated_image(self):
-        tracked=[ROOT/"views/traces/registry.json",
-                 ROOT/"views/traces/internet-map.json",
-                 ROOT/"views/motion/convergence-receipt.json",
-                 ROOT/"views/work_state.json"]
-        orig=[p.read_bytes() for p in tracked]
+    def test_write_only_generated_svg(self):
+        sources=[ROOT/"state/current.json",ROOT/"research/dives/ARC3-TRACE-001/dive.json",
+                 ROOT/"work/arc_like_maze/math.py"]
+        before=[x.read_bytes() for x in sources]
         with TemporaryDirectory() as d:
-            svg=generate(Path(d))
-            file=Path(d)/"atlas-dashboard.svg"
-            self.assertEqual(file.read_text(),svg+"\n")
-            ET.parse(file)
-        self.assertEqual(orig,[p.read_bytes() for p in tracked])
+            body=generate(Path(d))
+            svg=Path(d)/"atlas-dashboard.svg"
+            self.assertEqual(svg.read_text(encoding="utf8"),body+"\n")
+            ET.parse(svg)
+        self.assertEqual(before,[x.read_bytes() for x in sources])
 
 
 if __name__=="__main__":
