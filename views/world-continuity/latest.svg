@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="495" viewBox="0 0 1000 495">
+<rect width="1000" height="495" rx="20" fill="#0d1117"/>
+<rect x="12" y="12" width="976" height="471" rx="15" fill="#13202b" stroke="#435466"/>
+<g font-family="Arial,Helvetica,sans-serif">
+<text x="36" y="52" fill="#8ae0d4" font-size="13" letter-spacing="2">EXTERNAL DATA · READ-ONLY OBSERVATIONAL PROJECTION</text>
+<text x="36" y="92" fill="#eef4fa" font-size="33" font-weight="bold">World data through continuity</text>
+<text x="36" y="116" fill="#b4c5d3" font-size="15">Observed 2026-10-17 14:46:22 UTC</text>
+<rect x="34" y="147" width="297" height="191" rx="12" fill="#1a3036" stroke="#40787e"/>
+<text x="53" y="178" fill="#7ed8d4" font-size="16">USGS · earthquakes</text>
+<text x="53" y="235" fill="#f1f5f8" font-size="43" font-weight="bold">6</text>
+<text x="53" y="258" fill="#c0d2dc" font-size="15">events in rolling past hour</text>
+<text x="53" y="292" fill="#b7cdd4" font-size="15">Largest magnitude: 5.2</text>
+<text x="53" y="317" fill="#a3b9c5" font-size="13">Independent source identity</text>
+<rect x="348" y="147" width="297" height="191" rx="12" fill="#24273a" stroke="#7163a5"/>
+<text x="367" y="178" fill="#d0b9ff" font-size="16">GitHub · repository</text>
+<text x="367" y="221" fill="#f1f5f8" font-size="22" font-weight="bold">psf/requests</text>
+<text x="367" y="257" fill="#cbd4e4" font-size="16">Stars 54472</text>
+<text x="367" y="292" fill="#d0b9ff" font-size="15">Change: new</text>
+<text x="367" y="317" fill="#a3b9c5" font-size="13">Stable repository ID</text>
+<rect x="662" y="147" width="304" height="191" rx="12" fill="#302a22" stroke="#a68a61"/>
+<text x="681" y="178" fill="#eed09b" font-size="16">PyPI · package</text>
+<text x="681" y="221" fill="#f1f5f8" font-size="25" font-weight="bold">requests</text>
+<text x="681" y="257" fill="#d4d4d4" font-size="16">Version 2.34.2</text>
+<text x="681" y="292" fill="#eed09b" font-size="15">Change: new</text>
+<text x="681" y="317" fill="#a3b9c5" font-size="13">Package metadata source</text>
+<path d="M495 338 V356 H813 V338" fill="none" stroke="#75d8c1" stroke-width="2" stroke-dasharray="5 5"/>
+<rect x="444" y="363" width="426" height="43" rx="10" fill="#193031" stroke="#75d8c1"/>
+<text x="657" y="390" fill="#75d8c1" font-size="16" font-weight="bold" text-anchor="middle">URL-supported metadata match</text>
+<text x="37" y="382" fill="#99ced0" font-size="14">No inferred USGS/software link</text>
+<line x1="35" y1="431" x2="965" y2="431" stroke="#45586a"/>
+<text x="36" y="453" fill="#bccbd5" font-size="13">Every observation has a source, ID and timestamp. Follow source links in LATEST.md.</text>
+<text x="36" y="472" fill="#e8cb9c" font-size="12">A source-metadata match is not an ownership proof or a universal A/B claim.</text>
+</g></svg>
