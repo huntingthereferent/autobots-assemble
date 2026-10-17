@@ -25,9 +25,26 @@ REQUEST=ROOT/"network/tests/fixtures/game_temporal_live_example.json"
 
 def continue_stack(*,data_dir:Path,output_dir:Path,real_browser=True):
     data,output=Path(data_dir),Path(output_dir)
-    original=original_join(data_dir=data,output_dir=output,
-                           browser_witness=real_browser,
-                           packet_build=True,prototype_build=True)
+    state_file = data / "runtime.jsonl"
+    if state_file.exists() and JOB_ID in HandoffRuntime(
+            event_store=RuntimeJournal(state_file)).snapshot():
+        # A continuation must not re-create the old six-job seed over the
+        # seventh real native job. Reverify every original source-owned parent
+        # and reuse its frozen report; do NOT invent new events.
+        for original_id in (
+                "nih-scope-001", "ontology-job", "nih-reasoning-001",
+                "nih-packet-001", "nih-prototype-001", "build-game-room-v1"):
+            verified=reverify_job(data_dir=data,job_id=original_id)
+            if verified["status"]!="COMPLETE":
+                raise ValueError("original complete-stack parent no longer verified")
+        original=json.loads((output/"complete-stack-temporal-game.json").read_text(encoding="utf8"))
+        if (original.get("phase_2_prototype")!="WITNESSED"
+                or original.get("prototype_native_witness")!="PASS"):
+            raise ValueError("original stack checkpoint report no longer trusted")
+    else:
+        original=original_join(data_dir=data,output_dir=output,
+                               browser_witness=real_browser,
+                               packet_build=True,prototype_build=True)
     request=json.loads(REQUEST.read_text(encoding="utf8"))
     desk=ProcessWorkstation(data/"workstation")
     try:desk.inspect(worker_id=WORKER_ID,version_id=VERSION)
