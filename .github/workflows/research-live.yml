@@ -6,6 +6,7 @@ on:
       - 'docs/live/**'
       - 'views/traces/research_live.py'
       - 'network/tests/test_live_source_field.py'
+      - 'network/tests/test_work_activity_ui.py'
       - 'systems/workspace/research_observatory.py'
       - '.github/workflows/research-live.yml'
   push:
@@ -43,7 +44,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Verify source adapter and browser program
-        run: python -m unittest -v network.tests.test_live_source_field network.tests.test_research_observatory
+        run: python -m unittest -v network.tests.test_live_source_field network.tests.test_work_activity_ui network.tests.test_research_observatory
       - name: Generate the original workstation projection
         run: python -m views.traces.research_live
       - name: Validate original source relationships
@@ -70,7 +71,7 @@ jobs:
           git commit -m "Publish original research source-state projection"
           for attempt in 1 2 3; do
             git fetch origin main
-            if git diff --name-only HEAD origin/main | grep -E '^(views/traces/research_live\.py|systems/workspace/research_observatory\.py|network/tests/test_live_source_field\.py)$'; then
+            if git diff --name-only HEAD origin/main | grep -E '^(views/traces/research_live\.py|systems/workspace/research_observatory\.py|network/tests/test_live_source_field\.py|network/tests/test_work_activity_ui\.py)$'; then
               echo "Source code changed during projection"; exit 1
             fi
             if ! git rebase origin/main; then git rebase --abort; exit 1; fi

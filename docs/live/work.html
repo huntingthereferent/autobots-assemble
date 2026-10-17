@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Work · Original investigation</title>
+<meta name="description" content="Source-owned workstation executions, verification steps, research outcomes, and unresolved walls.">
+<style>
+:root{color-scheme:dark;--bg:#091017;--panel:#111c26;--panel2:#15232f;--line:#2b4050;--text:#e8f1f5;--muted:#9fb6c3;--blue:#8ed3ed;--green:#91ddba;--yellow:#f3c68c;--red:#f0a7a4}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg);font:14px/1.53 ui-monospace,SFMono-Regular,Consolas,monospace}a{color:#a6dcf2;text-decoration:none}a:hover{text-decoration:underline}button,input,select{font:inherit}button,select,input{color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:9px 12px}button{cursor:pointer}button:hover{border-color:var(--blue)}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:14px max(20px,4vw);background:#0d1620}header strong{font-size:13px;letter-spacing:1px}header nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap;font-size:12px}header nav a{color:var(--muted)}
+main{max-width:1490px;margin:auto;padding:25px max(20px,3vw) 60px}.eyebrow{font-size:11px;letter-spacing:1.8px;color:var(--blue);font-weight:700;text-transform:uppercase;margin:0 0 10px}h1{font-size:clamp(30px,4.4vw,58px);line-height:1.09;letter-spacing:-2.5px;margin:0 0 16px}h2{font-size:22px;letter-spacing:-.8px;margin:0}h3{font-size:15px;margin:0}.intro{max-width:1020px;color:#b4c7d1;line-height:1.7;margin:0 0 22px}.status-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding-bottom:16px}.indicator{height:8px;width:8px;border-radius:50%;background:#758c98;display:inline-block}.indicator.ok{background:var(--green)}.indicator.error{background:var(--red)}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:28px}.metric{border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:16px 18px}.metric strong{font-size:31px;line-height:1.2;display:block;font-variant-numeric:tabular-nums}.metric small{display:block;letter-spacing:1px;font-size:10px;color:var(--muted);margin-top:4px}.metric:has([data-stat="running"]) strong{color:var(--blue)}.metric:has([data-stat="failed"]) strong{color:var(--red)}
+.section-top{display:flex;justify-content:space-between;align-items:end;gap:15px;flex-wrap:wrap;margin:32px 0 14px}.subtitle{color:var(--muted);font-size:12px;margin:6px 0 0}.tools{display:flex;gap:8px;flex-wrap:wrap}.tools label{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
+.workspace{display:grid;grid-template-columns:minmax(340px,.94fr) minmax(460px,1.25fr);gap:16px;align-items:start}.pane{border:1px solid var(--line);border-radius:7px;background:var(--panel);min-width:0;overflow:hidden}.pane>header{background:#14212d;padding:13px 16px;border-bottom:1px solid var(--line)}.pane>header small{color:var(--muted)}.pane-content{max-height:680px;overflow-y:auto}.run{border:0;background:transparent;border-bottom:1px solid #243643;border-radius:0;width:100%;display:block;text-align:left;padding:14px 16px;position:relative}.run:hover,.run.selected{background:#1b2d3b}.run.selected{box-shadow:inset 3px 0 0 var(--blue)}.run:focus-visible{outline-offset:-3px}.run-title{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}.run h3{font-size:13px;line-height:1.4}.run p{font-size:11px;color:var(--muted);margin:7px 0 0;overflow-wrap:anywhere}
+.state{font-size:10px;font-weight:700;border-radius:4px;padding:4px 7px;border:1px solid #567080;color:#aaccda;white-space:nowrap;letter-spacing:.4px}.state.success{border-color:#408c71;color:var(--green)}.state.failure,.state.cancelled{border-color:#a36b6a;color:var(--red)}.state.in_progress,.state.queued{border-color:#6d90a2;color:var(--blue)}.state.neutral,.state.skipped,.state.unknown{border-color:#8e7e65;color:var(--yellow)}
+.detail-body{padding:18px}.detail-body .hash{color:var(--blue);font-size:12px;overflow-wrap:anywhere}.detail-body .subhead{margin-top:22px;font-size:12px;color:#cde0e9;font-weight:700}.detail-body a{font-size:12px}.steps{list-style:none;margin:9px 0 0;padding:0}.steps li{display:flex;align-items:baseline;gap:12px;border-left:2px solid #5c7e93;padding:9px 12px;border-bottom:1px solid #253b4b}.steps li.passed{border-left-color:var(--green)}.steps li.failed{border-left-color:var(--red)}.steps li.running{border-left-color:var(--blue)}.steps li>div{flex:1;min-width:0;overflow-wrap:anywhere}.steps small{color:var(--muted);display:block}.steps .step-num{color:var(--muted);font-variant-numeric:tabular-nums;min-width:24px}.no-source{padding:19px;color:var(--muted);line-height:1.7}
+.source-controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}.source-controls input{min-width:min(340px,95vw);flex:1}
+.research-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:start}.record-list{max-height:560px;overflow-y:auto}.record{padding:16px;border-bottom:1px solid #283b49}.record>header{background:transparent;padding:0;border:0;display:flex;gap:10px;align-items:start;justify-content:space-between}.record h3{line-height:1.5;font-size:13px;max-width:80%;overflow-wrap:anywhere}.record p{color:var(--muted);font-size:11px;margin:7px 0}.record .path{font-size:11px;overflow-wrap:anywhere}.wall{border-left:2px solid var(--yellow);padding:13px 16px;margin:0;border-bottom:1px solid #283b49;overflow-wrap:anywhere}.wall p{margin:0 0 9px;font-size:12px}.wall small{color:var(--muted)}
+.fine{color:var(--muted);font-size:11px;line-height:1.7}.notice{color:var(--yellow);font-size:12px;padding:11px;background:#2d241b;border:1px solid #594b35;border-radius:5px;margin-bottom:14px}.notice[hidden]{display:none}
+footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--muted);font-size:11px}
+@media(max-width:950px){.workspace,.research-grid{grid-template-columns:1fr}.pane-content{max-height:490px}}
+@media(max-width:610px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}h1{letter-spacing:-1.2px}.metric strong{font-size:26px}}
+</style>
+</head>
+<body>
+<header>
+  <strong>HUNTING THE REFERENT <span style="color:#7e9bab">/ WORK</span></strong>
+  <nav><a href="#executions">WORK IN MOTION</a><a href="#research">RESEARCH & WALLS</a><a href="trace.html">SOURCE TRACE</a><a href="https://github.com/huntingthereferent/autobots-assemble">REPOSITORY</a></nav>
+</header>
+<main>
+<section aria-labelledby="title">
+  <p class="eyebrow">Actual execution and original evidence</p>
+  <h1 id="title">What's happening in work?</h1>
+  <p class="intro">GitHub workflow runs and their individual steps appear here as recorded by GitHub. Mathematics, research, corrections and unresolved walls come from the original workstation's source records. An executed test is not automatically a solved research question; a stored research result is not automatically running.</p>
+  <div class="status-line" role="status"><span class="indicator" id="live-dot"></span><strong id="feed-state">Reading current executions</strong><span id="last-read"></span><button id="check-now" type="button">Refresh source</button></div>
+  <div id="feed-error" class="notice" hidden></div>
+  <div class="metrics" aria-label="Observed workflow state counts">
+    <div class="metric"><strong data-stat="running">—</strong><small>RUNNING NOW</small></div>
+    <div class="metric"><strong data-stat="queued">—</strong><small>QUEUED / WAITING</small></div>
+    <div class="metric"><strong data-stat="failed">—</strong><small>RECENT FAILURES</small></div>
+    <div class="metric"><strong data-stat="passed">—</strong><small>RECENT PASSES</small></div>
+  </div>
+  <p class="fine">Numbers describe the latest publicly accessible workflow-run sample, not every worker or every event in the workstation. Unavailable data is never counted as zero.</p>
+</section>
+<section id="executions" aria-label="Actual GitHub work execution">
+  <div class="section-top"><div><p class="eyebrow">Current execution</p><h2>What started, what passed, what stopped</h2><p class="subtitle">Select a recorded run to inspect the native jobs and exact steps GitHub observed.</p></div>
+    <div class="tools"><label for="run-filter">Show <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label></div></div>
+  <div class="workspace">
+    <div class="pane"><header><strong>Observed workflow runs</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div></div>
+    <div class="pane"><header><strong>Execution evidence</strong><small id="details-scope">Choose a source run</small></header><div id="detail" class="pane-content"><p class="no-source">Select an observed workflow to inspect its saved jobs, steps, SHA, and result. No work will be launched from this screen.</p></div></div>
+  </div>
+</section>
+<section id="research" aria-labelledby="research-title">
+  <div class="section-top"><div><p class="eyebrow">Original research</p><h2 id="research-title">What we learned and what remains open</h2><p class="subtitle">Original research states and preserved walls, linked back to the files that recorded them.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
+  <div class="source-controls"><input id="source-search" type="search" placeholder="Search original research, source, status or wall…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
+  <div class="research-grid">
+    <div class="pane"><header><strong>Recorded investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div></div>
+    <div class="pane"><header><strong>Unresolved conditions and documented walls</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div></div>
+  </div>
+  <p class="fine">A documentation heading is not a failed run or a newly discovered wall. A historical checkpoint is not a live worker. Open the original evidence to inspect what was actually established.</p>
+</section>
+</main>
+<footer>Read-only / evidence-first. Public runs poll periodically; recorded research updates when its committed source projection changes. Inspired by REA's evidence-and-unknowns model, without copying REA's implementation. <a href="https://github.com/morluto/rea">REA source</a>.</footer>
+<script>
+"use strict";
+(() => {
+  const REPO="huntingthereferent/autobots-assemble";
+  const API="https://api.github.com/repos/"+REPO;
+  const SOURCE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/research-live.json";
+  const PERIOD=180000;
+  const $=id=>document.getElementById(id);
+  const app={runs:[],selection:null,jobCache:new Map(),research:null,reading:false,checked:null};
+  function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
+  function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
+  function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
+  const isSHA=sha=>typeof sha==="string"&&/^[0-9a-f]{40}$/.test(sha);
+  function safeDate(value){const d=Date.parse(value||"");return Number.isFinite(d)?new Date(d).toLocaleString():"no source timestamp"}
+  function statusOf(x){if(x.status==="queued"||x.status==="waiting"||x.status==="pending")return "queued";if(x.status==="in_progress")return "in_progress";if(x.status==="completed"){return x.conclusion||"unknown"}return "unknown"}
+  function pill(s){return el("span",s.replaceAll("_"," ").toUpperCase(),"state "+(s==="success"||s==="failure"||s==="in_progress"||s==="queued"||s==="cancelled"?s:"neutral"))}
+  async function getJSON(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("HTTP "+r.status+(r.status===403?" / public API rate limit":""));return r.json()}
+  function readRuns(j){if(!j||!Array.isArray(j.workflow_runs))throw Error("Unexpected GitHub workflow response");
+    return j.workflow_runs.filter(r=>Number.isSafeInteger(r.id)&&r.id>0&&isSHA(r.head_sha)&&
+      typeof r.name==="string"&&["queued","waiting","pending","in_progress","completed"].includes(r.status))
+      .slice(0,50).map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
+        conclusion:r.conclusion||null,url:r.html_url,created:r.created_at,updated:r.updated_at,
+        runNumber:r.run_number,branch:r.head_branch||""}));}
+  function currentStates(){return app.runs.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
+    else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
+    else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
+  function renderMetrics(){const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
+  function filteredRuns(){const f=$("run-filter").value;return app.runs.filter(r=>f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success"))}
+  function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
+    $("runs-scope").textContent=subset.length+" / "+app.runs.length+" recent source runs";
+    for(const r of subset){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
+      btn.type="button";const head=el("div",undefined,"run-title");
+      head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
+      btn.append(el("p",r.branch+" · "+r.head.slice(0,10)+" · "+safeDate(r.created)));
+      btn.append(el("p","#"+r.runNumber+" · GitHub execution "+r.id));
+      btn.addEventListener("click",()=>selectRun(r.id));area.append(btn);
+    }
+    if(!subset.length)area.append(el("p","No source runs match this filter. This is not a claim that no work exists.","no-source"));
+  }
+  function appendStepList(target,steps){
+    const list=el("ol",undefined,"steps");for(const [i,step] of steps.entries()){
+      const st=statusOf(step),li=el("li",undefined,st==="success"?"passed":st==="failure"?"failed":st==="in_progress"?"running":"");
+      li.append(el("span",String(step.number||i+1).padStart(2,"0"),"step-num"));
+      const content=el("div");content.append(el("strong",step.name||"unnamed step"),
+        el("small",safeDate(step.started_at)+" · "+st.replaceAll("_"," ")));
+      li.append(content);list.append(li);
+    }target.append(list);
+  }
+  async function selectRun(id){
+    if(!Number.isSafeInteger(id)||id<1)return;const r=app.runs.find(x=>x.id===id);if(!r)return;
+    app.selection=id;renderRuns();const area=$("detail");area.replaceChildren();
+    const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
+    header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
+    header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
+    if(plausible(r.url,"run"))header.append(link("Open original workflow run ↗",r.url));
+    header.append(el("p","Source jobs and steps below are read from GitHub. A successful workflow proves only its declared checks.","fine"));
+    area.append(header);$("details-scope").textContent="Run "+r.id+" · "+r.head.slice(0,10);
+    const pane=el("div","Reading exact GitHub job evidence…","no-source");area.append(pane);
+    try{
+      const json=app.jobCache.has(id)?app.jobCache.get(id):await getJSON(API+"/actions/runs/"+id+"/jobs?per_page=100");
+      if(!json||!Array.isArray(json.jobs))throw Error("Missing job array");
+      app.jobCache.set(id,json);if(app.selection!==id)return;
+      pane.remove();for(const j of json.jobs.slice(0,100)){
+        const b=el("div",undefined,"detail-body");
+        b.append(el("div",undefined,"subhead"),el("h3",j.name||"Job"));
+        b.append(pill(statusOf(j)));
+        b.append(el("p","Job "+j.id+" · Started "+safeDate(j.started_at)+" · Ended "+safeDate(j.completed_at),"fine"));
+        if(plausible(j.html_url))b.append(link("Inspect this job on GitHub ↗",j.html_url));
+        if(Array.isArray(j.steps)&&j.steps.length)appendStepList(b,j.steps);
+        else b.append(el("p","No steps included in the source response; not interpreted as an empty execution.","no-source"));
+        area.append(b);
+      }
+      if(!json.jobs.length)area.append(el("p","No job evidence returned for this run.","no-source"));
+    }catch(e){if(app.selection===id)pane.textContent="Source evidence unavailable: "+e.message+". No steps inferred."}
+  }
+  function srcLink(path,line){if(typeof path!=="string"||!(/^[\w./-]+$/.test(path))||path.includes(".."))return null;
+    const url="https://github.com/"+REPO+"/blob/main/"+path.split("/").map(encodeURIComponent).join("/")+(Number.isInteger(line)&&line>0?"#L"+line:"");
+    return link(path+(line?" · L"+line:"")+" ↗",url,"path");
+  }
+  function renderResearch(){
+    const r=app.research;if(!r)return;const q=$("source-search").value.trim().toLowerCase(),type=$("source-filter").value;
+    const match=v=>String(v||"").toLowerCase().includes(q);
+    const items=r.records.filter(x=>(type==="all"||x.source_type===type)&&(!q||[x.label,x.path,x.state,x.source_type,x.scope,x.next,x.boundary].some(match)));
+    const area=$("research-records");area.replaceChildren();
+    for(const rec of items){
+      const item=el("article",undefined,"record");const head=el("header");
+      head.append(el("h3",rec.label||rec.path),pill(rec.state||"unknown"));item.append(head);
+      item.append(el("p",rec.source_type+" · "+(rec.scope||"original recorded result")));
+      if(rec.next)item.append(el("p","Next recorded movement: "+rec.next));
+      if(rec.boundary)item.append(el("p","Boundary: "+rec.boundary));
+      const href=srcLink(rec.path);if(href)item.append(href);area.append(item);
+    }
+    if(!items.length)area.append(el("p","No matching source records.","no-source"));
+    $("research-count").textContent=items.length+" / "+r.records.length+" source records";
+    const walls=r.walls.filter(x=>!q||[x.text,x.path,x.kind].some(match)),box=$("research-walls");box.replaceChildren();
+    for(const w of walls){
+      const card=el("article",undefined,"wall");card.append(el("p",w.text||"Original wall"));
+      card.append(el("small",w.kind==="source-recorded-wall"?"Explicit structured wall":"Documented heading only"));
+      const ref=srcLink(w.path,w.line);if(ref)card.append(el("div",undefined,"fine"),ref);box.append(card);
+    }
+    if(!walls.length)box.append(el("p","No matching wall records.","no-source"));
+    $("wall-count").textContent=walls.length+" / "+r.walls.length+" original source locators";
+  }
+  async function loadResearch(){try{const json=await getJSON(SOURCE+"?v="+Math.floor(Date.now()/PERIOD));
+      if(json?.schema!=="workstation-live-projection/v1"||!Array.isArray(json.records)||!Array.isArray(json.walls))throw Error("Unexpected workstation source schema");
+      app.research=json;$("research-scope").textContent="Published source-owned projection · not live worker telemetry";renderResearch();}
+    catch(e){$("research-scope").textContent="Research data unavailable: "+e.message;if(!app.research){$("research-records").replaceChildren(el("p","Original record data unavailable.","no-source"));$("research-walls").replaceChildren(el("p","Original wall data unavailable.","no-source"))}}}
+  async function refresh(){
+    if(app.reading)return;app.reading=true;$("check-now").disabled=true;
+    try{
+      const data=await getJSON(API+"/actions/runs?per_page=50");
+      const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
+      app.runs=runs;app.checked=Date.now();app.jobCache.clear();renderMetrics();
+      if(!app.selection||!runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
+      renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="Observed GitHub work";
+      $("last-read").textContent="checked "+new Date(app.checked).toLocaleString();
+      $("feed-error").hidden=true;
+      // Job detail requires an exact user selection or first source run.
+      await selectRun(app.selection);
+    }catch(e){
+      $("live-dot").className="indicator error";
+      $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
+      $("feed-error").textContent="Could not refresh the execution source: "+e.message+". Displayed results may be stale; no current status inferred.";
+      if(!app.runs.length)$("runs").replaceChildren(el("p","No verified execution sample loaded.","no-source"));
+    }finally{app.reading=false;$("check-now").disabled=false}
+    await loadResearch();
+  }
+  $("check-now").addEventListener("click",refresh);
+  $("run-filter").addEventListener("change",renderRuns);
+  $("source-search").addEventListener("input",renderResearch);
+  $("source-filter").addEventListener("change",renderResearch);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh()});
+  setInterval(()=>{if(!document.hidden)refresh()},PERIOD);
+  refresh();
+})();
+</script>
+</body>
+</html>
