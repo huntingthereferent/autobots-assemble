@@ -32,10 +32,71 @@ jobs:
           python-version: "3.12"
       - name: Test real A/B branch, connection, and restart observations
         run: python -m unittest -v network.tests.test_ab_relational_cluster
-      - name: Independent CLI reproduction of three successive waves
+      - name: Let existing finite workers follow the observed frontier until quiet
+        shell: bash
         run: |
+          set -euo pipefail
           scratch="$(mktemp -d)"
-          python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch"
-          python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch"
-          python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch"
-          python -m systems.workspace.ab_relational_cluster --inspect --data-dir "$scratch"
+          out="$RUNNER_TEMP/finite-ab-frontier"
+          mkdir -p "$out"
+          quiet=0
+          # Each source-owned native worker opens only the mathematical paths
+          # warranted by the previous independently replayed process results.
+          # This is a bounded invocation, never a model-backed agent.
+          for wave in $(seq 1 24); do
+            result="$(python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch")"
+            printf '%s\n' "$result" | tee -a "$out/waves.jsonl"
+            status="$(printf '%s\n' "$result" | python -c 'import json,sys;print(json.load(sys.stdin)["status"])')"
+            if [ "$status" = QUIET ]; then
+              quiet=1
+              break
+            fi
+          done
+          if [ "$quiet" -ne 1 ]; then
+            echo 'finite A/B frontier still moving at wave limit; do not claim quiet' >&2
+            exit 1
+          fi
+          cp "$scratch/ab_relational_cluster.jsonl" "$out/ab_relational_cluster.jsonl"
+          python -m systems.workspace.ab_relational_cluster --inspect --data-dir "$scratch" | tee "$out/state.json"
+          python - "$out" <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+          from systems.workspace.ab_relational_cluster import read_history, _pending
+          out = Path(sys.argv[1])
+          state, head = read_history(out / 'ab_relational_cluster.jsonl')
+          waves = [json.loads(line) for line in (out / 'waves.jsonl').read_text().splitlines()]
+          moved = [w for w in waves if w['status'] == 'MOVED']
+          if (not waves or waves[-1]['status'] != 'QUIET'
+                  or len(_pending(state, 10)) != 0
+                  or len(state['nodes']) < 11
+                  or state['connections'] < 2
+                  or state['events'] != len(moved)
+                  or sum(x['workers_started'] for x in moved) < 6):
+              raise SystemExit('existing native worker frontier was not independently closed')
+          report = {
+              'schema': 'finite-ab-source-owned-full-frontier/v1',
+              'source': 'work/arc_like_maze/math.py',
+              'bounded_worker_type': 'native-python-process',
+              'model_backed_ai_helpers': False,
+              'number_of_waves': len(moved),
+              'distinct_native_process_movements': sum(w['workers_started'] for w in moved),
+              'reached_states': len(state['nodes']),
+              'finite_connections': state['connections'],
+              'remaining_eligible_paths': len(_pending(state, 10)),
+              'terminal_status': waves[-1]['status'],
+              'native_journal_events': state['events'],
+              'journal_head': head,
+          }
+          (out / 'observations.json').write_text(json.dumps(report, indent=2, sort_keys=True)+'\n')
+          print(json.dumps(report, sort_keys=True))
+          PY
+          sha256sum "$out/ab_relational_cluster.jsonl" > "$out/ab_relational_cluster.sha256"
+      - name: Save actual finite A/B worker journals and trajectory evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: finite-ab-full-frontier-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/finite-ab-frontier/
+          if-no-files-found: warn
+          retention-days: 30
