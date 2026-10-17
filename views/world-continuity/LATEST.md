@@ -2,13 +2,13 @@
 
 ![Public world observation view](latest.svg)
 
-Collected: 2026-10-17T14:46:22.239651+00:00 (UTC). This projection uses the original public-data-monitor adapters.
+Collected: 2026-10-17T14:50:04.361822+00:00 (UTC). This projection uses the original public-data-monitor adapters.
 
 | Source | State | Direct source |
 | --- | --- | --- |
 | USGS / rolling past hour | 6 events | [USGS](https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson) |
-| GitHub / psf/requests | new | [GitHub](https://github.com/psf/requests) |
-| PyPI / requests | new | [PyPI](https://pypi.org/project/requests/) |
+| GitHub / psf/requests | unchanged | [GitHub](https://github.com/psf/requests) |
+| PyPI / requests | unchanged | [PyPI](https://pypi.org/project/requests/) |
 
 ## Relationship: GitHub and PyPI
 

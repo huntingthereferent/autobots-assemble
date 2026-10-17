@@ -1,7 +1,7 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-17T14:46:22.239651+00:00",
-  "content_sha256": "98f4e5932a3b4bee301d8815aec4e198c91a2887f82c28a2b9f76d672b8cd51e",
+  "checked_at": "2026-10-17T14:50:04.361822+00:00",
+  "content_sha256": "654eb38aded1a4a75a12d6577ac85dc34b927831b626d9d2e21db09577f0b4d6",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
@@ -23,7 +23,7 @@
       {
         "source": "live_json_api",
         "source_id": "aka2026uowomu",
-        "observed_at": "2026-10-17T14:46:21.774188Z",
+        "observed_at": "2026-10-17T14:50:04.096509Z",
         "source_updated_at": "2026-10-17T14:07:43.834000Z",
         "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uowomu",
         "entity_type": "event",
@@ -40,7 +40,7 @@
       {
         "source": "live_json_api",
         "source_id": "aka2026uoxepj",
-        "observed_at": "2026-10-17T14:46:21.774188Z",
+        "observed_at": "2026-10-17T14:50:04.096509Z",
         "source_updated_at": "2026-10-17T14:26:44.515000Z",
         "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uoxepj",
         "entity_type": "event",
@@ -57,7 +57,7 @@
       {
         "source": "live_json_api",
         "source_id": "hv75059686",
-        "observed_at": "2026-10-17T14:46:21.774188Z",
+        "observed_at": "2026-10-17T14:50:04.096509Z",
         "source_updated_at": "2026-10-17T14:23:22.470000Z",
         "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059686",
         "entity_type": "event",
@@ -74,7 +74,7 @@
       {
         "source": "live_json_api",
         "source_id": "hv75059691",
-        "observed_at": "2026-10-17T14:46:21.774188Z",
+        "observed_at": "2026-10-17T14:50:04.096509Z",
         "source_updated_at": "2026-10-17T14:35:38.530000Z",
         "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059691",
         "entity_type": "event",
@@ -91,7 +91,7 @@
       {
         "source": "live_json_api",
         "source_id": "nc75450951",
-        "observed_at": "2026-10-17T14:46:21.774188Z",
+        "observed_at": "2026-10-17T14:50:04.096509Z",
         "source_updated_at": "2026-10-17T14:16:33.947000Z",
         "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75450951",
         "entity_type": "event",
@@ -108,7 +108,7 @@
       {
         "source": "live_json_api",
         "source_id": "us6000u309",
-        "observed_at": "2026-10-17T14:46:21.774188Z",
+        "observed_at": "2026-10-17T14:50:04.096509Z",
         "source_updated_at": "2026-10-17T14:17:39.040000Z",
         "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u309",
         "entity_type": "event",
@@ -126,7 +126,7 @@
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-17T14:46:21.941693Z",
+      "observed_at": "2026-10-17T14:50:04.274740Z",
       "source_updated_at": "2026-10-17T12:54:45Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
@@ -144,7 +144,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-17T14:46:22.193878Z",
+      "observed_at": "2026-10-17T14:50:04.316161Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -164,11 +164,11 @@
   },
   "changes": {
     "github": {
-      "kind": "new",
+      "kind": "unchanged",
       "changed_fields": []
     },
     "pypi": {
-      "kind": "new",
+      "kind": "unchanged",
       "changed_fields": []
     }
   },
