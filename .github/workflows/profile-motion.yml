@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'views/motion/**'
+      - 'views/traces/convergence_focus.py'
+      - 'views/traces/test_convergence_focus.py'
       - '.github/workflows/profile-motion.yml'
   push:
     branches: [main]
@@ -12,6 +14,8 @@ on:
       - 'views/motion/test_render.py'
       - 'views/motion/convergence.py'
       - 'views/motion/test_convergence.py'
+      - 'views/traces/convergence_focus.py'
+      - 'views/traces/test_convergence_focus.py'
       - 'views/world-continuity/latest.json'
       - 'views/work_state.json'
       - 'work/arc_like_maze/math.py'
@@ -37,7 +41,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Native mathematics and source-projection tests
-        run: python -m unittest -v views.motion.test_render views.motion.test_convergence
+        run: python -m unittest -v views.motion.test_render views.motion.test_convergence views.traces.test_convergence_focus
       - name: Generate source-linked animations and native confluence
         run: |
           python -m views.motion.render
