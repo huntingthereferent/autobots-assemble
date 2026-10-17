@@ -13,7 +13,7 @@ from pathlib import Path
 import re
 
 SCHEMA = "workstation-native-visual/v1"
-_IDENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,79}\\Z")
+_IDENT = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,79}\Z")
 _ALLOWED_EDITION = {"AVAILABLE", "UNREADABLE"}
 _ALLOWED_VERIFY = {"recorded-not-reverified", "not-complete"}
 
@@ -203,7 +203,7 @@ def main() -> None:
     view = project_native(local)
     target = args.out_dir.resolve()
     target.mkdir(parents=True, exist_ok=True)
-    (target / "snapshot.json").write_text(json.dumps(view, indent=2, sort_keys=True)+"\\n")
+    (target / "snapshot.json").write_text(json.dumps(view, indent=2, sort_keys=True)+"\n")
     (target / "visual.svg").write_text(render_svg(view))
     print(json.dumps({"editions":view["counts"]["editions"],
                       "admitted_jobs":view["counts"]["admitted_jobs"],
