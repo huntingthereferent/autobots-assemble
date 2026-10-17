@@ -67,8 +67,8 @@ def _bounded_proposal(source: Path, observed: dict) -> dict:
             or type(proposal["after"]) is not str
             or not re.fullmatch(r"[0-9a-f]{64}", proposal["source_sha256"])):
         raise ValueError("invalid worker source/patch identity")
-    if (proposal["before"] != "or not inputs['product']"
-            or proposal["after"] != "or not inputs['product'].strip()"):
+    if (proposal["before"] != "not inputs['product']"
+            or proposal["after"] != "not inputs['product'].strip()"):
         raise ValueError("worker attempted an edit outside registered correction")
     raw = source.read_bytes()
     if len(raw) > MAX_BYTES or sha256(raw).hexdigest() != proposal["source_sha256"]:
