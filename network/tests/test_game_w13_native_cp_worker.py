@@ -171,7 +171,9 @@ class W13NativeWorkstationTests(unittest.TestCase):
         native=run_job(data_dir=self.root,job_id="game-w13-01",
                        confirm_execute="game-w13-01")
         self.assertEqual(native["status"],"COMPLETE")
-        self.assertTrue(self.bridge.reverify("game-w13-01"))
+        # Admission runtime is a pre-execution snapshot; replay durable journal.
+        resumed=HandoffRuntime(event_store=RuntimeJournal(self.root/"runtime.jsonl"))
+        self.assertTrue(GameW13NativeBridge(runtime=resumed,workstation=self.desk).reverify("game-w13-01"))
         fresh=self.cp(fresh=True)
         self.assertEqual(fresh["witnessed"],[CP_ID])
         self.assertIn("GAME-NATIVE-VERIFIER",fresh["frontier"])
