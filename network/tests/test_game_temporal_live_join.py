@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
+import importlib.util
 
 from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
@@ -16,6 +17,8 @@ class LiveTemporalGameTests(unittest.TestCase):
         self.data=Path(t.name)/"same-native-workstation"
         self.output=Path(t.name)/"artifacts"
 
+    @unittest.skipUnless(importlib.util.find_spec("playwright") is not None,
+                         "Real Chromium WITNESS runs in dedicated Playwright-installed workflow")
     def test_01_actual_game_calls_prototype_during_browser_moves(self):
         result=continue_stack(data_dir=self.data,output_dir=self.output,real_browser=True)
         self.assertEqual(result["source_owned_jobs"],7)
