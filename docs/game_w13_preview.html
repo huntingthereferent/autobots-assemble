@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD W13 — Two-room playable candidate</title>
+<style>
+:root{color-scheme:dark;font:16px system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#10151d;color:#eaf1fa}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#203046 0%,#10151d 68%)}
+main{max-width:800px;margin:0 auto;padding:28px 20px 48px}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);margin:0 0 9px;letter-spacing:-.04em}
+p{line-height:1.6;color:#b8c6d8;margin:0 0 17px}
+.eyebrow{color:#8ec9f0;font-size:.73rem;letter-spacing:.2em;font-weight:700;margin-bottom:11px}
+.session{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0 22px}
+.world-pill{background:#1d2937;border:1px solid #47566b;border-radius:9px;padding:11px 14px;display:flex;align-items:center;gap:10px}
+.world-pill.current{border-color:#80bdff;background:#20374d}
+.marker{display:inline-block;width:9px;height:9px;border-radius:50%;background:#647489}
+.world-pill.current .marker{background:#86caff;box-shadow:0 0 8px #86caff}
+.world-pill.completed .marker{background:#7ad6a0}
+.world-name{font-weight:650;font-size:.95rem}
+#room-subtitle,.mini{font-size:.83rem;color:#a8b8cc}
+.panel{background:#182332;border:1px solid #45566c;border-radius:17px;padding:clamp(15px,4vw,25px)}
+.topline{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+#room-title{font-size:1.1rem;font-weight:700}
+#room-subtitle{text-align:right}
+.arena{display:grid;gap:8px;width:min(100%,460px);margin:23px auto;justify-content:stretch}
+.cell{aspect-ratio:1;border:1px solid #50657a;border-radius:12px;display:grid;place-items:center;background:#253549;min-width:0;position:relative;font-size:clamp(1.45rem,5vw,2rem)}
+.cell.player{background:#214f75;border-color:#8acaf5;color:#b1e2ff}
+.cell.target{background:#594b24;border-color:#dfbd65;color:#ffdc7f}
+.cell.complete{background:#274a3e;border-color:#70bb97}
+.status{padding:13px 15px;background:#101c29;border-radius:10px;min-height:45px;color:#e6eef9;font-weight:560}
+.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:17px}
+button{font:inherit;font-size:.9rem;color:#edf5ff;background:#304458;border:1px solid #788fa5;border-radius:10px;padding:12px 16px;cursor:pointer;min-width:76px}
+button:hover:not(:disabled){background:#42627e}button:focus-visible{outline:3px solid #9dd4ff;outline-offset:3px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.advance{background:#186956;border-color:#91d5b4;font-weight:720;min-width:135px}
+button.advance:hover:not(:disabled){background:#258168}
+.actions2{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px;justify-content:center}
+.actions2 button{font-size:.8rem;background:#202f40}
+details{margin-top:24px;border-top:1px solid #3b4a60;padding-top:14px}summary{cursor:pointer}
+pre{font-size:.75rem;white-space:pre-wrap;overflow-wrap:anywhere;color:#c7d8eb;max-height:300px;overflow:auto}
+footer{margin:19px 4px 0;font-size:.84rem;color:#a5b6c9;line-height:1.6}
+kbd{border:1px solid #6c829b;border-radius:4px;font:inherit;padding:1px 5px;color:#dfebf8}
+</style></head>
+<body><main>
+<div class="eyebrow">WORLD / BUILD · W13 CANDIDATE</div>
+<h1>Two rooms. One preserved path.</h1>
+<p>Collect the object in the first room, choose <strong>Advance</strong>, then finish the second. The first room's actions and evidence stay intact.</p>
+<div class="session" id="session" aria-label="World progress"></div>
+<div class="panel">
+  <div class="topline">
+    <div id="room-title">World 1</div>
+    <div id="room-subtitle">4 × 3 room</div>
+  </div>
+  <div id="arena" class="arena" role="img" aria-label="Game grid"></div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="controls">
+    <button data-action="up">↑ Up</button>
+    <button data-action="left">← Left</button>
+    <button data-action="down">↓ Down</button>
+    <button data-action="right">→ Right</button>
+    <button data-action="interact">Interact</button>
+    <button class="advance" id="advance" disabled>Advance →</button>
+  </div>
+  <div class="actions2">
+    <button id="reset">Reset both rooms</button>
+    <button id="export">Export W13 receipt</button>
+  </div>
+  <details><summary>Local observations and session log</summary><pre id="log"></pre></details>
+</div>
+<footer>Keys: arrows/WASD move, <kbd>Enter</kbd> or <kbd>Space</kbd> interacts. Only the explicit Advance control changes rooms. Exported JSON is browser-reported evidence to be replayed by the native W12/W13 verifier; it does not authenticate browser origin. This is a playable BUILD candidate, not W13 WITNESS PASS.</footer>
+</main><script>
+'use strict';
+const VERSION='game-w13-multiworld-v1';
+const W12_VERSION='game-construction-v0';
+const WORLDS=[
+  {id:'first-room',spec:{width:4,height:3,start:[0,1],target:[2,1]}},
+  {id:'second-room',spec:{width:3,height:3,start:[0,0],target:[1,1]}}
+];
+const clone=o=>JSON.parse(JSON.stringify(o));
+const arena=document.getElementById('arena');
+const statusEl=document.getElementById('status');
+const logEl=document.getElementById('log');
+const advanceButton=document.getElementById('advance');
+let states,localActions,observations,actions,boundaries,current;
+function initial(index){
+  const at=WORLDS[index].spec.start;
+  return {x:at[0],y:at[1],collected:false,turns:0};
+}
+function result(){return {
+  world_id:WORLDS[current].id,
+  state:clone(states[current]),
+  worlds_completed:states.filter(s=>s.collected).length,
+  solved:current===WORLDS.length-1&&states.every(s=>s.collected)
+}}
+function snapshot(){
+  return {
+    version:VERSION,
+    worlds:WORLDS.map((world,i)=>({
+      id:world.id,version:W12_VERSION,spec:clone(world.spec),
+      actions:clone(localActions[i]),observations:clone(observations[i]),final:clone(states[i])
+    })),
+    actions:clone(actions),
+    boundaries:clone(boundaries),
+    final:result()
+  };
+}
+function render(message){
+  const world=WORLDS[current],state=states[current],spec=world.spec;
+  document.getElementById('room-title').textContent='Room '+(current+1)+' — '+world.id;
+  document.getElementById('room-subtitle').textContent=spec.width+' × '+spec.height+' · turn '+state.turns;
+  const session=document.getElementById('session');session.replaceChildren();
+  WORLDS.forEach((w,i)=>{
+    const pill=document.createElement('div');
+    pill.className='world-pill'+(i===current?' current':'')+(states[i].collected?' completed':'');
+    const mark=document.createElement('span');mark.className='marker';
+    const name=document.createElement('span');name.className='world-name';
+    name.textContent='Room '+(i+1)+(states[i].collected?' ✓':'');
+    pill.append(mark,name);session.appendChild(pill);
+  });
+  arena.style.gridTemplateColumns='repeat('+spec.width+',minmax(0,1fr))';
+  arena.replaceChildren();
+  for(let y=0;y<spec.height;y++)for(let x=0;x<spec.width;x++){
+    const cell=document.createElement('div');cell.className='cell';
+    if(x===spec.target[0]&&y===spec.target[1]){
+      cell.classList.add(state.collected?'complete':'target');
+      cell.textContent=state.collected?'✓':'✦';
+    }
+    if(x===state.x&&y===state.y){cell.classList.add('player');cell.textContent='●'}
+    arena.appendChild(cell);
+  }
+  arena.setAttribute('aria-label',world.id+', '+spec.width+' by '+spec.height+' room, player '+state.x+','+state.y+', target '+spec.target.join(',')+', collected '+state.collected);
+  advanceButton.disabled=!(current===0&&states[0].collected);
+  advanceButton.hidden=current!==0;
+  const final=result();
+  statusEl.textContent=message||(final.solved?'Both rooms collected — session complete':state.collected?'Room collected; advance when ready':'Room '+(current+1)+': collect the object');
+  logEl.textContent=JSON.stringify({actions,worlds:observations,boundaries,final},null,2);
+}
+function transition(action){
+  if(!['up','down','left','right','interact'].includes(action))return false;
+  const state=states[current],spec=WORLDS[current].spec;
+  const before=clone(state);
+  let verdict;
+  if(action==='interact'){
+    if(state.collected)verdict='already-collected';
+    else if(Math.abs(spec.target[0]-state.x)+Math.abs(spec.target[1]-state.y)===1){
+      state.collected=true;verdict='collected';
+    }else verdict='out-of-reach';
+  }else{
+    const delta={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[action];
+    const x=state.x+delta[0],y=state.y+delta[1];
+    if(x<0||x>=spec.width||y<0||y>=spec.height)verdict='blocked-by-boundary';
+    else{state.x=x;state.y=y;verdict='moved'}
+  }
+  state.turns++;
+  localActions[current].push(action);
+  actions.push(action);
+  observations[current].push({action,before,after:clone(state),verdict});
+  render('Room '+(current+1)+' · turn '+state.turns+': '+verdict);
+  return true;
+}
+function advance(){
+  if(current!==0||!states[current].collected)return false;
+  const before={world_id:WORLDS[current].id,state:clone(states[current])};
+  current=1;
+  const after={world_id:WORLDS[current].id,state:clone(states[current])};
+  actions.push('advance');
+  boundaries.push({action:'advance',from_world:before.world_id,to_world:after.world_id,before,after});
+  render('Advanced to Room 2. Room 1 evidence is preserved.');
+  return true;
+}
+function reset(){
+  states=WORLDS.map((_,i)=>initial(i));
+  localActions=WORLDS.map(()=>[]);
+  observations=WORLDS.map(()=>[]);
+  actions=[];boundaries=[];current=0;
+  render('Room 1 · start at (0,1); collect the object.');
+}
+function exportReceipt(){
+  const bytes=JSON.stringify(snapshot(),null,2)+'\n';
+  const url=URL.createObjectURL(new Blob([bytes],{type:'application/json'}));
+  const link=document.createElement('a');
+  link.href=url;link.download='game_w13_session_receipt.json';
+  document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+document.querySelectorAll('button[data-action]').forEach(button=>{
+  button.addEventListener('click',()=>transition(button.dataset.action));
+});
+advanceButton.addEventListener('click',advance);
+document.getElementById('reset').addEventListener('click',reset);
+document.getElementById('export').addEventListener('click',exportReceipt);
+document.addEventListener('keydown',event=>{
+  if(event.target instanceof HTMLButtonElement||event.ctrlKey||event.altKey||event.metaKey)return;
+  const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',Enter:'interact',' ':'interact'};
+  const action=map[event.key];if(action){event.preventDefault();transition(action)}
+});
+reset();
+</script></body></html>

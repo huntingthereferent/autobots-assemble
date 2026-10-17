@@ -1,0 +1,75 @@
+name: workstation-w13-build-browser
+on:
+  push:
+    paths:
+      - 'systems/workspace/game_w13_engine.py'
+      - 'systems/workspace/game_w13_receipt.py'
+      - 'docs/game_w13_preview.html'
+      - 'network/tests/test_game_w13_build_receipt.py'
+      - 'network/browser_w13_build_check.py'
+      - 'evidence/game_w13_build_reference.json'
+      - 'systems/workspace/BUILD_W13_BROWSER_RECEIPT.md'
+      - '.github/workflows/workstation-w13-build-browser.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/game_w13_engine.py'
+      - 'systems/workspace/game_w13_receipt.py'
+      - 'docs/game_w13_preview.html'
+      - 'network/tests/test_game_w13_build_receipt.py'
+      - 'network/browser_w13_build_check.py'
+      - 'evidence/game_w13_build_reference.json'
+      - 'systems/workspace/BUILD_W13_BROWSER_RECEIPT.md'
+      - '.github/workflows/workstation-w13-build-browser.yml'
+  workflow_dispatch:
+
+jobs:
+  w13-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Keep original 32 W12 tests and require 22 BUILD W13 native tests
+        run: |
+          python - <<'PY'
+          import importlib, unittest
+          names = ('network.tests.test_game_construction',
+                   'network.tests.test_game_receipt_compatibility',
+                   'network.tests.test_game_w13_build_receipt')
+          suites = []
+          for name in names:
+              suite = unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(name))
+              suites.append(suite)
+          counts = [suite.countTestCases() for suite in suites]
+          if counts != [11, 21, 22]:
+              raise SystemExit(f'changed bounded W12+W13 test counts {counts}')
+          result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(suites))
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('W12 preservation or BUILD W13 native evidence failure')
+          PY
+      - name: Install headless Chromium for actual BUILD browser interaction
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Require 9 Chromium interactive export and native replay checks
+        run: |
+          python - <<'PY'
+          import unittest
+          from network import browser_w13_build_check
+          suite = unittest.defaultTestLoader.loadTestsFromModule(browser_w13_build_check)
+          if suite.countTestCases() != 9:
+              raise SystemExit(f'expected 9 real browser cases, got {suite.countTestCases()}')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('BUILD W13 browser controls, exports or native replay failed')
+          PY
+      - name: Save actual BUILD browser receipts, negative exports and screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w13-build-chromium-evidence
+          path: build_w13_browser_receipts/
+          if-no-files-found: warn
+          retention-days: 30
