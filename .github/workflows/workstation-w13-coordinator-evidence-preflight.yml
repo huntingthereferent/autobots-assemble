@@ -1,0 +1,130 @@
+name: workstation-w13-coordinator-evidence-preflight
+on:
+  push:
+    paths:
+      - 'systems/workspace/game_w13_cp_preflight.py'
+      - 'network/tests/test_game_w13_cp_preflight.py'
+      - 'systems/workspace/COORDINATOR_W13_EVIDENCE_PREFLIGHT.md'
+      - '.github/workflows/workstation-w13-coordinator-evidence-preflight.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/game_w13_cp_preflight.py'
+      - 'network/tests/test_game_w13_cp_preflight.py'
+      - 'systems/workspace/COORDINATOR_W13_EVIDENCE_PREFLIGHT.md'
+      - '.github/workflows/workstation-w13-coordinator-evidence-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  evidence-preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Preserve 32 W12 and 26 independent WITNESS cases plus 16 coordinator negatives
+        run: |
+          python - <<'PY'
+          import importlib, unittest
+          names = (
+              'network.tests.test_game_construction',
+              'network.tests.test_game_receipt_compatibility',
+              'network.tests.test_game_w13_independent_witness',
+              'network.tests.test_game_w13_cp_preflight',
+          )
+          suites = [
+              unittest.defaultTestLoader.loadTestsFromModule(importlib.import_module(n))
+              for n in names
+          ]
+          counts = [s.countTestCases() for s in suites]
+          if counts != [11, 21, 26, 16]:
+              raise SystemExit(f'unexpected W12 / WITNESS / COORDINATOR test counts: {counts}')
+          result = unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(suites))
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('independent W13 coordinator evidence preflight failed')
+          PY
+      - name: Check exact immutable GitHub run/artifact provenance metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPOSITORY: ${{ github.repository }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from urllib.request import Request, urlopen
+          from systems.workspace.game_w13_cp_preflight import ARTIFACTS
+          repo = os.environ['GH_REPOSITORY']
+          token = os.environ['GH_TOKEN']
+          def get(route):
+              req = Request(
+                  f'https://api.github.com/repos/{repo}/{route}',
+                  headers={
+                      'Authorization': f'Bearer {token}',
+                      'Accept': 'application/vnd.github+json',
+                      'X-GitHub-Api-Version': '2022-11-28',
+                      'User-Agent': 'w13-coordinator-evidence-preflight',
+                  })
+              with urlopen(req, timeout=20) as response:
+                  return json.load(response)
+          for name, pinned in ARTIFACTS.items():
+              run = get(f'actions/runs/{pinned["run"]}')
+              if (run['status'], run['conclusion'], run['head_sha'], run['event']) != (
+                      'completed', 'success', pinned['head'], 'push'):
+                  raise SystemExit(f'{name} run identity / head / successful conclusion mismatch')
+              record = get(f'actions/artifacts/{pinned["id"]}')
+              if (record['id'] != pinned['id']
+                      or record['name'] != pinned['name']
+                      or record.get('digest') != pinned['digest']
+                      or record.get('expired')
+                      or record.get('workflow_run', {}).get('id') != pinned['run']):
+                  raise SystemExit(f'{name} artifact provenance or archive digest mismatch')
+              print(f'{name.upper()}: exact successful main run + artifact ID + GitHub archive SHA256 verified')
+          PY
+      - name: Recover original successful BUILD browser outputs
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 38999614131
+          name: w13-build-chromium-evidence
+          github-token: ${{ github.token }}
+          path: source_build_browser
+      - name: Recover separate successful WITNESS browser outputs
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 39001126918
+          name: w13-independent-witness-chromium-evidence
+          github-token: ${{ github.token }}
+          path: source_witness_browser
+      - name: Verify both actual browser histories and all ten altered artifacts independently
+        run: |
+          python -m systems.workspace.game_w13_cp_preflight \
+            --repo-root . \
+            --build-evidence source_build_browser \
+            --witness-evidence source_witness_browser \
+            --output coordinator_w13_preflight/evidence-admission.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          packet = json.loads(Path('coordinator_w13_preflight/evidence-admission.json').read_text())
+          assert packet['verdict'] == 'SOURCE_BOUND_BROWSER_EVIDENCE_ACCEPTED_FOR_OPERATOR_REVIEW'
+          assert packet['cp'] == 'GAME-W13-WORLDS'
+          assert packet['cp_state'] == 'ADMISSIBLE'
+          assert packet['independent_w12_replay']['solved']
+          assert len(packet['mutated_browser_receipts_rejected']) == 10
+          assert packet['cp_witnessed'] is False
+          assert packet['execution_triggered'] is False
+          assert packet['job_admitted'] is False
+          assert packet['checkpoint_promoted'] is False
+          print('COORDINATOR EVIDENCE ACCEPTED FOR NATIVE JOB REVIEW; CP STILL UNWITNESSED')
+          PY
+      - name: Retain separate coordinator review packet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w13-coordinator-evidence-preflight
+          path: coordinator_w13_preflight/
+          if-no-files-found: warn
+          retention-days: 30
