@@ -36,3 +36,17 @@ All future trace adapters need native source identities, units, observed vs mode
 This is neither a similarity-ranking model nor a rule that any real-world domain must have a leader. Stocks, gambling, solar observations and networks must each supply a meaningful native definition of their directed relation before applying it. The [finite A/B confluence renderer](../motion/convergence.py) demonstrates a narrower, independently checked mathematical path meeting; that is not yet a global one-followed-by-everything result.
 
 Reproduce focus tests: `python -m unittest -v views.traces.test_convergence_focus`.
+
+## External movement and observed return
+
+[GitHub fork/return witness](fork_return.py) is a separate measurable experiment derived from **public GitHub repository provenance**, not speculation about human movement.
+
+**Observable departure:** another account creates a public fork of `huntingthereferent/autobots-assemble` or `huntingthereferent/huntingthereferent`. This is *a copy*, not evidence that someone is using, following or understanding A/B.
+
+**Observable return:** an exact pull request with a GitHub-verified head repository ID matching that same fork is **merged back into the original repository**. Only then does the harness record a return and measure seconds from the fork's recorded creation to its earliest qualifying upstream merge.
+
+**Unreturned:** `OPEN` with null elapsed time. Never zero, infinite, or proof of no future return. A self-authored branch/PR is not external. Deleted forks, private copies, independent reimplementations, and external citations might be invisible. API reads are bounded at 300 forks and 300 PRs per repository; the output explicitly reports when a sample might be incomplete.
+
+The [latest receipt](return-latest.json) and [human-readable report](RETURN_LATEST.md) come from the actual GitHub API, refreshed daily and on manual dispatch. No synthetic test fixture is written to the published data; insufficient or failed API evidence aborts a refresh rather than manufacturing a connection.
+
+Local checks: `python -m unittest -v views.traces.test_fork_return`. Actual collection: `python -m views.traces.fork_return --refresh` (may use `GITHUB_TOKEN` in the environment). This is **only one measurable GitHub boundary** for the broader A/B tracing experiment, not a measure of James personally or of universal convergence.
