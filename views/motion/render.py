@@ -200,8 +200,12 @@ def render_world(s: dict) -> str:
     svg+=title_block("SOURCE OBSERVATIONS / SNAPSHOT",
                      "Some paths connect. Others stay open.",
                      "Source timestamp: "+stamp+" · not a live data feed")
-    cards=((55,178,"GITHUB","psf/requests",CYAN),
-           (565,178,"PYPI","requests",BLUE),
+    gh=s["observations"]["github"]["payload"]["full_name"]
+    package=s["observations"]["pypi"]["payload"]["name"]
+    if not isinstance(gh,str) or not isinstance(package,str):
+        raise ValueError("missing native names")
+    cards=((55,178,"GITHUB",gh,CYAN),
+           (565,178,"PYPI",package,BLUE),
            (55,308,"USGS",str(usgs)+" earthquake events",VIOLET))
     for x,y,title,subtitle,color in cards:
         w=445 if title!="USGS" else 1010
@@ -238,7 +242,9 @@ def produce(source_root: Path = ROOT) -> dict[str,str]:
 def generate(out: Path) -> None:
     images=produce()
     for name,source in images.items():
-        if "<script" in source or "http://" in source or "https://" in source:
+        if ("<script" in source or "<image" in source or "href=" in source
+                or "https://" in source or "http://" in source.replace(
+                    'xmlns="http://www.w3.org/2000/svg"', "")):
             raise ValueError("external/script content must not appear in SVG")
         ET.fromstring(source)
         if not source.endswith("</svg>"):
