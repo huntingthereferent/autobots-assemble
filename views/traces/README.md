@@ -28,3 +28,11 @@ The renderer contacts the allowlisted RIPE and Natural Earth sources. The option
 The GitHub workflow refreshes the source snapshot and SVG about every six hours on main, and supports manual runs. An unconfigured traffic credential produces an explicitly empty traffic layer (not a fake gradient). Failure of mandatory geography or probe reads fails rather than fabricating a previous time stamp.
 
 All future trace adapters need native source identities, units, observed vs model/forecast status, source time, collection time, geography accuracy, licensing, missing-data semantics and independently supported link rules. The view does not execute workers or claim universal A/B relationships.
+
+## Trace to the observed focus (A/B precision)
+
+[Native convergent-focus projection](convergence_focus.py) accepts **only directed relationships admitted by each domain's own verifier**. It traces all observed paths to their terminal referents. If every participant reaches one terminal, it reports `ONE_OBSERVED`. It reports `TWO_WITNESSED` **only if two terminals cover the observations and a separate source-owner verifier accepts an explicit reason for the split**. No source evidence, a third terminal, cycles without exits, or a partial dataset remain `OPEN`.
+
+This is neither a similarity-ranking model nor a rule that any real-world domain must have a leader. Stocks, gambling, solar observations and networks must each supply a meaningful native definition of their directed relation before applying it. The [finite A/B confluence renderer](../motion/convergence.py) demonstrates a narrower, independently checked mathematical path meeting; that is not yet a global one-followed-by-everything result.
+
+Reproduce focus tests: `python -m unittest -v views.traces.test_convergence_focus`.

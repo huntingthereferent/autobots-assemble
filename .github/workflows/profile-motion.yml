@@ -4,12 +4,18 @@ on:
   pull_request:
     paths:
       - 'views/motion/**'
+      - 'views/traces/convergence_focus.py'
+      - 'views/traces/test_convergence_focus.py'
       - '.github/workflows/profile-motion.yml'
   push:
     branches: [main]
     paths:
       - 'views/motion/render.py'
       - 'views/motion/test_render.py'
+      - 'views/motion/convergence.py'
+      - 'views/motion/test_convergence.py'
+      - 'views/traces/convergence_focus.py'
+      - 'views/traces/test_convergence_focus.py'
       - 'views/world-continuity/latest.json'
       - 'views/work_state.json'
       - 'work/arc_like_maze/math.py'
@@ -35,16 +41,18 @@ jobs:
         with:
           python-version: '3.12'
       - name: Native mathematics and source-projection tests
-        run: python -m unittest -v views.motion.test_render
-      - name: Generate three source-linked animations
-        run: python -m views.motion.render
+        run: python -m unittest -v views.motion.test_render views.motion.test_convergence views.traces.test_convergence_focus
+      - name: Generate source-linked animations and native confluence
+        run: |
+          python -m views.motion.render
+          python -m views.motion.convergence
       - name: Validate SVG and reduced-motion handling
         run: |
           python - <<'PY'
           from pathlib import Path
           import xml.etree.ElementTree as ET
           paths=list(Path("views/motion").glob("*-motion.svg"))
-          assert len(paths)==3
+          assert len(paths)==4
           for p in paths:
               ET.parse(p)
               assert "@media(prefers-reduced-motion:reduce)" in p.read_text()
@@ -57,7 +65,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add views/motion/finite-motion.svg views/motion/workstation-motion.svg views/motion/world-motion.svg
+          git add views/motion/finite-motion.svg views/motion/workstation-motion.svg views/motion/world-motion.svg views/motion/convergence-motion.svg views/motion/convergence-receipt.json
           if git diff --cached --quiet; then echo "No SVG change"; exit 0; fi
           git commit -m "Render motion from source-owned observations"
           for attempt in 1 2 3; do
