@@ -13,6 +13,10 @@ on:
       - 'systems/workspace/GAME_W13_GITHUB_NATIVE_ADMISSION.md'
       - 'network/tests/test_game_w13_github_native_workflow.py'
       - '.github/workflows/workstation-w13-github-native-admission.yml'
+      - 'systems/workspace/native_job_requests/w13/**'
+      - 'systems/workspace/GAME_W13_GITHUB_OWNER_MERGE.md'
+      - '.github/workflows/workstation-w13-owner-merged-one-shot.yml'
+      - 'network/tests/test_game_w13_owner_merged_one_shot.py'
       - '.github/workflows/workstation-w13-native-cp-worker.yml'
   pull_request:
     paths:
@@ -27,6 +31,10 @@ on:
       - 'systems/workspace/GAME_W13_GITHUB_NATIVE_ADMISSION.md'
       - 'network/tests/test_game_w13_github_native_workflow.py'
       - '.github/workflows/workstation-w13-github-native-admission.yml'
+      - 'systems/workspace/native_job_requests/w13/**'
+      - 'systems/workspace/GAME_W13_GITHUB_OWNER_MERGE.md'
+      - '.github/workflows/workstation-w13-owner-merged-one-shot.yml'
+      - 'network/tests/test_game_w13_owner_merged_one_shot.py'
       - '.github/workflows/workstation-w13-native-cp-worker.yml'
   workflow_dispatch:
 jobs:
