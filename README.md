@@ -1,8 +1,8 @@
 # Research and engineering experiments
 
-**[↗ ENTER THE SOURCE-DRIVEN TRACE FIELD](https://huntingthereferent.github.io/autobots-assemble/live/)** · [Browser implementation](docs/live/index.html) · [Workstation research projection](views/traces/research-live.json)
+**[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
-The browser display follows actual GitHub commit ancestry and exact CI-run source identities, updating its movement field and numbers when observed events change. Its research view reads source-owned workstation records; this is a verified first integration, not yet a live cross-domain A/B trace engine.
+The public work view reads actual GitHub workflow runs and native job/step results, with original workstation research and walls alongside them. Runs only show what GitHub executed; saved research findings are separate historical evidence. The earlier animated source graph remains optional at [trace.html](docs/live/trace.html). Local private process handoffs remain available only through the loopback workstation viewer.
 
 **James Muneoka · Independent research · AI-assisted software construction**
 
