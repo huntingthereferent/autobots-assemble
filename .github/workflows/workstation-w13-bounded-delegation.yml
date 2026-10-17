@@ -1,0 +1,188 @@
+# One protected-owner merged request -> real source-owned W13 helper B2/B3 execution.
+# PR events run regression tests only, and NEVER execute the owner-delegated job.
+name: workstation-w13-bounded-delegation
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/branch_help.py'
+      - 'systems/workspace/workstation_native_feedback.py'
+      - 'systems/workspace/workstation_w13_delegate.py'
+      - 'systems/workspace/WORKSTATION_DELEGATION_DIRECTION.md'
+      - 'network/tests/test_workstation_w13_bounded_delegation.py'
+      - '.github/workflows/workstation-w13-bounded-delegation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/native_job_requests/w13/w13-delegate-bounded-001.json'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: w13-bounded-delegation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  preserved-native-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original native verification dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Real W13 native delegated job and original B2/B3 regression
+        run: |
+          python -m unittest -v \
+            network.tests.test_workstation_w13_bounded_delegation \
+            network.tests.test_branch_help \
+            network.tests.test_workstation_harness \
+            network.tests.test_workstation_native_feedback_integration
+      - name: Preserve W13 source-owned game and independent replay
+        run: python -m unittest -v network.tests.test_game_w13_native_cp_worker
+
+  run-actual-bounded-w13-helper:
+    needs: preserved-native-tests
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      BOOTSTRAP: systems/workspace/native_job_requests/w13/w13-delegate-bounded-001.json
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout exact owner-merged native workstation
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Require exact owner-merged delegation and bind archived W13 source
+        id: bind
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/w13-delegation-result"
+          printf 'OUTDIR=%s\n' "$RUNNER_TEMP/w13-delegation-result" >> "$GITHUB_ENV"
+          python - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          request_path=Path(os.environ['BOOTSTRAP'])
+          request=json.loads(request_path.read_text())
+          expected={
+              'contract':'workstation-w13-native-bounded-delegation-v1',
+              'referent':'continue creation by delegating actual source-owned W13 game work through existing workstation B2/B3',
+              'source_continuation_run_id':39027647611,
+              'source_continuation_artifact_id':12098779457,
+              'source_continuation_digest':'sha256:bdd56c2a5204b24296033b2ff73a8d8ebcc79081e648273a6ca7a159e1bcbd98',
+              'source_continuation_head':'47d1468b064b545caa9d16797fc0ad42a316d2c2',
+              'parent_native_job':'game-w13-github-001',
+              'worker_git_blob':'54d847dadda9b5fd10297e2e88ee65bea9be2ad1',
+              'fixture_git_blob':'645819b70f022feee7b54e764f3d438c8e45f4c1',
+              'helper_capability':'game-w13-native-two-room',
+              'target':'one-exact-source-owned-W13-two-world-helper-subprocess',
+              'authorize_admission':True,'authorize_execution':True,
+              'execution_scope':'one-idempotent-bounded-helper-delegation-through-existing-workstation',
+              'activation':'one-new-owner-merged-protected-main-request',
+          }
+          if request!=expected:
+              raise SystemExit('delegation request differs from explicitly authorized contract')
+          if (os.environ['GITHUB_ACTOR']!=os.environ['GITHUB_REPOSITORY_OWNER']
+                  or os.environ['GITHUB_REF']!='refs/heads/main'
+                  or os.environ['GITHUB_EVENT_NAME']!='push'):
+              raise SystemExit('only owner merged main may activate actual native delegation')
+          sha=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          if sha!=os.environ['GITHUB_SHA']:
+              raise SystemExit('runner not checked out at event commit')
+          parents=subprocess.check_output(['git','rev-list','--parents','-n','1',sha],text=True).split()
+          if len(parents)!=3:
+              raise SystemExit('delegation must use a two-parent protected-main merge')
+          actual=subprocess.check_output([
+              'git','diff','--name-status',parents[1],sha,'--',
+              'systems/workspace/native_job_requests/w13/'],text=True).strip()
+          if actual!='A\t'+str(request_path):
+              raise SystemExit('require exactly one NEW owner merged native delegation request')
+          for file,expected_blob in (
+              ('systems/workspace/game_w13_worker_source/game_worlds_worker.py',
+               request['worker_git_blob']),
+              ('network/tests/fixtures/game_w13_native_cp_example.json',
+               request['fixture_git_blob'])):
+              blob=subprocess.check_output(['git','hash-object',file],text=True).strip()
+              if blob!=expected_blob:
+                  raise SystemExit('unapproved native W13 source/fixture changed: '+file)
+          repo=os.environ['GITHUB_REPOSITORY']
+          headers={
+              'Accept':'application/vnd.github+json',
+              'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+              'X-GitHub-Api-Version':'2022-11-28',
+              'User-Agent':'bounded-workstation-w13-delegation',
+          }
+          def fetch(path):
+              req=Request('https://api.github.com/repos/'+repo+'/'+path,headers=headers)
+              with urlopen(req,timeout=20) as response:
+                  return json.load(response)
+          source=fetch('actions/runs/'+str(request['source_continuation_run_id']))
+          if (source['name']!='workstation-w13-cross-run-continuation'
+                  or source['head_repository']['full_name']!=repo
+                  or source['head_sha']!=request['source_continuation_head']
+                  or source['event']!='push' or source['head_branch']!='main'
+                  or source['conclusion']!='success' or source['status']!='completed'
+                  or source['actor']['login']!=os.environ['GITHUB_REPOSITORY_OWNER']):
+              raise SystemExit('source native workstation continuity run not authentic')
+          artifacts=fetch('actions/runs/'+str(source['id'])+'/artifacts?per_page=100')['artifacts']
+          name='w13-continued-state-39027647611-1'
+          found=[a for a in artifacts if a['name']==name and
+                 a['id']==request['source_continuation_artifact_id'] and
+                 a['digest']==request['source_continuation_digest'] and
+                 not a['expired']]
+          if len(found)!=1:
+              raise SystemExit('exact source-owned workstation archive not available')
+          out=Path(os.environ['RUNNER_TEMP'])/'w13-delegation-result'
+          (out/'source-binding.json').write_text(json.dumps({
+              'owner':os.environ['GITHUB_REPOSITORY_OWNER'],
+              'repository':repo,'original_run':source['id'],
+              'original_artifact_id':found[0]['id'],
+              'original_artifact_digest':found[0]['digest'],
+              'source_commit':source['head_sha'],
+              'delegation_commit':sha,'request':request,
+          },sort_keys=True,indent=2)+'\n')
+          with Path(os.environ['GITHUB_OUTPUT']).open('a') as f:
+              f.write('run_id='+str(source['id'])+'\nartifact_name='+name+'\n')
+          print('SOURCE OWNED W13 CONTINUITY ARCHIVE VERIFIED; BOUNDED WORK AUTHORIZED')
+          PY
+      - name: Download preserved real workstation from earlier GitHub runner
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ steps.bind.outputs.run_id }}
+          name: ${{ steps.bind.outputs.artifact_name }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/w13-prior-native
+      - name: Install original native verifier and execute via existing B2/B3
+        run: |
+          set -euo pipefail
+          python -m pip install 'cryptography>=45,<47'
+          python -m systems.workspace.workstation_w13_delegate \
+            --inherited-evidence "$RUNNER_TEMP/w13-prior-native" \
+            --data-dir "$RUNNER_TEMP/w13-delegation-runtime" \
+            --output-dir "$OUTDIR"
+          tar -czf "$OUTDIR/delegated-runtime.tar.gz" \
+            -C "$RUNNER_TEMP/w13-delegation-runtime" \
+            workstation runtime.jsonl coordinator-windows.jsonl
+          sha256sum "$OUTDIR/delegated-runtime.tar.gz" > "$OUTDIR/delegated-runtime.sha256"
+      - name: Preserve actual delegated subprocess receipt and workstation state
+        uses: actions/upload-artifact@v4
+        with:
+          name: w13-bounded-delegation-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/w13-delegation-result/
+          if-no-files-found: error
+          retention-days: 30

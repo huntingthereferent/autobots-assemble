@@ -99,7 +99,9 @@ class WorkstationNativeFeedback:
         payload = {"opening_id": opening_id, "job_id": job_id,
                    "output_sha256": output_sha256, "evidence_sha256": evidence_sha256,
                    "source_fingerprint": source_fp,
-                   "claim_scope": "source-owned native finite helper return only",
+                   "claim_scope": ("exact WORLD W13 two-room native helper return only"
+                                   if assigned.get("worker_id") == "game-worlds-w13"
+                                   else "source-owned native finite helper return only"),
                    "parent_cp_witnessed": False}
         prior = [e for e in runtime.event_store.for_handoff(coordination_handoff_id)
                  if e.event_type == _RETURN_EVENT]

@@ -1,9 +1,9 @@
 """CP help openings over the EXISTING coordinator/workstation/runtime journal.
 
 An unfinished checkpoint may request assistance without a completed-parent
-spawn, which is unsuitable for blocked parents. The known finite-prefilter
-adapter demonstrates branching/admitting a child; it is NOT a game-builder.
-No second scheduler, new unverified capability, or automatic execution.
+spawn, which is unsuitable for blocked parents. Registered source-owned bounded adapters admit finite-prefilter and exact W13
+native jobs. Generic game-engine-build is still unregistered.
+No second scheduler, model helper, or implicit execution.
 """
 from __future__ import annotations
 
@@ -19,8 +19,9 @@ from .coordinator_window import CoordinatorIndex, _id
 from .workstation import ProcessWorkstation
 
 CAP_FINITE = 'finite-required-edge-prefilter'
-CAP_GAME = 'game-engine-build'
-_SUPPORTED = {CAP_FINITE}
+CAP_GAME = 'game-engine-build'  # Generic game generation is NOT registered.
+CAP_GAME_W13_NATIVE = 'game-w13-native-two-room'
+_SUPPORTED = {CAP_FINITE, CAP_GAME_W13_NATIVE}
 _OPENING_TYPE = 'cp-worker-help-opening'
 
 
@@ -108,7 +109,75 @@ def open_and_staff_known(*, data_dir: str | Path, lane: str, slot: str,
     if capability == CAP_FINITE:
         return staff_finite(data_dir=data_dir, opening_id=opened['opening_id'],
                             parent_version=parent_version, inputs_file=inputs_file)
+    if capability == CAP_GAME_W13_NATIVE:
+        return staff_w13_native(data_dir=data_dir, opening_id=opened['opening_id'],
+                                parent_version=parent_version, inputs_file=inputs_file)
     raise ValueError('capability registered without a native admission adapter')
+
+
+def staff_w13_native(*, data_dir: str | Path, opening_id: str,
+                     parent_version: str, inputs_file: str | Path) -> dict:
+    """Branch the ALREADY IMPLEMENTED two-room W13 worker; admit a new exact job.
+
+    Does not build a different game, run the subprocess, or claim generic AI.
+    Native admission/reverification belong to GameW13NativeBridge.
+    """
+    from .game_w13_native_bridge import GameW13NativeBridge, WORKER_ID, LOCATOR
+    from .game_w13_native_cli import bounded_input
+    _, runtime, desk = _load(data_dir)
+    opening = _original(runtime, opening_id)
+    if opening.inputs['capability'] != CAP_GAME_W13_NATIVE:
+        raise ValueError('not an exact W13 source-owned helper opening')
+    prior = _assignment(runtime, opening_id)
+    if prior:
+        return help_status(runtime, opening_id)
+    parent_version = _id(parent_version)
+    source_folder, provenance = desk._read(WORKER_ID, parent_version)
+    if provenance.get('source_locator') != LOCATOR:
+        raise ValueError('W13 parent edition does not belong to native source')
+    original = desk.inspect(worker_id=WORKER_ID, version_id=parent_version)
+    child_version = 'help-' + opening_id[-20:]
+    child_job = 'help-job-' + opening_id[-20:]
+    payload = bounded_input(Path(inputs_file))
+    try:
+        child = desk.branch(worker_id=WORKER_ID, parent_version=parent_version,
+                            version_id=child_version)
+    except FileExistsError:
+        folder, history = desk._read(WORKER_ID, child_version)
+        if (history.get('parent_version') != parent_version or
+                history.get('source_locator') != provenance.get('source_locator')):
+            raise ValueError('W13 helper source edition collision')
+        child = desk.inspect(worker_id=WORKER_ID, version_id=child_version)
+    # branch() returns a copy receipt; inspect() checks live edition bytes.
+    child = desk.inspect(worker_id=WORKER_ID, version_id=child_version)
+    if (child.get('source_fingerprint', child.get('current_fingerprint'))
+            != original['current_fingerprint'] or
+            child.get('current_fingerprint') != original['current_fingerprint']):
+        raise ValueError('W13 helper source bytes differ from preserved parent')
+    if child_job in runtime.snapshot():
+        existing = runtime.get(child_job)
+        if (existing.metadata.get('worker_id') != WORKER_ID
+                or existing.metadata.get('worker_version') != child_version
+                or existing.metadata.get('edition_fingerprint') != original['current_fingerprint']
+                or existing.inputs != payload):
+            raise ValueError('conflicting existing W13 child native job')
+    else:
+        GameW13NativeBridge(runtime=runtime, workstation=desk).admit(
+            version_id=child_version, inputs=payload,
+            from_actor='workstation-bounded-help', job_id=child_job,
+            lane_id=opening.inputs['lane'])
+    runtime = HandoffRuntime(event_store=RuntimeJournal(Path(data_dir) / 'runtime.jsonl'))
+    if _assignment(runtime, opening_id):
+        return help_status(runtime, opening_id)
+    runtime.event_store.append(HandoffEvent.create(
+        handoff_id=opening_id, event_type='HELP_ASSIGNED',
+        actor_id='workstation-bounded-help',
+        data={'job_id': child_job, 'worker_id': WORKER_ID,
+              'version_id': child_version,
+              'fingerprint': original['current_fingerprint'],
+              'parent_version': parent_version},
+        parents=(runtime.state(opening_id).last_event_id,)))
+    return help_status(runtime, opening_id)
 
 
 def staff_finite(*, data_dir: str | Path, opening_id: str,
@@ -165,7 +234,7 @@ def staff_finite(*, data_dir: str | Path, opening_id: str,
 
 
 def verify_return(*, data_dir: str | Path, opening_id: str) -> dict:
-    """Returns verified finite worker computation, never promotes parent CP."""
+    """Return source-owned bounded worker evidence without promoting the parent CP."""
     from .controls import reverify_job, job_view
     _, runtime, _ = _load(data_dir)
     _original(runtime, opening_id)
@@ -188,7 +257,9 @@ def verify_return(*, data_dir: str | Path, opening_id: str) -> dict:
         runtime.event_store.append(HandoffEvent.create(
             handoff_id=opening_id,event_type='HELP_RETURNED',actor_id='cp-help-coordinator',
             data={'job_id':assigned['job_id'], 'native_verifier_confirmed':True,
-                  'claim_scope':'finite prefilter computation only'},
+                  'claim_scope': ('finite prefilter computation only' if
+                       assigned['worker_id'] != 'game-worlds-w13' else
+                       'exact WORLD W13 two-room native job only')},
             parents=(runtime.state(opening_id).last_event_id,)))
     return help_status(HandoffRuntime(event_store=RuntimeJournal(Path(data_dir)/'runtime.jsonl')),
                        opening_id)
@@ -207,7 +278,7 @@ def help_status(runtime: HandoffRuntime, opening_id: str) -> dict:
                    else 'OPEN_UNSTAFFED',
             'registered_capability':h.inputs['capability'] in _SUPPORTED,
             'child':a, 'parent_cp_witnessed':False,
-            'note':'Returned finite computation is not a parent-domain proof.'}
+            'note':'A verified bounded helper result is not automatic parent-domain proof.'}
 
 
 def help_summary(data_dir: str | Path) -> list[dict]:
@@ -232,6 +303,9 @@ def main(argv=None):
     p=sub.add_parser('staff-finite')
     p.add_argument('--opening-id',required=True);p.add_argument('--parent-version',required=True)
     p.add_argument('--inputs-file',required=True)
+    p=sub.add_parser('staff-w13')
+    p.add_argument('--opening-id',required=True);p.add_argument('--parent-version',required=True)
+    p.add_argument('--inputs-file',required=True)
     p=sub.add_parser('return')
     p.add_argument('--opening-id',required=True)
     sub.add_parser('status')
@@ -244,6 +318,9 @@ def main(argv=None):
     elif args.command=='staff-finite':
         row=staff_finite(data_dir=args.data_dir,opening_id=args.opening_id,
                          parent_version=args.parent_version,inputs_file=args.inputs_file)
+    elif args.command=='staff-w13':
+        row=staff_w13_native(data_dir=args.data_dir, opening_id=args.opening_id,
+                             parent_version=args.parent_version, inputs_file=args.inputs_file)
     elif args.command=='return':
         row=verify_return(data_dir=args.data_dir,opening_id=args.opening_id)
     else:row=help_summary(args.data_dir)
