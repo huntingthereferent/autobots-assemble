@@ -46,6 +46,23 @@ class WorkstationHTTPTests(unittest.TestCase):
                 host.server_close()
                 thread.join(timeout=3)
 
+    def test_one_continuity_of_research_and_native_work(self):
+        html=(ROOT/"runtime/http/workstation.html").read_text(encoding="utf-8")
+        js=(ROOT/"runtime/http/workstation.js").read_text(encoding="utf-8")
+        self.assertIn('value="all_moves_walls"',html)
+        self.assertLess(html.index('value="all_moves_walls"'),html.index('value="observations"'))
+        self.assertLess(html.index('id="research-record-list"'),html.index('class="legacy-runtime"'))
+        self.assertIn('<details class="legacy-runtime">',html)
+        self.assertIn('mode==="all_moves_walls"',js)
+        self.assertIn('source_marker:"NATIVE_EXECUTION"',js)
+        self.assertIn('job.evidence',js)
+        self.assertFalse((ROOT/"views/work_state.json").exists())
+        self.assertFalse((ROOT/"views/motion/workstation-motion.svg").exists())
+        self.assertFalse((ROOT/"JOBS.md").exists())
+        self.assertFalse((ROOT/"OUTPUTS.md").exists())
+        self.assertFalse((ROOT/"generate_outputs.py").exists())
+        self.assertFalse((ROOT/"jobs").exists())
+
     def test_local_gui_contract_and_no_html_injection(self):
         server = (ROOT / "systems/workspace/view_server.py").read_text(encoding="utf-8")
         self.assertIn('"127.0.0.1"', server)

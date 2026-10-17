@@ -1,6 +1,6 @@
 """Generate GitHub-safe animated SVG views from ORIGINAL native research sources.
 
-No generic SVG artwork prompt, no network fetches, no synthetic job counts.
+No generic SVG artwork prompt, no network fetches, no job-count scoreboard.
 Only the original finite World and committed read-only JSON projections supply
 data. Animation is presentation, not a time series or evidence of live workers.
 """
@@ -17,7 +17,6 @@ import xml.etree.ElementTree as ET
 from work.arc_like_maze.math import World
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE_WORK = ROOT / "views/work_state.json"
 SOURCE_WORLD = ROOT / "views/world-continuity/latest.json"
 RENDERER_SCOPE = "finite-world / recorded-workstation-counts / public-world-snapshot"
 BG, PANEL, CYAN, BLUE, VIOLET, SILVER = (
@@ -134,43 +133,6 @@ def render_finite(value: dict) -> str:
     return svg
 
 
-def read_work_state(path: Path) -> dict:
-    data = json.loads(path.read_text(encoding="utf8"))
-    expected = {"MOVE", "WALL", "UNKNOWN", "PARTIAL"}
-    p = data.get("protocol_results")
-    if (not isinstance(p,dict) or set(p) != expected
-            or any(type(v) is not int or v < 0 for v in p.values())
-            or type(data.get("jobs")) is not int or data["jobs"] < 0
-            or sum(p.values()) != data["jobs"]):
-        raise ValueError("malformed or inconsistent recorded work-state counts")
-    return data
-
-
-def render_work_state(data: dict) -> str:
-    p = data["protocol_results"]
-    height = 350
-    svg = svg_start("Workstation recorded movement outcomes",
-                    "Recorded protocol outcomes from views/work_state.json. "
-                    "Animated marks do not signify running workers or new jobs.", height)
-    svg += title_block("EXISTING WORKSTATION / RECORDED RESULTS",
-                       "Movement and walls",
-                       f'{data["jobs"]} recorded jobs · public aggregate, not worker health')
-    for n,(name,color) in enumerate((("MOVE",CYAN),("WALL",VIOLET),
-                                    ("UNKNOWN",BLUE),("PARTIAL",SILVER))):
-        y=161+n*43
-        svg += (f'<text x="47" y="{y}" fill="{color}" font-size="16">{name}</text>'
-                f'<rect x="191" y="{y-16}" width="650" height="20" rx="8" fill="#1a2a3e"/>')
-        width=650*p[name]/max(1,data["jobs"])
-        if width:
-            svg += (f'<rect x="191" y="{y-16}" width="{width:.1f}" height="20" rx="8" fill="{color}" fill-opacity=".23"/>'
-                    f'<path class="signal slow" d="M195 {y-6}H{191+width:.1f}" stroke="{color}" '
-                    'stroke-width="4" fill="none"/>')
-        svg += f'<text x="876" y="{y}" fill="{SILVER}" font-size="20">{p[name]}</text>'
-    svg += ('<text x="47" y="326" fill="#acbfd1" font-size="13">'
-            'Counts are committed records, not live executions or source-edit witnesses.</text></svg>')
-    return svg
-
-
 def read_world_snapshot(path: Path) -> dict:
     s = json.loads(path.read_text(encoding="utf8"))
     if (s.get("schema") != "public-world-continuity/v1"
@@ -230,11 +192,9 @@ def render_world(s: dict) -> str:
 
 def produce(source_root: Path = ROOT) -> dict[str,str]:
     finite = finite_observation()
-    work = read_work_state(source_root/"views/work_state.json")
     world = read_world_snapshot(source_root/"views/world-continuity/latest.json")
     return {
         "finite-motion.svg":render_finite(finite),
-        "workstation-motion.svg":render_work_state(work),
         "world-motion.svg":render_world(world),
     }
 
@@ -269,4 +229,4 @@ if __name__ == "__main__":
                         default=ROOT/"views/motion")
     args=parser.parse_args()
     generate(args.out_dir)
-    print("Generated three source-owned SVG animations; no worker launched.")
+    print("Generated two source-owned SVG animations; no worker launched.")
