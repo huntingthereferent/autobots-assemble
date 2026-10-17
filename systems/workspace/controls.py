@@ -29,6 +29,9 @@ from .nih_scope_native import validate_scope, VERIFIER as NIH_SCOPE_VERIFIER
 from .nih_scope_bridge import SOURCE_FILE as NIH_SCOPE_SOURCE_FILE
 from .game_w13_native_bridge import GameW13NativeBridge, WORKER_ID as GAME_W13_ID, SOURCE_FILE as GAME_W13_FILE
 from .game_w13_native import VERIFIER as GAME_W13_VERIFIER, validate_game_request
+from .game_build_bridge import GameBuildBridge, SOURCE_FILE as GAME_BUILD_FILE
+from .game_build_native import (WORKER_ID as GAME_BUILD_ID,
+                                VERIFIER as GAME_BUILD_VERIFIER, check_world)
 
 KNOWN_WORKERS = frozenset((FINITE_ID, FACTORY_ID))
 FINITE_FILES = frozenset(("finite_goal_priority.py", "finite_required_edge_guard.py"))
@@ -36,7 +39,7 @@ NIH_ONTO_ID = 'nih-temporal-ontology'
 NIH_ONTO_VERIFIER = 'cp-checker:NIH-P1-ONTOLOGY'
 NIH_REASON_ID = 'nih-temporal-reasoning'
 NIH_REASON_VERIFIER = 'cp-checker:NIH-P1-REASONING'
-EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, GAME_W13_ID}
+EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, GAME_W13_ID, GAME_BUILD_ID}
 
 
 def _data_root(path: str | Path) -> Path:
@@ -104,6 +107,14 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
         from .nih_ontology_native import validate_request
         required = frozenset(('ontology_worker.py',))
         payload = validate_request(json.loads(file.read_text(encoding='utf-8')))
+    elif worker_id == GAME_BUILD_ID:
+        if inputs_file is None:
+            raise ValueError("game BUILD requires an exact WORLD JSON request")
+        file = Path(inputs_file)
+        if not file.is_file() or file.is_symlink() or file.stat().st_size > 4096:
+            raise ValueError("WORLD BUILD request must be ordinary JSON <=4 KiB")
+        required = frozenset((GAME_BUILD_FILE,))
+        payload = check_world(json.loads(file.read_text(encoding="utf8")))
     elif worker_id == GAME_W13_ID:
         if inputs_file is None:
             raise ValueError("W13 game native job requires --inputs-file")
@@ -135,6 +146,7 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
                          else "integrated-cp30-ed25519-verification" if worker_id == INTEGRATED_ID
                          else "nih-p1-synthetic-rdf-reasoning" if worker_id == NIH_REASON_ID
                          else "nih-p1-synthetic-rdf-ontology" if worker_id == NIH_ONTO_ID
+                         else "build-new-playable-world-room" if worker_id == GAME_BUILD_ID
                          else "game-w13-exact-two-world-native" if worker_id == GAME_W13_ID
                          else "nih-p1-synthetic-temporal-scope" if worker_id == NIH_SCOPE_ID
                          else "existing-factory-machine-simulation",
@@ -233,6 +245,10 @@ def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
         return CorrespondenceWorkBridge(runtime=runtime, workstation=desk)
     if worker_id == FACTORY_ID:
         return FactoryMachineSimulationBridge(runtime=runtime, workstation=desk)
+    if worker_id == GAME_BUILD_ID:
+        if verifier != GAME_BUILD_VERIFIER:
+            raise ValueError("unsupported game BUILD native verifier")
+        return GameBuildBridge(runtime=runtime, workstation=desk)
     if worker_id == GAME_W13_ID:
         if verifier != GAME_W13_VERIFIER:
             raise ValueError("unsupported game W13 native verifier")
@@ -292,7 +308,7 @@ def run_job(*, data_dir: str | Path, job_id: str,
         raise ValueError("not a supported workstation job")
     bridge = _bridge(runtime, root, worker, handoff.metadata.get("native_evidence_verifier"))
     state = runtime.state(job_id)
-    if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, GAME_W13_ID):
+    if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, GAME_W13_ID, GAME_BUILD_ID):
         if handoff.metadata.get("source_system") != "process-workstation":
             raise ValueError("selected local worker job source does not match")
         if state.status == "READY":
