@@ -1,0 +1,68 @@
+name: Public trace Internet map
+on:
+  pull_request:
+    paths:
+      - 'views/traces/**'
+      - '.github/workflows/public-trace-internet-map.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'views/traces/internet_map.py'
+      - 'views/traces/test_internet_map.py'
+      - '.github/workflows/public-trace-internet-map.yml'
+  schedule:
+    - cron: '15 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+concurrency:
+  group: public-trace-internet-map
+  cancel-in-progress: false
+
+jobs:
+  source-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify source scopes and geographic rendering
+        run: python -m unittest -v views.traces.test_internet_map
+      - name: Fetch public network probes and world geometry; optional actual Cloudflare shares
+        env:
+          CLOUDFLARE_RADAR_TOKEN: ${{ secrets.CLOUDFLARE_RADAR_TOKEN }}
+        run: python -m views.traces.internet_map --refresh
+      - name: Parse freshly generated output
+        run: |
+          python - <<'PY'
+          import json,xml.etree.ElementTree as ET
+          from pathlib import Path
+          d=Path('views/traces')
+          s=json.loads((d/'internet-map.json').read_text())
+          assert s['schema']=='internet-observations-map/v1'
+          assert s['probe_state']=='PUBLIC_SAMPLE'
+          assert s['traffic_state'] in ('TOKEN_NOT_CONFIGURED','SOURCE_MEASURED')
+          ET.parse(d/'internet-map.svg')
+          print('Probes',len(s['probes']['points']),'traffic',s['traffic_state'])
+          PY
+      - name: Publish source evidence on main only
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add views/traces/internet-map.json views/traces/internet-map.svg
+          if git diff --cached --quiet; then echo 'No observations changed'; exit 0; fi
+          git commit -m 'Refresh public Internet observation map'
+          git fetch origin main
+          if git diff --name-only HEAD origin/main | grep -E '^views/traces/(internet_map.py|test_internet_map.py|registry.json)$'; then
+            echo 'Source definition changed while collecting'; exit 1
+          fi
+          git rebase origin/main
+          git push origin HEAD:main
