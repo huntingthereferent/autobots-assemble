@@ -201,11 +201,12 @@ class W13BuildReceiptTests(unittest.TestCase):
             w12.verify_expanded_browser_receipt(data)
 
     def test_21_source_hash_change_is_refused_before_receipt_admission(self):
+        data = self.sample()
         with TemporaryDirectory() as tmp:
             fake = Path(tmp) / "game_construction.py"
             fake.write_text("not W12 source")
             with patch.object(w12, "__file__", str(fake)):
-                self.reject(self.sample())
+                self.reject(data)
 
     def test_22_all_inputs_remain_unchanged_on_success_or_rejection(self):
         data = self.sample()
