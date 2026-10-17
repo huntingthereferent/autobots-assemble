@@ -92,7 +92,7 @@ def verify_build(world, result):
         raise ValueError("BUILD playable room disagrees with WORLD source")
     for marker in ('id="grid"', 'id="status"', 'id="reset"', 'id="interact"',
                    'id="up"', 'id="down"', 'id="left"', 'id="right"',
-                   'data-solved', "WORLD COMPLETE"):
+                   'dataset.solved', "WORLD COMPLETE"):
         if marker not in html:
             raise ValueError("BUILD is missing essential playable interactions")
     return {"contract": VERSION, "world_id": world["world_id"],
