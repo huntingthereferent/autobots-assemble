@@ -42,6 +42,47 @@ class NIHTemporalGameStackTests(unittest.TestCase):
         self.assertEqual((self.data / "runtime.jsonl").read_bytes(), before)
         self.assertEqual((self.data / "coordinator-windows.jsonl").read_bytes(), indexes)
 
+    def test_04_native_packet_worker_builds_source_derived_local_proposal(self):
+        packet=join(data_dir=self.data, output_dir=self.out, packet_build=True)
+        self.assertEqual(packet["packet_native_witness"],"PASS")
+        self.assertEqual(packet["packet_worker"],"nih-phase1-packet")
+        self.assertEqual(packet["packet_job"],"nih-packet-001")
+        self.assertEqual(packet["next_prototype"],"NIH-P2-PROTOTYPE")
+        self.assertFalse(packet["official_submission"])
+        self.assertEqual(packet["next_phase_1"],"NIH-P1-SUBMISSION-EXTERNAL")
+        self.assertEqual(packet["phase_2_test"],"BLOCKED")
+        self.assertNotIn("NIH-P1-PACKET",packet["phase_2_test_blocked_by"])
+        text=(self.out/"nih-phase1-temporal-design-packet.md").read_text(encoding="utf8")
+        self.assertIn("## Temporal benchmark cases",text)
+        self.assertIn("before-result",text)
+        self.assertIn("delayed-result",text)
+        self.assertIn("future",text)
+        self.assertIn("Not an NIH submission",text)
+        runtime=HandoffRuntime(event_store=RuntimeJournal(self.data/"runtime.jsonl"))
+        child=runtime.get("nih-packet-001")
+        self.assertEqual(child.dependencies,("nih-reasoning-001",))
+        self.assertEqual(child.metadata["checkpoint_contract"],"NIH-P1-PACKET")
+        self.assertEqual(runtime.state("nih-packet-001").status,"COMPLETE")
+        self.assertEqual(len(runtime.snapshot()),5)
+
+    def test_05_packet_replays_without_double_running_or_index_duplication(self):
+        original=join(data_dir=self.data,output_dir=self.out,packet_build=True)
+        journal=(self.data/"runtime.jsonl").read_bytes()
+        index=(self.data/"coordinator-windows.jsonl").read_bytes()
+        replay=join(data_dir=self.data,output_dir=self.out,packet_build=True)
+        self.assertEqual(original,replay)
+        self.assertEqual(journal,(self.data/"runtime.jsonl").read_bytes())
+        self.assertEqual(index,(self.data/"coordinator-windows.jsonl").read_bytes())
+
+    def test_06_mutated_packet_worker_refuses_native_reverification(self):
+        join(data_dir=self.data,output_dir=self.out,packet_build=True)
+        from systems.workspace.workstation import ProcessWorkstation
+        desk=ProcessWorkstation(self.data/"workstation")
+        source=desk._edition("nih-phase1-packet","packet-v1")/"packet_worker.py"
+        source.write_text(source.read_text(encoding="utf8")+"\n# bad edit\n",encoding="utf8")
+        with self.assertRaises(ValueError):
+            join(data_dir=self.data,output_dir=self.out,packet_build=True)
+
     def test_03_damaged_temporal_source_refuses_inherited_success(self):
         join(data_dir=self.data, output_dir=self.out)
         from systems.workspace.workstation import ProcessWorkstation
