@@ -41,8 +41,8 @@ python -m tools.ab_math_workbench rea-evidence /tmp/rea-evidence.json --output /
 Or run the same documented static scan and preserve both output files in one explicit command (output directories must exist; existing files are not overwritten):
 
 ```bash
-python -m tools.rea_ab_bridge /absolute/path/to/your-app \\
-  --evidence-output /tmp/rea-evidence.json \\
+python -m tools.rea_ab_bridge /absolute/path/to/your-app \
+  --evidence-output /tmp/rea-evidence.json \
   --reference-output /tmp/rea-reference.json
 ```
 
