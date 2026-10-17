@@ -1,0 +1,63 @@
+name: REA actual source A/B control experiment
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.gitmodules'
+      - '.github/workflows/rea-swallow-ab.yml'
+  pull_request:
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.gitmodules'
+      - '.github/workflows/rea-swallow-ab.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  real-rea-native-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Prepare real REA source in two ProcessWorkstation editions
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/feature_traversal_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptFeatureTraversal.ab-swallow.test.ts
+      - name: Install real REA
+        working-directory: experiments/rea-swallow/upstream
+        run: npm ci --no-audit --no-fund
+      - name: Original REA tests and mathematical closure witness
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          REA_AB_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/control.json" npx --no-install vitest run src/domain/javascript/javascriptFeatureTraversal.ab-swallow.test.ts src/domain/javascript/javascriptFeatureSeed.test.ts src/domain/javascript/javascriptApplicationVersionComparison.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/control.log"
+      - name: Transform the actual REA file from workstation experimental edition
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/source_experiment.py apply --rea experiments/rea-swallow/upstream
+          git -C experiments/rea-swallow/upstream diff --stat
+          git -C experiments/rea-swallow/upstream diff > experiments/rea-swallow/results/source-change.patch
+      - name: Re-run the same native REA tests on changed source
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          REA_AB_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/experimental.json" npx --no-install vitest run src/domain/javascript/javascriptFeatureTraversal.ab-swallow.test.ts src/domain/javascript/javascriptFeatureSeed.test.ts src/domain/javascript/javascriptApplicationVersionComparison.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/experimental.log"
+      - name: Match identical outputs across all 3072 finite cases
+        run: |
+          cmp experiments/rea-swallow/results/control.json experiments/rea-swallow/results/experimental.json
+          sha256sum experiments/rea-swallow/results/*.json
+      - name: Publish actual native receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-source-ab-parity
+          path: experiments/rea-swallow/results/
+          retention-days: 14
+          if-no-files-found: warn

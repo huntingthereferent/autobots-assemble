@@ -1,0 +1,3 @@
+[submodule "experiments/rea-swallow/upstream"]
+	path = experiments/rea-swallow/upstream
+	url = https://github.com/morluto/rea.git
