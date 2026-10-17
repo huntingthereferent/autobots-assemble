@@ -1,0 +1,202 @@
+{
+  "schema": "workstation-live-projection/v1",
+  "generated_from": "systems/workspace/research_observatory.py",
+  "records": [
+    {
+      "path": "research/dives/ARC3-TRACE-001/dive.json",
+      "label": "ARC-AGI-3 causal reasoning trace",
+      "state": "MOVE_WITH_WALL",
+      "source_type": "RESEARCH_DIVE",
+      "scope": "User-directed research record; original result state"
+    },
+    {
+      "path": "work/arc_like_maze/chatbot/checkpoints/CP-0027.json",
+      "label": "Multi-task source dependency propagation",
+      "state": "witnessed",
+      "source_type": "CHECKPOINT",
+      "scope": "Historical checkpoint summary; external archive may be unavailable"
+    },
+    {
+      "path": "work/arc_like_maze/chatbot/checkpoints/CP-0028.json",
+      "label": "Shared fresh route certificate across tasks",
+      "state": "witnessed",
+      "source_type": "CHECKPOINT",
+      "scope": "Historical checkpoint summary; external archive may be unavailable"
+    },
+    {
+      "path": "work/arc_like_maze/chatbot/checkpoints/CP-0029.json",
+      "label": "Cross-invocation certificate handoff",
+      "state": "witnessed",
+      "source_type": "CHECKPOINT",
+      "scope": "Historical checkpoint summary; external archive may be unavailable"
+    },
+    {
+      "path": "work/arc_like_maze/chatbot/checkpoints/CP-0030.json",
+      "label": "Independent-process source attestations",
+      "state": "witnessed",
+      "source_type": "CHECKPOINT",
+      "scope": "Historical checkpoint summary; external archive may be unavailable"
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-001_ls20_inverse-action-calibration.json",
+      "label": "LS20 inverse-action calibration",
+      "state": "SUPPORTED_FORWARD_MATCH_CALIBRATION",
+      "source_type": "EXPERIMENT",
+      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-002_bp35_inverse-schema-transfer.json",
+      "label": "BP35 cross-environment transfer attempt",
+      "state": "PARTIAL_DIRECTIONAL_SEMANTIC_TRANSFER",
+      "source_type": "EXPERIMENT",
+      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-003_ls20_recursive-forward-match.json",
+      "label": "LS20 same-environment recursive forward match",
+      "state": "SUPPORTED_SAME_ENV_RECURSIVE_FORWARD_MATCH",
+      "source_type": "EXPERIMENT",
+      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-004_ls20_witness-compression.json",
+      "label": "LS20 witness compression by prediction partition",
+      "state": "SUPPORTED_WITNESS_COMPRESSION",
+      "source_type": "EXPERIMENT",
+      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-005_ls20_selector-validation.json",
+      "label": "LS20 retrospective selector validation",
+      "state": "SUPPORTED_SELECTOR_RETROSPECTIVE_VALIDATION",
+      "source_type": "EXPERIMENT",
+      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/experiments/FM-006_ka59_level-preservation-gate.json",
+      "label": "KA59 level-boundary preservation gate",
+      "state": "SUPPORTED_LEVEL_BOUNDARY_PRESERVATION_GATE",
+      "source_type": "EXPERIMENT",
+      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+    },
+    {
+      "path": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
+      "label": "📍 ARC3-100 — first-contact discovery-inclusive 100%",
+      "state": "UNCLASSIFIED",
+      "source_type": "PIN",
+      "scope": "Pinned or historical original; not a presently assigned task"
+    },
+    {
+      "path": "state/pins/GEMS-001_2026-10-03.json",
+      "label": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
+      "state": "MOVE_WITH_WALL",
+      "source_type": "PIN",
+      "scope": "Pinned or historical original; not a presently assigned task"
+    }
+  ],
+  "walls": [
+    {
+      "path": "open_source/contributions/CONTRIBUTION_TEMPLATE.md",
+      "text": "Walls / unknowns",
+      "kind": "documented-heading-only",
+      "line": 48
+    },
+    {
+      "path": "protocols/core/referent.md",
+      "text": "Wall",
+      "kind": "documented-heading-only",
+      "line": 21
+    },
+    {
+      "path": "protocols/core/wall.md",
+      "text": "Wall record",
+      "kind": "documented-heading-only",
+      "line": 14
+    },
+    {
+      "path": "protocols/domain/sports-betting-decision.md",
+      "text": "WALL",
+      "kind": "documented-heading-only",
+      "line": 96
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/dive.json",
+      "text": "Current chat runtime lacks arc_agi/live ARC3 execution, so first-contact performance remains unmeasured.",
+      "kind": "source-recorded-wall",
+      "index": 0
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/dive.json",
+      "text": "Private competition performance remains UNKNOWN until official hidden evaluation.",
+      "kind": "source-recorded-wall",
+      "index": 1
+    },
+    {
+      "path": "research/dives/ARC3-TRACE-001/dive.json",
+      "text": "OpenWorld's public 25/25 and RHAE 100 prove public completion/final-path efficiency, not discovery-inclusive first-contact 100%.",
+      "kind": "source-recorded-wall",
+      "index": 2
+    },
+    {
+      "path": "state/coupling-entry-verification.md",
+      "text": "Wall / unknown state",
+      "kind": "documented-heading-only",
+      "line": 35
+    },
+    {
+      "path": "state/pins/GEMS-001_2026-10-03.json",
+      "text": "Exact GEMS competition-data sharing/third-party-service terms still need direct verification before further gated-data modeling outside the competitor-controlled environment.",
+      "kind": "source-recorded-wall",
+      "index": 0
+    },
+    {
+      "path": "systems/factory/README.md",
+      "text": "Current wall",
+      "kind": "documented-heading-only",
+      "line": 107
+    },
+    {
+      "path": "systems/workspace/B16_DELIVERY_COORDINATION.md",
+      "text": "Remaining walls",
+      "kind": "documented-heading-only",
+      "line": 67
+    },
+    {
+      "path": "systems/workspace/WORLD_W13_MOVEMENT_01.md",
+      "text": "WALL",
+      "kind": "documented-heading-only",
+      "line": 169
+    },
+    {
+      "path": "work/arc_like_maze/WINDOW_FAMILY.md",
+      "text": "Wall, preservation, next referent",
+      "kind": "documented-heading-only",
+      "line": 186
+    },
+    {
+      "path": "work/arc_like_maze/WINDOW_ROOT_TRANSLATION.md",
+      "text": "Wall, preservation, next referent",
+      "kind": "documented-heading-only",
+      "line": 109
+    },
+    {
+      "path": "work/arc_like_maze/chatbot/research/integrated/baseline/COMPLETED_EXTENSION_PORTFOLIO_README.md",
+      "text": "Wall and next referent",
+      "kind": "documented-heading-only",
+      "line": 40
+    },
+    {
+      "path": "work/arc_like_maze/chatbot/research/integrated/baseline/POLICY_BENCHMARK_README.md",
+      "text": "Wall and next",
+      "kind": "documented-heading-only",
+      "line": 59
+    }
+  ],
+  "source_totals": {
+    "source_files": 1374,
+    "structured_records": 14,
+    "original_wall_entries": 4,
+    "documented_wall_headings": 12
+  },
+  "boundary": "Research entries are source-owned states; the browser's event roots and ancestry must come from GitHub directly. Presence in one display does not establish a causal relationship."
+}
