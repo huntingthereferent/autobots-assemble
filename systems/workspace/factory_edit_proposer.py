@@ -11,8 +11,8 @@ import os
 from pathlib import Path
 import sys
 
-BEFORE = "or not inputs['product']"
-AFTER = "or not inputs['product'].strip()"
+BEFORE = "not inputs['product']"
+AFTER = "not inputs['product'].strip()"
 
 
 def main() -> int:
