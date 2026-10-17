@@ -10,11 +10,12 @@
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--white);font:14px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;background:#050A12;overflow-x:hidden}
 body:before{content:"";position:fixed;inset:-30%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 45% 40%,rgba(65,159,189,calc(.06 + var(--intensity)*.18)),transparent 45%),radial-gradient(ellipse at 75% 75%,rgba(130,102,210,.09),transparent 42%);transition:background 2s}
 a{color:#A8E9F3;text-decoration:none}a:hover{text-decoration:underline}button,select{font:inherit;color:inherit}button{cursor:pointer}
+#field{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:0;pointer-events:none;background:linear-gradient(125deg,#050A12,#091726 65%,#050A12)}
 header{display:flex;align-items:center;gap:20px;justify-content:space-between;padding:16px 4.5vw;border-bottom:1px solid #1B3042;position:relative;z-index:3;background:#08101BC4;backdrop-filter:blur(20px);flex-wrap:wrap}
 .wordmark{font-size:12px;font-weight:800;letter-spacing:2.3px;color:#D8F4FF}.topnav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.topnav a{color:#A5BCCE;font-size:11px;letter-spacing:1px}
 #connection{color:var(--dim);font-size:11px}.dot{display:inline-block;width:7px;height:7px;border-radius:99px;background:#52637A;margin-right:7px;vertical-align:middle}.dot.connected{background:var(--mint)}.dot.error{background:#F0A28F}
-.hero{position:relative;min-height:min(78vh,760px);display:flex;align-items:center;border-bottom:1px solid #1D3449;overflow:hidden;isolation:isolate}
-#field{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:-1;background:linear-gradient(125deg,#050A12,#091726 65%,#050A12)}
+.hero{position:relative;z-index:1;min-height:min(78vh,760px);display:flex;align-items:center;border-bottom:1px solid #1D3449;overflow:hidden;isolation:isolate}
+
 .hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#050A12F2 0%,#050A12D4 28%,transparent 85%);pointer-events:none}
 .hero-content{margin-left:6vw;max-width:710px;padding:55px 0;pointer-events:none}
 .overline{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:2.2px}h1{font-size:clamp(52px,8.5vw,132px);letter-spacing:-.085em;line-height:.91;margin:31px 0 28px;font-weight:800}h1 span{color:#D8EEFB}
@@ -22,7 +23,7 @@ header{display:flex;align-items:center;gap:20px;justify-content:space-between;pa
 .live-strip{margin-top:52px;display:flex;gap:12px 28px;flex-wrap:wrap;border-top:1px solid #547089;padding-top:21px;max-width:640px}
 .live-strip>div{min-width:100px}.metric{font:700 clamp(22px,2.6vw,34px)/1.2 ui-monospace,monospace;letter-spacing:-1px}.metric-label{font-size:10px;letter-spacing:1.2px;color:#9BB6C8}
 .honest{margin-top:22px;color:#7D9CB3;font-size:11px;max-width:590px}
-main{max-width:1500px;margin:auto;padding:0 4.5vw}
+main{position:relative;z-index:1;max-width:1500px;margin:auto;padding:0 4.5vw}
 section.block{padding:65px 0;border-bottom:1px solid #263D50}
 .section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:23px;flex-wrap:wrap}
 .kicker{color:var(--cyan);letter-spacing:2px;font-size:11px;font-weight:700}h2{font-size:clamp(24px,3.2vw,45px);letter-spacing:-1.9px;margin:10px 0 0;line-height:1.15}
@@ -38,13 +39,14 @@ section.block{padding:65px 0;border-bottom:1px solid #263D50}
 #receipts{display:grid;gap:9px;max-height:450px;overflow-y:auto}.receipt{padding:12px;border-left:2px solid var(--mint);background:#112333;color:#B5D4E4;font-size:12px}
 .receipt.warn{border-color:var(--amber)}.receipt .hash{color:#5CE7EF;font-size:11px}
 #record-walls{padding-left:22px;color:#C1D2DD}#record-walls li{margin:13px 0}
-footer{padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
+footer{position:relative;z-index:1;padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
 .hidden{display:none}.fault{color:#F0AC96!important}.quiet{font-size:11px;color:#82A0B7}
 @media(max-width:740px){.hero{min-height:670px}.hero:after{background:linear-gradient(90deg,#050A12EF 0%,#050A12AA 100%)}.hero-content{margin-left:5vw;margin-right:5vw}.split{grid-template-columns:1fr}section.block{padding:42px 0}h1{font-size:clamp(50px,13vw,85px)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important} }
 </style>
 </head>
 <body>
+<canvas id="field" aria-label="Source-owned relationship graph, extending behind the full page"></canvas>
 <header>
   <a class="wordmark" href="#top">HUNTING THE REFERENT</a>
   <nav class="topnav" aria-label="Primary">
@@ -55,7 +57,7 @@ footer{padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justi
   <div id="connection" role="status"><span class="dot" id="status-dot"></span><span id="status-text">CONTACTING SOURCE</span></div>
 </header>
 <div class="hero" id="top">
-  <canvas id="field" aria-label="Canvas showing observed GitHub commit ancestry and source-bound CI witness edges"></canvas>
+  <
   <div class="hero-content">
     <div class="overline">OBSERVATION   →   RELATION   →   CONTINUATION</div>
     <h1>FOLLOW<br><span>WHAT MOVES.</span></h1>
@@ -63,7 +65,7 @@ footer{padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justi
     <div class="live-strip" aria-live="polite">
       <div><div id="n-commits" class="metric">—</div><div class="metric-label">OBSERVED COMMITS</div></div>
       <div><div id="n-relations" class="metric">—</div><div class="metric-label">NATIVE LINKS</div></div>
-      <div><div id="n-witnesses" class="metric">—</div><div class="metric-label">CI WITNESSES</div></div>
+      <div><div id="n-witnesses" class="metric">—</div><div class="metric-label">CI RUN RECORDS</div></div>
       <div><div id="n-open" class="metric">—</div><div class="metric-label">OPEN ENDS</div></div>
     </div>
     <div class="honest" id="freshness">No event assumed. The field begins only when original source observations arrive.</div>
