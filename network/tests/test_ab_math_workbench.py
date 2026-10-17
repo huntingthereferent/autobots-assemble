@@ -81,5 +81,62 @@ class AbMathWorkbenchTests(unittest.TestCase):
                 inspect_rea_evidence(path)
 
 
+
+class ReaBridgeTests(unittest.TestCase):
+    def test_explicit_rea_scan_preserves_real_output_without_math_proof(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        from tools.rea_ab_bridge import scan_javascript_target
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "chosen-app"
+            target.mkdir()
+            evidence = root / "rea-evidence.json"
+            reference = root / "rea-reference.json"
+            sample = {
+                "evidence_id": "ev-test",
+                "analysis_profile": None,
+                "normalized_result": {
+                    "coverage": {"status": "unknown"},
+                    "unknowns": ["dynamic edge"],
+                    "limitations": ["static only"],
+                },
+            }
+
+            def fake_run(argv, *, stdout, stderr, timeout, check):
+                self.assertEqual(argv[1], "analyze-javascript-application")
+                self.assertEqual(argv[-1], "--json")
+                stdout.write(json.dumps(sample).encode("utf-8"))
+                return SimpleNamespace(returncode=0, stderr=b"")
+
+            with patch("tools.rea_ab_bridge.shutil.which", return_value="/mock/rea"), \
+                    patch("tools.rea_ab_bridge.subprocess.run", side_effect=fake_run):
+                report = scan_javascript_target(target, evidence, reference)
+
+            self.assertTrue(evidence.exists())
+            self.assertTrue(reference.exists())
+            self.assertEqual(report["status"], "REA_EVIDENCE_SAVED_MATH_WITNESS_OPEN")
+            self.assertIsNone(report["mathematical_correspondence"])
+            self.assertEqual(json.loads(evidence.read_text())["evidence_id"], "ev-test")
+            self.assertEqual(json.loads(reference.read_text())["sha256"],
+                             hashlib.sha256(evidence.read_bytes()).hexdigest())
+
+    def test_missing_rea_and_existing_output_are_explicit_walls(self):
+        from unittest.mock import patch
+        from tools.rea_ab_bridge import scan_javascript_target
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            target = root / "app"
+            target.mkdir()
+            evidence, reference = root / "evidence.json", root / "reference.json"
+            with patch("tools.rea_ab_bridge.shutil.which", return_value=None):
+                with self.assertRaisesRegex(ValueError, "not installed"):
+                    scan_javascript_target(target, evidence, reference)
+            self.assertFalse(evidence.exists())
+            evidence.write_text("existing")
+            with self.assertRaisesRegex(ValueError, "must not already exist"):
+                scan_javascript_target(target, evidence, reference)
+
 if __name__ == "__main__":
     unittest.main()
