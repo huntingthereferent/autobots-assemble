@@ -96,7 +96,7 @@ footer{padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justi
   const FETCH_EVERY=120000;
   const $=id=>document.getElementById(id);
   const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const state={commits:[],runs:[],edges:[],root:null,seen:new Set(),last:0,graph:[],research:null,connected:false,
+  const state={commits:[],runs:[],edges:[],root:null,seen:new Set(),last:0,graph:null,research:null,connected:false,
     canvas:$("field"),nodes:[],animationFrame:0};
   const safeSha=v=>typeof v==="string"&&/^[0-9a-f]{40}$/.test(v);
   const sha7=v=>safeSha(v)?v.slice(0,8):"INVALID";
@@ -166,6 +166,7 @@ footer{padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justi
     const parents=new Set(trace.edges.filter(e=>e.type==="commit-parent").map(e=>e.from));
     numeric("n-open",trace.nodes.filter(c=>!parents.has(c.id)).length);
     state.graph=graphLayout(trace);
+    if(reduced)paint(0);
     const intensity=Math.min(1,trace.edges.length/19);document.documentElement.style.setProperty("--intensity",String(intensity));
     $("freshness").textContent="GitHub parent SHA / exact CI head SHA · "+new Date(state.last).toLocaleString()+" · "+trace.nodes.length+" observed commits in selected trace · source refresh every 2 minutes";
     const latest=trace.nodes.at(-1);
@@ -194,7 +195,7 @@ footer{padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justi
   function paint(now){
     const c=state.canvas,ctx=c.getContext("2d"),w=c.clientWidth,h=c.clientHeight;
     if(!ctx)return;ctx.setTransform(c.width/w,0,0,c.height/h,0,0);ctx.clearRect(0,0,w,h);
-    const graph=state.graph;if(graph&&graph.points.length){
+    const graph=state.graph;if(graph&&graph.points&&graph.points.length){
       const byId=new Map(graph.points.map(p=>[p.id,p]));
       ctx.lineWidth=1.4;
       for(const [i,e] of graph.edges.entries()){const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)continue;
