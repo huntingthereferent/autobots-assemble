@@ -82,6 +82,12 @@ def group_label(x,y,label,color,subtitle):
 def render(data):
     if data.get("research_schema")!="workstation-research-continuity/v1":
         raise ValueError("not the original workstation source")
+    if data["arc"]["state"]!="MOVE_WITH_WALL" or not data["arc"]["walls"]:
+        raise ValueError("original ARC movement and its walls must be preserved")
+    if "W13 PASS" not in data["w13"]["verdict"]:
+        raise ValueError("no bounded W13 witness result")
+    if any(x["state"]!="witnessed" for x in data["cp"]):
+        raise ValueError("checkpoint status cannot be promoted")
     routes=data["native"]["routes"]
     if any(len(row["states"])!=len(row["actions"])+1 for row in routes):
         raise ValueError("step receipts invalid")
