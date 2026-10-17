@@ -32,6 +32,7 @@ ORIGINAL_JOBS=(
 
 def join(*,data_dir:Path,output_dir:Path,with_browser=True):
     data,output=Path(data_dir),Path(output_dir)
+    data.mkdir(parents=True,exist_ok=True)
     existing=HandoffRuntime(event_store=RuntimeJournal(data/"runtime.jsonl")).snapshot()
     if JOB not in existing:
         # This is the existing seven-job game+temporal construction, not a new
