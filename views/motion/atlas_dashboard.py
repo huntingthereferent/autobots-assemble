@@ -139,7 +139,7 @@ def dashboard(data):
     return svg
 
 
-def generate(out:MOTION.__class__=MOTION):
+def generate(out:Path=MOTION):
     svg=dashboard(snapshot())
     if "<script" in svg or "<image" in svg or "href=" in svg:
         raise ValueError("SVG must be stand-alone")
