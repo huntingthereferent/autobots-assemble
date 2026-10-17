@@ -61,10 +61,9 @@ class RealW13DelegationTests(unittest.TestCase):
     def test_02_second_invocation_does_not_create_other_native_job_or_new_history(self):
         first=delegate_w13(data_dir=self.data, output_dir=self.output)
         before=(self.data/"runtime.jsonl").read_bytes()
-        # Delegate entry is one-shot. Replay-safe verification must be through
-        # WorkstationNativeFeedback.advance, tested by test_01.
-        with self.assertRaisesRegex(ValueError,"one native branch"):
-            delegate_w13(data_dir=self.data, output_dir=self.output)
+        second=delegate_w13(data_dir=self.data, output_dir=self.output)
+        self.assertEqual(second["delegate_job_id"],first["delegate_job_id"])
+        self.assertFalse(second["new_return_event"])
         self.assertEqual((self.data/"runtime.jsonl").read_bytes(),before)
 
     def test_03_changed_original_w13_source_cannot_authorize_a_helper(self):
