@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-17T14:51:41.257681+00:00",
-  "content_sha256": "654eb38aded1a4a75a12d6577ac85dc34b927831b626d9d2e21db09577f0b4d6",
+  "checked_at": "2026-10-17T18:47:12.112821+00:00",
+  "content_sha256": "125b4baa329f0e52d3fa46edab54e6e61f9fb3567fd3aa5c8a97e34877612b4c",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 6,
-      "max_magnitude": 5.2,
+      "count": 5,
+      "max_magnitude": 2.05,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,112 +22,95 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026uowomu",
-        "observed_at": "2026-10-17T14:51:40.644620Z",
-        "source_updated_at": "2026-10-17T14:07:43.834000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uowomu",
+        "source_id": "ci41348591",
+        "observed_at": "2026-10-17T18:47:11.815416Z",
+        "source_updated_at": "2026-10-17T18:01:54.700000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41348591",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uowomu",
+        "canonical_key": "event:ci41348591",
         "payload": {
-          "magnitude": 1.0,
-          "place": "63 km E of Ugashik, Alaska",
-          "longitude": -156.34,
-          "latitude": 57.515,
-          "depth_km": 10.5,
-          "occurred_at": "2026-10-17T14:06:51.112000+00:00"
+          "magnitude": 1.31,
+          "place": "26 km ESE of Campo, CA",
+          "longitude": -116.210333333333,
+          "latitude": 32.5141666666667,
+          "depth_km": 15.2,
+          "occurred_at": "2026-10-17T17:58:34.650000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026uoxepj",
-        "observed_at": "2026-10-17T14:51:40.644620Z",
-        "source_updated_at": "2026-10-17T14:26:44.515000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uoxepj",
+        "source_id": "hv75059731",
+        "observed_at": "2026-10-17T18:47:11.815416Z",
+        "source_updated_at": "2026-10-17T18:37:22.160000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059731",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uoxepj",
+        "canonical_key": "event:hv75059731",
         "payload": {
-          "magnitude": 1.7,
-          "place": "75 km W of Karluk, Alaska",
-          "longitude": -155.715,
-          "latitude": 57.649,
-          "depth_km": 5.0,
-          "occurred_at": "2026-10-17T14:25:37.005000+00:00"
+          "magnitude": 1.04,
+          "place": "5 km SSW of Volcano, Hawaii",
+          "longitude": -155.2605,
+          "latitude": 19.3978333333333,
+          "depth_km": 2.0,
+          "occurred_at": "2026-10-17T17:47:30.720000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "hv75059686",
-        "observed_at": "2026-10-17T14:51:40.644620Z",
-        "source_updated_at": "2026-10-17T14:23:22.470000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059686",
+        "source_id": "hv75059746",
+        "observed_at": "2026-10-17T18:47:11.815416Z",
+        "source_updated_at": "2026-10-17T18:29:28.230000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059746",
         "entity_type": "event",
-        "canonical_key": "event:hv75059686",
+        "canonical_key": "event:hv75059746",
         "payload": {
-          "magnitude": 2.01,
-          "place": "13 km S of Volcano, Hawaii",
-          "longitude": -155.217163085938,
-          "latitude": 19.3248329162598,
-          "depth_km": 1.0,
-          "occurred_at": "2026-10-17T14:19:57.390000+00:00"
+          "magnitude": 1.86,
+          "place": "28 km ESE of Naalehu, Hawaii",
+          "longitude": -155.345504760742,
+          "latitude": 18.9406661987305,
+          "depth_km": 13.9099998474121,
+          "occurred_at": "2026-10-17T18:26:01.060000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "hv75059691",
-        "observed_at": "2026-10-17T14:51:40.644620Z",
-        "source_updated_at": "2026-10-17T14:35:38.530000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059691",
+        "source_id": "nc75451071",
+        "observed_at": "2026-10-17T18:47:11.815416Z",
+        "source_updated_at": "2026-10-17T18:24:04.450000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75451071",
         "entity_type": "event",
-        "canonical_key": "event:hv75059691",
+        "canonical_key": "event:nc75451071",
         "payload": {
-          "magnitude": 1.99,
-          "place": "12 km NNW of Wai‘ōhinu, Hawaii",
-          "longitude": -155.662826538086,
-          "latitude": 19.1760005950928,
-          "depth_km": -0.569999992847443,
-          "occurred_at": "2026-10-17T14:32:12.650000+00:00"
+          "magnitude": 1.29,
+          "place": "3 km SE of The Geysers, CA",
+          "longitude": -122.734336853027,
+          "latitude": 38.753833770752,
+          "depth_km": 1.72000002861023,
+          "occurred_at": "2026-10-17T18:22:29.290000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "nc75450951",
-        "observed_at": "2026-10-17T14:51:40.644620Z",
-        "source_updated_at": "2026-10-17T14:16:33.947000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75450951",
+        "source_id": "pr71537058",
+        "observed_at": "2026-10-17T18:47:11.815416Z",
+        "source_updated_at": "2026-10-17T18:31:13.490000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71537058",
         "entity_type": "event",
-        "canonical_key": "event:nc75450951",
+        "canonical_key": "event:pr71537058",
         "payload": {
-          "magnitude": 0.75,
-          "place": "2 km NNW of The Geysers, CA",
-          "longitude": -122.760498046875,
-          "latitude": 38.7916679382324,
-          "depth_km": 2.86999988555908,
-          "occurred_at": "2026-10-17T14:14:58.460000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us6000u309",
-        "observed_at": "2026-10-17T14:51:40.644620Z",
-        "source_updated_at": "2026-10-17T14:17:39.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u309",
-        "entity_type": "event",
-        "canonical_key": "event:us6000u309",
-        "payload": {
-          "magnitude": 5.2,
-          "place": "86 km SW of Brisas Barra de Suchiate, Mexico",
-          "longitude": -92.8552,
-          "latitude": 14.0469,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-17T13:59:34.575000+00:00"
+          "magnitude": 2.05,
+          "place": "1 km WSW of Guánica, Puerto Rico",
+          "longitude": -66.918,
+          "latitude": 17.9693333333333,
+          "depth_km": 5.8,
+          "occurred_at": "2026-10-17T17:57:18.480000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-17T14:51:40.857581Z",
-      "source_updated_at": "2026-10-17T12:54:45Z",
+      "observed_at": "2026-10-17T18:47:11.903701Z",
+      "source_updated_at": "2026-10-17T17:05:14Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
@@ -135,7 +118,7 @@
         "full_name": "psf/requests",
         "default_branch": "main",
         "stargazers_count": 54472,
-        "forks_count": 13115,
+        "forks_count": 13114,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -144,7 +127,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-17T14:51:41.176249Z",
+      "observed_at": "2026-10-17T18:47:12.098867Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -164,8 +147,10 @@
   },
   "changes": {
     "github": {
-      "kind": "unchanged",
-      "changed_fields": []
+      "kind": "changed",
+      "changed_fields": [
+        "forks_count"
+      ]
     },
     "pypi": {
       "kind": "unchanged",
