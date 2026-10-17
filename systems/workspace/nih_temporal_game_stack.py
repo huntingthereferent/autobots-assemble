@@ -19,6 +19,7 @@ from .game_build_native import WORKER_ID as GAME_WORKER
 from .nih_scope_bridge import NIHScopeBridge, copy_scope_source, WORKER_ID as SCOPE_WORKER
 from .nih_ontology_bridge import NIHOntologyBridge, copy_ontology_source, WORKER_ID as ONTO_WORKER
 from .nih_reasoning_bridge import NIHReasoningBridge, copy_reasoning_source, WORKER_ID as REASON_WORKER
+from .nih_packet_bridge import NIHPacketBridge, copy_packet_source, WORKER_ID as PACKET_WORKER
 from .coordinator_window import (CoordinatorIndex, from_existing_workstation,
                                  freshly_reverify_linked_jobs, run_exact_linked_job)
 from .cp_motion import admit_research, one_cp_handoff, workstation_cp_view
@@ -33,6 +34,12 @@ SOURCES = (
      "nih_ontology_example.json", copy_ontology_source, NIHOntologyBridge),
     ("NIH-P1-REASONING", REASON_WORKER, "reasoning-v1", "nih-reasoning-001",
      "nih_reasoning_example.json", copy_reasoning_source, NIHReasoningBridge),
+)
+
+
+PACKET_SPEC = (
+    "NIH-P1-PACKET", PACKET_WORKER, "packet-v1", "nih-packet-001",
+    "nih_packet_example.json", copy_packet_source, NIHPacketBridge,
 )
 
 
@@ -95,7 +102,7 @@ def _game_member(index, data, output, world):
     return game
 
 
-def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False):
+def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False, packet_build: bool = False):
     data, output = Path(data_dir), Path(output_dir)
     data.mkdir(parents=True, exist_ok=True)
     output.mkdir(parents=True, exist_ok=True)
@@ -104,6 +111,19 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False):
     completed = []
     for spec in SOURCES:
         completed.append(_native_temporal_job(data, index, *spec))
+    packet_artifact = None
+    if packet_build:
+        # The source-owned bounded worker writes the new research packet;
+        # the coordinator only publishes its native-reverified artifact.
+        packet_job = _native_temporal_job(data, index, *PACKET_SPEC)
+        completed.append(packet_job)
+        built = _current(data).state(packet_job).output["packet"]
+        packet_artifact = output / "nih-phase1-temporal-design-packet.md"
+        if packet_artifact.exists() and packet_artifact.read_text(encoding="utf8") != built["markdown"]:
+            raise ValueError("published packet differs from native worker's artifact")
+        packet_artifact.write_text(built["markdown"], encoding="utf8")
+        (output / "nih-phase1-packet-summary.json").write_text(
+            json.dumps(built["summary"], sort_keys=True, indent=2) + "\n", encoding="utf8")
     world = json.loads((INPUTS / "game_build_world_next.json").read_text(encoding="utf8"))
     game = _game_member(index, data, output, world)
     if browser_witness:
@@ -125,13 +145,20 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False):
     required = {"NIH-P1-SCOPE", "NIH-P1-ONTOLOGY", "NIH-P1-REASONING"}
     if not required.issubset(set(graph["witnessed"])):
         raise ValueError("real temporal scope->ontology->reasoning did not advance in CP graph")
-    if "NIH-P1-PACKET" not in graph["frontier"]:
+    if packet_build:
+        if "NIH-P1-PACKET" not in graph["witnessed"]:
+            raise ValueError("bounded packet BUILD did not advance its actual CP")
+        if "NIH-P2-PROTOTYPE" not in graph["frontier"]:
+            raise ValueError("prototype should be next admissible research build")
+    elif "NIH-P1-PACKET" not in graph["frontier"]:
         raise ValueError("temporal Phase 1 packet should become admissible after reasoning")
-    if any(x in graph["witnessed"] for x in (
-          "NIH-P1-PACKET", "NIH-P2-PROTOTYPE", "NIH-P2-TEST",
-          "GAME-W13-WORLDS", "GAME-WORKER-READY", "NIH-P1-AWARD")):
+    forbidden = {"NIH-P2-PROTOTYPE", "NIH-P2-TEST",
+                 "GAME-W13-WORLDS", "GAME-WORKER-READY", "NIH-P1-AWARD"}
+    if not packet_build:
+        forbidden.add("NIH-P1-PACKET")
+    if forbidden.intersection(graph["witnessed"]):
         raise ValueError("synthetic tests incorrectly promoted unperformed work")
-    if len(_current(data).snapshot()) != 4:
+    if len(_current(data).snapshot()) != (5 if packet_build else 4):
         raise ValueError("NIH and game did not share one native runtime")
     report = {
         "schema": "nih-temporal-game-complete-stack/v1",
@@ -140,7 +167,7 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False):
         "exact_nih_jobs": completed,
         "native_game_build_job": GAME_JOB,
         "witnessed_nih_phase_1": sorted(required),
-        "next_phase_1": "NIH-P1-PACKET",
+        "next_phase_1": "NIH-P1-SUBMISSION-EXTERNAL" if packet_build else "NIH-P1-PACKET",
         "game_world": game["world_id"],
         "game_native_build": game["BUILD_native_execution"],
         "game_native_witness": game["WITNESS_native_w12"],
@@ -154,6 +181,13 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False):
         "one_native_workstation": True,
         "separate_native_source_verifiers": True,
     }
+    if packet_build:
+        report["packet_worker"] = PACKET_WORKER
+        report["packet_job"] = "nih-packet-001"
+        report["packet_artifact"] = packet_artifact.name
+        report["packet_native_witness"] = "PASS"
+        report["official_submission"] = False
+        report["next_prototype"] = "NIH-P2-PROTOTYPE"
     (output / "complete-stack-temporal-game.json").write_text(
         json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf8")
     (output / "temporal-cp-frontier.json").write_text(
@@ -166,9 +200,10 @@ def main(argv=None):
     p.add_argument("--data-dir", required=True, type=Path)
     p.add_argument("--output-dir", required=True, type=Path)
     p.add_argument("--browser-witness", action="store_true")
+    p.add_argument("--build-packet", action="store_true")
     a = p.parse_args(argv)
     print(json.dumps(join(data_dir=a.data_dir, output_dir=a.output_dir,
-                          browser_witness=a.browser_witness), indent=2, sort_keys=True))
+                          browser_witness=a.browser_witness, packet_build=a.build_packet), indent=2, sort_keys=True))
     return 0
 
 
