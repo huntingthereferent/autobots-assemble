@@ -1,0 +1,6 @@
+{
+  "kind": "synthetic-phase1-design-packet/v1",
+  "synthetic": true,
+  "packet_id": "temporal-evidence-design-001",
+  "reasoning_job_id": "nih-reasoning-001"
+}

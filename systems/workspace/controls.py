@@ -25,6 +25,11 @@ from .integrated_attestation_verifier import validate_request
 from .integrated_route_bridge import IntegratedRouteBridge, VERIFIER as ROUTE_VERIFIER
 from .integrated_route_verifier import validate_route_request
 from .nih_scope_bridge import NIHScopeBridge, WORKER_ID as NIH_SCOPE_ID
+# Keep the NIH packet/RDF implementation LAZY: unrelated W13 and game-only
+# workstation runners must not acquire rdflib as a global import dependency.
+NIH_PACKET_ID = "nih-phase1-packet"
+NIH_PACKET_FILE = "packet_worker.py"
+NIH_PACKET_VERIFIER = "cp-checker:NIH-P1-PACKET"
 from .nih_scope_native import validate_scope, VERIFIER as NIH_SCOPE_VERIFIER
 from .nih_scope_bridge import SOURCE_FILE as NIH_SCOPE_SOURCE_FILE
 from .game_w13_native_bridge import GameW13NativeBridge, WORKER_ID as GAME_W13_ID, SOURCE_FILE as GAME_W13_FILE
@@ -39,7 +44,7 @@ NIH_ONTO_ID = 'nih-temporal-ontology'
 NIH_ONTO_VERIFIER = 'cp-checker:NIH-P1-ONTOLOGY'
 NIH_REASON_ID = 'nih-temporal-reasoning'
 NIH_REASON_VERIFIER = 'cp-checker:NIH-P1-REASONING'
-EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, GAME_W13_ID, GAME_BUILD_ID}
+EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, NIH_PACKET_ID, GAME_W13_ID, GAME_BUILD_ID}
 
 
 def _data_root(path: str | Path) -> Path:
@@ -89,6 +94,15 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             raise ValueError("CP30 signature verification requires --inputs-file")
         required = frozenset(("finite_process_attestation.py",))
         payload = _cp30_inputs(inputs_file)
+    elif worker_id == NIH_PACKET_ID:
+        if inputs_file is None:
+            raise ValueError("NIH local packet preparation requires exact JSON")
+        file = Path(inputs_file)
+        if not file.is_file() or file.is_symlink() or file.stat().st_size > 4096:
+            raise ValueError("NIH packet request must be ordinary JSON <=4 KiB")
+        from .nih_packet_native import validate_packet_request
+        required = frozenset((NIH_PACKET_FILE,))
+        payload = validate_packet_request(json.loads(file.read_text(encoding="utf8")))
     elif worker_id == NIH_REASON_ID:
         if inputs_file is None:
             raise ValueError("NIH reasoning preparation requires --inputs-file")
@@ -144,6 +158,7 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             "source_modified_from_copy": bool(info["modified"] or info["added"] or info["deleted"]),
             "operation": "finite-required-edge-prefilter" if worker_id == FINITE_ID
                          else "integrated-cp30-ed25519-verification" if worker_id == INTEGRATED_ID
+                         else "nih-p1-local-temporal-design-packet" if worker_id == NIH_PACKET_ID
                          else "nih-p1-synthetic-rdf-reasoning" if worker_id == NIH_REASON_ID
                          else "nih-p1-synthetic-rdf-ontology" if worker_id == NIH_ONTO_ID
                          else "build-new-playable-world-room" if worker_id == GAME_BUILD_ID
@@ -253,6 +268,11 @@ def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
         if verifier != GAME_W13_VERIFIER:
             raise ValueError("unsupported game W13 native verifier")
         return GameW13NativeBridge(runtime=runtime, workstation=desk)
+    if worker_id == NIH_PACKET_ID:
+        if verifier != NIH_PACKET_VERIFIER:
+            raise ValueError("unsupported NIH packet native verifier")
+        from .nih_packet_bridge import NIHPacketBridge
+        return NIHPacketBridge(runtime=runtime, workstation=desk)
     if worker_id == NIH_REASON_ID:
         if verifier != NIH_REASON_VERIFIER:
             raise ValueError("unsupported NIH reasoning verifier")
@@ -308,7 +328,7 @@ def run_job(*, data_dir: str | Path, job_id: str,
         raise ValueError("not a supported workstation job")
     bridge = _bridge(runtime, root, worker, handoff.metadata.get("native_evidence_verifier"))
     state = runtime.state(job_id)
-    if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, GAME_W13_ID, GAME_BUILD_ID):
+    if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, NIH_PACKET_ID, GAME_W13_ID, GAME_BUILD_ID):
         if handoff.metadata.get("source_system") != "process-workstation":
             raise ValueError("selected local worker job source does not match")
         if state.status == "READY":

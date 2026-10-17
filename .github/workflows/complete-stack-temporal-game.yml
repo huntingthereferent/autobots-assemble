@@ -3,12 +3,20 @@ on:
   pull_request:
     paths:
       - 'systems/workspace/nih_temporal_game_stack.py'
+      - 'systems/workspace/nih_packet_*.py'
+      - 'systems/workspace/nih_packet_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/fixtures/nih_packet_example.json'
       - 'network/tests/test_nih_temporal_game_stack.py'
       - '.github/workflows/complete-stack-temporal-game.yml'
   push:
     branches: [main]
     paths:
       - 'systems/workspace/nih_temporal_game_stack.py'
+      - 'systems/workspace/nih_packet_*.py'
+      - 'systems/workspace/nih_packet_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/fixtures/nih_packet_example.json'
       - 'network/tests/test_nih_temporal_game_stack.py'
       - '.github/workflows/complete-stack-temporal-game.yml'
 permissions:
@@ -44,7 +52,8 @@ jobs:
           python -m systems.workspace.nih_temporal_game_stack \
             --data-dir "$RUNNER_TEMP/complete-stack-workstation" \
             --output-dir "$RUNNER_TEMP/complete-stack-artifacts" \
-            --browser-witness
+            --browser-witness \
+            --build-packet
           python - <<'PY'
           import json, os
           from pathlib import Path
@@ -53,14 +62,20 @@ jobs:
           assert result["game_browser_witness"]=="PASS"
           assert result["phase_2_test"]=="BLOCKED"
           assert result["one_native_workstation"] and result["synthetic_only"]
-          assert len(result["witnessed_nih_phase_1"])==3
+          assert len(result["witnessed_nih_phase_1"])==4
+          assert result["packet_native_witness"]=="PASS"
+          assert result["next_prototype"]=="NIH-P2-PROTOTYPE"
+          assert result["official_submission"] is False
+          draft=(source/"nih-phase1-temporal-design-packet.md").read_text()
+          assert "## Temporal benchmark cases" in draft
+          assert "Not an NIH submission" in draft
           PY
           tar -czf "$RUNNER_TEMP/complete-stack-artifacts/shared-native-workstation.tar.gz" \
             -C "$RUNNER_TEMP/complete-stack-workstation" \
             runtime.jsonl coordinator-windows.jsonl workstation world-request.json
           sha256sum "$RUNNER_TEMP/complete-stack-artifacts/shared-native-workstation.tar.gz" \
             > "$RUNNER_TEMP/complete-stack-artifacts/shared-native-workstation.sha256"
-      - name: Publish actual NIH worker observations, new playable game and shared journal
+      - name: Publish built Phase 1 packet, temporal evidence, new playable game and shared journal
         if: always()
         uses: actions/upload-artifact@v4
         with:
