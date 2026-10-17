@@ -16,7 +16,6 @@ from tempfile import TemporaryDirectory
 
 from .nih_scope_native import validate_scope
 from .nih_reasoning_native import validate_request as validate_reasoning
-from .nih_packet_native import validate_packet_request
 
 CP_ID="NIH-P2-PROTOTYPE"
 WORKER_ROLE="temporal-build"
@@ -69,14 +68,11 @@ def verify_prototype(artifact,*,request,scope,reasoning_request,packet_summary,o
     req=validate_proto_request(request)
     scope=validate_scope(scope)
     reason=validate_reasoning(reasoning_request)
-    packet=validate_packet_request({
-        "kind":"synthetic-phase1-design-packet/v1","synthetic":True,
-        "packet_id":packet_summary["packet_id"],
-        "reasoning_job_id":req["reasoning_job_id"]})
-    if packet["packet_id"]!=req["packet_job_id"] and packet_summary["packet_id"]!=req.get("packet_id"):
-        # A packet job ID identifies the *job*, not the research-design packet name.
-        # Cross-check exact job ancestry in the owning bridge, not a name coincidence.
-        pass
+    # The owning native bridge checks the exact packet job and its reasoning
+    # ancestor. This host verifier checks source-content claims, not job names.
+    if (type(packet_summary) is not dict
+            or type(packet_summary.get("packet_id")) is not str):
+        raise ValueError("verified research packet summary required")
     if type(artifact) is not dict or set(artifact)!={
         "kind","prototype_id","python_source","dataset_json","readme_md","examples"}:
         raise ValueError("prototype BUILD response fields differ")
