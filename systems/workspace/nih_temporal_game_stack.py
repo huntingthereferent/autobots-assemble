@@ -20,6 +20,8 @@ from .nih_scope_bridge import NIHScopeBridge, copy_scope_source, WORKER_ID as SC
 from .nih_ontology_bridge import NIHOntologyBridge, copy_ontology_source, WORKER_ID as ONTO_WORKER
 from .nih_reasoning_bridge import NIHReasoningBridge, copy_reasoning_source, WORKER_ID as REASON_WORKER
 from .nih_packet_bridge import NIHPacketBridge, copy_packet_source, WORKER_ID as PACKET_WORKER
+from .nih_prototype_bridge import NIHPrototypeBridge, copy_proto_source, WORKER_ID as PROTO_WORKER
+from .nih_prototype_native import verify_prototype
 from .coordinator_window import (CoordinatorIndex, from_existing_workstation,
                                  freshly_reverify_linked_jobs, run_exact_linked_job)
 from .cp_motion import admit_research, one_cp_handoff, workstation_cp_view
@@ -40,6 +42,12 @@ SOURCES = (
 PACKET_SPEC = (
     "NIH-P1-PACKET", PACKET_WORKER, "packet-v1", "nih-packet-001",
     "nih_packet_example.json", copy_packet_source, NIHPacketBridge,
+)
+
+
+PROTOTYPE_SPEC = (
+    "NIH-P2-PROTOTYPE", PROTO_WORKER, "prototype-v1", "nih-prototype-001",
+    "nih_prototype_example.json", copy_proto_source, NIHPrototypeBridge,
 )
 
 
@@ -102,8 +110,11 @@ def _game_member(index, data, output, world):
     return game
 
 
-def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False, packet_build: bool = False):
+def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False,
+         packet_build: bool = False, prototype_build: bool = False):
     data, output = Path(data_dir), Path(output_dir)
+    if prototype_build and not packet_build:
+        raise ValueError("Phase 2 prototype requires original verified Phase 1 packet")
     data.mkdir(parents=True, exist_ok=True)
     output.mkdir(parents=True, exist_ok=True)
     index = CoordinatorIndex(data / "coordinator-windows.jsonl")
@@ -124,6 +135,32 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False, pac
         packet_artifact.write_text(built["markdown"], encoding="utf8")
         (output / "nih-phase1-packet-summary.json").write_text(
             json.dumps(built["summary"], sort_keys=True, indent=2) + "\n", encoding="utf8")
+    prototype_artifact = None
+    prototype_native_report = None
+    if prototype_build:
+        prototype_job = _native_temporal_job(data, index, *PROTOTYPE_SPEC)
+        completed.append(prototype_job)
+        built = _current(data).state(prototype_job).output["prototype"]
+        exact = _current(data).get(prototype_job).inputs
+        prototype_native_report = verify_prototype(
+            built, request=exact["request"], scope=exact["scope"],
+            reasoning_request=exact["reasoning_request"],
+            packet_summary=exact["packet_summary"],
+            ontology_sha256=exact["ontology_sha256"])
+        prototype_artifact = output / "temporal_query.py"
+        published = (
+            ("temporal_query.py", built["python_source"]),
+            ("temporal_dataset.json", built["dataset_json"]),
+            ("temporal_prototype_README.md", built["readme_md"]),
+        )
+        for filename, text in published:
+            dest = output / filename
+            if dest.exists() and dest.read_text(encoding="utf8") != text:
+                raise ValueError("existing prototype artifact differs from source-owned native BUILD")
+            dest.write_text(text,encoding="utf8")
+        (output / "temporal_prototype_witness.json").write_text(
+            json.dumps(prototype_native_report,sort_keys=True,indent=2) + "\n",
+            encoding="utf8")
     world = json.loads((INPUTS / "game_build_world_next.json").read_text(encoding="utf8"))
     game = _game_member(index, data, output, world)
     if browser_witness:
@@ -145,22 +182,29 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False, pac
     required = {"NIH-P1-SCOPE", "NIH-P1-ONTOLOGY", "NIH-P1-REASONING"}
     if packet_build:
         required.add("NIH-P1-PACKET")
+    if prototype_build:
+        required.add("NIH-P2-PROTOTYPE")
     if not required.issubset(set(graph["witnessed"])):
         raise ValueError("real temporal scope->ontology->reasoning did not advance in CP graph")
     if packet_build:
         if "NIH-P1-PACKET" not in graph["witnessed"]:
             raise ValueError("bounded packet BUILD did not advance its actual CP")
-        if "NIH-P2-PROTOTYPE" not in graph["frontier"]:
+        if prototype_build:
+            if "NIH-P2-PROTOTYPE" not in graph["witnessed"]:
+                raise ValueError("prototype did not advance its own native CP")
+        elif "NIH-P2-PROTOTYPE" not in graph["frontier"]:
             raise ValueError("prototype should be next admissible research build")
     elif "NIH-P1-PACKET" not in graph["frontier"]:
         raise ValueError("temporal Phase 1 packet should become admissible after reasoning")
-    forbidden = {"NIH-P2-PROTOTYPE", "NIH-P2-TEST",
+    forbidden = {"NIH-P2-TEST",
                  "GAME-W13-WORLDS", "GAME-WORKER-READY", "NIH-P1-AWARD"}
     if not packet_build:
         forbidden.add("NIH-P1-PACKET")
+    if not prototype_build:
+        forbidden.add("NIH-P2-PROTOTYPE")
     if forbidden.intersection(graph["witnessed"]):
         raise ValueError("synthetic tests incorrectly promoted unperformed work")
-    if len(_current(data).snapshot()) != (5 if packet_build else 4):
+    if len(_current(data).snapshot()) != (6 if prototype_build else 5 if packet_build else 4):
         raise ValueError("NIH and game did not share one native runtime")
     report = {
         "schema": "nih-temporal-game-complete-stack/v1",
@@ -183,6 +227,15 @@ def join(*, data_dir: Path, output_dir: Path, browser_witness: bool = False, pac
         "one_native_workstation": True,
         "separate_native_source_verifiers": True,
     }
+    if prototype_build:
+        report["prototype_worker"] = PROTO_WORKER
+        report["prototype_job"] = "nih-prototype-001"
+        report["prototype_native_witness"] = "PASS"
+        report["prototype_artifact"] = prototype_artifact.name
+        report["prototype_hidden_queries"] = prototype_native_report["hidden_queries_verified"]
+        report["prototype_static_leakage_examples"] = prototype_native_report["leakage_examples"]
+        report["phase_2_prototype"] = "WITNESSED"
+        report["phase_2_game_test"] = "BLOCKED"
     if packet_build:
         report["packet_worker"] = PACKET_WORKER
         report["packet_job"] = "nih-packet-001"
@@ -203,9 +256,11 @@ def main(argv=None):
     p.add_argument("--output-dir", required=True, type=Path)
     p.add_argument("--browser-witness", action="store_true")
     p.add_argument("--build-packet", action="store_true")
+    p.add_argument("--build-prototype", action="store_true")
     a = p.parse_args(argv)
     print(json.dumps(join(data_dir=a.data_dir, output_dir=a.output_dir,
-                          browser_witness=a.browser_witness, packet_build=a.build_packet), indent=2, sort_keys=True))
+                          browser_witness=a.browser_witness, packet_build=a.build_packet,
+                          prototype_build=a.build_prototype), indent=2, sort_keys=True))
     return 0
 
 
