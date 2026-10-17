@@ -1,0 +1,85 @@
+name: workstation-w12-game-construction
+on:
+  push:
+    paths:
+      - 'systems/workspace/game_construction.py'
+      - 'network/tests/test_game_construction.py'
+      - 'network/tests/test_game_receipt_compatibility.py'
+      - 'docs/game_preview.html'
+      - 'docs/first_trace.json'
+      - 'evidence/export_success.json'
+      - 'systems/workspace/W12_SOURCE_RESTORATION.md'
+      - '.github/workflows/workstation-w12-game-construction.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/game_construction.py'
+      - 'network/tests/test_game_construction.py'
+      - 'network/tests/test_game_receipt_compatibility.py'
+      - 'docs/game_preview.html'
+      - 'docs/first_trace.json'
+      - 'evidence/export_success.json'
+      - 'systems/workspace/W12_SOURCE_RESTORATION.md'
+      - '.github/workflows/workstation-w12-game-construction.yml'
+  workflow_dispatch:
+
+jobs:
+  archived-w12-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify exact archived W12 source and evidence hashes
+        run: |
+          python - <<'PY'
+          from hashlib import sha256
+          from pathlib import Path
+          expected = {
+            'systems/workspace/game_construction.py': 'dcf457efd0bf9bd93823ad862e8f1f315b20f46334dd323a1d467a820c3f5ac1',
+            'network/tests/test_game_construction.py': '16fc2af47160b28b90cecc77e09a4e5c61766dee2b74e0aa4765c31bda186ce3',
+            'network/tests/test_game_receipt_compatibility.py': '183f8ff5eb243cca260db10b206df36881e1fa69869791b4d5fa0a919c636da5',
+            'docs/game_preview.html': '351aa430f23d5a08d3ec269288f19f2959cb372f81758660682aa5987e506eda',
+            'evidence/export_success.json': '925f94fcedf68c39b5ec10a39982e8a5638e8810f57a83d257e0734845121abb',
+            'docs/first_trace.json': '634b568ca85333c10ef86f4774b7b6cfbe4aa6565bcc775f4e841ddfdc93e5a1',
+          }
+          for name, digest in expected.items():
+              actual = sha256(Path(name).read_bytes()).hexdigest()
+              if actual != digest:
+                  raise SystemExit(f'ARCHIVED W12 FILE CHANGED: {name} {actual} != {digest}')
+              print(f'{name}: byte-preserved SHA-256 PASS')
+          PY
+      - name: Require 32 unchanged W12 tests, no skips
+        run: |
+          python - <<'PY'
+          import unittest
+          from network.tests import test_game_construction, test_game_receipt_compatibility
+          suite = unittest.TestSuite(
+              unittest.defaultTestLoader.loadTestsFromModule(module)
+              for module in (test_game_construction, test_game_receipt_compatibility)
+          )
+          if suite.countTestCases() != 32:
+              raise SystemExit(f'original W12 scope changed: {suite.countTestCases()} != 32')
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('native W12 archive integration regression')
+          PY
+      - name: Replay preserved native success and verify saved browser receipt
+        run: |
+          python -m systems.workspace.game_construction verify --trace docs/first_trace.json
+          python -m systems.workspace.game_construction verify-browser-expanded --receipt evidence/export_success.json
+      - name: Original strict browser receipt must still reject expanded data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.game_construction import verify_browser_receipt
+          receipt = json.loads(Path('evidence/export_success.json').read_text())
+          try:
+              verify_browser_receipt(receipt)
+          except ValueError:
+              print('Original W12 strict verifier correctly rejects extra fields')
+          else:
+              raise SystemExit('Original strict verifier admitted expanded receipt')
+          PY
