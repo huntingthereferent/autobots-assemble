@@ -113,3 +113,26 @@ Do not overwrite the original W12 archive, WORLD source, C1 evidence
 or independently recorded BUILD/WITNESS results.
 
 **Return target:** the existing WORLD window and the human COORDINATOR.
+
+## Recovery correction — later on October 16
+
+The earlier **source archive not recovered** wall above was accurate at the
+time of the coordinator audit but is now **resolved for source recovery**.
+The intact `W12_receipt_compatibility_candidate.zip` was found nested
+inside `game_nih_complete_stack_bridge_v1.zip`, matching the exact
+historical ZIP SHA-256
+`ec6b8b6e7371f7e3e30343af72fa090097e253768205a3aa93f5a064e7905582`.
+Its 33/33 archived manifest and original 32/32 Python tests passed on
+fresh extraction. Source, native regression files and playable browser HTML
+have since been restored on a new GitHub integration branch, keeping their
+original SHA-256 byte identities; see
+[W12 SOURCE RESTORATION](W12_SOURCE_RESTORATION.md).
+
+An **existing** W13 multi-world BUILD candidate and unadmitted WORLD W13
+proposal were also located separately in the source library. Their existence
+does not establish WORLD admission, an integrated browser, independent
+WITNESS, or W13 CP PASS. The next correct move is to connect the original
+WORLD contract to that candidate, rather than inventing a rival W13 project.
+
+This correction **does not erase** the earlier audit or imply that archive
+source recovery automatically certifies GitHub/deployment/browser origin.
