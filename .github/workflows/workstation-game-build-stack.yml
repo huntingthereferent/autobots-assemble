@@ -6,6 +6,7 @@ on:
       - 'systems/workspace/game_build_native.py'
       - 'systems/workspace/game_build_bridge.py'
       - 'systems/workspace/game_build_stack.py'
+      - 'systems/workspace/game_build_browser_witness.py'
       - 'systems/workspace/controls.py'
       - 'network/tests/test_game_build_in_workstation.py'
       - 'network/browser_game_build_stack.py'
@@ -18,6 +19,7 @@ on:
       - 'systems/workspace/game_build_native.py'
       - 'systems/workspace/game_build_bridge.py'
       - 'systems/workspace/game_build_stack.py'
+      - 'systems/workspace/game_build_browser_witness.py'
       - 'systems/workspace/controls.py'
       - 'network/tests/test_game_build_in_workstation.py'
       - 'network/browser_game_build_stack.py'
@@ -56,12 +58,18 @@ jobs:
             --data-dir "$RUNNER_TEMP/game-build-workstation" \
             --output-dir "$RUNNER_TEMP/game-build-output"
           test -s "$RUNNER_TEMP/game-build-output/built-world-room.html"
+      - name: Independent Chromium plays NEW rooms and failure cases
+        run: python -m unittest -v network.browser_game_build_stack
+      - name: Return Chromium WITNESS to the exact game BUILD journal
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.game_build_browser_witness \
+            --data-dir "$RUNNER_TEMP/game-build-workstation" \
+            --output-dir "$RUNNER_TEMP/game-build-output"
           tar -czf "$RUNNER_TEMP/game-build-output/workstation-runtime.tar.gz" \
             -C "$RUNNER_TEMP/game-build-workstation" runtime.jsonl workstation world-request.json
           sha256sum "$RUNNER_TEMP/game-build-output/workstation-runtime.tar.gz" \
             > "$RUNNER_TEMP/game-build-output/workstation-runtime.sha256"
-      - name: Independent Chromium plays NEW rooms and failure cases
-        run: python -m unittest -v network.browser_game_build_stack
       - name: Publish new playable game AND native job journal
         if: always()
         uses: actions/upload-artifact@v4
