@@ -10,7 +10,7 @@ import unittest
 from views.traces.research_live import ROOT, projection, generate, SCHEMA
 from systems.workspace.research_observatory import research_snapshot
 
-PAGE=ROOT/"docs/live/index.html"
+PAGE=ROOT/"docs/live/trace.html"
 
 
 class ScriptParser(html.parser.HTMLParser):
