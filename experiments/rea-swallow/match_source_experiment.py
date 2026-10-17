@@ -38,8 +38,7 @@ def main(action, rea):
             "status":"PENDING_TEST_EXECUTION"}
         out=Path("experiments/rea-swallow/results")
         out.mkdir(parents=True,exist_ok=True)
-        (out/"matching-edition.json").write_text(json.dumps(receipt,indent=2)+"
-")
+        (out/"matching-edition.json").write_text(json.dumps(receipt,indent=2)+chr(10))
         print(json.dumps(receipt))
     elif action == "apply":
         source=rea/REL
