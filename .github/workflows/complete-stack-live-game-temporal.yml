@@ -1,0 +1,73 @@
+name: Complete Stack actual live game-to-temporal query
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/game_temporal_*.py'
+      - 'systems/workspace/game_temporal_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/fixtures/game_temporal_live_example.json'
+      - 'network/tests/test_game_temporal_live_join.py'
+      - '.github/workflows/complete-stack-live-game-temporal.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/game_temporal_*.py'
+      - 'systems/workspace/game_temporal_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/fixtures/game_temporal_live_example.json'
+      - 'network/tests/test_game_temporal_live_join.py'
+      - '.github/workflows/complete-stack-live-game-temporal.yml'
+permissions:
+  contents: read
+jobs:
+  actual-game-to-temporal-cli:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Original native and browser witness dependencies
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Bounded BUILD must produce a game that calls actual temporal CLI
+        run: |
+          python -m unittest -v network.tests.test_game_temporal_live_join
+      - name: Construct once more through original seven-job workstation and browser
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/live-game-temporal-artifacts"
+          python -m systems.workspace.game_temporal_stack \
+            --data-dir "$RUNNER_TEMP/live-game-temporal-workstation" \
+            --output-dir "$RUNNER_TEMP/live-game-temporal-artifacts"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"live-game-temporal-artifacts"
+          result=json.loads((root/"game-temporal-complete-stack.json").read_text())
+          assert result["game_temporal_browser"]=="PASS"
+          assert result["game_to_real_python_queries"]>=5
+          assert result["source_owned_jobs"]==7
+          assert result["formally_witnessed_nih_p2_test"] is False
+          assert "GAME-WORKER-READY" in result["formal_cp_blocked_by"]
+          assert (root/"temporal-game.html").is_file()
+          assert (root/"temporal_bridge_server.py").is_file()
+          assert (root/"game-temporal-query-events.jsonl").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/live-game-temporal-artifacts/actual-native-workstation.tar.gz" \
+            -C "$RUNNER_TEMP/live-game-temporal-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+          sha256sum "$RUNNER_TEMP/live-game-temporal-artifacts/actual-native-workstation.tar.gz" \
+            > "$RUNNER_TEMP/live-game-temporal-artifacts/actual-native-workstation.sha256"
+      - name: Preserve playable temporal game, live source queries and actual journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-game-temporal-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/live-game-temporal-artifacts/
+          retention-days: 30
+          if-no-files-found: warn
