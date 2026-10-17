@@ -25,8 +25,11 @@ from .integrated_attestation_verifier import validate_request
 from .integrated_route_bridge import IntegratedRouteBridge, VERIFIER as ROUTE_VERIFIER
 from .integrated_route_verifier import validate_route_request
 from .nih_scope_bridge import NIHScopeBridge, WORKER_ID as NIH_SCOPE_ID
-from .nih_packet_bridge import NIHPacketBridge, WORKER_ID as NIH_PACKET_ID, SOURCE_FILE as NIH_PACKET_FILE
-from .nih_packet_native import validate_packet_request, VERIFIER as NIH_PACKET_VERIFIER
+# Keep the NIH packet/RDF implementation LAZY: unrelated W13 and game-only
+# workstation runners must not acquire rdflib as a global import dependency.
+NIH_PACKET_ID = "nih-phase1-packet"
+NIH_PACKET_FILE = "packet_worker.py"
+NIH_PACKET_VERIFIER = "cp-checker:NIH-P1-PACKET"
 from .nih_scope_native import validate_scope, VERIFIER as NIH_SCOPE_VERIFIER
 from .nih_scope_bridge import SOURCE_FILE as NIH_SCOPE_SOURCE_FILE
 from .game_w13_native_bridge import GameW13NativeBridge, WORKER_ID as GAME_W13_ID, SOURCE_FILE as GAME_W13_FILE
@@ -97,6 +100,7 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
         file = Path(inputs_file)
         if not file.is_file() or file.is_symlink() or file.stat().st_size > 4096:
             raise ValueError("NIH packet request must be ordinary JSON <=4 KiB")
+        from .nih_packet_native import validate_packet_request
         required = frozenset((NIH_PACKET_FILE,))
         payload = validate_packet_request(json.loads(file.read_text(encoding="utf8")))
     elif worker_id == NIH_REASON_ID:
@@ -267,6 +271,7 @@ def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
     if worker_id == NIH_PACKET_ID:
         if verifier != NIH_PACKET_VERIFIER:
             raise ValueError("unsupported NIH packet native verifier")
+        from .nih_packet_bridge import NIHPacketBridge
         return NIHPacketBridge(runtime=runtime, workstation=desk)
     if worker_id == NIH_REASON_ID:
         if verifier != NIH_REASON_VERIFIER:
