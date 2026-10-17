@@ -220,7 +220,7 @@ class W13NativeWorkstationTests(unittest.TestCase):
             reverify_job(data_dir=self.root,job_id="game-w13-01")
         self.assertNotIn(CP_ID,self.cp(fresh=True)["witnessed"])
 
-    def test_18_forged_PASS_without_host_native proof_rejected(self):
+    def test_18_forged_PASS_without_host_native_proof_rejected(self):
         handoff=self.admit()
         real=run_source(SOURCE_DIRECTORY,self.inputs)
         real["receipt"]["worlds"][1]["final"]["collected"]=False
