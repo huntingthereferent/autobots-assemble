@@ -8,8 +8,8 @@ const kinds = ["javascript-module", "source-module", "package", "endpoint", "unk
 const h = (i: number) => i.toString(16).padStart(64,"0");
 
 function makeNode(seed: number, i: number, side: number): ApplicationNode {
-  const kind = kinds[(seed + i * 3 + side) % kinds.length]!;
-  const group = (i * 7 + Math.floor(seed/3) + (side * (seed % 4))) % 6;
+  const group = (Math.floor(i / 2) + Math.floor(seed / 3) + side * (seed % 3)) % 4;
+  const kind = kinds[(seed + group) % kinds.length]!;
   const sameId = (seed % 5 === 0);
   const node_id = (sameId ? "shared-" : side === 0 ? "L-" : "R-") + i;
   const mode = (seed + i + side) % 3;
@@ -55,6 +55,7 @@ function pairsToOutput(left: ApplicationNode[], right: ApplicationNode[]) {
 describe("REA version-matcher A/B relation transpose",()=>{
   it("preserves 2048 typed synthetic source relation comparisons and inverse candidate sets",()=>{
     const records=[];
+    let ambiguousCases=0;
     for(let seed=0;seed<512;seed++){
       const countL=seed%7, countR=Math.floor(seed/7)%7;
       const left=Array.from({length:countL},(_,i)=>makeNode(seed,i,0));
@@ -64,11 +65,13 @@ describe("REA version-matcher A/B relation transpose",()=>{
           const l=reverseLeft?[...left].reverse():left;
           const r=reverseRight?[...right].reverse():right;
           const outcome=pairsToOutput(l,r);
+          if (outcome.leftCandidates.length > 0 && outcome.rightCandidates.length > 0) ambiguousCases++;
           records.push({seed,reverseLeft,reverseRight,outcome});
         }
       }
     }
     expect(records.length).toBe(2048);
+    expect(ambiguousCases).toBeGreaterThan(20);
     const output=process.env.REA_AB_MATCH_OUTPUT;
     if(output){
       mkdirSync(dirname(output),{recursive:true});
