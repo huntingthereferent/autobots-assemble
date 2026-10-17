@@ -59,7 +59,7 @@ def compose(quakes: list[SourceObservation], github: SourceObservation,
         reverse=True,
     )
     stable_values = {
-        "usgs": [{"id": q.source_id, "payload": q.payload, "updated": str(q.source_updated_at)} for q in quakes],
+        "usgs": [{"id": q.source_id, "payload": q.payload, "updated": str(q.source_updated_at)} for q in sorted(quakes, key=lambda q: q.source_id)],
         "github": github.payload, "pypi": pypi.payload,
         "match": [(e.kind, e.value, e.weight) for e in relation.evidence],
     }
