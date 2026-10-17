@@ -1,0 +1,58 @@
+name: workstation-w13-native-cp-worker
+on:
+  push:
+    paths:
+      - 'systems/workspace/game_w13_worker_source/**'
+      - 'systems/workspace/game_w13_native.py'
+      - 'systems/workspace/game_w13_native_bridge.py'
+      - 'systems/workspace/game_w13_native_cli.py'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_game_w13_native_cp_worker.py'
+      - 'network/tests/fixtures/game_w13_native_cp_example.json'
+      - 'systems/workspace/GAME_W13_NATIVE_CP_WORKER.md'
+      - '.github/workflows/workstation-w13-native-cp-worker.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/game_w13_worker_source/**'
+      - 'systems/workspace/game_w13_native.py'
+      - 'systems/workspace/game_w13_native_bridge.py'
+      - 'systems/workspace/game_w13_native_cli.py'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_game_w13_native_cp_worker.py'
+      - 'network/tests/fixtures/game_w13_native_cp_example.json'
+      - 'systems/workspace/GAME_W13_NATIVE_CP_WORKER.md'
+      - '.github/workflows/workstation-w13-native-cp-worker.yml'
+  workflow_dispatch:
+jobs:
+  game-w13-cp-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install existing native workstation Ed25519 runtime dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Require 21 actual GAME W13 source-owned native CP tests
+        run: |
+          python - <<'PY'
+          import unittest
+          from network.tests import test_game_w13_native_cp_worker
+          suite=unittest.defaultTestLoader.loadTestsFromModule(test_game_w13_native_cp_worker)
+          if suite.countTestCases()!=21:
+              raise SystemExit(f'exact W13 CP-native case count changed: {suite.countTestCases()}')
+          result=unittest.TextTestRunner(verbosity=2).run(suite)
+          if not result.wasSuccessful() or result.skipped:
+              raise SystemExit('W13 native source-copy, admission, execution or independent reverify failed')
+          PY
+      - name: Preserve coordinator CP gates and original W12/W13 replay
+        run: |
+          python -m unittest -v \
+            network.tests.test_cp_motion \
+            network.tests.test_coordinator_window \
+            network.tests.test_workstation_controls \
+            network.tests.test_game_construction \
+            network.tests.test_game_receipt_compatibility \
+            network.tests.test_game_w13_independent_witness \
+            network.tests.test_game_w13_cp_preflight

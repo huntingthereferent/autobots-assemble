@@ -1,0 +1,43 @@
+{
+  "contract": "game-w13-multiworld-v1",
+  "worlds": [
+    {
+      "id": "first-room",
+      "spec": {
+        "width": 4,
+        "height": 3,
+        "start": [
+          0,
+          1
+        ],
+        "target": [
+          2,
+          1
+        ]
+      }
+    },
+    {
+      "id": "second-room",
+      "spec": {
+        "width": 3,
+        "height": 3,
+        "start": [
+          0,
+          0
+        ],
+        "target": [
+          1,
+          1
+        ]
+      }
+    }
+  ],
+  "actions": [
+    "right",
+    "interact",
+    "advance",
+    "right",
+    "interact"
+  ],
+  "w12_sha256": "dcf457efd0bf9bd93823ad862e8f1f315b20f46334dd323a1d467a820c3f5ac1"
+}
