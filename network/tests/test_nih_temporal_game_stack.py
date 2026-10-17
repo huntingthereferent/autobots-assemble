@@ -83,6 +83,69 @@ class NIHTemporalGameStackTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             join(data_dir=self.data,output_dir=self.out,packet_build=True)
 
+    def test_07_real_runnable_phase2_prototype_consumes_verified_phase1(self):
+        import json
+        import subprocess
+        import sys
+        result=join(data_dir=self.data,output_dir=self.out,
+                    packet_build=True,prototype_build=True)
+        self.assertEqual(result["phase_2_prototype"],"WITNESSED")
+        self.assertEqual(result["phase_2_game_test"],"BLOCKED")
+        self.assertEqual(result["prototype_native_witness"],"PASS")
+        self.assertGreater(result["prototype_hidden_queries"],0)
+        self.assertGreater(result["prototype_static_leakage_examples"],0)
+        self.assertNotIn("NIH-P2-PROTOTYPE",result["phase_2_test_blocked_by"])
+        self.assertEqual(len(result["witnessed_nih_phase_1"]),5)
+        runtime=HandoffRuntime(event_store=RuntimeJournal(self.data/"runtime.jsonl"))
+        child=runtime.get("nih-prototype-001")
+        self.assertEqual(child.dependencies,("nih-reasoning-001","nih-packet-001"))
+        self.assertEqual(runtime.state(child.handoff_id).status,"COMPLETE")
+        self.assertEqual(len(runtime.snapshot()),6)
+        source=self.out/"temporal_query.py"
+        dataset=self.out/"temporal_dataset.json"
+        self.assertTrue(source.is_file())
+        self.assertTrue(dataset.is_file())
+        def query(known,target):
+            r=subprocess.run([sys.executable,str(source),str(dataset)],
+                             input=json.dumps({"known_at":known,"target_at":target}),
+                             text=True,capture_output=True,timeout=5,check=True)
+            return json.loads(r.stdout)
+        before=query("2026-01-04","2026-01-04")
+        after=query("2026-01-06","2026-01-04")
+        self.assertEqual(before["temporal_ids"],["prior-note"])
+        self.assertEqual(before["static_snapshot_ids"],["delayed-result","prior-note"])
+        self.assertEqual(before["future_leakage_ids"],["delayed-result"])
+        self.assertEqual(after["future_leakage_ids"],[])
+        self.assertIn("delayed-result",after["temporal_ids"])
+        self.assertEqual(before["clinical_verdict"],"NOT_EVALUATED")
+
+    def test_08_prototype_restart_reuses_original_workstation_jobs(self):
+        first=join(data_dir=self.data,output_dir=self.out,
+                   packet_build=True,prototype_build=True)
+        journal=(self.data/"runtime.jsonl").read_bytes()
+        index=(self.data/"coordinator-windows.jsonl").read_bytes()
+        second=join(data_dir=self.data,output_dir=self.out,
+                    packet_build=True,prototype_build=True)
+        self.assertEqual(first,second)
+        self.assertEqual(journal,(self.data/"runtime.jsonl").read_bytes())
+        self.assertEqual(index,(self.data/"coordinator-windows.jsonl").read_bytes())
+
+    def test_09_unverified_prototype_source_cannot_replay(self):
+        join(data_dir=self.data,output_dir=self.out,
+             packet_build=True,prototype_build=True)
+        from systems.workspace.workstation import ProcessWorkstation
+        desk=ProcessWorkstation(self.data/"workstation")
+        source=desk._edition("nih-temporal-prototype","prototype-v1")/"prototype_worker.py"
+        source.write_text(source.read_text(encoding="utf8")+"\n# untrusted edit\n",encoding="utf8")
+        with self.assertRaises(ValueError):
+            join(data_dir=self.data,output_dir=self.out,
+                 packet_build=True,prototype_build=True)
+
+    def test_10_prototype_refuses_missing_packet_parent(self):
+        with self.assertRaises(ValueError):
+            join(data_dir=self.data,output_dir=self.out,
+                 packet_build=False,prototype_build=True)
+
     def test_03_damaged_temporal_source_refuses_inherited_success(self):
         join(data_dir=self.data, output_dir=self.out)
         from systems.workspace.workstation import ProcessWorkstation

@@ -1,0 +1,7 @@
+{
+  "kind": "synthetic-temporal-prototype/v1",
+  "synthetic": true,
+  "prototype_id": "synthetic-bitemporal-cli-001",
+  "reasoning_job_id": "nih-reasoning-001",
+  "packet_job_id": "nih-packet-001"
+}
