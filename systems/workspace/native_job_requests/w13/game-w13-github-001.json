@@ -1,0 +1,14 @@
+{
+  "contract": "game-w13-owner-merged-one-shot-v1",
+  "checkpoint": "GAME-W13-WORLDS",
+  "job_id": "game-w13-github-001",
+  "worker_id": "game-worlds-w13",
+  "source_version": "w13-github-v1",
+  "worker_git_blob": "54d847dadda9b5fd10297e2e88ee65bea9be2ad1",
+  "fixture_git_blob": "645819b70f022feee7b54e764f3d438c8e45f4c1",
+  "authorizes_copy": true,
+  "authorizes_admit": true,
+  "authorizes_execute": true,
+  "execution_scope": "one-finite-original-WORLD-W13-two-room-job",
+  "activation": "one-new-file-in-protected-main-owner-merge"
+}

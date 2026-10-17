@@ -1,0 +1,203 @@
+# An owner's protected-main merge containing a NEW exact request file triggers
+# precisely one finite original W13 native job. Never on PRs, forks, or tests.
+name: workstation-w13-owner-merged-one-shot
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/native_job_requests/w13/game-w13-github-001.json'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: w13-one-shot-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  native-w13-committed-request:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    env:
+      W13_JOB_ID: game-w13-github-001
+      W13_SOURCE_VERSION: w13-github-v1
+      W13_REQUEST: systems/workspace/native_job_requests/w13/game-w13-github-001.json
+      W13_FIXTURE: network/tests/fixtures/game_w13_native_cp_example.json
+    steps:
+      - name: Checkout exact protected-main merge
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Python for original W13 native worker
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Verify owner and exact newly merged source-pinned authorization
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, os, re, subprocess
+          from pathlib import Path
+          request_path = Path(os.environ['W13_REQUEST'])
+          expected = {
+              'contract':'game-w13-owner-merged-one-shot-v1',
+              'checkpoint':'GAME-W13-WORLDS',
+              'job_id':'game-w13-github-001',
+              'worker_id':'game-worlds-w13',
+              'source_version':'w13-github-v1',
+              'worker_git_blob':'54d847dadda9b5fd10297e2e88ee65bea9be2ad1',
+              'fixture_git_blob':'645819b70f022feee7b54e764f3d438c8e45f4c1',
+              'authorizes_copy':True,'authorizes_admit':True,'authorizes_execute':True,
+              'execution_scope':'one-finite-original-WORLD-W13-two-room-job',
+              'activation':'one-new-file-in-protected-main-owner-merge',
+          }
+          if (os.environ.get('GITHUB_EVENT_NAME') != 'push'
+                  or os.environ.get('GITHUB_REF') != 'refs/heads/main'
+                  or os.environ.get('GITHUB_ACTOR') != os.environ.get('GITHUB_REPOSITORY_OWNER')):
+              raise SystemExit('only owner-authored protected-main push may authorize a native job')
+          if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,79}', os.environ['W13_JOB_ID']):
+              raise SystemExit('unsafe job ID')
+          sha = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          if sha != os.environ['GITHUB_SHA']:
+              raise SystemExit('checkout does not match GitHub event commit')
+          parents = subprocess.check_output(['git','rev-list','--parents','-n','1',sha],text=True).split()
+          if len(parents) != 3:
+              raise SystemExit('authorization must enter via a two-parent protected-main merge')
+          changes = subprocess.check_output([
+              'git','diff','--name-status',parents[1],sha,'--',
+              'systems/workspace/native_job_requests/w13/'
+          ],text=True).strip()
+          if changes != 'A\t'+request_path.as_posix():
+              raise SystemExit('require one and only one NEW exact W13 request on main')
+          if not request_path.is_file() or request_path.is_symlink():
+              raise SystemExit('source-owned W13 request missing or unsafe')
+          if json.loads(request_path.read_text(encoding='utf8')) != expected:
+              raise SystemExit('request differs from exact committed source/consent contract')
+          for path, recorded in (
+              ('systems/workspace/game_w13_worker_source/game_worlds_worker.py',expected['worker_git_blob']),
+              (os.environ['W13_FIXTURE'], expected['fixture_git_blob']),
+          ):
+              blob = subprocess.check_output(['git','hash-object',path],text=True).strip()
+              if blob != recorded:
+                  raise SystemExit(f'source bytes changed from explicitly authorized Git blob: {path}')
+          print('GITHUB OWNER MERGED ONE NEW AUTHORIZATION; ORIGINAL SOURCE PINNED')
+          PY
+
+      - name: Create isolated GitHub-runner workstation data root
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/game-w13-native" "$RUNNER_TEMP/game-w13-evidence"
+          printf 'DATA_DIR=%s\n' "$RUNNER_TEMP/game-w13-native" >> "$GITHUB_ENV"
+          printf 'EVIDENCE_DIR=%s\n' "$RUNNER_TEMP/game-w13-evidence" >> "$GITHUB_ENV"
+
+      - name: Install existing native cryptographic runtime dependency
+        run: python -m pip install 'cryptography>=45,<47'
+
+      - name: Copy and explicitly admit only authorized original W13 game job
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.cp_motion --data-dir "$DATA_DIR" admit-research \
+            > "$EVIDENCE_DIR/intake.json"
+          python -m systems.workspace.game_w13_native_cli --data-dir "$DATA_DIR" \
+            copy --version "$W13_SOURCE_VERSION" --confirm-copy \
+            > "$EVIDENCE_DIR/source-copy.json"
+          python -m systems.workspace.game_w13_native_cli --data-dir "$DATA_DIR" \
+            prepare --version "$W13_SOURCE_VERSION" --inputs-file "$W13_FIXTURE" \
+            > "$EVIDENCE_DIR/prepare.json"
+          python -m systems.workspace.game_w13_native_cli --data-dir "$DATA_DIR" \
+            admit --version "$W13_SOURCE_VERSION" --inputs-file "$W13_FIXTURE" \
+            --job-id "$W13_JOB_ID" --confirm-admit "$W13_JOB_ID" \
+            --from-actor "github-owner-$GITHUB_ACTOR" > "$EVIDENCE_DIR/admission.json"
+          python -m systems.workspace.coordinator_window --data-dir "$DATA_DIR" \
+            bind-job --lane game --slot cp-game-w13-worlds --job-id "$W13_JOB_ID" \
+            --worker-id game-worlds-w13 --version "$W13_SOURCE_VERSION"
+
+      - name: Execute exactly one native W13 job
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.coordinator_window --data-dir "$DATA_DIR" \
+            run-linked --lane game --slot cp-game-w13-worlds \
+            --confirm-execute "$W13_JOB_ID" > "$EVIDENCE_DIR/execution.json"
+
+      - name: Independently verify original W12 native replay and checkpoint motion
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.controls --data-dir "$DATA_DIR" \
+            reverify --job-id "$W13_JOB_ID" > "$EVIDENCE_DIR/native-reverify.json"
+          python -m systems.workspace.cp_motion --data-dir "$DATA_DIR" \
+            handoff --reverify > "$EVIDENCE_DIR/cp-handoff.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          evidence=Path(os.environ['EVIDENCE_DIR'])
+          job=os.environ['W13_JOB_ID']
+          executed=json.loads((evidence/'execution.json').read_text())
+          verified=json.loads((evidence/'native-reverify.json').read_text())
+          handoff=json.loads((evidence/'cp-handoff.json').read_text())
+          cp=handoff['cp_automation']
+          states={row['checkpoint']:row['state'] for row in cp['checkpoints']}
+          if executed.get('job_id')!=job or executed.get('status')!='COMPLETE':
+              raise SystemExit('native source job did not complete')
+          if (verified.get('job_id')!=job or verified.get('status')!='COMPLETE'
+                  or verified.get('reverified') is not True or verified.get('executed') is not False):
+              raise SystemExit('fresh source-owned native W13 verifier did not pass')
+          if (states.get('GAME-W13-WORLDS')!='WITNESSED'
+                  or states.get('GAME-NATIVE-VERIFIER')!='ADMISSIBLE'
+                  or 'GAME-W13-WORLDS' not in cp['witnessed']
+                  or 'GAME-NATIVE-VERIFIER' not in cp['frontier']
+                  or handoff.get('native_reverification_requested') is not True):
+              raise SystemExit('checkpoint motion not supported by admitted native job')
+          verdict={'native_job_id':job,'native_status':'COMPLETE',
+                   'native_reverify':'PASS','cp':'GAME-W13-WORLDS',
+                   'cp_state':'WITNESSED','next':'GAME-NATIVE-VERIFIER',
+                   'scope':'this finite original WORLD W13 two-room native session only'}
+          (evidence/'verdict.json').write_text(json.dumps(verdict,indent=2,sort_keys=True)+'\n')
+          print('GAME-W13-WORLDS WITNESSED by this native job; NEXT CP ADMISSIBLE')
+          PY
+
+      - name: Preserve original native runtime and merged authorization evidence
+        run: |
+          set -euo pipefail
+          cp "$W13_REQUEST" "$EVIDENCE_DIR/authorization.json"
+          tar -czf "$EVIDENCE_DIR/native-runtime.tar.gz" -C "$DATA_DIR" \
+            workstation runtime.jsonl coordinator-windows.jsonl
+          sha256sum "$EVIDENCE_DIR/native-runtime.tar.gz" > "$EVIDENCE_DIR/native-runtime.sha256"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os,subprocess
+          evidence=Path(os.environ['EVIDENCE_DIR'])
+          metadata={
+              'repository':os.environ['GITHUB_REPOSITORY'],
+              'head_sha':os.environ['GITHUB_SHA'],
+              'event':os.environ['GITHUB_EVENT_NAME'],
+              'owner_actor':os.environ['GITHUB_ACTOR'],
+              'job_id':os.environ['W13_JOB_ID'],
+              'run_id':os.environ['GITHUB_RUN_ID'],
+              'run_attempt':os.environ['GITHUB_RUN_ATTEMPT'],
+              'authorization_path':os.environ['W13_REQUEST'],
+              'worker_git_blob':subprocess.check_output([
+                  'git','hash-object','systems/workspace/game_w13_worker_source/game_worlds_worker.py'
+              ],text=True).strip(),
+              'fixture_git_blob':subprocess.check_output([
+                  'git','hash-object',os.environ['W13_FIXTURE']
+              ],text=True).strip(),
+          }
+          (evidence/'provenance.json').write_text(json.dumps(metadata,sort_keys=True,indent=2)+'\n')
+          PY
+
+      - name: Archive actual W13 one-shot native evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: w13-owner-merged-native-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/game-w13-evidence/
+          retention-days: 30
+          if-no-files-found: warn
