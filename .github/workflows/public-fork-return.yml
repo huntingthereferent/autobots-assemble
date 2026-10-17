@@ -1,0 +1,67 @@
+name: Public GitHub fork and return witness
+
+on:
+  pull_request:
+    paths:
+      - 'views/traces/fork_return.py'
+      - 'views/traces/test_fork_return.py'
+      - '.github/workflows/public-fork-return.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'views/traces/fork_return.py'
+      - 'views/traces/test_fork_return.py'
+      - '.github/workflows/public-fork-return.yml'
+  workflow_dispatch:
+  schedule:
+    - cron: '37 5 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: public-fork-return-observations
+  cancel-in-progress: false
+
+jobs:
+  source-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify source identity, return, and unresolved boundaries
+        run: python -m unittest -v views.traces.test_fork_return
+      - name: Fetch original public GitHub witnesses
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m views.traces.fork_return --refresh
+      - name: Commit dated source projection to main
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add views/traces/return-latest.json views/traces/RETURN_LATEST.md
+          if git diff --cached --quiet; then
+            echo "No new GitHub witness observation"
+            exit 0
+          fi
+          git commit -m "Record source-native GitHub fork and return observations"
+          for attempt in 1 2 3; do
+            git fetch origin main
+            if git diff --name-only HEAD origin/main | grep -E '^(views/traces/fork_return\\.py|views/traces/test_fork_return\\.py|\.github/workflows/public-fork-return\\.yml)$'; then
+              echo "Source implementation changed during collection"
+              exit 1
+            fi
+            if ! git rebase origin/main; then git rebase --abort; exit 1; fi
+            if git push origin HEAD:main; then exit 0; fi
+            sleep 2
+          done
+          exit 1
