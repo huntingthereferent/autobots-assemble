@@ -10,6 +10,9 @@ on:
       - 'network/tests/test_game_w13_native_cp_worker.py'
       - 'network/tests/fixtures/game_w13_native_cp_example.json'
       - 'systems/workspace/GAME_W13_NATIVE_CP_WORKER.md'
+      - 'systems/workspace/GAME_W13_GITHUB_NATIVE_ADMISSION.md'
+      - 'network/tests/test_game_w13_github_native_workflow.py'
+      - '.github/workflows/workstation-w13-github-native-admission.yml'
       - '.github/workflows/workstation-w13-native-cp-worker.yml'
   pull_request:
     paths:
@@ -21,6 +24,9 @@ on:
       - 'network/tests/test_game_w13_native_cp_worker.py'
       - 'network/tests/fixtures/game_w13_native_cp_example.json'
       - 'systems/workspace/GAME_W13_NATIVE_CP_WORKER.md'
+      - 'systems/workspace/GAME_W13_GITHUB_NATIVE_ADMISSION.md'
+      - 'network/tests/test_game_w13_github_native_workflow.py'
+      - '.github/workflows/workstation-w13-github-native-admission.yml'
       - '.github/workflows/workstation-w13-native-cp-worker.yml'
   workflow_dispatch:
 jobs:
