@@ -17,6 +17,11 @@ on:
       - 'systems/workspace/GAME_W13_GITHUB_OWNER_MERGE.md'
       - '.github/workflows/workstation-w13-owner-merged-one-shot.yml'
       - 'network/tests/test_game_w13_owner_merged_one_shot.py'
+      - 'systems/workspace/github_w13_continuation.py'
+      - 'systems/workspace/GAME_W13_CROSS_RUN_CONTINUATION.md'
+      - 'systems/workspace/native_job_requests/w13/continue-w13-39025574748.json'
+      - 'network/tests/test_github_w13_continuation.py'
+      - '.github/workflows/workstation-w13-cross-run-continuation.yml'
       - '.github/workflows/workstation-w13-native-cp-worker.yml'
   pull_request:
     paths:
@@ -35,6 +40,11 @@ on:
       - 'systems/workspace/GAME_W13_GITHUB_OWNER_MERGE.md'
       - '.github/workflows/workstation-w13-owner-merged-one-shot.yml'
       - 'network/tests/test_game_w13_owner_merged_one_shot.py'
+      - 'systems/workspace/github_w13_continuation.py'
+      - 'systems/workspace/GAME_W13_CROSS_RUN_CONTINUATION.md'
+      - 'systems/workspace/native_job_requests/w13/continue-w13-39025574748.json'
+      - 'network/tests/test_github_w13_continuation.py'
+      - '.github/workflows/workstation-w13-cross-run-continuation.yml'
       - '.github/workflows/workstation-w13-native-cp-worker.yml'
   workflow_dispatch:
 jobs:
@@ -60,6 +70,8 @@ jobs:
           if not result.wasSuccessful() or result.skipped:
               raise SystemExit('W13 native source-copy, admission, execution or independent reverify failed')
           PY
+      - name: Reject tampered cross-run journals and unearned CP branches
+        run: python -m unittest -v network.tests.test_github_w13_continuation
       - name: Preserve coordinator CP gates and original W12/W13 replay
         run: |
           python -m unittest -v \
