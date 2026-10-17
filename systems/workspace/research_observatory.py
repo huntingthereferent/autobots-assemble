@@ -98,8 +98,8 @@ def _documented_marks(root:Path, inventory:list[str]) -> list[dict]:
     no interpretation of free prose or broad keyword-based result counting.
     """
     marks=[]
-    wall=re.compile(r"^(?:wall|walls|current wall|new wall|remaining walls|open wall)\\b",re.I)
-    move=re.compile(r"^(?:movement|next movement|next single movement|world w\\d+.*movement|build movement|observed movement)\\b",re.I)
+    wall=re.compile(r"^(?:wall|walls|current wall|new wall|remaining walls|open wall)\b",re.I)
+    move=re.compile(r"^(?:movement|next movement|next single movement|world w\d+.*movement|build movement|observed movement)\b",re.I)
     for rel in inventory:
         if not rel.endswith(".md"):
             continue
@@ -107,7 +107,7 @@ def _documented_marks(root:Path, inventory:list[str]) -> list[dict]:
         if path.is_symlink() or path.stat().st_size>MAX_BYTES:
             continue
         for number,line in enumerate(path.read_text(encoding="utf-8").splitlines(),1):
-            m=re.match(r"^#{1,5}\\s+(.{2,160})\\s*$",line)
+            m=re.match(r"^#{1,5}\s+(.{2,160})\s*$",line)
             if not m:
                 continue
             heading=m.group(1).strip()
