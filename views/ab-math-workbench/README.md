@@ -38,7 +38,17 @@ rea analyze-javascript-application /absolute/path/to/your-app --json > /tmp/rea-
 python -m tools.ab_math_workbench rea-evidence /tmp/rea-evidence.json --output /tmp/rea-reference.json
 ```
 
-The second command keeps the original `evidence_id`, analysis profile, advertised coverage, limitations, unknowns and a digest of the **full** source bytes, while preserving the original REA Evidence file for detailed study. Ingestion is limited to 128 MiB for this first local tool; REA itself may emit a larger record. This script does not execute inspected application code, call REA by itself, update workstation state, or authenticate a modified Evidence record.
+Or run the same documented static scan and preserve both output files in one explicit command (output directories must exist; existing files are not overwritten):
+
+```bash
+python -m tools.rea_ab_bridge /absolute/path/to/your-app \\
+  --evidence-output /tmp/rea-evidence.json \\
+  --reference-output /tmp/rea-reference.json
+```
+
+The bridge invokes an **already installed** `rea` CLI on the specified JS/Electron directory or ASAR. It does not install software, run analysis automatically, or modify the application. The command is not tested against a real installed REA provider in this branch; regression tests use a simulated successful REA CLI process.
+
+The second command keeps the original `evidence_id`, analysis profile, advertised coverage, limitations, unknowns and a digest of the **full** source bytes, while preserving the original REA Evidence file for detailed study. Ingestion is limited to 128 MiB for this first local tool; REA itself may emit a larger record. The math workbench only reads saved Evidence; the optional REA bridge calls the CLI for an explicitly selected target. Neither creates a verified mathematical relationship, updates workstation state, or authenticates a manually modified Evidence record.
 
 REA has separate workflows for tracing features and comparing application versions. A mathematical claim about observed software requires *another explicit step*: select a specific edge and admissible source authority, define the proposed mathematical state/action relation, and verify a commuting map or produce a counterexample. Until that is implemented and witnessed, **the boundary is open**, rather than reported as completed.
 
@@ -51,4 +61,4 @@ REA has separate workflows for tracing features and comparing application versio
 
 ## Sources
 
-[Mathematical contract](../../work/arc_like_maze/README.md) · [Engine code](../../work/arc_like_maze/window_family.py) · [REA source](https://github.com/morluto/rea) · [REA cross-layer Evidence documentation](https://github.com/morluto/rea/blob/main/docs/javascript-application-workflows.md) · [Code](../../tools/ab_math_workbench.py) · [Tests](../../network/tests/test_ab_math_workbench.py)
+[Mathematical contract](../../work/arc_like_maze/README.md) · [Engine code](../../work/arc_like_maze/window_family.py) · [REA source](https://github.com/morluto/rea) · [REA cross-layer Evidence documentation](https://github.com/morluto/rea/blob/main/docs/javascript-application-workflows.md) · [Math code](../../tools/ab_math_workbench.py) · [REA bridge](../../tools/rea_ab_bridge.py) · [Tests](../../network/tests/test_ab_math_workbench.py)
