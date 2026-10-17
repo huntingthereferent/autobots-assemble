@@ -1,0 +1,91 @@
+"""Original evidence and browser program checks for the source-root trace surface."""
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import html.parser
+import json
+import shutil
+import subprocess
+import unittest
+
+from views.traces.research_live import ROOT, projection, generate, SCHEMA
+from systems.workspace.research_observatory import research_snapshot
+
+PAGE=ROOT/"docs/live/index.html"
+
+
+class ScriptParser(html.parser.HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.scripts=[]
+        self.active=False
+        self.buf=""
+    def handle_starttag(self,tag,attrs):
+        if tag=="script":
+            self.active=True
+            self.buf=""
+    def handle_data(self,data):
+        if self.active:self.buf+=data
+    def handle_endtag(self,tag):
+        if tag=="script" and self.active:
+            self.scripts.append(self.buf)
+            self.active=False
+
+
+class LiveTraceSourceTests(unittest.TestCase):
+    def test_real_workstation_projection_not_fake_execs(self):
+        data=projection(research_snapshot())
+        self.assertEqual(data["schema"],SCHEMA)
+        self.assertGreater(len(data["records"]),5)
+        self.assertGreater(len(data["walls"]),1)
+        self.assertTrue(any(x["path"]=="research/dives/ARC3-TRACE-001/dive.json"
+                            and x["state"]=="MOVE_WITH_WALL" for x in data["records"]))
+        self.assertTrue(any(x["source_type"]=="CHECKPOINT" and "CP-0030" in x["path"]
+                            for x in data["records"]))
+        self.assertTrue(any(x["kind"]=="source-recorded-wall" for x in data["walls"]))
+        self.assertNotIn("synthetic",json.dumps(data["records"]).lower())
+
+    def test_bad_record_source_rejected(self):
+        with self.assertRaises(ValueError):
+            projection({"schema":"invented","source_records":[]})
+
+    def test_generation_keeps_original_records(self):
+        f=ROOT/"research/dives/ARC3-TRACE-001/dive.json"
+        before=f.read_bytes()
+        with TemporaryDirectory() as d:
+            out=Path(d)/"projection.json"
+            actual=generate(out)
+            self.assertEqual(json.loads(out.read_text(encoding="utf8")),actual)
+        self.assertEqual(before,f.read_bytes())
+
+    def test_browser_traces_real_public_git_parent_and_ci_identity(self):
+        source=PAGE.read_text(encoding="utf8")
+        self.assertIn("GitHub lists the first SHA as an ancestor",source)
+        self.assertIn('e.type==="commit-parent"',source)
+        self.assertIn('e.type==="ci-head-sha"',source)
+        self.assertIn("c.parents.map(p=>p.sha)",source)
+        self.assertIn("x.head_sha",source)
+        self.assertIn("inSet.has(e.from)",source)
+        self.assertIn("requestAnimationFrame",source)
+        self.assertIn("refresh()",source)
+        self.assertIn('setInterval(()=>{if(!document.hidden)refresh()},FETCH_EVERY)',source)
+        self.assertIn("No event assumed",source)
+        self.assertIn("SOURCE UNAVAILABLE",source)
+        self.assertNotIn("work_state.json",source)
+        self.assertNotIn("10 DOMAINS",source)
+        self.assertNotIn("15 recorded jobs",source)
+
+    @unittest.skipUnless(shutil.which("node"),"Node.js needed for browser syntax lint")
+    def test_browser_javascript_is_syntactically_valid(self):
+        page=PAGE.read_text(encoding="utf8")
+        parser=ScriptParser()
+        parser.feed(page)
+        self.assertEqual(len(parser.scripts),1)
+        with TemporaryDirectory() as d:
+            script=Path(d)/"trace-page.js"
+            script.write_text(parser.scripts[0],encoding="utf8")
+            result=subprocess.run(["node","--check",str(script)],capture_output=True,text=True,timeout=15)
+            self.assertEqual(result.returncode,0,result.stderr)
+
+
+if __name__=="__main__":
+    unittest.main()
