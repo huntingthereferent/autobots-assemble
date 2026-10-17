@@ -9,7 +9,7 @@ This is a **browser-executable page**, not a prerecorded SVG in a GitHub README.
 
 ## What actually moves
 
-The page obtains recent commits and completed workflow runs from GitHub's public API **when opened and every two minutes while the tab is visible**. The default root is the oldest observed commit in the recent 24-commit sample, not the origin of all work. The viewer can choose another observed root.
+The page obtains recent commits and completed workflow runs from GitHub's public API **when opened and every three minutes while the tab is visible**. The default root is the oldest observed commit in the recent 24-commit sample, not the origin of all work. The viewer can choose another observed root.
 
 Each directed edge is made only from a native relationship:
 
