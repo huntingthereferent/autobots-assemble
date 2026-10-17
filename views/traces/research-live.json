@@ -7,91 +7,117 @@
       "label": "ARC-AGI-3 causal reasoning trace",
       "state": "MOVE_WITH_WALL",
       "source_type": "RESEARCH_DIVE",
-      "scope": "User-directed research record; original result state"
+      "scope": "User-directed research record; original result state",
+      "next": "Freeze the evidence-gated G2.3 typed-program mechanism (SB26 public regression 8/8, 124 actions). Move to the next unsolved public failure and infer its task representation from live causal evidence; do not widen SB26-specific assumptions.",
+      "boundary": ""
     },
     {
       "path": "work/arc_like_maze/chatbot/checkpoints/CP-0027.json",
       "label": "Multi-task source dependency propagation",
       "state": "witnessed",
       "source_type": "CHECKPOINT",
-      "scope": "Historical checkpoint summary; external archive may be unavailable"
+      "scope": "Historical checkpoint summary; external archive may be unavailable",
+      "next": "Explore whether one freshly audited route certificate can be reused by multiple independent tasks without merging their requirements.",
+      "boundary": "Tasks skipped by dependency selection retain historical results, not currently replayed proof. The complete integrated owner-bound chatbot is in a separate archive; the standalone finite checker does not authenticate owners."
     },
     {
       "path": "work/arc_like_maze/chatbot/checkpoints/CP-0028.json",
       "label": "Shared fresh route certificate across tasks",
       "state": "witnessed",
       "source_type": "CHECKPOINT",
-      "scope": "Historical checkpoint summary; external archive may be unavailable"
+      "scope": "Historical checkpoint summary; external archive may be unavailable",
+      "next": "Test a separately specified cross-invocation certificate handoff that revalidates source identity and never inherits another task's obligations or stale status.",
+      "boundary": "Reuse applies only within one invocation and exact pinned route identity. The owner-backed runtime is in the local ZIP; GitHub's standalone finite reference does not authenticate owners."
     },
     {
       "path": "work/arc_like_maze/chatbot/checkpoints/CP-0029.json",
       "label": "Cross-invocation certificate handoff",
       "state": "witnessed",
       "source_type": "CHECKPOINT",
-      "scope": "Historical checkpoint summary; external archive may be unavailable"
+      "scope": "Historical checkpoint summary; external archive may be unavailable",
+      "next": "Investigate separately verifiable owner and source-pin attestations for an independent-process receiver; withhold proof when identity cannot be authenticated.",
+      "boundary": "The portable receipt is historical evidence, not an authenticated authority. Owner checks remain in-process, and each receiving invocation must freshly replay its route."
     },
     {
       "path": "work/arc_like_maze/chatbot/checkpoints/CP-0030.json",
       "label": "Independent-process source attestations",
       "state": "witnessed",
       "source_type": "CHECKPOINT",
-      "scope": "Historical checkpoint summary; external archive may be unavailable"
+      "scope": "Historical checkpoint summary; external archive may be unavailable",
+      "next": "Test independently governed trust-anchor enrollment, key rotation and challenge-use accounting across processes; withhold proof where a signer authority cannot be established.",
+      "boundary": "The independently running signer and verifier use ephemeral pre-enrolled synthetic Ed25519 keys. This does not establish a real external owner's identity, key custody or trust enrollment. Full owner runtime remains in a separate ZIP."
     },
     {
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-001_ls20_inverse-action-calibration.json",
       "label": "LS20 inverse-action calibration",
       "state": "SUPPORTED_FORWARD_MATCH_CALIBRATION",
       "source_type": "EXPERIMENT",
-      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+      "scope": "Recorded experiment result; not automatically a workstation MOVE",
+      "next": "",
+      "boundary": ""
     },
     {
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-002_bp35_inverse-schema-transfer.json",
       "label": "BP35 cross-environment transfer attempt",
       "state": "PARTIAL_DIRECTIONAL_SEMANTIC_TRANSFER",
       "source_type": "EXPERIMENT",
-      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+      "scope": "Recorded experiment result; not automatically a workstation MOVE",
+      "next": "",
+      "boundary": "WALL_MISSING_CROSS_ENV_ACTION_CORRESPONDENCE"
     },
     {
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-003_ls20_recursive-forward-match.json",
       "label": "LS20 same-environment recursive forward match",
       "state": "SUPPORTED_SAME_ENV_RECURSIVE_FORWARD_MATCH",
       "source_type": "EXPERIMENT",
-      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+      "scope": "Recorded experiment result; not automatically a workstation MOVE",
+      "next": "",
+      "boundary": ""
     },
     {
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-004_ls20_witness-compression.json",
       "label": "LS20 witness compression by prediction partition",
       "state": "SUPPORTED_WITNESS_COMPRESSION",
       "source_type": "EXPERIMENT",
-      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+      "scope": "Recorded experiment result; not automatically a workstation MOVE",
+      "next": "Implement a generic prediction-partition selector and compare it with a simpler exploration policy on held-out replay segments or live public play.",
+      "boundary": ""
     },
     {
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-005_ls20_selector-validation.json",
       "label": "LS20 retrospective selector validation",
       "state": "SUPPORTED_SELECTOR_RETROSPECTIVE_VALIDATION",
       "source_type": "EXPERIMENT",
-      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+      "scope": "Recorded experiment result; not automatically a workstation MOVE",
+      "next": "Find a held-out decision where selector ranking differs from the recorded exploratory action and test whether the alternative would resolve more candidate relations.",
+      "boundary": ""
     },
     {
       "path": "research/dives/ARC3-TRACE-001/experiments/FM-006_ka59_level-preservation-gate.json",
       "label": "KA59 level-boundary preservation gate",
       "state": "SUPPORTED_LEVEL_BOUNDARY_PRESERVATION_GATE",
       "source_type": "EXPERIMENT",
-      "scope": "Recorded experiment result; not automatically a workstation MOVE"
+      "scope": "Recorded experiment result; not automatically a workstation MOVE",
+      "next": "Run the gate and selector on a replay level boundary with explicit early competing correspondences.",
+      "boundary": ""
     },
     {
       "path": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
       "label": "📍 ARC3-100 — first-contact discovery-inclusive 100%",
       "state": "UNCLASSIFIED",
       "source_type": "PIN",
-      "scope": "Pinned or historical original; not a presently assigned task"
+      "scope": "Pinned or historical original; not a presently assigned task",
+      "next": "Give ChatGPT an authorized execution surface with Python 3.12, git, internet for initial ARC setup, and the official ARC-AGI-3 starter/runtime.",
+      "boundary": "Kaggle credentials should be placed on the machine by the user, not pasted into chat."
     },
     {
       "path": "state/pins/GEMS-001_2026-10-03.json",
       "label": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
       "state": "MOVE_WITH_WALL",
       "source_type": "PIN",
-      "scope": "Pinned or historical original; not a presently assigned task"
+      "scope": "Pinned or historical original; not a presently assigned task",
+      "next": "Verify the exact GEMS-specific competition-data sharing/third-party-service rule; then run the local baseline through the downloaded-data/output contract before changing models.",
+      "boundary": "User explicitly pinned the active GEMS work before moving the current referent to a separate impressive tracing target."
     }
   ],
   "walls": [
@@ -193,7 +219,7 @@
     }
   ],
   "source_totals": {
-    "source_files": 1374,
+    "source_files": 1378,
     "structured_records": 14,
     "original_wall_entries": 4,
     "documented_wall_headings": 12
