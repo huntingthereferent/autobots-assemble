@@ -1,0 +1,8 @@
+{
+  "kind": "synthetic-live-game-temporal-join/v1",
+  "synthetic": true,
+  "cutover_turn": 2,
+  "known_at_before": "2026-01-04",
+  "known_at_after": "2026-01-06",
+  "target_at": "2026-01-04"
+}
