@@ -1,0 +1,18 @@
+{
+  "schema": "finite-ab-convergence/v1",
+  "left_word": "BBAA",
+  "right_word": "ABABB",
+  "target": [
+    2,
+    2,
+    1
+  ],
+  "initial": [
+    0,
+    0,
+    0
+  ],
+  "states_explored": 14,
+  "source": "work/arc_like_maze/math.py",
+  "witness": "systems/workspace/ab_relational_cluster.py::_independent_step"
+}
