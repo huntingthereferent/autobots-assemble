@@ -12,7 +12,6 @@ import hashlib
 import json
 from pathlib import Path
 import sys
-from xml.sax.saxutils import escape
 
 from work.arc_like_maze.window_family import (
     ClassifiedWindow,
@@ -35,11 +34,6 @@ def survey() -> dict:
     """Exhaust the currently declared 12-world family, not all A/B laws."""
     members = family()
     certificate = certify_family()
-    if certificate.status != "CERTIFIED":
-        # Report the actual certificate rather than silently assuming success.
-        certification_status = certificate.status
-    else:
-        certification_status = "CERTIFIED"
     worlds = [
         {
             "id": _world_id(w),
@@ -91,7 +85,7 @@ def survey() -> dict:
         "owner": MATHEMATICAL_OWNER,
         "scope": "12 constructed WindowProcess worlds over F_3; no general A/B theorem",
         "certificate": asdict(certificate),
-        "certificate_status": certification_status,
+        "certificate_status": certificate.status,
         "worlds": worlds,
         "movements": movements,
         "walls": walls,
@@ -156,9 +150,9 @@ def inspect_rea_evidence(path: Path) -> dict:
     The original Evidence file remains authoritative. A digest binds this small
     projection to the exact bytes, including omitted or unknown fields.
     """
-    raw = path.read_bytes()
-    if len(raw) > 128 * 1024 * 1024:
+    if path.stat().st_size > 128 * 1024 * 1024:
         raise ValueError("REA Evidence input exceeds 128 MiB local intake limit")
+    raw = path.read_bytes()
     document = json.loads(raw)
     if not isinstance(document, dict) or not isinstance(document.get("evidence_id"), str) or "normalized_result" not in document:
         raise ValueError("expected a REA Evidence envelope with evidence_id and normalized_result")
@@ -187,6 +181,10 @@ def inspect_rea_evidence(path: Path) -> dict:
 
 def render_svg(survey_record: dict) -> str:
     """Self-contained GitHub-renderable diagram of actual declared movements."""
+    by_id = {world["id"]: world for world in survey_record["worlds"]}
+    expected = {f"k{k}c{c}" for k in range(4) for c in range(3)}
+    if set(by_id) != expected:
+        raise ValueError("SVG requires exactly the declared 12-world survey")
     parts = [
         '<svg xmlns="http://www.w3.org/2000/svg" width="960" height="745" viewBox="0 0 960 745">',
         '<rect width="960" height="745" fill="#101825"/>',
@@ -208,7 +206,8 @@ def render_svg(survey_record: dict) -> str:
                 parts.append(f'<path d="M{x + 72} {y} H{x + 198}" stroke="#76bdff" stroke-width="2"/>')
             parts.append(f'<rect x="{x - 72}" y="{y - 35}" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>')
             parts.append(f'<text x="{x}" y="{y - 5}" fill="#f2f6ff" font-weight="bold">k{k} c{c}</text>')
-            parts.append(f'<text x="{x}" y="{y + 19}" fill="#afcbe6">fixed B: {(3-k)*3}</text>')
+            actual_fixed = by_id[f"k{k}c{c}"]["fixed_B_depth_3"]
+            parts.append(f'<text x="{x}" y="{y + 19}" fill="#afcbe6">fixed B: {actual_fixed}</text>')
             if k == 3:
                 parts.append(f'<text x="{x}" y="{y + 58}" fill="#ffad9f">WALL ↓</text>')
         parts.append(f'<path d="M{235 + 2*270 + 72} {y-9} h24 v18 h-24" fill="none" stroke="#76bdff" stroke-width="2"/>')
