@@ -1,0 +1,48 @@
+name: world-continuity-public-observation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 */6 * * *"
+  push:
+    paths:
+      - ".github/workflows/world-continuity.yml"
+      - "views/world-continuity/render.py"
+      - "views/world-continuity/test_render.py"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: world-continuity-public-observation
+  cancel-in-progress: false
+
+jobs:
+  collect-public-observations:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Reuse existing public-data-monitor adapters
+        run: python -m pip install -e ./work/projects/public-data-monitor
+      - name: Independently test the view before polling
+        run: python -m unittest discover -s views/world-continuity -p "test_*.py" -v
+      - name: Fetch the three existing public sources and project observations
+        run: python views/world-continuity/render.py --execute
+      - name: Commit source-linked view in one GitHub commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add views/world-continuity/latest.json views/world-continuity/latest.svg views/world-continuity/LATEST.md views/world-continuity/checks.jsonl
+          if git diff --staged --quiet; then
+            echo "No new observation output."
+          else
+            git commit -m "Observe public world sources in existing continuity view"
+            git push
+          fi
