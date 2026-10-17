@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1050" height="1010" viewBox="0 0 1050 1010" role="img" aria-labelledby="title desc">
+<title id="title">James Muneoka — visual provenance concept</title>
+<desc id="desc">Illustrative GitHub research visual showing independent lanes, a source witness, subsequent movement, scoped evidence, and preserved open boundaries. Not live data.</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#101c25"/><stop offset="1" stop-color="#0d1117"/></linearGradient><linearGradient id="accent"><stop stop-color="#6bd8cf"/><stop offset="1" stop-color="#8cb1ef"/></linearGradient></defs>
+<rect width="1050" height="1010" fill="#0d1117"/>
+<rect x="20" y="20" width="1010" height="968" rx="16" fill="url(#bg)" stroke="#364451" stroke-width="2"/>
+<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif">
+<text x="54" y="62" font-size="14" fill="#78dccd" letter-spacing="3">RESEARCH · OBSERVATION · CONTINUITY</text>
+<text x="54" y="125" font-size="49" fill="#e6edf3" font-weight="700">James Muneoka<tspan fill="#78d3d1">.</tspan></text>
+<text x="54" y="159" font-size="16" fill="#b2c1cd">Investigating relationships through movement, correction, and change.</text>
+<text x="54" y="181" font-size="16" fill="#b2c1cd">Observations, finite mathematical models, witnesses, and open questions.</text>
+<rect x="839" y="56" width="157" height="133" rx="16" fill="#172a33" stroke="#3c6770"/>
+<text x="916" y="119" font-size="31" text-anchor="middle" fill="#7cddd9" font-weight="700" font-family="Consolas,monospace">A↔B</text>
+<text x="916" y="146" font-size="12" text-anchor="middle" fill="#9db4c4" font-family="monospace">LANGUAGE</text>
+<text x="916" y="163" font-size="12" text-anchor="middle" fill="#9db4c4" font-family="monospace">REFERENT</text>
+<g font-size="13" font-family="Consolas,monospace">
+<rect x="54" y="210" width="216" height="35" rx="16" fill="#122a2d" stroke="#346b6b"/><text x="69" y="232" fill="#b4e9df">◇ Language Referent</text>
+<rect x="282" y="210" width="196" height="35" rx="16" fill="#231e37" stroke="#625382"/><text x="298" y="232" fill="#d4c5ff">↗ Finite constructions</text>
+<rect x="490" y="210" width="213" height="35" rx="16" fill="#30251a" stroke="#715a39"/><text x="505" y="232" fill="#e9d3a0">⎇ Witnessed relations</text>
+<rect x="715" y="210" width="168" height="35" rx="16" fill="#1d2833" stroke="#485b6c"/><text x="730" y="232" fill="#bfd1df">◌ Open boundaries</text>
+</g>
+<line x1="54" x2="996" y1="278" y2="278" stroke="#33414c"/>
+<text x="54" y="318" font-size="26" font-weight="700" fill="#edf3f8">Visible movement</text>
+<rect x="725" y="295" width="271" height="32" rx="7" fill="#2a241b" stroke="#81683b"/><text x="860" y="315" text-anchor="middle" font-size="12" font-family="monospace" fill="#efcd85">ILLUSTRATIVE · NOT LIVE</text>
+<rect x="54" y="341" width="942" height="240" rx="12" fill="#101d26" stroke="#344f60"/>
+<g stroke-width="2.5" fill="none" stroke-linecap="round">
+<path d="M210 411 C260 411 255 411 310 411" stroke="#73d0c9"/>
+<path d="M210 515 C260 515 255 515 310 515" stroke="#b5a1f5"/>
+<path d="M467 411 C535 411 527 462 604 462" stroke="#73d0c9"/>
+<path d="M467 515 C535 515 527 462 604 462" stroke="#b5a1f5"/>
+<path d="M756 462 L802 462" stroke="#c6d1d9"/>
+</g>
+<g fill="none" stroke="#cedbe4" stroke-width="2.5"><path d="M801 456 l8 6 -8 6"/></g>
+<g font-family="Consolas,monospace" text-anchor="middle">
+<rect x="75" y="379" width="135" height="66" rx="9" fill="#193436" stroke="#377d75"/><text x="142" y="406" font-size="16" fill="#a3e5da" font-weight="bold">LANE A</text><text x="142" y="427" font-size="12" fill="#a7c8c4">observation</text>
+<rect x="75" y="483" width="135" height="66" rx="9" fill="#28213b" stroke="#77639b"/><text x="142" y="509" font-size="16" fill="#d5c1ff" font-weight="bold">LANE B</text><text x="142" y="530" font-size="12" fill="#c1b0de">observation</text>
+<rect x="311" y="379" width="156" height="66" rx="9" fill="#152d35" stroke="#3b7884"/><text x="389" y="406" font-size="14" fill="#b0dde1">independent</text><text x="389" y="427" font-size="12" fill="#9cb6bf">branch evidence</text>
+<rect x="311" y="483" width="156" height="66" rx="9" fill="#251f38" stroke="#65558c"/><text x="389" y="510" font-size="14" fill="#d5c6ff">independent</text><text x="389" y="531" font-size="12" fill="#b7a7cf">branch evidence</text>
+<rect x="605" y="421" width="151" height="82" rx="10" fill="#302a1e" stroke="#a3894d"/><text x="680" y="451" font-size="16" fill="#f5d48e" font-weight="bold">WITNESS</text><text x="680" y="470" font-size="12" fill="#d2c2a2">source check</text><text x="680" y="486" font-size="12" fill="#d2c2a2">and relation</text>
+<rect x="810" y="418" width="167" height="89" rx="10" fill="#1d3039" stroke="#427c91"/><text x="893" y="449" font-size="15" fill="#a1e2ea" font-weight="bold">CONTINUE</text><text x="893" y="472" font-size="11" fill="#d2dae0">supported path</text><text x="893" y="488" font-size="11" fill="#eacb88">or unresolved wall</text>
+</g>
+<text x="75" y="563" font-size="13" font-family="monospace" fill="#90a8b7">Two histories stay separate. Similar labels alone do not prove a join.</text>
+<g font-size="14" fill="#aebbc6">
+<text x="54" y="620"><tspan fill="#ecf5fa" font-weight="700">Origin stays visible</tspan><tspan dx="15">Where and how each observation arose.</tspan></text>
+<text x="54" y="648"><tspan fill="#ecf5fa" font-weight="700">Corrections survive</tspan><tspan dx="15">Older records aren't silently rewritten.</tspan></text>
+<text x="54" y="676"><tspan fill="#ecf5fa" font-weight="700">Unknown stays unknown</tspan><tspan dx="15">A candidate doesn't become proof through design.</tspan></text>
+</g>
+<line x1="54" x2="996" y1="704" y2="704" stroke="#33414c"/>
+<text x="54" y="744" font-size="26" font-weight="700" fill="#edf3f8">Evidence trace</text>
+<g font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Arial,sans-serif">
+<rect x="54" y="766" width="454" height="70" rx="9" fill="#161e28" stroke="#3b4e60"/>
+<text x="72" y="793" font-size="16" font-weight="650" fill="#ecf3f8">B2–B7 · Workstation continuation</text>
+<text x="72" y="817" font-size="13" fill="#a6b8c8">Source history · Native returns · Recheck boundaries</text>
+<rect x="391" y="776" width="102" height="24" rx="7" fill="#173b36"/><text x="442" y="792" font-size="12" text-anchor="middle" fill="#78dfce">SCOPED</text>
+<rect x="527" y="766" width="469" height="70" rx="9" fill="#161e28" stroke="#3b4e60"/>
+<text x="545" y="793" font-size="16" font-weight="650" fill="#ecf3f8">B9–B18 · Native observation</text>
+<text x="545" y="817" font-size="13" fill="#a6b8c8">Route candidates · Signed delivery · Local coordination</text>
+<rect x="885" y="776" width="96" height="24" rx="7" fill="#2e2840"/><text x="933" y="792" font-size="12" text-anchor="middle" fill="#cfb6ff">SCOPED</text>
+<rect x="54" y="849" width="942" height="65" rx="9" fill="#241f20" stroke="#6d5a49"/>
+<text x="72" y="875" font-size="16" font-weight="650" fill="#f1e0d3">Cross-host autonomous cluster</text>
+<text x="72" y="899" font-size="13" fill="#c5b3a4">No automatic inference of independent owner authority or multi-host operation.</text>
+<rect x="864" y="861" width="118" height="24" rx="7" fill="#3b2e18"/><text x="923" y="877" font-size="12" text-anchor="middle" fill="#f1cd83">UNVERIFIED</text>
+</g>
+<text x="54" y="946" font-family="Consolas,monospace" font-size="14" fill="#94aab8">SOURCE → OBSERVATION → RELATION → WITNESS → NEXT ADMISSIBLE STEP</text>
+<text x="54" y="969" font-family="Consolas,monospace" font-size="12" fill="#e6c889">Concept only · NOT live testimony, measured deployment, or current-status verification.</text>
+</g></svg>
