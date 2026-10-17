@@ -359,7 +359,12 @@ function renderResearch() {
         .flatMap(x=>[
           ...(["MOVE","MOVE_WITH_WALL"].includes(x.state) ? [{...x,source_marker:"STRUCTURED_MOVEMENT"}] : []),
           ...x.walls.map((statement,index)=>({...x,source_marker:"STRUCTURED_WALL",statement,index}))
-        ])
+        ]),
+      // Native executions are observations of the SAME movement, not a separate research ontology.
+      ...(current.jobs || []).map(job=>({
+        source_marker:"NATIVE_EXECUTION",path:"~runtime/"+job.job_id,
+        section:"Runtime evidence",job
+      }))
     ].sort((a,b)=>a.path.localeCompare(b.path)||((a.line||0)-(b.line||0)));
   } else if (mode==="inventory") {
     entries=research.sections.filter(x=>!active||x.name===active)
@@ -376,6 +381,16 @@ function renderResearch() {
   const shown=entries.slice(0,researchShown);
   const nodes=shown.map(row=>{
     const card=el("article","entry research-entry");
+    if (row.source_marker==="NATIVE_EXECUTION") {
+      const job=row.job, head=el("div","line");
+      head.append(el("strong","name",job.title),status(job.status));
+      card.append(head,el("p","meta","Native observed runtime · "+(job.worker_id||"source")+" / "+(job.version_id||"edition")),
+        el("p","code","Handoff: "+job.job_id),
+        el("p","minor","Required relationship: "+job.required_relation));
+      if (job.missing_witnesses?.length) card.append(detail("Missing witnesses",job.missing_witnesses));
+      card.append(detail("Original result and evidence",{result:job.result,evidence:job.evidence,verification:job.verification}));
+      return card;
+    }
     if (mode==="inventory") {
       card.append(researchLink(row.path),el("p","meta",row.section+" · indexed source only"));
       return card;
