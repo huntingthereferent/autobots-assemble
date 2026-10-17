@@ -66,6 +66,15 @@ class WorldViewTests(unittest.TestCase):
         self.assertFalse(snap["relationship"]["matched_by_declared_url_rule"])
         self.assertIn("No supported metadata match", render_svg(snap))
 
+    def test_same_feed_content_has_order_independent_digest(self):
+        quakes, github, pypi = sources()
+        other = quakes[0].model_copy(deep=True)
+        other.source_id = "usgs-test-2"
+        other.canonical_key = "event:usgs-test-2"
+        a = compose([quakes[0], other], github, pypi, UTC)
+        b = compose([other, quakes[0]], github, pypi, UTC)
+        self.assertEqual(a["content_sha256"], b["content_sha256"])
+
     def test_bad_source_and_previous_schema_rejected(self):
         quakes, github, pypi = sources()
         github.source = "unknown"
