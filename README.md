@@ -1,5 +1,9 @@
 # Research and engineering experiments
 
+**[↗ ENTER THE SOURCE-DRIVEN TRACE FIELD](https://huntingthereferent.github.io/autobots-assemble/live/)** · [Browser implementation](docs/live/index.html) · [Workstation research projection](views/traces/research-live.json)
+
+The browser display follows actual GitHub commit ancestry and exact CI-run source identities, updating its movement field and numbers when observed events change. Its research view reads source-owned workstation records; this is a verified first integration, not yet a live cross-domain A/B trace engine.
+
 **James Muneoka · Independent research · AI-assisted software construction**
 
 An inspectable collection of code, mathematical experiments, system prototypes, and test records. The projects address different questions; they are not parts of a claimed universal theory or one finished platform.
