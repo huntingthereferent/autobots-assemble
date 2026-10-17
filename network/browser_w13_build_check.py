@@ -14,6 +14,7 @@ from systems.workspace.game_w13_receipt import verify_session_receipt
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML = (ROOT / "docs/game_w13_preview.html").read_text(encoding="utf8")
+BUILD_EVIDENCE = ROOT / "build_w13_browser_receipts"
 
 
 class W13BrowserBuildTests(unittest.TestCase):
@@ -61,6 +62,9 @@ class W13BrowserBuildTests(unittest.TestCase):
             "worlds_completed": 2, "solved": True
         })
         self.assertEqual(payload["worlds"][0]["final"]["turns"], 2)
+        BUILD_EVIDENCE.mkdir(exist_ok=True)
+        (BUILD_EVIDENCE / "w13_browser_positive.json").write_text(json.dumps(payload, indent=2) + "\n", encoding="utf8")
+        self.page.screenshot(path=str(BUILD_EVIDENCE / "w13_browser_complete.png"), full_page=True)
         self.assertEqual(len(payload["boundaries"]), 1)
         self.assertEqual(payload["boundaries"][0]["before"]["state"], payload["worlds"][0]["final"])
 
@@ -124,6 +128,8 @@ class W13BrowserBuildTests(unittest.TestCase):
                 bad["worlds"][1]["observations"][0]["after"]["turns"] = 99
             else:
                 bad["final"]["solved"] = False
+            BUILD_EVIDENCE.mkdir(exist_ok=True)
+            (BUILD_EVIDENCE / ("w13_rejected_" + edit + ".json")).write_text(json.dumps(bad, indent=2) + "\n", encoding="utf8")
             with self.subTest(edit=edit), self.assertRaises(ValueError):
                 verify_session_receipt(bad)
 
