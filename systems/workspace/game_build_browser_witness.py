@@ -83,6 +83,16 @@ def witness(*, data_dir: Path, output_dir: Path):
               "new_browser_event": new}
     (output_dir / "browser-witness.json").write_text(
         json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf8")
+    report_file = output_dir / "build-report.json"
+    report = json.loads(report_file.read_text(encoding="utf8"))
+    if (report.get("job_id") != JOB_ID
+            or report.get("html_sha256") != proof["html_sha256"]
+            or report.get("WITNESS_browser") not in ("SEPARATE_REQUIRED", "PASS")):
+        raise ValueError("coordinator build report does not match native browser witness")
+    report["WITNESS_browser"] = "PASS"
+    report["WITNESS_browser_returned_to_original_journal"] = True
+    report_file.write_text(json.dumps(report, sort_keys=True, indent=2) + "\n",
+                           encoding="utf8")
     print(json.dumps(result, sort_keys=True))
     return result
 
