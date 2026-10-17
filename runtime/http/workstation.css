@@ -27,3 +27,19 @@
 .control-body>button:disabled{opacity:.5;cursor:not-allowed}
 @media(max-width:1020px){.control-fields{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.control-fields{grid-template-columns:1fr}}
+
+/* The original research takes precedence over local admitted jobs. */
+.research-panel{margin:4px 0 26px;border-color:#bfd6d4;overflow:hidden}
+.research-intro{padding:12px 22px 0;color:var(--muted);max-width:1080px;font-size:13px}
+.research-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:12px 20px}
+.research-stats span{background:#eff6f5;border:1px solid #d3e9e7;border-radius:9px;padding:14px;color:#50736e;font-size:12px;display:flex;flex-direction:column}
+.research-stats strong{color:#164e4a;font-size:28px;letter-spacing:-1px}
+.research-controls{padding:4px 20px 14px;margin:0}
+.research-controls select{max-width:335px}
+.research-entries{max-height:540px;border-top:1px solid var(--line)}
+.research-entry .minor{margin:8px 0}
+.research-entry .code{display:block}
+.research-wall{border-left:3px solid #b88e4d;padding:6px 13px;line-height:1.55}
+.research-more{display:block;margin:17px auto;min-width:240px}
+.research-footnote{border-top:1px solid var(--line);margin:0;padding:13px 20px;color:var(--muted);font-size:11px}
+@media(max-width:780px){.research-stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
