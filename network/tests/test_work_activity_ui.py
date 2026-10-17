@@ -47,7 +47,7 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertNotIn("particles",work.lower())
         self.assertNotIn("work_state.json",work)
         self.assertIn('href="trace.html"',work)
-        self.assertIn("source-root",TRACE.read_text(encoding="utf-8").lower())
+        self.assertIn("const API=",TRACE.read_text(encoding="utf-8"))
 
     def test_workflow_status_and_native_steps_need_real_api(self):
         p=WORK.read_text(encoding="utf-8")
@@ -58,11 +58,9 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertIn("Array.isArray(j.steps)",p)
         self.assertIn("r.head_sha",p)
         self.assertIn("r.conclusion||null",p)
-        self.assertIn("No current status inferred",p) if False else None
         self.assertIn("no current status inferred",p.lower())
         self.assertIn("if(!document.hidden)refresh()",p)
         self.assertIn("Select an observed workflow",p)
-        self.assertIn("Successful workflow",p) if False else None
 
     def test_research_retains_original_boundary_and_next(self):
         v=projection(research_snapshot())
