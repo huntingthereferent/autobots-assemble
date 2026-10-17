@@ -28,7 +28,8 @@ def projection(research):
         if not (r["kind"] in ("CHECKPOINT","RESEARCH_DIVE","EXPERIMENT","PIN")):
             continue
         records.append({"path":path,"label":r["title"],"state":r["state"],
-                        "source_type":r["kind"],"scope":r["scope"]})
+                        "source_type":r["kind"],"scope":r["scope"],
+                        "next":r.get("next",""),"boundary":r.get("boundary","")})
     walls=[]
     for r in research.get("source_records",[]):
         for i,w in enumerate(r["walls"]):
