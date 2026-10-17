@@ -93,7 +93,7 @@ def verify_packet(packet: object, *, request: dict, scope: dict,
         conflicts = "; ".join("/".join(pair) for pair in case["declared_conflicts"]) or "none"
         if conflicts not in line:
             raise ValueError("packet conflict evidence differs from reasoning")
-    if doc.count("\n| ") != len(expected["temporal_cases"]) + 2:
+    if doc.count("\n| ") != len(expected["temporal_cases"]) + 1 or doc.count("\n|---") != 1:
         raise ValueError("packet benchmark table has unexpected rows")
     for required in ("known_at","valid_from","PROV-O","OWL-Time","Biolink",
                      "clinical validation","NIH submission","Phase 2 prototype"):
