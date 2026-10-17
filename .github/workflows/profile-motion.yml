@@ -6,12 +6,19 @@ on:
       - 'views/motion/**'
       - 'views/traces/convergence_focus.py'
       - 'views/traces/test_convergence_focus.py'
+      - 'views/motion/atlas_dashboard.py'
+      - 'views/motion/test_atlas_dashboard.py'
       - '.github/workflows/profile-motion.yml'
   push:
     branches: [main]
     paths:
       - 'views/motion/render.py'
       - 'views/motion/test_render.py'
+      - 'views/motion/atlas_dashboard.py'
+      - 'views/motion/test_atlas_dashboard.py'
+      - 'views/traces/registry.json'
+      - 'views/traces/internet-map.json'
+      - 'views/motion/convergence-receipt.json'
       - 'views/motion/convergence.py'
       - 'views/motion/test_convergence.py'
       - 'views/traces/convergence_focus.py'
@@ -41,11 +48,12 @@ jobs:
         with:
           python-version: '3.12'
       - name: Native mathematics and source-projection tests
-        run: python -m unittest -v views.motion.test_render views.motion.test_convergence views.traces.test_convergence_focus
+        run: python -m unittest -v views.motion.test_render views.motion.test_convergence views.traces.test_convergence_focus views.motion.test_atlas_dashboard
       - name: Generate source-linked animations and native confluence
         run: |
           python -m views.motion.render
           python -m views.motion.convergence
+          python -m views.motion.atlas_dashboard
       - name: Validate SVG and reduced-motion handling
         run: |
           python - <<'PY'
@@ -53,6 +61,7 @@ jobs:
           import xml.etree.ElementTree as ET
           paths=list(Path("views/motion").glob("*-motion.svg"))
           assert len(paths)==4
+          paths.append(Path('views/motion/atlas-dashboard.svg'))
           for p in paths:
               ET.parse(p)
               assert "@media(prefers-reduced-motion:reduce)" in p.read_text()
@@ -65,7 +74,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add views/motion/finite-motion.svg views/motion/workstation-motion.svg views/motion/world-motion.svg views/motion/convergence-motion.svg views/motion/convergence-receipt.json
+          git add views/motion/finite-motion.svg views/motion/workstation-motion.svg views/motion/world-motion.svg views/motion/convergence-motion.svg views/motion/convergence-receipt.json views/motion/atlas-dashboard.svg
           if git diff --cached --quiet; then echo "No SVG change"; exit 0; fi
           git commit -m "Render motion from source-owned observations"
           for attempt in 1 2 3; do
