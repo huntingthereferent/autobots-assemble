@@ -1,5 +1,9 @@
 # Visual provenance — GitHub README concept
 
+> **Current profile-wide A/B visual:** [James's public visual provenance map](https://github.com/huntingthereferent/huntingthereferent/blob/main/VISUAL_PROVENANCE.md). It carries the same continuing inquiry through writing, games, mathematics, interactive environments, the workstation and software while linking each context to its own evidence.
+>
+> The image below is the earlier static technical preview. The public profile map is the broader reader-facing entry, not a second evidence authority.
+
 ![James Muneoka — illustrative visual provenance](preview.svg)
 
 **Illustrative, not live.** This is a read-only presentation of how source-backed research provenance *could* appear in a GitHub profile. The diagram is a design example; it does not read live workstation data or assert current job results.
