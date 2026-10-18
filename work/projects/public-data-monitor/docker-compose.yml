@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: public_data_monitor
       POSTGRES_USER: monitor
-      POSTGRES_PASSWORD: monitor
+      POSTGRES_PASSWORD: ${MONITOR_DB_PASSWORD:?Set_MONITOR_DB_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U monitor -d public_data_monitor"]
       interval: 5s
@@ -20,7 +20,7 @@ services:
     build: .
     command: celery -A app.celery_app.celery_app worker --loglevel=INFO
     environment:
-      DATABASE_URL: postgresql+psycopg://monitor:monitor@db:5432/public_data_monitor
+      DATABASE_URL: postgresql+psycopg://monitor:${MONITOR_DB_PASSWORD:?Set_MONITOR_DB_PASSWORD}@db:5432/public_data_monitor
       REDIS_URL: redis://redis:6379/0
     depends_on:
       db:
@@ -32,7 +32,7 @@ services:
     build: .
     command: celery -A app.celery_app.celery_app beat --loglevel=INFO
     environment:
-      DATABASE_URL: postgresql+psycopg://monitor:monitor@db:5432/public_data_monitor
+      DATABASE_URL: postgresql+psycopg://monitor:${MONITOR_DB_PASSWORD:?Set_MONITOR_DB_PASSWORD}@db:5432/public_data_monitor
       REDIS_URL: redis://redis:6379/0
     depends_on:
       db:
@@ -43,10 +43,10 @@ services:
   api:
     build: .
     environment:
-      DATABASE_URL: postgresql+psycopg://monitor:monitor@db:5432/public_data_monitor
+      DATABASE_URL: postgresql+psycopg://monitor:${MONITOR_DB_PASSWORD:?Set_MONITOR_DB_PASSWORD}@db:5432/public_data_monitor
       REDIS_URL: redis://redis:6379/0
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -61,7 +61,7 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - ./prometheus-rules.yml:/etc/prometheus/prometheus-rules.yml:ro
     ports:
-      - "9090:9090"
+      - "127.0.0.1:9090:9090"
     depends_on:
       api:
         condition: service_started
@@ -73,19 +73,19 @@ services:
     volumes:
       - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
     ports:
-      - "9093:9093"
+      - "127.0.0.1:9093:9093"
 
   grafana:
     image: grafana/grafana:13.2.3
     environment:
       GF_SECURITY_ADMIN_USER: admin
-      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set_GRAFANA_ADMIN_PASSWORD}
       GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
       - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     depends_on:
       prometheus:
         condition: service_started
@@ -94,7 +94,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     depends_on:
       api:
         condition: service_started
