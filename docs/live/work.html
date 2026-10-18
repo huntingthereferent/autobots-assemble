@@ -317,7 +317,7 @@ footer {
     return [...changed].filter(path=>researchPaths.has(path)).sort();
   }
   function revisionLink(path,sha){
-    if(!isSHA(sha)||typeof path!=="string"||!(/^[\\w./-]+$/.test(path))||
+    if(!isSHA(sha)||typeof path!=="string"||!(/^[\w./-]+$/.test(path))||
       path.startsWith("/")||path.split("/").some(p=>p==="."||p===".."||!p))return null;
     return link(path+" @ "+sha.slice(0,10)+" ↗",
       "https://github.com/"+REPO+"/blob/"+sha+"/"+path.split("/").map(encodeURIComponent).join("/"),"path");
