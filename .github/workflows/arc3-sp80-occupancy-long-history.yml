@@ -1,0 +1,36 @@
+name: ARC3 SP80 frozen occupancy under longer native histories
+
+on:
+  push:
+    paths:
+      - "work/arc3/native_sp80_occupancy_long_history.py"
+      - ".github/workflows/arc3-sp80-occupancy-long-history.yml"
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_occupancy_long_history.py"
+      - ".github/workflows/arc3-sp80-occupancy-long-history.yml"
+  workflow_dispatch:
+
+jobs:
+  native-long-history-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official public native ARC SDK
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Validate original frozen gate and native before-color requirements
+        run: python -m unittest -v network.tests.test_arc3_sp80_occupancy_gate
+      - name: Test longer public native SP80 action histories without refitting
+        run: python -m work.arc3.native_sp80_occupancy_long_history --out runtime/data/arc3/sp80-occupancy-long-history.json
+      - name: Retain raw native frames and all counterexamples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-sp80-frozen-occupancy-long-history
+          path: runtime/data/arc3/sp80-occupancy-long-history.*
+          if-no-files-found: ignore
+          retention-days: 14
