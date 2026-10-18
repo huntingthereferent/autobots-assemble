@@ -21,3 +21,28 @@ GAME-WORKER-READY is still distinct. Its existing adapter belongs to the older s
 The encryption tests use disposable fixture keys and explicitly mocked sample receipts for codec testing; these are not historic W13 observations. Production uses the unmocked existing native verifiers. Run focused tests with:
 
     python -m unittest -v network.tests.test_owner_native_evidence_vault
+
+
+## Future execution hook (local capsule only)
+
+`execute_exact_authorized_child` accepts optional `recipient_public_key_b64`
+and `encrypted_output` arguments together. With neither argument, the historical
+one-shot behavior and authorization remain unchanged. With both, a NEW exact
+`systems/workspace/native_retention_requests/w13/verified-child-local-capsule.json`
+request must be introduced by the owner merge. It embeds `EXPECTED_REQUEST`, pins
+the SHA-256 of the decoded raw recipient public key, permits local encrypted
+retention, and explicitly denies artifact upload and raw export. The calling
+workflow still has to authenticate owner, push, protected main and exact commit.
+Existing execution consent cannot activate retention.
+
+The destination must be new and outside the repository. Sealing happens only
+after native child verification and CP-frontier checks, while the temporary
+journal still exists. A seal failure fails the invocation; no successful retained
+result is returned. The codec checks both actual native results again. Temporary
+plaintext is cleaned up on success or failure. This adds no CLI retention flags,
+workflow activation, request, key, artifact upload or cross-run witness.
+
+Next movement: prepare the owner-authenticated future invoking workflow with an
+explicit recipient and separately reviewed encrypted storage/retention contract;
+then run and independently restore its actual capsule. The historical lost child
+journal remains lost, and GAME-WORKER-READY remains separate.
