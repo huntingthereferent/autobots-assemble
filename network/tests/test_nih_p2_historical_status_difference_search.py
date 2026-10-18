@@ -59,10 +59,15 @@ class HistoricalStatusDifferenceTests(unittest.TestCase):
         self.assertEqual(report["same_normalized_status_count"],2)
         self.assertEqual(report["spelling_only_difference_count"],1)
         self.assertEqual(report["different_normalized_status_count"],1)
+        self.assertFalse(report["archive_collection_chronological_order_proven"])
+        self.assertEqual(report["temporal_direction_of_status_field_differences"],"UNRESOLVED")
+        self.assertFalse(report["underlying_extraction_date_of_2023_deposited_file_authenticated"])
+        self.assertEqual(report["recorded_update_dates_comparable"],3)
+        self.assertEqual(report["recorded_update_date_in_2023_deposit_is_earlier_count"],0)
         self.assertEqual([r["nct_id"] for r in report["selected_status_difference_anchors"]],[B])
         row=report["selected_status_difference_anchors"][0]
-        self.assertEqual(row["overall_status_export_2022"],"Recruiting")
-        self.assertEqual(row["overall_status_export_2023"],"Completed")
+        self.assertEqual(row["overall_status_source_dated_2022_nov09"],"Recruiting")
+        self.assertEqual(row["overall_status_source_deposited_2023_oct31"],"Completed")
         self.assertFalse(row["exact_original_registry_version_post_time_proven"])
         self.assertFalse(row["intervening_revisions_excluded"])
         self.assertFalse(row["actual_clinical_event_time_proven"])
@@ -78,6 +83,7 @@ class HistoricalStatusDifferenceTests(unittest.TestCase):
         self.assertEqual(
             [r["nct_id"] for r in rows["selected_status_difference_anchors"]],[A,B])
         self.assertEqual(rows["different_normalized_status_count"],3)
+        self.assertFalse(rows["archive_collection_chronological_order_proven"])
         self.assertEqual(sum(x["observed_paired_rows"] for x in rows["status_change_field_groups"]),3)
 
     def test_03_missing_duplicate_and_malformed_rows_fail(self):
