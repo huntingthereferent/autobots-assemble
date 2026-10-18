@@ -1,0 +1,77 @@
+name: NIH Phase 1 original W13 independent two-clock game
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_phase1_world_two_clock.py'
+      - 'systems/workspace/NIH_PHASE1_WORLD_TWO_CLOCK.md'
+      - 'network/tests/test_nih_phase1_world_two_clock.py'
+      - '.github/workflows/nih-phase1-world-two-clock.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_phase1_world_two_clock.py'
+      - 'systems/workspace/NIH_PHASE1_WORLD_TWO_CLOCK.md'
+      - 'network/tests/test_nih_phase1_world_two_clock.py'
+      - '.github/workflows/nih-phase1-world-two-clock.yml'
+permissions:
+  contents: read
+jobs:
+  original-twelve-native-two-clock-world:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install the original native stack and real Chromium browser
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Independently falsify incomplete/misdated original-source frame grids
+        run: python -m unittest -v network.tests.test_nih_phase1_world_two_clock
+      - name: Play the original world and query both clocks with unchanged emitted Python
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-phase1-two-clock-evidence"
+          python -m systems.workspace.nih_phase1_world_two_clock \
+            --data-dir "$RUNNER_TEMP/nih-phase1-two-clock-native" \
+            --output-dir "$RUNNER_TEMP/nih-phase1-two-clock-evidence"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"nih-phase1-two-clock-evidence"
+          report=json.loads((root/"nih-phase1-two-clock-world-report.json").read_text())
+          assert report["schema"]=="nih-phase1-original-w13-world-two-clock/v1"
+          assert report["original_native_jobs"]==12
+          assert report["original_phase1_world_witnessed"] is True
+          assert report["original_game_solved"] is True
+          assert report["both_clock_dimensions_observed"] is True
+          assert report["independent_source_oracle_agreed"] is True
+          assert report["preserved_original_native_ancestry"] is True
+          assert report["world_actions"]>=2
+          assert report["targets"]==["2026-01-02","2026-01-04","2026-01-11"]
+          assert len(report["browser_target_query_frames"])==(report["world_actions"]+1)*3
+          assert report["actual_original_python_probe_calls"]>=len(report["browser_target_query_frames"])
+          assert report["native_worker_created"] is False
+          assert report["new_cp_witnessed"] is False
+          assert report["historical_publication_time_authenticated"] is False
+          assert report["synthetic_only"] is True
+          assert report["official_NIH_submission"] is False
+          assert report["clinical_verdict"]=="NOT_EVALUATED"
+          assert (root/"nih-phase1-two-clock-live-world.png").is_file()
+          assert (root/"nih-phase1-frontier-live-world.png").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/nih-phase1-two-clock-evidence/original-native-twelve-job-journal.tgz" \
+            -C "$RUNNER_TEMP/nih-phase1-two-clock-native" \
+            runtime.jsonl coordinator-windows.jsonl workstation
+      - name: Preserve original world, original source receipts, and actual Chromium evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-phase1-two-clock-world-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-phase1-two-clock-evidence/
+          if-no-files-found: warn
+          retention-days: 30
