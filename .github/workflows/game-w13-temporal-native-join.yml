@@ -1,0 +1,62 @@
+name: Join W13 native CP to actual temporal gameplay Complete Stack
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/game_w13_temporal_join.py'
+      - 'network/tests/test_game_w13_temporal_join.py'
+      - '.github/workflows/game-w13-temporal-native-join.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/game_w13_temporal_join.py'
+      - 'network/tests/test_game_w13_temporal_join.py'
+      - '.github/workflows/game-w13-temporal-native-join.yml'
+permissions:
+  contents: read
+jobs:
+  join-real-w13-cp-with-temporal-game:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install existing native and independent Chromium dependencies
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Test source-owned W13 temporal game CP, restart, tamper boundary
+        run: python -m unittest -v network.tests.test_game_w13_temporal_join
+      - name: Play real temporal game and run original W13 native CP in same journal
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/w13-temporal-game-evidence"
+          python -m systems.workspace.game_w13_temporal_join \
+            --data-dir "$RUNNER_TEMP/w13-temporal-game-workstation" \
+            --output-dir "$RUNNER_TEMP/w13-temporal-game-evidence"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=Path(os.environ["RUNNER_TEMP"])/"w13-temporal-game-evidence"
+          proof=json.loads((out/"game-w13-real-native-joined.json").read_text())
+          assert proof["w13_worlds_witnessed"] is True
+          assert proof["real_original_native_jobs"]==8
+          assert proof["live_game_browser"]=="PASS"
+          assert proof["next_game_checkpoint"]=="GAME-NATIVE-VERIFIER"
+          assert proof["formal_nih_p2_test"]=="BLOCKED"
+          assert (out/"game-temporal-query-events.jsonl").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/w13-temporal-game-evidence/native-eight-job-journal.tar.gz" \
+            -C "$RUNNER_TEMP/w13-temporal-game-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+      - name: Publish W13 native execution, live temporal queries and original journal
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: real-w13-temporal-stack-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/w13-temporal-game-evidence
+          if-no-files-found: warn
+          retention-days: 30
