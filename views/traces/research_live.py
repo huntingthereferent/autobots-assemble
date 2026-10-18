@@ -8,7 +8,6 @@ scientific relationship between this record index and Git ancestry.
 from __future__ import annotations
 import json
 from pathlib import Path
-from datetime import datetime,timezone
 from systems.workspace.research_observatory import ROOT, research_snapshot
 
 SCHEMA="workstation-live-projection/v1"
@@ -38,6 +37,26 @@ def projection(research):
         if m["kind"]=="DOCUMENTED_WALL":
             walls.append({"path":m["path"],"text":m["heading"],
                           "kind":"documented-heading-only","line":m["line"]})
+    movements=[]
+    for r in research.get("source_records",[]):
+        if r["state"] not in ("MOVE","MOVE_WITH_WALL"):
+            continue
+        movements.append({
+            "id":"structured:"+r["path"],"path":r["path"],"line":None,
+            "title":r["title"],"state":r["state"],"evidence":"structured-source-state",
+            "boundary":r.get("boundary",""),"next":r.get("next","")
+        })
+    for m in research.get("documented_marks",[]):
+        if m["kind"]!="DOCUMENTED_MOVEMENT":
+            continue
+        movements.append({
+            "id":"heading:"+m["path"]+"#L"+str(m["line"]),
+            "path":m["path"],"line":m["line"],"title":m["heading"],
+            "state":"DOCUMENTED_MOVEMENT","evidence":"documented-heading-only",
+            "boundary":"This is a recorded heading, not a native verified execution.",
+            "next":""
+        })
+    movements.sort(key=lambda x:(x["path"],x["line"] or 0))
     if not records:
         raise ValueError("original records missing; refuse empty fabricated display")
     # A compact, deterministic projection. Checksums and generation dates are
@@ -49,11 +68,13 @@ def projection(research):
             "generated_from":"systems/workspace/research_observatory.py",
             "records":records[:160],
             "walls":walls[:160],
+            "movements":movements[:500],
             "source_totals":{
                 "source_files":research["totals"]["source_files"],
                 "structured_records":research["totals"]["structured_records"],
                 "original_wall_entries":research["totals"]["explicit_wall_entries"],
-                "documented_wall_headings":research["totals"]["documented_wall_headings"]},
+                "documented_wall_headings":research["totals"]["documented_wall_headings"],
+                "documented_movement_headings":research["totals"]["documented_movement_headings"]},
             "boundary":"Research entries are source-owned states; the browser's event roots and ancestry must come from GitHub directly. Presence in one display does not establish a causal relationship."}
 
 
@@ -67,4 +88,4 @@ def generate(out:Path=DEST):
 if __name__=="__main__":
     r=generate()
     print("Published original workstation research projection: "
-          +str(len(r["records"]))+" records; "+str(len(r["walls"]))+" walls.")
+          +str(len(r["records"]))+" records; "+str(len(r["movements"]))+" source movements; "+str(len(r["walls"]))+" walls.")
