@@ -29,6 +29,8 @@ from .native_relation_scan import compact_delta
 GAME = "ft09"
 MAX_SITES = 12
 MAX_COMPONENTS_PER_COLOR = 2
+# Fixed before the second experiment: uniform neutral field coverage.
+LATTICE_PIXEL_COORDS = (4, 12, 20, 28, 36, 44, 52, 60)
 
 
 def native_sites(grid):
@@ -73,8 +75,21 @@ def native_sites(grid):
     # source pixel measurements. No known FT09 solution or game IDs.
     selected.sort(key=lambda c:(-c["component_cells"],c["native_color"],c["click"]))
     selected=selected[:MAX_SITES]
-    if not selected:
-        raise RuntimeError("FT09 root has no non-dominant color measurements")
+    # Add native pixel-grid coverage, including dominant background, without
+    # claiming any region is a button, target, or F3 mathematical generator.
+    seen_xy={tuple(site["click"]) for site in selected}
+    for y in LATTICE_PIXEL_COORDS:
+        for x in LATTICE_PIXEL_COORDS:
+            if (x,y) in seen_xy:
+                continue
+            selected.append({
+                "native_color":int(grid[y,x]),"component_cells":None,
+                "click":[x,y],"bbox":None,
+                "site_source":"UNIFORM_NATIVE_PIXEL_LATTICE",
+            })
+            seen_xy.add((x,y))
+    for site in selected:
+        site.setdefault("site_source","NATIVE_COLOR_COMPONENT")
     return selected,background
 
 
@@ -200,6 +215,7 @@ def main():
         "root_native_available_actions":initial_actions,
         "background_native_color_by_pixel_majority":background,
         "spatial_source_sites":sites,
+        "predeclared_lattice_pixel_coordinates":list(LATTICE_PIXEL_COORDS),
         "contact":contact,
         "two_distinct_native_click_effects_found":len(distinct)>=2,
         "admitted_click_A_B":roles,
@@ -226,6 +242,8 @@ def main():
         "root_actions":initial_actions,
         "native_background_color":background,
         "sites_tested":len(sites),
+        "sites_from_component_colors":sum(x["site_source"]=="NATIVE_COLOR_COMPONENT" for x in sites),
+        "sites_from_spatial_lattice":sum(x["site_source"]=="UNIFORM_NATIVE_PIXEL_LATTICE" for x in sites),
         "clicks_change_visible_frame":len(effective),
         "distinct_click_effects":len(distinct),
         "native_A_B_coordinates":roles,
