@@ -1,4 +1,4 @@
-"""Run the existing F3 my_agent.py against ONE official native ARC public game.
+"""Run the original 48-law experimental MyAgent on native public ARC games.
 
 This is a bounded experiment, not a competition result, submission, solver,
 new game implementation, or restored saved route. Native SDK required.
@@ -21,9 +21,9 @@ AGENT_SOURCE = ROOT / "work/arc3/agent/my_agent.py"
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--game", default="ls20")
+    parser.add_argument("--game", default="sk48")
     parser.add_argument("--max-actions", type=int, default=12)
-    parser.add_argument("--out", type=Path, default=Path("runtime/data/arc3/f3-native-smoke.json"))
+    parser.add_argument("--out", type=Path, default=Path("runtime/data/arc3/window48-native-smoke.json"))
     args = parser.parse_args()
     if args.max_actions < 1 or args.max_actions > 50:
         raise ValueError("smoke run is bounded to 1..50 actual environment actions")
@@ -50,13 +50,13 @@ def main() -> None:
     if env is None:
         raise RuntimeError("official ARC environment unavailable")
     agent = module.MyAgent(
-        card_id="f3-native-smoke",
+        card_id="window48-native-smoke",
         game_id=args.game,
-        agent_name=f"F3NativeSmoke.{args.game}",
+        agent_name=f"Window48NativeSmoke.{args.game}",
         ROOT_URL="http://localhost",
         record=False,
         arc_env=env,
-        tags=["f3", "native-first-run", "experimental"],
+        tags=["f3-window48", "native-observation", "experimental"],
     )
     # Official Agent.main uses <= MAX_ACTIONS; 0-index accordingly.
     agent.MAX_ACTIONS = args.max_actions - 1
@@ -80,42 +80,47 @@ def main() -> None:
             ],
         })
 
-    evidence = agent.f3
-    # The last native response has not necessarily been processed by the next
-    # choose_action call. Admit it only if the same level/role context survives.
-    if (evidence is not None and agent.last_letter is not None and actual
-            and int(getattr(actual[-1], "levels_completed", -1)) == agent.last_level
-            and rows[-1]["exact_frame_hash"] is not None):
-        evidence.record(agent.last_letter, bytes.fromhex(rows[-1]["exact_frame_hash"]))
-        agent.last_letter = None
-
+    # The official SDK may stop at the action budget before consuming
+    # the final native response. Record that response at most once.
+    if actual and agent.pending_letter is not None:
+        agent._consume_pending_native_response(actual[-1])
+    evidence = agent.f3_48
     result = {
-        "kind": "F3_ON_NATIVE_ARC_PUBLIC_GAME_SMOKE",
+        "kind": "ORIGINAL_WINDOW48_ON_NATIVE_ARC_PUBLIC_GAME_SMOKE",
         "source_agent_sha256": sha256(AGENT_SOURCE.read_bytes()).hexdigest(),
-        "mathematical_source": "work/arc_like_maze/math.py",
+        "source_mathematical_family": "work/arc_like_maze/window_combined.py",
+        "source_original_law_count": len(module.WINDOW48),
+        "source_rooted_class_count": module.ROOTED_CLASS_COUNT,
+        "source_full_state_class_count": module.FULL_STATE_CLASS_COUNT,
         "game": args.game,
-        "environment_provider": "arc-agi Arcade NORMAL local native engine",
+        "environment_provider": "official arc-agi Arcade NORMAL",
         "native_environment_actions": int(agent.action_counter),
         "returned_native_frames": len(actual),
         "last_state": str(getattr(actual[-1], "state", "UNKNOWN")) if actual else None,
         "levels_completed": int(getattr(actual[-1], "levels_completed", 0)) if actual else 0,
         "per_response": rows,
-        "f3_evidence": None if evidence is None else {
-            "provisional_native_generators": list(evidence.native_actions),
+        "stopped_at_mathematical_or_interface_wall": bool(agent.stopped_at_wall),
+        "window48_evidence": None if evidence is None else {
+            "provisional_native_actions": list(evidence.native_actions),
             "status": evidence.report().status,
-            "surviving_candidate_indices": list(evidence.candidates),
-            "source_phi_values": [list(module.PHIS[i]) for i in evidence.candidates],
-            "rooted_action_words_and_frame_hashes": {
+            "remaining_source_law_indices": list(evidence.candidates),
+            "remaining_original_window_parameters": [
+                list(module.WINDOW48[i]) for i in evidence.candidates],
+            "remaining_rooted_class_keys": [
+                list(x) for x in evidence.report().rooted_class_keys],
+            "source_full_state_classes_not_inferred_from_rooted_evidence": 14,
+            "native_rooted_action_word_frame_hashes": {
                 word: key.hex() for word, key in evidence.words.items()
             },
-            "observed_distinctions": evidence.observed_distinctions,
-            "visible_equalities": evidence.visible_equalities,
-            "bounds": "single rooted path, first two advertised simple actions",
+            "observed_visible_distinctions": evidence.visible_distinctions,
+            "observed_visible_equalities": evidence.visible_collisions,
         },
         "boundary": (
-            "native frames and actions, but provisional F3 action-role pairing; "
-            "surviving candidates do not prove ARC correspondence; no hidden-state "
-            "equality or competition score claimed"
+            "The official native interactions test a PROVISIONAL pairing "
+            "of two advertised simple controls only. No native-F3 state "
+            "correspondence has been established; all native pixels remain "
+            "unchanged and full-state versus origin-preserving mathematical "
+            "conjugacy remain distinct. No competition win is claimed."
         ),
     }
     args.out.parent.mkdir(parents=True, exist_ok=True)
@@ -128,13 +133,14 @@ def main() -> None:
             frames.append(a.reshape(-1,64,64)[-1].astype(np.uint8))
     if frames:
         np.savez_compressed(args.out.with_suffix(".npz"), *frames)
-    print("F3_NATIVE_RESULT " + json.dumps({
+    print("WINDOW48_NATIVE_RESULT " + json.dumps({
         "source_sha256": result["source_agent_sha256"],
         "game": result["game"],
         "native_environment_actions": result["native_environment_actions"],
         "levels_completed": result["levels_completed"],
         "state": result["last_state"],
-        "f3_evidence": result["f3_evidence"],
+        "window48_evidence": result["window48_evidence"],
+        "stopped_at_wall": result["stopped_at_mathematical_or_interface_wall"],
         "manifest": str(args.out),
         "raw_frames": str(args.out.with_suffix(".npz")) if frames else None,
     }, sort_keys=True))
