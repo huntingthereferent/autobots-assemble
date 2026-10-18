@@ -1,0 +1,22 @@
+{
+  "contract": "owner-w13-independent-native-game-verifier-one-shot/v1",
+  "source_run_id": 39025574748,
+  "source_artifact_id": 12098716155,
+  "source_artifact_digest": "sha256:543c08f9f9f5cb1eee47b0ab21535e759495c6e7318dc5e06f3519f27f4dfcfa",
+  "source_head_sha": "1c28c44f655c3794fd64eb0b2ab822bebc9db2b2",
+  "original_w13_job_id": "game-w13-github-001",
+  "original_w13_result_event_id": "evt_208f2fbdb380437eb59790a9a704c0b9",
+  "original_w13_source_fingerprint": "798ed2399413ecbb30a1eb94c547a5517ee03dfd002600d868376f88f03f458a",
+  "checkpoint": "GAME-NATIVE-VERIFIER",
+  "job_id": "game-native-verifier-github-001",
+  "worker_id": "game-native-independent-verifier",
+  "source_version": "witness-owner-v1",
+  "worker_git_blob": "39fbb7178fccd9c37bd33f6b670b560fdbac4d30",
+  "bridge_git_blob": "694580a5e4c68c37eafafe11172fcf3bf37faa9d",
+  "parent_research_git_blob": "f8fbf981c75ccf53a8a72006053f8b02a31343dc",
+  "authorizes_source_copy": true,
+  "authorizes_admission": true,
+  "authorizes_execution": true,
+  "execution_scope": "one-exact-native-verifier-child-on-original-owner-W13",
+  "activation": "new-exact-request-in-owner-merged-protected-main"
+}
