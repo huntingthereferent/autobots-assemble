@@ -37,6 +37,7 @@ jobs:
       - name: Original REA v3 collision baseline and upstream fingerprint tests
         working-directory: experiments/rea-swallow/upstream
         run: |
+          set -o pipefail
           npx --no-install vitest run src/domain/javascript/javascriptBindingBaseline.ab-swallow.test.ts src/domain/javascript/javascriptAstFingerprint.test.ts \
             2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/binding-baseline.log"
       - name: Apply actual reference-aware fingerprint addition in REA source
@@ -47,6 +48,7 @@ jobs:
       - name: Run old REA fingerprint tests and new A/B reference experiments
         working-directory: experiments/rea-swallow/upstream
         run: |
+          set -o pipefail
           REA_AB_BINDING_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/binding-reference-witness.json" \
           npx --no-install vitest run src/domain/javascript/javascriptAstFingerprint.test.ts src/domain/javascript/javascriptBindingFingerprint.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts \
             2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/binding-experimental.log"
