@@ -72,7 +72,7 @@ def independent_scope(seed, size):
 def queries():
     return [
         {"known_at": day(k), "target_at": day(v)}
-        for k in (0, 4, 6, 7, 9) for v in (3, 4, 10, 11, 16)
+        for k in (0, 4, 6, 7, 20) for v in (3, 4, 10, 11, 16)
     ]
 
 
