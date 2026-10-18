@@ -220,8 +220,8 @@ footer {
 </header>
 <main>
 <section aria-labelledby="title">
-  <p class="eyebrow">Workstation / source evidence</p>
-  <h1 id="title">Research workstation</h1>
+  <p class="eyebrow">Actual execution and original evidence</p>
+  <h1 id="title">What's happening in work?</h1>
   <p class="intro">GitHub workflow runs and their individual steps appear here as recorded by GitHub. Mathematics, research, corrections and unresolved walls come from the original workstation's source records. An executed test is not automatically a solved research question; a stored research result is not automatically running.</p>
   <div class="status-line" role="status"><span class="indicator" id="live-dot"></span><strong id="feed-state">Reading current executions</strong><span id="last-read"></span><button id="check-now" type="button">Refresh source</button></div>
   <div id="feed-error" class="notice" hidden></div>
@@ -234,7 +234,7 @@ footer {
   <p class="fine">Numbers describe the latest publicly accessible workflow-run sample, not every worker or every event in the workstation. Unavailable data is never counted as zero.</p>
 </section>
 <section id="executions" aria-label="Actual GitHub work execution">
-  <div class="section-top"><div><p class="eyebrow">Current execution</p><h2>Execution record</h2><p class="subtitle">Select a recorded run to inspect the native jobs and exact steps GitHub observed.</p></div>
+  <div class="section-top"><div><p class="eyebrow">Current execution</p><h2>What started, what passed, what stopped</h2><p class="subtitle">Select a recorded run to inspect the native jobs and exact steps GitHub observed.</p></div>
     <div class="tools"><label for="run-filter">Show <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label></div></div>
   <div class="workspace">
     <div class="pane"><header><strong>Observed workflow runs</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div></div>
@@ -242,7 +242,7 @@ footer {
   </div>
 </section>
 <section id="research" aria-labelledby="research-title">
-  <div class="section-top"><div><p class="eyebrow">Original research</p><h2 id="research-title">Research record &amp; open conditions</h2><p class="subtitle">Original research states and preserved walls, linked back to the files that recorded them.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
+  <div class="section-top"><div><p class="eyebrow">Original research</p><h2 id="research-title">What we learned and what remains open</h2><p class="subtitle">Original research states and preserved walls, linked back to the files that recorded them.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
   <div class="source-controls"><input id="source-search" type="search" placeholder="Search original research, source, status or wall…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
   <div class="research-grid">
     <div class="pane"><header><strong>Recorded investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div></div>
