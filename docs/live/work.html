@@ -53,6 +53,11 @@ footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--m
 <section id="research" aria-labelledby="research-title">
   <div class="section-top"><div><p class="eyebrow">Original research</p><h2 id="research-title">What we learned and what remains open</h2><p class="subtitle">Original research states and preserved walls, linked back to the files that recorded them.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
   <div class="source-controls"><input id="source-search" type="search" placeholder="Search original research, source, status or wall…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
+  <details class="pane" open>
+    <summary style="padding:14px 18px;cursor:pointer"><strong>Recorded movements from original sources</strong> <small id="movement-count" class="fine">Loading…</small></summary>
+    <div id="research-movements" class="record-list" style="max-height:340px"><p class="no-source">Loading source-labeled moves…</p></div>
+  </details>
+  <p class="fine">The two evidence levels below are not interchangeable: a structured MOVE is a recorded source state; a documented movement heading is a source locator only. Neither means a worker is running right now.</p>
   <div class="research-grid">
     <div class="pane"><header><strong>Recorded investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div></div>
     <div class="pane"><header><strong>Unresolved conditions and documented walls</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div></div>
@@ -155,6 +160,21 @@ footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--m
     }
     if(!items.length)area.append(el("p","No matching source records.","no-source"));
     $("research-count").textContent=items.length+" / "+r.records.length+" source records";
+    const movements=Array.isArray(r.movements) ? r.movements : [];
+    const matching=movements.filter(x=>!q||[x.title,x.path,x.state,x.boundary,x.next].some(match));
+    const mv=$("research-movements");mv.replaceChildren();
+    for(const m of matching.slice(0,120)){
+      const item=el("article",undefined,"record");
+      const head=el("header");
+      head.append(el("h3",m.title||m.path),pill(m.state||"unknown"));item.append(head);
+      item.append(el("p",m.evidence==="structured-source-state"?"Structured recorded movement":"Document heading only; not native verification","fine"));
+      if(m.boundary)item.append(el("p","Boundary: "+m.boundary,"fine"));
+      if(m.next)item.append(el("p","Next recorded step: "+m.next,"fine"));
+      const original=srcLink(m.path,m.line);if(original)item.append(original);
+      mv.append(item);
+    }
+    if(!matching.length)mv.append(el("p","No source-labeled movements match.","no-source"));
+    $("movement-count").textContent=matching.length+" / "+movements.length+" recorded source locators"+(matching.length>120?" (first 120 shown)":"");
     const walls=r.walls.filter(x=>!q||[x.text,x.path,x.kind].some(match)),box=$("research-walls");box.replaceChildren();
     for(const w of walls){
       const card=el("article",undefined,"wall");card.append(el("p",w.text||"Original wall"));
@@ -165,7 +185,7 @@ footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--m
     $("wall-count").textContent=walls.length+" / "+r.walls.length+" original source locators";
   }
   async function loadResearch(){try{const json=await getJSON(SOURCE+"?v="+Math.floor(Date.now()/PERIOD));
-      if(json?.schema!=="workstation-live-projection/v1"||!Array.isArray(json.records)||!Array.isArray(json.walls))throw Error("Unexpected workstation source schema");
+      if(json?.schema!=="workstation-live-projection/v1"||!Array.isArray(json.records)||!Array.isArray(json.walls)||!Array.isArray(json.movements))throw Error("Unexpected workstation source schema");
       app.research=json;$("research-scope").textContent="Published source-owned projection · not live worker telemetry";renderResearch();}
     catch(e){$("research-scope").textContent="Research data unavailable: "+e.message;if(!app.research){$("research-records").replaceChildren(el("p","Original record data unavailable.","no-source"));$("research-walls").replaceChildren(el("p","Original wall data unavailable.","no-source"))}}}
   async function refresh(){
