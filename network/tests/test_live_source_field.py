@@ -37,6 +37,9 @@ class LiveTraceSourceTests(unittest.TestCase):
         self.assertEqual(data["schema"],SCHEMA)
         self.assertGreater(len(data["records"]),5)
         self.assertGreater(len(data["walls"]),1)
+        self.assertGreater(len(data["movements"]),1)
+        self.assertTrue(any(x["evidence"]=="structured-source-state" for x in data["movements"]))
+        self.assertTrue(any(x["evidence"]=="documented-heading-only" for x in data["movements"]))
         self.assertTrue(any(x["path"]=="research/dives/ARC3-TRACE-001/dive.json"
                             and x["state"]=="MOVE_WITH_WALL" for x in data["records"]))
         self.assertTrue(any(x["source_type"]=="CHECKPOINT" and "CP-0030" in x["path"]

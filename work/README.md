@@ -39,6 +39,6 @@ Foundation records what was actually demonstrated. Capability summaries are deri
 
 ## Legacy records
 
-`jobs/` remains the durable paid-work record set.
+The retired `jobs/` opportunity wrappers remain available in Git history, not in the active tree. They are not the definition of paid work, research, or the current referent. The executable external-source admission adapter remains available and is tested independently of any retired listing.
 
-Older scans and goal-lane structures remain provenance. They no longer define the repository's center.
+Older scans and goal-lane structures remain historical provenance; the present work and [TASKS.md](../TASKS.md) must not be replaced by a legacy job-only generator.

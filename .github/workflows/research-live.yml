@@ -7,26 +7,41 @@ on:
       - 'views/traces/research_live.py'
       - 'network/tests/test_live_source_field.py'
       - 'network/tests/test_work_activity_ui.py'
+      - 'network/tests/test_audit_boundaries.py'
       - 'systems/workspace/research_observatory.py'
       - '.github/workflows/research-live.yml'
   push:
     branches: [main]
+    # Index only what the source observer can actually read, not just a few favored projects.
     paths:
-      - 'docs/live/**'
-      - 'views/traces/research_live.py'
-      - 'network/tests/test_live_source_field.py'
-      - 'systems/workspace/research_observatory.py'
+      - 'work/**'
       - 'research/**'
-      - 'work/arc_like_maze/chatbot/checkpoints/**'
-      - 'state/pins/**'
+      - 'systems/**'
+      - 'runtime/**'
+      - 'protocols/**'
+      - 'network/**'
+      - 'views/**'
+      - '!views/traces/research-live.json'
+      - 'state/**'
       - 'language/**'
-      - 'systems/workspace/WORLD_W13_MOVEMENT_01.md'
-      - 'systems/workspace/WITNESS_W13_INDEPENDENT_VERDICT.md'
+      - 'docs/**'
+      - 'foundation/**'
+      - 'domains/**'
+      - 'companies/**'
+      - 'tools/**'
+      - 'design/**'
+      - 'evidence/**'
+      - 'capabilities/**'
+      - 'open_source/**'
+      - 'identity/**'
+      - 'activations/**'
+      - 'artifacts/**'
+      - 'money/**'
       - '.github/workflows/research-live.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: live-research-projection
@@ -44,7 +59,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Verify source adapter and browser program
-        run: python -m unittest -v network.tests.test_live_source_field network.tests.test_work_activity_ui network.tests.test_research_observatory
+        run: python -m unittest -v network.tests.test_live_source_field network.tests.test_work_activity_ui network.tests.test_research_observatory network.tests.test_audit_boundaries
       - name: Generate the original workstation projection
         run: python -m views.traces.research_live
       - name: Validate original source relationships
@@ -54,28 +69,38 @@ jobs:
           import json
           data=json.loads(Path('views/traces/research-live.json').read_text())
           assert data['schema']=='workstation-live-projection/v1'
-          assert data['records'] and data['walls']
+          assert data['records'] and data['walls'] and data['movements']
           assert all(x['path'] for x in data['records'])
           assert not any(x.get('source_type')=='SYNTHETIC' for x in data['records'])
           print(len(data['records']),'source-owned research records',len(data['walls']),'bounded wall records')
           PY
-      - name: Publish verified projection on main
-        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+  publish:
+    needs: source-proof
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Regenerate original source projection from the checked-out commit
+        run: python -m views.traces.research_live
+      - name: Reject stale research publication and publish exact source state
         shell: bash
         run: |
           set -euo pipefail
+          git add views/traces/research-live.json
+          if git diff --cached --quiet; then echo "No source change"; exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add views/traces/research-live.json
-          if git diff --cached --quiet; then echo "No source changes"; exit 0; fi
-          git commit -m "Publish original research source-state projection"
-          for attempt in 1 2 3; do
-            git fetch origin main
-            if git diff --name-only HEAD origin/main | grep -E '^(views/traces/research_live\.py|systems/workspace/research_observatory\.py|network/tests/test_live_source_field\.py|network/tests/test_work_activity_ui\.py)$'; then
-              echo "Source code changed during projection"; exit 1
-            fi
-            if ! git rebase origin/main; then git rebase --abort; exit 1; fi
-            if git push origin HEAD:main; then exit 0; fi
-            sleep 2
-          done
-          exit 1
+          git commit -m "Publish original workstation research evidence"
+          git fetch origin main
+          test "$(git rev-parse HEAD^)" = "$(git rev-parse origin/main)" || {
+            echo "Main changed since verification; refuse stale projection"; exit 1;
+          }
+          git push origin HEAD:main
