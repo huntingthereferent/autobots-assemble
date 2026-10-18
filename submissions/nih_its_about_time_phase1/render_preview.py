@@ -110,6 +110,8 @@ def elements(markdown):
             items.append(Paragraph(inlines(s), STYLES["bullet"]))
         else:
             pending.append(s)
+            if line.endswith("  "):  # Markdown hard break: keep the draft metadata separate
+                flush()
     flush()
     return items
 
@@ -120,7 +122,7 @@ def page_label(canvas, doc):
     canvas.setStrokeColor(colors.HexColor("#d7dfe5"))
     canvas.line(55, height - 42, width - 55, height - 42)
     canvas.setFillColor(colors.HexColor("#4b5864"))
-    canvas.setFont("Helvetica", 8)
+    canvas.setFont("Helvetica", 11)
     canvas.drawString(56, height - 34, "NIH Phase 1 | Concept and Feasibility | DRAFT FOR REVIEW")
     canvas.drawString(56, 39, "Not submitted to NIH - synthetic and bounded feasibility evidence")
     canvas.drawRightString(width - 56, 39, f"Page {doc.page}")
