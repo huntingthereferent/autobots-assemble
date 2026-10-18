@@ -12,6 +12,15 @@
       "boundary": ""
     },
     {
+      "path": "research/dives/W13-NATIVE-RECEIPT-001/dive.json",
+      "label": "Original owner-authorized WORLD W13 native result",
+      "state": "MOVE_WITH_WALL",
+      "source_type": "RESEARCH_DIVE",
+      "scope": "User-directed research record; original result state",
+      "next": "Replay the original GitHub evidence archive in a new temporary machine and verify the latest native result against this committed research record.",
+      "boundary": ""
+    },
+    {
       "path": "work/arc_like_maze/chatbot/checkpoints/CP-0027.json",
       "label": "Multi-task source dependency propagation",
       "state": "witnessed",
@@ -162,6 +171,30 @@
       "text": "OpenWorld's public 25/25 and RHAE 100 prove public completion/final-path efficiency, not discovery-inclusive first-contact 100%.",
       "kind": "source-recorded-wall",
       "index": 2
+    },
+    {
+      "path": "research/dives/W13-NATIVE-RECEIPT-001/dive.json",
+      "text": "A Git commit/result-event identity match is not scientific causality.",
+      "kind": "source-recorded-wall",
+      "index": 0
+    },
+    {
+      "path": "research/dives/W13-NATIVE-RECEIPT-001/dive.json",
+      "text": "The original private runtime journal must not be embedded in the research source or public site.",
+      "kind": "source-recorded-wall",
+      "index": 1
+    },
+    {
+      "path": "research/dives/W13-NATIVE-RECEIPT-001/dive.json",
+      "text": "The owner-authorized artifact expires after its retention period; inability to reverify is an open wall.",
+      "kind": "source-recorded-wall",
+      "index": 2
+    },
+    {
+      "path": "research/dives/W13-NATIVE-RECEIPT-001/dive.json",
+      "text": "The subsequent GAME-NATIVE-VERIFIER checkpoint requires its own separately admitted and witnessed worker.",
+      "kind": "source-recorded-wall",
+      "index": 3
     },
     {
       "path": "state/coupling-entry-verification.md",
@@ -360,6 +393,16 @@
       "next": ""
     },
     {
+      "id": "structured:research/dives/W13-NATIVE-RECEIPT-001/dive.json",
+      "path": "research/dives/W13-NATIVE-RECEIPT-001/dive.json",
+      "line": null,
+      "title": "Original owner-authorized WORLD W13 native result",
+      "state": "MOVE_WITH_WALL",
+      "evidence": "structured-source-state",
+      "boundary": "",
+      "next": "Replay the original GitHub evidence archive in a new temporary machine and verify the latest native result against this committed research record."
+    },
+    {
       "id": "heading:state/coupling-entry-verification.md#L28",
       "path": "state/coupling-entry-verification.md",
       "line": 28,
@@ -481,9 +524,9 @@
     }
   ],
   "source_totals": {
-    "source_files": 1449,
-    "structured_records": 14,
-    "original_wall_entries": 4,
+    "source_files": 1453,
+    "structured_records": 15,
+    "original_wall_entries": 8,
     "documented_wall_headings": 12,
     "documented_movement_headings": 23
   },
