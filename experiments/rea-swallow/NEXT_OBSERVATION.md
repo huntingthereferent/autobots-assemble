@@ -1,0 +1,9 @@
+# Movement 9 — choose next observation from evidence
+
+This is a real `morluto/rea` source experiment in `javascriptApplicationVersionKeys.ts`, branching from the last verified Movement 8 `ProcessWorkstation` edition. A/B's next movement is chosen from **externally captured candidate observations**, rather than a hardcoded second input. Existing REA matcher and all prior extensions remain preserved; upstream original pinned at `f0b9ef34c404c1c65f8167502db972b0bd708403`.
+
+Given unresolved pairs and recorded candidate outcomes, `selectNextJavaScriptApplicationObservation` ranks each candidate by the number of **new, comparable, witnessed differences** it reveals. It chooses the maximum and uses deterministic codepoint ordering for ties. It returns `no-new-witness` if all evidence is missing, incomparable, or uninformative. It never produces new evaluations or calls source code, and a witnessed agreement never becomes a universal equivalence proof.
+
+The native test feeds **16 programs with identical REA structural fingerprints** using four positions that can refer to one of two vector arguments. An independent finite fixture evaluates five contexts: a common baseline and four single-position perturbations. The matcher compares 256 ordered pairs. A/B selector receives actual previously captured outcomes and re-ranks after each selected observation; it should expose 128, then 64, then 32, then 16 **new** differences, leaving the 16 diagonal pairs undetermined. That is a reproducible **bounded evidence-driven choice**, not a general autonomous experiment generator. Input generation, real-world sampling, and trustworthy evidence capture remain separate unfinished work.
+
+CI fails on regressions or type errors. All negative/missing/incomparable evidence tests remain part of the witness.
