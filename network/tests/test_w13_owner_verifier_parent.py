@@ -9,6 +9,7 @@ from pathlib import Path
 from dataclasses import replace
 from tempfile import TemporaryDirectory
 import unittest
+from unittest.mock import patch
 
 from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
@@ -69,26 +70,39 @@ class OwnerW13NativeVerifierParentTests(unittest.TestCase):
                               from_actor="isolated-source-test",job_id=OWNER_JOB_ID)
         self.assertNotIn(OWNER_JOB_ID,self.rt.snapshot())
 
-    def test_actual_finite_owner_parent_witness_is_admitted_executed_then_reverified(self):
+    def test_synthetic_reuse_of_original_job_name_cannot_impersonate_real_result(self):
         self._parent_complete()
-        original=self._admit()
-        self.assertEqual(original.dependencies,(OWNER_W13_JOB,))
-        self.assertEqual(original.inputs["parent_job_id"],OWNER_W13_JOB)
-        self.assertEqual(self.rt.state(OWNER_JOB_ID).status,"READY")
-        self.assertEqual(original.metadata["checkpoint_contract"],"GAME-NATIVE-VERIFIER")
-        self.assertEqual(original.metadata["worker_version"],OWNER_VERSION)
-        with self.assertRaises(PermissionError):
-            self.bridge.execute(OWNER_JOB_ID)
-        self.bridge.execute(OWNER_JOB_ID,allow_local_execution=True)
-        self.assertEqual(self.rt.state(OWNER_JOB_ID).status,"COMPLETE")
-        self.assertTrue(self.bridge.reverify(OWNER_JOB_ID))
-        self.assertEqual(reverify_job(data_dir=self.root,job_id=OWNER_JOB_ID)["status"],"COMPLETE")
-        self.assertEqual(self.rt.get(OWNER_W13_JOB).handoff_id,OWNER_W13_JOB)
-        self.assertEqual(len(self.rt.snapshot()),2)
+        with self.assertRaisesRegex(ValueError,"original owner W13 RESULT/source identity not authenticated"):
+            self._admit()
+        self.assertNotIn(OWNER_JOB_ID,self.rt.snapshot())
+
+    def test_finite_owner_parent_algorithm_with_explicitly_mocked_historical_id(self):
+        """Exercises the real native subprocess but NOT the original owner archive.
+
+        Only this synthetic fixture substitutes historical identity admission;
+        the independent parent W12 replay and native witness still run for real.
+        """
+        self._parent_complete()
+        with patch.object(NativeGameVerifierBridge,"_check_original_owner",return_value=None):
+            original=self._admit()
+            self.assertEqual(original.dependencies,(OWNER_W13_JOB,))
+            self.assertEqual(original.inputs["parent_job_id"],OWNER_W13_JOB)
+            self.assertEqual(self.rt.state(OWNER_JOB_ID).status,"READY")
+            self.assertEqual(original.metadata["checkpoint_contract"],"GAME-NATIVE-VERIFIER")
+            self.assertEqual(original.metadata["worker_version"],OWNER_VERSION)
+            with self.assertRaises(PermissionError):
+                self.bridge.execute(OWNER_JOB_ID)
+            self.bridge.execute(OWNER_JOB_ID,allow_local_execution=True)
+            self.assertEqual(self.rt.state(OWNER_JOB_ID).status,"COMPLETE")
+            self.assertTrue(self.bridge.reverify(OWNER_JOB_ID))
+            self.assertEqual(reverify_job(data_dir=self.root,job_id=OWNER_JOB_ID)["status"],"COMPLETE")
+            self.assertEqual(self.rt.get(OWNER_W13_JOB).handoff_id,OWNER_W13_JOB)
+            self.assertEqual(len(self.rt.snapshot()),2)
 
     def test_spoofed_parent_dependency_is_rejected_before_execution(self):
         self._parent_complete()
-        original=self._admit()
+        with patch.object(NativeGameVerifierBridge,"_check_original_owner",return_value=None):
+            original=self._admit()
         self.rt._handoffs[OWNER_JOB_ID]=replace(original,dependencies=(W13_JOB,))
         with self.assertRaises(ValueError):
             self.bridge.execute(OWNER_JOB_ID,allow_local_execution=True)
@@ -96,7 +110,8 @@ class OwnerW13NativeVerifierParentTests(unittest.TestCase):
 
     def test_tampered_child_worker_edition_fails_closed(self):
         self._parent_complete()
-        self._admit()
+        with patch.object(NativeGameVerifierBridge,"_check_original_owner",return_value=None):
+            self._admit()
         edition=self.desk._edition(WORKER_ID,OWNER_VERSION)/"native_verifier.py"
         edition.write_text(edition.read_text(encoding="utf8")+"\n# changed after admission\n",encoding="utf8")
         with self.assertRaises(ValueError):
@@ -105,7 +120,8 @@ class OwnerW13NativeVerifierParentTests(unittest.TestCase):
 
     def test_parent_result_must_still_reverify_after_child_admission(self):
         self._parent_complete()
-        self._admit()
+        with patch.object(NativeGameVerifierBridge,"_check_original_owner",return_value=None):
+            self._admit()
         source=self.desk._edition("game-worlds-w13","w13-github-v1")/"game_worlds_worker.py"
         source.write_text(source.read_text(encoding="utf8")+"\n# changed parent\n",encoding="utf8")
         with self.assertRaises(ValueError):
