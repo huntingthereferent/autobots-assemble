@@ -1,0 +1,35 @@
+name: ARC3 Window48 rooted mathematics plan
+
+on:
+  push:
+    paths:
+      - "work/arc3/window48_rooted_questions.py"
+      - "network/tests/test_arc3_window48_rooted_questions.py"
+      - ".github/workflows/arc3-window48-rooted-questions.yml"
+  pull_request:
+    paths:
+      - "work/arc3/window48_rooted_questions.py"
+      - "network/tests/test_arc3_window48_rooted_questions.py"
+      - ".github/workflows/arc3-window48-rooted-questions.yml"
+  workflow_dispatch:
+
+jobs:
+  certify-source-rooted-questions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Prove rooted discrimination across original 48 windows
+        run: python -m unittest -v network.tests.test_arc3_window48_rooted_questions
+      - name: Generate executable source-backed rooted question catalog
+        run: python -m work.arc3.window48_rooted_questions --out runtime/data/arc3/window48-rooted-questions.json
+      - name: Archive mathematical questions, distinct from native evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-window48-mathematical-rooted-questions
+          path: runtime/data/arc3/window48-rooted-questions.json
+          if-no-files-found: error
+          retention-days: 14
