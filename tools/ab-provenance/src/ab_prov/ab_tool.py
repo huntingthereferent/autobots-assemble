@@ -210,6 +210,11 @@ def run(repo:Path,rea:Path,out:Path)->int:
 
 def main(argv:list[str]|None=None)->int:
     argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:2] == ["swallow", "repo"]:
+        argv.pop(1)
+    if argv and argv[0] == "ship":
+        from .ship_cli import main as ship_main
+        return ship_main(argv[1:])
     if argv and argv[0] in ("inspect", "ancestors", "render"):
         from .cli import main as provenance
         return provenance(argv)
