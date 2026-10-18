@@ -21,7 +21,7 @@ AUTH_BLOB = "7599869612b58d5949f3bd2b26616a5ffc262af1"
 READY_BLOB = "30749a8d126e4bfa46365d65adaecffa3512fdbe"
 _SHA = re.compile("[0-9a-f]{40}\\Z")
 _EVENT = re.compile("evt_[0-9a-f]{32}\\Z")
-_LOG = re.compile(r'"(?P<key>[a-z_]+)":\\s*(?:"(?P<string>[^"\\\\]*)"|(?P<atom>true|false|[0-9]+))')
+_LOG = re.compile(r'"(?P<key>[a-z_]+)":\s*(?:"(?P<string>[^"]*)"|(?P<atom>true|false|[0-9]+))')
 
 
 def _blob(path: Path) -> str:
