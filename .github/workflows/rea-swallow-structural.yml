@@ -1,0 +1,49 @@
+name: REA A/B structural reference counterexamples
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.github/workflows/rea-swallow-structural.yml'
+  pull_request:
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.github/workflows/rea-swallow-structural.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  witness-structural-blind-spot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - name: Keep pinned source control and install actual REA
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          test "$(git rev-parse HEAD)" = "f0b9ef34c404c1c65f8167502db972b0bd708403"
+          npm ci --no-audit --no-fund
+      - name: Install authored A/B reference counterexamples in REA source
+        run: |
+          cp experiments/rea-swallow/structural_reference_counterexamples.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptStructuralReference.ab-swallow.test.ts
+          mkdir -p experiments/rea-swallow/results
+      - name: Native REA fingerprint and version-matching counterexample tests
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          REA_AB_STRUCTURAL_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/structural-reference-witness.json" \
+          npx --no-install vitest run src/domain/javascript/javascriptStructuralReference.ab-swallow.test.ts src/domain/javascript/javascriptAstFingerprint.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts \
+            2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/structural-reference-native.log"
+      - name: Retain the complete observed witness, not a claim of semantic equality
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-structural-reference-counterexamples
+          path: experiments/rea-swallow/results/structural-reference-*
+          retention-days: 14
+          if-no-files-found: warn
