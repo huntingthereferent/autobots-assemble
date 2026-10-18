@@ -4,6 +4,22 @@
 
 This is a **real native ARC game investigation**, not an ARC-inspired artificial game, a replacement bot, a canned route, or a proof that native ARC is the F3 construction. The objective remains eventual native game solving, but this checkpoint only establishes a mathematical source and falsifiable native relationship tests.
 
+## Resume here
+
+**Latest executed follow-up:** [position-only condition test](runs/WINDOW48_SP80_POSITION_CONDITION_2026-10-18.md) rejected the proposed step-seven suppression: 8/16 exact versus 12/16 for the frozen baseline, with 128 actual changes wrongly removed. Resume by comparing those retained pre-action frames with the earlier absent block, then predeclare a new discriminating condition. Do not rerun or adopt the failed position-only repair.
+
+**Execution state:** the latest native SP80 experiments completed; no persistent ARC process or automatic successor is running. A green experiment workflow means observations were collected successfully, including counterexamples. It does not mean the tested model is exact.
+
+**On “continue”:** proceed from the longer-history counterexample below. Do not restart the 48-law investigation, replay the old 50/50 checkpoint as new progress, or repeat a completed experiment without a stated new question.
+
+1. Read [the current evidence record](runs/WINDOW48_SP80_NATIVE_LONG_HISTORY_2026-10-18.md), including both longer-history and streak-versus-position results. Inspect retained native frames when deriving a new condition.
+2. Prepare the next bounded SP80 experiment: identify an observable PRE-action condition that could distinguish the absent native 9-to-12 block from the surviving transitions. Word position alone is a hypothesis, not an established mechanism. Write the exact condition, new action words, negative controls, comparison metric and stop conditions before collecting new observations. Keep the existing geometry, pre-color gate and boundary model as the frozen baseline.
+3. Implement and run that predeclared experiment through the existing native ARC workflow pattern. Retain actual before/after frames, actions, native level counters, errors and all mismatches. Interrupted or unmatched steps remain UNKNOWN. Do not add a replacement game, bot population or scheduler.
+4. Compare complete transition maps, including false positives, misses and wrong colors. Record whether the condition survives new observations; a counterexample is a result to carry forward, not a reason to silently refit.
+5. Update this current handoff and the evidence record with the actual run URL, artifact reference, measured result and next unresolved question. Preserve the original 48 laws and canonical agent.
+
+**Completion for this next step:** a newly executed native experiment and retained evidence, or an explicit blocking dependency. Editing these instructions or rerunning mathematical tests alone does not complete it.
+
 ## Current native SP80 boundary — longer histories (Oct 18, 2026)
 
 [Source-owned long-history and action-position evidence](runs/WINDOW48_SP80_NATIVE_LONG_HISTORY_2026-10-18.md) now bounds the previous 50/50 exact pre-color result. Eight longer words across 32 actual native resets / 356 actions yielded **56/66 exact ACTION4 full native changes**, despite all 2,078 observed native changed pixels and native before/after colors still being included: **72 extra source predictions** occurred. A separately predeclared streak-versus-position control (32 more resets, 348 native actions) gave **88/102 exact**, with **0/78 errors at word steps 1–6**, but **2/12** inaccurate at word step 7 and **12/12** inaccurate at step 8. This shows target pre-action pixel color alone is NOT sufficient; native action history/progress matters. All actual predictions and counterexamples, and interrupted native level-change trials, remain source-owned.
@@ -104,7 +120,7 @@ That source observation fixed a bottom-edge action-position completion rule BEFO
 
 This is native empirical relation discovery **within public SP80**, NOT proof of F3-48 A/B roles, F3 color mapping, rooted/full-state mathematical conjugacy, closure of a factor, ARC game completion or an autonomous solving policy. The canonical agent and original mathematical laws stay unchanged.
 
-## Latest native SP80 conditional pre-color transition witness
+## Historical checkpoint — pre-color transition witness (bounded by longer histories)
 
 [Actual native pre-color occupancy test](runs/WINDOW48_SP80_NATIVE_OCCUPANCY_2026-10-18.md): Six previously untested public SP80 action contexts, 24 fresh native game resets and 216 real actions independently confirmed that a previously specified **target PRE-action native color** admission condition eliminates all 50 overpredicted stage-1 ACTION4 changes from the frozen geometry-plus-bottom-boundary models. Across 50 full ACTION4 effect comparisons, each frozen model predicted all 1,680 observed actual native before/after color changes, with **50/50 exact full transition maps, 0 false positives, 0 misses, 0 miscolored pixels**. All 50 rejected predictions expected native 14->0 where the actual *before* pixel was native color 12. The unshifted identity control stayed at 0/50 exact. Independent native CI and a before-state-only gate regression preserve the result.
 
