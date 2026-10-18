@@ -27,6 +27,18 @@ class OriginalW13SourceTests(unittest.TestCase):
         self.assertEqual(decl["source_fingerprint"],"798ed2399413ecbb30a1eb94c547a5517ee03dfd002600d868376f88f03f458a")
         self.assertTrue(record["walls"])
 
+    def test_owner_only_replay_repair_pins_original_record_and_loads_dependencies_first(self):
+        workflow=(ROOT/".github/workflows/w13-native-research-source.yml").read_text()
+        self.assertIn("github.actor == github.repository_owner",workflow)
+        self.assertIn("branches: [main]",workflow)
+        self.assertIn("0baeeae60718b0651f3afc503d98a39dd0a95b0a",workflow)
+        self.assertIn("f8fbf981c75ccf53a8a72006053f8b02a31343dc",workflow)
+        self.assertIn("git('diff','--name-status',parents[1],sha,'--',path)",workflow)
+        self.assertIn("cryptography>=45,<47",workflow)
+        self.assertLess(workflow.index("Install original native verifier dependency"),
+                        workflow.index("Authenticate original owner-run"))
+        self.assertIn("'.github/workflows/w13-native-research-source.yml'",workflow)
+
     def test_missing_original_artifact_cannot_verify(self):
         with self.assertRaises(ValueError):
             verify_original(artifact_dir=ROOT/"missing-artifact",
