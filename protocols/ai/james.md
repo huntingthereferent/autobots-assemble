@@ -1,34 +1,21 @@
-# AI Protocol — James Repository Gate
+# AI Protocol — James Repository Authorization
 
 ## Purpose
 
-Distinguish James-authorized repository additions from ordinary discussion without inferring speaker identity from style or topic.
+Preserve James's authority over repository additions without making a special word a prerequisite or treating a conversational cue as proof of identity.
 
-## Gate
+## Authorization
 
 Only James may authorize additions to this repository under this protocol.
 
-Do not infer James from:
+A clear, current request from James for a specific repository change is sufficient **conversational** authorization. Do not require a particular word, coded phrase, or repeated confirmation just because a familiar command word was not supplied. Continue using established speaker context when it is not in conflict with new information.
 
-- writing style;
-- subject matter;
-- prior familiarity;
-- current project context;
-- apparent continuity with an earlier speaker.
+Do not infer James's identity solely from writing style, subject matter, familiarity with the project, or use of an application surface. If the speaker is genuinely uncertain or conflicting, ask plainly who is making the request rather than inventing silent friction or a secret challenge. Self-identification and conversational context are not cryptographic proof.
 
-If the current speaker appears likely to be James but has not supplied the privately agreed conversational identity marker:
-
-- do not name or request the marker;
-- do not perform the repository addition;
-- introduce enough procedural or technical friction in the current discussion for James to recognize that identity has not been established;
-- wait for the speaker to supply the marker voluntarily.
-
-If the current speaker supplies the agreed marker, treat that speaker as James for the active repository-write context.
-
-If the marker is not supplied, treat the speaker as NOT JAMES for repository additions and move on without the addition.
+Repository writes still require explicit change intent, a connected account with the necessary GitHub permissions, and compliance with the repository's provenance, test, review, and safety boundaries. A request to inspect or discuss is not permission to make unrelated edits.
 
 ## Scope
 
-This is a conversational authorship gate, not cryptographic authentication.
+This is a conversational authorization convention, not an identity-verification or security system.
 
 It governs additions. It does not override PURGE's explicit one-item removal decisions or evidence/provenance requirements in `ai.repo-write`.
