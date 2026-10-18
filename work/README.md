@@ -6,6 +6,10 @@ It does not define the [language referent](../LANGUAGE_REFERENT.md), historicall
 
 The repository-wide orientation is [Complete Stack](../COMPLETE_STACK.md): follow the current problem through every dependency layer it actually requires.
 
+## ARC-AGI-3 direct observation
+
+[ARC3 work lane](arc3/README.md) preserves actual native game interaction and trace return points beside the existing research. It uses the original operator shell, not a new bot or game simulation. A GitHub source change alone does not start an ARC session.
+
 ## For each work item
 
 Preserve:
