@@ -136,7 +136,7 @@ class UncertainPublicationWorldTests(unittest.TestCase):
             (2,{"source_program_sha256":"e"*64}),
             (6,{"native_game_known_at":"2026-01-06"}),
             (8,{"native_game_known_at":"2026-01-04"}),
-            (11,{"admitted_ids":["delayed-result","prior-note"]}),
+            (10,{"admitted_ids":["delayed-result","prior-note"]}),
             (17,{"static_valid_ids":["prior-note"]}),
         ):
             altered=deepcopy(frames)
