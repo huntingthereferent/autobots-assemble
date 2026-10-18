@@ -45,7 +45,8 @@ DIRECTORIES = (
 ALLOWED={".py",".md",".json",".jsonl",".yml",".yaml",".js",".html",".css",".svg",".txt"}
 SKIP_DIRS={".git",".venv","node_modules","__pycache__",".pytest_cache","data","build","dist"}
 # runtime/data is private; all inventory is read-only and source-only.
-REDACT=("runtime/data/","systems/workspace/runtime/","work/private/")
+REDACT=("runtime/data/","systems/workspace/runtime/","work/private/",
+        "foundation/", "work/projects/st-joseph-complete-stack/")
 
 
 def _load(path:Path)->dict:

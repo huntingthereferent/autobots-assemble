@@ -64,3 +64,17 @@ python -m unittest -v \
 This controller is sequential/invoked. Actual continuous orchestration would
 also need authenticated native worker providers, independently evidenced
 cross-lane joins, and multi-process writer coordination.
+
+## Current integration and wall rechecks
+
+The source-owned W13 delegate invokes `WorkstationCycle` against its actual
+journal before assigning the native helper. B3 still owns separately admitted
+execution and native verification. This is an invoked continuation path; it
+is not a deployed background service.
+
+Hosts that can independently verify a previously missing owner relation may
+supply `verify_wall_resolution(runtime, wall_event)`. Only the exact boolean
+`True` releases that exact wall for the current pass. The callback must check
+current native evidence for the event's job, candidate, and missing relation.
+There is no permissive default, and wall history is never deleted. Withdrawing
+the verifier or its evidence makes the wall blocking again.

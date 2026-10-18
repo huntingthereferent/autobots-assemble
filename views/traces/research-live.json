@@ -17,7 +17,7 @@
       "state": "MOVE_WITH_WALL",
       "source_type": "RESEARCH_DIVE",
       "scope": "User-directed research record; original result state",
-      "next": "Replay the original GitHub evidence archive in a new temporary machine and verify the latest native result against this committed research record.",
+      "next": "Original archive replay passed in GitHub Actions run 39095851290. Continue through systems/workspace/W13_OWNER_NEXT_CP_PREFLIGHT.md and the separately admitted owner-parent verifier; preserve the missing historical child journal and live-temporal parent boundaries.",
       "boundary": ""
     },
     {
@@ -439,7 +439,7 @@
       "state": "MOVE_WITH_WALL",
       "evidence": "structured-source-state",
       "boundary": "",
-      "next": "Replay the original GitHub evidence archive in a new temporary machine and verify the latest native result against this committed research record."
+      "next": "Original archive replay passed in GitHub Actions run 39095851290. Continue through systems/workspace/W13_OWNER_NEXT_CP_PREFLIGHT.md and the separately admitted owner-parent verifier; preserve the missing historical child journal and live-temporal parent boundaries."
     },
     {
       "id": "structured:research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
@@ -573,7 +573,7 @@
     }
   ],
   "source_totals": {
-    "source_files": 1526,
+    "source_files": 1490,
     "structured_records": 16,
     "original_wall_entries": 13,
     "documented_wall_headings": 12,
