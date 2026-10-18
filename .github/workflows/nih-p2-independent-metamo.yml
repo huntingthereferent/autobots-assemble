@@ -1,0 +1,66 @@
+name: NIH P2 independent synthetic metamorphic checks
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_independent_metamo.py'
+      - 'network/tests/test_nih_independent_metamo.py'
+      - '.github/workflows/nih-p2-independent-metamo.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_independent_metamo.py'
+      - 'network/tests/test_nih_independent_metamo.py'
+      - '.github/workflows/nih-p2-independent-metamo.yml'
+permissions:
+  contents: read
+jobs:
+  independent-source-metamorphic-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original native and actual Chromium witness requirements
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Independently test fresh source and metamorphic boundaries
+        run: python -m unittest -v network.tests.test_nih_independent_metamo
+      - name: Verify actual original twelve jobs and independent source cases
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-independent-evidence"
+          python -m systems.workspace.nih_independent_metamo \
+            --data-dir "$RUNNER_TEMP/original-native-workstation" \
+            --output-dir "$RUNNER_TEMP/nih-independent-evidence"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-independent-evidence"
+          r=json.loads((out/"nih-p2-independent-metamo-summary.json").read_text())
+          assert r["independent_source_fixture_count"]==5
+          assert r["independent_query_replays"]==125
+          assert r["original_native_jobs"]==12
+          assert r["additional_native_checkpoint"] is False
+          assert r["synthetic_only"] is True
+          assert r["clinical_verdict"]=="NOT_EVALUATED"
+          assert r["general_biomedical_benchmark"] is False
+          assert r["official_NIH_submission"] is False
+          assert all(x["source_worker_original_program_and_oracle_agreed"] for x in r["source_cases"])
+          assert len(list(out.glob("seed-*-source.json")))==5
+          PY
+          tar -czf "$RUNNER_TEMP/nih-independent-evidence/original-native-journal.tar.gz" \
+            -C "$RUNNER_TEMP/original-native-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+      - name: Archive independent input records and original native journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-independent-metamo-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-independent-evidence
+          if-no-files-found: warn
+          retention-days: 30
