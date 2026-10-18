@@ -58,8 +58,8 @@ def evaluate(frozen:dict,record:dict,archive)->dict:
         rows.append({"word":word,"predicted_positions":predicted,
                      "observed_positions":positions,
                      "exact_positions":sum(a==b for a,b in zip(positions,predicted))})
-    if len(roots)!=1 or record.get("all_roots_identical") is not True or (
-            sorted(roots)!=record.get("root_hashes")) or
+    if (len(roots)!=1 or record.get("all_roots_identical") is not True or
+            sorted(roots)!=record.get("root_hashes") or
             completed!=len(WORDS) or record.get("native_actions")!=sum(map(len,WORDS))):
         raise ValueError("native source root/metadata inconsistent")
     return {"kind":"AB_LS20_GLYPH_TRANSPORT_OUT_OF_SAMPLE_VERDICT",
