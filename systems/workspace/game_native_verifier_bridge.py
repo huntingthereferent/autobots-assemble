@@ -56,6 +56,19 @@ class NativeGameVerifierBridge:
         self.parent_bridge=GameW13NativeBridge(runtime=runtime,workstation=workstation)
         runtime.register_evidence_verifier(VERIFIER,self._verify)
 
+    def _check_original_owner(self,parent_job_id):
+        """Require exact historical archived RESULT and original worker edition."""
+        from .native_receipt_projection import recorded_receipt
+        witness=recorded_receipt(self.runtime,parent_job_id)
+        completed=[event for event in witness["events"] if event["type"]=="RESULT"]
+        if (witness["worker_version"]!=OWNER_W13_EDITION
+                or witness["source_fingerprint"]!=OWNER_W13_FINGERPRINT
+                or witness["native_verifier_id"]!=W13_VERIFIER
+                or len(completed)!=1
+                or completed[0]["event_id"]!=OWNER_W13_RESULT_EVENT
+                or completed[0]["result_status"]!="COMPLETE"):
+            raise ValueError("original owner W13 RESULT/source identity not authenticated")
+
     def _parent_inputs(self,parent_job_id=W13_JOB):
         if parent_job_id not in PARENTS:
             raise ValueError("unknown original W13 parent identity")
@@ -67,18 +80,7 @@ class NativeGameVerifierBridge:
                 or self.runtime.state(parent_job_id).status!="COMPLETE"):
             raise ValueError("original W13 native game CP must be complete")
         if parent_job_id==OWNER_W13_JOB:
-            # This is a historical original, not a reused familiar job ID.
-            # A synthetic fixture with the same ID may not impersonate it.
-            from .native_receipt_projection import recorded_receipt
-            witness=recorded_receipt(self.runtime,parent_job_id)
-            completed=[event for event in witness["events"] if event["type"]=="RESULT"]
-            if (witness["worker_version"]!=OWNER_W13_EDITION
-                    or witness["source_fingerprint"]!=OWNER_W13_FINGERPRINT
-                    or witness["native_verifier_id"]!=W13_VERIFIER
-                    or len(completed)!=1
-                    or completed[0]["event_id"]!=OWNER_W13_RESULT_EVENT
-                    or completed[0]["result_status"]!="COMPLETE"):
-                raise ValueError("original owner W13 RESULT/source identity not authenticated")
+            self._check_original_owner(parent_job_id)
         self.parent_bridge.reverify(parent_job_id)
         original_result=self.runtime.state(parent_job_id).output["report"]
         verify_native_report(original.inputs,original_result)
