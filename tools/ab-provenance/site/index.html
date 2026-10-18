@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>A/B — Documentation</title>
+<style>
+:root{--base:#10161a;--surface:#182127;--type:#dce3df;--muted:#9dadae;--line:#33434c;--accent:#b1c9c0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--base);color:var(--type);font:15px/1.7 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+a{color:#accbc2;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{color:#e2f5ee}
+header{padding:22px max(24px,calc((100vw - 1120px)/2));border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.wordmark{font:normal 23px/1.2 Georgia,serif;letter-spacing:-.04em}
+.meta,.eyebrow{font:11px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+main{max-width:1130px;margin:auto;padding:64px 24px 90px}
+.hero{max-width:800px;padding-bottom:44px}
+h1,h2,h3{font-weight:400;font-family:Georgia,"Times New Roman",serif;letter-spacing:-.025em}
+h1{font-size:clamp(45px,6vw,76px);line-height:1.07;margin:10px 0 22px}
+h2{font-size:30px;margin:0 0 18px}
+h3{font-size:22px;margin:0 0 8px}
+.lead{font-size:18px;color:var(--muted);max-width:700px}
+.rule{border-bottom:1px solid var(--line);padding:32px 0}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:38px}
+.panel{padding:25px;background:var(--surface);border:1px solid var(--line);border-radius:4px}
+.small{font-size:12px;color:var(--muted)}
+pre{overflow:auto;white-space:pre;padding:22px;background:#0b1114;border:1px solid var(--line);font:13px/1.8 ui-monospace,Consolas,monospace;border-radius:4px}
+code{font:13px ui-monospace,Consolas,monospace;color:#d8ebd9}
+ol{padding-left:24px}li{margin-bottom:13px}
+dt{margin-top:17px;color:var(--accent);font:13px ui-monospace,Consolas,monospace}
+dd{margin:5px 0 14px;color:var(--muted)}
+.note{border-left:2px solid #c0a786;padding-left:15px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:28px 24px;text-align:center;color:var(--muted);font:12px ui-monospace,Consolas,monospace}
+@media(max-width:750px){.columns{grid-template-columns:1fr}main{padding-top:38px}}
+</style>
+</head>
+<body>
+<header><div class="wordmark">A/B <span class="small">/ Technical Documentation</span></div><div class="meta">v0.1.0 · Release Candidate</div></header>
+<main>
+<section class="hero">
+<div class="eyebrow">Source investigation · Provenance · Independent testing</div>
+<h1>Reground the source.<br>Carry what survives.</h1>
+<p class="lead">Swallow Repo is the A/B lane for correcting the referent: inspect actual source operations, change the relationships through the existing workstation, test them against native evidence, then ship A/B under its own license.</p>
+<p><a href="#start">Get started</a> &nbsp;·&nbsp; <a href="#method">How it works</a> &nbsp;·&nbsp; <a href="#rights">License and source rights</a></p>
+</section>
+<section id="start" class="rule">
+<div class="eyebrow">01 / Start</div>
+<h2>A tool you can run</h2>
+<p>Use a disposable repository checkout with the pinned REA source submodule, Python 3.11 and Node 24. The first adapter covers REA's JavaScript matching and observation workflow.</p>
+<pre><code>python -m pip install ./tools/ab-provenance
+git submodule update --init experiments/rea-swallow/upstream
+npm --prefix experiments/rea-swallow/upstream ci
+
+ab source
+ab swallow repo --allow-source-edit --repo-root . \
+  --out runtime/data/ab-source-tool/first-pass
+
+ab inspect runtime/data/ab-source-tool/first-pass/source-provenance.json
+ab render runtime/data/ab-source-tool/first-pass/source-provenance.json \
+  -o runtime/data/ab-source-tool/first-pass/source-provenance.html</code></pre>
+<p class="small">These commands change only the explicitly selected local REA worktree and require real dependencies. No arbitrary repository execution or automatic publication.</p>
+</section>
+<section id="method" class="rule">
+<div class="eyebrow">02 / Method</div>
+<div class="columns">
+<div><h2>What swallowing means here</h2>
+<ol>
+<li><strong>Source.</strong> Identify the original implementation and exact referent.</li>
+<li><strong>Inspect.</strong> Determine actual operations, not a rewritten description.</li>
+<li><strong>Reground.</strong> Preserve and alter source through ProcessWorkstation editions.</li>
+<li><strong>Witness.</strong> Run native source tests, record contradictions and unknowns.</li>
+<li><strong>Continue.</strong> Carry only observed supported relations.</li>
+<li><strong>Ship.</strong> Deliver the corrected A/B tool and its original provenance.</li>
+</ol></div>
+<div class="panel"><h3>Available commands</h3><dl>
+<dt>ab source</dt><dd>Identify the exact supported source commit and operation scope.</dd>
+<dt>ab swallow repo</dt><dd>Prepare and apply the real source corrections with explicit source-edit permission.</dd>
+<dt>ab inspect / ancestors</dt><dd>Inspect what was actually recorded, including unresolved and invalidated relations.</dd>
+<dt>ab render</dt><dd>Produce an original offline visual provenance inspection.</dd>
+<dt>ab ship</dt><dd>Verify execution receipts and package the original A/B release candidate.</dd>
+</dl></div>
+</div>
+</section>
+<section class="rule">
+<div class="eyebrow">03 / Release</div>
+<h2>Evidence travels with the package</h2>
+<pre><code>python -m pip install build
+python -m build tools/ab-provenance \
+  --outdir runtime/data/ab-source-tool/first-pass/dist
+ab ship --repo-root . \
+  --evidence runtime/data/ab-source-tool/first-pass \
+  --dist runtime/data/ab-source-tool/first-pass/dist \
+  --out runtime/data/ab-source-tool/shipped-0.1.0</code></pre>
+<p>Shipped artifacts include a wheel, source archive, A/B license, original docs, source receipts, native logs, an evidence manifest, and a provenance view. The release gate rejects missing or changed source evidence and preserves failed experiments.</p>
+</section>
+<section class="rule" id="comparison">
+<div class="eyebrow">04 / Reference comparison</div>
+<h2>Did A/B reconstruct the original?</h2>
+<p>The experiment runs original pinned REA matching, comparison and uncertainty test cases before changing source and runs those exact original cases again after A/B regrounding. Matching outcomes are recorded without replacing original test definitions.</p>
+<div class="columns"><div class="panel"><h3>Behavior that survived</h3><p>22 original REA native test assertions passed before and after the source correction in the first controlled run. The release records both test results and their source identities.</p></div><div class="panel"><h3>What is not the same</h3><p>A/B does not yet implement the original REA CLI/MCP interface or the full binary, Android and other analyzer provider catalog. Original A/B documentation and product licensing remain separate.</p></div></div>
+<p class="small">This is bounded test parity, not a universal source equivalence claim. Read comparison/comparison.md inside the actual release bundle for the source-specific result.</p>
+</section>
+<section id="rights" class="rule">
+<div class="eyebrow">05 / Scope and rights</div>
+<div class="columns">
+<div><h2>A/B has its own license.</h2><p>A/B original code, documentation and visuals are copyright 2026 James Muneoka, All Rights Reserved. The source under investigation is not the product's license.</p></div>
+<div class="note"><h3>Source referent stays separate</h3><p>The current REA adapter uses the original morluto/rea source at a fixed commit. REA remains under its own MIT terms where that code is used or distributed. REA's code, documentation and license are not included in the A/B product bundle.</p><p>Current coverage is a verified JavaScript investigation slice, not all of REA, every repository, or a universal theorem.</p></div>
+</div>
+</section>
+</main>
+<footer>A/B · Original documentation · All Rights Reserved · Local release candidate</footer>
+</body></html>

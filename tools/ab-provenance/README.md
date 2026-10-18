@@ -4,6 +4,23 @@ Installable A/B tool for actual source-version experiments through the existing 
 
 **REA is source under investigation, not A/B’s visual template.** This branch includes the pinned MIT REA source via an upstream submodule and the existing source-level A/B transformation experiments. A/B changes that real source through the workstation and tests the result. REA retains its MIT rights; original A/B code follows the repository [All Rights Reserved](../../LICENSE) notice.
 
+## Swallow Repo: fix or reground the source
+
+REA is the original source being corrected and tested through A/B—not a
+reference to copy. This lane now has its [operating rules](docs/swallow-repo-lane.md),
+an executable source workflow, an [A/B quickstart](docs/quickstart.md) and
+an offline, source-receipt-gated [release candidate](docs/release.md).
+
+The actual A/B release includes our own [LICENSE](LICENSE), original
+[documentation](docs/quickstart.md), changelog, installable code, tested
+source receipts, and the visual provenance. [Third-party notices](THIRD_PARTY_NOTICES.md)
+keep the REA source license with REA rather than making it A/B's license.
+
+Commands include source, swallow repo, inspect, ancestors, render, and ship.
+The initial adapter supports the pinned real REA JavaScript investigation,
+not arbitrary unverified repositories. CI keeps the tested package and
+release bundle inspectable without declaring public publication.
+
 ## Install, change the original source, and inspect real evidence
 
 See [the actual REA source transformation guide](docs/swallow.md), which invokes the native ProcessWorkstation editions and upstream REA tests through `ab swallow`. `ab-prov` is only the backward-compatible read-only projection entrypoint.

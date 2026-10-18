@@ -1,7 +1,7 @@
 name: A/B actual source absorption and native REA verification
 on:
   push:
-    branches: ['feature/ab-tool-swallow-rea-20261018']
+    branches: ['feature/ab-tool-swallow-rea-20261018', 'feature/ab-swallow-repo-ship-20261018']
     paths:
       - 'tools/ab-provenance/**'
       - '.github/workflows/ab-source-absorption.yml'
@@ -36,10 +36,27 @@ jobs:
         run: |
           python -m pip install ./tools/ab-provenance "jsonschema>=4.21"
           python -m unittest discover -s tools/ab-provenance/tests -v
+      - name: Freeze original REA native results before any A/B source change
+        run: |
+          python tools/ab-provenance/comparison/paired_reference.py baseline \
+            --rea "$GITHUB_WORKSPACE/experiments/rea-swallow/upstream" \
+            --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/original"
       - name: Construct actual REA source editions and test native TypeScript
         run: |
           ab source
           ab swallow --allow-source-edit --repo-root "$GITHUB_WORKSPACE" --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass"
+      - name: Compare unchanged original REA cases with A/B-corrected source
+        run: |
+          python tools/ab-provenance/comparison/paired_reference.py compare \
+            --rea "$GITHUB_WORKSPACE/experiments/rea-swallow/upstream" \
+            --ab-tool "$GITHUB_WORKSPACE/tools/ab-provenance" \
+            --baseline "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/original" \
+            --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass/comparison"
+      - name: Preserve immutable baseline inside the A/B release comparison record
+        run: |
+          cp runtime/data/ab-source-tool/original/baseline.json runtime/data/ab-source-tool/first-pass/comparison/baseline.json
+          cp runtime/data/ab-source-tool/original/original-vitest.json runtime/data/ab-source-tool/first-pass/comparison/original-vitest.json
+          cp runtime/data/ab-source-tool/original/original-vitest.log runtime/data/ab-source-tool/first-pass/comparison/original-vitest.log
       - name: Inspect actual source-lineage and produce HTML evidence
         run: |
           ab inspect runtime/data/ab-source-tool/first-pass/source-provenance.json --graph > runtime/data/ab-source-tool/first-pass/graph.json
@@ -51,11 +68,22 @@ jobs:
           python -m build tools/ab-provenance --outdir runtime/data/ab-source-tool/first-pass/dist
           test -f runtime/data/ab-source-tool/first-pass/dist/ab_tool-0.1.0-py3-none-any.whl
           test -f runtime/data/ab-source-tool/first-pass/dist/ab_tool-0.1.0.tar.gz
+      - name: Reground the source into a separately licensed A/B release bundle
+        run: |
+          ab ship --repo-root "$GITHUB_WORKSPACE" \
+            --evidence "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass" \
+            --dist "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass/dist" \
+            --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/shipped-0.1.0"
+          test -f runtime/data/ab-source-tool/shipped-0.1.0/ab-tool-0.1.0-release.zip
+          test -f runtime/data/ab-source-tool/shipped-0.1.0/release-manifest.json
       - name: Retain original native logs and failure if hypothesis breaks
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ab-swallowed-real-rea-source-and-visual
-          path: runtime/data/ab-source-tool/first-pass/*
+          path: |
+            runtime/data/ab-source-tool/first-pass/*
+            runtime/data/ab-source-tool/original/*
+            runtime/data/ab-source-tool/shipped-0.1.0/*
           retention-days: 14
           if-no-files-found: warn

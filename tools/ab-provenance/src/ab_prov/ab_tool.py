@@ -124,9 +124,8 @@ def _graph(receipt:dict)->dict:
     links=[]
     for i,row in enumerate(receipt["stages"]):
         dest="A/B source stage "+str(i+1)+": "+row["name"]
-        evidence=["local-log://"+row["prepare"]["log"],"local-log://"+row["apply"]["log"]]
-        if "native" in row:
-            evidence += ["local-log://"+row["native"]["log"],"local-log://"+row["typecheck"]["log"]]
+        evidence=["local-log://"+row[k]["log"] for k in ("prepare", "apply", "native", "typecheck")
+                  if isinstance(row.get(k), dict) and row[k].get("log")]
         links.append({
           "schema_version":1,
           "provenance_id":"ab-source-"+str(i+1)+"-"+row["name"],
@@ -136,7 +135,7 @@ def _graph(receipt:dict)->dict:
           "evidence_refs":evidence,
           "survived":["original source commit "+PIN,
                       "original REA MIT license"],
-          "invalidated":[],
+          "invalidated":["source stage failed or was interrupted"] if row["result"]=="FAIL" else [],
           "boundaries":["Local subprocess result and source hashes, NOT independent universal semantics.",
                         "Per-stage source preparation is not individually native-tested by this run."
                         if row["result"]!="PASS" else "Native REA tests and typecheck executed."],
@@ -210,11 +209,17 @@ def run(repo:Path,rea:Path,out:Path)->int:
 
 def main(argv:list[str]|None=None)->int:
     argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:2] == ["swallow", "repo"]:
+        argv.pop(1)
+    if argv and argv[0] == "ship":
+        from .ship_cli import main as ship_main
+        return ship_main(argv[1:])
     if argv and argv[0] in ("inspect", "ancestors", "render"):
         from .cli import main as provenance
         return provenance(argv)
     parser=argparse.ArgumentParser(prog="ab",description="A/B real-source transformation tool")
     sub=parser.add_subparsers(dest="command",required=True)
+    sub.add_parser("ship",help="Package source-verified A/B wheel, docs, and original evidence")
     sub.add_parser("source",help="Show actual pinned REA source and supported A/B stages")
     p=sub.add_parser("swallow",help="Rebuild and test actual REA source editions (mutates declared checkout)")
     p.add_argument("--repo-root",type=Path,default=Path.cwd())
