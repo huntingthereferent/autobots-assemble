@@ -62,3 +62,9 @@ The repository's independent [finite mathematical work](../arc_like_maze/README.
 **Not yet established natively:** a verified mapping from ARC control actions/coordinates and observed game state to those source laws, any source-to-native conjugacy, an ARC win, or a competition score.
 
 The next experiment must produce a **predeclared observable relation**, actually intervene in a native game, preserve counterexamples, and stop rather than asserting an unsupported equivalence. See [AGENTS.md](AGENTS.md) for the source/evidence contract.
+
+## Native composite-action evidence and one reproduced level advance
+
+[Latest source-bound native investigation](runs/WINDOW48_NATIVE_COMPOSITES_SP80_2026-10-17.md): 258 ordered two-action candidates across all 25 public game roots, 1,548 real environment actions, 257 complete runs and **zero strict three-state cycles** on entire frames or exact color masks. A single mathematical run was interrupted by an actual native level change.
+
+An **independent public SP80 replay** reproduced the six-action word 454545 advancing the native level counter **0 to 1 in both fresh resets**; state remained NOT_FINISHED. This is useful **real native game progress**, but it does not solve the complete game or establish source-F3 action/state alignment. The canonical mathematical agent remains unchanged.
