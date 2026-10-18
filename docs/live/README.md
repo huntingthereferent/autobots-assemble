@@ -1,12 +1,12 @@
-# Investigation Log
+# Workstation
 
-[Investigation Log](work.html) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
-The GitHub Pages entrance under `/live/` now redirects to the **Investigation Log**, not the source provenance graph.
+The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
 
 ## Evidence boundaries
 
-The Investigation Log reads actual **public GitHub Actions workflow runs** on opening and every three minutes while visible. It displays the *latest observed 50* runs, counts queued/running/passed/failed outcomes within that sample, and lets a viewer inspect the real GitHub jobs and ordered steps for one selected workflow. It uses exact GitHub execution IDs and commit hashes. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
+The Workstation reads actual **public GitHub Actions workflow runs** on opening and every three minutes while visible. It displays the *latest observed 50* runs, counts queued/running/passed/failed outcomes within that sample, and lets a viewer inspect the real GitHub jobs and ordered steps for one selected workflow. It uses exact GitHub execution IDs and commit hashes. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
 
 The research section loads `views/traces/research-live.json`, projected from native research checkpoints, ARC experiments, pinned statuses and explicit walls. Original `next` and `boundary` fields are preserved when recorded. These are **historical source states**, not a claim that all their workers are currently executing. Nothing is invented from a file name or decorative animation.
 
