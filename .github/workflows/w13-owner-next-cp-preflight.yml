@@ -1,0 +1,136 @@
+# New owner-only GitHub archive investigation, not a child job trigger.
+# PRs use local tests and must never download the original private archive.
+name: owner-w13-next-cp-source-preflight
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/w13_owner_next_cp_preflight.py'
+      - 'network/tests/test_w13_owner_next_cp_preflight.py'
+      - 'systems/workspace/W13_OWNER_NEXT_CP_PREFLIGHT.md'
+      - '.github/workflows/w13-owner-next-cp-preflight.yml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/w13-owner-next-cp-preflight.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  negative-controls:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install native read-only import prerequisites
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Check source pins and negative controls without owner artifact
+        run: python -m unittest -v network.tests.test_w13_owner_next_cp_preflight
+  real-original-source:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install native verifier prerequisites before importing original code
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Authorize read-only new preflight through owner merge
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,subprocess
+          sha=os.environ['GITHUB_SHA']
+          rel='.github/workflows/w13-owner-next-cp-preflight.yml'
+          def git(*args):
+              return subprocess.check_output(['git',*args],text=True).strip()
+          if git('rev-parse','HEAD')!=sha:
+              raise SystemExit('checkout does not match owner SHA')
+          parents=git('rev-list','--parents','-n','1',sha).split()
+          if len(parents)!=3 or git('diff','--name-status',parents[1],sha,'--',rel)!=f'A\t{rel}':
+              raise SystemExit('expected a newly owner-merged read-only preflight workflow')
+          source='research/dives/W13-NATIVE-RECEIPT-001/dive.json'
+          if git('rev-parse',f'{sha}:{source}')!='f8fbf981c75ccf53a8a72006053f8b02a31343dc':
+              raise SystemExit('original source changed; no preflight')
+          request='systems/workspace/native_job_requests/w13/game-native-verifier-github-001.json'
+          if git('ls-tree','--name-only',sha,'--',request):
+              raise SystemExit('owner child request is a separate activation boundary')
+          PY
+      - name: Authenticate original owner-run and immutable evidence artifact
+        id: source
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/original-w13-source"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from systems.workspace.github_w13_continuation import (
+              RUN_ID,ARTIFACT_ID,ORIGINAL_HEAD,ORIGINAL_DIGEST)
+          repo=os.environ['GITHUB_REPOSITORY']
+          def get(route):
+              req=Request(f'https://api.github.com/repos/{repo}/{route}',headers={
+                  'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+                  'Accept':'application/vnd.github+json',
+                  'X-GitHub-Api-Version':'2022-11-28',
+                  'User-Agent':'w13-original-native-research-source'})
+              with urlopen(req,timeout=20) as stream:
+                  return json.load(stream)
+          run=get(f'actions/runs/{RUN_ID}')
+          if (run['name']!='workstation-w13-owner-merged-one-shot'
+                  or run['head_repository']['full_name']!=repo
+                  or run['head_sha']!=ORIGINAL_HEAD
+                  or run['event']!='push' or run['head_branch']!='main'
+                  or run['status']!='completed' or run['conclusion']!='success'
+                  or run['actor']['login']!=os.environ['GITHUB_REPOSITORY_OWNER']):
+              raise SystemExit('original owner source not authenticated')
+          arts=get(f'actions/runs/{RUN_ID}/artifacts?per_page=100')['artifacts']
+          matches=[a for a in arts if a['id']==ARTIFACT_ID
+                   and a['name']==f'w13-owner-merged-native-{RUN_ID}-1'
+                   and a.get('workflow_run',{}).get('id')==RUN_ID
+                   and a.get('digest')==ORIGINAL_DIGEST and not a['expired']]
+          if len(matches)!=1:
+              raise SystemExit('original native artifact expired, missing or changed')
+          origin={'repository':repo,'workflow':run['name'],'run_id':RUN_ID,
+                  'attempt':1,'head_sha':ORIGINAL_HEAD,'event':'push',
+                  'branch':'main','actor':run['actor']['login'],
+                  'conclusion':'success','artifact_id':ARTIFACT_ID,
+                  'digest':ORIGINAL_DIGEST,'artifact_expired':False}
+          (Path(os.environ['RUNNER_TEMP'])/'original-w13-source'/'binding.json').write_text(
+              json.dumps(origin,sort_keys=True,indent=2)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:
+              out.write(f'run_id={RUN_ID}\n')
+              out.write(f'name=w13-owner-merged-native-{RUN_ID}-1\n')
+          print('Original owner W13 source and artifact verified')
+          PY
+      - name: Download authenticated original W13 artifact with digest validation
+        uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ steps.source.outputs.run_id }}
+          name: ${{ steps.source.outputs.name }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/original-w13-artifact
+      - name: Independently inspect original W13 and the unstaffed native verifier slot
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.w13_owner_next_cp_preflight \
+            --artifact-dir "$RUNNER_TEMP/original-w13-artifact" \
+            --source-binding "$RUNNER_TEMP/original-w13-source/binding.json" \
+            --repo-root "$GITHUB_WORKSPACE" \
+            --research-commit "$GITHUB_SHA"
+          echo 'Original W13 reverified; next verifier admissible, NOT admitted or executed'
