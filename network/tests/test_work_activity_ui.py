@@ -55,6 +55,9 @@ class WorkInvestigationPageTests(unittest.TestCase):
     def test_workflow_status_and_native_steps_need_real_api(self):
         p=WORK.read_text(encoding="utf-8")
         self.assertIn('API+"/actions/runs?per_page=50"',p)
+        self.assertIn('"queued","in_progress","waiting","pending","requested"',p)
+        self.assertIn("coverage incomplete",p)
+        self.assertIn("[...recent,...active]",p)
         self.assertIn('API+"/actions/runs/"+id+"/jobs?per_page=100"',p)
         self.assertIn("Array.isArray(j.workflow_runs)",p)
         self.assertIn("Array.isArray(json.jobs)",p)
@@ -64,6 +67,33 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertIn("no current status inferred",p.lower())
         self.assertIn("if(!document.hidden)refresh()",p)
         self.assertIn("Select an observed workflow",p)
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js required")
+    def test_active_run_query_paginates_and_keeps_old_work(self):
+        import re
+        page=WORK.read_text()
+        fn=re.search(r"  async function activeRuns\(\)\{.*?\n  \}",page,re.S).group(0)
+        script="""
+const assert=require('node:assert/strict');
+const API='https://example.test';
+let queries=[];
+function readRuns(data){return data.workflow_runs;}
+async function getJSON(url){
+  queries.push(url);
+  const u=new URL(url),state=u.searchParams.get('status'),page=u.searchParams.get('page');
+  return {workflow_runs:state==='in_progress' ? (page==='1' ?
+    Array.from({length:100},(_,i)=>({id:i+1})) : [{id:9999}]) : []};
+}
+"""+fn+"""
+(async()=>{
+ const runs=await activeRuns();
+ assert(runs.some(r=>r.id===9999));
+ assert(queries.some(q=>q.includes('page=2')));
+ getJSON=async()=>({workflow_runs:Array.from({length:100},()=>({id:1}))});
+ await assert.rejects(activeRuns(),/coverage incomplete/);
+})().catch(e=>{console.error(e);process.exit(1)});
+"""
+        subprocess.run(["node","-e",script],check=True,capture_output=True,text=True)
 
     def test_commit_revision_comparison_requires_exact_source_path(self):
         page=WORK.read_text(encoding="utf-8")

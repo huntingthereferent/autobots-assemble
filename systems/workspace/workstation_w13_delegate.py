@@ -18,6 +18,7 @@ from .game_w13_native import CP_ID, VERIFIER, verify_native_report
 from .game_w13_native_bridge import WORKER_ID
 from .github_w13_continuation import unpack_native_runtime
 from .workstation_harness import WorkstationContinuationHarness
+from .workstation_cycle import WorkstationCycle
 from .workstation_native_feedback import WorkstationNativeFeedback
 from .branch_help import verify_return
 
@@ -120,18 +121,16 @@ def delegate_w13(*, data_dir: Path, output_dir: Path) -> dict:
     harness.observe(lane_id="A", kind="BRANCH",
                     relation=RELATION, witness_ref=OBSERVATION,
                     capability=CAPABILITY)
-    created = harness.tick()
-    born = created["born_coordination_lanes"]
-    if created["execution_started"] is not False:
-        raise ValueError("B2 unexpectedly ran native source without admission")
-    if not born:
-        # Restart: recover the already-born same source-referent branch.
-        children = [h.handoff_id for h in harness._runtime()._handoffs.values()
-                    if h.metadata.get("source_system") == "workstation-continuation-lane/v1"
-                    and h.metadata.get("birth_proposal_id")
-                    and h.metadata.get("parents") == ["A"]
-                    and h.referent == RELATION]
-        born = children
+    # Run bounded coordination on the actual delegated journal, including
+    # restart recovery. Native execution still uses the admitted B3 path below.
+    cycle = WorkstationCycle(harness).run()
+    if cycle.native_worker_executed:
+        raise ValueError("coordination unexpectedly executed native work")
+    born = [h.handoff_id for h in harness._runtime()._handoffs.values()
+            if h.metadata.get("source_system") == "workstation-continuation-lane/v1"
+            and h.metadata.get("birth_proposal_id")
+            and h.metadata.get("parents") == ["A"]
+            and h.referent == RELATION]
     if len(born) != 1:
         raise ValueError("W13 B2 coordination did not resolve one native branch")
     admitted = harness.admit_native_help(

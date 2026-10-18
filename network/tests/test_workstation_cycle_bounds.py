@@ -94,6 +94,26 @@ class JournalBoundsTests(unittest.TestCase):
         fn(rows)
         self.h.path.write_text("".join(json.dumps(x) + "\n" for x in rows), encoding="utf-8")
 
+    def test_wall_requires_fresh_exact_resolution_and_keeps_history(self):
+        self.note_return()
+        wall = HandoffEvent.create(handoff_id="a", event_type=
+            "WORKSTATION_OWNER_CANDIDATE_BINDING_WALL", actor_id="fixture",
+            data={"job_id": "exact-source-job"})
+        self.h._runtime().event_store.append(wall)
+        self.assertEqual(self.cycle(True).run().preserved_wall_lanes, ("a",))
+        calls = []
+        def verify(runtime, event):
+            calls.append(event.event_id)
+            return event.event_id == wall.event_id and event.data["job_id"] == "exact-source-job"
+        report = WorkstationCycle(self.h, return_continuation=self.b4,
+                                  verify_wall_resolution=verify).run()
+        self.assertEqual(report.preserved_wall_lanes, ())
+        self.assertIn("a", report.derived_return_lanes)
+        self.assertIn(wall.event_id, calls)
+        self.assertTrue(any(e.event_id == wall.event_id for e in self.h._runtime().event_store.all()))
+        # Withdrawal restores the wall on the next invocation.
+        self.assertEqual(self.cycle(True).run().preserved_wall_lanes, ("a",))
+
     def test_empty_noop_keeps_existing_journal(self):
         before = self.h.path.read_bytes()
         result = self.cycle().run()

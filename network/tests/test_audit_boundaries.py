@@ -25,6 +25,14 @@ class AuditBoundaryTests(unittest.TestCase):
         self.assertIn("Active ALL WORK",tasks)
         self.assertIn("Swallow-first Boundary Adapter",tasks)
 
+    def test_retired_work_is_absent_from_workstation(self):
+        tasks=(ROOT/"TASKS.md").read_text()
+        self.assertNotIn("St. Joseph",tasks)
+        self.assertNotIn("Program Foundation",tasks)
+        source=research_snapshot()
+        self.assertNotIn("work/projects/st-joseph-complete-stack/",str(source))
+        self.assertNotIn("foundation/PROGRAM_FOUNDATION.md",str(source))
+
     def test_public_projection_preserves_source_classification(self):
         research=research_snapshot()
         exported=projection(research)

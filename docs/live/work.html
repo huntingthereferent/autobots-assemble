@@ -230,7 +230,7 @@ footer {
     <div class="metric"><strong data-stat="failed">—</strong><small>RECENT FAILURES</small></div>
     <div class="metric"><strong data-stat="passed">—</strong><small>RECENT PASSES</small></div>
   </div>
-  <p class="fine">Numbers describe the latest publicly accessible workflow-run sample, not every worker or every event in the workstation. Unavailable data is never counted as zero.</p>
+  <p class="fine">Numbers describe recent runs plus separately queried active runs, not every worker or every event in the workstation. Unavailable data is never counted as zero.</p>
 </section>
 <section id="executions" aria-label="Actual GitHub work execution">
   <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Runs, jobs, and steps reported by GitHub.</p></div>
@@ -267,7 +267,7 @@ footer {
   const REPO="huntingthereferent/autobots-assemble";
   const API="https://api.github.com/repos/"+REPO;
   const SOURCE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/research-live.json";
-  const PERIOD=180000;
+  const PERIOD=600000;
   const $=id=>document.getElementById(id);
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,checked:null};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
@@ -449,11 +449,24 @@ footer {
       const selected=app.runs.find(r=>r.id===app.selection);
       if(selected&&app.commitCache.has(selected.head))renderRevision(selected,app.commitCache.get(selected.head));}
     catch(e){$("research-scope").textContent="Research data unavailable: "+e.message;if(!app.research){$("research-records").replaceChildren(el("p","Original record data unavailable.","no-source"));$("research-walls").replaceChildren(el("p","Original wall data unavailable.","no-source"))}}}
+  async function activeRuns(){
+    const groups=await Promise.all(["queued","in_progress","waiting","pending","requested"].map(async state=>{
+      const runs=[];
+      for(let page=1;page<=10;page++){
+        const data=await getJSON(API+"/actions/runs?status="+state+"&per_page=100&page="+page);
+        runs.push(...readRuns(data));
+        if(data.workflow_runs.length<100)return runs;
+      }
+      throw Error("Active-run listing exceeded 1000 entries for "+state+"; coverage incomplete");
+    }));
+    return groups.flat();
+  }
   async function refresh(){
     if(app.reading)return;app.reading=true;$("check-now").disabled=true;
     try{
-      const data=await getJSON(API+"/actions/runs?per_page=50");
-      const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
+      const [data,active]=await Promise.all([getJSON(API+"/actions/runs?per_page=50"),activeRuns()]);
+      const recent=readRuns(data);
+      const runs=[...new Map([...recent,...active].map(r=>[r.id,r])).values()];if(!runs.length)throw Error("No trustworthy workflow identities supplied");
       app.runs=runs;app.checked=Date.now();app.jobCache.clear();renderMetrics();
       if(!app.selection||!runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
       renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="Observed GitHub work";

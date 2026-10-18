@@ -41,7 +41,8 @@ class WorkstationCycle:
     not itself have an execution authorization surface.
     """
 
-    def __init__(self, harness: Any, *, return_continuation: Any = None):
+    def __init__(self, harness: Any, *, return_continuation: Any = None,
+                 verify_wall_resolution: Any = None):
         if not callable(getattr(harness, '_runtime', None)) or not callable(getattr(harness, 'tick', None)):
             raise TypeError('existing workstation harness and native B2 movement required')
         if return_continuation is not None and (
@@ -50,6 +51,9 @@ class WorkstationCycle:
             or not callable(getattr(return_continuation, 'next_pass', None))
         ):
             raise ValueError('B4 must be bound to this exact workstation harness')
+        if verify_wall_resolution is not None and not callable(verify_wall_resolution):
+            raise TypeError("independent wall-resolution verifier required")
+        self.verify_wall_resolution = verify_wall_resolution
         self.harness = harness
         self.b4 = return_continuation
 
@@ -96,11 +100,16 @@ class WorkstationCycle:
         pending, jobs, owner, walls = [], set(), [], []
         for lane_id, history in sorted(groups.items()):
             types = {e.event_type for e in history}
-            if NATIVE_RETURN in types and DERIVED_RELATION not in types and OWNER_WALL not in types:
+            # History is retained; only a fresh, exact-wall native check can
+            # release a wall. Labels or later unrelated success cannot do so.
+            active_walls = [e for e in history if e.event_type == OWNER_WALL
+                            and not (self.verify_wall_resolution is not None
+                                     and self.verify_wall_resolution(runtime, e) is True)]
+            if NATIVE_RETURN in types and DERIVED_RELATION not in types and not active_walls:
                 pending.append(lane_id)
-            if OWNER_WALL in types:
+            if active_walls:
                 walls.append(lane_id)
-            if OWNER_WALL not in types and any(
+            if not active_walls and any(
                 e.event_type == OPEN_HELP
                 and e.data.get('capability') == OWNER_CAPABILITY
                 for e in history
