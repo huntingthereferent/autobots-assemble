@@ -15,8 +15,29 @@ python -m pip install ./tools/ab-provenance
 npm --prefix experiments/rea-swallow/upstream ci
 
 ab source
+
+# Freeze the original tests BEFORE changing the source.
+python tools/ab-provenance/comparison/paired_reference.py baseline \
+  --rea experiments/rea-swallow/upstream \
+  --out runtime/data/ab-source-tool/original
+
 ab swallow repo --allow-source-edit --repo-root . \
   --out runtime/data/ab-source-tool/first-pass
+
+# Rerun the unchanged original cases against the corrected source.
+python tools/ab-provenance/comparison/paired_reference.py compare \
+  --rea experiments/rea-swallow/upstream \
+  --ab-tool tools/ab-provenance \
+  --baseline runtime/data/ab-source-tool/original \
+  --out runtime/data/ab-source-tool/first-pass/comparison
+
+# Retain the original witness alongside the paired result for the ship gate.
+cp runtime/data/ab-source-tool/original/baseline.json \
+  runtime/data/ab-source-tool/first-pass/comparison/
+cp runtime/data/ab-source-tool/original/original-vitest.json \
+  runtime/data/ab-source-tool/first-pass/comparison/
+cp runtime/data/ab-source-tool/original/original-vitest.log \
+  runtime/data/ab-source-tool/first-pass/comparison/
 
 ab inspect runtime/data/ab-source-tool/first-pass/source-provenance.json
 ab ancestors runtime/data/ab-source-tool/first-pass/source-provenance.json \
@@ -33,6 +54,11 @@ ab ship --repo-root . \
   --dist runtime/data/ab-source-tool/first-pass/dist \
   --out runtime/data/ab-source-tool/shipped-0.1.0
 ~~~
+
+Use fresh output directories for each experiment; preserve the baseline and
+start from a clean disposable source checkout. The installed wheel provides
+the CLI; source transformation also requires this repository and its
+ProcessWorkstation scripts. The wheel alone is not a standalone source runner.
 
 The release directory contains an original A/B bundle and manifest.
 Check the manifest before using any reported source evidence. This tool
