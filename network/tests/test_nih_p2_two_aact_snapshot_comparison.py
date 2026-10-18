@@ -117,7 +117,7 @@ class PairwiseSourceTests(unittest.TestCase):
         report = compare(old_report(), b)
         self.assertEqual(report["different_recorded_status_count"], 1)
         case = next(x for x in report["observations"] if x["nct_id"] == IDS[0])
-        self.assertTrue(case["status_transition_between_snapshots_demonstrated"])
+        self.assertTrue(case["status_value_difference_between_exports"])
         self.assertFalse(case["exact_date_of_intervening_change_proven"])
 
     def test_04_same_status_does_not_claim_no_intervening_changes(self):
