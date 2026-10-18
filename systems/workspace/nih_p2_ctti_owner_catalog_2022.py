@@ -11,7 +11,7 @@ No W13 twelve-job journal/workstation or licensed source is modified.
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, timezone
+from datetime import datetime, timezone, date
 from html.parser import HTMLParser
 import json
 from pathlib import Path
@@ -75,7 +75,14 @@ def catalog_candidates(html, *,base_url):
         if (p.scheme!="https" or p.hostname!=OWNER_HOST or p.username or p.password or
                 not NAME.fullmatch(name) or p.fragment or p.query):
             continue
-        discovered.append({"owner_catalog_link":url,"archive_filename":name})
+        try:
+            parsed_date=date.fromisoformat(name[:4]+"-"+name[4:6]+"-"+name[6:8])
+        except ValueError:
+            continue
+        if parsed_date.year!=2022:
+            continue
+        discovered.append({"owner_catalog_link":url,"archive_filename":name,
+                           "date_parsed_from_filename_not_verified_capture":parsed_date.isoformat()})
     links={row["owner_catalog_link"]:row for row in discovered}
     page_text=" ".join(" ".join(parser.text).casefold().split())
     return {
