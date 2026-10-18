@@ -1,0 +1,56 @@
+name: A/B provenance tool package and visual
+on:
+  push:
+    branches: ['feature/ab-provenance-tool-20261018']
+    paths:
+      - 'tools/ab-provenance/**'
+      - 'design/visual-provenance/templates/ab_provenance_graph_v1.json'
+      - 'design/visual-provenance/registry.json'
+      - '.github/workflows/ab-provenance-package.yml'
+  pull_request:
+    paths:
+      - 'tools/ab-provenance/**'
+      - 'design/visual-provenance/templates/ab_provenance_graph_v1.json'
+      - 'design/visual-provenance/registry.json'
+      - '.github/workflows/ab-provenance-package.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-package-projection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original local A/B package and JSON schema test verifier
+        run: |
+          python -m pip install --disable-pip-version-check ./tools/ab-provenance "jsonschema>=4.21" build
+      - name: Run package input, output, security and evidence-boundary tests
+        run: |
+          python -m unittest discover -s tools/ab-provenance/tests -v
+      - name: Check the existing visual provenance registry
+        run: |
+          python design/visual-provenance/tests/test_visual_provenance.py
+          python -m unittest network.tests.test_natural_provenance -v
+      - name: Produce real offline visual from source-labeled illustrative input
+        run: |
+          mkdir -p runtime/data/ab-provenance-preview
+          ab-prov inspect tools/ab-provenance/examples/illustrative-provenance.json --graph > runtime/data/ab-provenance-preview/graph.json
+          ab-prov render tools/ab-provenance/examples/illustrative-provenance.json -o runtime/data/ab-provenance-preview/ab-provenance.html
+          ab-prov render --journal tools/ab-provenance/examples/illustrative-journal.jsonl -o runtime/data/ab-provenance-preview/ab-workstation-example.html
+      - name: Build the actual installable Python distribution
+        run: |
+          python -m build tools/ab-provenance --outdir runtime/data/ab-provenance-preview/dist
+      - name: Retain HTML visual, graph, source package, wheel and test boundaries
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-provenance-cli-visual-and-wheel
+          path: runtime/data/ab-provenance-preview/*
+          if-no-files-found: warn
+          retention-days: 14
