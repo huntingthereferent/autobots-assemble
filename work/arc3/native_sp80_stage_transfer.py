@@ -248,8 +248,37 @@ def main():
     stage1_hashes={r["stage1_root"]["full_frame_hash"]
                    for r in records if r["stage1_root"] is not None}
     pre_root_hashes={r["prefix_root"]["full_frame_hash"] for r in records}
+    stage0_vs_stage1_observed = [
+        difference(arrays[f"after_{r['suffix'] or 'EMPTY'}_reset_{r['independent_reset_index']}"][0],
+                   arrays[f"after_{r['suffix'] or 'EMPTY'}_reset_{r['independent_reset_index']}"][6])
+        for r in records if r["prefix_verified_0_to_1"]
+    ]
+    if len(stage0_vs_stage1_observed)!=prefix_count:
+        raise AssertionError("stage root images missing for some verified prefixes")
+    root_diffs_are_identical = all(
+        d==stage0_vs_stage1_observed[0] for d in stage0_vs_stage1_observed)
+    repeated_word=next(r for r in records
+                       if r["suffix"]=="454545"
+                       and r["independent_reset_index"]==0)
+    paired_action_effects=[]
+    for i,(before,after) in enumerate(zip(
+            repeated_word["native_prefix_events"],
+            repeated_word["native_stage1_events"])):
+        d0,d1=before["native_frame_delta"],after["native_frame_delta"]
+        paired_action_effects.append({
+            "position_in_word":i+1,
+            "native_action":before["native_action"],
+            "level0_changed_pixels":d0["changed_native_pixels"] if d0 else None,
+            "level1_changed_pixels":d1["changed_native_pixels"] if d1 else None,
+            "level0_changed_bbox":d0["bounding_box"] if d0 else None,
+            "level1_changed_bbox":d1["bounding_box"] if d1 else None,
+        })
     comparison={
         "kind":"ORIGINAL_WINDOW48_F3_NATIVE_SP80_STAGE_TRANSFER",
+        "stage0_to_stage1_exact_native_pixel_difference":
+            stage0_vs_stage1_observed[0] if stage0_vs_stage1_observed else None,
+        "stage0_to_stage1_diff_identical_in_replays":root_diffs_are_identical,
+        "paired_454545_action_effects_level0_vs_level1":paired_action_effects,
         "native_game":"sp80",
         "native_provider":"official arc-agi Arcade NORMAL",
         "source_math":"original 48-law window_combined; no attempted F3 role mapping",
@@ -295,6 +324,9 @@ def main():
         "verified_stage0_to_1_prefix":prefix_count,
         "stage0_start_hash_count":len(pre_root_hashes),
         "stage1_start_hash_count":len(stage1_hashes),
+        "native_pixel_stage0_stage1_difference":comparison["stage0_to_stage1_exact_native_pixel_difference"],
+        "root_transition_identical_across_replays":root_diffs_are_identical,
+        "paired_454545_native_transition_counts":paired_action_effects,
         "stage1_is_different_visible_frame":comparison[
             "stage1_different_from_stage0_visible_frame"],
         "second_level_progress_replays":len(second),
