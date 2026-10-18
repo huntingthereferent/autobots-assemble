@@ -1,0 +1,53 @@
+name: A/B independent native observation audit
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths: ['work/arc3/native_observation_bridge.py', 'work/arc3/native_suffix_extension.py', 'network/tests/test_arc3_native_observation_bridge.py', 'work/arc3/AB_INDEPENDENT_NATIVE_EVIDENCE.md', '.github/workflows/ab-native-independent-evidence.yml']
+  pull_request:
+    paths: ['work/arc3/native_observation_bridge.py', 'work/arc3/native_suffix_extension.py', 'network/tests/test_arc3_native_observation_bridge.py', 'work/arc3/AB_INDEPENDENT_NATIVE_EVIDENCE.md', '.github/workflows/ab-native-independent-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native-independent-observations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official ARC native runtime and recording dependencies
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Reject unproved native-to-F3 transformations
+        run: python -m unittest network.tests.test_arc3_native_observation_bridge network.tests.test_arc_like_inverse_observation_engine network.tests.test_arc_like_window_rooted_observation -v
+      - name: Download independently recorded native LS20 frame artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: arc3-f3-native-suffix-ls20
+          run-id: 39088689691
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/arc3/native-historical
+      - name: Verify archived native pixels against all frame hashes and source relations
+        run: |
+          python -m work.arc3.native_observation_bridge --native runtime/data/arc3/native-historical/f3-native-suffix.json --raw runtime/data/arc3/native-historical/f3-native-suffix.npz --dataset historical --out runtime/data/arc3/native-historical/ab-native-audit.json
+      - name: Collect out-of-sample suffixes in actual official LS20
+        run: |
+          python -m work.arc3.native_suffix_extension --game ls20 --out runtime/data/arc3/native-new/f3-native-suffix.json
+      - name: Independently verify new raw native pixels and equality relations
+        run: |
+          python -m work.arc3.native_observation_bridge --native runtime/data/arc3/native-new/f3-native-suffix.json --raw runtime/data/arc3/native-new/f3-native-suffix.npz --dataset new --out runtime/data/arc3/native-new/ab-native-audit.json
+      - name: Preserve original and new native frames, evidence and audits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-independent-native-evidence
+          path: |
+            runtime/data/arc3/native-historical/*
+            runtime/data/arc3/native-new/*
+          retention-days: 14
+          if-no-files-found: warn
