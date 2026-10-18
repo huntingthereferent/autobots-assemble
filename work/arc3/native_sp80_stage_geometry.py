@@ -204,10 +204,30 @@ def main():
                 **m,
             })
 
+    # Competing simpler hypothesis selected on the SAME training pair only.
+    # Compare independent heldout words/steps without fitting new shifts.
+    tk,tdx,tdy=(
+        translation_only["symmetry"],
+        translation_only["translation_dx"],
+        translation_only["translation_dy"])
+    translation_evaluations=[]
+    for reset in range(RESETS):
+        for step in range(1,7):
+            source,target=mask_pair(frames[f"reset_{reset}"],step)
+            z=compare(source,target,tk,tdx,tdy)
+            translation_evaluations.append({
+                "reset_index":reset,"word_step":step,
+                "native_action":int(WORDS[step-1]),
+                **z,
+            })
     heldout=[x for x in other_steps
              if x["role"]=="FROZEN_HELDOUT_ACTION4"]
     controls=[x for x in other_steps
               if x["role"]=="NEGATIVE_CONTROL_ACTION5"]
+    simpler_heldout=[x for x in translation_evaluations
+                     if x["word_step"] in (3,5)]
+    simpler_controls=[x for x in translation_evaluations
+                      if x["word_step"] in (2,4,6)]
     baseline=[
         compare(*mask_pair(frames[f"reset_{i}"],step),
                 "identity",0,0)
@@ -224,6 +244,11 @@ def main():
         "fit_hypothesis":"best sparse pixel overlap among D4+integer translation on first ACTION4 mask ONLY",
         "frozen_fit":chosen,
         "translation_only_training_fit":translation_only,
+        "translation_only_frozen_evaluations":translation_evaluations,
+        "translation_only_heldout_action4_mean_f1":
+            sum(x["f1"] for x in simpler_heldout)/len(simpler_heldout),
+        "translation_only_action5_control_mean_f1":
+            sum(x["f1"] for x in simpler_controls)/len(simpler_controls),
         "heldout_same_action_step_indices":[3,5],
         "different_action_negative_control_indices":[2,4,6],
         "every_stage_action_observation":experiments,
@@ -251,13 +276,21 @@ def main():
         "resets":RESETS,
         "stage1_roots":len({e["stage1_root"] for e in experiments}),
         "training_fit":chosen,
-        "translation_only_training_overlap":
-            translation_only["training_score"]["overlap"],
+        "translation_only_training_fit":translation_only,
+        "translation_only_heldout_action4_mean_f1":
+            data["translation_only_heldout_action4_mean_f1"],
+        "translation_only_action5_control_mean_f1":
+            data["translation_only_action5_control_mean_f1"],
         "heldout_action4_exact":data["heldout_action4_exact_count"],
         "heldout_action4_total":data["heldout_action4_total"],
         "heldout_action4_mean_f1":data["heldout_action4_mean_f1"],
         "identity_baseline_mean_f1":data["identity_no_shift_heldout_mean_f1"],
         "action5_control_mean_f1":data["action5_negative_control_mean_f1"],
+        "translation_only_per_step":[
+            {"reset":x["reset_index"],"step":x["word_step"],
+             "f1":x["f1"],"overlap":x["overlap"],
+             "projected":x["projected_count"],"clipped":x["clipped_source_pixels"]}
+            for x in translation_evaluations],
         "per_step":[{"reset":x["reset_index"],"step":x["word_step"],
                      "action":x["native_action"],"f1":x["f1"],
                      "overlap":x["overlap"],"projected":x["projected_count"],
