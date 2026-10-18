@@ -1,0 +1,34 @@
+name: ARC3 SP80 actual-native held-out spatial registration
+
+on:
+  push:
+    paths:
+      - "work/arc3/native_sp80_stage_geometry.py"
+      - ".github/workflows/arc3-sp80-geometric-heldout.yml"
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_stage_geometry.py"
+      - ".github/workflows/arc3-sp80-geometric-heldout.yml"
+  workflow_dispatch:
+
+jobs:
+  sp80-native-geometric-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install native ARC source dependency
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Observe SP80 and test frozen D4 map on held-out native changes
+        run: python -m work.arc3.native_sp80_stage_geometry --out runtime/data/arc3/sp80-stage-d4-heldout.json
+      - name: Retain native action masks, frames, training and negative controls
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-sp80-native-d4-heldout
+          path: runtime/data/arc3/sp80-stage-d4-heldout.*
+          if-no-files-found: ignore
+          retention-days: 14
