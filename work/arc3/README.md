@@ -15,13 +15,19 @@ Reproduce source-law conformance and the falsification cases:
 python -m unittest -v network.tests.test_arc3_f3_agent
 ```
 
-No native ARC gameplay has yet been witnessed for this F3 prototype. Historical G2.3 public-game evidence is retained as a comparison, not imported as the new agent's reasoning.
+The F3 prototype has now been executed against native LS20 and has a recorded 0-level result. Additional direct source-F3 tests on native SK48 and FT09 are independently recorded; none demonstrates a verified native-to-F3 generator correspondence. Historical G2.3 public-game evidence remains a separate comparison and is not imported as this agent's reasoning.
 
 ## Current F3/native observation
 
 [LS20 native relational evidence](runs/LS20_F3_NATIVE_RELATIONS_2026-10-17.md) now records the result of using the original F3 laws as a hypothesis against the real game: exact co-transport of native color groups, a separate persistent 2-cell change on every tested action, visible final-frame collisions for native words 34/43 and 23/32, and order-sensitive 12/21. All measurements came from official native action calls, not a synthetic ARC imitation.
 
 The mathematically necessary F3 order-three relation did **not** survive the literal raw-state mapping; the new observed glyph/trace distinction is not yet a justified F3 state representation. The single-file F3 agent remains experimental, and no game win is claimed. [Reproducible native tests](native_mixed_relation_probe.py) and [the direct original-law comparison](f3_native_word_comparison.py) preserve that boundary.
+
+## F3 source probe portability — other real ARC environments
+
+[FT09 and SK48 native source-F3 investigation](runs/F3_NATIVE_CROSS_GAME_2026-10-17.md) preserves source-selected F3 equality questions against independently reset real games. SK48 exposed directional native controls; the provisional ACTION1=A/ACTION2=B mapping failed the universal source A³-root return. FT09 exposed coordinate-parametrized ACTION6 rather than native simple controls: a source-only 74-site spatial investigation found eight real click effects, including the independently recorded native coordinates (36,36) and (44,36). Two separate coordinate pairs were tested with **62 further native click actions**, and each gave a visibly equal AB/BA endpoint while failing the source F3 A³ return; neither was idempotent in the tested states.
+
+These are meaningful native action-interface measurements and **negative results for a direct injective complete-frame identification** with the original F3 worlds. They are not F3 failures as mathematics, hidden-state identity proofs, general ARC solvers or new game wins. The experimental [single-file agent](agent/my_agent.py) should not be represented as having learned to choose native F3 generators, nor should arbitrary ACTION6 center clicks count as tested correspondence.
 
 ## Existing source, not rewritten
 
