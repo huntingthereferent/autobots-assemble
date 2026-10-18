@@ -154,6 +154,15 @@ def check_sequence(frames, *, expected_cutover):
         raise ValueError("no future-hidden evidence before original game cutover")
     if any(x["future_withheld_ids"] for x in frames[expected_cutover:]):
         raise ValueError("original source did not reveal evidence after cutover")
+    for frame in frames:
+        visible = frame["visible_ids"]
+        withheld = frame["future_withheld_ids"]
+        static = frame["static_ids"]
+        if any(type(x) is not list or len(x) != len(set(x))
+               for x in (visible, withheld, static)):
+            raise ValueError("duplicate source evidence in world frontier")
+        if set(visible) & set(withheld) or set(visible) | set(withheld) != set(static):
+            raise ValueError("world frontier omitted, duplicated or misplaced source evidence")
     for left, right in zip(frames, frames[1:]):
         if left["target_at"] != right["target_at"]:
             raise ValueError("world sequence changed valid target during monotonicity trial")
