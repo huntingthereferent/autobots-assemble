@@ -30,3 +30,9 @@ This prototype only exercises one rooted forward action path. It does not infer 
 5. Compare new revisions against the old G0 and G2.3 native results without mixing discovery-inclusive, replay-assisted, and hidden/competition runs. A green unit test alone is not a game solution.
 
 No new worker harness, bot ensemble, game simulator, or alternate scheduler is introduced here.
+
+## Native LS20 F3 first experiment (2026-10-17 local)
+
+[Native evidence and reproducible controls](runs/LS20_F3_NATIVE_2026-10-17.md) establish that **all four** advertised single directional controls fail the original F3 A³=root identity on the exact visible LS20 root frame. The F3 single-path agent under provisional ACTION1=A, ACTION2=B likewise exhausted the original nine-law family (0 levels won). Treat this as a **counterexample to direct full-frame generator identification**, not a proof that all native ARC games or other possible state representations cannot carry F3 relations.
+
+Do not retry the same action-ID renaming as a mathematical improvement. A next attempt needs an independently motivated native-to-F3 state correspondence, with preserved action-word predictions and explicit negative controls. Use real native transitions through the [official-run smoke](native_smoke.py) and [root-generator probe](native_f3_generator_probe.py), not stored game scripts or a replacement game engine.
