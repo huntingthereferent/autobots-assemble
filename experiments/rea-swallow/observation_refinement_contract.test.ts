@@ -51,7 +51,11 @@ describe("REA A/B finite observation refinement of structural matching",()=>{
       const original=matchJavaScriptApplicationVersions(
         [nodeFor(programs[left]!,"L")],[nodeFor(programs[right]!,"R")]);
       expect(original.pairs).toHaveLength(1);
-      expect(original.pairs[0]).toMatchObject({basis:"structural-fingerprint",confidence:"medium"});
+      // REA prioritizes exact content matching for each self-pair, and uses
+      // structural inference only for different source strings.
+      expect(original.pairs[0]).toMatchObject(left===right
+        ? {basis:"exact-module-source-digest",confidence:"exact"}
+        : {basis:"structural-fingerprint",confidence:"medium"});
       const pair=original.pairs[0]!;
       const initial=refineJavaScriptApplicationPairByObservations(pair,
         [captures[left]!.equal],[captures[right]!.equal]);
