@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ab-provenance-document.schema.json",
+  "title": "A/B provenance document envelope for existing native schemas",
+  "description": "The envelope groups original core protocol links and traces; these $ref values point to the pre-existing repository-local contracts rather than duplicated schemas.",
+  "type": "object",
+  "required": [
+    "schema_version"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "provenance_links": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../protocols/core/provenance-link.schema.json"
+      },
+      "maxItems": 2000
+    },
+    "traces": {
+      "type": "array",
+      "items": {
+        "$ref": "../../../protocols/core/trace.schema.json"
+      },
+      "maxItems": 2000
+    }
+  },
+  "additionalProperties": false
+}

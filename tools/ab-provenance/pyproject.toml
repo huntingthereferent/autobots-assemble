@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ab-provenance"
+version = "0.1.0"
+description = "A/B evidence-preserving provenance inspection and offline visual explorer"
+requires-python = ">=3.10"
+authors = [{name = "James Muneoka"}]
+readme = "README.md"
+keywords = ["provenance", "research", "evidence", "workstation"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.scripts]
+ab-prov = "ab_prov.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ab_prov = ["*.html"]

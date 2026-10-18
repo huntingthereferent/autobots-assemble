@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "surface_id": "ab_provenance_offline_explorer",
+  "surface_path": "tools/ab-provenance/src/ab_prov/render.py",
+  "template_id": "ab_provenance_graph_v1",
+  "preserve": [
+    "source→relation→referent ancestry",
+    "recorded boundaries and invalidation",
+    "stable provenance and native event IDs",
+    "read-only local evidence view"
+  ],
+  "local_additions": [
+    "cross-layer provenance-link schema projection",
+    "traversal trace projection",
+    "original RuntimeJournal SUBMISSION/EVENT reader",
+    "offline interactive SVG graph",
+    "no-witness-promoted-to-proof boundary"
+  ],
+  "deviations": [
+    "REA is packaging inspiration only, no copied visual elements",
+    "visual UI is generated locally from supplied records"
+  ],
+  "last_reviewed": "2026-10-18"
+}
