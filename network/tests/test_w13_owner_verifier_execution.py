@@ -116,8 +116,17 @@ class RetentionHookTests(unittest.TestCase):
                     impl.authenticate_retention_request(ROOT,"a"*40,key)
                 git.assert_not_called()
 
+    def test_github_storage_requires_its_own_exact_permission(self):
+        self._check_retention_merge(storage=True)
+
     def test_retention_requires_new_merge_request_and_pins_recipient(self):
+        self._check_retention_merge(storage=False)
+
+    def _check_retention_merge(self, storage):
         from systems.workspace import w13_owner_verifier_execution as impl
+        def authenticate(root, merge, key):
+            return impl.authenticate_retention_request(root,merge,key,
+                artifact_retention_days=1 if storage else None)
         key=base64.b64encode(bytes(range(32))).decode()
         with TemporaryDirectory() as tmp:
             root=Path(tmp)
@@ -138,22 +147,32 @@ class RetentionHookTests(unittest.TestCase):
                 "recipient_public_key_sha256":sha256(bytes(range(32))).hexdigest(),
                 "authorizes_local_encrypted_retention":True,
                 "authorizes_artifact_upload":False, "authorizes_raw_journal_export":False}
+            if storage:
+                request.update({"contract":"owner-w13-future-child-encrypted-github-retention/v1",
+                    "authorizes_artifact_upload":True,
+                    "storage":"github-actions-encrypted-capsule-only", "retention_days":1,
+                    "authorizes_separate_run_restore":True})
             path=root/impl.RETENTION_REQUEST
             path.parent.mkdir(parents=True); path.write_text(json.dumps(request))
             git("add", "."); git("commit", "-qm", "request")
             single=git("rev-parse", "HEAD")
             with self.assertRaisesRegex(ValueError,"two-parent"):
-                impl.authenticate_retention_request(root,single,key)
+                authenticate(root,single,key)
             git("checkout", "-q", "--detach", base)
             git("merge", "--no-ff", "-qm", "owner review", "retention")
             merge=git("rev-parse", "HEAD")
-            self.assertEqual(impl.authenticate_retention_request(root,merge,key),request)
+            self.assertEqual(authenticate(root,merge,key),request)
+            with self.assertRaisesRegex(ValueError,"permission|recipient"):
+                impl.authenticate_retention_request(root,merge,key,
+                    artifact_retention_days=None if storage else 1)
+            with self.assertRaisesRegex(ValueError,"one day"):
+                impl.authenticate_retention_request(root,merge,key,artifact_retention_days=2)
             with self.assertRaisesRegex(ValueError,"recipient"):
-                impl.authenticate_retention_request(root,merge,
+                authenticate(root,merge,
                     base64.b64encode(b"z"*32).decode())
-            path.write_text(json.dumps({**request,"authorizes_artifact_upload":True}))
+            path.write_text(json.dumps({**request,"authorizes_artifact_upload":not storage}))
             with self.assertRaisesRegex(ValueError,"changed"):
-                impl.authenticate_retention_request(root,merge,key)
+                authenticate(root,merge,key)
             git("restore", "--", impl.RETENTION_REQUEST)
             (root/"unrelated").write_text("unrelated")
             git("add", "."); git("commit", "-qm", "later change")
@@ -164,7 +183,7 @@ class RetentionHookTests(unittest.TestCase):
             git("checkout", "-q", "--detach", later)
             git("merge", "--no-ff", "-qm", "later merge", "another")
             with self.assertRaisesRegex(ValueError,"NEW retention"):
-                impl.authenticate_retention_request(root,git("rev-parse","HEAD"),key)
+                authenticate(root,git("rev-parse","HEAD"),key)
 
     def test_seal_runs_before_temporary_journal_cleanup_and_failure_is_not_success(self):
         from systems.workspace import w13_owner_verifier_execution as impl

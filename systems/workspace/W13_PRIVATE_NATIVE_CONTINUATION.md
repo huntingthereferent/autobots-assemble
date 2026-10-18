@@ -46,3 +46,43 @@ Next movement: prepare the owner-authenticated future invoking workflow with an
 explicit recipient and separately reviewed encrypted storage/retention contract;
 then run and independently restore its actual capsule. The historical lost child
 journal remains lost, and GAME-WORKER-READY remains separate.
+
+
+## GitHub capsule configuration (prepared, inactive)
+
+The producer `w13-encrypted-capsule-producer.yml` authenticates a NEW owner merge
+and the original archive, executes one exact native verifier child, seals before
+cleanup, and uploads only `continuation.enc` plus the redacted `receipt.json` as
+`w13-encrypted-RUN_ID` with **one day** retention. The separate
+`w13-encrypted-capsule-restore.yml` workflow accepts only a successful first-attempt
+owner push on main in this repository. It checks out the exact producer commit,
+rechecks the recipient/request, downloads that run's capsule, checks its receipt
+hash and event/commit binding, then decrypts and independently re-verifies both
+native jobs. Restored plaintext is deleted even if verification fails. Its logs
+contain only the redacted verification result. It admits no further worker.
+
+Before activation, install these repository Actions settings:
+
+- Variable `W13_CAPSULE_PUBLIC_KEY_B64`: base64 of the raw 32-byte X25519 public key.
+- Secret `W13_CAPSULE_PRIVATE_KEY_B64`: base64 of the corresponding raw private key.
+
+Keep an owner-controlled backup of the private key outside Git. Never commit it
+or put it in an artifact. GitHub secret installation is an administration action;
+the connected repository content tools cannot perform it.
+
+After key installation, a separate owner merge must add the retention request at
+`RETENTION_REQUEST`. Its exact value embeds `EXPECTED_REQUEST` and contains:
+`contract=owner-w13-future-child-encrypted-github-retention/v1`,
+`recipient_public_key_sha256=SHA256(decoded public key)`,
+`authorizes_local_encrypted_retention=true`, `authorizes_artifact_upload=true`,
+`authorizes_raw_journal_export=false`,
+`storage=github-actions-encrypted-capsule-only`, `retention_days=1`, and
+`authorizes_separate_run_restore=true`. Local-only requests cannot authorize
+GitHub storage; passing `artifact_retention_days=1` explicitly selects this scope.
+No request or key is included in the configuration PR, so merging the workflows
+alone does not execute a worker. Both workflow files must already be on main
+before the activating request merge, so the cross-run receiver is registered.
+
+Prepared configuration is not a witnessed cross-run result. Activation, successful
+artifact retention, and successful separate-run restoration each need actual run
+evidence. No GAME-WORKER-READY claim is added.
