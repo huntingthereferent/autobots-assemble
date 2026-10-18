@@ -13,7 +13,7 @@ def verify(inputs):
     if type(inputs) is not dict or set(inputs)!={"request","receipt","parent_job_id"}:
         raise ValueError("bounded native game witness requires exact W13 parent")
     request=inputs["request"]; receipt=inputs["receipt"]
-    if (inputs["parent_job_id"]!="game-w13-cp-joined-001" or
+    if (inputs["parent_job_id"] not in ("game-w13-cp-joined-001","game-w13-github-001") or
             request["contract"]!="game-w13-multiworld-v1" or
             request["actions"]!=["right","interact","advance","right","interact"] or
             receipt["version"]!="game-w13-multiworld-v1" or
