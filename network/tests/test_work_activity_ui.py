@@ -72,6 +72,8 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertTrue(cp["next"])
         self.assertTrue(cp["boundary"])
         self.assertTrue(any(x["kind"]=="source-recorded-wall" for x in v["walls"]))
+        self.assertGreater(len(v["movements"]),0)
+        self.assertTrue(any(x["evidence"]=="documented-heading-only" for x in v["movements"]))
 
     @unittest.skipUnless(shutil.which("node"),"Node.js needed for syntax check")
     def test_inline_program_valid_javascript(self):
