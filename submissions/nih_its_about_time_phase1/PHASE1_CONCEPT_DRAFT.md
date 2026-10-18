@@ -54,6 +54,17 @@ A correction produces a new assertion and a relation to the superseded one; it d
 
 A proposed extension adds ordered evidence events, source-confidence annotations tied to their method of measurement, and an **evidence frontier**: the subset of claims admitted from authenticated original versions at each knowledge cutoff. Temporal embeddings, if added, will encode intervals, order, provenance class, and missing-time masks; the proposed rule above remains the hard eligibility constraint.
 
+#### 2.3 Checkable invariants and an explicit unknown state
+
+Let D be a **fixed, fully witnessed** set of source-qualified assertions, and let `S(V)` be assertions whose stated validity interval contains V, ignoring knowledge time. Let `T(K,V)` be those members of `S(V)` with a *verified* availability time not later than K. Two useful invariants follow by construction:
+
+- **No future-evidence leakage:** `T(K,V) subset S(V)`, and no admitted A has `available_from(A) > K`. A supposed counterexample contradicts the admission rule. This proves a property of the specified selector, not that a real source's timestamp is correct.
+- **Knowledge-cutoff monotonicity for fixed append-only evidence:** if `K1 <= K2`, then `T(K1,V) subset T(K2,V)`. This result does not apply unmodified to a view showing only the *latest non-superseded* assertion. For revisions, preserve the old assertion and explicitly model the later correction/withdrawal event.
+
+The static future-leakage set is `L(K,V) = S(V) minus T(K,V)`. It is meaningful only when both sides operate on the **same witnessed D**, predicate scope, and cutoff grid. Comparison against a static union does not by itself prove advantage over other time-aware KG systems.
+
+**Partial publication evidence requires three outcomes, not forced Boolean answers.** Suppose independently justified evidence bounds a publication instant p only to `[L,U]`. At cutoff `K < L`, that claim was not yet publicly available; at `K >= U`, it was available by the cutoff; for `L <= K < U`, its public availability is **indeterminate**. These rules are a *proposed extension*, not a feature already established by the synthetic code. A third-party archive's release date is not an authenticated bound on when an **original registry version** became public; it can support only an appropriately scoped claim about that archive.
+
 ### 3. Worked biomedical-facing example
 
 The existing source-owned Phase 1 scope uses a **fictional clinical-sequence fixture**, not real patient records:
@@ -94,6 +105,12 @@ The proposed bounded reasoning pipeline has five auditable steps:
 
 The present implementation already supports the *synthetic subset*: scope validation, RDF/Turtle mapping, RDF parsing, knowledge/valid-time selection, declared functional-predicate conflict detection, a source-owned design-packet builder, an executable temporal Python prototype, and a browser-backed test/benchmark handoff. What remains proposed is robust evidence admission for individual authentic historical versions, full ontology-level constraint evaluation, domain transfer, and uncertainty-aware public-knowledge queries.
 
+#### 5.1 Relation to established temporal methods and proposed embedding gate
+
+The two-time design is **not** itself novel: [bitemporal databases](https://wiki.postgresql.org/wiki/SQL2011Temporal) distinguish application validity from a database's transaction history. Our separate proposal is a **source-qualified availability witness**: a system's row insertion time is not automatically when a public agency disclosed that assertion. [OWL-Time](https://www.w3.org/TR/owl-time/) provides interval, instant and ordering vocabulary; [PROV-O](https://www.w3.org/TR/prov-o/) describes source derivation, but neither standard alone authenticates external publication or enforces this bounded retrospective query policy. The research contribution to evaluate is the combination of independently admitted publication evidence, an explicit unknown state, and reproducible source-to-answer tracing, **not** a claim to have invented temporal logic.
+
+Temporal knowledge-graph embeddings are also established. For example, [HyTE (Dasgupta, Ray and Talukdar, 2018)](https://aclanthology.org/D18-1225/) uses time-associated hyperplanes for temporally aware embeddings. An optional extension here would first build a candidate score from entity/relation embeddings, interval features, and source-state embeddings; then apply a hard **eligible-and-authenticated mask** before ranking. The mask must exclude later-published evidence even if the embedding predicts it with high confidence. Proposed experiments would compare unmasked time-aware embeddings, masked embeddings, a bitemporal database selector, and the static union on identical split-by-publication-time data; report both leakage and ranking quality. **No such embedding experiment or comparative advantage is claimed as completed.**
+
 ### 6. Feasibility evidence already recorded
 
 This section describes **repository experiments**, not NIH-reviewed benchmarks.
@@ -119,6 +136,10 @@ These experiments establish local implementability, provenance discipline, and r
 **Criterion E — real-world transition.** Obtain two or more independently authenticated original historical study versions or dated source snapshots with evidence of the observation/publication times. Evaluate at least one change whose source versions and visibility times are independently established; demonstrate that the answer is reproducible by a reviewer who did not generate the fixture.
 
 Meeting A–D supports the *local design's* feasibility. E is necessary for defensible claims about authentic historical registry knowledge. All results should include negative controls, failure receipts, and exact tested source revisions.
+
+#### 7.1 Independent reviewer falsification plan
+
+Freeze the source manifests and evaluator **before** opening a held-out set of time cutoffs. Include deliberately awkward cases: a same-day publication boundary, an open-ended or missing interval, a correction after the decision date, different archived versions showing the same status spelling, and contradictory assertions under both functional and nonfunctional predicates. For each, require the exact admitted source identifiers, excluded identifiers, available-from witness class, and any `INDETERMINATE` verdict. A reviewer independently derives expected answers from source bytes or authenticated release receipts, not from our generated temporal output. A pass requires zero leaked future evidence **and** correctly reported unknowns; returning an empty result for every query is not sufficient. Record failures and source mismatches, not only aggregate successes.
 
 ### 8. Expected impact, limitations, and extensibility
 
