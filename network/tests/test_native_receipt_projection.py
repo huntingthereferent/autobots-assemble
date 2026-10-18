@@ -107,6 +107,40 @@ class NativeReceiptProjectionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             inspect_local(self.dir, self.job)
 
+    def test_other_handoff_parent_cannot_masquerade_as_local_ancestry(self):
+        self.runtime.submit(Handoff(
+            handoff_id="unrelated-job", referent="another source",
+            from_actor="operator", to_actor="worker", required_relation="separate",
+        ))
+        foreign=self.runtime.state("unrelated-job").last_event_id
+        self.runtime.event_store.append(HandoffEvent.create(
+            handoff_id=self.job, event_type="STARTED",
+            actor_id="private-worker", parents=(foreign,),
+        ))
+        with self.assertRaisesRegex(ValueError,"unresolved or forward"):
+            inspect_local(self.dir,self.job)
+
+    def test_duplicate_event_id_rejected_without_promoting_result(self):
+        first=self.runtime.event_store.for_handoff(self.job)[0]
+        self.runtime.event_store.append(replace(first,event_type="STARTED"))
+        with self.assertRaisesRegex(ValueError,"duplicate or invalid"):
+            inspect_local(self.dir,self.job)
+
+    def test_reverification_rejects_changed_journal_during_native_check(self):
+        self.complete()
+        def changed(*,data_dir,job_id):
+            runtime=HandoffRuntime(event_store=RuntimeJournal(self.path))
+            prior=runtime.state(self.job).last_event_id
+            runtime.event_store.append(HandoffEvent.create(
+                handoff_id=self.job,event_type="NOTE",
+                actor_id="private-worker",parents=(prior,),
+            ))
+            return {"job_id":job_id,"status":"COMPLETE",
+                    "reverified":True,"executed":False}
+        with patch("systems.workspace.controls.reverify_job",side_effect=changed):
+            with self.assertRaisesRegex(ValueError,"changed during native re-verification"):
+                reverify_local(self.dir,self.job)
+
     def test_noncomplete_cannot_invoke_native_reverifier(self):
         with patch("systems.workspace.controls.reverify_job") as invoke:
             with self.assertRaises(ValueError):
