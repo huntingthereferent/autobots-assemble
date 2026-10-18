@@ -4,6 +4,10 @@
 
 This is **one experimental ARC agent and the existing Work observation lane**. It is not a fabricated ARC engine, autonomous bot population, new scheduler, universal theory, or successful public/hidden competition entry.
 
+## Current SP80 longer-history checkpoint
+
+[New native long-history, state-limit and alternate level controls](runs/WINDOW48_SP80_NATIVE_LONG_HISTORY_2026-10-18.md): the earlier exact conditional relation breaks on longer contexts. Frozen maps include every observed native color change but overpredict changes after action steps 6–8 (56/66 exact in 356-action first run; 88/102 exact in independent 348-action history controls). Before-color occupancy is not sufficient. The native word **5454545** also advances public SP80 level 0→1 on its seventh action in **3/3 independent resets**, versus 0/3 for the six-action prefix. This is separate native level progress, not a complete game win, original F3-48 action mapping, or a new general solver.
+
 ## Active agent and mathematical scope
 
 The [official single-file entry](agent/my_agent.py) contains the literal mathematical A/B transformations for all 4×2×2×3=**48 source laws** (support, pulse, balanced edit, nonlinear shear coefficient), source-conformance tested over all 27 depth-three states. It keeps the original **16 marked/rooted equivalence classes** distinct from **14 full-state conjugacy classes**, including explicitly nonrooted cases where the alignment moves the origin.
