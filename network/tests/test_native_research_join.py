@@ -134,6 +134,25 @@ class NativeResearchJoinTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "exact native RESULT"):
             self.call(rev)
 
+    def test_prior_complete_result_cannot_impersonate_latest_replay(self):
+        self.native_result()
+        original = self.declaration()
+        runtime = HandoffRuntime(event_store=RuntimeJournal(
+            self.data / "runtime.jsonl"))
+        workstation = ProcessWorkstation(self.data / "workstation")
+        bridge = CorrespondenceWorkBridge(runtime=runtime, workstation=workstation)
+        runtime.reopen(self.job, actor_id="local-test", reason="new test run")
+        bridge.execute(self.job, allow_local_execution=True)
+        bridge.reverify(self.job)
+        self.assertNotEqual(
+            original["result_event_id"],
+            recorded_receipt(runtime, self.job)["events"][-1]["event_id"])
+        src = self.basic()
+        src["native_workstation_receipt"] = original
+        rev = self.commit(src)
+        with self.assertRaisesRegex(ValueError, "latest native RESULT"):
+            self.call(rev)
+
     def test_wrong_source_fingerprint_never_accepted(self):
         self.native_result()
         src = self.basic()

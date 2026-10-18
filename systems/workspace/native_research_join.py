@@ -125,12 +125,13 @@ def verify_local_relation(*, data_dir: str | Path, job_id: str,
             or native.get("source_fingerprint") != decl["source_fingerprint"]):
         raise ValueError("native source identity differs from committed relation")
     events = native["events"]
-    if (not events or not any(
-            e.get("event_id") == decl["result_event_id"]
-            and e.get("type") == "RESULT"
-            and e.get("result_status") == "COMPLETE"
-            for e in events)):
-        raise ValueError("committed research record does not name exact native RESULT")
+    # Stale successful results may remain after REOPENED and a later replay.
+    # Identity must follow the *latest* completed result, not any past PASS.
+    results = [e for e in events if e.get("type") == "RESULT"]
+    latest = results[-1] if results else {}
+    if (latest.get("event_id") != decl["result_event_id"]
+            or latest.get("result_status") != "COMPLETE"):
+        raise ValueError("committed research record does not name latest native RESULT")
     # Detect a concurrent source edit/revision switch while verifying a job.
     _, fresh_digest = _committed_record(repo_root, research_commit, path)
     if fresh_digest != source_digest:
