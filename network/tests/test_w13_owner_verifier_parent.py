@@ -15,8 +15,7 @@ from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
 from systems.workspace.controls import reverify_job
 from systems.workspace.workstation import ProcessWorkstation
-from systems.workspace.game_w13_native_bridge import (
-    GameW13NativeBridge,copy_game_source)
+from systems.workspace.game_w13_native_bridge import copy_game_source
 from systems.workspace.game_native_verifier_bridge import (
     NativeGameVerifierBridge,copy_verifier_source,WORKER_ID,
     OWNER_W13_JOB,OWNER_VERSION,OWNER_JOB_ID,VERSION,W13_JOB)
@@ -34,11 +33,13 @@ class OwnerW13NativeVerifierParentTests(unittest.TestCase):
         self.rt=HandoffRuntime(event_store=RuntimeJournal(self.root/"runtime.jsonl"))
         self.inputs=json.loads(FIXTURE.read_text(encoding="utf8"))
         copy_game_source(self.root,version_id="w13-github-v1",allow_copy=True)
-        self.parent=GameW13NativeBridge(runtime=self.rt,workstation=self.desk)
-        self.parent.admit(version_id="w13-github-v1",inputs=self.inputs,
-                          from_actor="isolated-test",job_id=OWNER_W13_JOB)
         copy_verifier_source(self.root,version_id=OWNER_VERSION,allow_copy=True)
         self.bridge=NativeGameVerifierBridge(runtime=self.rt,workstation=self.desk)
+        # The existing bridge already registers its own original W13 verifier.
+        # Registering a second instance would violate runtime verifier ownership.
+        self.parent=self.bridge.parent_bridge
+        self.parent.admit(version_id="w13-github-v1",inputs=self.inputs,
+                          from_actor="isolated-test",job_id=OWNER_W13_JOB)
 
     def _admit(self):
         return self.bridge.admit(version_id=OWNER_VERSION,
