@@ -1,0 +1,63 @@
+name: REA binding-aware structural fingerprint experiment
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.github/workflows/rea-swallow-binding.yml'
+  pull_request:
+    paths:
+      - 'experiments/rea-swallow/**'
+      - '.github/workflows/rea-swallow-binding.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reference-aware-fingerprint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Create original and experimental REA source editions
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/binding_baseline.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptBindingBaseline.ab-swallow.test.ts
+      - name: Install pinned original REA dependencies
+        working-directory: experiments/rea-swallow/upstream
+        run: npm ci --no-audit --no-fund
+      - name: Original REA v3 collision baseline and upstream fingerprint tests
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          npx --no-install vitest run src/domain/javascript/javascriptBindingBaseline.ab-swallow.test.ts src/domain/javascript/javascriptAstFingerprint.test.ts \
+            2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/binding-baseline.log"
+      - name: Apply actual reference-aware fingerprint addition in REA source
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/binding_fingerprint_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptBindingFingerprint.ab-swallow.test.ts
+          git -C experiments/rea-swallow/upstream diff > experiments/rea-swallow/results/binding-source.patch
+      - name: Run old REA fingerprint tests and new A/B reference experiments
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          REA_AB_BINDING_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/binding-reference-witness.json" \
+          npx --no-install vitest run src/domain/javascript/javascriptAstFingerprint.test.ts src/domain/javascript/javascriptBindingFingerprint.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts \
+            2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/binding-experimental.log"
+      - name: Typecheck changed REA source
+        working-directory: experiments/rea-swallow/upstream
+        run: npx --no-install tsc --noEmit -p tsconfig.json
+      - name: Preserve candidate, baseline, native tests, and mathematics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-reference-aware-fingerprint-probe
+          path: experiments/rea-swallow/results/binding-*
+          if-no-files-found: warn
+          retention-days: 14
