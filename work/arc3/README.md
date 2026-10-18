@@ -76,3 +76,7 @@ python -m unittest -v network.tests.test_arc3_direct_work_lane
 ## Current native F3 suffix witness
 
 [LS20 native suffix experiment and F3 mathematical comparison](runs/LS20_F3_SUFFIX_2026-10-17.md) (120 real environment actions): visible state equalities from native words 34/43 and 23/32 persist under six common suffixes; visibly unequal words 12/21 converge after native suffix 2 and suffix 21. In all nine original F3 laws, the corresponding mathematical states under provisional native ACTION1=A/ACTION2=B remain distinct, since the generators are bijective. This is a **negative result for a literal injective visible-state correspondence**, not a proof that F3 as a wider investigation fails. No game win or new agent was produced.
+
+## Native LS20 state predictions
+
+[Source-recorded native frame prediction experiment](runs/LS20_NATIVE_FACTOR_PREDICTION_2026-10-17.md) now contains a reproducible, exact native glyph/trace model: the original free-motion proposal failed 6/34 action predictions, while a geometry-corrected rule predicted **69/69** native full frames, including **35/35** actions across eight separate held-out mixed words. The modeled motion blocks against native static obstacles, while a separate two-cell trace advances with actions. These are local LS20 observations, not F3 mathematics or general ARC wins; the earlier source-grounded F3 counterexamples remain open.
