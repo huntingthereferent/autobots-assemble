@@ -1,0 +1,67 @@
+name: NIH P2 original historical AACT status-difference scan
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_historical_status_difference_search.py'
+      - 'systems/workspace/NIH_P2_STATUS_DIFFERENCE_SEARCH.md'
+      - 'network/tests/test_nih_p2_historical_status_difference_search.py'
+      - '.github/workflows/nih-p2-status-difference-search.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_p2_historical_status_difference_search.py'
+      - 'systems/workspace/NIH_P2_STATUS_DIFFERENCE_SEARCH.md'
+      - 'network/tests/test_nih_p2_historical_status_difference_search.py'
+      - '.github/workflows/nih-p2-status-difference-search.yml'
+permissions:
+  contents: read
+jobs:
+  independently-replay-full-original-snapshot-difference-scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Reject invented transitions and malformed source identifiers
+        run: python -m unittest -v network.tests.test_nih_p2_historical_status_difference_search
+      - name: Verify both complete original AACT deposits before comparing changed fields
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-source-status-scan"
+          python -m systems.workspace.nih_p2_historical_status_difference_search \
+            --output-dir "$RUNNER_TEMP/nih-p2-source-status-scan"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          path=Path(os.environ["RUNNER_TEMP"])/"nih-p2-source-status-scan/nih-p2-original-aact-status-differences.json"
+          r=json.loads(path.read_text())
+          assert r["schema"]=="nih-p2-original-aact-two-snapshot-status-difference-search/v1"
+          assert r["source_2022"]["whole_archive_sha256"]=="d1d4fb04a121e03f2ac08bacef708a896f7240d5ff025104ed7512b60408d755"
+          assert r["source_2023"]["whole_archive_sha256"]=="bed698312a04292fc31f7ea71130731acc9b57723399ab1b45c0f6d70a304d49"
+          assert r["rows_export_2022"] >= 400000
+          assert r["rows_export_2023"] >= 400000
+          assert r["common_nct_ids"] >= 100000
+          assert r["same_normalized_status_count"]+r["different_normalized_status_count"] == r["common_nct_ids"]
+          assert r["predeclared_anchor_rule"].startswith("lexicographically")
+          assert len(r["selected_status_difference_anchors"])<=8
+          assert all(x["exact_original_registry_version_post_time_proven"] is False
+                     and x["actual_clinical_event_time_proven"] is False
+                     and x["intervening_revisions_excluded"] is False
+                     for x in r["selected_status_difference_anchors"])
+          assert r["actual_original_per_version_public_posting_times_proven"] is False
+          assert r["original_twelve_native_jobs_modified"] is False
+          assert r["clinical_verdict"] == "NOT_EVALUATED"
+          assert r["official_NIH_submission"] is False
+          PY
+      - name: Retain hashes, aggregate counts and at most eight source-qualified status anchors
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-status-difference-scan-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-source-status-scan/
+          retention-days: 30
+          if-no-files-found: warn
