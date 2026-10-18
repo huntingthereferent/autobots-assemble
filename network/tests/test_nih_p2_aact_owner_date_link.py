@@ -96,12 +96,14 @@ class OwnerDateProvenanceTests(unittest.TestCase):
             r.download_script("main", opener=lambda *_a,**_kw:Reader(b"irrelevant"))
 
     def test_04_short_source_fetch_fails_closed_on_identity_mismatch(self):
-        local=example(r.LINKED_LOAD)
+        local=example(r.EARLIER_LOAD)
+        linked=example(r.LINKED_LOAD)
+        def opener(request, **_kwargs):
+            return Reader(local if r.EARLIER_COMMIT in request.full_url else linked)
         with patch.object(r,"EARLIER_BLOB_SHA1",r.github_blob_sha1(local)),\
-             patch.object(r,"LINKED_BLOB_SHA1",r.github_blob_sha1(local)):
+             patch.object(r,"LINKED_BLOB_SHA1",r.github_blob_sha1(linked)):
             with TemporaryDirectory() as td:
-                result=r.execute(output_dir=Path(td),
-                    opener=lambda *_args,**_kwargs:Reader(local))
+                result=r.execute(output_dir=Path(td),opener=opener)
                 self.assertTrue(result["owner_attested_source_date"])
                 self.assertTrue((Path(td)/"nih-p2-aact-owner-script-date-link.json").exists())
         with self.assertRaises(ValueError):
