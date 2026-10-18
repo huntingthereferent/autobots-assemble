@@ -1,0 +1,97 @@
+# Attest an existing source-owned GitHub run, not a reconstructed Workstation.
+# PR tests never request source logs; owner main verifies run/job and log
+# in memory and emits only a narrow evidence-bound observation.
+name: owner-w13-verifier-source-observation
+on:
+  pull_request:
+    paths:
+      - 'research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json'
+      - 'systems/workspace/w13_owner_verifier_source_record.py'
+      - 'network/tests/test_w13_owner_verifier_source_record.py'
+      - 'systems/workspace/W13_OWNER_VERIFIER_READINESS_GAP.md'
+      - '.github/workflows/w13-owner-verifier-source-observation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  local-evidence-controls:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Validate source record and negative controls
+        run: python -m unittest -v network.tests.test_w13_owner_verifier_source_record
+  original-github-run:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Require a new owner-merged source observation, never a new job
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,subprocess
+          sha=os.environ['GITHUB_SHA']
+          p='research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json'
+          def git(*args):return subprocess.check_output(['git',*args],text=True).strip()
+          if git('rev-parse','HEAD')!=sha:
+              raise SystemExit('owner merge commit does not match checkout')
+          parents=git('rev-list','--parents','-n','1',sha).split()
+          if len(parents)!=3:
+              raise SystemExit('owner source record must enter via two-parent main merge')
+          if git('diff','--name-status',parents[1],sha,'--',p)!=f'A\t{p}':
+              raise SystemExit('owner source record not introduced on main')
+          if git('diff','--name-status',parents[1],sha,'--','systems/workspace/native_job_requests/w13'):
+              raise SystemExit('original source observation must not authorize another job')
+          PY
+      - name: Authenticate existing GitHub owner run, successful job and redacted log
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from systems.workspace.w13_owner_verifier_source_record import verify_source,RUN_ID,REPO,JOB_ID
+          if os.environ['GITHUB_REPOSITORY']!=REPO:
+              raise SystemExit('wrong repository for original owner observation')
+          def get(route,parse_json=True):
+              req=Request(f'https://api.github.com/repos/{REPO}/{route}',headers={
+                  'Authorization':'Bearer '+os.environ['GH_TOKEN'],
+                  'Accept':'application/vnd.github+json',
+                  'X-GitHub-Api-Version':'2022-11-28',
+                  'User-Agent':'w13-original-owner-child-source-observation'})
+              with urlopen(req,timeout=30) as stream:
+                  data=stream.read(4_000_001)
+              if len(data)>4_000_000:
+                  raise SystemExit('bounded GitHub observation exceeded size limit')
+              return json.loads(data) if parse_json else data.decode('utf8')
+          run=get(f'actions/runs/{RUN_ID}')
+          jobs=get(f'actions/runs/{RUN_ID}/jobs?per_page=100')
+          artifacts=get(f'actions/runs/{RUN_ID}/artifacts?per_page=100')
+          log=get(f'actions/jobs/{JOB_ID}/logs',parse_json=False)
+          receipt=verify_source(repo_root=Path(os.environ['GITHUB_WORKSPACE']),
+                                run=run,jobs=jobs,artifacts=artifacts,log_text=log)
+          # Never print raw log, journal, job inputs or native worker output.
+          print(json.dumps(receipt,indent=2,sort_keys=True))
+          PY
