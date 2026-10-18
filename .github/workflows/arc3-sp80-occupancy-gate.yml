@@ -1,0 +1,38 @@
+name: ARC3 SP80 native pre-color occupancy blind check
+
+on:
+  push:
+    paths:
+      - "work/arc3/native_sp80_occupancy_gate.py"
+      - "network/tests/test_arc3_sp80_occupancy_gate.py"
+      - ".github/workflows/arc3-sp80-occupancy-gate.yml"
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_occupancy_gate.py"
+      - "network/tests/test_arc3_sp80_occupancy_gate.py"
+      - ".github/workflows/arc3-sp80-occupancy-gate.yml"
+  workflow_dispatch:
+
+jobs:
+  native-occupancy-experiment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official native ARC SDK
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Verify native before-color gating without post-action leakage
+        run: python -m unittest -v network.tests.test_arc3_sp80_occupancy_gate
+      - name: Test frozen occupancy rule on six untouched native SP80 words
+        run: python -m work.arc3.native_sp80_occupancy_gate --out runtime/data/arc3/sp80-native-color-occupancy-gate.json
+      - name: Preserve all real native frames, admitted and excluded predicted changes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-sp80-native-precolor-occupancy
+          path: runtime/data/arc3/sp80-native-color-occupancy-gate.*
+          if-no-files-found: ignore
+          retention-days: 14
