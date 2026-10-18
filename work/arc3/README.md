@@ -80,3 +80,7 @@ python -m unittest -v network.tests.test_arc3_direct_work_lane
 ## Native LS20 state predictions
 
 [Source-recorded native frame prediction experiment](runs/LS20_NATIVE_FACTOR_PREDICTION_2026-10-17.md) now contains a reproducible, exact native glyph/trace model: the original free-motion proposal failed 6/34 action predictions, while a geometry-corrected rule predicted **69/69** native full frames, including **35/35** actions across eight separate held-out mixed words. The modeled motion blocks against native static obstacles, while a separate two-cell trace advances with actions. These are local LS20 observations, not F3 mathematics or general ARC wins; the earlier source-grounded F3 counterexamples remain open.
+
+## Latest native F3 mathematical test
+
+[LS20 F3 A-generator macro screening](runs/LS20_F3_ORDER_THREE_MACROS_2026-10-17.md) now tested the original mathematical requirement A³=id with A and A² nontrivial against the independently measured native glyph factor. **5,460** native action words of length <=6, applied at **34 model-reachable offsets**, produced **zero strict period-three cycles** in that model. **57/57** separately executed native LS20 frames matched the model on six repeated macro words. This closes the **bounded short-generator proposal on that measured glyph factor**, not F3 more generally or unknown longer/higher-order native relationships. No game win claimed.

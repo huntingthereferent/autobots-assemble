@@ -1,0 +1,34 @@
+name: ARC3 F3 native order-three macro witness
+
+on:
+  push:
+    paths:
+      - "work/arc3/native_f3_macro_order.py"
+      - ".github/workflows/arc3-f3-macro-order.yml"
+  pull_request:
+    paths:
+      - "work/arc3/native_f3_macro_order.py"
+      - ".github/workflows/arc3-f3-macro-order.yml"
+  workflow_dispatch:
+
+jobs:
+  native-macro-search:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official native ARC runtime
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Screen strict period-three macro words and independently test on native LS20
+        run: python -m work.arc3.native_f3_macro_order --game ls20 --out runtime/data/arc3/f3-macro-order.json
+      - name: Keep exact native frame arrays and mathematical negative controls
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-f3-native-macro-order-ls20
+          path: runtime/data/arc3/f3-macro-order.*
+          if-no-files-found: error
+          retention-days: 14
