@@ -108,6 +108,31 @@ assert.deepEqual(sourceRevisionMatches([],movements,records),[]);
             proc=subprocess.run(["node",str(source)],capture_output=True,text=True,timeout=15)
         self.assertEqual(proc.returncode,0,proc.stderr)
 
+    @unittest.skipUnless(shutil.which("node"),"Node.js needed for immutable source URL check")
+    def test_revision_links_accept_real_research_paths_only(self):
+        import re
+        page=WORK.read_text(encoding="utf-8")
+        fn=re.search(r"  function revisionLink\(path,sha\)\{.*?\n  \}",page,re.S)
+        self.assertIsNotNone(fn)
+        script=fn.group(0)+"""
+const assert=require("node:assert/strict");
+const REPO="huntingthereferent/autobots-assemble";
+const sha="a".repeat(40);
+const isSHA=v=>typeof v==="string"&&/^[0-9a-f]{40}$/.test(v);
+const link=(text,href)=>({text,href});
+const good=revisionLink("research/dives/ARC3-TRACE-001/dive.json",sha);
+assert.equal(good.href,"https://github.com/"+REPO+"/blob/"+sha+"/research/dives/ARC3-TRACE-001/dive.json");
+assert.equal(revisionLink("../secret",sha),null);
+assert.equal(revisionLink("/absolute",sha),null);
+assert.equal(revisionLink("research//bad",sha),null);
+assert.equal(revisionLink("research/foo", "invalid-sha"),null);
+"""
+        with TemporaryDirectory() as d:
+            source=Path(d)/"revision-url.js"
+            source.write_text(script,encoding="utf-8")
+            proc=subprocess.run(["node",str(source)],capture_output=True,text=True,timeout=15)
+        self.assertEqual(proc.returncode,0,proc.stderr)
+
     def test_research_retains_original_boundary_and_next(self):
         v=projection(research_snapshot())
         arc=next(x for x in v["records"] if x["source_type"]=="RESEARCH_DIVE")
