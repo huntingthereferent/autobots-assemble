@@ -1,0 +1,25 @@
+name: ARC3 direct observation lane
+
+on:
+  push:
+    paths:
+      - "work/arc3/**"
+      - "network/tests/test_arc3_direct_work_lane.py"
+      - ".github/workflows/arc3-direct-observation.yml"
+  pull_request:
+    paths:
+      - "work/arc3/**"
+      - "network/tests/test_arc3_direct_work_lane.py"
+      - ".github/workflows/arc3-direct-observation.yml"
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check independent ARC lane and native transcript reader
+        run: python -m unittest -v network.tests.test_arc3_direct_work_lane
