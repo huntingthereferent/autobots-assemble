@@ -7,6 +7,7 @@ import unittest
 from unittest.mock import patch
 from systems.workspace.w13_owner_next_cp_preflight import (
     examine_original,EXPECTED_PARENT_BLOB,EXPECTED_WITNESS_BLOB,
+    EXPECTED_BRIDGE_BLOB,
     OWNER_REQUEST,SCHEMA
 )
 from systems.workspace.github_w13_continuation import (
@@ -20,8 +21,10 @@ class OriginalOwnerPreflightTests(unittest.TestCase):
         from systems.workspace.github_w13_continuation import _git_blob
         record=ROOT/"research/dives/W13-NATIVE-RECEIPT-001/dive.json"
         worker=ROOT/"systems/workspace/game_native_verifier_worker_source/native_verifier.py"
+        bridge=ROOT/"systems/workspace/game_native_verifier_bridge.py"
         self.assertEqual(_git_blob(record),EXPECTED_PARENT_BLOB)
         self.assertEqual(_git_blob(worker),EXPECTED_WITNESS_BLOB)
+        self.assertEqual(_git_blob(bridge),EXPECTED_BRIDGE_BLOB)
         self.assertEqual(SCHEMA,"owner-w13-game-native-verifier-source-preflight/v1")
 
     def test_missing_or_false_source_binding_rejected_without_runtime(self):
