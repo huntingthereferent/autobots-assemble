@@ -1,0 +1,60 @@
+name: A/B native special-tile multistep visible congruence
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths:
+      - 'work/arc3/native_special_tile_multistep*.py'
+      - 'network/tests/test_arc3_native_special_tile_multistep.py'
+      - 'work/arc3/runs/AB_NATIVE_SPECIAL_TILE_MULTISTEP_2026-10-18.md'
+      - '.github/workflows/ab-native-special-tile-multistep.yml'
+  pull_request:
+    paths:
+      - 'work/arc3/native_special_tile_multistep*.py'
+      - 'network/tests/test_arc3_native_special_tile_multistep.py'
+      - 'work/arc3/runs/AB_NATIVE_SPECIAL_TILE_MULTISTEP_2026-10-18.md'
+      - '.github/workflows/ab-native-special-tile-multistep.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native-source-backed-multistep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official native ARC public runtime
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Verify source and negative scientific evidence contracts
+        run: |
+          python -m unittest network.tests.test_arc3_native_special_tile_multistep network.tests.test_arc3_native_special_tile network.tests.test_arc3_native_multi_edge -v
+      - name: Retrieve verified native one-action special-tile source
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-special-tile-successor-evidence
+          run-id: 39121963532
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-special-tile-long/source
+      - name: Authenticate prior actual pixels and freeze all 36 next trials
+        run: |
+          python -m work.arc3.native_special_tile_multistep --source runtime/data/ab-special-tile-long/source --out runtime/data/ab-special-tile-long/new/frozen-multistep.json
+      - name: Run 36 real native LS20 longer follow-up words
+        run: |
+          python -m work.arc3.native_special_tile_multistep_capture --frozen runtime/data/ab-special-tile-long/new/frozen-multistep.json --out runtime/data/ab-special-tile-long/new/native-multistep.json
+      - name: Independently check each native intermediate frame and three hypotheses
+        run: |
+          python -m work.arc3.native_special_tile_multistep_verify --frozen runtime/data/ab-special-tile-long/new/frozen-multistep.json --native runtime/data/ab-special-tile-long/new/native-multistep.json --raw runtime/data/ab-special-tile-long/new/native-multistep.npz --out runtime/data/ab-special-tile-long/new/independent-verdict.json
+      - name: Preserve native pixels, frozen predictions, and all counterexamples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-native-special-tile-multistep-evidence
+          path: runtime/data/ab-special-tile-long/new/*
+          retention-days: 14
+          if-no-files-found: warn
