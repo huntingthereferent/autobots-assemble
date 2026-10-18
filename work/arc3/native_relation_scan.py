@@ -59,6 +59,37 @@ def component_boxes(g, color):
     return tuple(sorted(out))
 
 
+
+def rigid_color_motion(before, after):
+    """Exact transport witness for changed pixels of each unmodified color.
+
+    Identify outgoing/incoming coordinates for each color independently. Only
+    report translation when ALL outgoing pixels map to ALL incoming pixels by
+    one shift. A color can move while other static cells of that color remain.
+    This is native pixel geometry, never a finite-field coordinate.
+    """
+    touched = before != after
+    motions = []
+    for color in sorted(set(map(int, before[touched])) | set(map(int, after[touched]))):
+        removed = {(int(x), int(y)) for y,x in zip(*np.nonzero(touched & (before == color)))}
+        added = {(int(x), int(y)) for y,x in zip(*np.nonzero(touched & (after == color)))}
+        if len(removed) != len(added) or len(removed) < 4:
+            continue
+        anchor_x, anchor_y = min(removed)
+        matches = []
+        for x,y in added:
+            dx,dy = x-anchor_x, y-anchor_y
+            if dx == 0 and dy == 0:
+                continue
+            if {(px+dx,py+dy) for px,py in removed} == added:
+                matches.append((dx,dy))
+        if len(matches) == 1:
+            dx,dy = matches[0]
+            motions.append({"native_color":color, "moved_cells":len(removed),
+                            "dx":dx,"dy":dy, "exact_transport":True})
+    return motions
+
+
 def native_features(g):
     unique, counts = np.unique(g, return_counts=True)
     count = dict(zip(map(int, unique), map(int, counts)))
@@ -88,6 +119,7 @@ def compact_delta(before, after):
     return {
         "changed_cells": int(len(xs)),
         "bbox": [int(xs.min()),int(ys.min()),int(xs.max()),int(ys.max())],
+        "exact_color_translations": rigid_color_motion(before, after),
         "color_exchanges": [
             {"before": a, "after": b, "cells": n}
             for (a,b), n in pairs.most_common(12)
@@ -201,6 +233,7 @@ def main():
             "changed_cells":[d["changed_cells"] for d in r["deltas"]],
             "bbox":[d["bbox"] for d in r["deltas"]],
             "first_color_exchanges":[d["color_exchanges"][:5] for d in r["deltas"]],
+            "exact_color_translations":[d["exact_color_translations"] for d in r["deltas"]],
             "three_returns":r["nontrivial_observed_three_returns"],
             "raw_frame_3_return":r["raw_full_frame_root_return"],
         } for r in probes],
