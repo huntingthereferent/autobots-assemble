@@ -1,0 +1,62 @@
+name: REA A/B nested lexical scope experiment
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths: ['experiments/rea-swallow/**', '.github/workflows/rea-swallow-scopes.yml']
+  pull_request:
+    paths: ['experiments/rea-swallow/**', '.github/workflows/rea-swallow-scopes.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  scope-closure-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned original REA
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          test "$(git rev-parse HEAD)" = "f0b9ef34c404c1c65f8167502db972b0bd708403"
+          npm ci --no-audit --no-fund
+      - name: Replay last validated source edition and preserve it as control
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/binding_fingerprint_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptBindingFingerprint.ab-swallow.test.ts
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/scoped_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+      - name: Test the prior working edition unmodified
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          npx --no-install vitest run src/domain/javascript/javascriptAstFingerprint.test.ts src/domain/javascript/javascriptBindingFingerprint.ab-swallow.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/scoped-control.log"
+      - name: Apply experimental source and retain actual source patch
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/scoped_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/scoped_fingerprint_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptScopedFingerprint.ab-swallow.test.ts
+          git -C experiments/rea-swallow/upstream diff > experiments/rea-swallow/results/scoped-source.patch
+      - name: Verify scoped closure math, old fingerprint tests and upstream matching
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          REA_AB_SCOPED_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/scoped-witness.json" npx --no-install vitest run src/domain/javascript/javascriptAstFingerprint.test.ts src/domain/javascript/javascriptBindingFingerprint.ab-swallow.test.ts src/domain/javascript/javascriptScopedFingerprint.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/scoped-experiment.log"
+      - name: Verify native REA TypeScript types
+        working-directory: experiments/rea-swallow/upstream
+        run: npx --no-install tsc --noEmit -p tsconfig.json
+      - name: Retain real test receipts, source editions, and actual patch
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-nested-reference-math
+          path: experiments/rea-swallow/results/scoped-*
+          if-no-files-found: warn
+          retention-days: 14
