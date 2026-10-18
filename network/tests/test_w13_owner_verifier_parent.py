@@ -107,7 +107,9 @@ class OwnerW13NativeVerifierParentTests(unittest.TestCase):
         self.rt._handoffs[OWNER_JOB_ID]=replace(original,dependencies=(W13_JOB,))
         with self.assertRaises(ValueError):
             self.bridge.execute(OWNER_JOB_ID,allow_local_execution=True)
-        self.assertEqual(self.rt.state(OWNER_JOB_ID).status,"READY")
+        # The original HandoffRuntime also refuses a nonexistent dependency:
+        # the forged spec is WAITING, not runnable READY or witnessed COMPLETE.
+        self.assertEqual(self.rt.state(OWNER_JOB_ID).status,"WAITING")
 
     def test_tampered_child_worker_edition_fails_closed(self):
         self._parent_complete()
