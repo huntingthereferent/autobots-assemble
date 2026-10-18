@@ -33,6 +33,9 @@ RESULT_KIND="game-native-verifier-result/v1"
 JOB_ID="game-native-verifier-joined-001"
 # A second, independently authorized path to the existing genuine owner W13 journal.
 OWNER_W13_JOB="game-w13-github-001"
+OWNER_W13_EDITION="w13-github-v1"
+OWNER_W13_FINGERPRINT="798ed2399413ecbb30a1eb94c547a5517ee03dfd002600d868376f88f03f458a"
+OWNER_W13_RESULT_EVENT="evt_208f2fbdb380437eb59790a9a704c0b9"
 OWNER_VERSION="witness-owner-v1"
 OWNER_JOB_ID="game-native-verifier-github-001"
 PARENTS=(W13_JOB,OWNER_W13_JOB)
@@ -63,6 +66,19 @@ class NativeGameVerifierBridge:
                 or metadata.get("native_evidence_verifier")!=W13_VERIFIER
                 or self.runtime.state(parent_job_id).status!="COMPLETE"):
             raise ValueError("original W13 native game CP must be complete")
+        if parent_job_id==OWNER_W13_JOB:
+            # This is a historical original, not a reused familiar job ID.
+            # A synthetic fixture with the same ID may not impersonate it.
+            from .native_receipt_projection import recorded_receipt
+            witness=recorded_receipt(self.runtime,parent_job_id)
+            completed=[event for event in witness["events"] if event["type"]=="RESULT"]
+            if (witness["worker_version"]!=OWNER_W13_EDITION
+                    or witness["source_fingerprint"]!=OWNER_W13_FINGERPRINT
+                    or witness["native_verifier_id"]!=W13_VERIFIER
+                    or len(completed)!=1
+                    or completed[0]["event_id"]!=OWNER_W13_RESULT_EVENT
+                    or completed[0]["result_status"]!="COMPLETE"):
+                raise ValueError("original owner W13 RESULT/source identity not authenticated")
         self.parent_bridge.reverify(parent_job_id)
         original_result=self.runtime.state(parent_job_id).output["report"]
         verify_native_report(original.inputs,original_result)
