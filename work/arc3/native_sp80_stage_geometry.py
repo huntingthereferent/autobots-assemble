@@ -220,6 +220,23 @@ def main():
                 "native_action":int(WORDS[step-1]),
                 **z,
             })
+    # A symmetry claim requires predictions that differ on the heldout
+    # masks; equal scores alone cannot identify the D4 orientation.
+    competing_predictions=[]
+    for reset in range(RESETS):
+        for step in range(1,7):
+            source,target=mask_pair(frames[f"reset_{reset}"],step)
+            d4_pixels,_=transform(source,kind,dx,dy)
+            simple_pixels,_=transform(source,tk,tdx,tdy)
+            competing_predictions.append({
+                "reset":reset,"word_step":step,
+                "native_action":int(WORDS[step-1]),
+                "exact_same_predicted_pixels":d4_pixels==simple_pixels,
+                "symmetric_difference_predicted_pixels":len(
+                    d4_pixels^simple_pixels),
+                "d4_overlap":len(d4_pixels&target),
+                "translation_overlap":len(simple_pixels&target),
+            })
     heldout=[x for x in other_steps
              if x["role"]=="FROZEN_HELDOUT_ACTION4"]
     controls=[x for x in other_steps
@@ -245,6 +262,11 @@ def main():
         "frozen_fit":chosen,
         "translation_only_training_fit":translation_only,
         "translation_only_frozen_evaluations":translation_evaluations,
+        "prediction_distinctions_between_fitted_models":
+            competing_predictions,
+        "action4_competing_models_predict_identical_pixels":all(
+            x["exact_same_predicted_pixels"]
+            for x in competing_predictions if x["native_action"]==4),
         "translation_only_heldout_action4_mean_f1":
             sum(x["f1"] for x in simpler_heldout)/len(simpler_heldout),
         "translation_only_action5_control_mean_f1":
@@ -277,6 +299,10 @@ def main():
         "stage1_roots":len({e["stage1_root"] for e in experiments}),
         "training_fit":chosen,
         "translation_only_training_fit":translation_only,
+        "action4_competing_models_predict_identical_pixels":
+            data["action4_competing_models_predict_identical_pixels"],
+        "models_compare":[x for x in competing_predictions
+                          if x["reset"]==0],
         "translation_only_heldout_action4_mean_f1":
             data["translation_only_heldout_action4_mean_f1"],
         "translation_only_action5_control_mean_f1":
