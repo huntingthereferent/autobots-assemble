@@ -97,7 +97,7 @@ def authenticate_owner_request(repo_root: Path, owner_merge_sha: str) -> dict:
     auth=root/REQUEST
     if (not auth.is_file() or auth.is_symlink()
             or auth.stat().st_size>4096
-            or auth.read_bytes()!=_git(root,"show",owner_merge_sha+":"+REQUEST).encode()):
+            or _git_blob(auth)!=_git(root,"rev-parse",owner_merge_sha+":"+REQUEST)):
         raise ValueError("original owner request missing, changed or unsafe")
     request=_object(auth)
     if request!=EXPECTED_REQUEST:
