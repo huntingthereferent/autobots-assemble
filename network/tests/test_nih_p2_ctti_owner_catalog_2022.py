@@ -74,7 +74,7 @@ class OriginalCTTI2022CatalogTests(TestCase):
                             "Unavailable",{},None)
         report=m.inspect(opener=opener)
         self.assertEqual([x["http_status"] for x in report["unauthenticated_public_catalog_checks"]],
-                         [403,404])
+                         [403,404,404])
         self.assertFalse(report["public_2022_archive_url_discovered"])
         self.assertTrue(report["catalog_access_or_linkage_unresolved"])
         self.assertTrue(report["not_attempted_to_bypass_authentication"])
