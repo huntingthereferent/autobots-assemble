@@ -147,6 +147,26 @@ def check_axes(frames, *, plan_length, cutover, targets=TARGETS):
         indexed[key]=row
     if {(turn,target) for turn in range(plan_length+1) for target in targets} != set(indexed):
         raise ValueError("original world did not observe every turn and valid-time target")
+    whole=set(indexed[0,"2026-01-04"]["static_ids"]) | set(
+        indexed[0,"2026-01-04"]["outside_validity_ids"])
+    if len(whole) < 2:
+        raise ValueError("insufficient original source observations for two clocks")
+    for row in frames:
+        outside=row["outside_validity_ids"]
+        if (type(outside) is not list or len(outside)!=len(set(outside)) or
+                set(outside) & set(row["static_ids"]) or
+                set(outside) | set(row["static_ids"]) != whole):
+            raise ValueError("valid and outside-validity sets must partition original source")
+    knowledge_by_turn=[]
+    for turn in range(plan_length+1):
+        times={indexed[turn,target]["known_at"] for target in targets}
+        if len(times)!=1:
+            raise ValueError("independent valid-time selection changed game knowledge clock")
+        knowledge_by_turn.append(next(iter(times)))
+    if (knowledge_by_turn[0] >= knowledge_by_turn[cutover] or
+            len(set(knowledge_by_turn[:cutover]))!=1 or
+            len(set(knowledge_by_turn[cutover:]))!=1):
+        raise ValueError("world known-time axis differs from original cutover")
     for target in targets:
         prev=None
         for turn in range(plan_length+1):
@@ -302,7 +322,12 @@ def run_two_clock(*, data_dir, output_dir, parent=run_world):
                         # Every distinct validity target is clicked by the browser,
                         # including one before, within, and after stated source validity.
                         for target in TARGETS:
+                            previous=page.locator("#phase1-axis").get_attribute("data-completed")
+                            previous_number=int(previous) if previous is not None else 0
                             page.locator(f'#phase1-target-choices button[data-target="{target}"]').click()
+                            page.wait_for_function(
+                                "(n) => Number(document.querySelector('#phase1-axis')?.dataset.completed || 0)>n",
+                                arg=previous_number,timeout=15000)
                             snapshot(turn,target)
                     if page.locator("body").get_attribute("data-solved")!="true":
                         raise ValueError("real original world did not complete")
