@@ -55,6 +55,22 @@ class Phase1DraftReview(unittest.TestCase):
             self.assertEqual(len(list(g.objects(obs, NIH.knownFrom))), 1)
             self.assertEqual(len(list(g.objects(obs, NIH.validDuring))), 1)
 
+    def test_03a_review_math_prior_art_and_unknown_evidence_are_explicit(self):
+        text = DOC.read_text(encoding="utf8")
+        for required in (
+            "Checkable invariants and an explicit unknown state",
+            "T(K1,V) subset T(K2,V)",
+            "L(K,V) = S(V) minus T(K,V)",
+            "L <= K < U",
+            "bitemporal databases",
+            "HyTE",
+            "No such embedding experiment",
+            "Independent reviewer falsification plan",
+            "source bytes or authenticated release receipts",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required.lower(), text.lower())
+
     def test_04_no_authenticated_real_historical_claims_in_ttl(self):
         g = Graph()
         g.parse(OWL_FILE, format="turtle")
