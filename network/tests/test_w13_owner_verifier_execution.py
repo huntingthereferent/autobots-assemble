@@ -35,8 +35,18 @@ class OriginalW13ConsentGateTests(unittest.TestCase):
         self.assertTrue(all(EXPECTED_REQUEST[x] for x in (
             "authorizes_source_copy", "authorizes_admission", "authorizes_execution")))
 
-    def test_no_owner_authorization_file_is_committed_by_building_gate(self):
-        self.assertFalse((ROOT/REQUEST).exists())
+    def test_future_owner_request_requires_the_exact_source_contract(self):
+        # The gate PR intentionally has no request. Once the owner separately
+        # commits one, the repository-wide suite must verify its bytes rather
+        # than unconditionally reject the legitimate next activation step.
+        path=ROOT/REQUEST
+        if path.exists():
+            self.assertTrue(path.is_file())
+            self.assertFalse(path.is_symlink())
+            self.assertLessEqual(path.stat().st_size,4096)
+            self.assertEqual(json.loads(path.read_text(encoding="utf8")),EXPECTED_REQUEST)
+        else:
+            self.assertFalse(path.is_symlink())
 
     def test_invalid_revision_refused_before_loading_artifact_or_admitting(self):
         with self.assertRaisesRegex(ValueError, "exact owner-merge SHA"):
