@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Work · Original investigation</title>
+<title>Workstation · Hunting the Referent</title>
 <meta name="description" content="Source-owned workstation executions, verification steps, research outcomes, and unresolved walls.">
 <style>
 :root {
@@ -11,7 +11,6 @@
   --text:#e8f1f5; --muted:#9fb6c3; --blue:#8ed3ed;
   --green:#91ddba; --yellow:#f3c68c; --red:#f0a7a4;
   --body-font: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-  --heading-font: Georgia, "Times New Roman", serif;
   --data-font: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
 }
 * { box-sizing: border-box; }
@@ -53,12 +52,12 @@ main { max-width:1490px; margin:auto; padding:37px max(20px,3vw) 70px; }
   font:600 11px/1.5 var(--data-font); letter-spacing:.09em;
   color:var(--blue); text-transform:uppercase; margin:0 0 12px;
 }
-h1, h2 { font-family:var(--heading-font); font-weight:400; }
+h1, h2 { font-family:var(--body-font); font-weight:600; }
 h1 {
-  font-size:clamp(32px,3.2vw,45px); line-height:1.16;
-  letter-spacing:-.025em; margin:0 0 16px;
+  font-size:clamp(28px,2.6vw,34px); line-height:1.3;
+  letter-spacing:-.02em; margin:0 0 16px;
 }
-h2 { font-size:clamp(23px,2.25vw,30px); line-height:1.25; letter-spacing:-.015em; margin:0; }
+h2 { font-size:clamp(19px,1.8vw,22px); line-height:1.4; letter-spacing:-.01em; margin:0; }
 h3 { font:600 15px/1.45 var(--body-font); margin:0; letter-spacing:0; }
 .intro { max-width:900px; color:#b4c7d1; font-size:15px; line-height:1.75; margin:0 0 22px; }
 .status-line {
@@ -206,8 +205,8 @@ footer {
   .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .metric { padding:14px; }
   .metric strong { font-size:26px; }
-  h1 { font-size:34px; }
-  h2 { font-size:24px; }
+  h1 { font-size:28px; }
+  h2 { font-size:20px; }
   .section-top { margin-top:30px; }
   .run-title { flex-wrap:wrap; }
 }
@@ -216,13 +215,13 @@ footer {
 <body>
 <header>
   <strong>HUNTING THE REFERENT <span style="color:#7e9bab">/ WORK</span></strong>
-  <nav><a href="#executions">WORK IN MOTION</a><a href="#research">RESEARCH & WALLS</a><a href="trace.html">SOURCE TRACE</a><a href="https://github.com/huntingthereferent/autobots-assemble">REPOSITORY</a></nav>
+  <nav><a href="#executions">EXECUTIONS</a><a href="#research">RESEARCH</a><a href="trace.html">TRACE</a><a href="https://github.com/huntingthereferent/autobots-assemble">GITHUB</a></nav>
 </header>
 <main>
 <section aria-labelledby="title">
-  <p class="eyebrow">Actual execution and original evidence</p>
-  <h1 id="title">What's happening in work?</h1>
-  <p class="intro">GitHub workflow runs and their individual steps appear here as recorded by GitHub. Mathematics, research, corrections and unresolved walls come from the original workstation's source records. An executed test is not automatically a solved research question; a stored research result is not automatically running.</p>
+  <p class="eyebrow">GitHub / Workstation</p>
+  <h1 id="title">Workstation</h1>
+  <p class="intro">Execution data is read from GitHub Actions. Research records come from the repository’s committed workstation projection. Workflow status and research outcomes are separate.</p>
   <div class="status-line" role="status"><span class="indicator" id="live-dot"></span><strong id="feed-state">Reading current executions</strong><span id="last-read"></span><button id="check-now" type="button">Refresh source</button></div>
   <div id="feed-error" class="notice" hidden></div>
   <div class="metrics" aria-label="Observed workflow state counts">
@@ -234,24 +233,24 @@ footer {
   <p class="fine">Numbers describe the latest publicly accessible workflow-run sample, not every worker or every event in the workstation. Unavailable data is never counted as zero.</p>
 </section>
 <section id="executions" aria-label="Actual GitHub work execution">
-  <div class="section-top"><div><p class="eyebrow">Current execution</p><h2>What started, what passed, what stopped</h2><p class="subtitle">Select a recorded run to inspect the native jobs and exact steps GitHub observed.</p></div>
+  <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Runs, jobs, and steps reported by GitHub.</p></div>
     <div class="tools"><label for="run-filter">Show <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label></div></div>
   <div class="workspace">
-    <div class="pane"><header><strong>Observed workflow runs</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div></div>
-    <div class="pane"><header><strong>Execution evidence</strong><small id="details-scope">Choose a source run</small></header><div id="detail" class="pane-content"><p class="no-source">Select an observed workflow to inspect its saved jobs, steps, SHA, and result. No work will be launched from this screen.</p></div></div>
+    <div class="pane"><header><strong>Runs</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div></div>
+    <div class="pane"><header><strong>Run details</strong><small id="details-scope">Choose a source run</small></header><div id="detail" class="pane-content"><p class="no-source">Select an observed workflow to inspect its saved jobs, steps, SHA, and result. No work will be launched from this screen.</p></div></div>
   </div>
 </section>
 <section id="research" aria-labelledby="research-title">
-  <div class="section-top"><div><p class="eyebrow">Original research</p><h2 id="research-title">What we learned and what remains open</h2><p class="subtitle">Original research states and preserved walls, linked back to the files that recorded them.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
+  <div class="section-top"><div><p class="eyebrow">02 / Source records</p><h2 id="research-title">Research records</h2><p class="subtitle">Investigations, movements, and unresolved conditions with source references.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
   <div class="source-controls"><input id="source-search" type="search" placeholder="Search original research, source, status or wall…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
   <details class="pane" open>
-    <summary style="padding:14px 18px;cursor:pointer"><strong>Recorded movements from original sources</strong> <small id="movement-count" class="fine">Loading…</small></summary>
+    <summary style="padding:14px 18px;cursor:pointer"><strong>Movements</strong> <small id="movement-count" class="fine">Loading…</small></summary>
     <div id="research-movements" class="record-list" style="max-height:340px"><p class="no-source">Loading source-labeled moves…</p></div>
   </details>
   <p class="fine">The two evidence levels below are not interchangeable: a structured MOVE is a recorded source state; a documented movement heading is a source locator only. Neither means a worker is running right now.</p>
   <div class="research-grid">
-    <div class="pane"><header><strong>Recorded investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div></div>
-    <div class="pane"><header><strong>Unresolved conditions and documented walls</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div></div>
+    <div class="pane"><header><strong>Investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div></div>
+    <div class="pane"><header><strong>Open conditions</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div></div>
   </div>
   <p class="fine">A documentation heading is not a failed run or a newly discovered wall. A historical checkpoint is not a live worker. Open the original evidence to inspect what was actually established.</p>
 </section>
