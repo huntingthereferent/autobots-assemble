@@ -3,6 +3,23 @@
 **Status:** ACTIVE MAIN BUILD  
 **Purpose:** Build one reusable, deployable engine that can ingest heterogeneous external sources, preserve identity and provenance, detect change/conflict, reconcile state, and expose the result through APIs, interfaces, alerts, exports, and downstream automation.
 
+## Local monitoring credentials and network boundary
+
+The Docker Compose stack is a **local development and CI environment**, not a hardened public deployment. Compose requires two explicit environment variables instead of shipping reusable application/database passwords:
+
+```sh
+export MONITOR_DB_PASSWORD='<unique URL-safe password>'
+export GRAFANA_ADMIN_PASSWORD='<separate unique password>'
+docker compose config
+docker compose up -d --build
+```
+
+Keep these values outside Git and do not reuse CI fixture values. `MONITOR_DB_PASSWORD` is interpolated into a PostgreSQL connection URL, so special characters must be URL-encoded in that URL or a URL-safe credential should be chosen. All published Compose ports (8000 API, 8080 frontend, 3000 Grafana, 9090 Prometheus, and 9093 Alertmanager) bind to **127.0.0.1** only. Container-to-container access stays on the internal Compose network. Remote access requires a separate authenticated, TLS-protected gateway and an explicit deployment review.
+
+**Existing Docker volumes:** Changing `POSTGRES_PASSWORD` in Compose does not rotate the password stored in an initialized PostgreSQL database. Back up the data and rotate the database user's password before deploying these variables against an existing persistent volume; do not delete the volume to force a reset.
+
+CI provides disposable, publicly visible placeholder values only to its isolated Docker job. They are intentionally unusable as a recommended deployment configuration. The monitoring probes and existing metrics/dashboards remain unchanged.
+
 ## Stable referent
 
 The platform is not tied to one dataset or domain.
