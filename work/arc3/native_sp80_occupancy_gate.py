@@ -189,11 +189,14 @@ def aggregate(trials, model):
                 x["actual_pre_color"] for m in items
                 for x in m["ungated_false_positives_before_colors"]
             ).items())),
-        "ungated_false_positives_expected_native_from_to":dict(
-            sorted(Counter(
+        "ungated_false_positives_expected_native_from_to":[
+            {"from_color":int(pair[0]),"to_color":int(pair[1]),
+             "occurrences":int(n)}
+            for pair,n in sorted(Counter(
                 tuple(x["expected_from_to"]) for m in items
                 for x in m["ungated_false_positives_before_colors"]
-            ).items(), key=lambda item: item[0])),
+            ).items())
+        ],
 
         "remaining_gated_false_positives_with_actual_pre_colors":[
             {"word":row["word"],"reset":row["reset"],
