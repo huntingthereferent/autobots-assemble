@@ -17,6 +17,12 @@ python -m unittest -v network.tests.test_arc3_f3_agent
 
 No native ARC gameplay has yet been witnessed for this F3 prototype. Historical G2.3 public-game evidence is retained as a comparison, not imported as the new agent's reasoning.
 
+## Current F3/native observation
+
+[LS20 native relational evidence](runs/LS20_F3_NATIVE_RELATIONS_2026-10-17.md) now records the result of using the original F3 laws as a hypothesis against the real game: exact co-transport of native color groups, a separate persistent 2-cell change on every tested action, visible final-frame collisions for native words 34/43 and 23/32, and order-sensitive 12/21. All measurements came from official native action calls, not a synthetic ARC imitation.
+
+The mathematically necessary F3 order-three relation did **not** survive the literal raw-state mapping; the new observed glyph/trace distinction is not yet a justified F3 state representation. The single-file F3 agent remains experimental, and no game win is claimed. [Reproducible native tests](native_mixed_relation_probe.py) and [the direct original-law comparison](f3_native_word_comparison.py) preserve that boundary.
+
 ## Existing source, not rewritten
 
 - [Direct-solve objective](../../research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md) — solve the actual games, with discovery actions counted.
