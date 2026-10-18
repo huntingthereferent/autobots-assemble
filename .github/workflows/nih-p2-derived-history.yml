@@ -1,0 +1,62 @@
+name: NIH P2 independent derived history corpus
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_derived_history_receipt.py'
+      - 'network/tests/test_nih_derived_history_receipt.py'
+      - 'systems/workspace/NIH_P2_DERIVED_HISTORY_BOUNDARY.md'
+      - '.github/workflows/nih-p2-derived-history.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_derived_history_receipt.py'
+      - 'network/tests/test_nih_derived_history_receipt.py'
+      - 'systems/workspace/NIH_P2_DERIVED_HISTORY_BOUNDARY.md'
+      - '.github/workflows/nih-p2-derived-history.yml'
+permissions:
+  contents: read
+jobs:
+  verify-independent-derived-trial-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test integrity gates with invalid fixture and tampered source
+        run: python -m unittest -v network.tests.test_nih_derived_history_receipt
+      - name: Download four pinned upstream source files and independently verify source identity
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-derived-history"
+          python -m systems.workspace.nih_derived_history_receipt \
+            --output-dir "$RUNNER_TEMP/nih-derived-history"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"nih-derived-history/nih-p2-independent-derived-history.json").read_text())
+          assert r["schema"]=="nih-p2-independent-derived-history/v1"
+          assert r["nct_id"]=="NCT04153409"
+          assert len(r["source_sha256"])==4
+          assert r["corpus_counts"]["transitions"]==5629
+          assert r["corpus_counts"]["history_versions"]==6029
+          assert r["derived_transition_count"]>0
+          assert r["upstream_data_license"]=="CC BY 4.0"
+          assert r["original_historical_payloads_available"] is False
+          assert r["derived_corpus_is_second_archival_snapshot"] is False
+          assert r["individual_public_posting_dates_established"] is False
+          assert r["independent_historical_contents_authenticated"] is False
+          assert r["original_twelve_job_workstation_modified"] is False
+          assert r["official_NIH_submission"] is False
+          PY
+      - name: Archive only minimal derived version provenance receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-independent-derived-history-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-derived-history
+          if-no-files-found: warn
+          retention-days: 30
