@@ -49,6 +49,53 @@ def main() -> None:
     env = arcade.make(args.game)
     if env is None:
         raise RuntimeError("official ARC environment unavailable")
+    # The official ARC Agent.main calls choose_action before testing
+    # is_done in some paths. An ACTION6-only game therefore cannot be
+    # safely run by a two-generator native agent. Observe its REAL native
+    # reset and persist the explicit wall without sending a fake click.
+    root_obs = env.reset()
+    root_advertised = [
+        int(getattr(a, "value", a))
+        for a in (getattr(root_obs, "available_actions", ()) or ())
+    ]
+    if len([n for n in root_advertised if n in (1, 2, 3, 4, 5)]) < 2:
+        root_grid = np.asarray(getattr(root_obs, "frame"))
+        if root_grid.size != 4096:
+            raise ValueError("native click-only reset has no complete frame")
+        root_grid = root_grid.reshape(-1, 64, 64)[-1].astype(np.uint8)
+        result = {
+            "kind": "ORIGINAL_WINDOW48_NATIVE_INTERFACE_WALL",
+            "source_agent_sha256": sha256(AGENT_SOURCE.read_bytes()).hexdigest(),
+            "source_mathematical_family": "work/arc_like_maze/window_combined.py",
+            "source_original_law_count": len(module.WINDOW48),
+            "source_rooted_class_count": module.ROOTED_CLASS_COUNT,
+            "source_full_state_class_count": module.FULL_STATE_CLASS_COUNT,
+            "game": args.game,
+            "environment_provider": "official arc-agi Arcade NORMAL",
+            "native_root_advertised_actions": root_advertised,
+            "native_root_frame_hash": module.observation_key(root_obs).hex(),
+            "native_environment_actions": 0,
+            "levels_completed": int(getattr(root_obs, "levels_completed", 0)),
+            "stopped_at_mathematical_or_interface_wall": True,
+            "status": "WALL_NO_OBSERVED_NATIVE_A_B_GENERATORS",
+            "window48_evidence": None,
+            "boundary": "The real game was reset and observed. No native clicks were issued, no coordinates were invented, and no F3 A/B correspondence or ARC win is claimed.",
+        }
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(result, indent=2)+"\n", encoding="utf-8")
+        np.savez_compressed(args.out.with_suffix(".npz"), root=root_grid)
+        print("WINDOW48_NATIVE_RESULT "+json.dumps({
+            "game":args.game,
+            "native_environment_actions":0,
+            "levels_completed":result["levels_completed"],
+            "root_available_actions":root_advertised,
+            "status":result["status"],
+            "stopped_at_wall":True,
+            "manifest":str(args.out),
+            "raw_frames":str(args.out.with_suffix(".npz")),
+        },sort_keys=True))
+        return
+
     agent = module.MyAgent(
         card_id="window48-native-smoke",
         game_id=args.game,
