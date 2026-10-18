@@ -18,7 +18,7 @@ from runtime.handoff import Handoff,EvidenceRecord,ExecutionResult
 from .workstation import ProcessWorkstation
 from .nih_prototype_native import oracle
 from .nih_game_test_bridge import JOB_ID as TEST_JOB, digest
-from .nih_prototype_bridge import JOB_ID as PROTOTYPE_JOB
+PROTOTYPE_JOB="nih-prototype-001"
 
 CP_ID="NIH-P2-BENCHMARK"
 WORKER_ROLE="temporal-benchmark"
