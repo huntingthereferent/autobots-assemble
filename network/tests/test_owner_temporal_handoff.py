@@ -5,9 +5,11 @@ from pathlib import Path
 import tarfile
 from tempfile import TemporaryDirectory
 import unittest
+from urllib.request import HTTPRedirectHandler
 import zipfile
 from systems.workspace.owner_temporal_handoff import (
-    SOURCES, REPO, REPO_ID, OWNER_ID, validate_origin, unpack_zip, unpack_temporal)
+    SOURCES, REPO, REPO_ID, OWNER_ID, validate_origin, unpack_zip, unpack_temporal,
+    _api_request)
 
 
 def metadata(kind):
@@ -25,6 +27,14 @@ def metadata(kind):
 
 
 class OwnerTemporalHandoffTests(unittest.TestCase):
+    def test_github_token_is_not_forwarded_to_signed_artifact_storage(self):
+        request = _api_request("actions/artifacts/1/zip", "disposable-test-token")
+        self.assertEqual(request.get_header("Authorization"), "Bearer disposable-test-token")
+        redirected = HTTPRedirectHandler().redirect_request(request, None, 302,
+            "Found", {}, "https://storage.example/artifact?signature=disposable")
+        self.assertIsNone(redirected.get_header("Authorization"))
+        self.assertNotIn("disposable-test-token", str(redirected.header_items()))
+
     def test_exact_sources_are_distinct_and_metadata_is_required(self):
         self.assertNotEqual(SOURCES["owner"]["run"], SOURCES["temporal"]["run"])
         for kind in SOURCES:
