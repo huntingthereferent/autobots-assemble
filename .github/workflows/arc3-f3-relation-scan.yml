@@ -1,0 +1,30 @@
+name: ARC3 F3 observed native relationships
+
+on:
+  push:
+    paths:
+      - "work/arc3/native_relation_scan.py"
+      - ".github/workflows/arc3-f3-relation-scan.yml"
+  workflow_dispatch:
+
+jobs:
+  native-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official ARC native runtime
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Examine exact native frame changes without imposing F3 projection
+        run: python -m work.arc3.native_relation_scan --game ls20 --out runtime/data/arc3/f3-relation-scan.json
+      - name: Preserve source-owned native frames and metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-f3-native-relation-scan-ls20
+          path: runtime/data/arc3/f3-relation-scan.*
+          if-no-files-found: error
+          retention-days: 14
