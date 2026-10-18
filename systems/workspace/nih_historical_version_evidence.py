@@ -16,6 +16,7 @@ from datetime import date, datetime, timezone
 from hashlib import sha256
 import json
 from pathlib import Path
+from urllib.error import HTTPError
 import re
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
@@ -188,7 +189,26 @@ def main(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--output-dir", type=Path, required=True)
     args = p.parse_args(argv)
-    result = execute(output_dir=args.output_dir)
+    try:
+        result = execute(output_dir=args.output_dir)
+    except HTTPError as error:
+        # Fail the CI gate, but preserve the rejected source boundary as evidence.
+        # A 403 is NOT a valid historical version response and cannot be used.
+        receipt = {
+            "schema": SCHEMA,
+            "admission_status": "UNAVAILABLE",
+            "source_url": endpoint(TRIAL_ID),
+            "retrieved_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
+            "http_status": error.code,
+            "historical_version_contents_admitted": 0,
+            "historical_point_in_time_public_visibility_proven": False,
+            "no_substitute_current_record": True,
+            "additional_native_workstation_job": False,
+        }
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        (args.output_dir / "nih-p2-historical-source-unavailable.json").write_text(
+            json.dumps(receipt, sort_keys=True, indent=2) + "\n", encoding="utf8")
+        raise SystemExit(f"UNAVAILABLE: exact historical source HTTP {error.code}; no version evidence admitted") from error
     print(canonical({
         "schema": SCHEMA,
         "source_version_count": len(result["historical_version_receipts"]),
