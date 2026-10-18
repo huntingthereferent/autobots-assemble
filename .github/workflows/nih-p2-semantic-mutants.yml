@@ -1,0 +1,64 @@
+name: NIH P2 semantic mutant counterexamples
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_semantic_mutants.py'
+      - 'network/tests/test_nih_semantic_mutants.py'
+      - '.github/workflows/nih-p2-semantic-mutants.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_semantic_mutants.py'
+      - 'network/tests/test_nih_semantic_mutants.py'
+      - '.github/workflows/nih-p2-semantic-mutants.yml'
+permissions:
+  contents: read
+jobs:
+  execute-runnable-counterexamples:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original native and Chromium witness requirements
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Verify runnable semantic mutant counterexamples
+        run: python -m unittest -v network.tests.test_nih_semantic_mutants
+      - name: Reexecute original twelve-job source and counterexample detections
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-semantic-mutants"
+          python -m systems.workspace.nih_semantic_mutants \
+            --data-dir "$RUNNER_TEMP/original-twelve" \
+            --output-dir "$RUNNER_TEMP/nih-semantic-mutants"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-semantic-mutants"
+          r=json.loads((out/"nih-p2-semantic-mutant-summary.json").read_text())
+          assert r["original_native_jobs"]==12
+          assert r["semantic_mutants_attempted"]==8
+          assert r["semantic_mutants_detected"]==8
+          assert all(x["mutated_program_executed_successfully"] for x in r["results"])
+          assert r["additional_native_checkpoint"] is False
+          assert r["official_NIH_submission"] is False
+          assert r["synthetic_only"] is True
+          assert r["general_biomedical_benchmark"] is False
+          PY
+          tar -czf "$RUNNER_TEMP/nih-semantic-mutants/original-native-journal.tar.gz" \
+            -C "$RUNNER_TEMP/original-twelve" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+      - name: Archive wrong-answer witness cases and original journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-semantic-mutants-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-semantic-mutants
+          if-no-files-found: warn
+          retention-days: 30
