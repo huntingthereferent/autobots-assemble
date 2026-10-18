@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "dive_id": "W13-OWNER-NATIVE-VERIFIER-001",
+  "title": "Original owner W13 independent native verifier — exact run and readiness evidence boundary",
+  "status": "native-child-reported-and-github-success-observed",
+  "result_state": "MOVE_WITH_WALL",
+  "protocol": "source-owned-workstation-evidence",
+  "goal": "Preserve the exact observed owner-authorized native child result, distinguish GitHub log evidence from portable runtime proof, and expose the original GAME-WORKER-READY parent gap.",
+  "source_run": {
+    "repository": "huntingthereferent/autobots-assemble",
+    "workflow": "owner-w13-native-verifier-one-shot",
+    "run_id": 39135756852,
+    "run_attempt": 1,
+    "job_id": 117699812720,
+    "job_name": "owner-exact-original-child",
+    "event": "push",
+    "branch": "main",
+    "actor": "huntingthereferent",
+    "head_sha": "98d5cb136f531f8dd8e174fbd605f4769ecfad64",
+    "owner_request_path": "systems/workspace/native_job_requests/w13/game-native-verifier-github-001.json",
+    "owner_request_git_blob": "7599869612b58d5949f3bd2b26616a5ffc262af1"
+  },
+  "reported_native_result": {
+    "schema": "original-w13-owner-child-native-result/v1",
+    "original_run_id": 39025574748,
+    "owner_authorization_commit": "98d5cb136f531f8dd8e174fbd605f4769ecfad64",
+    "parent_job_id": "game-w13-github-001",
+    "parent_event_id": "evt_208f2fbdb380437eb59790a9a704c0b9",
+    "child_job_id": "game-native-verifier-github-001",
+    "child_result_event_id": "evt_a58b931a7b9d4b43b7e9715d36bf6929",
+    "child_worker_source_fingerprint": "cd2bbe9edd3bf756efa82efe7cf6a2aa1aceda8e13940bd8ac21a514d4074cbc",
+    "game_w13_cp": "WITNESSED",
+    "game_native_verifier_cp": "WITNESSED",
+    "game_worker_ready_cp": "ADMISSIBLE",
+    "source_owner_authorized": true,
+    "new_child_admitted": true,
+    "one_native_child_executed": true,
+    "fresh_native_child_reverified": true,
+    "private_journal_uploaded": false,
+    "official_game_or_scientific_claim": false
+  },
+  "original_readiness": {
+    "bridge_path": "systems/workspace/game_worker_ready_bridge.py",
+    "bridge_git_blob": "30749a8d126e4bfa46365d65adaecffa3512fdbe",
+    "existing_parent_jobs": [
+      "game-w13-cp-joined-001",
+      "game-native-verifier-joined-001",
+      "live-game-temporal-001"
+    ],
+    "original_owner_parent_jobs": [
+      "game-w13-github-001",
+      "game-native-verifier-github-001"
+    ],
+    "separate_required_live_parent": "live-game-temporal-001",
+    "legacy_readiness_contract_directly_compatible_with_owner_job_ids": false,
+    "original_owner_child_runtime_artifact_count_at_inspection": 0,
+    "native_child_replayable_in_later_runner": false,
+    "game_worker_ready_owner_run_executed": false
+  },
+  "walls": [
+    "The GitHub run and its recorded redacted worker report are historical source evidence, not a newly recovered native runtime journal.",
+    "The verified child runner uploaded no runtime archive; its completed native event cannot be freshly replayed in another process from retained child evidence.",
+    "Existing GAME-WORKER-READY implementation hardcodes older Complete Stack parents and additionally requires a separately source-owned LIVE-GAME-TEMPORAL job.",
+    "No owner-authorized GAME-WORKER-READY job was admitted or executed here; the CP graph's ADMISSIBLE status is not a native READY result.",
+    "Neither a synthetic same-named runtime nor this report proves external ARC, NIH, or scientific performance."
+  ],
+  "next_movement": "Create a distinct source-owned continuation/persistence mechanism for the original parent+child native runtime, and independently witness the separately required live-temporal parent before an owner-authorized READY task. Preserve the original run evidence without inventing the lost child journal."
+}
