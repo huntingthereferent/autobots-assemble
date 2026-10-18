@@ -46,6 +46,7 @@ def replay(arcade,word,run_index):
         **frame_state(obs)
     }]
     error=None
+    actions_issued=0
     for j,letter in enumerate(word,1):
         n=int(letter)
         if n not in legal_ids(obs):
@@ -53,29 +54,59 @@ def replay(arcade,word,run_index):
             break
         try:
             obs=env.step(getattr(GameAction,"ACTION"+letter))
+            actions_issued+=1
         except Exception as exc:
             error=f"NATIVE_EXCEPTION_{type(exc).__name__}"
             break
-        if obs is None or getattr(obs,"frame",None) is None:
+        if obs is None:
+            error="NATIVE_NULL_RESPONSE"
+            break
+
+        # A completed level/game may return a nonstandard native frame.
+        # Read the *actual native level counter and terminal state FIRST*.
+        stage={
+            "step":j,"native_action":n,
+            "levels_completed":int(getattr(obs,"levels_completed",0)),
+            "state":str(getattr(obs,"state",None)),
+            "advertised_native_actions":legal_ids(obs),
+        }
+        payload=getattr(obs,"frame",None)
+        if payload is None:
+            stage.update({"frame_status":"NO_FRAME","frame_shape":None,
+                          "frame_size":0,"frame_hash":None})
+            steps.append(stage)
             error="NATIVE_FRAMELESS_RESPONSE"
+            if stage["levels_completed"]!=root_level:
+                error="LEVEL_CHANGED_WITHOUT_FRAME"
+            break
+        image=np.asarray(payload)
+        stage["frame_shape"]=list(image.shape)
+        stage["frame_size"]=int(image.size)
+        if image.size!=4096:
+            stage.update({"frame_status":"NONSTANDARD_NATIVE_FRAME",
+                          "frame_hash":None})
+            steps.append(stage)
+            error=("LEVEL_CHANGED_NONSTANDARD_FRAME" if
+                   stage["levels_completed"]!=root_level
+                   else "NONSTANDARD_NATIVE_FRAME")
             break
         g=native_grid(obs)
-        frames.append(g)
-        steps.append({
-            "step":j,
-            "native_action":n,
-            **frame_state(obs),
+        stage.update({
+            "frame_status":"COMPLETE_64x64",
+            "frame_hash":digest(g),
             "different_full_frame_from_previous":bool(
-                not np.array_equal(frames[-2],frames[-1])),
-            "changed_cells":int(np.count_nonzero(frames[-2]!=frames[-1])),
+                not np.array_equal(frames[-1],g)),
+            "changed_cells":int(np.count_nonzero(frames[-1]!=g)),
         })
-        if int(getattr(obs,"levels_completed",0))!=root_level:
+        frames.append(g)
+        steps.append(stage)
+        if stage["levels_completed"]!=root_level:
             error="LEVEL_COUNT_CHANGED_STOP"
             break
     last_level=steps[-1]["levels_completed"]
     return {
         "game":GAME,"word":word,"independent_reset_index":run_index,
-        "native_action_count":len(frames)-1,
+        "native_action_count":actions_issued,
         "requested_action_count":len(word),
         "root_hash":steps[0]["frame_hash"],
         "root_levels_completed":root_level,
