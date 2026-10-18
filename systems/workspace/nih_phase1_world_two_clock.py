@@ -19,7 +19,7 @@ from tempfile import TemporaryDirectory
 from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
 from .nih_phase1_world_frontier import (
-    run_world, digest, check_frame, read_frame,
+    run_world, digest, check_frame,
     PROTOTYPE_JOB, GAME_JOB,
 )
 from .nih_prototype_native import oracle, invoke
@@ -268,11 +268,8 @@ def run_two_clock(*, data_dir, output_dir, parent=run_world):
                             arg={"turn":turn,"target":target,"known":known},timeout=15000)
                         expected=oracle(scope,dataset["functional_predicates"],
                                         known=known,target=target)
-                        frame=check_frame(read_frame(page.locator("#phase1-axis").page),
-                                          turn=turn,known=known,target=target,
-                                          source_sha=fingerprint,expected=expected)
-                        # read_frame locates #phase1-frontier; explicitly inspect the
-                        # independently selected target widget instead.
+                        # Inspect the actual selected target widget, not the original
+                        # fixed-target frontier panel.
                         selected=page.locator("#phase1-axis")
                         observation={
                             "turn":selected.get_attribute("data-turn"),
