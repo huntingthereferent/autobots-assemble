@@ -58,6 +58,7 @@ def style(name, size=BODY_PT, leading=BODY_LEADING_PT, after=6, before=0,
         fontSize=size, leading=leading, textColor=colors.HexColor("#172536"),
         alignment=TA_LEFT, spaceBefore=before, spaceAfter=after,
         leftIndent=left_indent, rightIndent=2, allowWidows=0, allowOrphans=0,
+        keepWithNext=bold,
     )
 
 
