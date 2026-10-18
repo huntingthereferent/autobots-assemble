@@ -1,0 +1,42 @@
+name: Native A/B shifted tile entry
+on:
+  workflow_dispatch:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths: ['work/arc3/native_shifted_tile_*.py','.github/workflows/ab-native-shifted-tile.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-native-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install "arc-agi>=0.9.6,<1" numpy
+      - run: python -m unittest network.tests.test_arc3_native_shifted_tile -v
+      - uses: actions/download-artifact@v4
+        with:
+          name: ab-native-special-tile-multistep-evidence
+          run-id: 39123519894
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-shifted/prior-special
+      - uses: actions/download-artifact@v4
+        with:
+          name: ab-native-glyph-transport-evidence
+          run-id: 39093565973
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-shifted/prior-loops
+      - run: python -m work.arc3.native_shifted_tile_entry --special runtime/data/ab-shifted/prior-special --loops runtime/data/ab-shifted/prior-loops --out runtime/data/ab-shifted/new/frozen-entry.json
+      - run: python -m work.arc3.native_shifted_tile_capture --frozen runtime/data/ab-shifted/new/frozen-entry.json --out runtime/data/ab-shifted/new/native-entry.json
+      - run: python -m work.arc3.native_shifted_tile_verify --frozen runtime/data/ab-shifted/new/frozen-entry.json --native runtime/data/ab-shifted/new/native-entry.json --raw runtime/data/ab-shifted/new/native-entry.npz --out runtime/data/ab-shifted/new/independent-verdict.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ab-native-shifted-tile-evidence
+          path: runtime/data/ab-shifted/new/*
+          if-no-files-found: warn
+          retention-days: 14
