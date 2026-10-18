@@ -11,7 +11,7 @@ import unittest
 from zipfile import ZipFile
 
 from ab_prov.ab_tool import PIN, STAGES, ABEvidenceError, main
-from ab_prov.release import BUNDLE, DIST_NAMES, DOC_FILES, GUIDES, validate_evidence, ship
+from ab_prov.release import BUNDLE, DIST_NAMES, DOC_FILES, GUIDES, validate_evidence, validate_reference_comparison, ship
 
 LICENSE = "Copyright (c) 2026 James Muneoka. All rights reserved.\n\nTEST FIXTURE ONLY\n"
 
@@ -72,6 +72,33 @@ def dummy_workspace(root:Path):
     (evidence/"source-provenance.json").write_text(json.dumps(graph))
     for name in ("source-provenance.html","graph.json","ancestry.json"):
         (evidence/name).write_text("TEST FIXTURE — illustrative only")
+    comparison=evidence/"comparison"
+    comparison.mkdir()
+    # Synthetic fixtures verify structural gating only: these strings do not
+    # masquerade as genuine native observations in a released experiment.
+    original=comparison/"original-vitest.json"
+    original.write_text('{"testResults":[],"fixture":true}')
+    (comparison/"original-vitest.log").write_text("TEST FIXTURE: original\n")
+    updated=comparison/"regrounded-vitest.json"
+    updated.write_text('{"testResults":[],"fixture":true}')
+    (comparison/"regrounded-vitest.log").write_text("TEST FIXTURE: regrounded\n")
+    baseline={"kind":"ab/original-REA-before-correction-v1","pin":PIN,
+      "original_test_cases":[["fixture-suite","fixture-assertion"]],
+      "native":{"json_sha256":h(original),
+                "log_sha256":h(comparison/"original-vitest.log")}}
+    b=comparison/"baseline.json"
+    b.write_text(json.dumps(baseline))
+    result={"kind":"ab/paired-reference-verdict-v1","upstream_pin":PIN,
+      "verdict":"PARTIAL_NATIVE_MATCH","full_REA_reconstructed":False,
+      "baseline_sha256":h(b),
+      "original_native_json_sha256":h(original),
+      "regrounded_native_json_sha256":h(updated),
+      "before_assertions":1,"after_assertions":1,
+      "capability_coverage":{
+        "original_cli_mcp_binary_android_and_other_providers":{"status":"NOT_RECONSTRUCTED"},
+        "license":{"status":"SEPARATE_RIGHTS"}}}
+    (comparison/"comparison.json").write_text(json.dumps(result))
+    (comparison/"comparison.md").write_text("TEST FIXTURE: not real native witness\n")
     return evidence,dist,tool
 
 class ABShipTests(unittest.TestCase):
@@ -92,6 +119,8 @@ class ABShipTests(unittest.TestCase):
                 self.assertIn("THIRD_PARTY_NOTICES.md",archive.namelist())
                 self.assertIn("docs/quickstart.md",archive.namelist())
                 self.assertIn("docs-site/index.html",archive.namelist())
+                self.assertIn("comparison/comparison.json",archive.namelist())
+                self.assertIn("comparison/baseline.json",archive.namelist())
                 self.assertIn("evidence/source-absorption-receipt.json",archive.namelist())
                 self.assertIn("dist/"+DIST_NAMES[0],archive.namelist())
                 self.assertIn("release-manifest.json",archive.namelist())
@@ -119,6 +148,34 @@ class ABShipTests(unittest.TestCase):
             with self.assertRaises(ABEvidenceError):
                 ship(repo=root,evidence=evidence,dist=dist,
                      out=root/"runtime/data/shipped")
+
+    def test_missing_upstream_paired_comparison_blocks_shipment(self):
+        with TemporaryDirectory() as folder:
+            root=Path(folder)
+            evidence,dist,_=dummy_workspace(root)
+            (evidence/"comparison/comparison.json").unlink()
+            with self.assertRaises(ABEvidenceError):
+                ship(repo=root,evidence=evidence,dist=dist,
+                     out=root/"runtime/data/shipped")
+
+    def test_false_full_rea_identity_claim_blocks_shipment(self):
+        with TemporaryDirectory() as folder:
+            root=Path(folder)
+            evidence,dist,_=dummy_workspace(root)
+            f=evidence/"comparison/comparison.json"
+            wrong=json.loads(f.read_text())
+            wrong["full_REA_reconstructed"]=True
+            f.write_text(json.dumps(wrong))
+            with self.assertRaises(ABEvidenceError):
+                validate_reference_comparison(evidence)
+
+    def test_modified_comparison_original_native_pixels_are_rejected(self):
+        with TemporaryDirectory() as folder:
+            root=Path(folder)
+            evidence,dist,_=dummy_workspace(root)
+            (evidence/"comparison/original-vitest.json").write_text('{"changed":true}')
+            with self.assertRaises(ABEvidenceError):
+                validate_reference_comparison(evidence)
 
     def test_own_product_license_cannot_be_replaced_by_referent_license(self):
         with TemporaryDirectory() as folder:
