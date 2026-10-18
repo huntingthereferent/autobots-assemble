@@ -72,3 +72,7 @@ Capture a real native start state, available actions, and one action's before/af
 ```sh
 python -m unittest -v network.tests.test_arc3_direct_work_lane
 ```
+
+## Current native F3 suffix witness
+
+[LS20 native suffix experiment and F3 mathematical comparison](runs/LS20_F3_SUFFIX_2026-10-17.md) (120 real environment actions): visible state equalities from native words 34/43 and 23/32 persist under six common suffixes; visibly unequal words 12/21 converge after native suffix 2 and suffix 21. In all nine original F3 laws, the corresponding mathematical states under provisional native ACTION1=A/ACTION2=B remain distinct, since the generators are bijective. This is a **negative result for a literal injective visible-state correspondence**, not a proof that F3 as a wider investigation fails. No game win or new agent was produced.
