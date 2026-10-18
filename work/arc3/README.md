@@ -72,3 +72,7 @@ An **independent public SP80 replay** reproduced the six-action word 454545 adva
 ## Latest native stage-to-stage evidence
 
 [SP80 stage-transfer results](runs/WINDOW48_SP80_STAGE_TRANSFER_2026-10-18.md): after 22 independently observed native 454545 first-level advances, the level-1 starting frame reproduced identically across resets but differed from the level-0 root at **1,136 exact native pixels**. None of 22 predeclared level-1 suffix trials reached level 2; the directly transferred suffix 454545 failed in **2/2** fresh resets. Native ACTION4/5 effects occur in different pixel regions and differ in changed counts across stages. Two ACTION5-only tests were frame-incomplete and remain unknown. No full game win or F3 mapping was found.
+
+## Current SP80 stage-specific spatial evidence
+
+[Native-heldout geometric investigation](runs/WINDOW48_SP80_HELDOUT_GEOMETRY_2026-10-18.md) used 36 real native actions across three independent game resets. A geometry mapping fitted only to first ACTION4 changed pixels matched 32/33 of the new-level changed pixels and averaged **96.99% F1** on later ACTION4 effects, but no tested mask matched exactly. **Reflection plus shift and pure translation plus shift were tied** in both training and heldout accuracy; neither is a proven transformation of the full native game. The 48-law mathematical source and canonical agent are unchanged.
