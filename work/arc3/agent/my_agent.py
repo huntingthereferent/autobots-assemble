@@ -194,9 +194,38 @@ class MyAgent(Agent):
         self.last_level: int | None = None
         self.stopped_at_wall = False
 
+    def _consume_pending_native_response(self, frame: FrameData) -> None:
+        """Check the last source-predicted step before deciding to continue.
+
+        The official SDK asks is_done before the next choose_action. A
+        contradiction therefore causes a clean stop rather than one extra
+        unjustified action or a recycled candidate set.
+        """
+        if self.f3_48 is None or self.pending_letter is None:
+            return
+        level = int(getattr(frame, "levels_completed", 0))
+        legal = allowed_actions(frame)
+        simple = [a for a in legal if a.value in (1, 2, 3, 4, 5)]
+        pair = tuple(a.value for a in simple[:2]) if len(simple) >= 2 else None
+        if pair != self.f3_48.native_actions or level != self.last_level:
+            self.f3_48 = None
+            self.pending_letter = None
+            return
+        try:
+            key = observation_key(frame)
+        except ValueError:
+            self.stopped_at_wall = True
+            return
+        self.f3_48.record(self.pending_letter, key)
+        self.pending_letter = None
+        if not self.f3_48.candidates:
+            self.stopped_at_wall = True
+
     def is_done(self, frames: list[FrameData], latest_frame: FrameData) -> bool:
         if latest_frame.state is GameState.WIN:
             return True
+        if latest_frame.state not in (GameState.NOT_PLAYED, GameState.GAME_OVER):
+            self._consume_pending_native_response(latest_frame)
         if self.stopped_at_wall:
             return True
         available = allowed_actions(latest_frame)
@@ -236,8 +265,9 @@ class MyAgent(Agent):
         if self.f3_48 is None:
             self.f3_48 = Window48Evidence(*pair, root=native_frame)
         elif self.pending_letter is not None:
-            self.f3_48.record(self.pending_letter, native_frame)
-            self.pending_letter = None
+            # Direct unit-test / nonstandard runner fallback when is_done
+            # has not been called for the new native response.
+            self._consume_pending_native_response(latest_frame)
         self.last_level = level
         result = self.f3_48.report()
         if not result.candidate_indices:
