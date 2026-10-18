@@ -8,6 +8,7 @@ RuntimeJournal, native GAME-NATIVE-VERIFIER bridge and controls.run_job.
 from __future__ import annotations
 
 import argparse
+import base64
 from hashlib import sha256
 import json
 from pathlib import Path
@@ -113,11 +114,74 @@ def authenticate_owner_request(repo_root: Path, owner_merge_sha: str) -> dict:
     return request
 
 
+RETENTION_REQUEST = "systems/workspace/native_retention_requests/w13/verified-child-local-capsule.json"
+
+
+def authenticate_retention_request(repo_root: Path, owner_merge_sha: str,
+                                   public_key_b64: str) -> dict:
+    """A NEW owner-merged request permits one future child and LOCAL sealing.
+
+    The invoking workflow must additionally authenticate owner, push and main.
+    No artifact storage or transfer is authorized by this local-only contract.
+    """
+    from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X25519PublicKey
+    root = Path(repo_root).resolve()
+    if not isinstance(owner_merge_sha, str) or not re.fullmatch("[0-9a-f]{40}", owner_merge_sha):
+        raise ValueError("exact owner-merge SHA required")
+    try:
+        raw = base64.b64decode(public_key_b64, validate=True)
+        recipient = X25519PublicKey.from_public_bytes(raw)
+        X25519PrivateKey.generate().exchange(recipient)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("explicit raw X25519 recipient public key required") from exc
+    if not (root / ".git").exists() or _git(root, "rev-parse", "HEAD") != owner_merge_sha:
+        raise ValueError("checkout does not equal trusted owner merge")
+    parents = _git(root, "rev-list", "--parents", "-n", "1", owner_merge_sha).split()
+    if len(parents) != 3:
+        raise ValueError("retention requires a two-parent protected-main owner merge")
+    diff = _git(root, "diff", "--name-status", parents[1], owner_merge_sha, "--",
+                "systems/workspace/native_retention_requests/w13")
+    if diff != "A\t" + RETENTION_REQUEST:
+        raise ValueError("owner merge must add exactly one NEW retention request")
+    path = root / RETENTION_REQUEST
+    if (not path.is_file() or path.is_symlink() or path.stat().st_size > 8192
+            or _git_blob(path) != _git(root, "rev-parse", owner_merge_sha + ":" + RETENTION_REQUEST)):
+        raise ValueError("retention request missing, changed or unsafe")
+    expected = {
+        "contract": "owner-w13-future-child-local-encrypted-retention/v1",
+        "execution": EXPECTED_REQUEST,
+        "recipient_public_key_sha256": sha256(raw).hexdigest(),
+        "authorizes_local_encrypted_retention": True,
+        "authorizes_artifact_upload": False,
+        "authorizes_raw_journal_export": False,
+    }
+    if _object(path) != expected:
+        raise ValueError("retention permission or recipient differs from exact request")
+    for rel, expected_blob in ((WORKER_PATH, VERIFIER_WORKER_BLOB),
+            (BRIDGE_PATH, VERIFIER_BRIDGE_BLOB), (RESEARCH_PATH, PARENT_RESEARCH_BLOB)):
+        source = root / rel
+        if not source.is_file() or source.is_symlink() or _git_blob(source) != expected_blob:
+            raise ValueError("owner-request source edition changed: " + rel)
+    return expected
+
+
 def execute_exact_authorized_child(*, artifact_dir: Path, source_binding: Path,
-                                   repo_root: Path, owner_merge_sha: str) -> dict:
+                                   repo_root: Path, owner_merge_sha: str,
+                                   recipient_public_key_b64: str | None = None,
+                                   encrypted_output: Path | None = None) -> dict:
     """One temporary original journal, ONE new existing native worker, no raw export."""
     root=Path(repo_root).resolve()
-    authenticate_owner_request(root,owner_merge_sha)
+    retaining = recipient_public_key_b64 is not None or encrypted_output is not None
+    if retaining:
+        if recipient_public_key_b64 is None or encrypted_output is None:
+            raise ValueError("retention requires BOTH explicit recipient and capsule destination")
+        authenticate_retention_request(root, owner_merge_sha, recipient_public_key_b64)
+        output = Path(encrypted_output)
+        if (output.exists() or output.is_symlink() or not output.parent.is_dir()
+                or output.resolve().is_relative_to(root)):
+            raise ValueError("new capsule destination outside repository required")
+    else:
+        authenticate_owner_request(root,owner_merge_sha)
     origin=_object(Path(source_binding))
     if (origin.get("repository")!="huntingthereferent/autobots-assemble"
             or origin.get("workflow")!="workstation-w13-owner-merged-one-shot"
@@ -188,7 +252,7 @@ def execute_exact_authorized_child(*, artifact_dir: Path, source_binding: Path,
         results=[x for x in evidence["events"] if x["type"]=="RESULT"]
         if len(results)!=1 or results[0]["result_status"]!="COMPLETE":
             raise ValueError("one exact completed child RESULT required")
-        return {
+        result = {
             "schema":"original-w13-owner-child-native-result/v1",
             "original_run_id":RUN_ID,
             "owner_authorization_commit":owner_merge_sha,
@@ -207,6 +271,14 @@ def execute_exact_authorized_child(*, artifact_dir: Path, source_binding: Path,
             "private_journal_uploaded":False,
             "official_game_or_scientific_claim":False,
         }
+        if retaining:
+            # Must run while TemporaryDirectory still owns the actual journal.
+            # seal_verified independently rechecks BOTH native results again.
+            from .owner_native_evidence_vault import seal_verified
+            result["encrypted_retention"] = seal_verified(
+                data_dir=data, public_key_b64=recipient_public_key_b64,
+                owner_execution_commit=owner_merge_sha, output=output)
+        return result
 
 
 def main(argv=None):

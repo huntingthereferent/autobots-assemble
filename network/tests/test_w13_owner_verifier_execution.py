@@ -4,6 +4,10 @@ from __future__ import annotations
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import json
+import base64
+from hashlib import sha256
+from unittest.mock import patch
+from contextlib import ExitStack
 import subprocess
 import unittest
 
@@ -89,6 +93,136 @@ class OriginalW13ConsentGateTests(unittest.TestCase):
         self.assertIn("source-contract-tests", workflow)
         self.assertIn("git", inspect.getsource(impl.authenticate_owner_request))
         self.assertNotIn("actions/upload-artifact@",workflow)
+
+
+class RetentionHookTests(unittest.TestCase):
+    def test_partial_retention_options_fail_before_authentication_or_execution(self):
+        from systems.workspace import w13_owner_verifier_execution as impl
+        for args in ({"recipient_public_key_b64": "unused"},
+                     {"encrypted_output": Path("unused")}):
+            with patch.object(impl, "authenticate_owner_request") as old, \
+                 patch.object(impl, "authenticate_retention_request") as new:
+                with self.assertRaisesRegex(ValueError, "BOTH"):
+                    impl.execute_exact_authorized_child(artifact_dir=ROOT,
+                        source_binding=ROOT, repo_root=ROOT, owner_merge_sha="a"*40, **args)
+                old.assert_not_called()
+                new.assert_not_called()
+
+    def test_unusable_recipient_is_rejected_before_git_or_execution(self):
+        from systems.workspace import w13_owner_verifier_execution as impl
+        for key in ("invalid", base64.b64encode(bytes(32)).decode()):
+            with patch.object(impl, "_git") as git:
+                with self.assertRaisesRegex(ValueError,"recipient public key"):
+                    impl.authenticate_retention_request(ROOT,"a"*40,key)
+                git.assert_not_called()
+
+    def test_retention_requires_new_merge_request_and_pins_recipient(self):
+        from systems.workspace import w13_owner_verifier_execution as impl
+        key=base64.b64encode(bytes(range(32))).decode()
+        with TemporaryDirectory() as tmp:
+            root=Path(tmp)
+            def git(*args):
+                return subprocess.check_output(["git", "-C", str(root),
+                    "-c", "user.name=fixture", "-c", "user.email=fixture@example.invalid",
+                    *args], text=True).strip()
+            git("init", "-q")
+            (root/"base").write_text("base")
+            for rel in (impl.WORKER_PATH, impl.BRIDGE_PATH, impl.RESEARCH_PATH):
+                target=root/rel; target.parent.mkdir(parents=True,exist_ok=True)
+                target.write_bytes((ROOT/rel).read_bytes())
+            git("add", "."); git("commit", "-qm", "base")
+            base=git("rev-parse", "HEAD")
+            git("checkout", "-qb", "retention")
+            request={"contract":"owner-w13-future-child-local-encrypted-retention/v1",
+                "execution":impl.EXPECTED_REQUEST,
+                "recipient_public_key_sha256":sha256(bytes(range(32))).hexdigest(),
+                "authorizes_local_encrypted_retention":True,
+                "authorizes_artifact_upload":False, "authorizes_raw_journal_export":False}
+            path=root/impl.RETENTION_REQUEST
+            path.parent.mkdir(parents=True); path.write_text(json.dumps(request))
+            git("add", "."); git("commit", "-qm", "request")
+            single=git("rev-parse", "HEAD")
+            with self.assertRaisesRegex(ValueError,"two-parent"):
+                impl.authenticate_retention_request(root,single,key)
+            git("checkout", "-q", "--detach", base)
+            git("merge", "--no-ff", "-qm", "owner review", "retention")
+            merge=git("rev-parse", "HEAD")
+            self.assertEqual(impl.authenticate_retention_request(root,merge,key),request)
+            with self.assertRaisesRegex(ValueError,"recipient"):
+                impl.authenticate_retention_request(root,merge,
+                    base64.b64encode(b"z"*32).decode())
+            path.write_text(json.dumps({**request,"authorizes_artifact_upload":True}))
+            with self.assertRaisesRegex(ValueError,"changed"):
+                impl.authenticate_retention_request(root,merge,key)
+            git("restore", "--", impl.RETENTION_REQUEST)
+            (root/"unrelated").write_text("unrelated")
+            git("add", "."); git("commit", "-qm", "later change")
+            later=git("rev-parse", "HEAD")
+            git("checkout", "-qb", "another")
+            (root/"branch").write_text("branch")
+            git("add", "."); git("commit", "-qm", "another")
+            git("checkout", "-q", "--detach", later)
+            git("merge", "--no-ff", "-qm", "later merge", "another")
+            with self.assertRaisesRegex(ValueError,"NEW retention"):
+                impl.authenticate_retention_request(root,git("rev-parse","HEAD"),key)
+
+    def test_seal_runs_before_temporary_journal_cleanup_and_failure_is_not_success(self):
+        from systems.workspace import w13_owner_verifier_execution as impl
+        from systems.workspace import owner_native_evidence_vault as vault
+        for fail in (False, True):
+            with self.subTest(seal_failure=fail), TemporaryDirectory() as tmp, ExitStack() as stack:
+                def mock(name, **kwargs):
+                    return stack.enter_context(patch.object(impl,name,**kwargs))
+                mock("authenticate_retention_request")
+                mock("_object", return_value={"repository":"huntingthereferent/autobots-assemble",
+                    "workflow":"workstation-w13-owner-merged-one-shot", "run_id":impl.RUN_ID,
+                    "artifact_id":impl.ARTIFACT_ID,"attempt":1,"head_sha":impl.ORIGINAL_HEAD,
+                    "digest":impl.ORIGINAL_DIGEST})
+                mock("validate_archive_metadata")
+                mock("unpack_native_runtime", side_effect=lambda artifact,data:data.mkdir())
+                mock("verify_local_relation", return_value={"native_verified":True,
+                    "relation":"EXACT_COMMITTED_SOURCE_TO_NATIVE_RESULT_MATCH",
+                    "result_event_id":impl.OWNER_W13_RESULT_EVENT,
+                    "native_source_fingerprint":impl.OWNER_W13_FINGERPRINT})
+                runtime=mock("HandoffRuntime").return_value
+                runtime.snapshot.return_value={}
+                runtime.state.return_value.status="READY"
+                index=mock("CoordinatorIndex").return_value
+                index.definition.return_value=(None,{"game":[{"slot":impl.SLOT,"source_kind":"planned"}]})
+                mock("freshly_reverify_linked_jobs")
+                mock("workstation_cp_view")
+                def cp(verifier,ready):
+                    return {"cp_automation":{"checkpoints":[
+                        {"checkpoint":"GAME-W13-WORLDS","state":"WITNESSED"},
+                        {"checkpoint":"GAME-NATIVE-VERIFIER","state":verifier},
+                        {"checkpoint":"GAME-WORKER-READY","state":ready}]}}
+                mock("one_cp_handoff", side_effect=[cp("ADMISSIBLE","WALLED"),cp("WITNESSED","ADMISSIBLE")])
+                mock("copy_verifier_source"); mock("ProcessWorkstation")
+                bridge=mock("NativeGameVerifierBridge").return_value
+                bridge.admit.return_value.dependencies=(impl.OWNER_W13_JOB,)
+                mock("run_exact_linked_job",return_value={"status":"COMPLETE"})
+                mock("reverify_local",return_value={"recorded_status":"COMPLETE",
+                    "verification":"FRESH_NATIVE_REVERIFICATION_LOCAL","source_fingerprint":"test-only",
+                    "events":[{"type":"RESULT","result_status":"COMPLETE","event_id":"test-only"}]})
+                observed=[]
+                def seal(**kwargs):
+                    observed.append(kwargs["data_dir"])
+                    self.assertTrue(observed[-1].is_dir())
+                    if fail:
+                        raise ValueError("seal failure")
+                    return {"test_only":True}
+                stack.enter_context(patch.object(vault,"seal_verified",side_effect=seal))
+                args=dict(artifact_dir=ROOT,source_binding=ROOT,repo_root=ROOT,
+                    owner_merge_sha="a"*40,recipient_public_key_b64="test-only",
+                    encrypted_output=Path(tmp)/"capsule.enc")
+                if fail:
+                    with self.assertRaisesRegex(ValueError,"seal failure"):
+                        impl.execute_exact_authorized_child(**args)
+                else:
+                    result=impl.execute_exact_authorized_child(**args)
+                    self.assertEqual(result["encrypted_retention"],{"test_only":True})
+                self.assertEqual(len(observed),1)
+                self.assertFalse(observed[0].exists())
 
 
 if __name__ == "__main__":
