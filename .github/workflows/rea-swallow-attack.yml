@@ -1,0 +1,52 @@
+name: REA A/B scoped fingerprint adversarial witnesses
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths: ['experiments/rea-swallow/**', '.github/workflows/rea-swallow-attack.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adversarial-lexical-references:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned REA baseline
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          test "$(git rev-parse HEAD)" = "f0b9ef34c404c1c65f8167502db972b0bd708403"
+          npm ci --no-audit --no-fund
+      - name: Replay only previously verified v4 and v5 real-source edits
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/scoped_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/scoped_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          mkdir -p experiments/rea-swallow/results
+          cp experiments/rea-swallow/reference_attack.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptReferenceAttack.ab-swallow.test.ts
+      - name: Execute adversarial counterexamples in actual REA
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          REA_AB_ATTACK_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/attack-witness.json" npx --no-install vitest run src/domain/javascript/javascriptReferenceAttack.ab-swallow.test.ts src/domain/javascript/javascriptAstFingerprint.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/attack-native.log"
+      - name: Real REA source TypeScript verification
+        working-directory: experiments/rea-swallow/upstream
+        run: npx --no-install tsc --noEmit -p tsconfig.json
+      - name: Preserve counterexamples and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-ab-reflection-eval-counterexamples
+          path: experiments/rea-swallow/results/attack-*
+          if-no-files-found: warn
+          retention-days: 14
