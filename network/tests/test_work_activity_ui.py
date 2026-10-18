@@ -65,6 +65,49 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertIn("if(!document.hidden)refresh()",p)
         self.assertIn("Select an observed workflow",p)
 
+    def test_commit_revision_comparison_requires_exact_source_path(self):
+        page=WORK.read_text(encoding="utf-8")
+        self.assertIn('API+"/commits/"+r.head+"?per_page=100"',page)
+        self.assertIn("doc.sha!==r.head",page)
+        self.assertIn("sourceRevisionMatches(files,movements,records)",page)
+        self.assertIn('id="revision-evidence"',page)
+        self.assertIn("not that the workflow executed the research",page)
+        self.assertIn("No research-execution link established",page)
+
+    @unittest.skipUnless(shutil.which("node"),"Node.js needed for exact-path verifier")
+    def test_revision_match_rejects_noncausal_and_lookalike_sources(self):
+        import re
+        page=WORK.read_text(encoding="utf-8")
+        fn=re.search(r"  function sourceRevisionMatches\\(files,movements,records\\)\\{.*?\\n  \\}",page,re.S)
+        self.assertIsNotNone(fn,"exact-source-match function must remain separately testable")
+        script=fn.group(0)+"""
+const assert=require("node:assert/strict");
+const files=[
+  {filename:"research/dives/ARC3-TRACE-001/dive.json",status:"modified"},
+  {filename:"research/dives/ARC3-TRACE-001/dive.json.old",status:"modified"},
+  {filename:"research/other.md",status:"removed"},
+  {filename:"research/spoof.md",status:"not-an-actual-change"},
+  {filename:"README.md",status:"added"},
+  {filename:"research/movement.md",status:"renamed"}
+];
+const movements=[
+  {path:"research/movement.md",evidence:"documented-heading-only"},
+  {path:"research/dives/ARC3-TRACE-001/dive.json",evidence:"structured-source-state"},
+  {path:"research/spoof.md",evidence:"structured-source-state"},
+  {path:"research/unrelated.md",evidence:"structured-source-state"}
+];
+const records=[{path:"research/dives/ARC3-TRACE-001/dive.json"}];
+assert.deepEqual(sourceRevisionMatches(files,movements,records),
+  ["research/dives/ARC3-TRACE-001/dive.json","research/movement.md"]);
+assert.deepEqual(sourceRevisionMatches([{filename:"x",status:"modified"}],movements,records),[]);
+assert.deepEqual(sourceRevisionMatches([],movements,records),[]);
+"""
+        with TemporaryDirectory() as d:
+            source=Path(d)/"revision-match.js"
+            source.write_text(script,encoding="utf-8")
+            proc=subprocess.run(["node",str(source)],capture_output=True,text=True,timeout=15)
+        self.assertEqual(proc.returncode,0,proc.stderr)
+
     def test_research_retains_original_boundary_and_next(self):
         v=projection(research_snapshot())
         arc=next(x for x in v["records"] if x["source_type"]=="RESEARCH_DIVE")
