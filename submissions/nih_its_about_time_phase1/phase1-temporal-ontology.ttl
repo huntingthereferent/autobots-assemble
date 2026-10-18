@@ -1,0 +1,152 @@
+# NIH "It's About Time" Phase 1 -- DRAFT OWL/RDF ONTOLOGY EXCERPT
+# Not submitted; synthetic evidence only; review ontology semantics independently.
+# Uses OWL-Time for time, PROV-O for source attribution, Biolink class alignment.
+# Standard OWL cannot evaluate comparison of XSD dates by itself.
+@prefix te: <https://example.org/nih-temporal-evidence/2026-10/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix time: <http://www.w3.org/2006/time#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix biolink: <https://w3id.org/biolink/vocab/> .
+
+te:ontology a owl:Ontology ;
+    rdfs:label "Source-qualified temporal evidence availability (draft)"@en ;
+    rdfs:comment "Fictional example and proposed extension; not a claim of implemented general OWL inference, clinical validation, or a verified version-history source."@en ;
+    owl:versionInfo "phase1-review-2026-10-18" .
+
+te:TemporalAssertion a owl:Class ;
+    rdfs:subClassOf biolink:InformationContentEntity ;
+    rdfs:label "Source-qualified temporal assertion"@en ;
+    rdfs:comment "An asserted relation with a source and independently represented time dimensions. OWL does not itself perform temporal comparison."@en .
+
+te:BoundedAssertion a owl:Class ;
+    rdfs:subClassOf te:TemporalAssertion ,
+        [ a owl:Restriction ;
+          owl:onProperty te:validDuring ;
+          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          owl:onClass time:ProperInterval
+        ] ;
+    rdfs:comment "An assertion whose source explicitly states one finite validity interval."@en .
+
+te:AvailabilityWitnessedAssertion a owl:Class ;
+    rdfs:subClassOf te:BoundedAssertion ,
+        [ a owl:Restriction ;
+          owl:onProperty te:knownFrom ;
+          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          owl:onClass time:Instant
+        ] ;
+    rdfs:comment "A claim with an explicit availability witness under a declared source policy; this class alone is NOT proof that the time is an authentic public posting date."@en .
+
+te:UnresolvedAvailabilityAssertion a owl:Class ;
+    rdfs:subClassOf te:TemporalAssertion ;
+    owl:disjointWith te:AuthenticatedPublicHistoryAssertion ;
+    rdfs:comment "Publication/availability provenance is insufficient for an authenticated historical public-knowledge answer."@en .
+
+te:AuthenticatedPublicHistoryAssertion a owl:Class ;
+    rdfs:subClassOf te:AvailabilityWitnessedAssertion ,
+        [ a owl:Restriction ;
+          owl:onProperty te:hasEvidenceClass ;
+          owl:hasValue te:OriginalPublicVersion
+        ] ;
+    rdfs:comment "Concept-only class; no such example individual is claimed or supplied by this draft."@en .
+
+te:RegistryStatusAssertion a owl:Class ;
+    rdfs:subClassOf te:TemporalAssertion ,
+        [ a owl:Restriction ;
+          owl:onProperty te:statusValue ;
+          owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+          owl:onDataRange xsd:string
+        ] ;
+    rdfs:comment "Public registry administrative status metadata; NOT disease, trial result, or efficacy."@en .
+
+# Properties, domains/ranges and functional constraints are OWL axioms beyond
+# subclass hierarchy. Source-date admission and inequality checks are external.
+te:validDuring a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain te:TemporalAssertion ; rdfs:range time:ProperInterval .
+
+te:knownFrom a owl:ObjectProperty, owl:FunctionalProperty ;
+    rdfs:domain te:TemporalAssertion ; rdfs:range time:Instant ;
+    rdfs:comment "Availability date supported by explicitly named source policy. For a synthetic example, it is a constructed fixture time, not real public disclosure."@en .
+
+te:observedAt a owl:ObjectProperty ;
+    rdfs:domain te:TemporalAssertion ; rdfs:range time:Instant ;
+    rdfs:comment "When this research system retrieved a source; never equated to earliest publication."@en .
+
+te:statusValue a owl:DatatypeProperty, owl:FunctionalProperty ;
+    rdfs:domain te:RegistryStatusAssertion ; rdfs:range xsd:string .
+
+te:subjectToken a owl:DatatypeProperty ;
+    rdfs:domain te:TemporalAssertion ; rdfs:range xsd:string .
+te:predicateToken a owl:DatatypeProperty ;
+    rdfs:domain te:TemporalAssertion ; rdfs:range xsd:string .
+te:objectToken a owl:DatatypeProperty ;
+    rdfs:domain te:TemporalAssertion ; rdfs:range xsd:string .
+
+te:sourceVersionId a owl:DatatypeProperty ;
+    rdfs:domain prov:Entity ; rdfs:range xsd:string ;
+    rdfs:comment "Only populated when the source actually contains an authenticated original version identifier."@en .
+
+te:hasEvidenceClass a owl:ObjectProperty ;
+    rdfs:domain te:TemporalAssertion ; rdfs:range te:EvidenceClass .
+
+te:EvidenceClass a owl:Class .
+te:OriginalPublicVersion a te:EvidenceClass ;
+    rdfs:label "Exact public historical version, independently authenticated"@en .
+te:DatedArchiveSnapshot a te:EvidenceClass ;
+    rdfs:label "Dated published archival snapshot"@en .
+te:ThirdPartyDerivedHistory a te:EvidenceClass ;
+    rdfs:label "Third-party reconstruction without original source version bytes"@en .
+te:SyntheticFixture a te:EvidenceClass ;
+    rdfs:label "Explicitly synthetic fixture"@en .
+te:UnavailableEvidence a te:EvidenceClass ;
+    rdfs:label "Historical source requested but unavailable"@en .
+
+[] a owl:AllDifferent ;
+   owl:distinctMembers (te:OriginalPublicVersion te:DatedArchiveSnapshot
+                        te:ThirdPartyDerivedHistory te:SyntheticFixture
+                        te:UnavailableEvidence) .
+
+# Fictional example from repository's source-owned Phase 1 scope fixture.
+# These assertions do not concern real people or real clinical measurements.
+te:priorNote a te:AvailabilityWitnessedAssertion ;
+    te:subjectToken "fictional-case" ;
+    te:predicateToken "has-status" ;
+    te:objectToken "baseline-status" ;
+    te:validDuring te:noteInterval ;
+    te:knownFrom te:instantJan01 ;
+    te:hasEvidenceClass te:SyntheticFixture ;
+    prov:wasDerivedFrom te:baselineFixture .
+
+te:delayedResult a te:AvailabilityWitnessedAssertion ;
+    te:subjectToken "fictional-case" ;
+    te:predicateToken "has-result" ;
+    te:objectToken "fictional-result" ;
+    te:validDuring te:resultInterval ;
+    te:knownFrom te:instantJan05 ;
+    te:hasEvidenceClass te:SyntheticFixture ;
+    prov:wasDerivedFrom te:labFixture .
+
+te:noteInterval a time:ProperInterval ;
+    time:hasBeginning te:instantJan01 ; time:hasEnd te:instantJan10 .
+te:resultInterval a time:ProperInterval ;
+    time:hasBeginning te:instantJan03 ; time:hasEnd te:instantJan10 .
+
+te:instantJan01 a time:Instant ; time:inXSDDate "2026-01-01"^^xsd:date .
+te:instantJan03 a time:Instant ; time:inXSDDate "2026-01-03"^^xsd:date .
+te:instantJan05 a time:Instant ; time:inXSDDate "2026-01-05"^^xsd:date .
+te:instantJan10 a time:Instant ; time:inXSDDate "2026-01-10"^^xsd:date .
+
+te:baselineFixture a prov:Entity ;
+    rdfs:label "Synthetic first-note input fixture"@en .
+te:labFixture a prov:Entity ;
+    rdfs:label "Synthetic delayed-result input fixture"@en .
+
+# Explicit query semantics (not an OWL entailment):
+# Eligible(Q(K,V), A) iff valid_from(A) <= V < valid_to(A)
+#                        and known_from(A) <= K,
+# PROVIDED the source policy authenticates known_from for the claim type.
+# At K=2026-01-04 and V=2026-01-04: priorNote eligible, delayedResult withheld.
+# The same V at K=2026-01-06: both eligible.
+# At V=2026-01-11: both outside the half-open validity interval.
