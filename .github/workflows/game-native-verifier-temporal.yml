@@ -1,0 +1,68 @@
+name: Native game verifier joined to NIH temporal Complete Stack
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/game_native_verifier_*.py'
+      - 'systems/workspace/game_native_verifier_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_game_native_verifier_temporal_join.py'
+      - '.github/workflows/game-native-verifier-temporal.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/game_native_verifier_*.py'
+      - 'systems/workspace/game_native_verifier_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_game_native_verifier_temporal_join.py'
+      - '.github/workflows/game-native-verifier-temporal.yml'
+permissions:
+  contents: read
+jobs:
+  original-nine-source-owned-jobs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install native and independent browser dependencies
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Confirm native GAME-NATIVE-VERIFIER CP requires real source replay
+        run: python -m unittest -v network.tests.test_game_native_verifier_temporal_join
+      - name: Actually play temporal game, then execute separate W13 native WITNESS worker
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nine-job-native-evidence"
+          python -m systems.workspace.game_native_verifier_temporal_join \
+            --data-dir "$RUNNER_TEMP/nine-job-native-workstation" \
+            --output-dir "$RUNNER_TEMP/nine-job-native-evidence"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          dest=Path(os.environ["RUNNER_TEMP"])/"nine-job-native-evidence"
+          proof=json.loads((dest/"game-independent-verifier-complete-stack.json").read_text())
+          assert proof["native_jobs"]==9
+          assert proof["original_live_game_browser"]=="PASS"
+          assert proof["w13_worlds_witnessed"] is True
+          assert proof["game_native_verifier_witnessed"] is True
+          assert proof["next_admissible_game_cp"]=="GAME-WORKER-READY"
+          assert proof["phase_2_test"]=="BLOCKED"
+          assert proof["phase_2_blocked_by"]==["GAME-WORKER-READY"]
+          assert (dest/"game-temporal-query-events.jsonl").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/nine-job-native-evidence/nine-source-owned-jobs.tar.gz" \
+            -C "$RUNNER_TEMP/nine-job-native-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+      - name: Publish actual native W13 independent witness and original 9-job journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: witnessed-native-game-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nine-job-native-evidence
+          if-no-files-found: warn
+          retention-days: 30
