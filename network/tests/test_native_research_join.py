@@ -131,27 +131,32 @@ class NativeResearchJoinTests(unittest.TestCase):
         decl["result_event_id"] = "evt_" + "9" * 32
         src["native_workstation_receipt"] = decl
         rev = self.commit(src)
-        with self.assertRaisesRegex(ValueError, "exact native RESULT"):
+        with self.assertRaisesRegex(ValueError, "latest native RESULT"):
             self.call(rev)
 
     def test_prior_complete_result_cannot_impersonate_latest_replay(self):
+        """Event-selection negative control uses a synthetic replay projection.
+
+        The separately tested real finite verifier rejects accumulated evidence
+        after REOPENED; it must not be relaxed to manufacture a second PASS.
+        """
         self.native_result()
         original = self.declaration()
-        runtime = HandoffRuntime(event_store=RuntimeJournal(
-            self.data / "runtime.jsonl"))
-        workstation = ProcessWorkstation(self.data / "workstation")
-        bridge = CorrespondenceWorkBridge(runtime=runtime, workstation=workstation)
-        runtime.reopen(self.job, actor_id="local-test", reason="new test run")
-        bridge.execute(self.job, allow_local_execution=True)
-        bridge.reverify(self.job)
-        self.assertNotEqual(
-            original["result_event_id"],
-            recorded_receipt(runtime, self.job)["events"][-1]["event_id"])
         src = self.basic()
         src["native_workstation_receipt"] = original
         rev = self.commit(src)
-        with self.assertRaisesRegex(ValueError, "latest native RESULT"):
-            self.call(rev)
+        from systems.workspace.native_receipt_projection import reverify_local
+        true_native = reverify_local(self.data, self.job)
+        synthetic = dict(true_native)
+        synthetic["events"] = list(true_native["events"]) + [{
+            "event_id": "evt_" + "8" * 32, "type": "RESULT",
+            "parents": [original["result_event_id"]],
+            "result_status": "COMPLETE",
+        }]
+        with patch("systems.workspace.native_research_join.reverify_local",
+                   return_value=synthetic):
+            with self.assertRaisesRegex(ValueError, "latest native RESULT"):
+                self.call(rev)
 
     def test_wrong_source_fingerprint_never_accepted(self):
         self.native_result()
