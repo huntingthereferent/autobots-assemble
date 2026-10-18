@@ -19,11 +19,17 @@ from .github_w13_continuation import (
 )
 from .w13_original_research_witness import RESEARCH_PATH
 from .native_research_join import verify_local_relation
-from .game_native_verifier_bridge import (
-    OWNER_JOB_ID, OWNER_VERSION, OWNER_W13_JOB,
-    OWNER_W13_FINGERPRINT, OWNER_W13_RESULT_EVENT, WORKER_ID, VERIFIER,
-    SOURCE_DIRECTORY, SOURCE_FILE,
-)
+# Pin the existing bridge *as source*, without importing the full NIH/game stack.
+# This inspection is not a native verifier implementation or an execution path.
+OWNER_JOB_ID="game-native-verifier-github-001"
+OWNER_VERSION="witness-owner-v1"
+OWNER_W13_JOB="game-w13-github-001"
+OWNER_W13_FINGERPRINT="798ed2399413ecbb30a1eb94c547a5517ee03dfd002600d868376f88f03f458a"
+OWNER_W13_RESULT_EVENT="evt_208f2fbdb380437eb59790a9a704c0b9"
+WORKER_ID="game-native-independent-verifier"
+SOURCE_FILE="native_verifier.py"
+SOURCE_REL="systems/workspace/game_native_verifier_worker_source/native_verifier.py"
+BRIDGE_REL="systems/workspace/game_native_verifier_bridge.py"
 from .cp_motion import workstation_cp_view, one_cp_handoff
 from .coordinator_window import CoordinatorIndex, freshly_reverify_linked_jobs
 from .controls import reverify_job
@@ -32,6 +38,7 @@ from runtime.journal import RuntimeJournal
 
 SCHEMA = "owner-w13-game-native-verifier-source-preflight/v1"
 EXPECTED_WITNESS_BLOB = "39fbb7178fccd9c37bd33f6b670b560fdbac4d30"
+EXPECTED_BRIDGE_BLOB = "694580a5e4c68c37eafafe11172fcf3bf37faa9d"
 EXPECTED_PARENT_BLOB = "f8fbf981c75ccf53a8a72006053f8b02a31343dc"
 EXPECTED_WINDOW = "complete-stack"
 EXPECTED_PARENT_SLOT = "cp-game-w13-worlds"
@@ -56,7 +63,11 @@ def examine_original(*, artifact_dir: Path, source_binding: Path,
             or origin.get("digest")!=ORIGINAL_DIGEST):
         raise ValueError("original owner W13 provenance mismatched")
 
-    witness_source = SOURCE_DIRECTORY / SOURCE_FILE
+    witness_source = root / SOURCE_REL
+    bridge_source = root / BRIDGE_REL
+    if (not bridge_source.is_file() or bridge_source.is_symlink()
+            or _git_blob(bridge_source)!=EXPECTED_BRIDGE_BLOB):
+        raise ValueError("independent witness bridge differs from pinned original edition")
     if (not witness_source.is_file() or witness_source.is_symlink()
             or not witness_source.resolve().is_relative_to(root)
             or _git_blob(witness_source)!=EXPECTED_WITNESS_BLOB):
