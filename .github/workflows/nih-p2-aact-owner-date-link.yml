@@ -1,0 +1,64 @@
+name: NIH P2 authenticate original AACT source-owner date link
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_aact_owner_date_link.py'
+      - 'systems/workspace/NIH_P2_AACT_OWNER_DATE_LINK.md'
+      - 'network/tests/test_nih_p2_aact_owner_date_link.py'
+      - '.github/workflows/nih-p2-aact-owner-date-link.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_p2_aact_owner_date_link.py'
+      - 'systems/workspace/NIH_P2_AACT_OWNER_DATE_LINK.md'
+      - 'network/tests/test_nih_p2_aact_owner_date_link.py'
+      - '.github/workflows/nih-p2-aact-owner-date-link.yml'
+permissions:
+  contents: read
+jobs:
+  independently-verify-original-depositor-git-blob-and-date-attribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Reject wrong original source identity, unrelated date and swapped Zenodo URL
+        run: python -m unittest -v network.tests.test_nih_p2_aact_owner_date_link
+      - name: Retrieve both pinned original author commits and verify raw Git blob content
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-owner-aact-date"
+          python -m systems.workspace.nih_p2_aact_owner_date_link \
+            --output-dir "$RUNNER_TEMP/nih-owner-aact-date"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          source=Path(os.environ["RUNNER_TEMP"])/"nih-owner-aact-date/nih-p2-aact-owner-script-date-link.json"
+          r=json.loads(source.read_text())
+          assert r["schema"]=="nih-p2-2022-aact-owner-script-date-reference/v1"
+          assert r["original_source_2022_date_owner_attested"]=="2022-11-04"
+          assert r["earlier_source_witness"]["git_blob_sha1"]=="3a5781267f15fa69ae1779e47cdb0b4e1f1f0cb6"
+          assert r["linked_source_witness"]["git_blob_sha1"]=="3e3f8714df2c037cce24961a57802546ce95f7b4"
+          assert r["later_code_links_same_date_claim_to_exact_deposited_file_url"] is True
+          assert r["linked_exact_depositor_zenodo_url"]=="https://zenodo.org/records/10058991/files/AACT_studies.txt?download=1"
+          assert r["external_zenodo_file_SHA256_verified_in_separate_original_archive_ci"]=="bed698312a04292fc31f7ea71130731acc9b57723399ab1b45c0f6d70a304d49"
+          assert r["owner_attested_source_date"] is True
+          assert r["2022_download_transaction_independently_timestamped"] is False
+          assert r["zenodo_file_SHA256_is_embedded_in_original_owner_script"] is False
+          assert r["underlying_snapshot_date_cryptographically_verified"] is False
+          assert r["all_original_per_study_versions_authenticated"] is False
+          assert r["individual_registry_version_publication_instants_authenticated"] is False
+          assert r["NIH_submission"] is False
+          assert r["native_twelve_job_workstation_modified"] is False
+          PY
+      - name: Preserve small author-attributed source link receipt, not third-party code
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-owner-aact-date-link-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-owner-aact-date/
+          retention-days: 30
+          if-no-files-found: error
