@@ -58,6 +58,24 @@ historical record substitute.
 See [issue #106](https://github.com/huntingthereferent/autobots-assemble/issues/106)
 for the unresolved source-owner evidence and independent-oracle criteria.
 
+## Actual live attempt and refusal (October 18, 2026 UTC)
+
+[Independent GitHub CI run 39092821376](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39092821376)
+passed the five local negative-control tests, then attempted to
+retrieve the exact history index for `NCT03280849` from the internal
+site endpoint. The server returned **HTTP 403 Forbidden**.
+
+Therefore, the source is **UNAVAILABLE** from this GitHub runner.
+No history index, historical version contents, historical source hashes,
+or public posting times have been independently observed or admitted.
+A subsequent test may capture a restricted `UNAVAILABLE` receipt
+artifact while keeping the live-source gate **failed**.
+
+The next possible source is a published CTTI/AACT archive or another
+authenticated snapshot with exact source and capture version identifiers.
+Do not attempt to bypass access restrictions or substitute modern
+current-record data for actual history.
+
 ## Reproduction
 
 ```bash
