@@ -2,7 +2,9 @@ name: original-w13-native-research-source
 on:
   push:
     branches: [main]
-    paths: ['research/dives/W13-NATIVE-RECEIPT-001/dive.json']
+    paths:
+      - 'research/dives/W13-NATIVE-RECEIPT-001/dive.json'
+      - '.github/workflows/w13-native-research-source.yml'
 permissions:
   contents: read
   actions: read
@@ -19,22 +21,35 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Require one genuinely added source record in owner merge
+      - name: Install original native verifier dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Recheck immutable owner-admitted original record on workflow-only repair merge
         shell: bash
         run: |
           set -euo pipefail
           python - <<'PY'
           import os,subprocess
           sha=os.environ['GITHUB_SHA']
-          if subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()!=sha:
-              raise SystemExit('checkout SHA does not match owner merge')
-          parents=subprocess.check_output(['git','rev-list','--parents','-n','1',sha],text=True).split()
-          if len(parents)!=3:
-              raise SystemExit('source must enter by two-parent merge')
+          original_merge='0baeeae60718b0651f3afc503d98a39dd0a95b0a'
           path='research/dives/W13-NATIVE-RECEIPT-001/dive.json'
-          changed=subprocess.check_output(['git','diff','--name-status',parents[1],sha,'--',path],text=True).strip()
-          if changed!='A\t'+path:
-              raise SystemExit('original source was not newly added')
+          workflow='.github/workflows/w13-native-research-source.yml'
+          expected_blob='f8fbf981c75ccf53a8a72006053f8b02a31343dc'
+          def git(*args):
+              return subprocess.check_output(['git',*args],text=True).strip()
+          if git('rev-parse','HEAD')!=sha:
+              raise SystemExit('checkout SHA does not match owner merge')
+          parents=git('rev-list','--parents','-n','1',sha).split()
+          if len(parents)!=3:
+              raise SystemExit('repair must enter through two-parent main owner merge')
+          subprocess.run(['git','merge-base','--is-ancestor',original_merge,sha],check=True)
+          if (git('rev-parse',f'{original_merge}:{path}')!=expected_blob
+                  or git('hash-object',path)!=expected_blob):
+              raise SystemExit('original owner-admitted research declaration was altered')
+          if git('diff','--name-status',parents[1],sha,'--',path):
+              raise SystemExit('repair must not alter original research declaration')
+          if git('diff','--name-status',parents[1],sha,'--',workflow)!=f'M\t{workflow}':
+              raise SystemExit('repair merge must change exactly the original verifier workflow')
+          print('Original source remains immutable; replay repair is owner-merged')
           PY
       - name: Authenticate original owner-run and immutable evidence artifact
         id: source
@@ -93,8 +108,6 @@ jobs:
           name: ${{ steps.source.outputs.name }}
           github-token: ${{ github.token }}
           path: ${{ runner.temp }}/original-w13-artifact
-      - name: Install original native verifier dependency
-        run: python -m pip install 'cryptography>=45,<47'
       - name: Reverify original native RESULT against exact committed research MOVE
         shell: bash
         run: |
