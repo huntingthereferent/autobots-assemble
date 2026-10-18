@@ -34,6 +34,24 @@ def mock(nct_id, *, first="2020-02-01", last="2023-05-04", results=None):
 
 
 class ExternalRegistryIntakeTests(unittest.TestCase):
+    def test_future_posting_dates_fail_before_receipt_is_written(self):
+        for dates in (
+            dict(first="2099-01-01", last="2099-01-02"),
+            dict(last="2099-01-01"),
+            dict(results="2099-01-01"),
+        ):
+            with self.subTest(dates=dates), TemporaryDirectory() as td:
+                with self.assertRaisesRegex(ValueError, "later than the source observation"):
+                    execute(output_dir=td, ids=(IDS[0],),
+                            fetch=lambda _: mock(IDS[0], **dates),
+                            now=datetime(2026, 10, 18, 2, tzinfo=timezone.utc))
+                self.assertFalse((Path(td) / "nih-p2-public-registry-intake.json").exists())
+
+    def test_posting_on_observation_date_is_admitted(self):
+        record = extract(IDS[0], mock(IDS[0], last="2026-10-18"),
+                         retrieved_at="2026-10-18T00:00:00Z")
+        self.assertEqual(record["posting_events"][-1]["posted_on"], "2026-10-18")
+
     def test_00_source_mapping_is_official_and_exact(self):
         self.assertEqual(len(IDS), 3)
         for nct_id in IDS:

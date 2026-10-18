@@ -1,0 +1,11 @@
+# Registry posting evidence audit — October 18, 2026
+
+Audited the public registry intake, negative tests and dedicated source-intake workflow at source commit 4b25841f68450c81a215acb28ff82de6bd75f11b. This is AI-authored work following James's supplied review and Diesel authorization.
+
+Confirmed defect: extract accepted a last-update posting date of 2099-01-01 with a source observation timestamp in 2026. This admitted internally contradictory posting evidence. Added rejection for every posting event after the UTC observation date. Regression cases cover first, last and results posting dates, absence of an output receipt after rejection, and acceptance on the observation date itself.
+
+Validation: 17 tests passed using `python -m unittest network.tests.test_nih_external_registry_intake network.tests.test_nih_aact_archival_source network.tests.test_nih_derived_history_receipt -v`. `git diff --check` passed. A live run of the modified intake retrieved three official records and six posting events, with observation timestamp 2026-10-18T10:59:22Z. The adjacent JSON preserves the minimal receipt, source URLs, field paths and exact response hashes; raw responses are not archived. A hash identifies observed bytes but cannot recover unavailable bytes or authenticate historical versions.
+
+Evidence chain inspected: official bounded API fetch -> identity/date extraction -> minimal JSON receipt -> dated event frontiers -> GitHub Actions artifact upload. The frontier is a date-filtered view of posting metadata; it is not historical trial content. No connection from this receipt to a live workstation display was established in this audit. The dedicated CI run and complete repository suite remain unverified for this PR. Local execution does not satisfy the documented independent CI gate.
+
+Additional limit observed: execute records one run-start timestamp for all fetches, rather than a separate response-completion timestamp for each record. This audit does not repair or certify that timing precision. Next: inspect CI evidence for this exact PR head and evaluate per-response observation timestamps before claiming precise retrieval timing. No license or personal profile was changed.
