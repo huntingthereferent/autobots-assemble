@@ -184,6 +184,17 @@ def aggregate(trials, model):
         "occupancy_gate_exclusion_reasons":dict(Counter(
             x["reason"] for m in items
             for x in m["pre_color_gate_exclusions"])),
+        "pre_action_native_color_of_all_ungated_false_positives":dict(
+            sorted(Counter(
+                x["actual_pre_color"] for m in items
+                for x in m["ungated_false_positives_before_colors"]
+            ).items())),
+        "ungated_false_positives_expected_native_from_to":dict(
+            sorted(Counter(
+                tuple(x["expected_from_to"]) for m in items
+                for x in m["ungated_false_positives_before_colors"]
+            ).items(), key=lambda item: item[0])),
+
         "remaining_gated_false_positives_with_actual_pre_colors":[
             {"word":row["word"],"reset":row["reset"],
              "action_step":effect["word_step"],
