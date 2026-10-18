@@ -21,6 +21,10 @@ source-owned research / factory / school / creative work / other systems
 
 The general rules stay at [`protocols/core/provenance.md`](../../protocols/core/provenance.md), cross-system work remains under [`runtime/`](../../runtime/README.md), and current person-facing attention remains under [`systems/day_to_day/`](../day_to_day/README.md). The workspace is **not** a new orchestrator and does not change `state/current.json` or `TASKS.md`.
 
+## Swallow Repo — source regrounding and A/B shipment
+
+The [Swallow Repo lane](SWALLOW_REPO.md) uses James’s intended meaning: fix or reground the referent. It links the real pinned source corrections, existing ProcessWorkstation, native evidence, visual provenance, and the release candidate for A/B under A/B’s own license. It does not create a fake workstation journal entry or automatically execute arbitrary source repositories.
+
 ## Research-wide observation
 
 [Original research source observer](research_observatory.py) reads the available repository sources and presents them in the existing workstation. It preserves mathematics, ARC experiments, CP checkpoints, W13 records, language writing, implementation files, and test files with their original source paths.

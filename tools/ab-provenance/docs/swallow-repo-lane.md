@@ -17,7 +17,7 @@ forward whatever survives native observation.
    failures and boundaries without manufacturing an equivalence claim.
 5. Carry forward source ancestry, evidence, uncertainty, invalidations,
    and the next observation; visual provenance is only an inspection surface.
-6. Produce a **shipped-looking A/B tool** with real commands, packaging,
+6. Produce a **release-quality A/B tool** with real commands, packaging,
    documentation, tests and provenance, all under A/B's own license.
 
 ## Source rights
