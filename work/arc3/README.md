@@ -68,3 +68,7 @@ The next experiment must produce a **predeclared observable relation**, actually
 [Latest source-bound native investigation](runs/WINDOW48_NATIVE_COMPOSITES_SP80_2026-10-17.md): 258 ordered two-action candidates across all 25 public game roots, 1,548 real environment actions, 257 complete runs and **zero strict three-state cycles** on entire frames or exact color masks. A single mathematical run was interrupted by an actual native level change.
 
 An **independent public SP80 replay** reproduced the six-action word 454545 advancing the native level counter **0 to 1 in both fresh resets**; state remained NOT_FINISHED. This is useful **real native game progress**, but it does not solve the complete game or establish source-F3 action/state alignment. The canonical mathematical agent remains unchanged.
+
+## Latest native stage-to-stage evidence
+
+[SP80 stage-transfer results](runs/WINDOW48_SP80_STAGE_TRANSFER_2026-10-18.md): after 22 independently observed native 454545 first-level advances, the level-1 starting frame reproduced identically across resets but differed from the level-0 root at **1,136 exact native pixels**. None of 22 predeclared level-1 suffix trials reached level 2; the directly transferred suffix 454545 failed in **2/2** fresh resets. Native ACTION4/5 effects occur in different pixel regions and differ in changed counts across stages. Two ACTION5-only tests were frame-incomplete and remain unknown. No full game win or F3 mapping was found.
