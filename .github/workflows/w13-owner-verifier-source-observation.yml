@@ -8,12 +8,15 @@ on:
       - 'research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json'
       - 'systems/workspace/w13_owner_verifier_source_record.py'
       - 'network/tests/test_w13_owner_verifier_source_record.py'
+      - 'network/tests/test_github_owner_signed_logs.py'
+      - 'systems/workspace/github_owner_signed_logs.py'
       - 'systems/workspace/W13_OWNER_VERIFIER_READINESS_GAP.md'
       - '.github/workflows/w13-owner-verifier-source-observation.yml'
   push:
     branches: [main]
     paths:
       - 'research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json'
+      - '.github/workflows/w13-owner-verifier-source-observation.yml'
 permissions:
   contents: read
   actions: read
@@ -30,7 +33,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Validate source record and negative controls
-        run: python -m unittest -v network.tests.test_w13_owner_verifier_source_record
+        run: python -m unittest -v network.tests.test_w13_owner_verifier_source_record network.tests.test_github_owner_signed_logs
   original-github-run:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && github.actor == github.repository_owner
     runs-on: ubuntu-latest
@@ -57,10 +60,19 @@ jobs:
           parents=git('rev-list','--parents','-n','1',sha).split()
           if len(parents)!=3:
               raise SystemExit('owner source record must enter via two-parent main merge')
-          if git('diff','--name-status',parents[1],sha,'--',p)!=f'A\t{p}':
-              raise SystemExit('owner source record not introduced on main')
+          original='860586aa98ddf27fca71cc53d9fa7fb478102dc4'
+          expected_blob='6f2feb35f76f7e2810ba714586585c98b6d45ae9'
+          subprocess.run(['git','merge-base','--is-ancestor',original,sha],check=True)
+          if (git('rev-parse',f'{original}:{p}')!=expected_blob
+                  or git('hash-object',p)!=expected_blob):
+              raise SystemExit('original owner W13 source evidence changed')
+          changed=git('diff','--name-status',parents[1],sha,'--',p)
+          workflow='.github/workflows/w13-owner-verifier-source-observation.yml'
+          repair=git('diff','--name-status',parents[1],sha,'--',workflow)
+          if (changed or repair!=f'M\t{workflow}'):
+              raise SystemExit('expected a new owner-merged read-only log verifier repair')
           if git('diff','--name-status',parents[1],sha,'--','systems/workspace/native_job_requests/w13'):
-              raise SystemExit('original source observation must not authorize another job')
+              raise SystemExit('repair must not authorize a new native job')
           PY
       - name: Authenticate existing GitHub owner run, successful job and redacted log
         shell: bash
@@ -73,6 +85,7 @@ jobs:
           from pathlib import Path
           from urllib.request import Request,urlopen
           from systems.workspace.w13_owner_verifier_source_record import verify_source,RUN_ID,REPO,JOB_ID
+          from systems.workspace.github_owner_signed_logs import fetch_signed_job_log
           if os.environ['GITHUB_REPOSITORY']!=REPO:
               raise SystemExit('wrong repository for original owner observation')
           def get(route,parse_json=True):
@@ -89,7 +102,7 @@ jobs:
           run=get(f'actions/runs/{RUN_ID}')
           jobs=get(f'actions/runs/{RUN_ID}/jobs?per_page=100')
           artifacts=get(f'actions/runs/{RUN_ID}/artifacts?per_page=100')
-          log=get(f'actions/jobs/{JOB_ID}/logs',parse_json=False)
+          log=fetch_signed_job_log(repository=REPO,job_id=JOB_ID,token=os.environ['GH_TOKEN'])
           receipt=verify_source(repo_root=Path(os.environ['GITHUB_WORKSPACE']),
                                 run=run,jobs=jobs,artifacts=artifacts,log_text=log)
           # Never print raw log, journal, job inputs or native worker output.
