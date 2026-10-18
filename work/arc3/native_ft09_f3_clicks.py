@@ -247,6 +247,16 @@ def main():
         "clicks_change_visible_frame":len(effective),
         "distinct_click_effects":len(distinct),
         "native_A_B_coordinates":roles,
+        "observed_first_click_effects":[{
+            "site_source":r["site_source"],
+            "click":r["click"],
+            "root_color":r["native_color"],
+            "status":r["native_effect"]["status"],
+            "changed_cells":r["native_effect"]["transitions"][0]["changed_cells"],
+            "diff_bbox":r["native_effect"]["transitions"][0]["diff_bbox"],
+            "level_after":r["native_effect"]["transitions"][0]["levels_completed"],
+        } for r in contact if r["native_effect"]["transitions"] and
+              r["changes_visible_frame"]],
         "F3_comparisons":[{"words":r["math_word_pair"],
                           "native_equal":r["actual_full_frame_equal"],
                           "F3_equal_worlds":r["source_original_nine_F3_equal"]}
