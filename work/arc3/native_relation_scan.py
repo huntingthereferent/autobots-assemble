@@ -114,7 +114,8 @@ def compact_delta(before, after):
     change = before != after
     ys, xs = np.nonzero(change)
     if len(xs) == 0:
-        return {"changed_cells": 0, "bbox": None, "color_exchanges": []}
+        return {"changed_cells": 0, "bbox": None, "color_exchanges": [],
+                "exact_color_translations": []}
     pairs = Counter((int(before[y,x]),int(after[y,x])) for y,x in zip(ys,xs))
     return {
         "changed_cells": int(len(xs)),
