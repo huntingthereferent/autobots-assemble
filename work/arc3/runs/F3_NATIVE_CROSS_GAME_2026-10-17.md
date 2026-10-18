@@ -8,7 +8,8 @@ This test intentionally left the previously studied LS20 environment. It uses on
 
 - [Initial native cross-game run](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39091045793).
 - [Native FT09 click-effect search and F3 source comparison](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39091384089), including the [native raw-frame and source-signature artifact](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39091384089/artifacts/12123260794).
-- Actual executables: [cross-game source probes](../native_f3_other_games.py), [FT09 coordinate measurement and rooted comparisons](../native_ft09_f3_clicks.py).
+- [Native independent repeated-click algebra test](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39091731824), [real pixel frames and all mathematical word comparisons](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39091731824/artifacts/12121944845).
+- Actual executables: [cross-game source probes](../native_f3_other_games.py), [FT09 coordinate measurement and rooted comparisons](../native_ft09_f3_clicks.py), and [follow-up click algebra](../native_ft09_click_algebra.py).
 - The GitHub Actions artifact contains complete native frame arrays and JSON traces and has 14-day retention. Committed scripts preserve a separate rerun path.
 
 ## F3 reference, frozen before native interventions
@@ -48,6 +49,31 @@ The first ten click locations, chosen deterministically from distinct native non
 Those two observed click transformations were **provisionally** assigned mathematical A and B strictly to challenge the existing F3 family. Their rooted AB and BA sequences ended at the **same visible full frame**, whereas **all nine original F3 laws distinguish AB from BA** mathematically. The tested candidate assignment had **0/9 source F3 worlds consistent with a direct injective identification of complete visible frames**. Rooted A³ and the additional separating questions were also executed and logged; the result is not upgraded into an F3 success on the basis of visually equal states.
 
 This is a genuine interface finding: **the action parameter is part of the experimental transformation**. A click action has no single intrinsic A/B identity without selecting coordinates and checking the native effect. No coordinate was taken from a solved path or an ARC game-specific rule. In this run, no pair of clicks was established as source F3 generators.
+
+## FT09 repeat-action and action-order witnesses
+
+The eight source-observed FT09 click effects were all located at native-color-9 measurement sites in the uniform spatial lattice, and each first click changed **38 native pixels**. Their diff bounding boxes extended from the clicked coordinate toward the lower-right native frame corner. This is a pixel-level observation, not an inference that the game internally represents a rectangle or a fixed 38-cell button.
+
+To test two source-grounded candidate transformations again, **two click pairs were predeclared from the prior 74-site observation** before executing a new set of independent native resets:
+
+- Pair 1: native coordinate clicks (36,36) and (44,36).
+- Pair 2: native coordinate clicks (36,44) and (52,52).
+
+The additional real FT09 experiment executed **62 native click actions**, each word from a fresh native reset, comparing original mathematical word identities directly to native complete-frame equality.
+
+| Witness question | Pair 1 native visible result | Pair 2 native visible result | Original 9 F3 worlds |
+| --- | --- | --- | --- |
+| Root versus A | Different | Different | Different (9/9) |
+| Root versus AAA | **Different** | **Different** | **Equal (9/9)** |
+| A versus AA | Different | Different | Different (9/9) |
+| B versus BB | Different | Different | Different (9/9) |
+| AB versus BA | **Equal** | **Equal** | **Different (9/9)** |
+
+**Correction:** repeated clicks were *not* visibly idempotent at the tested root. In both native pairs A and AA remained different, as did AA and AAA. Do not describe these controls as idempotent, irreversible, globally commutative, or invertible without the corresponding direct evidence. Only **the tested rooted two-click orders AB/BA** visibly commuted at their endpoints. Equal observed final frames may conceal different native histories.
+
+**The original source F3 discrepancy reproduced for a second spatially different pair:** native A³ did not return the complete frame to its origin, and native AB/BA had equal visible endpoints. Thus neither pair supplies a verified direct injective native-frame realization of original F3 generators.
+
+This is development evidence on public FT09, not an untouched hidden-game benchmark, a proof about all coordinate pairs, or a native win.
 
 ## Result and boundary for the agent
 
