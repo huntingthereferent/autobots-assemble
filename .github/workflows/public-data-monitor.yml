@@ -1,5 +1,10 @@
 name: public-data-monitor
 
+# Isolated CI-only placeholders; Compose itself has no fallback credentials.
+env:
+  MONITOR_DB_PASSWORD: ci-local-db-fixture-only
+  GRAFANA_ADMIN_PASSWORD: ci-local-grafana-fixture-only
+
 concurrency:
   group: public-data-monitor-${{ github.ref }}
   cancel-in-progress: true
@@ -136,15 +141,15 @@ jobs:
           exit 1
       - run: |
           for i in {1..30}; do
-            if curl --fail -u admin:admin http://localhost:3000/api/health; then exit 0; fi
+            if curl --fail -u "admin:${GRAFANA_ADMIN_PASSWORD}" http://localhost:3000/api/health; then exit 0; fi
             sleep 2
           done
           docker compose logs grafana
           exit 1
       - run: |
-          curl --fail -u admin:admin "http://localhost:3000/api/search?query=Platform%20Overview" | grep -q '"uid":"platform-overview"'
+          curl --fail -u "admin:${GRAFANA_ADMIN_PASSWORD}" "http://localhost:3000/api/search?query=Platform%20Overview" | grep -q '"uid":"platform-overview"'
       - run: |
-          curl --fail -u admin:admin http://localhost:3000/api/dashboards/uid/platform-overview | grep -q "Failed Source Runs (1h)"
+          curl --fail -u "admin:${GRAFANA_ADMIN_PASSWORD}" http://localhost:3000/api/dashboards/uid/platform-overview | grep -q "Failed Source Runs (1h)"
       - run: docker compose ps
       - if: always()
         run: docker compose down -v
