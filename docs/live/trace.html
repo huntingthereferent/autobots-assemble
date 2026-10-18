@@ -295,7 +295,7 @@ footer {max-width:1440px;margin:auto;padding:24px max(22px,4vw) 40px;color:var(-
         const color=ci?"#91ddba":"#8ed3ed";
         const cx=(a.x+b.x)/2;
         const cy=ci?(a.y+b.y)/2:a.y-Math.min(75,19+Math.abs(b.x-a.x)*.21);
-        ctx.strokeStyle=color;ctx.globalAlpha=ci?.6:.52;ctx.lineWidth=1.2;
+        ctx.strokeStyle=color;ctx.globalAlpha=ci?0.6:0.52;ctx.lineWidth=1.2;
         ctx.setLineDash(ci?[4,4]:[]);
         ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(cx,cy,b.x,b.y);ctx.stroke();
         ctx.setLineDash([]);
