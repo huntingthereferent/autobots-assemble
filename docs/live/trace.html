@@ -3,93 +3,173 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#050A12">
-<title>Hunting the Referent · Source Movement</title>
+<meta name="theme-color" content="#091017">
+<title>Source provenance · Hunting the Referent</title>
 <style>
-:root{color-scheme:dark;--white:#E8F6FF;--dim:#88A9BD;--line:#294C65;--cyan:#57E5F3;--violet:#B5A2FC;--mint:#75DFBE;--amber:#E8B474;--intensity:0.24;--speed:1}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--white);font:14px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;background:#050A12;overflow-x:hidden}
-body:before{content:"";position:fixed;inset:-30%;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 45% 40%,rgba(65,159,189,calc(.06 + var(--intensity)*.18)),transparent 45%),radial-gradient(ellipse at 75% 75%,rgba(130,102,210,.09),transparent 42%);transition:background 2s}
-a{color:#A8E9F3;text-decoration:none}a:hover{text-decoration:underline}button,select{font:inherit;color:inherit}button{cursor:pointer}
-#field{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:0;pointer-events:none;background:linear-gradient(125deg,#050A12,#091726 65%,#050A12)}
-header{display:flex;align-items:center;gap:20px;justify-content:space-between;padding:16px 4.5vw;border-bottom:1px solid #1B3042;position:relative;z-index:3;background:#08101BC4;backdrop-filter:blur(20px);flex-wrap:wrap}
-.wordmark{font-size:12px;font-weight:800;letter-spacing:2.3px;color:#D8F4FF}.topnav{display:flex;gap:22px;align-items:center;flex-wrap:wrap}.topnav a{color:#A5BCCE;font-size:11px;letter-spacing:1px}
-#connection{color:var(--dim);font-size:11px}.dot{display:inline-block;width:7px;height:7px;border-radius:99px;background:#52637A;margin-right:7px;vertical-align:middle}.dot.connected{background:var(--mint)}.dot.error{background:#F0A28F}
-.hero{position:relative;z-index:1;min-height:min(78vh,760px);display:flex;align-items:center;border-bottom:1px solid #1D3449;overflow:hidden;isolation:isolate}
-
-.hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#050A12F2 0%,#050A12D4 28%,transparent 85%);pointer-events:none}
-.hero-content{margin-left:6vw;max-width:710px;padding:55px 0;pointer-events:none}
-.overline{font-size:11px;font-weight:700;color:var(--cyan);letter-spacing:2.2px}h1{font-size:clamp(52px,8.5vw,132px);letter-spacing:-.085em;line-height:.91;margin:31px 0 28px;font-weight:800}h1 span{color:#D8EEFB}
-.subtitle{font-size:clamp(14px,1.8vw,22px);max-width:560px;color:#B5D3E3}
-.live-strip{margin-top:52px;display:flex;gap:12px 28px;flex-wrap:wrap;border-top:1px solid #547089;padding-top:21px;max-width:640px}
-.live-strip>div{min-width:100px}.metric{font:700 clamp(22px,2.6vw,34px)/1.2 ui-monospace,monospace;letter-spacing:-1px}.metric-label{font-size:10px;letter-spacing:1.2px;color:#9BB6C8}
-.honest{margin-top:22px;color:#7D9CB3;font-size:11px;max-width:590px}
-main{position:relative;z-index:1;max-width:1500px;margin:auto;padding:0 4.5vw}
-section.block{padding:65px 0;border-bottom:1px solid #263D50}
-.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:23px;flex-wrap:wrap}
-.kicker{color:var(--cyan);letter-spacing:2px;font-size:11px;font-weight:700}h2{font-size:clamp(24px,3.2vw,45px);letter-spacing:-1.9px;margin:10px 0 0;line-height:1.15}
-.explain{color:#A2BCCF;max-width:890px;margin:10px 0 26px;font-size:13px}
-.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.control{border:1px solid #385A72;background:#0C1C2A;padding:10px 14px;border-radius:7px;max-width:100%}select{min-width:260px}button:hover{border-color:var(--cyan)}button:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
-#trail-view{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))} .node-card{border:1px solid #2F526A;background:linear-gradient(160deg,#0C1A2A,#0A1320);padding:17px;border-radius:9px;min-height:145px;position:relative;overflow:hidden}
-.node-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--cyan))}
-.node-card .kind{font-size:10px;color:var(--accent,var(--cyan));letter-spacing:1px;font-weight:bold}.node-card h3{font-size:15px;line-height:1.45;margin:12px 0 9px;overflow-wrap:anywhere}
-.node-card p{color:var(--dim);font-size:12px;margin:4px 0}.node-card a{font-size:11px}
-.node-card.new{animation:new-in .65s ease-out both}@keyframes new-in{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}.panel{background:#0B1420;border:1px solid #243D51;border-radius:10px;padding:24px}
-.panel h3{font-size:14px;color:#CFE9F6;margin:0 0 13px}.panel p{color:#9BB8C9;font-size:12px}
-#receipts{display:grid;gap:9px;max-height:450px;overflow-y:auto}.receipt{padding:12px;border-left:2px solid var(--mint);background:#112333;color:#B5D4E4;font-size:12px}
-.receipt.warn{border-color:var(--amber)}.receipt .hash{color:#5CE7EF;font-size:11px}
-#record-walls{padding-left:22px;color:#C1D2DD}#record-walls li{margin:13px 0}
-footer{position:relative;z-index:1;padding:36px 5vw;color:#7897AB;font-size:11px;display:flex;gap:20px;justify-content:space-between;flex-wrap:wrap}
-.hidden{display:none}.fault{color:#F0AC96!important}.quiet{font-size:11px;color:#82A0B7}
-@media(max-width:740px){.hero{min-height:670px}.hero:after{background:linear-gradient(90deg,#050A12EF 0%,#050A12AA 100%)}.hero-content{margin-left:5vw;margin-right:5vw}.split{grid-template-columns:1fr}section.block{padding:42px 0}h1{font-size:clamp(50px,13vw,85px)}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important} }
+:root {
+  color-scheme: dark;
+  --bg:#091017; --surface:#111c26; --surface-alt:#14212b;
+  --rule:#304451; --text:#e8f1f5; --secondary:#a9bfcb;
+  --accent:#8ed3ed; --linked:#91ddba; --caution:#f3c68c;
+  --sans:"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  --mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+}
+* {box-sizing:border-box}
+html {scroll-behavior:smooth}
+body {margin:0;background:var(--bg);color:var(--text);font:15px/1.6 var(--sans)}
+a {color:var(--accent);text-decoration:none;text-underline-offset:3px}
+a:hover {text-decoration:underline}
+button,select {font:inherit;color:inherit}
+button {cursor:pointer}
+button:hover {border-color:var(--accent)}
+button:focus-visible,select:focus-visible,a:focus-visible {outline:2px solid var(--accent);outline-offset:3px}
+header {display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  border-bottom:1px solid var(--rule);background:#0d1620;padding:16px max(22px,4vw)}
+.wordmark {font-size:12px;letter-spacing:.1em;font-weight:600;color:var(--text)}
+.topnav {display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.topnav a {font-size:11px;letter-spacing:.07em;color:var(--secondary)}
+#connection {font:11px/1.6 var(--mono);color:var(--secondary)}
+.dot {display:inline-block;width:7px;height:7px;border-radius:50%;background:#657888;margin-right:7px}
+.dot.connected {background:var(--linked)}
+.dot.error {background:#f0a7a4}
+.hero,main {max-width:1440px;margin:0 auto;padding-left:max(22px,4vw);padding-right:max(22px,4vw)}
+.hero {padding-top:38px}
+.hero-content {max-width:1060px}
+.overline,.kicker {display:block;color:var(--accent);font:600 11px/1.6 var(--mono);letter-spacing:.06em}
+h1 {font-size:clamp(27px,3vw,35px);line-height:1.2;letter-spacing:-.02em;font-weight:600;margin:11px 0 10px}
+.subtitle {max-width:850px;color:var(--secondary);font-size:14px;line-height:1.75;margin:0}
+.live-strip {display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin:25px 0 10px;
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.live-strip>div {padding:13px 16px 15px 0;border-right:1px solid var(--rule);margin-right:17px}
+.live-strip>div:last-child {border-right:0}
+.metric {font:500 25px/1.25 var(--mono);font-variant-numeric:tabular-nums}
+.metric-label {font:11px/1.5 var(--mono);color:var(--secondary);margin-top:5px}
+.honest {max-width:1030px;font:11px/1.7 var(--mono);color:var(--secondary);margin:12px 0 0}
+.plot {margin:25px 0 0;border:1px solid var(--rule);background:var(--surface);border-radius:3px}
+.plot-header {display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;
+  padding:13px 18px;border-bottom:1px solid var(--rule)}
+.plot-header strong {font-size:13px;font-weight:600}
+.plot-header span {font:11px/1.6 var(--mono);color:var(--secondary)}
+.plot-frame {background-color:#0c1720;background-image:
+  linear-gradient(#22364366 1px,transparent 1px),
+  linear-gradient(90deg,#22364366 1px,transparent 1px);
+  background-size:48px 48px;overflow:hidden}
+#field {display:block;width:100%;height:315px;pointer-events:none}
+.plot figcaption {display:flex;gap:12px 20px;align-items:center;flex-wrap:wrap;
+  border-top:1px solid var(--rule);padding:11px 18px;font:11px/1.65 var(--mono);color:var(--secondary)}
+.legend {display:inline-flex;align-items:center;gap:6px}
+.legend-mark {width:8px;height:8px;background:var(--accent);display:inline-block;border-radius:50%}
+.legend-mark.root {background:var(--text);border:1px solid var(--accent);height:10px;width:10px}
+.legend-mark.run {background:var(--linked);border-radius:1px;transform:rotate(45deg)}
+.legend-mark.failed {background:var(--caution);border-radius:1px;transform:rotate(45deg)}
+section.block {padding:33px 0 38px;border-bottom:1px solid var(--rule)}
+.section-head {display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:15px}
+h2 {font-size:clamp(19px,2vw,23px);line-height:1.35;font-weight:600;letter-spacing:-.015em;margin:5px 0 0}
+.explain {font-size:13px;line-height:1.7;color:var(--secondary);max-width:1100px;margin:0 0 18px}
+.controls {display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.control {border:1px solid var(--rule);background:var(--surface-alt);border-radius:3px;padding:9px 11px;font-size:12px;max-width:100%}
+select {min-width:260px;max-width:min(100%,430px)}
+.quiet {font:11px/1.6 var(--mono);color:var(--secondary)}
+.ledger-head,.node-card {display:grid;grid-template-columns:150px minmax(210px,1fr) 245px 150px;gap:12px;align-items:center}
+.ledger-head {padding:10px 14px;border:1px solid var(--rule);border-bottom:0;color:var(--secondary);font:11px/1.5 var(--mono);background:var(--surface-alt)}
+#trail-view {border:1px solid var(--rule);background:var(--surface)}
+.node-card {padding:12px 14px;border-bottom:1px solid var(--rule)}
+.node-card:last-child {border-bottom:0}
+.node-card .kind {font:11px/1.4 var(--mono);color:var(--accent)}
+.node-card h3 {font-size:13px;font-weight:600;line-height:1.5;margin:0;overflow-wrap:anywhere}
+.node-card p {font:11px/1.55 var(--mono);color:var(--secondary);margin:0;overflow-wrap:anywhere}
+.node-card a {font:11px/1.6 var(--mono)}
+.split {display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.panel {border:1px solid var(--rule);background:var(--surface);border-radius:3px;min-width:0;overflow:hidden}
+.panel h3 {margin:0;padding:13px 15px;background:var(--surface-alt);border-bottom:1px solid var(--rule);font-size:13px}
+.panel p {font-size:12px;line-height:1.6;margin:0;padding:12px 15px;color:var(--secondary)}
+#receipts {max-height:430px;overflow-y:auto}
+.receipt {padding:11px 15px;border-bottom:1px solid var(--rule);font-size:12px;overflow-wrap:anywhere}
+.receipt:last-child {border-bottom:0}
+.receipt>div {margin-bottom:5px}
+.receipt .hash {font:11px/1.6 var(--mono);overflow-wrap:anywhere}
+#record-walls {margin:0;padding:4px 16px 4px 40px;max-height:430px;overflow-y:auto}
+#record-walls li {padding:8px 0;border-bottom:1px solid var(--rule);font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+#record-walls li:last-child {border-bottom:0}
+footer {max-width:1440px;margin:auto;padding:24px max(22px,4vw) 40px;color:var(--secondary);
+  font:11px/1.7 var(--mono);display:flex;gap:18px;justify-content:space-between;flex-wrap:wrap}
+.fault {color:#f0a7a4!important}
+@media (max-width:950px) {
+  .ledger-head,.node-card {grid-template-columns:105px minmax(160px,1fr)}
+  .node-card p,.node-card a {grid-column:2}
+  .split {grid-template-columns:1fr}
+}
+@media (max-width:630px) {
+  .topnav {gap:11px 15px}
+  .hero {padding-top:24px}
+  .live-strip {grid-template-columns:repeat(2,minmax(0,1fr))}
+  .live-strip>div:nth-child(2) {border-right:0}
+  #field {height:270px}
+  select {min-width:0;width:100%}
+  .controls {width:100%;align-items:stretch}
+  .controls label {width:100%}
+  .ledger-head {display:none}
+  .node-card {grid-template-columns:1fr;gap:5px}
+  .node-card p,.node-card a {grid-column:1}
+}
+@media (prefers-reduced-motion:reduce) {
+  *,*::before,*::after {scroll-behavior:auto!important;animation:none!important}
+}
 </style>
 </head>
+
 <body>
-<canvas id="field" aria-label="Source-owned relationship graph, extending behind the full page"></canvas>
 <header>
-  <a class="wordmark" href="#top">HUNTING THE REFERENT</a>
+  <a class="wordmark" href="work.html">HUNTING THE REFERENT</a>
   <nav class="topnav" aria-label="Primary">
-    <a href="#movement">FOLLOW A TRACE</a>
-    <a href="#research">ORIGINAL EVIDENCE</a>
-    <a href="https://github.com/huntingthereferent/autobots-assemble">SOURCE</a>
+    <a href="work.html">WORKSTATION</a>
+    <a href="#movement">COMMIT TRACE</a>
+    <a href="#research">RESEARCH RECORDS</a>
+    <a href="https://github.com/huntingthereferent/autobots-assemble">REPOSITORY</a>
   </nav>
   <div id="connection" role="status"><span class="dot" id="status-dot"></span><span id="status-text">CONTACTING SOURCE</span></div>
 </header>
 <div class="hero" id="top">
-  <
   <div class="hero-content">
-    <div class="overline">OBSERVATION   →   RELATION   →   CONTINUATION</div>
-    <h1>FOLLOW<br><span>WHAT MOVES.</span></h1>
-    <div class="subtitle">One recorded change. Follow what actually comes after it. Every connection has a source.</div>
+    <div class="overline">GITHUB / SOURCE RECORDS</div>
+    <h1>Source provenance</h1>
+    <p class="subtitle">Commit ancestry and workflow attribution from public GitHub records. Connections require a recorded parent SHA or an exact workflow head SHA.</p>
     <div class="live-strip" aria-live="polite">
-      <div><div id="n-commits" class="metric">—</div><div class="metric-label">OBSERVED COMMITS</div></div>
-      <div><div id="n-relations" class="metric">—</div><div class="metric-label">NATIVE LINKS</div></div>
-      <div><div id="n-witnesses" class="metric">—</div><div class="metric-label">CI RUN RECORDS</div></div>
-      <div><div id="n-open" class="metric">—</div><div class="metric-label">OPEN ENDS</div></div>
+      <div><div id="n-commits" class="metric">—</div><div class="metric-label">COMMITS IN TRACE</div></div>
+      <div><div id="n-relations" class="metric">—</div><div class="metric-label">PARENT LINKS</div></div>
+      <div><div id="n-witnesses" class="metric">—</div><div class="metric-label">MATCHING CI RUNS</div></div>
+      <div><div id="n-open" class="metric">—</div><div class="metric-label">NO CHILD IN SAMPLE</div></div>
     </div>
-    <div class="honest" id="freshness">No event assumed. The field begins only when original source observations arrive.</div>
+    <p class="honest" id="freshness">No event assumed. The graph is empty until GitHub source records are read.</p>
   </div>
+  <figure class="plot" aria-labelledby="plot-title">
+    <div class="plot-header"><strong id="plot-title">Observed source relationships</strong><span>Earlier → Later · displayed positions are schematic</span></div>
+    <div class="plot-frame"><canvas id="field" role="img" aria-label="Schematic lineage of observed GitHub commits and matching workflow runs"></canvas></div>
+    <figcaption><span class="legend"><i class="legend-mark root" aria-hidden="true"></i> Selected root</span><span class="legend"><i class="legend-mark" aria-hidden="true"></i> Commit</span><span class="legend"><i class="legend-mark run" aria-hidden="true"></i> Successful CI</span><span class="legend"><i class="legend-mark failed" aria-hidden="true"></i> Other CI result</span><span>Solid: parent SHA · dashed: exact CI head SHA · up to 10 run symbols shown</span></figcaption>
+  </figure>
 </div>
 <main>
 <section class="block" id="movement">
-  <div class="section-head"><div><div class="kicker">ROOT / SOURCE OWNED</div><h2>One observation. Follow its descendants.</h2></div>
-    <div class="controls"><label class="quiet" for="root-select">Choose observed root</label><select class="control" id="root-select" aria-label="Observed root commit"><option value="">Awaiting source…</option></select><button class="control" id="refresh" type="button">Check for new movement</button></div>
+  <div class="section-head">
+    <div><div class="kicker">01 / GIT HISTORY</div><h2>Commit trace</h2></div>
+    <div class="controls"><label class="quiet" for="root-select">Root commit</label><select class="control" id="root-select" aria-label="Observed root commit"><option value="">Awaiting source…</option></select><button class="control" id="refresh" type="button">Refresh source</button></div>
   </div>
-  <p class="explain">The starting point is an actual GitHub commit. A second commit joins its trace only if GitHub lists the first SHA as an ancestor through observed parent links. A workflow run joins only by its exact commit SHA. Unrelated changes remain unjoined. A line never claims a scientific A/B relationship on its own.</p>
-  <div id="trail-view" aria-live="polite"><div class="node-card"><p>Original events, not decorative placeholders.</p></div></div>
+  <p class="explain">The root is a recorded commit. A later commit belongs to the selected trace only if GitHub lists the first SHA as an ancestor through parent links. A workflow run is joined only to its exact head SHA. The view is limited to the latest public sample; absence here is not evidence of no relation.</p>
+  <div class="ledger-head" aria-hidden="true"><span>Relationship</span><span>Commit message</span><span>Source identity</span><span>Record</span></div>
+  <div id="trail-view" aria-live="polite"><div class="node-card"><p>Reading GitHub source records…</p></div></div>
 </section>
 <section class="block" id="research">
-  <div class="section-head"><div><div class="kicker">WORKSTATION / ORIGINALS</div><h2>Research is the work.</h2></div><span class="quiet" id="research-stamp">Source records loading</span></div>
-  <p class="explain">Finite mathematics, source changes, wall records, checkpoint witnesses, and native executions belong to the same inquiry. They don't become equivalent proofs just because they're on the same page. This is a read-only projection of the original workstation evidence.</p>
+  <div class="section-head"><div><div class="kicker">02 / WORKSTATION SOURCES</div><h2>Research records</h2></div><span class="quiet" id="research-stamp">Source records loading</span></div>
+  <p class="explain">Recorded research states and open conditions come from the committed workstation projection. They are not automatically linked to the Git history shown above or treated as currently executing work.</p>
   <div class="split">
-    <div class="panel"><h3>Source-recorded movements</h3><div id="receipts"><p>Checking original research receipts…</p></div></div>
-    <div class="panel"><h3>Walls that remain open</h3><ol id="record-walls"><li>Original records loading…</li></ol></div>
+    <div class="panel"><h3>Recorded states</h3><div id="receipts"><p>Reading source records…</p></div></div>
+    <div class="panel"><h3>Open conditions</h3><ol id="record-walls"><li>Reading source records…</li></ol></div>
   </div>
 </section>
 </main>
-<footer><span>Source provenance and observation limits remain visible. Canvas motion follows validated graph structure; it is not evidence of a new event.</span><span id="next-check">Checking publicly readable GitHub sources</span></footer>
+<footer><span>Read-only presentation of public source records. Graph movement replays verified links; it does not represent newly occurring events.</span><span id="next-check">Checking publicly readable GitHub sources</span></footer>
 <script>
+
 "use strict";
 (() => {
   const REPO="huntingthereferent/autobots-assemble";
@@ -105,12 +185,9 @@ footer{position:relative;z-index:1;padding:36px 5vw;color:#7897AB;font-size:11px
   const link=(tag,label,href,cls="")=>{const x=document.createElement(tag);x.textContent=label;x.className=cls;if(href){x.href=href;x.target="_blank";x.rel="noopener noreferrer"}return x};
   function setStatus(kind,message){$("status-dot").className="dot "+kind;$("status-text").textContent=message;
     state.connected=kind==="connected";}
-  function numeric(id,n){const element=$(id),target=Math.max(0,Number.isFinite(n)?n:0);
-    if(reduced){element.textContent=String(target);return}
-    let previous=Number(element.textContent);if(!Number.isFinite(previous))previous=0;
-    const start=performance.now(),dur=850;
-    function tick(now){const t=Math.min(1,(now-start)/dur),s=1-Math.pow(1-t,3);element.textContent=String(Math.round(previous+(target-previous)*s));if(t<1)requestAnimationFrame(tick)}
-    requestAnimationFrame(tick);
+  function numeric(id,n){
+    const target=Number.isFinite(n)?Math.max(0,n):0;
+    $(id).textContent=String(target);
   }
   async function json(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});
     if(!r.ok)throw Error("Source HTTP "+r.status+(r.status===403?" (public API limit?)":""));return r.json()}
@@ -148,20 +225,22 @@ footer{position:relative;z-index:1;padding:36px 5vw;color:#7897AB;font-size:11px
     state.root=old&&state.commits.some(c=>c.id===old)?old:state.commits.at(-1)?.id||null;
     if(state.root)box.value=state.root;
   }
-  function makeCard(commit,i){
-    const c=document.createElement("article");c.className="node-card";c.style.setProperty("--accent",i===0?"var(--mint)":"var(--cyan)");
-    c.appendChild(link("div",i===0?"WITNESSED ROOT":"NATIVE DESCENDANT",null,"kind"));
+  function makeCard(commit){
+    const c=document.createElement("article");c.className="node-card";
+    c.appendChild(link("div",commit.id===state.root?"ROOT":"DESCENDANT",null,"kind"));
     c.appendChild(link("h3",commit.message||sha7(commit.id)));
-    const meta=document.createElement("p");meta.textContent=sha7(commit.id)+" · "+commit.author+" · "+(commit.date||"undated");c.appendChild(meta);
-    c.appendChild(link("a","Inspect original commit ↗",commit.url));
+    const meta=document.createElement("p");
+    meta.textContent=sha7(commit.id)+" · "+commit.author+" · "+(commit.date||"undated");
+    c.appendChild(meta);
+    c.appendChild(link("a","Open commit ↗",commit.url));
     return c;
   }
   function renderTrail(){
     if(!state.root)return;
     const trace=descendants(state.root,state.commits,state.edges);
     const container=$("trail-view");container.replaceChildren();
-    trace.nodes.slice(-18).forEach((commit,i)=>container.appendChild(makeCard(commit,i)));
-    if(!trace.nodes.length)container.appendChild(link("p","No witnessed descendants in the bounded public sample."));
+    trace.nodes.forEach(commit=>container.appendChild(makeCard(commit)));
+    if(!trace.nodes.length)container.appendChild(link("p","No descendants in the current GitHub sample."));
     numeric("n-commits",trace.nodes.length);
     numeric("n-relations",trace.edges.filter(e=>e.type==="commit-parent").length);
     numeric("n-witnesses",trace.edges.filter(e=>e.type==="ci-head-sha").length);
@@ -169,52 +248,89 @@ footer{position:relative;z-index:1;padding:36px 5vw;color:#7897AB;font-size:11px
     numeric("n-open",trace.nodes.filter(c=>!parents.has(c.id)).length);
     state.graph=graphLayout(trace);
     if(reduced)paint(0);
-    const intensity=Math.min(1,trace.edges.length/19);document.documentElement.style.setProperty("--intensity",String(intensity));
-    $("freshness").textContent="GitHub parent SHA / exact CI head SHA · "+new Date(state.last).toLocaleString()+" · "+trace.nodes.length+" observed commits in selected trace · source refresh every 3 minutes";
+    $("freshness").textContent="GitHub / 24 most recent commits and 60 completed workflow runs requested · "+new Date(state.last).toLocaleString()+" · source refresh every 3 minutes. The view contains only matching records.";
     const latest=trace.nodes.at(-1);
-    $("next-check").textContent="Most recent trace node: "+(latest?sha7(latest.id):"none")+" · No unseen event assumed";
+    $("next-check").textContent="Latest trace commit: "+(latest?sha7(latest.id):"none")+" · No unseen event assumed";
   }
   function graphLayout(trace){
-    const width=Math.max(state.canvas.clientWidth,340),height=Math.max(state.canvas.clientHeight,340);
-    const n=trace.nodes.length,commits=trace.nodes;
-    const positions=new Map(),result=[];
-    commits.forEach((c,i)=>{const x=width*(.44+.45*((i+.45)/Math.max(n,1)));
-      const y=height*(.15+.67*((((i*7)%13)+1)/14));
-      positions.set(c.id,{x,y});result.push({id:c.id,x,y,type:i===0?"root":"commit",label:sha7(c.id),url:c.url});
+    const width=Math.max(state.canvas.clientWidth,320),height=Math.max(state.canvas.clientHeight,260);
+    const commits=trace.nodes,margin=width<500?28:50;
+    const positions=new Map(),points=[];
+    commits.forEach((c,i)=>{
+      const x=commits.length===1?width/2:margin+(width-2*margin)*i/(commits.length-1);
+      const y=height*.39;
+      positions.set(c.id,{x,y});
+      points.push({id:c.id,x,y,type:c.id===state.root?"root":"commit",label:sha7(c.id),index:i,total:commits.length});
     });
-    const witnesses=trace.runs.slice(0,20);
-    for(const r of witnesses){const origin=positions.get(r.sha);if(!origin)continue;
-      const idx=witnesses.findIndex(x=>x.id===r.id);
-      const x=Math.min(width-28,Math.max(width*.22,origin.x-43+(idx%3)*37));
-      const y=Math.min(height-25,origin.y+(idx%2?52:-48));
-      result.push({id:"ci:"+r.id,x,y,type:r.conclusion==="success"?"witness":"failed",label:r.conclusion,url:r.url});
+    const drawnRuns=trace.runs.filter(r=>positions.has(r.sha)).slice(0,10);
+    const perCommit=new Map();
+    for(const r of drawnRuns){
+      const origin=positions.get(r.sha),n=perCommit.get(r.sha)||0;
+      perCommit.set(r.sha,n+1);
+      const x=Math.max(18,Math.min(width-18,origin.x+(n%2?-1:1)*Math.floor(n/2)*10));
+      const y=height*(.70+.065*(n%3));
+      points.push({id:"ci:"+r.id,x,y,type:r.conclusion==="success"?"witness":"failed",label:r.conclusion});
     }
-    return {points:result,edges:trace.edges.filter(e=>positions.has(e.from)&&result.some(p=>p.id===e.to))};
+    const visible=new Set(points.map(p=>p.id));
+    return {points,edges:trace.edges.filter(e=>positions.has(e.from)&&visible.has(e.to))};
   }
-  function fitCanvas(){const c=state.canvas,r=c.getBoundingClientRect(),scale=Math.min(devicePixelRatio||1,2);
+  function fitCanvas(){
+    const c=state.canvas,r=c.getBoundingClientRect(),scale=Math.min(devicePixelRatio||1,2);
+    if(r.width<1||r.height<1)return;
     c.width=Math.round(r.width*scale);c.height=Math.round(r.height*scale);
-    if(state.root)renderTrail();}
+    if(state.root)renderTrail();
+  }
   function paint(now){
     const c=state.canvas,ctx=c.getContext("2d"),w=c.clientWidth,h=c.clientHeight;
-    if(!ctx)return;ctx.setTransform(c.width/w,0,0,c.height/h,0,0);ctx.clearRect(0,0,w,h);
-    const graph=state.graph;if(graph&&graph.points&&graph.points.length){
+    if(!ctx||!w||!h)return;
+    ctx.setTransform(c.width/w,0,0,c.height/h,0,0);
+    ctx.clearRect(0,0,w,h);
+    const graph=state.graph;
+    if(graph&&graph.points&&graph.points.length){
       const byId=new Map(graph.points.map(p=>[p.id,p]));
-      ctx.lineWidth=1.4;
-      for(const [i,e] of graph.edges.entries()){const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)continue;
-        const color=e.type==="ci-head-sha"?"#80DDB5":"#56D7ED";ctx.strokeStyle=color;ctx.globalAlpha=.37;
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2-20,b.x,b.y);ctx.stroke();
-        // A particle follows only a source-verified edge. Motion is REPLAY, not new data.
-        if(!reduced){const q=((now/4500)+(i*0.127))%1;
-          const cx=(1-q)*(1-q)*a.x+2*q*(1-q)*(a.x+b.x)/2+q*q*b.x;
-          const cy=(1-q)*(1-q)*a.y+2*q*(1-q)*((a.y+b.y)/2-20)+q*q*b.y;
-          ctx.fillStyle=color;ctx.globalAlpha=.75;ctx.beginPath();ctx.arc(cx,cy,2.4,0,Math.PI*2);ctx.fill();}
+      for(const [i,e] of graph.edges.entries()){
+        const a=byId.get(e.from),b=byId.get(e.to);
+        if(!a||!b)continue;
+        const ci=e.type==="ci-head-sha";
+        const color=ci?"#91ddba":"#8ed3ed";
+        const cx=(a.x+b.x)/2;
+        const cy=ci?(a.y+b.y)/2:a.y-Math.min(75,19+Math.abs(b.x-a.x)*.21);
+        ctx.strokeStyle=color;ctx.globalAlpha=ci?0.6:0.52;ctx.lineWidth=1.2;
+        ctx.setLineDash(ci?[4,4]:[]);
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(cx,cy,b.x,b.y);ctx.stroke();
+        ctx.setLineDash([]);
+        // The moving marker replays only the exact source link drawn above.
+        if(!reduced){
+          const t=((now/6600)+(i*.137))%1;
+          const mx=(1-t)*(1-t)*a.x+2*t*(1-t)*cx+t*t*b.x;
+          const my=(1-t)*(1-t)*a.y+2*t*(1-t)*cy+t*t*b.y;
+          ctx.fillStyle=color;ctx.globalAlpha=.72;ctx.beginPath();
+          ctx.arc(mx,my,1.6,0,Math.PI*2);ctx.fill();
+        }
       }
-      for(const p of graph.points){ctx.globalAlpha=1;const col=p.type==="root"?"#D4FAFE":p.type==="witness"?"#73E5B8":p.type==="failed"?"#E6B188":"#56DBEE";
-        ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=p.type==="root"?26:12;ctx.beginPath();ctx.arc(p.x,p.y,p.type==="root"?8:4.3,0,2*Math.PI);ctx.fill();ctx.shadowBlur=0;
-        ctx.fillStyle="#ABCDD9";ctx.font="10px ui-monospace, monospace";ctx.textAlign="center";
-        ctx.fillText(p.label,p.x,p.y-13);
+      for(const p of graph.points){
+        ctx.globalAlpha=1;
+        if(p.type==="witness"||p.type==="failed"){
+          ctx.fillStyle=p.type==="witness"?"#91ddba":"#f3c68c";
+          ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);
+          ctx.fillRect(-3,-3,6,6);ctx.restore();
+        }else{
+          ctx.fillStyle=p.type==="root"?"#e8f1f5":"#8ed3ed";
+          ctx.beginPath();ctx.arc(p.x,p.y,p.type==="root"?6:3.6,0,Math.PI*2);ctx.fill();
+          if(p.type==="root"){ctx.strokeStyle="#8ed3ed";ctx.lineWidth=1.2;
+            ctx.beginPath();ctx.arc(p.x,p.y,9,0,Math.PI*2);ctx.stroke();}
+          const step=Math.max(1,Math.ceil(p.total/5));
+          if(p.type==="root"||p.index===p.total-1||(p.index%step===0)){
+            ctx.textAlign="center";ctx.font="10px ui-monospace, monospace";
+            ctx.fillStyle="#b5c7d2";ctx.fillText(p.label,p.x,p.y-17);
+          }
+        }
       }
       ctx.globalAlpha=1;
+      if(graph.edges.length===0){
+        ctx.fillStyle="#a9bfcb";ctx.font="12px ui-monospace, monospace";
+        ctx.textAlign="center";ctx.fillText("No matching parent or CI links in this sample",w/2,h*.84);
+      }
     }
     if(!reduced)state.animationFrame=requestAnimationFrame(paint);
   }
@@ -249,7 +365,7 @@ footer{position:relative;z-index:1;padding:36px 5vw;color:#7897AB;font-size:11px
       setRoots();renderTrail();setStatus("connected","SOURCE OBSERVED");
       const added=next.filter(c=>!old.has(c.id));if(old.size&&added.length){
         $("status-text").textContent=added.length+" SOURCE CHANGES OBSERVED";
-        $("trail-view").querySelectorAll(".node-card").forEach(x=>x.classList.add("new"));
+
       }
     }catch(e){setStatus("error","SOURCE UNAVAILABLE");
       $("freshness").textContent="NO NEW EVIDENCE: "+e.message+". Last witnessed state remains; no synthetic movement.";
