@@ -5,6 +5,7 @@ on:
     paths:
       - "work/arc3/native_f3_other_games.py"
       - "work/arc3/native_ft09_f3_clicks.py"
+      - "work/arc3/native_ft09_click_algebra.py"
       - ".github/workflows/arc3-f3-native-other-games.yml"
   pull_request:
     paths:
@@ -27,6 +28,8 @@ jobs:
         run: python -m work.arc3.native_f3_other_games --out runtime/data/arc3/f3-new-native-games.json
       - name: Native FT09 coordinate-action contact and source F3 probes
         run: python -m work.arc3.native_ft09_f3_clicks --out runtime/data/arc3/f3-ft09-native-clicks.json
+      - name: Validate native click idempotence versus F3 invertibility on distinct observed pairs
+        run: python -m work.arc3.native_ft09_click_algebra --out runtime/data/arc3/ft09-click-algebra.json
       - name: Keep real native frames and exact source-witness comparison
         if: always()
         uses: actions/upload-artifact@v4
@@ -35,5 +38,6 @@ jobs:
           path: |
             runtime/data/arc3/f3-new-native-games.*
             runtime/data/arc3/f3-ft09-native-clicks.*
+            runtime/data/arc3/ft09-click-algebra.*
           if-no-files-found: error
           retention-days: 14
