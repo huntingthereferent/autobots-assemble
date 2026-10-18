@@ -6,7 +6,7 @@
 
 [PR #140](https://github.com/huntingthereferent/autobots-assemble/pull/140) independently re-downloaded and verified two complete AACT historical datasets. Both preselected study identifiers, `NCT03280849` and `NCT04153409`, had recorded `overall_status=Completed` in both exports. That **negative result** prevents using those two cases as evidence of a changed *recorded status value*.
 
-For a meaningful real-source test, this research instead asks: **Which public NCT IDs in both authenticated snapshots actually have a different recorded `overall_status` value?** This is an independently testable question without inventing a version-level timestamp.
+For a meaningful real-source test, this research instead asks: **Which public NCT IDs in both authenticated snapshots have a different recorded `overall_status` value, without assuming an order for the underlying source snapshots?** This is an independently testable question without inventing a version-level timestamp.
 
 ## Fixed before seeing live results
 
@@ -24,9 +24,19 @@ The source labels must remain distinct:
 - **2022-dated snapshot:** Cathrine Axfors and Gustav Nilsonne's AACT deposit [Zenodo 10.5281/zenodo.10091147](https://zenodo.org/records/10091147). Depositors state 2022-11-09 as dataset date, 2022-11-27 as retrieval date, while Zenodo publication was 2023-11-09.
 - **2023-dated snapshot:** [Zenodo record 10058991](https://zenodo.org/records/10058991), published 2023-10-31. It is a different complete source and not a per-study history endpoint.
 
+## Unexpected source chronology: later Zenodo publication is not later AACT collection
+
+The independent first scan found **432,983** NCT rows in the dataset whose owner dates its source to **November 9, 2022**, but **432,597** in the *other file*, which was **uploaded to Zenodo October 31, 2023**. Every one of the latter file's NCT IDs occurs in the 2022-dated dataset: **386 IDs in the 2022-dated file are absent from the October 2023 *deposit*, with zero IDs exclusively in the later deposit**. Some source-recorded `last_update_posted_date` values also run **backward** when read in Zenodo-deposit order. These are directly observed source anomalies, not evidence that official registry history moved backward.
+
+A highly relevant same-author publication, **Panagiotis N. Lalagkas and Rachel D. Melamed, *Shared etiology of Mendelian and complex disease supports drug discovery* (BMC Medical Genomics 2024; DOI 10.1186/s12920-024-01988-3)**, explicitly says the researchers downloaded AACT on **November 4, 2022** and obtained **432,597 studies**—the *exact* number of study IDs in the October 2023 Zenodo deposit from Lalagkas. This strongly suggests its underlying material may actually precede the November 9, 2022 AACT data, but the author paper is **not** a cryptographic attestation that the exact Zenodo file is the referenced November 4 download. The deposit page itself does not specify the underlying file extraction date.
+
+Thus a later **Zenodo deposit date must not be substituted for the underlying AACT snapshot date**. Both files are authenticated *as original immutable deposited artifacts*, but the **chronological order of their underlying source observations remains UNRESOLVED**. The 1,345 differing recorded statuses are reproducible cross-file discrepancies, **not proven transitions from November 2022 to October 2023**. A changed `last_update_posted_date` field is not proof of a unique original registry revision publication transaction. The output explicitly retains this ambiguity and counts backwards-moving source-recorded dates.
+
+Original sources: [Lalagkas Zenodo record (published October 31, 2023)](https://zenodo.org/records/10058991), [Axfors/Nilsonne Zenodo record (AACT collection November 9, 2022)](https://zenodo.org/records/10091147), [Lalagkas/Melamed peer-reviewed article](https://pmc.ncbi.nlm.nih.gov/articles/PMC11385846/).
+
 ## What this test can and cannot show
 
-When a case has different statuses in the two archives, the **recorded exported values differ**. It supports a time-bounded observation of changed source fields and a reproducible test case for the A/B evidence-selection rules. It does **not** establish that the study's clinical state actually changed, exactly when the first public record was updated, or whether other revisions occurred between the two exports.
+When a case has different statuses in the two archives, the **recorded exported values differ**. It establishes a reproducible two-source discrepancy, but **not a justified direction of time between the original extracts** until provenance resolves the underlying extraction date of both files. It does **not** establish that the study's clinical state actually changed, exactly when the first public record was updated, or whether other revisions occurred between the two exports.
 
 The selected anchors remain independently dated *source snapshots* with status observations, not original authenticated per-study version sequences. The [unresolved historical-version evidence issue #106](https://github.com/huntingthereferent/autobots-assemble/issues/106) remains open.
 
