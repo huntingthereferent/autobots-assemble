@@ -1,0 +1,68 @@
+name: NIH P2 actual game-backed temporal Python test
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_game_test_*.py'
+      - 'systems/workspace/nih_game_test_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_nih_game_test_temporal_join.py'
+      - '.github/workflows/nih-p2-real-game-backed-test.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_game_test_*.py'
+      - 'systems/workspace/nih_game_test_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_nih_game_test_temporal_join.py'
+      - '.github/workflows/nih-p2-real-game-backed-test.yml'
+permissions:
+  contents: read
+jobs:
+  real-game-to-temporal-python-p2-checkpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install native and real Chromium witness dependencies
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Test original Chromium log and actual temporal Python, tamper, replay boundary
+        run: python -m unittest -v network.tests.test_nih_game_test_temporal_join
+      - name: Run real eleven-job temporal game investigation in one original workstation
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-real-game-p2-evidence"
+          python -m systems.workspace.nih_game_test_temporal_join \
+            --data-dir "$RUNNER_TEMP/nih-real-game-p2-workstation" \
+            --output-dir "$RUNNER_TEMP/nih-real-game-p2-evidence"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-real-game-p2-evidence"
+          report=json.loads((out/"nih-phase2-game-test-complete-stack.json").read_text())
+          assert report["native_jobs"]==11
+          assert report["NIH_P2_TEST"]=="WITNESSED"
+          assert report["original_browser_queries_independently_replayed"] is True
+          assert report["next_admissible_checkpoint"]=="NIH-P2-BENCHMARK"
+          assert report["benchmark_witnessed"] is False
+          assert report["official_NIH_submission"] is False
+          assert (out/"game-temporal-query-events.jsonl").is_file()
+          assert (out/"temporal-game.html").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/nih-real-game-p2-evidence/original-eleven-job-journal.tar.gz" \
+            -C "$RUNNER_TEMP/nih-real-game-p2-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+      - name: Preserve real Chromium and Python query proof with native source journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: actual-nih-p2-game-test-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-real-game-p2-evidence
+          if-no-files-found: warn
+          retention-days: 30
