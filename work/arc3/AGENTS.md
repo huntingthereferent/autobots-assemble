@@ -4,6 +4,12 @@
 
 This is a **real native ARC game investigation**, not an ARC-inspired artificial game, a replacement bot, a canned route, or a proof that native ARC is the F3 construction. The objective remains eventual native game solving, but this checkpoint only establishes a mathematical source and falsifiable native relationship tests.
 
+## Current native SP80 boundary — longer histories (Oct 18, 2026)
+
+[Source-owned long-history and action-position evidence](runs/WINDOW48_SP80_NATIVE_LONG_HISTORY_2026-10-18.md) now bounds the previous 50/50 exact pre-color result. Eight longer words across 32 actual native resets / 356 actions yielded **56/66 exact ACTION4 full native changes**, despite all 2,078 observed native changed pixels and native before/after colors still being included: **72 extra source predictions** occurred. A separately predeclared streak-versus-position control (32 more resets, 348 native actions) gave **88/102 exact**, with **0/78 errors at word steps 1–6**, but **2/12** inaccurate at word step 7 and **12/12** inaccurate at step 8. This shows target pre-action pixel color alone is NOT sufficient; native action history/progress matters. All actual predictions and counterexamples, and interrupted native level-change trials, remain source-owned.
+
+Independent three-reset native controls additionally verified the alternate public SP80 one-level word **5454545** at action seven (3/3), with prefix **545454** not advancing (0/3); this is ONE native game level, not a full game win. The two frozen native geometry variants remain indistinguishable. The original F3-48 mathematical A/B and canonical agent remain unchanged; native stage effects are **not an F3 generator or rooted conjugacy**.
+
 ## Source contract — do not silently switch back to nine laws
 
 The original family is **48 DISTINCT concrete F3 transition laws** parametrized by:
