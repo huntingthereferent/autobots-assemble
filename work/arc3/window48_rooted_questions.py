@@ -62,23 +62,34 @@ def plan():
     # counts), generated for both ordered directions to avoid asymmetric
     # signatures hiding a class distinction.
     question_origins = {}
+    witnessed_direction_count = 0
     for i,a in enumerate(reps):
-        for j,b in enumerate(reps):
-            if i==j:
-                continue
-            event=rooted_conflict(a,b)
-            if event is None:
+        for j in range(i+1,len(reps)):
+            b=reps[j]
+            # A rooted equality witness is asymmetric: a collision in the
+            # source and split in target might exist only in one direction.
+            # Do not equate no witness (a->b) with mathematical alignment.
+            witnessed_this_pair = False
+            for source_id,target_id,source,target in (
+                    (i,j,a,b), (j,i,b,a)):
+                event=rooted_conflict(source,target)
+                if event is None:
+                    continue
+                witnessed_this_pair = True
+                witnessed_direction_count += 1
+                old,new,source_end,target_old,target_new=event
+                if source.apply(ORIGIN,old)!=source.apply(ORIGIN,new):
+                    raise AssertionError("generated source collision is invalid")
+                if target.apply(ORIGIN,old)==target.apply(ORIGIN,new):
+                    raise AssertionError("generated target split is invalid")
+                if source_end!=source.apply(ORIGIN,old):
+                    raise AssertionError("source endpoint provenance changed")
+                question=(old,new)
+                question_origins.setdefault(question,[]).append(
+                    [source_id,target_id])
+            if not witnessed_this_pair:
                 raise AssertionError(
-                    f"distinct marked classes {i},{j} lacked rooted counterexample")
-            old,new,source_end,target_old,target_new=event
-            if a.apply(ORIGIN,old)!=a.apply(ORIGIN,new):
-                raise AssertionError("generated source collision is invalid")
-            if b.apply(ORIGIN,old)==b.apply(ORIGIN,new):
-                raise AssertionError("generated target split is invalid")
-            if source_end!=a.apply(ORIGIN,old):
-                raise AssertionError("source endpoint provenance changed")
-            question=(old,new)
-            question_origins.setdefault(question,[]).append([i,j])
+                    f"distinct marked classes {i},{j} lacked either rooted counterexample")
 
     all_questions=sorted(question_origins,
                          key=lambda q:(max(map(len,q)),sum(map(len,q)),q))
@@ -150,7 +161,8 @@ def plan():
         "origin_preserving_classes":16,
         "representative_parameters":[parameters(x) for x in reps],
         "rooted_collision_candidate_pairs":len(all_questions),
-        "ordered_source_pair_witnesses":16*15,
+        "ordered_source_pair_witnesses":witnessed_direction_count,
+        "unordered_pairs_separated_by_source_witnesses":120,
         "selection":"deterministic greedy finite cover; NOT a proven globally minimal test set",
         "questions":chosen,
         "questions_selected":len(chosen),
