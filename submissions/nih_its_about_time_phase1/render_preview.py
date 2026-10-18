@@ -94,16 +94,16 @@ def elements(markdown):
             items.append(Paragraph(inlines(s[2:]), STYLES["title"]))
         elif s.startswith("## "):
             flush()
-            items.append(CondPageBreak(92))
+            items.append(CondPageBreak(65))
             items.append(Paragraph(inlines(s[3:]), STYLES["subtitle"]
                              if len(items) < 3 else STYLES["section"]))
         elif s.startswith("### "):
             flush()
-            items.append(CondPageBreak(78))
+            items.append(CondPageBreak(55))
             items.append(Paragraph(inlines(s[4:]), STYLES["section"]))
         elif s.startswith("#### "):
             flush()
-            items.append(CondPageBreak(66))
+            items.append(CondPageBreak(46))
             items.append(Paragraph(inlines(s[5:]), STYLES["subsection"]))
         elif re.match(r"^[-*] ", s):
             flush()
