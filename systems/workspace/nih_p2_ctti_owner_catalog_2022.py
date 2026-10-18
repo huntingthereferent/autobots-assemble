@@ -25,6 +25,7 @@ OWNER = "Clinical Trials Transformation Initiative (CTTI)"
 OWNER_HOST = "aact.ctti-clinicaltrials.org"
 CATALOG_URLS = (
     "https://aact.ctti-clinicaltrials.org/downloads/snapshots?type=flatfiles&year=2022",
+    "https://aact.ctti-clinicaltrials.org/snapshots?type=flatfiles&year=2022",
     "https://aact.ctti-clinicaltrials.org/snapshots",
 )
 MAX_RESPONSE_BYTES = 2_000_000
@@ -188,7 +189,10 @@ def main(argv=None):
     print(json.dumps({
         "schema":SCHEMA,"catalog_url_found":result["public_2022_archive_url_discovered"],
         "matching_2022_owner_links":len(result["candidate_archive_links_from_actual_owner_html"]),
-        "catalog_checks":[{"status":x["http_status"],"error":x["error"]}
+        "catalog_checks":[{"status":x["http_status"],"error":x["error"],
+                           "owner_page_title":x.get("source_page_title"),
+                           "sign_in_banner":x.get("login_or_access_banner_seen"),
+                           "mentions_2022":x.get("page_mentions_2022")}
                           for x in result["unauthenticated_public_catalog_checks"]],
         "original_archive_downloaded":False,
         "historical_version_timestamp_witnessed":False,
