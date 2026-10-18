@@ -1,0 +1,65 @@
+name: NIH P2 public original ClinicalTrials.gov version pages
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_official_history_browser_access.py'
+      - 'systems/workspace/NIH_P2_OFFICIAL_HISTORY_BROWSER.md'
+      - 'network/tests/test_nih_p2_official_history_browser_access.py'
+      - '.github/workflows/nih-p2-official-study-history-browser.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_p2_official_history_browser_access.py'
+      - 'systems/workspace/NIH_P2_OFFICIAL_HISTORY_BROWSER.md'
+      - 'network/tests/test_nih_p2_official_history_browser_access.py'
+      - '.github/workflows/nih-p2-official-study-history-browser.yml'
+permissions:
+  contents: read
+jobs:
+  independent-original-public-version-ui-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install Chromium without signed-in state or owner session
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Refute fake version banners and current-record substitution
+        run: python -m unittest -v network.tests.test_nih_p2_official_history_browser_access
+      - name: Visit two exact official public history URLs in fresh Chromium
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-study-history-browser"
+          python -m systems.workspace.nih_p2_official_history_browser_access \
+            --output-dir "$RUNNER_TEMP/nih-p2-study-history-browser"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-p2-study-history-browser/nih-p2-original-study-history-browser-access.json"
+          r=json.loads(p.read_text())
+          assert r["schema"]=="nih-p2-clinicaltrials-official-history-browser-access/v1"
+          assert r["target_public_study"]=="NCT00001756"
+          assert [x["requested_version"] for x in r["version_route_probe_records"]]==[94,105]
+          assert len(r["version_route_probe_records"])==2
+          assert r["actual_version_view_count"] in (0,1,2)
+          assert r["historical_source_fields_verified"] is False
+          assert r["per_version_public_posting_date_verified"] is False
+          assert r["blocked_undocumented_api_reused"] is False
+          assert r["external_derived_noncommercial_dataset_accessed"] is False
+          assert r["original_twelve_native_jobs_modified"] is False
+          assert r["official_NIH_submission"] is False
+          PY
+      - name: Retain only minimal source-access, browser visible-text hashes and no record bodies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-official-public-history-ui-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-study-history-browser/
+          retention-days: 30
+          if-no-files-found: warn
