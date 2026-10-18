@@ -1,0 +1,271 @@
+{
+  "biomedical_benchmark_complete": false,
+  "clinical_verdict": "NOT_EVALUATED",
+  "cutoff_frontiers": [
+    {
+      "as_of": "2000-01-01",
+      "posting_events_visible": []
+    },
+    {
+      "as_of": "2015-07-20",
+      "posting_events_visible": [
+        {
+          "event": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20"
+        }
+      ]
+    },
+    {
+      "as_of": "2019-08-28",
+      "posting_events_visible": [
+        {
+          "event": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2019-08-28"
+        }
+      ]
+    },
+    {
+      "as_of": "2021-04-21",
+      "posting_events_visible": [
+        {
+          "event": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2019-08-28"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2021-04-21"
+        }
+      ]
+    },
+    {
+      "as_of": "2021-05-25",
+      "posting_events_visible": [
+        {
+          "event": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2019-08-28"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2021-04-21"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2021-05-25"
+        }
+      ]
+    },
+    {
+      "as_of": "2022-09-30",
+      "posting_events_visible": [
+        {
+          "event": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2019-08-28"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2021-04-21"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2021-05-25"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2022-09-30"
+        }
+      ]
+    },
+    {
+      "as_of": "2025-04-04",
+      "posting_events_visible": [
+        {
+          "event": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2019-08-28"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2021-04-21"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2021-05-25"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2022-09-30"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2025-04-04"
+        }
+      ]
+    },
+    {
+      "as_of": "2026-10-18",
+      "posting_events_visible": [
+        {
+          "event": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2019-08-28"
+        },
+        {
+          "event": "first_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2021-04-21"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2021-05-25"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2022-09-30"
+        },
+        {
+          "event": "last_update_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2025-04-04"
+        }
+      ]
+    }
+  ],
+  "does_not_reconstruct_historical_version_contents": true,
+  "external_source_intake_only": true,
+  "fields": "NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate",
+  "known_at_interpretation": "registry-posted-event-date-only",
+  "official_NIH_submission": false,
+  "official_api_base": "https://clinicaltrials.gov/api/v2/studies/",
+  "original_workstation_modified": false,
+  "patient_data_ingested": false,
+  "raw_public_responses_not_archived": true,
+  "record_count": 3,
+  "records": [
+    {
+      "historical_content_available": false,
+      "nct_id": "NCT04852770",
+      "patient_data_ingested": false,
+      "posting_events": [
+        {
+          "kind": "first_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2021-04-21",
+          "source_path": "protocolSection.statusModule.studyFirstPostDateStruct.date",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04852770?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+        },
+        {
+          "kind": "last_update_posted",
+          "nct_id": "NCT04852770",
+          "posted_on": "2025-04-04",
+          "source_path": "protocolSection.statusModule.lastUpdatePostDateStruct.date",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04852770?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+        }
+      ],
+      "raw_source_sha256": "b7884c68ba234eb1ad3bd789b651bbc4b123b9a0c75bea30ef95fb761db69f8e",
+      "record_kind": "current-registry-publication-metadata-only",
+      "retrieved_at_utc": "2026-10-18T10:59:22Z",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04852770?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+    },
+    {
+      "historical_content_available": false,
+      "nct_id": "NCT04072276",
+      "patient_data_ingested": false,
+      "posting_events": [
+        {
+          "kind": "first_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2019-08-28",
+          "source_path": "protocolSection.statusModule.studyFirstPostDateStruct.date",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04072276?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+        },
+        {
+          "kind": "last_update_posted",
+          "nct_id": "NCT04072276",
+          "posted_on": "2022-09-30",
+          "source_path": "protocolSection.statusModule.lastUpdatePostDateStruct.date",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04072276?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+        }
+      ],
+      "raw_source_sha256": "0657166832cebdca462041ebf11bfdacc4e5a4dea8fed3a4587282ee0bb2690a",
+      "record_kind": "current-registry-publication-metadata-only",
+      "retrieved_at_utc": "2026-10-18T10:59:22Z",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT04072276?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+    },
+    {
+      "historical_content_available": false,
+      "nct_id": "NCT02502409",
+      "patient_data_ingested": false,
+      "posting_events": [
+        {
+          "kind": "first_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2015-07-20",
+          "source_path": "protocolSection.statusModule.studyFirstPostDateStruct.date",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02502409?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+        },
+        {
+          "kind": "last_update_posted",
+          "nct_id": "NCT02502409",
+          "posted_on": "2021-05-25",
+          "source_path": "protocolSection.statusModule.lastUpdatePostDateStruct.date",
+          "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02502409?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+        }
+      ],
+      "raw_source_sha256": "bbc0a40a8171f457cccf2b4c235e59a546d721ad2bf28e257d0df80a263143c8",
+      "record_kind": "current-registry-publication-metadata-only",
+      "retrieved_at_utc": "2026-10-18T10:59:22Z",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies/NCT02502409?fields=NCTId,StudyFirstPostDate,LastUpdatePostDate,ResultsFirstPostDate"
+    }
+  ],
+  "retrieved_at_utc": "2026-10-18T10:59:22Z",
+  "schema": "nih-p2-public-registry-posting-intake/v1",
+  "source": "ClinicalTrials.gov documented REST API v2",
+  "synthetic_observations": false
+}
