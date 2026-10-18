@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+from datetime import date
 import csv
 from hashlib import sha256
 import io
@@ -95,6 +96,8 @@ def scan_verified_tables(old_zip, new_flat, *, max_anchors=ANCHOR_COUNT):
     changed = []
     same_norm = 0
     only_case_or_spacing = 0
+    last_update_field_2023_earlier_count = 0
+    last_update_fields_compared_count = 0
     groups = Counter()
     with Path(new_flat).open(encoding="utf-8-sig", newline="") as stream:
         seen_new = set()
@@ -109,6 +112,14 @@ def scan_verified_tables(old_zip, new_flat, *, max_anchors=ANCHOR_COUNT):
             common += 1
             status22, norm22, update22 = original
             status23, norm23, update23 = item23
+            try:
+                if (len(update22) == 10 and len(update23) == 10 and
+                        date.fromisoformat(update22) and date.fromisoformat(update23)):
+                    last_update_fields_compared_count += 1
+                    if update23 < update22:
+                        last_update_field_2023_earlier_count += 1
+            except ValueError:
+                pass
             if norm22 == norm23:
                 same_norm += 1
                 if status22 != status23:
@@ -117,10 +128,10 @@ def scan_verified_tables(old_zip, new_flat, *, max_anchors=ANCHOR_COUNT):
             groups[(norm22, norm23)] += 1
             changed.append({
                 "nct_id": nct,
-                "overall_status_export_2022": status22,
-                "overall_status_export_2023": status23,
-                "last_update_posted_field_export_2022": update22,
-                "last_update_posted_field_export_2023": update23,
+                "overall_status_source_dated_2022_nov09": status22,
+                "overall_status_source_deposited_2023_oct31": status23,
+                "last_update_posted_field_source_dated_2022": update22,
+                "last_update_posted_field_source_deposited_2023": update23,
                 "status_values_differ_after_case_normalization": True,
                 "exact_original_registry_version_post_time_proven": False,
                 "actual_clinical_event_time_proven": False,
@@ -140,6 +151,9 @@ def scan_verified_tables(old_zip, new_flat, *, max_anchors=ANCHOR_COUNT):
         "ids_only_2023": new_count - common,
         "same_normalized_status_count": same_norm,
         "spelling_only_difference_count": only_case_or_spacing,
+        "recorded_update_dates_comparable": last_update_fields_compared_count,
+        "recorded_update_date_in_2023_deposit_is_earlier_count": last_update_field_2023_earlier_count,
+        "later_zenodo_deposit_appears_to_contain_earlier_source_rows": new_count < old_count and (new_count - common) == 0,
         "different_normalized_status_count": len(changed),
         "status_change_field_groups": [
             {"status_2022": a, "status_2023": b, "observed_paired_rows": n}
@@ -149,6 +163,9 @@ def scan_verified_tables(old_zip, new_flat, *, max_anchors=ANCHOR_COUNT):
         "selected_status_difference_anchors": selected,
         "new_source_versions_proven": False,
         "actual_original_per_version_public_posting_times_proven": False,
+        "underlying_extraction_date_of_2023_deposited_file_authenticated": False,
+        "archive_collection_chronological_order_proven": False,
+        "temporal_direction_of_status_field_differences": "UNRESOLVED",
         "a_status_difference_witnesses_a_specific_intermediate_clinical_event": False,
     }
 
@@ -190,6 +207,12 @@ def execute(*, output_dir):
             "whole_archive_md5": receipt23["dataset_md5"],
             "whole_archive_sha256": receipt23["dataset_sha256"],
             "source_table_filename": "AACT_studies.txt",
+            "actual_underlying_export_date_stated_by_depositor": None,
+            "related_same_author_article": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11385846/",
+            "article_author_reported_aact_download_date": "2022-11-04",
+            "article_author_reported_row_count": 432597,
+            "article_statement_cryptographically_bound_to_this_exact_zenodo_file": False,
+            "article_publication_is_not_original_archive_version_witness": True,
         },
         **actual,
         "raw_original_source_archives_persisted": False,
