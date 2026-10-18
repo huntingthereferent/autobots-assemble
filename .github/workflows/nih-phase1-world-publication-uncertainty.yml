@@ -1,0 +1,74 @@
+name: NIH Phase 1 original world uncertain-publication witness
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_phase1_world_publication_uncertainty.py'
+      - 'systems/workspace/NIH_PHASE1_WORLD_PUBLICATION_UNCERTAINTY.md'
+      - 'network/tests/test_nih_phase1_world_publication_uncertainty.py'
+      - '.github/workflows/nih-phase1-world-publication-uncertainty.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_phase1_world_publication_uncertainty.py'
+      - 'systems/workspace/NIH_PHASE1_WORLD_PUBLICATION_UNCERTAINTY.md'
+      - 'network/tests/test_nih_phase1_world_publication_uncertainty.py'
+      - '.github/workflows/nih-phase1-world-publication-uncertainty.yml'
+permissions:
+  contents: read
+jobs:
+  original-w13-native-uncertain-publication:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original native stack and actual Chromium
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Reject certainty from missing original publication evidence
+        run: python -m unittest -v network.tests.test_nih_phase1_world_publication_uncertainty
+      - name: Play original twelve-job world with independent admission-state source queries
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-world-uncertain-publication"
+          python -m systems.workspace.nih_phase1_world_publication_uncertainty \
+            --data-dir "$RUNNER_TEMP/nih-world-original-native" \
+            --output-dir "$RUNNER_TEMP/nih-world-uncertain-publication"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"nih-world-uncertain-publication"
+          r=json.loads((root/"nih-phase1-world-publication-uncertainty.json").read_text())
+          assert r["schema"]=="nih-phase1-original-world-publication-uncertainty/v1"
+          assert r["original_native_jobs"]==12
+          assert r["original_world_two_clock_parent_witnessed"] is True
+          assert r["constructed_source_policy"]=="constructed-synthetic-publication-bounds/v1"
+          assert r["cutoff_choices"]==["2026-01-03","2026-01-04","2026-01-06","2026-01-07"]
+          assert len(r["observed_browser_frames"])==(r["world_actions"]+1)*4
+          assert len(r["actual_original_python_calls"])>=len(r["observed_browser_frames"])
+          assert r["played_original_game_solved"] is True
+          assert r["independent_three_state_policy_verified"] is True
+          assert r["original_native_journals_preserved"] is True
+          assert r["three_state_logic_is_not_in_original_python"] is True
+          assert r["new_native_job"] is False and r["new_NIH_checkpoint"] is False
+          assert r["real_historical_publication_authenticated"] is False
+          assert r["synthetic_only"] is True and r["clinical_verdict"]=="NOT_EVALUATED"
+          assert r["official_NIH_submission"] is False
+          assert (root/"nih-phase1-world-publication-uncertainty.png").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/nih-world-uncertain-publication/original-native-journal.tgz" \
+            -C "$RUNNER_TEMP/nih-world-original-native" \
+            runtime.jsonl coordinator-windows.jsonl workstation
+      - name: Preserve real source-provenance browser frames and original native receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-phase1-world-publication-uncertainty-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-world-uncertain-publication/
+          if-no-files-found: warn
+          retention-days: 30
