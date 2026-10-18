@@ -93,12 +93,11 @@ def source_witness(*,data_dir:Path,output_dir:Path)->dict:
 
     events=[e for e in runtime.event_store.for_handoff(JOB_ID)
             if e.event_type==BROWSER_EVENT]
-    if len(events)!=1 or events[0].data!=proof | {"new_journal_event":proof.get("new_journal_event")}:
-        # game-temporal-witness.json includes new_journal_event, while the
-        # actual native event contains only the source/browser proof.
-        actual={k:v for k,v in proof.items() if k!="new_journal_event"}
-        if len(events)!=1 or events[0].data!=actual:
-            raise ValueError("browser return is not in the original native event lineage")
+    # The browser report adds new_journal_event only when written to disk;
+    # the original native journal event contains the actual browser proof.
+    actual={k:v for k,v in proof.items() if k!="new_journal_event"}
+    if len(events)!=1 or events[0].data!=actual:
+        raise ValueError("browser return is not in the original native event lineage")
     if receipts[JOB_ID]["source_fingerprint"]!=md.get("edition_fingerprint"):
         raise ValueError("fresh source fingerprint differs from original live handoff")
 
