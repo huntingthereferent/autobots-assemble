@@ -1,0 +1,30 @@
+name: ARC3 native visible factor prediction
+
+on:
+  push:
+    paths:
+      - "work/arc3/native_factor_prediction.py"
+      - ".github/workflows/arc3-f3-native-factor-prediction.yml"
+  workflow_dispatch:
+
+jobs:
+  native-predictive-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official native ARC runtime
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Predict held-out native LS20 frames before action execution
+        run: python -m work.arc3.native_factor_prediction --game ls20 --out runtime/data/arc3/native-factor-predictions.json
+      - name: Retain actual native frames, predictions and counterexamples
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-ls20-native-factor-prediction
+          path: runtime/data/arc3/native-factor-predictions.*
+          if-no-files-found: error
+          retention-days: 14
