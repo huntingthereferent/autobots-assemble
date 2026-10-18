@@ -206,6 +206,16 @@ def check_grid(frames, *, actions,cutover):
     if len(lookup)!=len(frames) or set(lookup)!={
             (turn,k) for turn in range(actions+1) for k in CUTOFFS}:
         raise ValueError("missing or repeated real browser query")
+    for row in frames:
+        groups=[row[key] for key in ("admitted_ids","definitely_withheld_ids",
+              "indeterminate_ids","outside_validity_ids","static_valid_ids")]
+        if any(type(group) is not list or group!=sorted(set(group)) for group in groups):
+            raise ValueError("missing source identities or duplicated source-state labels")
+        admitted,withheld,uncertain,outside,static=map(set,groups)
+        if (admitted & withheld or admitted & uncertain or withheld & uncertain or
+                (admitted|withheld|uncertain)!=static or static & outside or
+                static|outside!=set(BOUNDS)):
+            raise ValueError("source admission states do not partition actual original scope")
     for turn in range(actions+1):
         times={lookup[turn,k]["native_game_known_at"] for k in CUTOFFS}
         if len(times)!=1:
@@ -232,8 +242,12 @@ def check_grid(frames, *, actions,cutover):
         raise ValueError("original-world uncertain publication boundary incorrectly resolved")
     game_early=lookup[0,CUTOFFS[0]]["native_game_known_at"]
     game_after=lookup[cutover,CUTOFFS[0]]["native_game_known_at"]
-    if not game_early<game_after:
-        raise ValueError("original playable game did not advance its native knowledge clock")
+    if (not game_early<game_after or
+            any(lookup[t,CUTOFFS[0]]["native_game_known_at"]!=game_early
+                for t in range(cutover)) or
+            any(lookup[t,CUTOFFS[0]]["native_game_known_at"]!=game_after
+                for t in range(cutover,actions+1))):
+        raise ValueError("original playable game failed exact two-stage native knowledge clock")
     return True
 
 
