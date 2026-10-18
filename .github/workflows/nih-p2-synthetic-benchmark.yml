@@ -1,0 +1,70 @@
+name: NIH P2 source-owned temporal static benchmark
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_benchmark_*.py'
+      - 'systems/workspace/nih_benchmark_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_nih_benchmark_temporal_join.py'
+      - '.github/workflows/nih-p2-synthetic-benchmark.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_benchmark_*.py'
+      - 'systems/workspace/nih_benchmark_worker_source/**'
+      - 'systems/workspace/controls.py'
+      - 'network/tests/test_nih_benchmark_temporal_join.py'
+      - '.github/workflows/nih-p2-synthetic-benchmark.yml'
+permissions:
+  contents: read
+jobs:
+  original-twelve-job-benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install native and actual Chromium witness
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Test source-owned benchmark and exact independent verification
+        run: python -m unittest -v network.tests.test_nih_benchmark_temporal_join
+      - name: Execute original twelve-job synthetic temporal-static benchmark
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-benchmark-evidence"
+          python -m systems.workspace.nih_benchmark_temporal_join \
+            --data-dir "$RUNNER_TEMP/nih-p2-benchmark-workstation" \
+            --output-dir "$RUNNER_TEMP/nih-p2-benchmark-evidence"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          folder=Path(os.environ["RUNNER_TEMP"])/"nih-p2-benchmark-evidence"
+          r=json.loads((folder/"nih-phase2-temporal-static-benchmark.json").read_text())
+          assert r["native_jobs"]==12
+          assert r["NIH_P2_BENCHMARK"]=="WITNESSED"
+          assert r["new_boundary_queries_independently_executed"]>=20
+          assert r["static_future_leakage_cases"]>0
+          assert r["temporal_leakage_ids_total"]==0
+          assert r["original_executable_and_source_oracle_checked"] is True
+          assert r["official_NIH_submission"] is False
+          assert r["synthetic_only"] is True
+          assert (folder/"game-temporal-query-events.jsonl").is_file()
+          assert (folder/"temporal-game.html").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/nih-p2-benchmark-evidence/original-twelve-job-journal.tar.gz" \
+            -C "$RUNNER_TEMP/nih-p2-benchmark-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+      - name: Preserve original browser history, benchmark cases and native journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-original-native-benchmark-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-benchmark-evidence
+          if-no-files-found: warn
+          retention-days: 30
