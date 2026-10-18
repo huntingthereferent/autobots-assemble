@@ -82,7 +82,12 @@ def replay(arcade,word,run_index):
         image=np.asarray(payload)
         stage["frame_shape"]=list(image.shape)
         stage["frame_size"]=int(image.size)
-        if image.size!=4096:
+        # ARC may return an animation stack [n,64,64] for ACTION5;
+        # the declared native observation is its LAST full 64x64 frame.
+        final_visible=image[-1] if image.ndim==3 else image
+        stage["selected_native_frame_shape"]=list(final_visible.shape)
+        stage["selected_native_frame_size"]=int(final_visible.size)
+        if final_visible.size!=4096:
             stage.update({"frame_status":"NONSTANDARD_NATIVE_FRAME",
                           "frame_hash":None})
             steps.append(stage)
