@@ -113,6 +113,8 @@ def extract(nct_id, raw, *, retrieved_at):
         if type(entry) is not dict:
             raise ValueError("malformed public posting date")
         posted = day(entry.get("date"))
+        if posted > instant.date().isoformat():
+            raise ValueError("posting date is later than the source observation")
         events.append({
             "kind": name, "posted_on": posted, "nct_id": nct_id,
             "source_url": source, "source_path": "protocolSection.statusModule." + field + ".date",
