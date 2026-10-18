@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "work/arc3/native_smoke.py"
+      - "work/arc3/native_f3_generator_probe.py"
       - ".github/workflows/arc3-f3-native-smoke.yml"
   workflow_dispatch:
 
@@ -28,11 +29,15 @@ jobs:
         env:
           ARC3_FRAMEWORK: ${{ runner.temp }}/arc3-starter/vendor/ARC-AGI-3-Agents
         run: python -m work.arc3.native_smoke --game ls20 --max-actions 12 --out runtime/data/arc3/f3-native-smoke.json
+      - name: Native LS20 — test necessary F3 A-cubed equality for each advertised simple action
+        run: python -m work.arc3.native_f3_generator_probe --game ls20 --out runtime/data/arc3/f3-generator-probe.json
       - name: Save actual native frames and F3 evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: arc3-f3-native-ls20-observations
-          path: runtime/data/arc3/f3-native-smoke.*
+          path: |
+            runtime/data/arc3/f3-native-smoke.*
+            runtime/data/arc3/f3-generator-probe.*
           if-no-files-found: ignore
           retention-days: 14
