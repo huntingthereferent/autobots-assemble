@@ -4,6 +4,7 @@ on:
     paths:
       - 'systems/workspace/nih_dataset_sensitivity.py'
       - 'network/tests/test_nih_dataset_sensitivity.py'
+      - 'systems/workspace/NIH_P2_SOURCE_VARIATIONS.md'
       - '.github/workflows/nih-p2-source-variation.yml'
       - 'systems/workspace/nih_benchmark_*.py'
       - 'systems/workspace/nih_benchmark_worker_source/**'
@@ -12,6 +13,7 @@ on:
     paths:
       - 'systems/workspace/nih_dataset_sensitivity.py'
       - 'network/tests/test_nih_dataset_sensitivity.py'
+      - 'systems/workspace/NIH_P2_SOURCE_VARIATIONS.md'
       - '.github/workflows/nih-p2-source-variation.yml'
 permissions:
   contents: read
