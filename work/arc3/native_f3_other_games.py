@@ -143,7 +143,7 @@ def execute_word(arcade,game,word,roles):
         "word":word,
         "status":reason or "COMPLETED_NATIVE_WORD",
         "native_actions_executed":len(observed)-1,
-        "root":native_metadata(env.reset(),root) if False else {
+        "root":{
             "whole_frame_hash":digest(root),
             "levels_completed":initial_level
         },
