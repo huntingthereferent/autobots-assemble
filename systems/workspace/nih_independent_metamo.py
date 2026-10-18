@@ -152,7 +152,8 @@ def run_experiment(*, code, parent_dataset, worker_source,
                 [sys.executable, "-I", str(worker)], input=canonical(payload),
                 capture_output=True, text=True, cwd=folder, timeout=15, check=False)
             if result.returncode or len(result.stdout) > 100000:
-                raise ValueError("original pinned source benchmark worker rejected independent fixture")
+                raise ValueError("original pinned source benchmark worker rejected independent fixture: "
+                                 + repr((result.returncode, result.stderr[:500])))
             report = json.loads(result.stdout)["report"]
             expected = []
             static_leakage_cases = 0
