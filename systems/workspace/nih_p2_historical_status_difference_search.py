@@ -33,6 +33,7 @@ OLD_STUDIES = "AACT-2022-11-09/studies.txt"
 ID_PREFIX = "NCT"
 ANCHOR_COUNT = 8
 ROW_LIMIT = 1_000_000
+MIN_SOURCE_ROWS = 100_000
 REQUIRED = ("nct_id", "overall_status", "last_update_posted_date")
 
 
@@ -86,7 +87,7 @@ def scan_verified_tables(old_zip, new_flat, *, max_anchors=ANCHOR_COUNT):
                     if nct in old_rows:
                         raise ValueError("duplicate NCT in historical 2022 source")
                     old_rows[nct] = item
-    if len(old_rows) < 100_000:
+    if len(old_rows) < MIN_SOURCE_ROWS:
         raise ValueError("incomplete original 2022 snapshot")
     old_count = len(old_rows)
     new_count = 0
@@ -127,7 +128,7 @@ def scan_verified_tables(old_zip, new_flat, *, max_anchors=ANCHOR_COUNT):
             })
     if not common or common + len(old_rows) != old_count:
         raise ValueError("two source tables have no valid consistent join")
-    if new_count < 100_000 or common < 100_000:
+    if new_count < MIN_SOURCE_ROWS or common < MIN_SOURCE_ROWS:
         raise ValueError("paired real datasets do not overlap sufficiently")
     changed.sort(key=lambda row: row["nct_id"])
     selected = changed[:max_anchors]
