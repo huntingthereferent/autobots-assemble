@@ -1,0 +1,63 @@
+name: NIH P2 CTTI original 2022 archive public catalog access
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_ctti_owner_catalog_2022.py'
+      - 'systems/workspace/NIH_P2_CTTI_2022_ACCESS_BOUNDARY.md'
+      - 'network/tests/test_nih_p2_ctti_owner_catalog_2022.py'
+      - '.github/workflows/nih-p2-ctti-owner-2022-catalog.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_p2_ctti_owner_catalog_2022.py'
+      - 'systems/workspace/NIH_P2_CTTI_2022_ACCESS_BOUNDARY.md'
+      - 'network/tests/test_nih_p2_ctti_owner_catalog_2022.py'
+      - '.github/workflows/nih-p2-ctti-owner-2022-catalog.yml'
+permissions:
+  contents: read
+jobs:
+  independently-observe-primary-ctti-historical-snapshot-access:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Reject fabricated archive filenames, gated pages, redirects and data claims
+        run: python -m unittest -v network.tests.test_nih_p2_ctti_owner_catalog_2022
+      - name: Independently query only original CTTI owner public catalog metadata
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-ctti-catalog"
+          python -m systems.workspace.nih_p2_ctti_owner_catalog_2022 \
+            --output-dir "$RUNNER_TEMP/nih-p2-ctti-catalog"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          path=Path(os.environ["RUNNER_TEMP"])/"nih-p2-ctti-catalog/nih-p2-ctti-owner-catalog-2022.json"
+          r=json.loads(path.read_text())
+          assert r["schema"]=="nih-p2-ctti-primary-2022-catalog-access/v1"
+          assert len(r["unauthenticated_public_catalog_checks"])==3
+          assert all(x["source_catalog_url"].startswith("https://aact.ctti-clinicaltrials.org/")
+                     for x in r["unauthenticated_public_catalog_checks"])
+          assert r["public_2022_archive_url_discovered"] is bool(r["candidate_archive_links_from_actual_owner_html"])
+          assert r["archive_bytes_downloaded"]==0
+          assert r["archive_whole_file_sha256_verified"] is False
+          assert r["source_2022_record_contents_witnessed"] is False
+          assert r["historical_primary_record_version_content_witnessed"] is False
+          assert r["original_registry_per_version_public_posting_time_witnessed"] is False
+          assert r["not_attempted_to_bypass_authentication"] is True
+          assert r["third_party_bulk_data_copied_to_A_B"] is False
+          assert r["original_twelve_job_workstation_modified"] is False
+          assert r["NIH_submission"] is False
+          PY
+      - name: Preserve actual CTTI public access statuses and discovered owner links only
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-ctti-2022-catalog-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-ctti-catalog/
+          retention-days: 30
+          if-no-files-found: error
