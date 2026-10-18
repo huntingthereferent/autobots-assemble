@@ -7,6 +7,9 @@ on:
       - 'systems/workspace/controls.py'
       - 'network/tests/fixtures/game_temporal_live_example.json'
       - 'network/tests/test_game_temporal_live_join.py'
+      - 'network/tests/test_live_temporal_parent_evidence.py'
+      - 'systems/workspace/live_temporal_parent_evidence.py'
+      - 'systems/workspace/LIVE_TEMPORAL_PARENT_SOURCE.md'
       - '.github/workflows/complete-stack-live-game-temporal.yml'
   push:
     branches: [main]
@@ -37,6 +40,8 @@ jobs:
       - name: Bounded BUILD must produce a game that calls actual temporal CLI
         run: |
           python -m unittest -v network.tests.test_game_temporal_live_join
+      - name: Check live-temporal source lineage cannot impersonate owner W13
+        run: python -m unittest -v network.tests.test_live_temporal_parent_evidence
       - name: Construct once more through original seven-job workstation and browser
         run: |
           set -euo pipefail
@@ -58,6 +63,9 @@ jobs:
           assert (root/"temporal_bridge_server.py").is_file()
           assert (root/"game-temporal-query-events.jsonl").is_file()
           PY
+          python -m systems.workspace.live_temporal_parent_evidence \
+            --data-dir "$RUNNER_TEMP/live-game-temporal-workstation" \
+            --output-dir "$RUNNER_TEMP/live-game-temporal-artifacts"
           tar -czf "$RUNNER_TEMP/live-game-temporal-artifacts/actual-native-workstation.tar.gz" \
             -C "$RUNNER_TEMP/live-game-temporal-workstation" \
             runtime.jsonl coordinator-windows.jsonl workstation world-request.json
