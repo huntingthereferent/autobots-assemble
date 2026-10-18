@@ -124,9 +124,8 @@ def _graph(receipt:dict)->dict:
     links=[]
     for i,row in enumerate(receipt["stages"]):
         dest="A/B source stage "+str(i+1)+": "+row["name"]
-        evidence=["local-log://"+row["prepare"]["log"],"local-log://"+row["apply"]["log"]]
-        if "native" in row:
-            evidence += ["local-log://"+row["native"]["log"],"local-log://"+row["typecheck"]["log"]]
+        evidence=["local-log://"+row[k]["log"] for k in ("prepare", "apply", "native", "typecheck")
+                  if isinstance(row.get(k), dict) and row[k].get("log")]
         links.append({
           "schema_version":1,
           "provenance_id":"ab-source-"+str(i+1)+"-"+row["name"],
@@ -136,7 +135,7 @@ def _graph(receipt:dict)->dict:
           "evidence_refs":evidence,
           "survived":["original source commit "+PIN,
                       "original REA MIT license"],
-          "invalidated":[],
+          "invalidated":["source stage failed or was interrupted"] if row["result"]=="FAIL" else [],
           "boundaries":["Local subprocess result and source hashes, NOT independent universal semantics.",
                         "Per-stage source preparation is not individually native-tested by this run."
                         if row["result"]!="PASS" else "Native REA tests and typecheck executed."],

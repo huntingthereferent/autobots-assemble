@@ -21,7 +21,7 @@ RECEIPT = "source-absorption-receipt.json"
 PROVENANCE = "source-provenance.json"
 NATIVE_LOGS = ("native-rea-tests.log", "rea-typecheck.log", "source-diff-check.log")
 DOC_FILES = ("README.md", "CHANGELOG.md", "LICENSE", "THIRD_PARTY_NOTICES.md")
-GUIDES = ("quickstart.md", "swallow.md", "cli.md", "evidence.md", "visual.md")
+GUIDES = ("quickstart.md", "swallow-repo-lane.md", "release.md", "swallow.md", "cli.md", "evidence.md", "visual.md")
 PREVIEW = ("source-provenance.html", "graph.json", "ancestry.json")
 
 def _safe_file(root: Path, name: str) -> Path:
