@@ -204,7 +204,7 @@ def native_confirm(arcade,game,root,template,apply_word):
                     "sample_wrong_pixel":[{"x":int(x),"y":int(y),
                                           "expected_native_color":int(expected[y,x]),
                                           "actual_native_color":int(native[y,x])}
-                                          for y,x in list(zip(err[0][:3],err[1][:3]))],
+                                          for x,y in list(zip(err[1][:3],err[0][:3]))],
                     "state":str(getattr(actual_obs,"state",None)),
                     "levels_completed":int(getattr(actual_obs,"levels_completed",0)),
                     "status":"PREDICTION_MATCH" if equality else "NATIVE_COUNTEREXAMPLE",
