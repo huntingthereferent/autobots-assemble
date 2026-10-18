@@ -21,6 +21,8 @@ def h(path):
 def dummy_workspace(root:Path):
     tool=root/"tools/ab-provenance"
     (tool/"docs").mkdir(parents=True)
+    (tool/"site").mkdir(parents=True)
+    (tool/"site"/"index.html").write_text("<html><title>A/B fixture docs</title></html>")
     (root/"runtime/data/evidence").mkdir(parents=True)
     dist=root/"runtime/data/evidence/dist"
     dist.mkdir(parents=True)
@@ -89,6 +91,7 @@ class ABShipTests(unittest.TestCase):
                 self.assertEqual(archive.read("LICENSE").decode(),LICENSE)
                 self.assertIn("THIRD_PARTY_NOTICES.md",archive.namelist())
                 self.assertIn("docs/quickstart.md",archive.namelist())
+                self.assertIn("docs-site/index.html",archive.namelist())
                 self.assertIn("evidence/source-absorption-receipt.json",archive.namelist())
                 self.assertIn("dist/"+DIST_NAMES[0],archive.namelist())
                 self.assertIn("release-manifest.json",archive.namelist())

@@ -22,6 +22,7 @@ PROVENANCE = "source-provenance.json"
 NATIVE_LOGS = ("native-rea-tests.log", "rea-typecheck.log", "source-diff-check.log")
 DOC_FILES = ("README.md", "CHANGELOG.md", "LICENSE", "THIRD_PARTY_NOTICES.md")
 GUIDES = ("quickstart.md", "swallow-repo-lane.md", "release.md", "swallow.md", "cli.md", "evidence.md", "visual.md")
+SITE_FILE = "index.html"
 PREVIEW = ("source-provenance.html", "graph.json", "ancestry.json")
 
 def _safe_file(root: Path, name: str) -> Path:
@@ -107,6 +108,7 @@ def ship(*, repo: Path, evidence: Path, dist: Path, out: Path) -> dict:
         _safe_file(tool, name)
     for name in GUIDES:
         _safe_file(tool / "docs", name)
+    _safe_file(tool / "site", SITE_FILE)
     for name in (*DIST_NAMES,):
         candidate = _safe_file(dist, name)
         _archive_license(name, candidate, _hash(ab_license))
@@ -124,6 +126,7 @@ def ship(*, repo: Path, evidence: Path, dist: Path, out: Path) -> dict:
         add(tool / name, name)
     for name in GUIDES:
         add(tool / "docs" / name, "docs/" + name)
+    add(tool / "site" / SITE_FILE, "docs-site/" + SITE_FILE)
     for name in DIST_NAMES:
         add(dist / name, "dist/" + name)
     for name in PREVIEW:

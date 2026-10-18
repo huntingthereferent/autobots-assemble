@@ -6,3 +6,4 @@ include visual-provenance.json
 include LICENSE
 include THIRD_PARTY_NOTICES.md
 include CHANGELOG.md
+recursive-include site *.html

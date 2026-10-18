@@ -219,6 +219,7 @@ def main(argv:list[str]|None=None)->int:
         return provenance(argv)
     parser=argparse.ArgumentParser(prog="ab",description="A/B real-source transformation tool")
     sub=parser.add_subparsers(dest="command",required=True)
+    sub.add_parser("ship",help="Package source-verified A/B wheel, docs, and original evidence")
     sub.add_parser("source",help="Show actual pinned REA source and supported A/B stages")
     p=sub.add_parser("swallow",help="Rebuild and test actual REA source editions (mutates declared checkout)")
     p.add_argument("--repo-root",type=Path,default=Path.cwd())
