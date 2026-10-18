@@ -1,8 +1,24 @@
 # ARC-AGI-3 — 48-law native investigation lane
 
-**Active checkpoint:** restart the real ARC investigation using the repository's already-proved **48-law two-predecessor F3 window family**, rather than the earlier nine-law phi worlds. The mathematical source is [window_combined.py](../arc_like_maze/window_combined.py) with [48-law proofs and counterexamples](../arc_like_maze/WINDOW_COMBINED.md). The active instructions are [AGENTS.md](AGENTS.md).
+**Mathematical referent:** the real ARC investigation uses the repository's already-proved **48-law two-predecessor F3 window family**, rather than the earlier nine-law phi worlds. The mathematical source is [window_combined.py](../arc_like_maze/window_combined.py) with [48-law proofs and counterexamples](../arc_like_maze/WINDOW_COMBINED.md). The active instructions are [AGENTS.md](AGENTS.md).
 
 This is **one experimental ARC agent and the existing Work observation lane**. It is not a fabricated ARC engine, autonomous bot population, new scheduler, universal theory, or successful public/hidden competition entry.
+
+## Resume here
+
+**Latest executed follow-up:** [position-only condition test](runs/WINDOW48_SP80_POSITION_CONDITION_2026-10-18.md) rejected the proposed step-seven suppression: 8/16 exact versus 12/16 for the frozen baseline, with 128 actual changes wrongly removed. Resume by comparing those retained pre-action frames with the earlier absent block, then predeclare a new discriminating condition. Do not rerun or adopt the failed position-only repair.
+
+**Execution state:** the latest native SP80 experiments completed; no persistent ARC process or automatic successor is running. A green experiment workflow means observations were collected successfully, including counterexamples. It does not mean the tested model is exact.
+
+**On “continue”:** proceed from the longer-history counterexample below. Do not restart the 48-law investigation, replay the old 50/50 checkpoint as new progress, or repeat a completed experiment without a stated new question.
+
+1. Read [the current evidence record](runs/WINDOW48_SP80_NATIVE_LONG_HISTORY_2026-10-18.md), including both longer-history and streak-versus-position results. Inspect retained native frames when deriving a new condition.
+2. Prepare the next bounded SP80 experiment: identify an observable PRE-action condition that could distinguish the absent native 9-to-12 block from the surviving transitions. Word position alone is a hypothesis, not an established mechanism. Write the exact condition, new action words, negative controls, comparison metric and stop conditions before collecting new observations. Keep the existing geometry, pre-color gate and boundary model as the frozen baseline.
+3. Implement and run that predeclared experiment through the existing native ARC workflow pattern. Retain actual before/after frames, actions, native level counters, errors and all mismatches. Interrupted or unmatched steps remain UNKNOWN. Do not add a replacement game, bot population or scheduler.
+4. Compare complete transition maps, including false positives, misses and wrong colors. Record whether the condition survives new observations; a counterexample is a result to carry forward, not a reason to silently refit.
+5. Update this current handoff and the evidence record with the actual run URL, artifact reference, measured result and next unresolved question. Preserve the original 48 laws and canonical agent.
+
+**Completion for this next step:** a newly executed native experiment and retained evidence, or an explicit blocking dependency. Editing these instructions or rerunning mathematical tests alone does not complete it.
 
 ## Current SP80 longer-history checkpoint
 
@@ -85,6 +101,6 @@ An **independent public SP80 replay** reproduced the six-action word 454545 adva
 
 [Source-owned native color and edge investigations](runs/WINDOW48_SP80_COLOR_BOUNDARY_2026-10-18.md) extend the partial SP80 geometry result beyond mask overlap. A real native 148-action experiment matched all **704/704** original before/after pixel-color pairs at mapped ACTION4 overlaps. Its unexplained native stage-1 changes all lay at the bottom edge, native 14 to 0. A predeclared rule for that edge was checked on **five new words, 20 native resets and 152 actions**: the frozen model included **1,070/1,070 actual ACTION4 native color changes**, but was completely exact only on **18/32 action effects** because it predicted **20 additional edge changes that did not occur**. No difference in score separates the frozen reflection and pure translation alternatives. The original 48-law mathematical source and ARC agent are still unchanged; no F3 mapping or full game win is implied.
 
-## Latest public native SP80 conditional transition checkpoint
+## Historical checkpoint — pre-color relation (bounded by longer histories)
 
 [SP80 native pre-color gate](runs/WINDOW48_SP80_NATIVE_OCCUPANCY_2026-10-18.md): Six new words, 24 clean official game resets, 216 actual actions. Without fitting any new geometry, a source-native pre-action color constraint removed all 50 previously overpredicted edge changes, leaving **50/50 exact ACTION4 full changed-pixel/native-color effects and all 1,680/1,680 actual transitions correctly included**. A plain unshifted identity control stayed 0/50 exact. Both earlier shifted geometry candidates remain tied. The relation uses an observed corresponding level-0 effect plus actual level-1 pre-action pixels; it cannot yet solve the stage autonomously or establish original F3-48 correspondence.
