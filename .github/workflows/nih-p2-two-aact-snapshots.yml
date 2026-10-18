@@ -1,0 +1,63 @@
+name: NIH P2 independently authenticate two AACT archived tables
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_two_aact_snapshot_comparison.py'
+      - 'systems/workspace/NIH_P2_TWO_AACT_SNAPSHOT_BOUNDARY.md'
+      - 'network/tests/test_nih_p2_two_aact_snapshot_comparison.py'
+      - '.github/workflows/nih-p2-two-aact-snapshots.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_p2_two_aact_snapshot_comparison.py'
+      - 'systems/workspace/NIH_P2_TWO_AACT_SNAPSHOT_BOUNDARY.md'
+      - 'network/tests/test_nih_p2_two_aact_snapshot_comparison.py'
+      - '.github/workflows/nih-p2-two-aact-snapshots.yml'
+permissions:
+  contents: read
+jobs:
+  independently-replay-both-original-archive-downloads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independently reject corrupted source digests and forged revisions
+        run: python -m unittest -v network.tests.test_nih_p2_two_aact_snapshot_comparison
+      - name: Download both whole Zenodo archives and compare actual selected rows
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-aact-two-snapshots"
+          python -m systems.workspace.nih_p2_two_aact_snapshot_comparison \
+            --output-dir "$RUNNER_TEMP/nih-p2-aact-two-snapshots"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          path=Path(os.environ["RUNNER_TEMP"])/"nih-p2-aact-two-snapshots/nih-p2-2022-2023-paired-observations.json"
+          r=json.loads(path.read_text())
+          assert r["schema"]=="nih-p2-authenticated-aact-2022-2023-paired-observations/v1"
+          assert r["cross_source_nct_count"]==2
+          assert len(r["observations"])==2
+          assert len(r["sources"])==2
+          assert r["sources"][0]["whole_archive_sha256"]=="d1d4fb04a121e03f2ac08bacef708a896f7240d5ff025104ed7512b60408d755"
+          assert r["sources"][1]["whole_archive_sha256"]=="bed698312a04292fc31f7ea71130731acc9b57723399ab1b45c0f6d70a304d49"
+          assert r["same_recorded_status_count"]+r["different_recorded_status_count"]==2
+          assert r["historical_per_study_source_version_contents_authenticated"] is False
+          assert r["historical_per_study_first_publication_time_authenticated"] is False
+          assert r["missing_intervening_record_changes_ruled_out"] is False
+          assert r["official_NIH_submission"] is False
+          assert r["clinical_verdict"]=="NOT_EVALUATED"
+          assert r["original_twelve_job_workstation_modified"] is False
+          PY
+      - name: Retain only two-source hashes and bounded study observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-two-archive-pair-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-aact-two-snapshots/
+          if-no-files-found: warn
+          retention-days: 30
