@@ -22,6 +22,10 @@ The [official native test workflow](../../.github/workflows/arc3-f3-native-smoke
 
 [The new native 48-law evidence record](runs/WINDOW48_RESTART_2026-10-17.md) documents a successful [real native run](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39092926137). SK48 and LS20 each reached an explicit conditional rooted-law wall after six real actions; the click-only FT09 native reset was recorded without issuing fictional coordinates. Zero levels were completed. The old nine-law data remain historical and are not counted as 48-law observations.
 
+## Latest native evidence and rooted source plan
+
+[25-game actual native A-cube preflight and six rooted source questions](runs/WINDOW48_NATIVE_ROLE_PREFLIGHT_2026-10-17.md): 25 official public game roots observed, 75 simple native-action probes and 225 real native actions. There were 74 literal full-frame violations of source A³ and one degenerate visible return, with ZERO nontrivial three-state cycles. The independent source mathematical tool selected SIX rooted equality questions that distinguish 16 origin-preserving classes of the 48-law construction; these must NOT be treated as native results or used before a source-grounded native A/B correspondence exists.
+
 ## Workstation and native observation sources
 
 - [work/arc3/lane.py](lane.py) preserves the existing read-only native trace-inspection and Work journal mechanism; it is not a native action actuator.
