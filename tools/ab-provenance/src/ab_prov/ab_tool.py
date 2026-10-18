@@ -128,8 +128,10 @@ def _graph(receipt:dict)->dict:
           "evidence_refs":evidence,
           "survived":["original source commit "+PIN,
                       "original REA MIT license"],
-          "invalidated":[] if row["result"]=="PASS" else ["this stage has not passed native verification"],
-          "boundaries":["Local subprocess result and source hashes, NOT independent universal semantics."],
+          "invalidated":[],
+          "boundaries":["Local subprocess result and source hashes, NOT independent universal semantics.",
+                        "Per-stage source preparation is not individually native-tested by this run."
+                        if row["result"]!="PASS" else "Native REA tests and typecheck executed."],
           "transformation":"Original REA TypeScript source staged through ProcessWorkstation",
           "observed_at":row["timestamp"]
         })
@@ -199,6 +201,10 @@ def run(repo:Path,rea:Path,out:Path)->int:
                          sort_keys=True))
 
 def main(argv:list[str]|None=None)->int:
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv and argv[0] in ("inspect", "ancestors", "render"):
+        from .cli import main as provenance
+        return provenance(argv)
     parser=argparse.ArgumentParser(prog="ab",description="A/B real-source transformation tool")
     sub=parser.add_subparsers(dest="command",required=True)
     sub.add_parser("source",help="Show actual pinned REA source and supported A/B stages")
