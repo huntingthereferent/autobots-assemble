@@ -49,11 +49,8 @@ class OriginalCTTI2022CatalogTests(TestCase):
           <a href="/static/20221131_export.zip">not true calendar</a>
           <a href="/static/20221201_export.txt">not zip</a>'''
         result=m.catalog_candidates(html,base_url=m.CATALOG_URLS[0])
-        # Regex checks dated filename shape, not historical authenticity or
-        # Gregorian calendar: calendar date must be checked separately.
-        self.assertEqual(len(result["candidate_archive_links"]),1)
-        self.assertEqual(result["candidate_archive_links"][0]["archive_filename"],
-                         "20221131_export.zip")
+        # Invalid calendar dates are not promoted to historical archive rows.
+        self.assertEqual(result["candidate_archive_links"],[])
 
     def test_02_absent_or_login_only_page_is_not_claimed_as_archive(self):
         seen=[]
