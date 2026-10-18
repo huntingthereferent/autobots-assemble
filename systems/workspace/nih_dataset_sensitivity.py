@@ -140,7 +140,9 @@ def grid(scopes):
 
 
 def run_experiment(*, scope, predicates, code, dataset_text, worker_source,
-                   query_history_sha256, output_dir, edition_fingerprint):
+                   query_history_sha256, output_dir, edition_fingerprint,
+                   sources=None, label="nih-p2-source-variation",
+                   experiment_schema=EXPERIMENT):
     """Execute source worker, original Python, and independent oracle per variant."""
     scope = validate_scope(scope)
     original_data = json.loads(dataset_text)
@@ -152,9 +154,18 @@ def run_experiment(*, scope, predicates, code, dataset_text, worker_source,
         raise ValueError("original source evidence missing")
     out = Path(output_dir)
     out.mkdir(parents=True, exist_ok=True)
-    sources = variants(scope, predicates)
+    if sources is None:
+        sources = variants(scope, predicates)
+    else:
+        if type(sources) is not dict or "original" not in sources:
+            raise ValueError("source families must include the original source")
+        sources = {name: validate_scope(v) for name, v in sources.items()}
+        if sources["original"] != scope or len({digest(v) for v in sources.values()}) != len(sources):
+            raise ValueError("independent source families duplicate or replace the original")
+    if not isinstance(label, str) or label not in ("nih-p2-source-variation", "nih-p2-source-families"):
+        raise ValueError("unrecognized experimental evidence label")
     queries = grid(sources)
-    cases_path = out / "nih-p2-source-variation-cases.jsonl"
+    cases_path = out / (label + "-cases.jsonl")
     lines = []
     summaries = []
     with TemporaryDirectory() as td:
@@ -232,7 +243,7 @@ def run_experiment(*, scope, predicates, code, dataset_text, worker_source,
             })
     cases_path.write_text("\n".join(lines) + "\n", encoding="utf8")
     summary = {
-        "schema": EXPERIMENT,
+        "schema": experiment_schema,
         "parent_benchmark": "NIH-P2-BENCHMARK",
         "parent_edition_fingerprint": edition_fingerprint,
         "original_program_sha256": sha256(code.encode()).hexdigest(),
@@ -249,7 +260,7 @@ def run_experiment(*, scope, predicates, code, dataset_text, worker_source,
         "clinical_verdict": "NOT_EVALUATED",
         "general_biomedical_benchmark": False,
     }
-    (out / "nih-p2-source-variation-summary.json").write_text(
+    (out / (label + "-summary.json")).write_text(
         json.dumps(summary, sort_keys=True, indent=2) + "\n", encoding="utf8")
     return summary
 
