@@ -79,6 +79,19 @@ class LiveTraceSourceTests(unittest.TestCase):
         self.assertNotIn("10 DOMAINS",source)
         self.assertNotIn("15 recorded jobs",source)
 
+    def test_provenance_uses_bounded_source_diagram(self):
+        source=PAGE.read_text(encoding="utf8")
+        self.assertIn("<h1>Source provenance</h1>",source)
+        self.assertIn('<figure class="plot" aria-labelledby="plot-title">',source)
+        self.assertIn('<canvas id="field" role="img"',source)
+        self.assertIn("Earlier → Later · displayed positions are schematic",source)
+        self.assertIn('const drawnRuns=trace.runs.filter(r=>positions.has(r.sha)).slice(0,10)',source)
+        self.assertIn('const visible=new Set(points.map(p=>p.id))',source)
+        self.assertIn('ctx.setLineDash(ci?[4,4]:[])',source)
+        self.assertNotIn("FOLLOW<br>",source)
+        self.assertNotIn("position:fixed",source)
+        self.assertNotIn("shadowBlur",source)
+
     @unittest.skipUnless(shutil.which("node"),"Node.js needed for browser syntax lint")
     def test_browser_javascript_is_syntactically_valid(self):
         page=PAGE.read_text(encoding="utf8")
