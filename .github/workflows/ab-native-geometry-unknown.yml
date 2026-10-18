@@ -1,0 +1,66 @@
+name: A/B native previously unknown geometry edges
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths:
+      - 'work/arc3/native_geometry_unknown_edge*.py'
+      - 'network/tests/test_arc3_native_geometry_unknown_edge.py'
+      - '.github/workflows/ab-native-geometry-unknown.yml'
+  pull_request:
+    paths:
+      - 'work/arc3/native_geometry_unknown_edge*.py'
+      - 'network/tests/test_arc3_native_geometry_unknown_edge.py'
+      - '.github/workflows/ab-native-geometry-unknown.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  real-source-native-unknown-edge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original public native environment
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Test source geometry and reject unsupported evidence
+        run: |
+          python -m unittest network.tests.test_arc3_native_geometry_unknown_edge network.tests.test_arc3_native_glyph_transport network.tests.test_arc3_native_observation_bridge -v
+      - name: Download independent SOURCE native glyph-transport evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-glyph-transport-evidence
+          run-id: 39093565973
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-native-source
+      - name: Freeze map-based predictions for 18 originally unseen edges BEFORE native action
+        run: |
+          python -m work.arc3.native_geometry_unknown_edge \
+            --source runtime/data/ab-native-source \
+            --out runtime/data/ab-geometry-unknown/frozen-18-edges.json
+      - name: Run official LS20 actions with separately reset native paths
+        run: |
+          python -m work.arc3.native_geometry_unknown_edge_capture \
+            --frozen runtime/data/ab-geometry-unknown/frozen-18-edges.json \
+            --out runtime/data/ab-geometry-unknown/native-18-edges.json
+      - name: Independently compare every new raw frame against source-frozen predictions
+        run: |
+          python -m work.arc3.native_geometry_unknown_edge_verify \
+            --frozen runtime/data/ab-geometry-unknown/frozen-18-edges.json \
+            --native runtime/data/ab-geometry-unknown/native-18-edges.json \
+            --raw runtime/data/ab-geometry-unknown/native-18-edges.npz \
+            --out runtime/data/ab-geometry-unknown/independent-verdict.json
+      - name: Preserve frozen predictions, actual native pixels and even falsifying results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-native-unknown-geometry-evidence
+          path: runtime/data/ab-geometry-unknown/*
+          retention-days: 14
+          if-no-files-found: warn
