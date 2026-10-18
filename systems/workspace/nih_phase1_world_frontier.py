@@ -200,8 +200,6 @@ def run_world(*, data_dir, output_dir, parent=original_twelve):
         raise ValueError("original emitted program file disagrees with native source owner")
     if json.loads(file_map["temporal_dataset.json"])["observations"] != scope["observations"]:
         raise ValueError("original game dataset changed from original Phase 1 scope")
-    if file_map["temporal_game.html"] if False else False:
-        raise AssertionError("unreachable")
     config = json.loads(file_map["game-temporal-config.json"])
     if config.get("synthetic") is not True:
         raise ValueError("browser game is not synthetic")
