@@ -3,8 +3,8 @@
 
 **NIH “It's About Time” Challenge — Phase 1 Conceptual Design and Feasibility**  
 **DRAFT FOR REVIEW · October 18, 2026 · NOT SUBMITTED**  
-**Research:** James Muneoka, independent research / \`huntingthereferent\`  
-**Companion ontology:** \`phase1-temporal-ontology.ttl\`
+**Research:** James Muneoka, independent research / `huntingthereferent`  
+**Companion ontology:** `phase1-temporal-ontology.ttl`
 
 ### Abstract
 
@@ -24,9 +24,9 @@ The proposed workflow is suitable for public and de-identified research datasets
 
 The unit of evidence is a **source-qualified assertion**, not an unqualified timeless triple. An assertion A consists of:
 
-\`(subject, predicate, object, valid_from, valid_to, available_from, source_ref, provenance_state)\`.
+`(subject, predicate, object, valid_from, valid_to, available_from, source_ref, provenance_state)`.
 
-\`valid_from\` and \`valid_to\` define a half-open time interval \`[valid_from, valid_to)\`. \`available_from\` is an evidence-availability cutoff *under a declared source policy*. \`source_ref\` identifies a bounded source artifact, its version when available, or a recorded witness. \`provenance_state\` distinguishes an authenticated original historical version from a dated archive snapshot, a present-day registry record, a third-party reconstruction, or unavailable evidence. These categories are not interchangeable.
+`valid_from` and `valid_to` define a half-open time interval `[valid_from, valid_to)`. `available_from` is an evidence-availability cutoff *under a declared source policy*. `source_ref` identifies a bounded source artifact, its version when available, or a recorded witness. `provenance_state` distinguishes an authenticated original historical version from a dated archive snapshot, a present-day registry record, a third-party reconstruction, or unavailable evidence. These categories are not interchangeable.
 
 The framework also distinguishes five clocks:
 
@@ -40,11 +40,11 @@ When a record provides only a submission timestamp or a current “last updated�
 
 #### 2.1 Formal query rule
 
-For a query \`Q(K,V)\`, K is the knowledge cutoff and V is the valid-time target. Within a closed-world, fully witnessed bounded source set, assertion A is eligible only if:
+For a query `Q(K,V)`, K is the knowledge cutoff and V is the valid-time target. Within a closed-world, fully witnessed bounded source set, assertion A is eligible only if:
 
-\`A.valid_from <= V < A.valid_to AND A.available_from <= K\`.
+`A.valid_from <= V < A.valid_to AND A.available_from <= K`.
 
-The returned record is not just a set of \`subject-predicate-object\` values. It includes the assertion identifiers, their provenance witnesses, the exact cutoff pair, and a disposition: **eligible**, **withheld as later-known**, **outside validity**, **contradictory within declared constraints**, or **source availability unresolved**. If \`available_from\` is not authenticated, a query demanding verified historical public availability cannot return a positive historical assertion based on that field alone.
+The returned record is not just a set of `subject-predicate-object` values. It includes the assertion identifiers, their provenance witnesses, the exact cutoff pair, and a disposition: **eligible**, **withheld as later-known**, **outside validity**, **contradictory within declared constraints**, or **source availability unresolved**. If `available_from` is not authenticated, a query demanding verified historical public availability cannot return a positive historical assertion based on that field alone.
 
 This is an explicit deterministic selection rule, not an OWL-wide closed-world entailment guarantee. OWL supplies an interoperable description of the entities, intervals, and provenance relations. A query planner applies date inequalities and source-admission policy outside standard monotonic OWL reasoning. Future work may incorporate time-aware embedding features, but a similarity score can **rank only temporally eligible evidence**; it must never override the time or provenance guard.
 
@@ -58,21 +58,21 @@ A proposed extension adds ordered evidence events, source-confidence annotations
 
 The existing source-owned Phase 1 scope uses a **fictional clinical-sequence fixture**, not real patient records:
 
-- \`prior-note\`: source note valid January 1–10, 2026, knowable January 1.
-- \`delayed-result\`: fictional result valid January 3–10, 2026, but not knowable until January 5.
+- `prior-note`: source note valid January 1–10, 2026, knowable January 1.
+- `delayed-result`: fictional result valid January 3–10, 2026, but not knowable until January 5.
 
-At \`K = 2026-01-04, V = 2026-01-04\`, the temporal answer includes \`prior-note\` and withholds \`delayed-result\`. A static union treating every valid fact as knowable includes both, thus leaking the later result into the earlier decision. At \`K = 2026-01-06, V = 2026-01-04\`, both are eligible. At \`V = 2026-01-11\`, both are outside their stated validity intervals. The case demonstrates the distinction between retrospective fact validity and the observer's knowledge.
+At `K = 2026-01-04, V = 2026-01-04`, the temporal answer includes `prior-note` and withholds `delayed-result`. A static union treating every valid fact as knowable includes both, thus leaking the later result into the earlier decision. At `K = 2026-01-06, V = 2026-01-04`, both are eligible. At `V = 2026-01-11`, both are outside their stated validity intervals. The case demonstrates the distinction between retrospective fact validity and the observer's knowledge.
 
 A biomedical adaptation would replace these fictional sources with versioned public ClinicalTrials.gov study-status assertions, or an independently authenticated historical archive carrying date-specific facts. That replacement is **not yet implemented as an authenticated historical-version benchmark**. Registry submission, posting, clinical event, and our retrieval dates would be distinct fields, not inferred from one another.
 
 ### 4. Ontology and semantic interoperability
 
-The companion \`phase1-temporal-ontology.ttl\` is a **reviewable draft ontology excerpt**, not a claim that full biomedical OWL reasoning has been implemented. It includes:
+The companion `phase1-temporal-ontology.ttl` is a **reviewable draft ontology excerpt**, not a claim that full biomedical OWL reasoning has been implemented. It includes:
 
-- \`te:TemporalAssertion\` mapped as an \`rdfs:subClassOf\` \`biolink:InformationContentEntity\`.
-- \`te:validDuring\` linking assertions to \`time:ProperInterval\` with \`time:hasBeginning\` and \`time:hasEnd\`; \`te:knownFrom\` linking to \`time:Instant\`.
-- \`prov:wasDerivedFrom\` and explicitly typed \`prov:Entity\` resources to preserve source identity.
-- \`te:RegistryStatusAssertion\` and literal status data scoped to named, fictional study identifiers.
+- `te:TemporalAssertion` mapped as an `rdfs:subClassOf` `biolink:InformationContentEntity`.
+- `te:validDuring` linking assertions to `time:ProperInterval` with `time:hasBeginning` and `time:hasEnd`; `te:knownFrom` linking to `time:Instant`.
+- `prov:wasDerivedFrom` and explicitly typed `prov:Entity` resources to preserve source identity.
+- `te:RegistryStatusAssertion` and literal status data scoped to named, fictional study identifiers.
 - Machine-readable OWL axioms **beyond subclassing**: qualified exact-cardinality restrictions on a known-from instant and a validity interval, functional source-field properties, property-domain/range constraints, and disjoint evidence-state classes.
 - Explicit annotations explaining that an inferred OWL property does **not** perform arithmetic interval comparisons or establish when a version actually became public.
 
@@ -88,7 +88,7 @@ The proposed bounded reasoning pipeline has five auditable steps:
 
 **Admit.** Apply a source policy. A publicly posted historical-version question requires authentic publication evidence. A frozen archive comparison may use the archive observation bound, but must not claim that bound equals an individual amendment's posting date.
 
-**Query.** For a given \`Q(K,V)\`, select temporally eligible assertions, track excluded later-known assertions, detect declared functional conflicts, and preserve provenance links. Report unresolved historical evidence as unavailable or indeterminate rather than as a reconstructed record.
+**Query.** For a given `Q(K,V)`, select temporally eligible assertions, track excluded later-known assertions, detect declared functional conflicts, and preserve provenance links. Report unresolved historical evidence as unavailable or indeterminate rather than as a reconstructed record.
 
 **Verify.** Independently recompute the expected observation-level answers from pinned source inputs; execute the original generated temporal program, check returned IDs and provenance; inject source mutations and executable semantic mutants to test whether the verifier detects wrong answers. Never treat tests written against the same fixture-generating rule as external clinical ground truth.
 
@@ -110,7 +110,7 @@ These experiments establish local implementability, provenance discipline, and r
 
 **Criterion A — time-respecting correctness.** On a fixed, preregistered collection of synthetically generated observations and independent hand-labeled temporal query answers, report exact match rate; count future-evidence leakage cases and boundary failures; reject any nonzero leakage as a failed test of the stated guard.
 
-**Criterion B — source and version integrity.** For every admitted real version, require a reproducible source locator, verified identity, original response digest, known retrieval time, and independently supported visibility/release timestamp appropriate to the query. Record \`UNAVAILABLE\` or \`INDETERMINATE\` when any required witness is missing.
+**Criterion B — source and version integrity.** For every admitted real version, require a reproducible source locator, verified identity, original response digest, known retrieval time, and independently supported visibility/release timestamp appropriate to the query. Record `UNAVAILABLE` or `INDETERMINATE` when any required witness is missing.
 
 **Criterion C — ontology rigor.** Parse and validate the provided TTL; check OWL restrictions, property domains/ranges, and declared disjoint classes with a separately chosen reasoner. Test deliberately invalid graph examples. Recognize that OWL's open-world semantics do not by themselves detect missing dates or execute interval arithmetic.
 
@@ -132,7 +132,7 @@ We do **not** claim a novel invention of bitemporal databases, standard interval
 
 **Deliverable 1 — this concept/design draft:** a reviewable, not-yet-submitted Phase 1 narrative with an explicit model, a reproducible fictional example, feasibility evidence, source limits, and a real-world test plan.
 
-**Deliverable 2 — \`phase1-temporal-ontology.ttl\`:** a machine-readable OWL/RDF example with selected logical axioms beyond a class hierarchy. It illustrates proposed semantic structure; it is not an official NIH-accepted ontology.
+**Deliverable 2 — `phase1-temporal-ontology.ttl`:** a machine-readable OWL/RDF example with selected logical axioms beyond a class hierarchy. It illustrates proposed semantic structure; it is not an official NIH-accepted ontology.
 
 **Review required before submission:** Verify eligibility and registration; reconcile the exact official challenge documents, page and font requirements, and any later Q&A; validate the ontology in a separate reasoner and inspect its interpretation; independently review correctness and novelty claims; consider competing methods; and obtain informed owner approval concerning the challenge's intellectual-property provisions.
 
