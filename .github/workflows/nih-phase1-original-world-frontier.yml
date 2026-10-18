@@ -1,0 +1,76 @@
+name: NIH Phase 1 actual W13 world temporal frontier
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_phase1_world_frontier.py'
+      - 'systems/workspace/NIH_PHASE1_WORLD_FRONTIER.md'
+      - 'network/tests/test_nih_phase1_world_frontier.py'
+      - '.github/workflows/nih-phase1-original-world-frontier.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_phase1_world_frontier.py'
+      - 'systems/workspace/NIH_PHASE1_WORLD_FRONTIER.md'
+      - 'network/tests/test_nih_phase1_world_frontier.py'
+      - '.github/workflows/nih-phase1-original-world-frontier.yml'
+permissions:
+  contents: read
+jobs:
+  independent-original-world-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install existing original native workstation and actual Chromium dependencies
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Test frontier failures without counting fixtures as live evidence
+        run: python -m unittest -v network.tests.test_nih_phase1_world_frontier
+      - name: Play original twelve-job W13 game and verify bounded Phase 1 frontier
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-phase1-world-frontier"
+          python -m systems.workspace.nih_phase1_world_frontier \
+            --data-dir "$RUNNER_TEMP/nih-phase1-original-workstation" \
+            --output-dir "$RUNNER_TEMP/nih-phase1-world-frontier"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"nih-phase1-world-frontier"
+          r=json.loads((root/"nih-phase1-original-world-frontier.json").read_text())
+          assert r["schema"]=="nih-phase1-original-w13-world-frontier/v1"
+          assert r["original_native_jobs"]==12
+          assert r["original_NIH_P2_BENCHMARK"]=="WITNESSED"
+          assert r["browser_world_solved"] is True
+          assert r["independent_scope_oracle_agreed"] is True
+          assert r["future_evidence_withheld_then_revealed"] is True
+          assert r["fixed_source_knowledge_monotonicity_observed"] is True
+          assert r["actual_world_actions"]>=2
+          assert len(r["browser_frames"])==r["actual_world_actions"]+1
+          assert r["new_actual_python_query_log_entries"]>=len(r["browser_frames"])
+          assert len(r["additional_boundary_queries"])==9
+          assert r["new_native_job_created"] is False
+          assert r["new_NIH_checkpoint_claimed"] is False
+          assert r["historical_publication_time_authenticated"] is False
+          assert r["official_NIH_submission"] is False
+          assert (root/"nih-phase1-frontier-live-world.png").is_file()
+          assert (root/"nih-phase1-frontier-world.html").is_file()
+          assert (root/"game-temporal-query-events.jsonl").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/nih-phase1-world-frontier/original-native-replay.tgz" \
+            -C "$RUNNER_TEMP/nih-phase1-original-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation
+      - name: Preserve actual played-world screenshot, native receipts and original source digests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-phase1-original-world-frontier-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-phase1-world-frontier
+          if-no-files-found: warn
+          retention-days: 30
