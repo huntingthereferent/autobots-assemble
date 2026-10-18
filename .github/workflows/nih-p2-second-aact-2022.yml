@@ -1,0 +1,62 @@
+name: NIH P2 second original dated AACT source inspection
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_aact_second_2022_archive.py'
+      - 'systems/workspace/NIH_P2_AACT_SECOND_2022_BOUNDARY.md'
+      - 'network/tests/test_nih_aact_second_2022_archive.py'
+      - '.github/workflows/nih-p2-second-aact-2022.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_aact_second_2022_archive.py'
+      - 'systems/workspace/NIH_P2_AACT_SECOND_2022_BOUNDARY.md'
+      - 'network/tests/test_nih_aact_second_2022_archive.py'
+      - '.github/workflows/nih-p2-second-aact-2022.yml'
+permissions:
+  contents: read
+jobs:
+  authenticate-second-historical-archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Refute altered archive source bytes and unsupported historical claims
+        run: python -m unittest -v network.tests.test_nih_aact_second_2022_archive
+      - name: Download complete 2022 Zenodo archival source and inspect exact contents
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-second-aact-2022"
+          python -m systems.workspace.nih_aact_second_2022_archive \
+            --output-dir "$RUNNER_TEMP/nih-second-aact-2022"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-second-aact-2022/nih-p2-aact-2022-archive-inspection.json"
+          data=json.loads(p.read_text())
+          assert data["schema"]=="nih-p2-second-aact-2022-archive-inspection/v1"
+          assert data["entire_archive_md5"]=="1d4e6d141f40d300186fdd3d0a5980b1"
+          assert data["entire_archive_bytes"]==236218508
+          assert len(data["entire_archive_sha256"])==64
+          assert len(data["archive_files"])>=1
+          assert data["upstream_stated_dataset_date"]=="2022-11-09"
+          assert data["pairwise_2022_2023_status_comparison_proven"] is False
+          assert data["original_clinicaltrials_per_study_versions_proven"] is False
+          assert data["per_version_original_public_posting_date_proven"] is False
+          assert data["clinical_verdict"]=="NOT_EVALUATED"
+          assert data["original_twelve_job_workstation_modified"] is False
+          assert data["official_NIH_submission"] is False
+          PY
+      - name: Archive only independently hashed source manifest and bounded selected rows
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-second-aact-2022-inspection-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-second-aact-2022/
+          retention-days: 30
+          if-no-files-found: warn
