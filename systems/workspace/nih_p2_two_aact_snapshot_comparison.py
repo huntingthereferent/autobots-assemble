@@ -71,7 +71,7 @@ def compare(old_report, new_source):
             "study_last_update_posted_as_recorded_2022": d22,
             "study_last_update_posted_as_recorded_2023": d23,
             "recorded_last_update_posted_value_equal": d22 == d23,
-            "status_transition_between_snapshots_demonstrated": val_2022 != val_2023,
+            "status_value_difference_between_exports": val_2022 != val_2023,
             "any_intervening_status_revisions_excluded": False,
             "exact_date_of_intervening_change_proven": False,
             "actual_clinical_event_time_proven": False,
