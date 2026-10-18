@@ -1,0 +1,34 @@
+name: ARC3 F3 original probes on other native games
+
+on:
+  push:
+    paths:
+      - "work/arc3/native_f3_other_games.py"
+      - ".github/workflows/arc3-f3-native-other-games.yml"
+  pull_request:
+    paths:
+      - "work/arc3/native_f3_other_games.py"
+      - ".github/workflows/arc3-f3-native-other-games.yml"
+  workflow_dispatch:
+
+jobs:
+  f3-native-other-games:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Official native ARC dependency
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Original F3 rooted equalities versus native FT09 and SK48
+        run: python -m work.arc3.native_f3_other_games --out runtime/data/arc3/f3-new-native-games.json
+      - name: Keep real native frames and exact source-witness comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: arc3-f3-other-native-games
+          path: runtime/data/arc3/f3-new-native-games.*
+          if-no-files-found: error
+          retention-days: 14
