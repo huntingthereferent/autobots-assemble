@@ -218,11 +218,274 @@
       "line": 59
     }
   ],
+  "movements": [
+    {
+      "id": "heading:design/visual-provenance/README.md#L11",
+      "path": "design/visual-provenance/README.md",
+      "line": 11,
+      "title": "Movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:identity/README.md#L65",
+      "path": "identity/README.md",
+      "line": 65,
+      "title": "Movement boundary",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md#L99",
+      "path": "money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md",
+      "line": 99,
+      "title": "Next movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:protocols/TEMPLATE.md#L23",
+      "path": "protocols/TEMPLATE.md",
+      "line": 23,
+      "title": "Movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:protocols/ai/purge.md#L30",
+      "path": "protocols/ai/purge.md",
+      "line": 30,
+      "title": "Movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:protocols/core/referent.md#L17",
+      "path": "protocols/core/referent.md",
+      "line": 17,
+      "title": "Movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:protocols/domain/sports-betting-decision.md#L131",
+      "path": "protocols/domain/sports-betting-decision.md",
+      "line": 131,
+      "title": "Movement boundary",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:protocols/open_source/contribution.md#L29",
+      "path": "protocols/open_source/contribution.md",
+      "line": 29,
+      "title": "Movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:protocols/research/dive.md#L33",
+      "path": "protocols/research/dive.md",
+      "line": 33,
+      "title": "Movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:research/dives/ARC3-TRACE-001/ARC3_SWALLOWED.md#L227",
+      "path": "research/dives/ARC3-TRACE-001/ARC3_SWALLOWED.md",
+      "line": 227,
+      "title": "Next movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:research/dives/ARC3-TRACE-001/DIVE.md#L134",
+      "path": "research/dives/ARC3-TRACE-001/DIVE.md",
+      "line": 134,
+      "title": "Next movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "structured:research/dives/ARC3-TRACE-001/dive.json",
+      "path": "research/dives/ARC3-TRACE-001/dive.json",
+      "line": null,
+      "title": "ARC-AGI-3 causal reasoning trace",
+      "state": "MOVE_WITH_WALL",
+      "evidence": "structured-source-state",
+      "boundary": "",
+      "next": "Freeze the evidence-gated G2.3 typed-program mechanism (SB26 public regression 8/8, 124 actions). Move to the next unsolved public failure and infer its task representation from live causal evidence; do not widen SB26-specific assumptions."
+    },
+    {
+      "id": "heading:research/dives/ARC3-TRACE-001/runs/G2_SB26_FULL_SOLVE_2026-10-04.md#L23",
+      "path": "research/dives/ARC3-TRACE-001/runs/G2_SB26_FULL_SOLVE_2026-10-04.md",
+      "line": 23,
+      "title": "Movement from G0.1",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:research/dives/ARC3-TRACE-001/runs/G2_SB26_FULL_SOLVE_2026-10-04.md#L123",
+      "path": "research/dives/ARC3-TRACE-001/runs/G2_SB26_FULL_SOLVE_2026-10-04.md",
+      "line": 123,
+      "title": "Next movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:state/coupling-entry-verification.md#L28",
+      "path": "state/coupling-entry-verification.md",
+      "line": 28,
+      "title": "Movement and artifacts",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "structured:state/current.json",
+      "path": "state/current.json",
+      "line": null,
+      "title": "Continuity → Dense Live Feed / Clean Source Projection",
+      "state": "MOVE",
+      "evidence": "structured-source-state",
+      "boundary": "Historical non-current pointer; 'walls' are preserved guardrails",
+      "next": "Test shared-event movement across the remaining live providers without merging source claims. Preserve each witness separately while asking whether multiple BBC/Reuters/Reddit/Hacker News items point to the same current referent."
+    },
+    {
+      "id": "structured:state/pins/GEMS-001_2026-10-03.json",
+      "path": "state/pins/GEMS-001_2026-10-03.json",
+      "line": null,
+      "title": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
+      "state": "MOVE_WITH_WALL",
+      "evidence": "structured-source-state",
+      "boundary": "User explicitly pinned the active GEMS work before moving the current referent to a separate impressive tracing target.",
+      "next": "Verify the exact GEMS-specific competition-data sharing/third-party-service rule; then run the local baseline through the downloaded-data/output contract before changing models."
+    },
+    {
+      "id": "heading:state/session-continuity-verification.md#L7",
+      "path": "state/session-continuity-verification.md",
+      "line": 7,
+      "title": "Movement and witnesses",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/calendar/README.md#L32",
+      "path": "systems/calendar/README.md",
+      "line": 32,
+      "title": "Movement anchors",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/personal_operations/README.md#L21",
+      "path": "systems/personal_operations/README.md",
+      "line": 21,
+      "title": "Movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/workspace/BUILD_W13_BROWSER_RECEIPT.md#L84",
+      "path": "systems/workspace/BUILD_W13_BROWSER_RECEIPT.md",
+      "line": 84,
+      "title": "Next single movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/workspace/WITNESS_W13_INDEPENDENT_VERDICT.md#L106",
+      "path": "systems/workspace/WITNESS_W13_INDEPENDENT_VERDICT.md",
+      "line": 106,
+      "title": "NEXT SINGLE MOVEMENT — COORDINATOR",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/workspace/WORKSTATION_CONTINUATION_B2.md#L94",
+      "path": "systems/workspace/WORKSTATION_CONTINUATION_B2.md",
+      "line": 94,
+      "title": "Next single movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/workspace/WORKSTATION_NATIVE_FEEDBACK_B3.md#L73",
+      "path": "systems/workspace/WORKSTATION_NATIVE_FEEDBACK_B3.md",
+      "line": 73,
+      "title": "Next movement",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/workspace/WORLD_W13_MOVEMENT_01.md#L1",
+      "path": "systems/workspace/WORLD_W13_MOVEMENT_01.md",
+      "line": 1,
+      "title": "WORLD W13 — Movement 1: an explicit two-world continuation",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    },
+    {
+      "id": "heading:systems/workspace/WORLD_W13_MOVEMENT_01.md#L176",
+      "path": "systems/workspace/WORLD_W13_MOVEMENT_01.md",
+      "line": 176,
+      "title": "NEXT SINGLE MOVEMENT / COORDINATOR HANDOFF",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
+    }
+  ],
   "source_totals": {
-    "source_files": 1397,
+    "source_files": 1396,
     "structured_records": 14,
     "original_wall_entries": 4,
-    "documented_wall_headings": 12
+    "documented_wall_headings": 12,
+    "documented_movement_headings": 23
   },
   "boundary": "Research entries are source-owned states; the browser's event roots and ancestry must come from GitHub directly. Presence in one display does not establish a causal relationship."
 }
