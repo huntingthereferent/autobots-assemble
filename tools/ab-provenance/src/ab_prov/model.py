@@ -116,12 +116,13 @@ def build_graph(links: list, traces: list, journal_rows: list,
         return identity
 
     def edge(identity, start, end, relation, *, scope, evidence=None, boundaries=None,
-             invalidated=None, state="reported"):
+             invalidated=None, survived=None, details=None, state="reported"):
         edges.append({"id": _id(identity, "edge ID"), "from": start, "to": end,
                       "relation": _text(relation, "relation"), "scope": scope,
                       "evidence_refs": list(evidence or []),
                       "boundaries": list(boundaries or []),
-                      "invalidated": list(invalidated or []), "state": state})
+                      "invalidated": list(invalidated or []), "survived": list(survived or []),
+                      "details": dict(details or {}), "state": state})
 
     for raw in links:
         if not isinstance(raw, dict) or type(raw.get("schema_version")) is not int or raw["schema_version"] != 1:
@@ -141,7 +142,7 @@ def build_graph(links: list, traces: list, journal_rows: list,
             ends.append(node(key, ref, "referent", layer + ":" + ref))
         evidence, invalidated = _str_array(raw, "evidence_refs"), _str_array(raw, "invalidated")
         boundaries = _str_array(raw, "boundaries")
-        _str_array(raw, "survived")
+        survived = _str_array(raw, "survived")
         state = "contested" if invalidated else ("referenced" if evidence else "unresolved")
         if not evidence:
             warnings.append("link " + ident + " contains no evidence references")
@@ -149,7 +150,9 @@ def build_graph(links: list, traces: list, journal_rows: list,
             warnings.append("link " + ident + " includes invalidated relations: " + ", ".join(invalidated))
         edge("prov:" + ident, *ends, _text(raw.get("relation"), "relation"),
              scope="provenance", evidence=evidence, boundaries=boundaries,
-             invalidated=invalidated, state=state)
+             invalidated=invalidated, survived=survived,
+             details={"transformation": raw.get("transformation", ""),
+                      "observed_at": raw.get("observed_at", "")}, state=state)
 
     for raw in traces:
         if not isinstance(raw, dict) or type(raw.get("schema_version")) is not int or raw["schema_version"] != 1:
@@ -176,6 +179,8 @@ def build_graph(links: list, traces: list, journal_rows: list,
             warnings.append("trace " + ident + " has an unresolved continuation or boundary")
         edge("trace:" + ident, start, target, _text(raw.get("relation"), "relation"),
              scope="trace", evidence=evidence, boundaries=unresolved,
+             details={"touched_at": raw["touched_at"], "surface_kind": raw["surface_kind"],
+                      "locator": raw["locator"], "what_changed": raw.get("what_changed", "")},
              state="unresolved" if after is None or unresolved else "reported")
 
     for num, raw in enumerate(journal_rows, 1):
@@ -228,6 +233,11 @@ def build_graph(links: list, traces: list, journal_rows: list,
                      state="referenced")
             else:
                 warnings.append("event " + event_id + " reported evidence without a source reference")
+    for h in sorted({e["from"][len("handoff:"):] for e in edges
+                     if e["id"].startswith("event-of:") and e["from"].startswith("handoff:")}
+                    - seen_handoffs):
+        node("handoff:" + h, "Missing submission " + h, "unresolved")
+        warnings.append("event references handoff absent from supplied journal: " + h)
     for parent, child in pending_parents:
         if parent not in seen_events:
             warnings.append("event " + child + " points to absent parent " + parent)
