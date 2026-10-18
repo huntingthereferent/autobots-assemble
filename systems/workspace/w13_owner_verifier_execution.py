@@ -118,11 +118,11 @@ RETENTION_REQUEST = "systems/workspace/native_retention_requests/w13/verified-ch
 
 
 def authenticate_retention_request(repo_root: Path, owner_merge_sha: str,
-                                   public_key_b64: str) -> dict:
-    """A NEW owner-merged request permits one future child and LOCAL sealing.
+                                   public_key_b64: str, *, artifact_retention_days: int | None = None) -> dict:
+    """A NEW owner-merged request permits one future child and bounded sealing.
 
     The invoking workflow must additionally authenticate owner, push and main.
-    No artifact storage or transfer is authorized by this local-only contract.
+    Artifact retention requires the separate exact one-day GitHub contract.
     """
     from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X25519PublicKey
     root = Path(repo_root).resolve()
@@ -147,6 +147,8 @@ def authenticate_retention_request(repo_root: Path, owner_merge_sha: str,
     if (not path.is_file() or path.is_symlink() or path.stat().st_size > 8192
             or _git_blob(path) != _git(root, "rev-parse", owner_merge_sha + ":" + RETENTION_REQUEST)):
         raise ValueError("retention request missing, changed or unsafe")
+    if artifact_retention_days is not None and (type(artifact_retention_days) is not int or artifact_retention_days != 1):
+        raise ValueError("encrypted GitHub artifact retention must be exactly one day")
     expected = {
         "contract": "owner-w13-future-child-local-encrypted-retention/v1",
         "execution": EXPECTED_REQUEST,
@@ -155,6 +157,12 @@ def authenticate_retention_request(repo_root: Path, owner_merge_sha: str,
         "authorizes_artifact_upload": False,
         "authorizes_raw_journal_export": False,
     }
+    if artifact_retention_days is not None:
+        expected.update({"contract":"owner-w13-future-child-encrypted-github-retention/v1",
+            "authorizes_artifact_upload":True,
+            "storage":"github-actions-encrypted-capsule-only",
+            "retention_days":1,
+            "authorizes_separate_run_restore":True})
     if _object(path) != expected:
         raise ValueError("retention permission or recipient differs from exact request")
     for rel, expected_blob in ((WORKER_PATH, VERIFIER_WORKER_BLOB),
@@ -168,14 +176,17 @@ def authenticate_retention_request(repo_root: Path, owner_merge_sha: str,
 def execute_exact_authorized_child(*, artifact_dir: Path, source_binding: Path,
                                    repo_root: Path, owner_merge_sha: str,
                                    recipient_public_key_b64: str | None = None,
-                                   encrypted_output: Path | None = None) -> dict:
+                                   encrypted_output: Path | None = None,
+                                   artifact_retention_days: int | None = None) -> dict:
     """One temporary original journal, ONE new existing native worker, no raw export."""
     root=Path(repo_root).resolve()
-    retaining = recipient_public_key_b64 is not None or encrypted_output is not None
+    retaining = (recipient_public_key_b64 is not None or encrypted_output is not None
+                 or artifact_retention_days is not None)
     if retaining:
         if recipient_public_key_b64 is None or encrypted_output is None:
             raise ValueError("retention requires BOTH explicit recipient and capsule destination")
-        authenticate_retention_request(root, owner_merge_sha, recipient_public_key_b64)
+        authenticate_retention_request(root, owner_merge_sha, recipient_public_key_b64,
+            artifact_retention_days=artifact_retention_days)
         output = Path(encrypted_output)
         if (output.exists() or output.is_symlink() or not output.parent.is_dir()
                 or output.resolve().is_relative_to(root)):
@@ -287,10 +298,21 @@ def main(argv=None):
     p.add_argument("--source-binding",required=True,type=Path)
     p.add_argument("--repo-root",required=True,type=Path)
     p.add_argument("--owner-merge-sha",required=True)
+    p.add_argument("--recipient-public-key-file",type=Path)
+    p.add_argument("--encrypted-output",type=Path)
+    p.add_argument("--artifact-retention-days",type=int)
     a=p.parse_args(argv)
+    public_key = None
+    if a.recipient_public_key_file is not None:
+        f = a.recipient_public_key_file
+        if f.is_symlink() or not f.is_file() or f.stat().st_size > 128:
+            raise ValueError("explicit small recipient public-key file required")
+        public_key = f.read_text("ascii").strip()
     print(json.dumps(execute_exact_authorized_child(
         artifact_dir=a.artifact_dir,source_binding=a.source_binding,
-        repo_root=a.repo_root,owner_merge_sha=a.owner_merge_sha),
+        repo_root=a.repo_root,owner_merge_sha=a.owner_merge_sha,
+        recipient_public_key_b64=public_key,encrypted_output=a.encrypted_output,
+        artifact_retention_days=a.artifact_retention_days),
         indent=2,sort_keys=True))
 
 

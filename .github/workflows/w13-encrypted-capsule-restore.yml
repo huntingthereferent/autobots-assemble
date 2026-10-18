@@ -1,0 +1,83 @@
+name: owner-w13-encrypted-capsule-restore
+on:
+  workflow_run:
+    workflows: [owner-w13-encrypted-capsule-producer]
+    types: [completed]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  restore-and-reverify:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.actor.login == github.repository_owner &&
+      github.event.workflow_run.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8'
+      - name: Recheck exact owner execution request
+        env:
+          OWNER_COMMIT: ${{ github.event.workflow_run.head_sha }}
+          PUBLIC_KEY: ${{ vars.W13_CAPSULE_PUBLIC_KEY_B64 }}
+        run: |
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from systems.workspace.w13_owner_verifier_execution import authenticate_retention_request
+          authenticate_retention_request(Path.cwd(),os.environ['OWNER_COMMIT'],
+              os.environ['PUBLIC_KEY'].strip(),artifact_retention_days=1)
+          PY
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: ${{ github.event.workflow_run.id }}
+          name: w13-encrypted-${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/sealed-input
+      - name: Independently restore and freshly reverify native results
+        env:
+          PRIVATE_KEY_B64: ${{ secrets.W13_CAPSULE_PRIVATE_KEY_B64 }}
+          PUBLIC_KEY: ${{ vars.W13_CAPSULE_PUBLIC_KEY_B64 }}
+          OWNER_COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          python - <<'PY'
+          import base64,json,os
+          from hashlib import sha256
+          from pathlib import Path
+          from cryptography.hazmat.primitives import serialization
+          from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+          from systems.workspace.owner_native_evidence_vault import restore_verified
+          root=Path(os.environ['RUNNER_TEMP'])
+          private=base64.b64decode(os.environ['PRIVATE_KEY_B64'],validate=True)
+          public=X25519PrivateKey.from_private_bytes(private).public_key().public_bytes(
+              serialization.Encoding.Raw,serialization.PublicFormat.Raw)
+          if public != base64.b64decode(os.environ['PUBLIC_KEY'].strip(),validate=True):
+              raise SystemExit('configured recipient key pair differs')
+          capsule=root/'sealed-input'/'continuation.enc'
+          receipt=json.loads((root/'sealed-input'/'receipt.json').read_text())
+          sealed=receipt['encrypted_retention']
+          if (sealed['sealed_sha256'] != sha256(capsule.read_bytes()).hexdigest()
+              or receipt['owner_authorization_commit'] != os.environ['OWNER_COMMIT']
+              or sealed['owner_execution_commit'] != os.environ['OWNER_COMMIT']
+              or sealed['child_event'] != receipt['child_result_event_id']):
+              raise SystemExit('encrypted source receipt differs')
+          result=restore_verified(encrypted=capsule,private_key_raw=private,
+              destination=root/'restored-native',
+              expected_owner_execution_commit=os.environ['OWNER_COMMIT'],
+              expected_child_event=sealed['child_event'])
+          print(json.dumps(result,sort_keys=True))
+          PY
+      - name: Remove restored plaintext and capsule
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/restored-native" "$RUNNER_TEMP/sealed-input"
