@@ -36,10 +36,22 @@ jobs:
         run: |
           python -m pip install ./tools/ab-provenance "jsonschema>=4.21"
           python -m unittest discover -s tools/ab-provenance/tests -v
+      - name: Freeze original REA native results before any A/B source change
+        run: |
+          python tools/ab-provenance/comparison/paired_reference.py baseline \
+            --rea "$GITHUB_WORKSPACE/experiments/rea-swallow/upstream" \
+            --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/original"
       - name: Construct actual REA source editions and test native TypeScript
         run: |
           ab source
           ab swallow --allow-source-edit --repo-root "$GITHUB_WORKSPACE" --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass"
+      - name: Compare unchanged original REA cases with A/B-corrected source
+        run: |
+          python tools/ab-provenance/comparison/paired_reference.py compare \
+            --rea "$GITHUB_WORKSPACE/experiments/rea-swallow/upstream" \
+            --ab-tool "$GITHUB_WORKSPACE/tools/ab-provenance" \
+            --baseline "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/original" \
+            --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass/comparison"
       - name: Inspect actual source-lineage and produce HTML evidence
         run: |
           ab inspect runtime/data/ab-source-tool/first-pass/source-provenance.json --graph > runtime/data/ab-source-tool/first-pass/graph.json
@@ -66,6 +78,7 @@ jobs:
           name: ab-swallowed-real-rea-source-and-visual
           path: |
             runtime/data/ab-source-tool/first-pass/*
+            runtime/data/ab-source-tool/original/*
             runtime/data/ab-source-tool/shipped-0.1.0/*
           retention-days: 14
           if-no-files-found: warn
