@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import os
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
@@ -127,8 +128,9 @@ class Phase1WorldFrontierTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 check_sequence(fake,expected_cutover=2)
 
-    @unittest.skipUnless(importlib.util.find_spec("playwright") is not None,
-                         "real independent browser run belongs to dedicated CI workflow")
+    @unittest.skipUnless(importlib.util.find_spec("playwright") is not None and
+                         os.environ.get("RUN_PHASE1_WORLD_INTEGRATION") == "1",
+                         "real independent browser run is opt-in and runs once in dedicated CI")
     def test_05_replay_original_twelve_with_actual_world_movement(self):
         with TemporaryDirectory() as td:
             root=Path(td)
