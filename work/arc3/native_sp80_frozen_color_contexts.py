@@ -280,8 +280,50 @@ def main():
                 "exact_mask_comparisons":sum(x["exact_mask"] for x in rows),
             }
         return scores
+    def action4_residuals(model):
+        rows=[
+            (p,e,m)
+            for p in pair_results for e in p["effects"]
+            if e["native_action"]==4
+            for m in e["model_comparisons"] if m["rule"]==model
+        ]
+        misses=Counter()
+        clips=Counter()
+        missing_colors=Counter()
+        all_nonpredicted=[]
+        for p,e,m in rows:
+            for item in m["sample_unpredicted_target_pixels"]:
+                x,y=item["xy"];a,b=item["native_from_to"]
+                misses[(x,y,a,b)]+=1
+                missing_colors[(a,b)]+=1
+                all_nonpredicted.append({
+                    "word":p["word"],"reset":p["reset"],
+                    "step":e["position_in_word"],
+                    "xy":[x,y],"native_color_change":[a,b],
+                })
+            for item in m["sample_clipped_source_pixels"]:
+                x,y=item["source_xy"];a,b=item["native_from_to"]
+                clips[(x,y,a,b)]+=1
+        return {
+            "native_action4_events":len(rows),
+            "all_unpredicted_targets":all_nonpredicted,
+            "unpredicted_native_color_pair_counts":[
+                {"from":int(a),"to":int(b),"occurrences":int(n)}
+                for (a,b),n in sorted(missing_colors.items())],
+            "unpredicted_target_xy_native_color_frequency":[
+                {"xy":[int(x),int(y)],
+                 "from":int(a),"to":int(b),"occurrences":int(n)}
+                for (x,y,a,b),n in sorted(misses.items())],
+            "clipped_source_xy_native_color_frequency":[
+                {"xy":[int(x),int(y)],
+                 "from":int(a),"to":int(b),"occurrences":int(n)}
+                for (x,y,a,b),n in sorted(clips.items())],
+        }
+
     outcome={
         "kind":"SP80_FROZEN_SPATIAL_MODELS_NATIVE_COLOR_TRANSITIONS_NEW_CONTEXTS",
+        "action4_residuals_translation_only":action4_residuals("translation_only"),
+        "action4_residuals_reflection":action4_residuals("reflection_plus_shift"),
         "game":GAME,"source":"official native arc-agi Arcade NORMAL",
         "math_context":"original Window48 48 F3 laws; no native action correspondence",
         "prior_experiment":"WINDOW48_SP80_HELDOUT_GEOMETRY_2026-10-18.md",
@@ -318,6 +360,10 @@ def main():
         "pair_count":len(pair_results),
         "action4":outcome["action4_new_context_aggregates"],
         "action5_control":outcome["action5_negative_control_aggregates"],
+        "action4_residuals_translation_only":
+            outcome["action4_residuals_translation_only"],
+        "action4_residuals_reflection":
+            outcome["action4_residuals_reflection"],
         "incomplete_pairs":[{"word":r["word"],"replicate":r["reset"],
                              "level0_status":r["level0_status"],
                              "level1_status":r["level1_status"]}
