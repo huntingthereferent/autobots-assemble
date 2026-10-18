@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-17T18:47:12.112821+00:00",
-  "content_sha256": "125b4baa329f0e52d3fa46edab54e6e61f9fb3567fd3aa5c8a97e34877612b4c",
+  "checked_at": "2026-10-18T01:00:01.816406+00:00",
+  "content_sha256": "7f6b82f508cb9958f82d9b01b1778b11c133ab27dae13160bf93d99f3d385c93",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 5,
-      "max_magnitude": 2.05,
+      "count": 7,
+      "max_magnitude": 2.5,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,103 +22,137 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "ci41348591",
-        "observed_at": "2026-10-17T18:47:11.815416Z",
-        "source_updated_at": "2026-10-17T18:01:54.700000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41348591",
+        "source_id": "aka2026upqxpc",
+        "observed_at": "2026-10-18T01:00:01.451509Z",
+        "source_updated_at": "2026-10-18T00:25:00.783000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026upqxpc",
         "entity_type": "event",
-        "canonical_key": "event:ci41348591",
+        "canonical_key": "event:aka2026upqxpc",
         "payload": {
-          "magnitude": 1.31,
-          "place": "26 km ESE of Campo, CA",
-          "longitude": -116.210333333333,
-          "latitude": 32.5141666666667,
-          "depth_km": 15.2,
-          "occurred_at": "2026-10-17T17:58:34.650000+00:00"
+          "magnitude": 2.5,
+          "place": "55 km E of Pedro Bay, Alaska",
+          "longitude": -153.134,
+          "latitude": 59.881,
+          "depth_km": 135.5,
+          "occurred_at": "2026-10-18T00:20:20.074000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "hv75059731",
-        "observed_at": "2026-10-17T18:47:11.815416Z",
-        "source_updated_at": "2026-10-17T18:37:22.160000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059731",
+        "source_id": "aka2026uprtwb",
+        "observed_at": "2026-10-18T01:00:01.451509Z",
+        "source_updated_at": "2026-10-18T00:43:50.233000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uprtwb",
         "entity_type": "event",
-        "canonical_key": "event:hv75059731",
+        "canonical_key": "event:aka2026uprtwb",
         "payload": {
-          "magnitude": 1.04,
-          "place": "5 km SSW of Volcano, Hawaii",
-          "longitude": -155.2605,
-          "latitude": 19.3978333333333,
-          "depth_km": 2.0,
-          "occurred_at": "2026-10-17T17:47:30.720000+00:00"
+          "magnitude": 1.6,
+          "place": "14 km NW of Susitna, Alaska",
+          "longitude": -150.717,
+          "latitude": 61.624,
+          "depth_km": 15.1,
+          "occurred_at": "2026-10-18T00:42:42.964000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "hv75059746",
-        "observed_at": "2026-10-17T18:47:11.815416Z",
-        "source_updated_at": "2026-10-17T18:29:28.230000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75059746",
+        "source_id": "ci41348671",
+        "observed_at": "2026-10-18T01:00:01.451509Z",
+        "source_updated_at": "2026-10-18T00:17:48.640000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41348671",
         "entity_type": "event",
-        "canonical_key": "event:hv75059746",
+        "canonical_key": "event:ci41348671",
         "payload": {
-          "magnitude": 1.86,
-          "place": "28 km ESE of Naalehu, Hawaii",
-          "longitude": -155.345504760742,
-          "latitude": 18.9406661987305,
-          "depth_km": 13.9099998474121,
-          "occurred_at": "2026-10-17T18:26:01.060000+00:00"
+          "magnitude": 1.34,
+          "place": "26 km SW of Maricopa, CA",
+          "longitude": -119.608333333333,
+          "latitude": 34.9003333333333,
+          "depth_km": 8.64,
+          "occurred_at": "2026-10-18T00:06:54.580000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "nc75451071",
-        "observed_at": "2026-10-17T18:47:11.815416Z",
-        "source_updated_at": "2026-10-17T18:24:04.450000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75451071",
+        "source_id": "ci41348679",
+        "observed_at": "2026-10-18T01:00:01.451509Z",
+        "source_updated_at": "2026-10-18T00:19:53.570000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41348679",
         "entity_type": "event",
-        "canonical_key": "event:nc75451071",
+        "canonical_key": "event:ci41348679",
         "payload": {
-          "magnitude": 1.29,
-          "place": "3 km SE of The Geysers, CA",
-          "longitude": -122.734336853027,
-          "latitude": 38.753833770752,
-          "depth_km": 1.72000002861023,
-          "occurred_at": "2026-10-17T18:22:29.290000+00:00"
+          "magnitude": 1.47,
+          "place": "16 km WSW of Olancha, CA",
+          "longitude": -118.168833333333,
+          "latitude": 36.2176666666667,
+          "depth_km": 5.99,
+          "occurred_at": "2026-10-18T00:08:57.580000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "pr71537058",
-        "observed_at": "2026-10-17T18:47:11.815416Z",
-        "source_updated_at": "2026-10-17T18:31:13.490000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71537058",
+        "source_id": "ci41348687",
+        "observed_at": "2026-10-18T01:00:01.451509Z",
+        "source_updated_at": "2026-10-18T00:38:17.037000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41348687",
         "entity_type": "event",
-        "canonical_key": "event:pr71537058",
+        "canonical_key": "event:ci41348687",
         "payload": {
-          "magnitude": 2.05,
-          "place": "1 km WSW of Guánica, Puerto Rico",
-          "longitude": -66.918,
-          "latitude": 17.9693333333333,
-          "depth_km": 5.8,
-          "occurred_at": "2026-10-17T17:57:18.480000+00:00"
+          "magnitude": 1.73,
+          "place": "10 km E of Puebla, B.C., MX",
+          "longitude": -115.2505,
+          "latitude": 32.5493333333333,
+          "depth_km": 21.51,
+          "occurred_at": "2026-10-18T00:34:52.300000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "nc75451326",
+        "observed_at": "2026-10-18T01:00:01.451509Z",
+        "source_updated_at": "2026-10-18T00:42:21.309000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75451326",
+        "entity_type": "event",
+        "canonical_key": "event:nc75451326",
+        "payload": {
+          "magnitude": 1.18,
+          "place": "16 km NW of Pinnacles, CA",
+          "longitude": -121.258499145508,
+          "latitude": 36.6411666870117,
+          "depth_km": 6.19000005722046,
+          "occurred_at": "2026-10-18T00:23:47.060000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "nc75451331",
+        "observed_at": "2026-10-18T01:00:01.451509Z",
+        "source_updated_at": "2026-10-18T00:33:39.293000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75451331",
+        "entity_type": "event",
+        "canonical_key": "event:nc75451331",
+        "payload": {
+          "magnitude": 0.81,
+          "place": "7 km NW of The Geysers, CA",
+          "longitude": -122.813331604004,
+          "latitude": 38.8251647949219,
+          "depth_km": 1.86000001430511,
+          "occurred_at": "2026-10-18T00:32:05.130000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-17T18:47:11.903701Z",
-      "source_updated_at": "2026-10-17T17:05:14Z",
+      "observed_at": "2026-10-18T01:00:01.592284Z",
+      "source_updated_at": "2026-10-17T21:03:54Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54472,
-        "forks_count": 13114,
+        "stargazers_count": 54476,
+        "forks_count": 13116,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -127,7 +161,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-17T18:47:12.098867Z",
+      "observed_at": "2026-10-18T01:00:01.781283Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -149,7 +183,8 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count"
+        "forks_count",
+        "stargazers_count"
       ]
     },
     "pypi": {
