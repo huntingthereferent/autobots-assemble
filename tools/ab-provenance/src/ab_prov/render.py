@@ -9,7 +9,7 @@ import json
 _HTML = r"""<!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="utf-8">\n<meta name="visual-template" content="ab_provenance_graph_v1">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>A/B · Relational Provenance</title>
 <style>
