@@ -78,7 +78,7 @@ class WorkInvestigationPageTests(unittest.TestCase):
     def test_revision_match_rejects_noncausal_and_lookalike_sources(self):
         import re
         page=WORK.read_text(encoding="utf-8")
-        fn=re.search(r"  function sourceRevisionMatches\\(files,movements,records\\)\\{.*?\\n  \\}",page,re.S)
+        fn=re.search(r"  function sourceRevisionMatches\(files,movements,records\)\{.*?\n  \}",page,re.S)
         self.assertIsNotNone(fn,"exact-source-match function must remain separately testable")
         script=fn.group(0)+"""
 const assert=require("node:assert/strict");
