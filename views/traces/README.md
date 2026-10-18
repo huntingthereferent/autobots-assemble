@@ -36,3 +36,27 @@ All future trace adapters need native source identities, units, observed vs mode
 This is neither a similarity-ranking model nor a rule that any real-world domain must have a leader. Stocks, gambling, solar observations and networks must each supply a meaningful native definition of their directed relation before applying it. The [finite A/B confluence renderer](../motion/convergence.py) demonstrates a narrower, independently checked mathematical path meeting; that is not yet a global one-followed-by-everything result.
 
 Reproduce focus tests: `python -m unittest -v views.traces.test_convergence_focus`.
+
+## GitHub execution revisions on the Work page
+
+The [Work page](../../docs/live/work.html) reads a selected GitHub Actions run's exact
+`head_sha` and the changed-file list of that Git commit. It compares exact filenames
+against currently published structured research paths and movement-heading locators.
+A match establishes only **source-path overlap at an observed revision**. The panel
+links to the immutable commit and the file at that SHA. The GitHub changed-file list
+may be paginated; the interface labels its first-page limit.
+
+The existing GitHub run details separately report workflow jobs and steps.
+Neither a matching path nor a successful workflow is a verified native workstation
+movement, and there is no inferred cause/effect relation between a source heading
+and the workflow. Native `RuntimeJournal` / `HandoffRuntime` receipts are not
+automatically public. A future native receipt link requires an explicitly admitted,
+redacted publication source with exact handoff/event identity and an independent
+native verifier; never backfill the link from names, nearby timestamps or folder
+similarity. No private journal is read or uploaded by this page.
+
+Reproduce the exact-match and negative-link checks:
+
+```sh
+python -m unittest -v network.tests.test_work_activity_ui
+```

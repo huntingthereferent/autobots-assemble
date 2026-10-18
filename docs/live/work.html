@@ -215,11 +215,11 @@ footer {
 <body>
 <header>
   <strong>HUNTING THE REFERENT <span style="color:#7e9bab">/ WORK</span></strong>
-  <nav><a href="#executions">EXECUTIONS</a><a href="#research">RESEARCH</a><a href="trace.html">PROVENANCE</a><a href="https://github.com/huntingthereferent/autobots-assemble">GITHUB</a></nav>
+  <nav><a href="#executions">EXECUTIONS</a><a href="#research">RESEARCH</a><a href="trace.html">TRACE</a><a href="https://github.com/huntingthereferent/autobots-assemble">GITHUB</a></nav>
 </header>
 <main>
 <section aria-labelledby="title">
-  <p class="eyebrow">Workstation / Source records</p>
+  <p class="eyebrow">GitHub / Workstation</p>
   <h1 id="title">Workstation</h1>
   <p class="intro">Execution data is read from GitHub Actions. Research records come from the repository’s committed workstation projection. Workflow status and research outcomes are separate.</p>
   <div class="status-line" role="status"><span class="indicator" id="live-dot"></span><strong id="feed-state">Reading current executions</strong><span id="last-read"></span><button id="check-now" type="button">Refresh source</button></div>
@@ -239,6 +239,11 @@ footer {
     <div class="pane"><header><strong>Runs</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div></div>
     <div class="pane"><header><strong>Run details</strong><small id="details-scope">Choose a source run</small></header><div id="detail" class="pane-content"><p class="no-source">Select an observed workflow to inspect its saved jobs, steps, SHA, and result. No work will be launched from this screen.</p></div></div>
   </div>
+  <div class="pane" style="margin-top:16px" aria-labelledby="revision-title">
+    <header><strong id="revision-title">Source revision for selected run</strong><small id="revision-scope">Select a run</small></header>
+    <div id="revision-evidence" class="record-list"><p class="no-source">GitHub commit evidence loads after selecting a workflow execution.</p></div>
+  </div>
+  <p class="fine">This comparison uses the run's exact GitHub head SHA and filenames changed in that commit. A shared file path establishes a source-revision overlap, not that the workflow executed the research, witnessed a native workstation movement, or caused the recorded outcome.</p>
 </section>
 <section id="research" aria-labelledby="research-title">
   <div class="section-top"><div><p class="eyebrow">02 / Source records</p><h2 id="research-title">Research records</h2><p class="subtitle">Investigations, movements, and unresolved conditions with source references.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
@@ -264,7 +269,7 @@ footer {
   const SOURCE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/research-live.json";
   const PERIOD=180000;
   const $=id=>document.getElementById(id);
-  const app={runs:[],selection:null,jobCache:new Map(),research:null,reading:false,checked:null};
+  const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,checked:null};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
@@ -278,7 +283,7 @@ footer {
       typeof r.name==="string"&&["queued","waiting","pending","in_progress","completed"].includes(r.status))
       .slice(0,50).map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
         conclusion:r.conclusion||null,url:r.html_url,created:r.created_at,updated:r.updated_at,
-        runNumber:r.run_number,branch:r.head_branch||""}));}
+        runNumber:r.run_number,branch:r.head_branch||"",event:r.event||"unknown"}));}
   function currentStates(){return app.runs.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
@@ -304,9 +309,73 @@ footer {
       li.append(content);list.append(li);
     }target.append(list);
   }
+  // Exact source-path overlap, not an inferred causal or native-execution edge.
+  function sourceRevisionMatches(files,movements,records){
+    const changed=new Set(files.filter(f=>f&&typeof f.filename==="string"&&
+      ["added","modified","removed","renamed"].includes(f.status)).map(f=>f.filename));
+    const researchPaths=new Set([...movements,...records].filter(x=>x&&typeof x.path==="string").map(x=>x.path));
+    return [...changed].filter(path=>researchPaths.has(path)).sort();
+  }
+  function revisionLink(path,sha){
+    if(!isSHA(sha)||typeof path!=="string"||!(/^[\w./-]+$/.test(path))||
+      path.startsWith("/")||path.split("/").some(p=>p==="."||p===".."||!p))return null;
+    return link(path+" @ "+sha.slice(0,10)+" ↗",
+      "https://github.com/"+REPO+"/blob/"+sha+"/"+path.split("/").map(encodeURIComponent).join("/"),"path");
+  }
+  function renderRevision(r,commit){
+    if(app.selection!==r.id)return;
+    const target=$("revision-evidence");target.replaceChildren();
+    const head=el("div",undefined,"record");
+    head.append(el("h3","Commit "+r.head.slice(0,12)));
+    head.append(el("p","Run event: "+r.event+" · Head SHA: "+r.head,"fine"));
+    head.append(link("Inspect exact commit ↗","https://github.com/"+REPO+"/commit/"+r.head));
+    target.append(head);
+    if(!commit){target.append(el("p","Reading GitHub's changed-file list…","no-source"));return;}
+    const files=commit.files;
+    const movements=app.research?.movements||[],records=app.research?.records||[];
+    if(!app.research){target.append(el("p","Research projection has not loaded; source-path comparison unavailable.","no-source"));return;}
+    const matched=sourceRevisionMatches(files,movements,records);
+    $("revision-scope").textContent=matched.length+" matching paths / "+files.length+" reported changes";
+    if(files.length>=100)target.append(el("p","GitHub returned the first page of changed files; matches may be incomplete.","fine"));
+    if(!matched.length){
+      target.append(el("p","No exact path overlap between this commit's reported changed files and the current research index. No research-execution link established.","no-source"));
+    }
+    for(const path of matched.slice(0,30)){
+      const row=el("article",undefined,"record");
+      row.append(el("h3",path));
+      const marked=movements.filter(m=>m.path===path);
+      row.append(el("p","Exact source-path overlap · "+marked.length+" movement locator(s) in the current published projection.","fine"));
+      const ref=revisionLink(path,r.head);if(ref)row.append(ref);
+      row.append(el("p","This revision does not establish that a recorded movement was executed or native-verified.","fine"));
+      target.append(row);
+    }
+    if(matched.length>30)target.append(el("p","First 30 matching paths shown.","fine"));
+    const other=files.filter(f=>f&&typeof f.filename==="string"&&!matched.includes(f.filename)).slice(0,8);
+    if(other.length){
+      const list=el("div",undefined,"record");list.append(el("p","Other reported files changed at this commit (first 8):","fine"));
+      for(const f of other){const p=revisionLink(f.filename,r.head);if(p)list.append(el("p",undefined,"fine")).append(p);}
+      target.append(list);
+    }
+  }
+  async function loadRevision(r){
+    $("revision-scope").textContent="Reading exact commit";
+    if(app.commitCache.has(r.head)){renderRevision(r,app.commitCache.get(r.head));return;}
+    renderRevision(r,null);
+    try{
+      const doc=await getJSON(API+"/commits/"+r.head+"?per_page=100");
+      if(!doc||doc.sha!==r.head||!Array.isArray(doc.files))throw Error("Commit does not match exact workflow head SHA");
+      app.commitCache.set(r.head,doc);
+      renderRevision(r,doc);
+    }catch(e){
+      if(app.selection===r.id){
+        $("revision-scope").textContent="Source unavailable";
+        $("revision-evidence").append(el("p","Commit change list unavailable: "+e.message+". No source relationship inferred.","no-source"));
+      }
+    }
+  }
   async function selectRun(id){
     if(!Number.isSafeInteger(id)||id<1)return;const r=app.runs.find(x=>x.id===id);if(!r)return;
-    app.selection=id;renderRuns();const area=$("detail");area.replaceChildren();
+    app.selection=id;renderRuns();loadRevision(r);const area=$("detail");area.replaceChildren();
     const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
     header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
     header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
@@ -376,7 +445,9 @@ footer {
   }
   async function loadResearch(){try{const json=await getJSON(SOURCE+"?v="+Math.floor(Date.now()/PERIOD));
       if(json?.schema!=="workstation-live-projection/v1"||!Array.isArray(json.records)||!Array.isArray(json.walls)||!Array.isArray(json.movements))throw Error("Unexpected workstation source schema");
-      app.research=json;$("research-scope").textContent="Published source-owned projection · not live worker telemetry";renderResearch();}
+      app.research=json;$("research-scope").textContent="Published source-owned projection · not live worker telemetry";renderResearch();
+      const selected=app.runs.find(r=>r.id===app.selection);
+      if(selected&&app.commitCache.has(selected.head))renderRevision(selected,app.commitCache.get(selected.head));}
     catch(e){$("research-scope").textContent="Research data unavailable: "+e.message;if(!app.research){$("research-records").replaceChildren(el("p","Original record data unavailable.","no-source"));$("research-walls").replaceChildren(el("p","Original wall data unavailable.","no-source"))}}}
   async function refresh(){
     if(app.reading)return;app.reading=true;$("check-now").disabled=true;

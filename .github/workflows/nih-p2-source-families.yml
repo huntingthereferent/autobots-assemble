@@ -1,0 +1,69 @@
+name: NIH P2 synthetic source family stress replay
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_source_families.py'
+      - 'network/tests/test_nih_source_families.py'
+      - 'systems/workspace/nih_dataset_sensitivity.py'
+      - '.github/workflows/nih-p2-source-families.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_source_families.py'
+      - 'network/tests/test_nih_source_families.py'
+      - 'systems/workspace/nih_dataset_sensitivity.py'
+      - '.github/workflows/nih-p2-source-families.yml'
+permissions:
+  contents: read
+jobs:
+  independently-replay-source-families:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original native and Chromium verification requirements
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Verify source family and original source-variation tests
+        run: |
+          python -m unittest -v network.tests.test_nih_dataset_sensitivity
+          python -m unittest -v network.tests.test_nih_source_families
+      - name: Execute original twelve jobs and cross-family replay
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-families"
+          python -m systems.workspace.nih_source_families \
+            --data-dir "$RUNNER_TEMP/original-workstation" \
+            --output-dir "$RUNNER_TEMP/nih-families"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-families"
+          r=json.loads((out/"nih-p2-source-families-summary.json").read_text())
+          assert r["variation_count"]==6
+          assert r["queries_per_variation"]>=20
+          assert r["total_independent_original_program_executions"]>=120
+          assert r["source_owned_native_checkpoint"] is False
+          assert r["synthetic_only"] is True
+          assert r["official_NIH_submission"] is False
+          assert r["general_biomedical_benchmark"] is False
+          assert len(list(out.glob("dataset-*.json")))==6
+          assert (out/"nih-p2-source-families-cases.jsonl").is_file()
+          PY
+          tar -czf "$RUNNER_TEMP/nih-families/original-twelve-job-journal.tar.gz" \
+            -C "$RUNNER_TEMP/original-workstation" \
+            runtime.jsonl coordinator-windows.jsonl workstation world-request.json
+      - name: Archive original source, independent family inputs and case records
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-source-families-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-families
+          if-no-files-found: warn
+          retention-days: 30
