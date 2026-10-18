@@ -9,3 +9,5 @@ A source reference is a label until a source-specific verifier authenticates it.
 Contested and invalidated relations are retained. A trace with no next referent and workstation parent references absent from the supplied journal are displayed unresolved, not completed. This tool does not run, authorize, or silently register a worker. Original source files and private workstation runtimes retain ownership of their state.
 
 To extend this into an executable A/B investigator, integrate through the existing workstation admission and separate native witness callbacks, never through the graphical view.
+
+The separate `ab swallow` command performs source-edition construction and actual REA native tests through existing ProcessWorkstation. This inspection module alone does not execute or independently verify any source claim; the test receipt and native test logs must be examined as separate evidence.

@@ -14,7 +14,7 @@ python -m pip install ./tools/ab-provenance
 ab source
 cd experiments/rea-swallow/upstream
 npm ci
-cd ../../
+cd ../../..
 ab swallow --allow-source-edit --repo-root . --out runtime/data/ab-source-tool/first-pass
 ab inspect runtime/data/ab-source-tool/first-pass/source-provenance.json
 ab ancestors runtime/data/ab-source-tool/first-pass/source-provenance.json --target "A/B source stage 5: checkpoint"

@@ -17,12 +17,6 @@
       "source": "design/visual-provenance/README.md",
       "observed_on": "2026-10-18",
       "notes": "Visual grammar is a source-bound adaptation, not screenshot copying."
-    },
-    {
-      "kind": "document",
-      "source": "https://github.com/morluto/rea",
-      "observed_on": "2026-10-18",
-      "notes": "Referenced only for distributing a standalone tool with CLI and docs. No REA code or distinctive interface was copied."
     }
   ],
   "grammar": {
@@ -56,7 +50,8 @@
     "Copied REA images, branding, code and documentation",
     "False native verification badges",
     "Generic animated AI-dashboard ornament",
-    "Replacing owner-backed records with fabricated graph nodes"
+    "Replacing owner-backed records with fabricated graph nodes",
+    "Confusing investigated upstream software with a visual-design template"
   ],
   "adaptation_rules": [
     "Preserve the repo's cross-layer provenance and trace schema names unchanged",

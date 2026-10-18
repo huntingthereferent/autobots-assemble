@@ -3,9 +3,9 @@ requires = ["setuptools>=69"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "ab-provenance"
+name = "ab-tool"
 version = "0.1.0"
-description = "A/B evidence-preserving provenance inspection and offline visual explorer"
+description = "A/B source investigation tool with workstation-native REA transformations and provenance"
 requires-python = ">=3.10"
 authors = [{name = "James Muneoka"}]
 readme = "README.md"

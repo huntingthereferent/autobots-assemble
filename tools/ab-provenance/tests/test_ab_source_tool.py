@@ -51,7 +51,7 @@ class RealABSourceToolTests(unittest.TestCase):
             self.assertIn("git",text)
         for src_file,_ in CONTRACT_COPIES:
             self.assertTrue((src/src_file).is_file())
-        self.assertIn("javascriptCheckpoint.ab-swallow.test.ts",NATIVE_TESTS)
+        self.assertIn("src/domain/javascript/javascriptCheckpoint.ab-swallow.test.ts",NATIVE_TESTS)
 
     def test_source_receipt_keeps_partial_stage_unproved(self):
         report={"stages":[{"name":"observation","timestamp":"2026-10-18T00:00:00Z",

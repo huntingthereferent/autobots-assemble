@@ -1,10 +1,14 @@
-# A/B Provenance
+# A/B Tool — Source Investigation + Provenance
 
-Installable, read-only tool for research provenance built from the repository's own contracts.
+Installable A/B tool for actual source-version experiments through the existing workstation, plus a read-only source-provenance explorer.
 
-[morluto/rea](https://github.com/morluto/rea) is a packaging reference (standalone tool, commands and documentation), **not** the A/B engine. No REA source, docs or MIT-licensed assets are bundled. This original tool follows the repository [All Rights Reserved](../../LICENSE) notice.
+**REA is source under investigation, not A/B’s visual template.** This branch includes the pinned MIT REA source via an upstream submodule and the existing source-level A/B transformation experiments. A/B changes that real source through the workstation and tests the result. REA retains its MIT rights; original A/B code follows the repository [All Rights Reserved](../../LICENSE) notice.
 
-## Install and use
+## Install, change the original source, and inspect real evidence
+
+See [the actual REA source transformation guide](docs/swallow.md), which invokes the native ProcessWorkstation editions and upstream REA tests through `ab swallow`. `ab-prov` is only the backward-compatible read-only projection entrypoint.
+
+## Provenance inspection
 
 Requires Python 3.10 or later. Run from the cloned repository:
 
@@ -44,4 +48,4 @@ The output is inspectable typed JSON or a self-contained searchable SVG/HTML gra
 - [Illustrative provenance fixture](examples/illustrative-provenance.json)
 - [Illustrative journal fixture](examples/illustrative-journal.jsonl)
 
-Scope: a usable provenance viewer / CLI, **not** an autonomous worker, REA clone, F3 mapping, generalized A/B theory or fully operational Language Referent engine. Any future worker execution must preserve the repository's existing native workstation and owner/witness admission boundaries.
+Scope: the initial executable source-level A/B investigation slice is real REA JavaScript matching and checkpoint continuation, with native tests; it is not the entire REA analyzer ecosystem or a general A/B theory. `ab render` remains only a read-only visual projection.
