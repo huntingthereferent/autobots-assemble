@@ -52,7 +52,8 @@ class AuditBoundaryTests(unittest.TestCase):
     def test_page_renders_both_original_movements_and_walls(self):
         page=(ROOT/"docs/live/work.html").read_text(encoding="utf-8")
         self.assertIn('id="research-movements"',page)
-        self.assertIn("documented-heading-only",page)
+        self.assertIn("Document heading only; not native verification",page)
+        self.assertIn("m.evidence===\"structured-source-state\"",page)
         self.assertIn('id="research-walls"',page)
         self.assertIn('id="runs"',page)
         self.assertIn('Array.isArray(json.movements)',page)
