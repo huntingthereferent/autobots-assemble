@@ -52,6 +52,11 @@ jobs:
             --ab-tool "$GITHUB_WORKSPACE/tools/ab-provenance" \
             --baseline "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/original" \
             --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass/comparison"
+      - name: Preserve immutable baseline inside the A/B release comparison record
+        run: |
+          cp runtime/data/ab-source-tool/original/baseline.json runtime/data/ab-source-tool/first-pass/comparison/baseline.json
+          cp runtime/data/ab-source-tool/original/original-vitest.json runtime/data/ab-source-tool/first-pass/comparison/original-vitest.json
+          cp runtime/data/ab-source-tool/original/original-vitest.log runtime/data/ab-source-tool/first-pass/comparison/original-vitest.log
       - name: Inspect actual source-lineage and produce HTML evidence
         run: |
           ab inspect runtime/data/ab-source-tool/first-pass/source-provenance.json --graph > runtime/data/ab-source-tool/first-pass/graph.json
