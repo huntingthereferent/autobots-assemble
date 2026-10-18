@@ -28,7 +28,7 @@ const moduleNode=(source:string,side:"left"|"right")=>{
     structural_fingerprint_algorithm:"babel-ast-v3"
  },artifactEvidence(artifact,side+".js"));
 };
-const baselineArgs=[[0,0,0,0],[0,0,0,0]];
+const baselineArgs=[[0,0,0,0],[0,0,0,0]] as const;
 function externalWitness(
   source:string,contextId:string, vectors:readonly [readonly number[],readonly number[]]
 ):ApplicationVersionInputObservation{
