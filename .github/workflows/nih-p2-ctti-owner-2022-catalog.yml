@@ -40,7 +40,7 @@ jobs:
           path=Path(os.environ["RUNNER_TEMP"])/"nih-p2-ctti-catalog/nih-p2-ctti-owner-catalog-2022.json"
           r=json.loads(path.read_text())
           assert r["schema"]=="nih-p2-ctti-primary-2022-catalog-access/v1"
-          assert len(r["unauthenticated_public_catalog_checks"])==2
+          assert len(r["unauthenticated_public_catalog_checks"])==3
           assert all(x["source_catalog_url"].startswith("https://aact.ctti-clinicaltrials.org/")
                      for x in r["unauthenticated_public_catalog_checks"])
           assert r["public_2022_archive_url_discovered"] is bool(r["candidate_archive_links_from_actual_owner_html"])
