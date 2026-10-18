@@ -26,6 +26,8 @@ class ComparisonError(ValueError): pass
 def digest(p): return sha256(Path(p).read_bytes()).hexdigest()
 
 def identity(rea):
+    if not (rea/"package.json").is_file() or not (rea/".git").exists():
+        raise ComparisonError("actual pinned REA git checkout required")
     commit=subprocess.run(["git","-C",str(rea),"rev-parse","HEAD"],
           capture_output=True,text=True,check=True).stdout.strip()
     if commit!=PIN: raise ComparisonError("actual pinned REA source absent")
