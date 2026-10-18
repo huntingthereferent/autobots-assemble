@@ -103,6 +103,8 @@ class NativeGameVerifierBridge:
         parent_id=handoff.dependencies[0] if len(handoff.dependencies)==1 else None
         if parent_id not in PARENTS:
             raise ValueError("W13 verifier has no admitted exact parent")
+        if handoff.handoff_id==OWNER_JOB_ID and parent_id!=OWNER_W13_JOB:
+            raise ValueError("owner W13 verifier child cannot be rebound to another parent")
         if parent_id==OWNER_W13_JOB and (
                 md["worker_version"]!=OWNER_VERSION
                 or handoff.handoff_id!=OWNER_JOB_ID):
