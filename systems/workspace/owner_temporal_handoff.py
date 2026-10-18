@@ -131,10 +131,18 @@ def unpack_temporal(source, destination):
                 target.chmod(0o600)
 
 
-def _get(route, token, *, binary=False):
+def _api_request(route, token):
     req = Request(f"https://api.github.com/repos/{REPO}/{route}", headers={
-        "Authorization": "Bearer " + token, "Accept": "application/vnd.github+json",
+        "Accept": "application/vnd.github+json",
         "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "owner-temporal-handoff"})
+    # The GitHub API authenticates the first request. Its signed storage
+    # redirect authenticates itself and must not receive the GitHub token.
+    req.add_unredirected_header("Authorization", "Bearer " + token)
+    return req
+
+
+def _get(route, token, *, binary=False):
+    req = _api_request(route, token)
     with urlopen(req, timeout=30) as response:
         raw = response.read(MAX_ARCHIVE + 1)
     if len(raw) > MAX_ARCHIVE:
