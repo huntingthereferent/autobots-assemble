@@ -39,6 +39,9 @@ GAME_TEMPORAL_VERIFIER = "game-temporal-live-source-witness/v1"
 GAME_NATIVE_WITNESS_ID = "game-native-independent-verifier"
 GAME_NATIVE_WITNESS_FILE = "native_verifier.py"
 GAME_NATIVE_WITNESS_VERIFIER = "cp-checker:GAME-NATIVE-VERIFIER"
+GAME_READY_ID = "game-worker-ready"
+GAME_READY_FILE = "ready_worker.py"
+GAME_READY_VERIFIER = "cp-checker:GAME-WORKER-READY"
 from .nih_scope_native import validate_scope, VERIFIER as NIH_SCOPE_VERIFIER
 from .nih_scope_bridge import SOURCE_FILE as NIH_SCOPE_SOURCE_FILE
 from .game_w13_native_bridge import GameW13NativeBridge, WORKER_ID as GAME_W13_ID, SOURCE_FILE as GAME_W13_FILE
@@ -53,7 +56,7 @@ NIH_ONTO_ID = 'nih-temporal-ontology'
 NIH_ONTO_VERIFIER = 'cp-checker:NIH-P1-ONTOLOGY'
 NIH_REASON_ID = 'nih-temporal-reasoning'
 NIH_REASON_VERIFIER = 'cp-checker:NIH-P1-REASONING'
-EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, NIH_PACKET_ID, NIH_PROTO_ID, GAME_W13_ID, GAME_BUILD_ID, GAME_TEMPORAL_ID, GAME_NATIVE_WITNESS_ID}
+EXECUTABLE_WORKERS = KNOWN_WORKERS | {INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, NIH_PACKET_ID, NIH_PROTO_ID, GAME_W13_ID, GAME_BUILD_ID, GAME_TEMPORAL_ID, GAME_NATIVE_WITNESS_ID, GAME_READY_ID}
 
 
 def _data_root(path: str | Path) -> Path:
@@ -103,6 +106,16 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             raise ValueError("CP30 signature verification requires --inputs-file")
         required = frozenset(("finite_process_attestation.py",))
         payload = _cp30_inputs(inputs_file)
+    elif worker_id == GAME_READY_ID:
+        if inputs_file is None:
+            raise ValueError("game worker readiness requires exact source verification request")
+        file = Path(inputs_file)
+        if not file.is_file() or file.is_symlink() or file.stat().st_size > 4096:
+            raise ValueError("game worker readiness request must be JSON <=4KiB")
+        required = frozenset((GAME_READY_FILE,))
+        payload = json.loads(file.read_text(encoding="utf8"))
+        if payload != {"verify_game_adapter":True}:
+            raise ValueError("unsupported game source readiness request")
     elif worker_id == GAME_NATIVE_WITNESS_ID:
         if inputs_file is None:
             raise ValueError("independent game verifier must select exact W13 parent")
@@ -195,6 +208,7 @@ def prepare(*, data_dir: str | Path, worker_id: str, version_id: str,
             "source_modified_from_copy": bool(info["modified"] or info["added"] or info["deleted"]),
             "operation": "finite-required-edge-prefilter" if worker_id == FINITE_ID
                          else "integrated-cp30-ed25519-verification" if worker_id == INTEGRATED_ID
+                         else "source-pinned-original-game-adapter-readiness" if worker_id == GAME_READY_ID
                          else "independent-source-owned-game-W13-replay" if worker_id == GAME_NATIVE_WITNESS_ID
                          else "live-game-source-owned-temporal-query-build" if worker_id == GAME_TEMPORAL_ID
                          else "nih-p2-runnable-temporal-prototype" if worker_id == NIH_PROTO_ID
@@ -308,6 +322,11 @@ def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
         if verifier != GAME_W13_VERIFIER:
             raise ValueError("unsupported game W13 native verifier")
         return GameW13NativeBridge(runtime=runtime, workstation=desk)
+    if worker_id == GAME_READY_ID:
+        if verifier != GAME_READY_VERIFIER:
+            raise ValueError("wrong GAME-WORKER-READY native verifier")
+        from .game_worker_ready_bridge import GameReadyBridge
+        return GameReadyBridge(runtime=runtime, workstation=desk)
     if worker_id == GAME_NATIVE_WITNESS_ID:
         if verifier != GAME_NATIVE_WITNESS_VERIFIER:
             raise ValueError("wrong GAME-NATIVE-VERIFIER native checker")
@@ -383,7 +402,7 @@ def run_job(*, data_dir: str | Path, job_id: str,
         raise ValueError("not a supported workstation job")
     bridge = _bridge(runtime, root, worker, handoff.metadata.get("native_evidence_verifier"))
     state = runtime.state(job_id)
-    if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, NIH_PACKET_ID, NIH_PROTO_ID, GAME_W13_ID, GAME_BUILD_ID, GAME_TEMPORAL_ID, GAME_NATIVE_WITNESS_ID):
+    if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, NIH_PACKET_ID, NIH_PROTO_ID, GAME_W13_ID, GAME_BUILD_ID, GAME_TEMPORAL_ID, GAME_NATIVE_WITNESS_ID, GAME_READY_ID):
         if handoff.metadata.get("source_system") != "process-workstation":
             raise ValueError("selected local worker job source does not match")
         if state.status == "READY":
