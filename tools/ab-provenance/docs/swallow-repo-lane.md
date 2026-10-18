@@ -38,3 +38,12 @@ Each new source requires its own grounded adapter and native verification.
 The output gate requires a PASS receipt and authentic source hash-matching
 logs. The ship command builds an offline **release candidate**, not a
 published public release. The documentation must say what remains incomplete.
+
+## Repeatability check
+
+The original referent is tested **before and after** A/B's source correction.
+The same original native REA tests must retain their exact assertion
+identities and outcomes, while the actual original REA source file changes.
+The resulting release explicitly reports what still differs: complete REA
+CLI/MCP and provider coverage is NOT reconstructed. Identical aesthetics
+or copied docs cannot count as a successful result.

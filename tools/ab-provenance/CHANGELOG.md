@@ -18,3 +18,12 @@
 This is a bounded first supported REA source adapter, not absorption of
 every REA analyzer and provider, a published GitHub release, or a general
 scientific proof. New repositories require separately tested source adapters.
+
+### Original-reference comparison
+
+The source regrounding lane now freezes original REA native results before
+modifying source and compares the exact same upstream assertions afterward.
+The first original-versus-corrected native reference run matched 22/22
+original test assertions on both sides. Full REA CLI/MCP and provider
+equivalence remains unimplemented, so the release labels this a
+partial native match rather than claiming the same complete product.

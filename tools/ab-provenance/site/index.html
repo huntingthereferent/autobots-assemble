@@ -94,8 +94,15 @@ ab ship --repo-root . \
   --out runtime/data/ab-source-tool/shipped-0.1.0</code></pre>
 <p>Shipped artifacts include a wheel, source archive, A/B license, original docs, source receipts, native logs, an evidence manifest, and a provenance view. The release gate rejects missing or changed source evidence and preserves failed experiments.</p>
 </section>
+<section class="rule" id="comparison">
+<div class="eyebrow">04 / Reference comparison</div>
+<h2>Did A/B reconstruct the original?</h2>
+<p>The experiment runs original pinned REA matching, comparison and uncertainty test cases before changing source and runs those exact original cases again after A/B regrounding. Matching outcomes are recorded without replacing original test definitions.</p>
+<div class="columns"><div class="panel"><h3>Behavior that survived</h3><p>22 original REA native test assertions passed before and after the source correction in the first controlled run. The release records both test results and their source identities.</p></div><div class="panel"><h3>What is not the same</h3><p>A/B does not yet implement the original REA CLI/MCP interface or the full binary, Android and other analyzer provider catalog. Original A/B documentation and product licensing remain separate.</p></div></div>
+<p class="small">This is bounded test parity, not a universal source equivalence claim. Read comparison/comparison.md inside the actual release bundle for the source-specific result.</p>
+</section>
 <section id="rights" class="rule">
-<div class="eyebrow">04 / Scope and rights</div>
+<div class="eyebrow">05 / Scope and rights</div>
 <div class="columns">
 <div><h2>A/B has its own license.</h2><p>A/B original code, documentation and visuals are copyright 2026 James Muneoka, All Rights Reserved. The source under investigation is not the product's license.</p></div>
 <div class="note"><h3>Source referent stays separate</h3><p>The current REA adapter uses the original morluto/rea source at a fixed commit. REA remains under its own MIT terms where that code is used or distributed. REA's code, documentation and license are not included in the A/B product bundle.</p><p>Current coverage is a verified JavaScript investigation slice, not all of REA, every repository, or a universal theorem.</p></div>
