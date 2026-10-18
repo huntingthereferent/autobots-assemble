@@ -1,0 +1,31 @@
+name: ARC3 F3 native agent conformance
+
+on:
+  push:
+    paths:
+      - "work/arc3/agent/**"
+      - "work/arc3/AGENTS.md"
+      - "work/arc_like_maze/math.py"
+      - "network/tests/test_arc3_f3_agent.py"
+      - ".github/workflows/arc3-f3-agent.yml"
+  pull_request:
+    paths:
+      - "work/arc3/agent/**"
+      - "work/arc3/AGENTS.md"
+      - "work/arc_like_maze/math.py"
+      - "network/tests/test_arc3_f3_agent.py"
+      - ".github/workflows/arc3-f3-agent.yml"
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install numerical dependency used by official ARC agent
+        run: python -m pip install numpy
+      - name: Check F3 laws against original source and negative controls
+        run: python -m unittest -v network.tests.test_arc3_f3_agent
