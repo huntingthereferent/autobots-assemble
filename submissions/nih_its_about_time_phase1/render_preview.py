@@ -14,7 +14,7 @@ from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.enums import TA_LEFT
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogether
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogether, CondPageBreak
 from pypdf import PdfReader
 
 BODY_PT = 11.3
@@ -58,7 +58,6 @@ def style(name, size=BODY_PT, leading=BODY_LEADING_PT, after=6, before=0,
         fontSize=size, leading=leading, textColor=colors.HexColor("#172536"),
         alignment=TA_LEFT, spaceBefore=before, spaceAfter=after,
         leftIndent=left_indent, rightIndent=2, allowWidows=0, allowOrphans=0,
-        keepWithNext=bold,
     )
 
 
@@ -95,13 +94,16 @@ def elements(markdown):
             items.append(Paragraph(inlines(s[2:]), STYLES["title"]))
         elif s.startswith("## "):
             flush()
+            items.append(CondPageBreak(92))
             items.append(Paragraph(inlines(s[3:]), STYLES["subtitle"]
                              if len(items) < 3 else STYLES["section"]))
         elif s.startswith("### "):
             flush()
+            items.append(CondPageBreak(78))
             items.append(Paragraph(inlines(s[4:]), STYLES["section"]))
         elif s.startswith("#### "):
             flush()
+            items.append(CondPageBreak(66))
             items.append(Paragraph(inlines(s[5:]), STYLES["subsection"]))
         elif re.match(r"^[-*] ", s):
             flush()
