@@ -1,0 +1,60 @@
+name: NIH P2 public registry source intake
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_external_registry_intake.py'
+      - 'network/tests/test_nih_external_registry_intake.py'
+      - 'systems/workspace/NIH_P2_EXTERNAL_SOURCE_BOUNDARY.md'
+      - '.github/workflows/nih-p2-external-registry-intake.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_external_registry_intake.py'
+      - 'network/tests/test_nih_external_registry_intake.py'
+      - 'systems/workspace/NIH_P2_EXTERNAL_SOURCE_BOUNDARY.md'
+      - '.github/workflows/nih-p2-external-registry-intake.yml'
+permissions:
+  contents: read
+jobs:
+  source-owned-public-registry-receipt:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify strict public source evidence boundary with local negative tests
+        run: python -m unittest -v network.tests.test_nih_external_registry_intake
+      - name: Independently fetch real posting metadata from official registry
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-public-registry"
+          python -m systems.workspace.nih_external_registry_intake \
+            --output-dir "$RUNNER_TEMP/nih-public-registry"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-public-registry/nih-p2-public-registry-intake.json"
+          r=json.loads(p.read_text())
+          assert r["record_count"]==3
+          assert r["source"]=="ClinicalTrials.gov documented REST API v2"
+          assert r["patient_data_ingested"] is False
+          assert r["external_source_intake_only"] is True
+          assert r["does_not_reconstruct_historical_version_contents"] is True
+          assert r["biomedical_benchmark_complete"] is False
+          assert r["official_NIH_submission"] is False
+          assert r["original_workstation_modified"] is False
+          assert len(r["cutoff_frontiers"])>=2
+          assert all(len(x["raw_source_sha256"])==64 for x in r["records"])
+          PY
+      - name: Archive restricted public metadata receipts and checksums
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-public-registry-intake-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-public-registry
+          if-no-files-found: warn
+          retention-days: 30
