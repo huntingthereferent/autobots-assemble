@@ -3,6 +3,20 @@
 **Lane ID:** `arc3-direct-observation`  
 **Purpose:** Work toward solving real ARC-AGI-3 environments from native, observed interactions, preserving every action and correction. This is a separate `work/` lane, not another bot, solver generation, game imitation, or replacement for the existing research.
 
+## F3 mathematical starting point
+
+[The native F3-first experimental agent](agent/my_agent.py) uses the **actual depth-three transformations** and all nine phi(0)=0 candidate laws from [the original finite mathematical source](../arc_like_maze/math.py). [AGENTS.md](AGENTS.md) records the investigation rules and evidence boundary. The independently tested equations drive candidate endpoint-collision probes; this is not another G0/G2 solver, bot, or orchestration layer.
+
+The current agent tries one **provisional** assignment of two advertised native simple actions to mathematical A/B. It checks visible-frame counterexamples without relabeling colors as F3 values. A surviving candidate remains conditional; a contradiction yields OUTSIDE_DECLARED_F3_FAMILY. The initial policy does **not** infer goals or demonstrate an ARC win. Other native action assignments and richer finite-field grammars remain separate questions.
+
+Reproduce source-law conformance and the falsification cases:
+
+```sh
+python -m unittest -v network.tests.test_arc3_f3_agent
+```
+
+No native ARC gameplay has yet been witnessed for this F3 prototype. Historical G2.3 public-game evidence is retained as a comparison, not imported as the new agent's reasoning.
+
 ## Existing source, not rewritten
 
 - [Direct-solve objective](../../research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md) — solve the actual games, with discovery actions counted.
