@@ -10,6 +10,8 @@ from types import ModuleType, SimpleNamespace
 import unittest
 from unittest.mock import patch
 
+import numpy as np  # import before patch.dict: native extension cannot be reimported
+
 from work.arc_like_maze.math import inverse_candidates
 
 
@@ -96,7 +98,6 @@ class F3CoreTests(unittest.TestCase):
         self.assertEqual(set(evidence.rank_letters()), {"A", "B"})
 
     def test_native_colors_not_reduced_modulo_three(self):
-        import numpy as np
         grid = np.zeros((64, 64), dtype=np.uint8)
         first = self.f3.observation_key(SimpleNamespace(frame=[grid]))
         grid[0, 0] = 15
@@ -106,7 +107,6 @@ class F3CoreTests(unittest.TestCase):
         self.assertNotEqual(second, self.f3.observation_key(SimpleNamespace(frame=[grid])))
 
     def test_agent_reports_a_provisional_generator(self):
-        import numpy as np
         runner = self.f3.MyAgent()
         native = SimpleNamespace(frame=[np.zeros((64,64), dtype=np.uint8)],
                                  available_actions=[self.Action.ACTION1, self.Action.ACTION2],
@@ -117,7 +117,6 @@ class F3CoreTests(unittest.TestCase):
         self.assertEqual(action.reasoning["candidate_count"], 9)
 
     def test_no_unadvertised_second_generator(self):
-        import numpy as np
         runner = self.f3.MyAgent()
         native = SimpleNamespace(frame=[np.zeros((64,64), dtype=np.uint8)],
                                  available_actions=[self.Action.ACTION5],
