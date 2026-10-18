@@ -12,6 +12,7 @@ Requires Python 3.10 or later. Run from the cloned repository:
 python -m pip install ./tools/ab-provenance
 ab-prov inspect tools/ab-provenance/examples/illustrative-provenance.json
 ab-prov inspect tools/ab-provenance/examples/illustrative-provenance.json --graph
+ab-prov ancestors tools/ab-provenance/examples/illustrative-provenance.json --target sample/provisional-claim
 ab-prov render tools/ab-provenance/examples/illustrative-provenance.json -o /tmp/ab-prov.html
 ~~~
 

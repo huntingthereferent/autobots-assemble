@@ -11,6 +11,7 @@ import unittest
 from ab_prov import ProvenanceError, load_document, graph_summary, build_graph
 from ab_prov.cli import main
 from ab_prov.render import render_html
+from ab_prov.ancestry import ancestors
 
 ROOT = Path(__file__).resolve().parents[3]
 PACKAGE = ROOT / "tools" / "ab-provenance"
@@ -149,6 +150,50 @@ class ABProvenanceTests(unittest.TestCase):
             result=main(["inspect","/path/that/does/not/exist.json"])
         self.assertEqual(result,2)
         self.assertIn("ab-prov:",output.getvalue())
+
+    def test_backward_ancestry_preserves_recorded_source_and_contested_status(self):
+        graph=load_document(SAMPLE)
+        subset=ancestors(graph,"sample/provisional-claim")
+        ids={e["id"] for e in subset["edges"]}
+        self.assertIn("prov:fixture-source-observation",ids)
+        self.assertIn("prov:fixture-contested",ids)
+        self.assertNotIn("prov:fixture-open",ids)
+        self.assertFalse(subset["truncated"])
+        self.assertIn("prov:fixture-contested",subset["contested_edges"])
+        self.assertFalse(any(e["state"]=="verified" for e in subset["edges"]))
+
+    def test_backward_path_bounded_without_pretending_to_complete(self):
+        graph=load_document(SAMPLE)
+        subset=ancestors(graph,"sample/provisional-claim",max_hops=1)
+        self.assertTrue(subset["truncated"])
+        self.assertIn("Ancestry bounded at hop limit; upstream record may be missing.",
+                      subset["warnings"])
+        self.assertEqual(len(subset["edges"]),1)
+
+    def test_backward_path_requires_unique_source_reference_or_id(self):
+        graph=load_document(SAMPLE)
+        with self.assertRaises(ProvenanceError):
+            ancestors(graph,"nonexistent-source")
+        with self.assertRaises(ProvenanceError):
+            ancestors(graph,"sample/provisional-claim",max_hops=0)
+
+    def test_cli_backward_query_and_focused_visual_export(self):
+        with TemporaryDirectory() as temp:
+            html=Path(temp)/"focused.html"
+            stdout=StringIO()
+            with redirect_stdout(stdout):
+                rc=main(["ancestors",str(SAMPLE),"--target","sample/provisional-claim"])
+            self.assertEqual(rc,0)
+            view=json.loads(stdout.getvalue())
+            self.assertEqual(view["kind"],"ab-provenance/ancestry-v1")
+            with redirect_stdout(StringIO()):
+                rc=main(["render",str(SAMPLE),"-o",str(html),
+                         "--target","sample/provisional-claim"])
+            self.assertEqual(rc,0)
+            self.assertTrue(html.is_file())
+            self.assertIn("prov:fixture-contested",html.read_text())
+            self.assertNotIn("prov:fixture-open",html.read_text())
+
 
 if __name__=="__main__":
     unittest.main()
