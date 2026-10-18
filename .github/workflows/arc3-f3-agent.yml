@@ -1,19 +1,27 @@
-name: ARC3 F3 native agent conformance
+name: ARC3 original 48-law mathematical conformance
 
 on:
   push:
     paths:
       - "work/arc3/agent/**"
+      - "work/arc3/archive/**"
       - "work/arc3/AGENTS.md"
-      - "work/arc_like_maze/math.py"
+      - "work/arc_like_maze/window_combined.py"
+      - "work/arc_like_maze/window_branch.py"
+      - "work/arc_like_maze/window_two.py"
       - "network/tests/test_arc3_f3_agent.py"
+      - "network/tests/test_arc3_nine_law_archive.py"
       - ".github/workflows/arc3-f3-agent.yml"
   pull_request:
     paths:
       - "work/arc3/agent/**"
+      - "work/arc3/archive/**"
       - "work/arc3/AGENTS.md"
-      - "work/arc_like_maze/math.py"
+      - "work/arc_like_maze/window_combined.py"
+      - "work/arc_like_maze/window_branch.py"
+      - "work/arc_like_maze/window_two.py"
       - "network/tests/test_arc3_f3_agent.py"
+      - "network/tests/test_arc3_nine_law_archive.py"
       - ".github/workflows/arc3-f3-agent.yml"
   workflow_dispatch:
 
@@ -25,7 +33,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install numerical dependency used by official ARC agent
+      - name: Install official entry's numerical dependency
         run: python -m pip install numpy
-      - name: Check F3 laws against original source and negative controls
+      - name: Compare new entry to all 48 source laws and distinguish marked roots
         run: python -m unittest -v network.tests.test_arc3_f3_agent
+      - name: Preserve historical nine-law regression against archived source
+        run: python -m unittest -v network.tests.test_arc3_nine_law_archive

@@ -1,92 +1,60 @@
-# ARC-AGI-3 — Direct Observation Work Lane
+# ARC-AGI-3 — 48-law native investigation lane
 
-**Lane ID:** `arc3-direct-observation`  
-**Purpose:** Work toward solving real ARC-AGI-3 environments from native, observed interactions, preserving every action and correction. This is a separate `work/` lane, not another bot, solver generation, game imitation, or replacement for the existing research.
+**Active checkpoint:** restart the real ARC investigation using the repository's already-proved **48-law two-predecessor F3 window family**, rather than the earlier nine-law phi worlds. The mathematical source is [window_combined.py](../arc_like_maze/window_combined.py) with [48-law proofs and counterexamples](../arc_like_maze/WINDOW_COMBINED.md). The active instructions are [AGENTS.md](AGENTS.md).
 
-## F3 mathematical starting point
+This is **one experimental ARC agent and the existing Work observation lane**. It is not a fabricated ARC engine, autonomous bot population, new scheduler, universal theory, or successful public/hidden competition entry.
 
-[The native F3-first experimental agent](agent/my_agent.py) uses the **actual depth-three transformations** and all nine phi(0)=0 candidate laws from [the original finite mathematical source](../arc_like_maze/math.py). [AGENTS.md](AGENTS.md) records the investigation rules and evidence boundary. The independently tested equations drive candidate endpoint-collision probes; this is not another G0/G2 solver, bot, or orchestration layer.
+## Active agent and mathematical scope
 
-The current agent tries one **provisional** assignment of two advertised native simple actions to mathematical A/B. It checks visible-frame counterexamples without relabeling colors as F3 values. A surviving candidate remains conditional; a contradiction yields OUTSIDE_DECLARED_F3_FAMILY. The initial policy does **not** infer goals or demonstrate an ARC win. Other native action assignments and richer finite-field grammars remain separate questions.
+The [official single-file entry](agent/my_agent.py) contains the literal mathematical A/B transformations for all 4×2×2×3=**48 source laws** (support, pulse, balanced edit, nonlinear shear coefficient), source-conformance tested over all 27 depth-three states. It keeps the original **16 marked/rooted equivalence classes** distinct from **14 full-state conjugacy classes**, including explicitly nonrooted cases where the alignment moves the origin.
 
-Reproduce source-law conformance and the falsification cases:
+The executable investigates **necessary rooted word equalities** only after marking a pair of observed native simple controls as **provisional** mathematical generators. It records actual native pixel observations and may refute the entire proposed direct mapping. It does **not** promote native action IDs to proven F3 generators. For click-only games such as FT09, it does not fabricate ACTION6 coordinates. There is no demonstrated ARC puzzle-solving policy in this source.
 
-```sh
-python -m unittest -v network.tests.test_arc3_f3_agent
-```
+### Reproducibility
 
-The F3 prototype has now been executed against native LS20 and has a recorded 0-level result. Additional direct source-F3 tests on native SK48 and FT09 are independently recorded; none demonstrates a verified native-to-F3 generator correspondence. Historical G2.3 public-game evidence remains a separate comparison and is not imported as this agent's reasoning.
+    python -m unittest -v network.tests.test_arc3_f3_agent
 
-## Current F3/native observation
+The [focused mathematical CI](../../.github/workflows/arc3-f3-agent.yml) also tests the historical nine-law entry **against its archive only**, never against the new canonical agent.
 
-[LS20 native relational evidence](runs/LS20_F3_NATIVE_RELATIONS_2026-10-17.md) now records the result of using the original F3 laws as a hypothesis against the real game: exact co-transport of native color groups, a separate persistent 2-cell change on every tested action, visible final-frame collisions for native words 34/43 and 23/32, and order-sensitive 12/21. All measurements came from official native action calls, not a synthetic ARC imitation.
+The [official native test workflow](../../.github/workflows/arc3-f3-native-smoke.yml) exercises the same 48-law agent against public **SK48, LS20, and FT09** and uploads actual raw frames and rooted-law evidence. Actual outcomes must come from successful GitHub runs, not from mathematical unit tests alone.
 
-The mathematically necessary F3 order-three relation did **not** survive the literal raw-state mapping; the new observed glyph/trace distinction is not yet a justified F3 state representation. The single-file F3 agent remains experimental, and no game win is claimed. [Reproducible native tests](native_mixed_relation_probe.py) and [the direct original-law comparison](f3_native_word_comparison.py) preserve that boundary.
+## First 48-law native checkpoint
 
-## F3 source probe portability — other real ARC environments
+[The new native 48-law evidence record](runs/WINDOW48_RESTART_2026-10-17.md) documents a successful [real native run](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39092926137). SK48 and LS20 each reached an explicit conditional rooted-law wall after six real actions; the click-only FT09 native reset was recorded without issuing fictional coordinates. Zero levels were completed. The old nine-law data remain historical and are not counted as 48-law observations.
 
-[FT09 and SK48 native source-F3 investigation](runs/F3_NATIVE_CROSS_GAME_2026-10-17.md) preserves source-selected F3 equality questions against independently reset real games. SK48 exposed directional native controls; the provisional ACTION1=A/ACTION2=B mapping failed the universal source A³-root return. FT09 exposed coordinate-parametrized ACTION6 rather than native simple controls: a source-only 74-site spatial investigation found eight real click effects, including the independently recorded native coordinates (36,36) and (44,36). Two separate coordinate pairs were tested with **62 further native click actions**, and each gave a visibly equal AB/BA endpoint while failing the source F3 A³ return; neither was idempotent in the tested states.
+## Workstation and native observation sources
 
-These are meaningful native action-interface measurements and **negative results for a direct injective complete-frame identification** with the original F3 worlds. They are not F3 failures as mathematics, hidden-state identity proofs, general ARC solvers or new game wins. The experimental [single-file agent](agent/my_agent.py) should not be represented as having learned to choose native F3 generators, nor should arbitrary ACTION6 center clicks count as tested correspondence.
+- [work/arc3/lane.py](lane.py) preserves the existing read-only native trace-inspection and Work journal mechanism; it is not a native action actuator.
+- [Official ARC operator shell](../../research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py) exposes actual commands (show, info, act N, act 6 X Y), native frame hash and append-only observation log.
+- [Operator manual](../../research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md) and [first-contact runbook](../../research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md) keep manual, autonomous, development-tuned and hidden evaluations separate.
+- [Source-owned native observation adapter](../../runtime/ARC_NATIVE_OBSERVATIONS.md) can report before/after effects without pretending to choose actions.
 
-## Existing source, not rewritten
+To inspect a native observation log from the operator shell, use:
 
-- [Direct-solve objective](../../research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md) — solve the actual games, with discovery actions counted.
-- [Operator shell](../../research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py) — the existing one-action-at-a-time native ARC interface and append-only JSONL observations.
-- [Operator instructions](../../research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md) — exact manual operation.
-- [First-contact runbook](../../research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md) — separates untouched evaluations from tuned replays.
-- [Native observation adapter](../../runtime/ARC_NATIVE_OBSERVATIONS.md) — source-owned before/after frame observation, not an actuator.
-- [Recorded routes](../../research/arc_native_runs/README.md) and [negative autonomous trials](../../research/arc_native_runs/AUTONOMOUS_TRIALS.md) — historical evidence, **not** first-contact wins by this lane.
+    python -m work.arc3.lane inspect --trace runtime/data/arc3/native-session.jsonl
 
-The independent [mathematical ARC-like experiments](../arc_like_maze/README.md) stay in their own directory. Their finite constructions do not serve as results for this native game lane.
+To record it into the already existing workstation journal:
 
-## First operating slice
+    python -m work.arc3.lane record --journal runtime/data/workspace.jsonl --trace runtime/data/arc3/native-session.jsonl
 
-Use the existing official ARC runtime on an authorized machine and the **existing** operator shell; do not replay saved winning routes as first-contact results:
+These commands only work when a real operator-produced native trace exists. They do not generate observations or simulate ARC.
 
-```sh
-python -m work.arc3.lane open --journal runtime/data/workspace.jsonl
-python research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py --game ft09 --log runtime/data/arc3/ft09-new-session.jsonl
-```
+## What is preserved from the earlier nine-law route
 
-In the ARC shell: inspect `show` / `info`, choose a concrete action, issue `act N` or `act 6 X Y`, inspect what actually changed, and continue. This action is performed by the operator shell, **not** the lane code.
+The previous nine-world mathematical experiments and their native trials (including LS20 movement/trace, SK48 and FT09 comparisons) remain immutable historical evidence under [runs/](runs/). They were **not tests of the 48-law window**.
 
-After at least one native action:
+For unambiguous reproduction:
+- [Previous agent](archive/nine_law_agent_2026-10-17.py)
+- [Previous research instructions](archive/NINE_LAW_AGENTS_2026-10-17.md)
+- [Previous full Work README](archive/NINE_LAW_README_2026-10-17.md)
+- [Previous nine-law regression](../../network/tests/test_arc3_nine_law_archive.py)
 
-```sh
-python -m work.arc3.lane inspect --trace runtime/data/arc3/ft09-new-session.jsonl
-python -m work.arc3.lane record --journal runtime/data/workspace.jsonl --trace runtime/data/arc3/ft09-new-session.jsonl
-```
+The repository's independent [finite mathematical work](../arc_like_maze/README.md) remains distinct from native ARC evidence.
 
-`inspect` reads the source log without launching ARC, scheduling a process, or altering a journal. `record` links its digest and source-reported action changes into **only this lane's** existing `WorkspaceStore` journal. An identical trace cannot be recorded twice. Another lane's return point and current focus are preserved.
+## Current boundary
 
-## What we can and cannot conclude
+**Established mathematically:** 48 source laws, 14 full-state and 16 rooted classes with exact source witnesses.
 
-- `LANE_OPENED` is a return point, **not** a completed observation or active session.
-- The operator transcript records reported action IDs, before/after frame hashes, changed-cell counts, optional bounding boxes, levels, and resets. Continuity is checked **within the log**; original raw frames must be retained for an independent pixel-level audit.
-- An action with a nonzero changed-cell count is a reported observed change, **not** a proven mechanism, prediction, level solve, or first-contact benchmark score.
-- A previously solved FT09, LS20, or SK48 route is prior evidence, **not** a new live solve. A fresh session on a previously studied game is not first contact to that game's unseen rules.
-- No general-purpose worker, delegated bot, automatic game action, invented environment trace, or new scheduler is created here.
-- GitHub stores the source of this lane; private `runtime/data` journals and actual native actions only exist where explicitly run. Committing this branch alone does not start a remote ARC game.
+**Not yet established natively:** a verified mapping from ARC control actions/coordinates and observed game state to those source laws, any source-to-native conjugacy, an ARC win, or a competition score.
 
-## Next actual movement
-
-Capture a real native start state, available actions, and one action's before/after observation. State the proposed effect and **predict a subsequent change before taking the next action**, then keep the actual correction if it differs. Continue toward the level win state and separately measure action efficiency.
-
-## Checks
-
-```sh
-python -m unittest -v network.tests.test_arc3_direct_work_lane
-```
-
-## Current native F3 suffix witness
-
-[LS20 native suffix experiment and F3 mathematical comparison](runs/LS20_F3_SUFFIX_2026-10-17.md) (120 real environment actions): visible state equalities from native words 34/43 and 23/32 persist under six common suffixes; visibly unequal words 12/21 converge after native suffix 2 and suffix 21. In all nine original F3 laws, the corresponding mathematical states under provisional native ACTION1=A/ACTION2=B remain distinct, since the generators are bijective. This is a **negative result for a literal injective visible-state correspondence**, not a proof that F3 as a wider investigation fails. No game win or new agent was produced.
-
-## Native LS20 state predictions
-
-[Source-recorded native frame prediction experiment](runs/LS20_NATIVE_FACTOR_PREDICTION_2026-10-17.md) now contains a reproducible, exact native glyph/trace model: the original free-motion proposal failed 6/34 action predictions, while a geometry-corrected rule predicted **69/69** native full frames, including **35/35** actions across eight separate held-out mixed words. The modeled motion blocks against native static obstacles, while a separate two-cell trace advances with actions. These are local LS20 observations, not F3 mathematics or general ARC wins; the earlier source-grounded F3 counterexamples remain open.
-
-## Latest native F3 mathematical test
-
-[LS20 F3 A-generator macro screening](runs/LS20_F3_ORDER_THREE_MACROS_2026-10-17.md) now tested the original mathematical requirement A³=id with A and A² nontrivial against the independently measured native glyph factor. **5,460** native action words of length <=6, applied at **34 model-reachable offsets**, produced **zero strict period-three cycles** in that model. **57/57** separately executed native LS20 frames matched the model on six repeated macro words. This closes the **bounded short-generator proposal on that measured glyph factor**, not F3 more generally or unknown longer/higher-order native relationships. No game win claimed.
+The next experiment must produce a **predeclared observable relation**, actually intervene in a native game, preserve counterexamples, and stop rather than asserting an unsupported equivalence. See [AGENTS.md](AGENTS.md) for the source/evidence contract.

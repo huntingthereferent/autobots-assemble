@@ -1,9 +1,16 @@
-"""F3-first native ARC-AGI-3 experimental agent; one-file Kaggle entry.
+"""ARC-AGI-3 experimental agent: ORIGINAL 48-law marked F3 window.
 
-The F3 laws are transcribed from work.arc_like_maze.math.World(depth=3).
-Native ARC actions have no intrinsic mathematical A/B identity: two advertised
-simple actions are assigned provisional roles for a bounded falsification test.
-This is not a proved correspondence, general solver, or replay policy.
+Mathematical source: work.arc_like_maze.window_combined.CombinedWorld,
+branch_rule, and WindowProcess. Forty-eight B tables form 16 ROOTED and
+14 FULL-STATE labeled classes; a nonrooted conjugacy is NOT an admissible
+root-preserving witness. The former nine-phi experiment is archived.
+
+This is a self-contained official MyAgent file. Native inputs are unchanged
+64x64 color frames and explicitly advertised legal actions. An ARC action
+is NEVER intrinsically the mathematical A or B: assigning two simple native
+actions below is a provisional direct-realization FALSIFICATION experiment.
+If the candidate family fails, do not reset it or promote a saved route.
+No native-F3 relation, universal solver, or game win is claimed.
 """
 from __future__ import annotations
 
@@ -13,192 +20,278 @@ from itertools import combinations, product
 from typing import Any
 
 import numpy as np
-
 from agents.agent import Agent
 from arcengine import FrameData, GameAction, GameState
 
 
-PHIS = tuple((0, a, b) for a, b in product(range(3), repeat=2))
+# EXACT parameter ordering from window_combined.family():
+# CombinedWorld(k, c, e, t) for k,e,t,c in 4 x 2 x 2 x 3.
+WINDOW48 = tuple((k, c, e, t) for k, e, t, c in
+                 product(range(4), range(2), range(2), range(3)))
+ORIGIN = (0, 0, 0)
+ROOTED_CLASS_COUNT = 16
+FULL_STATE_CLASS_COUNT = 14
 
 
-def f3_step(state: tuple[int, int, int], letter: str,
-            phi: tuple[int, int, int]) -> tuple[int, int, int]:
-    """Exactly the depth-three F3 transformations in the source research."""
-    x0, x1, x2 = state
+def window48_q(u: int, v: int, law: tuple[int, int, int, int]) -> int:
+    """Literal window_combined.combined_rule source formula at q0(u,v)."""
+    k, c, e, t = law
+    if (k not in range(4) or c not in range(3)
+            or e not in (0, 1) or t not in (0, 1)):
+        raise ValueError("law is not a member of the original 48")
+    return (int(u == 2 and v < k)
+            + e * int(u == 0 and v == 0)
+            + t * (int(u == 1 and v == 0) - int(u == 1 and v == 1))
+            + c * ((v + u + 1) ** 2 - v ** 2)) % 3
+
+
+def window48_step(state: tuple[int, int, int], letter: str,
+                  law: tuple[int, int, int, int]) -> tuple[int, int, int]:
+    """Exact source depth-3 A/B transitions, with PRE-ACTION x0 and x1."""
+    if len(state) != 3 or any(v not in range(3) for v in state):
+        raise ValueError("the declared finite check is at depth three")
+    u, v, z = state
     if letter == "A":
-        return ((x0 + 1) % 3, x1, x2)
+        return ((u + 1) % 3, v, z)
     if letter == "B":
-        return (x0, (x1 + x0 + 1) % 3, (x2 + phi[x1]) % 3)
-    raise ValueError("only mathematically declared A and B")
+        return (u, (v + u + 1) % 3, (z + window48_q(u, v, law)) % 3)
+    raise ValueError("only source mathematical A/B letters are admitted")
 
 
-def f3_endpoint(word: str, phi: tuple[int, int, int]) -> tuple[int, int, int]:
-    state = (0, 0, 0)
+def window48_inverse(state: tuple[int, int, int], letter: str,
+                     law: tuple[int, int, int, int]) -> tuple[int, int, int]:
+    """Independent check of the original B triangular inverse."""
+    if len(state) != 3 or any(v not in range(3) for v in state):
+        raise ValueError("the declared finite check is at depth three")
+    u, v, z = state
+    if letter == "A":
+        return ((u - 1) % 3, v, z)
+    if letter == "B":
+        old_v = (v - u - 1) % 3
+        return (u, old_v, (z - window48_q(u, old_v, law)) % 3)
+    raise ValueError("only source mathematical A/B letters are admitted")
+
+
+def window48_endpoint(word: str, law: tuple[int, int, int, int],
+                      origin: tuple[int, int, int] = ORIGIN
+                      ) -> tuple[int, int, int]:
+    state = origin
     for letter in word:
-        state = f3_step(state, letter, phi)
+        state = window48_step(state, letter, law)
     return state
 
 
 def observation_key(frame: FrameData) -> bytes:
-    """Keep all 16 native colors; do not map observations modulo three."""
     grid = np.asarray(frame.frame)
     if grid.ndim == 3:
         grid = grid[-1]
     if grid.size != 64 * 64:
-        raise ValueError("native 64x64 observation unavailable")
-    arr = grid.reshape(64, 64)
-    if np.any(arr < 0) or np.any(arr > 15):
-        raise ValueError("unexpected ARC color outside 0..15")
-    return blake2b(np.ascontiguousarray(arr, dtype=np.uint8).tobytes(), digest_size=16).digest()
+        raise ValueError("not a complete native 64x64 observation")
+    values = grid.reshape(64, 64)
+    if np.any(values < 0) or np.any(values > 15):
+        raise ValueError("native colors outside 0..15")
+    return blake2b(np.ascontiguousarray(values, dtype=np.uint8).tobytes(),
+                   digest_size=16).digest()
 
 
 @dataclass(frozen=True)
-class CandidateReport:
-    candidate_indices: tuple[int, ...]
+class Window48Report:
     status: str
-    observed_distinctions: int
-    visible_equalities: int
+    candidate_indices: tuple[int, ...]
+    rooted_class_keys: tuple[tuple[int, int, int], ...]
+    observed_word_count: int
+    visible_collisions: int
+    visible_distinctions: int
 
 
-class F3Evidence:
-    """Compare a rooted native action-word trace against the nine F3 laws.
+class Window48Evidence:
+    """One rooted native trajectory, under an EXPLICITLY PROVISIONAL A/B pair.
 
-    Native A/B roles are provisional, not ARC action semantics. Distinct
-    observed full frames refute a predicted state equality. Equal visible
-    frames do NOT establish equal hidden states or full-state conjugacy.
+    Source F3 state-equality => equal observed native frames is a necessary
+    consequence of a direct action-preserving observable-state map. Violating
+    it removes the proposed law. Native frames being equal NEVER proves the
+    full native hidden states (or mathematical states) are equal.
+
+    The fourteen full-state class count is mathematical classification over
+    ALL states, and may NOT be inferred from these rooted observations.
     """
 
-    def __init__(self, native_a: int, native_b: int, root_key: bytes):
+    def __init__(self, native_a: int, native_b: int, root: bytes):
         if native_a == native_b:
-            raise ValueError("A and B require distinct native action IDs")
+            raise ValueError("A and B require distinct provisional native controls")
         self.native_actions = (native_a, native_b)
-        self.words: dict[str, bytes] = {"": root_key}
-        self.word = ""
-        self.candidates = tuple(range(len(PHIS)))
-        self.observed_distinctions = 0
-        self.visible_equalities = 0
+        self.words: dict[str, bytes] = {"": root}
+        self.current_word = ""
+        self.candidates = tuple(range(len(WINDOW48)))
+        self.visible_collisions = 0
+        self.visible_distinctions = 0
 
-    def record(self, letter: str, after: bytes) -> CandidateReport:
+    def record(self, letter: str, observed_frame: bytes) -> Window48Report:
         if letter not in ("A", "B"):
-            raise ValueError("unrecognized mathematical action letter")
-        new_word = self.word + letter
-        admitted = []
-        for index in self.candidates:
-            predicted = f3_endpoint(new_word, PHIS[index])
-            if all(f3_endpoint(old_word, PHIS[index]) != predicted or old_key == after
-                   for old_word, old_key in self.words.items()):
-                admitted.append(index)
-        self.observed_distinctions += sum(old_key != after for old_key in self.words.values())
-        self.visible_equalities += sum(old_key == after for old_key in self.words.values())
-        self.word = new_word
-        self.words[new_word] = after
-        self.candidates = tuple(admitted)
+            raise ValueError("invalid candidate generator label")
+        next_word = self.current_word + letter
+        remaining = []
+        for i in self.candidates:
+            law = WINDOW48[i]
+            end = window48_endpoint(next_word, law)
+            if all(window48_endpoint(old_word, law) != end
+                   or old_frame == observed_frame
+                   for old_word, old_frame in self.words.items()):
+                remaining.append(i)
+        self.visible_collisions += sum(
+            frame == observed_frame for frame in self.words.values())
+        self.visible_distinctions += sum(
+            frame != observed_frame for frame in self.words.values())
+        self.current_word = next_word
+        self.words[next_word] = observed_frame
+        self.candidates = tuple(remaining)
         return self.report()
 
-    def report(self) -> CandidateReport:
-        return CandidateReport(
-            self.candidates,
-            "CONDITIONAL_F3_CANDIDATES" if self.candidates else "OUTSIDE_DECLARED_F3_FAMILY",
-            self.observed_distinctions,
-            self.visible_equalities,
+    def report(self) -> Window48Report:
+        rooted = tuple(sorted({(WINDOW48[i][0], WINDOW48[i][2], WINDOW48[i][3])
+                               for i in self.candidates}))
+        return Window48Report(
+            "CONDITIONAL_ROOTED_WINDOW48" if self.candidates
+            else "WALL_NO_DIRECT_ROOTED_WINDOW48_MATCH",
+            self.candidates, rooted, len(self.words)-1,
+            self.visible_collisions, self.visible_distinctions,
         )
 
     def rank_letters(self) -> tuple[str, str]:
-        """Choose finite-field endpoint-collision questions, not ARC heuristics."""
-        def score(letter: str) -> tuple[int, int, int]:
-            word = self.word + letter
-            signatures = [
-                tuple(f3_endpoint(word, PHIS[i]) == f3_endpoint(old, PHIS[i])
-                      for old in self.words)
-                for i in self.candidates
-            ]
-            separated = sum(left != right for left, right in combinations(signatures, 2))
-            predicted_returns = sum(any(sig) for sig in signatures)
-            alternate = int(not self.word or self.word[-1] != letter)
-            return separated, predicted_returns, alternate
-        return tuple(sorted(("A", "B"), key=lambda a: (score(a), a), reverse=True))
+        """Use source endpoint-collision differences, never a game heuristic."""
+        def measure(letter: str):
+            word = self.current_word + letter
+            patterns = [tuple(window48_endpoint(word, WINDOW48[i]) ==
+                              window48_endpoint(old, WINDOW48[i])
+                              for old in self.words)
+                        for i in self.candidates]
+            discrimination = sum(a != b for a, b in combinations(patterns, 2))
+            predicted_returns = sum(any(p) for p in patterns)
+            change = int(bool(self.current_word) and
+                         self.current_word[-1] != letter)
+            return (discrimination, predicted_returns, change)
+        return tuple(sorted("AB", key=lambda x: (measure(x), x), reverse=True))
 
 
 def allowed_actions(frame: FrameData) -> list[GameAction]:
-    available = getattr(frame, "available_actions", None)
-    if not available:
-        return []  # Missing affordances are not permission to invent actions.
-    values = {int(getattr(a, "value", a)) for a in available}
-    return [a for a in GameAction if a is not GameAction.RESET and a.value in values]
+    advertised = getattr(frame, "available_actions", None)
+    if not advertised:
+        return []
+    values = {int(getattr(a, "value", a)) for a in advertised}
+    return [a for a in GameAction
+            if a is not GameAction.RESET and a.value in values]
 
 
 class MyAgent(Agent):
-    """One ARC entry point, with F3 evidence as the investigative basis."""
+    """Single executable interface; F3-48 investigation, NOT goal-solving."""
 
-    MAX_ACTIONS = 120  # bounded prototype; not a score-optimized action budget
+    MAX_ACTIONS = 40
 
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
-        self.f3: F3Evidence | None = None
-        self.last_letter: str | None = None
+        self.f3_48: Window48Evidence | None = None
+        self.pending_letter: str | None = None
         self.last_level: int | None = None
+        self.stopped_at_wall = False
+
+    def _consume_pending_native_response(self, frame: FrameData) -> None:
+        """Check the last source-predicted step before deciding to continue.
+
+        The official SDK asks is_done before the next choose_action. A
+        contradiction therefore causes a clean stop rather than one extra
+        unjustified action or a recycled candidate set.
+        """
+        if self.f3_48 is None or self.pending_letter is None:
+            return
+        level = int(getattr(frame, "levels_completed", 0))
+        legal = allowed_actions(frame)
+        simple = [a for a in legal if a.value in (1, 2, 3, 4, 5)]
+        pair = tuple(a.value for a in simple[:2]) if len(simple) >= 2 else None
+        if pair != self.f3_48.native_actions or level != self.last_level:
+            self.f3_48 = None
+            self.pending_letter = None
+            return
+        try:
+            key = observation_key(frame)
+        except ValueError:
+            self.stopped_at_wall = True
+            return
+        self.f3_48.record(self.pending_letter, key)
+        self.pending_letter = None
+        if not self.f3_48.candidates:
+            self.stopped_at_wall = True
 
     def is_done(self, frames: list[FrameData], latest_frame: FrameData) -> bool:
-        return latest_frame.state is GameState.WIN
+        if latest_frame.state is GameState.WIN:
+            return True
+        if latest_frame.state not in (GameState.NOT_PLAYED, GameState.GAME_OVER):
+            self._consume_pending_native_response(latest_frame)
+        if self.stopped_at_wall:
+            return True
+        available = allowed_actions(latest_frame)
+        # Coordinate-click ACTION6 needs observed coordinates; invented
+        # midpoint clicks or fake A/B generators are not admissible.
+        if latest_frame.state not in (GameState.NOT_PLAYED, GameState.GAME_OVER):
+            if len([a for a in available if a.value in (1, 2, 3, 4, 5)]) < 2:
+                return True
+        return False
 
-    def choose_action(self, frames: list[FrameData], latest_frame: FrameData) -> GameAction:
+    def choose_action(self, frames: list[FrameData], latest_frame: FrameData
+                      ) -> GameAction:
         if latest_frame.state in (GameState.NOT_PLAYED, GameState.GAME_OVER):
-            self.f3 = None
-            self.last_letter = None
+            self.f3_48 = None
+            self.pending_letter = None
             self.last_level = None
+            self.stopped_at_wall = False
             return GameAction.RESET
 
         legal = allowed_actions(latest_frame)
-        if not legal:
-            action = GameAction.RESET
-            action.reasoning = {"policy": "F3", "status": "NO_ADVERTISED_ACTIONS"}
-            return action
-
-        level = int(getattr(latest_frame, "levels_completed", 0))
         simple = [a for a in legal if a.value in (1, 2, 3, 4, 5)]
-        native_pair = tuple(a.value for a in simple[:2]) if len(simple) >= 2 else None
+        pair = tuple(a.value for a in simple[:2]) if len(simple) >= 2 else None
+        if pair is None:
+            # is_done will stop before this on the official SDK runner.
+            self.stopped_at_wall = True
+            raise RuntimeError("WALL: no grounded pair of simple native controls")
         try:
-            key = observation_key(latest_frame)
+            native_frame = observation_key(latest_frame)
         except ValueError:
-            key = None
-
-        if self.f3 is not None and (self.last_level != level or
-                                     native_pair != self.f3.native_actions or key is None):
-            self.f3 = None
-            self.last_letter = None
-
-        if self.f3 is None and native_pair is not None and key is not None:
-            self.f3 = F3Evidence(*native_pair, root_key=key)
-        elif self.f3 is not None and self.last_letter is not None and key is not None:
-            self.f3.record(self.last_letter, key)
-            self.last_letter = None
-
+            self.stopped_at_wall = True
+            raise RuntimeError("WALL: native frame unavailable")
+        level = int(getattr(latest_frame, "levels_completed", 0))
+        if self.f3_48 is not None and (
+                pair != self.f3_48.native_actions or level != self.last_level):
+            self.f3_48 = None
+            self.pending_letter = None
+        if self.f3_48 is None:
+            self.f3_48 = Window48Evidence(*pair, root=native_frame)
+        elif self.pending_letter is not None:
+            # Direct unit-test / nonstandard runner fallback when is_done
+            # has not been called for the new native response.
+            self._consume_pending_native_response(latest_frame)
         self.last_level = level
-        if self.f3 is not None and self.f3.candidates:
-            letter = self.f3.rank_letters()[0]
-            action_id = self.f3.native_actions[0 if letter == "A" else 1]
-            action = next(a for a in legal if a.value == action_id)
-            self.last_letter = letter
-            action.reasoning = {
-                "policy": "F3-rooted-relations",
-                "role": letter,
-                "hypothesis_only": True,
-                "native_roles": list(self.f3.native_actions),
-                "candidate_count": len(self.f3.candidates),
-                "word_before": self.f3.word,
-                "next_probe": self.f3.word + letter,
-                "visible_equalities_not_state_proof": True,
-            }
-            return action
-
-        # No fictitious successor law is created when the F3 hypothesis fails.
-        action = simple[0] if simple else legal[0]
-        if action is GameAction.ACTION6:
-            action.set_data({"x": 32, "y": 32})  # interface placeholder, not F3 evidence
+        result = self.f3_48.report()
+        if not result.candidate_indices:
+            self.stopped_at_wall = True
+            # A comparison has just contradicted the entire proposed family.
+            # Do not reset and start over with a new ungrounded native pair.
+            raise RuntimeError("WALL: all 48 direct rooted native-law proposals refuted")
+        letter = self.f3_48.rank_letters()[0]
+        control = self.f3_48.native_actions[0 if letter == "A" else 1]
+        action = next(a for a in simple if a.value == control)
+        self.pending_letter = letter
         action.reasoning = {
-            "policy": "F3",
-            "status": "WALL_NO_ADMITTED_F3_CORRESPONDENCE",
-            "candidate_count": len(self.f3.candidates) if self.f3 else 0,
-            "fallback_is_not_F3_inference": True,
+            "policy": "WINDOW48_SOURCE_ROOTED_EVIDENCE",
+            "status": result.status,
+            "provisional_native_action_roles": list(pair),
+            "role": letter,
+            "rooted_conjugacy_not_full_state_claim": True,
+            "48_source_laws_remaining": len(result.candidate_indices),
+            "rooted_class_keys_remaining": [
+                list(x) for x in result.rooted_class_keys],
+            "full_state_classes_not_inferred": FULL_STATE_CLASS_COUNT,
+            "word_before": self.f3_48.current_word,
+            "word_next": self.f3_48.current_word+letter,
+            "native_colors_not_reduced_modulo_three": True,
+            "hypothesis_only_no_arc_goal_model": True,
         }
         return action
