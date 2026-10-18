@@ -4,9 +4,9 @@ Scope is controlled by the **current referent**, not by a permanent job/category
 
 ## Preferred referent
 
-The canonical current routing pointer is [state/current.json](state/current.json).
+The authoritative current referent is the **user's explicit request in the active conversation**, interpreted with [ENTRY.md](ENTRY.md). Do not replace it with a historical repository pointer.
 
-A concrete work record may also preserve its own preferred referent.
+[state/current.json](state/current.json) is retained historical source evidence (`status: historical`), **not a current work queue or default next movement**. A source-specific work record may preserve its own preferred referent and its own historical next step, but neither can silently supersede the active request.
 
 ## Complete-stack ordering
 
@@ -48,4 +48,4 @@ Use an explicit wall or bounded placeholder when necessary.
 
 ## External job records
 
-`jobs/` holds only currently retained external-work opportunities. It is not permanent capability history and does not define repository-wide scope.
+The old `jobs/` listing directory and income scoreboards were retired. They remain recoverable from Git history, not from the current work tree. Paid requests, experiments, mathematical investigations and source corrections are all *work*; admission, verification and continuation depend on native evidence rather than an income category. Do not regenerate deleted listings or overwrite [TASKS.md](TASKS.md) from historical files.
