@@ -5,21 +5,212 @@
 <title>Work · Original investigation</title>
 <meta name="description" content="Source-owned workstation executions, verification steps, research outcomes, and unresolved walls.">
 <style>
-:root{color-scheme:dark;--bg:#091017;--panel:#111c26;--panel2:#15232f;--line:#2b4050;--text:#e8f1f5;--muted:#9fb6c3;--blue:#8ed3ed;--green:#91ddba;--yellow:#f3c68c;--red:#f0a7a4}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);background:var(--bg);font:14px/1.53 ui-monospace,SFMono-Regular,Consolas,monospace}a{color:#a6dcf2;text-decoration:none}a:hover{text-decoration:underline}button,input,select{font:inherit}button,select,input{color:var(--text);background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:9px 12px}button{cursor:pointer}button:hover{border-color:var(--blue)}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-header{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:14px max(20px,4vw);background:#0d1620}header strong{font-size:13px;letter-spacing:1px}header nav{display:flex;gap:20px;align-items:center;flex-wrap:wrap;font-size:12px}header nav a{color:var(--muted)}
-main{max-width:1490px;margin:auto;padding:25px max(20px,3vw) 60px}.eyebrow{font-size:11px;letter-spacing:1.8px;color:var(--blue);font-weight:700;text-transform:uppercase;margin:0 0 10px}h1{font-size:clamp(30px,4.4vw,58px);line-height:1.09;letter-spacing:-2.5px;margin:0 0 16px}h2{font-size:22px;letter-spacing:-.8px;margin:0}h3{font-size:15px;margin:0}.intro{max-width:1020px;color:#b4c7d1;line-height:1.7;margin:0 0 22px}.status-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);padding-bottom:16px}.indicator{height:8px;width:8px;border-radius:50%;background:#758c98;display:inline-block}.indicator.ok{background:var(--green)}.indicator.error{background:var(--red)}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:28px}.metric{border:1px solid var(--line);border-radius:7px;background:var(--panel);padding:16px 18px}.metric strong{font-size:31px;line-height:1.2;display:block;font-variant-numeric:tabular-nums}.metric small{display:block;letter-spacing:1px;font-size:10px;color:var(--muted);margin-top:4px}.metric:has([data-stat="running"]) strong{color:var(--blue)}.metric:has([data-stat="failed"]) strong{color:var(--red)}
-.section-top{display:flex;justify-content:space-between;align-items:end;gap:15px;flex-wrap:wrap;margin:32px 0 14px}.subtitle{color:var(--muted);font-size:12px;margin:6px 0 0}.tools{display:flex;gap:8px;flex-wrap:wrap}.tools label{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted)}
-.workspace{display:grid;grid-template-columns:minmax(340px,.94fr) minmax(460px,1.25fr);gap:16px;align-items:start}.pane{border:1px solid var(--line);border-radius:7px;background:var(--panel);min-width:0;overflow:hidden}.pane>header{background:#14212d;padding:13px 16px;border-bottom:1px solid var(--line)}.pane>header small{color:var(--muted)}.pane-content{max-height:680px;overflow-y:auto}.run{border:0;background:transparent;border-bottom:1px solid #243643;border-radius:0;width:100%;display:block;text-align:left;padding:14px 16px;position:relative}.run:hover,.run.selected{background:#1b2d3b}.run.selected{box-shadow:inset 3px 0 0 var(--blue)}.run:focus-visible{outline-offset:-3px}.run-title{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}.run h3{font-size:13px;line-height:1.4}.run p{font-size:11px;color:var(--muted);margin:7px 0 0;overflow-wrap:anywhere}
-.state{font-size:10px;font-weight:700;border-radius:4px;padding:4px 7px;border:1px solid #567080;color:#aaccda;white-space:nowrap;letter-spacing:.4px}.state.success{border-color:#408c71;color:var(--green)}.state.failure,.state.cancelled{border-color:#a36b6a;color:var(--red)}.state.in_progress,.state.queued{border-color:#6d90a2;color:var(--blue)}.state.neutral,.state.skipped,.state.unknown{border-color:#8e7e65;color:var(--yellow)}
-.detail-body{padding:18px}.detail-body .hash{color:var(--blue);font-size:12px;overflow-wrap:anywhere}.detail-body .subhead{margin-top:22px;font-size:12px;color:#cde0e9;font-weight:700}.detail-body a{font-size:12px}.steps{list-style:none;margin:9px 0 0;padding:0}.steps li{display:flex;align-items:baseline;gap:12px;border-left:2px solid #5c7e93;padding:9px 12px;border-bottom:1px solid #253b4b}.steps li.passed{border-left-color:var(--green)}.steps li.failed{border-left-color:var(--red)}.steps li.running{border-left-color:var(--blue)}.steps li>div{flex:1;min-width:0;overflow-wrap:anywhere}.steps small{color:var(--muted);display:block}.steps .step-num{color:var(--muted);font-variant-numeric:tabular-nums;min-width:24px}.no-source{padding:19px;color:var(--muted);line-height:1.7}
-.source-controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}.source-controls input{min-width:min(340px,95vw);flex:1}
-.research-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:start}.record-list{max-height:560px;overflow-y:auto}.record{padding:16px;border-bottom:1px solid #283b49}.record>header{background:transparent;padding:0;border:0;display:flex;gap:10px;align-items:start;justify-content:space-between}.record h3{line-height:1.5;font-size:13px;max-width:80%;overflow-wrap:anywhere}.record p{color:var(--muted);font-size:11px;margin:7px 0}.record .path{font-size:11px;overflow-wrap:anywhere}.wall{border-left:2px solid var(--yellow);padding:13px 16px;margin:0;border-bottom:1px solid #283b49;overflow-wrap:anywhere}.wall p{margin:0 0 9px;font-size:12px}.wall small{color:var(--muted)}
-.fine{color:var(--muted);font-size:11px;line-height:1.7}.notice{color:var(--yellow);font-size:12px;padding:11px;background:#2d241b;border:1px solid #594b35;border-radius:5px;margin-bottom:14px}.notice[hidden]{display:none}
-footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--muted);font-size:11px}
-@media(max-width:950px){.workspace,.research-grid{grid-template-columns:1fr}.pane-content{max-height:490px}}
-@media(max-width:610px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}h1{letter-spacing:-1.2px}.metric strong{font-size:26px}}
+:root {
+  color-scheme: dark;
+  --bg:#091017; --panel:#111c26; --panel2:#15232f; --line:#2b4050;
+  --text:#e8f1f5; --muted:#9fb6c3; --blue:#8ed3ed;
+  --green:#91ddba; --yellow:#f3c68c; --red:#f0a7a4;
+  --body-font: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --heading-font: Georgia, "Times New Roman", serif;
+  --data-font: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--text); background: var(--bg);
+  font: 15px/1.62 var(--body-font);
+  -webkit-font-smoothing: antialiased;
+}
+a { color:#a6dcf2; text-decoration:none; text-underline-offset:3px; }
+a:hover { text-decoration:underline; }
+button, input, select { font:inherit; }
+button, select, input {
+  color:var(--text); background:var(--panel2); border:1px solid var(--line);
+  border-radius:4px; padding:9px 12px; font-size:13px;
+}
+button { cursor:pointer; }
+button:hover { border-color:var(--blue); }
+button:focus-visible, a:focus-visible, select:focus-visible, input:focus-visible {
+  outline:2px solid var(--blue); outline-offset:2px;
+}
+body > header {
+  display:flex; justify-content:space-between; align-items:center;
+  gap:20px; flex-wrap:wrap; border-bottom:1px solid var(--line);
+  padding:17px max(20px,4vw); background:#0d1620;
+}
+body > header strong {
+  font:600 12px/1.4 var(--body-font);
+  letter-spacing:.105em;
+}
+body > header nav {
+  display:flex; gap:22px; align-items:center; flex-wrap:wrap;
+  font:500 11px/1.5 var(--body-font); letter-spacing:.075em;
+}
+body > header nav a { color:var(--muted); }
+body > header nav a:hover { color:var(--text); }
+main { max-width:1490px; margin:auto; padding:37px max(20px,3vw) 70px; }
+.eyebrow {
+  font:600 11px/1.5 var(--data-font); letter-spacing:.09em;
+  color:var(--blue); text-transform:uppercase; margin:0 0 12px;
+}
+h1, h2 { font-family:var(--heading-font); font-weight:400; }
+h1 {
+  font-size:clamp(32px,3.2vw,45px); line-height:1.16;
+  letter-spacing:-.025em; margin:0 0 16px;
+}
+h2 { font-size:clamp(23px,2.25vw,30px); line-height:1.25; letter-spacing:-.015em; margin:0; }
+h3 { font:600 15px/1.45 var(--body-font); margin:0; letter-spacing:0; }
+.intro { max-width:900px; color:#b4c7d1; font-size:15px; line-height:1.75; margin:0 0 22px; }
+.status-line {
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  font-size:12px; color:var(--muted); padding-bottom:18px;
+}
+.status-line strong { font-weight:600; color:var(--text); }
+.status-line #last-read { font-family:var(--data-font); font-size:11px; }
+.status-line button { padding:7px 11px; }
+.indicator { height:8px; width:8px; border-radius:50%; background:#758c98; display:inline-block; }
+.indicator.ok { background:var(--green); }
+.indicator.error { background:var(--red); }
+.metrics {
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px; margin-bottom:15px;
+}
+.metric {
+  border:1px solid var(--line); border-radius:4px;
+  background:var(--panel); padding:17px 19px 15px;
+}
+.metric strong {
+  font:500 29px/1.15 var(--data-font); display:block;
+  font-variant-numeric:tabular-nums;
+}
+.metric small {
+  display:block; font:500 11px/1.5 var(--data-font);
+  letter-spacing:.025em; color:var(--muted); margin-top:9px;
+}
+.metric:has([data-stat="running"]) strong { color:var(--blue); }
+.metric:has([data-stat="failed"]) strong { color:var(--red); }
+.section-top {
+  display:flex; justify-content:space-between; align-items:end;
+  gap:16px; flex-wrap:wrap; margin:39px 0 16px;
+  padding-top:23px; border-top:1px solid var(--line);
+}
+.subtitle { color:var(--muted); font-size:13px; line-height:1.6; margin:8px 0 0; }
+.tools { display:flex; gap:8px; flex-wrap:wrap; }
+.tools label { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); }
+.workspace {
+  display:grid; grid-template-columns:minmax(340px,.94fr) minmax(460px,1.25fr);
+  gap:16px; align-items:start;
+}
+.pane {
+  border:1px solid var(--line); border-radius:4px; background:var(--panel);
+  min-width:0; overflow:hidden;
+}
+.pane > header {
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; flex-wrap:wrap; background:#14212d;
+  padding:13px 17px; border-bottom:1px solid var(--line);
+}
+.pane > header strong { font:600 13px/1.45 var(--body-font); letter-spacing:.005em; }
+.pane > header small { color:var(--muted); font:11px/1.5 var(--data-font); }
+.pane-content { max-height:680px; overflow-y:auto; }
+.run {
+  border:0; background:transparent; border-bottom:1px solid #243643;
+  border-radius:0; width:100%; display:block; text-align:left;
+  padding:15px 17px; position:relative;
+}
+.run:hover, .run.selected { background:#1b2d3b; }
+.run.selected { box-shadow:inset 3px 0 0 var(--blue); }
+.run:focus-visible { outline-offset:-3px; }
+.run-title { display:flex; align-items:flex-start; gap:10px; justify-content:space-between; }
+.run h3 { font-size:14px; line-height:1.5; }
+.run p {
+  font:11.5px/1.6 var(--data-font); color:var(--muted);
+  margin:8px 0 0; overflow-wrap:anywhere;
+}
+.state {
+  font:600 10px/1.4 var(--data-font); border-radius:3px;
+  padding:4px 7px; border:1px solid #567080; color:#aaccda;
+  white-space:nowrap; letter-spacing:.02em;
+}
+.state.success { border-color:#408c71; color:var(--green); }
+.state.failure, .state.cancelled { border-color:#a36b6a; color:var(--red); }
+.state.in_progress, .state.queued { border-color:#6d90a2; color:var(--blue); }
+.state.neutral, .state.skipped, .state.unknown { border-color:#8e7e65; color:var(--yellow); }
+.detail-body { padding:19px; font-size:13.5px; line-height:1.65; }
+.detail-body .hash {
+  color:var(--blue); font:12px/1.6 var(--data-font);
+  overflow-wrap:anywhere;
+}
+.detail-body .subhead {
+  margin-top:22px; font-size:13px; color:#cde0e9; font-weight:600;
+}
+.detail-body a { font-size:12.5px; }
+.steps { list-style:none; margin:10px 0 0; padding:0; }
+.steps li {
+  display:flex; align-items:baseline; gap:12px;
+  border-left:2px solid #5c7e93; padding:10px 12px;
+  border-bottom:1px solid #253b4b; font-size:13px;
+}
+.steps li.passed { border-left-color:var(--green); }
+.steps li.failed { border-left-color:var(--red); }
+.steps li.running { border-left-color:var(--blue); }
+.steps li > div { flex:1; min-width:0; overflow-wrap:anywhere; }
+.steps small {
+  color:var(--muted); display:block;
+  font:11px/1.65 var(--data-font); margin-top:3px;
+}
+.steps .step-num {
+  color:var(--muted); font:11px/1.5 var(--data-font);
+  font-variant-numeric:tabular-nums; min-width:24px;
+}
+.no-source { padding:19px; color:var(--muted); font-size:13px; line-height:1.7; }
+.source-controls { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:13px; }
+.source-controls input { min-width:min(340px,95vw); flex:1; font-size:13px; }
+.research-grid { display:grid; grid-template-columns:1.2fr 1fr; gap:16px; align-items:start; }
+.record-list { max-height:560px; overflow-y:auto; }
+.record { padding:16px 17px; border-bottom:1px solid #283b49; }
+.record > header {
+  background:transparent; padding:0; border:0;
+  display:flex; gap:10px; align-items:start; justify-content:space-between;
+}
+.record h3 { line-height:1.5; font-size:14px; max-width:80%; overflow-wrap:anywhere; }
+.record p { color:var(--muted); font-size:13px; line-height:1.6; margin:8px 0; }
+.record .path {
+  font:11.5px/1.6 var(--data-font); overflow-wrap:anywhere;
+}
+.wall {
+  border-left:2px solid var(--yellow); padding:14px 17px; margin:0;
+  border-bottom:1px solid #283b49; overflow-wrap:anywhere;
+}
+.wall p { margin:0 0 9px; font-size:13px; line-height:1.6; }
+.wall small { color:var(--muted); font:11.5px/1.6 var(--data-font); }
+.fine { color:var(--muted); font-size:12px; line-height:1.7; }
+.notice {
+  color:var(--yellow); font-size:12.5px; line-height:1.6;
+  padding:12px; background:#2d241b; border:1px solid #594b35;
+  border-radius:4px; margin-bottom:14px;
+}
+.notice[hidden] { display:none; }
+footer {
+  border-top:1px solid var(--line); padding:25px max(20px,4vw);
+  color:var(--muted); font-size:12px; line-height:1.7;
+}
+@media (max-width:950px) {
+  .workspace, .research-grid { grid-template-columns:1fr; }
+  .pane-content { max-height:490px; }
+}
+@media (max-width:610px) {
+  main { padding-top:28px; }
+  body > header { padding:15px 20px; }
+  body > header nav { gap:12px 16px; }
+  .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .metric { padding:14px; }
+  .metric strong { font-size:26px; }
+  h1 { font-size:34px; }
+  h2 { font-size:24px; }
+  .section-top { margin-top:30px; }
+  .run-title { flex-wrap:wrap; }
+}
 </style>
 </head>
 <body>
@@ -29,8 +220,8 @@ footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--m
 </header>
 <main>
 <section aria-labelledby="title">
-  <p class="eyebrow">Actual execution and original evidence</p>
-  <h1 id="title">What's happening in work?</h1>
+  <p class="eyebrow">Workstation / source evidence</p>
+  <h1 id="title">Research workstation</h1>
   <p class="intro">GitHub workflow runs and their individual steps appear here as recorded by GitHub. Mathematics, research, corrections and unresolved walls come from the original workstation's source records. An executed test is not automatically a solved research question; a stored research result is not automatically running.</p>
   <div class="status-line" role="status"><span class="indicator" id="live-dot"></span><strong id="feed-state">Reading current executions</strong><span id="last-read"></span><button id="check-now" type="button">Refresh source</button></div>
   <div id="feed-error" class="notice" hidden></div>
@@ -43,7 +234,7 @@ footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--m
   <p class="fine">Numbers describe the latest publicly accessible workflow-run sample, not every worker or every event in the workstation. Unavailable data is never counted as zero.</p>
 </section>
 <section id="executions" aria-label="Actual GitHub work execution">
-  <div class="section-top"><div><p class="eyebrow">Current execution</p><h2>What started, what passed, what stopped</h2><p class="subtitle">Select a recorded run to inspect the native jobs and exact steps GitHub observed.</p></div>
+  <div class="section-top"><div><p class="eyebrow">Current execution</p><h2>Execution record</h2><p class="subtitle">Select a recorded run to inspect the native jobs and exact steps GitHub observed.</p></div>
     <div class="tools"><label for="run-filter">Show <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label></div></div>
   <div class="workspace">
     <div class="pane"><header><strong>Observed workflow runs</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div></div>
@@ -51,7 +242,7 @@ footer{border-top:1px solid var(--line);padding:25px max(20px,4vw);color:var(--m
   </div>
 </section>
 <section id="research" aria-labelledby="research-title">
-  <div class="section-top"><div><p class="eyebrow">Original research</p><h2 id="research-title">What we learned and what remains open</h2><p class="subtitle">Original research states and preserved walls, linked back to the files that recorded them.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
+  <div class="section-top"><div><p class="eyebrow">Original research</p><h2 id="research-title">Research record &amp; open conditions</h2><p class="subtitle">Original research states and preserved walls, linked back to the files that recorded them.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
   <div class="source-controls"><input id="source-search" type="search" placeholder="Search original research, source, status or wall…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
   <div class="research-grid">
     <div class="pane"><header><strong>Recorded investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div></div>
