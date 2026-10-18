@@ -18,6 +18,10 @@ The [focused mathematical CI](../../.github/workflows/arc3-f3-agent.yml) also te
 
 The [official native test workflow](../../.github/workflows/arc3-f3-native-smoke.yml) exercises the same 48-law agent against public **SK48, LS20, and FT09** and uploads actual raw frames and rooted-law evidence. Actual outcomes must come from successful GitHub runs, not from mathematical unit tests alone.
 
+## First 48-law native checkpoint
+
+[The new native 48-law evidence record](runs/WINDOW48_RESTART_2026-10-17.md) documents a successful [real native run](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39092926137). SK48 and LS20 each reached an explicit conditional rooted-law wall after six real actions; the click-only FT09 native reset was recorded without issuing fictional coordinates. Zero levels were completed. The old nine-law data remain historical and are not counted as 48-law observations.
+
 ## Workstation and native observation sources
 
 - [work/arc3/lane.py](lane.py) preserves the existing read-only native trace-inspection and Work journal mechanism; it is not a native action actuator.
