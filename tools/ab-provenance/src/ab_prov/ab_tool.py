@@ -29,12 +29,20 @@ STAGES = (
     ("checkpoint", "checkpoint_source_experiment.py"),
 )
 NATIVE_TESTS = (
+    "src/domain/javascript/javascriptObservationRefinement.ab-swallow.test.ts",
+    "src/domain/javascript/javascriptObservationChoice.ab-swallow.test.ts",
+    "src/domain/javascript/javascriptConstructObservation.ab-swallow.test.ts",
+    "src/domain/javascript/javascriptInvestigationAdvance.ab-swallow.test.ts",
     "src/domain/javascript/javascriptCheckpoint.ab-swallow.test.ts",
     "src/domain/javascript/javascriptApplicationVersionMatching.test.ts",
     "src/domain/javascript/javascriptApplicationVersionComparison.test.ts",
     "src/domain/javascript/javascriptApplicationVersionRelationshipUncertainty.test.ts",
 )
 CONTRACT_COPIES = (
+    ("observation_refinement_contract.test.ts", "src/domain/javascript/javascriptObservationRefinement.ab-swallow.test.ts"),
+    ("choice_contract.test.ts", "src/domain/javascript/javascriptObservationChoice.ab-swallow.test.ts"),
+    ("construct_contract.test.ts", "src/domain/javascript/javascriptConstructObservation.ab-swallow.test.ts"),
+    ("advance_contract.test.ts", "src/domain/javascript/javascriptInvestigationAdvance.ab-swallow.test.ts"),
     ("checkpoint_cli.ts", "src/domain/javascript/javascriptCheckpointCLI.ab-swallow.ts"),
     ("checkpoint_contract.test.ts", "src/domain/javascript/javascriptCheckpoint.ab-swallow.test.ts"),
 )
