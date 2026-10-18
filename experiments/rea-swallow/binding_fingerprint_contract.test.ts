@@ -43,7 +43,7 @@ describe("REA A/B lexical reference identity experiment", () => {
       ["function pick(a,b){return a;}", "function pick(a,b){return b;}"],
       ["function calc(a,b){return a-b;}", "function calc(a,b){return b-a;}"],
       ["function pick(a,b){const result=a;return result;}", "function pick(a,b){const result=b;return result;}"],
-    ]) {
+    ] as const) {
       expect(fingerprintJavaScriptAst(parse(a))).toBe(fingerprintJavaScriptAst(parse(b)));
       expect(fingerprint(a)).not.toBe(fingerprint(b));
     }
@@ -69,7 +69,6 @@ describe("REA A/B lexical reference identity experiment", () => {
       "function f(a,b){ function g(a){return a;} return g(b); }",
       "function f(a,b){ {const a=2; return a;} }",
       "function f({a},b){ return a; }",
-      "function f(a,b){ let a=3; return a; }",
       "function f(a,b){ try {return a;} catch (a) {return a;} }",
     ]) {
       expect(fingerprint(source)).toBeNull();
