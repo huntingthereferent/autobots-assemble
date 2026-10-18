@@ -1,0 +1,37 @@
+name: Native A/B 48-law inverse
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths: ['work/arc_like_maze/window_inverse_observation.py', 'work/arc_like_maze/WINDOW_INVERSE_OBSERVATION.md', 'network/tests/test_arc_like_window_inverse_observation.py', '.github/workflows/ab-window48-inverse.yml']
+  pull_request:
+    paths: ['work/arc_like_maze/window_inverse_observation.py', 'work/arc_like_maze/WINDOW_INVERSE_OBSERVATION.md', 'network/tests/test_arc_like_window_inverse_observation.py', '.github/workflows/ab-window48-inverse.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-window48:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Original classification plus new independent source tests
+        run: |
+          python -m unittest network.tests.test_arc_like_window_combined network.tests.test_arc_like_window_inverse_observation network.tests.test_arc_like_inverse_observation_engine -v
+      - name: Execute bounded mathematical inverse and retain receipts
+        run: |
+          mkdir -p runtime/data/ab-inverse
+          python -m work.arc_like_maze.window_inverse_observation --certificate --demo-law 0,0,1,0 > runtime/data/ab-inverse/window48-inverse.json
+          python -m work.arc_like_maze.window_inverse_observation --observe B=9 > runtime/data/ab-inverse/window48-admitted.json
+      - name: Save native A/B calculation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-ab-window48-inverse
+          path: runtime/data/ab-inverse/window48-*.json
+          retention-days: 14
+          if-no-files-found: warn
