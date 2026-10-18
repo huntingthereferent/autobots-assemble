@@ -185,12 +185,9 @@ footer {max-width:1440px;margin:auto;padding:24px max(22px,4vw) 40px;color:var(-
   const link=(tag,label,href,cls="")=>{const x=document.createElement(tag);x.textContent=label;x.className=cls;if(href){x.href=href;x.target="_blank";x.rel="noopener noreferrer"}return x};
   function setStatus(kind,message){$("status-dot").className="dot "+kind;$("status-text").textContent=message;
     state.connected=kind==="connected";}
-  function numeric(id,n){const element=$(id),target=Math.max(0,Number.isFinite(n)?n:0);
-    if(reduced){element.textContent=String(target);return}
-    let previous=Number(element.textContent);if(!Number.isFinite(previous))previous=0;
-    const start=performance.now(),dur=850;
-    function tick(now){const t=Math.min(1,(now-start)/dur),s=1-Math.pow(1-t,3);element.textContent=String(Math.round(previous+(target-previous)*s));if(t<1)requestAnimationFrame(tick)}
-    requestAnimationFrame(tick);
+  function numeric(id,n){
+    const target=Number.isFinite(n)?Math.max(0,n):0;
+    $(id).textContent=String(target);
   }
   async function json(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});
     if(!r.ok)throw Error("Source HTTP "+r.status+(r.status===403?" (public API limit?)":""));return r.json()}
@@ -228,20 +225,22 @@ footer {max-width:1440px;margin:auto;padding:24px max(22px,4vw) 40px;color:var(-
     state.root=old&&state.commits.some(c=>c.id===old)?old:state.commits.at(-1)?.id||null;
     if(state.root)box.value=state.root;
   }
-  function makeCard(commit,i){
-    const c=document.createElement("article");c.className="node-card";c.style.setProperty("--accent",i===0?"var(--mint)":"var(--cyan)");
-    c.appendChild(link("div",i===0?"WITNESSED ROOT":"NATIVE DESCENDANT",null,"kind"));
+  function makeCard(commit){
+    const c=document.createElement("article");c.className="node-card";
+    c.appendChild(link("div",commit.id===state.root?"ROOT":"DESCENDANT",null,"kind"));
     c.appendChild(link("h3",commit.message||sha7(commit.id)));
-    const meta=document.createElement("p");meta.textContent=sha7(commit.id)+" · "+commit.author+" · "+(commit.date||"undated");c.appendChild(meta);
-    c.appendChild(link("a","Inspect original commit ↗",commit.url));
+    const meta=document.createElement("p");
+    meta.textContent=sha7(commit.id)+" · "+commit.author+" · "+(commit.date||"undated");
+    c.appendChild(meta);
+    c.appendChild(link("a","Open commit ↗",commit.url));
     return c;
   }
   function renderTrail(){
     if(!state.root)return;
     const trace=descendants(state.root,state.commits,state.edges);
     const container=$("trail-view");container.replaceChildren();
-    trace.nodes.slice(-18).forEach((commit,i)=>container.appendChild(makeCard(commit,i)));
-    if(!trace.nodes.length)container.appendChild(link("p","No witnessed descendants in the bounded public sample."));
+    trace.nodes.forEach(commit=>container.appendChild(makeCard(commit)));
+    if(!trace.nodes.length)container.appendChild(link("p","No descendants in the current GitHub sample."));
     numeric("n-commits",trace.nodes.length);
     numeric("n-relations",trace.edges.filter(e=>e.type==="commit-parent").length);
     numeric("n-witnesses",trace.edges.filter(e=>e.type==="ci-head-sha").length);
@@ -249,52 +248,89 @@ footer {max-width:1440px;margin:auto;padding:24px max(22px,4vw) 40px;color:var(-
     numeric("n-open",trace.nodes.filter(c=>!parents.has(c.id)).length);
     state.graph=graphLayout(trace);
     if(reduced)paint(0);
-    const intensity=Math.min(1,trace.edges.length/19);document.documentElement.style.setProperty("--intensity",String(intensity));
-    $("freshness").textContent="GitHub parent SHA / exact CI head SHA · "+new Date(state.last).toLocaleString()+" · "+trace.nodes.length+" observed commits in selected trace · source refresh every 3 minutes";
+    $("freshness").textContent="GitHub / 24 most recent commits and 60 completed workflow runs requested · "+new Date(state.last).toLocaleString()+" · source refresh every 3 minutes. The view contains only matching records.";
     const latest=trace.nodes.at(-1);
-    $("next-check").textContent="Most recent trace node: "+(latest?sha7(latest.id):"none")+" · No unseen event assumed";
+    $("next-check").textContent="Latest trace commit: "+(latest?sha7(latest.id):"none")+" · No unseen event assumed";
   }
   function graphLayout(trace){
-    const width=Math.max(state.canvas.clientWidth,340),height=Math.max(state.canvas.clientHeight,340);
-    const n=trace.nodes.length,commits=trace.nodes;
-    const positions=new Map(),result=[];
-    commits.forEach((c,i)=>{const x=width*(.44+.45*((i+.45)/Math.max(n,1)));
-      const y=height*(.15+.67*((((i*7)%13)+1)/14));
-      positions.set(c.id,{x,y});result.push({id:c.id,x,y,type:i===0?"root":"commit",label:sha7(c.id),url:c.url});
+    const width=Math.max(state.canvas.clientWidth,320),height=Math.max(state.canvas.clientHeight,260);
+    const commits=trace.nodes,margin=width<500?28:50;
+    const positions=new Map(),points=[];
+    commits.forEach((c,i)=>{
+      const x=commits.length===1?width/2:margin+(width-2*margin)*i/(commits.length-1);
+      const y=height*.39;
+      positions.set(c.id,{x,y});
+      points.push({id:c.id,x,y,type:c.id===state.root?"root":"commit",label:sha7(c.id),index:i,total:commits.length});
     });
-    const witnesses=trace.runs.slice(0,20);
-    for(const r of witnesses){const origin=positions.get(r.sha);if(!origin)continue;
-      const idx=witnesses.findIndex(x=>x.id===r.id);
-      const x=Math.min(width-28,Math.max(width*.22,origin.x-43+(idx%3)*37));
-      const y=Math.min(height-25,origin.y+(idx%2?52:-48));
-      result.push({id:"ci:"+r.id,x,y,type:r.conclusion==="success"?"witness":"failed",label:r.conclusion,url:r.url});
+    const drawnRuns=trace.runs.filter(r=>positions.has(r.sha)).slice(0,10);
+    const perCommit=new Map();
+    for(const r of drawnRuns){
+      const origin=positions.get(r.sha),n=perCommit.get(r.sha)||0;
+      perCommit.set(r.sha,n+1);
+      const x=Math.max(18,Math.min(width-18,origin.x+(n%2?-1:1)*Math.floor(n/2)*10));
+      const y=height*(.70+.065*(n%3));
+      points.push({id:"ci:"+r.id,x,y,type:r.conclusion==="success"?"witness":"failed",label:r.conclusion});
     }
-    return {points:result,edges:trace.edges.filter(e=>positions.has(e.from)&&result.some(p=>p.id===e.to))};
+    const visible=new Set(points.map(p=>p.id));
+    return {points,edges:trace.edges.filter(e=>positions.has(e.from)&&visible.has(e.to))};
   }
-  function fitCanvas(){const c=state.canvas,r=c.getBoundingClientRect(),scale=Math.min(devicePixelRatio||1,2);
+  function fitCanvas(){
+    const c=state.canvas,r=c.getBoundingClientRect(),scale=Math.min(devicePixelRatio||1,2);
+    if(r.width<1||r.height<1)return;
     c.width=Math.round(r.width*scale);c.height=Math.round(r.height*scale);
-    if(state.root)renderTrail();}
+    if(state.root)renderTrail();
+  }
   function paint(now){
     const c=state.canvas,ctx=c.getContext("2d"),w=c.clientWidth,h=c.clientHeight;
-    if(!ctx)return;ctx.setTransform(c.width/w,0,0,c.height/h,0,0);ctx.clearRect(0,0,w,h);
-    const graph=state.graph;if(graph&&graph.points&&graph.points.length){
+    if(!ctx||!w||!h)return;
+    ctx.setTransform(c.width/w,0,0,c.height/h,0,0);
+    ctx.clearRect(0,0,w,h);
+    const graph=state.graph;
+    if(graph&&graph.points&&graph.points.length){
       const byId=new Map(graph.points.map(p=>[p.id,p]));
-      ctx.lineWidth=1.4;
-      for(const [i,e] of graph.edges.entries()){const a=byId.get(e.from),b=byId.get(e.to);if(!a||!b)continue;
-        const color=e.type==="ci-head-sha"?"#80DDB5":"#56D7ED";ctx.strokeStyle=color;ctx.globalAlpha=.37;
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo((a.x+b.x)/2,(a.y+b.y)/2-20,b.x,b.y);ctx.stroke();
-        // A particle follows only a source-verified edge. Motion is REPLAY, not new data.
-        if(!reduced){const q=((now/4500)+(i*0.127))%1;
-          const cx=(1-q)*(1-q)*a.x+2*q*(1-q)*(a.x+b.x)/2+q*q*b.x;
-          const cy=(1-q)*(1-q)*a.y+2*q*(1-q)*((a.y+b.y)/2-20)+q*q*b.y;
-          ctx.fillStyle=color;ctx.globalAlpha=.75;ctx.beginPath();ctx.arc(cx,cy,2.4,0,Math.PI*2);ctx.fill();}
+      for(const [i,e] of graph.edges.entries()){
+        const a=byId.get(e.from),b=byId.get(e.to);
+        if(!a||!b)continue;
+        const ci=e.type==="ci-head-sha";
+        const color=ci?"#91ddba":"#8ed3ed";
+        const cx=(a.x+b.x)/2;
+        const cy=ci?(a.y+b.y)/2:a.y-Math.min(75,19+Math.abs(b.x-a.x)*.21);
+        ctx.strokeStyle=color;ctx.globalAlpha=ci?.6:.52;ctx.lineWidth=1.2;
+        ctx.setLineDash(ci?[4,4]:[]);
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(cx,cy,b.x,b.y);ctx.stroke();
+        ctx.setLineDash([]);
+        // The moving marker replays only the exact source link drawn above.
+        if(!reduced){
+          const t=((now/6600)+(i*.137))%1;
+          const mx=(1-t)*(1-t)*a.x+2*t*(1-t)*cx+t*t*b.x;
+          const my=(1-t)*(1-t)*a.y+2*t*(1-t)*cy+t*t*b.y;
+          ctx.fillStyle=color;ctx.globalAlpha=.72;ctx.beginPath();
+          ctx.arc(mx,my,1.6,0,Math.PI*2);ctx.fill();
+        }
       }
-      for(const p of graph.points){ctx.globalAlpha=1;const col=p.type==="root"?"#D4FAFE":p.type==="witness"?"#73E5B8":p.type==="failed"?"#E6B188":"#56DBEE";
-        ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=p.type==="root"?26:12;ctx.beginPath();ctx.arc(p.x,p.y,p.type==="root"?8:4.3,0,2*Math.PI);ctx.fill();ctx.shadowBlur=0;
-        ctx.fillStyle="#ABCDD9";ctx.font="10px ui-monospace, monospace";ctx.textAlign="center";
-        ctx.fillText(p.label,p.x,p.y-13);
+      for(const p of graph.points){
+        ctx.globalAlpha=1;
+        if(p.type==="witness"||p.type==="failed"){
+          ctx.fillStyle=p.type==="witness"?"#91ddba":"#f3c68c";
+          ctx.save();ctx.translate(p.x,p.y);ctx.rotate(Math.PI/4);
+          ctx.fillRect(-3,-3,6,6);ctx.restore();
+        }else{
+          ctx.fillStyle=p.type==="root"?"#e8f1f5":"#8ed3ed";
+          ctx.beginPath();ctx.arc(p.x,p.y,p.type==="root"?6:3.6,0,Math.PI*2);ctx.fill();
+          if(p.type==="root"){ctx.strokeStyle="#8ed3ed";ctx.lineWidth=1.2;
+            ctx.beginPath();ctx.arc(p.x,p.y,9,0,Math.PI*2);ctx.stroke();}
+          const step=Math.max(1,Math.ceil(p.total/5));
+          if(p.type==="root"||p.index===p.total-1||(p.index%step===0)){
+            ctx.textAlign="center";ctx.font="10px ui-monospace, monospace";
+            ctx.fillStyle="#b5c7d2";ctx.fillText(p.label,p.x,p.y-17);
+          }
+        }
       }
       ctx.globalAlpha=1;
+      if(graph.edges.length===0){
+        ctx.fillStyle="#a9bfcb";ctx.font="12px ui-monospace, monospace";
+        ctx.textAlign="center";ctx.fillText("No matching parent or CI links in this sample",w/2,h*.84);
+      }
     }
     if(!reduced)state.animationFrame=requestAnimationFrame(paint);
   }
@@ -329,7 +365,7 @@ footer {max-width:1440px;margin:auto;padding:24px max(22px,4vw) 40px;color:var(-
       setRoots();renderTrail();setStatus("connected","SOURCE OBSERVED");
       const added=next.filter(c=>!old.has(c.id));if(old.size&&added.length){
         $("status-text").textContent=added.length+" SOURCE CHANGES OBSERVED";
-        $("trail-view").querySelectorAll(".node-card").forEach(x=>x.classList.add("new"));
+
       }
     }catch(e){setStatus("error","SOURCE UNAVAILABLE");
       $("freshness").textContent="NO NEW EVIDENCE: "+e.message+". Last witnessed state remains; no synthetic movement.";
