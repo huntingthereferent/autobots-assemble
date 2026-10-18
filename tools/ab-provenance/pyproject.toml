@@ -14,6 +14,7 @@ classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS In
 
 [project.scripts]
 ab-prov = "ab_prov.cli:main"
+ab = "ab_prov.ab_tool:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
