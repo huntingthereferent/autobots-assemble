@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "provenance_links": [
+    {
+      "schema_version": 1,
+      "provenance_id": "fixture-source-observation",
+      "from": {
+        "layer": "fixture-source",
+        "ref": "sample/original"
+      },
+      "relation": "reported_as",
+      "to": {
+        "layer": "fixture-research",
+        "ref": "sample/observation"
+      },
+      "evidence_refs": [
+        "fixture://witness-unchecked"
+      ],
+      "survived": [
+        "source identity"
+      ],
+      "invalidated": [],
+      "boundaries": [
+        "No independent replay of fixture"
+      ],
+      "transformation": "read-only example",
+      "observed_at": "2026-10-18T00:00:00Z"
+    },
+    {
+      "schema_version": 1,
+      "provenance_id": "fixture-contested",
+      "from": {
+        "layer": "fixture-research",
+        "ref": "sample/observation"
+      },
+      "relation": "tentatively_suggests",
+      "to": {
+        "layer": "fixture-research",
+        "ref": "sample/provisional-claim"
+      },
+      "evidence_refs": [
+        "fixture://witness-unchecked"
+      ],
+      "invalidated": [
+        "original assumption"
+      ],
+      "survived": [
+        "source identity"
+      ],
+      "boundaries": [
+        "Hypothetical counterexample"
+      ],
+      "observed_at": "2026-10-18T00:01:00Z"
+    },
+    {
+      "schema_version": 1,
+      "provenance_id": "fixture-open",
+      "from": {
+        "layer": "fixture-research",
+        "ref": "sample/provisional-claim"
+      },
+      "relation": "awaits",
+      "to": {
+        "layer": "fixture-workstation",
+        "ref": "sample/unexecuted-verifier"
+      },
+      "evidence_refs": [],
+      "survived": [
+        "unresolved work"
+      ],
+      "invalidated": [],
+      "boundaries": [
+        "No real worker executed"
+      ]
+    }
+  ],
+  "traces": [
+    {
+      "schema_version": 1,
+      "trace_id": "fixture-touch",
+      "touched_at": "2026-10-18T00:02:00Z",
+      "surface_kind": "file",
+      "locator": "fixture://input",
+      "referent_before": "sample/observation",
+      "relation": "continued_to",
+      "referent_after": "sample/unexecuted-verifier",
+      "what_changed": "Opened a candidate only",
+      "unresolved": [
+        "No native verifier"
+      ],
+      "evidence_refs": [
+        "fixture://witness-unchecked"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "trace_id": "fixture-open-touch",
+      "touched_at": "2026-10-18T00:03:00Z",
+      "surface_kind": "file",
+      "locator": "fixture://input",
+      "referent_before": "sample/unexecuted-verifier",
+      "relation": "requests",
+      "referent_after": null,
+      "unresolved": [
+        "Unresolved continuation"
+      ],
+      "evidence_refs": []
+    }
+  ]
+}

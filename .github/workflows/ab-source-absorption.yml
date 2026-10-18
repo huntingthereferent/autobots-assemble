@@ -1,0 +1,61 @@
+name: A/B actual source absorption and native REA verification
+on:
+  push:
+    branches: ['feature/ab-tool-swallow-rea-20261018']
+    paths:
+      - 'tools/ab-provenance/**'
+      - '.github/workflows/ab-source-absorption.yml'
+  pull_request:
+    paths:
+      - 'tools/ab-provenance/**'
+      - '.github/workflows/ab-source-absorption.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  actual-rea-source-edition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install actual pinned REA and original dependencies
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          test "$(git rev-parse HEAD)" = "f0b9ef34c404c1c65f8167502db972b0bd708403"
+          npm ci --no-audit --no-fund
+      - name: Install A/B CLI and test admissible source and provenance boundaries
+        run: |
+          python -m pip install ./tools/ab-provenance "jsonschema>=4.21"
+          python -m unittest discover -s tools/ab-provenance/tests -v
+      - name: Construct actual REA source editions and test native TypeScript
+        run: |
+          ab source
+          ab swallow --allow-source-edit --repo-root "$GITHUB_WORKSPACE" --out "$GITHUB_WORKSPACE/runtime/data/ab-source-tool/first-pass"
+      - name: Inspect actual source-lineage and produce HTML evidence
+        run: |
+          ab inspect runtime/data/ab-source-tool/first-pass/source-provenance.json --graph > runtime/data/ab-source-tool/first-pass/graph.json
+          ab ancestors runtime/data/ab-source-tool/first-pass/source-provenance.json --target "A/B source stage 5: checkpoint" > runtime/data/ab-source-tool/first-pass/ancestry.json
+          ab render runtime/data/ab-source-tool/first-pass/source-provenance.json -o runtime/data/ab-source-tool/first-pass/source-provenance.html
+      - name: Build distributable A/B tool with original documentation
+        run: |
+          python -m pip install build
+          python -m build tools/ab-provenance --outdir runtime/data/ab-source-tool/first-pass/dist
+          test -f runtime/data/ab-source-tool/first-pass/dist/ab_tool-0.1.0-py3-none-any.whl
+          test -f runtime/data/ab-source-tool/first-pass/dist/ab_tool-0.1.0.tar.gz
+      - name: Retain original native logs and failure if hypothesis breaks
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-swallowed-real-rea-source-and-visual
+          path: runtime/data/ab-source-tool/first-pass/*
+          retention-days: 14
+          if-no-files-found: warn

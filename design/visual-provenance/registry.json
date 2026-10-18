@@ -24,6 +24,12 @@
       "layer": "ecosystem_social_movement",
       "status": "approved",
       "path": "design/visual-provenance/templates/continuity_social_hub_v1.json"
+    },
+    {
+      "template_id": "ab_provenance_graph_v1",
+      "layer": "research_relational_provenance",
+      "status": "candidate",
+      "path": "design/visual-provenance/templates/ab_provenance_graph_v1.json"
     }
   ]
 }

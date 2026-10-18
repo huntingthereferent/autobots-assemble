@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "template_id": "ab_provenance_graph_v1",
+  "name": "A/B Research Provenance Graph",
+  "layer": "research_relational_provenance",
+  "status": "candidate",
+  "intent": "Read-only inspection of original local evidence ancestry, native workstation events, unresolved referents and contested relationships without presenting a graph as proof.",
+  "witnesses": [
+    {
+      "kind": "internal",
+      "source": "protocols/core/provenance.md",
+      "observed_on": "2026-10-18",
+      "notes": "Source, relationship, transformation, evidence and invalidation remain distinct and traceable."
+    },
+    {
+      "kind": "internal",
+      "source": "design/visual-provenance/README.md",
+      "observed_on": "2026-10-18",
+      "notes": "Visual grammar is a source-bound adaptation, not screenshot copying."
+    }
+  ],
+  "grammar": {
+    "layout": {
+      "shape": "five typed columns with selected record inspector",
+      "reading": "source ancestry and relationship edges",
+      "interaction": "inspect actual IDs and recorded boundaries rather than claim completion"
+    },
+    "hierarchy": {
+      "first": "referents and relationships",
+      "second": "original source/evidence references",
+      "third": "unresolved and contested warnings"
+    },
+    "density": "research-note medium-dense",
+    "controls": {
+      "search": "filter labels and relations",
+      "scope": "provenance/traversal/workstation"
+    },
+    "surface": {
+      "tone": "dark restrained research figure",
+      "links": "dashed for unresolved or contested",
+      "spacing": "regular"
+    },
+    "typography": {
+      "headings": "restrained serif",
+      "data": "monospace",
+      "body": "neutral sans"
+    }
+  },
+  "avoid": [
+    "Copied REA images, branding, code and documentation",
+    "False native verification badges",
+    "Generic animated AI-dashboard ornament",
+    "Replacing owner-backed records with fabricated graph nodes",
+    "Confusing investigated upstream software with a visual-design template"
+  ],
+  "adaptation_rules": [
+    "Preserve the repo's cross-layer provenance and trace schema names unchanged",
+    "Evidence depth and source references never upgrade themselves to a proof verdict",
+    "Render missing parents and absent continuation as explicitly unresolved",
+    "Local files remain immutable and the output is an offline visual projection"
+  ],
+  "review": {
+    "confidence": "medium",
+    "notes": "Candidate research visual pending user inspection of a rendered HTML preview."
+  }
+}

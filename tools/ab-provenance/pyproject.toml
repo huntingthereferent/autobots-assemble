@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ab-tool"
+version = "0.1.0"
+description = "A/B source investigation tool with workstation-native REA transformations and provenance"
+requires-python = ">=3.10"
+authors = [{name = "James Muneoka"}]
+readme = "README.md"
+keywords = ["provenance", "research", "evidence", "workstation"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.scripts]
+ab-prov = "ab_prov.cli:main"
+ab = "ab_prov.ab_tool:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ab_prov = ["*.html"]
