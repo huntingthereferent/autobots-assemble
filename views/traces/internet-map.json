@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-10-17T20:21:53.232515+00:00",
+  "checked_at": "2026-10-18T00:55:44.486461+00:00",
   "geography": {
     "license": "Natural Earth public domain",
     "source": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_110m_admin_0_countries.geojson"
@@ -707,6 +707,10 @@
         48.78
       ],
       [
+        29.83,
+        59.88
+      ],
+      [
         0.4,
         51.57
       ],
@@ -1209,10 +1213,6 @@
       [
         10.56,
         49.29
-      ],
-      [
-        8.97,
-        56.14
       ]
     ],
     "sampled_page_size": 300
