@@ -21,6 +21,15 @@
       "boundary": ""
     },
     {
+      "path": "research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "label": "Original owner W13 independent native verifier — exact run and readiness evidence boundary",
+      "state": "MOVE_WITH_WALL",
+      "source_type": "RESEARCH_DIVE",
+      "scope": "User-directed research record; original result state",
+      "next": "Create a distinct source-owned continuation/persistence mechanism for the original parent+child native runtime, and independently witness the separately required live-temporal parent before an owner-authorized READY task. Preserve the original run evidence without inventing the lost child journal.",
+      "boundary": ""
+    },
+    {
       "path": "work/arc_like_maze/chatbot/checkpoints/CP-0027.json",
       "label": "Multi-task source dependency propagation",
       "state": "witnessed",
@@ -195,6 +204,36 @@
       "text": "The subsequent GAME-NATIVE-VERIFIER checkpoint requires its own separately admitted and witnessed worker.",
       "kind": "source-recorded-wall",
       "index": 3
+    },
+    {
+      "path": "research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "text": "The GitHub run and its recorded redacted worker report are historical source evidence, not a newly recovered native runtime journal.",
+      "kind": "source-recorded-wall",
+      "index": 0
+    },
+    {
+      "path": "research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "text": "The verified child runner uploaded no runtime archive; its completed native event cannot be freshly replayed in another process from retained child evidence.",
+      "kind": "source-recorded-wall",
+      "index": 1
+    },
+    {
+      "path": "research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "text": "Existing GAME-WORKER-READY implementation hardcodes older Complete Stack parents and additionally requires a separately source-owned LIVE-GAME-TEMPORAL job.",
+      "kind": "source-recorded-wall",
+      "index": 2
+    },
+    {
+      "path": "research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "text": "No owner-authorized GAME-WORKER-READY job was admitted or executed here; the CP graph's ADMISSIBLE status is not a native READY result.",
+      "kind": "source-recorded-wall",
+      "index": 3
+    },
+    {
+      "path": "research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "text": "Neither a synthetic same-named runtime nor this report proves external ARC, NIH, or scientific performance.",
+      "kind": "source-recorded-wall",
+      "index": 4
     },
     {
       "path": "state/coupling-entry-verification.md",
@@ -403,6 +442,16 @@
       "next": "Replay the original GitHub evidence archive in a new temporary machine and verify the latest native result against this committed research record."
     },
     {
+      "id": "structured:research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "path": "research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",
+      "line": null,
+      "title": "Original owner W13 independent native verifier — exact run and readiness evidence boundary",
+      "state": "MOVE_WITH_WALL",
+      "evidence": "structured-source-state",
+      "boundary": "",
+      "next": "Create a distinct source-owned continuation/persistence mechanism for the original parent+child native runtime, and independently witness the separately required live-temporal parent before an owner-authorized READY task. Preserve the original run evidence without inventing the lost child journal."
+    },
+    {
       "id": "heading:state/coupling-entry-verification.md#L28",
       "path": "state/coupling-entry-verification.md",
       "line": 28,
@@ -524,9 +573,9 @@
     }
   ],
   "source_totals": {
-    "source_files": 1499,
-    "structured_records": 15,
-    "original_wall_entries": 8,
+    "source_files": 1503,
+    "structured_records": 16,
+    "original_wall_entries": 13,
     "documented_wall_headings": 12,
     "documented_movement_headings": 23
   },
