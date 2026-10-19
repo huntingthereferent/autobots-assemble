@@ -53,6 +53,10 @@ kbd{border:1px solid #6c829b;border-radius:4px;font:inherit;padding:1px 5px;colo
 .bp-controls button{min-width:0;padding:9px 12px;font-size:.82rem}
 .bp-segment{border-top:1px solid #405669;padding-top:16px;margin-top:16px}
 .bp-explainer{font-size:.85rem;color:#b3d1d9}
+.bp-clock-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin:12px 0}
+.bp-clock{background:#213347;border:1px solid #3b5269;border-radius:8px;padding:9px}
+.bp-clock strong{display:block;font-size:.74rem;color:#94d0dc}
+.bp-clock span{font-size:.8rem;overflow-wrap:anywhere}
 .bp-map-scroll{overflow:auto;max-width:100%;padding:6px 0}
 #bp-map{display:grid;gap:8px;align-items:stretch}
 .bp-map-node{min-height:62px;padding:9px;border:1px solid #53728c;border-radius:9px;background:#20394b;overflow-wrap:anywhere}
@@ -113,6 +117,8 @@ kbd{border:1px solid #6c829b;border-radius:4px;font:inherit;padding:1px 5px;colo
     <div class="bp-fields"><label>Visual map scale (3–12)
        <input id="bp-scale" type="number" min="3" max="12" step="1" value="6"/></label></div>
     <div class="bp-map-scroll"><div id="bp-map" role="group" aria-label="Source-linked temporal graph nodes"></div></div>
+    <h3 style="font-size:.95rem;margin:13px 0 5px">Selected assertion · five independent clocks</h3>
+    <div id="bp-clocks" class="bp-clock-grid" aria-label="Validity, event, submission, publication, observation and source"></div>
     <div id="bp-feedback" aria-live="polite"></div>
   </div>
   <div class="bp-segment">
@@ -300,6 +306,27 @@ const nodes=(bp,m)=>{
   });
   return built;
 };
+function paintClocks(){
+  const item=rows().find(x=>x.id===el('bp-assertion').value);
+  const panel=el('bp-clocks');panel.replaceChildren();
+  if(!item)return;
+  const show=v=>v===null?'UNKNOWN (not inferred)':v;
+  const clocks=[
+    ['Valid time',item.valid_from===null?'UNKNOWN interval':'['+item.valid_from+', '+item.valid_to+')'],
+    ['Event time',show(item.event_day)],
+    ['Submission time',show(item.submitted_day)],
+    ['Public posting day',show(item.posted_day)+(item.posted_day?' · owner-reported, exact hour unknown':'')],
+    ['Observation time',show(item.observed_day)],
+    ['Knowledge cutoff policy',item.known_day===null?'No authenticated exact known-at instant':item.known_day+' · fictional model'],
+    ['Source and evidence class',item.source_ref+' · '+item.provenance_state]
+  ];
+  for(const [title,value] of clocks){
+    const card=document.createElement('div');card.className='bp-clock';
+    const head=document.createElement('strong');head.textContent=title;
+    const body=document.createElement('span');body.textContent=value;
+    card.append(head,body);panel.append(card);
+  }
+}
 function paint(){
   const map=el('bp-map');map.replaceChildren();
   const width=108*blueprint.graph_layout.columns/6;
@@ -312,6 +339,7 @@ function paint(){
     node.append(hd,value);map.append(node);
   }
   el('bp-scale').value=blueprint.graph_layout.columns;
+  paintClocks();
 }
 function loadAssertion(){
   const item=rows().find(r=>r.id===el('bp-assertion').value);
@@ -320,6 +348,7 @@ function loadAssertion(){
   el('bp-valid-from').value=item.valid_from||'';
   el('bp-valid-to').value=item.valid_to||'';
   el('bp-known').value=item.known_day||'';
+  paintClocks();
 }
 function selection(){
   mode=el('bp-mode').value;
