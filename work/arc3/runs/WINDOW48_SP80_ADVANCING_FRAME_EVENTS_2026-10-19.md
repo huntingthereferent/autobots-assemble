@@ -39,6 +39,23 @@ All 24 actual source games reproduced their prospectively specified SDK progress
 
 **The end-of-action stage1 display repaint is an observable consequence correlated with the already SDK-confirmed stage0 transition, not an identified *pre-action* trigger.** Visual comparisons across different stages do not establish a hidden engine mechanism, physics correspondence, score semantics or a criterion to predict stage1→2.
 
+## Independent upper-display pseudo-objective negative from retained staggered archive
+
+This cross-stage conclusion was also checked against the **separate previously authenticated original native staggered-bar study**, not fitted to the 24 new games. Independently reopened its [original raw NPZ + SDK JSON artifact #12215606077](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39310598135/artifacts/12215606077), independently recomputed source ZIP SHA256 `1bef4336bd4a5d24afa668286715853752c984d676709823ccc3867a94ecb295`, and matched the retained [genuine original-native run #39310598135](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39310598135). All **56 original source sessions remained SDK level1 NOT_FINISHED, with zero level2/WIN**, including genuine properly selected staggered bar alignments.
+
+For **all 72 actual original SDK ACTION5 returned full frame stacks** in that archive, independently counted the native **color13 cells in upper y0..12** across every returned image:
+
+| Max actual upper source color13 count during one ACTION5 | Actual source SDK ACTION5 animations | Level2/WIN |
+| --- | ---: | ---: |
+| 0 | 4 | 0 |
+| 80 | 4 | 0 |
+| 160 | 32 | 0 |
+| **240** | **32** | **0** |
+
+Every one of the 72 native original **last-returned images** had **0** upper-region color13 pixels. Notably, **32 genuine stage1 failures reached 240 source-visible color13 upper pixels simultaneously in an intermediate frame**, then reverted without SDK progress. A sampled right-stair native animation had eight returned images with all 240 upper source color13 cells, but the original level remained 1.
+
+This directly falsifies **"all 240 upper-display pixels temporarily turning color13 is sufficient for original level1→2."** It does NOT establish what those top glyphs mean, whether final-frame persistence would have mattered, or the actual game objective. Retain this negative so later workers do not rediscover a visual pseudo-win.
+
 ## Research decision
 
 Source-native event recording is now complete enough to distinguish genuine SDK result labels from screen-only pseudo-objectives. The combination of several real source-negative stage1 tests and this cross-stage contrast **does not provide a level2 solution**. Stop treating apparent top-row magenta contact or HUD-colored blink as an objective by themselves.
