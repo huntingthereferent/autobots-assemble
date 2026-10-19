@@ -31,7 +31,7 @@ MAX_RAW=24*1024*1024
 MAX_SEALED=40*1024*1024
 SHA=re.compile("[0-9a-f]{40}\Z")
 EVENT=re.compile("evt_[0-9a-f]{32}\Z")
-ROOTS={"runtime.jsonl","coordinator-windows.jsonl","workstation"}
+ROOTS={"runtime.jsonl","coordinator-windows.jsonl","workstation","external-temporal.zip"}
 
 
 def _b64(raw: bytes)->str:
@@ -85,6 +85,10 @@ def _collect(root:Path)->list[dict]:
             if f.stat().st_size+total>MAX_RAW or len(out)>=MAX_FILES:
                 raise ValueError("bounded private source archive exceeded")
             raw=f.read_bytes()
+            if filename=="external-temporal.zip":
+                from .owner_temporal_handoff import SOURCES
+                if "sha256:"+sha256(raw).hexdigest()!=SOURCES["temporal"]["digest"]:
+                    raise ValueError("external temporal archive is not the pinned source")
             total+=len(raw)
             out.append({"path":filename,"sha256":sha256(raw).hexdigest(),"data":_b64(raw)})
     if not any(x["path"].startswith("workstation/") for x in out):
@@ -275,3 +279,4 @@ def main(argv=None):
 
 if __name__=="__main__":
     raise SystemExit(main())
+

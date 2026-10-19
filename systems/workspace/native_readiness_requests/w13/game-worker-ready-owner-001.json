@@ -1,0 +1,35 @@
+{
+  "authorizes_NIH_P2_TEST": false,
+  "authorizes_admission": true,
+  "authorizes_encrypted_ready_retention": true,
+  "authorizes_execution": true,
+  "authorizes_raw_journal_export": false,
+  "authorizes_source_copy": true,
+  "bridge_git_blob": "94f31044cf84040e627346937df416393062d8d6",
+  "contract": "owner-W13-adapter-readiness-one-shot/v1",
+  "job_id": "game-worker-ready-owner-001",
+  "owner_child_event": "evt_a9ba637571d04967ab777c71a2945a64",
+  "retention_days": 1,
+  "sources": {
+    "owner": {
+      "artifact": 12154278730,
+      "commit": "d725ac88d710199ce4de579dddcee36533a32ef9",
+      "digest": "sha256:efd88c5583fe781a3e48ed3a70cda7ce35788d65c3c3af1af4c5c96df2fb4dec",
+      "name": "w13-encrypted-39176448014",
+      "run": 39176448014,
+      "workflow": "owner-w13-encrypted-capsule-producer"
+    },
+    "temporal": {
+      "artifact": 12154340140,
+      "commit": "832acb777ee64d173ec8d5c91cbfe2c6dcdbfbad",
+      "digest": "sha256:591fe04d2537d753efaae5fc69580fa5885bb8e7510614af633ba8769a00e3a0",
+      "name": "live-game-temporal-39174631878-1",
+      "run": 39174631878,
+      "workflow": "Complete Stack actual live game-to-temporal query"
+    }
+  },
+  "temporal_history": "authenticated-external-input-not-native-parent",
+  "version": "owner-adapter-v1",
+  "worker_git_blob": "d2b5257bf9374ebb9e66a9ac3ea6667424d422af",
+  "worker_id": "game-worker-ready"
+}

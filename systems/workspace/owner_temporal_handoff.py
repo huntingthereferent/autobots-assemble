@@ -5,6 +5,7 @@ plaintext exists only inside a TemporaryDirectory and is never uploaded.
 """
 from __future__ import annotations
 import base64
+from contextlib import contextmanager
 from hashlib import sha256
 import io
 import json
@@ -193,12 +194,11 @@ def witness_pair(*, owner_dir, temporal_dir, temporal_artifacts):
     }
 
 
-def main():
+@contextmanager
+def authenticated_sources(*, token, private):
     from cryptography.hazmat.primitives import serialization
     from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
     from .owner_native_evidence_vault import restore_verified
-    token = os.environ["GH_TOKEN"]
-    private = base64.b64decode(os.environ["PRIVATE_KEY_B64"], validate=True)
     public = X25519PrivateKey.from_private_bytes(private).public_key().public_bytes(
         serialization.Encoding.Raw, serialization.PublicFormat.Raw)
     if public != base64.b64decode(PUBLIC_KEY, validate=True):
@@ -211,6 +211,7 @@ def main():
             validate_origin(kind, run, artifact)
             raw = _get(f"actions/artifacts/{pin['artifact']}/zip", token, binary=True)
             unpack_zip(raw, root/kind, pin["digest"])
+            (root/(kind+".zip")).write_bytes(raw)
         owner = root/"owner"
         receipt = json.loads((owner/"receipt.json").read_text())
         sealed = receipt["encrypted_retention"]
@@ -225,6 +226,12 @@ def main():
             destination=root/"owner-native", expected_owner_execution_commit=OWNER_COMMIT,
             expected_child_event=CHILD_EVENT)
         unpack_temporal(root/"temporal", root/"temporal-native")
+        yield root
+
+
+def main():
+    private = base64.b64decode(os.environ["PRIVATE_KEY_B64"], validate=True)
+    with authenticated_sources(token=os.environ["GH_TOKEN"], private=private) as root:
         result = witness_pair(owner_dir=root/"owner-native", temporal_dir=root/"temporal-native",
                               temporal_artifacts=root/"temporal")
         print(json.dumps(result, sort_keys=True))

@@ -1,0 +1,65 @@
+name: owner W13 native adapter readiness
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/owner_game_ready*'
+      - 'systems/workspace/owner_game_ready_source/**'
+      - 'systems/workspace/game_worker_ready_bridge.py'
+      - 'systems/workspace/controls.py'
+      - 'systems/workspace/owner_native_evidence_vault.py'
+      - 'systems/workspace/owner_temporal_handoff.py'
+      - 'network/tests/test_owner_game_ready.py'
+      - '.github/workflows/owner-game-ready.yml'
+      - 'systems/workspace/native_readiness_requests/w13/**'
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/native_readiness_requests/w13/game-worker-ready-owner-001.json'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-boundary-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8'
+      - run: python -m unittest -v network.tests.test_owner_game_ready network.tests.test_owner_temporal_handoff network.tests.test_owner_native_evidence_vault
+  execute-one-owner-ready:
+    needs: source-boundary-tests
+    if: github.event_name == 'push' && github.actor == github.repository_owner && github.run_attempt == 1
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8'
+      - name: Execute exact authorized readiness through existing coordinator and controls
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRIVATE_KEY_B64: ${{ secrets.W13_CAPSULE_PRIVATE_KEY_B64 }}
+        run: |
+          mkdir -m 700 "$RUNNER_TEMP/owner-ready-sealed"
+          python -m systems.workspace.owner_game_ready_execution > "$RUNNER_TEMP/owner-ready-sealed/receipt.json"
+          cat "$RUNNER_TEMP/owner-ready-sealed/receipt.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: owner-ready-encrypted-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/owner-ready-sealed/continuation.enc
+            ${{ runner.temp }}/owner-ready-sealed/receipt.json
+          if-no-files-found: error
+          retention-days: 1
+      - name: Remove local encrypted output
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/owner-ready-sealed"

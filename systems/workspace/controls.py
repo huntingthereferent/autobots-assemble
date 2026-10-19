@@ -334,7 +334,7 @@ def admit_integrated_route(*, data_dir: str | Path, version_id: str,
 
 
 def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
-            verifier: str | None = None):
+            verifier: str | None = None, *, job_id: str | None = None):
     desk = ProcessWorkstation(root / "workstation")
     if worker_id == FINITE_ID:
         return CorrespondenceWorkBridge(runtime=runtime, workstation=desk)
@@ -361,6 +361,9 @@ def _bridge(runtime: HandoffRuntime, root: Path, worker_id: str,
     if worker_id == GAME_READY_ID:
         if verifier != GAME_READY_VERIFIER:
             raise ValueError("wrong GAME-WORKER-READY native verifier")
+        if job_id == "game-worker-ready-owner-001":
+            from .owner_game_ready_bridge import OwnerGameReadyBridge
+            return OwnerGameReadyBridge(runtime=runtime,workstation=desk)
         from .game_worker_ready_bridge import GameReadyBridge
         return GameReadyBridge(runtime=runtime, workstation=desk)
     if worker_id == GAME_NATIVE_WITNESS_ID:
@@ -436,7 +439,7 @@ def run_job(*, data_dir: str | Path, job_id: str,
     worker = handoff.metadata.get("worker_id")
     if worker not in EXECUTABLE_WORKERS:
         raise ValueError("not a supported workstation job")
-    bridge = _bridge(runtime, root, worker, handoff.metadata.get("native_evidence_verifier"))
+    bridge = _bridge(runtime, root, worker, handoff.metadata.get("native_evidence_verifier"),job_id=job_id)
     state = runtime.state(job_id)
     if worker in (FINITE_ID, INTEGRATED_ID, NIH_SCOPE_ID, NIH_ONTO_ID, NIH_REASON_ID, NIH_PACKET_ID, NIH_PROTO_ID, GAME_W13_ID, GAME_BUILD_ID, GAME_TEMPORAL_ID, GAME_NATIVE_WITNESS_ID, GAME_READY_ID, NIH_P2_TEST_ID, NIH_BENCH_ID):
         if handoff.metadata.get("source_system") != "process-workstation":
@@ -481,7 +484,7 @@ def reverify_job(*, data_dir: str | Path, job_id: str) -> dict[str, Any]:
     runtime = _runtime(root)
     h = runtime.get(job_id)
     bridge = _bridge(runtime, root, h.metadata.get("worker_id"),
-                     h.metadata.get("native_evidence_verifier"))
+                     h.metadata.get("native_evidence_verifier"),job_id=job_id)
     bridge.reverify(job_id)
     return {"job_id": job_id, "status": runtime.state(job_id).status,
             "reverified": True, "executed": False}
