@@ -91,6 +91,29 @@ class ABWorkflowSourceTests(unittest.TestCase):
             self.assertEqual(sources.list_records(new_pin["revision"]), [])
             self.assertEqual(pins.list_pins()[0]["revision"], original["revision"])
 
+    def test_load_actual_continuity_worker_source_events_from_native_journal(self):
+        from runtime.continuity_pool import connect_pool
+        from runtime.pool_evaluator import ContinuityPoolEvaluator
+        from runtime.service import EcosystemService
+        with TemporaryDirectory() as tmp:
+            evaluator = ContinuityPoolEvaluator(ROOT)
+            service = EcosystemService(data_dir=tmp, ab_evaluator=evaluator)
+            evaluator.bind(service)
+            prior = ABWorkflowSources(ROOT, tmp).recorded_native_pool_sources()
+            self.assertEqual(prior["source_records"], [])
+            self.assertFalse(prior["journal_present"])
+            root = connect_pool(service, ROOT)["root"]
+            native = ABWorkflowSources(ROOT, tmp).recorded_native_pool_sources()
+            self.assertEqual(len(native["source_records"]), 3)
+            self.assertEqual(len(native["source_events"]), 1)
+            self.assertEqual(
+                native["source_events"][0],
+                service.runtime.event_store.for_handoff(root)[-1].event_id,
+            )
+            self.assertFalse(native["actor_identity_authenticated"])
+            self.assertFalse(native["native_result_verified"])
+            self.assertTrue(native["source_bytes_rechecked"])
+
     def test_unmatched_or_outside_source_stays_wall(self):
         with TemporaryDirectory() as tmp:
             bridge = ABWorkflowSources(ROOT, tmp)
