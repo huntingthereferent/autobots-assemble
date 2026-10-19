@@ -1,11 +1,11 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-19T13:02:44.112026+00:00",
-  "content_sha256": "41ab9da30dcbe13eb7c0c67ff23a737305da3a2f01a6ede108e43cf441917043",
+  "checked_at": "2026-10-19T18:59:52.047423+00:00",
+  "content_sha256": "a8795fcd4a348ed47e55ef9325847400380684ee4c4bd2c38dfc657bb978b4bf",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 6,
+      "count": 5,
       "max_magnitude": 4.8,
       "window": "rolling past hour"
     },
@@ -22,112 +22,95 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026uskvmz",
-        "observed_at": "2026-10-19T13:02:43.773533Z",
-        "source_updated_at": "2026-10-19T12:14:49.908000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uskvmz",
+        "source_id": "aka2026uswzye",
+        "observed_at": "2026-10-19T18:59:51.665026Z",
+        "source_updated_at": "2026-10-19T18:19:38.826000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uswzye",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uskvmz",
+        "canonical_key": "event:aka2026uswzye",
         "payload": {
-          "magnitude": 1.2,
-          "place": "22 km N of Manley Hot Springs, Alaska",
-          "longitude": -150.549,
-          "latitude": 65.2,
-          "depth_km": 10.3,
-          "occurred_at": "2026-10-19T12:13:39.184000+00:00"
+          "magnitude": 1.6,
+          "place": "44 km WNW of Valdez, Alaska",
+          "longitude": -147.144,
+          "latitude": 61.23,
+          "depth_km": 15.7,
+          "occurred_at": "2026-10-19T18:18:36.670000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026uslawy",
-        "observed_at": "2026-10-19T13:02:43.773533Z",
-        "source_updated_at": "2026-10-19T12:20:40.003000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uslawy",
+        "source_id": "aka2026usxgtp",
+        "observed_at": "2026-10-19T18:59:51.665026Z",
+        "source_updated_at": "2026-10-19T18:29:10.224000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026usxgtp",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uslawy",
+        "canonical_key": "event:aka2026usxgtp",
         "payload": {
           "magnitude": 0.7,
-          "place": "84 km NNW of Karluk, Alaska",
-          "longitude": -154.966,
-          "latitude": 58.277,
+          "place": "62 km ENE of Pedro Bay, Alaska",
+          "longitude": -153.132,
+          "latitude": 60.059,
           "depth_km": 5.0,
-          "occurred_at": "2026-10-19T12:19:53.856000+00:00"
+          "occurred_at": "2026-10-19T18:26:28.177000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026usltww",
-        "observed_at": "2026-10-19T13:02:43.773533Z",
-        "source_updated_at": "2026-10-19T12:44:40.917000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026usltww",
+        "source_id": "tx2026upolzm",
+        "observed_at": "2026-10-19T18:59:51.665026Z",
+        "source_updated_at": "2026-10-19T18:29:05.777000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/tx2026upolzm",
         "entity_type": "event",
-        "canonical_key": "event:aka2026usltww",
+        "canonical_key": "event:tx2026upolzm",
         "payload": {
-          "magnitude": 1.1,
-          "place": "55 km N of Chickaloon, Alaska",
-          "longitude": -148.434,
-          "latitude": 62.294,
-          "depth_km": 25.8,
-          "occurred_at": "2026-10-19T12:41:46.295000+00:00"
+          "magnitude": 2.8,
+          "place": "17 km SW of Jal, New Mexico",
+          "longitude": -103.299,
+          "latitude": 31.981,
+          "depth_km": 7.6892,
+          "occurred_at": "2026-10-19T18:11:05.285000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "ci41349295",
-        "observed_at": "2026-10-19T13:02:43.773533Z",
-        "source_updated_at": "2026-10-19T12:38:37.947000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41349295",
+        "source_id": "tx2026upoxoa",
+        "observed_at": "2026-10-19T18:59:51.665026Z",
+        "source_updated_at": "2026-10-19T18:50:16.040000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/tx2026upoxoa",
         "entity_type": "event",
-        "canonical_key": "event:ci41349295",
+        "canonical_key": "event:tx2026upoxoa",
         "payload": {
-          "magnitude": 0.4,
-          "place": "9 km WNW of Anza, CA",
-          "longitude": -116.763,
-          "latitude": 33.5926666666667,
-          "depth_km": 9.28,
-          "occurred_at": "2026-10-19T12:35:15.560000+00:00"
+          "magnitude": 2.7,
+          "place": "16 km SSW of Jal, New Mexico",
+          "longitude": -103.29,
+          "latitude": 31.987,
+          "depth_km": 6.5613,
+          "occurred_at": "2026-10-19T18:24:08.267000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "ok2026umqb",
-        "observed_at": "2026-10-19T13:02:43.773533Z",
-        "source_updated_at": "2026-10-19T12:40:32.763000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ok2026umqb",
+        "source_id": "us6000u3g6",
+        "observed_at": "2026-10-19T18:59:51.665026Z",
+        "source_updated_at": "2026-10-19T18:43:55.040000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u3g6",
         "entity_type": "event",
-        "canonical_key": "event:ok2026umqb",
-        "payload": {
-          "magnitude": 2.22,
-          "place": "7 km NW of Crescent, Oklahoma",
-          "longitude": -97.66766667,
-          "latitude": 35.99316667,
-          "depth_km": 22.63,
-          "occurred_at": "2026-10-19T12:27:46.469000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us6000u3ch",
-        "observed_at": "2026-10-19T13:02:43.773533Z",
-        "source_updated_at": "2026-10-19T12:22:21.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u3ch",
-        "entity_type": "event",
-        "canonical_key": "event:us6000u3ch",
+        "canonical_key": "event:us6000u3g6",
         "payload": {
           "magnitude": 4.8,
-          "place": "56 km N of Ruteng, Indonesia",
-          "longitude": 120.378,
-          "latitude": -8.1042,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-19T12:06:01.884000+00:00"
+          "place": "88 km WNW of Hihifo, Tonga",
+          "longitude": -174.5697,
+          "latitude": -15.6727,
+          "depth_km": 156.799,
+          "occurred_at": "2026-10-19T18:27:46.554000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-19T13:02:43.922992Z",
-      "source_updated_at": "2026-10-19T10:48:46Z",
+      "observed_at": "2026-10-19T18:59:51.825463Z",
+      "source_updated_at": "2026-10-19T17:53:46Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
@@ -135,7 +118,7 @@
         "full_name": "psf/requests",
         "default_branch": "main",
         "stargazers_count": 54517,
-        "forks_count": 13240,
+        "forks_count": 13236,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -144,7 +127,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-19T13:02:44.097996Z",
+      "observed_at": "2026-10-19T18:59:52.019936Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -166,8 +149,7 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count",
-        "stargazers_count"
+        "forks_count"
       ]
     },
     "pypi": {
