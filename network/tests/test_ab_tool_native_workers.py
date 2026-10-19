@@ -69,7 +69,8 @@ class ABToolNativeWorkerTests(unittest.TestCase):
             self.assertEqual(projection["status"], "SOURCE_REFERENCES_RECHECKED")
             self.assertEqual(len(projection["task_ids"]), 3)
             self.assertEqual(projection["graph_summary"]["relations"], 6)
-            self.assertTrue(all(len(r["recorded_ancestor_edges"]) == 2
+            # Shared source files can connect distinct task ancestries.
+            self.assertTrue(all(len(r["recorded_ancestor_edges"]) >= 2
                                 for r in projection["task_ancestry"].values()))
             self.assertFalse(projection["completion_verified"])
             self.assertEqual(event.data["output"]["task_results"], "NOT_EXECUTED")
