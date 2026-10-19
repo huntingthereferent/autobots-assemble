@@ -42,6 +42,10 @@ class Probe:
     source_sha256: str
     result_sha256: str
     witness_ref: str
+    model_id: str
+    execution_mode: str
+    agent_profile_sha256: str
+    execution_surface: str = "ab-workstation"
 
 
 @dataclass(frozen=True)
@@ -73,6 +77,11 @@ def _probe(p: Probe) -> None:
     for field in ("input_sha256", "source_sha256", "result_sha256"):
         _sha(getattr(p, field), field)
     _nonblank(p.witness_ref, "probe witness")
+    _nonblank(p.model_id, "model identity")
+    _nonblank(p.execution_mode, "execution mode")
+    _sha(p.agent_profile_sha256, "agent profile")
+    if p.execution_surface != "ab-workstation":
+        raise ValueError("foreign agent substrate is not admissible in this A/B lane")
 
 
 def _fingerprint(desk: ProcessWorkstation, worker_id: str, version_id: str) -> str:
@@ -95,8 +104,11 @@ def contrast_and_record(
     """Compare one task on two native source editions; append one scoped observation.
 
     Both probes must have their own native job IDs, equal task/input identities,
-    source bytes matching the currently inspected editions, and freshly pass
-    caller-supplied native verification. The independent comparator is invoked
+    the SAME independently verified agent identity / execution mode / executor
+    surface, source bytes matching the currently inspected editions, and freshly pass
+    caller-supplied native verification. Supplied metadata alone does not
+    authenticate the executor: the native verifier must attest the recorded
+    configuration. The independent comparator is invoked
     *only after* both probes pass. UNKNOWN is not counted as an improvement.
 
     Existing RuntimeJournal is the sole durable record. No source is modified,
@@ -118,6 +130,18 @@ def contrast_and_record(
         raise ValueError("probe source-edition identity mismatch")
     if base.job_id == candidate.job_id:
         raise ValueError("cannot compare one job with itself")
+    # The proposed harness edit is the variable being investigated. The
+    # surrounding model, agent identity, executor surface and mode must not
+    # silently change between probe runs. Keep Codex/build-mode switches out.
+    if (base.model_id != candidate.model_id
+            or base.execution_mode != candidate.execution_mode
+            or base.agent_profile_sha256 != candidate.agent_profile_sha256
+            or base.execution_surface != candidate.execution_surface):
+        raise ValueError("agent/execution configuration changed between probes")
+    if any("codex" in value.casefold() for value in (
+            base.model_id, base.execution_mode, candidate.model_id,
+            candidate.execution_mode)):
+        raise ValueError("Codex mode is not part of this A/B workstation lane")
     if base.task_id != candidate.task_id or base.input_sha256 != candidate.input_sha256:
         raise ValueError("different tasks or inputs cannot support a paired contrast")
 
