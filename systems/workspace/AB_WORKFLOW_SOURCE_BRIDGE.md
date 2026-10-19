@@ -63,6 +63,53 @@ The saved record contains only source locators, exact hashes, step/task bindings
 source-graph summary and the digest of the actual A/B graph. It does not copy
 source file contents into the local source-link journal.
 
+## Native result feedback (finite worker first)
+
+The Workstation now additionally supports real **completed native results**,
+not just source references. Open the local editor's **Source-verified native
+results** section, supply an exact native job ID from the existing
+finite-correspondence-process worker, and invoke **Reverify native result**.
+This routes to the existing `systems.workspace.controls.reverify_job`
+source-owner verifier. It freshly checks the copied source edition and
+recomputes the result without running another worker.
+
+**Attach to pinned step** binds that exact verified job and its original
+`RESULT` event, source-edition fingerprint, input digest, output digest,
+evidence digest and scoped finite verdict counts to an already pinned
+workflow revision. Earlier associations are append-only and changing a step
+requires a *new workflow revision*, not silently substituting a job.
+
+**Compare pinned native results** requires two different native job IDs,
+a direct pinned-parent/branch revision relationship and the **same native
+finite inputs**. Both results are freshly reverified before comparison.
+It reports count differences and whether those computations agree, without
+ranking entire workflows. In particular:
+
+- More `CONTRADICTED` outcomes do **not** establish a better mathematical
+  correspondence or application workflow.
+- `NOT_CONTRADICTED` does **not** establish an admitted mathematical relation.
+- Equality under a finite experiment does **not** prove universal equivalence.
+- The source-owned verifier supports only this finite worker family so far;
+  other families require their own native-result admission adapters.
+- The editor does not execute or restart workers. Native results must already
+  have been executed through their original explicit permission gates.
+- This is local source re-verification, not authentication of who operated
+  the computer, and not a hosted multi-customer system.
+
+The native-result association history lives at
+`runtime/data/workflow_native_result_links.jsonl`, separate from the
+pinned-branch journal, A/B source-link journal, and native source-owner
+`runtime.jsonl`. It is SHA-256 chained but not a multi-writer database.
+The independent native result recheck must succeed on every inspection and
+comparison; a historical pin is not enough.
+
+`network/tests/test_workflow_native_results.py` runs the **real native finite
+worker subprocess** on two independent source editions and then rereads
+both original source/results through the existing verifier. It tests
+idempotency, tamper rejection, missing native results, source drift, and
+the honest same-input comparison. The `workstation-ab-bridge` CI job
+executes this test. It is not a generic AI workflow optimizer.
+
 ## Deliberate separations
 
 - A/B source matching **is not** native job success, worker code execution,
