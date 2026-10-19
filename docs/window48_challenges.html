@@ -60,7 +60,7 @@ button.positive{background:#246554;border-color:#82baa8}
 <header>
 <div class="kicker">WORLD48 / original rooted A·B finite worlds</div>
 <h1>Collision laboratory</h1>
-<p>Complete 16 finite source-defined challenges. For each pair of worlds, discover two action paths from the marked origin that arrive at the <strong>same left-world state</strong> but <strong>different right-world states</strong>. The win condition is a mathematical rooted witness, not an invented maze goal.</p>
+<p>Complete 48 finite source-defined challenges: 16 original rooted classes viewed through three source-defined charts (c=0, 1, 2). For each pair of worlds, discover two action paths from the marked origin that arrive at the <strong>same left-world state</strong> but <strong>different right-world states</strong>. The win condition is a mathematical rooted witness, not an invented maze goal.</p>
 <p><a href="window48_world.html">Free exploration</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/work/arc_like_maze/WINDOW_COMBINED.md">Original source proof</a></p>
 </header>
 <div class="top">
@@ -68,7 +68,7 @@ button.positive{background:#246554;border-color:#82baa8}
 <label for="mission">Choose source challenge
 <select id="mission" disabled></select></label>
 <p id="task">Loading source-derived challenges…</p>
-<p id="progress">0 of 16 witnessed</p>
+<p id="progress">0 of 48 witnessed</p>
 </section>
 <section class="panel">
 <h2>Win condition</h2>
@@ -123,7 +123,7 @@ button.positive{background:#246554;border-color:#82baa8}
 <p class="kicker" style="margin-top:18px">Current path · exact finite transition log</p>
 <pre id="record">No actions yet.</pre>
 </section>
-<p class="note">The source gives 48 concrete depth-three F₃ laws; 16 rooted classes remain separate even where full-state classes coincide. This laboratory uses the original transitions and rooted-collision witnesses. It does <strong>not</strong> imitate the native ARC-AGI-3 game, prove a correspondence between native controls and A/B, or claim an external competition result. Downloaded certificates can be freshly replayed by the original Python source verifier.</p>
+<p class="note">The source gives 48 concrete depth-three F₃ laws; 16 rooted classes remain separate even where full-state classes coincide. The 48 missions cover all 48 concrete laws, organized as three views of 16 rooted classes; they are not 48 independent rooted classes. Existing first-16 witness certificates retain their exact IDs and law pairs. This laboratory uses the original transitions and rooted-collision witnesses. It does <strong>not</strong> imitate the native ARC-AGI-3 game, prove a correspondence between native controls and A/B, or claim an external competition result. Downloaded certificates can be freshly replayed by the original Python source verifier.</p>
 </main>
 <script>
 'use strict';
@@ -149,7 +149,7 @@ function isWord(v){return typeof v==='string'&&v.length<=128&&/^[AB]*$/.test(v)}
 function validatesSaved(cert){
  if(!cert||cert.schema!=='original-window48-rooted-collision-certificate/v1'||
    cert.scope!=='finite-mathematical-source-only'||!Number.isInteger(cert.challenge_id)||
-   cert.challenge_id<0||cert.challenge_id>=16||!Array.isArray(cert.law_ids)||
+   cert.challenge_id<0||cert.challenge_id>=roster.challenges.length||!Array.isArray(cert.law_ids)||
    cert.law_ids.length!==2||cert.law_ids.some((v,i)=>v!==roster.challenges[cert.challenge_id].law_ids[i])||
    !Array.isArray(cert.trials)||cert.trials.length!==2||!cert.verdict||
    Object.keys(cert.verdict).sort().join(',')!=='left_collides,passed,right_splits'||
@@ -188,11 +188,11 @@ function restoreProgress(){
   const raw=localStorage.getItem(STORAGE_KEY);
   if(!raw||raw.length>1500000)return null;
   const rec=JSON.parse(raw);
-  if(!rec||rec.schema!==STORAGE_KEY||!Array.isArray(rec.certificates)||rec.certificates.length>16)return null;
+  if(!rec||rec.schema!==STORAGE_KEY||!Array.isArray(rec.certificates)||rec.certificates.length>roster.challenges.length)return null;
   for(const cert of rec.certificates){if(validatesSaved(cert))savedCertificates.set(cert.challenge_id,cert)}
   solved=new Set(savedCertificates.keys());
   const d=rec.draft;
-  if(!d||!Number.isInteger(d.mission)||d.mission<0||d.mission>=16||
+  if(!d||!Number.isInteger(d.mission)||d.mission<0||d.mission>=roster.challenges.length||
      !Number.isInteger(d.phase)||d.phase<0||d.phase>2||!isWord(d.word)||
      !Array.isArray(d.paths)||d.paths.length!==d.phase||d.paths.some(p=>!isWord(p))||
      (d.phase===2&&d.word!==''))return null;
@@ -323,11 +323,13 @@ function reveal(){
 }
 function validate(model,roster){
  if(model.schema!=='original-window48-depth3-game-world/v1'||!Array.isArray(model.laws)||model.laws.length!==48)throw Error('Wrong source-law data');
- if(roster.schema!=='original-window48-rooted-challenge-roster/v1'||!Array.isArray(roster.challenges)||roster.challenges.length!==16)throw Error('Original challenge roster unavailable');
- for(let i=0;i<16;i++){
+ if(roster.schema!=='original-window48-rooted-challenge-roster/v1'||!Array.isArray(roster.challenges)||roster.challenges.length!==48)throw Error('Original challenge roster unavailable');
+ for(let i=0;i<roster.challenges.length;i++){
   const p=roster.challenges[i],ids=p.law_ids;
   if(p.id!==i||p.objective!=='rooted-collision-left-split-right'||ids.length!==2||
       ids.some(n=>!Number.isInteger(n)||n<0||n>47)||p.example_words.length!==2)throw Error('Rooted mission shape changed');
+  if(ids.some(id=>model.laws[id].coefficient!==Math.floor(i/16)))
+     throw Error('Source chart mismatch at mission '+i);
   const [a,b]=p.example_words;
   if(![a,b].every(w=>typeof w==='string'&&/^[AB]*$/.test(w)))throw Error('Source witness path invalid');
   const endpoint=(id,word)=>{
@@ -347,7 +349,7 @@ async function boot(){
   const select=$('mission');
   p.challenges.forEach((c,i)=>{
    const opt=document.createElement('option');opt.value=String(i);
-   opt.textContent=String(i+1).padStart(2,'0')+' · original laws #'+(c.law_ids[0]+1)+' / #'+(c.law_ids[1]+1);
+   opt.textContent=String(i+1).padStart(2,'0')+' · chart c='+Math.floor(i/16)+' · original laws #'+(c.law_ids[0]+1)+' / #'+(c.law_ids[1]+1);
    select.appendChild(opt);
   });
   select.disabled=false;select.addEventListener('change',()=>chooseChallenge(Number(select.value)));

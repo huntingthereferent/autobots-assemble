@@ -16,36 +16,48 @@ ROOT = (0, 0, 0)
 
 def rooted_roster() -> list[dict]:
     laws = family()
-    reps = [i for i, w in enumerate(laws) if w.coefficient == 0]
-    if len(reps) != 16 or len(laws) != 48:
+    if len(laws) != 48:
         raise AssertionError("original source cardinality changed")
     result = []
-    for n, first in enumerate(reps):
-        second = reps[(n + 1) % len(reps)]
-        if first == second:
-            raise AssertionError("source challenge must compare distinct classes")
-        witness = rooted_conflict(laws[first], laws[second])
-        if witness is None:
-            first, second = second, first
+    # Preserve the first 16 c=0 source challenge IDs exactly; saved certificates
+    # and browser-local progress from the original release remain valid.
+    # Continue through charts c=1 and c=2, visiting each concrete source law.
+    # These are three charts of 16 rooted classes, NOT 48 rooted classes.
+    for chart in (0, 1, 2):
+        reps = [i for i, w in enumerate(laws) if w.coefficient == chart]
+        if len(reps) != 16:
+            raise AssertionError("original source chart cardinality changed")
+        for position, first in enumerate(reps):
+            second = reps[(position + 1) % len(reps)]
+            # The final oriented pair requires source/target reversal to expose
+            # the rooted obstruction; this matches historical challenge 15.
+            if position == 15:
+                first, second = second, first
+            if first == second:
+                raise AssertionError("source challenge must compare distinct classes")
             witness = rooted_conflict(laws[first], laws[second])
-        if witness is None:
-            raise AssertionError("adjacent source rooted classes have no admissible distinguishing witness")
-        path_a, path_b, source_state, target_a, target_b = witness
-        assert laws[first].apply(ROOT, path_a) == source_state
-        assert laws[first].apply(ROOT, path_b) == source_state
-        assert target_a != target_b
-        assert laws[second].apply(ROOT, path_a) == target_a
-        assert laws[second].apply(ROOT, path_b) == target_b
-        result.append({
-            "id": n,
-            "law_ids": [first, second],
-            "objective": "rooted-collision-left-split-right",
-            "example_words": [path_a, path_b],
-            "example_source_endpoint": list(source_state),
-            "example_target_endpoints": [list(target_a), list(target_b)],
-        })
+            if witness is None:
+                first, second = second, first
+                witness = rooted_conflict(laws[first], laws[second])
+            if witness is None:
+                raise AssertionError("original rooted classes have no distinguishing witness")
+            path_a, path_b, source_state, target_a, target_b = witness
+            assert laws[first].apply(ROOT, path_a) == source_state
+            assert laws[first].apply(ROOT, path_b) == source_state
+            assert target_a != target_b
+            assert laws[second].apply(ROOT, path_a) == target_a
+            assert laws[second].apply(ROOT, path_b) == target_b
+            result.append({
+                "id": len(result),
+                "law_ids": [first, second],
+                "objective": "rooted-collision-left-split-right",
+                "example_words": [path_a, path_b],
+                "example_source_endpoint": list(source_state),
+                "example_target_endpoints": [list(target_a), list(target_b)],
+            })
+    if len(result) != 48 or {first for x in result for first in x["law_ids"]} != set(range(48)):
+        raise AssertionError("every original concrete law must be a playable source challenge")
     return result
-
 
 def _index(state) -> int:
     if len(state) != 3 or any(type(x) is not int or x not in range(3) for x in state):

@@ -43,7 +43,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.page=self.browser.new_page(accept_downloads=True)
         self.addCleanup(self.page.close)
         self.page.goto(self.url)
-        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
         self.assertEqual(self.page.locator("#left-nodes .node").count(),27)
         self.assertEqual(self.page.locator("#right-nodes .node").count(),27)
 
@@ -66,9 +66,9 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.addCleanup(page.close)
         page.goto("http://127.0.0.1:"+str(self.server.server_port)+"/game/")
         page.wait_for_url("**/window48_challenges.html")
-        page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        page.wait_for_function("document.querySelector('#mission').options.length === 48")
         self.assertEqual(page.locator("h1").inner_text(),"Collision laboratory")
-        self.assertEqual(page.locator('#mission option').count(),16)
+        self.assertEqual(page.locator('#mission option').count(),48)
         self.assertEqual(page.locator('button[data-action="interact"]').count(),0)
 
     def test_real_challenge_3_root_collision_and_python_host(self):
@@ -82,7 +82,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.lock()
         self.page.locator("#check").click()
         self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
-        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
         payload,report=self.exported()
         self.assertEqual(report["challenge_id"],2)
         self.assertTrue(report["passed"])
@@ -116,7 +116,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.assertTrue(self.page.locator("#export").is_disabled())
         self.page.locator("#retry").click()
         self.assertIn("PATH 1",self.page.locator("#phase").inner_text().upper())
-        self.assertEqual(self.page.locator("#progress").inner_text(),"0 of 16 source-replayed witnesses saved in this browser")
+        self.assertEqual(self.page.locator("#progress").inner_text(),"0 of 48 source-replayed witnesses saved in this browser")
 
     def test_completed_source_witness_survives_browser_reload_and_host_replay(self):
         self.page.locator("#mission").select_option("2")
@@ -128,8 +128,8 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         first,verified=self.exported()
         self.assertTrue(verified["passed"])
         self.page.reload()
-        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
-        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
         self.assertEqual(self.page.locator("#mission").input_value(),"2")
         self.assertIn("TWO LOCKED PATHS",self.page.locator("#phase").inner_text().upper())
         self.assertFalse(self.page.locator("#check").is_disabled())
@@ -145,7 +145,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.word("BB")
         old_left=self.page.locator("#left-state").inner_text()
         self.page.reload()
-        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
         self.assertIn("PATH 2",self.page.locator("#phase").inner_text().upper())
         self.assertEqual(self.page.locator("#left-state").inner_text(),old_left)
         self.word("BA")
@@ -163,7 +163,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.word("BBBA")
         self.lock()
         self.page.locator("#check").click()
-        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
         self.page.evaluate("""() => {
           const key='world48-source-replayed-progress/v1';
           const record=JSON.parse(localStorage.getItem(key));
@@ -171,8 +171,8 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
           localStorage.setItem(key,JSON.stringify(record));
         }""")
         self.page.reload()
-        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
-        self.assertIn("0 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertIn("0 of 48 source-replayed",self.page.locator("#progress").inner_text())
         self.assertTrue(self.page.locator("#export").is_disabled())
 
     def test_saved_progress_can_be_cleared_without_changing_original_source(self):
@@ -181,12 +181,12 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.word("BBB")
         self.lock()
         self.page.locator("#check").click()
-        self.assertIn("1 of 16",self.page.locator("#progress").inner_text())
+        self.assertIn("1 of 48",self.page.locator("#progress").inner_text())
         self.page.locator("#clear-progress").click()
-        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
         self.page.reload()
-        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
-        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
 
     def test_import_valid_export_restores_verified_progress_after_clear(self):
         self.page.locator("#mission").select_option("2")
@@ -201,14 +201,14 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         original=json.loads(path.read_text(encoding="utf8"))
         self.assertTrue(verify_certificate(original)["passed"])
         self.page.locator("#clear-progress").click()
-        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
         self.page.locator("#import-file").set_input_files(str(path))
         self.page.wait_for_function("document.querySelector('#status').textContent.includes('Imported and source-replayed challenge 3')")
-        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
         self.assertIn("Imported and source-replayed challenge 3",self.page.locator("#status").inner_text())
         self.page.reload()
-        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
-        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
 
     def test_forged_import_is_rejected_without_change_to_source_progress(self):
         self.page.locator("#mission").select_option("2")
@@ -228,10 +228,10 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             self.page.locator("#import-file").set_input_files(str(file))
             self.page.wait_for_function("document.querySelector('#status').textContent.includes('Witness import rejected')")
             self.assertIn("Witness import rejected",self.page.locator("#status").inner_text())
-            self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+            self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
         self.page.reload()
-        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
-        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
 
     def test_wrong_scope_import_cannot_be_counted(self):
         forged={"schema":"external-native-game-result","challenge_id":1,
@@ -242,7 +242,48 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             self.page.locator("#import-file").set_input_files(str(file))
             self.page.wait_for_function("document.querySelector('#status').textContent.includes('Witness import rejected')")
         self.assertIn("Witness import rejected",self.page.locator("#status").inner_text())
-        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
+
+    def test_new_chart_missions_are_real_chromium_witnesses_and_python_verified(self):
+        source=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+        for id in (16,31,32,47):
+            with self.subTest(mission=id):
+                self.page.locator("#mission").select_option(str(id))
+                self.assertIn("chart c="+str(id//16),
+                              self.page.locator("#mission option:checked").inner_text())
+                words=source["challenges"][id]["example_words"]
+                self.word(words[0])
+                self.lock()
+                self.word(words[1])
+                self.lock()
+                self.page.locator("#check").click()
+                self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+                payload,report=self.exported()
+                self.assertEqual(report["challenge_id"],id)
+                self.assertTrue(report["passed"])
+                self.assertEqual(payload["trials"][0]["actions"],words[0])
+                self.assertEqual(payload["trials"][1]["actions"],words[1])
+
+    def test_existing_16_level_progress_survives_expansion_to_48(self):
+        # A historical c=0 source receipt must retain mission index/pair in
+        # the larger manifest, rather than being remapped to a new law chart.
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
+        record,_=self.exported()
+        self.assertEqual(record["law_ids"],[6,9])
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
+        self.page.locator("#mission").select_option("47")
+        self.assertIn("48 / 48",self.page.locator("#task").inner_text())
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
+        self.page.locator("#mission").select_option("2")
+        self.assertIn("1 of 48 source-replayed",self.page.locator("#progress").inner_text())
 
     def test_invalid_word_keeps_source_origin(self):
         self.page.locator("#word").fill("AACX")
