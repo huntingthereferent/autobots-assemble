@@ -38,6 +38,7 @@ def originals():
                 "turn":t,"known_at":k,"native_game_known_at":known,
                 "target_at":"2026-01-04","source_program_sha256":"e"*64,
                 "independent_source_policy_agreement":True,
+                "static_valid_ids":["delayed-result","prior-note"],
                 "indeterminate_ids":["delayed-result"] if k in C[1:3] else [],
                 "admitted_ids":["delayed-result","prior-note"] if k==C[3] else ["prior-note"],
                 "definitely_withheld_ids":["delayed-result"] if k==C[0] else []})
