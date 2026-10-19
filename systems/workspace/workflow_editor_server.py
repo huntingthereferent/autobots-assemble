@@ -15,6 +15,7 @@ import secrets
 from foundation.program_kernel.manifest import load_manifest
 from systems.workspace.workflow_draft import build_preview, commit_proposal
 from systems.workspace.workflow_pins import WorkflowPins
+from systems.workspace.workflow_ab_bridge import ABWorkflowSources
 
 ROOT = Path(__file__).resolve().parents[2]
 MAX_BYTES = 131072
@@ -65,6 +66,12 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 except ValueError as e:
                     self._json({"error": str(e)}, 400)
                 return
+            if self.path == "/api/ab-links":
+                try:
+                    self._json(ABWorkflowSources(root, data_dir).list_records())
+                except ValueError as e:
+                    self._json({"error": str(e)}, 400)
+                return
             if self.path == "/api/manifests":
                 try:
                     catalog = []
@@ -95,7 +102,8 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 self._json({"error": "local editor authorization required"}, 403)
                 return
             if self.path not in ("/api/preview", "/api/diff", "/api/commit",
-                                 "/api/pin", "/api/consider"):
+                                 "/api/pin", "/api/consider",
+                                 "/api/ab-preview", "/api/ab-record"):
                 self._json({"error": "unknown action"}, 404)
                 return
             try:
@@ -106,7 +114,15 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 if not isinstance(payload, dict) or not isinstance(payload.get("draft"), dict):
                     raise ValueError("draft object required")
                 draft = payload["draft"]
-                if self.path == "/api/preview":
+                if self.path in ("/api/ab-preview", "/api/ab-record"):
+                    bridge = ABWorkflowSources(root, data_dir)
+                    records = payload.get("source_records")
+                    bindings = payload.get("step_bindings")
+                    if self.path == "/api/ab-preview":
+                        reply = bridge.inspect(draft, records, bindings)
+                    else:
+                        reply = bridge.record_for_pinned_branch(draft, records, bindings)
+                elif self.path == "/api/preview":
                     reply = build_preview(draft, root)
                 elif self.path == "/api/diff":
                     reply = WorkflowPins(data_dir).compare_branch(draft, root)
