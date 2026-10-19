@@ -66,12 +66,14 @@ source file contents into the local source-link journal.
 ## Native result feedback (finite worker first)
 
 The Workstation now additionally supports real **completed native results**,
-not just source references. Open the local editor's **Source-verified native
-results** section, supply an exact native job ID from the existing
-finite-correspondence-process worker, and invoke **Reverify native result**.
-This routes to the existing `systems.workspace.controls.reverify_job`
-source-owner verifier. It freshly checks the copied source edition and
-recomputes the result without running another worker.
+not just source references. The local editor's **Source-verified native
+results** panel accepts an exact job ID from either the original
+finite-correspondence process or the Factory **simulated machine-stage**
+worker. `systems.workspace.controls.reverify_job` dispatches to the
+respective source owner's existing verifier. The original selected edition
+and recorded output are independently rechecked without running another
+worker. Factory's result is strictly a *simulation*, never evidence that a
+physical object was manufactured.
 
 **Attach to pinned step** binds that exact verified job and its original
 `RESULT` event, source-edition fingerprint, input digest, output digest,
@@ -80,17 +82,23 @@ workflow revision. Earlier associations are append-only and changing a step
 requires a *new workflow revision*, not silently substituting a job.
 
 **Compare pinned native results** requires two different native job IDs,
-a direct pinned-parent/branch revision relationship and the **same native
-finite inputs**. Both results are freshly reverified before comparison.
-It reports count differences and whether those computations agree, without
-ranking entire workflows. In particular:
+a direct pinned-parent/branch revision relationship and the **same
+source-owned worker family and comparable operation inputs**. Both results
+are freshly reverified before comparison. For finite jobs, *all native inputs*
+must match; the comparison reports bounded verdict-count differences. For
+Factory's simulated machine stage, two distinct native order IDs are required:
+the order identifiers remain recorded, while product/material/quantity and
+all other machine-operation inputs must match. The comparison reports whether
+the two simulated outputs match, **not** a quality score or evidence of
+physical production. In particular:
 
 - More `CONTRADICTED` outcomes do **not** establish a better mathematical
   correspondence or application workflow.
 - `NOT_CONTRADICTED` does **not** establish an admitted mathematical relation.
 - Equality under a finite experiment does **not** prove universal equivalence.
-- The source-owned verifier supports only this finite worker family so far;
-  other families require their own native-result admission adapters.
+- The source-owned adapters support only these two bounded families:
+  finite prefilter and simulated Factory machine stage. Other families need
+  their own verifier, domain contracts, and explicit native-result admission.
 - The editor does not execute or restart workers. Native results must already
   have been executed through their original explicit permission gates.
 - This is local source re-verification, not authentication of who operated
@@ -103,12 +111,15 @@ pinned-branch journal, A/B source-link journal, and native source-owner
 The independent native result recheck must succeed on every inspection and
 comparison; a historical pin is not enough.
 
-`network/tests/test_workflow_native_results.py` runs the **real native finite
-worker subprocess** on two independent source editions and then rereads
-both original source/results through the existing verifier. It tests
-idempotency, tamper rejection, missing native results, source drift, and
-the honest same-input comparison. The `workstation-ab-bridge` CI job
-executes this test. It is not a generic AI workflow optimizer.
+`network/tests/test_workflow_native_results.py` runs the **real finite
+worker subprocess** on two source editions and replays their results.
+`network/tests/test_workflow_factory_native_results.py` additionally
+executes the existing Factory machine-stage simulator on two distinct
+source-owned orders/editions, then independently verifies both results.
+Together they test idempotency, source drift, absent native results, distinct
+order identity, incompatible machine parameters, and the explicitly
+simulation-only comparison. The `workstation-ab-bridge` CI job runs both.
+Neither is a generic AI workflow optimizer.
 
 ## Deliberate separations
 
