@@ -80,6 +80,8 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 <p class="note">Typed measurements remain unverified. This local page cannot create native verification receipts.</p>
 <hr><h2>A/B native source ancestry</h2>
 <p class="note">Paste existing worker records with native source paths and SHA-256 values. Bind workflow step IDs to existing native task IDs. A/B rechecks the original bytes; a graph is not execution proof.</p>
+<button id="ab-load-native">Load original local bot records</button>
+<p class="note">Reads the original Continuity worker journal, if present, and rechecks referenced source bytes. Local journal actor identity is not authenticated.</p>
 <label for="ab-records">Recorded native worker sources (JSON list)</label>
 <textarea id="ab-records" placeholder='[{"task_id":"native-task","native_sources":[{"source":"runtime/file.py","sha256":"..."}]}]' rows="5"></textarea>
 <label for="ab-bindings">Workflow step → native task (JSON object)</label>
@@ -189,6 +191,15 @@ function abInputs(){
   throw Error("A/B records require a list and step bindings require an object.");
  return {source_records:sources,step_bindings:bindings};
 }
+el("ab-load-native").onclick=async()=>{
+ try{
+  const result=await request("/api/ab-native-records");
+  el("ab-records").value=JSON.stringify(result.source_records,null,2);
+  el("report").textContent=JSON.stringify({source_events:result.source_events,
+      records:result.source_records.length, actor_identity_authenticated:false},null,2);
+  message("Loaded "+result.source_records.length+" original native task source records. Bind workflow steps to those task IDs.");
+ }catch(e){message(e.message,true);}
+};
 el("ab-preview").onclick=()=>{
  try{action("/api/ab-preview",abInputs());}catch(e){message(e.message,true);}
 };
