@@ -67,7 +67,15 @@ class IdeaFrontierTests(unittest.TestCase):
         self.assertEqual(relations[peer["revision"]], "SHARED_PARENT")
         self.assertEqual(relations[grandchild["revision"]], "DIRECT_CHILD")
         self.assertEqual(len(relations), 3)
-        self.assertNotIn("Deep unexplored C", str(local))
+        # The direct child's MATCHED current step is in front of us;
+        # its internal graph and any further descendants still are not.
+        direct = next(r for r in local["visible_branches"]
+                      if r["revision"] == grandchild["revision"])
+        self.assertEqual(direct["local_step_delta"]["neighbor_step_label"],
+                         "Deep unexplored C")
+        self.assertNotIn("steps", direct)
+        self.assertNotIn("links", direct)
+        self.assertNotIn("draft", direct)
         self.assertFalse(local["claimed_global_worker_visibility"])
         self.assertFalse(local["native_relationships_verified"])
         self.assertFalse(local["current_view_authenticated_as_worker"])
