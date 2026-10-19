@@ -1,0 +1,24 @@
+name: ARC3 actual SP80 level1 selected-bar A4 ordinal transfer
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage1_a4_transfer.py'
+      - '.github/workflows/arc3-sp80-stage1-a4-transfer.yml'
+jobs:
+  native-level1-transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - run: python -m work.arc3.native_sp80_stage1_a4_transfer --out runtime/data/arc3/sp80-stage1-a4-transfer.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-stage1-a4-transfer
+          path: runtime/data/arc3/sp80-stage1-a4-transfer.*
+          if-no-files-found: error
+          retention-days: 14
