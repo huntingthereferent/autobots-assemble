@@ -37,7 +37,7 @@ class VersionPostingFieldNegativeTests(unittest.TestCase):
         for v in (1,93,106,"94"):
             with self.subTest(version=v),self.assertRaises(ValueError):
                 exact_url(v)
-    def test_04_refuse_promoted_submission_date_and invented_time(self):
+    def test_04_refuse_promoted_submission_date_and_invented_time(self):
         a,b=page(94),page(105)
         r=verify_pair([a,b])
         self.assertEqual(r["schema"],SCHEMA)
