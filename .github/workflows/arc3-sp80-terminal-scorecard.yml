@@ -1,0 +1,38 @@
+name: ARC3 native SP80 official terminal and scorecard
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_terminal_scorecard.py'
+      - '.github/workflows/arc3-sp80-terminal-scorecard.yml'
+jobs:
+  original-native-terminal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official native SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Validate exact predeclared native controls without playing game
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_terminal_scorecard import TRIALS,RESETS,PREFIX
+          assert len(TRIALS)==4 and RESETS==2 and PREFIX=='454545'
+          assert [name for name,_,_ in TRIALS]==[
+              'stage0_all4_34','stage1_all4_48',
+              'stage1_late5_at39','stage1_early5_block']
+          assert TRIALS[2][2].count('5')==1 and TRIALS[2][2][38]=='5'
+          assert TRIALS[3][2][:8]=='5'*8
+          print('UNIT ONLY: original SDK state and scorecard trial controls frozen')
+          PY
+      - name: Check real SDK states and scorecards on original public SP80
+        run: python -m work.arc3.native_sp80_terminal_scorecard --out runtime/data/arc3/sp80-terminal-scorecard.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-terminal-scorecard
+          path: runtime/data/arc3/sp80-terminal-scorecard.*
+          if-no-files-found: error
+          retention-days: 14
