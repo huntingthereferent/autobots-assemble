@@ -57,7 +57,7 @@ TRIALS=(
 )
 assert len(set(name for name,_,_ in TRIALS))==len(TRIALS)==15
 assert all((pos is None or 0<=pos[0]<=63 and 0<=pos[1]<=63)
-           and set(suffix)<={"1","2","3","4","5"} for _,pos,suffix in TRIALS)
+           and set(suffix)<={"1","2","3","4","5","6"} for _,pos,suffix in TRIALS)
 
 
 def real_frame_summary(arr):
@@ -99,7 +99,9 @@ def real_original_session(label,click,suffix,replicate):
     if click is not None and 6 not in legal(obs):
         raise RuntimeError("Official native SDK did not advertise coordinate ACTION6")
     native_sequence=[(6,click)] if click is not None else []
-    native_sequence.extend((int(c),None) for c in suffix)
+    if "6" in suffix and click is None:
+        raise ValueError("Original ACTION6 requires an explicitly predeclared coordinate")
+    native_sequence.extend((int(c),click if c=="6" else None) for c in suffix)
 
     source_ledger=[]
     interruption=None
