@@ -96,6 +96,20 @@ def physical_impulse(v,spin,normal,friction=.4):
              "energy_before":rounded(before),"energy_after":rounded(after)}
     return outgoing,after_spin,receipt
 
+def world_edge_time(pos,vel,available):
+    options=[]
+    for axis in (0,1):
+        if vel[axis]<-EPS:
+            boundary=R
+        elif vel[axis]>EPS:
+            boundary=(24.-R if axis==0 else 6.-R)
+        else:
+            continue
+        t=(boundary-pos[axis])/vel[axis]
+        if -EPS<=t<=available+EPS:
+            options.append(max(0.,t))
+    return min(options) if options else None
+
 def trace(y,segments):
     if not 0<=y<=6:raise ValueError("probe outside original WORLD")
     pos=(12.,float(y))
@@ -113,6 +127,15 @@ def trace(y,segments):
         budget=tick*STEP-clock
         while budget>EPS:
             possible=candidates(pos,vel,segments,budget)
+            edge=world_edge_time(pos,vel,budget)
+            if edge is not None and (not possible or edge<possible[0][0]-EPS):
+                orientation+=spin*edge
+                pos=add(pos,mul(edge,vel))
+                clock+=edge
+                budget-=edge
+                status="world-edge-reached-no-boundary-response"
+                unresolved={"time":rounded(clock),"center":[rounded(z) for z in pos]}
+                break
             if not possible:
                 orientation+=spin*budget
                 pos=add(pos,mul(budget,vel))
