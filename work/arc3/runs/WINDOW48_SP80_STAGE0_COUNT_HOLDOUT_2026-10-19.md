@@ -28,7 +28,7 @@ Before this fresh native experiment, [`native_sp80_stage0_count_holdout.py`](../
 
 No genuine original ACTION5 with a different preceding ACTION4 count advanced in the frozen 36-game holdout. The 18 advancing responses returned exactly 20 original SDK frames; no negative response returned 20 frames. Both two- and four-ACTION4 controls failed to advance. Earlier inserted ACTION5 calls did not alter the observed three-ACTION4 condition in these tested source words.
 
-**Combined with preceding discovery, without double-counting holdout:** 32 original advancing ACTION5 responses out of 166 cumulative ACTION5 events (16/68 discovery plus 18/98 holdout); 32/32 successes after exactly three preceding ACTION4 uses, no observed success at other ordinals in these bounded tests. The 20-frame signature also tracked every advancing event but is an SDK output, not a demonstrated cause.
+**Combined with preceding discovery, without double-counting holdout:** 34 original advancing ACTION5 responses out of 166 cumulative ACTION5 events (16/68 discovery plus 18/98 holdout); 34/34 successes after exactly three preceding ACTION4 uses, no observed success at other ordinals in these bounded tests. The 20-frame signature also tracked every advancing event but is an SDK output, not a demonstrated cause.
 
 ## Scope and next genuine-game movement
 
