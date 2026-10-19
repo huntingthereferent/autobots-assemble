@@ -48,7 +48,7 @@ def verify(folder):
                 for _ in range(30):page.locator("#next").click()
                 if page.evaluate("window.worldABContinuous.cursor()")!=30:
                     raise ValueError("next look did not preserve 31-frame horizon")
-                label=f"probe y={float(actual['probe_levels'][i]):g}"
+                label=f"probe y={float(actual['probe_levels'][i]):.9g}"
                 if label not in page.locator("#status").inner_text():
                     raise ValueError("physical stage displays incorrect source probe")
                 page.locator("#prev").click()
