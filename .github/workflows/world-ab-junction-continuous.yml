@@ -1,0 +1,70 @@
+name: WORLD — Continuous Junction Contact Trial 06
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-ab-junction-continuous.yml'
+      - 'systems/workspace/world_ab_junction_continuous.py'
+      - 'network/tests/test_world_ab_junction_continuous.py'
+      - 'docs/world_ab_junction_continuous.html'
+      - 'scripts/verify_world_ab_junction_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-full-motion-and-independent-penetration-oracle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout existing WORLD source
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independently check swept finite segments and real endpoint impacts
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing \
+            network.tests.test_world_ab_oblique_rotation
+      - name: Write complete source motion receipts
+        run: |
+          mkdir -p "$RUNNER_TEMP/junction-world"
+          python - <<'PY'
+          import json,os,pathlib
+          from systems.workspace.world_ab_junction_continuous import run
+          from network.tests.test_world_ab_junction_continuous import check
+          result=run()
+          assert check(result)
+          path=pathlib.Path(os.environ["RUNNER_TEMP"])/"junction-world"/"world_ab_junction_native.json"
+          path.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
+          print(json.dumps({"schema":result["schema"],
+           "completed_cases":result["completed_cases"],
+           "unresolved_cases":result["unresolved_cases"],
+           "endpoint_contacts":sum('endpoint' in c["feature"] for p in result["connected_finite_capsule"] for c in p["contacts"]),
+           "original_complete_blueprint_generated":False},sort_keys=True))
+          PY
+      - name: Install real Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Verify browser continuous trajectories against independent native source
+        run: |
+          python -m scripts.verify_world_ab_junction_browser \
+            --output-dir "$RUNNER_TEMP/junction-world"
+      - name: Retain playable movement, full frames, source and independent witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-ab-junction-continuous-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/junction-world/world_ab_junction_native.json
+            ${{ runner.temp }}/junction-world/world_ab_junction_browser.json
+            ${{ runner.temp }}/junction-world/world_ab_junction_browser.png
+            ${{ runner.temp }}/junction-world/world_ab_junction_witness.json
+            docs/world_ab_junction_continuous.html
+          retention-days: 30
+          if-no-files-found: warn
