@@ -7,6 +7,8 @@ on:
       - '.github/workflows/world-nih-phase2-start.yml'
       - 'scripts/nih_p2_world_source_events.py'
       - 'network/tests/test_nih_p2_world_source_events.py'
+      - 'scripts/nih_p2_world_original_source_join.py'
+      - 'network/tests/test_nih_p2_world_original_source_join.py'
 permissions:
   contents: read
   actions: read
@@ -31,6 +33,12 @@ jobs:
         with:
           ref: 34652b7b788fe21cc470273c953ae0ea1799b1e9
           path: original
+          persist-credentials: false
+      - name: Checkout already verified independent original-depositor source verifier
+        uses: actions/checkout@v5
+        with:
+          ref: 6e912c12d61c1c6f68b806314c7e5c9b6a3a2cab
+          path: owner-source
           persist-credentials: false
       - uses: actions/setup-python@v6
         with:
@@ -71,7 +79,7 @@ jobs:
       - name: Falsify synthetic event chain and source-time counterexamples
         run: |
           cd world
-          python -m unittest -v network.tests.test_nih_p2_world_source_events
+          python -m unittest -v network.tests.test_nih_p2_world_source_events network.tests.test_nih_p2_world_original_source_join
       - name: Fetch exact owner-retained twelve-job native journal
         uses: actions/download-artifact@v4
         with:
@@ -92,6 +100,17 @@ jobs:
           python "$GITHUB_WORKSPACE/world/scripts/nih_p2_world_source_events.py" \
             --native "$RUNNER_TEMP/restored-original-w13" \
             --evidence "$RUNNER_TEMP/continued-original-w13"
+      - name: Verify pinned real depositor Git blobs and original source/date attribution
+        run: |
+          cd owner-source
+          python -m unittest -v network.tests.test_nih_p2_aact_owner_date_link
+          python -m systems.workspace.nih_p2_aact_owner_date_link --output-dir "$RUNNER_TEMP/original-depositor-evidence"
+      - name: Refuse false historical registry timestamp or synthetic game ownership join
+        run: |
+          python "$GITHUB_WORKSPACE/world/scripts/nih_p2_world_original_source_join.py" \
+            "$RUNNER_TEMP/original-depositor-evidence/nih-p2-aact-owner-script-date-link.json" \
+            "$RUNNER_TEMP/continued-original-w13/world-nih-p2-source-event-report.json" \
+            "$RUNNER_TEMP/continued-original-w13/world-nih-p2-owner-boundary.json"
       - name: Preserve fresh Phase 2 game-world evidence, without republishing original journal
         if: always()
         uses: actions/upload-artifact@v4
@@ -108,5 +127,7 @@ jobs:
             ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.png
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-source-event-report.json
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-source-event-game.png
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-owner-boundary.json
+            ${{ runner.temp }}/original-depositor-evidence/nih-p2-aact-owner-script-date-link.json
           retention-days: 30
           if-no-files-found: warn
