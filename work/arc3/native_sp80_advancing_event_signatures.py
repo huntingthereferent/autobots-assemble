@@ -108,8 +108,8 @@ def stage0_event(trial,raw):
 def stage1_event(trial,raw):
     result=[]
     for action in trial["real_sdk_observation_ledger"]:
-        if action["phase"]!="context" or action["native_action_id"]!=5 or
-           "source_animation" not in action:
+        if (action["phase"]!="context" or action["native_action_id"]!=5 or
+                "source_animation" not in action):
             continue
         idx=action["phase_action_number"]
         stack=raw["context_"+str(idx)]
