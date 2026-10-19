@@ -85,6 +85,15 @@ class WorkflowNativeResults:
                         or output.get("part_state") != "machined"
                         or type(output.get("quantity")) is not int):
             raise NativeResultBoundary("unexpected native Factory simulation result shape")
+        if factory:
+            # A Factory order identity is not a machine-operation parameter.
+            # The actual source handoff must still carry the matching order ID.
+            if (set(job.inputs) != {"order", "product", "material", "quantity", "material_state"}
+                    or job.inputs.get("order") != job.metadata.get("order_id")):
+                raise NativeResultBoundary("Factory order/source identity mismatch")
+            comparable_inputs = {k: v for k, v in job.inputs.items() if k != "order"}
+        else:
+            comparable_inputs = job.inputs
         events = [event for event in runtime.event_store.for_handoff(job_id)
                   if event.event_type == "RESULT"]
         if len(events) != 1:
@@ -97,6 +106,8 @@ class WorkflowNativeResults:
             "worker_version": job.metadata["worker_version"],
             "edition_fingerprint": job.metadata["edition_fingerprint"],
             "inputs_sha256": _hash(job.inputs),
+            "comparable_inputs_sha256": _hash(comparable_inputs),
+            "native_order_id": job.metadata["order_id"] if factory else None,
             "result_event_id": events[0].event_id,
             "result_sha256": _hash(output),
             "evidence_sha256": _hash([vars(e) for e in state.evidence]),
@@ -211,8 +222,11 @@ class WorkflowNativeResults:
             return current
         earlier = select(parent_revision, parent_step_id)
         later = select(branch_revision, branch_step_id)
-        if earlier["inputs_sha256"] != later["inputs_sha256"]:
-            raise NativeResultBoundary("native worker inputs differ; results are not comparable")
+        if earlier["comparable_inputs_sha256"] != later["comparable_inputs_sha256"]:
+            raise NativeResultBoundary("native worker operation inputs differ; results are not comparable")
+        if (earlier["simulation_only"] and
+                earlier["native_order_id"] == later["native_order_id"]):
+            raise NativeResultBoundary("Factory comparison requires two distinct native orders")
         if earlier["worker_id"] != later["worker_id"]:
             raise NativeResultBoundary("native worker families differ")
         if earlier["native_job_id"] == later["native_job_id"]:
@@ -239,7 +253,7 @@ class WorkflowNativeResults:
             "source_owned_native_results_reverified_now": True,
             "native_jobs_reexecuted": False,
             "native_metric_scope": ("finite-prefilter verdict counts on identical native inputs"
-                                    if finite else "simulated Factory machine-stage output on identical inputs"),
+                                    if finite else "simulated Factory machine operation on identical parameters, separate order IDs"),
             "workflow_quality_ranked": False,
             "physical_production_verified": False,
             "whole_workflow_verified": False,
