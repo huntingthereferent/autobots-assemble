@@ -46,7 +46,7 @@ class World48BrowserTests(unittest.TestCase):
         self.page=self.browser.new_page(accept_downloads=True)
         self.addCleanup(self.page.close)
         self.page.goto(self.url)
-        self.page.locator("#law-left option").first.wait_for()
+        self.page.wait_for_function("document.querySelector('#law-left').options.length === 48")
         self.assertEqual(self.page.locator("#law-left option").count(),48)
         self.assertEqual(self.page.locator("#law-right option").count(),48)
         self.assertEqual(self.page.locator("#left-nodes .node").count(),27)
