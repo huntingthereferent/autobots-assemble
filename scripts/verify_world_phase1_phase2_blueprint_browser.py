@@ -95,6 +95,13 @@ def run(reference,output):
                 raise ValueError("original W13 movement gate or blueprint 2D nodes absent")
             if not page.locator("#advance").is_disabled():
                 raise ValueError("W13 allowed advance before first-room collection")
+            page.locator("#bp-add").click()
+            if (page.locator("#bp-map .bp-map-node").count()!=18
+                or len(page.evaluate("window.worldBlueprintExport().blueprint.sample_sets.synthetic"))!=3):
+                raise ValueError("fixed tiny room dimensions improperly bound graph size")
+            page.locator("#bp-remove").click()
+            if page.locator("#bp-map .bp-map-node").count()!=12:
+                raise ValueError("removed graph assertion left stale displayed nodes")
             page.locator("#bp-assertion").select_option("delayed-result")
             page.locator("#bp-object").fill("changed-observation")
             page.locator("#bp-known").fill("2026-01-03")
