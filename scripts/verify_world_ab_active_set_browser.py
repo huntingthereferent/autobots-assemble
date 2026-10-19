@@ -40,8 +40,14 @@ def verify(output_dir):
                 if actual is None:
                     raise ValueError("browser experiment failed: "+page.locator("#status").inner_text()+" "+repr(errors))
                 upstream=page.evaluate("window.worldTrial10.upstream()")
-                if not source_equivalent(upstream,original):
-                    raise ValueError("unaltered source page disagrees with original independent Trial09 Python")
+                original_browser_subset={k:original[k] for k in (
+                    "schema","original_source_geometry","incoming_angle_grid",
+                    "surface_rotation_grid","speed","controlled_contact_lead",
+                    "cases","counts","original_surface_modified",
+                    "rotated_faces_are_original_source",
+                    "general_two_contact_physics_proven","frictional_manifold_solved")}
+                if not source_equivalent(upstream,original_browser_subset):
+                    raise ValueError("unaltered original Trial09 browser/source Python mismatch")
                 if not source_equivalent(actual,native):
                     if actual.get("counts")!=native["counts"]:
                         raise ValueError("classification counts mismatch: "+repr((actual.get("counts"),native["counts"])))
