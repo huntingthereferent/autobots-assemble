@@ -1,0 +1,158 @@
+{
+  "schema": "world-phase1-phase2-nih-temporal-blueprint/v1",
+  "research_context": {
+    "phase1": "concept-and-feasibility-DRAFT-NOT-SUBMITTED",
+    "phase2": "planned-implementation-blueprint-in-phase1",
+    "claim": "synthetic feasibility plus bounded source records, not a clinical result"
+  },
+  "base_world": {
+    "version": "game-w13-multiworld-v1",
+    "rooms": [
+      {
+        "id": "first-room",
+        "spec": {
+          "width": 4,
+          "height": 3,
+          "start": [
+            0,
+            1
+          ],
+          "target": [
+            2,
+            1
+          ]
+        }
+      },
+      {
+        "id": "second-room",
+        "spec": {
+          "width": 3,
+          "height": 3,
+          "start": [
+            0,
+            0
+          ],
+          "target": [
+            1,
+            1
+          ]
+        }
+      }
+    ],
+    "advance": "explicit-only-after-first-collection"
+  },
+  "world_roles": {
+    "first-room": "source assertion construction and provenance",
+    "second-room": "as-known-at reasoning, static comparison, independent witness"
+  },
+  "clocks": [
+    "valid_time",
+    "event_time",
+    "submission_time",
+    "public_posting_time",
+    "observation_time"
+  ],
+  "graph_schema": {
+    "entity": "subject",
+    "edge": "predicate",
+    "value": "object",
+    "source": "source_ref",
+    "validity": "half-open [valid_from, valid_to)",
+    "known": "known_day or owner-posted-day without inferred hour",
+    "verification": "independent source and answer oracle"
+  },
+  "sample_sets": {
+    "synthetic": [
+      {
+        "id": "prior-note",
+        "subject": "fictional-study",
+        "predicate": "has-status",
+        "object": "prior-note-value",
+        "source_ref": "synthetic-prior-note",
+        "provenance_state": "synthetic",
+        "valid_from": "2026-01-01",
+        "valid_to": "2026-01-10",
+        "known_day": "2026-01-01",
+        "event_day": null,
+        "submitted_day": null,
+        "posted_day": null,
+        "observed_day": null
+      },
+      {
+        "id": "delayed-result",
+        "subject": "fictional-study",
+        "predicate": "has-status",
+        "object": "delayed-result-value",
+        "source_ref": "synthetic-delayed-result",
+        "provenance_state": "synthetic",
+        "valid_from": "2026-01-03",
+        "valid_to": "2026-01-10",
+        "known_day": "2026-01-05",
+        "event_day": null,
+        "submitted_day": null,
+        "posted_day": null,
+        "observed_day": null
+      }
+    ],
+    "registry": [
+      {
+        "id": "ctgov-v94",
+        "subject": "nct00001756",
+        "predicate": "recruitment-status",
+        "object": "recruiting",
+        "source_ref": "https://clinicaltrials.gov/study/NCT00001756?a=94&tab=history",
+        "provenance_state": "owner-version-day-attested",
+        "valid_from": null,
+        "valid_to": null,
+        "known_day": null,
+        "event_day": null,
+        "submitted_day": "2019-08-01",
+        "posted_day": "2019-08-02",
+        "observed_day": "2026-10-19",
+        "source_text_sha256": "4370ff462cd731f2f42cc866aadb438e4d037c7a05de2cd64fb5acb53500c3ba"
+      },
+      {
+        "id": "ctgov-v105",
+        "subject": "nct00001756",
+        "predicate": "recruitment-status",
+        "object": "recruiting",
+        "source_ref": "https://clinicaltrials.gov/study/NCT00001756?a=105&tab=history",
+        "provenance_state": "owner-version-day-attested",
+        "valid_from": null,
+        "valid_to": null,
+        "known_day": null,
+        "event_day": null,
+        "submitted_day": "2019-11-22",
+        "posted_day": "2019-11-25",
+        "observed_day": "2026-10-19",
+        "source_text_sha256": "4daab6b95ea574a0aeaea3fba36a94fd9db8df8f0dafd41eee5b87bd9a6bd9db"
+      }
+    ]
+  },
+  "queries": {
+    "synthetic": {
+      "knowledge_cutoff": "2026-01-04",
+      "valid_target": "2026-01-04"
+    },
+    "registry": {
+      "knowledge_cutoff": "2019-11-25",
+      "valid_target": null
+    }
+  },
+  "source_policy": {
+    "synthetic_known_day": "model cutoff only, not real source release",
+    "owner_posted_day": "conditional day-level availability only",
+    "strict_original_publication_instant": "UNAVAILABLE"
+  },
+  "graph_layout": {
+    "columns": 6,
+    "lanes": [
+      "source",
+      "assertion",
+      "valid interval",
+      "availability",
+      "query",
+      "witness"
+    ]
+  }
+}
