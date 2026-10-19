@@ -26,6 +26,7 @@ from .native_sp80_occupancy_long_history import evaluate_pair
 
 WORDS = ("55555544", "55555444", "44555544", "55445544")
 RESETS = 2
+CONDITION_DESCRIPTION = "suppress predicted native 9->12 at context step >=7"
 
 
 def condition(predicted, step):
@@ -62,7 +63,7 @@ def main():
                         predicted, frames[1][i1])
                     candidate = condition(baseline, index+1)
                     scores = {"baseline": score(baseline, actual),
-                              "position_condition": score(candidate, actual)}
+                              "candidate_condition": score(candidate, actual)}
                     rows.append({"step": index+1, "model": rule[0],
                                  "removed": len(baseline)-len(candidate),
                                  "scores": scores})
@@ -80,8 +81,8 @@ def main():
                            "native_records": records, "omissions": omissions,
                            "comparisons": rows})
     result = {
-        "kind": "SP80_PREDECLARED_POSITION_CONDITION",
-        "condition": "suppress predicted native 9->12 at context step >=7",
+        "kind": "SP80_PREDECLARED_CONDITION",
+        "condition": CONDITION_DESCRIPTION,
         "predeclared_words": WORDS, "resets_per_word_per_level": RESETS,
         "native_resets": len(trials)*2,
         "native_actions": sum(r["real_native_actions"] for t in trials
