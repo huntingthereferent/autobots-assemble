@@ -111,7 +111,7 @@ def run(output):
                     # Record a bounded layout diagnosis, not the full historical page.
                     idx=body.find(f"Viewing V{v}")
                     tail=body[idx:] if idx>=0 else ""
-                    rec["post_banner_detail_preview"]=tail[:900]
+                    # No study-body excerpt, researcher contacts, or full page archived.
                     rec["diagnostic_status_labels_below_banner"]=[
                         x for x in ("Recruitment Status","Overall Status","Study Details")
                         if x in tail]
