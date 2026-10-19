@@ -202,7 +202,8 @@ button.positive{background:#246554;border-color:#82baa8}
 <p id="cross-status">Lock both paths to compare their recorded prefixes.</p>
 <div id="cross-readout" class="cross-readout">No recorded prefix pair selected.</div>
 <p id="cross-count">No cross-depth source candidates computed.</p>
-<div class="cross-actions"><button id="cross-first" disabled>Inspect first recorded candidate</button><button id="cross-ends" disabled>Inspect locked endpoints</button></div>
+<div class="cross-actions"><button id="cross-first" disabled>Inspect first recorded candidate</button><button id="cross-ends" disabled>Inspect locked endpoints</button><button id="cross-export" disabled>Export research observation JSON</button></div>
+<p class="inspector-note">The observation JSON is independently verifiable with <code>python -m work.arc3.window48_cross_depth --verify FILE.json</code>. It is NOT a completed challenge certificate.</p>
 <p class="inspector-note">Amber outline = Path 1 selected state; green inset = Path 2 selected state. A candidate is a mathematical relation among observed prefixes, not a certified completion. Only the explicit full-path check can grant a completed challenge.</p>
 </section>
 <p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Yellow '1' markers show the locked first path's endpoint while you build the second path. Only A/B actions move the state; this is not a physical 3D simulation.</p>
@@ -508,6 +509,39 @@ function firstCrossCandidate(statesA,statesB,wordA,wordB){
  }
  return {count,first};
 }
+function crossObservation(){
+ if(trials.length!==2)throw Error('Two locked original paths required for observation');
+ const a=trials[0].actions,b=trials[1].actions;
+ const statesA=sourcePrefixStates(a),statesB=sourcePrefixStates(b);
+ const depths=[crossStepOne,crossStepTwo];
+ const found=firstCrossCandidate(statesA,statesB,a,b);
+ return {
+  schema:'original-window48-cross-depth-observation/v1',
+  scope:'finite-mathematical-source-only',
+  source:'work/arc_like_maze/window_combined.py',
+  challenge_id:mission,
+  law_ids:currentMission().law_ids.slice(),
+  words:[a,b],
+  selected_depths:depths,
+  selected_states:[statesA[depths[0]].slice(),statesB[depths[1]].slice()],
+  pair_count:statesA.length*statesB.length,
+  candidate_count:found.count,
+  first_candidate:found.first===null?null:{
+   depths:found.first.slice(),
+   states:[statesA[found.first[0]].slice(),statesB[found.first[1]].slice()]
+  }
+ };
+}
+function downloadCrossObservation(){
+ if(trials.length!==2)return;
+ const report=crossObservation();
+ const blob=new Blob([JSON.stringify(report,null,2)+'\n'],{type:'application/json'});
+ const url=URL.createObjectURL(blob);
+ const link=document.createElement('a');link.href=url;
+ link.download='world48_cross_depth_observation_'+String(mission+1).padStart(2,'0')+'.json';
+ document.body.appendChild(link);link.click();link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
 function renderCrossDepth(){
  const panel=$('cross-depth'),one=$('cross-step-one'),two=$('cross-step-two');
  if(trials.length!==2){
@@ -517,7 +551,7 @@ function renderCrossDepth(){
   $('cross-readout').textContent='No recorded prefix pair selected.';
   $('cross-readout').classList.remove('ready');
   $('cross-count').textContent='No cross-depth source candidates computed.';
-  $('cross-first').disabled=true;$('cross-ends').disabled=true;
+  $('cross-first').disabled=true;$('cross-ends').disabled=true;$('cross-export').disabled=true;
   delete panel.dataset.firstOne;delete panel.dataset.firstTwo;
   return;
  }
@@ -546,7 +580,7 @@ function renderCrossDepth(){
  const found=firstCrossCandidate(statesA,statesB,a,b);
  $('cross-count').textContent=found.count+' actual prefix pairs satisfy the source condition out of '+
    (statesA.length*statesB.length)+' recorded prefix pairs. This count is not a competition score.';
- $('cross-first').disabled=!found.first;$('cross-ends').disabled=false;
+ $('cross-first').disabled=!found.first;$('cross-ends').disabled=false;$('cross-export').disabled=false;
  if(found.first){panel.dataset.firstOne=String(found.first[0]);panel.dataset.firstTwo=String(found.first[1]);}
  else{delete panel.dataset.firstOne;delete panel.dataset.firstTwo;}
  for(const [root,index] of [['left-nodes',0],['right-nodes',1]]){
@@ -726,6 +760,7 @@ async function boot(){
    if(panel.dataset.firstOne===undefined||panel.dataset.firstTwo===undefined)return;
    crossStepOne=Number(panel.dataset.firstOne);crossStepTwo=Number(panel.dataset.firstTwo);reRender();
   });
+  $('cross-export').addEventListener('click',downloadCrossObservation);
   $('cross-ends').addEventListener('click',()=>{
    if(trials.length!==2)return;
    crossStepOne=trials[0].actions.length;crossStepTwo=trials[1].actions.length;reRender();
