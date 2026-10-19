@@ -9,13 +9,27 @@ This is an additive operator surface over existing, separately owned foundations
 
 **This is workflow construction, not an inverse A/B mathematical proof.** Existing correspondence mathematics and B9 observational determination are unchanged.
 
+## Start the interactive local editor
+
+From the repository root:
+
+```bash
+python -m systems.workspace.workflow_editor_server --data-dir runtime/data --port 8054
+```
+
+Open **http://127.0.0.1:8054/** on the same computer. The browser page can add steps from existing Program Foundation manifests, edit their labels/inputs, add or remove explicit edges, inspect the graph, generate uniquely compatible edges, record a proposal into B9, branch from any pinned revision, compare it with its pinned ancestor, pin another edition, and export/import JSON.
+
+The server binds **only to 127.0.0.1**, checks the exact Host and Origin and requires an unpredictable server-local token for each write. It has no worker-execution route. Start it only on a computer you authorize; a local editor is **not** an authenticated cloud multi-tenant service.
+
+The existing `workstation.html` remains a GET-only independent research observer. This is a new *separate opt-in editor*, not a replacement.
+
 ## What a user can do now
 
 1. Open an existing bounded draft (see `examples/workstation_workflow_draft.json`). Edit step names, source manifests, declared inputs, prerequisite edges, and alternative paths. A `parent_revision` allows a later draft to identify its earlier version.
 2. Generate plausible edges by setting `auto_connect: true`. Generation uses real declared port names and compatible types, **not** a guessed dependency based on superficial descriptions. Ambiguous matches stay visible as unresolved and are not automatically linked.
 3. Preview and validate links and cycles without importing or executing a worker. A validated draft is still **PROPOSED**, not a verified native workflow.
 4. Commit the exact graph as B9 candidate paths, linked by the real source manifest revisions and the original construction journal. All execution and native-admission gates remain separate.
-5. Pin a branch you want to preserve. Optionally compare it with a pinned parent using a measured, source-scoped metric; an improved branch can be pinned automatically as a **candidate**. A separate independent source-native verifier callback is needed to label even that measurement verified, and this is never a blanket proof of the full workflow.
+5. Compare your branched graph with its pinned parent, and pin a branch you want to preserve. Optionally compare it with a pinned parent using a measured, source-scoped metric; an improved branch can be pinned automatically as a **candidate**. A separate independent source-native verifier callback is needed to label even that measurement verified, and this is never a blanket proof of the full workflow.
 
 ### Local commands (no execution)
 
@@ -24,6 +38,7 @@ python -m systems.workspace.workflow_draft preview --draft examples/workstation_
 python -m systems.workspace.workflow_draft commit --draft examples/workstation_workflow_draft.json --data-dir runtime/data
 python -m systems.workspace.workflow_draft pin --draft examples/workstation_workflow_draft.json --reason "Save original graph" --data-dir runtime/data
 python -m systems.workspace.workflow_draft pins --data-dir runtime/data
+python -m systems.workspace.workflow_draft diff --draft /path/to/branched-draft.json --data-dir runtime/data
 ```
 
 For another branch, add its exact prior pinned SHA-256 as `parent_revision`, change the graph, and preview it. For an explicitly supplied quality comparison:
@@ -61,7 +76,7 @@ This CLI route **does not independently verify** the claimed numbers; it can pin
 ## Tests
 
 ```bash
-python -m unittest -v network.tests.test_workstation_workflow_draft network.tests.test_workstation_workflow_pins network.tests.test_program_foundation network.tests.test_workstation_construction
+python -m unittest -v network.tests.test_workstation_workflow_draft network.tests.test_workstation_workflow_pins network.tests.test_workstation_workflow_editor_http network.tests.test_program_foundation network.tests.test_workstation_construction
 ```
 
-The PR's `workstation-workflow-drafts` check runs these tests and previews the example. Even a passing CI run establishes the bounded construction and ledger contracts, **not** hosted reliability or end-user success. Next product work is an actual interactive local editor bound to this preview/commit/pin interface, then carefully scoped authenticated hosting.
+The PR's `workstation-workflow-drafts` check runs these tests and previews the example. Even a passing CI run establishes the bounded construction and ledger contracts, **not** hosted reliability or end-user success. The local interactive editor is now available as an opt-in construction interface. Authenticated multi-tenant hosting, customer isolation, native worker integration, and end-user effectiveness remain separate unverified product work.
