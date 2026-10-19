@@ -121,7 +121,8 @@ jobs:
             --output-dir "$RUNNER_TEMP/continued-original-w13"
       - name: Inspect original selected-version posting labels versus current study header
         run: |
-          python "$GITHUB_WORKSPACE/world/scripts/nih_p2_world_version_posting_probe.py" \
+          cd "$GITHUB_WORKSPACE/world"
+          python -m scripts.nih_p2_world_version_posting_probe \
             --output-dir "$RUNNER_TEMP/continued-original-w13"
       - name: Preserve fresh Phase 2 game-world evidence, without republishing original journal
         if: always()
