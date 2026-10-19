@@ -1,0 +1,56 @@
+name: ARC3 native SP80 pre-action frontier holdout
+on:
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_frontier_probe.py"
+      - ".github/workflows/arc3-sp80-frontier-probe.yml"
+  push:
+    paths:
+      - "work/arc3/native_sp80_frontier_probe.py"
+      - ".github/workflows/arc3-sp80-frontier-probe.yml"
+jobs:
+  native-frontier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official native SDK
+        run: python -m pip install "arc-agi>=0.9.6,<1" numpy
+      - name: Check frozen frontier contract with explicitly synthetic unit control
+        run: |
+          python - <<'PY'
+          import numpy as np
+          from work.arc3.native_sp80_frontier_probe import (
+              WORDS, RESETS, observe_frontier)
+          assert RESETS == 2
+          assert len(WORDS) == len(set(WORDS)) == 5
+          assert all(len(w) == 13 and set(w) <= {"4", "5"} for w in WORDS)
+          before = np.full((64,64), 14, dtype=np.uint8)
+          before[63,:3] = 0
+          after = before.copy()
+          after[63,3:5] = 0
+          yes = observe_frontier(before, after, 8)
+          assert yes["pre_frontier_x"] == 3 and yes["post_frontier_x"] == 5
+          assert yes["frontier_14_to_0_minimum_hit"] is True
+          assert yes["contiguous_1_or_2_cell_progress"] is True
+          unchanged = observe_frontier(before, before, 8)
+          assert unchanged["frontier_14_to_0_minimum_hit"] is False
+          assert unchanged["contiguous_1_or_2_cell_progress"] is False
+          wrong = before.copy()
+          wrong[63,4] = 0
+          gap = observe_frontier(before, wrong, 8)
+          assert gap["contiguous_1_or_2_cell_progress"] is False
+          print("Synthetic UNIT ONLY: frontier admission and rejection pass")
+          PY
+      - name: Execute genuine public SP80 and retain native source observations
+        run: python -m work.arc3.native_sp80_frontier_probe --out runtime/data/arc3/sp80-frontier-probe.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-frontier-probe
+          path: runtime/data/arc3/sp80-frontier-probe.*
+          if-no-files-found: error
+          retention-days: 14
