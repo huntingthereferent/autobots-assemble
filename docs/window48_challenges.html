@@ -38,8 +38,14 @@ button.positive{background:#246554;border-color:#82baa8}
 .worlds{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
 .worldtitle{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
 .state{font:700 1rem ui-monospace,monospace;color:#b5dffb;margin:11px 0}
-.nodes{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px}
-.node{aspect-ratio:1;min-width:0;border-radius:5px;background:#0f1824;border:1px solid #314151;display:flex;justify-content:center;align-items:center;font:600 .69rem ui-monospace,monospace;color:#839bb3}
+.nodes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.slice{min-width:0;padding:8px 6px 7px;background:#111d29;border:1px solid #35495d;border-radius:8px}
+.slice-label{font:700 .7rem ui-monospace,monospace;color:#d1e6f5;margin-bottom:8px;text-align:center}
+.layer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.world-navigation{font:.78rem/1.5 ui-monospace,monospace;color:#cedde9;display:grid;gap:3px;margin-top:12px}
+.step-a{color:#ebc890}.step-b{color:#d9b6f2}
+.projection{font-size:.77rem;color:#9eb1c4;margin:10px 0 0}
+.node{aspect-ratio:1;min-width:0;border-radius:5px;background:#0f1824;border:1px solid #314151;display:flex;justify-content:center;align-items:center;font:600 clamp(.57rem,.85vw,.72rem) ui-monospace,monospace;color:#93a9c0}
 .node.marked{border-color:#648e70}.node.nextA{box-shadow:inset 0 0 0 1px #c79f61}
 .node.nextB{outline:1px dashed #b38bd1;outline-offset:-3px}
 .node.current{background:#245b7d;border:2px solid #8ecbf8;color:#fff}
@@ -86,14 +92,17 @@ button.positive{background:#246554;border-color:#82baa8}
 <section class="panel">
 <div class="worldtitle"><h2>Left world</h2><span class="tag" id="left-law"></span></div>
 <div id="left-state" class="state">(0,0,0)</div>
-<div id="left-nodes" class="nodes" role="img" aria-label="27 left-world states"></div>
+<div id="left-nodes" class="nodes" role="img" aria-label="27 left-world states in three z-coordinate planes"></div>
+<div id="left-next" class="world-navigation" aria-live="off"></div>
 </section>
 <section class="panel">
 <div class="worldtitle"><h2>Right world</h2><span class="tag" id="right-law"></span></div>
 <div id="right-state" class="state">(0,0,0)</div>
-<div id="right-nodes" class="nodes" role="img" aria-label="27 right-world states"></div>
+<div id="right-nodes" class="nodes" role="img" aria-label="27 right-world states in three z-coordinate planes"></div>
+<div id="right-next" class="world-navigation" aria-live="off"></div>
 </section>
 </div>
+<p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Only A/B actions move the state; this is not a physical 3D simulation.</p>
 <section class="panel">
 <div class="kicker" id="phase">Path 1 · build your first witness</div>
 <div class="actions">
@@ -201,16 +210,39 @@ function restoreProgress(){
 }
 function drawNodes(root,law,state){
  const parent=$(root);parent.replaceChildren();
- for(let i=0;i<27;i++){
-  const div=document.createElement('div');div.className='node';div.textContent=String(i).padStart(2,'0');
-  if(i===0)div.classList.add('marked');
-  if(i===law.A[state])div.classList.add('nextA');
-  if(i===law.B[state])div.classList.add('nextB');
-  if(i===state)div.classList.add('current');
-  div.title=stateName(i);
-  parent.appendChild(div);
+ for(let z=0;z<3;z++){
+  const slice=document.createElement('div');slice.className='slice';
+  slice.dataset.z=String(z);
+  const label=document.createElement('div');label.className='slice-label';
+  label.textContent='z = '+z;
+  const grid=document.createElement('div');grid.className='layer-grid';
+  for(let u=0;u<3;u++){
+   for(let v=0;v<3;v++){
+    const index=9*u+3*v+z;
+    const div=document.createElement('div');div.className='node';
+    div.dataset.stateIndex=String(index);
+    div.dataset.u=String(u);div.dataset.v=String(v);div.dataset.z=String(z);
+    div.textContent=u+','+v;
+    if(index===0)div.classList.add('marked');
+    if(index===law.A[state])div.classList.add('nextA');
+    if(index===law.B[state])div.classList.add('nextB');
+    if(index===state)div.classList.add('current');
+    div.title=stateName(index);
+    grid.appendChild(div);
+   }
+  }
+  slice.appendChild(label);slice.appendChild(grid);parent.appendChild(slice);
  }
- parent.setAttribute('aria-label','27 exact states, currently '+stateName(state));
+ parent.setAttribute('aria-label','27 exact F3 states in three z planes, currently '+stateName(state));
+}
+function showNext(root,law,state){
+ const target=$(root);target.replaceChildren();
+ for(const [action,cls] of [['A','step-a'],['B','step-b']]){
+  const line=document.createElement('div');line.className=cls;
+  const end=law[action][state];
+  line.textContent=action+': '+stateName(state)+' → '+stateName(end);
+  target.appendChild(line);
+ }
 }
 function reRender(message){
  if(!model||!roster)return;
@@ -219,6 +251,7 @@ function reRender(message){
  $('right-law').textContent='#'+String(right.id+1).padStart(2,'0')+' · k'+right.support+' e'+right.pulse+' t'+right.balanced+' c'+right.coefficient;
  $('left-state').textContent=stateName(state[0]);$('right-state').textContent=stateName(state[1]);
  drawNodes('left-nodes',left,state[0]);drawNodes('right-nodes',right,state[1]);
+ showNext('left-next',left,state[0]);showNext('right-next',right,state[1]);
  $('phase').textContent=phase===2?'Two locked paths · verify rooted relation':'Path '+(phase+1)+' · build '+(phase?'the comparison':'your first')+' witness';
  for(let i=0;i<2;i++){
   $('path-'+(i?'b':'a')).textContent=trials[i]?(trials[i].actions||'(empty path)'):'—';
