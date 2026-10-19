@@ -70,6 +70,42 @@ def check(out):
                 for f in faces:
                     d,_,_=nearest(frame["position"],f)
                     if d<R-3e-7:raise ValueError("recorded penetration")
+            # Independently reconstruct each observed inter-frame trajectory
+            # using the *recorded* impact instants. An event or observation
+            # cannot be shifted inside a free-flight interval unnoticed.
+            for i in range(1,len(frames)):
+                left,right=frames[i-1],frames[i]
+                p=tuple(left["position"])
+                v=tuple(left["velocity"])
+                omega=left["spin"]
+                theta=left["orientation"]
+                clock=left["time"]
+                segment_events=[e for e in case["contacts"]
+                    if clock+1e-8<e["time"]<=right["time"]+1e-8]
+                for event in segment_events:
+                    duration=event["time"]-clock
+                    expected=(p[0]+v[0]*duration,p[1]+v[1]*duration)
+                    if any(abs(a-b)>3e-7 for a,b in zip(expected,event["center"])):
+                        raise ValueError("contact not reached by pre-event motion")
+                    if any(abs(a-b)>3e-7 for a,b in zip(v,event["incoming_velocity"])):
+                        raise ValueError("impact incoming velocity not inherited")
+                    theta+=omega*duration
+                    p=tuple(event["center"])
+                    v=tuple(event["outgoing_velocity"])
+                    omega=event["outgoing_spin"]
+                    clock=event["time"]
+                remainder=right["time"]-clock
+                expected=(p[0]+v[0]*remainder,p[1]+v[1]*remainder)
+                for a,b in zip(expected,right["position"]):
+                    if abs(a-b)>4e-7:
+                        raise ValueError("frame position inconsistent with physical flight and impacts")
+                if any(abs(a-b)>2e-7 for a,b in zip(v,right["velocity"])):
+                    raise ValueError("frame velocity inconsistent with contact chronology")
+                if abs(omega-right["spin"])>2e-7:
+                    raise ValueError("frame rotation speed inconsistent with impulse")
+                theta+=omega*remainder
+                if abs(theta-right["orientation"])>4e-7:
+                    raise ValueError("integrated physical angular orientation drifted")
             # The last sampled state and first-contact relation must be a
             # consequence of actual events, not an authored label.
             expected_first=case["contacts"][0]["surface_id"] if case["contacts"] else None
