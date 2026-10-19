@@ -27,7 +27,8 @@ def check(out):
             if not frames or frames[0]["position"]!=[12.,round(y,9)]:
                 raise ValueError("initial state forged")
             if case["status"] not in ("completed","unresolved-multiple-contacts",
-                                     "unresolved-event-budget","penetration","outside-world"):
+                                     "unresolved-event-budget","penetration",
+                                     "world-edge-reached-no-boundary-response","outside-world"):
                 raise ValueError("unknown settlement state")
             if case["status"]=="completed" and abs(frames[-1]["time"]-HORIZON)>1e-8:
                 raise ValueError("simulation ended early")
@@ -93,6 +94,8 @@ class Trial06ContinuousJunctionTests(unittest.TestCase):
         self.assertIsNotNone(cases[1]["first_contact"])
         self.assertIn("endpoint",cases[1]["contacts"][0]["feature"])
         self.assertIsNotNone(cases[6]["first_contact"]) # y=2.25 endpoint
+        self.assertEqual(cases[1]["status"],"world-edge-reached-no-boundary-response")
+        self.assertAlmostEqual(cases[1]["exit"]["position"][1],R,places=7)
     def test_03_no_unsafe_future_or_missing_geometry_promoted(self):
         data=run()
         self.assertTrue(data["geometry"]["finite_intersection_verified"])
