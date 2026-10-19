@@ -80,6 +80,22 @@ class ABWorkflowHTTPTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertTrue(again["already_present"])
 
+    def test_native_result_route_has_no_execution_and_needs_local_token(self):
+        status, result = self.request("/api/native-results")
+        self.assertEqual(status, 200)
+        self.assertEqual(result, [])
+        code, _ = self.request("/api/native-inspect", {"job_id": "nonexistent"}, auth=False)
+        self.assertEqual(code, 403)
+        code, result = self.request("/api/native-inspect", {"job_id": "nonexistent"})
+        self.assertEqual(code, 400)
+        self.assertFalse((Path(self.temp.name)/"workflow_native_result_links.jsonl").exists())
+        status, result = self.request("/api/native-compare", {
+            "parent_revision": "0"*64, "branch_revision": "1"*64,
+            "parent_step_id": "finite", "branch_step_id": "finite",
+        })
+        self.assertEqual(status, 400)
+        self.assertFalse((Path(self.temp.name)/"workflow_native_result_links.jsonl").exists())
+
     def test_unverified_and_cross_origin_cannot_claim_or_write(self):
         _, draft = self.request("/api/example")
         payload = {"draft": draft, "source_records": self.native_records(),
