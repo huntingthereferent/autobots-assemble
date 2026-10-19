@@ -41,6 +41,55 @@ class ABWorkflowSources:
         self.data_dir = Path(data_dir).resolve()
         self.path = self.data_dir / "workflow_ab_source_links.jsonl"
 
+    def recorded_native_pool_sources(self) -> dict:
+        """Read the original locally journaled bot records; no synthetic tasks.
+
+        A locally saved agent event is useful lineage, not authenticated actor
+        identity. Exact source bytes are rechecked before exposing any record.
+        """
+        from runtime.journal import RuntimeJournal
+        path = self.data_dir / "runtime.jsonl"
+        if not path.exists():
+            return {"source_records": [], "source_events": [],
+                    "journal_present": False, "actor_identity_authenticated": False}
+        if path.is_symlink() or not path.is_file() or path.stat().st_size > MAX_LEDGER_BYTES:
+            raise ABWorkflowSourceError("native runtime journal missing or unsafe")
+        store = RuntimeJournal(path)
+        seen: dict[str, dict] = {}
+        events = []
+        for root in store.handoffs():
+            if (root.from_actor != "continuity-agent-pool"
+                    or root.metadata.get("birth_reason") != "continuity_pool_task_seed"
+                    or root.metadata.get("agent_lineage") is not True):
+                continue
+            if not isinstance(root.inputs.get("task_handoffs"), list):
+                continue
+            for event in store.for_handoff(root.handoff_id):
+                if event.event_type != "AGENT_AB_OBSERVED" or event.actor_id != "agent-ab":
+                    continue
+                output = event.data.get("output") or {}
+                if output.get("task_results") != "NOT_EXECUTED":
+                    continue
+                native = output.get("task_source_relations")
+                if not isinstance(native, list) or not 1 <= len(native) <= 32:
+                    continue
+                for entry in native:
+                    if not isinstance(entry, dict) or not isinstance(entry.get("task_id"), str):
+                        raise ABWorkflowSourceError("native worker event contains malformed task ID")
+                    record = {"task_id": entry["task_id"],
+                              "native_sources": entry.get("native_sources")}
+                    prior = seen.get(record["task_id"])
+                    if prior is not None and prior != record:
+                        raise ABWorkflowSourceError("conflicting native task source histories")
+                    seen[record["task_id"]] = record
+                events.append(event.event_id)
+        rows = [seen[k] for k in sorted(seen)]
+        if rows:
+            ABToolWorkerBridge(self.repository).inspect_task_sources(rows)
+        return {"source_records": rows, "source_events": events,
+                "journal_present": True, "actor_identity_authenticated": False,
+                "native_result_verified": False, "source_bytes_rechecked": bool(rows)}
+
     def inspect(self, draft: dict, task_source_records: list[dict],
                 step_bindings: dict[str, str]) -> dict:
         """Observe already recorded source relationships; never infer a task result."""
@@ -80,6 +129,8 @@ class ABWorkflowSources:
             "ab_graph_sha256": digest(observed["graph"]),
             "ab_graph_summary": observed["graph_summary"],
             "relation_scope": "SOURCE_REFERENCES_ONLY",
+            "input_origin": "CALLER_SUPPLIED_SOURCE_RECORDS",
+            "native_actor_identity_authenticated": False,
             "source_bytes_rechecked": True,
             "native_worker_executed": False,
             "native_result_verified": False,
