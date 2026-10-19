@@ -72,8 +72,21 @@ def check(out):
             separating=all(sum(outv[k]*n[k] for k in (0,1))>=-1e-8 for n in ns)
             energy=abs(sum(z*z for z in outv)-sum(z*z for z in vin))<=4e-7
             should_accept=positive and separating and energy
+            if should_accept:
+                # A local impulse can satisfy momentum while its full 1.5
+                # virtual-time path strikes the WORLD perimeter. Such a
+                # candidate is deliberately NOT a complete finite path.
+                for frame_idx in range(round(HORIZON/STEP)+1):
+                    t=frame_idx*STEP
+                    p=[start[k]+t*vin[k] for k in (0,1)] if t<=LEAD else [
+                        center[k]+(t-LEAD)*outv[k] for k in (0,1)]
+                    if (not (R-1e-9<=p[0]<=24-R+1e-9 and R-1e-9<=p[1]<=6-R+1e-9)
+                        or any(distance(p,s)<R-3e-7 for s in c["surfaces"])):
+                        should_accept=False
+                        break
             if (answer["status"]=="admissible-local-model")!=should_accept:
-                raise ValueError("active-set accept/reject rule inconsistent with independent momentum")
+                raise ValueError("case %d active %s: actual=%s expected full-horizon admissible=%s" % (
+                    i,active,answer["status"],should_accept))
             if not should_accept:
                 if answer["outgoing_velocity"] is not None or answer["normal_impulses"] is not None or answer["frames"] or not answer["reason"]:
                     raise ValueError("rejected impulse still has fake completed motion")
