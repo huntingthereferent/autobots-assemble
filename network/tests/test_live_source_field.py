@@ -62,6 +62,24 @@ class LiveTraceSourceTests(unittest.TestCase):
             self.assertEqual(json.loads(out.read_text(encoding="utf8")),actual)
         self.assertEqual(before,f.read_bytes())
 
+    def test_owner_ready_cross_run_is_separate_from_historical_w13_wall(self):
+        original=ROOT/"research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json"
+        restored=ROOT/"research/dives/W13-OWNER-READY-CROSS-RUN-001/dive.json"
+        old=json.loads(original.read_text(encoding="utf8"))
+        new=json.loads(restored.read_text(encoding="utf8"))
+        self.assertFalse(old["original_readiness"]["game_worker_ready_owner_run_executed"])
+        self.assertTrue(new["native_ready_source"]["game_worker_ready_witnessed"])
+        self.assertEqual(new["native_ready_source"]["run_id"],39183388852)
+        self.assertEqual(new["separate_run_restoration"]["run_id"],39183832462)
+        self.assertTrue(new["separate_run_restoration"]["journal_hashes_unchanged"])
+        self.assertEqual(new["separate_run_restoration"]["new_workers_executed"],0)
+        self.assertFalse(new["native_ready_source"]["nih_p2_test_witnessed"])
+        self.assertFalse(new["encrypted_continuation"]["plaintext_journal_published"])
+        index=projection(research_snapshot())
+        paths={r["path"] for r in index["records"]}
+        self.assertIn("research/dives/W13-OWNER-NATIVE-VERIFIER-001/dive.json",paths)
+        self.assertIn("research/dives/W13-OWNER-READY-CROSS-RUN-001/dive.json",paths)
+
     def test_browser_traces_real_public_git_parent_and_ci_identity(self):
         source=PAGE.read_text(encoding="utf8")
         self.assertIn("GitHub lists the first SHA as an ancestor",source)
