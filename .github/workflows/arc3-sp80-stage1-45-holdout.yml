@@ -1,0 +1,40 @@
+name: ARC3 original-native stage1 35 to 45 holdout
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage1_45_holdout.py'
+      - '.github/workflows/arc3-sp80-stage1-45-holdout.yml'
+jobs:
+  native-stage1-horizon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official native ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Check precommitted untouched 35 to 45 contract (unit only)
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage1_45_holdout import WORDS, PERIOD, RESETS, NEW_RANGE
+          from work.arc3.native_sp80_quantized_boundary import rounded_progress, frozen_width
+          assert PERIOD=={0:30,1:45} and RESETS==2
+          assert len(WORDS)==len(set(WORDS))==4
+          assert all(len(w)==48 and set(w)<={'4','5'} for w in WORDS)
+          assert NEW_RANGE==(35,45)
+          assert rounded_progress(1,34)==48 and rounded_progress(1,45)==64
+          assert sum(frozen_width(1,s) for s in range(35,46))==16
+          assert rounded_progress(0,30)==64
+          print('UNIT ONLY: previous empirical rates, new horizon and words frozen')
+          PY
+      - name: Execute genuine original SP80 native stage1 extended run
+        run: python -m work.arc3.native_sp80_stage1_45_holdout --out runtime/data/arc3/sp80-stage1-45-holdout.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-stage1-45-holdout
+          path: runtime/data/arc3/sp80-stage1-45-holdout.*
+          if-no-files-found: error
+          retention-days: 14
