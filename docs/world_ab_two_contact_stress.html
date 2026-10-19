@@ -49,7 +49,7 @@ window.worldTrial09=(()=>{
   if(offset===0)return {surfaces:copy(faces),ns:copy(normals),kind:'original-source-geometry'};
   const n1=normals[1],newN=rot(n1,offset),qOld=sub(center,mul(R,n1)),qNew=sub(center,mul(R,newN));
   const ends=faces[1].endpoints.map(e=>add(qNew,rot(sub(e,qOld),offset)).map(z=>rd(z,12)));
-  const changed={id:'controlled-face-B-'+offset,source_parent_id:faces[1].id,
+  const changed={id:'controlled-face-B-'+offset.toFixed(1),source_parent_id:faces[1].id,
    geometry_role:'explicit-rotated-counterfactual',rotation_degrees:offset,endpoints:ends};
   return {surfaces:[copy(faces[0]),changed],ns:[copy(normals[0]),newN],kind:'controlled-geometry-not-original'};
  }

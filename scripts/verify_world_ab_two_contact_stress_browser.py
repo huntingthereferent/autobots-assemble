@@ -39,7 +39,7 @@ def verify(folder):
                     raise ValueError("native/Chromium classification differs: "+repr((actual.get("counts"),subset["counts"])))
                 for i,(x,y) in enumerate(zip(actual.get("cases",[]),subset["cases"])):
                     if not source_equivalent(x,y):
-                        raise ValueError(f"native/Chromium differs on case {i}: "+repr((x["status"],y["status"],x.get("candidate"),y.get("candidate"))))
+                        raise ValueError(f"native/Chromium differs on case {i}: "+repr((x["status"],y["status"],[(k,x.get(k),y.get(k)) for k in x if not source_equivalent(x.get(k),y.get(k))])))
                 raise ValueError("original source or bounded claim differs in browser")
             for i in range(35):
                 page.locator("#case").select_option(str(i))
