@@ -61,7 +61,7 @@ Save the actual observed comparison to `runtime/data/assessment.json`; then:
 python -m systems.workspace.workflow_draft consider --draft /path/to/branched-draft.json --assessment runtime/data/assessment.json --data-dir runtime/data
 ```
 
-This CLI route **does not independently verify** the claimed numbers; it can pin the improved branch only as `CANDIDATE`. Hosts integrating a real source-native observation provider can supply `WorkflowPins.consider_discovery(..., verify_observation=...)`; the resulting state is `QUALITY_OBSERVATION_VERIFIED` for that one metric, not for the whole workflow.
+This CLI route **does not independently verify** the claimed numbers; it can pin the improved branch only as `CANDIDATE`. Hosts integrating a real source-native observation provider can supply `WorkflowPins.consider_discovery(..., verify_observation=...)`; the resulting state is `QUALITY_OBSERVATION_VERIFIED` for that one metric, not for the whole workflow. If the branch was first pinned as a candidate, a later verified measurement can be appended through `WorkflowPins.promote_pin(revision, verify_observation=...)`, preserving the original candidate entry and exactly the same workflow revision. The local browser cannot self-certify a measurement.
 
 ## Persistence and boundaries
 
