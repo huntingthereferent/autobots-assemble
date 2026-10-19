@@ -1,0 +1,64 @@
+name: ARC3 native explicit terminal regression and real replay
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_frozen_color_contexts.py'
+      - 'work/arc3/test_native_sp80_terminal_contract.py'
+      - '.github/workflows/arc3-native-terminal-regression.yml'
+jobs:
+  official-native-terminal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC-AGI-3 native toolkit
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Test bounded synthetic terminal capture only
+        run: python -m unittest work.arc3.test_native_sp80_terminal_contract -v
+      - name: Witness real public SP80 terminal on first SDK GAME_OVER
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import arc_agi
+          from arc_agi import OperationMode
+          from work.arc3.native_sp80_frozen_color_contexts import steps_on_real_game
+          arcade=arc_agi.Arcade(operation_mode=OperationMode.NORMAL)
+          data=[]
+          for stage,word in ((0,'4'*34),(1,'4'*48)):
+              record,frames=steps_on_real_game(arcade,word,stage,0)
+              result=record.get('terminal_observation')
+              if not result:raise AssertionError('No first explicit real native terminal')
+              assert record['status']=='NATIVE_TERMINAL_GAME_OVER', record['status']
+              assert result['state']=='GameState.GAME_OVER', result
+              assert result['frame_available'] is True, result
+              assert result['level']==stage
+              assert result['context_action_step']==(30 if stage==0 else 45)
+              assert record['real_native_actions']==(30 if stage==0 else 51)
+              assert len(record['transition_records'])==record['real_native_actions']
+              assert frames.shape[0]==record['real_native_actions']+1
+              data.append({
+                  'stage':stage,
+                  'actions':record['real_native_actions'],
+                  'status':record['status'],
+                  'first_sdk_terminal':result,
+                  'frame_count':len(frames),
+                  'prefix_root':record['stage_root_index'],
+                  'no_postterminal_action':True
+              })
+          out=Path('runtime/data/arc3/native-terminal-regression.json')
+          out.parent.mkdir(parents=True,exist_ok=True)
+          out.write_text(json.dumps({'kind':'ORIGINAL_NATIVE_SP80_TERMINAL_REGRESSION',
+                                     'source_results':data},indent=2)+'\n')
+          print('NATIVE_TERMINAL_REGRESSION '+json.dumps(data,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-native-terminal-regression
+          path: runtime/data/arc3/native-terminal-regression.json
+          if-no-files-found: error
+          retention-days: 14
