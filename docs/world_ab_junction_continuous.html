@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD / Trial 06 Continuous Junction</title>
+<style>
+body{background:#132635;color:#e6f3fc;font:16px system-ui;max-width:1120px;margin:auto;padding:25px}
+h1{font-size:1.6rem}p{color:#b7ccd9;line-height:1.5}
+button,select{font:inherit;padding:9px;background:#294b62;color:#eef5fc;border:1px solid #6296a8;border-radius:6px;margin:5px}
+canvas{width:100%;background:#102436;border-radius:9px}#status{min-height:45px}
+pre{white-space:pre-wrap;max-height:420px;overflow:auto;font-size:12px}
+a{color:#85d2ff}
+</style>
+</head><body>
+<h1>WORLD · Continuous Junction Trial 06</h1>
+<p><a href="world_ab_connected_routing.html">Return to the original source-driven Trial 05 world</a>. This separate playable experiment preserves its source geometry and extends the mechanics: real finite-segment endpoints, event-time disc motion, contact impulses, and explicit stops at the WORLD perimeter or unresolved simultaneous contacts.</p>
+<p>The two intersecting line segments are reconstructed from the original Trial 04B observations, not copied from a desired funnel or spiral. It remains a 24×6 virtual model with no measured Earth-scale material properties. A first-contact routing split is not yet proof of a working funnel or physical assembly.</p>
+<div>
+<button id="run">Run 10 source probes</button>
+<label>Probe height <select id="probe">
+<option value="0">0.90</option><option value="1">1.05</option><option value="2">1.20</option>
+<option value="3">1.60</option><option value="4">1.80</option><option value="5">2.00</option>
+<option value="6">2.25</option><option value="7">1.30 near junction</option>
+<option value="8">1.322386 near junction</option><option value="9">1.40 near junction</option>
+</select></label>
+<button id="prev">Previous look</button><button id="next">Next look</button>
+<button id="reset">Reset</button><button id="export">Export source and motion</button>
+</div>
+<canvas id="view" width="960" height="310" aria-label="Two finite source faces and baseline versus continuous contact traces"></canvas>
+<p id="status" aria-live="polite">No physical motion observed yet.</p>
+<details><summary>Source geometry, event times, contact and clearance receipts</summary><pre id="receipt"></pre></details>
+<script src="world_ab_junction_geometry.js"></script>
+<script src="world_ab_junction_physics.js"></script>
+</body></html>
