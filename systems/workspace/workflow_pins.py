@@ -64,7 +64,7 @@ class WorkflowPins:
                 raise ValueError("pin ledger content mismatch")
             data = item["data"]
             if (data.get("schema") != SCHEMA or
-                    data.get("kind") not in {"PIN", "DISCOVERED_PIN"} or
+                    data.get("kind") not in {"PIN", "DISCOVERED_PIN", "PROMOTION"} or
                     data.get("status") not in {"CANDIDATE", "QUALITY_OBSERVATION_VERIFIED"} or
                     not isinstance(data.get("revision"), str) or
                     len(data["revision"]) != 64 or
@@ -79,12 +79,22 @@ class WorkflowPins:
         events = self._read()
         if len(events) >= _MAX_EVENTS:
             raise ValueError("pin ledger event budget exceeded")
-        for row in events:
-            prev = row["data"]
-            if prev["revision"] == data["revision"]:
-                if prev == data:
-                    return dict(row["data"])
+        historical = [row["data"] for row in events
+                      if row["data"]["revision"] == data["revision"]]
+        if historical:
+            latest = historical[-1]
+            if latest == data:
+                return dict(latest)
+            if data["kind"] != "PROMOTION" or latest["status"] != "CANDIDATE":
                 raise ValueError("this exact revision is already pinned; do not overwrite its evidence")
+            if (data["draft"] != latest["draft"] or
+                    data["assessment"] != latest["assessment"] or
+                    data["reason"] != latest["reason"] or
+                    data["parent_revision"] != latest["parent_revision"] or
+                    not data["native_verification"]):
+                raise ValueError("promotion must preserve original revision and exact measured evidence")
+        elif data["kind"] == "PROMOTION":
+            raise ValueError("cannot promote an unknown pin")
         parent = events[-1]["hash"] if events else ""
         entry = {"parent": parent, "data": data,
                  "hash": _digest({"parent": parent, "data": data})}
@@ -96,7 +106,34 @@ class WorkflowPins:
         return dict(data)
 
     def list_pins(self) -> list[dict]:
-        return [dict(e["data"]) for e in self._read()]
+        latest: dict[str, dict] = {}
+        for event in self._read():
+            record = event["data"]
+            latest[record["revision"]] = dict(record)
+        return list(latest.values())
+
+    def promote_pin(
+        self, revision: str,
+        verify_observation: Callable[[dict, dict], bool],
+    ) -> dict:
+        """Append an independently checked quality claim without altering pin ancestry."""
+        if not callable(verify_observation):
+            raise ValueError("promotion requires independent source-native verification")
+        current = next((x for x in self.list_pins() if x["revision"] == revision), None)
+        if current is None or current["assessment"] is None:
+            raise ValueError("only a pinned, measured branch can be considered for promotion")
+        if current["native_verification"]:
+            return current
+        # The callback must independently re-observe the original exact
+        # recorded scope/source; a label, score or hash alone never verifies.
+        if verify_observation({"revision": current["revision"], "draft": current["draft"]},
+                              current["assessment"]) is not True:
+            raise ValueError("independent source observation did not verify the pinned metric")
+        upgraded = dict(current)
+        upgraded.update(kind="PROMOTION", status="QUALITY_OBSERVATION_VERIFIED",
+                        native_verification=True, whole_workflow_verified=False,
+                        execution_authorized=False)
+        return self._append(upgraded)
 
     def compare_branch(self, spec: dict, repo_root: str | Path) -> dict:
         """Diff a candidate against its pinned ancestor without executing it."""
