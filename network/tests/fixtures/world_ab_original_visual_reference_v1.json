@@ -1,0 +1,24 @@
+{
+  "schema": "world-ab-original-visual-blueprint-comparison/v1",
+  "source": "Owner supplied Visual Language A_B Exploration Blueprint.png; diagram relationships, not metric physics measurements",
+  "relation_checks": {
+    "approach": "approaching-boundary",
+    "boundary_contact": "contact",
+    "motion_redirected": "movement-redirected",
+    "next_physical_state": "continued-motion"
+  },
+  "generated_geometries_required": [
+    "guide",
+    "funnel",
+    "diverter",
+    "spiral"
+  ],
+  "constraints": {
+    "source_shapes": "one block approaches vertical wall",
+    "same_shape_under_physics": "NOT_ESTABLISHED",
+    "mass_measured": false,
+    "friction_measured": false,
+    "gravity_measured": false,
+    "metric_dimensions_measured": false
+  }
+}
