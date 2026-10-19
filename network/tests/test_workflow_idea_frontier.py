@@ -81,6 +81,16 @@ class IdeaFrontierTests(unittest.TestCase):
         self.assertEqual(back["event"]["witnessed_relation"], "DIRECT_PARENT")
         self.assertEqual(help_["event"]["witnessed_relation"], "SHARED_PARENT")
         self.assertFalse(help_["event"]["worker_help_executed"])
+        peer_view = self.index.worker_frontier(
+            idea_id=self.idea, revision=peer["revision"], step_id="start", worker="worker-B")
+        self.assertEqual(peer_view["incoming_peer_help"], [{
+            "from_worker": "worker-A",
+            "from_revision": first["revision"],
+            "source_step_id": "start",
+            "reason": "Inspect peer branch source differences",
+            "relationship": "SHARED_PARENT",
+            "state": "PROPOSED_NOT_EXECUTED",
+        }])
         self.assertFalse(back["event"]["rewind_executed"])
         self.assertEqual(len(self.pins.list_pins()), 4)
         self.assertFalse((self.directory / "runtime.jsonl").exists())
