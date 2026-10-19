@@ -115,7 +115,15 @@ def probe(y,faces,*,mu=.4):
             "angular_velocity":0.,"look_after":None,
             "contact_impulse":None}
     t,id,face,( _,p,within)=candidates[0]
-    velocity,spin,event=impact(PROBE_V,0.,tuple(face["normal"]),mu)
+    # Stored source normals are a 10-decimal observation of a true unit
+    # normal. Reconstruct its unit direction for the strict impulse solver,
+    # without altering the original witnessed face or contact geometry.
+    observed_n=tuple(face["normal"])
+    length=hypot(*observed_n)
+    if abs(length-1.0)>5e-9:
+        raise ValueError("source normal drift exceeds retained-observation precision")
+    impulse_n=tuple(q/length for q in observed_n)
+    velocity,spin,event=impact(PROBE_V,0.,impulse_n,mu)
     look=add(p,mul(PROBE_LOOK,velocity))
     return {"initial":[f(z) for z in start],"source_first_contact":id,
         "hit_time":f(t),"contact_center":[f(z) for z in p],
