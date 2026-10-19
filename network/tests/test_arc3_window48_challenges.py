@@ -71,10 +71,11 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
             self.assertEqual(
                 {laws[ch["law_ids"][1]].coefficient for ch in level},{chart}
             )
+            # The final pair is deliberately reversed by the source
+            # rooted witness search, so count both endpoints, not just left.
             self.assertEqual(
-                len({tuple((laws[ch["law_ids"][0]].support,
-                            laws[ch["law_ids"][0]].pulse,
-                            laws[ch["law_ids"][0]].balanced)) for ch in level}),16
+                len({tuple((laws[i].support,laws[i].pulse,laws[i].balanced))
+                     for ch in level for i in ch["law_ids"]}),16
             )
         # Explicit backward-compatibility contract: these are the historical
         # c=0 challenge pair IDs; the old receipt schema is unchanged.
