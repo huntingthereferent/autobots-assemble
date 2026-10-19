@@ -1,6 +1,6 @@
 # Swallow Harness²: bounded contrastive probe lane
 
-**Referent:** [google-research/harness2](https://github.com/google-research/harness2), public upstream at inspection on 2026-10-19. The upstream paper is [Harness²: Recursive Agent Harnessing for an Open World](https://arxiv.org/abs/2610.14224). This lane responds to that *actual* research object, not to a similarly named generic agent framework.
+**Referent:** [google-research/harness2](https://github.com/google-research/harness2), upstream main commit [\`1cfe254e8d25b15f37048c3730134686abe60335\`](https://github.com/google-research/harness2/commit/1cfe254e8d25b15f37048c3730134686abe60335), inspected 2026-10-19. The upstream paper is [Harness²: Recursive Agent Harnessing for an Open World](https://arxiv.org/abs/2610.14224). This lane responds to that *actual* research object, not to a similarly named generic agent framework.
 
 ## What was inspected
 
