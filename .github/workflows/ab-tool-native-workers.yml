@@ -1,0 +1,47 @@
+name: A/B tool native worker integration
+
+on:
+  push:
+    paths:
+      - 'runtime/ab_tool_worker.py'
+      - 'runtime/pool_evaluator.py'
+      - 'runtime/http_server.py'
+      - 'network/tests/test_ab_tool_native_workers.py'
+      - 'tools/ab-provenance/**'
+      - '.github/workflows/ab-tool-native-workers.yml'
+  pull_request:
+    paths:
+      - 'runtime/ab_tool_worker.py'
+      - 'runtime/pool_evaluator.py'
+      - 'runtime/http_server.py'
+      - 'network/tests/test_ab_tool_native_workers.py'
+      - 'tools/ab-provenance/**'
+      - '.github/workflows/ab-tool-native-workers.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-evidence-workers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install actual A/B package
+        run: |
+          python -m pip install ./tools/ab-provenance
+      - name: Run source-verified tool and original bot regressions
+        run: |
+          python -m unittest -v \
+            network.tests.test_ab_tool_native_workers \
+            network.tests.test_pool_evaluator \
+            network.tests.test_continuity_pool_runtime \
+            network.tests.test_combined_evaluator
+      - name: The A/B CLI remains the actual tool
+        run: |
+          ab --help
+          ab inspect tools/ab-provenance/examples/illustrative-provenance.json
