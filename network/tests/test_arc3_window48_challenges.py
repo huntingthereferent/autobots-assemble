@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from hashlib import sha1
 import json
 from pathlib import Path
 import unittest
@@ -115,6 +116,18 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
                 mutate(bad)
                 with self.assertRaises(ValueError):
                     verify_certificate(bad)
+
+    def test_world48_is_active_without_overwriting_pinned_w13_evidence(self):
+        historical = ROOT / "docs/game_w13_preview.html"
+        raw = historical.read_bytes()
+        blob = sha1(b"blob " + str(len(raw)).encode("ascii") + b"\\0" + raw).hexdigest()
+        self.assertEqual(blob, "eeb5e383fa093ff941c9880fb88acd62485ce3f2")
+        game = (ROOT / "docs/game/index.html").read_text(encoding="utf8")
+        work = (ROOT / "docs/live/work.html").read_text(encoding="utf8")
+        self.assertIn('url=../window48_challenges.html', game)
+        self.assertIn('href="../game/"', work)
+        self.assertNotIn("GAME-W13-WORLDS", game)
+        self.assertIn("original", game.lower())
 
     def test_game_html_keeps_exact_source_boundary(self):
         html=GAME.read_text(encoding="utf8")
