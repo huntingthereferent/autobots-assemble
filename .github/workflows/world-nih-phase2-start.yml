@@ -13,6 +13,8 @@ on:
       - 'network/tests/test_nih_p2_world_history_field_probe.py'
       - 'scripts/nih_p2_world_version_posting_probe.py'
       - 'network/tests/test_nih_p2_world_version_posting_probe.py'
+      - 'scripts/nih_p2_world_posted_day_cross_witness.py'
+      - 'network/tests/test_nih_p2_world_posted_day_cross_witness.py'
 permissions:
   contents: read
   actions: read
@@ -83,7 +85,7 @@ jobs:
       - name: Falsify synthetic event chain and source-time counterexamples
         run: |
           cd world
-          python -m unittest -v network.tests.test_nih_p2_world_source_events network.tests.test_nih_p2_world_original_source_join network.tests.test_nih_p2_world_history_field_probe network.tests.test_nih_p2_world_version_posting_probe
+          python -m unittest -v network.tests.test_nih_p2_world_source_events network.tests.test_nih_p2_world_original_source_join network.tests.test_nih_p2_world_history_field_probe network.tests.test_nih_p2_world_version_posting_probe network.tests.test_nih_p2_world_posted_day_cross_witness
       - name: Fetch exact owner-retained twelve-job native journal
         uses: actions/download-artifact@v4
         with:
@@ -124,6 +126,11 @@ jobs:
           cd "$GITHUB_WORKSPACE/world"
           python -m scripts.nih_p2_world_version_posting_probe \
             --output-dir "$RUNNER_TEMP/continued-original-w13"
+      - name: Independently cross-verify original historical version posting-day labels
+        run: |
+          cd "$GITHUB_WORKSPACE/world"
+          python -m scripts.nih_p2_world_posted_day_cross_witness \
+            --evidence-dir "$RUNNER_TEMP/continued-original-w13"
       - name: Preserve fresh Phase 2 game-world evidence, without republishing original journal
         if: always()
         uses: actions/upload-artifact@v4
@@ -143,6 +150,7 @@ jobs:
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-owner-boundary.json
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-original-history-field-probe.json
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-official-version-posting-probe.json
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-historical-posted-day-cross-witness.json
             ${{ runner.temp }}/original-depositor-evidence/nih-p2-aact-owner-script-date-link.json
           retention-days: 30
           if-no-files-found: warn
