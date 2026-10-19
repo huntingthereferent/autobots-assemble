@@ -4,9 +4,9 @@
 
 ## What was inspected
 
-Harness² refines a task's execution harness through Propose–Probe–Compose, then carries evidence-supported lessons into a separate improvement harness for subsequent tasks. It exposes eight configurable parts: system prompt, guardrails, memory, tool guidance, subagents, skills, scripts, and plugins. Its experiments include parallel and sequential refinement, candidate rollouts, composition, a run ledger, and a persistent per-domain library. It supports OpenCode and Codex with JobBench, LAB, and WorkBuddy-Bench.
+Harness² refines a task's execution harness through Propose–Probe–Compose, then carries evidence-supported lessons into a separate improvement harness for subsequent tasks. It exposes eight configurable parts: system prompt, guardrails, memory, tool guidance, subagents, skills, scripts, and plugins. Its experiments include parallel and sequential refinement, candidate rollouts, composition, a run ledger, and a persistent per-domain library. Upstream currently documents OpenCode as its default and Codex as an optional executor, for JobBench, LAB, and WorkBuddy-Bench. **That upstream option is not a recommendation or a dependency for A/B.**
 
-Upstream is **Apache-2.0** and retains third-party license notices. Its authors report improvements on their published benchmark configurations; those are their findings, **not** independently reproduced A/B results. Their documentation also warns that executor network access is unrestricted and Codex runs without sandboxing; public benchmark grading material can be fetched accidentally. Do not inherit those operational defaults.
+Upstream is **Apache-2.0** and retains third-party license notices. Its authors report improvements on their published benchmark configurations; those are their findings, **not** independently reproduced A/B results. Their documentation also warns that executor network access is unrestricted and its optional Codex executor runs without sandboxing; public benchmark grading material can be fetched accidentally. Do not inherit these operational defaults or switch agent substrates while evaluating a harness change.
 
 ## What A/B already has
 
@@ -17,12 +17,20 @@ Upstream is **Apache-2.0** and retains third-party license notices. Its authors 
 
 These are the native capabilities; importing Google's separate runner, prompts, grading tools, or benchmark datasets would create a competing execution and evidence spine.
 
+## Controlled builder/observer boundary
+
+James's correction: **Codex is another packaged agent/harness configuration, not a neutral code-editing instrument for this trial.** Switching ChatGPT into Codex build mode changes the active instruction/tool environment, so the resulting observations cannot be attributed solely to the A/B harness change being tested. Merely freezing the *model weights* does not freeze the surrounding agent.
+
+The A/B comparison refuses a foreign execution surface (including Codex-mode receipts), detects changes in model ID, execution mode or fixed agent-profile digest, and keeps the proposed editable harness component as the controlled variable. None of those labels authenticates itself: the user-supplied independent native verifier must establish identity from observed execution receipts. A valid comparison needs the same A/B agent continuity across baseline and candidate, not just a score or a convenient handoff to a different builder.
+
+This implements **only the admission check**, not yet an AI that autonomously proposes edits. A future AI builder should branch through the workstation's own recorded movements, use its existing tools and memory, and submit native results for independent inspection.
+
 ## First executable movement
 
 `systems/workspace/contrastive_harness.py` adds a small, independent **pairwise probe intake**:
 
 1. Choose a source-owned base and its changed child branch; declare which of the eight harness components was edited.
-2. Produce TWO native job receipts externally on the **same task and exact input digest**. Record each job, edition fingerprint, result digest and witness locator. Intake never performs execution.
+2. Produce TWO native job receipts externally on the **same task and exact input digest** using the **same active A/B agent, model identity, operating mode and workstation execution surface**. Record each job, edition fingerprint, result digest, witness locator, execution mode, model identity and fixed agent-profile digest. The fixed profile excludes the single deliberately edited harness component. Intake never performs execution. The native verifier must attest those claims: matching self-reported strings/digests alone are insufficient.
 3. Independently reverify both receipts with an installed domain-native callback **on each invocation**. There is no permissive verifier.
 4. Only then ask a **separate** domain-native comparator for an outcome and contrast witness. A changed result, a self-reported score or a shared witness is not evidence of improvement.
 5. Append the bounded verdict as `WORKSTATION_HARNESS_CONTRAST` to the **existing** `RuntimeJournal` under the chosen coordination lane. Replaying the same record is idempotent; a changed source blocks the old receipt.
@@ -30,7 +38,7 @@ These are the native capabilities; importing Google's separate runner, prompts, 
 
 **State vocabulary:** `SUPPORTED` = an independently supplied improvement verdict on *one matching task*. `NO_PREFERENCE` = comparator did not support preference. `UNKNOWN` = native evidence missing. These words do not assert generalization, truth of an external benchmark, autonomous operation, or successful deployment.
 
-This does **not** yet implement an AI proposer, automatic agent editing, recursive composition, task scheduling, full persistent cross-task optimization, remote network restrictions, or general native comparison workers. Those remain separate witness-requiring continuations. It deliberately leaves W13/game world, NIH, ARC and existing research lanes untouched.
+This does **not** yet implement an AI proposer, automatic agent editing, recursive composition, task scheduling, full persistent cross-task optimization, remote network restrictions, or general native comparison workers. Those remain separate witness-requiring continuations. The intended builder is **AI continuing within the existing A/B workstation**, not a mode switch into Codex or another prebuilt agent harness. It deliberately leaves W13/game world, NIH, ARC and existing research lanes untouched.
 
 ## Rights and provenance
 
