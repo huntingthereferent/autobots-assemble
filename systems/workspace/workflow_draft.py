@@ -89,7 +89,10 @@ def build_preview(spec: dict, repo_root: str | Path) -> dict:
         if not isinstance(inputs, dict) or any(k not in manifest["inputs"] for k in inputs):
             raise ValueError(f"{sid} contains undeclared external inputs")
         graph_nodes[sid] = GraphNode(manifest=manifest, inputs=inputs)
+        manifest_sha256 = sha256(json.dumps(manifest, ensure_ascii=False, allow_nan=False,
+                                           sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
         steps.append({"id": sid, "label": label, "manifest": ref,
+                      "manifest_sha256": manifest_sha256,
                       "path_role": role, "inputs": inputs})
 
     links = []
