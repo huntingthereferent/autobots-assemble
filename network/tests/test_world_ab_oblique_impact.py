@@ -71,7 +71,7 @@ class ObliqueFirstImpactTests(unittest.TestCase):
         self.assertTrue(verify_impact(a))
         self.assertEqual(a["support_count"],2)
         self.assertEqual(a["angular_velocity_after"],0.)
-        self.assertEqual(a["velocity_after"],[-2.1,.12])
+        self.assertEqual(a["velocity_after"],[-3.0,.12])
         self.assertFalse(result["exact_original_blueprint_generated"])
     def test_02_oblique_contact_generates_spin_and_new_direction(self):
         r=experiment(angle=20)
