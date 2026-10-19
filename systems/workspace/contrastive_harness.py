@@ -16,7 +16,7 @@ import re
 from typing import Callable
 
 from runtime.engine import HandoffRuntime
-from runtime.handoff import HandoffEvent
+from runtime.handoff import EvidenceRecord, HandoffEvent
 from runtime.journal import RuntimeJournal
 from .workstation import ProcessWorkstation, _safe_id
 from .workstation_harness import WorkstationContinuationHarness
@@ -183,7 +183,20 @@ def contrast_and_record(
     runtime.event_store.append(HandoffEvent.create(
         handoff_id=handoff.handoff_id, event_type=_EVENT,
         actor_id="workstation-harness-comparison",
-        data=result, parents=(prior,) if prior else (),
+        data=result,
+        evidence=(
+            EvidenceRecord(condition="baseline native probe", kind="source",
+                           source="harness-contrast-intake", ref=base.witness_ref,
+                           depth="reported"),
+            EvidenceRecord(condition="candidate native probe", kind="source",
+                           source="harness-contrast-intake", ref=candidate.witness_ref,
+                           depth="reported"),
+        ) + ((
+            EvidenceRecord(condition="separate comparative witness", kind="source",
+                           source="harness-contrast-intake",
+                           ref=comparison["witness_ref"], depth="reported"),
+        ) if comparison else ()),
+        parents=(prior,) if prior else (),
     ))
     return {**result, "already_recorded": False}
 
