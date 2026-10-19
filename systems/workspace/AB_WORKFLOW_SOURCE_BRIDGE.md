@@ -30,6 +30,15 @@ python -m pip install ./tools/ab-provenance
 python -m systems.workspace.workflow_editor_server --data-dir runtime/data
 ```
 
+For the original Continuity pool, use **Load original local bot records** in the
+editor. It reads the existing `runtime.jsonl` `AGENT_AB_OBSERVED` events from
+the original Continuity actor, extracts task/source pairs, and rechecks each
+file digest before presenting it. The UI also accepts manual references for
+other worker families. In either case, local journal labels and caller-supplied
+task identities are **not cryptographic proof of actor identity or execution**.
+Only genuine source bytes, the original local record lineage (when available),
+and unresolved scope are reported.
+
 The visual editor at http://127.0.0.1:8054/ now includes the optional
 **A/B native source ancestry** section. Paste native worker source-reference
 records and a map of workflow step IDs to native task IDs, then inspect.
