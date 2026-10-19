@@ -1,0 +1,37 @@
+name: ARC3 original SP80 exact-interior ACTION5 history holdout
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_equal_interior_history.py'
+      - '.github/workflows/arc3-sp80-equal-interior.yml'
+jobs:
+  genuine-native-equal-interior:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official public native ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Verify frozen original stage1 controls
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_equal_interior_history import PROGRAMS,RESETS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(PROGRAMS)==16 and RESETS==2
+          assert len({n for n,_ in PROGRAMS})==16
+          assert all(any(a==5 for a,_ in parse_plan(w)) for _,w in PROGRAMS)
+          assert all(a<=5 for _,w in PROGRAMS for a,_ in parse_plan(w))
+          print('UNIT ONLY: native original equal-interior programs frozen')
+          PY
+      - name: Run original native SP80 equal-interior historical contrasts
+        run: python -m work.arc3.native_sp80_equal_interior_history --out runtime/data/arc3/sp80-equal-interior.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-equal-interior
+          path: runtime/data/arc3/sp80-equal-interior.*
+          if-no-files-found: error
+          retention-days: 14
