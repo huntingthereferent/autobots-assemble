@@ -1,0 +1,52 @@
+name: WORLD — Relation-Derived Physical Construction Trial 02
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-ab-relation-growth.yml'
+      - 'systems/workspace/world_ab_relation_growth.py'
+      - 'network/tests/test_world_ab_relation_growth.py'
+      - 'docs/world_ab_relation_growth.html'
+      - 'scripts/verify_world_ab_relation_growth_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  derive-build-replay-and-independently-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout actual existing WORLD branch
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Falsify source-derived second surface with independent two-event equations
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_contact_trial \
+            network.tests.test_world_ab_relation_growth \
+            network.tests.test_world_physical_construction
+      - name: Install native browser engine
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Generate physical receiver, replay new collision, compare with original blueprint
+        run: |
+          python -m scripts.verify_world_ab_relation_growth_browser \
+            --output-dir "$RUNNER_TEMP/world-ab-relation-growth"
+      - name: Retain generated geometry, source trajectories, screenshot and verifier
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-ab-relation-growth-${{ github.run_id }}
+          path: |
+            docs/world_ab_relation_growth.html
+            ${{ runner.temp }}/world-ab-relation-growth/world_ab_relation_growth_second_contact.png
+            ${{ runner.temp }}/world-ab-relation-growth/world_ab_relation_growth_generated.json
+            ${{ runner.temp }}/world-ab-relation-growth/world_ab_relation_growth_independent_witness.json
+          retention-days: 30
+          if-no-files-found: warn
