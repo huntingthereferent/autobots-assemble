@@ -72,11 +72,14 @@ def validate(bp):
     rows=bp["sample_sets"]
     if type(rows) is not dict or set(rows)!={"synthetic","registry"}:raise ValueError("original source partitions missing")
     if (type(rows["synthetic"]) is not list or type(rows["registry"]) is not list or
-        len(rows["synthetic"])!=2 or len(rows["registry"])!=2 or
-        [x.get("id") for x in rows["synthetic"]]!=["prior-note","delayed-result"] or
+        not 2<=len(rows["synthetic"])<=32 or len(rows["registry"])!=2 or
+        [x.get("id") for x in rows["synthetic"][:2]]!=["prior-note","delayed-result"] or
         [x.get("id") for x in rows["registry"]]!=["ctgov-v94","ctgov-v105"]):
         raise ValueError("source-qualified assertion versions drifted")
     for sample,claims in rows.items():
+        ids=[x.get("id") for x in claims]
+        if len(ids)!=len(set(ids)):
+            raise ValueError("duplicate graph assertion identity")
         for entry in claims:
             real=sample=="registry"
             expected=FIELDS|({"source_text_sha256"} if real else set())
@@ -106,8 +109,7 @@ def validate(bp):
                     any(entry[k] is not None for k in ("submitted_day","posted_day","observed_day","event_day")) or
                     not entry["source_ref"].startswith("synthetic-")):
                     raise ValueError("synthetic valid interval and modeled availability required")
-    if (rows["synthetic"][0]["subject"]!="fictional-study" or
-        rows["synthetic"][1]["subject"]!="fictional-study" or
+    if (any(r["subject"]!="fictional-study" for r in rows["synthetic"]) or
         any(r["predicate"]!="has-status" for r in rows["synthetic"])):
         raise ValueError("do not silently change synthetic source domain")
     q=bp["queries"]
