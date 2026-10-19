@@ -127,7 +127,7 @@ def handler_for(root: Path, data_dir: Path, token: str):
                                  "/api/ab-preview", "/api/ab-record",
                                  "/api/native-inspect", "/api/native-attach",
                                  "/api/native-compare",
-                                 "/api/idea-bind", "/api/idea-frontier",
+                                 "/api/idea-bind", "/api/idea-branches", "/api/idea-frontier",
                                  "/api/idea-propose"):
                 self._json({"error": "unknown action"}, 404)
                 return
@@ -141,7 +141,9 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 if self.path.startswith("/api/idea-"):
                     from systems.workspace.workflow_idea_frontier import IdeaFrontier
                     ideas = IdeaFrontier(root, data_dir)
-                    if self.path == "/api/idea-bind":
+                    if self.path == "/api/idea-branches":
+                        reply = ideas.idea_branches_for_operator(payload.get("idea_id"))
+                    elif self.path == "/api/idea-bind":
                         reply = ideas.bind(idea_id=payload.get("idea_id"),
                                            revision=payload.get("revision"),
                                            worker=payload.get("worker"),
