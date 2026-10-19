@@ -238,6 +238,20 @@ class IdeaFrontier:
                 "execution_authorized": False,
             })
         visible.sort(key=lambda x: (x["relationship"], x["revision"]))
+        visible_revisions = {x["revision"] for x in visible[:MAX_FRONTIER]}
+        # A peer's help proposal is visible to its TARGET only if the
+        # originating branch is directly related and belongs to the same
+        # source-recorded idea. Never broadcast to unrelated workers.
+        incoming = [
+            {"from_worker": e["worker"], "from_revision": e["source_revision"],
+             "source_step_id": e["source_step_id"], "reason": e["reason"],
+             "relationship": e["witnessed_relation"],
+             "state": "PROPOSED_NOT_EXECUTED"}
+            for e in self._read()
+            if e["type"] == "HELP_PROPOSED" and e["idea_id"] == idea_id
+            and e["target_revision"] == revision
+            and e["source_revision"] in visible_revisions
+        ][:MAX_FRONTIER]
         return {
             "idea": {"idea_id": idea_id, "title": idea.title,
                      "source_link": idea.link, "source_row": idea.row_number},
@@ -247,6 +261,7 @@ class IdeaFrontier:
             "visible_steps": [{"id": key, "label": steps[key]["label"]}
                               for key in adjacent[:MAX_FRONTIER]],
             "visible_branches": visible[:MAX_FRONTIER],
+            "incoming_peer_help": incoming,
             "other_branches_hidden": max(0, len(visible) - MAX_FRONTIER),
             "claimed_global_worker_visibility": False,
             "current_view_authenticated_as_worker": False,
