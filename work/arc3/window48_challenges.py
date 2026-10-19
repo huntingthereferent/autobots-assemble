@@ -123,3 +123,28 @@ def verify_certificate(cert: dict) -> dict:
             "challenge_id": cid, "law_ids": ids,
             "paths": [x["actions"] for x in trials],
             "endpoints": finals}
+
+
+def main() -> None:
+    import argparse
+    import json
+    from pathlib import Path
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--check", action="store_true")
+    parser.add_argument("--out", type=Path,
+                        default=Path("docs/window48_challenges.json"))
+    args = parser.parse_args()
+    result = {"schema": "original-window48-rooted-challenge-roster/v1",
+              "source": "work/arc_like_maze/window_combined.py",
+              "scope": SCOPE, "challenges": rooted_roster()}
+    if args.check:
+        if not args.out.is_file() or json.loads(args.out.read_text()) != result:
+            raise SystemExit("original rooted collision challenges differ from source")
+    else:
+        args.out.parent.mkdir(parents=True, exist_ok=True)
+        args.out.write_text(json.dumps(result, indent=2) + "\n", encoding="utf8")
+    print(f"WORLD48 rooted challenges: {len(result['challenges'])} source witnesses verified")
+
+
+if __name__ == "__main__":
+    main()
