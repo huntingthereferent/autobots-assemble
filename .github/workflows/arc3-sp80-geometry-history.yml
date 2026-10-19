@@ -1,0 +1,38 @@
+name: ARC3 original SP80 ACTION5 geometry versus action history
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_geometry_history.py'
+      - '.github/workflows/arc3-sp80-geometry-history.yml'
+jobs:
+  genuine-native-action5-geometry-history:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install real ARC public SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Predeclared native word and controls validation
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_geometry_history import WORDS,PATHS,RESETS
+          assert PATHS==('11111333','33311111')
+          assert len(WORDS)==len(set(WORDS))==18 and RESETS==2
+          assert all(set(w)<={'1','2','3','4','5','6'} for w in WORDS)
+          assert all(path+'5' in WORDS and path+'6' in WORDS for path in PATHS)
+          assert all(('12'+path+'5') in WORDS and ('34'+path+'5') in WORDS
+                     and ('56'+path+'5') in WORDS for path in PATHS)
+          print('UNIT ONLY: genuine SP80 stage1 native paths and controls frozen')
+          PY
+      - name: Run authentic SP80 ACTION5 context intervention trials
+        run: python -m work.arc3.native_sp80_geometry_history --out runtime/data/arc3/sp80-geometry-history.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-geometry-history
+          path: runtime/data/arc3/sp80-geometry-history.*
+          if-no-files-found: error
+          retention-days: 14
