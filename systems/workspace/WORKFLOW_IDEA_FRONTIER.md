@@ -108,11 +108,57 @@ permission boundary, or automatic execution/merge of a different branch.
 Existing source-native worker runners would need to call the interface from
 their authorized continuation point; no unsupported assignment is invented.
 
+## Opt-in native worker handler (during real movement)
+
+`systems.workspace.workflow_native_continuation.ScopedRepositoryWorker`
+can wrap **one already admitted** source-owned repository-work handoff and
+an operator-provided native handler. It does not add a scheduler, spawn a bot,
+run an LLM, or change existing source-owner execution gates. The wrapper
+returns the original `SimulatedActor` carrier used by
+`HandoffRuntime.run()`, bound to that specific handoff, native worker and
+required relation.
+
+The original worker handler gets `BoundedWorkerContext`, which exposes
+exactly two callable operations:
+
+- `observe()`: fresh `IdeaFrontier.native_handoff_frontier` read for
+  the current task, step, native actor and immediate relations. Calling it
+  again *during the same execution* sees new peer-help proposals addressed
+  to this branch, without showing unrelated graphs or importing their code.
+- `propose(kind="HELP" | "BACKTRACK", target_revision=..., reason=...)`:
+  checks the native assignment and one-hop graph position again and writes
+  one append-only proposal. This does **not** adopt, merge, execute a second
+  worker, move the task, or declare branch quality.
+
+A source-owning host may explicitly invoke
+`ScopedRepositoryWorker.run(allow_native_execution=True)` after supplying
+its real worker callback; the default denies execution and leaves the native
+journal untouched. Alternatively a trusted host can explicitly use
+`as_actor()` with its existing runner. Source checks happen at wrapper
+construction and at the beginning of execution. The worker's original
+`ExecutionResult` and native witness validation remain unchanged.
+
+The context's read-shape is bounded but is **not an authentication sandbox**
+for arbitrary untrusted Python code; it should only be passed to an already
+authorized source-owner worker. The original Continuity pool's three
+nonexecuted source-inspection tasks are *not* magically made into runnable
+repository-work actors by this adapter. Only real repo-work handoffs fit
+this boundary.
+
+`network/tests/test_workflow_native_continuation.py` exercises an actual
+`HandoffRuntime.run` invocation using a bounded test handler. It witnesses
+two observations **within the same native handler call**, including an
+intervening, source-scoped peer-help record; verifies no automatic adoption
+or task completion; rejects wrong assignments and other handoffs; and checks
+the default no-execution gate. This confirms the integration contract, not
+unsupervised autonomous coding.
+
 ## Source-bound tests
 
 ```sh
 python -m unittest -v \
   network.tests.test_workflow_idea_frontier \
+  network.tests.test_workflow_native_continuation \
   network.tests.test_workstation_workflow_editor_http
 ```
 
