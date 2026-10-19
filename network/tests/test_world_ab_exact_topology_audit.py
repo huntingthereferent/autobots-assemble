@@ -65,6 +65,7 @@ class ExactTopologyAuditTests(unittest.TestCase):
             ((0, 0), (float("nan"), 1)),
             ((0, 0), (float("inf"), 1)),
             ((0, 0), (10001, 0)),
+            ((0, 0), (10**1000, 0)),
             ((0, 0), (True, 1)),
             ((0, 0), ("1", 1)),
             ((0, 0),),
