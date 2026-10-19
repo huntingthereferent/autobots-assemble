@@ -16,6 +16,7 @@ import re
 
 from runtime.repository_tasks import read_active_work
 from .workflow_pins import WorkflowPins
+from .workflow_draft import build_preview
 
 SCHEMA = "workstation-idea-frontier/v1"
 _SHA = re.compile(r"[0-9a-f]{64}\Z")
@@ -65,6 +66,11 @@ class IdeaFrontier:
         if len(pins) > MAX_BRANCHES:
             raise ValueError("too many pinned workflow branches")
         return {x["revision"]: x for x in pins}
+
+    def _fresh(self, pin: dict) -> None:
+        """Current source manifests must still match this exact pinned draft."""
+        if build_preview(pin["draft"], self.repository)["revision"] != pin["revision"]:
+            raise ValueError("pinned workflow source manifest differs from recorded revision")
 
     def _read(self) -> list[dict]:
         if not self.path.exists():
@@ -166,6 +172,7 @@ class IdeaFrontier:
         pins = self._pins()
         if revision not in pins:
             raise ValueError("branch must be an existing pinned revision")
+        self._fresh(pins[revision])
         worker = _word(worker, "worker label", 64)
         if not _ID.fullmatch(worker):
             raise ValueError("bounded native worker label required")
@@ -175,6 +182,7 @@ class IdeaFrontier:
         if parent:
             if parent not in pins:
                 raise ValueError("pinned ancestor missing")
+            self._fresh(pins[parent])
             if parent not in bindings or bindings[parent]["idea_id"] != idea_id:
                 raise ValueError("pin's exact parent must be bound to the same idea first")
         record = {"schema": SCHEMA, "type": "BIND", "idea_id": idea_id,
@@ -199,6 +207,7 @@ class IdeaFrontier:
         current = bindings[revision]
         if current["idea_id"] != idea_id or current["worker"] != worker:
             raise ValueError("worker has no explicit current task/branch association")
+        self._fresh(pins[revision])
         steps = {x["id"]: x for x in pins[revision]["draft"]["steps"]}
         if step_id not in steps:
             raise ValueError("current step not in pinned workflow revision")
@@ -226,6 +235,7 @@ class IdeaFrontier:
             related = pins.get(related_revision)
             if related is None:
                 raise ValueError("bound related revision no longer pinned")
+            self._fresh(related)
             # A neighboring worker is visible only through an actual pinned
             # parent/child relation. Return the *boundary*, not its full graph.
             has_step = any(s["id"] == step_id for s in related["draft"]["steps"])
