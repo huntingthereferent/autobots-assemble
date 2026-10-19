@@ -1,0 +1,72 @@
+name: WORLD — Oblique Disc Factorial and Derived Receiver Trial 04B
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-ab-oblique-disc-contrast.yml'
+      - 'systems/workspace/world_ab_oblique_rotation.py'
+      - 'network/tests/test_world_ab_oblique_rotation.py'
+      - 'docs/world_ab_oblique_disc_factorial.html'
+      - 'scripts/verify_world_ab_oblique_disc_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  factorial-source-and-independent-rigid-body-verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout existing WORLD without modifying Trial 03 or other Trial 04
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independently falsify angled normal, frictional spin and new receiver
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_rotation \
+            network.tests.test_world_ab_iterated_surfaces
+      - name: Retain original-source four-case physical observations
+        run: |
+          mkdir -p "$RUNNER_TEMP/oblique-disc"
+          python - <<'PY'
+          import json,os,pathlib
+          from systems.workspace.world_ab_oblique_rotation import run
+          from network.tests.test_world_ab_oblique_rotation import independently_verify_case
+          data=run()
+          for case in data["branches"]:
+              independently_verify_case(case)
+          path=pathlib.Path(os.environ["RUNNER_TEMP"])/"oblique-disc"/"world_ab_oblique_disc_native.json"
+          path.write_text(json.dumps(data,sort_keys=True,indent=2)+"\n")
+          print(json.dumps({"schema":data["schema"],"cases":[{
+            "source_angle":x["source_angle_degrees"],
+            "friction":x["friction"],
+            "receiver_angle":x["constructed_receiver"]["normal_angle_degrees"],
+            "spin":x["nonzero_spin_generated"],
+            "contacts":[e["at"] for e in x["events"]]
+            } for x in data["branches"]],"whole_original_blueprint_generated":False},sort_keys=True))
+          PY
+      - name: Install Chromium for real original WORLD browser witness
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Play four source physics branches and independently verify browser receipts
+        run: |
+          python -m scripts.verify_world_ab_oblique_disc_browser \
+            --output-dir "$RUNNER_TEMP/oblique-disc"
+      - name: Retain native receipts, physical browser trace and screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-oblique-disc-factorial-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/oblique-disc/world_ab_oblique_disc_native.json
+            ${{ runner.temp }}/oblique-disc/world_ab_oblique_disc_browser.json
+            ${{ runner.temp }}/oblique-disc/world_ab_oblique_disc_witness.json
+            ${{ runner.temp }}/oblique-disc/world_ab_oblique_disc_browser.png
+            docs/world_ab_oblique_disc_factorial.html
+          retention-days: 30
+          if-no-files-found: warn
