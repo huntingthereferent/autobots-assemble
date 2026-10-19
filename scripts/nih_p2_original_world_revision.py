@@ -307,7 +307,7 @@ def run_revision(*,data_dir,output_dir,two_clock):
                                 "known_at":game_known(turn),"target_at":TARGET,
                                 "temporal_ids":expected["temporal_ids"],
                                 "future_leakage_ids":expected["future_leakage_ids"],
-                                "source_dataset_sha256":editions_sha[name],
+                                "snapshot_dataset_sha256":editions_sha[name],
                                 "original_program_sha256":program,
                                 "independent_host_agreement":True})
                     if page.locator("body").get_attribute("data-solved")!="true":
