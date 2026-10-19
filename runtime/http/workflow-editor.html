@@ -78,6 +78,16 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 <label for="witness">Witness record</label><input id="witness" placeholder="run:...">
 <button id="discover">Pin improving branch</button>
 <p class="note">Typed measurements remain unverified. This local page cannot create native verification receipts.</p>
+<hr><h2>A/B native source ancestry</h2>
+<p class="note">Paste existing worker records with native source paths and SHA-256 values. Bind workflow step IDs to existing native task IDs. A/B rechecks the original bytes; a graph is not execution proof.</p>
+<label for="ab-records">Recorded native worker sources (JSON list)</label>
+<textarea id="ab-records" placeholder='[{"task_id":"native-task","native_sources":[{"source":"runtime/file.py","sha256":"..."}]}]' rows="5"></textarea>
+<label for="ab-bindings">Workflow step → native task (JSON object)</label>
+<textarea id="ab-bindings" placeholder='{"step1":"native-task"}' rows="3"></textarea>
+<button id="ab-preview">Inspect A/B ancestry</button>
+<button id="ab-record">Attach to pinned revision</button>
+<button id="ab-history">Show source-link history</button>
+<p class="note">Only local source references are retained, in a separate append-only record. Actual code and original worker journals remain in place. Attaching requires an existing pin.</p>
 <hr><h2>Portable drafts</h2><button id="export">Export JSON</button><button id="import">Import JSON</button><input id="file" type="file" accept=".json,application/json" hidden>
 <div id="message" role="status">Loading…</div>
 </section>
@@ -173,6 +183,22 @@ el("refresh").onclick=()=>pinsRefresh().catch(e=>message(e.message,true));
 el("preview").onclick=()=>action("/api/preview");el("compare").onclick=()=>action("/api/diff");el("record").onclick=()=>action("/api/commit");
 el("pin").onclick=()=>{const reason=prompt("Why preserve this workflow revision?");if(reason?.trim())action("/api/pin",{reason:reason.trim()});};
 el("discover").onclick=()=>action("/api/consider",{assessment:{metric:el("metric").value,parent_value:Number(el("baseline").value),branch_value:Number(el("branch-result").value),direction:el("direction").value,comparison_scope:el("scope").value,source_ref:el("source").value,witness_ref:el("witness").value}});
+function abInputs(){
+ const sources=JSON.parse(el("ab-records").value),bindings=JSON.parse(el("ab-bindings").value);
+ if(!Array.isArray(sources)||!bindings||Array.isArray(bindings)||typeof bindings!=="object")
+  throw Error("A/B records require a list and step bindings require an object.");
+ return {source_records:sources,step_bindings:bindings};
+}
+el("ab-preview").onclick=()=>{
+ try{action("/api/ab-preview",abInputs());}catch(e){message(e.message,true);}
+};
+el("ab-record").onclick=()=>{
+ try{action("/api/ab-record",abInputs());}catch(e){message(e.message,true);}
+};
+el("ab-history").onclick=async()=>{
+ try{const rows=await request("/api/ab-links");el("report").textContent=JSON.stringify(rows,null,2);message("Read saved A/B source ancestry links.");}
+ catch(e){message(e.message,true);}
+};
 el("export").onclick=()=>{snapshot();const blob=new Blob([JSON.stringify(draft,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="workflow-draft.json";a.click();URL.revokeObjectURL(url);};
 el("import").onclick=()=>el("file").click();
 el("file").onchange=async e=>{try{const file=e.target.files[0];if(!file)return;const obj=JSON.parse(await file.text());if(!Array.isArray(obj.steps))throw Error("Invalid draft");draft=obj;selected=draft.steps[0]?.id||"";lastPreview=null;render();message("Imported. Preview to validate.");}catch(err){message(err.message,true);}};
