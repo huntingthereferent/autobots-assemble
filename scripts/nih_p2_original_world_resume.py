@@ -115,6 +115,7 @@ def main():
     from systems.workspace.nih_phase1_world_publication_uncertainty import run_world
     from systems.workspace.nih_phase1_world_source_motion import run_source_motion
     from scripts.nih_p2_original_world_joint_witness import relate
+    from scripts.nih_p2_original_world_revision import run_revision
     original_jobs=HandoffRuntime(event_store=RuntimeJournal(native/"runtime.jsonl")).snapshot()
     if len(original_jobs)!=12 or "nih-p2-benchmark-001" not in original_jobs:
         raise ValueError("retained source isn't the original witnessed 12-job Phase 2 game world")
@@ -135,6 +136,7 @@ def main():
         data_dir=native,output_dir=output,
         parent=lambda **_:two_clock)
     cross=relate(motion,report)
+    revision=run_revision(data_dir=native,output_dir=output,two_clock=two_clock)
     after={name:sha256((native/name).read_bytes()).hexdigest() for name in before}
     new_jobs=HandoffRuntime(event_store=RuntimeJournal(native/"runtime.jsonl")).snapshot()
     if before!=after or set(original_jobs)!=set(new_jobs):
@@ -148,7 +150,13 @@ def main():
         or motion.get("actual_world_solved") is not True
         or motion.get("original_journals_preserved") is not True
         or motion.get("new_native_job") is not False
-        or cross.get("two_independent_browser_panels_cross_checked") is not True):
+        or cross.get("two_independent_browser_panels_cross_checked") is not True
+        or revision.get("original_native_jobs")!=12
+        or revision.get("fixed_snapshot_monotonicity_verified") is not True
+        or revision.get("source_changes_break_global_visible_id_monotonicity") is not True
+        or revision.get("original_journals_and_browser_source_unchanged") is not True
+        or revision.get("new_native_job") is not False
+        or revision.get("real_historical_source_withdrawal_authenticated") is not False):
         raise ValueError("continued original world evidence unsupported")
     (output/"nih-p2-original-world-joint-source-publication.json").write_text(
         json.dumps(cross,indent=2,sort_keys=True)+"\n")
@@ -161,9 +169,13 @@ def main():
         "world_actions":report["world_actions"],
         "browser_frames":len(report["observed_browser_frames"]),
         "source_motion_browser_frames":len(motion["actual_browser_source_frames"]),
+        "revision_browser_frames":len(revision["actual_browser_snapshot_frames"]),
+        "source_revision_chronology":revision["chronology_counterexample"],
+        "source_revision_changes_monotonicity":True,
         "joint_source_publication_counterexamples":cross["exact_vs_unknown_publication_counterexamples"],
         "joint_two_panel_witness":True,
-        "original_python_calls":cross["new_original_python_calls"],
+        "original_python_calls":cross["new_original_python_calls"]+len(
+            revision["original_python_snapshot_calls"]),
         "actual_historical_version_fields_authenticated":False,
         "new_checkpoint_claimed":False,"official_NIH_submission":False,
         "retained_original_journal_republished":False,
