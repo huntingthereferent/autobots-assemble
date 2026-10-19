@@ -1,0 +1,160 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WORLD Trial 11 / Missing Collision Evidence</title>
+<style>
+body{background:#12242f;color:#e6f1f8;font:16px system-ui;max-width:1120px;margin:auto;padding:25px}
+p{line-height:1.5;color:#b7ccda}h1{font-size:1.65rem}a{color:#94d9fc}
+button,select{background:#304f63;color:#f3faff;border:1px solid #6f91a1;border-radius:5px;font:inherit;padding:9px;margin:3px}
+canvas{width:100%;background:#0b2130;border-radius:6px}
+pre{font-size:12px;white-space:pre-wrap;max-height:400px;overflow:auto}
+#original{display:none}
+</style></head><body>
+<h1>WORLD · Trial 11 / What would discriminate the impacts?</h1>
+<p><a href="world_ab_active_set_trial.html">Trial 10 source / 35 controlled trials</a>.
+All candidate motion on this page is inherited from independently verified frictionless source states.
+A Coulomb `mu=0.4` cone inequality alone does not establish the actual frictional collision response.
+Position readings shown are <strong>hypothetical partitions</strong>; no material, camera or native source supplied an observation.</p>
+<button id="run">Evaluate missing evidence for all 35 cases</button>
+<label>Case <select id="case"></select></label>
+<label>Hypothetical measurement <select id="sensor"></select></label>
+<button id="reset">Reset</button>
+<p id="status" aria-live="polite">No source outcomes evaluated.</p>
+<canvas id="graph" width="960" height="290" aria-label="Counterfactual source trajectories and possible sensor readouts"></canvas>
+<details><summary>Full source-preserving comparison receipts</summary><pre id="receipt"></pre></details>
+<iframe id="original" src="world_ab_active_set_trial.html" title="Unaltered WORLD Trial 10 candidate source"></iframe>
+<script>
+'use strict';
+window.worldTrial11=(()=>{
+ const TIMES=[.4,.6,1.1],QUANTA=[.1,.01,.001],MU=.4;
+ const round=x=>+x.toFixed(9),cp=x=>JSON.parse(JSON.stringify(x));
+ let state=null,upstream=null,which=0,sensorIndex=0;
+ function build(previous){
+  if(previous.schema!=='world-ab-two-contact-active-set-enumeration/v1'||previous.cases.length!==35)
+   throw Error('original source Trial10 not present');
+  const original=window.document.getElementById('original').contentWindow.worldTrial10.upstream();
+  if(!original||original.schema!=='world-ab-two-contact-incidence-stress/v1')throw Error('original Trial09 source absent');
+  const cases=previous.cases.map((c,i)=>{
+   const source=original.cases[i],live=c.alternatives.filter(q=>q.status==='admissible-local-model');
+   if(live.length!==c.admissible_count)throw Error('source candidate count modified');
+   const inc=source.incoming_velocity,normals=source.normals;
+   const candidates=live.map(q=>{
+    const active=q.active_indices,jn=q.normal_impulses;
+    const bounds=active.map(k=>round(MU*jn[k]));
+    const reflect=normals.every(n=>Math.abs((q.outgoing_velocity[0]+inc[0])*n[0]+(q.outgoing_velocity[1]+inc[1])*n[1])<=5e-8);
+    return {active_indices:cp(active),source_ids:cp(q.active_ids),
+      outgoing_velocity:cp(q.outgoing_velocity),
+      necessary_mu_point_four_cone:bounds.every(b=>b>=0),
+      tangent_impulses_under_original_mu_zero_model:active.map(()=>0),
+      mu_point_four_normal_cone_bounds:bounds,
+      hypothesis_both_touching_normals_restitute:reflect,
+      has_actual_outgoing_motion_measurement:false};
+   });
+   const sensors=[];
+   for(const time of TIMES)for(const quantum of QUANTA){
+    const lookup=new Map();
+    for(const q of live){
+     const f=q.frames[Math.round(time/.05)];
+     if(!f||Math.abs(f.time-time)>1e-8)throw Error('missing source motion frame');
+     const bin=f.position.map(v=>Math.round(v/quantum));
+     const key=bin.join(',');
+     if(!lookup.has(key))lookup.set(key,{bin_xy:bin,possible_active_sets:[]});
+     lookup.get(key).possible_active_sets.push(cp(q.active_indices));
+    }
+    const partitions=[...lookup.values()].sort((x,y)=>x.bin_xy[0]-y.bin_xy[0]||x.bin_xy[1]-y.bin_xy[1]);
+    sensors.push({virtual_time:time,position_quantum:quantum,
+      hypothetical_reading_partitions:partitions,
+      distinguishable_bins:partitions.length,
+      would_uniquely_discriminate_if_a_matching_reading_were_observed:partitions.length===live.length,
+      measured_reading:null});
+   }
+   const first=live.length>1?sensors.find(x=>x.would_uniquely_discriminate_if_a_matching_reading_were_observed):null;
+   return {original_index:c.original_index,incoming_angle_degrees:c.incoming_angle_degrees,
+    surface_B_rotation_degrees:c.surface_B_rotation_degrees,geometry_kind:c.geometry_kind,
+    source_trial10_classification:c.classification,original_admissible_count:live.length,
+    candidates,sensors,
+    necessary_friction_cone_retained_count:candidates.filter(x=>x.necessary_mu_point_four_cone).length,
+    additional_all_normals_restitution_retained_count:candidates.filter(x=>x.hypothesis_both_touching_normals_restitute).length,
+    first_hypothetical_discriminating_sensor:first?{virtual_time:first.virtual_time,position_quantum:first.position_quantum}:null,
+    actual_source_sensor_reading_available:false,physical_outcome_selected:false};
+  });
+  const counts={
+   ambiguous_cases:cases.filter(c=>c.original_admissible_count>1).length,
+   friction_cone_only_narrowed_cases:cases.filter(c=>c.necessary_friction_cone_retained_count<c.original_admissible_count).length,
+   all_normals_rest_narrowed_cases:cases.filter(c=>c.additional_all_normals_restitution_retained_count<c.original_admissible_count).length,
+   all_normals_rest_eliminated_cases:cases.filter(c=>c.additional_all_normals_restitution_retained_count===0).length,
+   ambiguous_cases_with_hypothetical_distinguishing_sensor:cases.filter(c=>c.original_admissible_count>1&&c.first_hypothetical_discriminating_sensor!==null).length,
+   ambiguous_cases_not_distinguished_at_tested_sensor_settings:cases.filter(c=>c.original_admissible_count>1&&c.first_hypothetical_discriminating_sensor===null).length
+  };
+  return {schema:'world-ab-contact-discrimination-hypotheses/v1',
+    source_trial10_schema:previous.schema,source_trial09_schema:original.schema,
+    original_source_geometry:cp(previous.original_source_geometry),
+    source_trial10_counts:cp(previous.counts),
+    source_trial09_two_active_counts:cp(previous.original_trial09_two_active_counts),
+    sensor_times:cp(TIMES),sensor_position_quanta:cp(QUANTA),
+    friction_coefficient_hypothesis:MU,cases,counts,
+    friction_cone_check_is_necessary_not_sufficient:true,
+    all_normals_restitution_is_extra_unobserved_postulate:true,
+    all_sensor_readings_are_counterfactual:true,
+    source_physical_outgoing_velocities_measured:false,
+    original_trial06_mu_point_four_solver_resolved:false,
+    actual_outcome_selected:false,external_physical_blueprint_constructed:false};
+ }
+ const ctx=document.getElementById('graph').getContext('2d'),X=x=>18+38*x,Y=y=>15+42*y;
+ function draw(){
+  ctx.fillStyle='#0b2130';ctx.fillRect(0,0,960,290);
+  if(!state)return;
+  const c=state.cases[which],source=upstream.cases[which],s=c.sensors[sensorIndex],
+     original=document.getElementById('original').contentWindow.worldTrial10.upstream().cases[which];
+  original.surfaces.forEach((seg,i)=>{
+   ctx.strokeStyle=i?'#84bda4':'#f2ad81';ctx.lineWidth=3;ctx.beginPath();
+   ctx.moveTo(X(seg.endpoints[0][0]),Y(seg.endpoints[0][1]));
+   ctx.lineTo(X(seg.endpoints[1][0]),Y(seg.endpoints[1][1]));ctx.stroke();
+  });
+  const palette=['#69aee0','#f3dc9a','#94e1c0'];
+  const actual=source.alternatives.filter(q=>q.status==='admissible-local-model');
+  actual.forEach((choice,i)=>{
+   ctx.strokeStyle=palette[i];ctx.lineWidth=2;ctx.beginPath();
+   choice.frames.forEach((f,j)=>j?ctx.lineTo(X(f.position[0]),Y(f.position[1])):ctx.moveTo(X(f.position[0]),Y(f.position[1])));
+   ctx.stroke();
+   const f=choice.frames[Math.round(s.virtual_time/.05)],p=f.position;
+   ctx.beginPath();ctx.arc(X(p[0]),Y(p[1]),5,0,2*Math.PI);
+   ctx.fillStyle=palette[i];ctx.fill();
+  });
+  document.getElementById('status').textContent=
+   'Case '+(which+1)+'/35: '+c.original_admissible_count+
+   ' source candidates, '+s.distinguishable_bins+' hypothetical position bins at virtual time '+s.virtual_time+
+   ' (grid '+s.position_quantum+') · physical outcome NOT OBSERVED · friction cone alone narrowed 0';
+ }
+ document.getElementById('run').onclick=()=>{
+  try{
+   const fr=document.getElementById('original').contentWindow;
+   if(!fr?.worldTrial10)throw Error('unaltered Trial10 source page not loaded');
+   fr.document.getElementById('run').click();
+   upstream=fr.worldTrial10.receipt();
+   if(!upstream)throw Error('unaltered Trial10 computation not available');
+   state=build(upstream);which=sensorIndex=0;
+   const sel=document.getElementById('case');sel.innerHTML='';
+   state.cases.forEach((c,i)=>{
+    const opt=document.createElement('option');opt.value=String(i);
+    opt.textContent=(i+1)+': '+c.original_admissible_count+' candidates, '+c.incoming_angle_degrees+'° / '+c.surface_B_rotation_degrees+'°';
+    sel.append(opt);
+   });
+   const sensors=document.getElementById('sensor');sensors.innerHTML='';
+   state.cases[0].sensors.forEach((s,i)=>{
+    const opt=document.createElement('option');opt.value=String(i);
+    opt.textContent='t='+s.virtual_time+', hypothetical grid '+s.position_quantum;
+    sensors.append(opt);
+   });
+   document.getElementById('receipt').textContent=JSON.stringify(state,null,2);draw();
+  }catch(e){state=null;document.getElementById('status').textContent='Rejected: '+e.message;}
+ };
+ document.getElementById('case').onchange=v=>{if(state){which=+v.target.value;draw();}};
+ document.getElementById('sensor').onchange=v=>{if(state){sensorIndex=+v.target.value;draw();}};
+ document.getElementById('reset').onclick=()=>{
+  state=upstream=null;which=sensorIndex=0;
+  document.getElementById('case').innerHTML='';document.getElementById('sensor').innerHTML='';
+  document.getElementById('receipt').textContent='';
+  document.getElementById('status').textContent='No source outcomes evaluated.';draw();
+ };
+ draw();return {receipt:()=>state?cp(state):null,source:()=>upstream?cp(upstream):null,
+  selected:()=>({case:which,sensor:sensorIndex})};
+})();
+</script></body></html>
