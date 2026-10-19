@@ -75,11 +75,19 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.page.locator("#lock").click()
 
     def import_observation(self,record):
+        # A file input change fires an async file.text() read. Do not assert on
+        # the previous import's status before the new source replay finishes.
+        label=self.page.locator("#import-observation-result")
+        previous=int(label.get_attribute("data-review-count") or "0")
         self.page.locator("#cross-import-file").set_input_files({
             "name":"independent_observation.json",
             "mimeType":"application/json",
             "buffer":json.dumps(record).encode("utf8"),
         })
+        self.page.wait_for_function(
+            "(old) => Number(document.querySelector('#import-observation-result').dataset.reviewCount || '0') > old",
+            arg=previous
+        )
 
     def exported_observation(self):
         with self.page.expect_download() as event:
