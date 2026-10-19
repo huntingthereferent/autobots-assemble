@@ -1,0 +1,39 @@
+name: ARC3 real SP80 multi-object coordinate ACTION6 selection
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_multi_select.py'
+      - '.github/workflows/arc3-sp80-multi-select.yml'
+jobs:
+  original-native-multi-object-selection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official native ARC public SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Unit-check all native coordinate-bearing selection programs
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_multi_select import PLANS,RESETS,parse_plan
+          assert len(PLANS)==17 and RESETS==2
+          assert len({name for name,_ in PLANS})==17
+          for name,raw in PLANS:
+              steps=parse_plan(raw)
+              assert len(steps)>=3
+              assert all(action!=6 or xy is not None for action,xy in steps)
+              assert all(0<=xy[0]<64 and 0<=xy[1]<64 for _,xy in steps if xy)
+          print('UNIT ONLY: source all-coordinate ACTION6 and native trial words fixed')
+          PY
+      - name: Execute real native SP80 multiple bar selection and objective trial
+        run: python -m work.arc3.native_sp80_multi_select --out runtime/data/arc3/sp80-multi-select.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-multi-select
+          path: runtime/data/arc3/sp80-multi-select.*
+          if-no-files-found: error
+          retention-days: 14
