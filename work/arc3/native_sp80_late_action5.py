@@ -110,6 +110,7 @@ def main():
                 "insertion_step":intervention,
                 "replicate":replicate,
                 "original_native_record":record,
+                "original_native_records":{1:record},
                 # old_summary expects stage0/1 buckets and pairs. No fake stage0.
                 "admitted_stage1_actions":rows,
                 "unknown_original_actions":{1:unknown},
