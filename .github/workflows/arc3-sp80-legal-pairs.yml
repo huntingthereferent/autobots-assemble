@@ -1,0 +1,36 @@
+name: ARC3 genuine SP80 stage1 native action compositions
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_legal_pairs.py'
+      - '.github/workflows/arc3-sp80-legal-pairs.yml'
+jobs:
+  original-native-pairs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official original ARC native SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Check prospectively fixed native short-word candidates (unit only)
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_legal_pairs import WORDS,RESETS,PREFIX
+          assert PREFIX=='454545' and RESETS==2
+          assert WORDS==('12','21','34','43','56','65',
+                         '14','41','23','32','45','54')
+          assert len(set(WORDS))==12
+          print('UNIT ONLY: source-control composition words frozen before execution')
+          PY
+      - name: Run genuine original stage1 native compositions and progress observations
+        run: python -m work.arc3.native_sp80_legal_pairs --out runtime/data/arc3/sp80-legal-pairs.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-legal-pairs
+          path: runtime/data/arc3/sp80-legal-pairs.*
+          if-no-files-found: error
+          retention-days: 14
