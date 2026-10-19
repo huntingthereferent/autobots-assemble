@@ -66,10 +66,9 @@ def expected_receipt(data):
 
 
 class OwnerGameReadyBridge:
-    def __init__(self, *, runtime, workstation, register=True):
+    def __init__(self, *, runtime, workstation):
         self.runtime, self.workstation = runtime, workstation
-        if register:
-            runtime.register_evidence_verifier(VERIFIER, self._verify)
+        runtime.register_evidence_verifier(VERIFIER, self._verify)
 
     def _inputs(self):
         from .owner_temporal_handoff import unpack_zip, unpack_temporal, witness_pair, SOURCES

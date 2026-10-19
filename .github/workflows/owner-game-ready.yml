@@ -5,6 +5,7 @@ on:
       - 'systems/workspace/owner_game_ready*'
       - 'systems/workspace/owner_game_ready_source/**'
       - 'systems/workspace/game_worker_ready_bridge.py'
+      - 'systems/workspace/controls.py'
       - 'systems/workspace/owner_native_evidence_vault.py'
       - 'systems/workspace/owner_temporal_handoff.py'
       - 'network/tests/test_owner_game_ready.py'

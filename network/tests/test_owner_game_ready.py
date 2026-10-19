@@ -65,12 +65,6 @@ class OwnerGameReadyTests(unittest.TestCase):
             capture_output=True,text=True,timeout=8)
         self.assertEqual(proc.returncode,2)
 
-    def test_delegated_bridge_does_not_register_a_second_native_verifier(self):
-        class ExistingRuntime:
-            def register_evidence_verifier(self,*args):
-                raise AssertionError("duplicate native verifier")
-        OwnerGameReadyBridge(runtime=ExistingRuntime(),workstation=object(),register=False)
-
     def test_owner_merge_consent_rejects_single_parent_replay_and_changed_scope(self):
         with TemporaryDirectory() as tmp:
             root = Path(tmp)
