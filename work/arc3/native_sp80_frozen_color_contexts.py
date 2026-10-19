@@ -57,6 +57,17 @@ def advertised(obs):
             for x in (getattr(obs,"available_actions",[]) or [])}
 
 
+def classify_original_native_terminal(observation):
+    """Classify explicit original SDK state, not returned frame shape."""
+    state=getattr(observation,"state",None)
+    name=str(getattr(state,"name",state)).rsplit(".",1)[-1]
+    if name=="WIN":
+        return "NATIVE_TERMINAL_WIN"
+    if name=="GAME_OVER":
+        return "NATIVE_TERMINAL_GAME_OVER"
+    return None
+
+
 def steps_on_real_game(arcade,word,stage,replicate):
     env=arcade.make(GAME)
     if env is None: raise RuntimeError("real SP80 not available")
@@ -74,6 +85,7 @@ def steps_on_real_game(arcade,word,stage,replicate):
     stage_root_hash=origin_hash if stage==0 else None
     stage_root_index=0 if stage==0 else None
     interrupted=None
+    original_native_terminal=None
     for i,letter in enumerate(full_word,1):
         control=int(letter)
         if control not in advertised(obs):
@@ -96,7 +108,15 @@ def steps_on_real_game(arcade,word,stage,replicate):
         level=int(getattr(after_obs,"levels_completed",0))
         state=str(getattr(after_obs,"state",None))
         if next_grid is None:
-            interrupted="UNKNOWN_NONSTANDARD_FRAME"
+            classification=classify_original_native_terminal(after_obs)
+            interrupted=classification or "UNKNOWN_NONSTANDARD_FRAME"
+            original_native_terminal=({
+                "native_action_index":i,
+                "context_action_step":i-boundary if i>boundary else None,
+                "state":state,"level":level,
+                "frame_available":False,
+                "source_shape":shape,
+            } if classification else None)
             native_errors.append({"at":i,"level":level,"state":state,
                                   "source_shape":shape})
             break
@@ -112,6 +132,17 @@ def steps_on_real_game(arcade,word,stage,replicate):
             "changed_native_cells":int(np.count_nonzero(frames[-2]!=next_grid)),
         })
         obs=after_obs
+        classification=classify_original_native_terminal(after_obs)
+        if classification:
+            original_native_terminal={
+                "native_action_index":i,
+                "context_action_step":i-boundary if i>boundary else None,
+                "state":state,"level":level,
+                "frame_available":True,
+                "full_native_frame_hash":hash_grid(next_grid),
+            }
+            interrupted=classification
+            break
         if stage==1 and i<=boundary:
             if (i<boundary and level!=0) or (i==boundary and level!=1):
                 interrupted="UNKNOWN_STAGE1_PREFIX_NOT_REPRODUCED"
@@ -136,6 +167,7 @@ def steps_on_real_game(arcade,word,stage,replicate):
         "complete":completed,
         "frame_count":len(frames),
         "transition_records":transitions,
+        "terminal_observation":original_native_terminal,
         "errors":native_errors,
     },np.stack(frames)
 
