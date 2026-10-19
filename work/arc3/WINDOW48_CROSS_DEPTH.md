@@ -33,6 +33,24 @@ There is no padding or synthesized pause step. The selected candidate and
 total candidate count are observations; neither is a win, an inferred causal
 explanation, a native ARC game result or a claim of real-world physics.
 
+## Import and inspect another exported observation
+
+In the same live WORLD48 game, choose **Import research observation JSON**
+under **Inspect imported research observation**, and select a previously
+exported `original-window48-cross-depth-observation/v1` JSON file. The
+browser replays that observation from the exact original law pair named by the
+file, **even if a different challenge is active**. It checks the exact schema
+and scope, the source-owned law pair, bounded action words, selected depths,
+all replayed state endpoints, the qualifying pair count, and the earliest
+qualifying pair. Malformed, altered or over-200 KB files are rejected.
+
+A successful import appears **only in a separate read-only research pane**.
+It does not replace or select the current challenge, load paths into the
+game, persist imported observations, award progress, or issue any winning
+certificate. Imported previews disappear on reload or when you choose
+**Clear imported observation**. A genuinely complete source verifier
+remains available in Python for checks independent of the browser UI.
+
 The JSON is **not signed**. Source replay verifies its claims against the
 original mathematical definitions, not who generated the file, when it was
 recorded, or ownership of a browser session. Old
