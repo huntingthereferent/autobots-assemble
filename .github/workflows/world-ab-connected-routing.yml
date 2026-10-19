@@ -1,0 +1,72 @@
+name: WORLD — Source-Derived Connected Surface Routing Trial 05
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-ab-connected-routing.yml'
+      - 'systems/workspace/world_ab_connected_routing.py'
+      - 'network/tests/test_world_ab_connected_routing.py'
+      - 'docs/world_ab_connected_routing.html'
+      - 'scripts/verify_world_ab_connected_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  two-source-connected-geometry-and-independent-probes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout original WORLD source
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independently verify finite surface intersection and first-contact split
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_connected_routing \
+            network.tests.test_world_ab_oblique_rotation \
+            network.tests.test_world_ab_iterated_surfaces
+      - name: Save independent probe source receipts
+        run: |
+          mkdir -p "$RUNNER_TEMP/connected-world"
+          python - <<'PY'
+          import json,os,pathlib
+          from systems.workspace.world_ab_connected_routing import run
+          from network.tests.test_world_ab_connected_routing import verify_source_geometry,independently_verify_route
+          result=run()
+          assert verify_source_geometry(result["geometry"])
+          assert independently_verify_route(result["geometry"],result)
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"connected-world"/"world_ab_connected_native.json"
+          p.write_text(json.dumps(result,sort_keys=True,indent=2)+"\n")
+          print(json.dumps({
+            "schema":result["schema"],
+            "junction":result["geometry"]["junction"],
+            "route_changed_probe_levels":result["route_changed_probe_levels"],
+            "distinct_first_contacts":result["distinct_first_contacts"],
+            "original_target_shapes_generated":False},sort_keys=True))
+          PY
+      - name: Install real Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Play original WORLD with two source-derived connected faces
+        run: |
+          python -m scripts.verify_world_ab_connected_browser \
+            --output-dir "$RUNNER_TEMP/connected-world"
+      - name: Retain native, screenshot, browser first-contact witness and original source
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-ab-connected-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/connected-world/world_ab_connected_native.json
+            ${{ runner.temp }}/connected-world/world_ab_connected_browser.json
+            ${{ runner.temp }}/connected-world/world_ab_connected_witness.json
+            ${{ runner.temp }}/connected-world/world_ab_connected_browser.png
+            docs/world_ab_connected_routing.html
+          retention-days: 30
+          if-no-files-found: warn
