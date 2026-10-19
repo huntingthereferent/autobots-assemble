@@ -5,6 +5,8 @@ on:
       - 'scripts/nih_p2_original_world_resume.py'
       - 'scripts/nih_p2_original_world_joint_witness.py'
       - 'network/tests/test_nih_p2_original_world_joint_witness.py'
+      - 'scripts/nih_p2_original_world_revision.py'
+      - 'network/tests/test_nih_p2_original_world_revision.py'
       - '.github/workflows/nih-p2-original-world-retained-continuation.yml'
   push:
     branches: [main]
@@ -12,6 +14,8 @@ on:
       - 'scripts/nih_p2_original_world_resume.py'
       - 'scripts/nih_p2_original_world_joint_witness.py'
       - 'network/tests/test_nih_p2_original_world_joint_witness.py'
+      - 'scripts/nih_p2_original_world_revision.py'
+      - 'network/tests/test_nih_p2_original_world_revision.py'
       - '.github/workflows/nih-p2-original-world-retained-continuation.yml'
 permissions:
   contents: read
@@ -40,7 +44,7 @@ jobs:
       - name: Reject false publication certainty, altered source versions and duplicate frames
         run: |
           cd control
-          python -m unittest -v network.tests.test_nih_p2_original_world_joint_witness
+          python -m unittest -v network.tests.test_nih_p2_original_world_joint_witness network.tests.test_nih_p2_original_world_revision
       - name: Retrieve only exact retained original W13 twelve-job world evidence
         uses: actions/download-artifact@v4
         with:
@@ -66,5 +70,7 @@ jobs:
             ${{ runner.temp }}/continued-original-w13/nih-phase1-world-source-motion.json
             ${{ runner.temp }}/continued-original-w13/nih-phase1-world-source-motion.png
             ${{ runner.temp }}/continued-original-w13/nih-p2-original-world-joint-source-publication.json
+            ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.json
+            ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.png
           retention-days: 30
           if-no-files-found: warn
