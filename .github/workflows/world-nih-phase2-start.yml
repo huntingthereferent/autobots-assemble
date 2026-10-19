@@ -1,0 +1,97 @@
+name: WORLD branch — start retained NIH Phase 2 W13 game
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-nih-phase2-start.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-world-phase2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout unchanged WORLD contract
+        uses: actions/checkout@v5
+        with:
+          path: world
+          persist-credentials: false
+      - name: Checkout previously witnessed Phase 2 continuation controls
+        uses: actions/checkout@v5
+        with:
+          ref: 739335abf691b41592592013026cd5fc68156eba
+          path: control
+          persist-credentials: false
+      - name: Checkout exact original twelve-job source
+        uses: actions/checkout@v5
+        with:
+          ref: 34652b7b788fe21cc470273c953ae0ea1799b1e9
+          path: original
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Confirm WORLD branch referent and independent NIH source boundary
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json,subprocess
+          root=Path('world')
+          document=(root/'systems/workspace/WORLD_W13_MOVEMENT_01.md').read_text()
+          source=json.loads((root/'network/tests/fixtures/world_w13_movement_01.json').read_text())
+          assert source["contract"]=="game-w13-multiworld-v1"
+          assert [w["id"] for w in source["worlds"]]==["first-room","second-room"]
+          assert source["actions"]==["right","interact","advance","right","interact"]
+          assert "BUILD NOT YET VERIFIED" in document
+          assert "W13" in document and "WORLD" in document
+          head=subprocess.check_output(['git','-C','world','rev-parse','--abbrev-ref','HEAD'],text=True).strip()
+          # checkout may use detached HEAD: GITHUB_REF_NAME is the definitive event ref.
+          import os
+          assert os.environ["GITHUB_REF_NAME"]=="world/w13-two-world-advance-contract-20261016"
+          print(json.dumps({"world_branch":os.environ["GITHUB_REF_NAME"],
+            "world_contract":"game-w13-multiworld-v1",
+            "contract_original_bytes_unchanged":True,
+            "phase2_source_is_later_separately_authenticated_original_w13":True,
+            "no_world_build_promotion_claimed":True},sort_keys=True))
+          PY
+      - name: Install native source replay stack and actual Chromium
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Independently test Phase 2 game-world source/provenance controls
+        run: |
+          cd control
+          python -m unittest -v \
+            network.tests.test_nih_p2_original_world_joint_witness \
+            network.tests.test_nih_p2_original_world_revision
+      - name: Fetch exact owner-retained twelve-job native journal
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 39160329599
+          name: nih-phase1-world-publication-uncertainty-39160329599-1
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/source-world
+      - name: Start NIH Phase 2 replay inside original played W13 game
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ORIGINAL_SOURCE_DIR: ${{ github.workspace }}/original
+        run: |
+          python -I "$GITHUB_WORKSPACE/control/scripts/nih_p2_original_world_resume.py"
+      - name: Preserve fresh Phase 2 game-world evidence, without republishing original journal
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-branch-nih-phase2-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/continued-original-w13/retained-world-reentry-receipt.json
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-publication-uncertainty.json
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-publication-uncertainty.png
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-source-motion.json
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-source-motion.png
+            ${{ runner.temp }}/continued-original-w13/nih-p2-original-world-joint-source-publication.json
+            ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.json
+            ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.png
+          retention-days: 30
+          if-no-files-found: warn
