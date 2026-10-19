@@ -53,7 +53,11 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 <button id="idea-fork">Fork this pinned branch for structural changes</button>
 <label for="idea-step">Worker's current step</label>
 <select id="idea-step"></select>
-<button id="idea-observe">Observe first-hop frontier</button>
+<button id="idea-observe">Preview first-hop by label</button>
+<label for="idea-handoff">Existing source-owned handoff ID (for worker movement)</label>
+<input id="idea-handoff" placeholder="repo-work-&lt;recorded task ID&gt;">
+<button id="idea-native-observe">Observe from native handoff</button>
+<p class="note">A worker movement requires an actual live handoff, matching its source task and assigned actor. A label-only preview is not a native movement.</p>
 <pre id="idea-view">No worker view selected.</pre>
 <label for="idea-target">Visible related branch (never auto-ranked)</label>
 <select id="idea-target"></select>
@@ -135,6 +139,7 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 const TOKEN="__EDITOR_TOKEN__",el=id=>document.getElementById(id);
 let draft=null,catalog=[],pins=[],selected="",lastPreview=null;
 let activeIdeas=[],activeIdeaId="",ideaBranches=[],currentFrontier=null;
+let frontierIsNative=false;
 const copy=x=>JSON.parse(JSON.stringify(x));
 function message(s,bad=false){el("message").textContent=s;el("message").className=bad?"err":"";}
 async function request(route,data){
@@ -246,7 +251,8 @@ el("idea-current").onchange=()=>{
  const {row,pin}=selection();
  el("idea-worker").value=row?.worker||"";
  options("idea-step",pin?.draft.steps.map(s=>[s.id,s.id+" · "+s.label])||[]);
- currentFrontier=null;options("idea-target",[["","Inspect first-hop frontier first"]]);
+ currentFrontier=null;frontierIsNative=false;
+ options("idea-target",[["","Inspect first-hop frontier first"]]);
 };
 el("idea-bind").onclick=async()=>{
  try{
@@ -273,6 +279,7 @@ el("idea-observe").onclick=async()=>{
   currentFrontier=await request("/api/idea-frontier",{
    idea_id:activeIdeaId,revision:row.revision,
    worker:row.worker,step_id:el("idea-step").value});
+  frontierIsNative=false;
   el("idea-view").textContent=JSON.stringify(currentFrontier,null,2);
   options("idea-target",[["","Choose a visible first-hop branch"],
     ...currentFrontier.visible_branches.map(x=>[x.revision,
@@ -280,16 +287,36 @@ el("idea-observe").onclick=async()=>{
   message("Observed only the current step and source-recorded first-hop relationships.");
  }catch(e){message(e.message,true);}
 };
+el("idea-native-observe").onclick=async()=>{
+ try{
+  const {row}=selection();
+  if(!row)throw Error("Choose a bound source workflow branch.");
+  const handoffId=el("idea-handoff").value.trim();
+  if(!handoffId)throw Error("An existing native handoff ID is required.");
+  currentFrontier=await request("/api/idea-native-frontier",{
+    handoff_id:handoffId,revision:row.revision,step_id:el("idea-step").value});
+  frontierIsNative=true;
+  if(currentFrontier.idea.idea_id!==activeIdeaId||
+     currentFrontier.position.worker!==row.worker)
+    throw Error("Native handoff does not fit selected idea and worker position.");
+  el("idea-view").textContent=JSON.stringify(currentFrontier,null,2);
+  options("idea-target",[["","Choose a visible direct branch"],
+    ...currentFrontier.visible_branches.map(x=>[x.revision,
+      x.relationship+" · "+x.worker+" · "+x.revision.slice(0,8)])]);
+  message("Native handoff checked. Only this recorded task's first-hop branch relationships are visible.");
+ }catch(e){frontierIsNative=false;currentFrontier=null;message(e.message,true);}
+};
 async function ideaProposal(kind){
  try{
   const {row}=selection();
-  if(!row||!currentFrontier)throw Error("Inspect a specific worker frontier first.");
+  if(!row||!currentFrontier||!frontierIsNative)
+    throw Error("Inspect a valid native source-owned handoff before proposing movement.");
   if(currentFrontier.position.revision!==row.revision||
      currentFrontier.position.step_id!==el("idea-step").value)
      throw Error("Worker position changed; inspect first.");
-  const result=await request("/api/idea-propose",{
-   kind,idea_id:activeIdeaId,revision:row.revision,
-   worker:row.worker,step_id:el("idea-step").value,
+  const result=await request("/api/idea-native-propose",{
+   kind,handoff_id:el("idea-handoff").value.trim(),revision:row.revision,
+   step_id:el("idea-step").value,
    target_revision:el("idea-target").value,reason:el("idea-reason").value});
   el("idea-view").textContent=JSON.stringify(result,null,2);
   message(kind+" proposal saved; no worker executed, switched or promoted.");
