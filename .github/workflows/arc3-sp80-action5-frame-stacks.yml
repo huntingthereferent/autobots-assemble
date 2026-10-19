@@ -1,0 +1,40 @@
+name: ARC3 original SP80 full native ACTION5 frame stacks
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_action5_frame_stacks.py'
+      - '.github/workflows/arc3-sp80-action5-frame-stacks.yml'
+jobs:
+  original-native-complete-frame-return:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official public original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Validate frozen native controls and ACTION6 coordinate contract
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_action5_frame_stacks import PLANS,RESETS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(PLANS)==12 and RESETS==2
+          for name,program in PLANS:
+              acts=parse_plan(program)
+              assert acts
+              assert all(n!=6 or xy is not None for n,xy in acts)
+          assert all('5' in program.split() for name,program in PLANS
+                     if 'control' not in name)
+          print('UNIT ONLY: preserved real native SDK frame-stack trial controls')
+          PY
+      - name: Play original SP80 and retain EVERY actual SDK returned frame
+        run: python -m work.arc3.native_sp80_action5_frame_stacks --out runtime/data/arc3/sp80-action5-frame-stacks.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-action5-frame-stacks
+          path: runtime/data/arc3/sp80-action5-frame-stacks.*
+          if-no-files-found: error
+          retention-days: 14
