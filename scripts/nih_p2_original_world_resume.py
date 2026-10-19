@@ -113,6 +113,8 @@ def main():
     from runtime.journal import RuntimeJournal
     from systems.workspace.controls import reverify_job
     from systems.workspace.nih_phase1_world_publication_uncertainty import run_world
+    from systems.workspace.nih_phase1_world_source_motion import run_source_motion
+    from scripts.nih_p2_original_world_joint_witness import relate
     original_jobs=HandoffRuntime(event_store=RuntimeJournal(native/"runtime.jsonl")).snapshot()
     if len(original_jobs)!=12 or "nih-p2-benchmark-001" not in original_jobs:
         raise ValueError("retained source isn't the original witnessed 12-job Phase 2 game world")
@@ -121,6 +123,18 @@ def main():
         or verified.get("executed") is not False):
         raise ValueError("original Phase 2 benchmark is not freshly reverified")
     report=run_world(data_dir=native,output_dir=output)
+    # The original publisher-observation run already replayed and validated
+    # the exact original two-clock parent; do not create a second workstation.
+    two_clock=json.loads((output/"nih-phase1-two-clock-world-report.json").read_text())
+    if (two_clock.get("schema")!="nih-phase1-original-w13-world-two-clock/v1"
+        or two_clock.get("original_native_jobs")!=12
+        or two_clock.get("independent_source_oracle_agreed") is not True
+        or two_clock.get("preserved_original_native_ancestry") is not True):
+        raise ValueError("fresh original two-clock parent evidence missing")
+    motion=run_source_motion(
+        data_dir=native,output_dir=output,
+        parent=lambda **_:two_clock)
+    cross=relate(motion,report)
     after={name:sha256((native/name).read_bytes()).hexdigest() for name in before}
     new_jobs=HandoffRuntime(event_store=RuntimeJournal(native/"runtime.jsonl")).snapshot()
     if before!=after or set(original_jobs)!=set(new_jobs):
@@ -130,8 +144,14 @@ def main():
         or report.get("independent_three_state_policy_verified") is not True
         or report.get("new_native_job") is not False
         or report.get("new_NIH_checkpoint") is not False
-        or report.get("real_historical_publication_authenticated") is not False):
+        or report.get("real_historical_publication_authenticated") is not False
+        or motion.get("actual_world_solved") is not True
+        or motion.get("original_journals_preserved") is not True
+        or motion.get("new_native_job") is not False
+        or cross.get("two_independent_browser_panels_cross_checked") is not True):
         raise ValueError("continued original world evidence unsupported")
+    (output/"nih-p2-original-world-joint-source-publication.json").write_text(
+        json.dumps(cross,indent=2,sort_keys=True)+"\n")
     receipt={
         "schema":"nih-p2-retained-original-w13-world-reentry/v1",
         "source_run":RUN,"source_artifact":ARTIFACT,"source_commit":SOURCE,
@@ -140,7 +160,10 @@ def main():
         "original_game_played_again":True,"native_jobs_added":0,
         "world_actions":report["world_actions"],
         "browser_frames":len(report["observed_browser_frames"]),
-        "original_python_calls":len(report["actual_original_python_calls"]),
+        "source_motion_browser_frames":len(motion["actual_browser_source_frames"]),
+        "joint_source_publication_counterexamples":cross["exact_vs_unknown_publication_counterexamples"],
+        "joint_two_panel_witness":True,
+        "original_python_calls":cross["new_original_python_calls"],
         "actual_historical_version_fields_authenticated":False,
         "new_checkpoint_claimed":False,"official_NIH_submission":False,
         "retained_original_journal_republished":False,
@@ -150,5 +173,6 @@ def main():
     print(json.dumps(receipt,sort_keys=True))
 
 if __name__=="__main__":
+    sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
     sys.path.insert(0,str(Path(os.environ["ORIGINAL_SOURCE_DIR"]).resolve()))
     main()
