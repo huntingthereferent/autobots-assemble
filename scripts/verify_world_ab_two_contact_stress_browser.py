@@ -26,7 +26,7 @@ def verify(folder):
                 raise ValueError("browser preset synthetic outcomes")
             page.locator("#run").click()
             actual=page.evaluate("window.worldTrial09.receipt()")
-            if actual is None:raise ValueError("browser failed to calculate 35 controls")
+            if actual is None:raise ValueError("browser failed to calculate 35 controls: "+page.locator("#state").inner_text()+"; errors="+repr(errors))
             subset={k:native[k] for k in (
                 "schema","original_source_geometry","incoming_angle_grid",
                 "surface_rotation_grid","speed","controlled_contact_lead",

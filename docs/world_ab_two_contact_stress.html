@@ -66,9 +66,9 @@ window.worldTrial09=(()=>{
   if(ns.some((n,i)=>Math.abs(dot(out,n)+incoming[i])>3e-8||dot(out,n)<=0))throw Error('simultaneous normal restitution unsatisfied');
   const b=dot(v,v),e=dot(out,out);
   if(Math.abs(e-b)>3e-8)throw Error('frictionless restitution generated/lost energy');
-  return {normal_impulses:impulses.map(rd),incoming_normal_speeds:incoming.map(rd),
+  return {normal_impulses:impulses.map(x=>rd(x)),incoming_normal_speeds:incoming.map(x=>rd(x)),
    outgoing_normal_speeds:ns.map(n=>rd(dot(out,n))),
-   incoming_velocity:v.map(rd),outgoing_velocity:out.map(rd),
+   incoming_velocity:v.map(x=>rd(x)),outgoing_velocity:out.map(x=>rd(x)),
    incoming_spin:0,outgoing_spin:0,kinetic_energy_before:rd(.5*b),kinetic_energy_after:rd(.5*e),
    friction:0,normal_restitution:1,normal_matrix_determinant:rd(det)};
  }
@@ -76,8 +76,8 @@ window.worldTrial09=(()=>{
   const {surfaces,ns,kind}=arrange(faces,center,normals,offset),vin=[-SPEED*Math.cos(angle*Math.PI/180),-SPEED*Math.sin(angle*Math.PI/180)];
   const start=sub(center,mul(LEAD,vin));
   const record={incoming_angle_degrees:angle,surface_B_rotation_degrees:offset,geometry_kind:kind,
-   surfaces,incoming_velocity:vin.map(rd),start_center:start.map(rd),contact_center:center.map(rd),
-   normals:ns.map(n=>n.map(rd)),contact_at:LEAD};
+   surfaces,incoming_velocity:vin.map(x=>rd(x)),start_center:start.map(x=>rd(x)),contact_center:center.map(x=>rd(x)),
+   normals:ns.map(n=>n.map(x=>rd(x))),contact_at:LEAD};
   if(surfaces.some(s=>Math.abs(nearest(center,s)-R)>3e-7))throw Error('controlled contact untangent');
   for(let j=0;j<2;j++){
    const [a,b]=surfaces[j].endpoints,ab=sub(b,a),q=sub(center,mul(R,ns[j]));
@@ -99,7 +99,7 @@ window.worldTrial09=(()=>{
    const t=i*STEP,p=t<=LEAD?add(start,mul(t,vin)):add(center,mul(t-LEAD,vout));
    if(!(R<=p[0]&&p[0]<=24-R&&R<=p[1]&&p[1]<=6-R))throw Error('candidate outside WORLD');
    if(surfaces.some(s=>nearest(p,s)<R-3e-7))throw Error('candidate penetrated surface');
-   frames.push({time:rd(t),position:p.map(rd),velocity:(t<LEAD?vin:vout).map(rd)});
+   frames.push({time:rd(t),position:p.map(x=>rd(x)),velocity:(t<LEAD?vin:vout).map(x=>rd(x))});
   }
   const reverse=solve(vin,[ns[1],ns[0]]);
   if(JSON.stringify(reverse.outgoing_velocity)!==JSON.stringify(physical.outgoing_velocity)||
