@@ -44,7 +44,9 @@ class Window48WorkerHandoffTests(unittest.TestCase):
     def test_resealed_forged_events_and_claims_rejected(self):
         edits = [
             lambda p: p["certificates"][2]["trials"][0]["events"][0]["after"].__setitem__(0, 26),
-            lambda p: p["certificates"][3]["trials"][1]["final"].__setitem__(\n                1, (p["certificates"][3]["trials"][1]["final"][1] + 1) % 27\n            ),
+            lambda p: p["certificates"][3]["trials"][1]["final"].__setitem__(
+                1, (p["certificates"][3]["trials"][1]["final"][1] + 1) % 27
+            ),
             lambda p: p["certificates"][4]["verdict"].__setitem__("passed", False),
             lambda p: p["claims"].__setitem__("witnesses", 49),
             lambda p: p["certificates"].pop(),
