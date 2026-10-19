@@ -49,6 +49,18 @@ button.positive{background:#246554;border-color:#82baa8}
 .node.marked{border-color:#648e70}.node.nextA{box-shadow:inset 0 0 0 1px #c79f61}
 .node.nextB{outline:1px dashed #b38bd1;outline-offset:-3px}
 .node.current{background:#245b7d;border:2px solid #8ecbf8;color:#fff}
+.node.inspected{outline:2px solid #f5d998;outline-offset:1px}
+.node.inspected::before{content:"●";position:absolute;left:1px;top:-7px;color:#f5d998;font-size:12px;text-shadow:0 0 2px #0d1824}
+.node{position:relative}
+.inspector{margin:13px 0}
+.inspector-controls{display:grid;grid-template-columns:1fr 2fr auto auto;gap:10px;align-items:end;margin:12px 0}
+.inspector-controls label{display:block;min-width:0}
+.inspector-controls select,.inspector-controls input{width:100%}
+.inspector-controls input[type=range]{cursor:pointer}
+.inspector-controls button{white-space:nowrap}
+.inspector-status{margin:6px 0;color:#dbe9f5;font:600 .86rem/1.55 ui-monospace,monospace}
+.inspector-note{font-size:.81rem;color:#a9bdd0;margin:5px 0 0}
+@media(max-width:700px){.inspector-controls{grid-template-columns:1fr 1fr}.inspector-controls label:nth-child(2){grid-column:span 1}}
 .node.reference{position:relative}
 .node.reference::after{content:"1";position:absolute;right:-2px;top:-4px;min-width:12px;height:12px;border-radius:8px;background:#e8ca75;color:#182431;font:700 9px/12px ui-monospace,monospace;text-align:center}
 .relation{margin-top:14px}
@@ -122,6 +134,20 @@ button.positive{background:#246554;border-color:#82baa8}
 <div id="right-next" class="world-navigation" aria-live="off"></div>
 </section>
 </div>
+<section id="path-inspector" class="panel inspector" aria-label="Inspect locked original-source path">
+<h2>Inspect recorded movement</h2>
+<p class="inspector-note">Replays a locked A/B path one source transition at a time from (0,0,0). The gold marker shows the inspected recorded state. Blue still marks the active game state; inspection cannot edit actions, scores, or certificates.</p>
+<div class="inspector-controls">
+<label for="inspect-path">Locked path
+<select id="inspect-path" disabled><option value="0">Path 1</option><option value="1">Path 2</option></select></label>
+<label for="inspect-step">Source step
+<input id="inspect-step" type="range" min="0" max="0" step="1" value="0" disabled></label>
+<button id="inspect-prev" disabled>← Earlier</button>
+<button id="inspect-next" disabled>Later →</button>
+</div>
+<p id="inspect-status" class="inspector-status" aria-live="polite">Lock Path 1 to inspect its source movement.</p>
+<p id="inspect-event" class="inspector-note">No recorded transitions selected.</p>
+</section>
 <p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Yellow '1' markers show the locked first path's endpoint while you build the second path. Only A/B actions move the state; this is not a physical 3D simulation.</p>
 <section class="panel">
 <div class="kicker" id="phase">Path 1 · build your first witness</div>
@@ -159,6 +185,7 @@ button.positive{background:#246554;border-color:#82baa8}
 (() => {
 const $=id=>document.getElementById(id);
 let model=null, roster=null, mission=0, phase=0, word='', trials=[], solved=new Set(), revealed=false, pass=false;
+let inspectedPath=0, inspectedStep=0;
 const STORAGE_KEY='world48-source-replayed-progress/v1';
 const savedCertificates=new Map();
 const stateName=n=>'('+[Math.floor(n/9),Math.floor(n%9/3),n%3].join(',')+')';
@@ -303,6 +330,48 @@ function updateLiveComparison(candidate){
   (eligible?(phase===1?'The conditions currently hold; lock Path 2 to verify.':'Conditions hold; choose Check the two paths to verify.'):
   'Keep comparing endpoints; no verified witness yet.');
 }
+function renderInspector(){
+ const selector=$('inspect-path'),range=$('inspect-step'),panel=$('path-inspector');
+ const count=trials.length;
+ selector.disabled=count===0;
+ for(const option of selector.options)option.disabled=Number(option.value)>=count;
+ if(count===0){
+  inspectedPath=0;inspectedStep=0;selector.value='0';
+  range.value='0';range.max='0';range.disabled=true;
+  $('inspect-prev').disabled=true;$('inspect-next').disabled=true;
+  $('inspect-status').textContent='Lock Path 1 to inspect its source movement.';
+  $('inspect-event').textContent='No recorded transitions selected.';
+  panel.dataset.recorded='false';
+  return;
+ }
+ if(inspectedPath>=count)inspectedPath=count-1;
+ const recorded=trials[inspectedPath];
+ inspectedStep=Math.max(0,Math.min(recorded.actions.length,inspectedStep));
+ selector.value=String(inspectedPath);
+ range.max=String(recorded.actions.length);
+ range.value=String(inspectedStep);
+ range.disabled=recorded.actions.length===0;
+ $('inspect-prev').disabled=inspectedStep===0;
+ $('inspect-next').disabled=inspectedStep===recorded.actions.length;
+ // Replay only the inspected prefix against original source-law transitions;
+ // never trust a cached endpoint or edit an official witness receipt.
+ const replay=play(recorded.actions.slice(0,inspectedStep));
+ for(const [root,i] of [['left-nodes',0],['right-nodes',1]]){
+  const node=$(root).querySelector('.node[data-state-index="'+replay.final[i]+'"]');
+  if(!node)throw Error('Original-state projection missing during replay');
+  node.classList.add('inspected');
+  node.setAttribute('aria-label','Recorded Path '+(inspectedPath+1)+' step '+inspectedStep+': '+stateName(replay.final[i]));
+ }
+ panel.dataset.recorded='true';panel.dataset.path=String(inspectedPath);
+ panel.dataset.step=String(inspectedStep);
+ $('inspect-status').textContent='Path '+(inspectedPath+1)+' · step '+inspectedStep+'/'+recorded.actions.length+
+  ' · left '+stateName(replay.final[0])+' · right '+stateName(replay.final[1]);
+ const last=replay.events[replay.events.length-1];
+ $('inspect-event').textContent=last?
+  'Action '+last.action+' · left '+stateName(last.before[0])+' → '+stateName(last.after[0])+
+  ' · right '+stateName(last.before[1])+' → '+stateName(last.after[1]):
+  'Original marked source root in both worlds. No action taken.';
+}
 function reRender(message){
  if(!model||!roster)return;
  const [left,right]=laws(),result=phase===2?trials[1]:play(word),state=result.final;
@@ -314,6 +383,7 @@ function reRender(message){
  drawNodes('right-nodes',right,state[1],first?first[1]:null);
  updateLiveComparison(result);
  showNext('left-next',left,state[0]);showNext('right-next',right,state[1]);
+ renderInspector();
  $('phase').textContent=phase===2?'Two locked paths · verify rooted relation':'Path '+(phase+1)+' · build '+(phase?'the comparison':'your first')+' witness';
  for(let i=0;i<2;i++){
   $('path-'+(i?'b':'a')).textContent=trials[i]?(trials[i].actions||'(empty path)'):'—';
@@ -350,7 +420,7 @@ function nextWord(value){
  word+=value;reRender('Applied '+value.length+' exact source action(s).');persistProgress();
 }
 function chooseChallenge(id,store=true){
- mission=id;phase=0;word='';trials=[];pass=false;revealed=false;
+ mission=id;phase=0;word='';trials=[];pass=false;revealed=false;inspectedPath=0;inspectedStep=0;
  const p=currentMission();
  $('task').textContent='Challenge '+(id+1)+' / '+roster.challenges.length+': find the left-root collision and right-root split between laws #'+(p.law_ids[0]+1)+' and #'+(p.law_ids[1]+1)+'.';
  $('verdict').textContent='No rooted witness has been submitted.';
@@ -361,7 +431,7 @@ function chooseChallenge(id,store=true){
 function lockPath(){
  if(phase>=2)return;
  trials.push(play(word));
- phase++;word='';
+ phase++;word='';inspectedPath=phase-1;inspectedStep=trials[inspectedPath].actions.length;
  pass=false;
  reRender('Locked path '+phase+'. '+(phase===1?'Begin the second path at the same origin.':'Compare both rooted paths.'));persistProgress();
 }
@@ -462,6 +532,18 @@ async function boot(){
     const next=(mission+1)%roster.challenges.length;select.value=String(next);chooseChallenge(next);
   });
   $('hint').addEventListener('click',reveal);
+  $('inspect-path').addEventListener('change',()=>{
+   inspectedPath=Number($('inspect-path').value);inspectedStep=0;reRender();
+  });
+  $('inspect-step').addEventListener('input',()=>{
+   inspectedStep=Number($('inspect-step').value);reRender();
+  });
+  $('inspect-prev').addEventListener('click',()=>{
+   inspectedStep=Math.max(0,inspectedStep-1);reRender();
+  });
+  $('inspect-next').addEventListener('click',()=>{
+   inspectedStep=Math.min(trials[inspectedPath].actions.length,inspectedStep+1);reRender();
+  });
   $('export').addEventListener('click',download);
   $('import').addEventListener('click',()=>$('import-file').click());
   $('import-file').addEventListener('change',async()=>{
@@ -485,6 +567,7 @@ async function boot(){
   chooseChallenge(draft?draft.mission:0,false);
   if(draft){
    phase=draft.phase;word=draft.word;trials=draft.paths.map(actions=>play(actions));
+   inspectedPath=Math.max(0,trials.length-1);inspectedStep=trials.length?trials[inspectedPath].actions.length:0;
    $('mission').value=String(mission);
    reRender('Restored A/B paths and replayed saved witnesses against original source.');
   }

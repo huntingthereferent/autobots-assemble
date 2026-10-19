@@ -52,6 +52,12 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             self.page.locator("#word").fill(letters)
             self.page.locator("#run").click()
 
+    def seek_inspection(self,step):
+        self.page.locator("#inspect-step").evaluate(
+            "(input, value) => { input.value=String(value); input.dispatchEvent(new Event('input',{bubbles:true})); }",
+            step
+        )
+
     def lock(self):
         self.page.locator("#lock").click()
 
@@ -229,6 +235,100 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.lock()
         self.page.locator("#check").click()
         self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
+    def test_locked_source_path_scrubs_exact_native_math_at_every_step(self):
+        source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
+        roster=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+        self.page.locator("#mission").select_option("2")
+        self.assertTrue(self.page.locator("#inspect-path").is_disabled())
+        self.word("BAB")
+        self.lock()
+        self.assertFalse(self.page.locator("#inspect-path").is_disabled())
+        self.assertEqual(self.page.locator("#inspect-step").get_attribute("max"),"3")
+        self.assertEqual(self.page.locator("#inspect-step").input_value(),"3")
+        ids=roster["challenges"][2]["law_ids"]
+        word="BAB"
+        states=[0,0]
+        for step in range(4):
+            if step:
+                act=word[step-1]
+                states=[source["laws"][ids[i]][act][states[i]] for i in range(2)]
+            self.seek_inspection(step)
+            self.assertEqual(self.page.locator("#path-inspector").get_attribute("data-step"),str(step))
+            self.assertIn("step "+str(step)+"/3",self.page.locator("#inspect-status").inner_text())
+            for side,i in (("left",0),("right",1)):
+                inspected=self.page.locator("#"+side+"-nodes .node.inspected")
+                self.assertEqual(inspected.count(),1)
+                self.assertEqual(inspected.get_attribute("data-state-index"),str(states[i]))
+        self.assertTrue(self.page.locator("#inspect-next").is_disabled())
+        self.page.locator("#inspect-prev").click()
+        self.assertEqual(self.page.locator("#inspect-step").input_value(),"2")
+        self.assertEqual(self.page.locator("#path-inspector").get_attribute("data-step"),"2")
+        self.assertTrue(self.page.locator("#check").is_disabled())
+
+    def test_inspection_is_read_only_and_verified_certificate_is_unchanged(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        original,host=self.exported()
+        self.assertTrue(host["passed"])
+        initial_progress=self.page.locator("#progress").inner_text()
+        self.page.locator("#inspect-path").select_option("0")
+        self.assertEqual(self.page.locator("#inspect-step").input_value(),"0")
+        self.page.locator("#inspect-next").click()
+        self.page.locator("#inspect-next").click()
+        self.assertEqual(self.page.locator("#inspect-step").input_value(),"2")
+        self.page.locator("#inspect-path").select_option("1")
+        self.seek_inspection(4)
+        self.assertEqual(self.page.locator("#inspect-step").get_attribute("max"),"4")
+        self.assertEqual(self.page.locator("#path-inspector").get_attribute("data-path"),"1")
+        again,host_again=self.exported()
+        self.assertTrue(host_again["passed"])
+        self.assertEqual(original,again)
+        self.assertEqual(self.page.locator("#progress").inner_text(),initial_progress)
+        self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
+    def test_empty_locked_source_word_has_only_marked_root_inspection(self):
+        self.page.locator("#mission").select_option("1")
+        self.lock()
+        self.assertEqual(self.page.locator("#inspect-step").get_attribute("max"),"0")
+        self.assertTrue(self.page.locator("#inspect-step").is_disabled())
+        self.assertTrue(self.page.locator("#inspect-next").is_disabled())
+        self.assertTrue(self.page.locator("#inspect-prev").is_disabled())
+        for side in ("left","right"):
+            self.assertEqual(
+                self.page.locator("#"+side+"-nodes .node.inspected").get_attribute("data-state-index"),"0"
+            )
+        self.word("BBB")
+        self.lock()
+        self.page.locator("#inspect-path").select_option("0")
+        self.assertEqual(self.page.locator("#inspect-step").get_attribute("max"),"0")
+        self.page.locator("#inspect-path").select_option("1")
+        self.assertEqual(self.page.locator("#inspect-step").get_attribute("max"),"3")
+        self.page.locator("#check").click()
+        record,verified=self.exported()
+        self.assertTrue(verified["passed"])
+        self.assertEqual(record["trials"][0]["events"],[])
+
+    def test_replay_inspector_after_reload_and_reset_never_forges_progress(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.seek_inspection(1)
+        self.assertEqual(self.page.locator("#path-inspector").get_attribute("data-step"),"1")
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertEqual(self.page.locator("#inspect-step").get_attribute("max"),"3")
+        self.assertEqual(self.page.locator("#inspect-step").input_value(),"3")
+        self.assertEqual(self.page.locator("#left-nodes .node.inspected").count(),1)
+        self.assertEqual(self.page.locator("#progress").inner_text(),"0 of 48 source-replayed witnesses saved in this browser")
+        self.page.locator("#retry").click()
+        self.assertTrue(self.page.locator("#inspect-path").is_disabled())
+        self.assertEqual(self.page.locator("#left-nodes .node.inspected").count(),0)
+        self.assertEqual(self.page.locator("#right-nodes .node.inspected").count(),0)
 
     def test_real_challenge_3_root_collision_and_python_host(self):
         self.page.locator("#mission").select_option("2")

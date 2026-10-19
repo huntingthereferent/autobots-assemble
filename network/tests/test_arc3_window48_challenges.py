@@ -172,7 +172,8 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
                      "Lock path","Check the two paths","Retry challenge",
                      "Export verified certificate","marked origin","finite-mathematical-source-only",
                      "z = ","layer-grid","dataset.stateIndex","showNext","three z-planes",
-                     "updateLiveComparison","node.reference","relation-distinct","LIVE PREVIEW"):
+                     "updateLiveComparison","node.reference","relation-distinct","LIVE PREVIEW",
+                     "renderInspector","inspect-step","inspect-path","Recorded Path"):
             self.assertIn(term,html)
         self.assertNotIn("GameState.WIN",html)
         self.assertNotIn("native arcade result",html.lower())
