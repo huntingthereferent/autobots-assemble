@@ -9,6 +9,8 @@ on:
       - 'network/tests/fixtures/world_nih_phase1_phase2_blueprint_v1.json'
       - 'network/tests/test_world_nih_blueprint.py'
       - 'systems/workspace/world_temporal_blueprint.py'
+      - 'systems/workspace/world_blueprint_rdf.py'
+      - 'network/tests/test_world_blueprint_rdf.py'
       - 'scripts/verify_world_phase1_phase2_blueprint_browser.py'
   workflow_dispatch:
 permissions:
@@ -49,12 +51,12 @@ jobs:
           PY
       - name: Install actual headless Chromium
         run: |
-          python -m pip install 'playwright>=1.54,<2'
+          python -m pip install 'playwright>=1.54,<2' 'rdflib>=7,<8'
           python -m playwright install --with-deps chromium
       - name: Falsify date confusion, forged source, and display/engine mismatch
         run: |
           cd world
-          python -m unittest -v network.tests.test_world_nih_blueprint
+          python -m unittest -v network.tests.test_world_nih_blueprint network.tests.test_world_blueprint_rdf
       - name: Play editable source and query worlds; verify W13 original independently
         run: |
           cd world
@@ -70,6 +72,9 @@ jobs:
             ${{ runner.temp }}/world-temporal-blueprint-build/world_phase1_phase2_blueprint.png
             ${{ runner.temp }}/world-temporal-blueprint-build/world_phase1_phase2_blueprint_receipt.json
             ${{ runner.temp }}/world-temporal-blueprint-build/world_phase1_phase2_browser_witness.json
+            ${{ runner.temp }}/world-temporal-blueprint-build/world_synthetic_temporal_blueprint.ttl
+            ${{ runner.temp }}/world-temporal-blueprint-build/world_registry_temporal_blueprint.ttl
+            ${{ runner.temp }}/world-temporal-blueprint-build/world_temporal_blueprint_rdf_receipt.json
             world/docs/world_phase1_phase2_blueprint.html
             world/network/tests/fixtures/world_nih_phase1_phase2_blueprint_v1.json
           retention-days: 30
