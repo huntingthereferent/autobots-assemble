@@ -131,6 +131,46 @@ class WorkflowEditorHTTPTests(unittest.TestCase):
         self.assertIn("not visible", error["error"])
         self.assertFalse((Path(self.tmp.name) / "runtime.jsonl").exists())
 
+    def test_real_handoff_frontier_uses_native_task_owner_and_sources(self):
+        from runtime.engine import HandoffRuntime
+        from runtime.journal import RuntimeJournal
+        from runtime.repository_tasks import admit_active_work
+        runtime = HandoffRuntime(event_store=RuntimeJournal(
+            Path(self.tmp.name) / "runtime.jsonl"))
+        work = read_active_work(ROOT / "TASKS.md")
+        admit_active_work(runtime, ROOT / "TASKS.md", actor_id="james")
+        status, example = self.fetch("GET", "/api/example")
+        self.assertEqual(status, 200)
+        status, pinned = self.fetch("POST", "/api/pin",
+                                    {"draft": example, "reason": "Native source-bound task"},
+                                    authorized=True)
+        self.assertEqual(status, 200)
+        self.fetch("POST", "/api/idea-bind", {
+            "idea_id": work[0].source_id,
+            "revision": pinned["revision"],
+            "worker": "james",
+            "reason": "Explicit source association",
+        }, authorized=True)
+        before = (Path(self.tmp.name) / "runtime.jsonl").read_bytes()
+        req = {"handoff_id": "repo-work-" + work[0].source_id,
+               "revision": pinned["revision"], "step_id": "count"}
+        status, scoped = self.fetch("POST", "/api/idea-native-frontier",
+                                    req, authorized=True)
+        self.assertEqual(status, 200)
+        self.assertEqual(scoped["native_handoff"]["to_actor"], "james")
+        self.assertEqual(scoped["idea"]["idea_id"], work[0].source_id)
+        self.assertFalse(scoped["native_handoff"]["actor_identity_authenticated"])
+        status, denied = self.fetch("POST", "/api/idea-native-frontier",
+                                    req, authorized=False)
+        self.assertEqual(status, 403)
+        self.assertEqual((Path(self.tmp.name) / "runtime.jsonl").read_bytes(), before)
+        status, denial = self.fetch("POST", "/api/idea-native-propose", {
+            **req, "kind": "HELP", "target_revision": "0"*64,
+            "reason": "Not actually related",
+        }, authorized=True)
+        self.assertEqual(status, 400)
+        self.assertIn("not visible", denial["error"])
+
     def test_ui_can_edit_branch_diff_without_running_workers(self):
         _, draft = self.fetch("GET", "/api/example")
         _, parent = self.fetch("POST", "/api/pin",
