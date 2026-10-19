@@ -1,9 +1,10 @@
 """Reverify actual native worker results before attaching them to workflow pins.
 
-Only the existing finite-correspondence worker family is admitted initially:
-controls.reverify_job recreates its original verifier and rechecks the real
-selected source edition, handoff, output and evidence without executing a new
-worker. Other worker families require their own source-owned adapters.
+This adapter admits precisely two source-owned worker families: the native
+finite-correspondence prefilter and Factory's *simulated* machine stage.
+controls.reverify_job recreates each source-native verifier and rechecks the
+real selected source edition, handoff, output and evidence without executing
+another worker. No physical factory production is verified.
 
 Native computation success is NOT overall workflow correctness or quality.
 """
@@ -19,6 +20,9 @@ from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
 from systems.workspace.controls import reverify_job
 from systems.workspace.process_handoff import WORKER_ID, VERIFIER
+from systems.workspace.factory_machine_bridge import (
+    WORKER_ID as FACTORY_WORKER_ID, VERIFIER as FACTORY_VERIFIER,
+)
 from .workflow_draft import build_preview
 from .workflow_pins import WorkflowPins
 
@@ -50,46 +54,58 @@ class WorkflowNativeResults:
             raise NativeResultBoundary("exact native job ID required")
         runtime = HandoffRuntime(event_store=RuntimeJournal(self.data_dir / "runtime.jsonl"))
         job, state = runtime.get(job_id), runtime.state(job_id)
-        # Refuse other native families BEFORE dispatching the source verifier.
-        if (job.metadata.get("worker_id") != WORKER_ID
-                or job.metadata.get("native_evidence_verifier") != VERIFIER
-                or job.metadata.get("source_system") != "process-workstation"
-                or state.status != "COMPLETE"
+        # Restrict the dispatch BEFORE invoking a native source-owned
+        # verifier. Factory has its own simulated machine-stage owner, not
+        # the finite correspondence verifier or any physical machine.
+        worker_id = job.metadata.get("worker_id")
+        finite = (worker_id == WORKER_ID
+                  and job.metadata.get("native_evidence_verifier") == VERIFIER
+                  and job.metadata.get("source_system") == "process-workstation")
+        factory = (worker_id == FACTORY_WORKER_ID
+                   and job.metadata.get("native_evidence_verifier") == FACTORY_VERIFIER
+                   and job.metadata.get("source_system") == "factory"
+                   and job.metadata.get("workstation_worker") is True
+                   and job.metadata.get("stage") == "machine"
+                   and job.to_actor == "machine-sim")
+        if (not (finite or factory) or state.status != "COMPLETE"
                 or state.missing_witnesses):
-            raise NativeResultBoundary("not a completed finite process job with native evidence")
-        # The original verifier reopens the original worker/source edition and
-        # independently replays its result without running the native process.
+            raise NativeResultBoundary("not a completed supported native computation/simulation")
+        # Each original verifier reopens its own source edition and replays
+        # its result without running the native process.
         verdict = reverify_job(data_dir=self.data_dir, job_id=job_id)
         if verdict != {"job_id": job_id, "status": "COMPLETE",
                        "reverified": True, "executed": False}:
             raise NativeResultBoundary("native source-owned verifier did not confirm COMPLETE")
-        if (job.metadata.get("worker_id") != WORKER_ID
-                or job.metadata.get("native_evidence_verifier") != VERIFIER
-                or job.metadata.get("source_system") != "process-workstation"
-                or state.status != "COMPLETE"
-                or state.missing_witnesses):
-            raise NativeResultBoundary("not an independently reverified finite native job")
         output = state.output
-        if output.get("kind") != "finite-prefilter-v1" or not isinstance(output.get("verdicts"), list):
-            raise NativeResultBoundary("unexpected source-native result shape")
+        if finite and (output.get("kind") != "finite-prefilter-v1"
+                       or not isinstance(output.get("verdicts"), list)):
+            raise NativeResultBoundary("unexpected finite source-native result shape")
+        if factory and (not isinstance(output, dict)
+                        or set(output) != {"part", "quantity", "part_state"}
+                        or output.get("part_state") != "machined"
+                        or type(output.get("quantity")) is not int):
+            raise NativeResultBoundary("unexpected native Factory simulation result shape")
         events = [event for event in runtime.event_store.for_handoff(job_id)
                   if event.event_type == "RESULT"]
         if len(events) != 1:
             raise NativeResultBoundary("native job must have exactly one RESULT event")
         native = {
             "native_job_id": job_id,
-            "worker_id": WORKER_ID,
+            "worker_id": worker_id,
+            "result_family": "finite-prefilter-v1" if finite else "factory-machine-simulation-v1",
+            "simulation_only": bool(factory),
             "worker_version": job.metadata["worker_version"],
             "edition_fingerprint": job.metadata["edition_fingerprint"],
             "inputs_sha256": _hash(job.inputs),
             "result_event_id": events[0].event_id,
             "result_sha256": _hash(output),
             "evidence_sha256": _hash([vars(e) for e in state.evidence]),
-            "verdict_counts": {
+            "verdict_counts": ({
                 v: output["verdicts"].count(v)
                 for v in ("CONTRADICTED", "NOT_CONTRADICTED", "UNDECIDED")
-            },
-            "tested_candidates": len(output["verdicts"]),
+            } if finite else None),
+            "tested_candidates": len(output["verdicts"]) if finite else None,
+            "simulated_part_state": output["part_state"] if factory else None,
             "native_result_reverified": True,
             "native_job_reexecuted": False,
             "full_workflow_verified": False,
@@ -148,7 +164,9 @@ class WorkflowNativeResults:
         current = self.inspect(job_id)
         data = {"schema": SCHEMA, "draft_revision": revision, "step_id": step_id,
                 "native": current,
-                "relation_scope": "NATIVE_FINITE_PREFILTER_RESULT_ONLY",
+                "relation_scope": ("NATIVE_FINITE_PREFILTER_RESULT_ONLY"
+                                   if current["result_family"] == "finite-prefilter-v1"
+                                   else "NATIVE_FACTORY_MACHINE_SIMULATION_ONLY"),
                 "step_job_link": "USER_SELECTED_SOURCE_ASSOCIATION",
                 "execution_authorized_by_pin": False}
         old = self._replay()
@@ -199,19 +217,31 @@ class WorkflowNativeResults:
             raise NativeResultBoundary("native worker families differ")
         if earlier["native_job_id"] == later["native_job_id"]:
             raise NativeResultBoundary("one source job cannot independently witness two branches")
-        differences = {name: later["verdict_counts"][name] - earlier["verdict_counts"][name]
-                       for name in earlier["verdict_counts"]}
+        if earlier["result_family"] != later["result_family"]:
+            raise NativeResultBoundary("native result families differ")
+        finite = earlier["result_family"] == "finite-prefilter-v1"
+        if finite:
+            differences = {name: later["verdict_counts"][name] - earlier["verdict_counts"][name]
+                           for name in earlier["verdict_counts"]}
+        else:
+            differences = None
         return {
             "parent_revision": parent_revision, "branch_revision": branch_revision,
             "parent_job": earlier["native_job_id"], "branch_job": later["native_job_id"],
             "parent_result_sha256": earlier["result_sha256"],
             "branch_result_sha256": later["result_sha256"],
+            "result_family": earlier["result_family"],
+            "simulation_only": not finite,
             "verdict_count_deltas": differences,
-            "identical_native_verdicts": all(v == 0 for v in differences.values()),
+            "identical_native_verdicts": (all(v == 0 for v in differences.values())
+                                          if finite else None),
+            "identical_native_results": earlier["result_sha256"] == later["result_sha256"],
             "source_owned_native_results_reverified_now": True,
             "native_jobs_reexecuted": False,
-            "native_metric_scope": "finite-prefilter verdict counts on identical native inputs",
+            "native_metric_scope": ("finite-prefilter verdict counts on identical native inputs"
+                                    if finite else "simulated Factory machine-stage output on identical inputs"),
             "workflow_quality_ranked": False,
+            "physical_production_verified": False,
             "whole_workflow_verified": False,
             "automatic_pin_promotion": False,
         }
