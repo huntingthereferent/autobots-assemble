@@ -1,0 +1,163 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WORLD / Trial 10 Active-Set Alternatives</title>
+<style>
+body{background:#10232e;color:#e5f1f9;max-width:1100px;margin:auto;padding:24px;font:16px system-ui}
+p{color:#c0d1de;line-height:1.5}h1{font-size:1.6rem}a{color:#94ddff}
+button,select{background:#2c4f64;border:1px solid #668da2;color:#f2f7fa;padding:9px;border-radius:5px;font:inherit;margin-right:5px}
+canvas{width:100%;background:#0d2534;border-radius:6px}pre{white-space:pre-wrap;font-size:12px;max-height:500px;overflow:auto}
+iframe#source{display:none}
+</style></head><body>
+<h1>WORLD · Trial 10 / Active-contact alternatives</h1>
+<p><a href="world_ab_two_contact_stress.html">Trial 09 original 35-case browser</a>.
+The Trial 09 source continues running in its own preserved frame; this page applies a separate frictionless active-set comparison to its actual calculated cases. Original frictional contacts, material outcomes and sequential impacts remain unresolved.</p>
+<p><strong>Multiple admissible alternatives are not a choice of physical outcome.</strong> No contact is selected as the true response without independent evidence.</p>
+<button id="run">Evaluate all original 35 cases</button>
+<label>Case <select id="case"></select></label>
+<label>Alternative <select id="alternative"></select></label>
+<button id="next">Next observation</button><button id="previous">Previous observation</button><button id="reset">Reset</button>
+<p id="status" aria-live="polite">No local candidates evaluated.</p>
+<canvas id="scene" width="960" height="300"></canvas>
+<details><summary>Original source, all rejections and surviving candidate receipts</summary><pre id="receipt"></pre></details>
+<iframe id="source" src="world_ab_two_contact_stress.html" title="Original unmodified Trial 09 source"></iframe>
+<script>
+'use strict';
+window.worldTrial10=(()=>{
+ const R=.25,STEP=.05,T=1.5,LEAD=.35,SPEED=2,EPS=1e-8;
+ const activeSets=[[0],[1],[0,1]],rd=x=>+x.toFixed(9);
+ const dot=(a,b)=>a[0]*b[0]+a[1]*b[1],mul=(c,a)=>[c*a[0],c*a[1]],
+  add=(a,b)=>[a[0]+b[0],a[1]+b[1]],cp=x=>JSON.parse(JSON.stringify(x));
+ let data=null,source=null,index=0,alt=0,frame=0;
+ function nearest(p,s){
+  const a=s.endpoints[0],b=s.endpoints[1],ab=[b[0]-a[0],b[1]-a[1]];
+  const t=Math.max(0,Math.min(1,dot([p[0]-a[0],p[1]-a[1]],ab)/dot(ab,ab)));
+  return Math.hypot(p[0]-a[0]-t*ab[0],p[1]-a[1]-t*ab[1]);
+ }
+ function evaluate(c,active){
+  const a=c.incoming_angle_degrees,v=[-SPEED*Math.cos(a*Math.PI/180),-SPEED*Math.sin(a*Math.PI/180)],
+        normals=c.normals.map(x=>[...x]),start=c.start_center,center=c.contact_center,faces=c.surfaces;
+  const rec={active_indices:[...active],active_ids:active.map(i=>faces[i].id)};
+  const reject=code=>({...rec,status:'rejected-'+code,reason:code,normal_impulses:null,outgoing_velocity:null,frames:[]});
+  let js,out;
+  if(active.length===2){
+   const [n0,n1]=normals,g00=dot(n0,n0),g01=dot(n0,n1),g11=dot(n1,n1),det=g00*g11-g01*g01;
+   if(det<=1e-7)return reject('two-active-dependent-normals-require-a-different-solver');
+   const inc=normals.map(n=>dot(v,n));
+   if(inc.some(q=>q>=-1e-9))return reject('two-active-not-a-simultaneous-incoming-pair');
+   const rhs=inc.map(z=>-2*z);
+   js=[(rhs[0]*g11-rhs[1]*g01)/det,(rhs[1]*g00-rhs[0]*g01)/det];
+   if(js.some(q=>q<=1e-9))return reject('two-active-contact-requires-negative-or-inactive-normal-impulse');
+   out=add(v,add(mul(js[0],n0),mul(js[1],n1)));
+   if(normals.some((n,i)=>Math.abs(dot(out,n)+inc[i])>3e-8))return reject('two-active-simultaneous-normal-restitution-unsatisfied');
+   if(Math.abs(dot(v,v)-dot(out,out))>3e-8)return reject('two-active-frictionless-restitution-generated/lost-energy');
+  }else{
+   const k=active[0],approach=dot(v,normals[k]);
+   if(approach>=-EPS)return reject('nonincoming-active');
+   const j=-2*approach;if(j<=EPS)return reject('nonpositive-impulse');
+   js=[0,0];js[k]=j;out=add(v,mul(j,normals[k]));
+  }
+  if(active.some(k=>js[k]<=EPS))return reject('nonpositive-impulse');
+  if(js.some(q=>q < -EPS))return reject('negative-inactive');
+  if(normals.some(n=>dot(out,n)<-EPS))return reject('other-face-inward');
+  if(active.some(k=>Math.abs(dot(out,normals[k])+dot(v,normals[k]))>4e-8))return reject('active-restitution');
+  if(Math.abs(dot(v,v)-dot(out,out))>4e-8)return reject('energy');
+  if(normals.some(n=>dot(v,n)>=-EPS||dot(out,n)<-EPS))return reject('continuous-separation');
+  const frames=[];
+  for(let i=0;i<=Math.round(T/STEP);i++){
+   const time=i*STEP,p=time<=LEAD?add(start,mul(time,v)):add(center,mul(time-LEAD,out));
+   if(!(R-1e-9<=p[0]&&p[0]<=24-R+1e-9&&R-1e-9<=p[1]&&p[1]<=6-R+1e-9))return reject('world-edge');
+   if(faces.some(s=>nearest(p,s)<R-3e-7))return reject('penetration');
+   frames.push({time:rd(time),position:p.map(q=>rd(q)),
+    velocity:(time<LEAD?v:out).map(q=>rd(q))});
+  }
+  return {...rec,status:'admissible-local-model',reason:null,
+   normal_impulses:js.map(q=>rd(q)),outgoing_velocity:out.map(q=>rd(q)),frames,
+   energy_before:rd(.5*dot(v,v)),energy_after:rd(.5*dot(out,out))};
+ }
+ function calculate(upstream){
+  if(upstream.schema!=='world-ab-two-contact-incidence-stress/v1'||upstream.cases.length!==35)
+   throw Error('missing the independent Trial 09 original-source computation');
+  const cases=upstream.cases.map((c,i)=>{
+   const alternatives=activeSets.map(a=>evaluate(c,a));
+   const feasible=alternatives.filter(q=>q.status==='admissible-local-model');
+   if((alternatives[2].status==='admissible-local-model')!==(c.status==='accepted-local-candidate'))
+     throw Error('Trial 09 two-active result was overwritten');
+   return {original_index:i,incoming_angle_degrees:c.incoming_angle_degrees,
+    surface_B_rotation_degrees:c.surface_B_rotation_degrees,geometry_kind:c.geometry_kind,
+    source_ids:c.surfaces.map(s=>s.id),trial09_two_active_status:c.status,
+    alternatives,admissible_count:feasible.length,
+    classification:feasible.length===0?'no-local-candidate':feasible.length>1?'multiple-admissible':'single-admissible',
+    physical_outcome_independently_observed:false};
+  });
+  const counts={};for(const k of ['no-local-candidate','single-admissible','multiple-admissible'])
+    counts[k]=cases.filter(c=>c.classification===k).length;
+  return {schema:'world-ab-two-contact-active-set-enumeration/v1',
+   source_trial09_schema:upstream.schema,original_source_geometry:upstream.original_source_geometry,
+   angle_grid:[...upstream.incoming_angle_grid],rotation_grid:[...upstream.surface_rotation_grid],
+   active_sets:cp(activeSets),original_trial09_two_active_counts:cp(upstream.counts),
+   cases,counts,trial09_rejected_cases_with_local_alternatives:cases.filter(c=>c.trial09_two_active_status.startsWith('rejected')&&c.admissible_count>0).length,
+   original_trial06_friction:.4,candidate_friction:0,comparison_restitution:1,
+   simultaneous_multicontact_physics_uniquely_determined:false,
+   physical_active_contacts_observed:false,sequential_impacts_temporally_witnessed:false,
+   original_source_surfaces_modified:false,rotated_faces_are_original_source:false,
+   original_blueprint_generated:false,earth_material_equivalence:false};
+ }
+ const c=document.getElementById('scene'),ctx=c.getContext('2d'),X=x=>18+x*38,Y=y=>12+y*44;
+ function paint(){
+  ctx.fillStyle='#0d2534';ctx.fillRect(0,0,960,300);
+  if(!data)return;
+  const q=source.cases[index],current=data.cases[index],chosen=current.alternatives[alt];
+  q.surfaces.forEach((s,i)=>{
+   ctx.strokeStyle=i?'#84d4b4':'#f1b785';ctx.lineWidth=3;ctx.beginPath();
+   ctx.moveTo(X(s.endpoints[0][0]),Y(s.endpoints[0][1]));
+   ctx.lineTo(X(s.endpoints[1][0]),Y(s.endpoints[1][1]));ctx.stroke();
+  });
+  const path=chosen.frames.length?chosen.frames.slice(0,frame+1).map(f=>f.position):[q.start_center,q.contact_center];
+  ctx.strokeStyle=chosen.frames.length?'#a0dcfb':'#d9909f';ctx.lineWidth=2;ctx.beginPath();
+  path.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1]));ctx.stroke();
+  const p=path.at(-1);ctx.fillStyle='#f5ebcc';ctx.beginPath();ctx.arc(X(p[0]),Y(p[1]),R*38,0,Math.PI*2);ctx.fill();
+  document.getElementById('status').textContent='Case '+(index+1)+'/35 · angle '+current.incoming_angle_degrees+
+   '°, rotated B '+current.surface_B_rotation_degrees+'° · '+current.classification+
+   ' · chosen DISPLAY branch '+chosen.active_indices.join('+')+': '+chosen.status+
+   ' · physical outcome NOT determined · observation '+frame+'/30';
+ }
+ function selectCase(){
+  index=Number(document.getElementById('case').value);alt=0;frame=0;
+  document.getElementById('alternative').value='0';paint();
+ }
+ document.getElementById('run').onclick=()=>{
+  try{
+   const fr=document.getElementById('source').contentWindow;
+   if(!fr||!fr.worldTrial09)throw Error('original browser source frame is not loaded');
+   fr.document.getElementById('run').click();
+   source=fr.worldTrial09.receipt();
+   data=calculate(source);index=alt=frame=0;
+   const options=document.getElementById('case');options.innerHTML='';
+   data.cases.forEach((q,i)=>{
+    const el=document.createElement('option');el.value=String(i);
+    el.textContent=(i+1)+': '+q.incoming_angle_degrees+'° / '+q.surface_B_rotation_degrees+'° ('+q.classification+')';
+    options.append(el);
+   });
+   document.getElementById('alternative').innerHTML='';
+   for(let j=0;j<3;j++){
+    const op=document.createElement('option');op.value=String(j);op.textContent='Active '+activeSets[j].join('+');document.getElementById('alternative').append(op);
+   }
+   document.getElementById('receipt').textContent=JSON.stringify(data,null,2);paint();
+  }catch(e){data=null;document.getElementById('status').textContent='Rejected: '+e.message;}
+ };
+ document.getElementById('case').onchange=selectCase;
+ document.getElementById('alternative').onchange=()=>{
+  if(data){alt=Number(document.getElementById('alternative').value);frame=0;paint();}
+ };
+ document.getElementById('next').onclick=()=>{if(data){frame=Math.min(30,frame+1);paint();}};
+ document.getElementById('previous').onclick=()=>{if(data){frame=Math.max(0,frame-1);paint();}};
+ document.getElementById('reset').onclick=()=>{
+  data=source=null;index=alt=frame=0;
+  document.getElementById('case').innerHTML='';
+  document.getElementById('alternative').innerHTML='';
+  document.getElementById('receipt').textContent='';
+  document.getElementById('status').textContent='No local candidates evaluated.';paint();
+ };
+ paint();
+ return {receipt:()=>data?cp(data):null,upstream:()=>source?cp(source):null,
+  selected:()=>({case:index,alternative:alt,frame})};
+})();
+</script></body></html>
