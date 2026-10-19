@@ -80,6 +80,7 @@ class NativeResultWorkstationTests(unittest.TestCase):
         self.assertTrue(report["native_result_reverified"])
         self.assertEqual(report["verdict_counts"],
                          {"CONTRADICTED": 2, "NOT_CONTRADICTED": 1, "UNDECIDED": 0})
+        self.assertEqual(len(report["verdict_sequence_sha256"]), 64)
         self.assertTrue(report["result_event_id"].startswith("evt_"))
         self.assertFalse(report["branch_quality_verified"])
         self.assertFalse(report["native_job_reexecuted"])
