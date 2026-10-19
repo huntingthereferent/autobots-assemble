@@ -60,6 +60,16 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         data=json.loads(Path(evt.value.path()).read_text(encoding="utf8"))
         return data,verify_certificate(data)
 
+    def test_active_game_route_opens_world48_not_historical_w13(self):
+        page=self.browser.new_page()
+        self.addCleanup(page.close)
+        page.goto("http://127.0.0.1:"+str(self.server.server_port)+"/game/")
+        page.wait_for_url("**/window48_challenges.html")
+        page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertEqual(page.locator("h1").inner_text(),"Collision laboratory")
+        self.assertEqual(page.locator('#mission option').count(),16)
+        self.assertEqual(page.locator('button[data-action="interact"]').count(),0)
+
     def test_real_challenge_3_root_collision_and_python_host(self):
         self.page.locator("#mission").select_option("2")
         self.assertIn("laws #7 and #10",self.page.locator("#task").inner_text())
