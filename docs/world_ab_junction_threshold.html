@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD · Trial 07 Junction Arrival Tie</title>
+<style>body{background:#102330;color:#e4f2f9;font:16px system-ui;max-width:990px;margin:auto;padding:22px}h1{font-size:1.7rem}p{line-height:1.6;color:#b7d0de}button{font:inherit;background:#28536a;color:#eaf8ff;border:1px solid #76bfd7;border-radius:5px;padding:10px 16px}canvas{display:block;width:100%;background:#0c1c27;border-radius:7px}pre{white-space:pre-wrap;font-size:12px;max-height:440px;overflow:auto}a{color:#9adfff}</style></head><body>
+<h1>WORLD · Trial 07 / Two-contact arrival tie</h1>
+<p><a href="world_ab_junction_continuous.html">Return to verified continuous Trial 06</a>. No new surfaces are constructed here. Find the height where the existing two finite segments would be contacted at the same incoming instant. An arrival tie is NOT a rigid-body multi-contact solution.</p>
+<button id="run">Measure contact crossing</button> <button id="reset">Clear observation</button>
+<p id="status" aria-live="polite">Not measured.</p>
+<canvas id="scene" width="960" height="290"></canvas>
+<details><summary>Original source and measured contact receipts</summary><pre id="receipt"></pre></details>
+<script src="world_ab_junction_geometry.js"></script>
+<script>
+'use strict';
+window.worldTrial07=(()=>{
+ const R=.25, EPS=1e-9,BR=[1.35,1.4],r=(x,k=9)=>+x.toFixed(k);
+ const sub=(a,b)=>[a[0]-b[0],a[1]-b[1]],add=(a,b)=>[a[0]+b[0],a[1]+b[1]],mul=(k,a)=>[k*a[0],k*a[1]],dot=(a,b)=>a[0]*b[0]+a[1]*b[1];
+ let witness=null;
+ function arrival(y,s){
+  const a=s.endpoints[0],b=s.endpoints[1],ab=sub(b,a),len=Math.hypot(...ab);
+  if(len<=EPS)throw Error('degenerate source');
+  const tang=mul(1/len,ab),norm=[-tang[1],tang[0]],v=[-2,0],p=[12,y];
+  const signed=dot(sub(p,a),norm),rate=dot(v,norm),hits=[];
+  if(Math.abs(rate)<=EPS)throw Error('parallel source');
+  for(const side of [-1,1]){
+   const n=mul(side,norm);
+   if(dot(v,n)>=-EPS)continue;
+   const t=(side*R-signed)/rate;
+   if(t<=EPS||t>=1.5)continue;
+   const center=add(p,mul(t,v)),along=dot(sub(center,a),tang);
+   if(EPS<along&&along<len-EPS)hits.push({time:t,center,normal:n});
+  }
+  if(hits.length!==1)throw Error('interior source contact not unique');
+  return hits[0];
+ }
+ function measure(){
+  const geo=window.worldJunctionSource.generate(),faces=geo.surfaces;
+  if(faces.length!==2||faces[0].id===faces[1].id)throw Error('bad original source pair');
+  const gap=y=>arrival(y,faces[0]).time-arrival(y,faces[1]).time;
+  let [lo,hi]=BR,gl=gap(lo),gh=gap(hi);
+  if(gl*gh>=0)throw Error('no source switch in frozen bracket');
+  for(let i=0;i<64;i++){
+   const mid=(lo+hi)/2,gm=gap(mid);
+   if(gm===0){lo=hi=mid;break;}
+   if(gl*gm>0){lo=mid;gl=gm;} else {hi=mid;gh=gm;}
+  }
+  const y=r((lo+hi)/2,12),hits=faces.map(s=>arrival(y,s));
+  if(Math.abs(hits[0].time-hits[1].time)>1e-9||Math.hypot(...sub(hits[0].center,hits[1].center))>1e-8)throw Error('no actual two-face tie');
+  return {schema:'world-ab-junction-arrival-tie/v1',source_geometry:geo,
+   junction_contact:{
+    entry_y:y,candidate_gap:r(hits[0].time-hits[1].time,12),
+    contact_time:r((hits[0].time+hits[1].time)/2,12),
+    contact_center:hits[0].center.map(x=>r(x)),
+    source_ids:faces.map(s=>s.id),features:['interior','interior'],
+    normals:hits.map(h=>h.normal.map(x=>r(x)))
+   },simultaneous_contact_solver:false};
+ }
+ const c=document.getElementById('scene'),ctx=c.getContext('2d'),X=x=>18+x*38,Y=y=>12+y*42;
+ function paint(){
+  ctx.clearRect(0,0,960,290);ctx.strokeStyle='#355064';ctx.lineWidth=1;
+  for(let x=0;x<=24;x+=2){ctx.beginPath();ctx.moveTo(X(x),0);ctx.lineTo(X(x),290);ctx.stroke();}
+  if(!witness)return;
+  for(const [i,s] of witness.source_geometry.surfaces.entries()){
+   ctx.strokeStyle=i?'#7cd9b4':'#f0b782';ctx.lineWidth=4;
+   ctx.beginPath();ctx.moveTo(X(s.endpoints[0][0]),Y(s.endpoints[0][1]));
+   ctx.lineTo(X(s.endpoints[1][0]),Y(s.endpoints[1][1]));ctx.stroke();
+  }
+  const p=witness.junction_contact.contact_center;
+  ctx.fillStyle='#fff0c8';ctx.beginPath();ctx.arc(X(p[0]),Y(p[1]),R*38,0,2*Math.PI);ctx.fill();
+ }
+ document.getElementById('run').onclick=()=>{
+  try{
+   witness=measure();paint();
+   const j=witness.junction_contact;
+   document.getElementById('status').textContent='Two contacts converge at y='+j.entry_y+'; t='+j.contact_time+'. Multi-contact physical response remains UNRESOLVED.';
+   document.getElementById('receipt').textContent=JSON.stringify(witness,null,2);
+  }catch(e){witness=null;paint();document.getElementById('status').textContent='Rejected: '+e.message;}
+ };
+ document.getElementById('reset').onclick=()=>{
+  witness=null;paint();document.getElementById('status').textContent='Not measured.';
+  document.getElementById('receipt').textContent='';
+ };
+ paint();
+ return {receipt:()=>witness?JSON.parse(JSON.stringify(witness)):null};
+})();
+</script></body></html>
