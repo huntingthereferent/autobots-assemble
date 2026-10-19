@@ -1,0 +1,51 @@
+name: WORLD — A/B Original Physical Blueprint Relation Trial
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-ab-physical-relation-trial.yml'
+      - 'systems/workspace/world_ab_contact_trial.py'
+      - 'network/tests/test_world_ab_contact_trial.py'
+      - 'network/tests/fixtures/world_ab_original_visual_reference_v1.json'
+      - 'docs/world_ab_contact_trial.html'
+      - 'scripts/verify_world_ab_contact_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-physics-and-original-relation-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact WORLD source
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Falsify simple collision physics with independent analytic oracle
+        run: |
+          python -m unittest -v network.tests.test_world_ab_contact_trial network.tests.test_world_physical_construction
+      - name: Install original Chromium browser
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Execute moving block and wall in same source-owned physical WORLD
+        run: |
+          python -m scripts.verify_world_ab_contact_browser \
+            --output-dir "$RUNNER_TEMP/world-ab-contact"
+      - name: Retain source trajectory, independent comparison and frame
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-ab-physical-contact-${{ github.run_id }}
+          path: |
+            docs/world_ab_contact_trial.html
+            network/tests/fixtures/world_ab_original_visual_reference_v1.json
+            ${{ runner.temp }}/world-ab-contact/world_ab_physical_contact_final.png
+            ${{ runner.temp }}/world-ab-contact/world_ab_physical_contact_generated.json
+            ${{ runner.temp }}/world-ab-contact/world_ab_physical_contact_verified.json
+          retention-days: 30
+          if-no-files-found: warn
