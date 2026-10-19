@@ -466,6 +466,934 @@
           1
         ]
       ]
+    },
+    {
+      "id": 16,
+      "law_ids": [
+        1,
+        4
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "id": 17,
+      "law_ids": [
+        4,
+        7
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 18,
+      "law_ids": [
+        7,
+        10
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BAB",
+        "BBBA"
+      ],
+      "example_source_endpoint": [
+        1,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 19,
+      "law_ids": [
+        10,
+        13
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AA",
+        "AAB"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 20,
+      "law_ids": [
+        13,
+        16
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "id": 21,
+      "law_ids": [
+        16,
+        19
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 22,
+      "law_ids": [
+        19,
+        22
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AAB",
+        "BABA"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 23,
+      "law_ids": [
+        22,
+        25
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BBB",
+        "AABA"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 24,
+      "law_ids": [
+        25,
+        28
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "id": 25,
+      "law_ids": [
+        28,
+        31
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 26,
+      "law_ids": [
+        31,
+        34
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AAB",
+        "BABA"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 27,
+      "law_ids": [
+        34,
+        37
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BBB",
+        "AABA"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 28,
+      "law_ids": [
+        37,
+        40
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          2
+        ]
+      ]
+    },
+    {
+      "id": 29,
+      "law_ids": [
+        40,
+        43
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 30,
+      "law_ids": [
+        43,
+        46
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AAB",
+        "BABA"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 31,
+      "law_ids": [
+        1,
+        46
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AA",
+        "AAB"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 32,
+      "law_ids": [
+        2,
+        5
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        2
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 33,
+      "law_ids": [
+        5,
+        8
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 34,
+      "law_ids": [
+        8,
+        11
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BAB",
+        "BBBA"
+      ],
+      "example_source_endpoint": [
+        1,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 35,
+      "law_ids": [
+        11,
+        14
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AA",
+        "AAB"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 36,
+      "law_ids": [
+        14,
+        17
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        2
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 37,
+      "law_ids": [
+        17,
+        20
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 38,
+      "law_ids": [
+        20,
+        23
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AAB",
+        "BABA"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 39,
+      "law_ids": [
+        23,
+        26
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BBB",
+        "AABA"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 40,
+      "law_ids": [
+        26,
+        29
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        2
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 41,
+      "law_ids": [
+        29,
+        32
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 42,
+      "law_ids": [
+        32,
+        35
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AAB",
+        "BABA"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 43,
+      "law_ids": [
+        35,
+        38
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BBB",
+        "AABA"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 44,
+      "law_ids": [
+        38,
+        41
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "BA",
+        "ABB"
+      ],
+      "example_source_endpoint": [
+        1,
+        1,
+        2
+      ],
+      "example_target_endpoints": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 45,
+      "law_ids": [
+        41,
+        44
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "",
+        "BBB"
+      ],
+      "example_source_endpoint": [
+        0,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "id": 46,
+      "law_ids": [
+        44,
+        47
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AAB",
+        "BABA"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        1
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "id": 47,
+      "law_ids": [
+        2,
+        47
+      ],
+      "objective": "rooted-collision-left-split-right",
+      "example_words": [
+        "AA",
+        "AAB"
+      ],
+      "example_source_endpoint": [
+        2,
+        0,
+        0
+      ],
+      "example_target_endpoints": [
+        [
+          2,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          1
+        ]
+      ]
     }
   ]
 }
