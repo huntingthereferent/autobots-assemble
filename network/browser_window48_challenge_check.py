@@ -58,6 +58,12 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             step
         )
 
+    def seek_matched_depth(self,depth):
+        self.page.locator("#compare-depth").evaluate(
+            "(input, value) => { input.value=String(value); input.dispatchEvent(new Event('input',{bubbles:true})); }",
+            depth
+        )
+
     def lock(self):
         self.page.locator("#lock").click()
 
@@ -235,6 +241,107 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.lock()
         self.page.locator("#check").click()
         self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
+    def test_two_path_matched_depth_exact_transitions_across_all_three_charts(self):
+        source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
+        challenges=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+        for mission in (2,16,32,47):
+            with self.subTest(mission=mission):
+                self.page.locator("#mission").select_option(str(mission))
+                self.assertTrue(self.page.locator("#compare-depth").is_disabled())
+                ch=challenges["challenges"][mission]
+                a,b=ch["example_words"]
+                self.word(a)
+                self.lock()
+                self.word(b)
+                self.lock()
+                self.assertEqual(self.page.locator("#matched-history").get_attribute("data-available"),"true")
+                self.assertTrue(self.page.locator("#export").is_disabled())
+                common=min(len(a),len(b))
+                self.assertEqual(self.page.locator("#compare-depth").get_attribute("max"),str(common))
+                for depth in range(common+1):
+                    self.seek_matched_depth(depth)
+                    def replay(word):
+                        state=[0,0]
+                        for action in word[:depth]:
+                            state=[source["laws"][ch["law_ids"][i]][action][state[i]] for i in range(2)]
+                        return state
+                    sa,sb=replay(a),replay(b)
+                    panel=self.page.locator("#matched-history")
+                    self.assertEqual(panel.get_attribute("data-depth"),str(depth))
+                    self.assertEqual(panel.get_attribute("data-p1-left"),str(sa[0]))
+                    self.assertEqual(panel.get_attribute("data-p2-left"),str(sb[0]))
+                    self.assertEqual(panel.get_attribute("data-p1-right"),str(sa[1]))
+                    self.assertEqual(panel.get_attribute("data-p2-right"),str(sb[1]))
+                    for world,i in (("left",0),("right",1)):
+                        self.assertEqual(self.page.locator("#"+world+"-nodes .node.compare-one").get_attribute("data-state-index"),str(sa[i]))
+                        self.assertEqual(self.page.locator("#"+world+"-nodes .node.compare-two").get_attribute("data-state-index"),str(sb[i]))
+                self.page.locator("#check").click()
+                self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+                _,report=self.exported()
+                self.assertTrue(report["passed"])
+
+    def test_unmatched_tail_is_not_padded_or_claimed_as_same_depth(self):
+        self.page.locator("#mission").select_option("1")
+        self.lock()  # Valid empty first word, no source action.
+        self.word("BBB")
+        self.lock()
+        self.assertEqual(self.page.locator("#compare-depth").get_attribute("max"),"0")
+        self.assertTrue(self.page.locator("#compare-depth").is_disabled())
+        self.assertTrue(self.page.locator("#compare-prev").is_disabled())
+        self.assertTrue(self.page.locator("#compare-next").is_disabled())
+        self.assertIn("0–0 are comparable",self.page.locator("#compare-tail").inner_text())
+        self.assertEqual(self.page.locator("#matched-history").get_attribute("data-p1-right"),"0")
+        self.assertEqual(self.page.locator("#matched-history").get_attribute("data-p2-right"),"0")
+        self.assertIn("first right split not observed",self.page.locator("#compare-history").inner_text())
+        self.page.locator("#check").click()
+        self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+        cert,verified=self.exported()
+        self.assertTrue(verified["passed"])
+        self.assertEqual(cert["trials"][0]["events"],[])
+
+    def test_same_depth_inspection_is_read_only_even_after_verified_witness(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        original,proof=self.exported()
+        self.assertTrue(proof["passed"])
+        before=self.page.locator("#progress").inner_text()
+        self.seek_matched_depth(2)
+        self.assertEqual(self.page.locator("#compare-depth").input_value(),"2")
+        self.page.locator("#compare-prev").click()
+        self.assertEqual(self.page.locator("#compare-depth").input_value(),"1")
+        self.page.locator("#compare-next").click()
+        self.assertEqual(self.page.locator("#compare-depth").input_value(),"2")
+        self.page.locator("#inspect-path").select_option("0")
+        self.seek_inspection(1)
+        after,verified=self.exported()
+        self.assertEqual(original,after)
+        self.assertTrue(verified["passed"])
+        self.assertEqual(before,self.page.locator("#progress").inner_text())
+
+    def test_matched_depth_reset_and_reloaded_witness_from_original_words(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.seek_matched_depth(3)
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertEqual(self.page.locator("#matched-history").get_attribute("data-available"),"true")
+        self.assertEqual(self.page.locator("#matched-history").get_attribute("data-depth"),"0")
+        self.assertEqual(self.page.locator("#compare-depth").get_attribute("max"),"3")
+        self.seek_matched_depth(2)
+        self.assertIn("matched depth 2 / 3",self.page.locator("#compare-status").inner_text())
+        self.page.locator("#retry").click()
+        self.assertEqual(self.page.locator("#matched-history").get_attribute("data-available"),"false")
+        self.assertEqual(self.page.locator("#left-nodes .node.compare-one").count(),0)
+        self.page.locator("#mission").select_option("16")
+        self.assertEqual(self.page.locator("#matched-history").get_attribute("data-available"),"false")
 
     def test_locked_source_path_scrubs_exact_native_math_at_every_step(self):
         source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
