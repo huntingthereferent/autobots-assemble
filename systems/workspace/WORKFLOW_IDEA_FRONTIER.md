@@ -39,7 +39,14 @@ step_id, worker)` reads only the current known position:
 - directly adjacent declared steps in the *same* pinned graph;
 - directly pinned parent, direct children and immediate siblings sharing
   that same pinned parent **within the same explicitly associated idea**;
-- boundary descriptors for those related revisions, **not their full graphs**.
+- boundary descriptors for those related revisions, **not their full graphs**;
+- incoming, explicitly recorded help proposals addressed **to this exact
+  branch**, only when their source is also within the visible first hop.
+
+The Workstation reopens current source manifests and recomputes their
+fingerprints before a worker sees a pinned revision or direct neighbor.
+Stale manifest bytes make that relationship unavailable rather than
+silently inventing continuity.
 
 This is deliberately *not* global omniscience. A worker can move backward
 through one parent at a time, request another bounded perspective in a later
