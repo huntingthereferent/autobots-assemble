@@ -128,15 +128,17 @@ class ContrastiveHarnessTests(unittest.TestCase):
         self.assertEqual(self.calls, [])
         self.assertFalse(self.journal())
 
-    def test_codex_cannot_become_the_common_executor_even_if_profiles_match(self):
-        # Equally configured on paper is not a reason to switch the tested system
-        # to a different agent's frozen instructions or build mode.
-        bad_base = replace(self.base, execution_mode="codex-build")
-        bad_candidate = replace(self.candidate, execution_mode="codex-build")
-        with self.assertRaisesRegex(ValueError, "Codex"):
-            contrast_and_record(**{**self.args(),
-                                  "base": bad_base, "candidate": bad_candidate})
-        self.assertEqual(self.calls, [])
+    def test_any_agent_client_can_use_workstation_with_matched_probes(self):
+        # Codex is not used to build A/B, but an external client can legitimately
+        # invoke its workers. Its label is metadata, not an execution substrate.
+        for label in ("harness2", "other-researcher-agent", "codex"):
+            with self.subTest(client=label):
+                first = replace(self.base, model_id=label, execution_mode="worker-client")
+                second = replace(self.candidate, model_id=label, execution_mode="worker-client")
+                row = contrast_and_record(**{**self.args(),
+                                            "base": first, "candidate": second})
+                self.assertEqual(row["status"], "SUPPORTED")
+        self.assertEqual(len(self.journal()), 3)
 
     def test_source_mutation_invalidates_old_probe(self):
         p = self.data / "workstation" / self.worker / "candidate" / "worker.py"
