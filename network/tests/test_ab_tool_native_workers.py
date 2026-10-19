@@ -4,7 +4,13 @@ from __future__ import annotations
 from hashlib import sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import sys
 import unittest
+
+# Test the original packaged source when the general protocol-test job has
+# not installed the optional product. This does not copy or reimplement A/B.
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "tools" / "ab-provenance" / "src"))
 
 from runtime.ab_tool_worker import ABToolWorkerBridge, ABToolWorkerError
 from runtime.continuity_pool import connect_pool
