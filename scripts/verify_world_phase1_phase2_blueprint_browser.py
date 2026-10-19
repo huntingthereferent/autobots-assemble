@@ -99,6 +99,9 @@ def run(reference,output):
             page.locator("#bp-object").fill("changed-observation")
             page.locator("#bp-known").fill("2026-01-03")
             page.locator("#bp-apply").click()
+            if ("2026-01-03" not in page.locator("#bp-clocks").inner_text()
+                or page.locator("#bp-clocks .bp-clock").count()!=7):
+                raise ValueError("all five independent source clocks not rendered after editing")
             initial=page.evaluate("window.worldBlueprintExport()")
             if ("changed-observation" not in page.locator("#bp-map").inner_text()
                 or initial["blueprint"]["sample_sets"]["synthetic"][1]["known_day"]!="2026-01-03"
@@ -130,6 +133,12 @@ def run(reference,output):
             page.locator("#bp-scale").dispatch_event("change")
             if page.locator("#bp-map .bp-map-node").count()!=12:
                 raise ValueError("map layout scale incorrectly changed logical graph")
+            if ("2019-08-02" not in page.locator("#bp-clocks").inner_text()
+                or "UNKNOWN interval" not in page.locator("#bp-clocks").inner_text()):
+                raise ValueError("real owner posting-day evidence or missing validity not shown")
+            page.locator("#bp-assertion").select_option("ctgov-v105")
+            if "2019-11-25" not in page.locator("#bp-clocks").inner_text():
+                raise ValueError("selected original version does not update observed posting day")
             page.locator("#bp-run").click()
             registry=page.evaluate("window.worldBlueprintExport()")
             real=cross_check(registry,"registry")
