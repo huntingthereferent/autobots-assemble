@@ -1,0 +1,36 @@
+name: ARC3 original-native stage1 advertised controls
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_legal_actions.py'
+      - '.github/workflows/arc3-sp80-legal-actions.yml'
+jobs:
+  original-native-legal-probes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official public ARC native SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Validate finite source-action discovery scope (unit only)
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_legal_actions import (
+            PREFIX,CANDIDATES,RESETS)
+          assert PREFIX=='454545'
+          assert CANDIDATES==tuple(range(1,9))
+          assert RESETS==2
+          print('UNIT ONLY: candidate controls and reset count frozen')
+          PY
+      - name: Execute genuine native stage1 advertised control trials
+        run: python -m work.arc3.native_sp80_legal_actions --out runtime/data/arc3/sp80-legal-actions.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-legal-actions
+          path: runtime/data/arc3/sp80-legal-actions.*
+          if-no-files-found: error
+          retention-days: 14
