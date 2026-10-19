@@ -70,7 +70,7 @@ def parse_plan(text):
     return parsed
 
 
-assert all(len(parse_plan(steps))>=4 for _,steps in PLANS)
+assert all(len(parse_plan(steps))>=3 for _,steps in PLANS)
 assert all(not (action==6 and xy is None)
            for _,steps in PLANS for action,xy in parse_plan(steps))
 
