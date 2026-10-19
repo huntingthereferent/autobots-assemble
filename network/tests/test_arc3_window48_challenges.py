@@ -173,7 +173,9 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
                      "Export verified certificate","marked origin","finite-mathematical-source-only",
                      "z = ","layer-grid","dataset.stateIndex","showNext","three z-planes",
                      "updateLiveComparison","node.reference","relation-distinct","LIVE PREVIEW",
-                     "renderInspector","inspect-step","inspect-path","Recorded Path"):
+                     "renderInspector","inspect-step","inspect-path","Recorded Path",
+                     "renderMatchedHistory","compare-depth","compare-one","compare-two",
+                     "Unequal recorded lengths"):
             self.assertIn(term,html)
         self.assertNotIn("GameState.WIN",html)
         self.assertNotIn("native arcade result",html.lower())
