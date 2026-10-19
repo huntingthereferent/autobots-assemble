@@ -116,6 +116,7 @@ class WorkflowNativeResults:
                 for v in ("CONTRADICTED", "NOT_CONTRADICTED", "UNDECIDED")
             } if finite else None),
             "tested_candidates": len(output["verdicts"]) if finite else None,
+            "verdict_sequence_sha256": _hash(output["verdicts"]) if finite else None,
             "simulated_part_state": output["part_state"] if factory else None,
             "native_result_reverified": True,
             "native_job_reexecuted": False,
@@ -247,8 +248,8 @@ class WorkflowNativeResults:
             "result_family": earlier["result_family"],
             "simulation_only": not finite,
             "verdict_count_deltas": differences,
-            "identical_native_verdicts": (all(v == 0 for v in differences.values())
-                                          if finite else None),
+            "identical_native_verdicts": (earlier["verdict_sequence_sha256"]
+                                          == later["verdict_sequence_sha256"] if finite else None),
             "identical_native_results": earlier["result_sha256"] == later["result_sha256"],
             "source_owned_native_results_reverified_now": True,
             "native_jobs_reexecuted": False,
