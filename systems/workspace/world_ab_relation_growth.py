@@ -44,6 +44,9 @@ def construct(observation):
     vx=hit["outgoing_velocity"][0]
     if not all(type(x) in (int,float) and isfinite(x) for x in (vx,vy,hit["time"],hit["x"],hit["y"])):
         raise ValueError("contact result invalid")
+    if abs(vx)<=EPS:
+        return {"constructed":False,"reason":"NO_OUTGOING_REBOUND",
+                "surface":None,"source_contact":hit}
     if not (vx<0 and hit["normal"]==[-1.0,0.0] and
             abs(hit["x"]-(WALL["x"]-HALF))<EPS and
             hit["wall_id"]==WALL["id"]):
