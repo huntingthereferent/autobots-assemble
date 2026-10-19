@@ -80,7 +80,7 @@ class Phase1DraftReview(unittest.TestCase):
             with self.subTest(token=token):
                 self.assertIn(token.lower(), text.lower())
         self.assertIn("neither the status field nor per-version public posting date", inspection.lower())
-        self.assertIn("its 2023 deposit date is not a 2023 extraction witness", text.lower())
+        self.assertIn("2023 deposit date is not a 2023 extraction witness", text.lower())
         self.assertIn("https://www.nih.gov/challenges/its-about-time-temporal-reasoning-biomedical-knowledge-graphs-challenge", inspection)
 
     def test_04_no_authenticated_real_historical_claims_in_ttl(self):
