@@ -114,6 +114,7 @@ button.positive{background:#246554;border-color:#82baa8}
 <button id="next" disabled>Next challenge</button>
 <button id="hint" disabled>Reveal source example</button>
 <button id="export" disabled>Export verified certificate</button>
+<button id="clear-progress" disabled>Clear saved progress</button>
 </div>
 <p id="status" role="status" aria-live="polite">Waiting for source data.</p>
 <div id="verdict">No rooted witness has been submitted.</div>
@@ -127,6 +128,8 @@ button.positive{background:#246554;border-color:#82baa8}
 (() => {
 const $=id=>document.getElementById(id);
 let model=null, roster=null, mission=0, phase=0, word='', trials=[], solved=new Set(), revealed=false, pass=false;
+const STORAGE_KEY='world48-source-replayed-progress/v1';
+const savedCertificates=new Map();
 const stateName=n=>'('+[Math.floor(n/9),Math.floor(n%9/3),n%3].join(',')+')';
 const currentMission=()=>roster.challenges[mission];
 const laws=()=>currentMission().law_ids.map(i=>model.laws[i]);
@@ -139,6 +142,60 @@ function play(actions){
   events.push({action,before,after:state.slice()});
  }
  return {actions,events,final:state};
+}
+function isWord(v){return typeof v==='string'&&v.length<=128&&/^[AB]*$/.test(v)}
+function validatesSaved(cert){
+ if(!cert||cert.schema!=='original-window48-rooted-collision-certificate/v1'||
+   cert.scope!=='finite-mathematical-source-only'||!Number.isInteger(cert.challenge_id)||
+   cert.challenge_id<0||cert.challenge_id>=16||!Array.isArray(cert.law_ids)||
+   cert.law_ids.length!==2||cert.law_ids.some((v,i)=>v!==roster.challenges[cert.challenge_id].law_ids[i])||
+   !Array.isArray(cert.trials)||cert.trials.length!==2||!cert.verdict||
+   Object.keys(cert.verdict).sort().join(',')!=='left_collides,passed,right_splits'||
+   Object.values(cert.verdict).some(v=>v!==true))return false;
+ const endpoints=[];
+ for(const t of cert.trials){
+  if(!t||!isWord(t.actions)||!Array.isArray(t.events)||t.events.length!==t.actions.length||
+     !Array.isArray(t.final)||t.final.length!==2)return false;
+  let state=[0,0];
+  for(let j=0;j<t.actions.length;j++){
+   const a=t.actions[j],before=state.slice();
+   state=state.map((s,i)=>model.laws[cert.law_ids[i]][a][s]);
+   const ev=t.events[j];
+   if(!ev||Object.keys(ev).sort().join(',')!=='action,after,before'||
+      ev.action!==a||!Array.isArray(ev.before)||ev.before.length!==2||
+      !Array.isArray(ev.after)||ev.after.length!==2||
+      ev.before.some((v,i)=>v!==before[i])||
+      ev.after.some((v,i)=>v!==state[i]))return false;
+  }
+  if(t.final.some((v,i)=>v!==state[i]))return false;
+  endpoints.push(state);
+ }
+ return cert.trials[0].actions!==cert.trials[1].actions&&
+   endpoints[0][0]===endpoints[1][0]&&endpoints[0][1]!==endpoints[1][1];
+}
+function persistProgress(){
+ try{
+  localStorage.setItem(STORAGE_KEY,JSON.stringify({
+   schema:STORAGE_KEY,certificates:[...savedCertificates.values()].sort((a,b)=>a.challenge_id-b.challenge_id),
+   draft:{mission,phase,word,paths:trials.map(t=>t.actions)}
+  }));
+ }catch(_unavailable){/* Browser persistence is optional; source checks remain. */}
+}
+function restoreProgress(){
+ try{
+  const raw=localStorage.getItem(STORAGE_KEY);
+  if(!raw||raw.length>1500000)return null;
+  const rec=JSON.parse(raw);
+  if(!rec||rec.schema!==STORAGE_KEY||!Array.isArray(rec.certificates)||rec.certificates.length>16)return null;
+  for(const cert of rec.certificates){if(validatesSaved(cert))savedCertificates.set(cert.challenge_id,cert)}
+  solved=new Set(savedCertificates.keys());
+  const d=rec.draft;
+  if(!d||!Number.isInteger(d.mission)||d.mission<0||d.mission>=16||
+     !Number.isInteger(d.phase)||d.phase<0||d.phase>2||!isWord(d.word)||
+     !Array.isArray(d.paths)||d.paths.length!==d.phase||d.paths.some(p=>!isWord(p))||
+     (d.phase===2&&d.word!==''))return null;
+  return d;
+ }catch(_corrupt){return null}
 }
 function drawNodes(root,law,state){
  const parent=$(root);parent.replaceChildren();
@@ -171,7 +228,7 @@ function reRender(message){
  $('record').textContent=result.events.length?
    result.events.map((e,i)=>String(i+1).padStart(3,'0')+' '+e.action+'  '+stateName(e.before[0])+' → '+stateName(e.after[0])+'  |  '+stateName(e.before[1])+' → '+stateName(e.after[1])).join('\n'):
    'Marked origin in both source worlds.';
- $('progress').textContent=solved.size+' of '+roster.challenges.length+' witnessed in this browser session';
+ $('progress').textContent=solved.size+' of '+roster.challenges.length+' source-replayed witnesses saved in this browser';
  $('undo').disabled=phase===2||!word;
  $('reset').disabled=phase===2||!word;
  $('a').disabled=phase===2||word.length>=128;
@@ -184,6 +241,7 @@ function reRender(message){
  $('export').disabled=!pass;
  $('hint').disabled=revealed;
  $('retry').disabled=false;
+ $('clear-progress').disabled=savedCertificates.size===0;
  if(message)$('status').textContent=message;
 }
 function nextWord(value){
@@ -191,22 +249,23 @@ function nextWord(value){
   reRender('Use A/B only, with no more than 128 actions per path.');
   return;
  }
- word+=value;reRender('Applied '+value.length+' exact source action(s).');
+ word+=value;reRender('Applied '+value.length+' exact source action(s).');persistProgress();
 }
-function chooseChallenge(id){
+function chooseChallenge(id,store=true){
  mission=id;phase=0;word='';trials=[];pass=false;revealed=false;
  const p=currentMission();
  $('task').textContent='Challenge '+(id+1)+' / '+roster.challenges.length+': find the left-root collision and right-root split between laws #'+(p.law_ids[0]+1)+' and #'+(p.law_ids[1]+1)+'.';
  $('verdict').textContent='No rooted witness has been submitted.';
  $('hint').textContent='Reveal source example';
  reRender('Challenge reset at the marked origin.');
+ if(store)persistProgress();
 }
 function lockPath(){
  if(phase>=2)return;
  trials.push(play(word));
  phase++;word='';
  pass=false;
- reRender('Locked path '+phase+'. '+(phase===1?'Begin the second path at the same origin.':'Compare both rooted paths.'));
+ reRender('Locked path '+phase+'. '+(phase===1?'Begin the second path at the same origin.':'Compare both rooted paths.'));persistProgress();
 }
 function checkWitness(){
  if(phase!==2||trials.length!==2)return;
@@ -214,7 +273,8 @@ function checkWitness(){
  const collide=x.final[0]===y.final[0];
  const split=x.final[1]!==y.final[1];
  pass=x.actions!==y.actions&&collide&&split;
- if(pass)solved.add(mission);
+ if(pass){solved.add(mission);savedCertificates.set(mission,certificate());}
+ persistProgress();
  $('verdict').textContent=pass?
    'WITNESSED: Left endpoints coincide at '+stateName(x.final[0])+'. Right endpoints differ: '+stateName(x.final[1])+' versus '+stateName(y.final[1])+'. This is an exact rooted source separation.':
    'NOT YET: Left endpoints '+(collide?'coincide':'differ')+'; right endpoints '+(split?'differ':'coincide')+'. Two distinct words with left collision and right split are required. Reset this challenge and try different paths.';
@@ -272,8 +332,8 @@ async function boot(){
   select.disabled=false;select.addEventListener('change',()=>chooseChallenge(Number(select.value)));
   $('a').addEventListener('click',()=>nextWord('A'));
   $('b').addEventListener('click',()=>nextWord('B'));
-  $('undo').addEventListener('click',()=>{word=word.slice(0,-1);reRender('Replayed current path from marked origin.')});
-  $('reset').addEventListener('click',()=>{word='';reRender('Current path reset to origin.')});
+  $('undo').addEventListener('click',()=>{word=word.slice(0,-1);reRender('Replayed current path from marked origin.');persistProgress()});
+  $('reset').addEventListener('click',()=>{word='';reRender('Current path reset to origin.');persistProgress()});
   $('run').addEventListener('click',()=>nextWord($('word').value.toUpperCase().trim()));
   $('word').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('run').click()}});
   $('lock').addEventListener('click',lockPath);
@@ -285,13 +345,25 @@ async function boot(){
   });
   $('hint').addEventListener('click',reveal);
   $('export').addEventListener('click',download);
+  $('clear-progress').addEventListener('click',()=>{
+   savedCertificates.clear();solved.clear();
+   try{localStorage.removeItem(STORAGE_KEY)}catch(_unavailable){}
+   chooseChallenge(0,false);
+   reRender('Saved WORLD48 progress cleared. Source mathematics unchanged.');
+  });
   document.addEventListener('keydown',e=>{
     if(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement||e.target instanceof HTMLButtonElement||e.ctrlKey||e.altKey||e.metaKey)return;
     const key=e.key.toUpperCase();
     if(key==='A'||key==='B'){e.preventDefault();nextWord(key)}
-    if(e.key==='Backspace'&&phase<2){e.preventDefault();word=word.slice(0,-1);reRender('Replayed after undo.')}
+    if(e.key==='Backspace'&&phase<2){e.preventDefault();word=word.slice(0,-1);reRender('Replayed after undo.');persistProgress()}
   });
-  chooseChallenge(0);
+  const draft=restoreProgress();
+  chooseChallenge(draft?draft.mission:0,false);
+  if(draft){
+   phase=draft.phase;word=draft.word;trials=draft.paths.map(actions=>play(actions));
+   $('mission').value=String(mission);
+   reRender('Restored A/B paths and replayed saved witnesses against original source.');
+  }
  }catch(e){$('status').textContent='Source unavailable; no challenge invented: '+String(e.message||e);}
 }
 boot();
