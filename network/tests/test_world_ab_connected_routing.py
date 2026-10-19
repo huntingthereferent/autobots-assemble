@@ -146,8 +146,6 @@ class Trial05ConnectedRoutingTests(unittest.TestCase):
             q=deepcopy(r);change(q)
             with self.subTest(i=i),self.assertRaises(ValueError):
                 verify_source_geometry(q["geometry"])
-                # The test above will only reject geometric mutants; run the
-                # independent route oracle for trajectory/source mutants.
                 verify_route_or_fail(q)
     def test_05_no_guide_funnel_spiral_is_promoted_from_crossed_lines(self):
         r=run()
