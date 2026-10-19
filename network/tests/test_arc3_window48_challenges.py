@@ -171,7 +171,7 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
         for term in ("window48_world_data.json","window48_challenges.json",
                      "Lock path","Check the two paths","Retry challenge",
                      "Export verified certificate","marked origin","finite-mathematical-source-only",
-                     "z = ","layer-grid","data.stateIndex","showNext","three z-planes"):
+                     "z = ","layer-grid","dataset.stateIndex","showNext","three z-planes"):
             self.assertIn(term,html)
         self.assertNotIn("GameState.WIN",html)
         self.assertNotIn("native arcade result",html.lower())
