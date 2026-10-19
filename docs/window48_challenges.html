@@ -114,6 +114,8 @@ button.positive{background:#246554;border-color:#82baa8}
 <button id="next" disabled>Next challenge</button>
 <button id="hint" disabled>Reveal source example</button>
 <button id="export" disabled>Export verified certificate</button>
+<button id="import" disabled>Import witness JSON</button>
+<input id="import-file" type="file" accept=".json,application/json" aria-label="Choose previously exported WORLD48 witness" hidden>
 <button id="clear-progress" disabled>Clear saved progress</button>
 </div>
 <p id="status" role="status" aria-live="polite">Waiting for source data.</p>
@@ -240,6 +242,7 @@ function reRender(message){
  $('next').disabled=!pass;
  $('export').disabled=!pass;
  $('hint').disabled=revealed;
+ $('import').disabled=false;
  $('retry').disabled=false;
  $('clear-progress').disabled=savedCertificates.size===0;
  if(message)$('status').textContent=message;
@@ -295,6 +298,24 @@ function download(){
  document.body.appendChild(link);link.click();link.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+async function importWitnessFile(file){
+ if(!file)return;
+ if(file.size<1||file.size>200000){
+  reRender('Witness import rejected: expected an original JSON certificate under 200 KB.');
+  return;
+ }
+ try{
+  const cert=JSON.parse(await file.text());
+  if(!validatesSaved(cert))throw Error('original source replay rejected the witness');
+  savedCertificates.set(cert.challenge_id,cert);
+  solved.add(cert.challenge_id);
+  persistProgress();
+  reRender('Imported and source-replayed challenge '+(cert.challenge_id+1)+
+           '. The witness is saved in this browser. No native or external game claim was created.');
+ }catch(_invalid){
+  reRender('Witness import rejected: the JSON did not replay against original WORLD48 source laws.');
+ }
+}
 function reveal(){
  const example=currentMission().example_words;
  revealed=true;$('hint').textContent='Example: '+example.map(x=>x||'(empty)').join(' / ');
@@ -345,6 +366,12 @@ async function boot(){
   });
   $('hint').addEventListener('click',reveal);
   $('export').addEventListener('click',download);
+  $('import').addEventListener('click',()=>$('import-file').click());
+  $('import-file').addEventListener('change',async()=>{
+    const file=$('import-file').files[0];
+    await importWitnessFile(file);
+    $('import-file').value='';
+  });
   $('clear-progress').addEventListener('click',()=>{
    savedCertificates.clear();solved.clear();
    try{localStorage.removeItem(STORAGE_KEY)}catch(_unavailable){}

@@ -5,6 +5,7 @@ from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 import json
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from threading import Thread
 import unittest
 
@@ -185,6 +186,62 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
         self.page.reload()
         self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+
+    def test_import_valid_export_restores_verified_progress_after_clear(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        with self.page.expect_download() as receipt_event:
+            self.page.locator("#export").click()
+        path=Path(receipt_event.value.path())
+        original=json.loads(path.read_text(encoding="utf8"))
+        self.assertTrue(verify_certificate(original)["passed"])
+        self.page.locator("#clear-progress").click()
+        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.page.locator("#import-file").set_input_files(str(path))
+        self.page.wait_for_function("document.querySelector('#status').textContent.includes('Imported and source-replayed challenge 3')")
+        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.assertIn("Imported and source-replayed challenge 3",self.page.locator("#status").inner_text())
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+
+    def test_forged_import_is_rejected_without_change_to_source_progress(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        with self.page.expect_download() as receipt_event:
+            self.page.locator("#export").click()
+        forged=json.loads(Path(receipt_event.value.path()).read_text(encoding="utf8"))
+        forged["trials"][1]["events"][0]["after"][1]=26
+        self.page.locator("#clear-progress").click()
+        with TemporaryDirectory() as temp:
+            file=Path(temp)/"forged.json"
+            file.write_text(json.dumps(forged),encoding="utf8")
+            self.page.locator("#import-file").set_input_files(str(file))
+            self.page.wait_for_function("document.querySelector('#status').textContent.includes('Witness import rejected')")
+            self.assertIn("Witness import rejected",self.page.locator("#status").inner_text())
+            self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+
+    def test_wrong_scope_import_cannot_be_counted(self):
+        forged={"schema":"external-native-game-result","challenge_id":1,
+                "status":"WIN","score":100}
+        with TemporaryDirectory() as temp:
+            file=Path(temp)/"external.json"
+            file.write_text(json.dumps(forged),encoding="utf8")
+            self.page.locator("#import-file").set_input_files(str(file))
+            self.page.wait_for_function("document.querySelector('#status').textContent.includes('Witness import rejected')")
+        self.assertIn("Witness import rejected",self.page.locator("#status").inner_text())
         self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
 
     def test_invalid_word_keeps_source_origin(self):
