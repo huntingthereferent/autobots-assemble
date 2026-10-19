@@ -64,6 +64,12 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             depth
         )
 
+    def seek_cross_prefix(self,which,depth):
+        self.page.locator("#cross-step-"+which).evaluate(
+            "(input, value) => { input.value=String(value); input.dispatchEvent(new Event('input',{bubbles:true})); }",
+            depth
+        )
+
     def lock(self):
         self.page.locator("#lock").click()
 
@@ -241,6 +247,125 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.lock()
         self.page.locator("#check").click()
         self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
+    def test_cross_depth_source_prefixes_and_earliest_candidate_in_every_chart(self):
+        source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
+        roster=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+        for mission in (1,2,16,32,47):
+            with self.subTest(mission=mission):
+                self.page.locator("#mission").select_option(str(mission))
+                self.assertTrue(self.page.locator("#cross-first").is_disabled())
+                ids=roster["challenges"][mission]["law_ids"]
+                words=roster["challenges"][mission]["example_words"]
+                prefixes=[]
+                for word in words:
+                    states=[[0,0]]
+                    for action in word:
+                        prev=states[-1]
+                        states.append([
+                            source["laws"][ids[k]][action][prev[k]] for k in range(2)
+                        ])
+                    prefixes.append(states)
+                candidates=[]
+                for i,sa in enumerate(prefixes[0]):
+                    for j,sb in enumerate(prefixes[1]):
+                        if sa[0]==sb[0] and sa[1]!=sb[1] and words[0][:i]!=words[1][:j]:
+                            candidates.append((i+j,i,j))
+                self.assertTrue(candidates)
+                _,first_a,first_b=min(candidates)
+                self.word(words[0])
+                self.lock()
+                self.word(words[1])
+                self.lock()
+                self.assertEqual(self.page.locator("#cross-depth").get_attribute("data-available"),"true")
+                self.assertIn(str(len(candidates))+" actual prefix pairs",self.page.locator("#cross-count").inner_text())
+                self.assertEqual(self.page.locator("#cross-step-one").get_attribute("max"),str(len(words[0])))
+                self.assertEqual(self.page.locator("#cross-step-two").get_attribute("max"),str(len(words[1])))
+                self.assertTrue(self.page.locator("#export").is_disabled())
+                self.page.locator("#cross-first").click()
+                panel=self.page.locator("#cross-depth")
+                self.assertEqual(panel.get_attribute("data-one"),str(first_a))
+                self.assertEqual(panel.get_attribute("data-two"),str(first_b))
+                self.assertEqual(panel.get_attribute("data-candidate"),"true")
+                self.assertIn("not a completed witness",self.page.locator("#cross-readout").inner_text())
+                for side,k in (("left",0),("right",1)):
+                    self.assertEqual(
+                        self.page.locator("#"+side+"-nodes .node.cross-one").get_attribute("data-state-index"),
+                        str(prefixes[0][first_a][k]))
+                    self.assertEqual(
+                        self.page.locator("#"+side+"-nodes .node.cross-two").get_attribute("data-state-index"),
+                        str(prefixes[1][first_b][k]))
+                self.page.locator("#cross-ends").click()
+                self.assertEqual(panel.get_attribute("data-one"),str(len(words[0])))
+                self.assertEqual(panel.get_attribute("data-two"),str(len(words[1])))
+                self.page.locator("#check").click()
+                record,host=self.exported()
+                self.assertTrue(host["passed"])
+                self.assertEqual([t["actions"] for t in record["trials"]],words)
+
+    def test_cross_depth_does_not_claim_witness_for_same_words(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("AA")
+        self.lock()
+        self.word("AA")
+        self.lock()
+        panel=self.page.locator("#cross-depth")
+        self.assertEqual(panel.get_attribute("data-available"),"true")
+        self.assertEqual(panel.get_attribute("data-candidate"),"false")
+        self.assertEqual(self.page.locator("#cross-count").inner_text().split(" actual")[0],"0")
+        self.assertTrue(self.page.locator("#cross-first").is_disabled())
+        self.assertTrue(self.page.locator("#export").is_disabled())
+        self.page.locator("#check").click()
+        self.assertIn("NOT YET",self.page.locator("#verdict").inner_text())
+        self.assertEqual(self.page.locator("#progress").inner_text(),"0 of 48 source-replayed witnesses saved in this browser")
+
+    def test_cross_depth_with_empty_first_word_keeps_uninvented_prefix(self):
+        self.page.locator("#mission").select_option("1")
+        self.lock()
+        self.word("BBB")
+        self.lock()
+        self.assertTrue(self.page.locator("#cross-step-one").is_disabled())
+        self.assertEqual(self.page.locator("#cross-step-one").get_attribute("max"),"0")
+        self.assertEqual(self.page.locator("#cross-step-two").get_attribute("max"),"3")
+        self.page.locator("#cross-first").click()
+        panel=self.page.locator("#cross-depth")
+        self.assertEqual(panel.get_attribute("data-one"),"0")
+        self.assertGreater(int(panel.get_attribute("data-two")),0)
+        self.assertEqual(panel.get_attribute("data-candidate"),"true")
+        self.assertTrue(self.page.locator("#export").is_disabled())
+        self.page.locator("#check").click()
+        payload,result=self.exported()
+        self.assertTrue(result["verified"])
+        self.assertTrue(result["passed"])
+        self.assertEqual(payload["trials"][0]["events"],[])
+
+    def test_cross_depth_is_read_only_and_replayed_after_reload(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        original,proof=self.exported()
+        self.assertTrue(proof["passed"])
+        before=self.page.locator("#progress").inner_text()
+        self.seek_cross_prefix("one",1)
+        self.seek_cross_prefix("two",3)
+        self.assertEqual(self.page.locator("#cross-depth").get_attribute("data-one"),"1")
+        self.assertEqual(self.page.locator("#cross-depth").get_attribute("data-two"),"3")
+        record,proof2=self.exported()
+        self.assertEqual(original,record)
+        self.assertTrue(proof2["passed"])
+        self.assertEqual(self.page.locator("#progress").inner_text(),before)
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertEqual(self.page.locator("#cross-depth").get_attribute("data-one"),"3")
+        self.assertEqual(self.page.locator("#cross-depth").get_attribute("data-two"),"4")
+        self.page.locator("#retry").click()
+        self.assertEqual(self.page.locator("#cross-depth").get_attribute("data-available"),"false")
+        self.assertEqual(self.page.locator("#left-nodes .node.cross-one").count(),0)
+        self.page.locator("#mission").select_option("32")
+        self.assertEqual(self.page.locator("#cross-depth").get_attribute("data-available"),"false")
 
     def test_two_path_matched_depth_exact_transitions_across_all_three_charts(self):
         source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
