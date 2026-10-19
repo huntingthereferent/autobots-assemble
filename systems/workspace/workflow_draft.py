@@ -188,7 +188,7 @@ def commit_proposal(spec: dict, repo_root: str | Path, data_dir: str | Path) -> 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Review or record a non-executing workflow draft")
-    parser.add_argument("action", choices=("preview", "commit", "pin", "consider", "pins"))
+    parser.add_argument("action", choices=("preview", "diff", "commit", "pin", "consider", "pins"))
     parser.add_argument("--draft", type=Path)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--data-dir", type=Path, default=Path("runtime/data"))
@@ -205,6 +205,8 @@ def main() -> None:
         draft = json.loads(args.draft.read_text(encoding="utf-8"))
         if args.action == "preview":
             answer = build_preview(draft, args.repo_root)
+        elif args.action == "diff":
+            answer = pins.compare_branch(draft, args.repo_root)
         elif args.action == "commit":
             answer = commit_proposal(draft, args.repo_root, args.data_dir)
         elif args.action == "pin":
