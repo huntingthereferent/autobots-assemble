@@ -188,14 +188,32 @@ def commit_proposal(spec: dict, repo_root: str | Path, data_dir: str | Path) -> 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Review or record a non-executing workflow draft")
-    parser.add_argument("action", choices=("preview", "commit"))
-    parser.add_argument("--draft", type=Path, required=True)
+    parser.add_argument("action", choices=("preview", "commit", "pin", "consider", "pins"))
+    parser.add_argument("--draft", type=Path)
     parser.add_argument("--repo-root", type=Path, default=Path(__file__).resolve().parents[2])
     parser.add_argument("--data-dir", type=Path, default=Path("runtime/data"))
+    parser.add_argument("--reason", default="")
+    parser.add_argument("--assessment", type=Path)
     args = parser.parse_args()
-    draft = json.loads(args.draft.read_text(encoding="utf-8"))
-    answer = (build_preview(draft, args.repo_root) if args.action == "preview"
-              else commit_proposal(draft, args.repo_root, args.data_dir))
+    from systems.workspace.workflow_pins import WorkflowPins
+    pins = WorkflowPins(args.data_dir)
+    if args.action == "pins":
+        answer = pins.list_pins()
+    else:
+        if args.draft is None:
+            parser.error("--draft is required for this action")
+        draft = json.loads(args.draft.read_text(encoding="utf-8"))
+        if args.action == "preview":
+            answer = build_preview(draft, args.repo_root)
+        elif args.action == "commit":
+            answer = commit_proposal(draft, args.repo_root, args.data_dir)
+        elif args.action == "pin":
+            answer = pins.pin_candidate(draft, args.repo_root, reason=args.reason)
+        else:
+            if args.assessment is None:
+                parser.error("--assessment is required to consider a discovery")
+            observed = json.loads(args.assessment.read_text(encoding="utf-8"))
+            answer = pins.consider_discovery(draft, args.repo_root, assessment=observed)
     print(json.dumps(answer, indent=2, sort_keys=True))
 
 
