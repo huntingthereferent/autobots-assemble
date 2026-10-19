@@ -49,6 +49,17 @@ button.positive{background:#246554;border-color:#82baa8}
 .node.marked{border-color:#648e70}.node.nextA{box-shadow:inset 0 0 0 1px #c79f61}
 .node.nextB{outline:1px dashed #b38bd1;outline-offset:-3px}
 .node.current{background:#245b7d;border:2px solid #8ecbf8;color:#fff}
+.node.reference{position:relative}
+.node.reference::after{content:"1";position:absolute;right:-2px;top:-4px;min-width:12px;height:12px;border-radius:8px;background:#e8ca75;color:#182431;font:700 9px/12px ui-monospace,monospace;text-align:center}
+.relation{margin-top:14px}
+.relation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:10px 0 3px}
+.relation-metric{background:#101b27;border:1px solid #354a61;border-radius:8px;padding:11px;min-width:0}
+.relation-label{display:block;font-size:.78rem;color:#b8cee1;margin-bottom:5px}
+.relation-value{display:block;font:700 .84rem/1.55 ui-monospace,monospace;overflow-wrap:anywhere}
+.relation-metric.match{border-color:#78baa0}
+.relation-metric.miss{border-color:#b18a63}
+#relation-status{margin:10px 0 0;color:#b2c9dc;font-size:.86rem}
+@media(max-width:650px){.relation-grid{grid-template-columns:1fr}}
 .actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
 .wordentry{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
 .wordentry label{flex:1;min-width:180px}
@@ -88,6 +99,15 @@ button.positive{background:#246554;border-color:#82baa8}
 <div id="trial-a" class="trial"><strong>Path 1 · not locked</strong><span id="path-a" class="path">—</span><p id="final-a" class="dim">Not yet recorded</p></div>
 <div id="trial-b" class="trial"><strong>Path 2 · not locked</strong><span id="path-b" class="path">—</span><p id="final-b" class="dim">Not yet recorded</p></div>
 </div>
+<section id="live-relation" class="panel relation" aria-label="Live rooted witness comparison">
+<h2>Live A/B witness comparison</h2>
+<p id="relation-status">Lock Path 1 to compare both paths from the original source root.</p>
+<div class="relation-grid">
+<div id="relation-left" class="relation-metric"><span class="relation-label">Left · must coincide</span><span class="relation-value">Awaiting Path 1</span></div>
+<div id="relation-right" class="relation-metric"><span class="relation-label">Right · must split</span><span class="relation-value">Awaiting Path 1</span></div>
+<div id="relation-distinct" class="relation-metric"><span class="relation-label">Action words · must differ</span><span class="relation-value">Awaiting Path 1</span></div>
+</div>
+</section>
 <div class="worlds">
 <section class="panel">
 <div class="worldtitle"><h2>Left world</h2><span class="tag" id="left-law"></span></div>
@@ -102,7 +122,7 @@ button.positive{background:#246554;border-color:#82baa8}
 <div id="right-next" class="world-navigation" aria-live="off"></div>
 </section>
 </div>
-<p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Only A/B actions move the state; this is not a physical 3D simulation.</p>
+<p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Yellow '1' markers show the locked first path's endpoint while you build the second path. Only A/B actions move the state; this is not a physical 3D simulation.</p>
 <section class="panel">
 <div class="kicker" id="phase">Path 1 · build your first witness</div>
 <div class="actions">
@@ -208,7 +228,7 @@ function restoreProgress(){
   return d;
  }catch(_corrupt){return null}
 }
-function drawNodes(root,law,state){
+function drawNodes(root,law,state,reference=null){
  const parent=$(root);parent.replaceChildren();
  for(let z=0;z<3;z++){
   const slice=document.createElement('div');slice.className='slice';
@@ -227,13 +247,14 @@ function drawNodes(root,law,state){
     if(index===law.A[state])div.classList.add('nextA');
     if(index===law.B[state])div.classList.add('nextB');
     if(index===state)div.classList.add('current');
+    if(reference!==null&&index===reference)div.classList.add('reference');
     div.title=stateName(index);
     grid.appendChild(div);
    }
   }
   slice.appendChild(label);slice.appendChild(grid);parent.appendChild(slice);
  }
- parent.setAttribute('aria-label','27 exact F3 states in three z planes, currently '+stateName(state));
+ parent.setAttribute('aria-label','27 exact F3 states in three z planes, currently '+stateName(state)+(reference===null?'':', locked Path 1 '+stateName(reference)));
 }
 function showNext(root,law,state){
  const target=$(root);target.replaceChildren();
@@ -244,13 +265,54 @@ function showNext(root,law,state){
   target.appendChild(line);
  }
 }
+function updateLiveComparison(candidate){
+ const panel=$('live-relation');
+ const fields=[
+  {id:'relation-left',label:'Left · must coincide'},
+  {id:'relation-right',label:'Right · must split'},
+  {id:'relation-distinct',label:'Action words · must differ'}
+ ];
+ if(phase===0||!trials[0]){
+  $('relation-status').textContent='Lock Path 1 to compare both paths from the original source root.';
+  for(const f of fields){
+   const root=$(f.id);root.classList.remove('match','miss');
+   root.querySelector('.relation-value').textContent='Awaiting Path 1';
+  }
+  panel.dataset.ready='false';
+  return;
+ }
+ const first=trials[0],compare=phase===2?trials[1]:candidate;
+ const coincide=first.final[0]===compare.final[0];
+ const split=first.final[1]!==compare.final[1];
+ const distinct=first.actions!==compare.actions;
+ const metrics=[
+  {id:'relation-left',ok:coincide,text:stateName(first.final[0])+' / '+stateName(compare.final[0])+' · '+(coincide?'SAME':'DIFFERENT')},
+  {id:'relation-right',ok:split,text:stateName(first.final[1])+' / '+stateName(compare.final[1])+' · '+(split?'SPLIT':'SAME')},
+  {id:'relation-distinct',ok:distinct,text:distinct?'DISTINCT WORDS':'SAME WORD'}
+ ];
+ for(const m of metrics){
+  const root=$(m.id);
+  root.classList.toggle('match',m.ok);
+  root.classList.toggle('miss',!m.ok);
+  root.dataset.met=m.ok?'true':'false';
+  root.querySelector('.relation-value').textContent=m.text;
+ }
+ const eligible=coincide&&split&&distinct;
+ panel.dataset.ready=eligible?'true':'false';
+ $('relation-status').textContent=(phase===1?'LIVE PREVIEW — Path 2 not locked. ':'BOTH PATHS LOCKED — ')+
+  (eligible?(phase===1?'The conditions currently hold; lock Path 2 to verify.':'Conditions hold; choose Check the two paths to verify.'):
+  'Keep comparing endpoints; no verified witness yet.');
+}
 function reRender(message){
  if(!model||!roster)return;
- const [left,right]=laws(),result=play(word),state=result.final;
+ const [left,right]=laws(),result=phase===2?trials[1]:play(word),state=result.final;
  $('left-law').textContent='#'+String(left.id+1).padStart(2,'0')+' · k'+left.support+' e'+left.pulse+' t'+left.balanced+' c'+left.coefficient;
  $('right-law').textContent='#'+String(right.id+1).padStart(2,'0')+' · k'+right.support+' e'+right.pulse+' t'+right.balanced+' c'+right.coefficient;
  $('left-state').textContent=stateName(state[0]);$('right-state').textContent=stateName(state[1]);
- drawNodes('left-nodes',left,state[0]);drawNodes('right-nodes',right,state[1]);
+ const first=phase>0&&trials[0]?trials[0].final:null;
+ drawNodes('left-nodes',left,state[0],first?first[0]:null);
+ drawNodes('right-nodes',right,state[1],first?first[1]:null);
+ updateLiveComparison(result);
  showNext('left-next',left,state[0]);showNext('right-next',right,state[1]);
  $('phase').textContent=phase===2?'Two locked paths · verify rooted relation':'Path '+(phase+1)+' · build '+(phase?'the comparison':'your first')+' witness';
  for(let i=0;i<2;i++){

@@ -141,6 +141,95 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
                         self.assertEqual(preview,action+": "+coordinates(end)+" → "+coordinates(law[action][end]))
                 self.page.locator("#reset").click()
 
+    def test_live_comparison_uses_true_rooted_endpoints_without_premature_win(self):
+        self.page.locator("#mission").select_option("2")
+        self.assertIn("Awaiting Path 1",self.page.locator("#relation-left").inner_text())
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"false")
+        self.word("BAB")
+        self.lock()
+        self.assertIn("LIVE PREVIEW",self.page.locator("#relation-status").inner_text())
+        self.assertEqual(self.page.locator("#left-nodes .node.reference").count(),1)
+        self.assertEqual(self.page.locator("#right-nodes .node.reference").count(),1)
+        self.assertTrue(self.page.locator("#check").is_disabled())
+        self.word("BBBA")
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"true")
+        self.assertEqual(self.page.locator("#relation-left").get_attribute("data-met"),"true")
+        self.assertEqual(self.page.locator("#relation-right").get_attribute("data-met"),"true")
+        self.assertEqual(self.page.locator("#relation-distinct").get_attribute("data-met"),"true")
+        self.assertIn("SPLIT",self.page.locator("#relation-right").inner_text())
+        self.assertTrue(self.page.locator("#export").is_disabled())
+        self.lock()
+        self.assertIn("BOTH PATHS LOCKED",self.page.locator("#relation-status").inner_text())
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"true")
+        self.page.locator("#check").click()
+        self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+        payload,verified=self.exported()
+        self.assertTrue(verified["passed"])
+        self.assertEqual([t["actions"] for t in payload["trials"]],["BAB","BBBA"])
+
+    def test_live_relation_false_for_wrong_paths_and_resets_with_new_challenge(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("A")
+        self.lock()
+        self.word("B")
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"false")
+        self.assertTrue(self.page.locator("#export").is_disabled())
+        self.lock()
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"false")
+        self.page.locator("#check").click()
+        self.assertIn("NOT YET",self.page.locator("#verdict").inner_text())
+        self.page.locator("#retry").click()
+        self.assertIn("Awaiting Path 1",self.page.locator("#relation-right").inner_text())
+        self.assertEqual(self.page.locator("#left-nodes .node.reference").count(),0)
+        self.page.locator("#mission").select_option("16")
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"false")
+
+    def test_source_root_comparison_across_all_three_coefficient_charts(self):
+        manifest=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
+        roster=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+        for mission in (0,16,32,47):
+            with self.subTest(mission=mission):
+                self.page.locator("#mission").select_option(str(mission))
+                ch=roster["challenges"][mission]
+                ids=ch["law_ids"]
+                w1,w2=ch["example_words"]
+                expected=[]
+                for word in (w1,w2):
+                    pair=[0,0]
+                    for action in word:
+                        pair=[manifest["laws"][ids[i]][action][pair[i]] for i in range(2)]
+                    expected.append(pair)
+                self.word(w1)
+                self.lock()
+                for side,index in (("left",0),("right",1)):
+                    self.assertEqual(
+                        self.page.locator("#"+side+"-nodes .node.reference").get_attribute("data-state-index"),
+                        str(expected[0][index]))
+                self.word(w2)
+                self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"true")
+                self.lock()
+                for side,index in (("left",0),("right",1)):
+                    self.assertEqual(
+                        self.page.locator("#"+side+"-nodes .node.current").get_attribute("data-state-index"),
+                        str(expected[1][index]))
+                self.page.locator("#check").click()
+                self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
+    def test_live_relation_is_recomputed_after_reload(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"true")
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"true")
+        self.assertIn("LIVE PREVIEW",self.page.locator("#relation-status").inner_text())
+        self.assertTrue(self.page.locator("#check").is_disabled())
+        self.lock()
+        self.page.locator("#check").click()
+        self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
     def test_real_challenge_3_root_collision_and_python_host(self):
         self.page.locator("#mission").select_option("2")
         self.assertIn("laws #7 and #10",self.page.locator("#task").inner_text())
