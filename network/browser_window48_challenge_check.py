@@ -52,6 +52,12 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             self.page.locator("#word").fill(letters)
             self.page.locator("#run").click()
 
+    def seek_inspection(self,step):
+        self.page.locator("#inspect-step").evaluate(
+            "(input, value) => { input.value=String(value); input.dispatchEvent(new Event('input',{bubbles:true})); }",
+            step
+        )
+
     def lock(self):
         self.page.locator("#lock").click()
 
@@ -247,7 +253,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             if step:
                 act=word[step-1]
                 states=[source["laws"][ids[i]][act][states[i]] for i in range(2)]
-            self.page.locator("#inspect-step").fill(str(step))
+            self.seek_inspection(step)
             self.assertEqual(self.page.locator("#path-inspector").get_attribute("data-step"),str(step))
             self.assertIn("step "+str(step)+"/3",self.page.locator("#inspect-status").inner_text())
             for side,i in (("left",0),("right",1)):
@@ -276,7 +282,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.page.locator("#inspect-next").click()
         self.assertEqual(self.page.locator("#inspect-step").input_value(),"2")
         self.page.locator("#inspect-path").select_option("1")
-        self.page.locator("#inspect-step").fill("4")
+        self.seek_inspection(4)
         self.assertEqual(self.page.locator("#inspect-step").get_attribute("max"),"4")
         self.assertEqual(self.page.locator("#path-inspector").get_attribute("data-path"),"1")
         again,host_again=self.exported()
@@ -311,7 +317,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.page.locator("#mission").select_option("2")
         self.word("BAB")
         self.lock()
-        self.page.locator("#inspect-step").fill("1")
+        self.seek_inspection(1)
         self.assertEqual(self.page.locator("#path-inspector").get_attribute("data-step"),"1")
         self.page.reload()
         self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
