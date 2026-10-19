@@ -4,6 +4,8 @@ on:
     paths:
       - 'systems/workspace/workflow_ab_bridge.py'
       - 'systems/workspace/workflow_idea_frontier.py'
+      - 'network/tests/test_workflow_native_continuation.py'
+      - 'systems/workspace/workflow_native_continuation.py'
       - 'network/tests/test_workflow_idea_frontier.py'
       - 'network/tests/test_workflow_native_results.py'
       - 'network/tests/test_workflow_factory_native_results.py'
@@ -20,6 +22,8 @@ on:
     paths:
       - 'systems/workspace/workflow_ab_bridge.py'
       - 'systems/workspace/workflow_idea_frontier.py'
+      - 'network/tests/test_workflow_native_continuation.py'
+      - 'systems/workspace/workflow_native_continuation.py'
       - 'network/tests/test_workflow_idea_frontier.py'
       - 'network/tests/test_workflow_native_results.py'
       - 'network/tests/test_workflow_factory_native_results.py'
@@ -52,6 +56,7 @@ jobs:
           python -m unittest -v \
             network.tests.test_workstation_ab_workflow_bridge \
             network.tests.test_workflow_idea_frontier \
+            network.tests.test_workflow_native_continuation \
             network.tests.test_workflow_native_results \
             network.tests.test_workflow_factory_native_results \
             network.tests.test_workstation_ab_workflow_http \
