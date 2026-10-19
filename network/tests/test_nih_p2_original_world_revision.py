@@ -38,7 +38,7 @@ def frames():
             rows.append({
                 "turn":turn,"snapshot":name,"known_at":known,"target_at":"2026-01-04",
                 "temporal_ids":result["temporal_ids"],"future_leakage_ids":result["future_leakage_ids"],
-                "source_dataset_sha256":{"baseline":"a"*64,"corrected":"b"*64,"withdrawn":"c"*64}[name],
+                "snapshot_dataset_sha256":{"baseline":"a"*64,"corrected":"b"*64,"withdrawn":"c"*64}[name],
                 "original_program_sha256":"d"*64,
                 "independent_host_agreement":True})
     return rows
@@ -74,7 +74,7 @@ class RevisionWorldTests(unittest.TestCase):
         base=frames()
         for idx,changes in (
             (0,{"original_program_sha256":"f"*64}),
-            (1,{"source_dataset_sha256":"f"*64}),
+            (1,{"snapshot_dataset_sha256":"f"*64}),
             (3,{"known_at":"2026-01-06"}),
             (4,{"independent_host_agreement":False}),
             (6,{"temporal_ids":["prior-note"]}),
