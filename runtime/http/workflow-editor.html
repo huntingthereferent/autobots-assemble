@@ -90,6 +90,16 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 <button id="ab-record">Attach to pinned revision</button>
 <button id="ab-history">Show source-link history</button>
 <p class="note">Only local source references are retained, in a separate append-only record. Actual code and original worker journals remain in place. Attaching requires an existing pin.</p>
+<hr><h2>Source-verified native results</h2>
+<p class="note">First supported worker: the actual finite correspondence process. The verifier replays the existing job from its own source edition; this page never executes it.</p>
+<label for="native-job">Exact existing native job ID</label><input id="native-job" placeholder="Native completed job ID">
+<label for="native-step">Workflow step ID</label><input id="native-step" placeholder="Step to bind result to">
+<button id="native-inspect">Reverify native result</button>
+<button id="native-attach">Attach to pinned step</button>
+<label for="parent-step">Same pinned-parent step ID (for comparison)</label><input id="parent-step" placeholder="Parent workflow step ID">
+<button id="native-compare">Compare pinned native results</button>
+<button id="native-history">Native result history</button>
+<p class="note">A reverified computation is not proof of whole-workflow quality. Changed inputs are incomparable and no branch is automatically promoted.</p>
 <hr><h2>Portable drafts</h2><button id="export">Export JSON</button><button id="import">Import JSON</button><input id="file" type="file" accept=".json,application/json" hidden>
 <div id="message" role="status">Loading…</div>
 </section>
@@ -209,6 +219,34 @@ el("ab-record").onclick=()=>{
 el("ab-history").onclick=async()=>{
  try{const rows=await request("/api/ab-links");el("report").textContent=JSON.stringify(rows,null,2);message("Read saved A/B source ancestry links.");}
  catch(e){message(e.message,true);}
+};
+el("native-inspect").onclick=async()=>{
+ try{const result=await request("/api/native-inspect",{job_id:el("native-job").value});
+  el("report").textContent=JSON.stringify(result,null,2);
+  message("Fresh source-owned finite-result verification completed without execution.");
+ }catch(e){message(e.message,true);}
+};
+el("native-attach").onclick=async()=>{
+ try{snapshot();const result=await request("/api/native-attach",{draft,
+    step_id:el("native-step").value,job_id:el("native-job").value});
+  el("report").textContent=JSON.stringify(result,null,2);
+  message(result.recorded?"Attached freshly reverified native result to pinned workflow step.":"Exact native result is already attached.");
+ }catch(e){message(e.message,true);}
+};
+el("native-compare").onclick=async()=>{
+ try{snapshot();const view=await request("/api/preview",{draft});
+  const result=await request("/api/native-compare",{
+    parent_revision:draft.parent_revision,branch_revision:view.revision,
+    parent_step_id:el("parent-step").value,branch_step_id:el("native-step").value});
+  el("report").textContent=JSON.stringify(result,null,2);
+  message("Reverified both native editions. This compares bounded computation, not overall workflow quality.");
+ }catch(e){message(e.message,true);}
+};
+el("native-history").onclick=async()=>{
+ try{const result=await request("/api/native-results");
+  el("report").textContent=JSON.stringify(result,null,2);
+  message("Read "+result.length+" original native-result associations.");
+ }catch(e){message(e.message,true);}
 };
 el("export").onclick=()=>{snapshot();const blob=new Blob([JSON.stringify(draft,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="workflow-draft.json";a.click();URL.revokeObjectURL(url);};
 el("import").onclick=()=>el("file").click();
