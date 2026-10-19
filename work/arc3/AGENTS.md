@@ -6,6 +6,8 @@ This is a **real native ARC game investigation**, not an ARC-inspired artificial
 
 ## Resume here
 
+**Current executed follow-up:** [spatial condition evidence](runs/WINDOW48_SP80_SPATIAL_CONDITION_2026-10-18.md): 182 native actions, 16 resets, 52 paired comparisons. Spatial suppression reduced extras from 166 to 6 without adding misses; exact effects remain 40/52 and SIX native changes are missed by both baseline and candidate. The earlier all-change coverage is now bounded. Resume by inspecting the six remaining extras and six misses before predeclaring another condition. The older position-only test below is historical.
+
 **Latest executed follow-up:** [position-only condition test](runs/WINDOW48_SP80_POSITION_CONDITION_2026-10-18.md) rejected the proposed step-seven suppression: 8/16 exact versus 12/16 for the frozen baseline, with 128 actual changes wrongly removed. Resume by comparing those retained pre-action frames with the earlier absent block, then predeclare a new discriminating condition. Do not rerun or adopt the failed position-only repair.
 
 **Execution state:** the latest native SP80 experiments completed; no persistent ARC process or automatic successor is running. A green experiment workflow means observations were collected successfully, including counterexamples. It does not mean the tested model is exact.
