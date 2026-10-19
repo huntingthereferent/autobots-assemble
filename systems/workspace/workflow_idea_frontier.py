@@ -137,6 +137,25 @@ class IdeaFrontier:
                            "status": "SOURCE_RECORDED_NOT_COMPLETED"})
         return result
 
+    def idea_branches_for_operator(self, idea_id: str) -> list[dict]:
+        """Human editor view of just ONE source-recorded idea's bound branches.
+
+        Never wire this inventory method into native workers; workers use only
+        worker_frontier(), which reveals first-hop relations.
+        """
+        if idea_id not in self._active():
+            raise ValueError("requested idea is not in current source ledger")
+        pins = self._pins()
+        bindings = self._bindings()
+        result = [
+            {"revision": rev, "parent_revision": row["pinned_parent"],
+             "worker": row["worker"], "pin_status": pins[rev]["status"],
+             "title": pins[rev]["draft"]["title"]}
+            for rev, row in bindings.items()
+            if row["idea_id"] == idea_id and rev in pins
+        ]
+        return result[:MAX_BRANCHES]
+
     def bind(self, *, idea_id: str, revision: str, worker: str, reason: str) -> dict:
         """Explicit association only. Textual similarity NEVER infers a link."""
         idea_id = _word(idea_id, "idea ID", 40)
