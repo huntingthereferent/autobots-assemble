@@ -81,7 +81,9 @@ def verified_versions(dataset,events):
                 rows.append(deepcopy(event["replacement"]))
             elif kind!="withdrawal":raise ValueError("unsupported source operation")
         edition=deepcopy(dataset)
-        edition["observations"]=sorted(deepcopy(rows),key=lambda r:r["id"])
+        # Preserve native source ordering: digest comparisons are byte-sensitive.
+        # Sorting the corrected edition fabricates a different source fingerprint.
+        edition["observations"]=deepcopy(rows)
         states[{"base":"baseline","correction":"corrected","withdrawal":"withdrawn"}[kind]]=edition
     if tuple(states)!=STAGES:raise ValueError("source event stages changed")
     return states
