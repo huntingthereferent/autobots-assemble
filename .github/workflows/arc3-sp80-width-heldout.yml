@@ -1,0 +1,57 @@
+name: ARC3 SP80 native held-out frontier width
+on:
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_width_heldout.py"
+      - ".github/workflows/arc3-sp80-width-heldout.yml"
+  push:
+    paths:
+      - "work/arc3/native_sp80_width_heldout.py"
+      - ".github/workflows/arc3-sp80-width-heldout.yml"
+jobs:
+  native-width-heldout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official native ARC SDK and NumPy
+        run: python -m pip install "arc-agi>=0.9.6,<1" numpy
+      - name: Validate the frozen candidate and negative-controls (unit only)
+        run: |
+          python - <<'PY'
+          import numpy as np
+          from work.arc3.native_sp80_width_heldout import (
+              WORDS, RESETS, width_candidates, score_row)
+          assert len(WORDS) == 6 and len(set(WORDS)) == 6
+          assert all(len(w) == 17 and set(w) <= {"4", "5"} for w in WORDS)
+          assert RESETS == 2
+          assert width_candidates(0, None) == {
+              "X3_frontier_coordinate": 1,
+              "ALT_previous_observed_width": 1,
+              "ONE_negative_control": 1,
+          }
+          assert width_candidates(1, 1)["ALT_previous_observed_width"] == 2
+          assert width_candidates(3, 2)["ALT_previous_observed_width"] == 1
+          assert width_candidates(10, 1)["X3_frontier_coordinate"] == 2
+          pre = np.full((64, 64), 14, dtype=np.uint8)
+          pre[63, :3] = 0
+          one = {(3, 63): (14, 0)}
+          two = {(3, 63): (14, 0), (4, 63): (14, 0)}
+          assert score_row(pre, one, 3, 1)["exact"]
+          assert not score_row(pre, two, 3, 1)["exact"]
+          assert score_row(pre, two, 3, 2)["exact"]
+          assert not score_row(pre, {(3, 63): (14, 5)}, 3, 1)["exact"]
+          print("UNIT-ONLY: frozen candidate predictions and falsification checks passed")
+          PY
+      - name: Execute new official public native SP80 held-out histories
+        run: python -m work.arc3.native_sp80_width_heldout --out runtime/data/arc3/sp80-width-heldout.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-width-heldout
+          path: runtime/data/arc3/sp80-width-heldout.*
+          if-no-files-found: error
+          retention-days: 14
