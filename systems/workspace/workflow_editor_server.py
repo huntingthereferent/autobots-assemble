@@ -72,6 +72,13 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 except (ValueError, OSError) as e:
                     self._json({"error": str(e)}, 400)
                 return
+            if self.path == "/api/native-results":
+                try:
+                    from systems.workspace.workflow_native_results import WorkflowNativeResults
+                    self._json(WorkflowNativeResults(root, data_dir).list_records())
+                except (ValueError, OSError) as e:
+                    self._json({"error": str(e)}, 400)
+                return
             if self.path == "/api/ab-links":
                 try:
                     from systems.workspace.workflow_ab_bridge import ABWorkflowSources
@@ -110,7 +117,9 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 return
             if self.path not in ("/api/preview", "/api/diff", "/api/commit",
                                  "/api/pin", "/api/consider",
-                                 "/api/ab-preview", "/api/ab-record"):
+                                 "/api/ab-preview", "/api/ab-record",
+                                 "/api/native-inspect", "/api/native-attach",
+                                 "/api/native-compare"):
                 self._json({"error": "unknown action"}, 404)
                 return
             try:
@@ -118,7 +127,26 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 if length <= 0 or length > MAX_BYTES:
                     raise ValueError("invalid bounded request size")
                 payload = json.loads(self.rfile.read(length))
-                if not isinstance(payload, dict) or not isinstance(payload.get("draft"), dict):
+                if not isinstance(payload, dict):
+                    raise ValueError("request object required")
+                if self.path.startswith("/api/native-"):
+                    from systems.workspace.workflow_native_results import WorkflowNativeResults
+                    native = WorkflowNativeResults(root, data_dir)
+                    if self.path == "/api/native-inspect":
+                        reply = native.inspect(payload.get("job_id"))
+                    elif self.path == "/api/native-attach":
+                        reply = native.attach(payload.get("draft"), step_id=payload.get("step_id"),
+                                              job_id=payload.get("job_id"))
+                    else:
+                        reply = native.compare(
+                            parent_revision=payload.get("parent_revision"),
+                            branch_revision=payload.get("branch_revision"),
+                            parent_step_id=payload.get("parent_step_id"),
+                            branch_step_id=payload.get("branch_step_id"),
+                        )
+                    self._json(reply)
+                    return
+                if not isinstance(payload.get("draft"), dict):
                     raise ValueError("draft object required")
                 draft = payload["draft"]
                 if self.path in ("/api/ab-preview", "/api/ab-record"):
