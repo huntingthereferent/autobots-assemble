@@ -197,6 +197,67 @@ class IdeaFrontierTests(unittest.TestCase):
                 index.worker_frontier(idea_id=idea_id, revision=pinned["revision"],
                                       step_id="start", worker="worker-A")
 
+    def test_native_handoff_supplies_task_and_actor_without_caller_guesswork(self):
+        from runtime.engine import HandoffRuntime
+        from runtime.journal import RuntimeJournal
+        from runtime.repository_tasks import admit_active_work
+        local_runtime = HandoffRuntime(
+            event_store=RuntimeJournal(self.directory / "runtime.jsonl"))
+        admitted = admit_active_work(local_runtime, TASKS, actor_id="james")
+        self.assertEqual(len(admitted), len(self.work))
+        first = self.pin("Original native step", worker="james")
+        child = self.pin("Alternative native step", first["revision"],
+                         worker="worker-B")
+        handoff_id = "repo-work-" + self.idea
+        before = (self.directory / "runtime.jsonl").read_bytes()
+        view = self.index.native_handoff_frontier(
+            local_runtime, handoff_id=handoff_id,
+            revision=first["revision"], step_id="start")
+        self.assertEqual(view["native_handoff"]["to_actor"], "james")
+        self.assertEqual(view["native_handoff"]["source_work_id"], self.idea)
+        self.assertEqual(view["position"]["worker"], "james")
+        self.assertEqual(view["visible_branches"][0]["revision"], child["revision"])
+        self.assertTrue(view["native_handoff"]["task_origin_rechecked"])
+        self.assertFalse(view["native_handoff"]["actor_identity_authenticated"])
+        with self.assertRaisesRegex(ValueError, "no explicit"):
+            self.index.native_handoff_frontier(
+                local_runtime, handoff_id=handoff_id,
+                revision=child["revision"], step_id="start")
+        with self.assertRaisesRegex(ValueError, "no explicit"):
+            self.index.native_handoff_frontier(
+                local_runtime, handoff_id="repo-work-" + self.other_idea,
+                revision=first["revision"], step_id="start")
+        self.assertEqual((self.directory / "runtime.jsonl").read_bytes(), before)
+
+    def test_native_handoff_help_is_visible_to_exact_peer_at_next_observation(self):
+        from runtime.engine import HandoffRuntime
+        from runtime.journal import RuntimeJournal
+        from runtime.repository_tasks import admit_active_work
+        runtime = HandoffRuntime(
+            event_store=RuntimeJournal(self.directory / "runtime.jsonl"))
+        admit_active_work(runtime, TASKS, actor_id="james")
+        parent = self.pin("Native root", worker="james")
+        first = self.pin("Worker branch", parent["revision"], worker="james")
+        peer = self.pin("Peer approach", parent["revision"], worker="worker-B")
+        caller = "repo-work-" + self.idea
+        proposal = self.index.propose_from_native_handoff(
+            runtime, handoff_id=caller, revision=first["revision"],
+            step_id="start", target_revision=peer["revision"],
+            kind="HELP", reason="Matching declared step exposes a different label")
+        self.assertEqual(proposal["event"]["target_revision"], peer["revision"])
+        self.assertFalse(proposal["event"]["worker_help_executed"])
+        peer_view = self.index.worker_frontier(
+            idea_id=self.idea, revision=peer["revision"], step_id="start",
+            worker="worker-B")
+        self.assertEqual(peer_view["incoming_peer_help"][0]["from_revision"],
+                         first["revision"])
+        first_view = self.index.native_handoff_frontier(
+            runtime, handoff_id=caller, revision=first["revision"],
+            step_id="start")
+        self.assertEqual(first_view["visible_branches"][1]["local_step_delta"]["scope"],
+                         "MATCHED_DECLARED_STEP_ONLY_NOT_SUPERIORITY")
+        self.assertFalse(first_view["visible_branches"][1]["quality_superiority_proven"])
+
     def test_tampered_binding_history_fails_closed(self):
         parent = self.pin("Initial")
         journal = self.index.path
