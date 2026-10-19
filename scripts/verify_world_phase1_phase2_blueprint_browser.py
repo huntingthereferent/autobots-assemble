@@ -15,6 +15,7 @@ from pathlib import Path
 import subprocess
 import sys
 from systems.workspace.world_temporal_blueprint import validate,evaluate,graph
+from systems.workspace.world_blueprint_rdf import write_exports
 
 ROOT=Path(__file__).resolve().parents[1]
 PAGE=ROOT/"docs/world_phase1_phase2_blueprint.html"
@@ -171,8 +172,13 @@ def run(reference,output):
                 reset["active_source"]!="synthetic"):
                 raise ValueError("reset did not restore original world plus untouched blueprint")
             if failures:raise ValueError("page JavaScript errors: "+repr(failures))
+            rdf_receipts=write_exports(final["blueprint"],output)
+            if (len(rdf_receipts)!=2 or
+                any(r["parsed_graph_query_oracle_agreed"] is not True for r in rdf_receipts)):
+                raise ValueError("source graph RDF parsing/independent temporal oracle failed")
             evidence.update({
                 "original_two_room_browser_source_unchanged":True,
+                "phase1_ontology_aligned_rdf_receipts":rdf_receipts,
                 "original_w13_independent_native_witness":native,
                 "actual_played_world_actions":final["w13"]["actions"],
                 "first_room_actions_preserved":first["worlds"][0]["actions"]==final["w13"]["worlds"][0]["actions"],
@@ -191,7 +197,7 @@ def run(reference,output):
     print(json.dumps({"original_w13_replayed":True,
         "original_rooms_completed":2,"source_edit_changed_query":True,
         "real_registry_validity_unresolved":True,"reset_passed":True,
-        "original_JS_unchanged":True},sort_keys=True))
+        "original_JS_unchanged":True,"independently_parsed_RDF_graphs":2},sort_keys=True))
     return evidence
 
 if __name__=="__main__":
