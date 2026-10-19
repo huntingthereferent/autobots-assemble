@@ -1,0 +1,49 @@
+name: WORLD48 original finite-world source and Chromium
+
+on:
+  push:
+    paths:
+      - "work/arc3/window48_world_export.py"
+      - "work/arc_like_maze/window_combined.py"
+      - "work/arc_like_maze/window_two.py"
+      - "work/arc_like_maze/window_branch.py"
+      - "docs/window48_world.html"
+      - "docs/window48_world_data.json"
+      - "network/tests/test_arc3_window48_game_world.py"
+      - "network/browser_window48_world_check.py"
+      - ".github/workflows/arc3-window48-world.yml"
+  pull_request:
+    paths:
+      - "work/arc3/window48_world_export.py"
+      - "work/arc_like_maze/window_combined.py"
+      - "work/arc_like_maze/window_two.py"
+      - "work/arc_like_maze/window_branch.py"
+      - "docs/window48_world.html"
+      - "docs/window48_world_data.json"
+      - "network/tests/test_arc3_window48_game_world.py"
+      - "network/browser_window48_world_check.py"
+      - ".github/workflows/arc3-window48-world.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-math-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Recompute every WORLD48 transition from authoritative mathematics
+        run: python -m work.arc3.window48_world_export --check
+      - name: Independent host replay and negative controls
+        run: python -m unittest -v network.tests.test_arc3_window48_game_world
+      - name: Install actual Chromium driver
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Real browser actions, downloads, and independent source replay
+        run: python -m unittest -v network.browser_window48_world_check
