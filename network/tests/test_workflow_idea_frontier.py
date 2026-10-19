@@ -137,7 +137,9 @@ class IdeaFrontierTests(unittest.TestCase):
                                revision=first["revision"], step_id="start",
                                worker="worker-A", target_revision=same_worker["revision"],
                                reason="Not another worker")
-        self.assertFalse(self.index.path.exists())
+        self.assertTrue(self.index.path.exists())  # explicit BINDs are journaled
+        self.assertEqual([r["type"] for r in self.index._read()],
+                         ["BIND", "BIND", "BIND"])  # no invalid movement proposal
 
     def test_no_auto_ranking_even_if_pins_claim_verification(self):
         parent = self.pin("Original")
