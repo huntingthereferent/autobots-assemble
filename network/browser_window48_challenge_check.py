@@ -71,6 +71,76 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.assertEqual(page.locator('#mission option').count(),48)
         self.assertEqual(page.locator('button[data-action="interact"]').count(),0)
 
+    def test_each_finite_world_has_three_exact_z_planes_and_27_unique_coordinates(self):
+        for side in ("left","right"):
+            slices=self.page.locator("#"+side+"-nodes .slice")
+            self.assertEqual(slices.count(),3)
+            labels=[slices.nth(z).locator(".slice-label").inner_text() for z in range(3)]
+            self.assertEqual(labels,["z = 0","z = 1","z = 2"])
+            observed=[]
+            for z in range(3):
+                nodes=slices.nth(z).locator(".node")
+                self.assertEqual(nodes.count(),9)
+                self.assertEqual(nodes.count(),len([
+                    nodes.nth(i).get_attribute("data-state-index") for i in range(9)
+                ]))
+                for u in range(3):
+                    for v in range(3):
+                        node=nodes.nth(3*u+v)
+                        index=9*u+3*v+z
+                        self.assertEqual(int(node.get_attribute("data-state-index")),index)
+                        self.assertEqual(node.inner_text(),str(u)+","+str(v))
+                        self.assertEqual(node.get_attribute("title"),
+                                         "("+str(u)+","+str(v)+","+str(z)+")")
+                        observed.append(index)
+            self.assertEqual(set(observed),set(range(27)))
+            self.assertEqual(
+                self.page.locator("#"+side+"-nodes .node.current").count(),1
+            )
+            self.assertEqual(
+                self.page.locator("#"+side+"-nodes .node.marked").get_attribute("data-state-index"),"0"
+            )
+
+    def test_exact_source_A_B_previews_and_highlights_across_three_charts(self):
+        manifest=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
+        roster=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+        def coordinates(index):
+            return "("+str(index//9)+","+str((index%9)//3)+","+str(index%3)+")"
+        for mission in (0,16,32,47):
+            with self.subTest(mission=mission):
+                self.page.locator("#mission").select_option(str(mission))
+                ids=roster["challenges"][mission]["law_ids"]
+                for side,n in (("left",0),("right",1)):
+                    law=manifest["laws"][ids[n]]
+                    self.assertEqual(
+                        self.page.locator("#"+side+"-next .step-a").inner_text(),
+                        "A: (0,0,0) → "+coordinates(law["A"][0])
+                    )
+                    self.assertEqual(
+                        self.page.locator("#"+side+"-next .step-b").inner_text(),
+                        "B: (0,0,0) → "+coordinates(law["B"][0])
+                    )
+                    for action,name in (("A","nextA"),("B","nextB")):
+                        self.assertEqual(
+                            self.page.locator("#"+side+"-nodes .node."+name).get_attribute("data-state-index"),
+                            str(law[action][0])
+                        )
+                self.page.locator("#a").click()
+                self.page.locator("#b").click()
+                for side,n in (("left",0),("right",1)):
+                    law=manifest["laws"][ids[n]]
+                    end=law["B"][law["A"][0]]
+                    self.assertEqual(self.page.locator("#"+side+"-state").inner_text(),
+                                     coordinates(end))
+                    self.assertEqual(
+                        self.page.locator("#"+side+"-nodes .node.current").get_attribute("data-state-index"),
+                        str(end)
+                    )
+                    for action,cls in (("A","step-a"),("B","step-b")):
+                        preview=self.page.locator("#"+side+"-next ."+cls).inner_text()
+                        self.assertEqual(preview,action+": "+coordinates(end)+" → "+coordinates(law[action][end]))
+                self.page.locator("#reset").click()
+
     def test_real_challenge_3_root_collision_and_python_host(self):
         self.page.locator("#mission").select_option("2")
         self.assertIn("laws #7 and #10",self.page.locator("#task").inner_text())
