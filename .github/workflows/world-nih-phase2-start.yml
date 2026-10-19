@@ -9,6 +9,8 @@ on:
       - 'network/tests/test_nih_p2_world_source_events.py'
       - 'scripts/nih_p2_world_original_source_join.py'
       - 'network/tests/test_nih_p2_world_original_source_join.py'
+      - 'scripts/nih_p2_world_history_field_probe.py'
+      - 'network/tests/test_nih_p2_world_history_field_probe.py'
 permissions:
   contents: read
   actions: read
@@ -79,7 +81,7 @@ jobs:
       - name: Falsify synthetic event chain and source-time counterexamples
         run: |
           cd world
-          python -m unittest -v network.tests.test_nih_p2_world_source_events network.tests.test_nih_p2_world_original_source_join
+          python -m unittest -v network.tests.test_nih_p2_world_source_events network.tests.test_nih_p2_world_original_source_join network.tests.test_nih_p2_world_history_field_probe
       - name: Fetch exact owner-retained twelve-job native journal
         uses: actions/download-artifact@v4
         with:
@@ -111,6 +113,10 @@ jobs:
             "$RUNNER_TEMP/original-depositor-evidence/nih-p2-aact-owner-script-date-link.json" \
             "$RUNNER_TEMP/continued-original-w13/world-nih-p2-source-event-report.json" \
             "$RUNNER_TEMP/continued-original-w13/world-nih-p2-owner-boundary.json"
+      - name: Inspect two exact original public historical versions in real Chromium
+        run: |
+          python "$GITHUB_WORKSPACE/world/scripts/nih_p2_world_history_field_probe.py" \
+            --output-dir "$RUNNER_TEMP/continued-original-w13"
       - name: Preserve fresh Phase 2 game-world evidence, without republishing original journal
         if: always()
         uses: actions/upload-artifact@v4
@@ -128,6 +134,7 @@ jobs:
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-source-event-report.json
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-source-event-game.png
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-owner-boundary.json
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-original-history-field-probe.json
             ${{ runner.temp }}/original-depositor-evidence/nih-p2-aact-owner-script-date-link.json
           retention-days: 30
           if-no-files-found: warn
