@@ -22,6 +22,9 @@ hr{border:0;border-top:1px solid var(--line);margin:15px 0}
 #graph svg{min-width:590px;display:block}
 #nodes button{display:block;width:100%;text-align:left;background:#26313e;border-color:#455767;margin:4px 0}
 #nodes button.active{border-color:var(--accent);background:#1d403f}
+#idea-list button{width:100%;text-align:left;background:#253440;font-size:13px;margin:3px 0}
+#idea-list button.active{border-color:var(--accent);background:#1e4642}
+#idea-view{max-height:245px;min-height:50px}
 #links div{border-bottom:1px solid var(--line);padding:5px 0;display:flex;justify-content:space-between;gap:6px}
 #links span{overflow-wrap:anywhere;font-family:monospace;font-size:12px}
 pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;font-size:12px}
@@ -38,6 +41,28 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 <p>Edit a workflow without replacing its earlier versions. Generation uses declared source interfaces; ambiguous relationships stay unresolved. Pin a promising branch, and inspect exactly what changed.</p>
 <div class="layout">
 <section class="panel">
+<h2>Ideas <small class="muted">existing task checklist</small></h2>
+<p class="note">These are exactly the active MOVE entries from TASKS.md. An idea is not a completion claim. Click one to inspect or change its branches.</p>
+<div id="idea-list"></div>
+<p class="note" id="idea-selected">Select an idea. Other relationships remain hidden until linked.</p>
+<label for="idea-worker">Worker label for this pinned branch</label>
+<input id="idea-worker" placeholder="existing native worker label">
+<button id="idea-bind">Associate selected pin with idea</button>
+<label for="idea-current">Linked branch for this idea</label>
+<select id="idea-current"></select>
+<button id="idea-fork">Fork this pinned branch for structural changes</button>
+<label for="idea-step">Worker's current step</label>
+<select id="idea-step"></select>
+<button id="idea-observe">Observe first-hop frontier</button>
+<pre id="idea-view">No worker view selected.</pre>
+<label for="idea-target">Visible related branch (never auto-ranked)</label>
+<select id="idea-target"></select>
+<label for="idea-reason">Observed reason to revisit or help</label>
+<input id="idea-reason" placeholder="What in this local view calls for a different path?">
+<button id="idea-back">Propose backward movement</button>
+<button id="idea-help">Offer help on peer branch</button>
+<p class="note">Only recorded first-hop relations are visible to worker logic. These actions record review proposals—not worker execution, automatic merges or proof of superiority.</p>
+<hr>
 <h2>Workflow</h2>
 <label for="title">Goal</label><input id="title">
 <label for="provenance">Source / provenance</label><input id="provenance">
@@ -109,6 +134,7 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 "use strict";
 const TOKEN="__EDITOR_TOKEN__",el=id=>document.getElementById(id);
 let draft=null,catalog=[],pins=[],selected="",lastPreview=null;
+let activeIdeas=[],activeIdeaId="",ideaBranches=[],currentFrontier=null;
 const copy=x=>JSON.parse(JSON.stringify(x));
 function message(s,bad=false){el("message").textContent=s;el("message").className=bad?"err":"";}
 async function request(route,data){
@@ -186,6 +212,92 @@ function render(){
 }
 async function pinsRefresh(){pins=await request("/api/pins");options("pinned",[["","Select pinned edition"],...pins.map(x=>[x.revision,x.draft.title+" · "+x.revision.slice(0,8)])]);}
 async function action(route,extra={}){try{snapshot();const result=await request(route,{draft,...extra});el("report").textContent=JSON.stringify(result,null,2);lastPreview=route==="/api/preview"?result:null;svgGraph();message("Recorded: "+route);if(route==="/api/pin"||route==="/api/consider")await pinsRefresh();return result;}catch(e){message(e.message,true);return null;}}
+
+function selectedIdea(){return activeIdeas.find(x=>x.idea_id===activeIdeaId);}
+async function loadIdeas(){
+ activeIdeas=await request("/api/ideas");
+ const list=el("idea-list");list.replaceChildren();
+ for(const idea of activeIdeas){
+  const btn=document.createElement("button");btn.className=idea.idea_id===activeIdeaId?"active":"";
+  btn.textContent="□ "+idea.title+" ("+idea.bound_branches+" branches)";
+  btn.onclick=async()=>{try{activeIdeaId=idea.idea_id;currentFrontier=null;await loadIdeas();await loadIdeaBranches();}
+                        catch(e){message(e.message,true);}};
+  list.append(btn);
+ }
+ el("idea-selected").textContent=selectedIdea()
+   ?selectedIdea().title+" — "+selectedIdea().state+" — source "+selectedIdea().source_link
+   :"Choose one existing active source task.";
+}
+async function loadIdeaBranches(){
+ ideaBranches=activeIdeaId
+   ?await request("/api/idea-branches",{idea_id:activeIdeaId}):[];
+ options("idea-current",[["","Select an explicitly associated pinned branch"],
+  ...ideaBranches.map(x=>[x.revision,x.worker+" · "+x.title+" · "+x.revision.slice(0,8)])]);
+ options("idea-target",[["","No visible branch selected"]]);
+ options("idea-step",[["","Select a current step"]]);
+ el("idea-view").textContent="Choose a recorded branch and step to inspect its local frontier.";
+}
+function selection(){
+ const row=ideaBranches.find(x=>x.revision===el("idea-current").value);
+ const pin=pins.find(p=>p.revision===row?.revision);
+ return {row,pin};
+}
+el("idea-current").onchange=()=>{
+ const {row,pin}=selection();
+ el("idea-worker").value=row?.worker||"";
+ options("idea-step",pin?.draft.steps.map(s=>[s.id,s.id+" · "+s.label])||[]);
+ currentFrontier=null;options("idea-target",[["","Inspect first-hop frontier first"]]);
+};
+el("idea-bind").onclick=async()=>{
+ try{
+  const rev=el("pinned").value;
+  if(!activeIdeaId||!rev)throw Error("Select an existing source task and an already pinned workflow.");
+  await request("/api/idea-bind",{
+   idea_id:activeIdeaId,revision:rev,worker:el("idea-worker").value,
+   reason:"Operator explicitly associated existing workflow pin with current task checklist idea"});
+  await loadIdeas();await loadIdeaBranches();
+  message("Recorded explicit idea → pinned branch relationship. No native execution.");
+ }catch(e){message(e.message,true);}
+};
+el("idea-fork").onclick=()=>{
+ const {row,pin}=selection();
+ if(!row||!pin){message("Select a related pinned branch first.",true);return;}
+ draft=copy(pin.draft);draft.parent_revision=pin.revision;draft.title+=" — structural alternative";
+ selected=draft.steps[0]?.id||"";lastPreview=null;render();
+ el("pinned").value=pin.revision;
+ message("Opened a new proposed workflow edition from this pinned branch. Original remains intact.");
+};
+el("idea-observe").onclick=async()=>{
+ try{
+  const {row}=selection();if(!row)throw Error("Choose an explicitly bound branch.");
+  currentFrontier=await request("/api/idea-frontier",{
+   idea_id:activeIdeaId,revision:row.revision,
+   worker:row.worker,step_id:el("idea-step").value});
+  el("idea-view").textContent=JSON.stringify(currentFrontier,null,2);
+  options("idea-target",[["","Choose a visible first-hop branch"],
+    ...currentFrontier.visible_branches.map(x=>[x.revision,
+      x.relationship+" · "+x.worker+" · "+x.revision.slice(0,8)])]);
+  message("Observed only the current step and source-recorded first-hop relationships.");
+ }catch(e){message(e.message,true);}
+};
+async function ideaProposal(kind){
+ try{
+  const {row}=selection();
+  if(!row||!currentFrontier)throw Error("Inspect a specific worker frontier first.");
+  if(currentFrontier.position.revision!==row.revision||
+     currentFrontier.position.step_id!==el("idea-step").value)
+     throw Error("Worker position changed; inspect first.");
+  const result=await request("/api/idea-propose",{
+   kind,idea_id:activeIdeaId,revision:row.revision,
+   worker:row.worker,step_id:el("idea-step").value,
+   target_revision:el("idea-target").value,reason:el("idea-reason").value});
+  el("idea-view").textContent=JSON.stringify(result,null,2);
+  message(kind+" proposal saved; no worker executed, switched or promoted.");
+ }catch(e){message(e.message,true);}
+}
+el("idea-back").onclick=()=>ideaProposal("BACKTRACK");
+el("idea-help").onclick=()=>ideaProposal("HELP");
+
 el("title").onchange=snapshot;el("provenance").onchange=snapshot;el("generate").onchange=()=>{snapshot();lastPreview=null;svgGraph();};
 el("source-step").onchange=ports;el("target-step").onchange=ports;
 el("add-step").onclick=()=>{const m=el("new-manifest").value;if(!m)return;const id=uniqueName();draft.steps.push({id,label:id,manifest:m,path_role:"ALTERNATIVE",inputs:{}});selected=id;lastPreview=null;render();};
@@ -251,6 +363,6 @@ el("native-history").onclick=async()=>{
 el("export").onclick=()=>{snapshot();const blob=new Blob([JSON.stringify(draft,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="workflow-draft.json";a.click();URL.revokeObjectURL(url);};
 el("import").onclick=()=>el("file").click();
 el("file").onchange=async e=>{try{const file=e.target.files[0];if(!file)return;const obj=JSON.parse(await file.text());if(!Array.isArray(obj.steps))throw Error("Invalid draft");draft=obj;selected=draft.steps[0]?.id||"";lastPreview=null;render();message("Imported. Preview to validate.");}catch(err){message(err.message,true);}};
-(async()=>{try{catalog=await request("/api/manifests");draft=await request("/api/example");selected=draft.steps[0]?.id||"";await pinsRefresh();render();message("Ready. Preview and editing do not execute code.");}catch(e){message("Setup error: "+e.message,true);}})();
+(async()=>{try{catalog=await request("/api/manifests");draft=await request("/api/example");selected=draft.steps[0]?.id||"";await pinsRefresh();await loadIdeas();await loadIdeaBranches();render();message("Ready. Ideas use existing source tasks; workers see only local graph frontiers.");}catch(e){message("Setup error: "+e.message,true);}})();
 </script>
 </body></html>
