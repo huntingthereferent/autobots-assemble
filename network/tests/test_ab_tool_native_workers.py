@@ -74,6 +74,17 @@ class ABToolNativeWorkerTests(unittest.TestCase):
                                 for r in projection["task_ancestry"].values()))
             self.assertFalse(projection["completion_verified"])
             self.assertEqual(event.data["output"]["task_results"], "NOT_EXECUTED")
+            # The same shipped A/B package also reads existing native worker
+            # journals and their parent edges, without writing back into them.
+            native_journal = Path(tmp) / "runtime.jsonl"
+            original_bytes = native_journal.read_bytes()
+            journal_view = ABToolWorkerBridge(ROOT).inspect_native_journal(
+                native_journal, target="event:" + event.event_id)
+            self.assertEqual(journal_view["capability"], "ab-tool/native-runtime-journal-v1")
+            self.assertEqual(journal_view["projection"]["kind"], "ab-provenance/ancestry-v1")
+            self.assertGreater(journal_view["graph_summary"]["relations"], 0)
+            self.assertFalse(journal_view["completion_verified"])
+            self.assertEqual(native_journal.read_bytes(), original_bytes)
             self.assertEqual(service.runtime.state(root).status, "READY")
             self.assertEqual(service.runtime.state(root).missing_witnesses, ("movement witness",))
             count = len(service.runtime.event_store.all())
