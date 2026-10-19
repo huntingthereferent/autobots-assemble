@@ -178,7 +178,9 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
                      "Unequal recorded lengths","renderCrossDepth","sourcePrefixStates",
                      "cross-step-one","cross-step-two","cross-first","cross-ends",
                      "not a completed witness","crossObservation","cross-export",
-                     "work.arc3.window48_cross_depth --verify"):
+                     "work.arc3.window48_cross_depth --verify",
+                     "validateImportedCrossObservation","sourcePrefixesForLaws",
+                     "cross-import-file","cross-import-clear","Import research observation JSON"):
             self.assertIn(term,html)
         self.assertNotIn("GameState.WIN",html)
         self.assertNotIn("native arcade result",html.lower())
