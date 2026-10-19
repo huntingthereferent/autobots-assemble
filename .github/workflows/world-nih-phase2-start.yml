@@ -5,6 +5,8 @@ on:
       - 'world/w13-two-world-advance-contract-20261016'
     paths:
       - '.github/workflows/world-nih-phase2-start.yml'
+      - 'scripts/nih_p2_world_source_events.py'
+      - 'network/tests/test_nih_p2_world_source_events.py'
 permissions:
   contents: read
   actions: read
@@ -66,6 +68,10 @@ jobs:
           python -m unittest -v \
             network.tests.test_nih_p2_original_world_joint_witness \
             network.tests.test_nih_p2_original_world_revision
+      - name: Falsify synthetic event chain and source-time counterexamples
+        run: |
+          cd world
+          python -m unittest -v network.tests.test_nih_p2_world_source_events
       - name: Fetch exact owner-retained twelve-job native journal
         uses: actions/download-artifact@v4
         with:
@@ -79,6 +85,13 @@ jobs:
           ORIGINAL_SOURCE_DIR: ${{ github.workspace }}/original
         run: |
           python -I "$GITHUB_WORKSPACE/control/scripts/nih_p2_original_world_resume.py"
+      - name: Exercise source event chronology inside original live W13 game
+        env:
+          PYTHONPATH: ${{ github.workspace }}/original:${{ github.workspace }}/control:${{ github.workspace }}/world
+        run: |
+          python "$GITHUB_WORKSPACE/world/scripts/nih_p2_world_source_events.py" \
+            --native "$RUNNER_TEMP/restored-original-w13" \
+            --evidence "$RUNNER_TEMP/continued-original-w13"
       - name: Preserve fresh Phase 2 game-world evidence, without republishing original journal
         if: always()
         uses: actions/upload-artifact@v4
@@ -93,5 +106,7 @@ jobs:
             ${{ runner.temp }}/continued-original-w13/nih-p2-original-world-joint-source-publication.json
             ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.json
             ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.png
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-source-event-report.json
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-source-event-game.png
           retention-days: 30
           if-no-files-found: warn
