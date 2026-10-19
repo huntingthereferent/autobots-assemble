@@ -128,6 +128,23 @@ def independent_oracle(dataset, *, known, target):
         "visible_source_refs":sorted(set(r["source_ref"] for r in visible)),
         "clinical_verdict":"NOT_EVALUATED"}
 
+def frame_for_verifier(*,turn,snapshot,known,result,program,edition):
+    """One canonical schema for both actual Chromium captures and negative tests."""
+    if (type(turn) is not int or turn<0 or snapshot not in SNAPSHOTS
+        or type(known) is not str or len(known)!=10
+        or type(result) is not dict or result.get("known_at")!=known
+        or result.get("target_at")!=TARGET
+        or result.get("clinical_verdict")!="NOT_EVALUATED"
+        or any(type(x) is not str or len(x)!=64 for x in (program,edition))):
+        raise ValueError("invalid original Python source-frame receipt")
+    return {"turn":turn,"snapshot":snapshot,
+        "known_at":known,"target_at":TARGET,
+        "temporal_ids":result["temporal_ids"],
+        "future_leakage_ids":result["future_leakage_ids"],
+        "snapshot_dataset_sha256":edition,
+        "original_program_sha256":program,
+        "independent_host_agreement":True}
+
 def validate_frames(frames, *, actions, cutover, program, editions):
     if type(actions) is not int or actions<3 or type(cutover) is not int or cutover<1 or cutover>=actions:
         raise ValueError("original game lacks enough turns to witness withdrawal")
@@ -303,13 +320,9 @@ def run_revision(*,data_dir,output_dir,two_clock):
                                        c["request"]=={"known_at":game_known(turn),"target_at":TARGET}
                                        for c in calls):
                                 raise ValueError("UI panel did not execute source-owned original Python")
-                            frames.append({"turn":turn,"snapshot":name,
-                                "known_at":game_known(turn),"target_at":TARGET,
-                                "temporal_ids":expected["temporal_ids"],
-                                "future_leakage_ids":expected["future_leakage_ids"],
-                                "snapshot_dataset_sha256":editions_sha[name],
-                                "original_program_sha256":program,
-                                "independent_host_agreement":True})
+                            frames.append(frame_for_verifier(turn=turn,
+                                snapshot=name,known=game_known(turn),result=expected,
+                                program=program,edition=editions_sha[name]))
                     if page.locator("body").get_attribute("data-solved")!="true":
                         raise ValueError("original played game did not solve")
                     page.screenshot(path=str(out/"nih-p2-world-source-revision.png"),full_page=True)
