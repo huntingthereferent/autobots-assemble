@@ -1,0 +1,40 @@
+name: NIH Phase 1 draft inspection
+on:
+  pull_request:
+    paths:
+      - 'submissions/nih_its_about_time_phase1/**'
+      - 'network/tests/test_nih_phase1_submission_draft.py'
+      - '.github/workflows/nih-phase1-draft-preview.yml'
+permissions:
+  contents: read
+jobs:
+  build-review-only-pdf-and-check-ontology:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install only preview/test dependencies
+        run: python -m pip install 'reportlab>=4,<5' 'pypdf>=5,<7' 'rdflib>=7,<8'
+      - name: Parse the ontology and check draft claims and distinct OWL axioms
+        run: python -m unittest -v network.tests.test_nih_phase1_submission_draft
+      - name: Render bounded Phase 1 concept for manual owner review
+        run: |
+          mkdir -p "$RUNNER_TEMP/nih-phase1-inspection"
+          python submissions/nih_its_about_time_phase1/render_preview.py \
+            --output "$RUNNER_TEMP/nih-phase1-inspection/NIH_Phase1_Concept_DRAFT.pdf"
+          cp submissions/nih_its_about_time_phase1/phase1-temporal-ontology.ttl \
+            "$RUNNER_TEMP/nih-phase1-inspection/phase1-temporal-ontology.ttl"
+          cp submissions/nih_its_about_time_phase1/INSPECTION.md \
+            "$RUNNER_TEMP/nih-phase1-inspection/INSPECTION.md"
+      - name: Retain review-only draft, never send to NIH
+        uses: actions/upload-artifact@v4
+        with:
+          name: NIH-phase1-draft-for-owner-inspection-${{ github.run_id }}
+          path: ${{ runner.temp }}/nih-phase1-inspection/
+          if-no-files-found: error
+          retention-days: 30
