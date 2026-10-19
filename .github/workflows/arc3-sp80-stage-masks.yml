@@ -1,0 +1,52 @@
+name: ARC3 native SP80 stage0/stage1 exact masks
+on:
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_stage_mask_holdout.py"
+      - ".github/workflows/arc3-sp80-stage-masks.yml"
+  push:
+    paths:
+      - "work/arc3/native_sp80_stage_mask_holdout.py"
+      - ".github/workflows/arc3-sp80-stage-masks.yml"
+jobs:
+  native-stage-masks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install official original ARC native SDK
+        run: python -m pip install "arc-agi>=0.9.6,<1" numpy
+      - name: Verify frozen stage-discriminating masks (unit only)
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage_mask_holdout import (
+              WORDS, RESETS, predeclared_interior_mask, stage0_to_stage1_translation)
+          assert len(WORDS)==len(set(WORDS))==6 and RESETS==2
+          assert all(len(w)==16 and set(w)<={"4","5"} for w in WORDS)
+          for k in range(1,7):
+              s0=predeclared_interior_mask(0,4,k)
+              s1=predeclared_interior_mask(1,4,k)
+              assert len(s0)==len(s1)==32
+              assert stage0_to_stage1_translation(s0)==s1
+              assert s0[(8+4*k,16)]==(9,12)
+              assert s1[(36+4*k,39)]==(12,9)
+          assert len(predeclared_interior_mask(0,4,7))==32
+          assert len(predeclared_interior_mask(0,4,8))==32
+          assert predeclared_interior_mask(0,4,9)=={}
+          assert predeclared_interior_mask(1,4,7)=={}
+          assert predeclared_interior_mask(0,5,1)=={}
+          assert predeclared_interior_mask(1,5,1)=={}
+          print("SYNTHETIC UNIT ONLY: frozen exact stage-specific source masks established")
+          PY
+      - name: Run genuine independently reset stage0/stage1 SP80 histories
+        run: python -m work.arc3.native_sp80_stage_mask_holdout --out runtime/data/arc3/sp80-stage-masks.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-stage-masks
+          path: runtime/data/arc3/sp80-stage-masks.*
+          if-no-files-found: error
+          retention-days: 14
