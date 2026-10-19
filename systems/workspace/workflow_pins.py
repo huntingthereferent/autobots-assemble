@@ -98,6 +98,38 @@ class WorkflowPins:
     def list_pins(self) -> list[dict]:
         return [dict(e["data"]) for e in self._read()]
 
+    def compare_branch(self, spec: dict, repo_root: str | Path) -> dict:
+        """Diff a candidate against its pinned ancestor without executing it."""
+        preview = build_preview(spec, repo_root)
+        current = preview["draft"]
+        parent = current["parent_revision"]
+        if not parent:
+            raise ValueError("branch comparison requires a pinned parent revision")
+        historical = next((row for row in self.list_pins() if row["revision"] == parent), None)
+        if historical is None:
+            raise ValueError("pinned parent revision unavailable")
+        before = historical["draft"]
+        old_nodes = {s["id"]: s for s in before["steps"]}
+        new_nodes = {s["id"]: s for s in current["steps"]}
+        old_edges = {_canonical(x).decode("utf-8") for x in before["links"]}
+        new_edges = {_canonical(x).decode("utf-8") for x in current["links"]}
+        changed = sorted(s for s in old_nodes.keys() & new_nodes.keys()
+                         if old_nodes[s] != new_nodes[s])
+        return {
+            "parent_revision": parent,
+            "branch_revision": preview["revision"],
+            "added_steps": sorted(new_nodes.keys() - old_nodes.keys()),
+            "removed_steps": sorted(old_nodes.keys() - new_nodes.keys()),
+            "changed_steps": changed,
+            "added_links": [json.loads(x) for x in sorted(new_edges - old_edges)],
+            "removed_links": [json.loads(x) for x in sorted(old_edges - new_edges)],
+            "unresolved_inputs": preview["unresolved_inputs"],
+            "ambiguous_links": preview["ambiguous_links"],
+            "graph_validated_only": True,
+            "execution_authorized": False,
+            "native_verified": False,
+        }
+
     def pin_candidate(self, spec: dict, repo_root: str | Path, *, reason: str) -> dict:
         preview = build_preview(spec, repo_root)
         revision = preview["revision"]
