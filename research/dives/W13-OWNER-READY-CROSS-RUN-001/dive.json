@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "dive_id": "W13-OWNER-READY-CROSS-RUN-001",
+  "title": "Original owner W13 GAME-WORKER-READY — witnessed native execution and separate-run restoration",
+  "status": "native-readiness-complete-and-cross-run-freshly-reverified",
+  "result_state": "MOVE_WITH_WALL",
+  "protocol": "source-owned-workstation-evidence",
+  "goal": "Record the completed original owner W13 readiness and fresh, separate-run native restoration as a new source observation; do not rewrite the historical W13 verifier record or import the separate temporal journal as native owner ancestry.",
+  "native_ready_source": {
+    "repository": "huntingthereferent/autobots-assemble",
+    "workflow": "owner W13 native adapter readiness",
+    "run_id": 39183388852,
+    "event": "push",
+    "branch": "main",
+    "execution_commit": "b939f577962f737cc60a977977d5ca9adc0731d6",
+    "job_name": "execute-one-owner-ready",
+    "job_id": "game-worker-ready-owner-001",
+    "result_event": "evt_74329dc7684b487abfe7bf7ad3538897",
+    "worker_source_fingerprint": "b6ed010d128d713af995945ced90d8094b884a2c3b96cdf9a2c80c8d3618d289",
+    "native_job_count_added": 1,
+    "game_worker_ready_witnessed": true,
+    "external_temporal_source_reverified": true,
+    "external_temporal_journal_imported": false,
+    "nih_p2_test_witnessed": false
+  },
+  "encrypted_continuation": {
+    "artifact_id": 12156672990,
+    "artifact_name": "owner-ready-encrypted-39183388852",
+    "artifact_zip_digest": "sha256:34ee7433aee5882c71cdb38410e812d6db4a46ab7a21b7589835ac6ae1c834a5",
+    "sealed_native_capsule_sha256": "18cba8f958a9f3654362eb00a249d244e9bc77b65afd9a6b655045a9cc047e88",
+    "retention_days": 1,
+    "github_recorded_expires_at": "2026-10-20T01:01:47Z",
+    "plaintext_journal_published": false,
+    "native_reverified_before_seal": true,
+    "same_run_restore_reverified": true
+  },
+  "separate_run_restoration": {
+    "workflow": "owner readiness separate-run restoration",
+    "run_id": 39183832462,
+    "job_name": "restore-exact-owner-readiness",
+    "outcome": "success",
+    "result_state": "EXACT_READY_RESULT_RESTORED_AND_FRESHLY_REVERIFIED",
+    "original_source_run": 39183388852,
+    "original_source_artifact": 12156672990,
+    "original_source_commit": "b939f577962f737cc60a977977d5ca9adc0731d6",
+    "restored_ready_job": "game-worker-ready-owner-001",
+    "restored_ready_result_event": "evt_74329dc7684b487abfe7bf7ad3538897",
+    "journal_hashes_unchanged": true,
+    "new_workers_executed": 0,
+    "nih_p2_test_witnessed": false,
+    "private_journal_published": false
+  },
+  "historical_boundary": "The earlier W13-OWNER-NATIVE-VERIFIER-001 record reports the state at that older run; its missing readiness result was true at that time and is not deleted or rewritten by this new, later observation.",
+  "walls": [
+    "The source encrypted readiness artifact was explicitly retained for one day; this public redacted record does not preserve private journal bytes or extend storage authorization. After artifact expiry, the same retained native journal cannot be freshly restored from this record.",
+    "Owner GAME-WORKER-READY completion does not execute or authorize owner NIH-P2-TEST. The original 12-job synthetic NIH game world is a distinct journal, not an extension of this owner-native result.",
+    "GitHub workflow success and fresh bounded native re-verification are not claims of external competition performance, clinical validity, NIH acceptance, funding, or scientific causality."
+  ],
+  "next_movement": "Separately decide whether to authorize a protected longer-term encrypted evidence retention path and whether to admit the next owner NIH-P2-TEST job using the existing native coordinator and controls, with fresh source authentication. Do not silently promote the old historical wall into a current blocker."
+}
