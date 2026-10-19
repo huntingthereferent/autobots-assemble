@@ -30,6 +30,19 @@ The adapter is reusable by other source-owning workers that have bounded,
 already-recorded source-reference pairs. It is **not** a general algorithm
 that discovers arbitrary source meaning.
 
+## Native journal inspection across Workstation worker families
+
+The same adapter exposes `ABToolWorkerBridge.inspect_native_journal(path, target=...)`.
+A trusted local caller explicitly supplies an existing `RuntimeJournal` JSONL
+path; the installed A/B package parses its original submissions, events,
+evidence locators and event parent links. An exact event or source target can
+be selected for bounded A/B ancestry inspection.
+
+This **reads** existing job evidence without starting another agent, replaying
+a verifier, changing an edition, or changing a journal. A typed provenance
+projection is not fresh evidence of task success. Workstation jobs retain
+their original native owner and their own separate verification gates.
+
 ## Start locally (explicit opt-in)
 
 Install the actual tool from the adjacent Swallow Repo source, then start the
