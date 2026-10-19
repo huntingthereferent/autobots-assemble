@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD48 — Original A/B finite worlds</title>
+<style>
+:root{color-scheme:dark;font:15px system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#10151b;color:#e7edf5}
+*{box-sizing:border-box}body{margin:0;background:#10151b;min-height:100vh}
+main{max-width:1120px;margin:auto;padding:29px 22px 54px}
+a{color:#9bd2fd}h1{font-size:clamp(1.8rem,4vw,2.55rem);letter-spacing:-.035em;margin:6px 0}
+h2{font-size:1.1rem;margin:0 0 11px}p{line-height:1.56;color:#aebfd0;max-width:80ch}
+.kicker{font-size:.73rem;font-weight:700;letter-spacing:.13em;color:#a4bdd2;text-transform:uppercase}
+.intro{margin:6px 0 20px}.meta{display:flex;flex-wrap:wrap;gap:14px;font-size:.8rem;color:#a8b9cc;margin:16px 0 23px}
+.panel{background:#17212c;border:1px solid #354456;border-radius:13px;padding:19px}
+.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+label{font-size:.82rem;color:#b9c9da;display:block;margin-bottom:7px}
+select,input,button{font:inherit}select,input{width:100%;background:#0e1822;color:#f0f5fb;border:1px solid #53667d;border-radius:7px;padding:10px}
+select:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid #84c9ff;outline-offset:2px}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:16px 0}
+button{background:#253346;color:#ecf4fc;border:1px solid #566e89;border-radius:8px;padding:10px 14px;cursor:pointer}
+button:hover:not(:disabled){background:#30465f}button.primary{background:#28618d;border-color:#6baddd;font-weight:700}
+button:disabled{opacity:.45;cursor:not-allowed}
+.wordrun{display:flex;gap:9px;align-items:end;flex-wrap:wrap}.wordrun label{flex:1;min-width:210px;margin:0}.wordrun input{margin-top:5px;font-family:ui-monospace,monospace;letter-spacing:.06em}
+.status{margin:14px 0 0;color:#cfdeeb;min-height:22px}.error{color:#ffb7ab}
+.worlds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:19px}
+.world{min-width:0}.worldheader{display:flex;justify-content:space-between;gap:10px;align-items:start}
+.symbol{font:700 1.2rem ui-monospace,monospace;color:#e6f4ff}
+.coords{font:600 1rem ui-monospace,monospace;color:#b8dfff;margin:10px 0}
+.legend{font-size:.76rem;display:flex;gap:13px;flex-wrap:wrap;margin:7px 0 12px;color:#adbfcf}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px}
+.swatch.current{background:#7ad0ff}.swatch.origin{background:#b2e2ac}.swatch.a{background:#e2b97c}.swatch.b{background:#d3a8ec}
+.nodes{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px}
+.node{min-width:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:5px;background:#0b141d;border:1px solid #293a4a;font:600 clamp(.6rem,1.15vw,.79rem) ui-monospace,monospace;color:#879bb1;position:relative}
+.node.is-origin{border-color:#6f9c75;color:#b2e2ac}.node.next-a{box-shadow:inset 0 0 0 1px #c19b5f}.node.next-b{outline:1px dashed #ab7ec3;outline-offset:-3px}
+.node.is-current{background:#245b79;border:2px solid #85d2ff;color:white;font-weight:800}
+.axis{font-size:.75rem;color:#9baec0;margin:12px 0 0}
+.comparison{margin-top:17px}.comparison strong{color:#e9f3fc}
+.word{font:600 .89rem ui-monospace,monospace;overflow-wrap:anywhere;color:#e8d9ac}
+.trace{margin-top:16px}.trace pre{background:#0c151e;border:1px solid #28394a;padding:12px;max-height:180px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;color:#cbd7e5;font-size:.78rem;line-height:1.5}
+.note{border-left:3px solid #57748e;padding-left:13px;margin:22px 0 0;font-size:.85rem}
+@media(max-width:730px){.worlds,.controls{grid-template-columns:1fr}.node{font-size:.72rem}main{padding:20px 14px 42px}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<main>
+<div class="kicker">Finite source world · mathematical investigation</div>
+<h1>WORLD48</h1>
+<p class="intro">Play the original two-predecessor F<sub>3</sub> family. Choose two of its 48 concrete laws, move with the exact A and B transitions, and observe when identical action words reach different states. Both worlds begin at the marked origin (0,0,0).</p>
+<div class="meta"><span>48 concrete laws</span><span>16 rooted classes</span><span>14 full-state classes</span><span>27 states per depth-three world</span></div>
+
+<section class="panel" aria-label="World selection and actions">
+<div class="controls">
+<div><label for="law-left">World A · source law</label><select id="law-left" disabled></select></div>
+<div><label for="law-right">World B · comparison law</label><select id="law-right" disabled></select></div>
+</div>
+<div class="actions">
+<button id="action-a" class="primary" disabled>A</button>
+<button id="action-b" class="primary" disabled>B</button>
+<button id="undo" disabled>Undo</button>
+<button id="reset" disabled>Reset</button>
+<button id="export" disabled>Export witnessed actions</button>
+</div>
+<div class="wordrun">
+<label for="word-input">Apply an exact action word (A/B only, up to 64 letters at once)
+<input id="word-input" value="ABABAB" spellcheck="false" autocomplete="off" maxlength="64" aria-label="A B action word"></label>
+<button id="run-word" disabled>Apply word</button>
+</div>
+<p id="status" class="status" role="status" aria-live="polite">Loading original finite source transitions…</p>
+</section>
+
+<div class="worlds">
+<section class="panel world" aria-label="Left mathematical world">
+<div class="worldheader"><h2>World A</h2><span id="left-id" class="symbol"></span></div>
+<div id="left-params" class="kicker"></div>
+<div id="left-state" class="coords"></div>
+<div class="legend"><span><i class="swatch current"></i>Current</span><span><i class="swatch origin"></i>Marked origin</span><span><i class="swatch a"></i>Next A</span><span><i class="swatch b"></i>Next B</span></div>
+<div id="left-nodes" class="nodes" role="img" aria-label="27 finite states in world A"></div>
+<div class="axis">Rows: u = 0,1,2 · each row: v = 0,1,2 and z = 0,1,2</div>
+</section>
+<section class="panel world" aria-label="Right mathematical world">
+<div class="worldheader"><h2>World B</h2><span id="right-id" class="symbol"></span></div>
+<div id="right-params" class="kicker"></div>
+<div id="right-state" class="coords"></div>
+<div class="legend"><span><i class="swatch current"></i>Current</span><span><i class="swatch origin"></i>Marked origin</span><span><i class="swatch a"></i>Next A</span><span><i class="swatch b"></i>Next B</span></div>
+<div id="right-nodes" class="nodes" role="img" aria-label="27 finite states in world B"></div>
+<div class="axis">Every tile represents one exact (u,v,z) state, not an ARC pixel.</div>
+</section>
+</div>
+<section class="panel comparison">
+<h2>Relation at the marked root</h2>
+<p id="relation">Waiting for source data.</p>
+<p>Action word: <span id="applied-word" class="word">(empty)</span></p>
+<p id="comparison"></p>
+</section>
+<section class="panel trace">
+<h2>Observed finite transitions</h2>
+<pre id="trace">No transitions yet.</pre>
+</section>
+<p class="note">Source: <a href="../work/arc_like_maze/window_combined.py">original finite A/B laws</a> and <a href="../work/arc_like_maze/WINDOW_COMBINED.md">proved equivalence boundaries</a>. These are executable mathematical worlds—not the official ARC-AGI-3 game, not an assertion that native SDK controls equal A or B, and not a replacement for the independently witnessed W13 two-room runtime. Browser exports can be independently replayed against the original Python source.</p>
+</main>
+<script>
+'use strict';
+(() => {
+const MANIFEST='window48_world_data.json';
+const RECEIPT='original-window48-depth3-browser-receipt/v1';
+const SCOPE='finite-mathematical-source-only';
+const $=id=>document.getElementById(id);
+let model=null, word='', lawIds=[0,1], events=[];
+const indexToState=index=>[Math.floor(index/9),Math.floor(index%9/3),index%3];
+const fmt=index=>'('+indexToState(index).join(',')+')';
+const law=index=>model.laws[index];
+function atEnd(){
+  let states=[0,0];
+  const trace=[];
+  for(const action of word){
+    const before=states.slice();
+    states=states.map((state,i)=>law(lawIds[i])[action][state]);
+    trace.push({action,before,after:states.slice()});
+  }
+  return {states,trace};
+}
+function description(w){return 'k='+w.support+' · e='+w.pulse+' · t='+w.balanced+' · c='+w.coefficient}
+function relation(a,b){
+  if(a.support===b.support&&a.pulse===b.pulse&&a.balanced===b.balanced){
+    return a.coefficient===b.coefficient?
+      'Identical law and marked root. Both trajectories agree.':
+      'Origin-preserving conjugacy. These are different shear charts of the same rooted class; equal coordinate triples are not required at every step.';
+  }
+  if(a.support===b.support&&a.pulse===1&&(a.support===0||a.support===3)&&a.balanced!==b.balanced){
+    return 'Full-state conjugacy only; no origin-preserving conjugacy. The proved alignment moves the marked origin. Do not merge these rooted worlds.';
+  }
+  return 'Distinct action-labeled full-state classes. The original source has a fixed-word obstruction; matching one finite visible trajectory would not undo it.';
+}
+function renderGrid(el,world,state){
+  el.replaceChildren();
+  for(let i=0;i<27;i++){
+    const cell=document.createElement('div');
+    cell.className='node';
+    cell.textContent=String(i).padStart(2,'0');
+    if(i===0)cell.classList.add('is-origin');
+    if(i===world.A[state])cell.classList.add('next-a');
+    if(i===world.B[state])cell.classList.add('next-b');
+    if(i===state)cell.classList.add('is-current');
+    cell.title=fmt(i);
+    el.appendChild(cell);
+  }
+  el.setAttribute('aria-label','27 exact states; current '+fmt(state)+', next A '+fmt(world.A[state])+', next B '+fmt(world.B[state]));
+}
+function render(message='',isError=false){
+  if(!model)return;
+  lawIds=[Number($('law-left').value),Number($('law-right').value)];
+  const a=law(lawIds[0]),b=law(lawIds[1]);
+  const {states,trace}=atEnd();
+  events=trace;
+  for(const [name,world,state] of [['left',a,states[0]],['right',b,states[1]]]){
+    $(name+'-id').textContent='#'+String(world.id+1).padStart(2,'0');
+    $(name+'-params').textContent=description(world);
+    $(name+'-state').textContent='Current '+fmt(state)+' · index '+state;
+    renderGrid($(name+'-nodes'),world,state);
+  }
+  $('relation').textContent=relation(a,b);
+  $('applied-word').textContent=word||'(empty)';
+  $('comparison').textContent=states[0]===states[1]?
+    'Current coordinate triples match. This does not prove the worlds have identical transition laws.':
+    'Current coordinate triples differ. This is an observed difference under the same action word.';
+  $('trace').textContent=trace.length?trace.map((x,i)=>
+    String(i+1).padStart(3,'0')+' '+x.action+'    '+fmt(x.before[0])+' → '+fmt(x.after[0])+'    |    '+fmt(x.before[1])+' → '+fmt(x.after[1])).join('\n'):
+    'No actions yet; both worlds are at (0,0,0).';
+  $('status').classList.toggle('error',isError);
+  $('status').textContent=message||('Source transitions loaded · '+word.length+'/128 actions');
+  $('undo').disabled=word.length===0;
+  $('reset').disabled=word.length===0;
+  $('action-a').disabled=word.length>=128;
+  $('action-b').disabled=word.length>=128;
+  $('run-word').disabled=word.length>=128;
+}
+function apply(next){
+  if(!/^[AB]+$/.test(next)||word.length+next.length>128){render('Only A/B and up to 128 total actions are supported.',true);return false}
+  word+=next;render('Applied '+next.length+' source action(s).');return true;
+}
+function download(){
+  const {states,trace}=atEnd();
+  const receipt={schema:RECEIPT,scope:SCOPE,law_ids:lawIds.slice(),root_index:0,actions:word,events:trace,final:states};
+  const url=URL.createObjectURL(new Blob([JSON.stringify(receipt,null,2)+'\n'],{type:'application/json'}));
+  const anchor=document.createElement('a');anchor.href=url;anchor.download='window48_source_receipt.json';
+  document.body.appendChild(anchor);anchor.click();anchor.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function validate(d){
+  if(!d||d.schema!=='original-window48-depth3-game-world/v1'||d.scope!==SCOPE||
+     d.concrete_laws!==48||d.rooted_classes!==16||d.full_state_classes!==14||
+     d.depth!==3||d.root_index!==0||!Array.isArray(d.laws)||d.laws.length!==48)
+     throw Error('Original source manifest contract mismatch');
+  const seen=new Set();
+  d.laws.forEach((w,i)=>{
+    if(w.id!==i||!Number.isInteger(w.support)||w.support<0||w.support>3||
+       !Number.isInteger(w.pulse)||w.pulse<0||w.pulse>1||
+       !Number.isInteger(w.balanced)||w.balanced<0||w.balanced>1||
+       !Number.isInteger(w.coefficient)||w.coefficient<0||w.coefficient>2||
+       !Array.isArray(w.rooted_class)||w.rooted_class.join(',')!==[w.support,w.pulse,w.balanced].join(',')||
+       !['A','B'].every(k=>Array.isArray(w[k])&&w[k].length===27&&w[k].every(v=>Number.isInteger(v)&&v>=0&&v<27)))
+       throw Error('Invalid original law #'+i);
+    const key=[w.support,w.pulse,w.balanced,w.coefficient].join(',');
+    if(seen.has(key))throw Error('Duplicate original law');seen.add(key);
+  });
+}
+async function boot(){
+ try{
+  const response=await fetch(MANIFEST,{cache:'no-store'});
+  if(!response.ok)throw Error('Source manifest HTTP '+response.status);
+  const parsed=await response.json();validate(parsed);model=parsed;
+  for(const id of ['law-left','law-right']){
+    const select=$(id);select.replaceChildren();
+    for(const w of model.laws){
+      const option=document.createElement('option');
+      option.value=String(w.id);
+      option.textContent='#'+String(w.id+1).padStart(2,'0')+' · '+description(w);
+      select.appendChild(option);
+    }
+    select.disabled=false;select.addEventListener('change',()=>{word='';render('Changed law; marked origin restored for both worlds.')});
+  }
+  $('law-left').value='0';$('law-right').value='1';
+  for(const [id,action] of [['action-a','A'],['action-b','B']]){
+    $(id).disabled=false;$(id).addEventListener('click',()=>apply(action));
+  }
+  $('undo').addEventListener('click',()=>{word=word.slice(0,-1);render('Replayed from marked root after undo.')});
+  $('reset').addEventListener('click',()=>{word='';render('Returned both worlds to marked origin.')});
+  $('export').disabled=false;$('export').addEventListener('click',download);
+  $('run-word').disabled=false;
+  $('run-word').addEventListener('click',()=>{const text=$('word-input').value.toUpperCase().trim();apply(text)});
+  $('word-input').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('run-word').click()}});
+  document.addEventListener('keydown',e=>{
+    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement||e.target instanceof HTMLButtonElement||
+       e.ctrlKey||e.metaKey||e.altKey)return;
+    const key=e.key.toUpperCase();
+    if(key==='A'||key==='B'){e.preventDefault();apply(key)}
+    else if(e.key==='Backspace'){e.preventDefault();if(word){word=word.slice(0,-1);render('Replayed after undo.')}}
+    else if(e.key==='Escape'){word='';render('Returned to origin.')}
+  });
+  render('Loaded 48 original source laws and 2,592 depth-three A/B transitions.');
+ }catch(err){
+  $('status').classList.add('error');
+  $('status').textContent='Source data unavailable; no world state or action was invented. '+String(err.message||err);
+ }
+}
+boot();
+})();
+</script>
+</body>
+</html>
