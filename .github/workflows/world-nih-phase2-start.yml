@@ -15,6 +15,9 @@ on:
       - 'network/tests/test_nih_p2_world_version_posting_probe.py'
       - 'scripts/nih_p2_world_posted_day_cross_witness.py'
       - 'network/tests/test_nih_p2_world_posted_day_cross_witness.py'
+      - 'scripts/nih_p2_world_calendar_day_model.py'
+      - 'network/tests/test_nih_p2_world_calendar_day_model.py'
+      - 'scripts/nih_p2_world_day_live.py'
 permissions:
   contents: read
   actions: read
@@ -85,7 +88,7 @@ jobs:
       - name: Falsify synthetic event chain and source-time counterexamples
         run: |
           cd world
-          python -m unittest -v network.tests.test_nih_p2_world_source_events network.tests.test_nih_p2_world_original_source_join network.tests.test_nih_p2_world_history_field_probe network.tests.test_nih_p2_world_version_posting_probe network.tests.test_nih_p2_world_posted_day_cross_witness
+          python -m unittest -v network.tests.test_nih_p2_world_source_events network.tests.test_nih_p2_world_original_source_join network.tests.test_nih_p2_world_history_field_probe network.tests.test_nih_p2_world_version_posting_probe network.tests.test_nih_p2_world_posted_day_cross_witness network.tests.test_nih_p2_world_calendar_day_model
       - name: Fetch exact owner-retained twelve-job native journal
         uses: actions/download-artifact@v4
         with:
@@ -131,6 +134,18 @@ jobs:
           cd "$GITHUB_WORKSPACE/world"
           python -m scripts.nih_p2_world_posted_day_cross_witness \
             --evidence-dir "$RUNNER_TEMP/continued-original-w13"
+      - name: Independently verify six conditional original source-owner posted days
+        run: |
+          cd "$GITHUB_WORKSPACE/world"
+          python -m scripts.nih_p2_world_calendar_day_model \
+            --evidence-dir "$RUNNER_TEMP/continued-original-w13"
+      - name: Replay six calendar-day choices inside original W13 browser game
+        env:
+          PYTHONPATH: ${{ github.workspace }}/original:${{ github.workspace }}/control:${{ github.workspace }}/world
+        run: |
+          python "$GITHUB_WORKSPACE/world/scripts/nih_p2_world_day_live.py" \
+            --native "$RUNNER_TEMP/restored-original-w13" \
+            --evidence "$RUNNER_TEMP/continued-original-w13"
       - name: Preserve fresh Phase 2 game-world evidence, without republishing original journal
         if: always()
         uses: actions/upload-artifact@v4
@@ -151,6 +166,9 @@ jobs:
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-original-history-field-probe.json
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-official-version-posting-probe.json
             ${{ runner.temp }}/continued-original-w13/world-nih-p2-historical-posted-day-cross-witness.json
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-day-level-temporal-query.json
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-live-day-level-room.json
+            ${{ runner.temp }}/continued-original-w13/world-nih-p2-live-day-level-room.png
             ${{ runner.temp }}/original-depositor-evidence/nih-p2-aact-owner-script-date-link.json
           retention-days: 30
           if-no-files-found: warn
