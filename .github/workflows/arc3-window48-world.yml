@@ -49,7 +49,7 @@ jobs:
           python-version: "3.12"
       - name: Recompute every WORLD48 transition from authoritative mathematics
         run: python -m work.arc3.window48_world_export --check
-      - name: Independently verify all 16 original rooted challenge witnesses
+      - name: Independently verify all 48 original source-law rooted challenge witnesses
         run: python -m work.arc3.window48_challenges --check
       - name: Independent host replay and negative controls
         run: python -m unittest -v network.tests.test_arc3_window48_game_world network.tests.test_arc3_window48_challenges
