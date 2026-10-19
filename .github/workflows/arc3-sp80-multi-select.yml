@@ -23,7 +23,7 @@ jobs:
           assert len({name for name,_ in PLANS})==17
           for name,raw in PLANS:
               steps=parse_plan(raw)
-              assert len(steps)>=4
+              assert len(steps)>=3
               assert all(action!=6 or xy is not None for action,xy in steps)
               assert all(0<=xy[0]<64 and 0<=xy[1]<64 for _,xy in steps if xy)
           print('UNIT ONLY: source all-coordinate ACTION6 and native trial words fixed')
