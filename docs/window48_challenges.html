@@ -260,7 +260,7 @@ button.positive{background:#246554;border-color:#82baa8}
 const $=id=>document.getElementById(id);
 let model=null, roster=null, mission=0, phase=0, word='', trials=[], solved=new Set(), revealed=false, pass=false;
 let inspectedPath=0, inspectedStep=0, matchedDepth=0, crossStepOne=0, crossStepTwo=0;
-let inspectedImportedObservation=null;
+let inspectedImportedObservation=null, observationImportEpoch=0;
 const STORAGE_KEY='world48-source-replayed-progress/v1';
 const savedCertificates=new Map();
 const stateName=n=>'('+[Math.floor(n/9),Math.floor(n%9/3),n%3].join(',')+')';
@@ -611,6 +611,8 @@ function validateImportedCrossObservation(obj){
 }
 function renderImportedCrossObservation(message){
  const target=$('import-observation-result');
+ // Signals completion of an asynchronous import, including rejected reports.
+ target.dataset.reviewCount=String(Number(target.dataset.reviewCount||'0')+1);
  target.classList.remove('verified','rejected');
  $('cross-import-clear').disabled=!inspectedImportedObservation;
  if(!inspectedImportedObservation){
@@ -633,6 +635,7 @@ function renderImportedCrossObservation(message){
 }
 async function importCrossObservationFile(file){
  if(!file)return;
+ const request=++observationImportEpoch;
  inspectedImportedObservation=null;
  if(file.size<1||file.size>200000){
   renderImportedCrossObservation('Observation import rejected: expected JSON of 1–200,000 bytes.');
@@ -640,11 +643,13 @@ async function importCrossObservationFile(file){
  }
  try{
   const parsed=JSON.parse(await file.text());
+  if(request!==observationImportEpoch)return;
   const report=validateImportedCrossObservation(parsed);
   if(!report)throw Error('source mismatch');
   inspectedImportedObservation=report;
   renderImportedCrossObservation();
  }catch(_invalid){
+  if(request!==observationImportEpoch)return;
   renderImportedCrossObservation('Observation import rejected: fields did not replay against the original WORLD48 source.');
  }
 }
@@ -875,6 +880,7 @@ async function boot(){
    $('cross-import-file').value='';
   });
   $('cross-import-clear').addEventListener('click',()=>{
+   ++observationImportEpoch;
    inspectedImportedObservation=null;renderImportedCrossObservation();
   });
   $('cross-ends').addEventListener('click',()=>{

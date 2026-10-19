@@ -180,7 +180,8 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
                      "not a completed witness","crossObservation","cross-export",
                      "work.arc3.window48_cross_depth --verify",
                      "validateImportedCrossObservation","sourcePrefixesForLaws",
-                     "cross-import-file","cross-import-clear","Import research observation JSON"):
+                     "cross-import-file","cross-import-clear","Import research observation JSON",
+                     "observationImportEpoch","dataset.reviewCount"):
             self.assertIn(term,html)
         self.assertNotIn("GameState.WIN",html)
         self.assertNotIn("native arcade result",html.lower())

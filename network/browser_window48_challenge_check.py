@@ -75,11 +75,19 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.page.locator("#lock").click()
 
     def import_observation(self,record):
+        # A file input change fires an async file.text() read. Do not assert on
+        # the previous import's status before the new source replay finishes.
+        label=self.page.locator("#import-observation-result")
+        previous=int(label.get_attribute("data-review-count") or "0")
         self.page.locator("#cross-import-file").set_input_files({
             "name":"independent_observation.json",
             "mimeType":"application/json",
             "buffer":json.dumps(record).encode("utf8"),
         })
+        self.page.wait_for_function(
+            "(old) => Number(document.querySelector('#import-observation-result').dataset.reviewCount || '0') > old",
+            arg=previous
+        )
 
     def exported_observation(self):
         with self.page.expect_download() as event:
@@ -293,6 +301,45 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
                 self.page.locator("#cross-import-clear").click()
                 self.assertIn("No imported research observation",result.inner_text())
                 self.assertTrue(self.page.locator("#cross-import-clear").is_disabled())
+
+    def test_older_delayed_import_cannot_override_newer_rejected_report(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        valid,_=self.exported_observation()
+        from copy import deepcopy
+        forged=deepcopy(valid)
+        forged["candidate_count"]=999
+        self.page.evaluate("""
+            () => {
+              const original=File.prototype.text;
+              let reads=0;
+              File.prototype.text=function(...args){
+                reads+=1;
+                if(reads!==1)return original.apply(this,args);
+                const file=this;
+                return new Promise(resolve=>{
+                  window.__releaseFirstObservation=()=>original.call(file).then(resolve);
+                });
+              };
+            }
+        """)
+        input_file=self.page.locator("#cross-import-file")
+        input_file.set_input_files({
+            "name":"old_valid.json","mimeType":"application/json",
+            "buffer":json.dumps(valid).encode("utf8")
+        })
+        self.page.wait_for_function("Boolean(window.__releaseFirstObservation)")
+        self.import_observation(forged)
+        result=self.page.locator("#import-observation-result")
+        self.assertIn("rejected",result.inner_text())
+        self.page.evaluate("async () => { await window.__releaseFirstObservation(); await new Promise(resolve => setTimeout(resolve, 10)); }")
+        self.assertIn("rejected",result.inner_text())
+        self.assertTrue(self.page.locator("#cross-import-clear").is_disabled())
+        self.assertTrue(self.page.locator("#export").is_disabled())
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
 
     def test_import_rejects_tampered_and_forged_research_without_game_mutation(self):
         self.page.locator("#mission").select_option("2")
