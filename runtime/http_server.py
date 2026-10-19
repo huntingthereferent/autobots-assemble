@@ -25,11 +25,19 @@ HOST = os.environ.get("HOST", "127.0.0.1")
 PORT = int(os.environ.get("PORT", "8040"))
 LOCK = threading.RLock()
 POOL_ENABLED = os.environ.get("CONTINUITY_AGENT_POOL", "").lower() in {"1", "true", "yes"}
+AB_TOOL_WORKERS = os.environ.get("AB_TOOL_WORKERS", "").lower() in {"1", "true", "yes"}
 if POOL_ENABLED and HOST not in {"127.0.0.1", "::1", "localhost"}:
     raise ValueError("Continuity agent pool is local-only")
+if AB_TOOL_WORKERS and not POOL_ENABLED:
+    raise ValueError("A/B tool worker capability requires the native Continuity agent pool")
 if POOL_ENABLED:
     from runtime.pool_evaluator import ContinuityPoolEvaluator
-    POOL_EVALUATOR = ContinuityPoolEvaluator(ROOT.parent)
+    if AB_TOOL_WORKERS:
+        from runtime.ab_tool_worker import ABToolWorkerBridge
+        AB_TOOL_BRIDGE = ABToolWorkerBridge(ROOT.parent)
+    else:
+        AB_TOOL_BRIDGE = None
+    POOL_EVALUATOR = ContinuityPoolEvaluator(ROOT.parent, ab_tool=AB_TOOL_BRIDGE)
 else:
     POOL_EVALUATOR = None
 SERVICE = EcosystemService(

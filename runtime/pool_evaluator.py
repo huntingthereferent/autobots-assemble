@@ -25,9 +25,11 @@ SOURCES = {
 class ContinuityPoolEvaluator:
     supported_actors = frozenset({"continuity-agent-pool"})
 
-    def __init__(self, repo: Path) -> None:
+    def __init__(self, repo: Path, *, ab_tool=None) -> None:
         self.repo = repo.resolve()
         self.service = None
+        # The real A/B tool is opt-in and stays a bounded source capability.
+        self.ab_tool = ab_tool
 
     def bind(self, service) -> None:
         if self.service is not None and self.service is not service:
@@ -153,6 +155,19 @@ class ContinuityPoolEvaluator:
             "task_results": "NOT_EXECUTED",
             "model_actor": "NOT_REGISTERED",
         }
+        if self.ab_tool is not None:
+            # The packaged A/B source/provenance tool participates in
+            # this SAME evaluator; it is not a parallel agent or scheduler.
+            # A mismatch invalidates stale source evidence.
+            try:
+                outcome["ab_tool_worker"] = self.ab_tool.inspect_task_sources(matched)
+            except (ValueError, OSError) as exc:
+                outcome["ab_tool_worker"] = {
+                    "status": "UNKNOWN",
+                    "wall": f"current source/provenance check failed: {type(exc).__name__}: {exc}",
+                    "completion_verified": False,
+                }
+                evidence = ()
         return AgentMove(
             result=ExecutionResult(
                 status="UNKNOWN", output=outcome, evidence=evidence,
