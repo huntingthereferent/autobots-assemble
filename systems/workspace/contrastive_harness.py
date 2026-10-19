@@ -81,7 +81,7 @@ def _probe(p: Probe) -> None:
     _nonblank(p.execution_mode, "execution mode")
     _sha(p.agent_profile_sha256, "agent profile")
     if p.execution_surface != "ab-workstation":
-        raise ValueError("foreign agent substrate is not admissible in this A/B lane")
+        raise ValueError("native probe must be observed through the A/B workstation")
 
 
 def _fingerprint(desk: ProcessWorkstation, worker_id: str, version_id: str) -> str:
@@ -130,18 +130,14 @@ def contrast_and_record(
         raise ValueError("probe source-edition identity mismatch")
     if base.job_id == candidate.job_id:
         raise ValueError("cannot compare one job with itself")
-    # The proposed harness edit is the variable being investigated. The
-    # surrounding model, agent identity, executor surface and mode must not
-    # silently change between probe runs. Keep Codex/build-mode switches out.
+    # A/B is the workstation surface, not the caller's frozen personality.
+    # Any agent can be a client. A *paired experiment* must hold the caller's
+    # model/config/mode constant so its intended component edit is testable.
     if (base.model_id != candidate.model_id
             or base.execution_mode != candidate.execution_mode
             or base.agent_profile_sha256 != candidate.agent_profile_sha256
             or base.execution_surface != candidate.execution_surface):
         raise ValueError("agent/execution configuration changed between probes")
-    if any("codex" in value.casefold() for value in (
-            base.model_id, base.execution_mode, candidate.model_id,
-            candidate.execution_mode)):
-        raise ValueError("Codex mode is not part of this A/B workstation lane")
     if base.task_id != candidate.task_id or base.input_sha256 != candidate.input_sha256:
         raise ValueError("different tasks or inputs cannot support a paired contrast")
 
