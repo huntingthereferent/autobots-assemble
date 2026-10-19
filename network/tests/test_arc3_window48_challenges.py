@@ -120,7 +120,7 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
     def test_world48_is_active_without_overwriting_pinned_w13_evidence(self):
         historical = ROOT / "docs/game_w13_preview.html"
         raw = historical.read_bytes()
-        blob = sha1(b"blob " + str(len(raw)).encode("ascii") + b"\\0" + raw).hexdigest()
+        blob = sha1(b"blob " + str(len(raw)).encode("ascii") + b"\0" + raw).hexdigest()
         self.assertEqual(blob, "eeb5e383fa093ff941c9880fb88acd62485ce3f2")
         game = (ROOT / "docs/game/index.html").read_text(encoding="utf8")
         work = (ROOT / "docs/live/work.html").read_text(encoding="utf8")
