@@ -1,0 +1,28 @@
+name: ARC3 SP80 held-out boundary timing
+on:
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_boundary_timing.py"
+      - ".github/workflows/arc3-sp80-boundary-timing.yml"
+  push:
+    paths:
+      - "work/arc3/native_sp80_boundary_timing.py"
+      - ".github/workflows/arc3-sp80-boundary-timing.yml"
+jobs:
+  native-boundary-timing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install "arc-agi>=0.9.6,<1" numpy
+      - run: python -m work.arc3.native_sp80_boundary_timing --out runtime/data/arc3/sp80-boundary-timing.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-boundary-timing
+          path: runtime/data/arc3/sp80-boundary-timing.*
+          if-no-files-found: error
+          retention-days: 14
