@@ -1,0 +1,50 @@
+name: WORLD — Physical Blueprint Construction and Fit
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-physical-blueprint-build.yml'
+      - 'docs/world_phase1_phase2_physical.html'
+      - 'systems/workspace/world_physical_construction.py'
+      - 'network/tests/test_world_physical_construction.py'
+      - 'scripts/verify_world_physical_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  physical-construction-fit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout source-owned WORLD blueprint
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify physical geometry and temporal blueprint dimensions
+        run: |
+          python -m unittest -v network.tests.test_world_physical_construction network.tests.test_world_nih_blueprint
+      - name: Install headless browser
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Play the actual physical WORLD and independently verify movement and query
+        run: |
+          python -m scripts.verify_world_physical_browser \
+            --output-dir "$RUNNER_TEMP/physical-world-witness"
+      - name: Preserve playable WORLD and original physical construction receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-physical-construction-${{ github.run_id }}
+          path: |
+            docs/world_phase1_phase2_physical.html
+            network/tests/fixtures/world_nih_phase1_phase2_blueprint_v1.json
+            ${{ runner.temp }}/physical-world-witness/world_physical_blueprint_144_cells.png
+            ${{ runner.temp }}/physical-world-witness/world_physical_blueprint_receipt.json
+            ${{ runner.temp }}/physical-world-witness/world_physical_blueprint_independent_witness.json
+          retention-days: 30
+          if-no-files-found: warn
