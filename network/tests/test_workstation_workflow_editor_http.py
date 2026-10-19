@@ -134,7 +134,7 @@ class WorkflowEditorHTTPTests(unittest.TestCase):
     def test_real_handoff_frontier_uses_native_task_owner_and_sources(self):
         from runtime.engine import HandoffRuntime
         from runtime.journal import RuntimeJournal
-        from runtime.repository_tasks import admit_active_work
+        from runtime.repository_tasks import admit_active_work, read_active_work
         runtime = HandoffRuntime(event_store=RuntimeJournal(
             Path(self.tmp.name) / "runtime.jsonl"))
         work = read_active_work(ROOT / "TASKS.md")
