@@ -170,7 +170,7 @@ def graph(bp,mode):
             ("availability",entry["known_day"] or
              ((entry["posted_day"] or "UNKNOWN")+" (owner day only)")),
             ("query","K="+bp["queries"][mode]["knowledge_cutoff"]+
-             " / V="+str(bp["queries"][mode]["valid_target"])),
+             " / V="+("null" if bp["queries"][mode]["valid_target"] is None else bp["queries"][mode]["valid_target"])),
             ("witness",entry["provenance_state"])]
         for j,(lane,text) in enumerate(attrs):
             nid=f"{entry['id']}:{j}"
