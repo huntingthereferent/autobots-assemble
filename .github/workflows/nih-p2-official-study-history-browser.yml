@@ -47,7 +47,13 @@ jobs:
           assert r["target_public_study"]=="NCT00001756"
           assert [x["requested_version"] for x in r["version_route_probe_records"]]==[94,105]
           assert len(r["version_route_probe_records"])==2
-          assert r["actual_version_view_count"] in (0,1,2)
+          # Unavailable source must block: an always-uploaded receipt records failure.
+          assert r["actual_version_view_count"] == 2
+          assert r["both_original_version_views_witnessed"] is True
+          assert all(x["result"]=="EXPLICIT_ORIGINAL_VERSION_VIEW" and
+                     x["selected_exact_original_route"] is True and
+                     x["selected_version_view_banner_visible"] is True
+                     for x in r["version_route_probe_records"])
           assert r["historical_source_fields_verified"] is False
           assert r["per_version_public_posting_date_verified"] is False
           assert r["blocked_undocumented_api_reused"] is False

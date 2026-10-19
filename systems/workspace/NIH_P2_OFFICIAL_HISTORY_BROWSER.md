@@ -19,6 +19,8 @@ The selected version numbers are observed in search-indexed original ClinicalTri
 
 The runner records actual HTTP status, retrieval UTC, original host, exact selected URL, limited page title, and a SHA-256 of the browser-visible text. A page counts as **explicitly rendered as requested historical version** only if the official site's public content contains the exact `Viewing V94` or `Viewing V105` banner **alongside the original exact study ID, title, real version index, and Study Details section**. A URL query parameter, current version summary, an index table's other version numbers, a search result snippet or a cross-host redirected page **cannot satisfy this gate**.
 
+**CI admission boundary:** The independent browser workflow requires **both exact original viewer routes** and explicitly rendered V94/V105 banners. Wrong-path or duplicate query parameters and false prefix banners such as `Viewing V940` are rejected. A failed source request now fails the check (the minimal blocked-access receipt is still retained); a green check cannot mean `0/2` or `1/2` original versions were witnessed. This is strictly a page-presentation test, not authentication of historical status content or public posting dates.
+
 ## What is not claimed even if a browser page renders
 
 - The raw source text/HTML is **not redistributed**, because historical study pages may include sponsor contacts or other irrelevant person details.

@@ -56,26 +56,33 @@ def validate_observed_page(*, requested_version, requested_url, effective_url,
         raise ValueError("unexpected source status type")
     text=" ".join(body_text.split())
     marker=f"Viewing V{requested_version}"
-    # The same document lists many versions. Only the explicit viewer banner
-    # identifies which *rendered content* the page purports to display.
-    render=(marker in text and NCT in text and TITLE in text and
+    # A substring such as "Viewing V940" must not count as V94.
+    # The index lists versions, but only the exact selected route and banner
+    # can establish that this original version was presented in Chromium.
+    marker_found=re.search(rf"(?<![A-Za-z0-9])Viewing\s+V{requested_version}(?![A-Za-z0-9])",text) is not None
+    qs=parse_qs(original.query,keep_blank_values=True)
+    exact_route=(original.path==f"/study/{NCT}" and
+                 qs=={"a":[str(requested_version)],"tab":["history"]} and
+                 not original.fragment and not original.username and
+                 not original.password and original.port is None)
+    render=(marker_found and exact_route and NCT in text and TITLE in text and
             "Study Record Versions" in text and
             "Study Details" in text and
             status==200 and
             not any(k in text.casefold() for k in INACCESSIBLE))
-    qs=parse_qs(original.query)
     return {
         "requested_version":requested_version,
         "requested_url":requested_url,
         "observed_effective_host":original.hostname,
         "observed_query_selected_version":qs.get("a",[None])[0],
+        "selected_exact_original_route":exact_route,
         "status":status,
         "retrieved_utc":retrieved_utc,
         "observed_page_title":title[:180],
         "visible_study_identifier":NCT in text,
         "record_history_list_visible":"Study Record Versions" in text,
         "study_detail_heading_visible":"Study Details" in text,
-        "selected_version_view_banner_visible":marker in text,
+        "selected_version_view_banner_visible":marker_found,
         "explicit_rendered_version_banner":marker if render else None,
         "visible_source_text_sha256":hashlib.sha256(body_text.encode("utf-8")).hexdigest(),
         "result":"EXPLICIT_ORIGINAL_VERSION_VIEW" if render else "VERSION_VIEW_NOT_INDEPENDENTLY_RENDERED",
@@ -95,6 +102,13 @@ def summarize(version_records):
     if any(r.get("historic_status_field_authenticated") is not False or
            r.get("public_version_post_date_authenticated") is not False for r in version_records):
         raise ValueError("source access cannot be promoted to version-content/publication proof")
+    for r in version_records:
+        if r.get("actual_original_version_rendered") is True and (
+            r.get("result")!="EXPLICIT_ORIGINAL_VERSION_VIEW" or
+            r.get("selected_exact_original_route") is not True or
+            r.get("selected_version_view_banner_visible") is not True
+        ):
+            raise ValueError("contradictory original historical-version view witness")
     return {
         "schema":SCHEMA,
         "original_source_owner":"ClinicalTrials.gov / U.S. National Library of Medicine",
@@ -103,6 +117,8 @@ def summarize(version_records):
         "version_route_probe_records":version_records,
         "actual_version_view_count":sum(r["actual_original_version_rendered"] is True
                                         for r in version_records),
+        "both_original_version_views_witnessed":all(r["actual_original_version_rendered"] is True
+                                                   for r in version_records),
         "historical_source_fields_verified":False,
         "per_version_public_posting_date_verified":False,
         "blocked_undocumented_api_reused":False,

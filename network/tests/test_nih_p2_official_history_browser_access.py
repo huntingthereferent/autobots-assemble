@@ -71,6 +71,53 @@ class OriginalVersionPageTests(TestCase):
             retrieved_utc="2026-10-18T00:00:00+00:00")
         self.assertFalse(r["actual_original_version_rendered"])
 
+    def test_02a_reject_wrong_same_origin_route_with_correct_visible_banner(self):
+        for changed_url in (
+            "https://clinicaltrials.gov/study/NCT00001756?tab=history",
+            "https://clinicaltrials.gov/study/NCT00001756?a=105&tab=history",
+            "https://clinicaltrials.gov/study/NCT00001756?a=94&a=105&tab=history",
+            "https://clinicaltrials.gov/study/NCT00001756?a=94&tab=history&extra=1",
+            "https://clinicaltrials.gov/study/NCT00001756?a=94&tab=details",
+            "https://clinicaltrials.gov/study/NCT00001757?a=94&tab=history",
+            "https://clinicaltrials.gov/study/NCT00001756/other?a=94&tab=history",
+        ):
+            with self.subTest(effective_url=changed_url):
+                r=h.validate_observed_page(
+                    requested_version=94,requested_url=h.version_url(94),
+                    effective_url=changed_url,body_text=text_for(94),
+                    title="Record History",status=200,
+                    retrieved_utc="2026-10-18T00:00:00+00:00")
+                self.assertFalse(r["selected_exact_original_route"])
+                self.assertFalse(r["actual_original_version_rendered"])
+                self.assertFalse(r["historic_status_field_authenticated"])
+
+    def test_02b_version_banner_must_have_exact_number_boundary(self):
+        for fake in ("Viewing V940", "Viewing V941", "Viewing V94x"):
+            with self.subTest(fake=fake):
+                r=h.validate_observed_page(
+                    requested_version=94,requested_url=h.version_url(94),
+                    effective_url=h.version_url(94),
+                    body_text=text_for(94).replace("Viewing V94",fake),
+                    title="Record History",status=200,
+                    retrieved_utc="2026-10-18T00:00:00+00:00")
+                self.assertFalse(r["selected_version_view_banner_visible"])
+                self.assertFalse(r["actual_original_version_rendered"])
+
+    def test_04a_summarizer_rejects_inconsistent_success_receipts(self):
+        r=sample(94)
+        r["selected_exact_original_route"]=False
+        with self.assertRaises(ValueError):
+            h.summarize([r,sample(105)])
+        r=sample(94)
+        r["result"]="VERSION_VIEW_NOT_INDEPENDENTLY_RENDERED"
+        with self.assertRaises(ValueError):
+            h.summarize([r,sample(105)])
+        incomplete=sample(94)
+        incomplete["actual_original_version_rendered"]=False
+        outcome=h.summarize([incomplete,sample(105)])
+        self.assertEqual(outcome["actual_version_view_count"],1)
+        self.assertFalse(outcome["both_original_version_views_witnessed"])
+
     def test_03_cross_origin_redirect_cannot_be_claimed_original_version(self):
         result=h.validate_observed_page(
             requested_version=94,requested_url=h.version_url(94),
@@ -83,6 +130,7 @@ class OriginalVersionPageTests(TestCase):
     def test_04_exact_two_distinct_actual_pages_required(self):
         r=h.summarize([sample(94),sample(105)])
         self.assertEqual(r["actual_version_view_count"],2)
+        self.assertTrue(r["both_original_version_views_witnessed"])
         self.assertFalse(r["historical_source_fields_verified"])
         self.assertFalse(r["per_version_public_posting_date_verified"])
         self.assertFalse(r["original_twelve_native_jobs_modified"])
