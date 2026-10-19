@@ -15,6 +15,7 @@ from pathlib import Path
 import re
 
 from runtime.repository_tasks import read_active_work
+from runtime.engine import HandoffRuntime
 from .workflow_pins import WorkflowPins
 from .workflow_draft import build_preview
 
@@ -238,11 +239,27 @@ class IdeaFrontier:
             self._fresh(related)
             # A neighboring worker is visible only through an actual pinned
             # parent/child relation. Return the *boundary*, not its full graph.
-            has_step = any(s["id"] == step_id for s in related["draft"]["steps"])
+            peer_step = next((s for s in related["draft"]["steps"]
+                              if s["id"] == step_id), None)
+            local_step = steps[step_id]
+            has_step = peer_step is not None
+            # Compare the SAME explicitly named step only. A shared task
+            # title or worker label is not evidence of step correspondence.
+            # Expose a bounded local difference, not the neighboring graph.
+            delta = ({
+                "neighbor_step_label": peer_step["label"],
+                "label_changed": peer_step["label"] != local_step["label"],
+                "source_manifest_changed": (
+                    peer_step["manifest_sha256"] != local_step["manifest_sha256"]),
+                "declared_inputs_changed": peer_step["inputs"] != local_step["inputs"],
+                "path_role_changed": peer_step["path_role"] != local_step["path_role"],
+                "scope": "MATCHED_DECLARED_STEP_ONLY_NOT_SUPERIORITY",
+            } if peer_step is not None else None)
             visible.append({
                 "revision": related_revision,
                 "relationship": rel, "worker": record["worker"],
                 "same_step_id_present": has_step,
+                "local_step_delta": delta,
                 "pin_status": related["status"],
                 "quality_superiority_proven": False,
                 "execution_authorized": False,
@@ -278,6 +295,68 @@ class IdeaFrontier:
             "native_relationships_verified": False,
             "only_recorded_first_hop": True,
         }
+
+    def native_handoff_frontier(self, runtime: HandoffRuntime, *,
+                                handoff_id: str, revision: str,
+                                step_id: str) -> dict:
+        """Observe ONLY an actual repository-task native handoff's next edge.
+
+        The original immutable handoff supplies the owner and source idea.
+        This call must not accept caller-chosen worker or idea identities.
+        No scheduler work or handoff edits occur. Re-invoking it during
+        movement re-reads direct help proposals addressed to this position.
+        """
+        if not isinstance(runtime, HandoffRuntime):
+            raise TypeError("existing native handoff runtime required")
+        if not isinstance(handoff_id, str) or not handoff_id:
+            raise ValueError("native handoff ID required")
+        handoff = runtime.get(handoff_id)
+        work_id = handoff.metadata.get("repository_work_id")
+        if (handoff.metadata.get("source_system") != "repository"
+                or handoff.metadata.get("repository_source") != "TASKS.md"
+                or not isinstance(work_id, str)
+                or handoff.handoff_id != "repo-work-" + work_id):
+            raise ValueError("handoff is not an original source-recorded repository task")
+        idea = self._active().get(work_id)
+        if (idea is None or handoff.referent != idea.title
+                or handoff.inputs.get("source_link") != idea.link
+                or handoff.inputs.get("row_number") != idea.row_number
+                or handoff.inputs.get("source") != "TASKS.md"
+                or handoff.metadata.get("title") != idea.title):
+            raise ValueError("native handoff no longer matches current task source")
+        status = runtime.state(handoff_id).status
+        if status not in {"READY", "ACTIVE"}:
+            raise ValueError("handoff has no current runnable frontier")
+        if not isinstance(handoff.to_actor, str) or not handoff.to_actor.strip():
+            raise ValueError("native handoff has no assigned worker")
+        view = self.worker_frontier(
+            idea_id=work_id, revision=revision,
+            step_id=step_id, worker=handoff.to_actor.strip())
+        return {
+            **view,
+            "native_handoff": {
+                "id": handoff_id, "to_actor": handoff.to_actor,
+                "state": status, "source_work_id": work_id,
+                "source_row_checked": idea.row_number,
+                "task_origin_rechecked": True,
+                "actor_identity_authenticated": False,
+            },
+        }
+
+    def propose_from_native_handoff(
+        self, runtime: HandoffRuntime, *, handoff_id: str,
+        revision: str, step_id: str, target_revision: str,
+        kind: str, reason: str,
+    ) -> dict:
+        """Propose a single first-hop movement from a true source handoff."""
+        view = self.native_handoff_frontier(
+            runtime, handoff_id=handoff_id, revision=revision,
+            step_id=step_id)
+        return self.propose(
+            kind=kind, idea_id=view["idea"]["idea_id"],
+            revision=revision, step_id=step_id,
+            worker=view["position"]["worker"],
+            target_revision=target_revision, reason=reason)
 
     def propose(self, *, kind: str, idea_id: str, revision: str,
                 step_id: str, worker: str, target_revision: str,
