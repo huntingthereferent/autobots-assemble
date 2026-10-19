@@ -134,6 +134,24 @@ class WorkflowPinTests(unittest.TestCase):
             self.assertEqual(pins.list_pins()[0]["revision"], old["revision"])
             self.assertEqual(len(pins.list_pins()), 2)
 
+    def test_pinned_parent_diff_retains_original_graph(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pins = WorkflowPins(tmp)
+            baseline = pins.pin_candidate(base(), ROOT, reason="Initial workflow")
+            child = copy.deepcopy(base())
+            child["parent_revision"] = baseline["revision"]
+            child["steps"][1]["label"] = "Different classification"
+            child["steps"].append({
+                "id": "alternative", "label": "Inspect other evidence", "manifest": TEXT,
+                "path_role": "ALTERNATIVE", "inputs": {"text": "some other material"},
+            })
+            difference = pins.compare_branch(child, ROOT)
+            self.assertEqual(difference["changed_steps"], ["classify"])
+            self.assertEqual(difference["added_steps"], ["alternative"])
+            self.assertEqual(difference["removed_steps"], [])
+            self.assertFalse(difference["execution_authorized"])
+            self.assertEqual(pins.list_pins()[0]["revision"], baseline["revision"])
+
     def test_ledger_replay_detects_mutation(self):
         with tempfile.TemporaryDirectory() as tmp:
             pins = WorkflowPins(tmp)
