@@ -183,6 +183,7 @@ function reRender(message){
  $('next').disabled=!pass;
  $('export').disabled=!pass;
  $('hint').disabled=revealed;
+ $('retry').disabled=false;
  if(message)$('status').textContent=message;
 }
 function nextWord(value){
