@@ -65,6 +65,12 @@ button.positive{background:#246554;border-color:#82baa8}
 .cross-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
 .cross-readout{background:#101b27;border:1px solid #405267;border-radius:8px;padding:11px;line-height:1.65;margin:10px 0;font:.85rem ui-monospace,monospace}
 .cross-readout.ready{border-color:#78baa0}
+.import-obs{margin:13px 0}
+.import-obs .buttons{margin:10px 0}
+.import-obs p{margin:8px 0}
+#import-observation-result{font:.86rem/1.6 ui-monospace,monospace;background:#101b27;border:1px solid #41576b;border-radius:8px;padding:11px;white-space:pre-wrap;overflow-wrap:anywhere}
+#import-observation-result.verified{border-color:#78baa0}
+#import-observation-result.rejected{border-color:#b18a63}
 #cross-status,#cross-count{color:#c8dae9;font-size:.86rem}
 @media(max-width:650px){.cross-grid{grid-template-columns:1fr}}
 .paired{margin:13px 0}
@@ -206,6 +212,16 @@ button.positive{background:#246554;border-color:#82baa8}
 <p class="inspector-note">The observation JSON is independently verifiable with <code>python -m work.arc3.window48_cross_depth --verify FILE.json</code>. It is NOT a completed challenge certificate.</p>
 <p class="inspector-note">Amber outline = Path 1 selected state; green inset = Path 2 selected state. A candidate is a mathematical relation among observed prefixes, not a certified completion. Only the explicit full-path check can grant a completed challenge.</p>
 </section>
+<section id="observation-import-panel" class="panel import-obs" aria-label="Independently inspect imported source research observation">
+<h2>Inspect imported research observation</h2>
+<p class="inspector-note">Open an exported cross-depth research JSON file. This panel replays its two words against the original law pair and independently recomputes every observation field. It never switches challenges, edits locked paths, saves progress, or issues a win certificate.</p>
+<div class="buttons">
+<button id="cross-import" disabled>Import research observation JSON</button>
+<input id="cross-import-file" type="file" accept=".json,application/json" aria-label="Choose original WORLD48 cross-depth research observation JSON" hidden>
+<button id="cross-import-clear" disabled>Clear imported observation</button>
+</div>
+<div id="import-observation-result" role="status" aria-live="polite">No imported research observation.</div>
+</section>
 <p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Yellow '1' markers show the locked first path's endpoint while you build the second path. Only A/B actions move the state; this is not a physical 3D simulation.</p>
 <section class="panel">
 <div class="kicker" id="phase">Path 1 · build your first witness</div>
@@ -244,6 +260,7 @@ button.positive{background:#246554;border-color:#82baa8}
 const $=id=>document.getElementById(id);
 let model=null, roster=null, mission=0, phase=0, word='', trials=[], solved=new Set(), revealed=false, pass=false;
 let inspectedPath=0, inspectedStep=0, matchedDepth=0, crossStepOne=0, crossStepTwo=0;
+let inspectedImportedObservation=null;
 const STORAGE_KEY='world48-source-replayed-progress/v1';
 const savedCertificates=new Map();
 const stateName=n=>'('+[Math.floor(n/9),Math.floor(n%9/3),n%3].join(',')+')';
@@ -542,6 +559,95 @@ function downloadCrossObservation(){
  document.body.appendChild(link);link.click();link.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+function exactObjectKeys(obj,names){
+ return obj!==null&&typeof obj==='object'&&!Array.isArray(obj)&&
+  Object.keys(obj).length===names.length&&names.every(name=>Object.prototype.hasOwnProperty.call(obj,name));
+}
+function sourcePrefixesForLaws(ids,actions){
+ let state=[0,0];
+ const history=[state.slice()];
+ for(const action of actions){
+  state=state.map((old,i)=>model.laws[ids[i]][action][old]);
+  history.push(state.slice());
+ }
+ return history;
+}
+function validateImportedCrossObservation(obj){
+ const fields=['schema','scope','source','challenge_id','law_ids','words',
+  'selected_depths','selected_states','pair_count','candidate_count','first_candidate'];
+ if(!exactObjectKeys(obj,fields)||obj.schema!=='original-window48-cross-depth-observation/v1'||
+    obj.scope!=='finite-mathematical-source-only'||
+    obj.source!=='work/arc_like_maze/window_combined.py')return null;
+ const id=obj.challenge_id;
+ if(!Number.isInteger(id)||id<0||id>=roster.challenges.length)return null;
+ const ids=roster.challenges[id].law_ids;
+ if(!Array.isArray(obj.law_ids)||obj.law_ids.length!==2||
+    obj.law_ids.some((n,k)=>n!==ids[k]))return null;
+ if(!Array.isArray(obj.words)||obj.words.length!==2||obj.words.some(x=>!isWord(x)))return null;
+ if(!Array.isArray(obj.selected_depths)||obj.selected_depths.length!==2||
+    obj.selected_depths.some((n,k)=>!Number.isInteger(n)||n<0||n>obj.words[k].length))return null;
+ const histories=obj.words.map(word=>sourcePrefixesForLaws(ids,word));
+ const selected=obj.selected_depths.map((d,k)=>histories[k][d].slice());
+ if(!Array.isArray(obj.selected_states)||obj.selected_states.length!==2||
+    obj.selected_states.some((a,k)=>!Array.isArray(a)||a.length!==2||
+      a.some((v,i)=>v!==selected[k][i])))return null;
+ const found=firstCrossCandidate(histories[0],histories[1],obj.words[0],obj.words[1]);
+ if(obj.pair_count!==histories[0].length*histories[1].length||obj.candidate_count!==found.count)return null;
+ if(found.first===null){
+  if(obj.first_candidate!==null)return null;
+ }else{
+  const fc=obj.first_candidate;
+  if(!exactObjectKeys(fc,['depths','states'])||!Array.isArray(fc.depths)||
+     fc.depths.length!==2||fc.depths.some((d,k)=>d!==found.first[k])||
+     !Array.isArray(fc.states)||fc.states.length!==2||
+     fc.states.some((state,k)=>!Array.isArray(state)||state.length!==2||
+       state.some((v,i)=>v!==histories[k][found.first[k]][i])))return null;
+ }
+ return {id,ids:ids.slice(),words:obj.words.slice(),depths:obj.selected_depths.slice(),
+         states:selected,candidate_count:found.count,pair_count:obj.pair_count,
+         first:found.first===null?null:found.first.slice(),
+         qualifies:selected[0][0]===selected[1][0]&&selected[0][1]!==selected[1][1]&&
+           obj.words[0].slice(0,obj.selected_depths[0])!==obj.words[1].slice(0,obj.selected_depths[1])};
+}
+function renderImportedCrossObservation(message){
+ const target=$('import-observation-result');
+ target.classList.remove('verified','rejected');
+ $('cross-import-clear').disabled=!inspectedImportedObservation;
+ if(!inspectedImportedObservation){
+  target.textContent=message||'No imported research observation.';
+  if(message)target.classList.add('rejected');
+  return;
+ }
+ const r=inspectedImportedObservation;
+ target.classList.add('verified');
+ target.textContent='ORIGINAL SOURCE REPLAY VERIFIED · Challenge '+(r.id+1)+
+  ' · laws #'+(r.ids[0]+1)+' / #'+(r.ids[1]+1)+
+  '\nPath 1 '+(r.words[0]||'(empty)')+' · depth '+r.depths[0]+' · left '+stateName(r.states[0][0])+
+  ' · right '+stateName(r.states[0][1])+
+  '\nPath 2 '+(r.words[1]||'(empty)')+' · depth '+r.depths[1]+' · left '+stateName(r.states[1][0])+
+  ' · right '+stateName(r.states[1][1])+
+  '\nSource qualifying prefix pairs: '+r.candidate_count+' / '+r.pair_count+
+  ' · first '+(r.first===null?'none':r.first[0]+'/'+r.first[1])+
+  '\nSelected pair: '+(r.qualifies?'source relation observed':'not a qualifying relation')+
+  ' · NOT a winning certificate. Report is unsigned.';
+}
+async function importCrossObservationFile(file){
+ if(!file)return;
+ inspectedImportedObservation=null;
+ if(file.size<1||file.size>200000){
+  renderImportedCrossObservation('Observation import rejected: expected JSON of 1–200,000 bytes.');
+  return;
+ }
+ try{
+  const parsed=JSON.parse(await file.text());
+  const report=validateImportedCrossObservation(parsed);
+  if(!report)throw Error('source mismatch');
+  inspectedImportedObservation=report;
+  renderImportedCrossObservation();
+ }catch(_invalid){
+  renderImportedCrossObservation('Observation import rejected: fields did not replay against the original WORLD48 source.');
+ }
+}
 function renderCrossDepth(){
  const panel=$('cross-depth'),one=$('cross-step-one'),two=$('cross-step-two');
  if(trials.length!==2){
@@ -761,6 +867,16 @@ async function boot(){
    crossStepOne=Number(panel.dataset.firstOne);crossStepTwo=Number(panel.dataset.firstTwo);reRender();
   });
   $('cross-export').addEventListener('click',downloadCrossObservation);
+  $('cross-import').disabled=false;
+  $('cross-import').addEventListener('click',()=>$('cross-import-file').click());
+  $('cross-import-file').addEventListener('change',async()=>{
+   const file=$('cross-import-file').files[0];
+   await importCrossObservationFile(file);
+   $('cross-import-file').value='';
+  });
+  $('cross-import-clear').addEventListener('click',()=>{
+   inspectedImportedObservation=null;renderImportedCrossObservation();
+  });
   $('cross-ends').addEventListener('click',()=>{
    if(trials.length!==2)return;
    crossStepOne=trials[0].actions.length;crossStepTwo=trials[1].actions.length;reRender();
