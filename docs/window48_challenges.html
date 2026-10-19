@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD48 · Rooted collision challenges</title>
+<style>
+:root{color-scheme:dark;font:15px system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#e8f0f7;background:#0e151d}
+*{box-sizing:border-box}
+body{margin:0;background:#0e151d}
+main{max-width:1030px;margin:auto;padding:27px 18px 55px}
+a{color:#9fd3ff}
+h1{font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.04em;margin:6px 0 9px}
+h2{font-size:1.12rem;margin:0 0 10px}
+p{line-height:1.52;color:#adbed0}
+small,.dim{color:#a1b4c7}
+.kicker{font-weight:700;font-size:.74rem;letter-spacing:.13em;text-transform:uppercase;color:#8facc7}
+.panel{background:#182431;border:1px solid #405267;border-radius:12px;padding:17px}
+header{margin-bottom:22px}
+.top{display:grid;grid-template-columns:1.2fr .8fr;gap:13px}
+label{display:block;font-size:.84rem;color:#bdcddd}
+select,input,button{font:inherit;color:#f0f6fc;border:1px solid #60738b;border-radius:8px}
+select,input{background:#0d1824;padding:10px;width:100%;margin-top:7px}
+button{background:#28394b;padding:10px 14px;cursor:pointer}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:not(:disabled):hover{background:#36536e}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #a1d3ff;outline-offset:2px}
+button.primary{background:#265a85;border-color:#75b2de;font-weight:700}
+button.positive{background:#246554;border-color:#82baa8}
+#task{font-size:.91rem;color:#d8e8f5;margin:9px 0 0}
+#progress{font-size:.88rem;color:#b9cadc;margin-top:14px}
+.tag{color:#d8e5f0;font:600 .82rem ui-monospace,monospace}
+.trials{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-top:13px}
+.trial{border:1px solid #3d5065;background:#111d29;border-radius:9px;padding:13px}
+.trial.ready{border-color:#64b4aa}
+.trial strong{display:block;margin-bottom:5px}
+.path{font:700 1.2rem ui-monospace,monospace;color:#d6e6c4;overflow-wrap:anywhere}
+.worlds{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
+.worldtitle{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.state{font:700 1rem ui-monospace,monospace;color:#b5dffb;margin:11px 0}
+.nodes{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px}
+.node{aspect-ratio:1;min-width:0;border-radius:5px;background:#0f1824;border:1px solid #314151;display:flex;justify-content:center;align-items:center;font:600 .69rem ui-monospace,monospace;color:#839bb3}
+.node.marked{border-color:#648e70}.node.nextA{box-shadow:inset 0 0 0 1px #c79f61}
+.node.nextB{outline:1px dashed #b38bd1;outline-offset:-3px}
+.node.current{background:#245b7d;border:2px solid #8ecbf8;color:#fff}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.wordentry{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
+.wordentry label{flex:1;min-width:180px}
+#status{min-height:24px;color:#cce4f3;margin-bottom:3px}
+#verdict{background:#0f1b26;border:1px solid #3a5167;padding:14px;border-radius:8px;color:#d9e6f0;line-height:1.55;min-height:49px}
+.result{font-weight:700}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#record{white-space:pre-wrap;overflow-wrap:anywhere;max-height:160px;overflow:auto;background:#0d1823;border:1px solid #32475a;border-radius:7px;padding:12px;font:12px/1.6 ui-monospace,monospace}
+.note{border-left:3px solid #516f8c;padding-left:12px;font-size:.85rem;margin-top:24px}
+@media(max-width:700px){.top,.worlds,.trials{grid-template-columns:1fr}main{padding:20px 12px}.panel{padding:14px}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<div class="kicker">WORLD48 / original rooted A·B finite worlds</div>
+<h1>Collision laboratory</h1>
+<p>Complete 16 finite source-defined challenges. For each pair of worlds, discover two action paths from the marked origin that arrive at the <strong>same left-world state</strong> but <strong>different right-world states</strong>. The win condition is a mathematical rooted witness, not an invented maze goal.</p>
+<p><a href="window48_world.html">Free exploration</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/work/arc_like_maze/WINDOW_COMBINED.md">Original source proof</a></p>
+</header>
+<div class="top">
+<section class="panel">
+<label for="mission">Choose source challenge
+<select id="mission" disabled></select></label>
+<p id="task">Loading source-derived challenges…</p>
+<p id="progress">0 of 16 witnessed</p>
+</section>
+<section class="panel">
+<h2>Win condition</h2>
+<p>Two different A/B paths begin at <span class="tag">(0,0,0)</span> in both worlds.</p>
+<p><strong>Left:</strong> both paths must end together.
+<strong>Right:</strong> their endpoints must split.</p>
+<p class="dim">Only source-verified transitions count. A path may be empty.</p>
+</section>
+</div>
+<div class="trials">
+<div id="trial-a" class="trial"><strong>Path 1 · not locked</strong><span id="path-a" class="path">—</span><p id="final-a" class="dim">Not yet recorded</p></div>
+<div id="trial-b" class="trial"><strong>Path 2 · not locked</strong><span id="path-b" class="path">—</span><p id="final-b" class="dim">Not yet recorded</p></div>
+</div>
+<div class="worlds">
+<section class="panel">
+<div class="worldtitle"><h2>Left world</h2><span class="tag" id="left-law"></span></div>
+<div id="left-state" class="state">(0,0,0)</div>
+<div id="left-nodes" class="nodes" role="img" aria-label="27 left-world states"></div>
+</section>
+<section class="panel">
+<div class="worldtitle"><h2>Right world</h2><span class="tag" id="right-law"></span></div>
+<div id="right-state" class="state">(0,0,0)</div>
+<div id="right-nodes" class="nodes" role="img" aria-label="27 right-world states"></div>
+</section>
+</div>
+<section class="panel">
+<div class="kicker" id="phase">Path 1 · build your first witness</div>
+<div class="actions">
+<button id="a" class="primary" disabled>Apply A</button>
+<button id="b" class="primary" disabled>Apply B</button>
+<button id="undo" disabled>Undo</button>
+<button id="reset" disabled>Reset current path</button>
+</div>
+<div class="wordentry">
+<label for="word">Apply an A/B word (up to 64 actions per entry)
+<input id="word" maxlength="64" spellcheck="false" autocomplete="off" placeholder="e.g. AABAB"></label>
+<button id="run" disabled>Apply word</button>
+</div>
+<div class="buttons">
+<button id="lock" class="positive" disabled>Lock path 1</button>
+<button id="check" disabled>Check the two paths</button>
+<button id="next" disabled>Next challenge</button>
+<button id="hint" disabled>Reveal source example</button>
+<button id="export" disabled>Export verified certificate</button>
+</div>
+<p id="status" role="status" aria-live="polite">Waiting for source data.</p>
+<div id="verdict">No rooted witness has been submitted.</div>
+<p class="kicker" style="margin-top:18px">Current path · exact finite transition log</p>
+<pre id="record">No actions yet.</pre>
+</section>
+<p class="note">The source gives 48 concrete depth-three F₃ laws; 16 rooted classes remain separate even where full-state classes coincide. This laboratory uses the original transitions and rooted-collision witnesses. It does <strong>not</strong> imitate the native ARC-AGI-3 game, prove a correspondence between native controls and A/B, or claim an external competition result. Downloaded certificates can be freshly replayed by the original Python source verifier.</p>
+</main>
+<script>
+'use strict';
+(() => {
+const $=id=>document.getElementById(id);
+let model=null, roster=null, mission=0, phase=0, word='', trials=[], solved=new Set(), revealed=false, pass=false;
+const stateName=n=>'('+[Math.floor(n/9),Math.floor(n%9/3),n%3].join(',')+')';
+const currentMission=()=>roster.challenges[mission];
+const laws=()=>currentMission().law_ids.map(i=>model.laws[i]);
+function play(actions){
+ const ids=currentMission().law_ids;
+ let state=[0,0],events=[];
+ for(const action of actions){
+  const before=state.slice();
+  state=state.map((old,i)=>model.laws[ids[i]][action][old]);
+  events.push({action,before,after:state.slice()});
+ }
+ return {actions,events,final:state};
+}
+function drawNodes(root,law,state){
+ const parent=$(root);parent.replaceChildren();
+ for(let i=0;i<27;i++){
+  const div=document.createElement('div');div.className='node';div.textContent=String(i).padStart(2,'0');
+  if(i===0)div.classList.add('marked');
+  if(i===law.A[state])div.classList.add('nextA');
+  if(i===law.B[state])div.classList.add('nextB');
+  if(i===state)div.classList.add('current');
+  div.title=stateName(i);
+  parent.appendChild(div);
+ }
+ parent.setAttribute('aria-label','27 exact states, currently '+stateName(state));
+}
+function reRender(message){
+ if(!model||!roster)return;
+ const [left,right]=laws(),result=play(word),state=result.final;
+ $('left-law').textContent='#'+String(left.id+1).padStart(2,'0')+' · k'+left.support+' e'+left.pulse+' t'+left.balanced+' c'+left.coefficient;
+ $('right-law').textContent='#'+String(right.id+1).padStart(2,'0')+' · k'+right.support+' e'+right.pulse+' t'+right.balanced+' c'+right.coefficient;
+ $('left-state').textContent=stateName(state[0]);$('right-state').textContent=stateName(state[1]);
+ drawNodes('left-nodes',left,state[0]);drawNodes('right-nodes',right,state[1]);
+ $('phase').textContent=phase===2?'Two locked paths · verify rooted relation':'Path '+(phase+1)+' · build '+(phase?'the comparison':'your first')+' witness';
+ for(let i=0;i<2;i++){
+  $('path-'+(i?'b':'a')).textContent=trials[i]?(trials[i].actions||'(empty path)'):'—';
+  $('final-'+(i?'b':'a')).textContent=trials[i]?
+    stateName(trials[i].final[0])+' | '+stateName(trials[i].final[1]):'Not yet recorded';
+  $('trial-'+(i?'b':'a')).classList.toggle('ready',Boolean(trials[i]));
+  $('trial-'+(i?'b':'a')).querySelector('strong').textContent='Path '+(i+1)+' · '+(trials[i]?'locked':'not locked');
+ }
+ $('record').textContent=result.events.length?
+   result.events.map((e,i)=>String(i+1).padStart(3,'0')+' '+e.action+'  '+stateName(e.before[0])+' → '+stateName(e.after[0])+'  |  '+stateName(e.before[1])+' → '+stateName(e.after[1])).join('\n'):
+   'Marked origin in both source worlds.';
+ $('progress').textContent=solved.size+' of '+roster.challenges.length+' witnessed in this browser session';
+ $('undo').disabled=phase===2||!word;
+ $('reset').disabled=phase===2||!word;
+ $('a').disabled=phase===2||word.length>=128;
+ $('b').disabled=phase===2||word.length>=128;
+ $('run').disabled=phase===2||word.length>=128;
+ $('lock').disabled=phase===2;
+ $('lock').textContent='Lock path '+(phase+1);
+ $('check').disabled=phase!==2;
+ $('next').disabled=!pass;
+ $('export').disabled=!pass;
+ $('hint').disabled=revealed;
+ if(message)$('status').textContent=message;
+}
+function nextWord(value){
+ if(phase===2||!value||!/^[AB]+$/.test(value)||word.length+value.length>128){
+  reRender('Use A/B only, with no more than 128 actions per path.');
+  return;
+ }
+ word+=value;reRender('Applied '+value.length+' exact source action(s).');
+}
+function chooseChallenge(id){
+ mission=id;phase=0;word='';trials=[];pass=false;revealed=false;
+ const p=currentMission();
+ $('task').textContent='Challenge '+(id+1)+' / '+roster.challenges.length+': find the left-root collision and right-root split between laws #'+(p.law_ids[0]+1)+' and #'+(p.law_ids[1]+1)+'.';
+ $('verdict').textContent='No rooted witness has been submitted.';
+ $('hint').textContent='Reveal source example';
+ reRender('Challenge reset at the marked origin.');
+}
+function lockPath(){
+ if(phase>=2)return;
+ trials.push(play(word));
+ phase++;word='';
+ pass=false;
+ reRender('Locked path '+phase+'. '+(phase===1?'Begin the second path at the same origin.':'Compare both rooted paths.'));
+}
+function checkWitness(){
+ if(phase!==2||trials.length!==2)return;
+ const [x,y]=trials;
+ const collide=x.final[0]===y.final[0];
+ const split=x.final[1]!==y.final[1];
+ pass=x.actions!==y.actions&&collide&&split;
+ if(pass)solved.add(mission);
+ $('verdict').textContent=pass?
+   'WITNESSED: Left endpoints coincide at '+stateName(x.final[0])+'. Right endpoints differ: '+stateName(x.final[1])+' versus '+stateName(y.final[1])+'. This is an exact rooted source separation.':
+   'NOT YET: Left endpoints '+(collide?'coincide':'differ')+'; right endpoints '+(split?'differ':'coincide')+'. Two distinct words with left collision and right split are required. Reset this challenge and try different paths.';
+ reRender(pass?'Rooted challenge passed by two exact source paths.':'The attempted paths did not satisfy the source objective.');
+}
+function certificate(){
+ return {schema:'original-window48-rooted-collision-certificate/v1',
+         scope:'finite-mathematical-source-only',challenge_id:mission,
+         law_ids:currentMission().law_ids.slice(),
+         trials:trials.map(t=>({actions:t.actions,events:t.events,final:t.final})),
+         verdict:{left_collides:true,right_splits:true,passed:true}};
+}
+function download(){
+ if(!pass)return;
+ const link=document.createElement('a');
+ const url=URL.createObjectURL(new Blob([JSON.stringify(certificate(),null,2)+'\n'],{type:'application/json'}));
+ link.href=url;link.download='world48_rooted_witness_'+String(mission+1).padStart(2,'0')+'.json';
+ document.body.appendChild(link);link.click();link.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function reveal(){
+ const example=currentMission().example_words;
+ revealed=true;$('hint').textContent='Example: '+example.map(x=>x||'(empty)').join(' / ');
+ reRender('This exact example was generated by the source rooted-conflict search. Find your own path or replay it.');
+}
+function validate(model,roster){
+ if(model.schema!=='original-window48-depth3-game-world/v1'||!Array.isArray(model.laws)||model.laws.length!==48)throw Error('Wrong source-law data');
+ if(roster.schema!=='original-window48-rooted-challenge-roster/v1'||!Array.isArray(roster.challenges)||roster.challenges.length!==16)throw Error('Original challenge roster unavailable');
+ for(let i=0;i<16;i++){
+  const p=roster.challenges[i],ids=p.law_ids;
+  if(p.id!==i||p.objective!=='rooted-collision-left-split-right'||ids.length!==2||
+      ids.some(n=>!Number.isInteger(n)||n<0||n>47)||p.example_words.length!==2)throw Error('Rooted mission shape changed');
+  const [a,b]=p.example_words;
+  if(![a,b].every(w=>typeof w==='string'&&/^[AB]*$/.test(w)))throw Error('Source witness path invalid');
+  const endpoint=(id,word)=>{
+   let s=0;
+   for(const letter of word)s=model.laws[id][letter][s];
+   return s;
+  };
+  if(a===b||endpoint(ids[0],a)!==endpoint(ids[0],b)||endpoint(ids[1],a)===endpoint(ids[1],b))
+     throw Error('Source-root witness contradicted manifest #'+i);
+ }
+}
+async function boot(){
+ try{
+  const [a,b]=await Promise.all([fetch('window48_world_data.json',{cache:'no-store'}),fetch('window48_challenges.json',{cache:'no-store'})]);
+  if(!a.ok||!b.ok)throw Error('Missing source-owned manifest');
+  const m=await a.json(),p=await b.json();validate(m,p);model=m;roster=p;
+  const select=$('mission');
+  p.challenges.forEach((c,i)=>{
+   const opt=document.createElement('option');opt.value=String(i);
+   opt.textContent=String(i+1).padStart(2,'0')+' · original laws #'+(c.law_ids[0]+1)+' / #'+(c.law_ids[1]+1);
+   select.appendChild(opt);
+  });
+  select.disabled=false;select.addEventListener('change',()=>chooseChallenge(Number(select.value)));
+  $('a').addEventListener('click',()=>nextWord('A'));
+  $('b').addEventListener('click',()=>nextWord('B'));
+  $('undo').addEventListener('click',()=>{word=word.slice(0,-1);reRender('Replayed current path from marked origin.')});
+  $('reset').addEventListener('click',()=>{word='';reRender('Current path reset to origin.')});
+  $('run').addEventListener('click',()=>nextWord($('word').value.toUpperCase().trim()));
+  $('word').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('run').click()}});
+  $('lock').addEventListener('click',lockPath);
+  $('check').addEventListener('click',checkWitness);
+  $('next').addEventListener('click',()=>{
+    if(!pass)return;
+    const next=(mission+1)%roster.challenges.length;select.value=String(next);chooseChallenge(next);
+  });
+  $('hint').addEventListener('click',reveal);
+  $('export').addEventListener('click',download);
+  document.addEventListener('keydown',e=>{
+    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement||e.target instanceof HTMLButtonElement||e.ctrlKey||e.altKey||e.metaKey)return;
+    const key=e.key.toUpperCase();
+    if(key==='A'||key==='B'){e.preventDefault();nextWord(key)}
+    if(e.key==='Backspace'&&phase<2){e.preventDefault();word=word.slice(0,-1);reRender('Replayed after undo.')}
+  });
+  chooseChallenge(0);
+ }catch(e){$('status').textContent='Source unavailable; no challenge invented: '+String(e.message||e);}
+}
+boot();
+})();
+</script>
+</body>
+</html>
