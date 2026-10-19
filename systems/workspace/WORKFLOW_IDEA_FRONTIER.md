@@ -77,6 +77,37 @@ worker API is `worker_frontier()`. This is an enforced read-shape in the
 Python worker capability, *not security isolation against a malicious local
 process*; there is no real multi-user worker authentication here.
 
+## Native worker continuation from the actual handoff
+
+`IdeaFrontier.native_handoff_frontier(runtime, handoff_id=..., revision=...,
+step_id=...)` reopens an **existing** `HandoffRuntime` record. It only accepts
+the original source-linked `repo-work-<source_id>` task handoffs created by
+`runtime.repository_tasks.admit_active_work`. The immutable handoff's
+recorded task source ID, Markdown link, source row, title and assigned
+`to_actor` must still match the **current active** task ledger.
+The handoff must remain READY or ACTIVE. The caller cannot choose a
+different idea ID or worker label; they are derived from the native source.
+
+A worker implementation can call this read-only observer at any continuation
+point. Each call rechecks its current source manifests and first-hop
+relationships and includes **only** incoming HELP proposals addressed to
+that currently visible position. A peer's same declared step ID exposes a
+bounded step difference (label, source manifest, inputs, path role), **not**
+their full graph or a fabricated superiority score. If there is no exact
+step correspondence, no step delta is inferred.
+
+`propose_from_native_handoff` enforces this same native input check before
+recording a first-hop help or backtrack **proposal**. The local editor now
+exposes `/api/idea-native-frontier` and `/api/idea-native-propose`.
+The editor's **Preview first-hop by label** remains an operator diagnostic,
+but its actionable buttons require an observed real handoff.
+
+This is a **worker-callable observation interface**, not a continuously
+running agent, a pushed notification service, an authenticated multiuser
+permission boundary, or automatic execution/merge of a different branch.
+Existing source-native worker runners would need to call the interface from
+their authorized continuation point; no unsupported assignment is invented.
+
 ## Source-bound tests
 
 ```sh
