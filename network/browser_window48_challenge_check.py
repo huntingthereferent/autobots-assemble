@@ -10,6 +10,7 @@ from threading import Thread
 import unittest
 
 from work.arc3.window48_challenges import verify_certificate
+from work.arc3.window48_cross_depth import verify_observation
 
 DOCS=Path(__file__).resolve().parents[1]/"docs"
 
@@ -72,6 +73,12 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
 
     def lock(self):
         self.page.locator("#lock").click()
+
+    def exported_observation(self):
+        with self.page.expect_download() as event:
+            self.page.locator("#cross-export").click()
+        data=json.loads(Path(event.value.path()).read_text(encoding="utf8"))
+        return data,verify_observation(data)
 
     def exported(self):
         with self.page.expect_download() as evt:
@@ -247,6 +254,92 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.lock()
         self.page.locator("#check").click()
         self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
+    def test_cross_depth_research_exports_replay_independently_across_all_charts(self):
+        source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
+        roster=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+        self.assertTrue(self.page.locator("#cross-export").is_disabled())
+        for mission in (1,2,16,32,47):
+            with self.subTest(mission=mission):
+                self.page.locator("#mission").select_option(str(mission))
+                words=roster["challenges"][mission]["example_words"]
+                self.word(words[0])
+                self.lock()
+                self.assertTrue(self.page.locator("#cross-export").is_disabled())
+                self.word(words[1])
+                self.lock()
+                self.assertFalse(self.page.locator("#cross-export").is_disabled())
+                self.assertTrue(self.page.locator("#export").is_disabled())
+                receipt,verification=self.exported_observation()
+                self.assertTrue(verification["verified"])
+                self.assertFalse(verification["win_certificate"])
+                self.assertEqual(receipt["words"],words)
+                self.assertEqual(receipt["law_ids"],roster["challenges"][mission]["law_ids"])
+                self.assertEqual(receipt["pair_count"],(len(words[0])+1)*(len(words[1])+1))
+                self.assertEqual(receipt["selected_depths"],list(map(len,words)))
+                self.assertEqual(receipt["candidate_count"],1)
+                self.assertTrue(verification["candidate"])
+                self.assertEqual(receipt["first_candidate"]["depths"],list(map(len,words)))
+                for k in range(2):
+                    state=[0,0]
+                    for action in words[k]:
+                        state=[
+                            source["laws"][receipt["law_ids"][j]][action][state[j]]
+                            for j in range(2)
+                        ]
+                    self.assertEqual(receipt["selected_states"][k],state)
+                self.page.locator("#cross-first").click()
+                other,also=self.exported_observation()
+                self.assertTrue(also["verified"])
+                self.assertEqual(other["words"],receipt["words"])
+                self.assertEqual(other["candidate_count"],receipt["candidate_count"])
+                self.page.locator("#check").click()
+                certificate,proven=self.exported()
+                self.assertTrue(proven["passed"])
+                self.assertNotEqual(certificate["schema"],receipt["schema"])
+
+    def test_nonwinning_observation_exports_no_completion_claim(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("AA")
+        self.lock()
+        self.word("AA")
+        self.lock()
+        receipt,verification=self.exported_observation()
+        self.assertEqual(receipt["candidate_count"],0)
+        self.assertIsNone(receipt["first_candidate"])
+        self.assertFalse(verification["candidate"])
+        self.assertFalse(verification["win_certificate"])
+        self.assertTrue(self.page.locator("#export").is_disabled())
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
+        self.page.locator("#check").click()
+        self.assertIn("NOT YET",self.page.locator("#verdict").inner_text())
+
+    def test_observation_selected_depth_changes_do_not_mutate_recorded_words(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        win,verified=self.exported()
+        self.assertTrue(verified["passed"])
+        self.seek_cross_prefix("one",1)
+        self.seek_cross_prefix("two",2)
+        report,source_replay=self.exported_observation()
+        self.assertEqual(report["selected_depths"],[1,2])
+        self.assertTrue(source_replay["verified"])
+        self.assertEqual(report["words"],["BAB","BBBA"])
+        still_win,rechecked=self.exported()
+        self.assertEqual(win,still_win)
+        self.assertTrue(rechecked["passed"])
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        report_restored,restored=self.exported_observation()
+        self.assertTrue(restored["verified"])
+        self.assertEqual(report_restored["words"],report["words"])
+        self.assertEqual(report_restored["selected_depths"],[3,4])
+        self.page.locator("#retry").click()
+        self.assertTrue(self.page.locator("#cross-export").is_disabled())
 
     def test_cross_depth_source_prefixes_and_earliest_candidate_in_every_chart(self):
         source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
