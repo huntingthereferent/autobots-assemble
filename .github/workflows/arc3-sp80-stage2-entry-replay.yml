@@ -1,0 +1,38 @@
+name: ARC3 genuine SP80 native stage2 witness reproduction and controls
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_entry_replay.py'
+      - '.github/workflows/arc3-sp80-stage2-entry-replay.yml'
+jobs:
+  original-native-stage2-witness-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Freeze literal stage1-to-stage2 original source witnesses before replay
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_entry_replay import PROGRAMS, RESETS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(PROGRAMS)==21 and RESETS==2
+          words=dict(PROGRAMS)
+          assert words['replicate_success_A']=='6@24,37 4 4 6@32,25 6@12,17 4 4 4 5'
+          assert words['replicate_success_B']=='6@24,37 4 4 6@32,25 4 4 6@12,17 4 4 4 5'
+          assert all(a!=6 or xy is not None for _,word in PROGRAMS
+                    for a,xy in parse_plan(word))
+          print('UNIT ONLY: true original level2 witness replay words frozen')
+          PY
+      - name: Play 42 independent authentic original SP80 stage1 games
+        run: python -m work.arc3.native_sp80_stage2_entry_replay --out runtime/data/arc3/sp80-stage2-entry-replay.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-entry-replay
+          path: runtime/data/arc3/sp80-stage2-entry-replay.*
+          if-no-files-found: error
+          retention-days: 14
