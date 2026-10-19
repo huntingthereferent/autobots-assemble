@@ -3,7 +3,7 @@ from copy import deepcopy
 import unittest
 
 from scripts.nih_p2_original_world_revision import (
-    snapshots,independent_oracle,validate_frames,apply_overlay,SNAPSHOTS)
+    snapshots,independent_oracle,validate_frames,apply_overlay,SNAPSHOTS,frame_for_verifier)
 
 BASE={
     "kind":"temporal-scope/v1","synthetic":True,"case_id":"synthetic-interval",
@@ -35,12 +35,10 @@ def frames():
         known="2026-01-04" if turn<2 else "2026-01-06"
         for name in SNAPSHOTS:
             result=independent_oracle(versions[name],known=known,target="2026-01-04")
-            rows.append({
-                "turn":turn,"snapshot":name,"known_at":known,"target_at":"2026-01-04",
-                "temporal_ids":result["temporal_ids"],"future_leakage_ids":result["future_leakage_ids"],
-                "snapshot_dataset_sha256":{"baseline":"a"*64,"corrected":"b"*64,"withdrawn":"c"*64}[name],
-                "original_program_sha256":"d"*64,
-                "independent_host_agreement":True})
+            rows.append(frame_for_verifier(
+                turn=turn,snapshot=name,known=known,result=result,
+                program="d"*64,
+                edition={"baseline":"a"*64,"corrected":"b"*64,"withdrawn":"c"*64}[name]))
     return rows
 
 class RevisionWorldTests(unittest.TestCase):
