@@ -1,0 +1,47 @@
+name: ARC3 SP80 native ACTION4 visible saturation
+on:
+  pull_request:
+    paths:
+      - "work/arc3/native_sp80_action4_saturation.py"
+      - ".github/workflows/arc3-sp80-action4-saturation.yml"
+  push:
+    paths:
+      - "work/arc3/native_sp80_action4_saturation.py"
+      - ".github/workflows/arc3-sp80-action4-saturation.yml"
+jobs:
+  native-action4-saturation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install "arc-agi>=0.9.6,<1" numpy
+      - name: Validate prespecified action-count contrast (synthetic unit only)
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_action4_saturation import (
+              WORDS, RESETS, predict_nonbottom
+          )
+          assert len(WORDS) == len(set(WORDS)) == 6 and RESETS == 2
+          assert all(len(w) == 16 and set(w) <= {"4", "5"} for w in WORDS)
+          at8 = predict_nonbottom(4, 5, 8)
+          assert at8["ACTION4_ORDINAL_SATURATION"] == 32
+          assert at8["ABSOLUTE_STEP_BASELINE"] == 0
+          at7 = predict_nonbottom(4, 7, 7)
+          assert at7["ACTION4_ORDINAL_SATURATION"] == 0
+          at5 = predict_nonbottom(5, 2, 3)
+          assert all(v == 0 for v in at5.values())
+          assert predict_nonbottom(4, 6, 9)["ACTION4_ORDINAL_SATURATION"] == 32
+          print("UNIT ONLY: predeclared differentiation/rejection assertions passed")
+          PY
+      - name: Run original native ARC SP80 mixed-action trajectories
+        run: python -m work.arc3.native_sp80_action4_saturation --out runtime/data/arc3/sp80-action4-saturation.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-action4-saturation
+          path: runtime/data/arc3/sp80-action4-saturation.*
+          if-no-files-found: error
+          retention-days: 14
