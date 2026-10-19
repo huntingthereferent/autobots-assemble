@@ -39,7 +39,9 @@ class ContrastiveHarnessTests(unittest.TestCase):
         self.calls = []
         self.allowed = {"native-base", "native-candidate"}
         common = dict(worker_id=self.worker, task_id="task-one",
-                      input_sha256=sha256(b"same native inputs").hexdigest())
+                      input_sha256=sha256(b"same native inputs").hexdigest(),
+                      model_id="ab-ai-builder", execution_mode="continuous",
+                      agent_profile_sha256=sha256(b"fixed AB runtime and profile").hexdigest())
         self.base = Probe(
             job_id="native-base", version_id="base",
             source_sha256=self.desk.inspect(worker_id=self.worker, version_id="base")[
@@ -111,6 +113,30 @@ class ContrastiveHarnessTests(unittest.TestCase):
                     contrast_and_record(**{**self.args(), "candidate": candidate})
         self.assertEqual(self.calls, [])
         self.assertFalse(self.journal())
+
+    def test_switching_agent_or_build_mode_invalidates_comparison(self):
+        for candidate in (
+            replace(self.candidate, execution_mode="codex-build"),
+            replace(self.candidate, model_id="different-agent-model"),
+            replace(self.candidate, agent_profile_sha256="f" * 64),
+            replace(self.candidate, execution_surface="foreign-substrate"),
+            replace(self.candidate, model_id="codex"),
+        ):
+            with self.subTest(candidate=candidate):
+                with self.assertRaises(ValueError):
+                    contrast_and_record(**{**self.args(), "candidate": candidate})
+        self.assertEqual(self.calls, [])
+        self.assertFalse(self.journal())
+
+    def test_codex_cannot_become_the_common_executor_even_if_profiles_match(self):
+        # Equally configured on paper is not a reason to switch the tested system
+        # to a different agent's frozen instructions or build mode.
+        bad_base = replace(self.base, execution_mode="codex-build")
+        bad_candidate = replace(self.candidate, execution_mode="codex-build")
+        with self.assertRaisesRegex(ValueError, "Codex"):
+            contrast_and_record(**{**self.args(),
+                                  "base": bad_base, "candidate": bad_candidate})
+        self.assertEqual(self.calls, [])
 
     def test_source_mutation_invalidates_old_probe(self):
         p = self.data / "workstation" / self.worker / "candidate" / "worker.py"
