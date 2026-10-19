@@ -1,0 +1,41 @@
+name: ARC3 original SP80 upper glyph real SDK coordinate click controls
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_top_glyph_click_controls.py'
+      - '.github/workflows/arc3-sp80-top-glyph-clicks.yml'
+jobs:
+  genuine-native-upper-click-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Verify frozen original native coordinate click programs
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_top_glyph_click_controls import PLANS,RESETS,FROZEN_COORDINATES
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(PLANS)==15 and RESETS==2 and len(FROZEN_COORDINATES)==8
+          assert FROZEN_COORDINATES['top_white_A']==(14,5,11)
+          assert FROZEN_COORDINATES['top_white_B']==(30,5,11)
+          assert FROZEN_COORDINATES['top_white_C']==(46,5,11)
+          for name,word in PLANS:
+              actions=parse_plan(word)
+              assert actions[-1][0]==5
+              assert all(n!=6 or xy is not None for n,xy in actions)
+          print('UNIT ONLY: original SDK upper white glyph and actual bar clicks frozen')
+          PY
+      - name: Play actual original SP80 click controls with complete SDK native frames
+        run: python -m work.arc3.native_sp80_top_glyph_click_controls --out runtime/data/arc3/sp80-top-glyph-click-controls.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-original-sp80-upper-click-controls
+          path: runtime/data/arc3/sp80-top-glyph-click-controls.*
+          if-no-files-found: error
+          retention-days: 14
