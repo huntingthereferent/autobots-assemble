@@ -150,7 +150,6 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.assertIn("LIVE PREVIEW",self.page.locator("#relation-status").inner_text())
         self.assertEqual(self.page.locator("#left-nodes .node.reference").count(),1)
         self.assertEqual(self.page.locator("#right-nodes .node.reference").count(),1)
-        self.assertIn("SAME WORD",self.page.locator("#relation-distinct").inner_text()) if False else None
         self.assertTrue(self.page.locator("#check").is_disabled())
         self.word("BBBA")
         self.assertEqual(self.page.locator("#live-relation").get_attribute("data-ready"),"true")
