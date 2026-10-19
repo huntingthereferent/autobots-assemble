@@ -92,4 +92,17 @@ class WorldNIHBlueprintTests(unittest.TestCase):
         for size in (0,2,13,True,"6"):
             c=deepcopy(b);c["graph_layout"]["columns"]=size
             with self.subTest(size=size),self.assertRaises(ValueError):validate(c)
+    def test_07_graph_expansion_does_not_expand_physical_rooms(self):
+        b=original()
+        new=deepcopy(b["sample_sets"]["synthetic"][1])
+        new.update(id="synthetic-added-1",source_ref="synthetic-added-source",object="added-observation")
+        b["sample_sets"]["synthetic"].append(new)
+        validate(b)
+        self.assertEqual(len(graph(b,"synthetic")["nodes"]),18)
+        self.assertEqual(b["base_world"]["rooms"],ROOMS)
+        out=evaluate(b,"synthetic")
+        self.assertEqual(out["withheld_future"],["delayed-result","synthetic-added-1"])
+        self.assertEqual(out["static_future_leakage"],["delayed-result","synthetic-added-1"])
+        b["sample_sets"]["synthetic"].append(deepcopy(new))
+        with self.assertRaises(ValueError):validate(b)
 if __name__=="__main__":unittest.main()
