@@ -112,7 +112,7 @@ window.worldTrial10=(()=>{
   });
   const path=chosen.frames.length?chosen.frames.slice(0,frame+1).map(f=>f.position):[q.start_center,q.contact_center];
   ctx.strokeStyle=chosen.frames.length?'#a0dcfb':'#d9909f';ctx.lineWidth=2;ctx.beginPath();
-  path.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1]));ctx.stroke();
+  path.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.stroke();
   const p=path.at(-1);ctx.fillStyle='#f5ebcc';ctx.beginPath();ctx.arc(X(p[0]),Y(p[1]),R*38,0,Math.PI*2);ctx.fill();
   document.getElementById('status').textContent='Case '+(index+1)+'/35 · angle '+current.incoming_angle_degrees+
    '°, rotated B '+current.surface_B_rotation_degrees+'° · '+current.classification+
