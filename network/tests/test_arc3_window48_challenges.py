@@ -47,14 +47,50 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
         cls.roster = rooted_roster()
         cls.saved = json.loads(MANIFEST.read_text(encoding="utf8"))
 
-    def test_source_generated_16_challenges_are_exactly_published(self):
+    def test_source_generated_48_challenges_are_exactly_published(self):
         self.assertEqual(self.saved["challenges"],self.roster)
         self.assertEqual(self.saved["source"],"work/arc_like_maze/window_combined.py")
         self.assertEqual(self.saved["scope"],SCOPE)
-        self.assertEqual(len(self.roster),16)
-        self.assertEqual(len({tuple(c["law_ids"]) for c in self.roster}),16)
+        self.assertEqual(len(self.roster),48)
+        self.assertEqual(len({tuple(c["law_ids"]) for c in self.roster}),48)
         self.assertEqual(len({tuple((family()[i].support,family()[i].pulse,family()[i].balanced))
                               for ch in self.roster for i in ch["law_ids"]}),16)
+
+    def test_all_48_concrete_laws_are_playable_with_16_classes_across_three_charts(self):
+        laws=family()
+        self.assertEqual(
+            {id for ch in self.roster for id in ch["law_ids"]},set(range(48))
+        )
+        for chart in range(3):
+            level=self.roster[chart*16:(chart+1)*16]
+            self.assertEqual(len(level),16)
+            self.assertEqual([c["id"] for c in level],list(range(chart*16,(chart+1)*16)))
+            self.assertEqual(
+                {laws[ch["law_ids"][0]].coefficient for ch in level},{chart}
+            )
+            self.assertEqual(
+                {laws[ch["law_ids"][1]].coefficient for ch in level},{chart}
+            )
+            self.assertEqual(
+                len({tuple((laws[ch["law_ids"][0]].support,
+                            laws[ch["law_ids"][0]].pulse,
+                            laws[ch["law_ids"][0]].balanced)) for ch in level}),16
+            )
+        # Explicit backward-compatibility contract: these are the historical
+        # c=0 challenge pair IDs; the old receipt schema is unchanged.
+        original_pairs=[(i,i+3) for i in range(0,45,3)]+[(0,45)]
+        self.assertEqual(
+            [tuple(ch["law_ids"]) for ch in self.roster[:16]],original_pairs
+        )
+
+    def test_chart_1_and_chart_2_witness_receipts_replay_and_reject_tampering(self):
+        for mission in (16,31,32,47):
+            cert=example_certificate(mission)
+            self.assertTrue(verify_certificate(cert)["passed"])
+            forged=deepcopy(cert)
+            forged["trials"][1]["final"][0]=(forged["trials"][1]["final"][0]+1)%27
+            with self.assertRaises(ValueError):
+                verify_certificate(forged)
 
     def test_each_example_is_original_bfs_source_witness(self):
         worlds=family()
@@ -71,7 +107,7 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
             self.assertTrue(witnessed["passed"])
 
     def test_every_source_certificate_replays(self):
-        for n in range(16):
+        for n in range(48):
             report=verify_certificate(example_certificate(n))
             self.assertTrue(report["verified"])
             self.assertTrue(report["passed"])
@@ -106,7 +142,7 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
             lambda c:c["trials"][1].__setitem__("actions","AB"*70),
             lambda c:c["trials"].pop(),
             lambda c:c["law_ids"].__setitem__(0,47),
-            lambda c:c.__setitem__("challenge_id",44),
+            lambda c:c.__setitem__("challenge_id",99),
             lambda c:c.__setitem__("scope","native-arc"),
             lambda c:c["verdict"].__setitem__("passed",False),
         ]
