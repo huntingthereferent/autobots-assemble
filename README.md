@@ -1,6 +1,6 @@
 # Research and engineering experiments
 
-**[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
+**[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
 The public work view reads actual GitHub workflow runs and native job/step results, with original workstation research and walls alongside them. Runs only show what GitHub executed; saved research findings are separate historical evidence. The earlier animated source graph remains optional at [trace.html](docs/live/trace.html). Local private process handoffs remain available only through the loopback workstation viewer.
 
@@ -15,7 +15,7 @@ An inspectable collection of code, mathematical experiments, system prototypes, 
 | **Finite-state mathematics** | [Constructed transformation systems](work/arc_like_maze/README.md) — finite-field models, inverse construction, correspondence tests, and counterexamples |
 | **Finite correspondence research** | [Checkpoint research](work/arc_like_maze/chatbot/README.md) — witnessed correspondences, selected routes, source-change propagation, task requirements, and bounded evidence verification |
 | **Finite Correspondence Process** | [Executable process and worker role](work/arc_like_maze/chatbot/PROCESS.md) — distinguishes the bounded process from research and its potential workstation assignment; not a general AI agent |
-| **Interactive environments** | [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
+| **Interactive environments** | [Play WORLD48 rooted challenges](docs/game/index.html) · [Explore all 48 original mathematical worlds](docs/window48_world.html) · [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
 | **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
 | **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
 | **CP automation** | [One-window CP frontier](systems/workspace/CP_AUTOMATION.md) — declared dependencies over the existing workstation; native worker evidence remains authoritative |
