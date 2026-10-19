@@ -30,6 +30,8 @@ def verify(output_dir):
                 page=browser.new_page(viewport={"width":1220,"height":840})
                 page.on("pageerror",lambda e:errors.append(str(e)))
                 page.goto("http://127.0.0.1:"+str(server.server_port)+"/"+PAGE,wait_until="load")
+                if page.evaluate("typeof window.worldTrial10")!="object":
+                    raise ValueError("Trial10 browser source unavailable: errors="+repr(errors)+" page_title="+page.title())
                 if page.evaluate("window.worldTrial10.receipt()") is not None:
                     raise ValueError("candidate prefilled without source experiment")
                 page.frame_locator("#source").locator("#run").wait_for()
