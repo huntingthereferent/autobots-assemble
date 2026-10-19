@@ -1,53 +1,65 @@
-# Swallow Harness²: bounded contrastive probe lane
+# Harness² swallowed into the existing A/B workstation
 
-**Referent:** [google-research/harness2](https://github.com/google-research/harness2), upstream main commit [\`1cfe254e8d25b15f37048c3730134686abe60335\`](https://github.com/google-research/harness2/commit/1cfe254e8d25b15f37048c3730134686abe60335), inspected 2026-10-19. The upstream paper is [Harness²: Recursive Agent Harnessing for an Open World](https://arxiv.org/abs/2610.14224). This lane responds to that *actual* research object, not to a similarly named generic agent framework.
+Source inspected: [Google Research Harness²](https://github.com/google-research/harness2/tree/1cfe254e8d25b15f37048c3730134686abe60335), revision `1cfe254e8d25b15f37048c3730134686abe60335` (2026-10-14). Paper: [Harness²: Recursive Agent Harnessing for an Open World](https://arxiv.org/abs/2610.14224).
 
-## What was inspected
+**What is useful:** the controlled task-level *propose → probe → compare/compose* loop, and retaining observed outcomes for later tasks. The model's weights are not the harness. A/B already has source editions, recorded worker movements, provenance and exact native verifiers; there is no need to import Google's runner, scheduler, agent prompts or benchmarks.
 
-Harness² refines a task's execution harness through Propose–Probe–Compose, then carries evidence-supported lessons into a separate improvement harness for subsequent tasks. It exposes eight configurable parts: system prompt, guardrails, memory, tool guidance, subagents, skills, scripts, and plugins. Its experiments include parallel and sequential refinement, candidate rollouts, composition, a run ledger, and a persistent per-domain library. Upstream currently documents OpenCode as its default and Codex as an optional executor, for JobBench, LAB, and WorkBuddy-Bench. **That upstream option is not a recommendation or a dependency for A/B.**
+## One shared workstation, many AI clients
 
-Upstream is **Apache-2.0** and retains third-party license notices. Its authors report improvements on their published benchmark configurations; those are their findings, **not** independently reproduced A/B results. Their documentation also warns that executor network access is unrestricted and its optional Codex executor runs without sandboxing; public benchmark grading material can be fetched accidentally. Do not inherit these operational defaults or switch agent substrates while evaluating a harness change.
+Harness², ChatGPT and other agents may all call the **same** workstation. A client is not the workstation. No particular AI model or personality becomes its runtime.
 
-## What A/B already has
+`systems/workspace/harness_client.py` is an in-process Python adapter to **existing** `branch_help`, `controls.run_job`, `verify_return` and `RuntimeJournal`. It provides:
 
-- `ProcessWorkstation`: unchanged source ownership, inspectable editions and branches with SHA-256 fingerprints.
-- `WorkstationContinuationHarness`: native journal, explicit lane creation, witnessed branch/connection observations.
-- `controls.promote_edition`: selection only after a COMPLETE native job on the exact edition, independently reverified.
-- `PreferredEditions`: append-only local preferences, not automatic deployment or blanket scientific success.
+- `request_worker`: open a bounded request, optionally admit an already-registered, source-pinned worker. Unregistered work stays `OPEN_UNSTAFFED`.
+- `execute_worker`: run only the exact admitted job with explicit execution approval. A completed job is reverified without spawning a duplicate subprocess.
+- `reverify_return`: replay the native evidence without executing again.
 
-These are the native capabilities; importing Google's separate runner, prompts, grading tools, or benchmark datasets would create a competing execution and evidence spine.
+The recorded client ID is attribution, **not proof of caller identity or authorization**. The native controls retain all execution and source gates. The adapter does not run Harness² or call any AI model itself.
 
-## Controlled builder/observer boundary
+Example, assuming the existing coordinator checkpoint, registered finite worker edition and input file have already been prepared:
 
-James's correction: **Codex is another packaged agent/harness configuration, not a neutral code-editing instrument for this trial.** Switching ChatGPT into Codex build mode changes the active instruction/tool environment, so the resulting observations cannot be attributed solely to the A/B harness change being tested. Merely freezing the *model weights* does not freeze the surrounding agent.
+```python
+from systems.workspace.harness_client import WorkstationClient
+from systems.workspace.branch_help import CAP_FINITE
 
-The A/B comparison refuses a foreign execution surface (including Codex-mode receipts), detects changes in model ID, execution mode or fixed agent-profile digest, and keeps the proposed editable harness component as the controlled variable. None of those labels authenticates itself: the user-supplied independent native verifier must establish identity from observed execution receipts. A valid comparison needs the same A/B agent continuity across baseline and candidate, not just a score or a convenient handoff to a different builder.
-
-This implements **only the admission check**, not yet an AI that autonomously proposes edits. A future AI builder should branch through the workstation's own recorded movements, use its existing tools and memory, and submit native results for independent inspection.
-
-## First executable movement
-
-`systems/workspace/contrastive_harness.py` adds a small, independent **pairwise probe intake**:
-
-1. Choose a source-owned base and its changed child branch; declare which of the eight harness components was edited.
-2. Produce TWO native job receipts externally on the **same task and exact input digest** using the **same active A/B agent, model identity, operating mode and workstation execution surface**. Record each job, edition fingerprint, result digest, witness locator, execution mode, model identity and fixed agent-profile digest. The fixed profile excludes the single deliberately edited harness component. Intake never performs execution. The native verifier must attest those claims: matching self-reported strings/digests alone are insufficient.
-3. Independently reverify both receipts with an installed domain-native callback **on each invocation**. There is no permissive verifier.
-4. Only then ask a **separate** domain-native comparator for an outcome and contrast witness. A changed result, a self-reported score or a shared witness is not evidence of improvement.
-5. Append the bounded verdict as `WORKSTATION_HARNESS_CONTRAST` to the **existing** `RuntimeJournal` under the chosen coordination lane. Replaying the same record is idempotent; a changed source blocks the old receipt.
-6. `pin_supported_candidate` requires explicit operator approval, **fresh verification**, and delegates to existing `controls.promote_edition` for a second source-owned native recheck. A supported comparison is **not** itself a promotion.
-
-**State vocabulary:** `SUPPORTED` = an independently supplied improvement verdict on *one matching task*. `NO_PREFERENCE` = comparator did not support preference. `UNKNOWN` = native evidence missing. These words do not assert generalization, truth of an external benchmark, autonomous operation, or successful deployment.
-
-This does **not** yet implement an AI proposer, automatic agent editing, recursive composition, task scheduling, full persistent cross-task optimization, remote network restrictions, or general native comparison workers. Those remain separate witness-requiring continuations. The intended builder is **AI continuing within the existing A/B workstation**, not a mode switch into Codex or another prebuilt agent harness. It deliberately leaves W13/game world, NIH, ARC and existing research lanes untouched.
-
-## Rights and provenance
-
-No Harness² source files, prompt strings, benchmark data, or dependencies are copied into this lane. The code is a new A/B implementation based on the described contrastive research relationship. The root A/B **All Rights Reserved** notice remains unchanged and does **not** purport to revoke or replace upstream Apache-2.0 rights. If actual upstream code is later incorporated, preserve the exact Apache license and any applicable NOTICE/third-party terms.
-
-## Reproduce contract tests
-
-```bash
-python -m unittest -v network.tests.test_contrastive_harness
+client = WorkstationClient("runtime/data", client_id="harness2")
+request = client.request_worker(
+    lane="game", slot="cp-game-w13-worlds",
+    capability=CAP_FINITE, opening_key="experiment-01",
+    reason="Bounded preflight for a harness experiment",
+    parent_version="base", inputs_file="native-inputs.json",
+    admit_registered=True,
+)
+if request["child"]:
+    job_id = request["child"]["job_id"]
+    result = client.execute_worker(
+        opening_id=request["opening_id"],
+        expected_job_id=job_id,
+        allow_native_execution=True,
+    )
+    print(result["return"])
 ```
 
-All witness callbacks in the included tests are explicit **fixtures**. They validate the behavior of the admission gate and journal, not that any real model or native domain experiment improved. An operational demonstration requires real executed base/candidate receipts and an independent native comparator bound to that domain.
+This **example** uses an existing finite worker, not a generic game builder or a claim that a Harness² benchmark was executed.
+
+## Compare only what was actually tested
+
+`systems/workspace/contrastive_harness.py` compares the baseline and a changed child source edition on the *same task and inputs*. It requires two distinct native job receipts, current source fingerprints, fresh independently checked native results, and a separate comparison witness. It records the scoped outcome on the original workstation lane.
+
+For a **single controlled harness experiment**, keep model identity, execution mode and fixed agent profile consistent between base and candidate. **Different agents are all welcome as separate workstation clients.** Switching a model, tooling mode or agent configuration *inside one pairwise test* creates a confound; do not attribute the difference solely to the changed harness component. No special prohibition is imposed on client names (including Codex); A/B itself has no dependency on Codex and does not switch to it to build.
+
+`pin_supported_candidate` passes a supported comparison through the workstation's **existing** explicit native edition-promotion gate. That gate currently supports only registered editions it can independently reverify. A comparison never selects, merges or deploys a candidate by itself.
+
+## Boundaries
+
+This lane does **not** implement Google's agent editor, learned proposer, model-backed executor, recursive self-modification, parallel scheduler or benchmark scoring. It adds only the worker client path and the bounded witnessed comparison that our workstation can already support. Existing W13/world, ARC, NIH and A/B source lanes remain untouched.
+
+Upstream Harness² is Apache-2.0; third-party components have their own terms. No upstream code or third-party dependencies are copied. Original A/B code remains under the repository's current All Rights Reserved notice. The upstream paper's performance figures are not claims of tested A/B improvements.
+
+## Reproduction
+
+```bash
+python -m unittest -v network.tests.test_harness_client network.tests.test_contrastive_harness
+```
+
+The harness-client tests use **actual registered native finite-worker execution and re-verification** against isolated temporary data. Contrast tests use declared synthetic comparator fixtures, proving the gate's behavior but **not** real AI/harness improvement. A model-backed paired trial and cross-task generalization remain unverified.
