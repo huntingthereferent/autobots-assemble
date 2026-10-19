@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD W13 — Two-room playable candidate</title>
+<style>
+:root{color-scheme:dark;font:16px system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#10151d;color:#eaf1fa}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#203046 0%,#10151d 68%)}
+main{max-width:800px;margin:0 auto;padding:28px 20px 48px}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);margin:0 0 9px;letter-spacing:-.04em}
+p{line-height:1.6;color:#b8c6d8;margin:0 0 17px}
+.eyebrow{color:#8ec9f0;font-size:.73rem;letter-spacing:.2em;font-weight:700;margin-bottom:11px}
+.session{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0 22px}
+.world-pill{background:#1d2937;border:1px solid #47566b;border-radius:9px;padding:11px 14px;display:flex;align-items:center;gap:10px}
+.world-pill.current{border-color:#80bdff;background:#20374d}
+.marker{display:inline-block;width:9px;height:9px;border-radius:50%;background:#647489}
+.world-pill.current .marker{background:#86caff;box-shadow:0 0 8px #86caff}
+.world-pill.completed .marker{background:#7ad6a0}
+.world-name{font-weight:650;font-size:.95rem}
+#room-subtitle,.mini{font-size:.83rem;color:#a8b8cc}
+.panel{background:#182332;border:1px solid #45566c;border-radius:17px;padding:clamp(15px,4vw,25px)}
+.topline{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+#room-title{font-size:1.1rem;font-weight:700}
+#room-subtitle{text-align:right}
+.arena{display:grid;gap:8px;width:min(100%,460px);margin:23px auto;justify-content:stretch}
+.cell{aspect-ratio:1;border:1px solid #50657a;border-radius:12px;display:grid;place-items:center;background:#253549;min-width:0;position:relative;font-size:clamp(1.45rem,5vw,2rem)}
+.cell.player{background:#214f75;border-color:#8acaf5;color:#b1e2ff}
+.cell.target{background:#594b24;border-color:#dfbd65;color:#ffdc7f}
+.cell.complete{background:#274a3e;border-color:#70bb97}
+.status{padding:13px 15px;background:#101c29;border-radius:10px;min-height:45px;color:#e6eef9;font-weight:560}
+.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:17px}
+button{font:inherit;font-size:.9rem;color:#edf5ff;background:#304458;border:1px solid #788fa5;border-radius:10px;padding:12px 16px;cursor:pointer;min-width:76px}
+button:hover:not(:disabled){background:#42627e}button:focus-visible{outline:3px solid #9dd4ff;outline-offset:3px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.advance{background:#186956;border-color:#91d5b4;font-weight:720;min-width:135px}
+button.advance:hover:not(:disabled){background:#258168}
+.actions2{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px;justify-content:center}
+.actions2 button{font-size:.8rem;background:#202f40}
+details{margin-top:24px;border-top:1px solid #3b4a60;padding-top:14px}summary{cursor:pointer}
+pre{font-size:.75rem;white-space:pre-wrap;overflow-wrap:anywhere;color:#c7d8eb;max-height:300px;overflow:auto}
+footer{margin:19px 4px 0;font-size:.84rem;color:#a5b6c9;line-height:1.6}
+kbd{border:1px solid #6c829b;border-radius:4px;font:inherit;padding:1px 5px;color:#dfebf8}
+
+.blueprint{margin-top:24px;border:1px solid #537089;border-radius:17px;background:#142434;padding:20px}
+.bp-eyebrow{color:#8ccde8;font:700 .78rem system-ui;letter-spacing:.1em}
+.bp-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.bp-top h2{margin:8px 0 10px;font-size:1.28rem}
+.bp-top select,.bp-top input,.blueprint select,.blueprint input{font:inherit;color:#edf5ff;background:#23394c;border:1px solid #8aa3ba;border-radius:7px;padding:7px 9px;max-width:100%}
+.bp-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.bp-fields label{display:flex;flex-direction:column;gap:5px;font-size:.81rem;color:#bcd0df}
+.bp-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0}
+.bp-controls button{min-width:0;padding:9px 12px;font-size:.82rem}
+.bp-segment{border-top:1px solid #405669;padding-top:16px;margin-top:16px}
+.bp-explainer{font-size:.85rem;color:#b3d1d9}
+.bp-map-scroll{overflow:auto;max-width:100%;padding:6px 0}
+#bp-map{display:grid;gap:8px;align-items:stretch}
+.bp-map-node{min-height:62px;padding:9px;border:1px solid #53728c;border-radius:9px;background:#20394b;overflow-wrap:anywhere}
+.bp-map-node .label{font-size:.7rem;color:#94d0dc;text-transform:uppercase;letter-spacing:.05em}
+.bp-map-node .value{font-size:.74rem;line-height:1.4;margin-top:4px;word-break:break-word}
+.bp-map-node[data-lane="witness"]{background:#26473f;border-color:#6eaa9b}
+.bp-map-node[data-lane="availability"]{border-color:#d3ae65}
+#bp-result{font-size:.81rem;background:#0e1b2a;border-radius:10px;padding:14px;max-height:380px}
+#bp-feedback{min-height:22px;color:#99dbcb;font-size:.82rem}
+#bp-readonly{color:#f4cf87;font-size:.83rem}
+
+</style></head>
+<body><main>
+<div class="eyebrow">WORLD / BUILD · W13 CANDIDATE</div>
+<h1>Two rooms. One preserved path.</h1>
+<p>Collect the object in the first room, choose <strong>Advance</strong>, then finish the second. The first room's actions and evidence stay intact.</p>
+<div class="session" id="session" aria-label="World progress"></div>
+<div class="panel">
+  <div class="topline">
+    <div id="room-title">World 1</div>
+    <div id="room-subtitle">4 × 3 room</div>
+  </div>
+  <div id="arena" class="arena" role="img" aria-label="Game grid"></div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="controls">
+    <button data-action="up">↑ Up</button>
+    <button data-action="left">← Left</button>
+    <button data-action="down">↓ Down</button>
+    <button data-action="right">→ Right</button>
+    <button data-action="interact">Interact</button>
+    <button class="advance" id="advance" disabled>Advance →</button>
+  </div>
+  <div class="actions2">
+    <button id="reset">Reset both rooms</button>
+    <button id="export">Export W13 receipt</button>
+  </div>
+  <details><summary>Local observations and session log</summary><pre id="log"></pre></details>
+</div>
+<footer>Keys: arrows/WASD move, <kbd>Enter</kbd> or <kbd>Space</kbd> interacts. Only the explicit Advance control changes rooms. Exported JSON is browser-reported evidence to be replayed by the native W12/W13 verifier; it does not authenticate browser origin. This is a playable BUILD candidate, not W13 WITNESS PASS.</footer>
+
+<section class="blueprint" id="world-blueprint" aria-label="NIH Phase 1 contained Phase 2 temporal KG blueprint">
+  <div class="bp-eyebrow">WORLD / PHASE 1 CONCEPT → PHASE 2 BUILD BLUEPRINT</div>
+  <div class="bp-top">
+   <h2>Temporal evidence world</h2>
+   <label>Source evidence <select id="bp-mode"><option value="synthetic">Fictional feasibility case</option><option value="registry">Original registry-version claims</option></select></label>
+  </div>
+  <p class="bp-explainer">Room 1: construct a source-qualified assertion. Collect its target, then use the existing Advance boundary. Room 2: execute an as-known-at and valid-time query; compare a static union; inspect independent evidence. The map is a 2-D view of relationships, not the number of dimensions in the knowledge graph.</p>
+  <div class="bp-segment">
+    <strong>Blueprint control · Room 1 (source and provenance)</strong>
+    <div class="bp-fields">
+      <label>Assertion <select id="bp-assertion"></select></label>
+      <label>Object/value <input id="bp-object" aria-label="Assertion object" maxlength="64"/></label>
+      <label>Valid from <input id="bp-valid-from" type="date"/></label>
+      <label>Valid to (exclusive) <input id="bp-valid-to" type="date"/></label>
+      <label>Modeled known day <input id="bp-known" type="date"/></label>
+    </div>
+    <div class="bp-controls"><button id="bp-apply">Apply to world blueprint</button><button id="bp-reset">Restore original blueprint</button><span id="bp-readonly" aria-live="polite"></span></div>
+    <div class="bp-fields"><label>Visual map scale (3–12)
+       <input id="bp-scale" type="number" min="3" max="12" step="1" value="6"/></label></div>
+    <div class="bp-map-scroll"><div id="bp-map" role="group" aria-label="Source-linked temporal graph nodes"></div></div>
+    <div id="bp-feedback" aria-live="polite"></div>
+  </div>
+  <div class="bp-segment">
+    <strong>Blueprint reasoning · Room 2 (query and witness)</strong>
+    <div class="bp-fields">
+      <label>Knowledge cutoff K <input type="date" id="bp-k"/></label>
+      <label>Valid-time target V <input type="date" id="bp-v"/></label>
+    </div>
+    <div class="bp-controls"><button id="bp-run" disabled>Run temporal + static comparison</button><button id="bp-export">Export blueprint/session receipt</button></div>
+    <pre id="bp-result" aria-live="polite">Collect room 1 target and Advance to execute a query.</pre>
+  </div>
+  <p class="bp-explainer">Five separate clocks: validity · event · submission · public posting · observation. Unknown fields stay unknown. Original registry owner-reported posting days do not authenticate an exact publication instant or clinical validity. The exported browser receipt is subject to independent native verification.</p>
+</section>
+
+</main><script>
+'use strict';
+const VERSION='game-w13-multiworld-v1';
+const W12_VERSION='game-construction-v0';
+const WORLDS=[
+  {id:'first-room',spec:{width:4,height:3,start:[0,1],target:[2,1]}},
+  {id:'second-room',spec:{width:3,height:3,start:[0,0],target:[1,1]}}
+];
+const clone=o=>JSON.parse(JSON.stringify(o));
+const arena=document.getElementById('arena');
+const statusEl=document.getElementById('status');
+const logEl=document.getElementById('log');
+const advanceButton=document.getElementById('advance');
+let states,localActions,observations,actions,boundaries,current;
+function initial(index){
+  const at=WORLDS[index].spec.start;
+  return {x:at[0],y:at[1],collected:false,turns:0};
+}
+function result(){return {
+  world_id:WORLDS[current].id,
+  state:clone(states[current]),
+  worlds_completed:states.filter(s=>s.collected).length,
+  solved:current===WORLDS.length-1&&states.every(s=>s.collected)
+}}
+function snapshot(){
+  return {
+    version:VERSION,
+    worlds:WORLDS.map((world,i)=>({
+      id:world.id,version:W12_VERSION,spec:clone(world.spec),
+      actions:clone(localActions[i]),observations:clone(observations[i]),final:clone(states[i])
+    })),
+    actions:clone(actions),
+    boundaries:clone(boundaries),
+    final:result()
+  };
+}
+function render(message){
+  const world=WORLDS[current],state=states[current],spec=world.spec;
+  document.getElementById('room-title').textContent='Room '+(current+1)+' — '+world.id;
+  document.getElementById('room-subtitle').textContent=spec.width+' × '+spec.height+' · turn '+state.turns;
+  const session=document.getElementById('session');session.replaceChildren();
+  WORLDS.forEach((w,i)=>{
+    const pill=document.createElement('div');
+    pill.className='world-pill'+(i===current?' current':'')+(states[i].collected?' completed':'');
+    const mark=document.createElement('span');mark.className='marker';
+    const name=document.createElement('span');name.className='world-name';
+    name.textContent='Room '+(i+1)+(states[i].collected?' ✓':'');
+    pill.append(mark,name);session.appendChild(pill);
+  });
+  arena.style.gridTemplateColumns='repeat('+spec.width+',minmax(0,1fr))';
+  arena.replaceChildren();
+  for(let y=0;y<spec.height;y++)for(let x=0;x<spec.width;x++){
+    const cell=document.createElement('div');cell.className='cell';
+    if(x===spec.target[0]&&y===spec.target[1]){
+      cell.classList.add(state.collected?'complete':'target');
+      cell.textContent=state.collected?'✓':'✦';
+    }
+    if(x===state.x&&y===state.y){cell.classList.add('player');cell.textContent='●'}
+    arena.appendChild(cell);
+  }
+  arena.setAttribute('aria-label',world.id+', '+spec.width+' by '+spec.height+' room, player '+state.x+','+state.y+', target '+spec.target.join(',')+', collected '+state.collected);
+  advanceButton.disabled=!(current===0&&states[0].collected);
+  advanceButton.hidden=current!==0;
+  const final=result();
+  statusEl.textContent=message||(final.solved?'Both rooms collected — session complete':state.collected?'Room collected; advance when ready':'Room '+(current+1)+': collect the object');
+  logEl.textContent=JSON.stringify({actions,worlds:observations,boundaries,final},null,2);
+}
+function transition(action){
+  if(!['up','down','left','right','interact'].includes(action))return false;
+  const state=states[current],spec=WORLDS[current].spec;
+  const before=clone(state);
+  let verdict;
+  if(action==='interact'){
+    if(state.collected)verdict='already-collected';
+    else if(Math.abs(spec.target[0]-state.x)+Math.abs(spec.target[1]-state.y)===1){
+      state.collected=true;verdict='collected';
+    }else verdict='out-of-reach';
+  }else{
+    const delta={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[action];
+    const x=state.x+delta[0],y=state.y+delta[1];
+    if(x<0||x>=spec.width||y<0||y>=spec.height)verdict='blocked-by-boundary';
+    else{state.x=x;state.y=y;verdict='moved'}
+  }
+  state.turns++;
+  localActions[current].push(action);
+  actions.push(action);
+  observations[current].push({action,before,after:clone(state),verdict});
+  render('Room '+(current+1)+' · turn '+state.turns+': '+verdict);
+  return true;
+}
+function advance(){
+  if(current!==0||!states[current].collected)return false;
+  const before={world_id:WORLDS[current].id,state:clone(states[current])};
+  current=1;
+  const after={world_id:WORLDS[current].id,state:clone(states[current])};
+  actions.push('advance');
+  boundaries.push({action:'advance',from_world:before.world_id,to_world:after.world_id,before,after});
+  render('Advanced to Room 2. Room 1 evidence is preserved.');
+  return true;
+}
+function reset(){
+  states=WORLDS.map((_,i)=>initial(i));
+  localActions=WORLDS.map(()=>[]);
+  observations=WORLDS.map(()=>[]);
+  actions=[];boundaries=[];current=0;
+  render('Room 1 · start at (0,1); collect the object.');
+}
+function exportReceipt(){
+  const bytes=JSON.stringify(snapshot(),null,2)+'\n';
+  const url=URL.createObjectURL(new Blob([bytes],{type:'application/json'}));
+  const link=document.createElement('a');
+  link.href=url;link.download='game_w13_session_receipt.json';
+  document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+document.querySelectorAll('button[data-action]').forEach(button=>{
+  button.addEventListener('click',()=>transition(button.dataset.action));
+});
+advanceButton.addEventListener('click',advance);
+document.getElementById('reset').addEventListener('click',reset);
+document.getElementById('export').addEventListener('click',exportReceipt);
+document.addEventListener('keydown',event=>{
+  if(event.target instanceof HTMLButtonElement||event.ctrlKey||event.altKey||event.metaKey)return;
+  const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',Enter:'interact',' ':'interact'};
+  const action=map[event.key];if(action){event.preventDefault();transition(action)}
+});
+reset();
+</script><script type="application/json" id="world-blueprint-fixture">{"schema":"world-phase1-phase2-nih-temporal-blueprint/v1","research_context":{"phase1":"concept-and-feasibility-DRAFT-NOT-SUBMITTED","phase2":"planned-implementation-blueprint-in-phase1","claim":"synthetic feasibility plus bounded source records, not a clinical result"},"base_world":{"version":"game-w13-multiworld-v1","rooms":[{"id":"first-room","spec":{"width":4,"height":3,"start":[0,1],"target":[2,1]}},{"id":"second-room","spec":{"width":3,"height":3,"start":[0,0],"target":[1,1]}}],"advance":"explicit-only-after-first-collection"},"world_roles":{"first-room":"source assertion construction and provenance","second-room":"as-known-at reasoning, static comparison, independent witness"},"clocks":["valid_time","event_time","submission_time","public_posting_time","observation_time"],"graph_schema":{"entity":"subject","edge":"predicate","value":"object","source":"source_ref","validity":"half-open [valid_from, valid_to)","known":"known_day or owner-posted-day without inferred hour","verification":"independent source and answer oracle"},"sample_sets":{"synthetic":[{"id":"prior-note","subject":"fictional-study","predicate":"has-status","object":"prior-note-value","source_ref":"synthetic-prior-note","provenance_state":"synthetic","valid_from":"2026-01-01","valid_to":"2026-01-10","known_day":"2026-01-01","event_day":null,"submitted_day":null,"posted_day":null,"observed_day":null},{"id":"delayed-result","subject":"fictional-study","predicate":"has-status","object":"delayed-result-value","source_ref":"synthetic-delayed-result","provenance_state":"synthetic","valid_from":"2026-01-03","valid_to":"2026-01-10","known_day":"2026-01-05","event_day":null,"submitted_day":null,"posted_day":null,"observed_day":null}],"registry":[{"id":"ctgov-v94","subject":"nct00001756","predicate":"recruitment-status","object":"recruiting","source_ref":"https://clinicaltrials.gov/study/NCT00001756?a=94&tab=history","provenance_state":"owner-version-day-attested","valid_from":null,"valid_to":null,"known_day":null,"event_day":null,"submitted_day":"2019-08-01","posted_day":"2019-08-02","observed_day":"2026-10-19","source_text_sha256":"4370ff462cd731f2f42cc866aadb438e4d037c7a05de2cd64fb5acb53500c3ba"},{"id":"ctgov-v105","subject":"nct00001756","predicate":"recruitment-status","object":"recruiting","source_ref":"https://clinicaltrials.gov/study/NCT00001756?a=105&tab=history","provenance_state":"owner-version-day-attested","valid_from":null,"valid_to":null,"known_day":null,"event_day":null,"submitted_day":"2019-11-22","posted_day":"2019-11-25","observed_day":"2026-10-19","source_text_sha256":"4daab6b95ea574a0aeaea3fba36a94fd9db8df8f0dafd41eee5b87bd9a6bd9db"}]},"queries":{"synthetic":{"knowledge_cutoff":"2026-01-04","valid_target":"2026-01-04"},"registry":{"knowledge_cutoff":"2019-11-25","valid_target":null}},"source_policy":{"synthetic_known_day":"model cutoff only, not real source release","owner_posted_day":"conditional day-level availability only","strict_original_publication_instant":"UNAVAILABLE"},"graph_layout":{"columns":6,"lanes":["source","assertion","valid interval","availability","query","witness"]}}</script><script>
+
+'use strict';
+(()=>{
+const fixed=JSON.parse(document.getElementById('world-blueprint-fixture').textContent);
+const copy=x=>JSON.parse(JSON.stringify(x));
+let blueprint=copy(fixed),mode='synthetic',outcome=null,history=[];
+const el=id=>document.getElementById(id);
+const rows=()=>blueprint.sample_sets[mode];
+const q=()=>blueprint.queries[mode];
+const opt=(id,value,text)=>{const e=document.createElement('option');e.value=value;e.textContent=text;el(id).append(e);};
+const result=(bp,m)=>{
+  const qq=bp.queries[m],o={eligible:[],withheld_future:[],outside_validity:[],
+   unresolved_validity:[],owner_day_states:{},static_union_valid:[]};
+  for(const a of bp.sample_sets[m]){
+    if(a.provenance_state==='synthetic'){
+      if(!(a.valid_from<=qq.valid_target && qq.valid_target<a.valid_to)){o.outside_validity.push(a.id);continue;}
+      o.static_union_valid.push(a.id);
+      o[a.known_day<=qq.knowledge_cutoff?'eligible':'withheld_future'].push(a.id);
+    }else{
+      o.unresolved_validity.push(a.id);
+      o.owner_day_states[a.id]=qq.knowledge_cutoff<a.posted_day?'BEFORE_OWNER_REPORTED_DAY':
+        qq.knowledge_cutoff===a.posted_day?'SAME_DAY_TIME_UNRESOLVED':'AFTER_OWNER_REPORTED_DAY';
+    }
+  }
+  o.static_future_leakage=m==='synthetic'?o.static_union_valid.filter(id=>!o.eligible.includes(id)).sort():[];
+  o.source_partition=m;o.query=copy(qq);
+  o.clinical_verdict='NOT_EVALUATED';
+  o.publication_instant_authenticated=m==='registry'?false:null;
+  return o;
+};
+const nodes=(bp,m)=>{
+  const built=[];
+  bp.sample_sets[m].forEach((r,i)=>{
+    const labels=[
+      [bp.graph_layout.lanes[0],r.source_ref],
+      [bp.graph_layout.lanes[1],r.id+' → '+r.object],
+      [bp.graph_layout.lanes[2],r.valid_from===null?'UNKNOWN validity':'[ '+r.valid_from+', '+r.valid_to+' )'],
+      [bp.graph_layout.lanes[3],r.known_day||((r.posted_day||'UNKNOWN')+' (owner day only)')],
+      [bp.graph_layout.lanes[4],'K='+bp.queries[m].knowledge_cutoff+' / V='+bp.queries[m].valid_target],
+      [bp.graph_layout.lanes[5],r.provenance_state]
+    ];
+    labels.forEach(([lane,value],col)=>built.push({id:r.id+':'+col,row:i,col,lane,value}));
+  });
+  return built;
+};
+function paint(){
+  const map=el('bp-map');map.replaceChildren();
+  const width=108*blueprint.graph_layout.columns/6;
+  map.style.gridTemplateColumns='repeat(6,minmax('+Math.round(width)+'px,1fr))';
+  for(const n of nodes(blueprint,mode)){
+    const node=document.createElement('div');node.className='bp-map-node';
+    node.dataset.node=n.id;node.dataset.lane=n.lane;
+    const hd=document.createElement('div');hd.className='label';hd.textContent=n.lane;
+    const value=document.createElement('div');value.className='value';value.textContent=n.value;
+    node.append(hd,value);map.append(node);
+  }
+  el('bp-scale').value=blueprint.graph_layout.columns;
+}
+function loadAssertion(){
+  const item=rows().find(r=>r.id===el('bp-assertion').value);
+  if(!item)return;
+  el('bp-object').value=item.object;
+  el('bp-valid-from').value=item.valid_from||'';
+  el('bp-valid-to').value=item.valid_to||'';
+  el('bp-known').value=item.known_day||'';
+}
+function selection(){
+  mode=el('bp-mode').value;
+  el('bp-assertion').replaceChildren();
+  for(const a of rows())opt('bp-assertion',a.id,a.id);
+  loadAssertion();
+  el('bp-k').value=q().knowledge_cutoff;
+  el('bp-v').value=q().valid_target||'';
+  const registry=mode==='registry';
+  for(const id of ['bp-object','bp-valid-from','bp-valid-to','bp-known']){
+    el(id).disabled=registry||current!==0;
+  }
+  el('bp-v').disabled=registry;
+  el('bp-apply').disabled=registry||current!==0;
+  el('bp-readonly').textContent=registry?
+    'Pinned public versions: source, fields, timestamps and hashes read-only. Missing valid-time bounds remain null.':'';
+  outcome=null;el('bp-result').textContent=registry?
+    'Owner-reported posting DAY only; no authenticated version-level valid interval.':
+    'After Advance, run as-known-at/valid-time comparison.';
+  paint();
+  availability();
+}
+function availability(){
+  const sourceStage=current===0;
+  const registry=mode==='registry';
+  for(const id of ['bp-object','bp-valid-from','bp-valid-to','bp-known']){
+    el(id).disabled=registry||!sourceStage;
+  }
+  el('bp-apply').disabled=registry||!sourceStage;
+  el('bp-run').disabled=current!==1;
+}
+function evaluateQuery(){
+  if(current!==1){el('bp-feedback').textContent='First collect the original source room and Advance.';return false;}
+  const k=el('bp-k').value,v=el('bp-v').value;
+  const day=/^\d{4}-\d{2}-\d{2}$/;
+  if(!day.test(k)||(mode==='synthetic'&&!day.test(v))){
+    el('bp-feedback').textContent='Both synthetic query dates must be valid calendar days.';return false;
+  }
+  q().knowledge_cutoff=k;q().valid_target=mode==='synthetic'?v:null;
+  outcome=result(blueprint,mode);
+  history.push({mode,query:copy(q()),observations:copy(outcome)});
+  el('bp-result').textContent=JSON.stringify(outcome,null,2);
+  el('bp-feedback').textContent='Temporal query executed; this browser result requires an independent native verifier.';
+  paint();return true;
+}
+function applyEdit(){
+  if(current!==0 || mode!=='synthetic'){el('bp-feedback').textContent='Source edits only in Room 1 synthetic mode.';return false;}
+  const entry=rows().find(r=>r.id===el('bp-assertion').value);
+  const obj=el('bp-object').value,fr=el('bp-valid-from').value,
+        to=el('bp-valid-to').value,known=el('bp-known').value;
+  const tok=/^[a-z][a-z0-9-]{1,63}$/;
+  if(!tok.test(obj)||!fr||!to||!known||fr>=to){
+    el('bp-feedback').textContent='Rejected: bounded object token, known day and half-open valid interval required.';return false;
+  }
+  entry.object=obj;entry.valid_from=fr;entry.valid_to=to;entry.known_day=known;
+  outcome=null;el('bp-feedback').textContent='Changed actual assertion data; graph nodes rebuilt.';
+  paint();return true;
+}
+el('bp-mode').onchange=selection;
+el('bp-assertion').onchange=loadAssertion;
+el('bp-apply').onclick=applyEdit;
+el('bp-run').onclick=evaluateQuery;
+el('bp-scale').onchange=()=>{
+  const scale=Number(el('bp-scale').value);
+  if(!Number.isInteger(scale)||scale<3||scale>12){
+    el('bp-feedback').textContent='Map scale must be 3–12; source W13 geometry unchanged.';return;
+  }
+  blueprint.graph_layout.columns=scale;paint();
+};
+el('bp-reset').onclick=()=>{
+  blueprint=copy(fixed);history=[];outcome=null;reset();
+  el('bp-mode').value='synthetic';selection();el('bp-feedback').textContent='Original W13 session and blueprint reset.';
+};
+const oldRender=render;
+render=(message)=>{oldRender(message);availability();};
+window.worldBlueprintExport=()=>({
+  schema:'world-phase1-phase2-browser-receipt/v1',
+  blueprint:copy(blueprint),w13: snapshot(),
+  active_source:mode,query_result:copy(outcome),history:copy(history),
+  graph_nodes:copy(nodes(blueprint,mode)),
+  browser_origin_authenticated:false,
+  semantic_contract:'Phase 1 design controls planned Phase 2 tests; not NIH Phase 2 eligibility'
+});
+el('bp-export').onclick=()=>{
+  const text=JSON.stringify(window.worldBlueprintExport(),null,2)+'\n';
+  const url=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+  const a=document.createElement('a');a.href=url;a.download='world_phase1_phase2_blueprint_receipt.json';
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+el('bp-feedback').textContent='Original W13 movement preserved. Blueprint source fields are now editable.';
+selection();
+})();
+
+</script></body></html>
