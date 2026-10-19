@@ -330,9 +330,12 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
                 self.assertTrue(self.page.locator("#cross-import-clear").is_disabled())
                 self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
                 self.assertEqual(self.page.locator("#progress").inner_text(),before)
-                cert,verified=self.exported()
-                self.assertEqual(cert,original)
-                self.assertTrue(verified["passed"])
+        # Verify the actual certificate bytes once after all rejected imports.
+        # Repeated downloads in one browser session can trigger Chromium's
+        # automatic-download suppression even when the win state is intact.
+        cert,verified=self.exported()
+        self.assertEqual(cert,original)
+        self.assertTrue(verified["passed"])
         self.import_observation(observation)
         self.assertIn("ORIGINAL SOURCE REPLAY VERIFIED",self.page.locator("#import-observation-result").inner_text())
         self.page.reload()
