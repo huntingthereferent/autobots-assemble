@@ -103,7 +103,7 @@ class NativeWorkerContinuationTests(unittest.TestCase):
                 position=rejected,
                 handler=lambda *_: ExecutionResult(status="UNKNOWN"))
         before = (self.data_dir/"runtime.jsonl").read_bytes()
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(KeyError, "unknown handoff"):
             ScopedRepositoryWorker(
                 runtime=self.runtime, frontier=self.frontier,
                 position=NativePosition("repo-work-imaginary", self.pins_branch["revision"], "site"),
