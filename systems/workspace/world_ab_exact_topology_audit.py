@@ -19,7 +19,7 @@ _MAX_COORD = 10_000
 def _coordinate(v):
     if isinstance(v, bool) or not isinstance(v, (int, float)):
         raise ValueError("coordinate must be a finite real number")
-    if not isfinite(v) or abs(v) > _MAX_COORD:
+    if abs(v) > _MAX_COORD or not isfinite(v):
         raise ValueError("coordinate outside finite WORLD audit bound")
     # Integers retain exact values; floats retain their exact binary value,
     # not an imagined infinitely precise decimal measurement.
