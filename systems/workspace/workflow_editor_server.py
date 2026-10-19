@@ -59,6 +59,13 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 self.end_headers()
                 self.wfile.write(out)
                 return
+            if self.path == "/api/ideas":
+                try:
+                    from systems.workspace.workflow_idea_frontier import IdeaFrontier
+                    self._json(IdeaFrontier(root, data_dir).ideas())
+                except (ValueError, OSError) as e:
+                    self._json({"error": str(e)}, 400)
+                return
             if self.path == "/api/pins":
                 try:
                     self._json(WorkflowPins(data_dir).list_pins())
@@ -119,7 +126,9 @@ def handler_for(root: Path, data_dir: Path, token: str):
                                  "/api/pin", "/api/consider",
                                  "/api/ab-preview", "/api/ab-record",
                                  "/api/native-inspect", "/api/native-attach",
-                                 "/api/native-compare"):
+                                 "/api/native-compare",
+                                 "/api/idea-bind", "/api/idea-frontier",
+                                 "/api/idea-propose"):
                 self._json({"error": "unknown action"}, 404)
                 return
             try:
@@ -129,6 +138,31 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 payload = json.loads(self.rfile.read(length))
                 if not isinstance(payload, dict):
                     raise ValueError("request object required")
+                if self.path.startswith("/api/idea-"):
+                    from systems.workspace.workflow_idea_frontier import IdeaFrontier
+                    ideas = IdeaFrontier(root, data_dir)
+                    if self.path == "/api/idea-bind":
+                        reply = ideas.bind(idea_id=payload.get("idea_id"),
+                                           revision=payload.get("revision"),
+                                           worker=payload.get("worker"),
+                                           reason=payload.get("reason"))
+                    elif self.path == "/api/idea-frontier":
+                        reply = ideas.worker_frontier(
+                            idea_id=payload.get("idea_id"),
+                            revision=payload.get("revision"),
+                            step_id=payload.get("step_id"),
+                            worker=payload.get("worker"))
+                    else:
+                        reply = ideas.propose(
+                            kind=payload.get("kind"),
+                            idea_id=payload.get("idea_id"),
+                            revision=payload.get("revision"),
+                            step_id=payload.get("step_id"),
+                            worker=payload.get("worker"),
+                            target_revision=payload.get("target_revision"),
+                            reason=payload.get("reason"))
+                    self._json(reply)
+                    return
                 if self.path.startswith("/api/native-"):
                     from systems.workspace.workflow_native_results import WorkflowNativeResults
                     native = WorkflowNativeResults(root, data_dir)
