@@ -1,0 +1,38 @@
+name: ARC3 native SP80 nonrestoring stage1 to stage2 probes
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_nonrestoring_level2.py'
+      - '.github/workflows/arc3-sp80-nonrestoring-level2.yml'
+jobs:
+  native-nonrestoring-level2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official original ARC game SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Assert frozen real-game action words and matched controls
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_nonrestoring_level2 import (
+              CANDIDATES,TIMING_CONTROLS,WORDS,RESETS)
+          assert len(CANDIDATES)==12 and len(TIMING_CONTROLS)==2
+          assert TIMING_CONTROLS==('12'*6,'34'*6)
+          assert len(WORDS)==len(set(WORDS))==14 and RESETS==2
+          assert all(12<=len(w)<=16 and set(w)<={'1','2','3','4','5','6'}
+                     for w in WORDS)
+          print('UNIT ONLY: non-restoring real-native stage1 interventions frozen')
+          PY
+      - name: Execute genuine original SP80 nonrestoring level-2 trials
+        run: python -m work.arc3.native_sp80_nonrestoring_level2 --out runtime/data/arc3/sp80-nonrestoring-level2.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-nonrestoring-level2
+          path: runtime/data/arc3/sp80-nonrestoring-level2.*
+          if-no-files-found: error
+          retention-days: 14
