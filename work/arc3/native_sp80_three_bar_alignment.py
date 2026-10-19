@@ -30,8 +30,6 @@ ALIGNMENTS=(
  ("right51",(3,3,8)),
 )
 COORDS={"F":"6@24,37","L":"6@32,25","U":"6@12,17"}
-ORDERS=("FLU","ULF","FUL","LCU")
-# In LCU, C is the same upper source object U, kept explicit below.
 ORDERS=("FLU","ULF","FUL","LUF")
 def build(target,counts,order,suffix="5"):
     moves=dict(zip("FLU",counts))
@@ -115,9 +113,9 @@ def main():
         "original_SDK_advanced_to_level2_or_WIN":[t["native_level2_or_win"] for t in records],
         "authentic_dispositions":[t["actual_source_disposition"] for t in records],
         "pre_FIRST_ACTION5_original_bar_region":[next((
-             t["original_source_bar_region_ledger"][i-2]["actual_original_visible_bars_after"]
+             t["original_source_bar_region_ledger"][i-1]["actual_original_visible_bars_after"]
              for i,e in enumerate(t["original_source_bar_region_ledger"])
-             if e.get("native_action")==5
+             if e.get("native_action")==5 and i>0
         ),None) for t in records],
         "final_source_bar_region":[
              t["original_source_bar_region_ledger"][-1].get("actual_original_visible_bars_after")
