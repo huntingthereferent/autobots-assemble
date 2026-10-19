@@ -54,6 +54,34 @@ jobs:
           assert report["official_NIH_submission"] is False
           assert (out/"game-temporal-query-events.jsonl").is_file()
           assert (out/"temporal-game.html").is_file()
+          # Cross-check the worker's actual browser observations independently
+          # of its checkpoint verdict; an empty run cannot pass this gate.
+          receipt=json.loads((out/"nih-phase2-game-test-native-receipt.json").read_text())
+          rows=[json.loads(line) for line in (out/"game-temporal-query-events.jsonl").read_text().splitlines()]
+          assert 4 <= len(rows) <= 60
+          assert len(rows) == report["actual_game_query_count"] == receipt["query_count"]
+          assert receipt["before_cutover_queries"] >= 1
+          assert receipt["after_cutover_queries"] >= 1
+          assert receipt["before_cutover_queries"] + receipt["after_cutover_queries"] == len(rows)
+          assert receipt["actual_browser_source"] == "GAME_TEMPORAL_LIVE_BROWSER_RETURNED"
+          assert receipt["independent_python_replay_required"] is True
+          assert receipt["verified_synthetic_timing_only"] is True
+          assert receipt["clinical_verdict"] == "NOT_EVALUATED"
+          assert report["synthetic_only"] is True
+          assert report["static_future_leakage_observed"] is True
+          for row in rows:
+              assert set(row) == {"turn","request","result"}
+              assert set(row["request"]) == {"known_at","target_at"}
+              assert row["result"]["known_at"] == row["request"]["known_at"]
+              assert row["result"]["target_at"] == row["request"]["target_at"]
+              assert row["result"]["prototype_sha256"] == receipt["original_temporal_source_sha256"]
+          print(json.dumps({"native_jobs":report["native_jobs"],
+                "test_worker":report["niH_P2_test_job"],
+                "browser_queries":len(rows),
+                "before_cutover":receipt["before_cutover_queries"],
+                "after_cutover":receipt["after_cutover_queries"],
+                "native_CP":"NIH-P2-TEST",
+                "synthetic_only":True,"owner_W13_lineage_claimed":False},sort_keys=True))
           PY
           tar -czf "$RUNNER_TEMP/nih-real-game-p2-evidence/original-eleven-job-journal.tar.gz" \
             -C "$RUNNER_TEMP/nih-real-game-p2-workstation" \
