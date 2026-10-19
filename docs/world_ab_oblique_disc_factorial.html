@@ -1,0 +1,1321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD W13 — Two-room playable candidate</title>
+<style>
+:root{color-scheme:dark;font:16px system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#10151d;color:#eaf1fa}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at top,#203046 0%,#10151d 68%)}
+main{max-width:800px;margin:0 auto;padding:28px 20px 48px}
+h1{font-size:clamp(1.6rem,4vw,2.3rem);margin:0 0 9px;letter-spacing:-.04em}
+p{line-height:1.6;color:#b8c6d8;margin:0 0 17px}
+.eyebrow{color:#8ec9f0;font-size:.73rem;letter-spacing:.2em;font-weight:700;margin-bottom:11px}
+.session{display:flex;gap:8px;flex-wrap:wrap;margin:17px 0 22px}
+.world-pill{background:#1d2937;border:1px solid #47566b;border-radius:9px;padding:11px 14px;display:flex;align-items:center;gap:10px}
+.world-pill.current{border-color:#80bdff;background:#20374d}
+.marker{display:inline-block;width:9px;height:9px;border-radius:50%;background:#647489}
+.world-pill.current .marker{background:#86caff;box-shadow:0 0 8px #86caff}
+.world-pill.completed .marker{background:#7ad6a0}
+.world-name{font-weight:650;font-size:.95rem}
+#room-subtitle,.mini{font-size:.83rem;color:#a8b8cc}
+.panel{background:#182332;border:1px solid #45566c;border-radius:17px;padding:clamp(15px,4vw,25px)}
+.topline{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+#room-title{font-size:1.1rem;font-weight:700}
+#room-subtitle{text-align:right}
+.arena{display:grid;gap:8px;width:min(100%,460px);margin:23px auto;justify-content:stretch}
+.cell{aspect-ratio:1;border:1px solid #50657a;border-radius:12px;display:grid;place-items:center;background:#253549;min-width:0;position:relative;font-size:clamp(1.45rem,5vw,2rem)}
+.cell.player{background:#214f75;border-color:#8acaf5;color:#b1e2ff}
+.cell.target{background:#594b24;border-color:#dfbd65;color:#ffdc7f}
+.cell.complete{background:#274a3e;border-color:#70bb97}
+.status{padding:13px 15px;background:#101c29;border-radius:10px;min-height:45px;color:#e6eef9;font-weight:560}
+.controls{display:flex;flex-wrap:wrap;justify-content:center;gap:9px;margin-top:17px}
+button{font:inherit;font-size:.9rem;color:#edf5ff;background:#304458;border:1px solid #788fa5;border-radius:10px;padding:12px 16px;cursor:pointer;min-width:76px}
+button:hover:not(:disabled){background:#42627e}button:focus-visible{outline:3px solid #9dd4ff;outline-offset:3px}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.advance{background:#186956;border-color:#91d5b4;font-weight:720;min-width:135px}
+button.advance:hover:not(:disabled){background:#258168}
+.actions2{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px;justify-content:center}
+.actions2 button{font-size:.8rem;background:#202f40}
+details{margin-top:24px;border-top:1px solid #3b4a60;padding-top:14px}summary{cursor:pointer}
+pre{font-size:.75rem;white-space:pre-wrap;overflow-wrap:anywhere;color:#c7d8eb;max-height:300px;overflow:auto}
+footer{margin:19px 4px 0;font-size:.84rem;color:#a5b6c9;line-height:1.6}
+kbd{border:1px solid #6c829b;border-radius:4px;font:inherit;padding:1px 5px;color:#dfebf8}
+
+.blueprint{margin-top:24px;border:1px solid #537089;border-radius:17px;background:#142434;padding:20px}
+.bp-eyebrow{color:#8ccde8;font:700 .78rem system-ui;letter-spacing:.1em}
+.bp-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+.bp-top h2{margin:8px 0 10px;font-size:1.28rem}
+.bp-top select,.bp-top input,.blueprint select,.blueprint input{font:inherit;color:#edf5ff;background:#23394c;border:1px solid #8aa3ba;border-radius:7px;padding:7px 9px;max-width:100%}
+.bp-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.bp-fields label{display:flex;flex-direction:column;gap:5px;font-size:.81rem;color:#bcd0df}
+.bp-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 0}
+.bp-controls button{min-width:0;padding:9px 12px;font-size:.82rem}
+.bp-segment{border-top:1px solid #405669;padding-top:16px;margin-top:16px}
+.bp-explainer{font-size:.85rem;color:#b3d1d9}
+.bp-clock-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin:12px 0}
+.bp-clock{background:#213347;border:1px solid #3b5269;border-radius:8px;padding:9px}
+.bp-clock strong{display:block;font-size:.74rem;color:#94d0dc}
+.bp-clock span{font-size:.8rem;overflow-wrap:anywhere}
+.bp-map-scroll{overflow:auto;max-width:100%;padding:6px 0}
+#bp-map{display:grid;gap:8px;align-items:stretch}
+.bp-map-node{min-height:62px;padding:9px;border:1px solid #53728c;border-radius:9px;background:#20394b;overflow-wrap:anywhere}
+.bp-map-node .label{font-size:.7rem;color:#94d0dc;text-transform:uppercase;letter-spacing:.05em}
+.bp-map-node .value{font-size:.74rem;line-height:1.4;margin-top:4px;word-break:break-word}
+.bp-map-node[data-lane="witness"]{background:#26473f;border-color:#6eaa9b}
+.bp-map-node[data-lane="availability"]{border-color:#d3ae65}
+#bp-result{font-size:.81rem;background:#0e1b2a;border-radius:10px;padding:14px;max-height:380px}
+#bp-feedback{min-height:22px;color:#99dbcb;font-size:.82rem}
+#bp-readonly{color:#f4cf87;font-size:.83rem}
+
+
+.phy-shell{background:#121e2b;border:1px solid #6b89a2;border-radius:17px;margin:24px 0;padding:20px}
+.phy-head{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.phy-head h2{margin:5px 0 10px;font-size:1.4rem}
+.phy-chip{padding:7px 10px;border:1px solid #5c7a91;border-radius:9px;background:#263a4a;font-size:.81rem}
+.phy-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.phy-actions button{font-size:.8rem;padding:10px 12px;min-width:0}
+.phy-actions .critical{background:#186955}
+#phy-canvas{width:100%;height:auto;background:linear-gradient(160deg,#1b3040,#0d1825);border:1px solid #425c70;border-radius:12px;touch-action:manipulation;cursor:crosshair}
+.phy-status{background:#17293b;padding:11px;margin-top:12px;border-radius:9px;font-size:.88rem;min-height:42px;color:#cce0ef}
+.phy-grid-meta{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:#adc3d2;margin:10px 0}
+.phy-key{width:10px;height:10px;display:inline-block;margin-right:5px}
+
+
+.ab-trial{border:1px solid #677f91;background:#132335;padding:20px;border-radius:16px;margin:25px 0}
+.ab-trial h2{font-size:1.35rem;margin:5px 0 10px}
+.ab-trial .ab-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:9px;margin:10px 0 16px}
+.ab-fields label{display:flex;flex-direction:column;gap:5px;font-size:.83rem;color:#c0d4e5}
+.ab-fields input{font:inherit;font-size:.9rem;color:#edf5ff;background:#20374a;border:1px solid #718ba2;border-radius:6px;padding:7px;width:100%}
+.ab-trial canvas{width:100%;height:auto;background:#0b1827;border:1px solid #516b83;border-radius:9px}
+.ab-trial .ab-actions{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0}
+.ab-trial .ab-actions button{font-size:.85rem;min-width:0}
+.ab-trial pre{white-space:pre-wrap;max-height:430px}
+#ab-look{background:#182b3e;border-radius:8px;padding:9px;font-size:.86rem}
+#ab-step-number{color:#b5d9ee}
+
+
+.growth-trial{background:#132b32;border:1px solid #5e9e9b;border-radius:16px;padding:18px;margin:25px 0}
+.growth-trial h2{font-size:1.35rem;margin:6px 0 12px}
+.growth-trial canvas{background:#101d2c;border:1px solid #48626b;border-radius:10px;width:100%;height:auto}
+.growth-trial .controls{display:flex;flex-wrap:wrap;gap:9px;margin:13px 0}
+.growth-trial .controls button{min-width:0;font-size:.83rem;padding:9px 11px}
+#grow-result{white-space:pre-wrap;max-height:400px}
+#grow-caption{font-size:.85rem;color:#a8d5d1;min-height:40px}
+
+
+.iteration{background:#102631;border:1px solid #628e96;border-radius:16px;padding:18px;margin:25px 0}
+.iteration h2{font-size:1.3rem;margin:6px 0 11px}
+.iteration canvas{width:100%;height:auto;background:#0d1a2b;border-radius:10px;border:1px solid #577282}
+.iteration .controls{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.iteration button{font-size:.81rem;min-width:0;padding:9px 12px}
+#iter-status{color:#c1ddd6;min-height:42px;font-size:.85rem;padding:9px 0}
+#iter-log{max-height:350px;white-space:pre-wrap}
+
+.disc-stage{border:1px solid #698f9d;background:#102434;border-radius:14px;padding:17px;margin:24px 0}
+.disc-stage h2{font-size:1.2rem}.disc-stage button,.disc-stage select{padding:8px;background:#2c455a;color:white;border-radius:7px;border:1px solid #8fa9b7;margin:3px;font-size:.85rem}
+.disc-stage canvas{width:100%;background:#102333;border-radius:7px}
+#disc-readout{font-size:.82rem;color:#b9dfe0;min-height:30px}#disc-data{white-space:pre-wrap;max-height:370px}</style></head>
+<body><main>
+<div class="eyebrow">WORLD / BUILD · W13 CANDIDATE</div>
+<h1>Two rooms. One preserved path.</h1>
+<p>Collect the object in the first room, choose <strong>Advance</strong>, then finish the second. The first room's actions and evidence stay intact.</p>
+<div class="session" id="session" aria-label="World progress"></div>
+<div class="panel">
+  <div class="topline">
+    <div id="room-title">World 1</div>
+    <div id="room-subtitle">4 × 3 room</div>
+  </div>
+  <div id="arena" class="arena" role="img" aria-label="Game grid"></div>
+  <div class="status" id="status" aria-live="polite"></div>
+  <div class="controls">
+    <button data-action="up">↑ Up</button>
+    <button data-action="left">← Left</button>
+    <button data-action="down">↓ Down</button>
+    <button data-action="right">→ Right</button>
+    <button data-action="interact">Interact</button>
+    <button class="advance" id="advance" disabled>Advance →</button>
+  </div>
+  <div class="actions2">
+    <button id="reset">Reset both rooms</button>
+    <button id="export">Export W13 receipt</button>
+  </div>
+  <details><summary>Local observations and session log</summary><pre id="log"></pre></details>
+</div>
+<footer>Keys: arrows/WASD move, <kbd>Enter</kbd> or <kbd>Space</kbd> interacts. Only the explicit Advance control changes rooms. Exported JSON is browser-reported evidence to be replayed by the native W12/W13 verifier; it does not authenticate browser origin. This is a playable BUILD candidate, not W13 WITNESS PASS.</footer>
+
+<section class="blueprint" id="world-blueprint" aria-label="NIH Phase 1 contained Phase 2 temporal KG blueprint">
+  <div class="bp-eyebrow">WORLD / PHASE 1 CONCEPT → PHASE 2 BUILD BLUEPRINT</div>
+  <div class="bp-top">
+   <h2>Temporal evidence world</h2>
+   <label>Source evidence <select id="bp-mode"><option value="synthetic">Fictional feasibility case</option><option value="registry">Original registry-version claims</option></select></label>
+  </div>
+  <p class="bp-explainer">Room 1: construct a source-qualified assertion. Collect its target, then use the existing Advance boundary. Room 2: execute an as-known-at and valid-time query; compare a static union; inspect independent evidence. The map is a 2-D view of relationships, not the number of dimensions in the knowledge graph.</p>
+  <div class="bp-segment">
+    <strong>Blueprint control · Room 1 (source and provenance)</strong>
+    <div class="bp-fields">
+      <label>Assertion <select id="bp-assertion"></select></label>
+      <label>Object/value <input id="bp-object" aria-label="Assertion object" maxlength="64"/></label>
+      <label>Valid from <input id="bp-valid-from" type="date"/></label>
+      <label>Valid to (exclusive) <input id="bp-valid-to" type="date"/></label>
+      <label>Modeled known day <input id="bp-known" type="date"/></label>
+    </div>
+    <div class="bp-controls"><button id="bp-apply">Apply to world blueprint</button><button id="bp-add">Add fictional assertion</button><button id="bp-remove">Remove added assertion</button><button id="bp-reset">Restore original blueprint</button><span id="bp-readonly" aria-live="polite"></span></div>
+    <div class="bp-fields"><label>Visual map scale (3–12)
+       <input id="bp-scale" type="number" min="3" max="12" step="1" value="6"/></label></div>
+    <div class="bp-map-scroll"><div id="bp-map" role="group" aria-label="Source-linked temporal graph nodes"></div></div>
+    <h3 style="font-size:.95rem;margin:13px 0 5px">Selected assertion · five independent clocks</h3>
+    <div id="bp-clocks" class="bp-clock-grid" aria-label="Validity, event, submission, publication, observation and source"></div>
+    <div id="bp-feedback" aria-live="polite"></div>
+  </div>
+  <div class="bp-segment">
+    <strong>Blueprint reasoning · Room 2 (query and witness)</strong>
+    <div class="bp-fields">
+      <label>Knowledge cutoff K <input type="date" id="bp-k"/></label>
+      <label>Valid-time target V <input type="date" id="bp-v"/></label>
+    </div>
+    <div class="bp-controls"><button id="bp-run" disabled>Run temporal + static comparison</button><button id="bp-export">Export blueprint/session receipt</button></div>
+    <pre id="bp-result" aria-live="polite">Collect room 1 target and Advance to execute a query.</pre>
+  </div>
+  <p class="bp-explainer">Five separate clocks: validity · event · submission · public posting · observation. Unknown fields stay unknown. Original registry owner-reported posting days do not authenticate an exact publication instant or clinical validity. The exported browser receipt is subject to independent native verification.</p>
+</section>
+
+
+<section class="phy-shell" id="physical-world" aria-label="Constructed six-bay physical world blueprint">
+  <div class="phy-head">
+    <div><div class="bp-eyebrow">PHYSICAL WORLD / SOURCE-QUALIFIED CONSTRUCTION</div><h2>Construct → Boundary → Reason</h2></div>
+    <div class="phy-chip" id="phy-measure">24 × 6 grid units</div>
+  </div>
+  <p class="bp-explainer">Six blueprint relationship bays × the original four-cell W13 width, across two three-cell stages. This is a navigable <strong>144-cell physical simulation</strong>, not meters. The five temporal clocks are data relationships, not floor coordinates. The block, wall, guide, funnel, diverter and spiral are placed in the space.</p>
+  <div class="phy-grid-meta"><span><span class="phy-key" style="background:#4b8094"></span>Source / construction</span><span><span class="phy-key" style="background:#4c775e"></span>Reason / witness</span><span><span class="phy-key" style="background:#cda96b"></span>Solid physical blocks</span><span>Door opens only after source constructed</span></div>
+  <canvas id="phy-canvas" width="1100" height="520" role="img" aria-label="24 by 6 isometric physical world with walls, evidence stations, and movement"></canvas>
+  <div class="phy-actions">
+    <button id="phy-go-source">Go to source</button>
+    <button class="critical" id="phy-construct">Construct source</button>
+    <button id="phy-go-door">Go to boundary</button>
+    <button class="critical" id="phy-advance">Cross after construction</button>
+    <button id="phy-go-query">Go to reasoning</button>
+    <button class="critical" id="phy-query">Execute source query</button>
+    <button id="phy-go-finish">Go to end</button>
+    <button id="phy-reset">Reset physical world</button>
+    <button id="phy-export">Export physical witness</button>
+  </div>
+  <div class="phy-status" id="phy-status" aria-live="polite">Start → source station. The boundary remains closed until the source is constructed.</div>
+  <details><summary>Physical movement and source witness</summary><pre id="phy-log"></pre></details>
+</section>
+
+
+<section id="ab-contact" class="ab-trial" aria-label="A B moving block boundary experiment">
+  <div class="bp-eyebrow">WORLD / A-B SELF-GENERATED PHYSICAL STATE · EXPERIMENT 01</div>
+  <h2>One block. One boundary. What follows?</h2>
+  <p class="bp-explainer">Within the same 24 × 6 physical WORLD: A has no wall, B collides with the source boundary at x=12. This isolated two-dimensional trial uses a rigid translating square, event-driven specular contact, no gravity, no friction, and virtual grid units. The original blueprint's intended results are <strong>not supplied to the simulator</strong>.</p>
+  <div class="ab-fields">
+    <label>Start x <input id="ab-x" type="number" min="0.5" max="8" step="0.1" value="3"></label>
+    <label>Start y <input id="ab-y" type="number" min="0.5" max="5.5" step="0.05" value="1.35"></label>
+    <label>Velocity x <input id="ab-vx" type="number" min="0.2" max="4" step="0.1" value="3"></label>
+    <label>Velocity y <input id="ab-vy" type="number" min="-0.5" max="0.5" step="0.02" value="0.12"></label>
+    <label>Restitution <input id="ab-e" type="number" min="0" max="1" step="0.1" value="1"></label>
+  </div>
+  <div class="ab-actions">
+    <button id="ab-run">Run A/B motion</button><button id="ab-prev">Previous look</button><button id="ab-next">Next look</button>
+    <button id="ab-reset">Reset</button><button id="ab-export">Export independent-check receipt</button>
+  </div>
+  <div id="ab-step-number" aria-live="polite">No trial executed yet.</div>
+  <canvas id="ab-canvas" width="960" height="255" role="img" aria-label="2D side by side free movement and block-wall collision traces"></canvas>
+  <div id="ab-look" aria-live="polite">Run the identical initial state under A (open) and B (wall) to compare what the physics model generates.</div>
+  <details><summary>Generated physical relations and 17 observed states</summary><pre id="ab-receipt"></pre></details>
+</section>
+
+<section id="relation-growth" class="growth-trial" aria-label="Physical A/B relation-derived second surface">
+<div class="bp-eyebrow">WORLD / A-B PHYSICAL COMPOSITION · TRIAL 02</div>
+<h2>Can the rebound construct the next surface?</h2>
+<p class="bp-explainer">This trial uses the contact event you just generated in the same 24 × 6 world. The declared assembly rule places a new vertical receiver a fixed observation interval (0.75 simulated seconds) along the <em>measured</em> outgoing motion; then it replays the block against both surfaces. The generator knows nothing about the drawing's desired guide, funnel, diverter or spiral shapes. This is an explicit digital assembly policy, not spontaneous physical self-assembly.</p>
+<div class="controls">
+<button id="grow-construct">Observe contact and construct new surface</button>
+<button id="grow-replay">Replay with generated surface</button>
+<button id="grow-prev">Previous look</button><button id="grow-next">Next look</button>
+<button id="grow-reset">Reset composition</button>
+<button id="grow-export">Export generated experiment</button>
+</div>
+<canvas id="grow-canvas" width="960" height="250" role="img" aria-label="Observed original wall path alongside generated receiver and new two-contact trajectory"></canvas>
+<div id="grow-caption" aria-live="polite">First run the block–wall experiment above, then construct from its observed contact.</div>
+<details><summary>Actual generated geometry, contact events and physical evidence</summary><pre id="grow-result"></pre></details>
+</section>
+
+<section class="iteration" id="ab-iteration" aria-label="A B repeated physical construction">
+ <div class="bp-eyebrow">WORLD / A-B REPEATED CONSTRUCTION · TRIAL 03</div>
+ <h2>Collision → proposed surface → next collision</h2>
+ <p class="bp-explainer">Use the same physical WORLD source wall and motion controls. Every verified rebound proposes another finite vertical face in free space; new faces become active only at the generating contact. Proposed faces closer than the block's diameter to any existing face are rejected. The generator has no target blueprint names, curved-surface rules, or spontaneous matter creation.</p>
+ <div class="controls">
+   <button id="iter-run">Build by repeated motion</button>
+   <button id="iter-prev">Previous observation</button><button id="iter-next">Next observation</button>
+   <button id="iter-reset">Reset iteration</button><button id="iter-export">Export source receipts</button>
+ </div>
+ <canvas id="iter-canvas" width="960" height="280" role="img" aria-label="Generated vertical surfaces activated in chronological order, collision trajectory, and stalled growth"></canvas>
+ <div id="iter-status" aria-live="polite">Run the original contact first, then begin repeated source-derived construction.</div>
+ <details><summary>Observation-level movement and rejected construction evidence</summary><pre id="iter-log"></pre></details>
+</section>
+<section class="disc-stage" id="disc-experiment">
+<div class="bp-eyebrow">WORLD / SOURCE PHYSICS / TRIAL 04B</div><h2>Angled contact × friction × rotation</h2>
+<p>Same 24 × 6 WORLD, separately perturbed source plane. Four trials: vertical/20° source and zero/0.4 friction. A disc (not the preceding square) strikes the source; outgoing motion constructs a new receiver normal. Neither target spiral nor guide is supplied to the generator.</p>
+<div><button id="disc-run">Run source experiments</button>
+<select id="disc-branch"><option value="0">0° · friction 0</option><option value="1">0° · friction 0.4</option><option value="2">20° · friction 0</option><option value="3">20° · friction 0.4</option></select>
+<button id="disc-prev">Previous look</button><button id="disc-next">Next look</button><button id="disc-reset">Reset</button><button id="disc-export">Export observed state</button></div>
+<canvas id="disc-canvas" width="960" height="330" aria-label="Source plane, collision-generated receiver and rotating disc"></canvas>
+<div id="disc-readout" aria-live="polite">No experiment yet. The original physical WORLD remains unchanged.</div>
+<details><summary>Actual collision impulses and construction receipt</summary><pre id="disc-data"></pre></details></section></main><script>
+'use strict';
+const VERSION='game-w13-multiworld-v1';
+const W12_VERSION='game-construction-v0';
+const WORLDS=[
+  {id:'first-room',spec:{width:4,height:3,start:[0,1],target:[2,1]}},
+  {id:'second-room',spec:{width:3,height:3,start:[0,0],target:[1,1]}}
+];
+const clone=o=>JSON.parse(JSON.stringify(o));
+const arena=document.getElementById('arena');
+const statusEl=document.getElementById('status');
+const logEl=document.getElementById('log');
+const advanceButton=document.getElementById('advance');
+let states,localActions,observations,actions,boundaries,current;
+function initial(index){
+  const at=WORLDS[index].spec.start;
+  return {x:at[0],y:at[1],collected:false,turns:0};
+}
+function result(){return {
+  world_id:WORLDS[current].id,
+  state:clone(states[current]),
+  worlds_completed:states.filter(s=>s.collected).length,
+  solved:current===WORLDS.length-1&&states.every(s=>s.collected)
+}}
+function snapshot(){
+  return {
+    version:VERSION,
+    worlds:WORLDS.map((world,i)=>({
+      id:world.id,version:W12_VERSION,spec:clone(world.spec),
+      actions:clone(localActions[i]),observations:clone(observations[i]),final:clone(states[i])
+    })),
+    actions:clone(actions),
+    boundaries:clone(boundaries),
+    final:result()
+  };
+}
+function render(message){
+  const world=WORLDS[current],state=states[current],spec=world.spec;
+  document.getElementById('room-title').textContent='Room '+(current+1)+' — '+world.id;
+  document.getElementById('room-subtitle').textContent=spec.width+' × '+spec.height+' · turn '+state.turns;
+  const session=document.getElementById('session');session.replaceChildren();
+  WORLDS.forEach((w,i)=>{
+    const pill=document.createElement('div');
+    pill.className='world-pill'+(i===current?' current':'')+(states[i].collected?' completed':'');
+    const mark=document.createElement('span');mark.className='marker';
+    const name=document.createElement('span');name.className='world-name';
+    name.textContent='Room '+(i+1)+(states[i].collected?' ✓':'');
+    pill.append(mark,name);session.appendChild(pill);
+  });
+  arena.style.gridTemplateColumns='repeat('+spec.width+',minmax(0,1fr))';
+  arena.replaceChildren();
+  for(let y=0;y<spec.height;y++)for(let x=0;x<spec.width;x++){
+    const cell=document.createElement('div');cell.className='cell';
+    if(x===spec.target[0]&&y===spec.target[1]){
+      cell.classList.add(state.collected?'complete':'target');
+      cell.textContent=state.collected?'✓':'✦';
+    }
+    if(x===state.x&&y===state.y){cell.classList.add('player');cell.textContent='●'}
+    arena.appendChild(cell);
+  }
+  arena.setAttribute('aria-label',world.id+', '+spec.width+' by '+spec.height+' room, player '+state.x+','+state.y+', target '+spec.target.join(',')+', collected '+state.collected);
+  advanceButton.disabled=!(current===0&&states[0].collected);
+  advanceButton.hidden=current!==0;
+  const final=result();
+  statusEl.textContent=message||(final.solved?'Both rooms collected — session complete':state.collected?'Room collected; advance when ready':'Room '+(current+1)+': collect the object');
+  logEl.textContent=JSON.stringify({actions,worlds:observations,boundaries,final},null,2);
+}
+function transition(action){
+  if(!['up','down','left','right','interact'].includes(action))return false;
+  const state=states[current],spec=WORLDS[current].spec;
+  const before=clone(state);
+  let verdict;
+  if(action==='interact'){
+    if(state.collected)verdict='already-collected';
+    else if(Math.abs(spec.target[0]-state.x)+Math.abs(spec.target[1]-state.y)===1){
+      state.collected=true;verdict='collected';
+    }else verdict='out-of-reach';
+  }else{
+    const delta={up:[0,-1],down:[0,1],left:[-1,0],right:[1,0]}[action];
+    const x=state.x+delta[0],y=state.y+delta[1];
+    if(x<0||x>=spec.width||y<0||y>=spec.height)verdict='blocked-by-boundary';
+    else{state.x=x;state.y=y;verdict='moved'}
+  }
+  state.turns++;
+  localActions[current].push(action);
+  actions.push(action);
+  observations[current].push({action,before,after:clone(state),verdict});
+  render('Room '+(current+1)+' · turn '+state.turns+': '+verdict);
+  return true;
+}
+function advance(){
+  if(current!==0||!states[current].collected)return false;
+  const before={world_id:WORLDS[current].id,state:clone(states[current])};
+  current=1;
+  const after={world_id:WORLDS[current].id,state:clone(states[current])};
+  actions.push('advance');
+  boundaries.push({action:'advance',from_world:before.world_id,to_world:after.world_id,before,after});
+  render('Advanced to Room 2. Room 1 evidence is preserved.');
+  return true;
+}
+function reset(){
+  states=WORLDS.map((_,i)=>initial(i));
+  localActions=WORLDS.map(()=>[]);
+  observations=WORLDS.map(()=>[]);
+  actions=[];boundaries=[];current=0;
+  render('Room 1 · start at (0,1); collect the object.');
+}
+function exportReceipt(){
+  const bytes=JSON.stringify(snapshot(),null,2)+'\n';
+  const url=URL.createObjectURL(new Blob([bytes],{type:'application/json'}));
+  const link=document.createElement('a');
+  link.href=url;link.download='game_w13_session_receipt.json';
+  document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+document.querySelectorAll('button[data-action]').forEach(button=>{
+  button.addEventListener('click',()=>transition(button.dataset.action));
+});
+advanceButton.addEventListener('click',advance);
+document.getElementById('reset').addEventListener('click',reset);
+document.getElementById('export').addEventListener('click',exportReceipt);
+document.addEventListener('keydown',event=>{
+  if(event.target instanceof HTMLButtonElement||event.ctrlKey||event.altKey||event.metaKey)return;
+  const map={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',s:'down',a:'left',d:'right',Enter:'interact',' ':'interact'};
+  const action=map[event.key];if(action){event.preventDefault();transition(action)}
+});
+reset();
+</script><script type="application/json" id="world-blueprint-fixture">{"schema":"world-phase1-phase2-nih-temporal-blueprint/v1","research_context":{"phase1":"concept-and-feasibility-DRAFT-NOT-SUBMITTED","phase2":"planned-implementation-blueprint-in-phase1","claim":"synthetic feasibility plus bounded source records, not a clinical result"},"base_world":{"version":"game-w13-multiworld-v1","rooms":[{"id":"first-room","spec":{"width":4,"height":3,"start":[0,1],"target":[2,1]}},{"id":"second-room","spec":{"width":3,"height":3,"start":[0,0],"target":[1,1]}}],"advance":"explicit-only-after-first-collection"},"world_roles":{"first-room":"source assertion construction and provenance","second-room":"as-known-at reasoning, static comparison, independent witness"},"clocks":["valid_time","event_time","submission_time","public_posting_time","observation_time"],"graph_schema":{"entity":"subject","edge":"predicate","value":"object","source":"source_ref","validity":"half-open [valid_from, valid_to)","known":"known_day or owner-posted-day without inferred hour","verification":"independent source and answer oracle"},"sample_sets":{"synthetic":[{"id":"prior-note","subject":"fictional-study","predicate":"has-status","object":"prior-note-value","source_ref":"synthetic-prior-note","provenance_state":"synthetic","valid_from":"2026-01-01","valid_to":"2026-01-10","known_day":"2026-01-01","event_day":null,"submitted_day":null,"posted_day":null,"observed_day":null},{"id":"delayed-result","subject":"fictional-study","predicate":"has-status","object":"delayed-result-value","source_ref":"synthetic-delayed-result","provenance_state":"synthetic","valid_from":"2026-01-03","valid_to":"2026-01-10","known_day":"2026-01-05","event_day":null,"submitted_day":null,"posted_day":null,"observed_day":null}],"registry":[{"id":"ctgov-v94","subject":"nct00001756","predicate":"recruitment-status","object":"recruiting","source_ref":"https://clinicaltrials.gov/study/NCT00001756?a=94&tab=history","provenance_state":"owner-version-day-attested","valid_from":null,"valid_to":null,"known_day":null,"event_day":null,"submitted_day":"2019-08-01","posted_day":"2019-08-02","observed_day":"2026-10-19","source_text_sha256":"4370ff462cd731f2f42cc866aadb438e4d037c7a05de2cd64fb5acb53500c3ba"},{"id":"ctgov-v105","subject":"nct00001756","predicate":"recruitment-status","object":"recruiting","source_ref":"https://clinicaltrials.gov/study/NCT00001756?a=105&tab=history","provenance_state":"owner-version-day-attested","valid_from":null,"valid_to":null,"known_day":null,"event_day":null,"submitted_day":"2019-11-22","posted_day":"2019-11-25","observed_day":"2026-10-19","source_text_sha256":"4daab6b95ea574a0aeaea3fba36a94fd9db8df8f0dafd41eee5b87bd9a6bd9db"}]},"queries":{"synthetic":{"knowledge_cutoff":"2026-01-04","valid_target":"2026-01-04"},"registry":{"knowledge_cutoff":"2019-11-25","valid_target":null}},"source_policy":{"synthetic_known_day":"model cutoff only, not real source release","owner_posted_day":"conditional day-level availability only","strict_original_publication_instant":"UNAVAILABLE"},"graph_layout":{"columns":6,"lanes":["source","assertion","valid interval","availability","query","witness"]}}</script><script>
+
+'use strict';
+(()=>{
+const fixed=JSON.parse(document.getElementById('world-blueprint-fixture').textContent);
+const copy=x=>JSON.parse(JSON.stringify(x));
+let blueprint=copy(fixed),mode='synthetic',outcome=null,history=[];
+const el=id=>document.getElementById(id);
+const rows=()=>blueprint.sample_sets[mode];
+const q=()=>blueprint.queries[mode];
+const opt=(id,value,text)=>{const e=document.createElement('option');e.value=value;e.textContent=text;el(id).append(e);};
+const result=(bp,m)=>{
+  const qq=bp.queries[m],o={eligible:[],withheld_future:[],outside_validity:[],
+   unresolved_validity:[],owner_day_states:{},static_union_valid:[]};
+  for(const a of bp.sample_sets[m]){
+    if(a.provenance_state==='synthetic'){
+      if(!(a.valid_from<=qq.valid_target && qq.valid_target<a.valid_to)){o.outside_validity.push(a.id);continue;}
+      o.static_union_valid.push(a.id);
+      o[a.known_day<=qq.knowledge_cutoff?'eligible':'withheld_future'].push(a.id);
+    }else{
+      o.unresolved_validity.push(a.id);
+      o.owner_day_states[a.id]=qq.knowledge_cutoff<a.posted_day?'BEFORE_OWNER_REPORTED_DAY':
+        qq.knowledge_cutoff===a.posted_day?'SAME_DAY_TIME_UNRESOLVED':'AFTER_OWNER_REPORTED_DAY';
+    }
+  }
+  o.static_future_leakage=m==='synthetic'?o.static_union_valid.filter(id=>!o.eligible.includes(id)).sort():[];
+  o.source_partition=m;o.query=copy(qq);
+  o.clinical_verdict='NOT_EVALUATED';
+  o.publication_instant_authenticated=m==='registry'?false:null;
+  return o;
+};
+const nodes=(bp,m)=>{
+  const built=[];
+  bp.sample_sets[m].forEach((r,i)=>{
+    const labels=[
+      [bp.graph_layout.lanes[0],r.source_ref],
+      [bp.graph_layout.lanes[1],r.id+' → '+r.object],
+      [bp.graph_layout.lanes[2],r.valid_from===null?'UNKNOWN validity':'[ '+r.valid_from+', '+r.valid_to+' )'],
+      [bp.graph_layout.lanes[3],r.known_day||((r.posted_day||'UNKNOWN')+' (owner day only)')],
+      [bp.graph_layout.lanes[4],'K='+bp.queries[m].knowledge_cutoff+' / V='+bp.queries[m].valid_target],
+      [bp.graph_layout.lanes[5],r.provenance_state]
+    ];
+    labels.forEach(([lane,value],col)=>built.push({id:r.id+':'+col,row:i,col,lane,value}));
+  });
+  return built;
+};
+function paintClocks(){
+  const item=rows().find(x=>x.id===el('bp-assertion').value);
+  const panel=el('bp-clocks');panel.replaceChildren();
+  if(!item)return;
+  const show=v=>v===null?'UNKNOWN (not inferred)':v;
+  const clocks=[
+    ['Valid time',item.valid_from===null?'UNKNOWN interval':'['+item.valid_from+', '+item.valid_to+')'],
+    ['Event time',show(item.event_day)],
+    ['Submission time',show(item.submitted_day)],
+    ['Public posting day',show(item.posted_day)+(item.posted_day?' · owner-reported, exact hour unknown':'')],
+    ['Observation time',show(item.observed_day)],
+    ['Knowledge cutoff policy',item.known_day===null?'No authenticated exact known-at instant':item.known_day+' · fictional model'],
+    ['Source and evidence class',item.source_ref+' · '+item.provenance_state]
+  ];
+  for(const [title,value] of clocks){
+    const card=document.createElement('div');card.className='bp-clock';
+    const head=document.createElement('strong');head.textContent=title;
+    const body=document.createElement('span');body.textContent=value;
+    card.append(head,body);panel.append(card);
+  }
+}
+function paint(){
+  const map=el('bp-map');map.replaceChildren();
+  const width=108*blueprint.graph_layout.columns/6;
+  map.style.gridTemplateColumns='repeat(6,minmax('+Math.round(width)+'px,1fr))';
+  for(const n of nodes(blueprint,mode)){
+    const node=document.createElement('div');node.className='bp-map-node';
+    node.dataset.node=n.id;node.dataset.lane=n.lane;
+    const hd=document.createElement('div');hd.className='label';hd.textContent=n.lane;
+    const value=document.createElement('div');value.className='value';value.textContent=n.value;
+    node.append(hd,value);map.append(node);
+  }
+  el('bp-scale').value=blueprint.graph_layout.columns;
+  paintClocks();
+}
+function loadAssertion(){
+  const item=rows().find(r=>r.id===el('bp-assertion').value);
+  if(!item)return;
+  el('bp-object').value=item.object;
+  el('bp-valid-from').value=item.valid_from||'';
+  el('bp-valid-to').value=item.valid_to||'';
+  el('bp-known').value=item.known_day||'';
+  paintClocks();
+}
+function selection(){
+  mode=el('bp-mode').value;
+  el('bp-assertion').replaceChildren();
+  for(const a of rows())opt('bp-assertion',a.id,a.id);
+  loadAssertion();
+  el('bp-k').value=q().knowledge_cutoff;
+  el('bp-v').value=q().valid_target||'';
+  const registry=mode==='registry';
+  for(const id of ['bp-object','bp-valid-from','bp-valid-to','bp-known']){
+    el(id).disabled=registry||current!==0;
+  }
+  el('bp-v').disabled=registry;
+  el('bp-apply').disabled=registry||current!==0;
+  el('bp-readonly').textContent=registry?
+    'Pinned public versions: source, fields, timestamps and hashes read-only. Missing valid-time bounds remain null.':'';
+  outcome=null;el('bp-result').textContent=registry?
+    'Owner-reported posting DAY only; no authenticated version-level valid interval.':
+    'After Advance, run as-known-at/valid-time comparison.';
+  paint();
+  availability();
+}
+function availability(){
+  const sourceStage=current===0;
+  const registry=mode==='registry';
+  for(const id of ['bp-object','bp-valid-from','bp-valid-to','bp-known']){
+    el(id).disabled=registry||!sourceStage;
+  }
+  el('bp-apply').disabled=registry||!sourceStage;
+  el('bp-add').disabled=registry||!sourceStage||rows().length>=32;
+  el('bp-remove').disabled=registry||!sourceStage||!el('bp-assertion').value.startsWith('synthetic-added-');
+  el('bp-run').disabled=current!==1;
+}
+function evaluateQuery(){
+  if(current!==1){el('bp-feedback').textContent='First collect the original source room and Advance.';return false;}
+  const k=el('bp-k').value,v=el('bp-v').value;
+  const day=/^\d{4}-\d{2}-\d{2}$/;
+  if(!day.test(k)||(mode==='synthetic'&&!day.test(v))){
+    el('bp-feedback').textContent='Both synthetic query dates must be valid calendar days.';return false;
+  }
+  q().knowledge_cutoff=k;q().valid_target=mode==='synthetic'?v:null;
+  outcome=result(blueprint,mode);
+  history.push({mode,query:copy(q()),observations:copy(outcome)});
+  el('bp-result').textContent=JSON.stringify(outcome,null,2);
+  el('bp-feedback').textContent='Temporal query executed; this browser result requires an independent native verifier.';
+  paint();return true;
+}
+function applyEdit(){
+  if(current!==0 || mode!=='synthetic'){el('bp-feedback').textContent='Source edits only in Room 1 synthetic mode.';return false;}
+  const entry=rows().find(r=>r.id===el('bp-assertion').value);
+  const obj=el('bp-object').value,fr=el('bp-valid-from').value,
+        to=el('bp-valid-to').value,known=el('bp-known').value;
+  const tok=/^[a-z][a-z0-9-]{1,63}$/;
+  if(!tok.test(obj)||!fr||!to||!known||fr>=to){
+    el('bp-feedback').textContent='Rejected: bounded object token, known day and half-open valid interval required.';return false;
+  }
+  entry.object=obj;entry.valid_from=fr;entry.valid_to=to;entry.known_day=known;
+  outcome=null;el('bp-feedback').textContent='Changed actual assertion data; graph nodes rebuilt.';
+  paint();return true;
+}
+el('bp-mode').onchange=selection;
+el('bp-assertion').onchange=loadAssertion;
+el('bp-apply').onclick=applyEdit;
+el('bp-add').onclick=()=>{
+  if(mode!=='synthetic'||current!==0||rows().length>=32)return;
+  let n=1;while(rows().some(r=>r.id==='synthetic-added-'+n))n++;
+  const item=copy(rows()[1]);
+  item.id='synthetic-added-'+n;
+  item.source_ref='synthetic-'+item.id;
+  item.object='added-evidence';
+  rows().push(item);
+  opt('bp-assertion',item.id,item.id);
+  el('bp-assertion').value=item.id;
+  loadAssertion();paint();availability();
+  el('bp-feedback').textContent='New source assertion admitted to the editable 2-D graph projection.';
+};
+el('bp-remove').onclick=()=>{
+  if(mode!=='synthetic'||current!==0)return;
+  const id=el('bp-assertion').value;
+  if(!id.startsWith('synthetic-added-'))return;
+  blueprint.sample_sets.synthetic=rows().filter(r=>r.id!==id);
+  el('bp-assertion').querySelector('option[value="'+id+'"]').remove();
+  el('bp-assertion').value='prior-note';
+  loadAssertion();paint();availability();
+  el('bp-feedback').textContent='Additional source assertion removed; original two source records preserved.';
+};
+el('bp-run').onclick=evaluateQuery;
+el('bp-scale').onchange=()=>{
+  const scale=Number(el('bp-scale').value);
+  if(!Number.isInteger(scale)||scale<3||scale>12){
+    el('bp-feedback').textContent='Map scale must be 3–12; source W13 geometry unchanged.';return;
+  }
+  blueprint.graph_layout.columns=scale;paint();
+};
+el('bp-reset').onclick=()=>{
+  blueprint=copy(fixed);history=[];outcome=null;reset();
+  el('bp-mode').value='synthetic';selection();el('bp-feedback').textContent='Original W13 session and blueprint reset.';
+};
+const oldRender=render;
+render=(message)=>{oldRender(message);availability();};
+window.worldBlueprintExport=()=>({
+  schema:'world-phase1-phase2-browser-receipt/v1',
+  blueprint:copy(blueprint),w13: snapshot(),
+  active_source:mode,query_result:copy(outcome),history:copy(history),
+  graph_nodes:copy(nodes(blueprint,mode)),
+  browser_origin_authenticated:false,
+  semantic_contract:'Phase 1 design controls planned Phase 2 tests; not NIH Phase 2 eligibility'
+});
+el('bp-export').onclick=()=>{
+  const text=JSON.stringify(window.worldBlueprintExport(),null,2)+'\n';
+  const url=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+  const a=document.createElement('a');a.href=url;a.download='world_phase1_phase2_blueprint_receipt.json';
+  document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+el('bp-feedback').textContent='Original W13 movement preserved. Blueprint source fields are now editable.';
+selection();
+})();
+
+</script><script>
+
+'use strict';
+(()=>{
+const original=window.worldBlueprintExport();
+const laneNames=original.blueprint.graph_layout.lanes;
+const laneWidth=original.blueprint.base_world.rooms[0].spec.width;
+const stageHeight=original.blueprint.base_world.rooms[1].spec.height;
+const width=laneWidth*laneNames.length,height=2*stageHeight;
+const solid=[
+{id:'boundary-wall',kind:'wall',x:3*laneWidth,y:1,h:2},
+{id:'guide',kind:'guide',x:1*laneWidth,y:1,h:1},
+{id:'funnel',kind:'funnel',x:2*laneWidth,y:1,h:1},
+{id:'diverter',kind:'diverter',x:4*laneWidth,y:stageHeight+1,h:1},
+{id:'spiral',kind:'spiral',x:5*laneWidth,y:stageHeight+1,h:1}
+];
+const source=[2,1],doorBefore=[3*laneWidth,stageHeight-1],doorAfter=[3*laneWidth,stageHeight],query=[width-2,stageHeight+1],finish=[width-1,stageHeight+1];
+const el=id=>document.getElementById(id),cv=el('phy-canvas'),ctx=cv.getContext('2d');
+const clone=x=>JSON.parse(JSON.stringify(x));
+let actor=[0,1],stage='construct',sourceData=null,queryData=null,actions=[],completed=false,revision=0;
+const key=p=>p[0]+','+p[1],solids=new Set(solid.map(e=>key([e.x,e.y])));
+const same=(a,b)=>a[0]===b[0]&&a[1]===b[1];
+const allowed=(p)=>p[0]>=0&&p[0]<width&&p[1]>=0&&p[1]<height&&!solids.has(key(p));
+const layout=()=>({
+schema:'world-phase1-phase2-physical-construction/v1',
+unit:'W13 movement cell (arbitrary virtual unit, NOT meters)',
+dimensions:{width,height,lane_width:laneWidth,stage_height:stageHeight,area_cells:width*height},
+lanes:laneNames.map((name,i)=>({id:name,x_start:i*laneWidth,x_end_exclusive:(i+1)*laneWidth})),
+stages:[{id:'construct',y_start:0,y_end_exclusive:stageHeight},
+        {id:'reason',y_start:stageHeight,y_end_exclusive:2*stageHeight}],
+source_station:{id:'source-station',x:source[0],y:source[1],stage:'construct'},
+reasoning_station:{id:'reasoning-station',x:query[0],y:query[1],stage:'reason'},
+gate:{from:doorBefore,to:doorAfter,requires:'source-constructed'},start:[0,1],end:finish,
+solid_blocks:solid.map(({id,kind,x,y,h})=>({id,kind,x,y,height:h})),
+physical_scale_authenticated:false,source_assertions_not_constrained_by_physical_grid_cells:true,
+original_W13_rooms_preserved:true
+});
+function neighbors(p){
+const moves=[[1,0],[-1,0],[0,1],[0,-1]];
+return moves.map(v=>[p[0]+v[0],p[1]+v[1]]).filter(x=>allowed(x)&&Math.floor(x[1]/stageHeight)===Math.floor(p[1]/stageHeight));
+}
+function route(dest){
+if(!allowed(dest)||Math.floor(dest[1]/stageHeight)!==Math.floor(actor[1]/stageHeight))return null;
+const queue=[actor],paths=new Map([[key(actor),null]]);
+for(let i=0;i<queue.length;i++){
+ const p=queue[i];if(same(p,dest)){const result=[];let t=p;
+  while(t!==null){result.push(t);t=paths.get(key(t));}
+  return result.reverse();}
+ for(const n of neighbors(p)){if(!paths.has(key(n))){paths.set(key(n),p);queue.push(n);}}
+}
+return null;
+}
+const note=t=>{el('phy-status').textContent=t;el('phy-log').textContent=JSON.stringify({stage,actor,source_constructed:!!sourceData,query_result:queryData,actions},null,2)};
+const TW=22,TH=11,OX=260,OY=100;
+const pos=(x,y,z=0)=>[OX+(x-y)*TW,OY+(x+y)*TH-z];
+function poly(points,fill,stroke='#274358'){
+ctx.beginPath();ctx.moveTo(...points[0]);points.slice(1).forEach(p=>ctx.lineTo(...p));
+ctx.closePath();ctx.fillStyle=fill;ctx.fill();ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();
+}
+function tile(x,y,fill){
+const p=pos(x,y);poly([[p[0],p[1]],[p[0]+TW,p[1]+TH],[p[0],p[1]+2*TH],[p[0]-TW,p[1]+TH]],fill);
+}
+function block(x,y,z,kind){
+const [sx,sy]=pos(x,y);
+const heightPx=z*22;
+const top=[[sx,sy-heightPx],[sx+TW,sy+TH-heightPx],[sx,sy+2*TH-heightPx],[sx-TW,sy+TH-heightPx]];
+const base=[[sx,sy],[sx+TW,sy+TH],[sx,sy+2*TH],[sx-TW,sy+TH]];
+poly([top[2],top[1],base[1],base[2]],'#95764d','#a88e6d');
+poly([top[3],top[2],base[2],base[3]],'#615943','#a88e6d');
+poly(top,kind==='wall'?'#cbad80':'#9aaab5','#dbc9a0');
+}
+function draw(){
+ctx.clearRect(0,0,cv.width,cv.height);
+for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+ let fill=y<stageHeight?'#29495b':'#31554c';
+ if(x%laneWidth===0)fill=y<stageHeight?'#32586d':'#3c655a';
+ if(same([x,y],source)||same([x,y],query))fill='#428788';
+ if(same([x,y],doorBefore)||same([x,y],doorAfter))fill=sourceData?'#6b977a':'#a36d4b';
+ if(same([x,y],finish))fill='#698cbe';
+ tile(x,y,fill);
+}
+for(const item of solid)block(item.x,item.y,item.h,item.kind);
+for(const [pt,label] of [[source,'SOURCE'],[query,'QUERY'],[doorBefore,'GATE'],[finish,'END']]){
+const [x,y]=pos(pt[0],pt[1],12);
+ctx.fillStyle='#fff';ctx.font='bold 13px sans-serif';ctx.textAlign='center';ctx.fillText(label,x,y);
+}
+for(let i=0;i<laneNames.length;i++){
+const [x,y]=pos(i*laneWidth+1,0,50);
+ctx.font='bold 14px sans-serif';ctx.textAlign='left';ctx.fillStyle='#d4e3ed';
+ctx.fillText(laneNames[i],x-22,y);
+}
+const [ax,ay]=pos(actor[0],actor[1],10);
+ctx.fillStyle='#ffeaae';ctx.strokeStyle='#413724';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(ax,ay,9,0,Math.PI*2);ctx.fill();ctx.stroke();
+el('phy-measure').textContent=width+' × '+height+' = '+width*height+' cells · '+stage;
+}
+function moveTo(dest){
+const r=route(dest);
+if(!r){note('Not reachable in this physical stage. The boundary must be crossed explicitly.');return false;}
+for(let i=1;i<r.length;i++){
+const next=r[i];actions.push({action:'move',before:clone(actor),after:clone(next),stage});
+actor=next;
+}
+note('Moved '+(r.length-1)+' physical cells. Source, gate and layout remain intact.');
+draw();return true;
+}
+function sourceBuild(){
+if(stage!=='construct'||!same(actor,source)){note('Stand at SOURCE station before construction.');return false;}
+const data=window.worldBlueprintExport();
+if(data.blueprint.sample_sets.synthetic.length<2){note('Blueprint has no bounded source graph.');return false;}
+sourceData=clone(data.blueprint);
+actions.push({action:'construct',at:clone(actor),assertion_count:sourceData.sample_sets.synthetic.length,
+   source_schema:sourceData.schema});
+note('Constructed '+sourceData.sample_sets.synthetic.length+' source assertions. Boundary can now open.');
+draw();return true;
+}
+function advance(){
+if(stage!=='construct'||!sourceData||!same(actor,doorBefore)){
+note('Cannot cross: first construct the source and reach the original boundary.');return false;
+}
+stage='reason';actor=clone(doorAfter);
+actions.push({action:'advance',before:clone(doorBefore),after:clone(doorAfter),requires:'source-constructed'});
+note('Crossed the physical boundary. Original source construction retained.');
+draw();return true;
+}
+function temporal(source,mode,k,v){
+const result={eligible:[],withheld_future:[],outside_validity:[],unresolved_validity:[],
+ owner_day_states:{},static_union_valid:[],static_future_leakage:[],source_partition:mode,
+ query:{knowledge_cutoff:k,valid_target:v},clinical_verdict:'NOT_EVALUATED'};
+for(const a of source.sample_sets[mode]){
+if(mode==='registry'){result.unresolved_validity.push(a.id);
+result.owner_day_states[a.id]=k<a.posted_day?'BEFORE_OWNER_REPORTED_DAY':
+ k===a.posted_day?'SAME_DAY_TIME_UNRESOLVED':'AFTER_OWNER_REPORTED_DAY';continue;}
+if(!(a.valid_from<=v&&v<a.valid_to)){result.outside_validity.push(a.id);continue;}
+result.static_union_valid.push(a.id);
+result[a.known_day<=k?'eligible':'withheld_future'].push(a.id);
+}
+result.static_future_leakage=mode==='synthetic'?result.static_union_valid.filter(id=>!result.eligible.includes(id)).sort():[];
+return result;
+}
+function queryWorld(){
+if(stage!=='reason'||!same(actor,query)||!sourceData){note('Build the source, cross and stand at QUERY station first.');return false;}
+const current=window.worldBlueprintExport();
+const mode=current.active_source;
+const k=current.blueprint.queries[mode].knowledge_cutoff;
+const v=current.blueprint.queries[mode].valid_target;
+queryData=temporal(sourceData,mode,k,v);
+actions.push({action:'query',at:clone(actor),mode,knowledge_cutoff:k,valid_target:v,
+ result:clone(queryData)});
+note('Executed source-built temporal world: '+queryData.eligible.join(', ')+
+ ' eligible; '+queryData.withheld_future.join(', ')+' withheld; '+queryData.unresolved_validity.join(', ')+' unresolved.');
+draw();return true;
+}
+function save(){
+return {schema:'world-phase1-phase2-physical-play-receipt/v1',layout:layout(),
+ stage,actor:clone(actor),actions:clone(actions),constructed_blueprint:clone(sourceData),
+ last_query:clone(queryData),completed,
+ browser_origin_authenticated:false,exact_real_publication_instant_authenticated:false};
+}
+window.physicalWorld={receipt:save,moveTo,sourceBuild,advance,queryWorld,reset(){
+actor=[0,1];stage='construct';sourceData=null;queryData=null;actions=[];completed=false;
+draw();note('Original physical world reset; source can be constructed again.');}};
+function end(){
+if(stage!=='reason'||!same(actor,finish)||!queryData){note('Cannot finish before running the query in the reasoning stage.');return false;}
+completed=true;actions.push({action:'finish',at:clone(actor)});
+note('Physical blueprint completed. Source, boundary and query evidence preserved.');draw();return true;
+}
+el('phy-go-source').onclick=()=>moveTo(source);
+el('phy-construct').onclick=sourceBuild;
+el('phy-go-door').onclick=()=>moveTo(doorBefore);
+el('phy-advance').onclick=advance;
+el('phy-go-query').onclick=()=>moveTo(query);
+el('phy-query').onclick=queryWorld;
+el('phy-go-finish').onclick=()=>{if(moveTo(finish))end();};
+el('phy-reset').onclick=()=>window.physicalWorld.reset();
+el('phy-export').onclick=()=>{
+const text=JSON.stringify(save(),null,2)+'\n',url=URL.createObjectURL(new Blob([text],{type:'application/json'}));
+const a=document.createElement('a');a.href=url;a.download='world_physical_blueprint_witness.json';
+document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+cv.addEventListener('click',ev=>{
+const box=cv.getBoundingClientRect(),sx=(ev.clientX-box.left)*cv.width/box.width,sy=(ev.clientY-box.top)*cv.height/box.height;
+const a=(sx-OX)/TW,b=(sy-OY-TH)/TH;
+const x=Math.round((a+b)/2),y=Math.round((b-a)/2);
+moveTo([x,y]);
+});
+draw();note('144-cell physical world constructed. Move to source, then cross the boundary.');
+})();
+
+</script><script>
+
+'use strict';
+(()=>{
+const schema='world-ab-physical-contact-trial/v1';
+const half=0.25,dt=0.25,steps=16,wall={id:'boundary-wall',x:12,y:1},area=[24,6];
+const el=id=>document.getElementById(id);
+const copy=o=>JSON.parse(JSON.stringify(o));
+const approx=v=>Math.round(v*1e9)/1e9;
+let result=null,cursor=0;
+function initial(){
+const s={x:Number(el('ab-x').value),y:Number(el('ab-y').value),
+ vx:Number(el('ab-vx').value),vy:Number(el('ab-vy').value),restitution:Number(el('ab-e').value)};
+for(const v of Object.values(s))if(!Number.isFinite(v))throw Error('nonfinite numeric control');
+if(!(s.x>=0.5&&s.x<=8&&s.y>=.5&&s.y<=5.5&&s.vx>=.2&&s.vx<=4&&
+ s.vy>=-.5&&s.vy<=.5&&s.restitution>=0&&s.restitution<=1))
+ throw Error('input outside source-backed minimal physics limits');
+if(!(s.x+half<wall.x&&s.x+s.vx*dt*steps<=area[0]&&
+ s.y+s.vy*dt*steps>=0&&s.y+s.vy*dt*steps<=area[1]))
+ throw Error('block would exit declared floor or overlap the wall');
+return s;
+}
+function simulate(s,present){
+let x=s.x,y=s.y,vx=s.vx,vy=s.vy;
+const frames=[{turn:0,time:0,x:approx(x),y:approx(y),vx:approx(vx),vy:approx(vy)}],contacts=[];
+for(let turn=1;turn<=steps;turn++){
+ let remaining=dt;
+ if(present&&contacts.length===0&&vx>0&&x+half<wall.x+1e-8){
+   const distance=wall.x-half-x;
+   const hit=distance>=0?distance/vx:Infinity;
+   const hy=y+vy*hit;
+   if(hit>=0&&hit<=remaining+1e-10&&hy>=wall.y-half&&hy<=wall.y+1+half){
+     const time=Math.min(remaining,hit),incoming=[vx,vy],energy=.5*(vx*vx+vy*vy);
+     x+=vx*time;y+=vy*time;remaining-=time;vx=-s.restitution*vx;
+     contacts.push({
+      time:approx((turn-1)*dt+time),x:approx(x),y:approx(y),
+      incoming_velocity:incoming.map(approx),outgoing_velocity:[approx(vx),approx(vy)],
+      normal:[-1,0],normal_impulse:approx((1+s.restitution)*incoming[0]),
+      energy_before:approx(energy),energy_after:approx(.5*(vx*vx+vy*vy)),
+      wall_id:wall.id
+     });
+   }
+ }
+ x+=vx*remaining;y+=vy*remaining;
+ frames.push({turn,time:approx(turn*dt),x:approx(x),y:approx(y),vx:approx(vx),vy:approx(vy)});
+}
+const relations=[];
+if(s.vx>0&&s.x+half<wall.x)relations.push('approaching-boundary');
+if(contacts.length){
+  relations.push('contact','normal-motion-reversed');
+  if(JSON.stringify(contacts[0].incoming_velocity)!==JSON.stringify(contacts[0].outgoing_velocity))
+    relations.push('movement-redirected');
+}else if(frames[frames.length-1].x+half>wall.x){
+  relations.push('passed-boundary-coordinate');
+}else relations.push('no-contact-observed');
+if(Math.hypot(vx,vy)>0)relations.push('continued-motion');
+return {frames,contacts,relations,final:frames[frames.length-1],wall_present:present};
+}
+function generate(s){
+const A=simulate(s,false),B=simulate(s,true);
+return {schema,model:'2D-translational-square/specular-single-face/no-gravity-no-friction',
+ physical_world_dimensions:area,source_boundary:{id:wall.id,face_x:wall.x,y_min:wall.y,y_max:wall.y+1},
+ half_extent:half,duration:dt*steps,time_step:dt,initial:s,
+ A_without_wall:A,B_with_wall:B,observed_relation_difference:{A:A.relations,B:B.relations},
+ literal_Earth_physics_equivalence:false,source_blueprint_structure_generated:false,clinical_evidence:false};
+}
+function draw(){
+const c=el('ab-canvas'),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);
+g.fillStyle='#101d2c';g.fillRect(0,0,c.width,c.height);
+const ox=20,oy=15,sx=38,sy=37;
+g.strokeStyle='#30495e';g.lineWidth=1;
+for(let x=0;x<=24;x+=2){g.beginPath();g.moveTo(ox+x*sx,0);g.lineTo(ox+x*sx,250);g.stroke();}
+for(let y=0;y<=6;y++){g.beginPath();g.moveTo(0,oy+y*sy);g.lineTo(960,oy+y*sy);g.stroke();}
+g.fillStyle='#cda26c';g.fillRect(ox+wall.x*sx,oy+wall.y*sy,sx,sy);
+g.fillStyle='#e3d0a5';g.font='bold 12px system-ui';g.fillText('WALL FROM 144-CELL WORLD',ox+wall.x*sx+5,oy+wall.y*sy-6);
+if(!result)return;
+for(const [name,color] of [['A_without_wall','#70cbea'],['B_with_wall','#f3ca79']]){
+ const frames=result[name].frames;
+ g.strokeStyle=color;g.lineWidth=2.5;g.beginPath();
+ for(let i=0;i<=cursor;i++){const f=frames[i],px=ox+f.x*sx,py=oy+f.y*sy;
+   if(i===0)g.moveTo(px,py);else g.lineTo(px,py);}
+ g.stroke();
+ const f=frames[cursor];g.fillStyle=color;
+ g.fillRect(ox+(f.x-half)*sx,oy+(f.y-half)*sy,half*2*sx,half*2*sy);
+ g.fillStyle=color;g.font='bold 14px system-ui';g.fillText(name==='A_without_wall'?'A OPEN':'B SOLID',
+      name==='A_without_wall'?20:110,242);
+}
+}
+function render(){
+draw();
+if(!result){el('ab-step-number').textContent='No trial executed yet.';return;}
+const A=result.A_without_wall,B=result.B_with_wall;
+const fa=A.frames[cursor],fb=B.frames[cursor],contact=B.contacts.length?B.contacts[0]:null;
+const current=fa.time;
+el('ab-step-number').textContent='LOOK '+cursor+'/'+steps+' | t='+current+' virtual seconds; A open vs B solid wall';
+let look='LOOK at t='+current+': A x='+fa.x+', y='+fa.y+'; B x='+fb.x+', y='+fb.y;
+let language='LANGUAGE from measured states: '+
+  (fb.vx>0?'approach in +x':fb.vx<0?'movement in -x':'x motion stopped')+
+  ', A x velocity '+fa.vx+', B x velocity '+fb.vx;
+if(contact&&current>=contact.time)language+='; solid boundary contact recorded at t='+contact.time;
+else language+='; no B boundary contact observed yet';
+el('ab-look').textContent=look+' | '+language+' | NEXT LOOK is generated by the next physics step.';
+el('ab-receipt').textContent=JSON.stringify({
+generated_relations_A:A.relations,generated_relations_B:B.relations,
+actual_contacts_B:B.contacts,frame_A:fa,frame_B:fb,
+experiment_scope:'Isolated virtual square and wall; not a general Earth physics simulation',
+preplaced_world_objects_not_generated_by_this_trial:true},null,2);
+}
+function run(){
+try{
+ const s=initial();result=generate(s);cursor=0;render();
+}catch(e){result=null;draw();el('ab-look').textContent='Rejected physical input: '+e.message;el('ab-step-number').textContent='Not executed.';}
+}
+el('ab-run').addEventListener('click',run);
+el('ab-prev').addEventListener('click',()=>{if(result){cursor=Math.max(0,cursor-1);render();}});
+el('ab-next').addEventListener('click',()=>{if(result){cursor=Math.min(steps,cursor+1);render();}});
+el('ab-reset').addEventListener('click',()=>{for(const [id,v] of Object.entries({'ab-x':3,'ab-y':1.35,'ab-vx':3,'ab-vy':.12,'ab-e':1}))
+ el(id).value=v;result=null;cursor=0;render();});
+el('ab-export').addEventListener('click',()=>{
+ if(!result)return;
+ const data=JSON.stringify(result,null,2)+'\n',url=URL.createObjectURL(new Blob([data],{type:'application/json'}));
+ const a=document.createElement('a');a.href=url;a.download='world_ab_contact_generated_trial.json';
+ document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+window.worldABContact={
+ run,
+ generate,
+ get:()=>result?copy(result):null,
+ cursor:()=>cursor,
+ frame:()=>result?copy({A:result.A_without_wall.frames[cursor],B:result.B_with_wall.frames[cursor]}):null
+};
+draw();
+})();
+
+</script><script>
+
+'use strict';
+(()=>{
+const schema='world-ab-relation-derived-second-surface/v1',projection=0.75;
+const half=0.25,dt=0.25,steps=16,wallX=12,spanMin=1,spanMax=2;
+const e=id=>document.getElementById(id),clone=o=>JSON.parse(JSON.stringify(o)),round=v=>Math.round(v*1e9)/1e9;
+let state=null,phase='none',frame=0;
+const canvas=e('grow-canvas'),ctx=canvas.getContext('2d');
+function assemble(src){
+if(!src||src.schema!=='world-ab-physical-contact-trial/v1')throw Error('No source contact trial');
+const contacts=src.B_with_wall.contacts;
+if(contacts.length!==1)return {constructed:false,reason:'NO_SINGLE_SOURCE_CONTACT',surface:null,source_contact:null};
+const h=contacts[0],vx=h.outgoing_velocity[0],vy=h.outgoing_velocity[1];
+if(Math.abs(vx)<=1e-9)return {constructed:false,reason:'NO_OUTGOING_REBOUND',surface:null,source_contact:h};
+if(vx>=0||h.normal.join(',')!=='-1,0'||h.wall_id!=='boundary-wall'||
+ Math.abs(h.x-(wallX-half))>1e-9)throw Error('rebound not supported');
+const face=h.x+vx*projection,center=h.y+vy*projection;
+if(!(face>half&&face<wallX-2*half&&center>0.75&&center<5.25))
+ return {constructed:false,reason:'PROJECTED_RECEIVER_OUTSIDE_WORLD',surface:null,source_contact:h};
+return {constructed:true,reason:'PROJECTED_FROM_OBSERVED_REBOUND',surface:{
+ id:'relation-surface-1',face_x:round(face),y_min:round(center-.5),y_max:round(center+.5),
+ normal:[1,0],basis_contact_time:h.time,basis_contact_xy:[h.x,h.y],
+ basis_outgoing_velocity:clone(h.outgoing_velocity),projection_duration:projection,
+ source_boundary_id:'boundary-wall'},source_contact:h};
+}
+function move(src,shape){
+const s=src.initial;let x=s.x,y=s.y,vx=s.vx,vy=s.vy;
+const frames=[{turn:0,time:0,x:round(x),y:round(y),vx:round(vx),vy:round(vy)}],contacts=[];
+for(let turn=1;turn<=steps;turn++){
+let remain=dt,elapsed=0;
+for(let iter=0;iter<3;iter++){
+if(remain<=1e-9)break;
+const choices=[];
+if(vx>1e-9){
+ let t=(wallX-half-x)/vx;
+ if(t>=-1e-9&&t<=remain+1e-9){
+  const cy=y+vy*t;if(cy>=spanMin-half&&cy<=spanMax+half)choices.push([Math.max(t,0),'source-wall']);
+ }
+}
+if(vx< -1e-9){
+ let t=(shape.face_x+half-x)/vx;
+ if(t>=-1e-9&&t<=remain+1e-9){
+  const cy=y+vy*t;if(cy>=shape.y_min-half&&cy<=shape.y_max+half)
+    choices.push([Math.max(t,0),shape.id]);
+ }
+}
+if(!choices.length){x+=vx*remain;y+=vy*remain;elapsed+=remain;remain=0;break;}
+choices.sort((a,b)=>a[0]-b[0]);const [t,kind]=choices[0];
+x+=vx*t;y+=vy*t;elapsed+=t;remain-=t;
+const incoming=[vx,vy],before=.5*(vx*vx+vy*vy);
+vx=-s.restitution*vx;
+contacts.push({time:round((turn-1)*dt+elapsed),surface:kind,x:round(x),y:round(y),
+ incoming_velocity:incoming.map(round),outgoing_velocity:[round(vx),round(vy)],
+ normal:kind==='source-wall'?[-1,0]:[1,0],
+ normal_impulse:round((1+s.restitution)*Math.abs(incoming[0])),
+ energy_before:round(before),energy_after:round(.5*(vx*vx+vy*vy))});
+if(contacts.length>3)throw Error('unsupported repeated impacts');
+}
+if(remain>1e-9)throw Error('could not resolve physical event');
+frames.push({turn,time:round(turn*dt),x:round(x),y:round(y),vx:round(vx),vy:round(vy)});
+}
+return {frames,contacts,final:frames[frames.length-1]};
+}
+function full(){
+if(!state)return null;
+return {schema,input:clone(state.source.initial),original:clone(state.source),
+ assembly:clone(state.assembly),second_motion:clone(state.motion),
+ new_surface_reused:!!(state.motion&&state.motion.contacts.some(c=>c.surface==='relation-surface-1')),
+ observed_contacts:state.motion?state.motion.contacts.map(c=>c.surface):[],
+ automatically_assembled_without_declared_rule:false,full_visual_blueprint_generated:false,
+ physics_scope:'one rigid translating square, one original wall, one relation-assembled collision face'};
+}
+function graph(){
+const w=canvas.width,h=canvas.height;ctx.clearRect(0,0,w,h);
+ctx.fillStyle='#112030';ctx.fillRect(0,0,w,h);
+const dx=38,dy=32,ox=15,oy=20;
+ctx.strokeStyle='#25475a';for(let i=0;i<=24;i+=2){
+ctx.beginPath();ctx.moveTo(ox+i*dx,0);ctx.lineTo(ox+i*dx,h);ctx.stroke();}
+const rectangle=(x,y,min,max,color)=>{
+ctx.fillStyle=color;ctx.fillRect(ox+x*dx,oy+min*dy,5,(max-min)*dy);
+};
+rectangle(12,0,1,2,'#c4a36c');
+if(state?.assembly?.constructed)rectangle(state.assembly.surface.face_x,0,
+ state.assembly.surface.y_min,state.assembly.surface.y_max,'#87d4a0');
+if(!state)return;
+const paths=[['B_with_wall','#f1b969',state.source.B_with_wall.frames],
+ ['generated','#6adbc0',state.motion?state.motion.frames:[]]];
+for(const [name,color,frames] of paths){
+if(!frames.length)continue;
+ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=2.5;
+for(let i=0;i<=Math.min(frame,frames.length-1);i++){
+const f=frames[i],px=ox+f.x*dx,py=oy+f.y*dy;
+if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();const f=frames[Math.min(frame,frames.length-1)];
+ctx.fillStyle=color;ctx.fillRect(ox+(f.x-half)*dx,oy+(f.y-half)*dy,half*2*dx,half*2*dy);
+}
+ctx.fillStyle='#f4dfb9';ctx.font='bold 13px system-ui';
+ctx.fillText('ORIGINAL SOURCE WALL',550,23);
+ctx.fillStyle='#a6e1ca';ctx.fillText('RELATION-DERIVED RECEIVER',550,40);
+}
+function paint(){
+graph();
+if(!state)return;
+e('grow-result').textContent=JSON.stringify({
+ constructed:state.assembly,contacts:state.motion?.contacts||[],
+ first_wall_contacts:state.source.B_with_wall.contacts,
+ current_frame:state.motion?state.motion.frames[frame]:state.source.B_with_wall.frames[frame],
+ no_original_target_geometry_labels_in_generator:true,
+ originally_desired_guide_funnel_diverter_spiral_generated:false},null,2);
+if(!state.assembly.constructed)
+ e('grow-caption').textContent='Construction stopped: '+state.assembly.reason+'; no relation-derived surface';
+else if(!state.motion)
+ e('grow-caption').textContent='Contact at t='+state.assembly.source_contact.time+
+  ' produced a new collision face at x='+state.assembly.surface.face_x+
+  ' by projecting the observed outgoing velocity; replay to test whether it works.';
+else e('grow-caption').textContent='LOOK '+frame+'/16 | original contacts: '+
+ state.source.B_with_wall.contacts.length+' | constructed-surface contacts: '+
+ state.motion.contacts.length+' | actual terminal x='+state.motion.final.x+
+ ' | bigger original blueprint not yet generated.';
+}
+function construct(){
+const prior=window.worldABContact.get();
+if(!prior){e('grow-caption').textContent='Run A/B motion first to obtain an observed contact.';return;}
+try{const geometry=assemble(prior);state={source:prior,assembly:geometry,motion:null};
+phase='constructed';frame=0;paint();
+}catch(err){e('grow-caption').textContent='Construction rejected: '+err.message;}
+}
+function replay(){
+if(!state?.assembly.constructed){
+e('grow-caption').textContent='No admitted rebound-derived surface to replay.';return;}
+try{state.motion=move(state.source,state.assembly.surface);phase='replayed';frame=0;paint();
+}catch(err){e('grow-caption').textContent='Replay rejected: '+err.message;}
+}
+e('grow-construct').onclick=construct;
+e('grow-replay').onclick=replay;
+e('grow-next').onclick=()=>{if(state){frame=Math.min(steps,frame+1);paint();}};
+e('grow-prev').onclick=()=>{if(state){frame=Math.max(0,frame-1);paint();}};
+e('grow-reset').onclick=()=>{state=null;frame=0;phase='none';graph();e('grow-caption').textContent='Source composition reset. Original physical WORLD is preserved.';e('grow-result').textContent='';};
+e('grow-export').onclick=()=>{
+if(!state)return;const str=JSON.stringify(full(),null,2)+'\n';
+const url=URL.createObjectURL(new Blob([str],{type:'application/json'})),a=document.createElement('a');
+a.href=url;a.download='world_ab_relation_growth_generated.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+window.worldABGrowth={get:()=>full(),construct,replay,frame:()=>frame,phase:()=>phase};
+graph();
+})();
+
+</script><script>
+
+'use strict';
+(()=>{
+const sc='world-ab-contact-derived-sequential-construction/v1',half=.25,duration=5,maxEvents=30;
+const wall={id:'source-wall',face_x:12,y_min:1,y_max:2,normal:[-1,0],active_at:0,source_contact_index:null};
+const el=id=>document.getElementById(id),copy=x=>JSON.parse(JSON.stringify(x)),rnd=x=>Math.round(x*1e9)/1e9;
+let output=null,index=0;
+function next(x,y,vx,vy,time,objects){
+ const choices=[];
+ for(const s of objects){
+  if(vx*s.normal[0]>=-1e-8)continue;
+  const cx=s.face_x+s.normal[0]*half;
+  const t=(cx-x)/vx;
+  if(t<=1e-8||t>duration-time+1e-8)continue;
+  const cy=y+vy*t;
+  if(cy>=s.y_min-half-1e-8&&cy<=s.y_max+half+1e-8)choices.push({time:t,surface:s});
+ }
+ choices.sort((a,b)=>a.time-b.time||a.surface.id.localeCompare(b.surface.id));
+ return choices[0]||null;
+}
+function construct(event,objects){
+ const [vx,vy]=event.outgoing_velocity,[px,py]=event.point;
+ if(Math.abs(vx)<=1e-8)return {accepted:false,reason:'NO_REBOUND',candidate:null};
+ const sign=vx>0?1:-1;
+ const ahead=objects.filter(s=>(s.face_x-px)*sign>1e-8&&s.normal[0]*vx< -1e-8)
+   .map(s=>Math.abs(s.face_x-px));
+ const max=.75*Math.abs(vx);
+ const distance=Math.min(max,ahead.length?Math.min(...ahead)/2:max);
+ const face=px+sign*distance,center=py+vy*distance/Math.abs(vx);
+ const proposal={id:'generated-face-'+objects.length,face_x:rnd(face),
+    y_min:rnd(center-.5),y_max:rnd(center+.5),
+    normal:[-sign,0],active_at:event.time,source_contact_index:event.index};
+ if(distance<=half+1e-8||face<=half+1e-8||face>=24-half-1e-8||
+    proposal.y_min<half||proposal.y_max>6-half)
+  return {accepted:false,reason:'NO_ADMISSIBLE_CLEARANCE',candidate:proposal};
+ for(const other of objects){
+  const overlap=proposal.y_min<=other.y_max+.5&&proposal.y_max>=other.y_min-.5;
+  if(overlap&&Math.abs(face-other.face_x)<=.5+1e-8)
+   return {accepted:false,reason:'FACES_TOO_CLOSE_FOR_BLOCK',candidate:proposal};
+ }
+ if(objects.length-1>=12)
+  return {accepted:false,reason:'BOUNDED_SURFACE_LIMIT',candidate:proposal};
+ return {accepted:true,reason:'CONTACT_DERIVED_CLEARANCE_ALLOWED',candidate:proposal};
+}
+function generate(s){
+ let x=s.x,y=s.y,vx=s.vx,vy=s.vy,t=0;
+ const objects=[copy(wall)],events=[],attempts=[],motions=[
+  {time:0,x:rnd(x),y:rnd(y),vx:rnd(vx),vy:rnd(vy),phase:'initial'}];
+ for(let i=0;i<maxEvents;i++){
+  const candidate=next(x,y,vx,vy,t,objects);
+  if(!candidate){x+=vx*(duration-t);y+=vy*(duration-t);t=duration;break;}
+  const delta=candidate.time,hitTime=t+delta;
+  if(hitTime>duration+1e-8)break;
+  x+=vx*delta;y+=vy*delta;t=hitTime;
+  const incoming=[vx,vy],oldEnergy=.5*(vx*vx+vy*vy);
+  vx=-s.restitution*vx;
+  const event={index:events.length,time:rnd(t),source_surface_id:candidate.surface.id,
+   point:[rnd(x),rnd(y)],incoming_velocity:incoming.map(rnd),
+   outgoing_velocity:[rnd(vx),rnd(vy)],normal:copy(candidate.surface.normal),
+   impulse:rnd((1+s.restitution)*Math.abs(incoming[0])),energy_before:rnd(oldEnergy),
+   energy_after:rnd(.5*(vx*vx+vy*vy))};
+  events.push(event);
+  motions.push({time:rnd(t),x:rnd(x),y:rnd(y),vx:rnd(vx),vy:rnd(vy),phase:'contact'});
+  const choice=construct(event,objects);
+  attempts.push({contact_index:event.index,...choice});
+  if(choice.accepted)objects.push(choice.candidate);
+  if(events.length>=maxEvents)throw Error('bounded event budget exhausted');
+ }
+ if(t<duration-1e-8)throw Error('physical time budget incomplete');
+ motions.push({time:rnd(t),x:rnd(x),y:rnd(y),vx:rnd(vx),vy:rnd(vy),phase:'terminal'});
+ if(motions.some(m=>m.x<0||m.x>24||m.y<0||m.y>6))throw Error('movement outside world');
+ return {schema:sc,input:copy(s),duration,half_extent:half,
+  physics:'2D translational rigid square; event-time x-normal restitution; no Earth-scale calibration',
+  source_world_dimensions:[24,6],source_original_wall_preserved:true,
+  surfaces:objects,events,construction_attempts:attempts,motions,final:motions[motions.length-1],
+  generated_surface_count:objects.length-1,straight_vertical_faces_only:true,
+  spontaneous_material_self_assembly:false,full_original_visual_blueprint_generated:false,
+  original_target_shape_names_used_in_generator:false};
+}
+function draw(){
+ const c=el('iter-canvas'),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);
+ g.fillStyle='#102133';g.fillRect(0,0,c.width,c.height);
+ const sx=38,sy=34,ox=22,oy=25;
+ g.strokeStyle='#264459';g.lineWidth=1;
+ for(let x=0;x<=24;x+=2){g.beginPath();g.moveTo(ox+x*sx,0);g.lineTo(ox+x*sx,c.height);g.stroke();}
+ for(let y=0;y<=6;y++){g.beginPath();g.moveTo(0,oy+y*sy);g.lineTo(c.width,oy+y*sy);g.stroke();}
+ if(!output)return;
+ const obs=output.motions[index],selectedT=obs.time,active=output.surfaces.filter(s=>s.active_at<=selectedT+1e-8);
+ for(const s of active){
+  g.strokeStyle=s.id==='source-wall'?'#d1af74':'#67c7ae';g.lineWidth=7;
+  g.beginPath();g.moveTo(ox+s.face_x*sx,oy+s.y_min*sy);
+  g.lineTo(ox+s.face_x*sx,oy+s.y_max*sy);g.stroke();
+ }
+ g.strokeStyle='#c4e0ff';g.lineWidth=2;g.beginPath();
+ for(let i=0;i<=index;i++){
+  const p=output.motions[i],xx=ox+p.x*sx,yy=oy+p.y*sy;
+  if(i===0)g.moveTo(xx,yy);else g.lineTo(xx,yy);
+ }g.stroke();
+ g.fillStyle='#fff3bd';g.fillRect(ox+(obs.x-half)*sx,oy+(obs.y-half)*sy,2*half*sx,2*half*sy);
+ g.fillStyle='#e4f4f8';g.font='bold 13px system-ui';
+ g.fillText('ACTIVE FACES '+active.length+' / SOURCE + '+output.generated_surface_count+' BUILT',26,267);
+}
+function render(){
+ draw();if(!output)return;
+ const obs=output.motions[index],accepted=output.construction_attempts.filter(p=>p.accepted).length,
+ failed=output.construction_attempts.filter(p=>!p.accepted);
+ el('iter-status').textContent='LOOK '+index+'/'+(output.motions.length-1)+
+  ' | t='+obs.time+' | generated faces '+accepted+
+  ' | rejected attempts '+failed.length+' | x='+obs.x+', y='+obs.y+
+  ' | all faces remain straight; no guide/funnel/diverter/spiral generated.';
+ el('iter-log').textContent=JSON.stringify({
+  at:obs,latest_event:output.events[index-1]||null,
+  source_geometry:output.surfaces,all_construction_attempts:output.construction_attempts,
+  never_retroactively_revealed_future_surfaces:true},null,2);
+}
+function run(){
+ const prior=window.worldABContact.get();
+ if(!prior){el('iter-status').textContent='First run A/B motion above to witness the original wall.';return;}
+ try{output=generate(prior.initial);index=0;render();}
+ catch(e){output=null;draw();el('iter-status').textContent='Growth rejected: '+e.message;}
+}
+el('iter-run').onclick=run;
+el('iter-prev').onclick=()=>{if(output){index=Math.max(index-1,0);render();}};
+el('iter-next').onclick=()=>{if(output){index=Math.min(index+1,output.motions.length-1);render();}};
+el('iter-reset').onclick=()=>{index=0;output=null;draw();el('iter-log').textContent='';el('iter-status').textContent='Iteration reset without changing original physical WORLD.';};
+el('iter-export').onclick=()=>{
+ if(!output)return;const data=JSON.stringify(output,null,2)+'\n';
+ const blob=new Blob([data],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+ a.href=url;a.download='world_ab_iterated_generated.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+window.worldABIteration={get:()=>output?copy(output):null,cursor:()=>index,run,generate};
+draw();
+})();
+
+</script><script>
+(()=>{
+'use strict';
+const $=id=>document.getElementById(id),rnd=x=>Math.round(x*1e10)/1e10;
+const R=.25,I=.03125,A=[12,1.5],P=[3,1.35],V=[3,.12],limit=3.3;
+const dot=(x,y)=>x[0]*y[0]+x[1]*y[1],sum=(x,y)=>[x[0]+y[0],x[1]+y[1]];
+const minus=(x,y)=>[x[0]-y[0],x[1]-y[1]],scale=(s,v)=>v.map(q=>s*q);
+const normalize=v=>scale(1/Math.hypot(...v),v),energy=(v,w)=>.5*dot(v,v)+.5*I*w*w;
+const copy=o=>JSON.parse(JSON.stringify(o));
+let all=null,k=0;
+function impact(v,w,n,mu){
+ const tangent=[-n[1],n[0]],vn=dot(v,n),jn=-2*vn;
+ if(vn>=0)throw Error('contact normal has no incoming motion');
+ const slip=dot(v,tangent)-w*R, raw=-slip/(1+R*R/I),jt=Math.max(-mu*jn,Math.min(mu*jn,raw));
+ const after=sum(v,sum(scale(jn,n),scale(jt,tangent))),spin=w-R*jt/I;
+ const record={incoming_velocity:v.map(rnd),outgoing_velocity:after.map(rnd),
+ incoming_spin:rnd(w),outgoing_spin:rnd(spin),normal:n.map(rnd),
+ normal_impulse:rnd(jn),tangential_impulse:rnd(jt),tangential_slip_before:rnd(slip),
+ kinetic_energy_before:rnd(energy(v,w)),kinetic_energy_after:rnd(energy(after,spin))};
+ if(record.kinetic_energy_after>record.kinetic_energy_before+1e-9)throw Error('energy created by impact');
+ return {after,spin,record};
+}
+function single(angle,mu){
+ const r=angle*Math.PI/180,n=[-Math.cos(r),-Math.sin(r)],tangent=[-n[1],n[0]];
+ const t1=(R-dot(minus(P,A),n))/dot(V,n),p1=sum(P,scale(t1,V)),offset=dot(minus(p1,A),tangent);
+ if(!(t1>0&&t1<limit&&Math.abs(offset)<=.75))throw Error('source collision unavailable');
+ const one=impact(V,0,n,mu),n2=scale(-1,normalize(one.after));
+ const ptarget=sum(p1,scale(.25,one.after)),anchor=minus(ptarget,scale(R,n2));
+ const delta=(R-dot(minus(p1,anchor),n2))/dot(one.after,n2),t2=t1+delta;
+ if(!(Math.abs(delta-.25)<1e-9&&t2<limit))throw Error('derived receiver unreachable');
+ const p2=sum(p1,scale(delta,one.after)),two=impact(one.after,one.spin,n2,mu);
+ const event1={id:'original-source-face-experimental',at:rnd(t1),center:p1.map(rnd),
+ face_normal:n.map(rnd),source_tangent_coordinate:rnd(offset),...one.record};
+ const event2={id:'derived-receiver-face',at:rnd(t2),center:p2.map(rnd),face_normal:n2.map(rnd),...two.record};
+ const receiver={id:'contact-derived-face-1',anchor:anchor.map(rnd),normal:n2.map(rnd),
+ normal_angle_degrees:rnd(Math.atan2(n2[1],n2[0])*180/Math.PI),span:1,activated_at:rnd(t1),
+ observed_source_event:'original-source-face-experimental',constructed_from:'observed-outgoing-center-velocity',
+ projection_duration:.25};
+ const frames=[];
+ for(let i=0;i<34;i++){
+  const time=Math.min(limit,i*.1);let pos,vel,spin,theta,phase;
+  if(time<t1){pos=sum(P,scale(time,V));vel=V;spin=0;theta=0;phase='before-source-contact';}
+  else if(time<t2){pos=sum(p1,scale(time-t1,one.after));vel=one.after;spin=one.spin;
+    theta=one.spin*(time-t1);phase='between-collisions';}
+  else {pos=sum(p2,scale(time-t2,two.after));vel=two.after;spin=two.spin;
+    theta=one.spin*(t2-t1)+two.spin*(time-t2);phase='after-receiver-contact';}
+  if(pos[0]<R-1e-8||pos[0]>24-R+1e-8||pos[1]<R-1e-8||pos[1]>6-R+1e-8)
+    throw Error('object left the physical WORLD');
+  frames.push({t:rnd(time),position:pos.map(rnd),velocity:vel.map(rnd),
+    angular_velocity:rnd(spin),orientation:rnd(theta),phase});
+ }
+ return {source_angle_degrees:angle,friction:mu,
+ source_face:{anchor:copy(A),normal:n.map(rnd),span:1,source_world_wall_unchanged:true,
+ mode:'isolated angled perturbation; original wall is separately retained'},
+ constructed_receiver:receiver,events:[event1,event2],frames,last:frames.at(-1),
+ generated_surface_count:1,nonzero_spin_generated:[event1,event2].some(e=>Math.abs(e.outgoing_spin)>1e-7),
+ receiver_nonvertical:Math.abs(n2[1])>1e-5,
+ shape_topology:'two straight line segments, not curved guide/funnel/diverter/spiral'};
+}
+function generate(){
+ const branches=[];for(const a of [0,20])for(const m of [0,.4])branches.push(single(a,m));
+ return {schema:'world-ab-oblique-rotational-contact/v1',
+ model:'2D unit-mass disc/I=0.5*m*r^2/normal restitution 1/capped Coulomb friction',
+ units:'original WORLD virtual movement cells, unitless normalized mass',
+ geometry:[24,6],disc_radius:R,disc_mass:1,moment_of_inertia:I,
+ initial_position:copy(P),initial_velocity:copy(V),source_anchor:copy(A),
+ projection_duration:.25,horizon:3.3,branches,
+ original_W13_world_rewritten:false,original_Trial03_collision_source_rewritten:false,
+ original_sketch_shape_labels_given_to_generator:false,full_original_physical_blueprint_generated:false,
+ real_Earth_material_behavior_verified:false};
+}
+const ctx=$('disc-canvas').getContext('2d'),dx=39,dy=43,ox=17,oy=12;
+function draw(){
+ ctx.clearRect(0,0,960,330);ctx.fillStyle='#112333';ctx.fillRect(0,0,960,330);
+ ctx.strokeStyle='#325164';ctx.lineWidth=1;
+ for(let x=0;x<=24;x+=2){ctx.beginPath();ctx.moveTo(ox+x*dx,0);ctx.lineTo(ox+x*dx,330);ctx.stroke();}
+ for(let y=0;y<=6;y++){ctx.beginPath();ctx.moveTo(0,oy+y*dy);ctx.lineTo(960,oy+y*dy);ctx.stroke();}
+ if(!all)return;const c=all.branches[Number($('disc-branch').value)],frame=c.frames[k];
+ const line=(anchor,n,color)=>{
+ const tangent=[-n[1],n[0]],a=sum(anchor,scale(.5,tangent)),b=sum(anchor,scale(-.5,tangent));
+ ctx.strokeStyle=color;ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(ox+a[0]*dx,oy+a[1]*dy);
+ ctx.lineTo(ox+b[0]*dx,oy+b[1]*dy);ctx.stroke();};
+ line(c.source_face.anchor,c.source_face.normal,'#f1b979');
+ if(frame.t>=c.constructed_receiver.activated_at-1e-8)
+   line(c.constructed_receiver.anchor,c.constructed_receiver.normal,'#73d6ae');
+ ctx.strokeStyle='#a9d6fc';ctx.lineWidth=2;ctx.beginPath();
+ for(let i=0;i<=k;i++){const p=c.frames[i].position;
+  if(i===0)ctx.moveTo(ox+p[0]*dx,oy+p[1]*dy);else ctx.lineTo(ox+p[0]*dx,oy+p[1]*dy);}
+ ctx.stroke();
+ const X=ox+frame.position[0]*dx,Y=oy+frame.position[1]*dy;
+ ctx.fillStyle='#eff7ff';ctx.strokeStyle='#f3c484';ctx.lineWidth=2;
+ ctx.beginPath();ctx.arc(X,Y,R*(dx+dy)/2,0,2*Math.PI);ctx.fill();ctx.stroke();
+ ctx.strokeStyle='#1b394e';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(X,Y);
+ ctx.lineTo(X+R*dx*Math.cos(frame.orientation),Y+R*dy*Math.sin(frame.orientation));ctx.stroke();
+}
+function present(){
+ draw();if(!all)return;const c=all.branches[Number($('disc-branch').value)],f=c.frames[k];
+ $('disc-readout').textContent='LOOK '+k+'/33: t='+f.t+', phase='+f.phase+
+ ', spin='+f.angular_velocity+', new face angle='+c.constructed_receiver.normal_angle_degrees+'°';
+ $('disc-data').textContent=JSON.stringify({events:c.events,receiver:c.constructed_receiver,
+ observation:f,full_original_blueprint_generated:false},null,2);
+}
+$('disc-run').onclick=()=>{try{all=generate();k=0;present();}
+ catch(e){all=null;draw();$('disc-readout').textContent='Rejected: '+e.message;}};
+$('disc-branch').onchange=()=>{k=0;present();};
+$('disc-next').onclick=()=>{if(all){k=Math.min(33,k+1);present();}};
+$('disc-prev').onclick=()=>{if(all){k=Math.max(0,k-1);present();}};
+$('disc-reset').onclick=()=>{all=null;k=0;draw();$('disc-readout').textContent='Reset. Original WORLD unchanged.';};
+$('disc-export').onclick=()=>{if(!all)return;
+ const url=URL.createObjectURL(new Blob([JSON.stringify(all,null,2)+'\n'],{type:'application/json'}));
+ const a=document.createElement('a');a.href=url;a.download='world_ab_oblique_disc_factorial.json';
+ document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+window.worldABObliqueDisc={receipt:()=>all?copy(all):null,cursor:()=>k,run:generate};
+draw();
+})();
+</script></body></html>
