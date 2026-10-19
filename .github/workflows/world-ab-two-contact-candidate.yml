@@ -1,0 +1,49 @@
+name: WORLD — Two-Contact Candidate Trial 08
+on:
+  push:
+    branches:
+      - 'experiment/world-trial08-two-contact-impulse-20261019'
+    paths:
+      - '.github/workflows/world-ab-two-contact-candidate.yml'
+      - 'systems/workspace/world_ab_two_contact_candidate.py'
+      - 'network/tests/test_world_ab_two_contact_candidate.py'
+      - 'docs/world_ab_two_contact_candidate.html'
+      - 'scripts/verify_world_ab_two_contact_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-frictionless-two-contact-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify original Trial 06 and Trial 07 and new independent candidate
+        run: |
+          python -m unittest -v network.tests.test_world_ab_two_contact_candidate network.tests.test_world_ab_junction_threshold network.tests.test_world_ab_junction_continuous network.tests.test_world_ab_connected_routing
+      - name: Install real Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Compare separately calculated Chromium and native candidate movement
+        run: |
+          python -m scripts.verify_world_ab_two_contact_browser --output-dir "$RUNNER_TEMP/world-trial08"
+      - name: Retain native/Chromium motion and original-source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-trial08-two-contact-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/world-trial08/world_trial08_native.json
+            ${{ runner.temp }}/world-trial08/world_trial08_browser.json
+            ${{ runner.temp }}/world-trial08/world_trial08_chromium.png
+            ${{ runner.temp }}/world-trial08/world_trial08_verification.json
+            docs/world_ab_two_contact_candidate.html
+            docs/world_ab_junction_geometry.js
+          retention-days: 30
+          if-no-files-found: warn

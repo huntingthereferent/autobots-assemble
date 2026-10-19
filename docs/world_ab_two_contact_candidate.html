@@ -1,0 +1,122 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>WORLD · Trial 08 Two-Contact Candidate</title>
+<style>
+body{background:#0d202b;color:#e4f3ff;font:16px system-ui;max-width:1110px;margin:auto;padding:24px}a{color:#8fddfc}p{line-height:1.5;color:#bad1e1}h1{font-size:1.6rem}button{font:inherit;background:#2c5365;color:#eef9ff;padding:9px 14px;border:1px solid #7ab5c7;border-radius:6px;margin-right:6px}canvas{width:100%;background:#0a1822;border-radius:7px}#status{min-height:48px}pre{font-size:12px;white-space:pre-wrap;max-height:370px;overflow:auto}
+</style></head><body>
+<h1>WORLD · Trial 08 / A falsifiable two-contact impulse</h1>
+<p><a href="world_ab_junction_threshold.html">Trial 07 actual two-contact arrival</a> · <a href="world_ab_junction_continuous.html">Trial 06 original finite-motion simulator</a>.</p>
+<p>The source segments stay unchanged. At the exact measured arrival tie, this page independently tests a <strong>frictionless, perfectly elastic two-normal candidate</strong>, not the original Trial 06 friction 0.4 model. It does not claim general multi-contact physics or a physical blueprint.</p>
+<button id="run">Calculate candidate</button><button id="prev">Previous observation</button><button id="next">Next observation</button><button id="reset">Reset</button>
+<p id="status" aria-live="polite">No candidate has been evaluated.</p>
+<canvas id="scene" width="960" height="305" aria-label="Original finite surfaces and predicted disc movement"></canvas>
+<details><summary>Original source and candidate motion receipts</summary><pre id="receipt"></pre></details>
+<script src="world_ab_junction_geometry.js"></script>
+<script>
+'use strict';
+window.worldTrial08=(()=>{
+ const R=.25,I=.03125,T=1.5,STEP=.05,EPS=1e-9,BR=[1.35,1.4],rd=(x,k=9)=>+x.toFixed(k);
+ const dot=(a,b)=>a[0]*b[0]+a[1]*b[1],add=(a,b)=>[a[0]+b[0],a[1]+b[1]];
+ const sub=(a,b)=>[a[0]-b[0],a[1]-b[1]],mul=(s,a)=>[s*a[0],s*a[1]],cp=o=>JSON.parse(JSON.stringify(o));
+ let state=null,index=0;
+ function hit(y,s){
+  const [a,b]=s.endpoints,ab=sub(b,a),length=Math.hypot(...ab);
+  if(length<=EPS)throw Error('invalid source segment');
+  const tang=mul(1/length,ab),norm=[-tang[1],tang[0]],v=[-2,0],p=[12,y];
+  const signed=dot(sub(p,a),norm),rate=dot(v,norm),hits=[];
+  if(Math.abs(rate)<=EPS)throw Error('source parallel');
+  for(const sign of [-1,1]){
+   const n=mul(sign,norm);if(dot(v,n)>=-EPS)continue;
+   const t=(sign*R-signed)/rate;if(t<=EPS||t>=T)continue;
+   const center=add(p,mul(t,v)),along=dot(sub(center,a),tang);
+   if(EPS<along&&along<length-EPS)hits.push({time:t,center,normal:n});
+  }
+  if(hits.length!==1)throw Error('unique finite segment interior hit not found');
+  return hits[0];
+ }
+ function near(p,s){
+  const [a,b]=s.endpoints,ab=sub(b,a);
+  const t=Math.max(0,Math.min(1,dot(sub(p,a),ab)/dot(ab,ab)));
+  return Math.hypot(...sub(p,add(a,mul(t,ab))));
+ }
+ function measure(){
+  const geometry=window.worldJunctionSource.generate(),faces=geometry.surfaces;
+  if(faces.length!==2||faces[0].id===faces[1].id)throw Error('missing two distinct original sources');
+  const gap=y=>hit(y,faces[0]).time-hit(y,faces[1]).time;
+  let [lo,hi]=BR,gl=gap(lo);
+  if(gl*gap(hi)>=0)throw Error('original source has no contact crossing');
+  for(let i=0;i<64;i++){
+   const middle=(lo+hi)/2,gm=gap(middle);
+   if(gm===0){lo=hi=middle;break;}
+   if(gl*gm>0){lo=middle;gl=gm;}else hi=middle;
+  }
+  const y=rd((lo+hi)/2,12),contacts=faces.map(s=>hit(y,s));
+  const t=(contacts[0].time+contacts[1].time)/2;
+  const point=contacts[0].center,n0=contacts[0].normal,n1=contacts[1].normal;
+  if(Math.abs(contacts[0].time-contacts[1].time)>1e-9||Math.hypot(...sub(point,contacts[1].center))>1e-8)throw Error('noncoincident source arrival');
+  const g00=dot(n0,n0),g01=dot(n0,n1),g11=dot(n1,n1),det=g00*g11-g01*g01;
+  if(det<=1e-7)throw Error('singular two-contact candidate');
+  const v=[-2,0],before=[dot(v,n0),dot(v,n1)];
+  if(before.some(q=>q>=-EPS))throw Error('not a simultaneous incoming pair');
+  const rhs=before.map(q=>-2*q),impulses=[(rhs[0]*g11-rhs[1]*g01)/det,(rhs[1]*g00-rhs[0]*g01)/det];
+  if(impulses.some(q=>q<=EPS))throw Error('unilateral impulse rejected');
+  const outgoing=add(v,add(mul(impulses[0],n0),mul(impulses[1],n1)));
+  const speedBefore=dot(v,v),speedAfter=dot(outgoing,outgoing);
+  if(Math.abs(speedBefore-speedAfter)>3e-8)throw Error('energy failed');
+  if(contacts.some(c=>Math.abs(dot(outgoing,c.normal)+dot(v,c.normal))>3e-8||dot(outgoing,c.normal)<=0))throw Error('normal restitution failed');
+  const frames=[];let clearance=Infinity;
+  for(let i=0;i<=Math.round(T/STEP);i++){
+   const clock=i*STEP,center=clock<=t?add([12,y],mul(clock,v)):add(point,mul(clock-t,outgoing));
+   if(!(R<=center[0]&&center[0]<=24-R&&R<=center[1]&&center[1]<=6-R))throw Error('outside original WORLD');
+   for(const face of faces){
+    const d=near(center,face);clearance=Math.min(clearance,d);
+    if(d<R-3e-7)throw Error('candidate penetrated finite source');
+   }
+   frames.push({time:rd(clock),position:center.map(q=>rd(q)),
+    velocity:(clock<t?v:outgoing).map(q=>rd(q)),spin:0,orientation:0});
+  }
+  return {schema:'world-ab-two-contact-frictionless-candidate/v1',geometry,
+   candidate:{entry_y:y,collision_time:rd(t,12),collision_center:point.map(q=>rd(q)),
+   source_ids:faces.map(s=>s.id),normals:contacts.map(z=>z.normal.map(q=>rd(q))),
+   normal_impulses:impulses.map(q=>rd(q)),
+   incoming_normal_speeds:before.map(q=>rd(q)),
+   outgoing_normal_speeds:contacts.map(z=>rd(dot(outgoing,z.normal))),
+   incoming_velocity:v,incoming_spin:0,outgoing_spin:0,
+   outgoing_velocity:outgoing.map(q=>rd(q)),
+   kinetic_energy_before:rd(.5*speedBefore),
+   kinetic_energy_after:rd(.5*speedAfter),
+   friction:0,normal_restitution:1,
+   normal_matrix_determinant:rd(det),
+   frames,minimum_sampled_clearance:rd(clearance),
+   candidate_full_horizon_observed:true}};
+ }
+ const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d'),X=x=>20+x*38,Y=y=>15+y*43;
+ function paint(){
+  ctx.clearRect(0,0,960,305);
+  ctx.strokeStyle='#395168';ctx.lineWidth=1;
+  for(let x=0;x<=24;x+=2){ctx.beginPath();ctx.moveTo(X(x),0);ctx.lineTo(X(x),305);ctx.stroke();}
+  if(!state)return;
+  state.geometry.surfaces.forEach((s,i)=>{
+   ctx.strokeStyle=i?'#78cbaa':'#e6b17a';ctx.lineWidth=3;
+   ctx.beginPath();ctx.moveTo(X(s.endpoints[0][0]),Y(s.endpoints[0][1]));
+   ctx.lineTo(X(s.endpoints[1][0]),Y(s.endpoints[1][1]));ctx.stroke();
+  });
+  const frames=state.candidate.frames;
+  ctx.strokeStyle='#86dafe';ctx.lineWidth=2;ctx.beginPath();
+  frames.slice(0,index+1).forEach((f,i)=>i?ctx.lineTo(X(f.position[0]),Y(f.position[1])):ctx.moveTo(X(f.position[0]),Y(f.position[1])));
+  ctx.stroke();
+  const p=frames[index].position;
+  ctx.fillStyle='#f8f3d8';ctx.beginPath();ctx.arc(X(p[0]),Y(p[1]),R*38,0,2*Math.PI);ctx.fill();
+  document.getElementById('status').textContent='Observation '+index+'/30 | candidate '+state.candidate.frames[index].time+
+    ' | e=1, friction=0 | normal impulses '+JSON.stringify(state.candidate.normal_impulses)+
+    ' | local two-face response only; original frictional contact remains unresolved.';
+ }
+ document.getElementById('run').onclick=()=>{
+  try{state=measure();index=0;paint();document.getElementById('receipt').textContent=JSON.stringify(state,null,2);}
+  catch(e){state=null;index=0;paint();document.getElementById('status').textContent='Rejected: '+e.message;}
+ };
+ document.getElementById('prev').onclick=()=>{if(state){index=Math.max(0,index-1);paint();}};
+ document.getElementById('next').onclick=()=>{if(state){index=Math.min(30,index+1);paint();}};
+ document.getElementById('reset').onclick=()=>{state=null;index=0;paint();document.getElementById('receipt').textContent='';document.getElementById('status').textContent='No candidate has been evaluated.';};
+ paint();
+ return {receipt:()=>state?cp(state):null,cursor:()=>index};
+})();
+</script></body></html>
