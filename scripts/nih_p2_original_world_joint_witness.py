@@ -95,6 +95,19 @@ def relate(motion,unknown):
                 or u.get("source_program_sha256")!=program
                 or u.get("independent_source_policy_agreement") is not True):
                 raise ValueError("source-policy clock or original Python identity differs")
+            # Enforce every independently observed cutoff, not merely the
+            # two selected counterexample turns. Partial mutations must fail.
+            expected={
+                "2026-01-03":"definitely_withheld_ids",
+                "2026-01-04":"indeterminate_ids",
+                "2026-01-06":"indeterminate_ids",
+                "2026-01-07":"admitted_ids"}[cutoff]
+            groups=("admitted_ids","definitely_withheld_ids","indeterminate_ids")
+            if (u.get("static_valid_ids")!=["delayed-result","prior-note"]
+                or any(type(u.get(k)) is not list for k in groups)
+                or sum("delayed-result" in u[k] for k in groups)!=1
+                or "delayed-result" not in u[expected]):
+                raise ValueError("original bounded publication interval falsely resolved")
     if len(transitions)!=1:
         raise ValueError("original browser cutover missing or repeated")
     cut=transitions[0]
