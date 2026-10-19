@@ -10,8 +10,25 @@ from systems.workspace.world_ab_junction_continuous import (
     run,trace,nearest,SCHEMA,HORIZON,R,I,STEP)
 from systems.workspace.world_ab_connected_routing import assemble,PROBE_Y
 
+def source_equivalent(left,right):
+    # Independently reconstructed Python and Chromium materialize the same
+    # owner-source geometry with at most final-decimal rounding differences.
+    # Field names, source identities, tags and booleans must match EXACTLY.
+    if isinstance(left,bool) or isinstance(right,bool):
+        return left is right
+    if isinstance(left,(int,float)) and isinstance(right,(int,float)):
+        return abs(left-right)<=3e-8
+    if type(left) is dict and type(right) is dict:
+        return (set(left)==set(right) and
+                all(source_equivalent(left[k],right[k]) for k in left))
+    if type(left) is list and type(right) is list:
+        return (len(left)==len(right) and
+                all(source_equivalent(x,y) for x,y in zip(left,right)))
+    return left==right
+
 def check(out):
-    if (out["schema"]!=SCHEMA or out["geometry"]!=assemble() or
+    if (out["schema"]!=SCHEMA or
+        not source_equivalent(out["geometry"],assemble()) or
         out["physical_world_dimensions"]!=[24,6] or
         out["finite_segment_endpoints_enabled"] is not True or
         out["multi_contact_manifold_solver"] is not False or
