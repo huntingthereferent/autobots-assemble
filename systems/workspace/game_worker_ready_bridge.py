@@ -186,6 +186,10 @@ class GameReadyBridge:
         return handoff
 
     def _verify(self,handoff,result):
+        if handoff.handoff_id == "game-worker-ready-owner-001":
+            from .owner_game_ready_bridge import OwnerGameReadyBridge
+            return OwnerGameReadyBridge(runtime=self.runtime,workstation=self.workstation,
+                register=False)._verify(handoff,result)
         self._pinned(handoff)
         fp=handoff.metadata["edition_fingerprint"]
         ev=(EvidenceRecord(condition=WITNESS,kind="computation",source=SOURCE,
@@ -209,10 +213,17 @@ class GameReadyBridge:
     def execute(self,job_id,*,allow_local_execution=False):
         if not allow_local_execution:
             raise PermissionError("exact original game-ready native job confirmation required")
+        if job_id == "game-worker-ready-owner-001":
+            from .owner_game_ready_bridge import OwnerGameReadyBridge
+            return OwnerGameReadyBridge(runtime=self.runtime,workstation=self.workstation,register=False).execute(
+                job_id,allow_local_execution=True)
         self._pinned(self.runtime.get(job_id))
         return self.runtime.run(job_id,ReadyWorker(self,job_id))
 
     def reverify(self,job_id):
+        if job_id == "game-worker-ready-owner-001":
+            from .owner_game_ready_bridge import OwnerGameReadyBridge
+            return OwnerGameReadyBridge(runtime=self.runtime,workstation=self.workstation,register=False).reverify(job_id)
         state=self.runtime.state(job_id)
         if state.status!="COMPLETE":
             raise ValueError("game worker is not source-owned ready")
@@ -256,3 +267,4 @@ class ReadyWorker:
                     "edition_fingerprint":fp,"pid":reported["pid"]},
             evidence=(EvidenceRecord(condition=WITNESS,kind="computation",
                       source=SOURCE,ref=fp,depth="exact-controls-route-and-native-source-reverify"),))
+
