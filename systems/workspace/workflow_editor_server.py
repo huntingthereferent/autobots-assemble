@@ -128,7 +128,8 @@ def handler_for(root: Path, data_dir: Path, token: str):
                                  "/api/native-inspect", "/api/native-attach",
                                  "/api/native-compare",
                                  "/api/idea-bind", "/api/idea-branches", "/api/idea-frontier",
-                                 "/api/idea-propose"):
+                                 "/api/idea-propose", "/api/idea-native-frontier",
+                                 "/api/idea-native-propose"):
                 self._json({"error": "unknown action"}, 404)
                 return
             try:
@@ -141,7 +142,25 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 if self.path.startswith("/api/idea-"):
                     from systems.workspace.workflow_idea_frontier import IdeaFrontier
                     ideas = IdeaFrontier(root, data_dir)
-                    if self.path == "/api/idea-branches":
+                    if self.path in ("/api/idea-native-frontier",
+                                         "/api/idea-native-propose"):
+                        from runtime.engine import HandoffRuntime
+                        from runtime.journal import RuntimeJournal
+                        runtime = HandoffRuntime(
+                            event_store=RuntimeJournal(data_dir / "runtime.jsonl"))
+                        if self.path == "/api/idea-native-frontier":
+                            reply = ideas.native_handoff_frontier(
+                                runtime, handoff_id=payload.get("handoff_id"),
+                                revision=payload.get("revision"),
+                                step_id=payload.get("step_id"))
+                        else:
+                            reply = ideas.propose_from_native_handoff(
+                                runtime, handoff_id=payload.get("handoff_id"),
+                                revision=payload.get("revision"),
+                                step_id=payload.get("step_id"),
+                                target_revision=payload.get("target_revision"),
+                                kind=payload.get("kind"), reason=payload.get("reason"))
+                    elif self.path == "/api/idea-branches":
                         reply = ideas.idea_branches_for_operator(payload.get("idea_id"))
                     elif self.path == "/api/idea-bind":
                         reply = ideas.bind(idea_id=payload.get("idea_id"),
