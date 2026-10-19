@@ -1,0 +1,157 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WORLD / Trial 09 Contact Stress Grid</title>
+<style>body{background:#101f2b;color:#e4f2f8;font:16px system-ui;max-width:1050px;margin:auto;padding:24px}h1{font-size:1.7rem}p{color:#bdd1df;line-height:1.5}select,button{background:#304d61;border:1px solid #7399b5;color:#f0f8ff;padding:10px;border-radius:5px;font:inherit;margin:4px}a{color:#99d8f5}canvas{width:100%;background:#102939;border-radius:6px}pre{overflow:auto;max-height:330px;font-size:12px}#state{min-height:52px}</style></head><body>
+<h1>WORLD · Trial 09 / Falsification grid</h1>
+<p><a href="world_ab_two_contact_candidate.html">Trial 08 verified local candidate</a>. Original two finite source surfaces are shown at zero arrangement offset. Rotated faces are <strong>synthetic controls</strong>, not newly witnessed original source geometry. Failed unilateral impulses count as rejections, not successes. Friction remains zero only in this candidate; original Trial 06 remains friction 0.4 and unresolved at the tie.</p>
+<button id="run">Run source and 35 controls</button><label>Trial <select id="case"></select></label><button id="previous">Previous look</button><button id="next">Next look</button><button id="reset">Reset</button>
+<p id="state" aria-live="polite">No movement calculated.</p>
+<canvas id="stage" width="960" height="285" aria-label="Original and controlled finite segment contacts"></canvas>
+<details><summary>Source, controls and independently checkable receipts</summary><pre id="receipt"></pre></details>
+<script src="world_ab_junction_geometry.js"></script><script>
+'use strict';
+window.worldTrial09=(()=>{
+ const R=.25,HORIZON=1.5,STEP=.05,EPS=1e-9,SPEED=2,LEAD=.35,ANGLE=[-15,-5,0,10,20,30,45],OFFSET=[-15,-7.5,0,7.5,15];
+ const rd=(x,k=9)=>+x.toFixed(k),dot=(a,b)=>a[0]*b[0]+a[1]*b[1],add=(a,b)=>[a[0]+b[0],a[1]+b[1]],sub=(a,b)=>[a[0]-b[0],a[1]-b[1]],mul=(k,v)=>[k*v[0],k*v[1]],copy=o=>JSON.parse(JSON.stringify(o));
+ const rot=(p,d)=>{const a=d*Math.PI/180,c=Math.cos(a),s=Math.sin(a);return [p[0]*c-p[1]*s,p[0]*s+p[1]*c];};
+ let state=null,chosen=0,cursor=0;
+ function nearest(p,seg){
+  const a=seg.endpoints[0],b=seg.endpoints[1],ab=sub(b,a);
+  const t=Math.max(0,Math.min(1,dot(sub(p,a),ab)/dot(ab,ab)));
+  return Math.hypot(...sub(p,add(a,mul(t,ab))));
+ }
+ function hit(y,s){
+  const [a,b]=s.endpoints,ab=sub(b,a),len=Math.hypot(...ab),tang=mul(1/len,ab),norm=[-tang[1],tang[0]];
+  const v=[-2,0],p=[12,y],signed=dot(sub(p,a),norm),rate=dot(v,norm);
+  if(Math.abs(rate)<=EPS)throw Error('source ray parallel');
+  const hits=[];
+  for(const sign of [-1,1]){
+   const n=mul(sign,norm);if(dot(v,n)>=-EPS)continue;
+   const dt=(sign*R-signed)/rate;if(dt<=EPS||dt>=HORIZON)continue;
+   const center=add(p,mul(dt,v)),along=dot(sub(center,a),tang);
+   if(EPS<along&&along<len-EPS)hits.push({time:dt,center,normal:n});
+  }
+  if(hits.length!==1)throw Error('original source contact ambiguous');
+  return hits[0];
+ }
+ function measuredOriginal(faces){
+  const gap=y=>hit(y,faces[0]).time-hit(y,faces[1]).time;
+  let lo=1.35,hi=1.4,gl=gap(lo);
+  if(gl*gap(hi)>=0)throw Error('original arrival tie missing');
+  for(let i=0;i<64;i++){
+   const mid=(lo+hi)/2,g=gap(mid);
+   if(g===0){lo=hi=mid;break;}
+   if(gl*g>0){lo=mid;gl=g;} else hi=mid;
+  }
+  const y=rd((lo+hi)/2,12),hits=faces.map(s=>hit(y,s));
+  if(Math.abs(hits[0].time-hits[1].time)>1e-9||Math.hypot(...sub(hits[0].center,hits[1].center))>1e-8)throw Error('measured center differs across sources');
+  return {y,center:hits[0].center,normals:hits.map(z=>z.normal),hits};
+ }
+ function arrange(faces,center,normals,offset){
+  if(offset===0)return {surfaces:copy(faces),ns:copy(normals),kind:'original-source-geometry'};
+  const n1=normals[1],newN=rot(n1,offset),qOld=sub(center,mul(R,n1)),qNew=sub(center,mul(R,newN));
+  const ends=faces[1].endpoints.map(e=>add(qNew,rot(sub(e,qOld),offset)).map(z=>rd(z,12)));
+  const changed={id:'controlled-face-B-'+offset.toFixed(1),source_parent_id:faces[1].id,
+   geometry_role:'explicit-rotated-counterfactual',rotation_degrees:offset,endpoints:ends};
+  return {surfaces:[copy(faces[0]),changed],ns:[copy(normals[0]),newN],kind:'controlled-geometry-not-original'};
+ }
+ function solve(v,ns){
+  const [n0,n1]=ns,g00=dot(n0,n0),g01=dot(n0,n1),g11=dot(n1,n1),det=g00*g11-g01*g01;
+  if(det<=1e-7)throw Error('dependent normals require a different solver');
+  if(ns.some(n=>Math.abs(Math.hypot(...n)-1)>1e-7))throw Error('non-unit measured normal');
+  const incoming=ns.map(n=>dot(v,n));
+  if(incoming.some(q=>q>=-EPS))throw Error('not a simultaneous incoming pair');
+  const rhs=incoming.map(q=>-2*q);
+  const impulses=[(rhs[0]*g11-rhs[1]*g01)/det,(rhs[1]*g00-rhs[0]*g01)/det];
+  if(impulses.some(q=>q<=EPS))throw Error('contact requires negative or inactive normal impulse');
+  const out=add(v,add(mul(impulses[0],n0),mul(impulses[1],n1)));
+  if(ns.some((n,i)=>Math.abs(dot(out,n)+incoming[i])>3e-8||dot(out,n)<=0))throw Error('simultaneous normal restitution unsatisfied');
+  const b=dot(v,v),e=dot(out,out);
+  if(Math.abs(e-b)>3e-8)throw Error('frictionless restitution generated/lost energy');
+  return {normal_impulses:impulses.map(x=>rd(x)),incoming_normal_speeds:incoming.map(x=>rd(x)),
+   outgoing_normal_speeds:ns.map(n=>rd(dot(out,n))),
+   incoming_velocity:v.map(x=>rd(x)),outgoing_velocity:out.map(x=>rd(x)),
+   incoming_spin:0,outgoing_spin:0,kinetic_energy_before:rd(.5*b),kinetic_energy_after:rd(.5*e),
+   friction:0,normal_restitution:1,normal_matrix_determinant:rd(det)};
+ }
+ function probe(angle,offset,faces,center,normals){
+  const {surfaces,ns,kind}=arrange(faces,center,normals,offset),vin=[-SPEED*Math.cos(angle*Math.PI/180),-SPEED*Math.sin(angle*Math.PI/180)];
+  const start=sub(center,mul(LEAD,vin));
+  const record={incoming_angle_degrees:angle,surface_B_rotation_degrees:offset,geometry_kind:kind,
+   surfaces,incoming_velocity:vin.map(x=>rd(x)),start_center:start.map(x=>rd(x)),contact_center:center.map(x=>rd(x)),
+   normals:ns.map(n=>n.map(x=>rd(x))),contact_at:LEAD};
+  if(surfaces.some(s=>Math.abs(nearest(center,s)-R)>3e-7))throw Error('controlled contact untangent');
+  for(let j=0;j<2;j++){
+   const [a,b]=surfaces[j].endpoints,ab=sub(b,a),q=sub(center,mul(R,ns[j]));
+   const frac=dot(sub(q,a),ab)/dot(ab,ab);
+   if(!(frac>1e-8&&frac<1-1e-8))throw Error('controlled contact off finite interior');
+  }
+  if(!(R<start[0]&&start[0]<24-R&&R<start[1]&&start[1]<6-R))throw Error('controlled start outside WORLD');
+  let physical;
+  try{physical=solve(vin,ns);}
+  catch(e){
+   const status=e.message==='contact requires negative or inactive normal impulse'?'rejected-unilateral':
+    e.message==='not a simultaneous incoming pair'?'rejected-not-incoming':'rejected-constraint';
+   return {...record,status,reason:e.message,candidate:null,frames:[]};
+  }
+  const vout=physical.outgoing_velocity;
+  if(ns.some(n=>dot(vin,n)>=-1e-8||dot(vout,n)<=1e-8))throw Error('candidate continuous clearance failed');
+  const frames=[];
+  for(let i=0;i<=Math.round(HORIZON/STEP);i++){
+   const t=i*STEP,p=t<=LEAD?add(start,mul(t,vin)):add(center,mul(t-LEAD,vout));
+   if(!(R<=p[0]&&p[0]<=24-R&&R<=p[1]&&p[1]<=6-R))throw Error('candidate outside WORLD');
+   if(surfaces.some(s=>nearest(p,s)<R-3e-7))throw Error('candidate penetrated surface');
+   frames.push({time:rd(t),position:p.map(x=>rd(x)),velocity:(t<LEAD?vin:vout).map(x=>rd(x))});
+  }
+  const reverse=solve(vin,[ns[1],ns[0]]);
+  if(JSON.stringify(reverse.outgoing_velocity)!==JSON.stringify(physical.outgoing_velocity)||
+    JSON.stringify(reverse.normal_impulses)!==JSON.stringify([...physical.normal_impulses].reverse()))
+    throw Error('order-dependent candidate');
+  return {...record,status:'accepted-local-candidate',reason:null,candidate:physical,frames};
+ }
+ function calculate(){
+  const original=window.worldJunctionSource.generate(),m=measuredOriginal(original.surfaces);
+  const cases=[];for(const offset of OFFSET)for(const angle of ANGLE)cases.push(probe(angle,offset,original.surfaces,m.center,m.normals));
+  const counts={};for(const k of ['accepted-local-candidate','rejected-unilateral','rejected-not-incoming','rejected-constraint'])
+   counts[k]=cases.filter(c=>c.status===k).length;
+  return {schema:'world-ab-two-contact-incidence-stress/v1',original_source_geometry:original,
+   incoming_angle_grid:copy(ANGLE),surface_rotation_grid:copy(OFFSET),
+   speed:SPEED,controlled_contact_lead:LEAD,cases,counts,
+   original_surface_modified:false,rotated_faces_are_original_source:false,
+   general_two_contact_physics_proven:false,frictional_manifold_solved:false};
+ }
+ const canvas=document.getElementById('stage'),ctx=canvas.getContext('2d'),X=x=>20+x*38,Y=y=>10+y*43;
+ function render(){
+  ctx.fillStyle='#102939';ctx.fillRect(0,0,960,285);
+  if(!state)return;
+  const c=state.cases[chosen];c.surfaces.forEach((s,i)=>{
+   ctx.strokeStyle=i?'#6ccaa6':'#f8ad75';ctx.lineWidth=4;ctx.beginPath();
+   ctx.moveTo(X(s.endpoints[0][0]),Y(s.endpoints[0][1]));ctx.lineTo(X(s.endpoints[1][0]),Y(s.endpoints[1][1]));ctx.stroke();
+  });
+  const points=c.frames.length?c.frames.slice(0,cursor+1).map(f=>f.position):[c.start_center,c.contact_center];
+  ctx.beginPath();ctx.strokeStyle='#86d2f7';ctx.lineWidth=2;points.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.stroke();
+  const p=points.at(-1);ctx.beginPath();ctx.arc(X(p[0]),Y(p[1]),R*38,0,2*Math.PI);
+  ctx.fillStyle=c.frames.length?'#f9e7bc':'#da92a0';ctx.fill();
+  document.getElementById('state').textContent='Case '+(chosen+1)+'/35 | angle '+c.incoming_angle_degrees+
+   '° | face B '+c.surface_B_rotation_degrees+'° | '+c.status+
+   ' | accepted '+state.counts['accepted-local-candidate']+', rejected '+(35-state.counts['accepted-local-candidate'])+
+   ' | view '+cursor;
+ }
+ document.getElementById('run').onclick=()=>{
+  try{
+   state=calculate();chosen=0;cursor=0;
+   document.getElementById('case').innerHTML='';
+   state.cases.forEach((c,i)=>{
+    const opt=document.createElement('option');opt.value=String(i);opt.textContent='Case '+(i+1)+': '+c.incoming_angle_degrees+'° / '+c.surface_B_rotation_degrees+'° ('+c.status+')';
+    document.getElementById('case').append(opt);
+   });
+   document.getElementById('receipt').textContent=JSON.stringify(state,null,2);render();
+  }catch(e){state=null;document.getElementById('state').textContent='Rejected experiment: '+e.message;}
+ };
+ document.getElementById('case').onchange=()=>{
+  if(!state)return;chosen=+document.getElementById('case').value;cursor=0;render();
+ };
+ document.getElementById('next').onclick=()=>{if(state){cursor=Math.min(30,cursor+1);render();}};
+ document.getElementById('previous').onclick=()=>{if(state){cursor=Math.max(0,cursor-1);render();}};
+ document.getElementById('reset').onclick=()=>{state=null;chosen=cursor=0;document.getElementById('case').innerHTML='';document.getElementById('receipt').textContent='';document.getElementById('state').textContent='No movement calculated.';render();};
+ render();return {receipt:()=>state?copy(state):null,selected:()=>chosen,cursor:()=>cursor};
+})();
+</script></body></html>

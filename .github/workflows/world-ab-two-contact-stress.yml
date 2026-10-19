@@ -1,0 +1,54 @@
+name: WORLD — Two-Contact Angle Stress Trial 09
+on:
+  push:
+    branches:
+      - 'experiment/world-trial09-cross-angle-stress-20261019'
+    paths:
+      - '.github/workflows/world-ab-two-contact-stress.yml'
+      - 'systems/workspace/world_ab_two_contact_stress.py'
+      - 'network/tests/test_world_ab_two_contact_stress.py'
+      - 'docs/world_ab_two_contact_stress.html'
+      - 'scripts/verify_world_ab_two_contact_stress_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-and-independent-chromium-geometry-stress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independently test 35 controls plus preserved Trial 05-08 native regressions
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+      - name: Install actual Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Independently reconstruct source and all thirty-five cases in Chromium
+        run: |
+          python -m scripts.verify_world_ab_two_contact_stress_browser --output-dir "$RUNNER_TEMP/world-trial09"
+      - name: Retain all original-source/controlled-case receipts and browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-trial09-two-contact-stress-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/world-trial09/world_trial09_native.json
+            ${{ runner.temp }}/world-trial09/world_trial09_browser.json
+            ${{ runner.temp }}/world-trial09/world_trial09_chromium.png
+            ${{ runner.temp }}/world-trial09/world_trial09_verification.json
+            docs/world_ab_two_contact_stress.html
+            docs/world_ab_junction_geometry.js
+          retention-days: 30
+          if-no-files-found: warn
