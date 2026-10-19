@@ -1,0 +1,39 @@
+name: ARC3 original SP80 advancing versus nonadvancing native frame events
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_advancing_event_signatures.py'
+      - '.github/workflows/arc3-sp80-advancing-event-signatures.yml'
+jobs:
+  authentic-native-source-event-contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original ARC public SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Validate fixed original source control programs and SDK event labels
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_advancing_event_signatures import STAGE0,STAGE1,RESETS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(STAGE0)==len(STAGE1)==6 and RESETS==2
+          assert dict(STAGE0)['advancing_three_right']=='4445'
+          assert dict(STAGE0)['negative_three_right_one_left']=='44435'
+          for _,word in STAGE1:
+              assert parse_plan(word)[-1][0]==5
+              assert all(n!=6 or xy is not None for n,xy in parse_plan(word))
+          print('Original stage0/1 control scripts frozen; game progression only SDK levels/WIN')
+          PY
+      - name: Run actual SP80 advancing and nonadvancing full returned SDK frames
+        run: python -m work.arc3.native_sp80_advancing_event_signatures --out runtime/data/arc3/sp80-advancing-event-signatures.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-original-sp80-advancing-event-signatures
+          path: runtime/data/arc3/sp80-advancing-event-signatures.*
+          if-no-files-found: error
+          retention-days: 14
