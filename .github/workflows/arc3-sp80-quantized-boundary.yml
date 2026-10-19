@@ -1,0 +1,41 @@
+name: ARC3 original-native quantized boundary widths
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_quantized_boundary.py'
+      - '.github/workflows/arc3-sp80-quantized-boundary.yml'
+jobs:
+  native-quantized-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original public ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Check predeclared rational rate and novel horizon (unit only)
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_quantized_boundary import (
+              WORDS, rounded_progress, frozen_width, NOVEL_STEP_MIN)
+          assert len(WORDS)==len(set(WORDS))==4
+          assert all(len(w)==34 for w in WORDS) and NOVEL_STEP_MIN==27
+          assert [frozen_width(0,t) for t in range(1,5)]==[2,2,2,3]
+          assert [frozen_width(1,t) for t in range(1,5)]==[1,2,1,2]
+          assert rounded_progress(0,30)==64
+          assert rounded_progress(1,45)==64
+          assert sum(frozen_width(0,t) for t in range(1,31))==64
+          assert sum(frozen_width(1,t) for t in range(1,46))==64
+          print("UNIT ONLY: frozen rational rates and future horizon established")
+          PY
+      - name: Execute fresh official original-native SP80 34-step trajectories
+        run: python -m work.arc3.native_sp80_quantized_boundary --out runtime/data/arc3/sp80-quantized-boundary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-quantized-boundary
+          path: runtime/data/arc3/sp80-quantized-boundary.*
+          if-no-files-found: error
+          retention-days: 14
