@@ -1,0 +1,58 @@
+name: WORLD — A/B Iterated Physical Construction Trial 03
+on:
+  push:
+    branches:
+      - 'world/w13-two-world-advance-contract-20261016'
+    paths:
+      - '.github/workflows/world-ab-iterated-construction.yml'
+      - 'systems/workspace/world_ab_iterated_surfaces.py'
+      - 'network/tests/test_world_ab_iterated_surfaces.py'
+      - 'docs/world_ab_iterated_surfaces.html'
+      - 'scripts/verify_world_ab_iterated_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-derived-iteration-and-independent-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout original WORLD
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independently check source-derived geometry, contacts and saturation
+        run: |
+          python -m unittest -v network.tests.test_world_ab_iterated_surfaces network.tests.test_world_ab_relation_growth network.tests.test_world_ab_contact_trial
+      - name: Record actual sequential world construction
+        run: |
+          mkdir -p "$RUNNER_TEMP/iterated-world"
+          python - <<'PY'
+          import json,os,pathlib
+          from systems.workspace.world_ab_iterated_surfaces import run
+          from network.tests.test_world_ab_iterated_surfaces import independent_trace
+          x=run()
+          assert independent_trace(x)
+          p=pathlib.Path(os.environ["RUNNER_TEMP"])/"iterated-world"/"world_ab_iterated_native.json"
+          p.write_text(json.dumps(x,indent=2,sort_keys=True)+"\n")
+          print(json.dumps({"schema":x["schema"],"surface_count":x["generated_surface_count"],
+           "source_contact_events":len(x["events"]),
+           "new_surface_faces":[s["face_x"] for s in x["surfaces"][1:]],
+           "rejected_proposals":[p["reason"] for p in x["construction_attempts"] if not p["accepted"]],
+           "no_original_blueprint_equivalence":not x["full_original_visual_blueprint_generated"]},sort_keys=True))
+          PY
+      - name: Preserve source/native geometry evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-ab-iterated-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/iterated-world/world_ab_iterated_native.json
+            ${{ runner.temp }}/iterated-world/world_ab_iterated_browser_receipt.json
+            ${{ runner.temp }}/iterated-world/world_ab_iterated_browser.png
+            docs/world_ab_iterated_surfaces.html
+          retention-days: 30
+          if-no-files-found: warn
