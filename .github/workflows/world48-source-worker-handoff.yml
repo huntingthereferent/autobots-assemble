@@ -1,0 +1,74 @@
+name: WORLD48 source worker and independent handoff
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "work/arc3/window48_worker_handoff.py"
+      - "work/arc3/window48_challenges.py"
+      - "work/arc_like_maze/window_combined.py"
+      - "work/arc_like_maze/window_two.py"
+      - "work/arc_like_maze/window_branch.py"
+      - "network/tests/test_arc3_window48_worker_handoff.py"
+      - ".github/workflows/world48-source-worker-handoff.yml"
+  pull_request:
+    paths:
+      - "work/arc3/window48_worker_handoff.py"
+      - "work/arc3/window48_challenges.py"
+      - "work/arc_like_maze/window_combined.py"
+      - "work/arc_like_maze/window_two.py"
+      - "work/arc_like_maze/window_branch.py"
+      - "network/tests/test_arc3_window48_worker_handoff.py"
+      - ".github/workflows/world48-source-worker-handoff.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  source-worker:
+    name: original-law-source-worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Recompute original source challenge roster
+        run: python -m work.arc3.window48_challenges --check
+      - name: Produce original-law finite A/B event records
+        run: python -m work.arc3.window48_worker_handoff produce --out runtime/world48/source-worker.json
+      - name: Retain unverified worker record for independent replay
+        uses: actions/upload-artifact@v4
+        with:
+          name: world48-unverified-source-worker
+          path: runtime/world48/source-worker.json
+          if-no-files-found: error
+          retention-days: 30
+
+  independent-verifier:
+    name: independent-source-replay-verifier
+    needs: source-worker
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Download actual preceding worker output
+        uses: actions/download-artifact@v4
+        with:
+          name: world48-unverified-source-worker
+          path: runtime/world48
+      - name: Independently test source replay and forged record rejection
+        run: python -m unittest -v network.tests.test_arc3_window48_worker_handoff
+      - name: Replay actual downloaded worker events against original 48 laws
+        run: python -m work.arc3.window48_worker_handoff verify --input runtime/world48/source-worker.json --report runtime/world48/verified-replay.json
+      - name: Retain source-verifier report, separately from worker input
+        uses: actions/upload-artifact@v4
+        with:
+          name: world48-independent-replay-report
+          path: runtime/world48/verified-replay.json
+          if-no-files-found: error
+          retention-days: 30
