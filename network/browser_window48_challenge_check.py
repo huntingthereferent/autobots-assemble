@@ -203,6 +203,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.page.locator("#clear-progress").click()
         self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
         self.page.locator("#import-file").set_input_files(str(path))
+        self.page.wait_for_function("document.querySelector('#status').textContent.includes('Imported and source-replayed challenge 3')")
         self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
         self.assertIn("Imported and source-replayed challenge 3",self.page.locator("#status").inner_text())
         self.page.reload()
@@ -225,6 +226,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             file=Path(temp)/"forged.json"
             file.write_text(json.dumps(forged),encoding="utf8")
             self.page.locator("#import-file").set_input_files(str(file))
+            self.page.wait_for_function("document.querySelector('#status').textContent.includes('Witness import rejected')")
             self.assertIn("Witness import rejected",self.page.locator("#status").inner_text())
             self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
         self.page.reload()
@@ -238,6 +240,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
             file=Path(temp)/"external.json"
             file.write_text(json.dumps(forged),encoding="utf8")
             self.page.locator("#import-file").set_input_files(str(file))
+            self.page.wait_for_function("document.querySelector('#status').textContent.includes('Witness import rejected')")
         self.assertIn("Witness import rejected",self.page.locator("#status").inner_text())
         self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
 
