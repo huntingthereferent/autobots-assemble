@@ -1,0 +1,56 @@
+name: WORLD — Contact Active-Set Trial 10
+on:
+  push:
+    branches:
+      - 'experiment/world-trial10-active-set-ambiguity-20261019'
+    paths:
+      - '.github/workflows/world-ab-active-set-trial.yml'
+      - 'systems/workspace/world_ab_active_set_trial.py'
+      - 'network/tests/test_world_ab_active_set_trial.py'
+      - 'docs/world_ab_active_set_trial.html'
+      - 'scripts/verify_world_ab_active_set_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-source-active-sets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independently replay 35 cases with all three contact sets and earlier regressions
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_active_set_trial \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+      - name: Install Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Independently verify actual original Trial09 page and active-set browser
+        run: |
+          python -m scripts.verify_world_ab_active_set_browser --output-dir "$RUNNER_TEMP/world-trial10"
+      - name: Retain actual source and browser motion and original playable pages
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-trial10-active-set-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/world-trial10/world_trial10_native.json
+            ${{ runner.temp }}/world-trial10/world_trial10_browser.json
+            ${{ runner.temp }}/world-trial10/world_trial10_chromium.png
+            ${{ runner.temp }}/world-trial10/world_trial10_verification.json
+            docs/world_ab_active_set_trial.html
+            docs/world_ab_two_contact_stress.html
+            docs/world_ab_junction_geometry.js
+          retention-days: 30
+          if-no-files-found: warn
