@@ -21,6 +21,17 @@ source-owned research / factory / school / creative work / other systems
 
 The general rules stay at [`protocols/core/provenance.md`](../../protocols/core/provenance.md), cross-system work remains under [`runtime/`](../../runtime/README.md), and current person-facing attention remains under [`systems/day_to_day/`](../day_to_day/README.md). The workspace is **not** a new orchestrator and does not change `state/current.json` or `TASKS.md`.
 
+## Workflow construction and retained branches
+
+[Workflow drafts and pinned branches](WORKFLOW_DRAFT_EDITOR.md) provide an opt-in
+construction surface over existing B9 candidate handoffs and the Program Foundation.
+Operators can edit source-manifest-backed step graphs, inspect proposed connections,
+keep alternate paths, compare against exact pinned ancestor revisions, and preserve
+promising candidates. Quality-based discovery is scoped to externally supplied
+measurements; an independent native verifier is required to label even that
+observation verified. A pin, source hint, or structural graph check does not execute
+workers or authenticate a full workflow. The local viewer remains read-only.
+
 ## Research-wide observation
 
 [Original research source observer](research_observatory.py) reads the available repository sources and presents them in the existing workstation. It preserves mathematics, ARC experiments, CP checkpoints, W13 records, language writing, implementation files, and test files with their original source paths.
