@@ -84,6 +84,34 @@ class WorkflowPinTests(unittest.TestCase):
             self.assertFalse(result["whole_workflow_verified"])
             self.assertFalse(result["execution_authorized"])
 
+    def test_later_verification_promotes_exact_pin_without_rewriting_history(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pins = WorkflowPins(tmp)
+            parent = pins.pin_candidate(base(), ROOT, reason="Baseline")
+            new = copy.deepcopy(base())
+            new["parent_revision"] = parent["revision"]
+            new["steps"][0]["label"] = "Candidate from trial"
+            pinned = pins.consider_discovery(new, ROOT, assessment=improvement())
+            self.assertFalse(pinned["native_verification"])
+            journal = Path(tmp) / "workflow_pins.jsonl"
+            before = journal.read_text(encoding="utf-8")
+            with self.assertRaises(ValueError):
+                pins.promote_pin(pinned["revision"], lambda *_: False)
+            self.assertEqual(before, journal.read_text(encoding="utf-8"))
+            promoted = pins.promote_pin(
+                pinned["revision"],
+                lambda preview, observation: (
+                    preview["revision"] == pinned["revision"]
+                    and observation["comparison_scope"] == "same fixture and native source revision"),
+            )
+            self.assertTrue(promoted["native_verification"])
+            self.assertFalse(promoted["whole_workflow_verified"])
+            self.assertFalse(promoted["execution_authorized"])
+            self.assertEqual(promoted["revision"], pinned["revision"])
+            self.assertTrue(journal.read_text(encoding="utf-8").startswith(before))
+            self.assertEqual(len(pins.list_pins()), 2)
+            self.assertEqual(pins.promote_pin(pinned["revision"], lambda *_: False), promoted)
+
     def test_equal_or_worse_branch_not_pinned(self):
         with tempfile.TemporaryDirectory() as tmp:
             pins = WorkflowPins(tmp)
