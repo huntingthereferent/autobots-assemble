@@ -305,7 +305,7 @@ function updateLiveComparison(candidate){
 }
 function reRender(message){
  if(!model||!roster)return;
- const [left,right]=laws(),result=play(word),state=result.final;
+ const [left,right]=laws(),result=phase===2?trials[1]:play(word),state=result.final;
  $('left-law').textContent='#'+String(left.id+1).padStart(2,'0')+' · k'+left.support+' e'+left.pulse+' t'+left.balanced+' c'+left.coefficient;
  $('right-law').textContent='#'+String(right.id+1).padStart(2,'0')+' · k'+right.support+' e'+right.pulse+' t'+right.balanced+' c'+right.coefficient;
  $('left-state').textContent=stateName(state[0]);$('right-state').textContent=stateName(state[1]);
