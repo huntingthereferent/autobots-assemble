@@ -1,0 +1,49 @@
+name: WORLD — Junction Arrival Tie Trial 07
+on:
+  push:
+    branches:
+      - 'experiment/world-trial07-junction-tie-20261019'
+    paths:
+      - '.github/workflows/world-ab-junction-threshold.yml'
+      - 'systems/workspace/world_ab_junction_threshold.py'
+      - 'network/tests/test_world_ab_junction_threshold.py'
+      - 'docs/world_ab_junction_threshold.html'
+      - 'scripts/verify_world_ab_junction_threshold_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-source-junction-tie:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Preserve Trial 06 and verify actual two-face source contact
+        run: |
+          python -m unittest -v network.tests.test_world_ab_junction_threshold network.tests.test_world_ab_junction_continuous network.tests.test_world_ab_connected_routing
+      - name: Install Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Reconstruct source contact in Chromium and compare to Python
+        run: |
+          python -m scripts.verify_world_ab_junction_threshold_browser --output-dir "$RUNNER_TEMP/world-trial07"
+      - name: Retain original source and independent raw witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-trial07-junction-tie-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/world-trial07/world_trial07_native.json
+            ${{ runner.temp }}/world-trial07/world_trial07_browser.json
+            ${{ runner.temp }}/world-trial07/world_trial07_chromium.png
+            ${{ runner.temp }}/world-trial07/world_trial07_verification.json
+            docs/world_ab_junction_threshold.html
+            docs/world_ab_junction_geometry.js
+          retention-days: 30
+          if-no-files-found: warn
