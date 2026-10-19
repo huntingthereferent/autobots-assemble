@@ -27,6 +27,14 @@ jobs:
       - name: Independently check source-derived geometry, contacts and saturation
         run: |
           python -m unittest -v network.tests.test_world_ab_iterated_surfaces network.tests.test_world_ab_relation_growth network.tests.test_world_ab_contact_trial
+      - name: Install headless Chromium to replay actual generated surfaces
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Verify real browser iteration, source chronology and original WORLD preservation
+        run: |
+          python -m scripts.verify_world_ab_iterated_browser \
+            --output-dir "$RUNNER_TEMP/iterated-world"
       - name: Record actual sequential world construction
         run: |
           mkdir -p "$RUNNER_TEMP/iterated-world"
@@ -52,6 +60,7 @@ jobs:
           path: |
             ${{ runner.temp }}/iterated-world/world_ab_iterated_native.json
             ${{ runner.temp }}/iterated-world/world_ab_iterated_browser_receipt.json
+            ${{ runner.temp }}/iterated-world/world_ab_iterated_browser_witness.json
             ${{ runner.temp }}/iterated-world/world_ab_iterated_browser.png
             docs/world_ab_iterated_surfaces.html
           retention-days: 30
