@@ -90,6 +90,47 @@ class WorkflowEditorHTTPTests(unittest.TestCase):
         self.assertFalse(pins[0]["whole_workflow_verified"])
         self.assertFalse((Path(self.tmp.name) / "runtime.jsonl").exists())
 
+    def test_idea_checklist_only_native_active_tasks_and_scoped_worker_proposals(self):
+        from runtime.repository_tasks import read_active_work
+        tasks = read_active_work(ROOT / "TASKS.md")
+        status, ideas = self.fetch("GET", "/api/ideas")
+        self.assertEqual(status, 200)
+        self.assertEqual([x["idea_id"] for x in ideas], [x.source_id for x in tasks])
+        self.assertTrue(all(x["status"] == "SOURCE_RECORDED_NOT_COMPLETED" for x in ideas))
+        _, draft = self.fetch("GET", "/api/example")
+        _, pinned = self.fetch("POST", "/api/pin",
+                               {"draft": draft, "reason": "Known original workflow"},
+                               authorized=True)
+        idea_id = ideas[0]["idea_id"]
+        payload = {"idea_id": idea_id, "revision": pinned["revision"],
+                   "worker": "native-worker-A", "reason": "Explicit source association"}
+        status, blocked = self.fetch("POST", "/api/idea-bind", payload, authorized=False)
+        self.assertEqual(status, 403)
+        status, recorded = self.fetch("POST", "/api/idea-bind", payload, authorized=True)
+        self.assertEqual(status, 200)
+        self.assertTrue(recorded["recorded"])
+        status, branches = self.fetch("POST", "/api/idea-branches",
+                                      {"idea_id": idea_id}, authorized=True)
+        self.assertEqual(status, 200)
+        self.assertEqual(len(branches), 1)
+        status, view = self.fetch("POST", "/api/idea-frontier", {
+            "idea_id": idea_id, "revision": pinned["revision"],
+            "worker": "native-worker-A", "step_id": "count",
+        }, authorized=True)
+        self.assertEqual(status, 200)
+        self.assertEqual(view["idea"]["idea_id"], idea_id)
+        self.assertEqual(view["visible_branches"], [])
+        self.assertFalse(view["claimed_global_worker_visibility"])
+        self.assertFalse(view["native_relationships_verified"])
+        status, error = self.fetch("POST", "/api/idea-propose", {
+            "kind": "HELP", "idea_id": idea_id, "revision": pinned["revision"],
+            "worker": "native-worker-A", "step_id": "count",
+            "target_revision": "0"*64, "reason": "Unsupported imaginary peer",
+        }, authorized=True)
+        self.assertEqual(status, 400)
+        self.assertIn("not visible", error["error"])
+        self.assertFalse((Path(self.tmp.name) / "runtime.jsonl").exists())
+
     def test_ui_can_edit_branch_diff_without_running_workers(self):
         _, draft = self.fetch("GET", "/api/example")
         _, parent = self.fetch("POST", "/api/pin",
