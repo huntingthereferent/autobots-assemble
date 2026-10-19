@@ -74,6 +74,13 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
     def lock(self):
         self.page.locator("#lock").click()
 
+    def import_observation(self,record):
+        self.page.locator("#cross-import-file").set_input_files({
+            "name":"independent_observation.json",
+            "mimeType":"application/json",
+            "buffer":json.dumps(record).encode("utf8"),
+        })
+
     def exported_observation(self):
         with self.page.expect_download() as event:
             self.page.locator("#cross-export").click()
@@ -254,6 +261,103 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.lock()
         self.page.locator("#check").click()
         self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+
+    def test_reimport_independent_original_research_across_all_charts(self):
+        for mission in (1,2,16,32,47):
+            with self.subTest(mission=mission):
+                self.page.locator("#mission").select_option(str(mission))
+                roster=json.loads((DOCS/"window48_challenges.json").read_text(encoding="utf8"))
+                words=roster["challenges"][mission]["example_words"]
+                self.word(words[0])
+                self.lock()
+                self.word(words[1])
+                self.lock()
+                self.page.locator("#cross-first").click()
+                report,verified=self.exported_observation()
+                self.assertTrue(verified["verified"])
+                self.assertTrue(verified["candidate"])
+                self.assertEqual(report["candidate_count"],1)
+                self.page.locator("#mission").select_option("0" if mission else "1")
+                active=self.page.locator("#mission").input_value()
+                progress=self.page.locator("#progress").inner_text()
+                self.import_observation(report)
+                result=self.page.locator("#import-observation-result")
+                self.assertIn("ORIGINAL SOURCE REPLAY VERIFIED",result.inner_text())
+                self.assertIn("NOT a winning certificate",result.inner_text())
+                self.assertIn("Challenge "+str(mission+1),result.inner_text())
+                self.assertEqual(self.page.locator("#mission").input_value(),active)
+                self.assertEqual(self.page.locator("#progress").inner_text(),progress)
+                self.assertTrue(self.page.locator("#check").is_disabled())
+                self.assertTrue(self.page.locator("#export").is_disabled())
+                self.assertFalse(self.page.locator("#cross-import-clear").is_disabled())
+                self.page.locator("#cross-import-clear").click()
+                self.assertIn("No imported research observation",result.inner_text())
+                self.assertTrue(self.page.locator("#cross-import-clear").is_disabled())
+
+    def test_import_rejects_tampered_and_forged_research_without_game_mutation(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        original,host=self.exported()
+        self.assertTrue(host["passed"])
+        observation,ob_verifier=self.exported_observation()
+        self.assertTrue(ob_verifier["verified"])
+        from copy import deepcopy
+        edits=[
+            lambda x:x["selected_states"][0].__setitem__(0,26),
+            lambda x:x["selected_depths"].__setitem__(0,99),
+            lambda x:x["selected_depths"].__setitem__(0,True),
+            lambda x:x["law_ids"].__setitem__(0,47),
+            lambda x:x.__setitem__("challenge_id",47),
+            lambda x:x.__setitem__("source","native ARC"),
+            lambda x:x.__setitem__("scope","native-game"),
+            lambda x:x.__setitem__("candidate_count",999),
+            lambda x:x.__setitem__("pair_count",0),
+            lambda x:x.__setitem__("first_candidate",None),
+            lambda x:x["first_candidate"]["states"][0].__setitem__(0,26),
+            lambda x:x.__setitem__("passed",True),
+        ]
+        before=self.page.locator("#progress").inner_text()
+        for edit in edits:
+            with self.subTest(edit=edit):
+                forged=deepcopy(observation)
+                edit(forged)
+                self.import_observation(forged)
+                self.assertIn("rejected",self.page.locator("#import-observation-result").inner_text())
+                self.assertTrue(self.page.locator("#cross-import-clear").is_disabled())
+                self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+                self.assertEqual(self.page.locator("#progress").inner_text(),before)
+                cert,verified=self.exported()
+                self.assertEqual(cert,original)
+                self.assertTrue(verified["passed"])
+        self.import_observation(observation)
+        self.assertIn("ORIGINAL SOURCE REPLAY VERIFIED",self.page.locator("#import-observation-result").inner_text())
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 48")
+        self.assertIn("No imported research observation",self.page.locator("#import-observation-result").inner_text())
+        self.assertIn("1 of 48",self.page.locator("#progress").inner_text())
+
+    def test_import_valid_nonwinning_research_without_witness_completion(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("AA")
+        self.lock()
+        self.word("AA")
+        self.lock()
+        nonwinning,verified=self.exported_observation()
+        self.assertTrue(verified["verified"])
+        self.assertEqual(nonwinning["candidate_count"],0)
+        self.page.locator("#mission").select_option("16")
+        self.import_observation(nonwinning)
+        result=self.page.locator("#import-observation-result").inner_text()
+        self.assertIn("ORIGINAL SOURCE REPLAY VERIFIED",result)
+        self.assertIn("not a qualifying relation",result)
+        self.assertIn("0 / 9",result)
+        self.assertTrue(self.page.locator("#export").is_disabled())
+        self.assertIn("0 of 48",self.page.locator("#progress").inner_text())
+        self.assertEqual(self.page.locator("#mission").input_value(),"16")
 
     def test_cross_depth_research_exports_replay_independently_across_all_charts(self):
         source=json.loads((DOCS/"window48_world_data.json").read_text(encoding="utf8"))
