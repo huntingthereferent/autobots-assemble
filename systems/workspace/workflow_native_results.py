@@ -48,14 +48,21 @@ class WorkflowNativeResults:
     def inspect(self, job_id: str) -> dict:
         if not isinstance(job_id, str) or not 1 <= len(job_id) <= 120:
             raise NativeResultBoundary("exact native job ID required")
+        runtime = HandoffRuntime(event_store=RuntimeJournal(self.data_dir / "runtime.jsonl"))
+        job, state = runtime.get(job_id), runtime.state(job_id)
+        # Refuse other native families BEFORE dispatching the source verifier.
+        if (job.metadata.get("worker_id") != WORKER_ID
+                or job.metadata.get("native_evidence_verifier") != VERIFIER
+                or job.metadata.get("source_system") != "process-workstation"
+                or state.status != "COMPLETE"
+                or state.missing_witnesses):
+            raise NativeResultBoundary("not a completed finite process job with native evidence")
         # The original verifier reopens the original worker/source edition and
         # independently replays its result without running the native process.
         verdict = reverify_job(data_dir=self.data_dir, job_id=job_id)
         if verdict != {"job_id": job_id, "status": "COMPLETE",
                        "reverified": True, "executed": False}:
             raise NativeResultBoundary("native source-owned verifier did not confirm COMPLETE")
-        runtime = HandoffRuntime(event_store=RuntimeJournal(self.data_dir / "runtime.jsonl"))
-        job, state = runtime.get(job_id), runtime.state(job_id)
         if (job.metadata.get("worker_id") != WORKER_ID
                 or job.metadata.get("native_evidence_verifier") != VERIFIER
                 or job.metadata.get("source_system") != "process-workstation"
@@ -142,6 +149,7 @@ class WorkflowNativeResults:
         data = {"schema": SCHEMA, "draft_revision": revision, "step_id": step_id,
                 "native": current,
                 "relation_scope": "NATIVE_FINITE_PREFILTER_RESULT_ONLY",
+                "step_job_link": "USER_SELECTED_SOURCE_ASSOCIATION",
                 "execution_authorized_by_pin": False}
         old = self._replay()
         if data in old:
