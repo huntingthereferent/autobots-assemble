@@ -1,0 +1,42 @@
+name: ARC3 original SP80 joint three-bar source displacement and commit timing
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_joint_bar_displacement.py'
+      - '.github/workflows/arc3-sp80-joint-bar-displacement.yml'
+jobs:
+  original-SP80-joint-bar-native-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Assert fixed native factorial and coordinate-bearing click controls
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_joint_bar_displacement import (
+             PROGRAMS,MAIN,CONTROLS,ORDERS,STEPWISE,RESETS)
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(MAIN)==27 and len(CONTROLS)==5
+          assert len(ORDERS)==3 and len(STEPWISE)==4
+          assert len(PROGRAMS)==39 and RESETS==2
+          for name,actions in PROGRAMS:
+              parsed=parse_plan(actions)
+              assert parsed[-1][0]==5
+              assert sum(action==6 for action,xy in parsed)==3
+              assert all(action!=6 or xy is not None for action,xy in parsed)
+          print('Source original three-bar coordinate and ACTION5 controls precommitted')
+          PY
+      - name: Run real original SP80 joint bar positions and ACTION5 commits
+        run: python -m work.arc3.native_sp80_joint_bar_displacement --out runtime/data/arc3/sp80-joint-bar-displacement.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-joint-bar-displacement
+          path: runtime/data/arc3/sp80-joint-bar-displacement.*
+          if-no-files-found: error
+          retention-days: 14
