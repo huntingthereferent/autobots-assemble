@@ -34,7 +34,7 @@ def verify(output_dir):
                     raise ValueError("Trial10 browser source unavailable: errors="+repr(errors)+" page_title="+page.title())
                 if page.evaluate("window.worldTrial10.receipt()") is not None:
                     raise ValueError("candidate prefilled without source experiment")
-                page.frame_locator("#source").locator("#run").wait_for()
+                page.frame_locator("#source").locator("#run").wait_for(state="attached")
                 page.locator("#run").click()
                 actual=page.evaluate("window.worldTrial10.receipt()")
                 if actual is None:
