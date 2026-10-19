@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - 'systems/workspace/workflow_ab_bridge.py'
+      - 'network/tests/test_workflow_native_results.py'
+      - 'systems/workspace/workflow_native_results.py'
       - 'systems/workspace/workflow_draft.py'
       - 'systems/workspace/workflow_pins.py'
       - 'systems/workspace/workflow_editor_server.py'
@@ -14,6 +16,8 @@ on:
   pull_request:
     paths:
       - 'systems/workspace/workflow_ab_bridge.py'
+      - 'network/tests/test_workflow_native_results.py'
+      - 'systems/workspace/workflow_native_results.py'
       - 'systems/workspace/workflow_draft.py'
       - 'systems/workspace/workflow_pins.py'
       - 'systems/workspace/workflow_editor_server.py'
@@ -41,6 +45,7 @@ jobs:
         run: |
           python -m unittest -v \
             network.tests.test_workstation_ab_workflow_bridge \
+            network.tests.test_workflow_native_results \
             network.tests.test_workstation_ab_workflow_http \
             network.tests.test_workstation_workflow_draft \
             network.tests.test_workstation_workflow_pins \
