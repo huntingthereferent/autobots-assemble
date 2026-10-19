@@ -66,5 +66,7 @@ jobs:
             ${{ runner.temp }}/junction-world/world_ab_junction_browser.png
             ${{ runner.temp }}/junction-world/world_ab_junction_witness.json
             docs/world_ab_junction_continuous.html
+            docs/world_ab_junction_geometry.js
+            docs/world_ab_junction_physics.js
           retention-days: 30
           if-no-files-found: warn
