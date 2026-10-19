@@ -109,6 +109,7 @@ button.positive{background:#246554;border-color:#82baa8}
 </div>
 <div class="buttons">
 <button id="lock" class="positive" disabled>Lock path 1</button>
+<button id="retry" disabled>Retry challenge</button>
 <button id="check" disabled>Check the two paths</button>
 <button id="next" disabled>Next challenge</button>
 <button id="hint" disabled>Reveal source example</button>
@@ -275,6 +276,7 @@ async function boot(){
   $('run').addEventListener('click',()=>nextWord($('word').value.toUpperCase().trim()));
   $('word').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('run').click()}});
   $('lock').addEventListener('click',lockPath);
+  $('retry').addEventListener('click',()=>chooseChallenge(mission));
   $('check').addEventListener('click',checkWitness);
   $('next').addEventListener('click',()=>{
     if(!pass)return;
