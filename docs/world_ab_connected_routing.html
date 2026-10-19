@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WORLD / A-B connected source geometry 05</title>
+<style>
+body{background:#122333;color:#e6f1f6;max-width:1080px;margin:auto;padding:25px;font:16px system-ui}p{line-height:1.5;color:#baccd6}
+button,select{padding:9px;color:inherit;background:#28475b;border:1px solid #668da0;border-radius:6px}
+canvas{width:100%;background:#0d1b29;border-radius:9px}
+pre{font-size:12px;white-space:pre-wrap;max-height:360px;overflow:auto}
+a{color:#86c7f0}
+</style></head><body>
+<h1>WORLD · Trial 05 / connected surface routing</h1>
+<p>Two separately observed Trial 04B receivers, not predesigned shapes, are kept at their measured locations. Their finite segments intersect. Fresh disc probes test which one gets hit first. This is a bounded cross-run construction and first-contact test, not verified multi-contact passage or Earth material physics.</p>
+<p><a href="world_ab_oblique_disc_factorial.html">Original playable WORLD and Trial 04B source experiments</a></p>
+<button id="run">Generate source geometry and test probes</button>
+<select id="choice"><option value="0">y 0.90</option><option value="1">y 1.05</option><option value="2">y 1.20</option><option value="3">y 1.60</option><option value="4">y 1.80</option><option value="5">y 2.00</option><option value="6">y 2.25</option></select>
+<button id="reset">Reset</button>
+<canvas id="view" width="960" height="290"></canvas>
+<p id="status">No source construction executed.</p>
+<details><summary>Measured source, intersection and first-contact receipts</summary><pre id="details"></pre></details>
+<script>
+'use strict';
+(()=>{
+const P=[3,1.35],V=[3,.12],C=[12,1.5],Y=[.9,1.05,1.2,1.6,1.8,2,2.25],R=.25,I=.03125;
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1],add=(a,b)=>[a[0]+b[0],a[1]+b[1]],sub=(a,b)=>[a[0]-b[0],a[1]-b[1]],mul=(k,a)=>[k*a[0],k*a[1]],cross=(a,b)=>a[0]*b[1]-a[1]*b[0],r=(x,n=9)=>+x.toFixed(n),rnd=a=>a.map(x=>r(x));
+const E=(v,w)=>.5*dot(v,v)+.5*I*w*w;
+function hit(v,w,n,mu){
+const t=[-n[1],n[0]],jn=-2*dot(v,n),slip=dot(v,t)-R*w,jt=Math.max(-mu*jn,Math.min(mu*jn,-slip/(1+R*R/I)));
+const out=add(v,add(mul(jn,n),mul(jt,t))),omega=w-R*jt/I;
+if(E(out,omega)>E(v,w)+1e-9)throw Error('contact energy grew');
+return {out,omega,receipt:{incoming_velocity:v.map(x=>r(x,10)),outgoing_velocity:out.map(x=>r(x,10)),incoming_spin:r(w,10),outgoing_spin:r(omega,10),normal:n.map(x=>r(x,10)),normal_impulse:r(jn,10),tangential_impulse:r(jt,10),tangential_slip_before:r(slip,10),kinetic_energy_before:r(E(v,w),10),kinetic_energy_after:r(E(out,omega),10)}};
+}
+function receiver(deg){
+const a=deg*Math.PI/180,n=[-Math.cos(a),-Math.sin(a)],time=(R-dot(sub(P,C),n))/dot(V,n),place=add(P,mul(time,V));
+const motion=hit(V,0,n,.4),vn=mul(-1/Math.hypot(...motion.out),motion.out);
+const anchor=add(add(place,mul(.25,motion.out)),mul(-R,vn)).map(x=>r(x,10));
+const normal=vn.map(x=>r(x,10)),t=[-normal[1],normal[0]];
+return {id:'source-derived-'+deg+'-friction-0.4',source_original_angle:deg,source_friction:.4,anchor,normal,
+endpoints:[rnd(add(anchor,mul(-.5,t))),rnd(add(anchor,mul(.5,t)))],
+origin_04B_branch_first_contact:r(time,10),origin_04B_branch_receiver_contact:r(time+.25,10),
+source_receipt_id:'contact-derived-face-1'};
+}
+function geometry(){
+const surfaces=[receiver(0),receiver(20)],a=surfaces[0],b=surfaces[1],ta=sub(a.endpoints[1],a.endpoints[0]),tb=sub(b.endpoints[1],b.endpoints[0]),den=cross(ta,tb);
+if(Math.abs(den)<1e-5)throw Error('source faces parallel');
+const delta=sub(b.anchor,a.anchor),u=cross(delta,tb)/den,v=cross(delta,ta)/den;
+if(Math.abs(u)>.5||Math.abs(v)>.5)throw Error('source faces did not actually connect');
+return {schema:'world-ab-connected-receiver-routing/v1',assembly_policy:'combine independent observed 04B receivers without moving or relabeling',source_experiment_is_separate_cross_run_branches:true,
+surfaces,junction:rnd(add(a.anchor,mul(u,ta))),junction_local_coordinates:[r(u),r(v)],finite_intersection_verified:true,
+topology:{segments:2,intersections:1,connected_components:1,curved_segments:0},
+original_geometry_24x6_preserved:true,simultaneous_disc_multicontact_resolved:false};
+}
+function probe(y,faces){
+const start=[12,y],v=[-2,0],candidates=[];
+for(const face of faces){
+const n=face.normal,d=dot(v,n);if(d>=-1e-9)continue;
+const t=(R-dot(sub(start,face.anchor),n))/d;if(t<=1e-9)continue;
+const center=add(start,mul(t,v)),point=sub(center,mul(R,n)),tau=[-n[1],n[0]],along=dot(sub(point,face.anchor),tau);
+if(Math.abs(along)<=.5+1e-9)candidates.push({t,face,center,along});
+}
+candidates.sort((a,b)=>a.t-b.t||a.face.id.localeCompare(b.face.id));
+if(candidates.length>1&&Math.abs(candidates[0].t-candidates[1].t)<.01)throw Error('multiple contacts unresolved');
+if(!candidates.length)return {initial:rnd(start),source_first_contact:null,hit_time:null,contact_center:null,outgoing_velocity:rnd(v),angular_velocity:0,look_after:null,contact_impulse:null};
+const q=candidates[0],impact=hit(v,0,q.face.normal,.4);
+return {initial:rnd(start),source_first_contact:q.face.id,hit_time:r(q.t),contact_center:rnd(q.center),contact_tangent_coordinate:r(q.along),
+outgoing_velocity:rnd(impact.out),angular_velocity:r(impact.omega),look_after:rnd(add(q.center,mul(.2,impact.out))),contact_impulse:impact.receipt};
+}
+function generate(){
+const g=geometry(),baseline=[],together=[],changed=[],seen=new Set(),names={};
+for(const y of Y){
+const a=probe(y,g.surfaces.slice(0,1)),b=probe(y,g.surfaces);
+baseline.push(a);together.push(b);
+if(a.source_first_contact!==b.source_first_contact||JSON.stringify(a.outgoing_velocity)!==JSON.stringify(b.outgoing_velocity))changed.push(y);
+if(b.source_first_contact)seen.add(b.source_first_contact);
+names[String(y)]=b.source_first_contact;
+}
+return {schema:'world-ab-connected-receiver-routing/v1',geometry:g,probe_y_levels:Y.slice(),baseline_first_face_only:baseline,assembled_two_faces:together,
+source_first_surface_by_level:names,route_changed_probe_levels:changed,distinct_first_contacts:[...seen].sort(),
+functional_first_contact_splitting_verified:seen.size>=2&&changed.length>0,
+simultaneous_source_generation_proven:false,continuous_multicontact_navigation_verified:false,target_original_blueprint_shapes_generated:false,material_earth_physics_verified:false};
+}
+const $=id=>document.getElementById(id),ctx=$('view').getContext('2d');let state=null;
+function paint(){
+ctx.fillStyle='#132839';ctx.fillRect(0,0,960,290);
+const x=v=>17+38*v,y=v=>12+40*v;
+ctx.strokeStyle='#375165';for(let j=0;j<=24;j+=2){ctx.beginPath();ctx.moveTo(x(j),0);ctx.lineTo(x(j),290);ctx.stroke();}
+if(!state)return;const faces=state.geometry.surfaces;
+faces.forEach((s,i)=>{ctx.strokeStyle=i?'#6fe0ad':'#eab46c';ctx.lineWidth=5;ctx.beginPath();ctx.moveTo(x(s.endpoints[0][0]),y(s.endpoints[0][1]));ctx.lineTo(x(s.endpoints[1][0]),y(s.endpoints[1][1]));ctx.stroke();});
+const j=state.geometry.junction;ctx.fillStyle='#f2e1af';ctx.beginPath();ctx.arc(x(j[0]),y(j[1]),5,0,Math.PI*2);ctx.fill();
+const idx=+$('choice').value;
+for(const [r,col] of [[state.baseline_first_face_only[idx],'#efa57f'],[state.assembled_two_faces[idx],'#91def5']]){
+if(!r.contact_center)continue;
+ctx.strokeStyle=col;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(x(r.initial[0]),y(r.initial[1]));ctx.lineTo(x(r.contact_center[0]),y(r.contact_center[1]));ctx.lineTo(x(r.look_after[0]),y(r.look_after[1]));ctx.stroke();}
+}
+function show(){
+paint();if(!state)return;const idx=+$('choice').value,a=state.baseline_first_face_only[idx],b=state.assembled_two_faces[idx];
+$('status').textContent='Probe '+Y[idx]+' | baseline: '+(a.source_first_contact||'no hit')+' | connected: '+(b.source_first_contact||'no hit')+' | changed levels '+state.route_changed_probe_levels.join(', ');
+$('details').textContent=JSON.stringify({geometry:state.geometry,baseline:a,assembled:b,first_contact_by_level:state.source_first_surface_by_level},null,2);
+}
+$('run').onclick=()=>{try{state=generate();show();}catch(e){state=null;paint();$('status').textContent='Rejected: '+e.message;}};
+$('choice').onchange=show;
+$('reset').onclick=()=>{state=null;paint();$('status').textContent='Reset';};
+window.worldABConnectedRouting={generate,receipt:()=>state?JSON.parse(JSON.stringify(state)):null};
+paint();
+})();
+</script></body></html>
