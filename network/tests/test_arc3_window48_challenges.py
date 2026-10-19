@@ -175,7 +175,9 @@ class OriginalWindow48ChallengeTests(unittest.TestCase):
                      "updateLiveComparison","node.reference","relation-distinct","LIVE PREVIEW",
                      "renderInspector","inspect-step","inspect-path","Recorded Path",
                      "renderMatchedHistory","compare-depth","compare-one","compare-two",
-                     "Unequal recorded lengths"):
+                     "Unequal recorded lengths","renderCrossDepth","sourcePrefixStates",
+                     "cross-step-one","cross-step-two","cross-first","cross-ends",
+                     "not a completed witness"):
             self.assertIn(term,html)
         self.assertNotIn("GameState.WIN",html)
         self.assertNotIn("native arcade result",html.lower())

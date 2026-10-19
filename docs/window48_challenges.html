@@ -55,6 +55,18 @@ button.positive{background:#246554;border-color:#82baa8}
 .node.compare-one{border-color:#e1c786}
 .node.compare-two{box-shadow:inset 0 0 0 2px #c2a1e5}
 .node.compare-one.compare-two{background:#3d465d}
+.node.cross-one{border:2px solid #f3bf73}
+.node.cross-two{box-shadow:inset 0 0 0 2px #b2e5c1}
+.node.cross-one.cross-two{background:#2b534e}
+.cross-depth{margin:13px 0}
+.cross-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:13px 0}
+.cross-grid label{display:block;min-width:0}
+.cross-grid input{width:100%}
+.cross-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.cross-readout{background:#101b27;border:1px solid #405267;border-radius:8px;padding:11px;line-height:1.65;margin:10px 0;font:.85rem ui-monospace,monospace}
+.cross-readout.ready{border-color:#78baa0}
+#cross-status,#cross-count{color:#c8dae9;font-size:.86rem}
+@media(max-width:650px){.cross-grid{grid-template-columns:1fr}}
 .paired{margin:13px 0}
 .paired-controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin:12px 0}
 .paired-controls label{flex:1;min-width:175px}
@@ -178,6 +190,21 @@ button.positive{background:#246554;border-color:#82baa8}
 <p id="compare-history" class="paired-summary">No comparable movement history yet.</p>
 <p id="compare-tail" class="inspector-note">Unequal path lengths are never padded with invented actions.</p>
 </section>
+<section id="cross-depth" class="panel cross-depth" aria-label="Compare both locked paths at independent recorded depths">
+<h2>Cross-depth source comparison</h2>
+<p class="inspector-note">Replay independently chosen, actually recorded prefixes of both locked paths. Different action counts can meet at the same left state while separating on the right. This view does not shorten, extend, or replace either locked witness.</p>
+<div class="cross-grid">
+<label for="cross-step-one">Path 1 recorded prefix
+<input id="cross-step-one" type="range" min="0" max="0" value="0" step="1" disabled></label>
+<label for="cross-step-two">Path 2 recorded prefix
+<input id="cross-step-two" type="range" min="0" max="0" value="0" step="1" disabled></label>
+</div>
+<p id="cross-status">Lock both paths to compare their recorded prefixes.</p>
+<div id="cross-readout" class="cross-readout">No recorded prefix pair selected.</div>
+<p id="cross-count">No cross-depth source candidates computed.</p>
+<div class="cross-actions"><button id="cross-first" disabled>Inspect first recorded candidate</button><button id="cross-ends" disabled>Inspect locked endpoints</button></div>
+<p class="inspector-note">Amber outline = Path 1 selected state; green inset = Path 2 selected state. A candidate is a mathematical relation among observed prefixes, not a certified completion. Only the explicit full-path check can grant a completed challenge.</p>
+</section>
 <p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Yellow '1' markers show the locked first path's endpoint while you build the second path. Only A/B actions move the state; this is not a physical 3D simulation.</p>
 <section class="panel">
 <div class="kicker" id="phase">Path 1 · build your first witness</div>
@@ -215,7 +242,7 @@ button.positive{background:#246554;border-color:#82baa8}
 (() => {
 const $=id=>document.getElementById(id);
 let model=null, roster=null, mission=0, phase=0, word='', trials=[], solved=new Set(), revealed=false, pass=false;
-let inspectedPath=0, inspectedStep=0, matchedDepth=0;
+let inspectedPath=0, inspectedStep=0, matchedDepth=0, crossStepOne=0, crossStepTwo=0;
 const STORAGE_KEY='world48-source-replayed-progress/v1';
 const savedCertificates=new Map();
 const stateName=n=>'('+[Math.floor(n/9),Math.floor(n%9/3),n%3].join(',')+')';
@@ -462,6 +489,74 @@ function renderMatchedHistory(){
   }
  }
 }
+function sourcePrefixStates(actions){
+ // Rebuild all prefixes from the original law tables. No stored score,
+ // visual state, or external native-game event is used as authority.
+ const replay=play(actions);
+ return [[0,0],...replay.events.map(event=>event.after.slice())];
+}
+function firstCrossCandidate(statesA,statesB,wordA,wordB){
+ let count=0,first=null;
+ for(let i=0;i<statesA.length;i++){
+  for(let j=0;j<statesB.length;j++){
+   const a=statesA[i],b=statesB[j];
+   if(a[0]!==b[0]||a[1]===b[1]||wordA.slice(0,i)===wordB.slice(0,j))continue;
+   count++;
+   if(!first||i+j<first[0]+first[1]||
+      (i+j===first[0]+first[1]&&i<first[0]))first=[i,j];
+  }
+ }
+ return {count,first};
+}
+function renderCrossDepth(){
+ const panel=$('cross-depth'),one=$('cross-step-one'),two=$('cross-step-two');
+ if(trials.length!==2){
+  crossStepOne=0;crossStepTwo=0;panel.dataset.available='false';
+  for(const slider of [one,two]){slider.value='0';slider.max='0';slider.disabled=true;}
+  $('cross-status').textContent='Lock both paths to compare their recorded prefixes.';
+  $('cross-readout').textContent='No recorded prefix pair selected.';
+  $('cross-readout').classList.remove('ready');
+  $('cross-count').textContent='No cross-depth source candidates computed.';
+  $('cross-first').disabled=true;$('cross-ends').disabled=true;
+  delete panel.dataset.firstOne;delete panel.dataset.firstTwo;
+  return;
+ }
+ const a=trials[0].actions,b=trials[1].actions;
+ const statesA=sourcePrefixStates(a),statesB=sourcePrefixStates(b);
+ crossStepOne=Math.max(0,Math.min(crossStepOne,a.length));
+ crossStepTwo=Math.max(0,Math.min(crossStepTwo,b.length));
+ for(const [slider,max,position] of [[one,a.length,crossStepOne],[two,b.length,crossStepTwo]]){
+  slider.max=String(max);slider.value=String(position);slider.disabled=max===0;
+ }
+ const s1=statesA[crossStepOne],s2=statesB[crossStepTwo];
+ const collide=s1[0]===s2[0],split=s1[1]!==s2[1];
+ const distinct=a.slice(0,crossStepOne)!==b.slice(0,crossStepTwo);
+ const candidate=collide&&split&&distinct;
+ panel.dataset.available='true';panel.dataset.one=String(crossStepOne);panel.dataset.two=String(crossStepTwo);
+ panel.dataset.p1Left=String(s1[0]);panel.dataset.p2Left=String(s2[0]);
+ panel.dataset.p1Right=String(s1[1]);panel.dataset.p2Right=String(s2[1]);
+ panel.dataset.candidate=candidate?'true':'false';
+ $('cross-status').textContent='Recorded prefix depth: Path 1 '+crossStepOne+'/'+a.length+
+    ' · Path 2 '+crossStepTwo+'/'+b.length+'.';
+ $('cross-readout').classList.toggle('ready',candidate);
+ $('cross-readout').textContent='Left '+stateName(s1[0])+' / '+stateName(s2[0])+
+   (collide?' · SAME':' · DIFFERENT')+'; right '+stateName(s1[1])+' / '+stateName(s2[1])+
+   (split?' · SPLIT':' · SAME')+'; prefixes '+(distinct?'DISTINCT':'IDENTICAL')+
+   '. '+(candidate?'SOURCE RELATION OBSERVED — not a completed witness.':'Not a rooted-separation candidate at these prefixes.');
+ const found=firstCrossCandidate(statesA,statesB,a,b);
+ $('cross-count').textContent=found.count+' actual prefix pairs satisfy the source condition out of '+
+   (statesA.length*statesB.length)+' recorded prefix pairs. This count is not a competition score.';
+ $('cross-first').disabled=!found.first;$('cross-ends').disabled=false;
+ if(found.first){panel.dataset.firstOne=String(found.first[0]);panel.dataset.firstTwo=String(found.first[1]);}
+ else{delete panel.dataset.firstOne;delete panel.dataset.firstTwo;}
+ for(const [root,index] of [['left-nodes',0],['right-nodes',1]]){
+  for(const [cls,position] of [['cross-one',s1[index]],['cross-two',s2[index]]]){
+   const node=$(root).querySelector('.node[data-state-index="'+position+'"]');
+   if(!node)throw Error('Original source cross-depth coordinate missing');
+   node.classList.add(cls);
+  }
+ }
+}
 function reRender(message){
  if(!model||!roster)return;
  const [left,right]=laws(),result=phase===2?trials[1]:play(word),state=result.final;
@@ -475,6 +570,7 @@ function reRender(message){
  showNext('left-next',left,state[0]);showNext('right-next',right,state[1]);
  renderInspector();
  renderMatchedHistory();
+ renderCrossDepth();
  $('phase').textContent=phase===2?'Two locked paths · verify rooted relation':'Path '+(phase+1)+' · build '+(phase?'the comparison':'your first')+' witness';
  for(let i=0;i<2;i++){
   $('path-'+(i?'b':'a')).textContent=trials[i]?(trials[i].actions||'(empty path)'):'—';
@@ -511,7 +607,7 @@ function nextWord(value){
  word+=value;reRender('Applied '+value.length+' exact source action(s).');persistProgress();
 }
 function chooseChallenge(id,store=true){
- mission=id;phase=0;word='';trials=[];pass=false;revealed=false;inspectedPath=0;inspectedStep=0;matchedDepth=0;
+ mission=id;phase=0;word='';trials=[];pass=false;revealed=false;inspectedPath=0;inspectedStep=0;matchedDepth=0;crossStepOne=0;crossStepTwo=0;
  const p=currentMission();
  $('task').textContent='Challenge '+(id+1)+' / '+roster.challenges.length+': find the left-root collision and right-root split between laws #'+(p.law_ids[0]+1)+' and #'+(p.law_ids[1]+1)+'.';
  $('verdict').textContent='No rooted witness has been submitted.';
@@ -522,7 +618,7 @@ function chooseChallenge(id,store=true){
 function lockPath(){
  if(phase>=2)return;
  trials.push(play(word));
- phase++;word='';matchedDepth=0;inspectedPath=phase-1;inspectedStep=trials[inspectedPath].actions.length;
+ phase++;word='';matchedDepth=0;crossStepOne=trials.length===2?trials[0].actions.length:0;crossStepTwo=trials.length===2?trials[1].actions.length:0;inspectedPath=phase-1;inspectedStep=trials[inspectedPath].actions.length;
  pass=false;
  reRender('Locked path '+phase+'. '+(phase===1?'Begin the second path at the same origin.':'Compare both rooted paths.'));persistProgress();
 }
@@ -623,6 +719,17 @@ async function boot(){
     const next=(mission+1)%roster.challenges.length;select.value=String(next);chooseChallenge(next);
   });
   $('hint').addEventListener('click',reveal);
+  $('cross-step-one').addEventListener('input',()=>{crossStepOne=Number($('cross-step-one').value);reRender();});
+  $('cross-step-two').addEventListener('input',()=>{crossStepTwo=Number($('cross-step-two').value);reRender();});
+  $('cross-first').addEventListener('click',()=>{
+   const panel=$('cross-depth');
+   if(panel.dataset.firstOne===undefined||panel.dataset.firstTwo===undefined)return;
+   crossStepOne=Number(panel.dataset.firstOne);crossStepTwo=Number(panel.dataset.firstTwo);reRender();
+  });
+  $('cross-ends').addEventListener('click',()=>{
+   if(trials.length!==2)return;
+   crossStepOne=trials[0].actions.length;crossStepTwo=trials[1].actions.length;reRender();
+  });
   $('compare-depth').addEventListener('input',()=>{
    matchedDepth=Number($('compare-depth').value);reRender();
   });
@@ -668,6 +775,7 @@ async function boot(){
   if(draft){
    phase=draft.phase;word=draft.word;trials=draft.paths.map(actions=>play(actions));
    inspectedPath=Math.max(0,trials.length-1);inspectedStep=trials.length?trials[inspectedPath].actions.length:0;
+   crossStepOne=trials.length===2?trials[0].actions.length:0;crossStepTwo=trials.length===2?trials[1].actions.length:0;
    $('mission').value=String(mission);
    reRender('Restored A/B paths and replayed saved witnesses against original source.');
   }
