@@ -65,6 +65,13 @@ def handler_for(root: Path, data_dir: Path, token: str):
                 except ValueError as e:
                     self._json({"error": str(e)}, 400)
                 return
+            if self.path == "/api/ab-native-records":
+                try:
+                    from systems.workspace.workflow_ab_bridge import ABWorkflowSources
+                    self._json(ABWorkflowSources(root, data_dir).recorded_native_pool_sources())
+                except (ValueError, OSError) as e:
+                    self._json({"error": str(e)}, 400)
+                return
             if self.path == "/api/ab-links":
                 try:
                     from systems.workspace.workflow_ab_bridge import ABWorkflowSources
