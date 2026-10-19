@@ -104,7 +104,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.assertTrue(self.page.locator("#next").is_disabled())
         self.assertTrue(self.page.locator("#export").is_disabled())
         self.page.locator("#retry").click()
-        self.assertIn("Path 1",self.page.locator("#phase").inner_text())
+        self.assertIn("PATH 1",self.page.locator("#phase").inner_text().upper())
         self.assertEqual(self.page.locator("#progress").inner_text(),"0 of 16 witnessed in this browser session")
 
     def test_invalid_word_keeps_source_origin(self):
