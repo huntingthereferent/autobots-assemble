@@ -5,6 +5,9 @@ on:
       - 'foundation/program_kernel/graph.py'
       - 'systems/workspace/workflow_draft.py'
       - 'systems/workspace/workflow_pins.py'
+      - 'systems/workspace/workflow_editor_server.py'
+      - 'runtime/http/workflow-editor.html'
+      - 'network/tests/test_workstation_workflow_editor_http.py'
       - 'network/tests/test_workstation_workflow_draft.py'
       - 'network/tests/test_workstation_workflow_pins.py'
       - '.github/workflows/workstation-workflow-drafts.yml'
@@ -13,6 +16,9 @@ on:
       - 'foundation/program_kernel/graph.py'
       - 'systems/workspace/workflow_draft.py'
       - 'systems/workspace/workflow_pins.py'
+      - 'systems/workspace/workflow_editor_server.py'
+      - 'runtime/http/workflow-editor.html'
+      - 'network/tests/test_workstation_workflow_editor_http.py'
       - 'network/tests/test_workstation_workflow_draft.py'
       - 'network/tests/test_workstation_workflow_pins.py'
       - '.github/workflows/workstation-workflow-drafts.yml'
@@ -33,6 +39,7 @@ jobs:
           python -m unittest -v \
             network.tests.test_workstation_workflow_draft \
             network.tests.test_workstation_workflow_pins \
+            network.tests.test_workstation_workflow_editor_http \
             network.tests.test_program_foundation \
             network.tests.test_workstation_construction
       - name: No app hosted or workflows executed by construction
