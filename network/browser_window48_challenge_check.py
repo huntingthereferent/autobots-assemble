@@ -81,7 +81,7 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.lock()
         self.page.locator("#check").click()
         self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
-        self.assertIn("1 of 16 witnessed",self.page.locator("#progress").inner_text())
+        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
         payload,report=self.exported()
         self.assertEqual(report["challenge_id"],2)
         self.assertTrue(report["passed"])
@@ -115,7 +115,77 @@ class Window48ChallengeBrowserTests(unittest.TestCase):
         self.assertTrue(self.page.locator("#export").is_disabled())
         self.page.locator("#retry").click()
         self.assertIn("PATH 1",self.page.locator("#phase").inner_text().upper())
-        self.assertEqual(self.page.locator("#progress").inner_text(),"0 of 16 witnessed in this browser session")
+        self.assertEqual(self.page.locator("#progress").inner_text(),"0 of 16 source-replayed witnesses saved in this browser")
+
+    def test_completed_source_witness_survives_browser_reload_and_host_replay(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        first,verified=self.exported()
+        self.assertTrue(verified["passed"])
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.assertEqual(self.page.locator("#mission").input_value(),"2")
+        self.assertIn("TWO LOCKED PATHS",self.page.locator("#phase").inner_text().upper())
+        self.assertFalse(self.page.locator("#check").is_disabled())
+        self.page.locator("#check").click()
+        second,replayed=self.exported()
+        self.assertEqual(first,second)
+        self.assertTrue(replayed["verified"])
+
+    def test_in_progress_words_resume_from_source_not_stored_pixel_state(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BB")
+        old_left=self.page.locator("#left-state").inner_text()
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertIn("PATH 2",self.page.locator("#phase").inner_text().upper())
+        self.assertEqual(self.page.locator("#left-state").inner_text(),old_left)
+        self.word("BA")
+        self.lock()
+        self.page.locator("#check").click()
+        self.assertIn("WITNESSED",self.page.locator("#verdict").inner_text())
+        record,check=self.exported()
+        self.assertEqual([x["actions"] for x in record["trials"]],["BAB","BBBA"])
+        self.assertTrue(check["passed"])
+
+    def test_corrupt_saved_witness_is_not_restored_as_completion(self):
+        self.page.locator("#mission").select_option("2")
+        self.word("BAB")
+        self.lock()
+        self.word("BBBA")
+        self.lock()
+        self.page.locator("#check").click()
+        self.assertIn("1 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.page.evaluate("""() => {
+          const key='world48-source-replayed-progress/v1';
+          const record=JSON.parse(localStorage.getItem(key));
+          record.certificates[0].trials[0].events[0].after[0]=26;
+          localStorage.setItem(key,JSON.stringify(record));
+        }""")
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertIn("0 of 16 source-replayed",self.page.locator("#progress").inner_text())
+        self.assertTrue(self.page.locator("#export").is_disabled())
+
+    def test_saved_progress_can_be_cleared_without_changing_original_source(self):
+        self.page.locator("#mission").select_option("1")
+        self.lock()
+        self.word("BBB")
+        self.lock()
+        self.page.locator("#check").click()
+        self.assertIn("1 of 16",self.page.locator("#progress").inner_text())
+        self.page.locator("#clear-progress").click()
+        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
+        self.page.reload()
+        self.page.wait_for_function("document.querySelector('#mission').options.length === 16")
+        self.assertIn("0 of 16",self.page.locator("#progress").inner_text())
 
     def test_invalid_word_keeps_source_origin(self):
         self.page.locator("#word").fill("AACX")
