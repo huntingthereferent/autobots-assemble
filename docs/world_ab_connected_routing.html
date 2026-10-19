@@ -71,7 +71,7 @@ const a=probe(y,g.surfaces.slice(0,1)),b=probe(y,g.surfaces);
 baseline.push(a);together.push(b);
 if(a.source_first_contact!==b.source_first_contact||JSON.stringify(a.outgoing_velocity)!==JSON.stringify(b.outgoing_velocity))changed.push(y);
 if(b.source_first_contact)seen.add(b.source_first_contact);
-names[String(y)]=b.source_first_contact;
+names[Number.isInteger(y)?y.toFixed(1):String(y)]=b.source_first_contact;
 }
 return {schema:'world-ab-connected-receiver-routing/v1',geometry:g,probe_y_levels:Y.slice(),baseline_first_face_only:baseline,assembled_two_faces:together,
 source_first_surface_by_level:names,route_changed_probe_levels:changed,distinct_first_contacts:[...seen].sort(),
