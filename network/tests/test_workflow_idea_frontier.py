@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import json
 from pathlib import Path
+import shutil
 from tempfile import TemporaryDirectory
 import unittest
 
@@ -160,6 +162,40 @@ class IdeaFrontierTests(unittest.TestCase):
         peer = next(x for x in local["visible_branches"] if x["revision"] == second["revision"])
         self.assertFalse(peer["quality_superiority_proven"])
         self.assertFalse(peer["execution_authorized"])
+
+    def test_current_native_manifest_drift_disables_branch_view(self):
+        with TemporaryDirectory() as temp:
+            local = Path(temp)
+            repo = local / "repo"
+            manifest = repo / MANIFEST
+            manifest.parent.mkdir(parents=True)
+            shutil.copyfile(ROOT / MANIFEST, manifest)
+            (repo / "TASKS.md").write_text(
+                "# Tasks\\n\\n## Active ALL WORK\\n"
+                "| Work | Lane | State | Next movement |\\n"
+                "|---|---|---|---|\\n"
+                "| [Original work](foundation/PROGRAM_FOUNDATION.md) | Test | MOVE | Observe sources |\\n",
+                encoding="utf-8",
+            )
+            # Literal line breaks are the Markdown ledger's native shape.
+            taskfile = repo / "TASKS.md"
+            taskfile.write_text(taskfile.read_text().replace("\\n", "\n"), encoding="utf-8")
+            store = local / "runtime"
+            manager = WorkflowPins(store)
+            pinned = manager.pin_candidate(spec("Local original"), repo, reason="Exact source")
+            index = IdeaFrontier(repo, store)
+            idea_id = next(iter(index._active()))
+            index.bind(idea_id=idea_id, revision=pinned["revision"],
+                       worker="worker-A", reason="Explicit source")
+            self.assertEqual(index.worker_frontier(
+                idea_id=idea_id, revision=pinned["revision"],
+                step_id="start", worker="worker-A")["visible_branches"], [])
+            changed = json.loads(manifest.read_text(encoding="utf-8"))
+            changed["referent"] = changed["referent"] + " modified"
+            manifest.write_text(json.dumps(changed), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "manifest differs"):
+                index.worker_frontier(idea_id=idea_id, revision=pinned["revision"],
+                                      step_id="start", worker="worker-A")
 
     def test_tampered_binding_history_fails_closed(self):
         parent = self.pin("Initial")
