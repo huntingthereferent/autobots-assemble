@@ -1,0 +1,38 @@
+name: ARC3 original-native late ACTION5 stage1 contrast
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_late_action5.py'
+      - '.github/workflows/arc3-sp80-late-action5.yml'
+jobs:
+  native-late-action5:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original public ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Confirm frozen action interventions before native execution
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_late_action5 import WORDS, RESETS, INTERVENTIONS, PERIOD
+          assert len(WORDS)==5 and all(len(w)==48 for w in WORDS)
+          assert WORDS[0]=='4'*48 and RESETS==2
+          assert INTERVENTIONS=={33,35,39,43}
+          assert sorted(w.index('5')+1 for w in WORDS[1:])==[33,35,39,43]
+          assert all(w.count('5')==1 for w in WORDS[1:])
+          assert PERIOD[1]==45
+          print('UNIT ONLY: predeclared original action intervention and rate frozen')
+          PY
+      - name: Execute genuine original SP80 stage1 late ACTION5 experiments
+        run: python -m work.arc3.native_sp80_late_action5 --out runtime/data/arc3/sp80-late-action5.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc3-sp80-late-action5
+          path: runtime/data/arc3/sp80-late-action5.*
+          if-no-files-found: error
+          retention-days: 14
