@@ -117,3 +117,10 @@ this file.**
 The legacy dashboard's HTTP API is deliberately unavailable while
 signed-only mode is enabled. Do not treat this as an accidental UI
 regression or silently re-enable unsigned reads for convenience.
+
+- **SEC-13 — fixed on draft branch:** Encrypted native journal startup
+  originally left legacy localhost APIs usable until the first
+  authenticated signer role was installed. The HTTP entrance now enters
+  signed-only mode immediately on sealed-service construction. Until
+  operator trust is installed, both signed routes return 403. This is
+  exercised with a fresh encrypted test journal and no enrolled worker.
