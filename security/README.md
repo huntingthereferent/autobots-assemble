@@ -166,3 +166,13 @@ outstanding production blockers, and a read-only
 `check_staged_local_security` gate. A passing local staging gate **cannot
 authorize production use** or certify the operator's human identity or
 off-host checkpoint custody. No external professional review is claimed.
+
+## Signed-only HTTP audit
+
+[The HTTP ingress contract](HTTP_INGRESS.md) now records the default-deny
+HTTP fence: once any signer role is registered, **only** authenticated
+handoff/result POSTs can reach the native service, and private legacy
+`/api/` GET views are denied. The signed HTTP response no longer returns
+decrypted native work material, only the handoff ID and status. The normal
+local prototype retains its existing routes when no signer role is
+configured. This still does not cover privileged direct Python calls.
