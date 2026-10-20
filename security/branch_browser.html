@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>A/B — Branches in Movement</title>
+<style>
+:root {font-family:ui-monospace,SFMono-Regular,Consolas,monospace; color:#eceef4; background:#090d16}
+*{box-sizing:border-box}
+body{margin:0; min-height:100vh; background:radial-gradient(ellipse 70% 55% at 70% 10%,#1b2542 0%,transparent 72%),#090d16}
+main{max-width:1120px;margin:auto;padding:30px 22px 64px}
+header{display:flex;gap:12px;align-items:center;justify-content:space-between;border-bottom:1px solid #35405b;padding-bottom:20px;flex-wrap:wrap}
+mark{color:#c3f7d8;background:#203b35;border:1px solid #456c57;border-radius:40px;padding:6px 11px;font-size:11px;letter-spacing:.08em}
+h1{font-size:clamp(27px,4.7vw,51px);letter-spacing:-.05em;line-height:1.12;margin:38px 0 12px}
+h1 span{color:#9fc3ff}
+.lead{max-width:720px;line-height:1.8;font-family:system-ui,sans-serif;color:#aab6d0;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1.15fr;gap:17px;margin-top:30px}
+.panel{border:1px solid #33415c;background:rgba(13,20,35,.86);border-radius:18px;padding:25px}
+.panel h2{font-size:14px;text-transform:uppercase;letter-spacing:.16em;color:#a9bbd7;margin:0 0 20px}
+.notice{font-size:13px;line-height:1.85;color:#b9c5dc;max-width:660px}
+button,input{font:inherit}
+button{padding:12px 15px;border-radius:9px;border:1px solid #758fbf;background:#1c3054;color:#f5f7ff;cursor:pointer}
+button:hover:enabled{background:#29416a}
+button:focus-visible,input:focus-visible{outline:3px solid #94d3f5;outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.42}
+.primary{background:#8dbdff;color:#061026;border-color:#8dbdff;font-weight:700}
+.primary:hover:enabled{background:#b6d4ff}
+.erase{background:#302029;border-color:#775060}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.field{width:100%;background:#0b1424;border:1px solid #405373;color:#f2f6ff;border-radius:10px;padding:14px;font-size:14px}
+small,.small{color:#97a7c7;font-size:11px;line-height:1.6}
+#stage{margin-top:18px;position:relative;min-height:240px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:16px;border:1px solid #3a4d6e;border-radius:14px;background:radial-gradient(circle at 50% 50%,#22345b,#0b1427 74%);overflow:hidden;text-align:center;padding:22px}
+#stage::before{content:"";position:absolute;inset:16px;border:1px dashed #455e87;border-radius:11px;pointer-events:none}
+#node{font-size:clamp(25px,4vw,46px);font-weight:800;letter-spacing:.08em;text-transform:uppercase;z-index:1}
+#swing{z-index:1;color:#c6d7fd;font-size:12px}
+#pulse{width:42px;height:42px;border:2px solid #9dc4ff;border-radius:50%;box-shadow:0 0 0 10px #7d9ceb1c,0 0 22px #7d9ceb80;z-index:1;transition:transform 380ms ease}
+#pulse.negative{transform:translateX(-38px)}
+#pulse.positive{transform:translateX(38px)}
+#words{white-space:pre-wrap;overflow-wrap:anywhere;min-height:100px;font-size:14px;line-height:1.75;color:#b9dbf7}
+#route{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+#route span{border:1px solid #384969;padding:8px;border-radius:7px;color:#c6d5f5;font-size:11px}
+#trail{margin:18px 0 0;padding:0;list-style:none;max-height:250px;overflow:auto}
+#trail li{border-top:1px solid #2c3b52;padding:12px 0;font-size:12px;line-height:1.6}
+#trail .entered{color:#8fb8d6}
+#trail .shown{color:#e3ebfa;white-space:pre-wrap;overflow-wrap:anywhere}
+footer{margin-top:24px;color:#8d9fbd;font-size:11px;line-height:1.8}
+.hidden{display:none!important}
+@media(max-width:780px){.grid{grid-template-columns:1fr}main{padding:20px 14px 50px}.panel{padding:20px}}
+@media(prefers-reduced-motion:reduce){#pulse{transition:none}}
+</style>
+<script src="/maze.js" defer></script>
+</head>
+<body>
+<main>
+<header><strong>A/B &nbsp;/&nbsp; FINITE WORLD</strong><mark>LOCAL · FICTIONAL · NO REAL KEYS</mark></header>
+<h1>Branches <span>in movement.</span></h1>
+<p class="lead">The bipolar presence moves whether you speak or not. Choose an exit and see what words the moving world shows you. Every sign points toward another fictional branch. Nothing in this experiment accesses keys, runs your code, or controls workers.</p>
+<section id="consent" class="panel" aria-labelledby="consent-title">
+<h2 id="consent-title">Before entering</h2>
+<p class="notice">Only messages you deliberately submit here are kept temporarily in this process's memory. Do not enter passwords, secrets, or personal information. No typing outside this page is monitored. You can erase the session at any time. This is a disclosed fictional maze, not an actual route to keys or a privileged environment.</p>
+<button class="primary" id="agree" type="button">I agree · enter the fiction</button>
+</section>
+<section id="experience" class="grid hidden" aria-label="Fictional world">
+<div class="panel">
+<h2>Observed presence</h2>
+<div id="stage">
+<div id="pulse" class="positive" aria-hidden="true"></div>
+<div id="node">THRESHOLD</div>
+<div id="swing">Awaiting movement observation</div>
+</div>
+<div id="route"><span>Along → <b id="along-node">hallway</b></span><span>Side → <b id="side-node">mirror</b></span></div>
+<p class="small">The world moves independently. Your choice changes only your fictional position.</p>
+<form id="message-form">
+<label for="message" class="small">Your submitted words (max 280 characters)</label>
+<input class="field" id="message" maxlength="280" autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="Say something to the maze">
+<div class="form-row">
+<button id="along" class="primary" type="submit">Follow movement</button>
+<button id="side" type="button">Take side branch</button>
+<button id="erase" class="erase" type="button">Erase and exit</button>
+</div>
+</form>
+<p id="status" class="small" role="status" aria-live="polite"></p>
+</div>
+<div class="panel">
+<h2>Branch words</h2>
+<div id="words" aria-live="polite">The first branch has not been observed yet.</div>
+<h2 style="margin-top:25px">Local session transcript</h2>
+<ol id="trail" aria-label="Voluntarily submitted messages"></ol>
+</div>
+</section>
+<footer>The browser owns no key material. No web tracking, third-party scripts, or local storage. Code-like messages select inert display text only. Closing this page does not erase the process's in-memory session; use Erase and exit or stop the local server.</footer>
+</main>
+</body>
+</html>
