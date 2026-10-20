@@ -255,6 +255,124 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
 @media(max-width:720px){.lab-strip{grid-template-columns:1fr}.stream-toolbar{flex-direction:column}.tick-settings>summary{text-align:left}.history-chart{gap:5px}.notebook{padding:14px}.notebook-heading{align-items:start;flex-direction:column}.workflow-catalog{grid-template-columns:1fr}.run-tools{width:100%}.run-tools label{width:100%}.run-tools select{max-width:none;flex:1}}
 @media(max-width:440px){.tick-form{grid-template-columns:1fr 1fr}.tick-form input{grid-column:1/-1}.hist-day small{font-size:9px}.hist-day strong{font-size:9.5px}.history-chart{gap:3px}.index-footer{flex-direction:column;align-items:stretch}.index-footer small{text-align:left}}
 
+
+/* Research workstation audit — reduce dashboard noise and constrain source lists. */
+:root { --bg:#0a1015; --panel:#101b23; --panel2:#16252e; --line:#33444d; --text:#e9f0f3; --muted:#9eb2bd; --blue:#8ec6d6; }
+body { background:var(--bg); }
+main { max-width:1510px; padding-top:23px; }
+body > header { min-height:58px; }
+.overview { background:#101c24; border-radius:9px; padding:23px 27px 16px; border-color:#344850; }
+h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
+.intro { max-width:760px; margin-top:10px; color:#b1c3cd; line-height:1.65; }
+.feed-panel { padding:11px 13px; border-radius:7px; background:#14242d; }
+.status-line button { min-height:32px; padding:6px 9px; }
+.metrics { margin:19px 0 5px; gap:0; background:#0e1921; border:1px solid #314650; border-radius:8px; overflow:hidden; }
+.metric { padding:12px 17px; min-height:72px; border:0; border-right:1px solid #334650; border-radius:0; background:transparent; }
+.metric:last-child { border-right:0; }
+.metric strong { font:500 25px/1.1 var(--data-font); color:var(--text); }
+.metric small { margin-top:6px; font-size:9px; }
+.metric-running strong { color:var(--blue); }
+.metric-failed strong { color:var(--red); }
+.overview .fine { margin:7px 0 0; font-size:10.5px; }
+.source-ledger { display:flex; flex-wrap:wrap; align-items:center; gap:7px 22px; margin:9px 0 8px; padding:8px 5px; font:11px/1.5 var(--data-font); color:var(--muted); border-bottom:1px solid #2d3f47; }
+.source-ledger b { color:var(--blue); font-weight:600; }
+.source-ledger strong { font-weight:500; color:#b4cad4; }
+.source-ledger small { margin-left:auto; color:#8cabb9; font-size:10px; }
+.stream-toolbar { margin:0 0 8px; padding:5px 4px 11px; border-bottom:0; }
+.stream-readout { font-size:11px; gap:7px; }
+.stream-readout small { font-size:10px; }
+.tick-settings > summary { font-size:11px; }
+.section-top { margin-top:29px; margin-bottom:13px; padding-bottom:12px; }
+.notebook { margin:9px 0 0; border-radius:8px; padding:0; background:#101b23; }
+.notebook > summary { cursor:pointer; padding:11px 16px; margin:0; align-items:center; }
+.notebook > summary strong { display:block; color:var(--text); font-size:13px; font-weight:600; }
+.notebook .history-chart { margin:8px 17px; min-height:110px; }
+.notebook > .fine { margin:8px 17px 15px; }
+.pane { border-radius:8px; }
+.pane > header { padding:12px 15px; }
+.run { padding:10px 14px; }
+.run h3 { font-size:12px; font-weight:600; }
+.run p { margin-top:4px; font-size:10px; }
+.run p:last-child { display:none; }
+.pane-content { max-height:590px; }
+.run-tools { gap:7px; }
+.run-tools label { font-size:11px; }
+.run-tools input { width:min(220px,28vw); }
+.run-tools select { min-width:130px; max-width:220px; }
+.index-footer { flex-wrap:wrap; gap:8px; padding:8px 12px; }
+.index-footer button { flex:0 0 auto; }
+.index-footer small { margin-left:auto; }
+.registry-panel { margin:12px 0; }
+.registry-summary { padding:12px 16px; background:#182832; }
+.registry-summary strong { font-size:13px; }
+.catalog-controls { display:flex; align-items:end; justify-content:space-between; gap:12px; padding:13px 15px; }
+.catalog-controls label { display:flex; flex-direction:column; gap:5px; color:var(--muted); font-size:11px; width:min(360px,100%); }
+.catalog-controls input { width:100%; }
+.catalog-controls small { color:var(--muted); font:10px/1.6 var(--data-font); }
+.workflow-catalog { grid-template-columns:repeat(2,minmax(0,1fr)); max-height:none; }
+.workflow-row { padding:10px 15px; }
+.workflow-row strong { font-size:11.5px; }
+.workflow-row small { font-size:10px; }
+.catalog-footer { padding:8px 13px; border-top:1px solid var(--line); }
+.catalog-footer:has(button[hidden]) { display:none; }
+.catalog-footer button { width:100%; min-height:33px; font-size:11px; padding:6px; border:1px solid #405864; background:#192d38; }
+.revision-pane { margin-top:12px; }
+.revision-pane .record-list { max-height:none; }
+.research-grid { margin-top:11px; }
+.research-grid .record-list,.movement-list { max-height:none; }
+.movement-summary { padding:12px 15px; }
+.record { padding:12px 15px; }
+.record p { line-height:1.5; margin:5px 0; font-size:11.5px; }
+.record h3 { font-size:12px; }
+.wall { padding:11px 14px; }
+.wall p { font-size:11.5px; }
+.state { font-size:9px; padding:3px 6px; }
+.steps li { padding:8px 10px; }
+@media(max-width:1000px) {
+  .run-tools { width:100%; justify-content:flex-start; }
+  .run-tools label { flex:1 1 165px; }
+  .run-tools input,.run-tools select { max-width:none; width:100%; }
+}
+@media(max-width:760px) {
+  .overview { padding:17px; }
+  .source-ledger { gap:6px 13px; }
+  .source-ledger small { margin-left:0; width:100%; }
+  .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .metric:nth-child(2) { border-right:0; }
+  .metric:nth-child(-n+2) { border-bottom:1px solid var(--line); }
+  .pane-content,#detail { max-height:none; min-height:0; }
+  .workspace,.research-grid { gap:11px; }
+  .workflow-catalog { grid-template-columns:1fr; }
+  .run-tools label { width:auto; }
+}
+@media(max-width:480px){
+  .metric { padding:10px 12px; }
+  .metric strong { font-size:24px; }
+  .feed-panel { padding:11px; }
+  .catalog-controls { flex-direction:column; align-items:stretch; }
+  .catalog-controls label { width:100%; }
+  .index-footer button { flex:1; }
+  .index-footer small { flex-basis:100%; text-align:left; }
+  .notebook-heading { flex-direction:row; align-items:center; }
+}
+
+
+/* Audit refinement: evidence disclosure, catalogue and lists. */
+.workflow-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:3px}
+.workflow-actions a{font:11px/1.5 var(--data-font)}
+.workflow-choose{font:11px/1.3 var(--data-font);color:var(--blue);padding:4px 7px;min-height:27px;border-radius:4px}
+.catalog-footer button[hidden],.index-footer button[hidden]{display:none}
+.catalog-footer:has(button:not([hidden])){display:flex;gap:9px}
+.catalog-footer button{width:auto;flex:1}
+.job-section{border-bottom:1px solid #344750}
+.job-summary{padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;cursor:pointer}
+.job-summary strong{font-size:12.5px}
+.job-section .detail-body{padding:0 17px 16px}
+.job-section .detail-body p:first-child{margin-top:0}
+.run[aria-pressed="true"]{background:#223742;box-shadow:inset 3px 0 var(--blue)}
+#workflow-registry>.registry-summary,#revision-panel>.registry-summary{list-style-position:inside}
+@media(max-width:760px){.job-summary{padding:11px 13px}.catalog-footer:has(button:not([hidden])){flex-wrap:wrap}}
+
 </style>
 </head>
 <body>
@@ -267,11 +385,11 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   <div class="hero-layout">
     <div class="hero-copy">
       <p class="eyebrow">Source-backed / workstation</p>
-      <h1 id="title">Workstation</h1>
-      <p class="intro">Inspect observed execution and preserved research in one place. GitHub Actions reports workflow activity; the repository records the research. One is not proof of the other.</p>
+      <h1 id="title">Research workstation</h1>
+      <p class="intro">A source-backed record of work in motion: inspect a run, follow its commit, and return to the original research. Execution status and scientific evidence remain separate.</p>
     </div>
     <div class="feed-panel">
-      <span class="feed-label">SOURCE CONNECTION</span>
+      <span class="feed-label">GITHUB OBSERVATION</span>
       <div class="status-line" role="status"><span class="indicator" id="live-dot"></span><strong id="feed-state">Reading current executions</strong><span id="last-read"></span><button id="check-now" type="button">Refresh source</button></div>
     </div>
   </div>
@@ -282,13 +400,14 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     <div class="metric metric-failed"><strong data-stat="failed">—</strong><small>FAILED · LATEST 100</small></div>
     <div class="metric metric-passed"><strong data-stat="passed">—</strong><small>PASSED · LATEST 100</small></div>
   </div>
-  <p class="fine">Counts describe the latest retrieved GitHub page (up to 100 runs), not all workers or events. Older loaded pages are displayed separately. Unavailable data is never shown as zero.</p>
+  <p class="fine">Latest GitHub sample (up to 100 runs). Not every worker or event; missing data is never counted as zero.</p>
 </section>
-  <section class="lab-strip" aria-label="Source boundaries">
-    <div><span class="lab-label">01 / EXECUTION SOURCE</span><strong>GitHub Actions</strong><small>Runs, jobs and steps · observed</small></div>
-    <div><span class="lab-label">02 / RESEARCH SOURCE</span><strong>Committed research</strong><small>Moves, records, source walls</small></div>
-    <div><span class="lab-label">03 / EVENT CHANNEL</span><strong id="stream-summary">GitHub polling</strong><small id="tick-summary">No tickserver transport configured</small></div>
-  </section>
+  <div class="source-ledger" aria-label="Observed source boundaries">
+    <span><b>01 / EXECUTIONS</b> GitHub Actions</span>
+    <span><b>02 / RECORDS</b> Committed source</span>
+    <span><b>03 / TRANSPORT</b> <strong id="stream-summary">GitHub polling</strong></span>
+    <small id="tick-summary">No tickserver configured</small>
+  </div>
   <div class="stream-toolbar">
     <div class="stream-readout"><span class="indicator" id="stream-dot"></span><strong id="stream-label">GitHub auto-check enabled</strong><small id="next-check">Preparing next verification</small></div>
     <details class="tick-settings">
@@ -302,40 +421,42 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       <small id="tick-status" role="status">Not connected. GitHub auto-check remains available.</small>
     </details>
   </div>
-  <section class="notebook" aria-labelledby="window-title">
-    <div class="notebook-heading"><div><span class="lab-label">OBSERVATION WINDOW</span><h2 id="window-title">Run history, not a fixed sample</h2></div><small id="history-window">Loading first page…</small></div>
+  <details class="notebook" id="history-panel">
+    <summary class="notebook-heading"><span><span class="lab-label">OBSERVATION WINDOW</span><strong id="window-title">Run activity by day</strong></span><small id="history-window">Loading first page…</small></summary>
     <div class="history-chart" id="history-chart" aria-label="Observed run outcomes by day"><p class="no-source">Loading dated source runs…</p></div>
     <p class="fine">Bars summarize the currently retrieved pages only. Load older runs to extend the observation window; a missing date in this sample does not establish inactivity.</p>
-  </section>
+  </details>
 <section id="executions" aria-label="Actual GitHub work execution">
-  <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Runs, jobs, and steps reported by GitHub.</p></div>
-    <div class="tools run-tools"><label for="run-filter">Result <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label><label for="workflow-filter">Workflow <select id="workflow-filter"><option value="all">Every workflow</option></select></label></div></div>
+  <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Select a run to inspect its jobs, steps, exact revision and source boundaries.</p></div>
+    <div class="tools run-tools"><label for="run-search">Find <input id="run-search" type="search" placeholder="Workflow, branch, SHA…" autocomplete="off" aria-label="Search retrieved workflow runs"></label><label for="run-filter">Result <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label><label for="workflow-filter">Workflow <select id="workflow-filter"><option value="all">Every workflow</option></select></label></div></div>
   <div class="workspace">
-    <div class="pane"><header><strong>Runs · source index</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div><div class="index-footer"><button id="load-older" type="button" disabled>Load 100 older runs</button><small id="history-state">First source page</small></div></div>
+    <div class="pane"><header><strong>Runs · source index</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div><div class="index-footer"><button id="show-more-runs" type="button" hidden>Show 20 more</button><button id="load-older" type="button" disabled>Load 100 older runs</button><small id="history-state">First source page</small></div></div>
     <div class="pane"><header><strong>Run details</strong><small id="details-scope">Choose a source run</small></header><div id="detail" class="pane-content"><p class="no-source">Select an observed workflow to inspect its saved jobs, steps, SHA, and result. No work will be launched from this screen.</p></div></div>
   </div>
-  <details class="pane registry-panel" id="workflow-registry" open>
+  <details class="pane registry-panel" id="workflow-registry">
     <summary class="registry-summary"><span><span class="lab-label">SOURCE REGISTRY</span><strong>Workflow catalog</strong></span><small id="workflow-scope">Loading workflow definitions…</small></summary>
+    <div class="catalog-controls"><label for="workflow-search">Find a workflow <input id="workflow-search" type="search" placeholder="Name or source file…" autocomplete="off"></label><small id="workflow-visible">Loading registry…</small></div>
     <div id="workflow-catalog" class="workflow-catalog"><p class="no-source">Reading original workflow definitions…</p></div>
+    <div class="catalog-footer"><button id="show-more-workflows" type="button" hidden>Show 16 more matches</button><button id="load-more-workflows" type="button" hidden>Fetch next GitHub workflow page</button></div>
     <p class="fine registry-note">Catalog entries identify workflow definitions. A registered workflow is not automatically an active worker or a completed research result.</p>
   </details>
-  <div class="pane revision-pane" aria-labelledby="revision-title">
-    <header><strong id="revision-title">Source revision for selected run</strong><small id="revision-scope">Select a run</small></header>
-    <div id="revision-evidence" class="record-list"><p class="no-source">GitHub commit evidence loads after selecting a workflow execution.</p></div>
-  </div>
+  <details class="pane revision-pane" id="revision-panel">
+    <summary class="registry-summary"><strong id="revision-title">Source revision / exact commit comparison</strong><small id="revision-scope">Select a run</small></summary>
+    <div id="revision-evidence" class="record-list"><p class="no-source">Open this section to inspect the exact commit's source changes.</p></div>
+  </details>
   <p class="fine">This comparison uses the run's exact GitHub head SHA and filenames changed in that commit. A shared file path establishes a source-revision overlap, not that the workflow executed the research, witnessed a native workstation movement, or caused the recorded outcome.</p>
 </section>
 <section id="research" aria-labelledby="research-title">
   <div class="section-top"><div><p class="eyebrow">02 / Source records</p><h2 id="research-title">Research records</h2><p class="subtitle">Investigations, movements, and unresolved conditions with source references.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
   <div class="source-controls"><input id="source-search" type="search" placeholder="Search original research, source, status or wall…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
-  <details class="pane movement-panel" open>
+  <details class="pane movement-panel">
     <summary class="movement-summary"><strong>Movements</strong> <small id="movement-count" class="fine">Loading…</small></summary>
-    <div id="research-movements" class="record-list movement-list"><p class="no-source">Loading source-labeled moves…</p></div>
+    <div id="research-movements" class="record-list movement-list"><p class="no-source">Loading source-labeled moves…</p></div><div class="catalog-footer"><button id="show-more-movements" type="button" hidden>More movements</button></div>
   </details>
   <p class="fine">The two evidence levels below are not interchangeable: a structured MOVE is a recorded source state; a documented movement heading is a source locator only. Neither means a worker is running right now.</p>
   <div class="research-grid">
-    <div class="pane"><header><strong>Investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div></div>
-    <div class="pane"><header><strong>Open conditions</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div></div>
+    <div class="pane"><header><strong>Investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div><div class="catalog-footer"><button id="show-more-records" type="button" hidden>More investigations</button></div></div>
+    <div class="pane"><header><strong>Source boundaries</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div><div class="catalog-footer"><button id="show-more-walls" type="button" hidden>More boundaries</button></div></div>
   </div>
   <p class="fine">A documentation heading is not a failed run or a newly discovered wall. A historical checkpoint is not a live worker. Open the original evidence to inspect what was actually established.</p>
 </section>
@@ -355,7 +476,9 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
     checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],
     catalog:[],catalogLoaded:false,stream:null,streamUrl:"",streamTicks:0,lastTick:0,
-    lastStreamStatus:"not configured",rateLimitUntil:0,lastAttempt:0};
+    lastStreamStatus:"not configured",rateLimitUntil:0,lastAttempt:0,
+    runVisible:20,catalogVisible:16,recordVisible:16,movementVisible:18,wallVisible:12,
+    selectedUpdated:null,catalogNextPage:2,catalogExhausted:false,catalogTotal:null,catalogLoading:false};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
@@ -430,20 +553,33 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     }
     const counts=new Map();
     for(const r of app.runs)counts.set(r.name,(counts.get(r.name)||0)+1);
-    const sorted=[...app.catalog].sort((a,b)=>(counts.get(b.name)||0)-(counts.get(a.name)||0)||a.name.localeCompare(b.name));
-    $("workflow-scope").textContent=sorted.length+" registered workflows · "+app.runs.length+" sampled runs";
-    for(const workflow of sorted){
+    const q=$("workflow-search").value.trim().toLowerCase();
+    const sorted=[...app.catalog].filter(w=>!q||(w.name+" "+w.path).toLowerCase().includes(q))
+      .sort((a,b)=>(counts.get(b.name)||0)-(counts.get(a.name)||0)||a.name.localeCompare(b.name));
+    $("workflow-scope").textContent=app.catalog.length+" retrieved workflows · "+app.runs.length+" sampled runs";
+    $("workflow-visible").textContent=Math.min(sorted.length,app.catalogVisible)+" / "+sorted.length+" matching";
+    for(const workflow of sorted.slice(0,app.catalogVisible)){
       const article=el("article",undefined,"workflow-row");
       article.append(el("strong",workflow.name));
-      article.append(el("small",workflow.state+" · "+(counts.get(workflow.name)||0)+" runs in loaded sample"));
+      article.append(el("small",workflow.state.replaceAll("_"," ")+" · "+(counts.get(workflow.name)||0)+" runs in retrieved sample"));
+      const links=el("div",undefined,"workflow-actions");
       const filename=workflow.path.split("/").pop();
-      if(filename&&/^[\w.-]+\.ya?ml$/.test(filename)){
-        article.append(link("Open workflow source ↗","https://github.com/"+REPO+"/blob/main/"+workflow.path));
+      if(filename&&/^[\w.-]+\.ya?ml$/.test(filename))
+        links.append(link("Source ↗","https://github.com/"+REPO+"/blob/main/"+workflow.path));
+      if((counts.get(workflow.name)||0)>0){
+        const choose=el("button","Inspect runs","workflow-choose");choose.type="button";
+        choose.addEventListener("click",()=>{
+          $("workflow-filter").value=workflow.name;app.runVisible=20;renderRuns();
+          $("executions").scrollIntoView({block:"start",behavior:"smooth"});
+        });
+        links.append(choose);
       }
-      target.append(article);
+      article.append(links);target.append(article);
     }
-    if(!sorted.length)target.append(el("p","No workflow definitions reported in this source response.","no-source"));
-    if(sorted.length===MAX_CATALOG_PAGE)target.append(el("p","Catalog shows at most the first 100 definitions returned by GitHub.","no-source"));
+    if(!sorted.length)target.append(el("p","No workflow definitions match this search.","no-source"));
+    $("show-more-workflows").hidden=sorted.length<=app.catalogVisible;
+    $("load-more-workflows").hidden=app.catalogExhausted;
+    $("load-more-workflows").disabled=app.catalogLoading;
   }
   async function loadCatalog(){
     try{
@@ -452,12 +588,32 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       app.catalog=json.workflows.filter(w=>Number.isSafeInteger(w.id)&&typeof w.name==="string"&&
         typeof w.path==="string"&&w.path.startsWith(".github/workflows/")&&
         ["active","disabled_manually","disabled_inactivity","deleted"].includes(w.state));
+      app.catalogTotal=Number.isSafeInteger(json.total_count)?json.total_count:null;
+      app.catalogExhausted=json.workflows.length<100||(app.catalogTotal!==null&&app.catalog.length>=app.catalogTotal);
       app.catalogLoaded=true;renderCatalog();
     }catch(e){
       $("workflow-scope").textContent="Workflow catalog unavailable";
       $("workflow-catalog").replaceChildren(el("p","Could not read workflow definitions: "+e.message+". Run history remains separate.","no-source"));
       updateWorkflowFilter();
     }
+  }
+  async function loadMoreWorkflows(){
+    if(app.catalogLoading||app.catalogExhausted)return;
+    app.catalogLoading=true;$("load-more-workflows").disabled=true;
+    try{
+      const json=await getJSON(API+"/actions/workflows?per_page=100&page="+app.catalogNextPage);
+      if(!json||!Array.isArray(json.workflows))throw Error("Missing workflow definitions");
+      const ids=new Set(app.catalog.map(x=>x.id));
+      const valid=json.workflows.filter(w=>Number.isSafeInteger(w.id)&&typeof w.name==="string"&&
+        typeof w.path==="string"&&w.path.startsWith(".github/workflows/")&&
+        ["active","disabled_manually","disabled_inactivity","deleted"].includes(w.state));
+      for(const w of valid)if(!ids.has(w.id)){app.catalog.push(w);ids.add(w.id);}
+      app.catalogNextPage++;
+      app.catalogExhausted=json.workflows.length<100||
+        (app.catalogTotal!==null&&app.catalog.length>=app.catalogTotal);
+      app.catalogVisible+=16;
+    }catch(e){$("workflow-visible").textContent="Next catalog page unavailable: "+e.message;}
+    finally{app.catalogLoading=false;renderCatalog();}
   }
   async function loadOlder(){
     if(app.olderLoading||app.olderExhausted||app.reading)return;
@@ -477,17 +633,17 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
   function renderMetrics(){const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
-  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value;return app.runs.filter(r=>(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
+  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();return app.runs.filter(r=>(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
-    $("runs-scope").textContent=subset.length+" shown / "+app.runs.length+" retrieved source runs";
-    for(const r of subset){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
-      btn.type="button";const head=el("div",undefined,"run-title");
-      head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
+    $("runs-scope").textContent=Math.min(subset.length,app.runVisible)+" / "+subset.length+" matching · "+app.runs.length+" retrieved";
+    for(const r of subset.slice(0,app.runVisible)){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
+      btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
+      const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
       btn.append(el("p",r.branch+" · "+r.head.slice(0,10)+" · "+safeDate(r.created)));
-      btn.append(el("p","#"+r.runNumber+" · GitHub execution "+r.id));
-      btn.addEventListener("click",()=>selectRun(r.id));area.append(btn);
+      btn.addEventListener("click",()=>selectRun(r.id,true));area.append(btn);
     }
-    if(!subset.length)area.append(el("p","No source runs match this filter. This is not a claim that no work exists.","no-source"));
+    $("show-more-runs").hidden=subset.length<=app.runVisible;
+    if(!subset.length)area.append(el("p","No retrieved runs match this filter. Load older pages if needed; no absence claim is implied.","no-source"));
   }
   function appendStepList(target,steps){
     const list=el("ol",undefined,"steps");for(const [i,step] of steps.entries()){
@@ -562,29 +718,36 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       }
     }
   }
-  async function selectRun(id){
+  async function selectRun(id,focus=false){
     if(!Number.isSafeInteger(id)||id<1)return;const r=app.runs.find(x=>x.id===id);if(!r)return;
-    app.selection=id;renderRuns();loadRevision(r);const area=$("detail");area.replaceChildren();
+    app.selection=id;app.selectedUpdated=r.updated;renderRuns();
+    if($("revision-panel").open)loadRevision(r);
+    else $("revision-scope").textContent="Run "+r.id+" · open for exact source paths";
+    const area=$("detail");area.replaceChildren();
     const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
     header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
     header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
     if(plausible(r.url,"run"))header.append(link("Open original workflow run ↗",r.url));
     header.append(el("p","Source jobs and steps below are read from GitHub. A successful workflow proves only its declared checks.","fine"));
     area.append(header);$("details-scope").textContent="Run "+r.id+" · "+r.head.slice(0,10);
+    if(focus&&window.matchMedia("(max-width:980px)").matches)
+      area.scrollIntoView({block:"start",behavior:"smooth"});
     const pane=el("div","Reading exact GitHub job evidence…","no-source");area.append(pane);
     try{
       const json=app.jobCache.has(id)?app.jobCache.get(id):await getJSON(API+"/actions/runs/"+id+"/jobs?per_page=100");
       if(!json||!Array.isArray(json.jobs))throw Error("Missing job array");
       app.jobCache.set(id,json);if(app.selection!==id)return;
-      pane.remove();for(const j of json.jobs.slice(0,100)){
-        const b=el("div",undefined,"detail-body");
-        b.append(el("div",undefined,"subhead"),el("h3",j.name||"Job"));
-        b.append(pill(statusOf(j)));
-        b.append(el("p","Job "+j.id+" · Started "+safeDate(j.started_at)+" · Ended "+safeDate(j.completed_at),"fine"));
-        if(plausible(j.html_url))b.append(link("Inspect this job on GitHub ↗",j.html_url));
-        if(Array.isArray(j.steps)&&j.steps.length)appendStepList(b,j.steps);
-        else b.append(el("p","No steps included in the source response; not interpreted as an empty execution.","no-source"));
-        area.append(b);
+      pane.remove();for(const [index,j] of json.jobs.slice(0,100).entries()){
+        const b=el("details",undefined,"job-section");b.open=index===0;
+        const title=el("summary",undefined,"job-summary");
+        title.append(el("strong",j.name||"Job"),pill(statusOf(j)));
+        b.append(title);
+        const inside=el("div",undefined,"detail-body");
+        inside.append(el("p","Job "+j.id+" · Started "+safeDate(j.started_at)+" · Ended "+safeDate(j.completed_at),"fine"));
+        if(plausible(j.html_url))inside.append(link("Inspect this job on GitHub ↗",j.html_url));
+        if(Array.isArray(j.steps)&&j.steps.length)appendStepList(inside,j.steps);
+        else inside.append(el("p","No steps included in the source response; not interpreted as an empty execution.","no-source"));
+        b.append(inside);area.append(b);
       }
       if(!json.jobs.length)area.append(el("p","No job evidence returned for this run.","no-source"));
     }catch(e){if(app.selection===id)pane.textContent="Source evidence unavailable: "+e.message+". No steps inferred."}
@@ -598,7 +761,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     const match=v=>String(v||"").toLowerCase().includes(q);
     const items=r.records.filter(x=>(type==="all"||x.source_type===type)&&(!q||[x.label,x.path,x.state,x.source_type,x.scope,x.next,x.boundary].some(match)));
     const area=$("research-records");area.replaceChildren();
-    for(const rec of items){
+    for(const rec of items.slice(0,app.recordVisible)){
       const item=el("article",undefined,"record");const head=el("header");
       head.append(el("h3",rec.label||rec.path),pill(rec.state||"unknown"));item.append(head);
       item.append(el("p",rec.source_type+" · "+(rec.scope||"original recorded result")));
@@ -607,11 +770,12 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       const href=srcLink(rec.path);if(href)item.append(href);area.append(item);
     }
     if(!items.length)area.append(el("p","No matching source records.","no-source"));
-    $("research-count").textContent=items.length+" / "+r.records.length+" source records";
+    $("research-count").textContent=Math.min(items.length,app.recordVisible)+" / "+items.length+" matches · "+r.records.length+" records";
+    $("show-more-records").hidden=items.length<=app.recordVisible;
     const movements=Array.isArray(r.movements) ? r.movements : [];
     const matching=movements.filter(x=>!q||[x.title,x.path,x.state,x.boundary,x.next].some(match));
     const mv=$("research-movements");mv.replaceChildren();
-    for(const m of matching.slice(0,120)){
+    for(const m of matching.slice(0,app.movementVisible)){
       const item=el("article",undefined,"record");
       const head=el("header");
       head.append(el("h3",m.title||m.path),pill(m.state||"unknown"));item.append(head);
@@ -622,15 +786,17 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       mv.append(item);
     }
     if(!matching.length)mv.append(el("p","No source-labeled movements match.","no-source"));
-    $("movement-count").textContent=matching.length+" / "+movements.length+" recorded source locators"+(matching.length>120?" (first 120 shown)":"");
+    $("movement-count").textContent=Math.min(matching.length,app.movementVisible)+" / "+matching.length+" matches · "+movements.length+" source locators";
+    $("show-more-movements").hidden=matching.length<=app.movementVisible;
     const walls=r.walls.filter(x=>!q||[x.text,x.path,x.kind].some(match)),box=$("research-walls");box.replaceChildren();
-    for(const w of walls){
+    for(const w of walls.slice(0,app.wallVisible)){
       const card=el("article",undefined,"wall");card.append(el("p",w.text||"Original wall"));
       card.append(el("small",w.kind==="source-recorded-wall"?"Explicit structured wall":"Documented heading only"));
       const ref=srcLink(w.path,w.line);if(ref)card.append(el("div",undefined,"fine"),ref);box.append(card);
     }
     if(!walls.length)box.append(el("p","No matching wall records.","no-source"));
-    $("wall-count").textContent=walls.length+" / "+r.walls.length+" original source locators";
+    $("wall-count").textContent=Math.min(walls.length,app.wallVisible)+" / "+walls.length+" matches · "+r.walls.length+" source locators";
+    $("show-more-walls").hidden=walls.length<=app.wallVisible;
   }
   async function loadResearch(){try{const json=await getJSON(SOURCE+"?v="+Math.floor(Date.now()/PERIOD));
       if(json?.schema!=="workstation-live-projection/v1"||!Array.isArray(json.records)||!Array.isArray(json.walls)||!Array.isArray(json.movements))throw Error("Unexpected workstation source schema");
@@ -712,8 +878,12 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       $("last-read").textContent="checked "+new Date(app.checked).toLocaleString();
       updateNextCheck();
       $("feed-error").hidden=true;
-      // Job detail requires an exact user selection or first source run.
-      await selectRun(app.selection);
+      // Re-read jobs only when the selected run changes; polling run status remains source-backed.
+      const selected=app.runs.find(r=>r.id===app.selection);
+      if(selected&&(!app.selectedUpdated||app.selectedUpdated!==selected.updated)){
+        app.selectedUpdated=selected.updated;
+        await selectRun(app.selection);
+      }
     }catch(e){
       $("live-dot").className="indicator error";
       $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
@@ -724,11 +894,25 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     await loadResearch();
   }
   $("check-now").addEventListener("click",refresh);
-  $("run-filter").addEventListener("change",renderRuns);
-  $("workflow-filter").addEventListener("change",renderRuns);
+  $("run-filter").addEventListener("change",()=>{app.runVisible=20;renderRuns()});
+  $("run-search").addEventListener("input",()=>{app.runVisible=20;renderRuns()});
+  $("show-more-runs").addEventListener("click",()=>{app.runVisible+=20;renderRuns()});
+  $("workflow-search").addEventListener("input",()=>{app.catalogVisible=16;renderCatalog()});
+  $("show-more-workflows").addEventListener("click",()=>{app.catalogVisible+=16;renderCatalog()});
+  $("load-more-workflows").addEventListener("click",loadMoreWorkflows);
+  $("revision-panel").addEventListener("toggle",()=>{
+    if($("revision-panel").open){const r=app.runs.find(x=>x.id===app.selection);if(r)loadRevision(r);}
+  });
+  $("workflow-filter").addEventListener("change",()=>{app.runVisible=20;renderRuns()});
   $("load-older").addEventListener("click",loadOlder);
-  $("source-search").addEventListener("input",renderResearch);
-  $("source-filter").addEventListener("change",renderResearch);
+  function resetResearchLimits(){
+    app.recordVisible=16;app.movementVisible=18;app.wallVisible=12;renderResearch();
+  }
+  $("source-search").addEventListener("input",resetResearchLimits);
+  $("source-filter").addEventListener("change",resetResearchLimits);
+  $("show-more-records").addEventListener("click",()=>{app.recordVisible+=16;renderResearch()});
+  $("show-more-movements").addEventListener("click",()=>{app.movementVisible+=18;renderResearch()});
+  $("show-more-walls").addEventListener("click",()=>{app.wallVisible+=12;renderResearch()});
   $("tick-form").addEventListener("submit",e=>{
     e.preventDefault();if(!connectTick($("tick-url").value.trim()))$("tick-url").focus();
   });
