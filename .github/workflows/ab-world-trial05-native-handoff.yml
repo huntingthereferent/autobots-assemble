@@ -1,0 +1,82 @@
+name: A/B WORLD native physical-source handoff
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial05_handoff.py'
+      - 'network/tests/test_ab_world_trial05_handoff.py'
+      - '.github/workflows/ab-world-trial05-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-world-to-general-carrier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout A/B carrier
+        uses: actions/checkout@v4
+      - name: Checkout pinned original WORLD branch
+        uses: actions/checkout@v4
+        with:
+          ref: 75a78478b3a437f55e8efc138d746c8096dae8d9
+          path: source-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check generic carrier negative tests
+        run: python -m unittest -v network.tests.test_ab_world_trial05_handoff
+      - name: Execute the original native source and independent WORLD verifier
+        working-directory: source-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_connected_routing import run
+          from network.tests.test_world_ab_connected_routing import verify_source_geometry, independently_verify_route
+          native = run()
+          assert verify_source_geometry(native["geometry"])
+          assert independently_verify_route(native["geometry"], native)
+          Path("../world-trial05-original-native.json").write_text(
+              json.dumps(native, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          Path("../world-trial05-independent-verdict.json").write_text(
+              json.dumps({"native_geometry_verified": True,
+                          "native_route_verified": True,
+                          "original_source_commit": "75a78478b3a437f55e8efc138d746c8096dae8d9"},
+                         sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          PY
+      - name: Carry original source result without inheriting its mechanics
+        run: |
+          python -m work.ab_world.world_trial05_handoff \
+            --native world-trial05-original-native.json \
+            --source-commit 75a78478b3a437f55e8efc138d746c8096dae8d9 \
+            > world-trial05-ab-carrier.json
+          python - <<'PY'
+          import json
+          native=json.load(open("world-trial05-original-native.json"))
+          carrier=json.load(open("world-trial05-ab-carrier.json"))
+          assert carrier["ledger_witness"]["valid"]
+          assert carrier["ledger_witness"]["steps_verified"] == 31
+          assert carrier["difference_levels"] == native["route_changed_probe_levels"]
+          assert carrier["difference_levels"] == [0.9, 1.05, 1.2]
+          assert not carrier["physical_measurement_verified"]
+          assert not carrier["source_authenticated_by_this_adapter"]
+          PY
+          sha256sum source-world/systems/workspace/world_ab_connected_routing.py \
+            source-world/systems/workspace/world_ab_oblique_rotation.py \
+            source-world/network/tests/test_world_ab_connected_routing.py \
+            world-trial05-original-native.json world-trial05-independent-verdict.json \
+            world-trial05-ab-carrier.json > world-trial05-handoff-digests.txt
+      - name: Retain original source and independently checked carrier
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-original-trial05-handoff
+          path: |
+            world-trial05-original-native.json
+            world-trial05-independent-verdict.json
+            world-trial05-ab-carrier.json
+            world-trial05-handoff-digests.txt
+          retention-days: 30
