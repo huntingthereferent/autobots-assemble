@@ -154,6 +154,15 @@ class SignedHttpIntegrationTests(unittest.TestCase):
         finally:
             conn.close()
 
+    def get(self, path):
+        conn = HTTPConnection("127.0.0.1", self.httpd.server_port, timeout=5)
+        try:
+            conn.request("GET", path)
+            r = conn.getresponse()
+            return r.status, json.loads(r.read().decode("utf8"))
+        finally:
+            conn.close()
+
     def seal(self, h=None, parent=None):
         return seal_handoff(h or self.task(), lane="native", parent_sha256=parent,
                             sender_private_key=self.owner_key,
@@ -219,6 +228,56 @@ class SignedHttpIntegrationTests(unittest.TestCase):
         self.ingress("submit")
         with self.assertRaises(ValueError):
             self.ingress("submit")
+
+    def test_signed_mode_blocks_all_other_mutation_routes(self):
+        self.assertFalse(self.service.signed_http_only)
+        # Even partial signer registration activates the restrictive surface.
+        self.ingress("submit")
+        self.assertTrue(self.service.signed_http_only)
+        paths = (
+            "/api/ohayo",
+            "/api/agents/activate",
+            "/api/agents/a/result",
+            "/api/handoffs/task-1/result",
+            "/api/tasks",
+            "/api/tasks/id/admit",
+            "/api/notes",
+            "/api/plans",
+            "/api/calendar",
+            "/api/reminders",
+            "/api/reminders/id/ack",
+            "/api/daily-checklist",
+            "/api/daily-checklist/id/check",
+            "/api/traces",
+            "/api/unknown-mutation",
+        )
+        before = tuple(self.service.runtime.event_store.all())
+        for path in paths:
+            with self.subTest(path=path):
+                status, document = self.request(path, {"actor_id": "owner", "title": "bad"})
+                self.assertEqual(status, 403)
+                self.assertIn("unsigned", document["error"])
+        self.assertEqual(tuple(self.service.runtime.event_store.all()), before)
+
+    def test_signed_mode_prevents_unauthenticated_read_disclosure(self):
+        self.assertEqual(self.get("/api/status")[0], 200)
+        self.ingress("result")
+        for path in ("/api/status", "/api/handoffs", "/api/notes", "/api/plans",
+                     "/api/tasks", "/api/agents?root=private", "/api/activate?surface=ohayo",
+                     "/api/live-feed", "/api/traces", "/api/research-board",
+                     "/api/monitor?actor=owner", "/api/security/handoffs"):
+            with self.subTest(path=path):
+                status, doc = self.get(path)
+                self.assertEqual(status, 403)
+                self.assertIn("unsigned", doc["error"])
+
+    def test_ordinary_local_http_mutations_remain_available_without_signed_policy(self):
+        self.assertFalse(self.service.signed_http_only)
+        status, doc = self.request("/api/notes",
+            {"body": "local fixture", "actor_id": "owner", "referent": "fixture"})
+        self.assertEqual(status, 201)
+        self.assertEqual(doc["body"], "local fixture")
+        self.assertEqual(len(self.service.list_notes()), 1)
 
     def test_signed_result_policy_refuses_all_unsigned_worker_routes(self):
         self.ingress("submit")
