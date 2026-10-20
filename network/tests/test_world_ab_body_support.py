@@ -55,6 +55,8 @@ def independent_witness(record):
     n=(-cos(theta),-sin(theta))
     if not near(record["source"]["normal"],n):
         raise ValueError("source normal changed")
+    if not near(record["source"]["anchor"],a):
+        raise ValueError("source anchor no longer matches admitted input")
     tangent=(-n[1],n[0])
     for pt,k in zip(record["source"]["endpoints"],(-.5,.5)):
         if not near(pt,plus(a,mul(k,tangent))):
