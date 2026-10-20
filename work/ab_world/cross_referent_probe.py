@@ -16,6 +16,7 @@ from tempfile import TemporaryDirectory
 
 from systems.workspace import game_construction as w13
 from systems.workspace import nih_scope_native as scope_native
+from systems.workspace import nih_prototype_native as prototype_host
 from systems.workspace.nih_prototype_worker_source import prototype_worker
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -50,10 +51,10 @@ def temporal_observations(scope: dict) -> dict:
                 text=True, capture_output=True, timeout=5, check=True,
             )
             result = json.loads(raw.stdout)
-            host = scope_native.expected_scope_report({**scope, "query_at": cutoff})
-            if result["temporal_ids"] != host["visible_ids"]:
+            host = prototype_host.oracle(scope, ["has-status"], known=cutoff, target=TARGET)
+            if result["temporal_ids"] != host["temporal_ids"]:
                 raise ValueError("temporal program differs from original scope oracle")
-            if result["future_leakage_ids"] != host["withheld_future_ids"]:
+            if result["future_leakage_ids"] != host["future_leakage_ids"]:
                 raise ValueError("future availability differs from original scope oracle")
             if result["clinical_verdict"] != "NOT_EVALUATED":
                 raise ValueError("synthetic data promoted into a clinical claim")
@@ -107,6 +108,7 @@ def run(*, with_world48: bool = False) -> dict:
     paths = {
         "w13": Path(w13.__file__),
         "nih_scope": Path(scope_native.__file__),
+        "nih_independent_oracle": Path(prototype_host.__file__),
         "nih_emitted_builder": Path(prototype_worker.__file__),
         "nih_fixture": FIXTURE,
     }
