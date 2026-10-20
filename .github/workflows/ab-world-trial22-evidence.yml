@@ -1,0 +1,112 @@
+name: A/B WORLD Trial22 original first-candidate evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial22_handoff.py'
+      - 'network/tests/test_ab_world_trial22_handoff.py'
+      - 'work/ab_world/TRIAL22_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial22-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bounded-original-first-candidate-to-neutral-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout neutral A/B recorder
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD22 numerical source by immutable SHA
+        uses: actions/checkout@v4
+        with:
+          ref: 84e9bc9a51e813cfcac3146ab49e153cdb02d47b
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify unchanged original WORLD source and separate numerical witness
+        working-directory: original-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from systems.workspace.world_ab_first_post_third_candidate import run as run22
+          from network.tests.test_world_ab_first_post_third_candidate import independent_check
+          from systems.workspace.world_ab_third_contact import run as run21
+          from network.tests.test_world_ab_third_contact import independent_check as check21
+          source=run22()
+          prior=run21()
+          assert len(source["cases"]) == len(prior["cases"]) == 8
+          assert all(independent_check(case) for case in source["cases"])
+          assert all(check21(case) for case in prior["cases"])
+          assert source["source_line_crossing_cases"] == 3
+          assert source["source_line_no_crossing_cases"] == 3
+          assert source["no_third_impulse_controls"] == 2
+          assert source["selected_fourth_impulses"] == 0
+          Path("../trial22-original-native.json").write_text(
+              json.dumps(source,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../trial22-original-source21.json").write_text(
+              json.dumps(prior,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../trial22-original-verdict.json").write_text(json.dumps({
+              "source_pin":"84e9bc9a51e813cfcac3146ab49e153cdb02d47b",
+              "independent_original_world21_impulse_witness_passed":True,
+              "independent_original_world22_first_crossing_witness_passed":True,
+              "source_crossing_cases":3,
+              "bounded_no_crossing_cases":3,
+              "no_impulse_controls":2,
+              "physical_measurements":0,
+              "fourth_impulses_selected":0
+          },sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Test standalone bounded A/B transport and negative cases
+        run: python -m unittest -v network.tests.test_ab_world_trial22_handoff
+      - name: Independently replay all eight neutral source ledgers
+        run: |
+          python -m work.ab_world.world_trial22_handoff --native trial22-original-native.json --source21 trial22-original-source21.json > trial22-ab-carrier.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          carried=json.load(open("trial22-ab-carrier.json"))
+          assert carried["ledger_witness"]["valid"]
+          assert carried["ledger_witness"]["pages_verified"]==8
+          assert carried["line_crossing_cases"]==3
+          assert carried["bounded_no_crossing_cases"]==3
+          assert carried["without_source_third_impulse"]==2
+          assert carried["real_fourth_impulses"]==0
+          assert carried["real_material_measurements"]==0
+          assert carried["post_crossing_trajectories_admitted"]==0
+          assert digest(carried["manifest"])==carried["manifest_sha256"]
+          out=Path("trial22-ab-pages")
+          out.mkdir(exist_ok=True)
+          for page in carried["ledger_pages"]:
+              receipt=page["receipt"]
+              assert verify_receipt(receipt)["valid"]
+              assert carried["manifest"]["ordered_receipts"][page["index"]]["head_hash"]==receipt["head_hash"]
+              out.joinpath(f'case-{page["index"]:02d}.json').write_text(
+                  json.dumps(receipt,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("trial22-ab-manifest.json").write_text(
+              json.dumps(carried["manifest"],sort_keys=True,indent=2)+"\n")
+          PY
+          sha256sum trial22-original-native.json trial22-original-source21.json trial22-original-verdict.json trial22-ab-carrier.json trial22-ab-manifest.json trial22-ab-pages/case-*.json > trial22-source-digests.txt
+      - name: Retain original evidence, bounded receipts and hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial22-first-candidate-source-ledgers
+          path: |
+            trial22-original-native.json
+            trial22-original-source21.json
+            trial22-original-verdict.json
+            trial22-ab-carrier.json
+            trial22-ab-manifest.json
+            trial22-ab-pages/
+            trial22-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
