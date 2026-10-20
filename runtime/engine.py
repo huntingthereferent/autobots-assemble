@@ -70,7 +70,9 @@ class HandoffRuntime:
             raise ValueError("evidence verifier must be named and unique")
         self._evidence_verifiers[verifier_id] = verifier
 
-    def submit(self, handoff: Handoff) -> HandoffState:
+    def submit(self, handoff: Handoff, *,
+               admission: tuple[str, str, str] | None = None) -> HandoffState:
+        """Append native CREATED and optional replay admission in one journal commit."""
         if handoff.handoff_id in self._handoffs:
             raise ValueError(f"handoff already exists: {handoff.handoff_id}")
         created = HandoffEvent.create(
@@ -90,8 +92,13 @@ class HandoffRuntime:
             None,
         )
         if append_submission is not None:
-            append_submission(handoff, created)
+            if admission is None:
+                append_submission(handoff, created)
+            else:
+                append_submission(handoff, created, admission=admission)
         else:
+            if admission is not None:
+                raise ValueError("atomic admission requires sealed native journal")
             self.event_store.append(created)
 
         self._handoffs[handoff.handoff_id] = handoff
@@ -177,6 +184,7 @@ class HandoffRuntime:
         *,
         actor_id: str,
         result: ExecutionResult,
+        admission: tuple[str, str, str] | None = None,
     ) -> HandoffState:
         handoff = self.get(handoff_id)
         current = self.state(handoff_id)
@@ -200,20 +208,18 @@ class HandoffRuntime:
             verifier(handoff, result)
 
         parent = current.last_event_id
-        self.event_store.append(
-            HandoffEvent.create(
-                handoff_id=handoff_id,
-                event_type="RESULT",
-                actor_id=actor_id,
-                data={
-                    "status": result.status,
-                    "output": result.output,
-                    "note": result.note,
-                },
-                evidence=result.evidence,
-                parents=(parent,) if parent else (),
-            )
+        native_event = HandoffEvent.create(
+            handoff_id=handoff_id,
+            event_type="RESULT",
+            actor_id=actor_id,
+            data={"status": result.status, "output": result.output, "note": result.note},
+            evidence=result.evidence,
+            parents=(parent,) if parent else (),
         )
+        if admission is None:
+            self.event_store.append(native_event)
+        else:
+            self.event_store.append(native_event, admission=admission)
         return self.state(handoff_id)
 
     def run(self, handoff_id: str, actor: SimulatedActor) -> HandoffState:
