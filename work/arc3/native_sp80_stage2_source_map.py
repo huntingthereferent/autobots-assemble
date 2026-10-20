@@ -68,7 +68,7 @@ def main():
                 "source_sha256":sha(frame),
                 "changed_original_source_pixels":int(changed.sum()),
                 "changed_bbox":[int(xs.min()),int(ys.min()),int(xs.max()),int(ys.max())] if len(xs) else None,
-                "observed_palette_changes":dict(Counter((int(a),int(b)) for a,b in
+                "observed_palette_changes":dict(Counter("%d>%d"%(int(a),int(b)) for a,b in
                                           zip(pre[changed],frame[changed]))),
             })
         item={
