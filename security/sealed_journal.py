@@ -134,6 +134,10 @@ class SealedRuntimeJournal(RuntimeJournal):
         """Test fault-injection point inside the uncommitted transaction."""
         return None
 
+    def _after_record_insert(self) -> None:
+        """Test fault-injection point after native row, before SQLite commit."""
+        return None
+
     def _append_admitted_record(self, record: dict, admission: tuple[str, str, str]) -> None:
         self._append_record(record, admission=admission)
 
@@ -173,5 +177,6 @@ class SealedRuntimeJournal(RuntimeJournal):
             db.execute("INSERT INTO records VALUES (?, ?, ?, ?, ?)",
                        (seq, previous, nonce, cipher,
                         self._digest(seq, previous, nonce, cipher)))
+            self._after_record_insert()
             db.commit()
             self._committed_records += 1
