@@ -1,0 +1,137 @@
+name: A/B WORLD Trial12 source friction and spin movements
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial12_handoff.py'
+      - 'network/tests/test_ab_world_trial12_handoff.py'
+      - 'work/ab_world/TRIAL12_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial12-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-friction-spin-source-and-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout bounded general A/B source carrier
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD Trial12 source pinned to original branch commit
+        uses: actions/checkout@v4
+        with:
+          ref: 790f81b02a03c79cab8d502dd6e43cf65c29ba4e
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run A/B carrier negative controls
+        run: python -m unittest -v network.tests.test_ab_world_trial12_handoff
+      - name: Replay original friction and spin source and its independent oracle
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_friction_spin_trial \
+            network.tests.test_world_ab_contact_discrimination \
+            network.tests.test_world_ab_active_set_trial \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_friction_spin_trial import run
+          from network.tests.test_world_ab_friction_spin_trial import oracle
+          result=run()
+          assert oracle(result)
+          assert len(result["cases"]) == 35
+          assert sum(len(c["options"]) for c in result["cases"]) == 420
+          rows=result["by_parameter"]
+          assert [row["accepted_single_face_candidates"] for row in rows] == [56,64,64,56,68,68]
+          assert result["original_trial06_two_contact_solver_unchanged"]
+          assert not result["frictional_simultaneous_two_contact_manifold_solved"]
+          assert not result["actual_active_contact_observed"]
+          Path("../trial12-original-native.json").write_text(
+              json.dumps(result, sort_keys=True, indent=2)+"\n", encoding="utf-8")
+          Path("../trial12-original-verdict.json").write_text(
+              json.dumps({"pinned_original_commit": "790f81b02a03c79cab8d502dd6e43cf65c29ba4e",
+                          "original_independent_oracle_passed": True,
+                          "source_parameter_counts": rows,
+                          "material_contact_observed": False,
+                          "frictional_multicontact_solved": False},
+                         sort_keys=True, indent=2)+"\n", encoding="utf-8")
+          PY
+      - name: Preserve all native candidate frames and independently replay bounded A/B records
+        run: |
+          python -m work.ab_world.world_trial12_handoff \
+            --native trial12-original-native.json \
+            --source-commit 790f81b02a03c79cab8d502dd6e43cf65c29ba4e \
+            > trial12-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          source=json.load(open("trial12-original-native.json"))
+          record=json.load(open("trial12-ab-carrier.json"))
+          assert record["ledger_witness"]["valid"]
+          assert record["ledger_witness"]["pages_verified"] == 35
+          assert record["ledger_witness"]["observations_recorded"] == 420
+          assert record["cases"] == 35
+          assert record["source_candidates"] == 420
+          assert record["admissible_candidates"] == 376
+          assert record["rejected_candidates"] == 44
+          assert record["candidate_frames"] == 11656
+          assert record["by_parameter"] == source["by_parameter"]
+          assert not record["physical_winner_selected"]
+          assert not record["original_frictional_multicontact_solved"]
+          assert not record["native_model_verified_by_adapter"]
+          assert digest(record["page_manifest"]) == record["page_manifest_sha256"]
+          Path("trial12-ab-pages").mkdir(exist_ok=True)
+          assert len(record["ledger_pages"]) == 35
+          for idx,page in enumerate(record["ledger_pages"]):
+              assert page["case"] == idx and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"] == record["page_manifest"]["ordered_source_cases"][idx]["head_hash"]
+              with open(f"trial12-ab-pages/case-{idx:02d}.json","w") as f:
+                  json.dump(page["receipt"],f,indent=2,sort_keys=True)
+          with open("trial12-ab-manifest.json","w") as f:
+              json.dump(record["page_manifest"],f,indent=2,sort_keys=True)
+          print(json.dumps({"source_candidates":record["source_candidates"],
+              "admissible":record["admissible_candidates"],
+              "rejected":record["rejected_candidates"],
+              "frames_preserved":record["candidate_frames"],
+              "pages_verified":record["ledger_witness"]["pages_verified"],
+              "ledger_steps":record["ledger_witness"]["steps_verified"],
+              "real_physical_measurements":0},sort_keys=True))
+          PY
+          for page in $(seq -w 0 34); do
+            python -m work.ab_world.construction --verify "trial12-ab-pages/case-$page.json" > "trial12-ab-pages/verdict-$page.json"
+          done
+          python - <<'PY'
+          import json
+          for i in range(35):
+              assert json.load(open(f"trial12-ab-pages/verdict-{i:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_friction_spin_trial.py \
+            original-world/network/tests/test_world_ab_friction_spin_trial.py \
+            trial12-original-native.json trial12-original-verdict.json \
+            trial12-ab-carrier.json trial12-ab-manifest.json \
+            trial12-ab-pages/case-*.json trial12-ab-pages/verdict-*.json \
+            > trial12-source-digests.txt
+      - name: Retain original source and separately witnessed candidate movements
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial12-friction-spin-source-ledgers
+          path: |
+            trial12-original-native.json
+            trial12-original-verdict.json
+            trial12-ab-carrier.json
+            trial12-ab-manifest.json
+            trial12-ab-pages/
+            trial12-source-digests.txt
+          retention-days: 30
