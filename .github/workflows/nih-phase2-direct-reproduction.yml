@@ -1,0 +1,66 @@
+name: NIH Phase 2 direct W13 reproduction trial
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_phase2_direct_reproduction.py'
+      - 'network/tests/test_nih_phase2_direct_reproduction.py'
+      - 'systems/workspace/NIH_PHASE2_DIRECT_REPRODUCTION.md'
+      - '.github/workflows/nih-phase2-direct-reproduction.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  direct-phase2-native-capability-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Original RDF dependency for measured graph structural metrics
+        run: python -m pip install 'rdflib>=7,<8'
+      - name: Test actual W13 Phase2 successes and expected native failures
+        run: python -m unittest -v network.tests.test_nih_phase2_direct_reproduction
+      - name: Execute original emitted W13 temporal engine on Phase2 practice questions
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-phase2-direct"
+          python -m systems.workspace.nih_phase2_direct_reproduction \
+            --output-dir "$RUNNER_TEMP/nih-phase2-direct"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          source=Path(os.environ["RUNNER_TEMP"])/"nih-phase2-direct/phase2-direct-functional-trial.json"
+          r=json.loads(source.read_text())
+          assert r["scored_cases"]==13
+          assert r["native_pass"]==8
+          assert r["native_fail"]==5
+          assert r["static_pass"]==6
+          assert r["by_kind"]["derived"]["native_pass"]==0
+          assert r["by_kind"]["rdf"]["native_pass"]==0
+          assert not r["phase2_reproduced_in_full"]
+          assert not r["all_official_Phase2_metrics_implemented"]
+          assert not r["full_OWL_reasoner_present"]
+          assert not r["real_clinical_benchmark"]
+          assert not r["W13_native_journal_mutated"]
+          assert not r["World48_required"]
+          assert r["RDF_structural_metrics"]["static_KG"][
+              "logical_inconsistencies_unsatisfiable_classes"
+              ]=="NOT_MEASURED_NO_OWL_REASONER"
+          PY
+          (cd "$RUNNER_TEMP/nih-phase2-direct" &&
+            sha256sum phase2-direct-functional-trial.json > sha256.txt)
+      - name: Retain complete task-by-task actual native response and capability gaps
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-phase2-direct-w13-capability-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-phase2-direct/
+          if-no-files-found: warn
+          retention-days: 30
