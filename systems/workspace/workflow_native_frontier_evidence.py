@@ -27,6 +27,7 @@ def _bounded_native(row: dict) -> dict:
         "result_sha256": row["result_sha256"],
         "verdict_sequence_sha256": row["verdict_sequence_sha256"],
         "simulation_only": row["simulation_only"],
+        "native_order_id": row["native_order_id"],
         "native_result_reverified_now": True,
         "native_job_reexecuted": False,
         "whole_workflow_verified": False,
@@ -60,10 +61,11 @@ class NativeFrontierEvidence:
         # revision/step records to this native worker. Never return a
         # global inventory of all stored jobs.
         stored = self.records.list_records()
+        allowed = {(r, step_id) for r in allowed_revisions}
         seen = {}
         for entry in stored:
             key = (entry["draft_revision"], entry["step_id"])
-            if key not in {(r, step_id) for r in allowed_revisions}:
+            if key not in allowed:
                 continue
             if key in seen:
                 raise ValueError("multiple native result associations for one visible step")
@@ -102,7 +104,9 @@ class NativeFrontierEvidence:
                 other = peer["native"]
                 if (own["result_family"] == other["result_family"]
                         and own["comparable_inputs_sha256"] == other["comparable_inputs_sha256"]
-                        and own["native_job_id"] != other["native_job_id"]):
+                        and own["native_job_id"] != other["native_job_id"]
+                        and (not own["simulation_only"]
+                             or own["native_order_id"] != other["native_order_id"])):
                     peer["comparison"] = "SAME_OPERATION_INPUTS_REVERIFIED"
                     peer["matching_observed_result"] = (
                         own["verdict_sequence_sha256"] == other["verdict_sequence_sha256"]
