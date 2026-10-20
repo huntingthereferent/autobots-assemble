@@ -12,6 +12,7 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 import os
 import unittest
+from time import monotonic, sleep
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
@@ -20,7 +21,7 @@ from runtime.engine import HandoffRuntime
 from runtime.handoff import Handoff
 from security.continuation import EnvelopeError, ReplayLedger
 from security.finite_motion import BipolarBoundary
-from security.key_approach import KeyApproachBoundary
+from security.key_approach import KeyApproachBoundary, NativePresenceRunner
 from security.runtime_ingress import (
     AuthenticatedHandoffIngress, IngressAuthority, seal_handoff)
 from security.sealed_journal import SealedRuntimeJournal
@@ -58,8 +59,66 @@ class KeyApproachHarnessTests(unittest.TestCase):
         self.assertEqual(
             set(harness.snapshot().__dict__),
             {"protected_orientation", "protected_movements",
-             "approach_movements", "admitted_movements"})
+             "approach_movements", "admitted_movements",
+             "presence_orientation", "presence_movements"})
         self.assertNotIn("secret", repr(harness.snapshot()).lower())
+
+
+class IndependentNativePresenceTests(unittest.TestCase):
+    @staticmethod
+    def wait_for(boundary, min_ticks=4, timeout=2.0):
+        deadline = monotonic() + timeout
+        while monotonic() < deadline:
+            if boundary.snapshot().presence_movements >= min_ticks:
+                return
+            sleep(0.01)
+        raise AssertionError("trusted native presence driver did not move")
+
+    def test_native_clock_continues_during_idle_without_approach_or_admission(self):
+        boundary = KeyApproachBoundary()
+        before = boundary.snapshot()
+        driver = NativePresenceRunner(boundary, interval_seconds=0.01)
+        self.assertFalse(driver.running)
+        self.assertEqual(boundary.snapshot(), before)  # inert construction
+        with driver:
+            self.wait_for(boundary, 5)
+            inside = boundary.snapshot()
+            self.assertTrue(driver.running)
+            self.assertGreaterEqual(inside.presence_movements, 5)
+            self.assertEqual(inside.approach_movements, 0)
+            self.assertEqual(inside.protected_movements, 0)
+            self.assertEqual(inside.admitted_movements, 0)
+        self.assertFalse(driver.running)
+        stopped = boundary.snapshot()
+        sleep(0.06)
+        self.assertEqual(boundary.snapshot(), stopped)
+
+    def test_approaches_and_commits_do_not_halt_independent_presence(self):
+        boundary = KeyApproachBoundary()
+        with NativePresenceRunner(boundary, interval_seconds=0.01):
+            self.wait_for(boundary, 3)
+            first = boundary.snapshot()
+            for _ in range(300):
+                boundary.approach()
+            boundary.admitted()
+            self.wait_for(boundary, first.presence_movements + 3)
+            final = boundary.snapshot()
+        self.assertEqual(final.approach_movements, 300)
+        self.assertEqual(final.protected_movements, 1)
+        self.assertEqual(final.admitted_movements, 1)
+        self.assertGreaterEqual(final.presence_movements,
+                                first.presence_movements + 3)
+
+    def test_duplicate_start_and_invalid_intervals_are_refused(self):
+        boundary = KeyApproachBoundary()
+        for value in (0, -1, 1e-8, 20, "one", True, float("nan")):
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                NativePresenceRunner(boundary, interval_seconds=value)
+        runner = NativePresenceRunner(boundary, interval_seconds=0.01)
+        with runner:
+            with self.assertRaisesRegex(RuntimeError, "already started"):
+                runner.start()
+        self.assertFalse(runner.running)
 
 
 class RealKeyUseIngressTests(unittest.TestCase):
@@ -148,6 +207,43 @@ class RealKeyUseIngressTests(unittest.TestCase):
         after = self.ingress.key_approach.snapshot()
         self.assertEqual(before.protected_movements, after.protected_movements)
         self.assertEqual(after.approach_movements, before.approach_movements + 1)
+
+    def test_one_native_presence_shared_across_two_signed_ingress_roles(self):
+        worker = Ed25519PrivateKey.generate()
+        opposite = AuthenticatedHandoffIngress(
+            self.runtime, self.ledger,
+            IngressAuthority("key-approach", "worker", "owner",
+                             worker.public_key(), self.recipient))
+        self.assertIs(self.ingress.key_approach, opposite.key_approach)
+        with NativePresenceRunner(self.ingress.key_approach, interval_seconds=0.01):
+            IndependentNativePresenceTests.wait_for(
+                self.ingress.key_approach, min_ticks=4)
+            self.assertEqual(
+                opposite.key_approach.snapshot().presence_movements,
+                self.ingress.key_approach.snapshot().presence_movements)
+            self.assertEqual(self.runtime.snapshot(), {})
+            self.assertEqual(len(self.runtime.event_store.all()), 0)
+
+    def test_native_presence_during_invalid_requests_leaves_keys_and_records_unchanged(self):
+        signed = self.envelope("movement")
+        bad = deepcopy(signed)
+        bad["signature"] = "A" * 88
+        with NativePresenceRunner(self.ingress.key_approach, interval_seconds=0.01):
+            IndependentNativePresenceTests.wait_for(self.ingress.key_approach, 3)
+            first = self.ingress.key_approach.snapshot()
+            with patch("security.continuation._key",
+                       side_effect=AssertionError("unexpected key derivation")):
+                for _ in range(20):
+                    with self.assertRaises(EnvelopeError):
+                        self.ingress.submit(bad)
+            IndependentNativePresenceTests.wait_for(
+                self.ingress.key_approach, first.presence_movements + 3)
+            after = self.ingress.key_approach.snapshot()
+        self.assertEqual(after.protected_movements, 0)
+        self.assertEqual(after.admitted_movements, 0)
+        self.assertEqual(after.approach_movements, 20)
+        self.assertGreater(after.presence_movements, first.presence_movements)
+        self.assertEqual(self.runtime.snapshot(), {})
 
     def test_key_identity_unchanged_by_approaches_and_admission(self):
         from cryptography.hazmat.primitives import serialization
