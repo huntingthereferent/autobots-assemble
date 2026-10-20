@@ -1,0 +1,65 @@
+name: WORLD 20 motion-derived rotating receiver
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_rotating_receiver.py'
+      - 'network/tests/test_world_ab_rotating_receiver.py'
+      - 'systems/workspace/WORLD_AB_ROTATING_RECEIVER_TRIAL_20_2026-10-20.md'
+      - '.github/workflows/world-ab-rotating-receiver.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_rotating_receiver.py'
+      - 'network/tests/test_world_ab_rotating_receiver.py'
+      - 'systems/workspace/WORLD_AB_ROTATING_RECEIVER_TRIAL_20_2026-10-20.md'
+      - '.github/workflows/world-ab-rotating-receiver.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-continuous-rotation-to-new-receiver:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify original WORLD contact history and new receiver with independent extrema
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_square_first_recontact \
+            network.tests.test_world_ab_local_recontact_impulse \
+            network.tests.test_world_ab_continuous_separation \
+            network.tests.test_world_ab_rotating_receiver
+      - name: Retain source construction records and independent audit
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_rotating_receiver import run
+          from network.tests.test_world_ab_rotating_receiver import independent_check
+          out=run()
+          evidence={"model":out,"independent_witness":[
+              {"angle":case["source_angle"],"status":case["status"],
+               "checked":independent_check(case)}
+              for case in out["cases"]]}
+          text=json.dumps(evidence,indent=2,sort_keys=True,allow_nan=False)+"\n"
+          folder=Path("world20-native-evidence")
+          folder.mkdir(exist_ok=True)
+          (folder/"motion_derived_receiver.json").write_text(text,encoding="utf8")
+          (folder/"motion_derived_receiver.sha256").write_text(
+              sha256(text.encode()).hexdigest()+"  motion_derived_receiver.json\n",
+              encoding="utf8")
+          print("WORLD20 admitted model receiver arrivals:",out["conditional_receiver_arrivals"])
+          print("WORLD20 no-source-impulse controls:",out["no_source_second_impulse"])
+          PY
+      - name: Preserve model, math and original provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world20-rotating-receiver-math-and-oracle
+          path: world20-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
