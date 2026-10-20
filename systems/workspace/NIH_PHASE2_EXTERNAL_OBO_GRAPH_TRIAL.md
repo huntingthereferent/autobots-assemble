@@ -18,7 +18,9 @@ Compare against **separately executed rdflib SPARQL property-path reasoning**:
 
 The source ontology **does not publish true edge-by-edge known/valid time**, so the deterministic timestamps attached to each original graph edge are explicitly labelled **synthetic stress overlay**, not the source's original publication events or clinical validity. These scores must never be called real biomedical as-known-at correctness or extrapolated to Phase 2 performance.
 
-The A/B operation specifically tests **exactly two edges**; the SPARQL `+` oracle tests **arbitrary-length paths**. Cases where SPARQL proves reachable but A/B cannot are retained as real scope **failures**, not repaired by making the oracle match the A/B result. An independent RDF two-edge product also checks the exact intermediate witnesses.
+The A/B operation specifically tests **exactly two edges**; the SPARQL `+` oracle tests **arbitrary-length paths**. Cases where SPARQL proves reachable but A/B cannot are retained as real scope **failures**, not repaired by making the oracle match the A/B result.
+
+The extended trial deliberately selects two distinct groups **from the original ontology's edges**: (1) witnessed two-hop pairs, where A/B and an independently constructed RDF two-edge oracle must match, and (2) witnessed three-hop paths with **no shorter direct or two-hop path**, where the capable static SPARQL `+` reasoner can succeed and the bounded A/B operation must truthfully return no exact two-hop witness. These genuine longer-path cases are required to reveal a measurable **structural limitation**, separate from the hypothetical clock/filtering comparison. An independent RDF two-edge product also checks the exact intermediate witnesses.
 
 ## Logical inconsistency measurement — explicitly limited
 
