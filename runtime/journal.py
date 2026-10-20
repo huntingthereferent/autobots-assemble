@@ -128,6 +128,8 @@ class RuntimeJournal:
         self,
         handoff: Handoff,
         created_event: HandoffEvent,
+        *,
+        admission: tuple[str, str, str] | None = None,
     ) -> HandoffEvent:
         if handoff.handoff_id in self._handoffs:
             raise ValueError(f"handoff already exists: {handoff.handoff_id}")
@@ -141,22 +143,31 @@ class RuntimeJournal:
             "handoff": handoff_to_dict(handoff),
             "event": event_to_dict(created_event),
         }
-        self._append_record(record)
+        if admission is None:
+            self._append_record(record)
+        else:
+            atomic_append = getattr(self, "_append_admitted_record", None)
+            if atomic_append is None:
+                raise ValueError("native atomic admission requires sealed SQLite storage")
+            atomic_append(record, admission)
         self._handoffs[handoff.handoff_id] = handoff
         self._events.append(created_event)
         return created_event
 
-    def append(self, event: HandoffEvent) -> HandoffEvent:
+    def append(self, event: HandoffEvent, *,
+               admission: tuple[str, str, str] | None = None) -> HandoffEvent:
         if event.handoff_id not in self._handoffs:
             raise ValueError(
                 f"event references unknown handoff: {event.handoff_id}"
             )
-        self._append_record(
-            {
-                "record_type": "EVENT",
-                "event": event_to_dict(event),
-            }
-        )
+        record = {"record_type": "EVENT", "event": event_to_dict(event)}
+        if admission is None:
+            self._append_record(record)
+        else:
+            atomic_append = getattr(self, "_append_admitted_record", None)
+            if atomic_append is None:
+                raise ValueError("native atomic admission requires sealed SQLite storage")
+            atomic_append(record, admission)
         self._events.append(event)
         return event
 

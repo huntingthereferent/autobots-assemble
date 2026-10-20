@@ -381,3 +381,24 @@ Git-versioned research outputs, not task state or a new evaluator.
 ## Separate read-only workstation viewer
 
 The reusable [Process Workstation](../systems/workspace/README.md) has a local viewer at `http://127.0.0.1:8051/workstation.html`. Run `python -m systems.workspace.view_server --data-dir runtime/data --port 8051` to start it explicitly. This small **HTTP reader**, not another execution runtime, reloads the same `RuntimeJournal` on each `GET /api/workstation`, displays source editions, admitted jobs, historical results and evidence, and exposes **no** job-execution or task-admission endpoint. It does not run automatically with `runtime.http_server` or seed any example tasks. Both services must use the same `ECOSYSTEM_DATA_DIR` if that default is overridden. This viewer is strictly local-only, not an authentication system.
+
+## HTTP security boundary (October 2026 draft)
+
+The standalone HTTP entrance now **requires loopback binding** even when
+`HOST` was formerly configured for remote access; external binding is
+refused at startup. Requests must have a loopback Host header, correct port,
+same origin, and bounded JSON for mutations. These rules protect the local
+prototype from accidental remote exposure; they are not a user-authentication
+system. Existing local endpoints still assume a trusted local process.
+
+The optional `/api/security/handoffs` and
+`/api/security/handoffs/{id}/result` APIs delegate to the **same native**
+`HandoffRuntime` only after the host installs trusted key policy. Both
+routes return 403 by default. See [the HTTP security boundary](../security/HTTP_INGRESS.md)
+for the trust contract, recovery limitations and at-rest storage risk.
+
+## Optional signed checkpoint and local worker policy
+
+The encrypted journal can optionally require a preexisting independently signed checkpoint and a pinned Ed25519 public key at service startup. An empty replacement database or historical rollback below the anchored sequence is refused. See [the checkpoint and offline recovery record](../security/CHECKPOINT_RECOVERY.md).
+
+When a trusted host installs the authenticated `result` ingress, the former unsigned native and agent result/activation endpoints are refused in that process. Existing local workflows are unchanged if signed ingress is not installed. This HTTP policy does not intercept privileged Python methods.

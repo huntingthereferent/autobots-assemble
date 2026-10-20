@@ -52,9 +52,18 @@ class EcosystemService:
         native_observer: Observer | None = None,
         closure_admitter: ClosureAdmitter | None = None,
         repository_work_file: str | Path | None = None,
+        protected_runtime_key: bytes | None = None,
+        trusted_runtime_checkpoint: dict[str, Any] | None = None,
+        trusted_checkpoint_public_key: Any | None = None,
     ) -> None:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
+        # Explicit trusted-host configuration only. Never enroll keys from HTTP.
+        self._security_ingresses = {}
+        self._native_security_presence = None  # trusted opt-in; no auto thread
+        # A sealed history must never open legacy HTTP routes even during
+        # the interval before operator signers are enrolled.
+        self._protected_runtime = protected_runtime_key is not None
         self.repository_work_file = (Path(repository_work_file).resolve()
                                      if repository_work_file is not None else None)
         if self.repository_work_file is not None and not self.repository_work_file.is_file():
@@ -70,11 +79,30 @@ class EcosystemService:
         self.calendar = CalendarStore(
             self.data_dir / "calendar.jsonl"
         )
-        self.runtime = HandoffRuntime(
-            event_store=RuntimeJournal(
-                self.data_dir / "runtime.jsonl"
-            )
-        )
+        # Explicit opt-in to native encrypted records. Never silently mix
+        # the legacy plaintext journal with a new encrypted history.
+        legacy = self.data_dir / "runtime.jsonl"
+        sealed = self.data_dir / "runtime.sealed.sqlite"
+        if (trusted_runtime_checkpoint is None) != (trusted_checkpoint_public_key is None):
+            raise ValueError("both signed checkpoint and pinned public key must be supplied")
+        if trusted_runtime_checkpoint is not None and protected_runtime_key is None:
+            raise ValueError("checkpoint needs the encrypted runtime key")
+        if trusted_runtime_checkpoint is not None and not sealed.is_file():
+            raise ValueError("cannot recover missing sealed history from a checkpoint")
+        if protected_runtime_key is None:
+            if sealed.exists() or sealed.is_symlink():
+                raise ValueError("sealed runtime exists; provide its trusted key")
+            event_store = RuntimeJournal(legacy)
+        else:
+            if legacy.exists() or legacy.is_symlink():
+                raise ValueError("plaintext runtime exists; explicit migration required")
+            from security.sealed_journal import SealedRuntimeJournal
+            event_store = SealedRuntimeJournal(sealed, key=protected_runtime_key)
+            if trusted_runtime_checkpoint is not None:
+                from security.journal_checkpoint import verify_checkpoint
+                verify_checkpoint(event_store, trusted_runtime_checkpoint,
+                                  trusted_checkpoint_public_key)
+        self.runtime = HandoffRuntime(event_store=event_store)
         self.trace = TraceStore(
             self.data_dir / "traversal.jsonl"
         )
@@ -419,6 +447,8 @@ class EcosystemService:
         return rows
 
     def activate_agent(self, payload: dict[str, Any]) -> dict[str, Any]:
+        if "result" in self._security_ingresses:
+            raise PermissionError("unsigned agent activation disabled under signed worker policy")
         activated = self.agent_bridge.activate(payload)
         if self.agent_lineage.evaluate is not None:
             self.agent_lineage.run_until_idle(activated["root"])
@@ -426,6 +456,8 @@ class EcosystemService:
         return activated
 
     def agent_result(self, agent_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        if "result" in self._security_ingresses:
+            raise PermissionError("unsigned agent result disabled under signed worker policy")
         returned = self.agent_bridge.result(agent_id, payload)
         if self.agent_lineage.evaluate is not None:
             root = returned["lineage"]["root"]
@@ -574,6 +606,100 @@ class EcosystemService:
             payload["repository_work"] = self.connections()["repository_work"]
         return payload
 
+    @property
+    def signed_http_only(self) -> bool:
+        """True when sealed storage or signer enrollment demands signed HTTP.
+
+        Both partial enrollment and the initial protected storage state fail
+        closed. Native Python callers remain a separate trusted boundary.
+        """
+        return self._protected_runtime or bool(self._security_ingresses)
+
+    def register_authenticated_ingress(self, role: str, ingress) -> None:
+        """Install trusted local key policy; HTTP has no enrollment endpoint."""
+        from security.runtime_ingress import AuthenticatedHandoffIngress
+        if role not in {"submit", "result"} or role in self._security_ingresses:
+            raise ValueError("ingress role must be a unique submit or result")
+        if not isinstance(ingress, AuthenticatedHandoffIngress) or ingress.runtime is not self.runtime:
+            raise ValueError("security ingress must use this exact native runtime")
+        if ingress.authority.operator_pin_ledger is None:
+            raise PermissionError("HTTP ingress requires the active B14 operator key policy")
+        ingress.authority.require_current_operator_pin()
+        self._security_ingresses[role] = ingress
+
+    def start_local_key_presence(self, *, interval_seconds: float = 0.02) -> None:
+        """Trusted native host starts bipolar presence independent of requests.
+
+        Never exposed through HTTP. This only observes a finite trajectory;
+        it does not rekey, decrypt, authorize work or claim continuous
+        cryptographic protection.
+        """
+        from security.sealed_journal import SealedRuntimeJournal
+        from security.key_approach import NativePresenceRunner
+        if not isinstance(self.runtime.event_store, SealedRuntimeJournal):
+            raise PermissionError("key presence requires sealed native runtime")
+        if self._native_security_presence is not None:
+            raise ValueError("key presence is already configured")
+        a = self._security_ingresses.get("submit")
+        b = self._security_ingresses.get("result")
+        if a is None or b is None or a.key_approach is not b.key_approach:
+            raise PermissionError("both signer roles and shared native presence required")
+        x, y = a.authority, b.authority
+        if (x.lane != y.lane or x.signer_actor != y.receiver_actor
+                or x.receiver_actor != y.signer_actor):
+            raise PermissionError("reciprocal native actor/lane scope required")
+        if x.operator_pin_ledger is None or y.operator_pin_ledger is None:
+            raise PermissionError("operator-pinned signer authority required")
+        x.require_current_operator_pin()
+        y.require_current_operator_pin()
+        runner = NativePresenceRunner(a.key_approach, interval_seconds=interval_seconds)
+        runner.start()
+        self._native_security_presence = runner
+
+    def stop_local_key_presence(self) -> None:
+        """Trusted local lifecycle control; safe even when never started."""
+        runner = self._native_security_presence
+        if runner is None:
+            return
+        runner.stop()
+        self._native_security_presence = None
+
+    def authenticated_submit(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Only operator-installed, authenticated external handoffs are admitted."""
+        ingress = self._security_ingresses.get("submit")
+        if ingress is None:
+            raise PermissionError("authenticated handoff ingress is not configured")
+        if type(payload) is not dict or set(payload) != {"envelope"}:
+            raise ValueError("one sealed envelope required")
+        # A caller-supplied expected-parent digest must never establish ancestry.
+        # Root events only until a trusted parent registry is attached.
+        envelope = payload["envelope"]
+        if type(envelope) is not dict:
+            raise ValueError("sealed envelope must be an object")
+        state = ingress.submit(envelope, expected_parent_sha256=None)
+        # Do not reflect decrypted inputs, expected outputs or metadata back
+        # to an arbitrary loopback client holding the signed envelope bytes.
+        return {"handoff_id": state.handoff_id, "status": state.status}
+
+    def authenticated_return_result(self, handoff_id: str,
+                                    payload: dict[str, Any]) -> dict[str, Any]:
+        """Admit a signed worker result without trusting HTTP actor_id."""
+        ingress = self._security_ingresses.get("result")
+        if ingress is None:
+            raise PermissionError("authenticated result ingress is not configured")
+        if type(payload) is not dict or set(payload) != {"envelope"}:
+            raise ValueError("one sealed envelope required")
+        envelope = payload["envelope"]
+        if type(envelope) is not dict:
+            raise ValueError("sealed envelope must be an object")
+        if self.runtime.get(handoff_id).metadata.get("agent_lineage") is True:
+            raise ValueError("agent lineage requires its own authenticated contract")
+        state = ingress.return_result(envelope, handoff_id=handoff_id,
+                                      expected_parent_sha256=None)
+        # Results are persisted to the native journal, not revealed through
+        # the signed HTTP transport acknowledgement.
+        return {"handoff_id": handoff_id, "status": state.status}
+
     def return_result(
         self,
         handoff_id: str,
@@ -581,6 +707,8 @@ class EcosystemService:
         *,
         actor_id: str,
     ) -> dict[str, Any]:
+        if "result" in self._security_ingresses:
+            raise PermissionError("unsigned handoff result disabled under signed worker policy")
         if self.runtime.get(handoff_id).metadata.get("agent_lineage") is True:
             raise ValueError("agent lineage results require POST /api/agents/{id}/result")
         evidence = tuple(
