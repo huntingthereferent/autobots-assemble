@@ -65,8 +65,30 @@ FROZEN=(
     ("mid3_bottom_right1_upperleft2",middle(3)+" 6@40,42 4 6@40,18 3 3 5"),
     ("mid3_bottom_right1_selectedleft1",middle(3)+" 6@40,42 4 6@20,18 3 5"),
     ("mid3_bottom_right1_selectedright1",middle(3)+" 6@40,42 4 6@20,18 4 5"),
+    # Source frame check #39475101511: all four lower groups illuminate,
+    # while native palette6 trails remain in the gaps; test upper offsets.
+    ("top_left1_mid3_bottom_right1","6@20,18 3 "+middle(3)+" 6@40,42 4 5"),
+    ("top_left1_mid4_bottom_right1","6@20,18 3 "+middle(4)+" 6@40,42 4 5"),
+    ("top_left2_mid3_bottom_right1","6@20,18 3 3 "+middle(3)+" 6@40,42 4 5"),
+    ("top_left2_mid4_bottom_right1","6@20,18 3 3 "+middle(4)+" 6@40,42 4 5"),
+    ("top_right1_mid3_bottom_right1","6@20,18 4 "+middle(3)+" 6@40,42 4 5"),
+    ("top_right1_mid4_bottom_right1","6@20,18 4 "+middle(4)+" 6@40,42 4 5"),
+    ("top_right2_mid3_bottom_right1","6@20,18 4 4 "+middle(3)+" 6@40,42 4 5"),
+    ("top_right2_mid4_bottom_right1","6@20,18 4 4 "+middle(4)+" 6@40,42 4 5"),
+    ("top_left1_mid3_bottom_right2","6@20,18 3 "+middle(3)+" 6@40,42 4 4 5"),
+    ("top_left1_mid4_bottom_right2","6@20,18 3 "+middle(4)+" 6@40,42 4 4 5"),
+    ("top_right1_mid3_bottom_right2","6@20,18 4 "+middle(3)+" 6@40,42 4 4 5"),
+    ("top_right1_mid4_bottom_right2","6@20,18 4 "+middle(4)+" 6@40,42 4 4 5"),
+    ("top_left1_mid3_bottom_right1_lowerleft1","6@20,18 3 "+middle(3)+" 6@40,42 4 6@46,33 3 5"),
+    ("top_left1_mid3_bottom_right1_lowerleft2","6@20,18 3 "+middle(3)+" 6@40,42 4 6@46,33 3 3 5"),
+    ("top_left1_mid4_bottom_right1_lowerleft1","6@20,18 3 "+middle(4)+" 6@40,42 4 6@46,33 3 5"),
+    ("top_right1_mid3_bottom_right1_lowerleft1","6@20,18 4 "+middle(3)+" 6@40,42 4 6@46,33 3 5"),
+    ("top_right1_mid4_bottom_right1_lowerleft1","6@20,18 4 "+middle(4)+" 6@40,42 4 6@46,33 3 5"),
+    ("top_up1_mid4_bottom_right1","6@20,18 1 "+middle(4)+" 6@40,42 4 5"),
+    ("top_down1_mid4_bottom_right1","6@20,18 2 "+middle(4)+" 6@40,42 4 5"),
+    ("top_down2_mid4_bottom_right1","6@20,18 2 2 "+middle(4)+" 6@40,42 4 5"),
 )
-assert len(FROZEN)==len(set(n for n,_ in FROZEN))==44
+assert len(FROZEN)==len(set(n for n,_ in FROZEN))==64
 assert all(parse_plan(s)[-1][0]==5 for _,s in FROZEN)
 
 def compact(row):
@@ -98,7 +120,7 @@ def main():
             print("ORIGINAL_SP80_MULTI_STEP_SOURCE_RESULT "+json.dumps({
                 k:v for k,v in entry_record.items() if k!="true_original_sdk_actions"
             },sort_keys=True),flush=True)
-    if len(records)!=88 or len(sha)!=1:
+    if len(records)!=128 or len(sha)!=1:
         raise AssertionError("Missing independent original SDK witness or root disagreement")
     summary={
        "kind":"ACTUAL_ORIGINAL_SP80_STAGE3_MULTI_STEP_SOURCE_PATH_CONTROLS",
