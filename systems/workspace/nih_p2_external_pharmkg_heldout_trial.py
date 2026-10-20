@@ -47,18 +47,24 @@ def read_source(p,name):
         raise ValueError("original source bytes do not match Git owner object SHA1")
     rows=[]
     seen=set()
+    duplicated=0
+    physical=0
     for line in raw.decode("utf-8-sig").splitlines():
         parts=line.split("\t")
         if len(parts)!=3 or any(not x or len(x)>256 for x in parts):
             raise ValueError("invalid original biomedical triple row")
         triple=tuple(parts)
-        if triple in seen:raise ValueError("original study source contains duplicate statement")
+        physical+=1
+        if triple in seen:
+            duplicated+=1
+            continue
         seen.add(triple)
         rows.append(triple)
-        if len(rows)>MAX_TSV_ROWS:raise ValueError("source exceeded finite declared benchmark")
+        if physical>MAX_TSV_ROWS:raise ValueError("source exceeded finite declared benchmark")
     if not rows:raise ValueError("original owner data missing")
     return rows,{"source_file":name,"git_blob_sha1":SOURCE_FILES[name],
-                 "raw_sha256":sha256(raw).hexdigest(),"rows":len(rows),
+                 "raw_sha256":sha256(raw).hexdigest(),"unique_rows":len(rows),
+                 "original_physical_rows":physical,"duplicate_original_rows":duplicated,
                  "original_owner":ORIGIN,"commit":COMMIT}
 
 
