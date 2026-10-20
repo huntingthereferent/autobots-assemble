@@ -47,3 +47,7 @@ jobs:
         run: |
           timeout 45 ./Godot_v4.7.2-stable_linux.x86_64 \
             --headless --path views/godot_ab --quit-after 8
+      - name: Replay actual Godot keyboard navigation and bounded demo
+        run: |
+          timeout 45 ./Godot_v4.7.2-stable_linux.x86_64 \
+            --headless --path views/godot_ab --script res://test_viewer.gd
