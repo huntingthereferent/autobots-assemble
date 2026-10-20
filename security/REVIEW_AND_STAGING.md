@@ -128,3 +128,14 @@ regression or silently re-enable unsigned reads for convenience.
 ## SEC-14 — sealed atomic native admission
 
 The opt-in sealed native journal now binds replay identity to the signed native event **inside one SQLite commit**. The replay token and envelope digest are authenticated in encrypted journal content; restart compares every replay table entry to those protected records and refuses deletion, alteration or extra entries. Failure-injection tests interrupt between replay insertion and encrypted event insertion, after both inserts but before COMMIT, and simulate losing the network acknowledgement after COMMIT. Separate plaintext JSONL admission and recovery-escrow operations are unchanged. This is not distributed consensus, hardware power-loss certification or an independently audited production guarantee.
+
+## SEC-15 — signed native concurrency
+
+The authenticated `submit` and `return_result` paths now share one
+native runtime admission lock, covering read/validation/commit instead of
+relying on SQLite's write lock alone. Concurrent integration tests cover
+independent submissions, duplicate attempts and two worker results against
+the same parent event. The second conflicting result fails as stale, and
+restart preserves one coherent recorded outcome. This is a **single-process
+trust boundary**; privileged direct runtime calls and independently started
+hosts are still outside it. [Protocol](ATOMIC_ADMISSION.md).
