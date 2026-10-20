@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="745" viewBox="0 0 960 745">
+<title>A/B finite mathematical workbench</title>
+<desc>Twelve constructed finite F3 worlds arranged in four support classes and three shear charts. Blue shear relations stay within each class; orange support moves change class. Three support walls at k=3.</desc>
+<rect width="960" height="745" fill="#101825"/>
+<text x="44" y="53" fill="#f3f6fc" font-family="system-ui,sans-serif" font-size="27" font-weight="bold">A/B | Finite Mathematical Workbench</text>
+<text x="44" y="80" fill="#aab8ca" font-family="system-ui,sans-serif" font-size="14">Existing 12-world F3 family · movement, conjugacy, obstruction, walls</text>
+<g font-family="system-ui,sans-serif" font-size="14" text-anchor="middle">
+<text x="235" y="120" fill="#c4cfde">shear chart c=0</text>
+<text x="505" y="120" fill="#c4cfde">shear chart c=1</text>
+<text x="775" y="120" fill="#c4cfde">shear chart c=2</text>
+<text x="65" y="184" fill="#b7c8dd" text-anchor="start">support k=0</text>
+<path d="M235 217 V286" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M307 180 H433" stroke="#76bdff" stroke-width="2"/>
+<rect x="163" y="145" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="235" y="175" fill="#f2f6ff" font-weight="bold">k0 c0</text>
+<text x="235" y="199" fill="#afcbe6">fixed B: 9</text>
+<path d="M505 217 V286" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M577 180 H703" stroke="#76bdff" stroke-width="2"/>
+<rect x="433" y="145" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="505" y="175" fill="#f2f6ff" font-weight="bold">k0 c1</text>
+<text x="505" y="199" fill="#afcbe6">fixed B: 9</text>
+<path d="M775 217 V286" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="703" y="145" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="775" y="175" fill="#f2f6ff" font-weight="bold">k0 c2</text>
+<text x="775" y="199" fill="#afcbe6">fixed B: 9</text>
+<path d="M847 171 h24 v18 h-24" fill="none" stroke="#76bdff" stroke-width="2"/>
+<text x="65" y="329" fill="#b7c8dd" text-anchor="start">support k=1</text>
+<path d="M235 362 V431" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M307 325 H433" stroke="#76bdff" stroke-width="2"/>
+<rect x="163" y="290" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="235" y="320" fill="#f2f6ff" font-weight="bold">k1 c0</text>
+<text x="235" y="344" fill="#afcbe6">fixed B: 6</text>
+<path d="M505 362 V431" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M577 325 H703" stroke="#76bdff" stroke-width="2"/>
+<rect x="433" y="290" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="505" y="320" fill="#f2f6ff" font-weight="bold">k1 c1</text>
+<text x="505" y="344" fill="#afcbe6">fixed B: 6</text>
+<path d="M775 362 V431" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="703" y="290" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="775" y="320" fill="#f2f6ff" font-weight="bold">k1 c2</text>
+<text x="775" y="344" fill="#afcbe6">fixed B: 6</text>
+<path d="M847 316 h24 v18 h-24" fill="none" stroke="#76bdff" stroke-width="2"/>
+<text x="65" y="474" fill="#b7c8dd" text-anchor="start">support k=2</text>
+<path d="M235 507 V576" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M307 470 H433" stroke="#76bdff" stroke-width="2"/>
+<rect x="163" y="435" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="235" y="465" fill="#f2f6ff" font-weight="bold">k2 c0</text>
+<text x="235" y="489" fill="#afcbe6">fixed B: 3</text>
+<path d="M505 507 V576" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<path d="M577 470 H703" stroke="#76bdff" stroke-width="2"/>
+<rect x="433" y="435" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="505" y="465" fill="#f2f6ff" font-weight="bold">k2 c1</text>
+<text x="505" y="489" fill="#afcbe6">fixed B: 3</text>
+<path d="M775 507 V576" stroke="#f5ad69" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="703" y="435" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="775" y="465" fill="#f2f6ff" font-weight="bold">k2 c2</text>
+<text x="775" y="489" fill="#afcbe6">fixed B: 3</text>
+<path d="M847 461 h24 v18 h-24" fill="none" stroke="#76bdff" stroke-width="2"/>
+<text x="65" y="619" fill="#b7c8dd" text-anchor="start">support k=3</text>
+<path d="M307 615 H433" stroke="#76bdff" stroke-width="2"/>
+<rect x="163" y="580" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="235" y="610" fill="#f2f6ff" font-weight="bold">k3 c0</text>
+<text x="235" y="634" fill="#afcbe6">fixed B: 0</text>
+<text x="235" y="673" fill="#ffad9f">WALL ↓</text>
+<path d="M577 615 H703" stroke="#76bdff" stroke-width="2"/>
+<rect x="433" y="580" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="505" y="610" fill="#f2f6ff" font-weight="bold">k3 c1</text>
+<text x="505" y="634" fill="#afcbe6">fixed B: 0</text>
+<text x="505" y="673" fill="#ffad9f">WALL ↓</text>
+<rect x="703" y="580" width="144" height="70" rx="12" fill="#1c2b3d" stroke="#6a849f"/>
+<text x="775" y="610" fill="#f2f6ff" font-weight="bold">k3 c2</text>
+<text x="775" y="634" fill="#afcbe6">fixed B: 0</text>
+<text x="775" y="673" fill="#ffad9f">WALL ↓</text>
+<path d="M847 606 h24 v18 h-24" fill="none" stroke="#76bdff" stroke-width="2"/>
+</g>
+<path d="M44 694 h28" stroke="#76bdff" stroke-width="3"/>
+<text x="82" y="700" fill="#d3e0ef" font-family="system-ui,sans-serif" font-size="13">shear: same class (third step returns to start)</text>
+<path d="M484 694 h28" stroke="#f5ad69" stroke-width="3" stroke-dasharray="6 6"/>
+<text x="522" y="700" fill="#d3e0ef" font-family="system-ui,sans-serif" font-size="13">support: class changes; last row is a wall</text>
+<text x="44" y="728" fill="#94a3b8" font-family="system-ui,sans-serif" font-size="12">Source: work.arc_like_maze.window_family · diagram does not claim universal A/B closure</text>
+</svg>
