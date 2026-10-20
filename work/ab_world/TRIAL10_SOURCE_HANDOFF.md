@@ -28,7 +28,11 @@ CI checks out immutable original WORLD commit
 native verifier, then imports the actual source JSON through the neutral
 A/B record. A separate ledger verifier reconstructs the declared event
 chain and detects tampering. CI preserves native result, source verdict,
-full carrier receipt, ledger verdict and hashes.
+five independently verified finite A/B receipts, their ordered source-linked
+head-hash manifest, per-page ledger verdicts and file hashes. The original
+1 MB per-plan limit is unchanged. Each rotation forms an independently
+bounded record; the manifest orders and binds these records, but does not
+make them one shared mutable-world state or authenticate a third party.
 
 The original native browser experiment is already separate; the handoff
 does not claim a new browser replay. The A/B ledger's independent
