@@ -130,11 +130,11 @@ class GenericTimeRespectingChainTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         with TemporaryDirectory() as tmp:
-            cls.run=trial.run(output_dir=Path(tmp))
-        cls.by_id={t["task"]:t for t in cls.run["original_13_case_results"]}
+            cls.report=trial.run(output_dir=Path(tmp))
+        cls.by_id={t["task"]:t for t in cls.report["original_13_case_results"]}
 
     def test_09_replay_original_exact_13_question_score_without_modification(self):
-        r=self.run
+        r=self.report
         self.assertEqual(r["original_13_case_scores"],
                          {"W13":8,"static":6,"cases":13})
         self.assertEqual(r["with_bounded_generic_source_chain"],
@@ -166,7 +166,7 @@ class GenericTimeRespectingChainTests(unittest.TestCase):
                          ["evidence"]["witness_paths"],[])
 
     def test_11_unseen_cross_domain_160_cases_have_both_outcomes_and_oracle(self):
-        r=self.run["unseen_generated"]
+        r=self.report["unseen_generated"]
         self.assertEqual(r["cases"],160)
         self.assertEqual(r["verified_by_independent_cartesian_oracle"],160)
         self.assertGreater(r["positive_cases"],0)
@@ -180,9 +180,9 @@ class GenericTimeRespectingChainTests(unittest.TestCase):
         for key in ("superseded-claim-not-current","rdf-property-chain-inference"):
             item=self.by_id[key]
             self.assertFalse(item["new_pass"])
-        self.assertTrue(self.run["longitudinal_observation_supported"])
-        self.assertFalse(self.run["causal_therapy_change_inferred"])
-        self.assertFalse(self.run["clinical_event_valid_at_authenticated"])
+        self.assertTrue(self.report["longitudinal_observation_supported"])
+        self.assertFalse(self.report["causal_therapy_change_inferred"])
+        self.assertFalse(self.report["clinical_event_valid_at_authenticated"])
 
 
 if __name__=="__main__":
