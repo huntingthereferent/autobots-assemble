@@ -88,6 +88,12 @@ def main():
         for y,row in enumerate(item["source_original_pre_pour_ascii_palette"]):
             print("%02d %s"%(y,row))
         print("ORIGINAL_SP80_STAGE2_SOURCE_MAP_END "+name)
+        if name=="A":
+            for k in sorted(set((0,4,8,12,16,20,len(pour)-1)).intersection(range(len(pour)))):
+                print("ORIGINAL_SOURCE_POUR_FRAME_BEGIN "+str(k))
+                for yy, row in enumerate(scene(pour[k])):
+                    print("%02d %s" % (yy,row))
+                print("ORIGINAL_SOURCE_POUR_FRAME_END "+str(k))
         print("ORIGINAL_SOURCE_MAP_REGIONS "+name+" "+json.dumps(item["original_source_connected_same_palette_regions"],sort_keys=True))
         print("ORIGINAL_SOURCE_MAP_POUR "+name+" "+json.dumps({
             "native_SDK_end_level":item["native_SDK_end_level"],
