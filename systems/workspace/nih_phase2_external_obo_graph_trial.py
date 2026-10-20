@@ -24,6 +24,11 @@ SCHEMA="nih-phase2-external-obo-original-rdf-inference-comparison/v1"
 OWNER="oborel/obo-relations"
 COMMIT="091f4761ec84657cc336d623e02006d6c351722c"
 SOURCE_FILES=("ro-base.owl","core.owl")
+# Observed exact raw original GitHub commit assets, fixed before benchmark run.
+PINNED_WHOLE_SOURCE_SHA256={
+    "ro-base.owl":"bdfe8dda3adc4b9cda9d9c843b02e1031772280a92c07003af7c9c22cde027fe",
+    "core.owl":"3c8e219fddd6f772c2d5e27cced12a91e8c3d2431b5e02af58e4ec567a4efeb8",
+}
 VERSION="2026-09-04"
 SOURCE_URL="https://raw.githubusercontent.com/"+OWNER+"/"+COMMIT+"/"
 CUTOFFS=("2026-01-03","2026-01-12","2026-01-29")
@@ -41,6 +46,8 @@ def admit_sources(filenames):
     src={}
     for name in SOURCE_FILES:
         raw=Path(filenames[name]).read_bytes()
+        if digest(raw)!=PINNED_WHOLE_SOURCE_SHA256[name]:
+            raise ValueError("original external ontology bytes do not match frozen source hash")
         if not 5000<len(raw)<5_000_000:
             raise ValueError("original ontology missing or unreasonable size")
         g=Graph()
