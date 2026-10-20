@@ -1,0 +1,47 @@
+name: A/B general world construction witness
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'work/ab_world/construction.py'
+      - 'work/ab_world/verify_construction.py'
+      - 'work/ab_world/GENERAL_CONSTRUCTION.md'
+      - 'network/tests/test_ab_world_construction.py'
+      - 'network/tests/fixtures/ab_world_construction_example.json'
+      - '.github/workflows/ab-world-general-construction.yml'
+
+jobs:
+  verify-native-construction:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run independent reconstruction and failure controls
+        run: python -m unittest -v network.tests.test_ab_world_construction
+      - name: Produce and independently replay a concrete receipt
+        run: |
+          python -m work.ab_world.construction --plan network/tests/fixtures/ab_world_construction_example.json > ab-world-construction-receipt.json
+          python -m work.ab_world.construction --verify ab-world-construction-receipt.json > ab-world-construction-verdict.json
+          python - <<'PY'
+          import json
+          trace = json.load(open("ab-world-construction-receipt.json"))
+          check = json.load(open("ab-world-construction-verdict.json"))
+          assert check["valid"] and check["steps_verified"] == 6
+          assert trace["final"]["comparisons"]["angle-contrast"]["result"] == "DIFFERENT"
+          assert not check["physical_behavior_verified"]
+          assert not check["external_source_authenticated"]
+          PY
+          sha256sum ab-world-construction-*.json > ab-world-construction-digests.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-construction-local-evidence
+          path: |
+            ab-world-construction-receipt.json
+            ab-world-construction-verdict.json
+            ab-world-construction-digests.txt
+          retention-days: 30
