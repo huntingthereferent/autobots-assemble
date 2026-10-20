@@ -299,6 +299,30 @@ class SignedHttpIntegrationTests(unittest.TestCase):
                 self.assertEqual(status, 403)
                 self.assertIn("unsigned", doc["error"])
 
+    def test_sealed_runtime_without_signers_denies_legacy_http_from_start(self):
+        # Protected storage is itself an opt-in security posture, even when
+        # the operator has not registered a worker key yet.
+        import os
+        sealed = EcosystemService(
+            data_dir=Path(self.tmp.name) / "sealed-runtime",
+            protected_runtime_key=os.urandom(32))
+        previous = server_module.SERVICE
+        server_module.SERVICE = sealed
+        try:
+            self.assertTrue(sealed.signed_http_only)
+            status, _ = self.get("/api/status")
+            self.assertEqual(status, 403)
+            for path in ("/api/notes", "/api/ohayo",
+                         "/api/tasks", "/api/tasks/id/admit"):
+                with self.subTest(path=path):
+                    status, _ = self.request(path, {"actor_id": "owner", "title": "unsafe"})
+                    self.assertEqual(status, 403)
+            status, _ = self.request("/api/security/handoffs", {"envelope": self.seal()})
+            self.assertEqual(status, 403)  # absent operator trust, not self-enrollment
+            self.assertEqual(sealed.runtime.snapshot(), {})
+        finally:
+            server_module.SERVICE = previous
+
     def test_ordinary_local_http_mutations_remain_available_without_signed_policy(self):
         self.assertFalse(self.service.signed_http_only)
         status, doc = self.request("/api/notes",
