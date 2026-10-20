@@ -602,6 +602,15 @@ class EcosystemService:
             payload["repository_work"] = self.connections()["repository_work"]
         return payload
 
+    @property
+    def signed_http_only(self) -> bool:
+        """True as soon as a trusted host begins enrolling HTTP signer roles.
+
+        Partial setup fails closed. Local native Python callers and legacy
+        service methods are separate, explicitly trusted interfaces.
+        """
+        return bool(self._security_ingresses)
+
     def register_authenticated_ingress(self, role: str, ingress) -> None:
         """Install trusted local key policy; HTTP has no enrollment endpoint."""
         from security.runtime_ingress import AuthenticatedHandoffIngress
