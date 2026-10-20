@@ -356,6 +356,23 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
   .notebook-heading { flex-direction:row; align-items:center; }
 }
 
+
+/* Audit refinement: evidence disclosure, catalogue and lists. */
+.workflow-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:3px}
+.workflow-actions a{font:11px/1.5 var(--data-font)}
+.workflow-choose{font:11px/1.3 var(--data-font);color:var(--blue);padding:4px 7px;min-height:27px;border-radius:4px}
+.catalog-footer button[hidden],.index-footer button[hidden]{display:none}
+.catalog-footer:has(button:not([hidden])){display:flex;gap:9px}
+.catalog-footer button{width:auto;flex:1}
+.job-section{border-bottom:1px solid #344750}
+.job-summary{padding:12px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;cursor:pointer}
+.job-summary strong{font-size:12.5px}
+.job-section .detail-body{padding:0 17px 16px}
+.job-section .detail-body p:first-child{margin-top:0}
+.run[aria-pressed="true"]{background:#223742;box-shadow:inset 3px 0 var(--blue)}
+#workflow-registry>.registry-summary,#revision-panel>.registry-summary{list-style-position:inside}
+@media(max-width:760px){.job-summary{padding:11px 13px}.catalog-footer:has(button:not([hidden])){flex-wrap:wrap}}
+
 </style>
 </head>
 <body>
@@ -420,7 +437,7 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
     <summary class="registry-summary"><span><span class="lab-label">SOURCE REGISTRY</span><strong>Workflow catalog</strong></span><small id="workflow-scope">Loading workflow definitions…</small></summary>
     <div class="catalog-controls"><label for="workflow-search">Find a workflow <input id="workflow-search" type="search" placeholder="Name or source file…" autocomplete="off"></label><small id="workflow-visible">Loading registry…</small></div>
     <div id="workflow-catalog" class="workflow-catalog"><p class="no-source">Reading original workflow definitions…</p></div>
-    <div class="catalog-footer"><button id="show-more-workflows" type="button" hidden>Show more workflows</button></div>
+    <div class="catalog-footer"><button id="show-more-workflows" type="button" hidden>Show 16 more matches</button><button id="load-more-workflows" type="button" hidden>Fetch next GitHub workflow page</button></div>
     <p class="fine registry-note">Catalog entries identify workflow definitions. A registered workflow is not automatically an active worker or a completed research result.</p>
   </details>
   <details class="pane revision-pane" id="revision-panel">
@@ -459,7 +476,9 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
     checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],
     catalog:[],catalogLoaded:false,stream:null,streamUrl:"",streamTicks:0,lastTick:0,
-    lastStreamStatus:"not configured",rateLimitUntil:0,lastAttempt:0};
+    lastStreamStatus:"not configured",rateLimitUntil:0,lastAttempt:0,
+    runVisible:20,catalogVisible:16,recordVisible:16,movementVisible:18,wallVisible:12,
+    selectedUpdated:null,catalogNextPage:2,catalogExhausted:false,catalogTotal:null,catalogLoading:false};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
@@ -534,20 +553,33 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
     }
     const counts=new Map();
     for(const r of app.runs)counts.set(r.name,(counts.get(r.name)||0)+1);
-    const sorted=[...app.catalog].sort((a,b)=>(counts.get(b.name)||0)-(counts.get(a.name)||0)||a.name.localeCompare(b.name));
-    $("workflow-scope").textContent=sorted.length+" registered workflows · "+app.runs.length+" sampled runs";
-    for(const workflow of sorted){
+    const q=$("workflow-search").value.trim().toLowerCase();
+    const sorted=[...app.catalog].filter(w=>!q||(w.name+" "+w.path).toLowerCase().includes(q))
+      .sort((a,b)=>(counts.get(b.name)||0)-(counts.get(a.name)||0)||a.name.localeCompare(b.name));
+    $("workflow-scope").textContent=app.catalog.length+" retrieved workflows · "+app.runs.length+" sampled runs";
+    $("workflow-visible").textContent=Math.min(sorted.length,app.catalogVisible)+" / "+sorted.length+" matching";
+    for(const workflow of sorted.slice(0,app.catalogVisible)){
       const article=el("article",undefined,"workflow-row");
       article.append(el("strong",workflow.name));
-      article.append(el("small",workflow.state+" · "+(counts.get(workflow.name)||0)+" runs in loaded sample"));
+      article.append(el("small",workflow.state.replaceAll("_"," ")+" · "+(counts.get(workflow.name)||0)+" runs in retrieved sample"));
+      const links=el("div",undefined,"workflow-actions");
       const filename=workflow.path.split("/").pop();
-      if(filename&&/^[\w.-]+\.ya?ml$/.test(filename)){
-        article.append(link("Open workflow source ↗","https://github.com/"+REPO+"/blob/main/"+workflow.path));
+      if(filename&&/^[\w.-]+\.ya?ml$/.test(filename))
+        links.append(link("Source ↗","https://github.com/"+REPO+"/blob/main/"+workflow.path));
+      if((counts.get(workflow.name)||0)>0){
+        const choose=el("button","Inspect runs","workflow-choose");choose.type="button";
+        choose.addEventListener("click",()=>{
+          $("workflow-filter").value=workflow.name;app.runVisible=20;renderRuns();
+          $("executions").scrollIntoView({block:"start",behavior:"smooth"});
+        });
+        links.append(choose);
       }
-      target.append(article);
+      article.append(links);target.append(article);
     }
-    if(!sorted.length)target.append(el("p","No workflow definitions reported in this source response.","no-source"));
-    if(sorted.length===MAX_CATALOG_PAGE)target.append(el("p","Catalog shows at most the first 100 definitions returned by GitHub.","no-source"));
+    if(!sorted.length)target.append(el("p","No workflow definitions match this search.","no-source"));
+    $("show-more-workflows").hidden=sorted.length<=app.catalogVisible;
+    $("load-more-workflows").hidden=app.catalogExhausted;
+    $("load-more-workflows").disabled=app.catalogLoading;
   }
   async function loadCatalog(){
     try{
@@ -556,12 +588,32 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
       app.catalog=json.workflows.filter(w=>Number.isSafeInteger(w.id)&&typeof w.name==="string"&&
         typeof w.path==="string"&&w.path.startsWith(".github/workflows/")&&
         ["active","disabled_manually","disabled_inactivity","deleted"].includes(w.state));
+      app.catalogTotal=Number.isSafeInteger(json.total_count)?json.total_count:null;
+      app.catalogExhausted=json.workflows.length<100||(app.catalogTotal!==null&&app.catalog.length>=app.catalogTotal);
       app.catalogLoaded=true;renderCatalog();
     }catch(e){
       $("workflow-scope").textContent="Workflow catalog unavailable";
       $("workflow-catalog").replaceChildren(el("p","Could not read workflow definitions: "+e.message+". Run history remains separate.","no-source"));
       updateWorkflowFilter();
     }
+  }
+  async function loadMoreWorkflows(){
+    if(app.catalogLoading||app.catalogExhausted)return;
+    app.catalogLoading=true;$("load-more-workflows").disabled=true;
+    try{
+      const json=await getJSON(API+"/actions/workflows?per_page=100&page="+app.catalogNextPage);
+      if(!json||!Array.isArray(json.workflows))throw Error("Missing workflow definitions");
+      const ids=new Set(app.catalog.map(x=>x.id));
+      const valid=json.workflows.filter(w=>Number.isSafeInteger(w.id)&&typeof w.name==="string"&&
+        typeof w.path==="string"&&w.path.startsWith(".github/workflows/")&&
+        ["active","disabled_manually","disabled_inactivity","deleted"].includes(w.state));
+      for(const w of valid)if(!ids.has(w.id)){app.catalog.push(w);ids.add(w.id);}
+      app.catalogNextPage++;
+      app.catalogExhausted=json.workflows.length<100||
+        (app.catalogTotal!==null&&app.catalog.length>=app.catalogTotal);
+      app.catalogVisible+=16;
+    }catch(e){$("workflow-visible").textContent="Next catalog page unavailable: "+e.message;}
+    finally{app.catalogLoading=false;renderCatalog();}
   }
   async function loadOlder(){
     if(app.olderLoading||app.olderExhausted||app.reading)return;
@@ -581,17 +633,17 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
   function renderMetrics(){const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
-  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value;return app.runs.filter(r=>(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
+  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();return app.runs.filter(r=>(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
-    $("runs-scope").textContent=subset.length+" shown / "+app.runs.length+" retrieved source runs";
-    for(const r of subset){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
-      btn.type="button";const head=el("div",undefined,"run-title");
-      head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
+    $("runs-scope").textContent=Math.min(subset.length,app.runVisible)+" / "+subset.length+" matching · "+app.runs.length+" retrieved";
+    for(const r of subset.slice(0,app.runVisible)){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
+      btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
+      const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
       btn.append(el("p",r.branch+" · "+r.head.slice(0,10)+" · "+safeDate(r.created)));
-      btn.append(el("p","#"+r.runNumber+" · GitHub execution "+r.id));
-      btn.addEventListener("click",()=>selectRun(r.id));area.append(btn);
+      btn.addEventListener("click",()=>selectRun(r.id,true));area.append(btn);
     }
-    if(!subset.length)area.append(el("p","No source runs match this filter. This is not a claim that no work exists.","no-source"));
+    $("show-more-runs").hidden=subset.length<=app.runVisible;
+    if(!subset.length)area.append(el("p","No retrieved runs match this filter. Load older pages if needed; no absence claim is implied.","no-source"));
   }
   function appendStepList(target,steps){
     const list=el("ol",undefined,"steps");for(const [i,step] of steps.entries()){
@@ -666,29 +718,36 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
       }
     }
   }
-  async function selectRun(id){
+  async function selectRun(id,focus=false){
     if(!Number.isSafeInteger(id)||id<1)return;const r=app.runs.find(x=>x.id===id);if(!r)return;
-    app.selection=id;renderRuns();loadRevision(r);const area=$("detail");area.replaceChildren();
+    app.selection=id;renderRuns();
+    if($("revision-panel").open)loadRevision(r);
+    else $("revision-scope").textContent="Run "+r.id+" · open for exact source paths";
+    const area=$("detail");area.replaceChildren();
     const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
     header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
     header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
     if(plausible(r.url,"run"))header.append(link("Open original workflow run ↗",r.url));
     header.append(el("p","Source jobs and steps below are read from GitHub. A successful workflow proves only its declared checks.","fine"));
     area.append(header);$("details-scope").textContent="Run "+r.id+" · "+r.head.slice(0,10);
+    if(focus&&window.matchMedia("(max-width:980px)").matches)
+      area.scrollIntoView({block:"start",behavior:"smooth"});
     const pane=el("div","Reading exact GitHub job evidence…","no-source");area.append(pane);
     try{
       const json=app.jobCache.has(id)?app.jobCache.get(id):await getJSON(API+"/actions/runs/"+id+"/jobs?per_page=100");
       if(!json||!Array.isArray(json.jobs))throw Error("Missing job array");
       app.jobCache.set(id,json);if(app.selection!==id)return;
-      pane.remove();for(const j of json.jobs.slice(0,100)){
-        const b=el("div",undefined,"detail-body");
-        b.append(el("div",undefined,"subhead"),el("h3",j.name||"Job"));
-        b.append(pill(statusOf(j)));
-        b.append(el("p","Job "+j.id+" · Started "+safeDate(j.started_at)+" · Ended "+safeDate(j.completed_at),"fine"));
-        if(plausible(j.html_url))b.append(link("Inspect this job on GitHub ↗",j.html_url));
-        if(Array.isArray(j.steps)&&j.steps.length)appendStepList(b,j.steps);
-        else b.append(el("p","No steps included in the source response; not interpreted as an empty execution.","no-source"));
-        area.append(b);
+      pane.remove();for(const [index,j] of json.jobs.slice(0,100).entries()){
+        const b=el("details",undefined,"job-section");b.open=index===0;
+        const title=el("summary",undefined,"job-summary");
+        title.append(el("strong",j.name||"Job"),pill(statusOf(j)));
+        b.append(title);
+        const inside=el("div",undefined,"detail-body");
+        inside.append(el("p","Job "+j.id+" · Started "+safeDate(j.started_at)+" · Ended "+safeDate(j.completed_at),"fine"));
+        if(plausible(j.html_url))inside.append(link("Inspect this job on GitHub ↗",j.html_url));
+        if(Array.isArray(j.steps)&&j.steps.length)appendStepList(inside,j.steps);
+        else inside.append(el("p","No steps included in the source response; not interpreted as an empty execution.","no-source"));
+        b.append(inside);area.append(b);
       }
       if(!json.jobs.length)area.append(el("p","No job evidence returned for this run.","no-source"));
     }catch(e){if(app.selection===id)pane.textContent="Source evidence unavailable: "+e.message+". No steps inferred."}
@@ -816,8 +875,12 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
       $("last-read").textContent="checked "+new Date(app.checked).toLocaleString();
       updateNextCheck();
       $("feed-error").hidden=true;
-      // Job detail requires an exact user selection or first source run.
-      await selectRun(app.selection);
+      // Re-read jobs only when the selected run changes; polling run status remains source-backed.
+      const selected=app.runs.find(r=>r.id===app.selection);
+      if(selected&&(!app.selectedUpdated||app.selectedUpdated!==selected.updated)){
+        app.selectedUpdated=selected.updated;
+        await selectRun(app.selection);
+      }
     }catch(e){
       $("live-dot").className="indicator error";
       $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
@@ -828,8 +891,16 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
     await loadResearch();
   }
   $("check-now").addEventListener("click",refresh);
-  $("run-filter").addEventListener("change",renderRuns);
-  $("workflow-filter").addEventListener("change",renderRuns);
+  $("run-filter").addEventListener("change",()=>{app.runVisible=20;renderRuns()});
+  $("run-search").addEventListener("input",()=>{app.runVisible=20;renderRuns()});
+  $("show-more-runs").addEventListener("click",()=>{app.runVisible+=20;renderRuns()});
+  $("workflow-search").addEventListener("input",()=>{app.catalogVisible=16;renderCatalog()});
+  $("show-more-workflows").addEventListener("click",()=>{app.catalogVisible+=16;renderCatalog()});
+  $("load-more-workflows").addEventListener("click",loadMoreWorkflows);
+  $("revision-panel").addEventListener("toggle",()=>{
+    if($("revision-panel").open){const r=app.runs.find(x=>x.id===app.selection);if(r)loadRevision(r);}
+  });
+  $("workflow-filter").addEventListener("change",()=>{app.runVisible=20;renderRuns()});
   $("load-older").addEventListener("click",loadOlder);
   $("source-search").addEventListener("input",renderResearch);
   $("source-filter").addEventListener("change",renderResearch);
