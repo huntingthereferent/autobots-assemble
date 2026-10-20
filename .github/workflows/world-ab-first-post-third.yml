@@ -1,0 +1,67 @@
+name: WORLD 22 first modeled feature after conditional third contact
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_first_post_third_candidate.py'
+      - 'network/tests/test_world_ab_first_post_third_candidate.py'
+      - 'systems/workspace/WORLD_AB_FIRST_POST_THIRD_TRIAL_22_2026-10-20.md'
+      - '.github/workflows/world-ab-first-post-third.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_first_post_third_candidate.py'
+      - 'network/tests/test_world_ab_first_post_third_candidate.py'
+      - 'systems/workspace/WORLD_AB_FIRST_POST_THIRD_TRIAL_22_2026-10-20.md'
+      - '.github/workflows/world-ab-first-post-third.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-first-post-third-feature:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recheck source 04 18 20 21 and new independent first-feature witness
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate
+      - name: Preserve source-owned first-crossing alternatives and witness
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_first_post_third_candidate import run
+          from network.tests.test_world_ab_first_post_third_candidate import independent_check
+          report=run()
+          verified=[{"angle":c["angle"],"status":c["status"],
+                     "verified":independent_check(c)} for c in report["cases"]]
+          assert len(verified)==8 and all(x["verified"] for x in verified)
+          assert report["conditional_third_impulse_inputs"]==6
+          assert report["no_third_impulse_controls"]==2
+          assert report["physical_contact_measurements"]==0
+          assert report["selected_fourth_impulses"]==0
+          target=Path("world22-native-evidence")
+          target.mkdir(exist_ok=True)
+          payload=json.dumps({"source":report,"independent_witness":verified},indent=2,sort_keys=True,allow_nan=False)+"\n"
+          (target/"first_post_third_candidates.json").write_text(payload,encoding="utf8")
+          (target/"first_post_third_candidates.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  first_post_third_candidates.json\n")
+          print(json.dumps({"source_line_crossing_cases":report["source_line_crossing_cases"],
+                            "no_crossing_in_window":report["source_line_no_crossing_cases"],
+                            "absent_third_impulse":report["no_third_impulse_controls"],
+                            "real_fourth_impulses":0},sort_keys=True))
+          PY
+      - name: Retain source and independent numerical evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world22-conditional-first-post-third-feature
+          path: world22-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
