@@ -1,0 +1,123 @@
+name: A/B WORLD Trial15 source-body geometry continuity
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial15_handoff.py'
+      - 'network/tests/test_ab_world_trial15_handoff.py'
+      - 'work/ab_world/TRIAL15_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial15-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-body-support-to-bounded-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout independent A/B carrier
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD15 native source at fixed commit
+        uses: actions/checkout@v4
+        with:
+          ref: 65339494abaccac3c4dd20aa89439af057ec3035
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute original tests and independent body-support geometry oracle
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_rotation \
+            network.tests.test_world_ab_relation_morph \
+            network.tests.test_world_ab_body_support
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from systems.workspace.world_ab_body_support import run, trial
+          from network.tests.test_world_ab_body_support import independent_witness
+          native=run()
+          assert len(native["cases"]) == 8
+          assert all(case["status"] == "TWO_MODELED_CONTACTS"
+                     and independent_witness(case) for case in native["cases"])
+          refusal=trial("fixed-square",angle=30.)
+          assert refusal["status"] == "NO_ADMITTED_INTERIOR_CONTACT"
+          assert refusal["receiver"] is None and refusal["frames"] == [] and refusal["contacts"] == []
+          Path("../trial15-original-native.json").write_text(json.dumps(native,indent=2,sort_keys=True)+"\n")
+          Path("../trial15-original-refusal.json").write_text(json.dumps(refusal,indent=2,sort_keys=True)+"\n")
+          Path("../trial15-original-verdict.json").write_text(
+              json.dumps({"source_commit":"65339494abaccac3c4dd20aa89439af057ec3035",
+                          "source_independent_geometry_audit_passed":True,
+                          "modeled_disc_cases":4,
+                          "modeled_constrained_square_cases":4,
+                          "unadmitted_square_endpoint_cases":1,
+                          "real_material_measurements":0},indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Test source identity, refusal and receipt tamper controls
+        run: python -m unittest -v network.tests.test_ab_world_trial15_handoff
+      - name: Preserve source chronology and independently replay finite ledgers
+        run: |
+          python -m work.ab_world.world_trial15_handoff \
+            --native trial15-original-native.json \
+            --refusal trial15-original-refusal.json > trial15-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          r=json.load(open("trial15-ab-carrier.json"))
+          assert r["source_commit"] == "65339494abaccac3c4dd20aa89439af057ec3035"
+          assert r["ledger_witness"]["valid"]
+          assert r["ledger_witness"]["pages_verified"] == 9
+          assert r["ledger_witness"]["observations_recorded"] == 25
+          assert r["modeled_movements"] == 8 and r["unadmitted_endpoint_cases"] == 1
+          assert r["real_material_measurements"] == 0
+          assert not r["free_square_rotation_solved"] and not r["contact_law_generalized"]
+          assert digest(r["manifest"]) == r["manifest_sha256"]
+          Path("trial15-ab-ledgers").mkdir(exist_ok=True)
+          for page in r["ledger_pages"]:
+              index=page["index"]
+              assert page["witness"]["valid"]
+              receipt=page["receipt"]
+              assert verify_receipt(receipt)["valid"]
+              assert receipt["head_hash"] == r["manifest"]["ordered_pages"][index]["head_hash"]
+              Path(f"trial15-ab-ledgers/case-{index:02d}.json").write_text(
+                  json.dumps(receipt,indent=2,sort_keys=True)+"\n")
+          Path("trial15-ab-manifest.json").write_text(
+              json.dumps(r["manifest"],indent=2,sort_keys=True)+"\n")
+          print(json.dumps({"source_owned_case_count":8,
+                            "refused_endpoint_cases":1,
+                            "native_frames_carried":r["frames_carried"],
+                            "verified_operations":r["ledger_witness"]["steps_verified"],
+                            "real_physical_measurements":0},sort_keys=True))
+          PY
+          for n in $(seq 0 8); do
+            p=$(printf '%02d' "$n")
+            python -m work.ab_world.construction --verify "trial15-ab-ledgers/case-$p.json" > "trial15-ab-ledgers/verdict-$p.json"
+          done
+          sha256sum \
+            original-world/systems/workspace/world_ab_body_support.py \
+            original-world/network/tests/test_world_ab_body_support.py \
+            trial15-original-native.json trial15-original-refusal.json trial15-original-verdict.json \
+            trial15-ab-carrier.json trial15-ab-manifest.json \
+            trial15-ab-ledgers/case-*.json trial15-ab-ledgers/verdict-*.json \
+            > trial15-source-digests.txt
+      - name: Retain source, contrast, refusal and bounded ledger evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial15-body-support-source-ledgers
+          path: |
+            trial15-original-native.json
+            trial15-original-refusal.json
+            trial15-original-verdict.json
+            trial15-ab-carrier.json
+            trial15-ab-manifest.json
+            trial15-ab-ledgers/
+            trial15-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
