@@ -2,7 +2,7 @@
 
 ![Public world observation view](latest.svg)
 
-Collected: 2026-10-20T13:02:47.899348+00:00 (UTC). This projection uses the original public-data-monitor adapters.
+Collected: 2026-10-20T18:57:49.165891+00:00 (UTC). This projection uses the original public-data-monitor adapters.
 
 | Source | State | Direct source |
 | --- | --- | --- |
