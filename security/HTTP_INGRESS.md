@@ -134,3 +134,17 @@ Privileged local Python calls, source-owned worker adapters, operator
 registration races, arbitrary host processes and other local data stores
 remain distinct audit boundaries. Configure all pinned signers before
 starting a listener.
+
+## Sealed-journal startup is also protected
+
+The default-deny HTTP fence now activates when either (1) a trusted host
+constructs `EcosystemService` with `protected_runtime_key` or (2) any
+signer ingress has been registered. It does not briefly re-open legacy
+notes, task admissions, Ohayo or private GETs just because journal
+encryption was configured before signer enrollment.
+
+In this condition the two signed paths are **eligible** to proceed, but
+still fail with HTTP 403 until their respective roles and independently
+pinned keys are installed. A live encrypted journal by itself never
+enrolls a worker. Tests exercise this intermediate state with a fresh
+sealed journal and no signing keys.
