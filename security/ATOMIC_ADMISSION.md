@@ -97,3 +97,33 @@ runtime instance**. It does not serialize arbitrary privileged callers of
 remote machines. Different stale native instances are rejected by the
 existing sequence guard and must be reconciled by restarting from the
 trusted history. No distributed exactly-once claim is made.
+
+## Independent process / same-host observation
+
+[Native multiprocess regression](../network/tests/test_security_multiprocess_admission.py)
+starts **two fresh spawned Python interpreters**, each independently opens
+the same actual sealed SQLite database, and pauses after both have loaded
+the same prior history. The parent simultaneously releases both. This is
+different from two threads sharing a single in-memory runtime lock.
+
+- Two distinct signed handoffs from that same base history: only one
+  process commits; the other fails with an explicit stale-writer error.
+- Two independently signed results that name the same native prior event:
+  only one commits. The reopened record has one RESULT, not two.
+- Two differently encrypted envelopes reusing the same signed event ID:
+  only one commits. A newly opened runtime refuses a fresh reencryption
+  of the reused event ID as a replay.
+- After a stale-writer failure, a fresh runtime loads the committed history,
+  then independently signs and admits a **new** movement. Both remain in
+  the native journal without silently undoing the first writer.
+
+There is deliberately **no auto-retry on the stale runtime**: its
+observations are now out of date. Native recovery means reloading the
+actual source, checking applicable trusted checkpoints, and constructing
+a new explicitly authorized relationship. A losing writer's submitted
+envelope is not automatically executed or reinterpreted.
+
+**Scope:** two local processes, same reliable SQLite file, ordinary
+operating-system file locks, controlled tests. This is **not** a
+multi-machine consensus protocol, cloud service, shared network filesystem
+guarantee, or a solution for privately held worker sessions on hostile hosts.
