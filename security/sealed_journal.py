@@ -14,6 +14,7 @@ import sqlite3
 from cryptography.exceptions import InvalidTag
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from runtime.journal import RuntimeJournal
+from .continuation import DIGEST, TOKEN, EnvelopeError
 
 SCHEMA = b"ab-native-sealed-journal/v1"
 SENTINEL = b"native-journal-key-check/v1"
@@ -54,6 +55,13 @@ class SealedRuntimeJournal(RuntimeJournal):
         with closing(self._connect()) as db:
             db.execute("CREATE TABLE IF NOT EXISTS seal (version TEXT PRIMARY KEY, nonce BLOB NOT NULL, proof BLOB NOT NULL)")
             db.execute("CREATE TABLE IF NOT EXISTS records (seq INTEGER PRIMARY KEY, prev BLOB NOT NULL, nonce BLOB NOT NULL, cipher BLOB NOT NULL, digest BLOB NOT NULL)")
+            # An earlier draft database might contain signed ingress records
+            # admitted to a SEPARATE ledger. Refuse silent conversion that
+            # would forget those old replay decisions.
+            already_admitted = db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='admitted'").fetchone()
+            if not already_admitted and db.execute("SELECT 1 FROM records LIMIT 1").fetchone():
+                raise SealedJournalError("legacy sealed history needs explicit replay-ledger migration")
+            db.execute("CREATE TABLE IF NOT EXISTS admitted (token BLOB PRIMARY KEY, digest BLOB NOT NULL)")
             row = db.execute("SELECT version, nonce, proof FROM seal").fetchall()
             if not row:
                 if db.execute("SELECT 1 FROM records LIMIT 1").fetchone():
@@ -108,7 +116,28 @@ class SealedRuntimeJournal(RuntimeJournal):
     def _digest(cls, seq: int, prev: bytes, nonce: bytes, cipher: bytes) -> bytes:
         return sha256(cls._aad(seq, prev) + nonce + cipher).digest()
 
-    def _append_record(self, record: dict) -> None:
+    @staticmethod
+    def _admission_token(lane: str, event_id: str) -> bytes:
+        if not isinstance(lane, str) or not TOKEN.fullmatch(lane) or not isinstance(event_id, str) or not TOKEN.fullmatch(event_id):
+            raise EnvelopeError("invalid native admission scope")
+        return sha256(b"ab-sealed-admission/v1\\0" + lane.encode("ascii") +
+                      b"\\0" + event_id.encode("ascii")).digest()
+
+    def require_new(self, lane: str, event_id: str) -> None:
+        """Early replay refusal; UNIQUE constraint is the final atomic guard."""
+        token = self._admission_token(lane, event_id)
+        with closing(self._connect()) as db:
+            if db.execute("SELECT 1 FROM admitted WHERE token=?", (token,)).fetchone():
+                raise EnvelopeError("replayed or reused event identifier")
+
+    def _after_replay_insert(self) -> None:
+        """Test fault-injection point inside the uncommitted transaction."""
+        return None
+
+    def _append_admitted_record(self, record: dict, admission: tuple[str, str, str]) -> None:
+        self._append_record(record, admission=admission)
+
+    def _append_record(self, record: dict, *, admission: tuple[str, str, str] | None = None) -> None:
         try:
             raw = json.dumps(record, sort_keys=True, separators=(",", ":"),
                              ensure_ascii=True, allow_nan=False).encode("ascii")
@@ -116,12 +145,29 @@ class SealedRuntimeJournal(RuntimeJournal):
             raise SealedJournalError("invalid runtime record") from exc
         if not 0 < len(raw) <= MAX_RECORD:
             raise SealedJournalError("unbounded runtime record")
+        token = None
+        signed_digest = None
+        if admission is not None:
+            if type(admission) is not tuple or len(admission) != 3:
+                raise EnvelopeError("invalid native replay admission")
+            lane, event_id, envelope_sha = admission
+            token = self._admission_token(lane, event_id)
+            if not isinstance(envelope_sha, str) or not DIGEST.fullmatch(envelope_sha):
+                raise EnvelopeError("invalid envelope digest")
+            signed_digest = bytes.fromhex(envelope_sha)
         with closing(self._connect()) as db:
             db.execute("BEGIN IMMEDIATE")
             row = db.execute("SELECT seq, digest FROM records ORDER BY seq DESC LIMIT 1").fetchone()
             seq, previous = ((row[0] + 1, row[1]) if row else (1, ZERO))
             if seq != self._committed_records + 1:
                 raise SealedJournalError("concurrent journal writer detected; restart required")
+            if token is not None:
+                try:
+                    db.execute("INSERT INTO admitted VALUES (?, ?)", (token, signed_digest))
+                except sqlite3.IntegrityError as exc:
+                    raise EnvelopeError("replayed or reused event identifier") from exc
+                # A crash here rolls back admission as well as native movement.
+                self._after_replay_insert()
             nonce = os.urandom(12)
             cipher = self._crypto.encrypt(nonce, raw, self._aad(seq, previous))
             db.execute("INSERT INTO records VALUES (?, ?, ?, ?, ?)",
