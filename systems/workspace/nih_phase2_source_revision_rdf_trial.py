@@ -36,8 +36,8 @@ def independent_revision_oracle(rows,*, subject,claim,known,target):
          and b["valid_from"]<=target<b["valid_to"] and b["known_at"]<=known]
     if not old:return "NOT_AVAILABLE"
     for o in old:
-        if any(n["known_at"]==o["known_at"] for n in new)
-           and not any(n["known_at"]>o["known_at"] for n in new):
+        if (any(n["known_at"]==o["known_at"] for n in new)
+                and not any(n["known_at"]>o["known_at"] for n in new)):
             return "AMBIGUOUS"
     if any(not any(n["known_at"]>o["known_at"] for n in new) for o in old):
         return "SUPPORTED"
