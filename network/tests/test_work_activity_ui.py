@@ -217,7 +217,7 @@ assert.equal(revisionLink("research/foo", "invalid-sha"),null);
         self.assertIn('views/traces/workflow-runs-index.json',page)
         self.assertIn('async function loadRunArchive()',page)
         self.assertIn('loadRunArchive();',page)
-        self.assertIn('setInterval(()=>{if(!document.hidden)loadRunArchive()},ARCHIVE_CHECK)',page)
+        self.assertIn('setInterval(()=>{if(!document.hidden&&!$("workstation-main").hidden)loadRunArchive()},ARCHIVE_CHECK)',page)
         self.assertIn('doc.schema!=="workstation-run-index/v1"',page)
         self.assertIn('doc.complete!==true',page)
         self.assertIn('doc.reported_total!==doc.indexed_count',page)
