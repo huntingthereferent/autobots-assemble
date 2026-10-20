@@ -82,7 +82,7 @@ The assistant read the shortened wording as James still following a longer relat
 
 **What changed:** The sentence could remain compressed because both sides reached the same connection. The expansion belonged to the conversation, not a definition imposed on James. Silence or misunderstanding can affect his continued experience of the relationship without establishing the other person's private state or requiring them to continue participating.
 
-[Language and Observation — full two-sided account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) · [Original wording and speaker attribution](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION_QUOTES.md)
+[Language and Observation — full two-sided account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
 
 ### October 16 — silence changes with time even without words
 
