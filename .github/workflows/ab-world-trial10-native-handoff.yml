@@ -1,0 +1,123 @@
+name: A/B WORLD Trial10 original active-set alternatives
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial10_handoff.py'
+      - 'network/tests/test_ab_world_trial10_handoff.py'
+      - 'work/ab_world/TRIAL10_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial10-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-active-sets-to-general-world:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout general A/B carrier
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD Trial10 at pinned commit
+        uses: actions/checkout@v4
+        with:
+          ref: e70f4fe80d6345e23771644bc5f86f4adcaea931
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative controls and independent carrier verification
+        run: python -m unittest -v network.tests.test_ab_world_trial10_handoff
+      - name: Run unchanged native active-set source and original independent oracle
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_active_set_trial \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_active_set_trial import run
+          from network.tests.test_world_ab_active_set_trial import check
+          native = run()
+          assert check(native)
+          assert len(native["cases"]) == 35
+          assert native["counts"] == {
+              "no-local-candidate": 0,
+              "single-admissible": 9,
+              "multiple-admissible": 26,
+          }
+          assert native["trial09_rejected_cases_with_local_alternatives"] == 17
+          assert all(len(c["alternatives"]) == 3 for c in native["cases"])
+          assert not native["physical_active_contacts_observed"]
+          Path("../trial10-original-native.json").write_text(
+              json.dumps(native, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          Path("../trial10-original-verdict.json").write_text(
+              json.dumps({
+                  "pinned_original_commit": "e70f4fe80d6345e23771644bc5f86f4adcaea931",
+                  "native_independent_verification": True,
+                  "classification_counts": native["counts"],
+                  "physical_contact_winner_observed": False,
+                  "frictional_manifold_solved": False,
+              }, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          PY
+      - name: Carry all 105 source outcomes and separately verify movement receipt
+        run: |
+          python -m work.ab_world.world_trial10_handoff \
+            --native trial10-original-native.json \
+            --source-commit e70f4fe80d6345e23771644bc5f86f4adcaea931 \
+            > trial10-ab-carrier.json
+          python - <<'PY'
+          import json
+          source = json.load(open("trial10-original-native.json"))
+          record = json.load(open("trial10-ab-carrier.json"))
+          assert record["ledger_witness"]["valid"]
+          assert record["cases"] == 35
+          assert record["alternatives"] == 105
+          assert record["classifications"] == source["counts"]
+          assert record["source_trial09_rejections_with_alternatives"] == 17
+          assert record["candidate_frames_carried"] == 31 * record["admissible_alternatives"]
+          assert record["admissible_alternatives"] + record["rejected_alternatives"] == 105
+          assert record["ledger_witness"]["observations_recorded"] == 105
+          assert not record["physical_outcome_chosen"]
+          assert not record["original_frictional_contact_solved"]
+          assert not record["source_dynamics_verified_by_adapter"]
+          with open("trial10-ab-ledger.json","w") as handle:
+              json.dump(record["ledger_receipt"], handle, indent=2, sort_keys=True)
+          print(json.dumps({
+              "cases": record["cases"],
+              "alternatives": record["alternatives"],
+              "admissible_candidates": record["admissible_alternatives"],
+              "rejected_candidates": record["rejected_alternatives"],
+              "candidate_frames": record["candidate_frames_carried"],
+              "ledger_steps": record["ledger_witness"]["steps_verified"],
+          }, sort_keys=True))
+          PY
+          python -m work.ab_world.construction --verify trial10-ab-ledger.json > trial10-ab-verdict.json
+          python - <<'PY'
+          import json
+          assert json.load(open("trial10-ab-verdict.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_active_set_trial.py \
+            original-world/network/tests/test_world_ab_active_set_trial.py \
+            trial10-original-native.json trial10-original-verdict.json \
+            trial10-ab-carrier.json trial10-ab-verdict.json > trial10-source-hashes.txt
+      - name: Retain original and general-world evidence, including rejections
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial10-competing-native-candidates
+          path: |
+            trial10-original-native.json
+            trial10-original-verdict.json
+            trial10-ab-carrier.json
+            trial10-ab-ledger.json
+            trial10-ab-verdict.json
+            trial10-source-hashes.txt
+          retention-days: 30
