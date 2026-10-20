@@ -1,6 +1,6 @@
 # Workstation
 
-[Workstation](work.html) · [Referent audit](audit.html) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[A/B-owned renderer](ab-renderer.html) · [Workstation](work.html) · [Referent audit](audit.html) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
 
