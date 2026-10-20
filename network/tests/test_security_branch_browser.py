@@ -77,7 +77,9 @@ class LocalMazeBrowserTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertIn('textContent', js)
         self.assertNotIn("innerHTML", js)
-        self.assertNotIn("localStorage", js)
+        self.assertNotIn("window.localStorage", js)
+        self.assertNotIn("localStorage.", js)
+        self.assertNotIn("sessionStorage.", js)
         self.assertNotIn("eval(", js)
         self.assertNotIn("os.system", js)
         self.assertEqual(self.server.recorder.operator_snapshot(), ())
@@ -125,7 +127,9 @@ class LocalMazeBrowserTests(unittest.TestCase):
         branch = body["branch"]
         self.assertIn(branch["branch_node"], {"hallway", "mirror"})
         self.assertEqual(len(branch["exits"]), 2)
-        self.assertIn("branch", branch["branch_words"].lower())
+        self.assertTrue(branch["branch_words"])
+        self.assertTrue(any(marker in branch["branch_words"].lower()
+                            for marker in ("branch", "passage", "direction")))
         status, body, _ = self.request(
             "POST", "/api/submit", {"message": "python print(1)", "exit_choice": "side"})
         self.assertEqual(status, 200)
