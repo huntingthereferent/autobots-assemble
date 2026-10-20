@@ -59,7 +59,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Verify source adapter and browser program
-        run: python -m unittest -v network.tests.test_live_source_field network.tests.test_work_activity_ui network.tests.test_research_observatory network.tests.test_audit_boundaries
+        run: python -m unittest -v network.tests.test_live_source_field network.tests.test_work_activity_ui network.tests.test_referent_audit_ui network.tests.test_research_observatory network.tests.test_audit_boundaries
       - name: Generate the original workstation projection
         run: python -m views.traces.research_live
       - name: Validate original source relationships
