@@ -1,0 +1,99 @@
+name: NIH P2 training-frozen heterogeneous PharmKG source paths
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/ab_pharmkg_training_metapath_witness.py'
+      - 'systems/workspace/nih_p2_pharmkg_frozen_heterogeneous_trial.py'
+      - 'network/tests/test_nih_p2_pharmkg_heterogeneous_trial.py'
+      - 'systems/workspace/NIH_P2_PHARMKG_FROZEN_HETEROGENEOUS.md'
+      - '.github/workflows/nih-p2-pharmkg-frozen-heterogeneous.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nih-pharmkg-train-frozen-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  real-heldout-mixed-relations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Fetch immutable source-owner original splits with exact Git blob hashes
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pharmkg-original" "$RUNNER_TEMP/pharmkg-derived"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from systems.workspace import nih_p2_external_pharmkg_heldout_trial as p
+          import hashlib,os
+          root="https://raw.githubusercontent.com/"+p.ORIGIN+"/"+p.COMMIT+"/data/PharmKG-8k/"
+          place=Path(os.environ["RUNNER_TEMP"])/"pharmkg-original"
+          for name,digest in p.SOURCE_FILES.items():
+              url=root+name
+              with urlopen(Request(url,headers={"User-Agent":"AB-P2-Mixed-Heldout-ReadOnly/1.0"}),timeout=45) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("source host/immutable original commit changed")
+                  raw=response.read(15_000_001)
+              if len(raw)>15_000_000 or p.git_blob_sha1(raw)!=digest:
+                  raise ValueError("original external source-owner Git blob mismatch")
+              (place/name).write_bytes(raw)
+              print(name,len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Falsify source-path meaning and heldout train/test wall
+        env:
+          PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/pharmkg-original/train.tsv
+          PHARMKG_ORIGINAL_TEST: ${{ runner.temp }}/pharmkg-original/test.tsv
+          PHARMKG_ORIGINAL_VALID: ${{ runner.temp }}/pharmkg-original/valid.tsv
+        run: python -m unittest -v network.tests.test_nih_p2_pharmkg_heterogeneous_trial
+      - name: Score NEW externally authored heldout questions with training-frozen rules
+        env:
+          PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/pharmkg-original/train.tsv
+          PHARMKG_ORIGINAL_TEST: ${{ runner.temp }}/pharmkg-original/test.tsv
+          PHARMKG_ORIGINAL_VALID: ${{ runner.temp }}/pharmkg-original/valid.tsv
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_pharmkg_frozen_heterogeneous_trial \
+            --train "$PHARMKG_ORIGINAL_TRAIN" \
+            --test "$PHARMKG_ORIGINAL_TEST" \
+            --valid "$PHARMKG_ORIGINAL_VALID" \
+            --output "$RUNNER_TEMP/pharmkg-derived/frozen-mixed-source-result.json"
+          python - <<'PY'
+          from pathlib import Path
+          import os,json
+          f=Path(os.environ["RUNNER_TEMP"])/"pharmkg-derived/frozen-mixed-source-result.json"
+          x=json.loads(f.read_text())
+          assert x["schema"]=="nih-p2-pharmkg-heldout-mixed-relation-structural-proxy/v1"
+          assert x["new_heldout_questions"]==64
+          assert x["frozen_calibration_source_digest_sha256"]
+          assert x["untouched_new_heldout_selection_digest_sha256"]
+          assert x["mixed_A_B_proxy"]==x["independent_equal_strength_static_mixed_proxy"]
+          assert x["A_B_vs_equal_strength_static_disagreements"]==0
+          assert x["calibration_before_heldout_selection"] is True
+          assert x["previously_scored_test_selection_excluded"] is True
+          assert x["real_biomedical_temporal_event_dates"] is False
+          assert x["source_split_chronological"] is False
+          assert x["clinical_entailment_demonstrated"] is False
+          assert x["official_NIH_Phase2_benchmark_reproduced"] is False
+          assert x["original_W13_runtime_modified"] is False
+          assert x["original_source_file_bodies_redistributed"] is False
+          PY
+          (cd "$RUNNER_TEMP/pharmkg-derived" && sha256sum frozen-mixed-source-result.json > sha256.txt)
+      - name: Retain derived frozen training rule record and heldout score, no original dataset
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-frozen-heterogeneous-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pharmkg-derived/
+          retention-days: 30
+          if-no-files-found: warn
