@@ -299,3 +299,21 @@ Regression checks traverse 10,000 consecutive fictional edges, verify
 that no node is a real key path or external terminal, and refuse invalid
 exit choices without recording a message. The experiment remains local,
 explicitly consented, in-memory and non-deployed.
+
+## Local browser view of the finite A/B maze (SEC-25)
+
+[The optional loopback browser](BRANCH_BROWSER.md) makes the existing Python
+bipolar presence and [ten-node story graph](branch_world.py) visible in
+an interactive page without duplicating or reimplementing its mathematics
+in JavaScript. A native thread drives the presence regardless of user
+requests; the browser merely polls read-only state and submits a voluntary
+message and fictional `along` or `side` choice. Words and code-shaped
+signposts never execute or reach real cryptographic keys.
+
+The browser is a **new, explicit, separate local-only server**:
+`python -m security.branch_browser`. It does not open the workstation
+service, schedule any workers, or add a public route. Consented transcripts
+stay bounded to one Python process, can be erased and are not persisted
+by the experiment. Real local HTTP integration tests exercise consent,
+same-origin restrictions, native idle motion, erase, and injection-shaped
+messages rendered only as text.
