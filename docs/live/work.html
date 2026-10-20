@@ -347,9 +347,15 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   const REPO="huntingthereferent/autobots-assemble";
   const API="https://api.github.com/repos/"+REPO;
   const SOURCE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/research-live.json";
-  const PERIOD=180000;
+  const PERIOD=120000; // GitHub API budget: one background source check per two minutes.
+  const TICK_REFRESH_GAP=90000;
+  const MAX_CATALOG_PAGE=100;
+  const TICK_STORAGE="workstationTrustedTickSSEv1";
   const $=id=>document.getElementById(id);
-  const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,checked:null};
+  const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
+    checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,
+    catalog:[],catalogLoaded:false,stream:null,streamUrl:"",streamTicks:0,lastTick:0,
+    lastStreamStatus:"not configured",rateLimitUntil:0};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
@@ -361,16 +367,119 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   function readRuns(j){if(!j||!Array.isArray(j.workflow_runs))throw Error("Unexpected GitHub workflow response");
     return j.workflow_runs.filter(r=>Number.isSafeInteger(r.id)&&r.id>0&&isSHA(r.head_sha)&&
       typeof r.name==="string"&&["queued","waiting","pending","in_progress","completed"].includes(r.status))
-      .slice(0,50).map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
+      .slice(0,100).map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
         conclusion:r.conclusion||null,url:r.html_url,created:r.created_at,updated:r.updated_at,
         runNumber:r.run_number,branch:r.head_branch||"",event:r.event||"unknown"}));}
+
+  function mergeRuns(incoming,replaceRecent=false){
+    const previous=new Map(app.runs.map(r=>[r.id,r]));
+    for(const r of incoming){
+      const old=previous.get(r.id);
+      if(old&&(old.updated!==r.updated||old.status!==r.status||old.conclusion!==r.conclusion))
+        app.jobCache.delete(r.id);
+      previous.set(r.id,r);
+    }
+    app.runs=[...previous.values()].sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id);
+    renderMetrics();renderRuns();renderHistory();renderCatalog();
+  }
+  function renderHistory(){
+    const day=24*60*60*1000;
+    const today=new Date();const utc=Date.UTC(today.getUTCFullYear(),today.getUTCMonth(),today.getUTCDate());
+    const days=Array.from({length:7},(_,i)=>{
+      const date=new Date(utc-(6-i)*day);return {key:date.toISOString().slice(0,10),label:date.toLocaleDateString(undefined,{month:"short",day:"numeric",timeZone:"UTC"}),passed:0,failed:0,other:0};
+    });
+    const byDay=new Map(days.map(d=>[d.key,d]));
+    for(const r of app.runs){
+      const d=new Date(r.created||"");if(!Number.isFinite(d.getTime()))continue;
+      const group=byDay.get(d.toISOString().slice(0,10));if(!group)continue;
+      const result=statusOf(r);
+      group[result==="success"?"passed":(["failure","cancelled","timed_out"].includes(result)?"failed":"other")]++;
+    }
+    const max=Math.max(1,...days.map(d=>d.passed+d.failed+d.other));
+    const chart=$("history-chart");chart.replaceChildren();
+    for(const d of days){
+      const total=d.passed+d.failed+d.other;const column=el("div",undefined,"hist-day");
+      const bars=el("div",undefined,"hist-bars");
+      for(const kind of ["other","failed","passed"]){
+        if(!d[kind])continue;
+        const bar=el("span",undefined,"hist-bar "+kind);
+        bar.style.height=Math.max(2,80*d[kind]/max)+"px";
+        bar.title=d.key+" · "+d[kind]+" "+kind+" run(s) in retrieved pages";
+        bars.append(bar);
+      }
+      const name=el("strong",d.label);const count=el("small",total+" sampled");
+      column.append(bars,name,count);chart.append(column);
+    }
+    const total=app.runs.length,oldest=app.runs[total-1];
+    $("history-window").textContent=total+" loaded · UTC last 7 days";
+    $("history-state").textContent=app.olderExhausted?"All retrievable pages loaded":total+" indexed"+(app.reportedTotal===null?"":" / "+app.reportedTotal+" reported");
+    $("load-older").disabled=app.olderExhausted||app.olderLoading;
+  }
+  function updateWorkflowFilter(){
+    const control=$("workflow-filter"),old=control.value;
+    const names=[...new Set([...app.catalog.map(x=>x.name),...app.runs.map(x=>x.name)])].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+    control.replaceChildren(Object.assign(el("option","Every workflow"),{value:"all"}));
+    for(const name of names){const o=el("option",name);o.value=name;control.append(o);}
+    control.value=old==="all"||names.includes(old)?old:"all";
+  }
+  function renderCatalog(){
+    updateWorkflowFilter();
+    const target=$("workflow-catalog");target.replaceChildren();
+    if(!app.catalogLoaded){
+      target.append(el("p","Workflow source catalog not available yet.","no-source"));return;
+    }
+    const counts=new Map();
+    for(const r of app.runs)counts.set(r.name,(counts.get(r.name)||0)+1);
+    const sorted=[...app.catalog].sort((a,b)=>(counts.get(b.name)||0)-(counts.get(a.name)||0)||a.name.localeCompare(b.name));
+    $("workflow-scope").textContent=sorted.length+" registered workflows · "+app.runs.length+" sampled runs";
+    for(const workflow of sorted){
+      const article=el("article",undefined,"workflow-row");
+      article.append(el("strong",workflow.name));
+      article.append(el("small",workflow.state+" · "+(counts.get(workflow.name)||0)+" runs in loaded sample"));
+      const filename=workflow.path.split("/").pop();
+      if(filename&&/^[\w.-]+\.ya?ml$/.test(filename)){
+        article.append(link("Open workflow source ↗","https://github.com/"+REPO+"/blob/main/"+workflow.path));
+      }
+      target.append(article);
+    }
+    if(!sorted.length)target.append(el("p","No workflow definitions reported in this source response.","no-source"));
+    if(sorted.length===MAX_CATALOG_PAGE)target.append(el("p","Catalog shows at most the first 100 definitions returned by GitHub.","no-source"));
+  }
+  async function loadCatalog(){
+    try{
+      const json=await getJSON(API+"/actions/workflows?per_page=100");
+      if(!json||!Array.isArray(json.workflows))throw Error("Workflow array unavailable");
+      app.catalog=json.workflows.filter(w=>Number.isSafeInteger(w.id)&&typeof w.name==="string"&&
+        typeof w.path==="string"&&w.path.startsWith(".github/workflows/")&&
+        ["active","disabled_manually","disabled_inactivity","deleted"].includes(w.state));
+      app.catalogLoaded=true;renderCatalog();
+    }catch(e){
+      $("workflow-scope").textContent="Workflow catalog unavailable";
+      $("workflow-catalog").replaceChildren(el("p","Could not read workflow definitions: "+e.message+". Run history remains separate.","no-source"));
+      updateWorkflowFilter();
+    }
+  }
+  async function loadOlder(){
+    if(app.olderLoading||app.olderExhausted||app.reading)return;
+    app.olderLoading=true;$("load-older").disabled=true;$("history-state").textContent="Reading page "+app.nextPage+"…";
+    try{
+      const page=app.nextPage;
+      const data=await getJSON(API+"/actions/runs?per_page=100&page="+page);
+      const runs=readRuns(data);
+      app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
+      app.nextPage=page+1;
+      if(runs.length<100||!runs.length)app.olderExhausted=true;
+      mergeRuns(runs);
+    }catch(e){$("history-state").textContent="Could not read older source page: "+e.message;}
+    finally{app.olderLoading=false;renderHistory();}
+  }
   function currentStates(){return app.runs.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
   function renderMetrics(){const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
-  function filteredRuns(){const f=$("run-filter").value;return app.runs.filter(r=>f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success"))}
+  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value;return app.runs.filter(r=>(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
-    $("runs-scope").textContent=subset.length+" / "+app.runs.length+" recent source runs";
+    $("runs-scope").textContent=subset.length+" shown / "+app.runs.length+" retrieved source runs";
     for(const r of subset){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
       btn.type="button";const head=el("div",undefined,"run-title");
       head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
@@ -529,15 +638,73 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       const selected=app.runs.find(r=>r.id===app.selection);
       if(selected&&app.commitCache.has(selected.head))renderRevision(selected,app.commitCache.get(selected.head));}
     catch(e){$("research-scope").textContent="Research data unavailable: "+e.message;if(!app.research){$("research-records").replaceChildren(el("p","Original record data unavailable.","no-source"));$("research-walls").replaceChildren(el("p","Original wall data unavailable.","no-source"))}}}
+
+  function tickDisplay(){
+    const connected=app.stream&&app.stream.readyState===EventSource.OPEN;
+    $("stream-dot").className="indicator "+(connected?"ok":app.lastStreamStatus==="error"?"error":"");
+    $("stream-label").textContent=connected?"Tickserver transport connected":"GitHub auto-check active";
+    $("stream-summary").textContent=connected?"Tickserver notifications":"GitHub polling";
+    $("tick-summary").textContent=connected?app.streamTicks+" event(s) observed · source checks separate":
+      (app.streamUrl?"Stream waiting / unavailable":"No tickserver transport configured");
+    if(app.streamUrl){
+      $("tick-status").textContent=connected?"Stream connected · "+app.streamTicks+" event(s) received. Ticks request GitHub verification, not worker execution.":
+      (app.lastStreamStatus==="error"?"Stream not reachable or CORS denied; GitHub auto-check continues.":"Stream connecting · GitHub auto-check continues.");
+    }
+  }
+  function safeTickUrl(value){
+    try{
+      const parsed=new URL(value);
+      if(parsed.protocol!=="https:"||!parsed.hostname||parsed.username||parsed.password||parsed.search||parsed.hash)
+        return null;
+      if(parsed.hostname==="github.com"||parsed.hostname==="api.github.com")return null;
+      return parsed.href;
+    }catch{return null;}
+  }
+  function persistTick(value){try{if(value)localStorage.setItem(TICK_STORAGE,value);else localStorage.removeItem(TICK_STORAGE)}catch{}}
+  function disconnectTick(){
+    if(app.stream){app.stream.close();app.stream=null;}
+    app.streamUrl="";app.streamTicks=0;app.lastStreamStatus="not configured";
+    persistTick("");$("tick-url").value="";$("tick-status").textContent="Not connected. GitHub auto-check remains available.";
+    tickDisplay();
+  }
+  function onServerTick(){
+    app.streamTicks++;app.lastTick=Date.now();tickDisplay();
+    // A server event is a prompt to recheck original evidence, never a worker result.
+    if(!document.hidden&&!app.reading&&(!app.checked||Date.now()-app.checked>=TICK_REFRESH_GAP))refresh();
+  }
+  function connectTick(value){
+    const safe=safeTickUrl(value);
+    if(!safe||typeof EventSource!=="function"){
+      $("tick-status").textContent="Requires a reachable HTTPS SSE endpoint without credentials or query tokens, with CORS enabled.";
+      return false;
+    }
+    if(app.stream)app.stream.close();
+    app.streamUrl=safe;app.streamTicks=0;app.lastStreamStatus="connecting";
+    $("tick-url").value=safe;persistTick(safe);
+    const connection=new EventSource(safe,{withCredentials:false});app.stream=connection;
+    connection.onopen=()=>{if(app.stream!==connection)return;app.lastStreamStatus="connected";tickDisplay();};
+    connection.onerror=()=>{if(app.stream!==connection)return;app.lastStreamStatus="error";tickDisplay();};
+    connection.onmessage=onServerTick;
+    connection.addEventListener("tick",onServerTick);
+    connection.addEventListener("workstation-refresh",onServerTick);
+    tickDisplay();return true;
+  }
+  function updateNextCheck(){
+    const remaining=app.checked?Math.max(0,Math.ceil((PERIOD-(Date.now()-app.checked))/1000)):0;
+    $("next-check").textContent=app.checked?"Next GitHub source check in "+remaining+"s · last checked "+new Date(app.checked).toLocaleTimeString():"Awaiting first source check";
+  }
   async function refresh(){
     if(app.reading)return;app.reading=true;$("check-now").disabled=true;
     try{
-      const data=await getJSON(API+"/actions/runs?per_page=50");
+      const data=await getJSON(API+"/actions/runs?per_page=100&page=1");
       const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
-      app.runs=runs;app.checked=Date.now();app.jobCache.clear();renderMetrics();
-      if(!app.selection||!runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
-      renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="Observed GitHub work";
+      app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
+      app.checked=Date.now();
+      mergeRuns(runs);
+      if(!app.selection||!app.runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
+      renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="GitHub source observed";
       $("last-read").textContent="checked "+new Date(app.checked).toLocaleString();
+      updateNextCheck();
       $("feed-error").hidden=true;
       // Job detail requires an exact user selection or first source run.
       await selectRun(app.selection);
@@ -551,10 +718,22 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   }
   $("check-now").addEventListener("click",refresh);
   $("run-filter").addEventListener("change",renderRuns);
+  $("workflow-filter").addEventListener("change",renderRuns);
+  $("load-older").addEventListener("click",loadOlder);
   $("source-search").addEventListener("input",renderResearch);
   $("source-filter").addEventListener("change",renderResearch);
+  $("tick-form").addEventListener("submit",e=>{
+    e.preventDefault();if(!connectTick($("tick-url").value.trim()))$("tick-url").focus();
+  });
+  $("tick-disconnect").addEventListener("click",disconnectTick);
+  let stored="";try{stored=localStorage.getItem(TICK_STORAGE)||""}catch{}
+  if(stored)connectTick(stored);else tickDisplay();
   document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh()});
-  setInterval(()=>{if(!document.hidden)refresh()},PERIOD);
+  setInterval(()=>{
+    updateNextCheck();
+    if(!document.hidden&&!app.reading&&(!app.checked||Date.now()-app.checked>=PERIOD))refresh();
+  },10000);
+  loadCatalog();
   refresh();
 })();
 </script>
