@@ -1,0 +1,112 @@
+name: A/B WORLD Trial09 source angle stress and negative evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial09_handoff.py'
+      - 'network/tests/test_ab_world_trial09_handoff.py'
+      - 'work/ab_world/TRIAL09_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial09-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-incidence-stress-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout general A/B carrier
+        uses: actions/checkout@v4
+      - name: Checkout pinned original WORLD Trial09 source
+        uses: actions/checkout@v4
+        with:
+          ref: e1679c4dd7b810e0539bc619ace32f0fea67814d
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify neutral carrier and rejection mutants
+        run: python -m unittest -v network.tests.test_ab_world_trial09_handoff
+      - name: Execute original native 35-case WORLD source and independent witness
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_two_contact_stress import run
+          from network.tests.test_world_ab_two_contact_stress import check
+          source=run()
+          assert check(source)
+          assert len(source["cases"]) == 35
+          assert source["original_trial06_friction"] == .4
+          assert source["candidate_friction"] == 0.
+          assert source["frictional_manifold_solved"] is False
+          assert not source["rotated_faces_are_original_source"]
+          assert source["counts"]["accepted-local-candidate"] > 0
+          assert source["counts"]["rejected-unilateral"] > 0
+          Path("../trial09-original-native.json").write_text(
+              json.dumps(source, sort_keys=True, indent=2)+"\n", encoding="utf-8")
+          Path("../trial09-original-verdict.json").write_text(
+              json.dumps({"pinned_original_commit": "e1679c4dd7b810e0539bc619ace32f0fea67814d",
+                          "original_native_verification": True,
+                          "candidate_rejections_preserved": True,
+                          "original_frictional_contact_solved": False,
+                          "source_case_counts": source["counts"]},
+                         sort_keys=True, indent=2)+"\n", encoding="utf-8")
+          PY
+      - name: Independently verify accepted and rejected A/B source movements
+        run: |
+          python -m work.ab_world.world_trial09_handoff \
+            --native trial09-original-native.json \
+            --source-commit e1679c4dd7b810e0539bc619ace32f0fea67814d \
+            > trial09-ab-carrier.json
+          python - <<'PY'
+          import json
+          receipt=json.load(open("trial09-ab-carrier.json"))
+          native=json.load(open("trial09-original-native.json"))
+          assert receipt["ledger_witness"]["valid"]
+          assert receipt["stress_cases"] == 35
+          assert receipt["outcome_counts"] == native["counts"]
+          assert receipt["ledger_witness"]["observations_recorded"] == 35
+          assert receipt["candidate_frames_carried"] == 31 * native["counts"]["accepted-local-candidate"]
+          assert receipt["original_frictional_contact_still_unresolved"]
+          assert not receipt["native_physics_verified_by_adapter"]
+          assert not receipt["physical_materials_verified"]
+          with open("trial09-ab-ledger.json","w") as f:
+              json.dump(receipt["ledger_receipt"], f, sort_keys=True, indent=2)
+          print(json.dumps({"outcomes": native["counts"],
+                            "candidate_frames": receipt["candidate_frames_carried"],
+                            "ledger_operations": receipt["ledger_witness"]["steps_verified"]},
+                           sort_keys=True))
+          PY
+          python -m work.ab_world.construction --verify trial09-ab-ledger.json > trial09-ab-verdict.json
+          python - <<'PY'
+          import json
+          assert json.load(open("trial09-ab-verdict.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_two_contact_stress.py \
+            original-world/network/tests/test_world_ab_two_contact_stress.py \
+            trial09-original-native.json trial09-original-verdict.json \
+            trial09-ab-carrier.json trial09-ab-verdict.json > trial09-handoff-digests.txt
+      - name: Retain original source and negative plus positive witnesses
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial09-source-contrasts
+          path: |
+            trial09-original-native.json
+            trial09-original-verdict.json
+            trial09-ab-carrier.json
+            trial09-ab-ledger.json
+            trial09-ab-verdict.json
+            trial09-handoff-digests.txt
+          retention-days: 30
