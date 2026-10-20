@@ -119,25 +119,51 @@ def exact_two_hop_oracle(rows,start,end,pred,known,valid):
 
 
 def selected_queries(rows):
-    per_domain={}
+    """Preserve exact 2-hop cases AND source-observed >2-hop limitation cases."""
+    within={}
     for domain in ("relation-types","biological-classes"):
         subset=[r for r in rows if r["domain"]==domain]
         by_source={}
-        for r in subset:by_source.setdefault(r["s"],[]).append(r)
-        candidates=set()
         for r in subset:
-            for rr in by_source.get(r["o"],[]):
-                if r["s"]!=rr["o"]:
-                    candidates.add((r["s"],rr["o"],r["p"],domain))
-        per_domain[domain]=sorted(candidates)
-    if not per_domain["relation-types"]:
-        raise ValueError("external ontology has no two-hop property hierarchy")
-    # First 96 source-declared property paths + all up to 24 class paths.
-    picks=per_domain["relation-types"][:96]+per_domain["biological-classes"][:24]
-    if len(picks)<30:
-        raise ValueError("not enough actual external ontology paths")
-    return picks, {k:len(v) for k,v in per_domain.items()}
-
+            by_source.setdefault(r["s"],set()).add(r["o"])
+        direct={(r["s"],r["o"]) for r in subset}
+        pairs2=set()
+        for first in subset:
+            for final in by_source.get(first["o"],()):
+                if first["s"]!=final:
+                    pairs2.add((first["s"],final))
+        # Use the actual original source edges; don't inject synthetic edges
+        # to force the static baseline into better-looking performance.
+        pairs3=set()
+        for first in subset:
+            for middle in by_source.get(first["o"],()):
+                for final in by_source.get(middle,()):
+                    if (first["s"]!=final and first["s"]!=middle
+                            and final!=first["o"]):
+                        pair=(first["s"],final)
+                        if pair not in pairs2 and pair not in direct:
+                            pairs3.add(pair)
+        within[domain]={
+            "predicate":subset[0]["p"] if subset else None,
+            "exact-two-hop":sorted(pairs2),
+            "three-hop-without-shorter":sorted(pairs3),
+        }
+    if not within["relation-types"]["exact-two-hop"] or not within["relation-types"]["three-hop-without-shorter"]:
+        raise ValueError("external original ontology has no both two- and three-hop source trials")
+    cases=[]
+    sizes={}
+    for domain,data in within.items():
+        sizes[domain]={
+            "original_exact_two_hop":len(data["exact-two-hop"]),
+            "original_three_hop_without_shorter":len(data["three-hop-without-shorter"]),
+        }
+        for kind,limit in (("exact-two-hop",96 if domain=="relation-types" else 24),
+                           ("three-hop-without-shorter",24 if domain=="relation-types" else 8)):
+            for source,target in data[kind][:limit]:
+                cases.append((source,target,data["predicate"],domain,kind))
+    if len(cases)<40 or not any(case[-1]=="three-hop-without-shorter" for case in cases):
+        raise ValueError("insufficient independent actual longer-source-path examples")
+    return cases,sizes
 
 def ontology_disjoint_probe(g):
     """Actual external owl:disjointWith premise + injected contradiction CONTROL.
@@ -176,7 +202,7 @@ def execute(files):
     rows=overlay(edges)
     picks,candidate_counts=selected_queries(rows)
     cases=[]
-    for src,tgt,p,domain in picks:
+    for src,tgt,p,domain,path_type in picks:
         for known in CUTOFFS:
             # target is deliberately held later than all hypothetical starts.
             valid="2026-01-30"
@@ -187,7 +213,7 @@ def execute(files):
             static=sparql_oracle(rows,src,tgt,p,known,valid,ignore_clocks=True)
             temporal_all_paths=sparql_oracle(rows,src,tgt,p,known,valid,ignore_clocks=False)
             cases.append({
-                "source_domain":domain,"source_subject":src,"source_object":tgt,
+                "source_domain":domain,"source_path_category":path_type,\n                "source_subject":src,"source_object":tgt,
                 "source_predicate":p,"test_known_at_synthetic":known,
                 "test_target_at_synthetic":valid,
                 "AB_two_hop":ab["path_exists"],
@@ -218,6 +244,12 @@ def execute(files):
         "full_static_true_cases":sum(c["full_external_graph_static_RDF_property_path_plus"] for c in cases),
         "temporal_any_path_not_supported_by_AB_2_hop":
             sum(c["temporal_any_path_unmatched_by_2_hop"] for c in cases),
+        "original_three_hop_only_case_count":
+            sum(c["source_path_category"]=="three-hop-without-shorter" for c in cases),
+        "static_reasoner_reachable_three_hop_AB_misses":
+            sum(c["source_path_category"]=="three-hop-without-shorter"
+                and c["full_external_graph_static_RDF_property_path_plus"]
+                and not c["AB_two_hop"] for c in cases),
         "actual_original_disjointness_with_synthetic_inconsistent_fixture":
             ontology_disjoint_probe(graph),
         "original_raw_ontology_files_redistributed":False,
@@ -246,6 +278,8 @@ def main():
         "static_future_leakage_cases":result["static_future_leakage_cases"],
         "two_hop_mismatch_cases":result["scored_cases"]-
             result["AB_equals_independent_exact_two_hop_cases"],
+        "static_reaches_three_hop_where_AB_cannot":
+            result["static_reasoner_reachable_three_hop_AB_misses"],
         "OWL_RL_deliberate_contradiction_signal":
             result["actual_original_disjointness_with_synthetic_inconsistent_fixture"]
                   ["owlrl_error_signal_count"],
