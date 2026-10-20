@@ -12,6 +12,11 @@ on:
 permissions:
   contents: read
 
+# Superseded branch-push experiments should not clog the independent verifier.
+concurrency:
+  group: nih-p2-obo-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   original-ontology-graph-reasoning:
     runs-on: ubuntu-latest
