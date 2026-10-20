@@ -1,0 +1,67 @@
+name: NIH P2 original registry x two whole AACT archives
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_independent_aact_registry_corroboration.py'
+      - 'network/tests/test_nih_p2_independent_aact_registry_corroboration.py'
+      - '.github/workflows/nih-p2-original-adjacent-cross-archive.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-source-cross-archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Original-source admission and independent mismatch rejection
+        run: |
+          python -m unittest -v \
+            network.tests.test_nih_p2_independent_aact_registry_corroboration \
+            network.tests.test_nih_p2_source_reported_posting_gate
+      - name: Verify both complete external deposits and exact original NCT row
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-independent-cross-archive"
+          python -m systems.workspace.nih_p2_independent_aact_registry_corroboration \
+            --output-dir "$RUNNER_TEMP/nih-independent-cross-archive"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/
+            "nih-independent-cross-archive/independent-aact-original-version-corroboration.json").read_text())
+          assert x["schema"]=="nih-p2-adjacent-original-cross-archive-status-witness/v1"
+          assert x["study"]=="NCT00001756"
+          assert [s["owner_attested_collection_date"] for s in
+                  x["original_archive_sources"]]==["2022-11-04","2022-11-09"]
+          assert all(len(s["whole_file_sha256"])==64 for s in x["original_archive_sources"])
+          assert [s["original_registry_version"] for s in
+                  x["source_status_comparisons"]]==[259,260]
+          assert type(x["archival_status_values_differ"]) is bool
+          assert type(x["archived_and_registry_status_correspondence"]) is bool
+          assert not x["archive_collection_order_independently_timestamped"]
+          assert not x["first_public_version_post_times_independently_witnessed"]
+          assert not x["clinical_event_valid_at_authenticated"]
+          assert not x["real_historical_W13_query_admitted"]
+          assert not x["nih_phase2_completed"]
+          assert not x["original_twelve_job_runtime_modified"]
+          assert not x["third_party_archive_bodies_published"]
+          PY
+          (cd "$RUNNER_TEMP/nih-independent-cross-archive" &&
+            sha256sum independent-aact-original-version-corroboration.json > sha256.txt)
+      - name: Preserve minimal derived field comparison, no third-party files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-independent-aact-v259-v260-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-independent-cross-archive/
+          retention-days: 30
+          if-no-files-found: warn
