@@ -105,6 +105,43 @@ class EcosystemServiceNativeContinuationTests(unittest.TestCase):
         self.assertEqual(reply[0]["review"], "DECLINE")
         self.assertFalse(reply[0]["branch_adopted"])
 
+    def test_restarted_service_preserves_native_help_review_without_rerunning(self):
+        _, mine, peer = self.pinned()
+        self.service.ohayo(actor_id="james")
+        self.frontier.propose(
+            kind="HELP", idea_id=self.idea, revision=peer["revision"],
+            step_id="source-step", worker="worker-B",
+            target_revision=mine["revision"],
+            reason="Visible same-step candidate")
+        def review_once(_handoff, context):
+            request = context.observe()["incoming_peer_help"][0]
+            context.review_help(
+                proposal_ref=request["proposal_ref"], decision="INSPECT",
+                reason="Record a bounded next inspection, not source adoption")
+            return ExecutionResult(status="UNKNOWN", note="Still unresolved")
+        state = self.service.run_repository_worker_with_frontier(
+            handoff_id=self.handoff, revision=mine["revision"],
+            step_id="source-step", handler=review_once, allow_native_execution=True)
+        self.assertEqual(state.status, "UNKNOWN")
+        source_events = (self.data / "runtime.jsonl").read_bytes()
+        peer_events = self.frontier.path.read_bytes()
+        restored = EcosystemService(
+            data_dir=self.data, repository_work_file=ROOT / "TASKS.md")
+        self.assertEqual(restored.runtime.state(self.handoff).status, "UNKNOWN")
+        self.assertEqual((self.data / "runtime.jsonl").read_bytes(), source_events)
+        self.assertEqual(self.frontier.path.read_bytes(), peer_events)
+        decisions = IdeaFrontier(ROOT, self.data).worker_frontier(
+            idea_id=self.idea, revision=peer["revision"],
+            step_id="source-step", worker="worker-B")["outgoing_help_reviews"]
+        self.assertEqual(len(decisions), 1)
+        self.assertEqual(decisions[0]["review"], "INSPECT")
+        with self.assertRaisesRegex(ValueError, "runnable frontier"):
+            restored.run_repository_worker_with_frontier(
+                handoff_id=self.handoff, revision=mine["revision"],
+                step_id="source-step", handler=review_once,
+                allow_native_execution=True)
+        self.assertEqual((self.data / "runtime.jsonl").read_bytes(), source_events)
+
     def test_without_configured_native_repository_source_no_execution(self):
         unrelated = EcosystemService(data_dir=self.data / "separate")
         _, mine, _ = self.pinned()
