@@ -139,3 +139,20 @@ the same parent event. The second conflicting result fails as stale, and
 restart preserves one coherent recorded outcome. This is a **single-process
 trust boundary**; privileged direct runtime calls and independently started
 hosts are still outside it. [Protocol](ATOMIC_ADMISSION.md).
+
+## SEC-16 — independent native process collision (local)
+
+Two separately spawned interpreters independently restore the same sealed
+native journal and compete to submit signed handoffs or return different
+signed results referring to one earlier event. Tests require exactly one
+successful commit, one stale-writer refusal, no duplicate persisted
+native movement, and a coherent native restart. A follow-up test verifies
+that a fresh, observed-and-authorized signed handoff can continue after a
+stale writer is rejected. Independent processes do **not** share the
+`HandoffRuntime` in-memory lock; their conflict is stopped by the
+sealed SQLite sequence check under its `BEGIN IMMEDIATE` transaction.
+
+Do **not** promote this to multi-host consensus or restart/retry
+automatically against an obsolete parent. A real secondary process must
+reload authentic, checkpointed evidence and obtain current authorization
+before issuing new work. See [atomic admission](ATOMIC_ADMISSION.md).
