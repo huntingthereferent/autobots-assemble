@@ -1,0 +1,62 @@
+name: NIH P2 original historical status fields
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_official_history_status_fields.py'
+      - 'systems/workspace/nih_p2_official_history_browser_access.py'
+      - 'network/tests/test_nih_p2_official_history_status_fields.py'
+      - '.github/workflows/nih-p2-official-history-status-fields.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-historical-status-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install headless public browser (no credentials)
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Falsify contamination by current header and invented temporal dates
+        run: |
+          python -m unittest -v \
+            network.tests.test_nih_p2_official_history_browser_access \
+            network.tests.test_nih_p2_official_history_status_fields
+      - name: Read exact selected source versions and retain bounded field receipts
+        run: |
+          mkdir -p "${RUNNER_TEMP}/nih-version-status"
+          python -m systems.workspace.nih_p2_official_history_status_fields \
+            --output-dir "${RUNNER_TEMP}/nih-version-status"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-version-status/historical-version-status-fields.json"
+          x=json.loads(p.read_text())
+          assert x["two_exact_version_status_fields_observed"]
+          assert len(x["versions"]) == 2
+          assert [r["requested_version"] for r in x["versions"]] == [94,105]
+          assert all(r["version_local_status_observed"] is True for r in x["versions"])
+          assert all(r["original_version_first_public_day_independently_proved"] is False
+                     for r in x["versions"])
+          assert not x["public_known_at_admitted_for_temporal_program"]
+          assert x["historical_first_publication_attribution"]=="UNAVAILABLE"
+          assert not x["original_w13_journals_modified"]
+          PY
+      - name: Retain minimal source receipts only (no browser bodies)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-version-status-fields-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-version-status/
+          retention-days: 30
+          if-no-files-found: warn
