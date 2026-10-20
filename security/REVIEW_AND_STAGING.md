@@ -261,3 +261,28 @@ guarantee timing through host suspend or crash, and its ticks are
 traffic metadata, cryptographic leakage, keys exposed by an adversarial
 host, and pre-existing untrusted Python entrances are not secured
 by oscillation. No production deployment approval results.
+
+## SEC-23 — local consented input observation and finite maze prototype
+
+A separate `security.approach_dialogue` module provides a bounded
+**explicitly consented message entrance**, not a system/device keylogger.
+A user who acknowledges the notice may submit at most 280 printable
+characters per complete message. The experiment stores a maximum of
+64 messages and eight sessions **in the local process's memory**, with
+per-session erasure; its toy rooms are merely labels on the existing
+A/B probe trajectory. It never intercepts unrelated keystrokes,
+password fields, browser traffic, or private key material, and does
+not alter native worker admission.
+
+Negative tests confirm no recording without affirmative consent,
+bad session refusal, overlong/control-character rejection, memory
+erasure, finite limits, unchanged native protected movement, and
+best-effort redaction of ordinary token/email patterns. CI checks
+the separate local CLI entrance.
+
+**Not cleared for publication/remote use:** simple redaction cannot
+guarantee no personal information is submitted; consent, visibility,
+retention, encrypted storage if any, participant withdrawal and
+independent privacy review would all require explicit operational
+policy. There is no secretly monitored target or network-facing
+logger. See [bounded experiment](APPROACH_DIALOGUE.md).
