@@ -1,0 +1,71 @@
+name: NIH P2 generic time-respecting source chain
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/ab_time_respecting_source_chain.py'
+      - 'systems/workspace/nih_phase2_time_respecting_chain_trial.py'
+      - 'network/tests/test_nih_phase2_time_respecting_chain_trial.py'
+      - 'systems/workspace/NIH_PHASE2_TIME_RESPECTING_SOURCE_CHAINS.md'
+      - '.github/workflows/nih-p2-time-respecting-chains.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  direct-time-respecting-source-chain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original RDF measurement dependency
+        run: python -m pip install 'rdflib>=7,<8'
+      - name: Test actual original W13 plus independent generic chain negative controls
+        run: |
+          python -m unittest -v \
+            network.tests.test_nih_phase2_direct_reproduction \
+            network.tests.test_nih_phase2_time_respecting_chain_trial
+      - name: Replay 13 original practice questions and 160 unseen sequences
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-chain"
+          python -m systems.workspace.nih_phase2_time_respecting_chain_trial \
+            --output-dir "$RUNNER_TEMP/nih-p2-chain"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-p2-chain/nih-phase2-time-respecting-chain.json"
+          d=json.loads(p.read_text())
+          assert d["schema"]=="nih-phase2-direct-generic-chain-reproduction/v1"
+          assert d["original_13_case_scores"]=={"W13":8,"static":6,"cases":13}
+          assert d["with_bounded_generic_source_chain"]=={
+            "passed":11,"cases":13,"improved_by":3}
+          assert d["by_kind"]["derived"]=={
+            "cases":3,"original_pass":0,"new_pass":3}
+          assert d["unseen_generated"]["cases"]==160
+          assert d["unseen_generated"]["verified_by_independent_cartesian_oracle"]==160
+          assert d["unseen_generated"]["positive_cases"]>0
+          assert d["unseen_generated"]["negative_cases"]>0
+          assert not d["Phase2_fully_reproduced"]
+          assert not d["research_evidence_supersession_supported"]
+          assert not d["biomedical_OWL_property_chain_supported"]
+          assert not d["original_native_W13_engine_changed"]
+          assert not d["original_W13_journal_modified"]
+          assert not d["World48_required"]
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-chain" &&
+            sha256sum nih-phase2-time-respecting-chain.json > sha256.txt)
+      - name: Preserve question-by-question native outputs and separate chain witnesses
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-phase2-time-respecting-chain-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-chain/
+          if-no-files-found: warn
+          retention-days: 30
