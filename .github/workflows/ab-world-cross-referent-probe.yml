@@ -24,6 +24,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Install original ontology verifier dependency
+        run: python -m pip install 'rdflib>=7,<8'
       - name: Execute source and negative-control tests
         run: python -m unittest -v network.tests.test_ab_world_cross_referent_probe
       - name: Save source-owned cross-referent observations
