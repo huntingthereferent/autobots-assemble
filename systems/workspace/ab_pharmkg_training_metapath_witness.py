@@ -83,7 +83,7 @@ def discover(rows, graph):
         for head, _, tail in chosen:
             # Excluding intermediate=head/tail prevents target direct edge
             # from being counted as a composed alternate source path.
-            support.update(observed_patterns(graph, head, tail))
+            support.update(observed_patterns(graph, head, tail).keys())
         ranked = sorted(
             support.items(), key=lambda kv:(-kv[1],kv[0]))
         choices[target_rel] = tuple(k for k,_ in ranked[:TOP_PATTERNS])
