@@ -1,0 +1,135 @@
+name: A/B WORLD Trial14 source-derived receiver movement evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial14_handoff.py'
+      - 'network/tests/test_ab_world_trial14_handoff.py'
+      - 'work/ab_world/TRIAL14_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial14-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-causal-geometry-to-bounded-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout A/B bounded causal recorder
+        uses: actions/checkout@v4
+      - name: Checkout original Trial14 pinned source
+        uses: actions/checkout@v4
+        with:
+          ref: 344d419be87b737b7cc8af57fb8c680ce492beac
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test original contact ancestry, no receiver on misses, and tamper controls
+        run: python -m unittest -v network.tests.test_ab_world_trial14_handoff
+      - name: Execute source unchanged and independently verify modeled contact geometry
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_rotation \
+            network.tests.test_world_ab_iterated_surfaces \
+            network.tests.test_world_ab_relation_morph
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_relation_morph import run, trial
+          from network.tests.test_world_ab_relation_morph import audit
+          native = run()
+          assert len(native["cases"]) == 8
+          assert all(audit(case) for case in native["cases"])
+          assert all(case["status"] == "TWO_CONTACTS_IN_DECLARED_MODEL"
+                     for case in native["cases"])
+          assert not native["real_earth_physics_verified"]
+          miss = trial(angle=0., anchor=(12.,4.), friction=.4)
+          assert miss["status"] == "NO_FINITE_SEGMENT_CONTACT"
+          assert miss["receiver"] is None and miss["contacts"] == [] and miss["frames"] == []
+          Path("../trial14-original-native.json").write_text(
+              json.dumps(native,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial14-original-miss.json").write_text(
+              json.dumps(miss,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial14-source-verdict.json").write_text(
+              json.dumps({"pinned_original_commit":"344d419be87b737b7cc8af57fb8c680ce492beac",
+                          "native_independent_geometry_witness":True,
+                          "original_04B_controls_replayed":True,
+                          "modeled_two_contact_continuations":8,
+                          "finite_source_miss_constructions":0,
+                          "real_material_construction_observed":False},
+                         sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          PY
+      - name: Replay causal receiver introduction, finite movement, and source miss
+        run: |
+          python -m work.ab_world.world_trial14_handoff \
+            --native trial14-original-native.json \
+            --miss trial14-original-miss.json \
+            --source-commit 344d419be87b737b7cc8af57fb8c680ce492beac \
+            > trial14-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          out=json.load(open("trial14-ab-carrier.json"))
+          assert out["ledger_witness"]["valid"]
+          assert out["completed_causal_movements"] == 8
+          assert out["source_misses"] == 1
+          assert out["ledger_witness"]["pages_verified"] == 9
+          assert out["ledger_witness"]["observations_recorded"] == 25
+          assert out["receivers_constructed_only_after_source_contact"]
+          assert not out["real_material_construction_verified"]
+          assert out["physical_material_measurements"] == 0
+          assert out["source_frames_carried"] >= 40
+          assert digest(out["page_manifest"]) == out["page_manifest_sha256"]
+          Path("trial14-ab-pages").mkdir(exist_ok=True)
+          for index,page in enumerate(out["ledger_pages"]):
+              assert page["index"] == index and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"] == out["page_manifest"]["ordered_pages"][index]["head_hash"]
+              with open(f"trial14-ab-pages/case-{index:02d}.json","w") as f:
+                  json.dump(page["receipt"],f,sort_keys=True,indent=2)
+          miss=out["ledger_pages"][-1]["receipt"]
+          assert "derived-receiver-face" not in miss["final"]["objects"]
+          assert len(miss["final"]["observations"]) == 1
+          with open("trial14-ab-manifest.json","w") as f:
+              json.dump(out["page_manifest"],f,sort_keys=True,indent=2)
+          print(json.dumps({"source_cases":8,
+                            "modeled_receivers":8,
+                            "source_misses":1,
+                            "frames_carried":out["source_frames_carried"],
+                            "A_B_operations":out["ledger_witness"]["steps_verified"],
+                            "real_material_measurements":0},sort_keys=True))
+          PY
+          for n in $(seq 0 8); do
+            page=$(printf '%02d' "$n")
+            python -m work.ab_world.construction --verify "trial14-ab-pages/case-$page.json" > "trial14-ab-pages/verdict-$page.json"
+          done
+          python - <<'PY'
+          import json
+          for index in range(9):
+              assert json.load(open(f"trial14-ab-pages/verdict-{index:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_relation_morph.py \
+            original-world/network/tests/test_world_ab_relation_morph.py \
+            trial14-original-native.json trial14-original-miss.json \
+            trial14-source-verdict.json trial14-ab-carrier.json \
+            trial14-ab-manifest.json trial14-ab-pages/case-*.json \
+            trial14-ab-pages/verdict-*.json > trial14-source-digests.txt
+      - name: Retain source first-contact, movement and bounded A/B causal records
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial14-causal-morph-source-ledgers
+          path: |
+            trial14-original-native.json
+            trial14-original-miss.json
+            trial14-source-verdict.json
+            trial14-ab-carrier.json
+            trial14-ab-manifest.json
+            trial14-ab-pages/
+            trial14-source-digests.txt
+          retention-days: 30
