@@ -1,10 +1,14 @@
-# Research and engineering experiments
+# Hunting the Referent — research records and experiments
 
 **[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
 The public work view reads actual GitHub workflow runs and native job/step results, with original workstation research and walls alongside them. Runs only show what GitHub executed; saved research findings are separate historical evidence. The earlier animated source graph remains optional at [trace.html](docs/live/trace.html). Local private process handoffs remain available only through the loopback workstation viewer.
 
-**James Muneoka · Independent research · AI-assisted software construction**
+**James Muneoka · Independent research · Human problem-solving**
+
+**Why this repository exists:** [The Human Wall](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/THE_HUMAN_WALL.md) is the question at the root of James's work. He is investigating whether the vastness of what humans learn about reality can spill into local problems as disproportionate uncertainty, imagined possibilities, and explanations that drift from observation — and whether that relationship can become normal across different layers. This is a working research question, not an established universal cause of human behavior.
+
+The mathematics, ARC and world experiments, AI-assisted software, workers, and verification harnesses are **ways to investigate and retain evidence**, not competing purposes or a claim that one method explains the universe. [Start with James's account](https://github.com/huntingthereferent/huntingthereferent#the-human-wall).
 
 An inspectable collection of code, mathematical experiments, system prototypes, and test records. The projects address different questions; they are not parts of a claimed universal theory or one finished platform.
 
