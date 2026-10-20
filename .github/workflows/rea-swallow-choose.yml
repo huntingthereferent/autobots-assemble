@@ -1,0 +1,60 @@
+name: REA A/B evidence-driven observation selection
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths: ['experiments/rea-swallow/**', '.github/workflows/rea-swallow-choose.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  next-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact original REA
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          test "$(git rev-parse HEAD)" = "f0b9ef34c404c1c65f8167502db972b0bd708403"
+          npm ci --no-audit --no-fund
+      - name: Reconstruct successful movement 8 source edition as control
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/observation_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/observation_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/observation_refinement_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptObservationRefinement.ab-swallow.test.ts
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/choice_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+      - name: Test prior observed-refinement REA without new selector
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          npx --no-install vitest run src/domain/javascript/javascriptObservationRefinement.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/choice-control.log"
+      - name: Apply experimental selector in actual REA source
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/choice_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/choice_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptObservationChoice.ab-swallow.test.ts
+          git -C experiments/rea-swallow/upstream diff > experiments/rea-swallow/results/choice-source.patch
+      - name: Run native REA comparison and adaptive selection oracle
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          REA_AB_CHOICE_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/choice-witness.json" npx --no-install vitest run src/domain/javascript/javascriptObservationChoice.ab-swallow.test.ts src/domain/javascript/javascriptObservationRefinement.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/choice-experimental.log"
+      - name: Typecheck real REA source and authored experiments
+        working-directory: experiments/rea-swallow/upstream
+        run: npx --no-install tsc --noEmit -p tsconfig.json
+      - name: Retain patch, control, counterexamples, and selection trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-choose-observation-source-trace
+          path: experiments/rea-swallow/results/choice-*
+          if-no-files-found: warn
+          retention-days: 14

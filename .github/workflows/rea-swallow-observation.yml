@@ -1,0 +1,57 @@
+name: REA A/B observational refinement experiment
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths: ['experiments/rea-swallow/**', '.github/workflows/rea-swallow-observation.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  observed-relation-refinement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned original REA
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          test "$(git rev-parse HEAD)" = "f0b9ef34c404c1c65f8167502db972b0bd708403"
+          npm ci --no-audit --no-fund
+      - name: Create control/experimental editions of the actual version matcher
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/observation_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/structural_reference_counterexamples.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptStructuralReference.ab-swallow.test.ts
+      - name: Verify original matcher baseline
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          npx --no-install vitest run src/domain/javascript/javascriptApplicationVersionMatching.test.ts src/domain/javascript/javascriptStructuralReference.ab-swallow.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/observation-control.log"
+      - name: Apply real REA source transformation
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/observation_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/observation_refinement_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptObservationRefinement.ab-swallow.test.ts
+          git -C experiments/rea-swallow/upstream diff > experiments/rea-swallow/results/observation-source.patch
+      - name: Run REA's actual matcher and 256 observation comparisons
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          REA_AB_OBSERVATION_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/observation-refinement-witness.json" npx --no-install vitest run src/domain/javascript/javascriptObservationRefinement.ab-swallow.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts src/domain/javascript/javascriptStructuralReference.ab-swallow.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/observation-experimental.log"
+      - name: Complete actual REA TypeScript typecheck
+        working-directory: experiments/rea-swallow/upstream
+        run: npx --no-install tsc --noEmit -p tsconfig.json
+      - name: Preserve source patch and all experiment evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-observation-refinement-witness
+          path: experiments/rea-swallow/results/observation-*
+          retention-days: 14

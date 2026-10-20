@@ -1,0 +1,58 @@
+name: REA A/B observability guard transformation
+on:
+  push:
+    branches: ['experiment/swallow-rea-ab-20261017']
+    paths: ['experiments/rea-swallow/**', '.github/workflows/rea-swallow-guard.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  guard-known-name-reflection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.11.1'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install original REA source with pinned SHA
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          test "$(git rev-parse HEAD)" = "f0b9ef34c404c1c65f8167502db972b0bd708403"
+          npm ci --no-audit --no-fund
+      - name: Replay already tested versions 4 and 5
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/binding_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/scoped_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/scoped_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/guard_source_experiment.py prepare --rea experiments/rea-swallow/upstream
+      - name: Apply guarded actual REA source candidate
+        run: |
+          PYTHONPATH="$GITHUB_WORKSPACE" python3 experiments/rea-swallow/guard_source_experiment.py apply --rea experiments/rea-swallow/upstream
+          cp experiments/rea-swallow/guard_fingerprint_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptGuardFingerprint.ab-swallow.test.ts
+          cp experiments/rea-swallow/reference_attack.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptReferenceAttack.ab-swallow.test.ts
+          cp experiments/rea-swallow/scoped_fingerprint_contract.test.ts experiments/rea-swallow/upstream/src/domain/javascript/javascriptScopedFingerprint.ab-swallow.test.ts
+          git -C experiments/rea-swallow/upstream diff > experiments/rea-swallow/results/guard-source.patch
+      - name: Verify observed traps remain and new guard blocks them
+        working-directory: experiments/rea-swallow/upstream
+        run: |
+          set -o pipefail
+          REA_AB_GUARD_OUTPUT="$GITHUB_WORKSPACE/experiments/rea-swallow/results/guard-witness.json" npx --no-install vitest run src/domain/javascript/javascriptGuardFingerprint.ab-swallow.test.ts src/domain/javascript/javascriptReferenceAttack.ab-swallow.test.ts src/domain/javascript/javascriptScopedFingerprint.ab-swallow.test.ts src/domain/javascript/javascriptAstFingerprint.test.ts src/domain/javascript/javascriptApplicationVersionMatching.test.ts 2>&1 | tee "$GITHUB_WORKSPACE/experiments/rea-swallow/results/guard-native.log"
+      - name: Typecheck native real REA TypeScript
+        working-directory: experiments/rea-swallow/upstream
+        run: npx --no-install tsc --noEmit -p tsconfig.json
+      - name: Retain observability counterexamples, source patch, test receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rea-ab-observability-guard-source
+          path: experiments/rea-swallow/results/guard-*
+          retention-days: 14
+          if-no-files-found: warn

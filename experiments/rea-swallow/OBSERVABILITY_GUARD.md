@@ -1,0 +1,5 @@
+# Movement 6B: experimentally guard name-reflection/eval traps
+
+This **does not change REA's original `babel-ast-v3` algorithm**, nor overwrite the already-preserved A/B v4 or v5 source. The native REA source is pinned; existing `ProcessWorkstation` creates another control+experimental edition from the previously validated scoped candidate. `fingerprintJavaScriptAstScopedReferencesGuarded` returns null on known reflection/dynamic code constructs instead of issuing a digest that was demonstrated to collide on observable behavior. It is a **deliberately overconservative** research boundary, not a complete semantic proof or production integration.
+
+The native test must retain all prior four counterexamples, exercise six identified reflection/dynamic hazards in total, and still accept 16 consistent nested-closure renames without collapsing 16 distinct parameter-choice patterns. Also rerun REA's original fingerprint and version-matching tests and native TypeScript typecheck. If a new counterexample survives the guard, retain it as an unresolved wall rather than forcing an equivalence claim.
