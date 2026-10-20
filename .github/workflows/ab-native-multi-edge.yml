@@ -1,0 +1,67 @@
+name: A/B native multi-new-edge composition
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths: ['work/arc3/native_multi_edge_*.py', 'network/tests/test_arc3_native_multi_edge.py', 'work/arc3/runs/AB_NATIVE_MULTI_EDGE_2026-10-18.md', '.github/workflows/ab-native-multi-edge.yml']
+  pull_request:
+    paths: ['work/arc3/native_multi_edge_*.py', 'network/tests/test_arc3_native_multi_edge.py', 'work/arc3/runs/AB_NATIVE_MULTI_EDGE_2026-10-18.md', '.github/workflows/ab-native-multi-edge.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native-multiple-unknown-edges:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original official ARC native public runtime
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Test evidence boundaries and original map geometry contracts
+        run: python -m unittest network.tests.test_arc3_native_multi_edge network.tests.test_arc3_native_geometry_frontier network.tests.test_arc3_native_geometry_unknown_edge -v
+      - name: Download prior verified glyph transport source
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-glyph-transport-evidence
+          run-id: 39093565973
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-composition/prior
+      - name: Download prior verified 18 native geometry edges
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-unknown-geometry-evidence
+          run-id: 39096314847
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-composition/last
+      - name: Download verified complete-frontier native observation
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-complete-frontier-evidence
+          run-id: 39101728758
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-composition/frontier
+      - name: Authenticate original raw evidence and freeze 64 unknown-edge paths
+        run: |
+          python -m work.arc3.native_multi_edge_composition --prior runtime/data/ab-composition/prior --last runtime/data/ab-composition/last --frontier runtime/data/ab-composition/frontier --out runtime/data/ab-composition/new/frozen-multi-edge.json
+      - name: Collect independent new LS20 native frame sequences
+        run: |
+          python -m work.arc3.native_multi_edge_capture --prediction runtime/data/ab-composition/new/frozen-multi-edge.json --out runtime/data/ab-composition/new/native-multi-edge.json
+      - name: Independently verify both newly predicted edges and preserve falsifications
+        run: |
+          python -m work.arc3.native_multi_edge_verify --frozen runtime/data/ab-composition/new/frozen-multi-edge.json --native runtime/data/ab-composition/new/native-multi-edge.json --raw runtime/data/ab-composition/new/native-multi-edge.npz --out runtime/data/ab-composition/new/independent-verdict.json
+      - name: Preserve predictions raw source frames and any failure record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-native-multi-unknown-edge-evidence
+          path: runtime/data/ab-composition/new/*
+          retention-days: 14
+          if-no-files-found: warn

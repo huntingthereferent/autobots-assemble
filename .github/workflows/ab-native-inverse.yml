@@ -1,0 +1,45 @@
+name: Native A/B inverse observation
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths:
+      - 'work/arc_like_maze/inverse_observation_engine.py'
+      - 'network/tests/test_arc_like_inverse_observation_engine.py'
+      - 'work/arc_like_maze/INVERSE_OBSERVATION_ENGINE.md'
+      - '.github/workflows/ab-native-inverse.yml'
+  pull_request:
+    paths:
+      - 'work/arc_like_maze/inverse_observation_engine.py'
+      - 'network/tests/test_arc_like_inverse_observation_engine.py'
+      - 'work/arc_like_maze/INVERSE_OBSERVATION_ENGINE.md'
+      - '.github/workflows/ab-native-inverse.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-f3-inverse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify original A/B source laws and independent inverse tests
+        run: |
+          python -m unittest network.tests.test_arc_like_inverse_ab network.tests.test_arc_like_alignment network.tests.test_arc_like_inverse_observation_engine -v
+      - name: Execute actual native mathematical inverse calculation
+        run: |
+          mkdir -p runtime/data/ab-inverse
+          python -m work.arc_like_maze.inverse_observation_engine --certificate --demo-phi 1,2 > runtime/data/ab-inverse/native-f3-inverse.json
+          python -m work.arc_like_maze.inverse_observation_engine --observe BB=0,2,1 > runtime/data/ab-inverse/admitted-evidence.json
+      - name: Retain source-owned mathematical computation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-ab-inverse-calculation
+          path: runtime/data/ab-inverse/*.json
+          if-no-files-found: warn
+          retention-days: 14

@@ -1,0 +1,59 @@
+name: A/B native special-tile successor equivalence
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths: ['work/arc3/native_special_tile_*.py','network/tests/test_arc3_native_special_tile.py','work/arc3/runs/AB_NATIVE_SPECIAL_TILE_SUCCESSOR_2026-10-18.md','.github/workflows/ab-native-special-tile.yml']
+  pull_request:
+    paths: ['work/arc3/native_special_tile_*.py','network/tests/test_arc3_native_special_tile.py','work/arc3/runs/AB_NATIVE_SPECIAL_TILE_SUCCESSOR_2026-10-18.md','.github/workflows/ab-native-special-tile.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native-successor-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original official native LS20 runtime
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Verify independent-source and negative-evidence contracts
+        run: python -m unittest network.tests.test_arc3_native_special_tile network.tests.test_arc3_native_multi_edge network.tests.test_arc3_native_geometry_frontier -v
+      - name: Retrieve original independent official LS20 falsification
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-multi-unknown-edge-evidence
+          run-id: 39120013342
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-tile/source-original
+      - name: Retrieve independently repeated official LS20 falsification
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-multi-unknown-edge-evidence
+          run-id: 39120016493
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-tile/source-repeat
+      - name: Authenticate both original native recordings and freeze 12 actions
+        run: |
+          python -m work.arc3.native_special_tile_successor --original runtime/data/ab-tile/source-original --repeat runtime/data/ab-tile/source-repeat --out runtime/data/ab-tile/new/frozen-successors.json
+      - name: Execute real official native LS20 successors from three histories
+        run: |
+          python -m work.arc3.native_special_tile_capture --frozen runtime/data/ab-tile/new/frozen-successors.json --out runtime/data/ab-tile/new/native-successors.json
+      - name: Independently verify every original native raw frame and successor
+        run: |
+          python -m work.arc3.native_special_tile_verify --frozen runtime/data/ab-tile/new/frozen-successors.json --native runtime/data/ab-tile/new/native-successors.json --raw runtime/data/ab-tile/new/native-successors.npz --out runtime/data/ab-tile/new/independent-verdict.json
+      - name: Preserve all raw source evidence even if the new hypotheses fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-native-special-tile-successor-evidence
+          path: runtime/data/ab-tile/new/*
+          retention-days: 14
+          if-no-files-found: warn

@@ -1,0 +1,46 @@
+name: A/B LS20 out-of-sample trace prediction
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths: ['work/arc3/native_trace_factor_*.py', 'network/tests/test_arc3_native_trace_factor.py', '.github/workflows/ab-native-trace-factor.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official public ARC environment
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Validate frozen prediction source
+        run: python -m unittest network.tests.test_arc3_native_trace_factor network.tests.test_arc3_native_observation_bridge -v
+      - name: Retrieve historical native training frames
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-independent-native-evidence
+          run-id: 39091972954
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-trace-basis
+      - name: Freeze the source-derived prediction BEFORE taking new actions
+        run: python -m work.arc3.native_trace_factor_prediction --basis runtime/data/ab-trace-basis/native-new/f3-native-suffix.npz --out runtime/data/ab-trace/preregistered-prediction.json
+      - name: Execute new unseen words in official native LS20
+        run: python -m work.arc3.native_trace_factor_native --prediction runtime/data/ab-trace/preregistered-prediction.json --out runtime/data/ab-trace/native-holdout.json
+      - name: Independently verify actual raw frames against frozen predictions
+        run: python -m work.arc3.native_trace_factor_verify --prediction runtime/data/ab-trace/preregistered-prediction.json --native runtime/data/ab-trace/native-holdout.json --raw runtime/data/ab-trace/native-holdout.npz --out runtime/data/ab-trace/independent-verdict.json
+      - name: Retain both passing and falsifying observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-ls20-trace-factor-holdout
+          path: runtime/data/ab-trace/*
+          retention-days: 14
+          if-no-files-found: warn

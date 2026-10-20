@@ -1,0 +1,66 @@
+name: A/B native complete geometry frontier and delayed history
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths:
+      - 'work/arc3/native_geometry_frontier*.py'
+      - 'network/tests/test_arc3_native_geometry_frontier.py'
+      - 'work/arc3/runs/AB_NATIVE_FULL_FRONTIER_2026-10-18.md'
+      - '.github/workflows/ab-native-geometry-frontier.yml'
+  pull_request:
+    paths:
+      - 'work/arc3/native_geometry_frontier*.py'
+      - 'network/tests/test_arc3_native_geometry_frontier.py'
+      - '.github/workflows/ab-native-geometry-frontier.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-native-frontier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original official native LS20 runtime
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Regression tests for source and evidence boundaries
+        run: python -m unittest network.tests.test_arc3_native_geometry_frontier network.tests.test_arc3_native_geometry_unknown_edge network.tests.test_arc3_native_glyph_transport -v
+      - name: Download source-verified original 27-edge glyph transport
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-glyph-transport-evidence
+          run-id: 39093565973
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-frontier/prior
+      - name: Download independently observed next 18 native edges
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-native-unknown-geometry-evidence
+          run-id: 39096314847
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-frontier/last
+      - name: Freeze all 39 new reachable source edges BEFORE native execution
+        run: |
+          python -m work.arc3.native_geometry_frontier --prior runtime/data/ab-frontier/prior --last runtime/data/ab-frontier/last --out runtime/data/ab-frontier/new/frozen-full-frontier.json
+      - name: Run all 39 edges under direct and six-step delayed histories in official LS20
+        run: |
+          python -m work.arc3.native_geometry_frontier_capture --frozen runtime/data/ab-frontier/new/frozen-full-frontier.json --out runtime/data/ab-frontier/new/native-full-frontier.json
+      - name: Independently verify native pixel results and preserve counterexamples
+        run: |
+          python -m work.arc3.native_geometry_frontier_verify --frozen runtime/data/ab-frontier/new/frozen-full-frontier.json --native runtime/data/ab-frontier/new/native-full-frontier.json --raw runtime/data/ab-frontier/new/native-full-frontier.npz --out runtime/data/ab-frontier/new/independent-verdict.json
+      - name: Save real native raw evidence even if the original hypothesis fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-native-complete-frontier-evidence
+          path: runtime/data/ab-frontier/new/*
+          retention-days: 14
+          if-no-files-found: warn

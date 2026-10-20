@@ -1,0 +1,75 @@
+name: A/B native glyph transport out of sample
+on:
+  push:
+    branches: ['experiment/ab-native-inverse-20261017']
+    paths:
+      - 'work/arc3/native_glyph_transport_*.py'
+      - 'network/tests/test_arc3_native_glyph_transport.py'
+      - '.github/workflows/ab-native-glyph-transport.yml'
+      - 'work/arc3/runs/AB_NATIVE_GLYPH_TRANSPORT_2026-10-17.md'
+  pull_request:
+    paths:
+      - 'work/arc3/native_glyph_transport_*.py'
+      - 'network/tests/test_arc3_native_glyph_transport.py'
+      - '.github/workflows/ab-native-glyph-transport.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  native-transport:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original public ARC runtime and numpy
+        run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" numpy
+      - name: Validate the partial glyph transport source and previous evidence guards
+        run: python -m unittest network.tests.test_arc3_native_glyph_transport network.tests.test_arc3_native_trace_factor network.tests.test_arc3_native_observation_bridge -v
+      - name: Download independently verified preexisting 36 plus 24 native trajectories
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-independent-native-evidence
+          run-id: 39091972954
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-glyph-train/earlier
+      - name: Download independently verified preexisting 16 depth holdout trajectories
+        uses: actions/download-artifact@v4
+        with:
+          name: ab-ls20-trace-factor-holdout
+          run-id: 39092801419
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/ab-glyph-train/depth-holdout
+      - name: Construct and freeze observed partial action relation BEFORE new native actions
+        run: |
+          python -m work.arc3.native_glyph_transport_prediction \
+            --basis runtime/data/ab-glyph-train/earlier \
+            --previous-holdout runtime/data/ab-glyph-train/depth-holdout \
+            --out runtime/data/ab-glyph-new/preregistered-transport.json
+      - name: Independently run 17 new eight-step words in official LS20
+        run: |
+          python -m work.arc3.native_glyph_transport_native \
+            --prediction runtime/data/ab-glyph-new/preregistered-transport.json \
+            --out runtime/data/ab-glyph-new/native-transport.json
+      - name: Verify all actual glyph positions against frozen model and native raw pixels
+        run: |
+          python -m work.arc3.native_glyph_transport_verify \
+            --prediction runtime/data/ab-glyph-new/preregistered-transport.json \
+            --native runtime/data/ab-glyph-new/native-transport.json \
+            --raw runtime/data/ab-glyph-new/native-transport.npz \
+            --out runtime/data/ab-glyph-new/independent-verdict.json
+      - name: Preserve predicted and actual data, INCLUDING contradictions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-native-glyph-transport-evidence
+          path: runtime/data/ab-glyph-new/*
+          retention-days: 14
+          if-no-files-found: warn
