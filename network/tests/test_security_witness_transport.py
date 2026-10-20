@@ -244,7 +244,7 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
                     lines.extend(f"{name}: {value}" for value in values)
                 else:
                     lines.append(f"{name}: {values}")
-            sock.sendall(("\\r\\n".join(lines) + "\\r\\n\\r\\n").encode("ascii") + raw)
+            sock.sendall(("\r\n".join(lines) + "\r\n\r\n").encode("ascii") + raw)
             response = conn.response_class(sock)
             response.begin()
             return response.status, json.loads(response.read().decode("utf-8"))
