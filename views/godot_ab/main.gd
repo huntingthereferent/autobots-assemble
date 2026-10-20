@@ -82,14 +82,19 @@ func _load_native_data() -> bool:
     if not (parsed is Dictionary):
         return _fail("dataset is not a JSON object")
     _source = parsed
-    if (_source.get("schema") != SCHEMA
-            or _source.get("source") != "work.arc_like_maze.math.World"
-            or _source.get("phi") != [0, 1, 2]
-            or _source.get("depth") != 3
-            or _source.get("origin") != [0, 0, 0]
-            or _source.get("state_count") != 27
-            or _source.get("positions") != "editorial BFS-depth projection; no physical distance claim"):
-        return _fail("model identity/boundary mismatch")
+    var expected: Dictionary = {
+        "schema": SCHEMA,
+        "source": "work.arc_like_maze.math.World",
+        "phi": [0, 1, 2],
+        "depth": 3,
+        "origin": [0, 0, 0],
+        "state_count": 27,
+        "positions": "editorial BFS-depth projection; no physical distance claim",
+    }
+    for field in expected:
+        if _source.get(field) != expected[field]:
+            return _fail("model identity/boundary mismatch at " + str(field)
+                + ": got " + str(_source.get(field)))
     var nodes: Variant = _source.get("nodes")
     if not (nodes is Array) or nodes.size() != 27:
         return _fail("wrong finite node count")
