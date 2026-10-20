@@ -18,7 +18,6 @@ import argparse
 import json
 from rdflib import Graph,URIRef,RDFS,OWL,RDF,Namespace
 from rdflib.namespace import XSD
-from owlrl import DeductiveClosure,OWLRL_Semantics
 
 SCHEMA="nih-phase2-external-obo-original-rdf-inference-comparison/v1"
 OWNER="oborel/obo-relations"
@@ -171,6 +170,8 @@ def ontology_disjoint_probe(g):
     This checks an OWL RL inconsistency signal. It is not unsatisfiable-class
     enumeration, full OWL DL or a claim original OBO ontology inconsistent.
     """
+    # Only the dedicated external-source OWL probe requires the optional OWL-RL dependency.
+    from owlrl import DeductiveClosure, OWLRL_Semantics
     pairs=sorted((str(s),str(o)) for s,o in g.subject_objects(OWL.disjointWith)
                  if isinstance(s,URIRef) and isinstance(o,URIRef))
     if not pairs:raise ValueError("no actual external disjointness premise")
