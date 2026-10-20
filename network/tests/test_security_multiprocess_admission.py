@@ -36,7 +36,7 @@ def _independent_process_worker(base, journal_key, mode, suffix,
         ledger = ReplayLedger(root / ("unused-replay-" + suffix + ".sqlite"))
         signer = Ed25519PrivateKey.generate()
         recipient = X25519PrivateKey.generate()
-        actor, peer = (("owner", "worker") if mode == "submit"
+        actor, peer = (("owner", "worker") if mode in {"submit", "duplicate"}
                        else ("worker", "owner"))
         ingress = AuthenticatedHandoffIngress(
             runtime, ledger,
