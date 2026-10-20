@@ -1,0 +1,26 @@
+name: Native workstation visual source tests
+on:
+  pull_request:
+    paths:
+      - 'views/workstation-continuity/**'
+      - '.github/workflows/workstation-visual-source.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'views/workstation-continuity/**'
+      - '.github/workflows/workstation-visual-source.yml'
+permissions:
+  contents: read
+jobs:
+  verify-source-projection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test projection from original copy/edit/branch implementation
+        run: python -m unittest discover -s views/workstation-continuity -p 'test_*.py' -v
