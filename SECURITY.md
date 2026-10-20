@@ -36,3 +36,7 @@ the bind address or adding an unaudited reverse proxy.
 ## Protected native journal (opt-in)
 
 The optional [encrypted runtime journal](security/SEALED_JOURNAL.md) encrypts only the native handoff history. It is not a whole-workstation encryption guarantee. Existing plaintext journals cannot be silently migrated or replaced; key custody, backup and recovery remain operator responsibilities. Signed HTTP admission requires a current operator-enrolled signer key, and revoked keys are checked again on subsequent requests.
+
+## Independent continuity checkpoint
+
+The optional [signed journal checkpoint and offline recovery contract](security/CHECKPOINT_RECOVERY.md) covers observed native encrypted history and a separate recipient-encrypted key envelope. It does not implement unattended key backup or off-host publication. A checkpoint stored only beside a rollback-able database does **not** defend against whole-history rollback. See also the signed-worker-only HTTP policy in [HTTP ingress](security/HTTP_INGRESS.md).
