@@ -44,7 +44,10 @@ DIRECTIONS = ("with the movement", "against the movement")
 LANGUAGE_HINTS = (
     ("python", re.compile(r"\b(?:python|import|def|lambda|os\.environ|sys\.modules|__import__)\b|print\s*\(", re.I)),
     ("javascript", re.compile(r"\b(?:javascript|function|const|let|window\.|document\.|nodejs|process\.env)\b|console\.log|=>", re.I)),
-    ("sql", re.compile(r"\b(?:select|union|insert|drop|delete|from|where|sqlite)\b", re.I)),
+    ("sql", re.compile(
+        r"\b(?:select\s+(?:\*|[\w, ]+)\s+from\b|"
+        r"select\s+['\"]|insert\s+into\b|drop\s+table\b|"
+        r"delete\s+from\b|union\s+select\b|sqlite)\b", re.I)),
     ("shell", re.compile(r"\b(?:bash|shell|curl|wget|sudo|chmod|cat\s+/|ls\s+-)\b|\$\(", re.I)),
     ("instruction", re.compile(
         r"\b(?:ignore (?:previous|all) instructions|system prompt|developer message|"
