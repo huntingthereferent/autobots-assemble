@@ -1,0 +1,64 @@
+name: WORLD 16 rotating square original-face clearance
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_rotating_square_clearance.py'
+      - 'network/tests/test_world_ab_rotating_square_clearance.py'
+      - 'systems/workspace/WORLD_AB_ROTATING_SQUARE_TRIAL_16_2026-10-20.md'
+      - '.github/workflows/world-ab-rotating-square-clearance.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_rotating_square_clearance.py'
+      - 'network/tests/test_world_ab_rotating_square_clearance.py'
+      - 'systems/workspace/WORLD_AB_ROTATING_SQUARE_TRIAL_16_2026-10-20.md'
+      - '.github/workflows/world-ab-rotating-square-clearance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  finite-original-square-rotation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Preserve original square/contact witness and source-derived body support
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_body_support \
+            network.tests.test_world_ab_rotating_square_clearance
+      - name: Retain exact first-contact and sampled short-window evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_rotating_square_clearance import run
+          from network.tests.test_world_ab_rotating_square_clearance import verify
+          data=run()
+          data["independent_replay"]=[
+              {"angle":case["angle"],"verified":verify(case)}
+              for case in data["cases"]]
+          body=json.dumps(data,sort_keys=True,indent=2,allow_nan=False)+"\n"
+          dest=Path("world16-native-evidence")
+          dest.mkdir(exist_ok=True)
+          (dest/"rotating_square_clearance.json").write_text(body,encoding="utf8")
+          (dest/"rotating_square_clearance.sha256").write_text(
+              sha256(body.encode()).hexdigest()+"  rotating_square_clearance.json\n",
+              encoding="utf8")
+          print("WORLD16 sampled statuses:",data["counts"])
+          PY
+      - name: Preserve precise virtual source and independently verified refutations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world16-rotating-square-original-contact
+          path: world16-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
