@@ -60,6 +60,9 @@ class EcosystemService:
         self.data_dir.mkdir(parents=True, exist_ok=True)
         # Explicit trusted-host configuration only. Never enroll keys from HTTP.
         self._security_ingresses = {}
+        # A sealed history must never open legacy HTTP routes even during
+        # the interval before operator signers are enrolled.
+        self._protected_runtime = protected_runtime_key is not None
         self.repository_work_file = (Path(repository_work_file).resolve()
                                      if repository_work_file is not None else None)
         if self.repository_work_file is not None and not self.repository_work_file.is_file():
@@ -604,12 +607,12 @@ class EcosystemService:
 
     @property
     def signed_http_only(self) -> bool:
-        """True as soon as a trusted host begins enrolling HTTP signer roles.
+        """True when sealed storage or signer enrollment demands signed HTTP.
 
-        Partial setup fails closed. Local native Python callers and legacy
-        service methods are separate, explicitly trusted interfaces.
+        Both partial enrollment and the initial protected storage state fail
+        closed. Native Python callers remain a separate trusted boundary.
         """
-        return bool(self._security_ingresses)
+        return self._protected_runtime or bool(self._security_ingresses)
 
     def register_authenticated_ingress(self, role: str, ingress) -> None:
         """Install trusted local key policy; HTTP has no enrollment endpoint."""
