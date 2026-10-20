@@ -185,23 +185,22 @@ class ReplayLedger:
             raise EnvelopeError("replayed or reused event identifier") from exc
 
 
-def open_record(
+def verify_record(
     envelope: dict, *, expected_lane: str, expected_parent_sha256: str | None,
     sender_public_key: Ed25519PublicKey, recipient_private_key: X25519PrivateKey,
-    replay_ledger: ReplayLedger,
 ) -> bytes:
-    """Verify sender, scope, ancestry and ciphertext before admitting once.
+    """Verify/decrypt WITHOUT admission; caller MUST commit replay with movement.
 
-    The caller must authenticate/pin sender_public_key out of band; obtaining
-    that key from untrusted envelope data is not authentication.
+    Only the sealed native SQLite journal can make those two writes atomic.
+    This function is not a usable admission API by itself.
     """
     _structure(envelope)
     _name(expected_lane)
     _parent(expected_parent_sha256)
     if not isinstance(sender_public_key, Ed25519PublicKey) or not isinstance(
         recipient_private_key, X25519PrivateKey
-    ) or not isinstance(replay_ledger, ReplayLedger):
-        raise TypeError("pinned sender, private recipient and replay ledger required")
+    ):
+        raise TypeError("pinned sender and private recipient keys required")
     if envelope["lane"] != expected_lane or envelope["parent_sha256"] != expected_parent_sha256:
         raise EnvelopeError("wrong lane or parent relationship")
     if not hmac.compare_digest(envelope["sender_key_sha256"],
@@ -225,6 +224,25 @@ def open_record(
         )
     except Exception as exc:
         raise EnvelopeError("ciphertext authentication failed") from exc
-    # Commit replay admission only after all cryptographic checks succeed.
+    return plain
+
+
+def open_record(
+    envelope: dict, *, expected_lane: str, expected_parent_sha256: str | None,
+    sender_public_key: Ed25519PublicKey, recipient_private_key: X25519PrivateKey,
+    replay_ledger: ReplayLedger,
+) -> bytes:
+    """Legacy separate-ledger API: verify then persist replay admission.
+
+    Sealed native runtime ingress instead uses verify_record() followed by a
+    single SQLite transaction joining replay admission to the journal event.
+    """
+    if not isinstance(replay_ledger, ReplayLedger):
+        raise TypeError("replay ledger required")
+    plain = verify_record(
+        envelope, expected_lane=expected_lane,
+        expected_parent_sha256=expected_parent_sha256,
+        sender_public_key=sender_public_key,
+        recipient_private_key=recipient_private_key)
     replay_ledger.admit(expected_lane, envelope["event_id"], envelope_digest(envelope))
     return plain
