@@ -106,3 +106,31 @@ The same `EcosystemService` supports `protected_runtime_key=<32 independently ma
 When the trusted host registers the `result` signed ingress, the service refuses the old unsigned `POST /api/handoffs/{id}/result`, `POST /api/agents/{id}/result`, and `POST /api/agents/activate` paths, rather than leaving a bypass around the enrolled worker key. The original localhost behavior remains unchanged until the operator explicitly installs that policy.
 
 The signed native-result route does not yet support agent-lineage result semantics. A trusted operator must keep external agents off these interfaces until a separate authenticated lineage contract exists. The `/api/ohayo` and other local application APIs still require their own deployment-specific authorization and storage review. Native Python callers of the runtime remain outside this HTTP gate.
+
+## Protected-mode complete HTTP fence
+
+The previous signed-result-only fence was incomplete: `POST /api/ohayo`
+and `POST /api/tasks/{id}/admit` could still admit work, and unsigned GET
+routes could disclose research state. Protected mode now begins at **first
+trusted ingress registration**, even while the second signer role is still
+being enrolled, and the HTTP entrance refuses **every other** POST path and
+**every** `/api/` GET. Only the two designated signed POST paths are
+eligible to continue to the independently authenticated ingress.
+
+This intentionally disables the ordinary localhost UI's legacy API reads
+and writes in signed-only mode. Users who need the original UI should use
+the ordinary local prototype without treating it as an authenticated,
+confidential research service. Do not disable the guard to restore
+convenience. No remote deployment is authorized.
+
+The signed HTTP handler also returns **minimal receipts only**:
+`{"handoff_id": "...", "status": "..."}`. It must not echo decrypted
+handoff inputs, expected outputs, metadata, result evidence or actual output
+to a loopback caller merely presenting a signed envelope. The sealed
+native journal remains the owner of those data.
+
+These protections cover **only requests through this HTTP Handler**.
+Privileged local Python calls, source-owned worker adapters, operator
+registration races, arbitrary host processes and other local data stores
+remain distinct audit boundaries. Configure all pinned signers before
+starting a listener.
