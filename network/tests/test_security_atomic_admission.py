@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import replace
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest.mock import patch
@@ -211,6 +213,65 @@ class AtomicSealedAdmissionTests(unittest.TestCase):
         self.restart()
         self.assertEqual(self.runtime.get("native").handoff_id, "native")
         self.assertEqual(self.runtime.get("task-1"), self.task())
+
+    def test_concurrent_distinct_signed_submissions_are_serialized(self):
+        start = Barrier(3)
+        def one(ticket):
+            start.wait(timeout=5)
+            return self.ingress.submit(ticket).status
+        tickets = [self.signed(self.task("parallel-a")),
+                   self.signed(self.task("parallel-b"))]
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            pending = [pool.submit(one, ticket) for ticket in tickets]
+            start.wait(timeout=5)
+            statuses = [p.result(timeout=10) for p in pending]
+        self.assertEqual(statuses, ["READY", "READY"])
+        self.assertEqual(self.counts(), (2, 2))
+        self.restart()
+        self.assertEqual({x.handoff_id for x in self.store.handoffs()},
+                         {"parallel-a", "parallel-b"})
+
+    def test_concurrent_identical_signed_submissions_admit_once(self):
+        ticket = self.signed()
+        start = Barrier(3)
+        def one():
+            start.wait(timeout=5)
+            try:
+                self.ingress.submit(ticket)
+                return "admitted"
+            except EnvelopeError:
+                return "replayed"
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            pending = [pool.submit(one) for _ in range(2)]
+            start.wait(timeout=5)
+            results = [p.result(timeout=10) for p in pending]
+        self.assertEqual(sorted(results), ["admitted", "replayed"])
+        self.assertEqual(self.counts(), (1, 1))
+        self.restart()
+        self.assertEqual(self.runtime.state("task-1").status, "READY")
+
+    def test_concurrent_distinct_results_on_same_parent_reject_stale_one(self):
+        self.ingress.submit(self.signed())
+        first = self.result("result-a")
+        second = self.result("result-b")  # same witnessed prior event
+        start = Barrier(3)
+        def one(ticket):
+            start.wait(timeout=5)
+            try:
+                self.returns.return_result(ticket, handoff_id="task-1")
+                return "admitted"
+            except EnvelopeError as exc:
+                self.assertIn("stale", str(exc))
+                return "stale"
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            pending = [pool.submit(one, ticket) for ticket in (first, second)]
+            start.wait(timeout=5)
+            results = [p.result(timeout=10) for p in pending]
+        self.assertEqual(sorted(results), ["admitted", "stale"])
+        self.assertEqual(self.counts(), (2, 2))
+        self.restart()
+        self.assertEqual(self.runtime.state("task-1").status, "COMPLETE")
+        self.assertEqual(len(self.store.for_handoff("task-1")), 2)
 
     def test_historical_sealed_database_without_atomic_table_refused(self):
         self.runtime.submit(self.task())
