@@ -16,6 +16,7 @@ import ssl
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 from .remote_witness import RemoteWitnessLedger
+from .observer_anchor import verify_observer_anchor
 from .sealed_journal import SealedJournalError
 
 MAX_REQUEST = 1_048_576
@@ -29,7 +30,8 @@ class WitnessOnlyHTTPServer(ThreadingHTTPServer):
     allow_reuse_address = False
 
     def __init__(self, address, *, tls_context: ssl.SSLContext,
-                 observer: RemoteWitnessLedger, client_pins: dict):
+                 observer: RemoteWitnessLedger, client_pins: dict,
+                 independently_retained_anchors: dict):
         host, port = address
         if host not in ("127.0.0.1", "::1") or not isinstance(port, int):
             raise ValueError("witness listener must be loopback-only")
@@ -40,6 +42,9 @@ class WitnessOnlyHTTPServer(ThreadingHTTPServer):
             raise ValueError("operator-provided TLS 1.3 mutual authentication required")
         if not isinstance(observer, RemoteWitnessLedger) or not client_pins:
             raise ValueError("trusted observer and client certificate pins required")
+        if (type(independently_retained_anchors) is not dict
+                or not independently_retained_anchors):
+            raise ValueError("independently retained observer anchors required")
         normalized = {}
         for digest, item in client_pins.items():
             if (type(digest) is not str or not HEX.fullmatch(digest)
@@ -47,10 +52,16 @@ class WitnessOnlyHTTPServer(ThreadingHTTPServer):
                     or not isinstance(item[1], Ed25519PublicKey)):
                 raise ValueError("client certificate must map to pinned source identity and key")
             observer._name(item[0])
-            observer.current(item[0], trusted_source_public_key=item[1])
+            if item[0] not in independently_retained_anchors:
+                raise ValueError("source requires separately retained observer anchor")
+            anchor, observer_public = independently_retained_anchors[item[0]]
+            verify_observer_anchor(
+                observer, anchor, source_public_key=item[1],
+                observer_public_key=observer_public)
             normalized[digest] = item
         self.observer = observer
         self.client_pins = normalized
+        self.independent_anchors = dict(independently_retained_anchors)
         super().__init__((host, port), WitnessOnlyHandler, bind_and_activate=False)
         self.socket = tls_context.wrap_socket(self.socket, server_side=True,
                                               do_handshake_on_connect=False)
@@ -108,6 +119,10 @@ class WitnessOnlyHandler(BaseHTTPRequestHandler):
                     or document["source_id"] != authorized[0]):
                 self._reply(403, {"error": "witness source not authorized by mTLS pin"})
                 return
+            anchor, observer_public_key = self.server.independent_anchors[authorized[0]]
+            verify_observer_anchor(
+                self.server.observer, anchor, source_public_key=authorized[1],
+                observer_public_key=observer_public_key)
             checkpoint = self.server.observer.observe(
                 authorized[0], document["bundle"],
                 trusted_source_public_key=authorized[1])
