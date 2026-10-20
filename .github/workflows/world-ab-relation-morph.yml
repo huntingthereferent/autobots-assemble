@@ -1,0 +1,59 @@
+name: WORLD 14 source-derived orientation morph
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_relation_morph.py'
+      - 'network/tests/test_world_ab_relation_morph.py'
+      - 'systems/workspace/WORLD_AB_RELATION_MORPH_TRIAL_14_2026-10-20.md'
+      - '.github/workflows/world-ab-relation-morph.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_relation_morph.py'
+      - 'network/tests/test_world_ab_relation_morph.py'
+      - 'systems/workspace/WORLD_AB_RELATION_MORPH_TRIAL_14_2026-10-20.md'
+      - '.github/workflows/world-ab-relation-morph.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  finite-native-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify original 04B and native WORLD morph with independent numerical oracle
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_rotation \
+            network.tests.test_world_ab_iterated_surfaces \
+            network.tests.test_world_ab_relation_morph
+      - name: Preserve actual finite numerical record with exact source IDs
+        run: |
+          python - <<'PY'
+          from hashlib import sha256
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_relation_morph import run
+          data=run()
+          text=json.dumps(data,sort_keys=True,indent=2,allow_nan=False)+'\n'
+          target=Path('world14-native-evidence')
+          target.mkdir(exist_ok=True)
+          (target/'world14_movement.json').write_text(text,encoding='utf-8')
+          (target/'world14_movement.sha256').write_text(
+            sha256(text.encode('utf-8')).hexdigest()+'  world14_movement.json\n',encoding='utf-8')
+          print(f"WORLD14: {len(data['cases'])} bounded attempts, "
+                f"{sum(c['status']=='TWO_CONTACTS_IN_DECLARED_MODEL' for c in data['cases'])} modeled two-contact continuations")
+          PY
+      - name: Retain original mathematical evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world14-finite-morph-source-and-witness
+          path: world14-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
