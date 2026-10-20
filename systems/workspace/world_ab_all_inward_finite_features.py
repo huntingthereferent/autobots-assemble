@@ -177,6 +177,14 @@ def run():
                 c["first_eligible_geometry"] is None for c in cases),
             "total_inward_root_candidates":sum(
                 len(c["all_inward_roots"]) for c in cases),
+            "trial22_first_per_pair_candidates":sum(
+                len(c["source_trial22_all_first_per_line"]) for c in cases),
+            "additional_inward_roots_beyond_trial22_first":sum(
+                len(c["all_inward_roots"]) -
+                len(c["source_trial22_all_first_per_line"]) for c in cases),
+            "cases_with_new_later_root":sum(
+                len(c["all_inward_roots"]) >
+                len(c["source_trial22_all_first_per_line"]) for c in cases),
             "outside_finite_face_candidates":sum(
                 len(c["outside_finite_face_roots"]) for c in cases),
             "endpoint_uncertainties":sum(
