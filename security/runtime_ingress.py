@@ -173,7 +173,16 @@ class AuthenticatedHandoffIngress:
         self.runtime = runtime
         self.ledger = ledger
         self.authority = authority
-        self.key_approach = KeyApproachBoundary()
+        # Submit and result roles share the same native presence/probe
+        # referent. Never create different key-boundary worlds per signer.
+        with runtime._authenticated_admission_lock:
+            existing = getattr(runtime, "_ab_key_approach", None)
+            if existing is None:
+                existing = KeyApproachBoundary()
+                runtime._ab_key_approach = existing
+            if not isinstance(existing, KeyApproachBoundary):
+                raise TypeError("native key approach boundary invalid")
+            self.key_approach = existing
 
     def _open(self, envelope: dict, expected_parent_sha256: str | None) -> bytes:
         self.authority.require_current_operator_pin()
