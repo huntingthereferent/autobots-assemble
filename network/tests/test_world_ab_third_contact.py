@@ -281,8 +281,10 @@ class WorldThirdContactTests(unittest.TestCase):
         c=attempt(5.)
         for field in ("anchor","normal","endpoints"):
             bad=deepcopy(c)
-            bad["source_receiver"][field][0][0]+=.1 if field=="endpoints" else 0
-            if field!="endpoints":bad["source_receiver"][field][0]+=.1
+            if field=="endpoints":
+                bad["source_receiver"][field][0][0]+=.1
+            else:
+                bad["source_receiver"][field][0]+=.1
             with self.subTest(field=field),self.assertRaises(ValueError):
                 independent_check(bad)
 
