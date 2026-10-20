@@ -6,8 +6,10 @@ on:
     paths:
       - 'work/ab_world/construction.py'
       - 'work/ab_world/verify_construction.py'
+      - 'work/ab_world/w13_source_handoff.py'
       - 'work/ab_world/GENERAL_CONSTRUCTION.md'
       - 'network/tests/test_ab_world_construction.py'
+      - 'network/tests/test_ab_world_w13_source_handoff.py'
       - 'network/tests/fixtures/ab_world_construction_example.json'
       - '.github/workflows/ab-world-general-construction.yml'
 
@@ -22,7 +24,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Run independent reconstruction and failure controls
-        run: python -m unittest -v network.tests.test_ab_world_construction
+        run: python -m unittest -v network.tests.test_ab_world_construction network.tests.test_ab_world_w13_source_handoff
       - name: Produce and independently replay a concrete receipt
         run: |
           python -m work.ab_world.construction --plan network/tests/fixtures/ab_world_construction_example.json > ab-world-construction-receipt.json
@@ -36,12 +38,21 @@ jobs:
           assert not check["physical_behavior_verified"]
           assert not check["external_source_authenticated"]
           PY
-          sha256sum ab-world-construction-*.json > ab-world-construction-digests.txt
+          python -m work.ab_world.w13_source_handoff > ab-world-w13-source.json
+          python - <<'PY'
+          import json
+          p=json.load(open('ab-world-w13-source.json'))
+          assert p['native_source_replay']['valid'] and p['world_ledger_witness']['valid']
+          assert p['source_consistent_with_independent_contract']
+          assert not p['physically_measured']
+          PY
+          sha256sum ab-world-construction-*.json ab-world-w13-source.json > ab-world-construction-digests.txt
       - uses: actions/upload-artifact@v4
         with:
           name: ab-world-construction-local-evidence
           path: |
             ab-world-construction-receipt.json
             ab-world-construction-verdict.json
+            ab-world-w13-source.json
             ab-world-construction-digests.txt
           retention-days: 30
