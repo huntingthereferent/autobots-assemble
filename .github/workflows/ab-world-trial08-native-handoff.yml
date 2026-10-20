@@ -1,0 +1,108 @@
+name: A/B WORLD Trial08 separate native candidate handoff
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial08_handoff.py'
+      - 'network/tests/test_ab_world_trial08_handoff.py'
+      - 'work/ab_world/TRIAL08_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial08-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-original-candidate-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout A/B neutral carrier
+        uses: actions/checkout@v4
+      - name: Checkout exact original WORLD Trial08 source
+        uses: actions/checkout@v4
+        with:
+          ref: 2e109a6fc8af766c2bcaa665f1a1898a1d5634bd
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify carrier and false promotion controls
+        run: python -m unittest -v network.tests.test_ab_world_trial08_handoff
+      - name: Execute original candidate and independent physical-model checker
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_two_contact_candidate import run
+          from network.tests.test_world_ab_two_contact_candidate import verify
+          result = run()
+          assert verify(result)
+          assert result["baseline_trial06_status"] == "unresolved-multiple-contacts"
+          assert result["candidate_friction"] == 0.
+          assert result["original_trial06_friction"] == .4
+          assert len(result["candidate"]["frames"]) == 31
+          assert result["candidate_is_a_new_comparison_not_original_friction_physics"]
+          assert not result["simultaneous_frictional_manifold_solved"]
+          Path("../trial08-original-candidate.json").write_text(
+              json.dumps(result, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          Path("../trial08-source-verdict.json").write_text(
+              json.dumps({
+                  "original_source_commit": "2e109a6fc8af766c2bcaa665f1a1898a1d5634bd",
+                  "native_candidate_independently_checked": True,
+                  "original_contact_resolved": False,
+                  "hypothetical_frictionless_candidate_verified_in_declared_model": True,
+                  "real_material_verification": False
+              }, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          PY
+      - name: Preserve native conditional model separately in generic A/B ledger
+        run: |
+          python -m work.ab_world.world_trial08_handoff \
+            --native trial08-original-candidate.json \
+            --source-commit 2e109a6fc8af766c2bcaa665f1a1898a1d5634bd \
+            > trial08-ab-candidate-carrier.json
+          python - <<'PY'
+          import json
+          x = json.load(open("trial08-ab-candidate-carrier.json"))
+          assert x["ledger_witness"]["valid"]
+          assert x["ledger_witness"]["steps_verified"] == 39
+          assert x["ledger_witness"]["observations_recorded"] == 2
+          assert x["ledger_witness"]["relations_live"] == 2
+          assert x["candidate_frames_carried"] == 31
+          assert x["original_status"] == "unresolved-multiple-contacts"
+          assert not x["original_response_known"]
+          assert not x["frictional_simultaneous_contact_solved"]
+          assert not x["candidate_verified_by_adapter_as_physics"]
+          with open("trial08-ab-candidate-ledger.json", "w") as f:
+              json.dump(x["ledger_receipt"], f, indent=2, sort_keys=True)
+          PY
+          python -m work.ab_world.construction --verify trial08-ab-candidate-ledger.json > trial08-ab-candidate-verdict.json
+          python - <<'PY'
+          import json
+          assert json.load(open("trial08-ab-candidate-verdict.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_two_contact_candidate.py \
+            original-world/network/tests/test_world_ab_two_contact_candidate.py \
+            trial08-original-candidate.json \
+            trial08-source-verdict.json \
+            trial08-ab-candidate-carrier.json \
+            trial08-ab-candidate-verdict.json > trial08-ab-handoff-digests.txt
+      - name: Retain native candidate and independently checked A/B receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial08-native-candidate
+          path: |
+            trial08-original-candidate.json
+            trial08-source-verdict.json
+            trial08-ab-candidate-carrier.json
+            trial08-ab-candidate-ledger.json
+            trial08-ab-candidate-verdict.json
+            trial08-ab-handoff-digests.txt
+          retention-days: 30
