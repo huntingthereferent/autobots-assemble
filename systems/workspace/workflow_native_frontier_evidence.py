@@ -122,8 +122,10 @@ class NativeFrontierEvidence:
             "position": visible["position"],
             "current_step_native_evidence": current,
             "visible_related_step_evidence": related_evidence,
-            "other_steps_not_read": True,
-            "other_ideas_not_read": True,
+            # The append-only journal is replayed for integrity, but
+            # no other task's evidence is returned to this worker.
+            "other_steps_not_exposed": True,
+            "other_ideas_not_exposed": True,
             "operator_association_is_not_source_execution_proof": True,
             "branch_quality_ranked": False,
             "native_jobs_reexecuted": False,
