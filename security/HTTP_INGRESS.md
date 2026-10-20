@@ -25,7 +25,7 @@ separately pinned sender **public** key, locally held recipient **private**
 key, bounded lane, exact sender/receiver actor IDs, and a private
 `ReplayLedger`. The sender signs with its Ed25519 private key elsewhere.
 
-No environment variable or public HTTP route automatically enrolls a key.
+The trusted host must additionally supply a B14 `OperatorPinLedger` and enroll the exact signer Ed25519 public-key digest under the lane/actor/receiver scope before registration. The ledger is re-read for every handoff and worker result; revocation or rotation denies the existing handler. No environment variable or public HTTP route automatically enrolls a key.
 The stock `runtime.http_server` does **not** install these objects, so
 these endpoints remain unavailable in its default deployment. A trusted host
 integration must inject them into the service before serving requests.
@@ -96,3 +96,7 @@ python -W error::ResourceWarning -m unittest discover \
 
 The HTTP tests use an ephemeral in-process loopback listener and temporary
 native journal. They do not install or expose a production service.
+
+## Opt-in encrypted storage
+
+The same `EcosystemService` supports `protected_runtime_key=<32 independently managed bytes>` for a new, encrypted native handoff history. See [the protected journal record and recovery contract](SEALED_JOURNAL.md). Default execution does **not** automatically enable this; additional service logs and user data remain separate plaintext stores.
