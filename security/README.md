@@ -282,3 +282,20 @@ must not deploy the experiment to others without separate data handling,
 consent and security review.
 
 Local demo from repository root: `python -m security.approach_dialogue`.
+
+## Closed finite branch graph — opted-in dialogue maze
+
+The consented local [A/B approach dialogue](APPROACH_DIALOGUE.md) now uses
+a [ten-node fictional graph](branch_world.py). Each node offers two
+different fictional passages, both returning to the closed maze. A
+participant's `/side` or `/along` choice moves **only** their story
+cursor; neither choice controls the real key-approach driver nor changes
+standard cryptographic authorization. The independent presence snapshot
+orders the visible exits and chooses the signpost wording. Static
+code-language signposts remain inert even when supplied text resembles
+Python, SQL, shell commands or injected instructions.
+
+Regression checks traverse 10,000 consecutive fictional edges, verify
+that no node is a real key path or external terminal, and refuse invalid
+exit choices without recording a message. The experiment remains local,
+explicitly consented, in-memory and non-deployed.
