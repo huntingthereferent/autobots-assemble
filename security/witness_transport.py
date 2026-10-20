@@ -17,9 +17,18 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 from .remote_witness import RemoteWitnessLedger
 from .observer_anchor import verify_observer_anchor
+from systems.workspace.b14_operator_pin_ledger import OperatorPinLedger
 from .sealed_journal import SealedJournalError
 
 MAX_REQUEST = 1_048_576
+WITNESS_CLIENT_EDITION = "ab-witness-client-cert/v1"
+
+
+def witness_client_pin_source(source_id: str) -> str:
+    """Bounded source ID for independently enrolled certificate digest."""
+    RemoteWitnessLedger._name(source_id)
+    return f"ab-witness-client:{source_id}"
+
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
 
@@ -44,7 +53,8 @@ class WitnessOnlyHTTPServer(ThreadingHTTPServer):
 
     def __init__(self, address, *, tls_context: ssl.SSLContext,
                  observer: RemoteWitnessLedger, client_pins: dict,
-                 independently_retained_anchors: dict):
+                 independently_retained_anchors: dict,
+                 operator_pin_ledger: OperatorPinLedger):
         host, port = address
         if host not in ("127.0.0.1", "::1") or not isinstance(port, int):
             raise ValueError("witness listener must be loopback-only")
@@ -55,6 +65,8 @@ class WitnessOnlyHTTPServer(ThreadingHTTPServer):
             raise ValueError("operator-provided TLS 1.3 mutual authentication required")
         if not isinstance(observer, RemoteWitnessLedger) or not client_pins:
             raise ValueError("trusted observer and client certificate pins required")
+        if not isinstance(operator_pin_ledger, OperatorPinLedger):
+            raise ValueError("independent operator certificate pin ledger required")
         if (type(independently_retained_anchors) is not dict
                 or not independently_retained_anchors):
             raise ValueError("independently retained observer anchors required")
@@ -65,6 +77,11 @@ class WitnessOnlyHTTPServer(ThreadingHTTPServer):
                     or not isinstance(item[1], Ed25519PublicKey)):
                 raise ValueError("client certificate must map to pinned source identity and key")
             observer._name(item[0])
+            # Enrollment is a prior local operator action. An incoming TLS
+            # certificate or JSON document can never enroll its own pin.
+            operator_pin_ledger.require_current(
+                witness_client_pin_source(item[0]), WITNESS_CLIENT_EDITION,
+                digest)
             if item[0] not in independently_retained_anchors:
                 raise ValueError("source requires separately retained observer anchor")
             anchor, observer_public = independently_retained_anchors[item[0]]
@@ -74,6 +91,7 @@ class WitnessOnlyHTTPServer(ThreadingHTTPServer):
             normalized[digest] = item
         self.observer = observer
         self.client_pins = normalized
+        self.operator_pin_ledger = operator_pin_ledger
         self.independent_anchors = dict(independently_retained_anchors)
         super().__init__((host, port), WitnessOnlyHandler, bind_and_activate=False)
         self.socket = tls_context.wrap_socket(self.socket, server_side=True,
@@ -116,6 +134,15 @@ class WitnessOnlyHandler(BaseHTTPRequestHandler):
             authorized = self.server.client_pins.get(digest)
             if authorized is None:
                 self._reply(403, {"error": "unrecognized witness transport identity"})
+                return
+            # Re-evaluate the same operator authority for EVERY request;
+            # an already-running listener must not retain revoked pins.
+            try:
+                self.server.operator_pin_ledger.require_current(
+                    witness_client_pin_source(authorized[0]),
+                    WITNESS_CLIENT_EDITION, digest)
+            except (PermissionError, ValueError, OSError):
+                self._reply(403, {"error": "witness certificate not currently authorized"})
                 return
             lengths = self.headers.get_all("Content-Length", [])
             content_types = self.headers.get_all("Content-Type", [])
