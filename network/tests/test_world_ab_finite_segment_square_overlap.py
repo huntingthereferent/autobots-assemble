@@ -104,7 +104,8 @@ def verify(case):
         if (case.get("status")!="NO_ADMITTED_THIRD_IMPULSE" or
             case.get("face_results")!=[] or
             case.get("first_detected_bracket") is not None or
-            case.get("finite_intersection_candidates")!=[]):
+            case.get("finite_intersection_candidates")!=[] or
+            case.get("onset_vs_original_vertex_candidate") is not None):
             raise ValueError("absent source impulse produced imaginary motion")
         return True
     if old["status"]!="CONDITIONAL_LOCAL_SEPARATION":
@@ -171,6 +172,36 @@ def verify(case):
     first=first_candidates[0] if first_candidates else None
     if case.get("first_detected_bracket")!=first:
         raise ValueError("first finite-intersection bracket changed")
+    expected_comparison=None
+    if first:
+        b=first["bracket"]
+        matching=[
+            x["dt_after_third_impulse"]
+            for x in parent23["eligible_geometry_roots"]
+            if x["surface"]==first["face"] and
+               x["feature_classification"]=="FINITE_FACE_INTERIOR_CANDIDATE"
+        ]
+        time=min(matching) if matching else None
+        lo=b["last_grid_separated_at"]
+        hi=b["first_grid_intersection_at"]
+        relationship=("NO_PRIOR_VERTEX_CANDIDATE_ON_THIS_FINITE_FACE"
+                      if time is None else
+                      "SOURCE_VERTEX_TIME_INSIDE_FIRST_GRID_BRACKET"
+                      if lo-3e-7<=time<=hi+3e-7 else
+                      "SOURCE_VERTEX_TIME_BEFORE_FIRST_GRID_BRACKET"
+                      if time<lo else
+                      "SOURCE_VERTEX_TIME_AFTER_FIRST_GRID_BRACKET")
+        expected_comparison={
+            "face":first["face"],
+            "source_first_finite_vertex_time":time,
+            "first_grid_clear_time":lo,
+            "first_grid_overlap_time":hi,
+            "relationship":relationship,
+            "same_face_only":True,
+            "numerical_grid_not_certified_first_contact":True,
+        }
+    if case.get("onset_vs_original_vertex_candidate")!=expected_comparison:
+        raise ValueError("same finite face timing comparison differs")
     count=sum(r["intersecting_grid_samples"]>0 for r in records)
     if case.get("faces_with_sampled_intersection")!=count:
         raise ValueError("observed finite-face count wrong")
