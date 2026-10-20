@@ -26,7 +26,9 @@ from runtime.handoff import Handoff
 from security.journal_checkpoint import issue_checkpoint
 from security.observer_anchor import issue_observer_anchor
 from security.remote_witness import RemoteWitnessLedger, export_witness_span
-from security.witness_transport import WitnessOnlyHTTPServer
+from security.witness_transport import (
+    WitnessOnlyHTTPServer, witness_client_pin_source, WITNESS_CLIENT_EDITION)
+from systems.workspace.b14_operator_pin_ledger import OperatorPinLedger
 
 
 class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
@@ -95,6 +97,13 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
         self.anchor = issue_observer_anchor(
             self.observer, "alpha", source_public_key=self.source_key.public_key(),
             observer_private_key=self.observer_key)
+        self.operator_pins = OperatorPinLedger(self.root / "client-pin-policy.jsonl")
+        self.operator_pins.enroll(
+            source_name=witness_client_pin_source("alpha"),
+            source_edition=WITNESS_CLIENT_EDITION,
+            pin_sha256=self.client_pin, confirm_pin_sha256=self.client_pin,
+            operator_ref="fixture-operator",
+            verification_ref="independently-checked-test-client-certificate")
         self.server_context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
         self.server_context.minimum_version = ssl.TLSVersion.TLSv1_3
         self.server_context.verify_mode = ssl.CERT_REQUIRED
@@ -109,7 +118,8 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
             observer=self.observer,
             client_pins={self.client_pin: ("alpha", self.source_key.public_key())},
             independently_retained_anchors={
-                "alpha": (self.anchor, self.observer_key.public_key())})
+                "alpha": (self.anchor, self.observer_key.public_key())},
+            operator_pin_ledger=self.operator_pins)
         self.addCleanup(self.server.server_close)
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
@@ -250,6 +260,59 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
             return response.status, json.loads(response.read().decode("utf-8"))
         finally:
             conn.close()
+
+    def test_revoked_client_certificate_refused_on_existing_listener(self):
+        first = self.next_bundle("one")
+        self.assertEqual(self.request({"source_id": "alpha", "bundle": first})[0], 200)
+        self.operator_pins.revoke(
+            source_name=witness_client_pin_source("alpha"),
+            source_edition=WITNESS_CLIENT_EDITION,
+            pin_sha256=self.client_pin, confirm_pin_sha256=self.client_pin,
+            operator_ref="fixture-operator", verification_ref="witness-revocation")
+        second = self.next_bundle("two")
+        status, doc = self.request({"source_id": "alpha", "bundle": second})
+        self.assertEqual(status, 403)
+        self.assertIn("certificate", doc["error"])
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 1)
+
+    def test_operator_rotation_disables_old_certificate_until_new_listener(self):
+        other_pin = sha256(self.wrong_cert.read_bytes()).hexdigest()
+        self.operator_pins.rotate(
+            source_name=witness_client_pin_source("alpha"),
+            source_edition=WITNESS_CLIENT_EDITION,
+            prior_sha256=self.client_pin, confirm_prior_sha256=self.client_pin,
+            new_pin_sha256=other_pin, confirm_new_sha256=other_pin,
+            operator_ref="fixture-operator", verification_ref="test-rotation")
+        bundle = self.next_bundle("one")
+        self.assertEqual(self.request({"source_id": "alpha", "bundle": bundle})[0], 403)
+        # The receiver cannot replace or self-enroll its certificate map
+        # from a remote request; a trusted host must reconstruct it.
+        self.assertEqual(self.request(
+            {"source_id": "alpha", "bundle": bundle},
+            context=self.wrong_context)[0], 403)
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
+
+    def test_missing_or_corrupt_operator_policy_fails_closed(self):
+        bundle = self.next_bundle("one")
+        with self.operator_pins.path.open("ab") as out:
+            out.write(b'not-a-valid-operator-ledger-entry\\n')
+        status, _ = self.request({"source_id": "alpha", "bundle": bundle})
+        self.assertEqual(status, 403)
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
+
+    def test_constructor_refuses_missing_enrollment(self):
+        fresh = OperatorPinLedger(self.root / "unenrolled.jsonl")
+        with self.assertRaises(PermissionError):
+            WitnessOnlyHTTPServer(
+                ("127.0.0.1", 0), tls_context=self.server_context,
+                observer=self.observer,
+                client_pins={self.client_pin: ("alpha", self.source_key.public_key())},
+                independently_retained_anchors={
+                    "alpha": (self.anchor, self.observer_key.public_key())},
+                operator_pin_ledger=fresh)
 
     def test_endpoint_never_accepts_worker_commands_or_reads(self):
         self.assertEqual(self.request({}, method="GET")[0], 405)
