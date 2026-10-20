@@ -128,7 +128,7 @@ Run all focused tests:
 python -W error::ResourceWarning -m unittest discover -s network/tests -p 'test_security_*.py' -v
 ```
 
-**Trust boundary:** This is not a global interceptor. Applications must keep
+**Storage boundary:** Accepted handoffs and results are passed to the existing native `RuntimeJournal`, which serializes their contents as ordinary local JSONL. Transport encryption does **not** make those at-rest journal bytes confidential. Do not submit secrets or human-private research into a journal without separately secured storage, redaction, permissions, and backups.\n\n**Trust boundary:** This is not a global interceptor. Applications must keep
 the raw `HandoffRuntime.submit/run/return_result` methods away from
 untrusted callers and exclusively route their untrusted ingress through this
 adapter. Private keys and operator key enrollment remain external. Replay
