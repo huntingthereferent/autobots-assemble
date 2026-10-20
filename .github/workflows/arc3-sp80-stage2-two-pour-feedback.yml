@@ -1,0 +1,39 @@
+name: ARC3 original SP80 stage2 paired-pour source feedback
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_two_pour_feedback.py'
+      - '.github/workflows/arc3-sp80-stage2-two-pour-feedback.yml'
+jobs:
+  original-sdk-paired-pour:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original public ARC-AGI-3 SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Preflight frozen original-source action words
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_two_pour_feedback import PROGRAMS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(PROGRAMS)==16
+          for name, offsets, bar, delta, word in PROGRAMS:
+              actions=parse_plan(word)
+              assert len([a for a,_ in actions if a==5])==2, name
+              assert len([a for a,_ in actions if a==6])==5, name
+              assert all(a!=6 or xy is not None for a,xy in actions), name
+          print("16 prospectively frozen source action words verified")
+          PY
+      - name: Execute two original SDK pours on each genuine native level2 session
+        run: python -m work.arc3.native_sp80_stage2_two_pour_feedback --out runtime/data/arc3/sp80-stage2-two-pour-feedback.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-two-pour-feedback
+          path: runtime/data/arc3/sp80-stage2-two-pour-feedback.*
+          if-no-files-found: error
+          retention-days: 14
