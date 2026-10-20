@@ -43,3 +43,14 @@ The fixture introduces two parts, declares a candidate relationship, revises a d
 Attach one **source-owned** movement or recorded observation from an existing investigation through this envelope. Then have the relevant original native source or physical instrument independently attest the emitted content, including input, source fingerprint, units, measurement uncertainty and timing. A visualization can consume the receipt read-only; it must not become the authority for physical movement.
 
 The separate WORLD contact studies, W13, ARC, NIH Phase 1/2, World48 and their source histories are not altered by this construction. No GitHub job is implicitly admitted or dispatched. The A/B All Rights Reserved repository notice remains unchanged.
+
+## First actual source handoff — W13
+
+The W13-specific adapter in w13_source_handoff.py runs the existing native W13 game-construction source, first checks its intact action trace, then records its moves as source-attributed object revisions and observation events in the neutral A/B carrier. A separate W12 contract implementation computes independent expectations. A disagreement remains a DIFFERENT comparison; the source trace is not rewritten. The adapter is separate from the general construction code, so it does not make W13 rules, geometry, action vocabulary or turn counts universal.
+
+    python -m work.ab_world.w13_source_handoff
+    python -m unittest -v network.tests.test_ab_world_w13_source_handoff
+
+This is **real local native source execution**, not browser attribution and not a physical measurement. Recorded source SHA-256 binds the code bytes used for the adapter's run; neither a string source reference nor an unsigned hash authenticates a physical instrument or external party.
+
+The next physical ingress should use the exact same neutral carrier with a separately checkable original source receipt, rather than deriving physical rules from the W13 adapter.
