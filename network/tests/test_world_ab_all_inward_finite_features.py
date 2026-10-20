@@ -241,6 +241,11 @@ class OriginalWorld23Tests(unittest.TestCase):
         self.assertEqual(native["angles"],list(ANGLES))
         self.assertEqual(native["conditional_third_impulse_inputs"],6)
         self.assertEqual(native["without_third_impulse"],2)
+        self.assertEqual(native["total_inward_root_candidates"],
+                         native["trial22_first_per_pair_candidates"] +
+                         native["additional_inward_roots_beyond_trial22_first"])
+        self.assertGreaterEqual(native["additional_inward_roots_beyond_trial22_first"],0)
+        self.assertLessEqual(native["cases_with_new_later_root"],6)
         self.assertEqual(native["first_eligible_cases"]+
                          native["root_free_eligible_windows"],6)
         for key in ("physical_measurements","fourth_impulses_selected",
