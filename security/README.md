@@ -229,3 +229,9 @@ Tests cover revocation of an already-running client, rotation that
 requires trusted listener reconfiguration, corrupt policy, and denial
 when revocation occurs during proof verification. This is not an atomic
 policy/journal commit or a production CA revocation service.
+
+## A/B bipolar approach at existing cryptographic key use
+
+[Key-approach motion and noninterference evidence](KEY_APPROACH.md) now link the *already existing* `BipolarBoundary` to the real `AuthenticatedHandoffIngress`. Each external approach moves only the bounded probe; the protected trajectory moves only after a cryptographically authenticated and successfully committed native handoff/result. **Neither key material nor key identity is changed by the bipolar model**. Negative tests include 250 invalid approaches, signature refusal before private-key derivation, bad native actors, replay attempts, and unchanged disposable test keys.
+
+The model is event-driven and does **not** itself generate continuous idle-time motion. It does not hide all public envelope metadata or guarantee safety from a compromised local host. Authenticated signatures and native evidence checks still control actual admission; bipolar motion is the observation-layer relationship, not a new cipher.
