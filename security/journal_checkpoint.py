@@ -46,6 +46,7 @@ def _snapshot(journal: SealedRuntimeJournal):
         prev = ZERO
         count = 0
         digests = {0: ZERO.hex()}
+        protected_admissions = {}
         for seq, back, nonce, cipher, digest in db.execute(
                 "SELECT seq, prev, nonce, cipher, digest FROM records ORDER BY seq"):
             if (type(seq) is not int or seq != count + 1 or back != prev
@@ -53,14 +54,32 @@ def _snapshot(journal: SealedRuntimeJournal):
                     or digest != journal._digest(seq, prev, nonce, cipher)):
                 raise SealedJournalError("checkpoint journal ancestry invalid")
             try:
-                journal._crypto.decrypt(nonce, cipher, journal._aad(seq, prev))
-            except (InvalidTag, ValueError) as exc:
+                plaintext = journal._crypto.decrypt(nonce, cipher, journal._aad(seq, prev))
+                record = json.loads(plaintext.decode("utf-8"))
+                if type(record) is not dict:
+                    raise SealedJournalError("invalid checkpoint native record")
+                protected = record.get("_sealed_admission")
+                if protected is not None:
+                    if (type(protected) is not dict
+                            or set(protected) != {"token", "digest"}
+                            or type(protected["token"]) is not str
+                            or len(protected["token"]) != 64
+                            or type(protected["digest"]) is not str
+                            or len(protected["digest"]) != 64):
+                        raise SealedJournalError("invalid checkpoint replay binding")
+                    token, envelope_hash = bytes.fromhex(protected["token"]), bytes.fromhex(protected["digest"])
+                    if token in protected_admissions:
+                        raise SealedJournalError("duplicate checkpoint replay binding")
+                    protected_admissions[token] = envelope_hash
+            except (InvalidTag, ValueError, UnicodeError, TypeError) as exc:
                 raise SealedJournalError("checkpoint journal authentication failed") from exc
             count = seq
             prev = digest
             digests[seq] = digest.hex()
         if count != journal._committed_records:
             raise SealedJournalError("checkpoint source changed outside runtime")
+        if dict(db.execute("SELECT token, digest FROM admitted")) != protected_admissions:
+            raise SealedJournalError("checkpoint replay table differs from encrypted history")
         return identity, count, digests
 
 
