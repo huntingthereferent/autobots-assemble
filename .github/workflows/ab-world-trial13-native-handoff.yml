@@ -1,0 +1,136 @@
+name: A/B WORLD Trial13 coupled-mode alternative evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial13_handoff.py'
+      - 'network/tests/test_ab_world_trial13_handoff.py'
+      - 'work/ab_world/TRIAL13_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial13-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-coupled-modes-to-bounded-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout A/B bounded source carrier
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD Trial13 at pinned source commit
+        uses: actions/checkout@v4
+        with:
+          ref: 6179d4e6b6e66a02065e8a5c1ef64b855a2de763
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Negative controls against false original physics
+        run: python -m unittest -v network.tests.test_ab_world_trial13_handoff
+      - name: Replay original 1330 mode attempts and independent contact Jacobian oracle
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_coupled_contact_modes \
+            network.tests.test_world_ab_friction_spin_trial \
+            network.tests.test_world_ab_contact_discrimination \
+            network.tests.test_world_ab_active_set_trial \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_coupled_contact_modes import run
+          from network.tests.test_world_ab_coupled_contact_modes import check
+          native=run()
+          assert check(native)
+          assert len(native["scenarios"]) == 35
+          assert sum(len(g["options"]) for c in native["scenarios"] for g in c["groups"]) == 1330
+          assert [row["admissible_modes"] for row in native["aggregate"]] == [18,0,0,18,12,12]
+          assert native["source_original_trial06_simultaneous_stop_preserved"]
+          assert not native["general_simultaneous_friction_manifold_solved"]
+          assert not native["actual_joint_contact_impulses_measured"]
+          Path("../trial13-original-native.json").write_text(
+              json.dumps(native, sort_keys=True, indent=2)+"\n", encoding="utf-8")
+          Path("../trial13-original-verdict.json").write_text(
+              json.dumps({"pinned_original_commit":"6179d4e6b6e66a02065e8a5c1ef64b855a2de763",
+                          "original_independent_jacobian_verifier":True,
+                          "original_coupled_mode_aggregate":native["aggregate"],
+                          "real_joint_impulses_measured":False,
+                          "material_friction_solver_proven":False},
+                         sort_keys=True, indent=2)+"\n", encoding="utf-8")
+          PY
+      - name: Record original admissible and rejected modes as 35 finite A/B ledgers
+        run: |
+          python -m work.ab_world.world_trial13_handoff \
+            --native trial13-original-native.json \
+            --source-commit 6179d4e6b6e66a02065e8a5c1ef64b855a2de763 \
+            > trial13-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          source=json.load(open("trial13-original-native.json"))
+          carrier=json.load(open("trial13-ab-carrier.json"))
+          assert carrier["ledger_witness"]["valid"]
+          assert carrier["ledger_witness"]["pages_verified"] == 35
+          assert carrier["ledger_witness"]["observations_recorded"] == 1330
+          assert carrier["mode_attempts"] == 1330
+          assert carrier["admissible_modes"] == 60
+          assert carrier["rejected_modes"] == 1270
+          assert carrier["conditional_motion_frames"] == 1860
+          assert carrier["aggregate"] == source["aggregate"]
+          assert not carrier["original_material_contact_solved"]
+          assert not carrier["actual_joint_contact_impulses_measured"]
+          assert not carrier["native_model_verified_by_adapter"]
+          assert digest(carrier["page_manifest"]) == carrier["page_manifest_sha256"]
+          assert len(carrier["ledger_pages"]) == 35
+          Path("trial13-ab-pages").mkdir(exist_ok=True)
+          for i, page in enumerate(carrier["ledger_pages"]):
+              assert page["case"] == i and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"] == carrier["page_manifest"]["ordered_source_cases"][i]["head_hash"]
+              with open(f"trial13-ab-pages/case-{i:02d}.json","w") as f:
+                  json.dump(page["receipt"],f,indent=2,sort_keys=True)
+          with open("trial13-ab-manifest.json","w") as f:
+              json.dump(carrier["page_manifest"],f,indent=2,sort_keys=True)
+          print(json.dumps({"source_modes":carrier["mode_attempts"],
+                            "admissible":carrier["admissible_modes"],
+                            "rejected":carrier["rejected_modes"],
+                            "candidate_motion_frames":carrier["conditional_motion_frames"],
+                            "bounded_case_pages":carrier["ledger_witness"]["pages_verified"],
+                            "A_B_operations":carrier["ledger_witness"]["steps_verified"],
+                            "real_contact_measurements":0},sort_keys=True))
+          PY
+          for page in $(seq -w 0 34); do
+            python -m work.ab_world.construction --verify "trial13-ab-pages/case-$page.json" > "trial13-ab-pages/verdict-$page.json"
+          done
+          python - <<'PY'
+          import json
+          for i in range(35):
+              assert json.load(open(f"trial13-ab-pages/verdict-{i:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_coupled_contact_modes.py \
+            original-world/network/tests/test_world_ab_coupled_contact_modes.py \
+            trial13-original-native.json trial13-original-verdict.json \
+            trial13-ab-carrier.json trial13-ab-manifest.json \
+            trial13-ab-pages/case-*.json trial13-ab-pages/verdict-*.json \
+            > trial13-source-digests.txt
+      - name: Retain original coupled mode evidence and A/B witnesses
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial13-coupled-source-alternatives
+          path: |
+            trial13-original-native.json
+            trial13-original-verdict.json
+            trial13-ab-carrier.json
+            trial13-ab-manifest.json
+            trial13-ab-pages/
+            trial13-source-digests.txt
+          retention-days: 30
