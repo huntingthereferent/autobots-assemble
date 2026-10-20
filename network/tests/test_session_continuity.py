@@ -57,6 +57,28 @@ class SessionContinuityTests(unittest.TestCase):
         self.assertIn("ai.james", session)
         self.assertTrue((ROOT / index["ai.james"]["path"]).is_file())
 
+    def test_james_authorization_has_no_word_gate(self):
+        # Documentation contract only; this does not authenticate a speaker.
+        gate = self.read("protocols/ai/james.md")
+        repo_write = self.read("protocols/ai/repo-write.md")
+        for text in (
+            "A clear, current request from James",
+            "Do not require a particular word",
+            "ask plainly who is making the request",
+            "connected account with the necessary GitHub permissions",
+        ):
+            with self.subTest(text=text):
+                self.assertIn(text, gate)
+        for retired in (
+            "privately agreed conversational identity marker",
+            "introduce enough procedural or technical friction",
+            "wait for the speaker to supply the marker",
+            "Diesel",
+        ):
+            with self.subTest(retired=retired):
+                self.assertNotIn(retired, gate)
+        self.assertIn("no special word is required", repo_write)
+
     def test_language_first_and_scalpel_precision_survive_entry(self):
         # Static source contract only: wording does not prove model behavior.
         entry = self.read("ENTRY.md")
