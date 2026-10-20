@@ -235,3 +235,26 @@ policy/journal commit or a production CA revocation service.
 [Key-approach motion and noninterference evidence](KEY_APPROACH.md) now link the *already existing* `BipolarBoundary` to the real `AuthenticatedHandoffIngress`. Each external approach moves only the bounded probe; the protected trajectory moves only after a cryptographically authenticated and successfully committed native handoff/result. **Neither key material nor key identity is changed by the bipolar model**. Negative tests include 250 invalid approaches, signature refusal before private-key derivation, bad native actors, replay attempts, and unchanged disposable test keys.
 
 The model is event-driven and does **not** itself generate continuous idle-time motion. It does not hide all public envelope metadata or guarantee safety from a compromised local host. Authenticated signatures and native evidence checks still control actual admission; bipolar motion is the observation-layer relationship, not a new cipher.
+
+## Independently continuing bipolar presence
+
+The [native key-approach experiment](KEY_APPROACH.md) now includes
+`NativePresenceRunner`, an **explicitly host-started**, monotonic-clock
+driver for a *separate* bipolar presence trajectory. It advances without
+incoming requests or worker results. Both trusted signed roles sharing
+the same `HandoffRuntime` now share one key-approach referent.
+
+`EcosystemService.start_local_key_presence()` and
+`stop_local_key_presence()` are trusted-local Python lifecycle controls,
+not HTTP endpoints. Startup requires the same sealed runtime and two
+currently B14-pinned reciprocal actor roles. No worker is run,
+journal event fabricated or cryptographic key modified. CI includes
+actual idle-time thread ticks, independent interleavings, stable
+native journal, and explicit stop/restart controls.
+
+**What has not been proven:** this finite clock-driven trajectory is
+not already a physical world-motion witness or perpetual protection;
+its phase is only observed while the trusted process runs. It does
+not obscure public envelope metadata, prevent key theft or grant
+cryptographic authorization. The key material remains governed by
+ordinary vetted cryptography and operator trust policies.
