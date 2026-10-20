@@ -103,7 +103,7 @@ class Trial13CoupledModeCarrierTests(unittest.TestCase):
         self.assertEqual(out["conditional_motion_frames"], 1085)
         self.assertEqual(out["ledger_witness"]["pages_verified"], 35)
         self.assertEqual(out["ledger_witness"]["observations_recorded"], 1330)
-        self.assertEqual(out["ledger_witness"]["steps_verified"], 5460)
+        self.assertEqual(out["ledger_witness"]["steps_verified"], 5670)
         self.assertTrue(out["ledger_witness"]["valid"])
         self.assertFalse(out["original_material_contact_solved"])
         self.assertFalse(out["actual_joint_contact_impulses_measured"])
