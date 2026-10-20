@@ -236,3 +236,28 @@ operator ledger is also not a trusted independent PKI authority. See
 The existing `security.finite_motion.BipolarBoundary` is now connected to the actual signed native ingress through an operator-only `KeyApproachBoundary`. An incoming approach can move the independent probe trajectory; a **durably accepted native movement** advances the protected trajectory. Invalid signatures, unauthorized actor claims and replays leave that trajectory unchanged. The 141-test security CI includes a key derivation guard and unchanged disposable signing/recipient-key test. [Observed relationship and limits](KEY_APPROACH.md).
 
 **Still open:** this event-driven harness does not by itself prove uninterrupted native movement in the absence of input; it does not constitute cryptographic authorization, passive traffic secrecy, general leak resistance or a guarantee against key theft. The existing crypto, trust enrollment and server protections remain necessary. A compromised host still has privileged access outside this ingress.
+
+## SEC-22 — independent native bipolar presence with no key mutation
+
+A trusted native host can explicitly start a `NativePresenceRunner`
+attached to the real signed key-approach boundary, with no need for
+incoming requests. The monotonic-clock native thread advances a
+**separate bipolar presence trajectory** while retaining the existing
+probe and authenticated/durable-movement trajectories. Two signed
+roles using the same runtime share this one observation referent.
+
+A protected `EcosystemService` only starts this presence after both
+reciprocally scoped B14-pinned worker roles are installed with the
+same sealed native journal. Negative tests refuse missing roles,
+revoked pins and plaintext runtime. Actual native idle tests verify
+presence ticks without **any native journal events**, no HTTP requests
+and no worker dispatch; stop halts it. The cryptographic key bytes,
+key identities and replay rules are untouched.
+
+**Remaining bounds:** the driver is opt-in, native and memory-resident.
+It is not a durable source-synchronized physical world clock, cannot
+guarantee timing through host suspend or crash, and its ticks are
+*not* accepted as signed native evidence. Compromised endpoints,
+traffic metadata, cryptographic leakage, keys exposed by an adversarial
+host, and pre-existing untrusted Python entrances are not secured
+by oscillation. No production deployment approval results.
