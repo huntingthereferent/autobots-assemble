@@ -45,11 +45,18 @@ details>summary::-webkit-details-marker{display:none}details>summary:before{cont
 button.inline{font:11px var(--mono);padding:6px 10px;margin:5px 8px 5px 0}
 .pager{text-align:center;margin:13px 0}.footer{border-top:1px solid var(--line);padding-top:20px;margin-top:20px;color:var(--dim);font:11px/1.8 var(--mono)}
 @media(max-width:1020px){.split{grid-template-columns:1fr}.side{position:static}}@media(max-width:680px){.layout{grid-template-columns:1fr}.side{position:static}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{align-items:start}.controls input{width:100%}}
+/* The standalone source component also fits within the same Workstation page. */
+html.embedded body{background:transparent}
+html.embedded .top{display:none}
+html.embedded .shell{max-width:none;margin:0;padding:4px 1px 20px}
+html.embedded .hero{padding:4px 0 17px}
+html.embedded .hero h1,html.embedded .hero .eyebrow{display:none}
+html.embedded .statusbar{margin:12px 0 18px}
 </style>
 </head>
 <body>
 <header class="top"><a class="brand" href="work.html">HUNTING THE REFERENT <span style="color:var(--blue)">/ AUDIT</span></a>
-<nav aria-label="Workstation"><a href="work.html">WORKSTATION</a><a href="audit.html" aria-current="page">AUDIT</a><a href="trace.html">PROVENANCE</a><a href="../game/">WORLD48 GAME</a></nav></header>
+<nav aria-label="Workstation"><a href="work.html">WORKSTATION</a><a href="work.html#audit" aria-current="page">AUDIT</a><a href="trace.html">PROVENANCE</a><a href="../game/">WORLD48 GAME</a></nav></header>
 <main class="shell">
 <section class="hero"><div><div class="eyebrow">REFERENT / SOURCE-BOUND AUDIT / READ ONLY</div><h1>Audit viewer</h1><p>Choose the project referent. Follow the source-owned lines of work through branch, workflow, run, job and step, alongside recorded results, unresolved walls, and proposed next tests. These are two separately attributed evidence streams—not an invented causal chain.</p></div>
 <div class="controls"><input type="search" id="search" placeholder="Filter within the selected referent" aria-label="Filter selected referent"><button id="refresh" type="button">Refresh sources</button></div></section>
@@ -73,6 +80,21 @@ button.inline{font:11px var(--mono);padding:6px 10px;margin:5px 8px 5px 0}
 <script>
 'use strict';
 (() => {
+  const embedded=new URLSearchParams(location.search).get('embedded')==='1'&&window.parent!==window;
+  if(embedded){
+    document.documentElement.classList.add('embedded');
+    const announceSize=()=>{
+      const height=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);
+      window.parent.postMessage({type:'referent-audit:resize',height},location.origin);
+    };
+    if(typeof ResizeObserver==='function'){
+      const watcher=new ResizeObserver(announceSize);
+      watcher.observe(document.body);
+    }
+    window.addEventListener('resize',announceSize);
+    window.addEventListener('load',announceSize);
+    requestAnimationFrame(announceSize);
+  }
   const REPO='huntingthereferent/autobots-assemble';
   const API='https://api.github.com/repos/'+REPO;
   const RESEARCH='https://raw.githubusercontent.com/'+REPO+'/main/views/traces/research-live.json';
