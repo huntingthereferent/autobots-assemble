@@ -174,3 +174,40 @@ remote source's signatures do not prove the truth of plaintext work.
 Observer SQLite state still requires independent retention to defend
 against observer-side rollback. Tests use isolated directories on the
 same CI machine. No production route is opened.
+
+## SEC-18 — mTLS witness-only transport (local)
+
+The separately owned observation lane now offers an opt-in TLS 1.3
+listener **restricted to localhost** and only `POST /v1/witness`.
+It requires a trusted client certificate, an exact operator-enrolled
+certificate fingerprint mapped to an already-pinned source Ed25519
+key, plus a valid ciphertext witness that extends that source's
+existing observed prefix. The receiver returns a minimal receipt and
+does not dispatch work or expose the core HTTP workstation API.
+Negative tests include unrecognized clients, missing client certs,
+false source claims, unauthorized endpoints and ambiguous JSON/HTTP
+framing. See [transport contract](WITNESS_TRANSPORT.md).
+
+**Deployment still blocked:** the local ephemeral TLS fixture is not
+a field-tested two-host transport, an identity-management system, an
+internet-service boundary, or a production certificate revocation
+scheme. Keys, TLS configuration and source identity must be separately
+authorized and reviewed before any external traffic is permitted.
+
+## SEC-19 — independently signed observer continuity
+
+The operator may issue an independent observer-owned checkpoint for
+the per-source acknowledged prefix: source identity, current signed
+source checkpoint, counted movement history, and its canonical digest,
+signed by a separate observer key. The witness receiver verifies this
+anchor at startup and before accepting another observation.
+Rollback of the observer SQLite ledger behind a newer independently
+retained signed prefix is refused in tests. A valid older anchor
+cannot protect subsequent *unanchored* observations.
+
+**Deployment still blocked:** there is no actual off-host automatic
+checkpoint publication, independent retention schedule, hardware
+trust root, observer PKI, or disaster recovery system. The receiving
+operator is responsible for retaining authentic anchors outside the
+SQLite file's rollback domain. Passing CI does not prove such an
+independent custodian exists.
