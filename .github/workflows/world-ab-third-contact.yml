@@ -1,0 +1,65 @@
+name: WORLD 21 conditional third square contact
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_third_contact.py'
+      - 'network/tests/test_world_ab_third_contact.py'
+      - 'systems/workspace/WORLD_AB_THIRD_CONTACT_TRIAL_21_2026-10-20.md'
+      - '.github/workflows/world-ab-third-contact.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_third_contact.py'
+      - 'network/tests/test_world_ab_third_contact.py'
+      - 'systems/workspace/WORLD_AB_THIRD_CONTACT_TRIAL_21_2026-10-20.md'
+      - '.github/workflows/world-ab-third-contact.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-world-third-contact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recheck original square, source receiver, third impulse and independent extrema
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_local_recontact_impulse \
+            network.tests.test_world_ab_rotating_receiver \
+            network.tests.test_world_ab_third_contact
+      - name: Preserve source and independent mathematical witness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_third_contact import run
+          from network.tests.test_world_ab_third_contact import independent_check
+          source=run()
+          evidence={"model":source,"independent_replay":[
+            {"angle":r["angle"],"status":r["status"],"verified":independent_check(r)}
+            for r in source["cases"]]}
+          data=json.dumps(evidence,sort_keys=True,indent=2,allow_nan=False)+"\n"
+          target=Path("world21-native-evidence")
+          target.mkdir(exist_ok=True)
+          (target/"third_contact.json").write_text(data,encoding="utf8")
+          (target/"third_contact.sha256").write_text(
+            sha256(data.encode()).hexdigest()+"  third_contact.json\n",encoding="utf8")
+          print("WORLD21 independently replayed third-impulse hypotheses:",source["candidate_third_impulses"])
+          print("WORLD21 local bounded conditional continuations:",source["local_conditional_separations"])
+          PY
+      - name: Retain recorded virtual mathematics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world21-third-impulse-and-whole-local-interval
+          path: world21-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
