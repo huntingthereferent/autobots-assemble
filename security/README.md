@@ -181,3 +181,17 @@ configured. This still does not cover privileged direct Python calls.
 ## Native atomic replay admission
 
 [Atomic native admission](ATOMIC_ADMISSION.md) binds each signed replay token to its encrypted native SUBMISSION or RESULT record in a **single** SQLite commit on the opt-in sealed journal path. Restart verifies that the replay table exactly matches the authenticated encrypted history. Fault-injection tests exercise before-commit rollback and after-commit lost acknowledgements. The legacy JSONL lane and offline recovery ledger retain their separate transactions; distributed admission remains out of scope.
+
+## Independently witnessed remote source movement
+
+[Source-bound offline witness exchange](REMOTE_WITNESS.md) lets an
+operator-pinned observer verify a bounded contiguous encrypted journal
+hash-chain extension from an independently owned source. The observer
+keeps its own SQLite source checkpoint and cannot decrypt or execute the
+source's work. CI exercises separate journals and keys, rejects missing
+frames, alternate sources, wrong signing keys and competing observations.
+
+This is **observation, not remote control**. There is no live network
+transport, worker admission or distributed consensus. The independent
+"hosts" in these regression fixtures are separately owned directories
+and journals on one CI runner, not physically distinct machines.
