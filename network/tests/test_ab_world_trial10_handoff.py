@@ -94,13 +94,17 @@ class Trial10CarrierTests(unittest.TestCase):
         self.assertEqual(output["rejected_alternatives"], 44)
         self.assertEqual(output["candidate_frames_carried"], 1891)
         self.assertEqual(output["classifications"]["multiple-admissible"], 26)
-        self.assertEqual(output["ledger_witness"]["steps_verified"], 2279)
-        self.assertEqual(output["ledger_witness"]["objects_live"], 142)
-        self.assertEqual(output["ledger_witness"]["relations_live"], 141)
+        self.assertEqual(output["ledger_witness"]["steps_verified"], 2291)
+        self.assertEqual(output["ledger_witness"]["objects_live"], 150)
+        self.assertEqual(output["ledger_witness"]["relations_live"], 145)
         self.assertEqual(output["ledger_witness"]["observations_recorded"], 105)
         self.assertFalse(output["physical_outcome_chosen"])
         self.assertFalse(output["original_frictional_contact_solved"])
-        self.assertTrue(verify_receipt(output["ledger_receipt"])["valid"])
+        self.assertEqual(output["ledger_witness"]["pages_verified"], 5)
+        self.assertEqual([p["rotation"] for p in output["ledger_pages"]], list(ROTATIONS))
+        self.assertEqual([p["first_case"] for p in output["ledger_pages"]], [0, 7, 14, 21, 28])
+        self.assertTrue(all(verify_receipt(p["receipt"])["valid"]
+                            for p in output["ledger_pages"]))
 
     def test_02_rejected_branch_cannot_gain_unobserved_motion(self):
         data = example()
@@ -154,7 +158,7 @@ class Trial10CarrierTests(unittest.TestCase):
             carry(data, PIN)
 
     def test_06_independent_witness_detects_promoted_solved_contact(self):
-        record = carry(example(), PIN)["ledger_receipt"]
+        record = carry(example(), PIN)["ledger_pages"][0]["receipt"]
         changed = deepcopy(record)
         changed["final"]["objects"]["original-frictional-contact"]["state"] = "SOLVED"
         with self.assertRaises(ValueError):
