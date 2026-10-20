@@ -161,21 +161,22 @@ assert.equal(revisionLink("research/foo", "invalid-sha"),null);
         self.assertIn("not automatically an active worker",p)
         self.assertNotIn('API+"/actions/runs?per_page=50"',p)
 
-    def test_tickstream_only_triggers_original_source_refresh(self):
+    def test_only_github_refresh_without_tickserver_transport(self):
         p=WORK.read_text(encoding="utf-8")
-        self.assertIn('id="tick-form"',p)
-        self.assertIn('id="tick-status"',p)
-        self.assertIn("new EventSource(safe,{withCredentials:false})",p)
-        self.assertIn('connection.addEventListener("tick",onServerTick)',p)
-        self.assertIn("app.streamTicks++",p)
-        self.assertIn("if(parsed.protocol!==\"https:\"",p)
-        self.assertIn("parsed.username||parsed.password||parsed.search||parsed.hash",p)
-        self.assertIn("TICK_REFRESH_GAP",p)
-        self.assertIn("app.rateLimitUntil=Date.now()+15*60*1000",p)
-        self.assertIn("app.lastAttempt=Date.now()",p)
-        self.assertIn("A server event is a prompt to recheck original evidence, never a worker result.",p)
-        self.assertIn("GitHub auto-check continues",p)
-        self.assertIn("no current status inferred",p.lower())
+        # The page must not show transport configuration or open SSE connections.
+        for removed in (
+            "tickserver", "tick-form", "tick-status", "tick-url",
+            "tick-summary", "TICK_REFRESH_GAP", "TICK_STORAGE",
+            "EventSource", "onServerTick", "connectTick", "disconnectTick",
+        ):
+            self.assertNotIn(removed.lower(), p.lower())
+        self.assertIn('id="next-check"', p)
+        self.assertIn("Automatic GitHub source checks", p)
+        self.assertIn('API+"/actions/runs?per_page=100&page=1"', p)
+        self.assertIn("app.rateLimitUntil=Date.now()+15*60*1000", p)
+        self.assertIn("app.lastAttempt=Date.now()", p)
+        self.assertIn("if(!document.hidden&&Date.now()>=app.rateLimitUntil", p)
+        self.assertIn("no current status inferred", p.lower())
 
 
     def test_research_workbench_limits_dom_and_preserves_complete_source_index(self):
