@@ -493,12 +493,12 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
   const isSHA=sha=>typeof sha==="string"&&/^[0-9a-f]{40}$/.test(sha);
   function safeDate(value){const d=Date.parse(value||"");return Number.isFinite(d)?new Date(d).toLocaleString():"no source timestamp"}
-  function statusOf(x){if(x.status==="queued"||x.status==="waiting"||x.status==="pending")return "queued";if(x.status==="in_progress")return "in_progress";if(x.status==="completed"){return x.conclusion||"unknown"}return "unknown"}
+  function statusOf(x){if(x.status==="queued"||x.status==="waiting"||x.status==="pending"||x.status==="requested")return "queued";if(x.status==="in_progress")return "in_progress";if(x.status==="completed"){return x.conclusion||"unknown"}return "unknown"}
   function pill(s){return el("span",s.replaceAll("_"," ").toUpperCase(),"state "+(s==="success"||s==="failure"||s==="in_progress"||s==="queued"||s==="cancelled"?s:"neutral"))}
   async function getJSON(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("HTTP "+r.status+(r.status===403?" / public API rate limit":""));return r.json()}
   function readRuns(j){if(!j||!Array.isArray(j.workflow_runs))throw Error("Unexpected GitHub workflow response");
     return j.workflow_runs.filter(r=>Number.isSafeInteger(r.id)&&r.id>0&&isSHA(r.head_sha)&&
-      typeof r.name==="string"&&["queued","waiting","pending","in_progress","completed"].includes(r.status))
+      typeof r.name==="string"&&["queued","waiting","pending","requested","in_progress","completed"].includes(r.status))
       .map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
         conclusion:r.conclusion||null,url:r.html_url,created:r.created_at,updated:r.updated_at,
         runNumber:r.run_number,branch:r.head_branch||"",event:r.event||"unknown"}));}
