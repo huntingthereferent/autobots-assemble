@@ -94,6 +94,59 @@ class NativeWorkerContinuationTests(unittest.TestCase):
         self.assertEqual(len(self.pins.list_pins()), 3)
         self.assertEqual(self.frontier._read()[-1]["type"], "HELP_PROPOSED")
 
+    def test_native_worker_reviews_exact_incoming_help_and_peer_sees_decision(self):
+        seen = []
+
+        def owner(_handoff, context):
+            # The peer can only submit from its own explicitly bound
+            # first-hop sibling, never an unrelated branch or fake revision.
+            self.frontier.propose(
+                kind="HELP", idea_id=self.idea, revision=self.peer["revision"],
+                step_id="site", worker="worker-B",
+                target_revision=self.pins_branch["revision"],
+                reason="Other branch has different step source label")
+            pending = context.observe()["incoming_peer_help"]
+            self.assertEqual(len(pending), 1)
+            self.assertEqual(pending[0]["state"], "AWAITING_REVIEW")
+            ref = pending[0]["proposal_ref"]
+            with self.assertRaisesRegex(ValueError, "not visible"):
+                context.review_help(proposal_ref="0" * 64, decision="INSPECT",
+                                    reason="Not in front of this worker")
+            accepted = context.review_help(
+                proposal_ref=ref, decision="INSPECT",
+                reason="Inspect this source-bound alternate before any change")
+            seen.append(accepted)
+            self.assertTrue(accepted["recorded"])
+            self.assertFalse(accepted["event"]["branch_adopted"])
+            self.assertFalse(accepted["event"]["worker_help_executed"])
+            self.assertEqual(context.review_help(
+                proposal_ref=ref, decision="INSPECT",
+                reason="Inspect this source-bound alternate before any change")["recorded"], False)
+            with self.assertRaisesRegex(ValueError, "already reviewed"):
+                context.review_help(proposal_ref=ref, decision="DECLINE",
+                                    reason="Silently change first review")
+            newer = context.observe()["incoming_peer_help"]
+            self.assertEqual(newer[0]["state"], "INSPECT")
+            self.assertFalse(newer[0]["worker_help_executed"])
+            return ExecutionResult(status="UNKNOWN",
+                                   note="Review acknowledged, task still unresolved")
+
+        worker = ScopedRepositoryWorker(
+            runtime=self.runtime, frontier=self.frontier,
+            position=self.position, handler=owner)
+        self.assertEqual(worker.run(allow_native_execution=True).status, "UNKNOWN")
+        self.assertEqual(len(seen), 1)
+        peer_view = self.frontier.worker_frontier(
+            idea_id=self.idea, revision=self.peer["revision"],
+            step_id="site", worker="worker-B")
+        self.assertEqual(len(peer_view["outgoing_help_reviews"]), 1)
+        review = peer_view["outgoing_help_reviews"][0]
+        self.assertEqual(review["review"], "INSPECT")
+        self.assertEqual(review["target_revision"], self.pins_branch["revision"])
+        self.assertFalse(review["branch_adopted"])
+        self.assertEqual(len(self.pins.list_pins()), 3)
+        self.assertEqual(self.runtime.state(self.handoff_id).status, "UNKNOWN")
+
     def test_run_preflight_fails_closed_on_wrong_assignment_or_source(self):
         actual = self.handoff_id
         rejected = NativePosition(actual, self.peer["revision"], "site")
