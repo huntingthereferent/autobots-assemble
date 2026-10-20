@@ -84,8 +84,9 @@ def carry(original: dict[str, Any], source_commit: str) -> dict[str, Any]:
                 len(frame["position"]) == len(frame["velocity"]) == 2 and
                 all(number(x) for x in frame["position"] + frame["velocity"]),
                 "candidate frame movement missing")
-    require(frames[0]["position"] == [12., candidate["entry_y"]],
-            "candidate start differs from original probe")
+    require(abs(frames[0]["position"][0] - 12.) <= 2e-9 and
+            abs(frames[0]["position"][1] - candidate["entry_y"]) <= 2e-9,
+            "candidate start differs from original probe beyond source precision")
     controls = original.get("nearby_trial07_statuses")
     require(type(controls) is list and len(controls) == 9,
             "missing original Trial07 controls")
