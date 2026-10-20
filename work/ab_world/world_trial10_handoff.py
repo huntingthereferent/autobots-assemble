@@ -104,6 +104,8 @@ def carry(native: dict[str, Any], source_commit: str) -> dict[str, Any]:
     rejected = 0
     frames = 0
     recovered = 0
+    page_ranges = []
+    page_start = len(steps)
     for i, (angle, rotation) in enumerate(
             ((a, d) for d in ROTATIONS for a in ANGLES)):
         case = cases[i]
@@ -218,18 +220,57 @@ def carry(native: dict[str, Any], source_commit: str) -> dict[str, Any]:
                 "entity": "object", "subject": aid,
                 "reading": observed, "basis": owner,
             })
+        if (i + 1) % len(ANGLES) == 0:
+            page_ranges.append((i // len(ANGLES), i - len(ANGLES) + 1,
+                                i, page_start, len(steps)))
+            page_start = len(steps)
     demand(native.get("counts") == counts, "source classification totals altered")
     demand(native.get("trial09_rejected_cases_with_local_alternatives") == recovered,
            "earlier rejection recovery summary altered")
     demand(admitted + rejected == 105, "original tested active sets missing")
-    plan = {
-        "schema": PLAN,
-        "referent": "WORLD Trial10 / competing active-set candidates for native stress cases",
-        "limits": {"objects": 2 + 35 + 105, "relations": 1 + 35 + 105,
-                   "steps": len(steps)},
-        "steps": steps,
+    # The general A/B carrier has a strict 1 MB per-plan bound. Five native
+    # surface-rotation groups remain independently witnessed finite worlds,
+    # connected by an ordered manifest. Do not alter the global storage bound.
+    demand(len(page_ranges) == len(ROTATIONS) and
+           page_start == len(steps), "finite source pages were not complete")
+    pages = []
+    base_steps = steps[:3]
+    for rotation_index, first_case, last_case, start, stop in page_ranges:
+        operations = deepcopy(base_steps) + deepcopy(steps[start:stop])
+        plan = {
+            "schema": PLAN,
+            "referent": ("WORLD Trial10 / active-set source, rotation " +
+                         str(ROTATIONS[rotation_index])),
+            "limits": {"objects": 2 + len(ANGLES) * 4,
+                       "relations": 1 + len(ANGLES) * 4,
+                       "steps": len(operations)},
+            "steps": operations,
+        }
+        receipt = run_plan(plan)
+        witness = verify_receipt(receipt)
+        pages.append({
+            "rotation": ROTATIONS[rotation_index],
+            "first_case": first_case, "last_case": last_case,
+            "receipt": receipt, "witness": witness,
+        })
+    combined = {
+        "valid": all(page["witness"]["valid"] for page in pages),
+        "pages_verified": len(pages),
+        "steps_verified": sum(p["witness"]["steps_verified"] for p in pages),
+        "objects_live": sum(p["witness"]["objects_live"] for p in pages),
+        "relations_live": sum(p["witness"]["relations_live"] for p in pages),
+        "observations_recorded": sum(
+            p["witness"]["observations_recorded"] for p in pages),
     }
-    receipt = run_plan(plan)
+    manifest = {
+        "source_report_sha256": digest(native),
+        "ordered_rotation_pages": [
+            {"rotation": p["rotation"], "first_case": p["first_case"],
+             "last_case": p["last_case"],
+             "head_hash": p["receipt"]["head_hash"]}
+            for p in pages
+        ],
+    }
     return {
         "schema": SCHEMA, "source_commit": source_commit,
         "source_report_sha256": digest(native),
@@ -241,7 +282,8 @@ def carry(native: dict[str, Any], source_commit: str) -> dict[str, Any]:
         "original_source_authenticated_by_adapter": False,
         "source_dynamics_verified_by_adapter": False,
         "material_physics_verified": False,
-        "ledger_receipt": receipt, "ledger_witness": verify_receipt(receipt),
+        "ledger_pages": pages, "ledger_witness": combined,
+        "page_manifest": manifest, "page_manifest_sha256": digest(manifest),
     }
 
 
