@@ -163,6 +163,33 @@ class IdeaFrontierTests(unittest.TestCase):
         self.assertEqual([r["type"] for r in self.index._read()],
                          ["BIND", "BIND", "BIND"])  # no invalid movement proposal
 
+    def test_shared_parent_without_matching_step_does_not_create_help_relation(self):
+        parent = self.pin("Root with known step")
+        own = self.pin("Own branch step", parent["revision"], "worker-A")
+        unrelated_step = spec("Peer unrelated step", parent["revision"])
+        unrelated_step["steps"][0]["id"] = "different-step"
+        other = self.pins.pin_candidate(
+            unrelated_step, ROOT, reason="Separate declared step")
+        self.index.bind(
+            idea_id=self.idea, revision=other["revision"], worker="worker-B",
+            reason="Different recorded step under same parent")
+        view = self.index.worker_frontier(
+            idea_id=self.idea, revision=own["revision"],
+            step_id="start", worker="worker-A")
+        candidate = next(x for x in view["visible_branches"]
+                         if x["revision"] == other["revision"])
+        self.assertFalse(candidate["same_step_id_present"])
+        self.assertIsNone(candidate["local_step_delta"])
+        with self.assertRaisesRegex(ValueError, "another recorded worker"):
+            self.index.propose(
+                kind="HELP", idea_id=self.idea, revision=own["revision"],
+                step_id="start", worker="worker-A",
+                target_revision=other["revision"], reason="Only share parent")
+        # The mere parent association did not record any help or view leak.
+        self.assertTrue(all(e["type"] == "BIND" for e in self.index._read()))
+        self.assertEqual(view["incoming_peer_help"], [])
+        self.assertEqual(view["outgoing_help_reviews"], [])
+
     def test_no_auto_ranking_even_if_pins_claim_verification(self):
         parent = self.pin("Original")
         first = self.pin("Alpha", parent["revision"], "worker-A")
