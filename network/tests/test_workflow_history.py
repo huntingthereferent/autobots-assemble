@@ -1,6 +1,6 @@
 """No-network provenance and pagination tests for the source-run archive."""
 import unittest
-from views.traces.workflow_history import SCHEMA, collect, normalize_run
+from views.traces.workflow_history import SCHEMA, collect, collect_frozen_history, normalize_run
 
 
 def run(i, **kwargs):
@@ -38,6 +38,36 @@ class ArchiveTests(unittest.TestCase):
         def capped(page):
             return {"total_count": 220, "workflow_runs": [run(i+100*(page-1)) for i in range(1, 101)]}
         self.assertFalse(collect(capped, max_pages=2)["complete"])
+
+    def test_frozen_time_windows_partition_without_overlaps_or_newer_runs(self):
+        from datetime import datetime, timezone
+        start = int(datetime(2026, 10, 19, tzinfo=timezone.utc).timestamp())
+        created = []
+        def fetch(page, window):
+            created.append((page, window))
+            left = window.endswith("00:00:05Z")
+            whole = window.endswith("00:00:11Z") and window.startswith("2026-10-19T00:00:00Z")
+            if whole:
+                return {"total_count": 12, "workflow_runs": [run(i) for i in range(1, 13)]}
+            rows = [run(i) for i in (range(1, 7) if left else range(7, 13))]
+            return {"total_count": 6, "workflow_runs": rows}
+        doc = collect_frozen_history(fetch, start=start, cutoff=start+11, partition_max=10)
+        self.assertTrue(doc["complete"])
+        self.assertEqual(doc["indexed_count"], 12)
+        self.assertEqual(doc["windows_read"], 2)
+        self.assertEqual(doc["cutoff_at"], "2026-10-19T00:00:11Z")
+        self.assertEqual(len(set(x["id"] for x in doc["runs"])), 12)
+        self.assertEqual(len(created), 3)
+
+    def test_frozen_window_rejects_cross_page_count_drift(self):
+        from datetime import datetime, timezone
+        start = int(datetime(2026, 10, 19, tzinfo=timezone.utc).timestamp())
+        def fetch(page, window):
+            rows = [run(i + 100*(page-1)) for i in range(1, 101)] if page == 1 else [run(101)]
+            return {"total_count": 101 if page == 1 else 102, "workflow_runs": rows}
+        doc = collect_frozen_history(fetch, start=start, cutoff=start+2, partition_max=200)
+        self.assertEqual(doc["indexed_count"], 101)
+        self.assertFalse(doc["complete"])
 
     def test_cross_page_reported_total_drift_must_not_be_called_complete(self):
         def fetch(page):
