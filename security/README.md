@@ -195,3 +195,24 @@ This is **observation, not remote control**. There is no live network
 transport, worker admission or distributed consensus. The independent
 "hosts" in these regression fixtures are separately owned directories
 and journals on one CI runner, not physically distinct machines.
+
+## Authenticated witness transport and observer rollback anchors
+
+[Witness-only TLS and independent observer anchors](WITNESS_TRANSPORT.md)
+add a deliberately loopback-only TLS 1.3 receiver that authenticates a
+pre-enrolled client certificate and separately verifies the source's
+Ed25519 ciphertext-chain witness. Incoming HTTP cannot control native
+workers, enroll identities or request decryption.
+
+The receiving operator can separately sign and preserve its own
+source-specific **observer checkpoint**. An observer that has rolled
+back below this independently retained prefix is refused before another
+witness movement is admitted. This requires actual out-of-band
+checkpoint retention; creating a signature beside the SQLite file is
+not independent storage.
+
+The tests use genuine localhost TLS with temporary CA/server/client
+certificates and separately owned source/observer journals on one
+runner. Neither real internet transport nor physical multi-host
+resilience is established. Security preflight for public deployment
+remains blocked.
