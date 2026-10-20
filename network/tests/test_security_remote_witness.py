@@ -211,6 +211,36 @@ class IndependentRemoteWitnessTests(unittest.TestCase):
         except SealedJournalError:
             return "refused"
 
+    def test_same_signer_two_valid_forks_cannot_be_merged_as_one_history(self):
+        # Copy the encrypted database *before* either branch moves. Both
+        # branches have the same authentic journal identity and signer.
+        other_path = self.root_a / "forked-copy.sqlite"
+        with sqlite3.connect(self.file_a) as original, sqlite3.connect(other_path) as copy:
+            original.backup(copy)
+        forked = HandoffRuntime(event_store=SealedRuntimeJournal(
+            other_path, key=self.key_a))
+        first = self.advance_a(["a-real"])
+        forked.submit(self.task("a-other"))
+        forked_tip = issue_checkpoint(forked.event_store, self.signer_a)
+        conflicting = export_witness_span(
+            forked.event_store, base_checkpoint=self.base_a,
+            tip_checkpoint=forked_tip,
+            source_public_key=self.signer_a.public_key())
+        # Each fork independently verifies from the original pinned baseline.
+        self.assertEqual(
+            verify_witness_span(conflicting, base_checkpoint=self.base_a,
+                                source_public_key=self.signer_a.public_key()),
+            forked_tip)
+        self.observer.observe(
+            "alpha", first, trusted_source_public_key=self.signer_a.public_key())
+        with self.assertRaises(SealedJournalError):
+            self.observer.observe(
+                "alpha", conflicting,
+                trusted_source_public_key=self.signer_a.public_key())
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.signer_a.public_key()),
+            first["tip_checkpoint"])
+
     def test_bounded_span_not_unbounded_transfer(self):
         for i in range(65):
             self.a.submit(self.task("a-"+str(i)))
