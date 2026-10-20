@@ -4,12 +4,12 @@
 <g font-family="Arial,Helvetica,sans-serif">
 <text x="36" y="52" fill="#8ae0d4" font-size="13" letter-spacing="2">EXTERNAL DATA · READ-ONLY OBSERVATIONAL PROJECTION</text>
 <text x="36" y="92" fill="#eef4fa" font-size="33" font-weight="bold">World data through continuity</text>
-<text x="36" y="116" fill="#b4c5d3" font-size="15">Observed 2026-10-20 01:02:47 UTC</text>
+<text x="36" y="116" fill="#b4c5d3" font-size="15">Observed 2026-10-20 07:03:03 UTC</text>
 <rect x="34" y="147" width="297" height="191" rx="12" fill="#1a3036" stroke="#40787e"/>
 <text x="53" y="178" fill="#7ed8d4" font-size="16">USGS · earthquakes</text>
-<text x="53" y="235" fill="#f1f5f8" font-size="43" font-weight="bold">9</text>
+<text x="53" y="235" fill="#f1f5f8" font-size="43" font-weight="bold">8</text>
 <text x="53" y="258" fill="#c0d2dc" font-size="15">events in rolling past hour</text>
-<text x="53" y="292" fill="#b7cdd4" font-size="15">Largest magnitude: 5.0</text>
+<text x="53" y="292" fill="#b7cdd4" font-size="15">Largest magnitude: 5.3</text>
 <text x="53" y="317" fill="#a3b9c5" font-size="13">Independent source identity</text>
 <rect x="348" y="147" width="297" height="191" rx="12" fill="#24273a" stroke="#7163a5"/>
 <text x="367" y="178" fill="#d0b9ff" font-size="16">GitHub · repository</text>
