@@ -211,6 +211,24 @@ assert.equal(revisionLink("research/foo", "invalid-sha"),null);
         self.assertIn("Array.isArray(json.jobs)",page)
         self.assertIn("No research-execution link established",page)
 
+
+    def test_complete_workflow_archive_is_loaded_automatically_without_browser_rate_burst(self):
+        page=WORK.read_text(encoding="utf-8")
+        self.assertIn('views/traces/workflow-runs-index.json',page)
+        self.assertIn('async function loadRunArchive()',page)
+        self.assertIn('loadRunArchive();',page)
+        self.assertIn('setInterval(()=>{if(!document.hidden)loadRunArchive()},ARCHIVE_CHECK)',page)
+        self.assertIn('doc.schema!=="workstation-run-index/v1"',page)
+        self.assertIn('doc.complete!==true',page)
+        self.assertIn('doc.reported_total!==doc.indexed_count',page)
+        self.assertIn('new Set(ids.map(x=>x.id)).size!==ids.length',page)
+        self.assertIn('if(app.latestPage.length)mergeRuns(app.latestPage)',page)
+        self.assertIn('app.archiveComplete=true',page)
+        self.assertIn('app.archiveError=e.message',page)
+        self.assertIn('app.archiveComplete||app.archiveLoading||!app.archiveError',page)
+        self.assertIn('subset.slice(0,app.runVisible)',page)
+        self.assertIn('API+"/actions/runs?per_page=100&page=1"',page)
+
     @unittest.skipUnless(shutil.which("node"),"Node.js needed for syntax check")
     def test_inline_program_valid_javascript(self):
         p=Extract()
