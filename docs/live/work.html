@@ -277,12 +277,12 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   </div>
   <div id="feed-error" class="notice" hidden></div>
   <div class="metrics" aria-label="Observed workflow state counts">
-    <div class="metric metric-running"><strong data-stat="running">—</strong><small>RUNNING NOW</small></div>
-    <div class="metric metric-queued"><strong data-stat="queued">—</strong><small>QUEUED / WAITING</small></div>
-    <div class="metric metric-failed"><strong data-stat="failed">—</strong><small>RECENT FAILURES</small></div>
-    <div class="metric metric-passed"><strong data-stat="passed">—</strong><small>RECENT PASSES</small></div>
+    <div class="metric metric-running"><strong data-stat="running">—</strong><small>RUNNING · LATEST 100</small></div>
+    <div class="metric metric-queued"><strong data-stat="queued">—</strong><small>QUEUED · LATEST 100</small></div>
+    <div class="metric metric-failed"><strong data-stat="failed">—</strong><small>FAILED · LATEST 100</small></div>
+    <div class="metric metric-passed"><strong data-stat="passed">—</strong><small>PASSED · LATEST 100</small></div>
   </div>
-  <p class="fine">Counts describe the latest accessible GitHub workflow sample, not all workers or events. Unavailable data is never shown as zero.</p>
+  <p class="fine">Counts describe the latest retrieved GitHub page (up to 100 runs), not all workers or events. Older loaded pages are displayed separately. Unavailable data is never shown as zero.</p>
 </section>
   <section class="lab-strip" aria-label="Source boundaries">
     <div><span class="lab-label">01 / EXECUTION SOURCE</span><strong>GitHub Actions</strong><small>Runs, jobs and steps · observed</small></div>
@@ -353,7 +353,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   const TICK_STORAGE="workstationTrustedTickSSEv1";
   const $=id=>document.getElementById(id);
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
-    checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,
+    checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],
     catalog:[],catalogLoaded:false,stream:null,streamUrl:"",streamTicks:0,lastTick:0,
     lastStreamStatus:"not configured",rateLimitUntil:0,lastAttempt:0};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
@@ -473,7 +473,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     }catch(e){$("history-state").textContent="Could not read older source page: "+e.message;}
     finally{app.olderLoading=false;renderHistory();}
   }
-  function currentStates(){return app.runs.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
+  function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
   function renderMetrics(){const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
@@ -701,6 +701,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       const data=await getJSON(API+"/actions/runs?per_page=100&page=1");
       const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
       app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
+      app.latestPage=runs;
       app.checked=Date.now();
       mergeRuns(runs);
       app.rateLimitUntil=0;
