@@ -95,7 +95,7 @@ class GeneralConstructionTests(unittest.TestCase):
         cases = [start([obj("x"), obj("y")], objects=1),
                  start([obj("x")]) | {"limits": {"objects": 1, "relations": 1, "steps": 0}},
                  start([obj("x")]) | {"physics": "forced"},
-                 start([obj("x", {"n": float("nan")})]}]
+                 start([obj("x", {"n": float("nan")})])]
         for case in cases:
             with self.assertRaises(ValueError):
                 run_plan(case)
