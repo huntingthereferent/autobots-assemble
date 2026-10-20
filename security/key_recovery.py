@@ -13,7 +13,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey,
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X25519PublicKey
 
 from .continuation import EnvelopeError, ReplayLedger, open_record, seal_record
-from .journal_checkpoint import verify_checkpoint
+from .journal_checkpoint import verify_checkpoint, verify_checkpoint_signature
 from .sealed_journal import SealedRuntimeJournal
 
 LANE = "ab-journal-key-recovery-v1"
@@ -56,6 +56,7 @@ def issue_recovery_envelope(
 def recover_journal_key(
     envelope: dict, *, trusted_journal_identity: str,
     signed_checkpoint: dict,
+    trusted_checkpoint_public_key: Ed25519PublicKey,
     trusted_operator_public_key: Ed25519PublicKey,
     offline_recovery_private_key: X25519PrivateKey,
     recovery_ledger: ReplayLedger,
@@ -68,6 +69,9 @@ def recover_journal_key(
             or not isinstance(envelope, dict)
             or envelope.get("event_id") != trusted_journal_identity):
         raise EnvelopeError("recovery identity mismatch")
+    # Checkpoint signing trust must be established independently of the
+    # operator recovery envelope; a supplied JSON object is not an anchor.
+    verify_checkpoint_signature(signed_checkpoint, trusted_checkpoint_public_key)
     recovered = open_record(
         envelope, expected_lane=LANE,
         expected_parent_sha256=_anchor(signed_checkpoint),
