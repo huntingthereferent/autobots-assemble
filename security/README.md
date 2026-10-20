@@ -1,0 +1,101 @@
+# A/B security: authenticated continuation and finite movement
+
+A small, testable security lane that protects evidence at handoff boundaries and
+observes a separate finite bipolar movement. Neither implementation redefines
+A/B or substitutes for native research verification.
+
+## What exists
+
+| Boundary | Actual mechanism |
+| --- | --- |
+| Confidentiality | Ephemeral X25519 key exchange, HKDF-SHA256, and AES-256-GCM per record |
+| Source authentication | Ed25519 signature over the complete canonical envelope; pinned public key required to open |
+| Continuity | Authenticated lane, event ID, expected parent envelope digest, and sender/recipient key fingerprints |
+| Replay | Persistent SQLite first-admission ledger, unique per lane and event ID |
+| Bipolar motion | Two separate finite trajectories with tests confirming probe movements do not change protected trajectory |
+
+The finite-motion harness is not cryptography, malicious-intent detection, an
+attacker sandbox, or an access-control replacement. Admission must come from an
+independent authenticated authorization decision, **never** from oscillation alone.
+
+## Use the evidence boundary
+
+Requires Python 3.12+ and `cryptography>=45,<47`. This example generates disposable
+test keys. Real deployments must enroll, protect, rotate and revoke keys separately.
+
+```python
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+from security.continuation import ReplayLedger, seal_record, open_record, envelope_digest
+
+sender = Ed25519PrivateKey.generate()
+recipient = X25519PrivateKey.generate()
+root = seal_record(
+    b"observed native result", lane="world48", event_id="move-1",
+    parent_sha256=None, sender_private_key=sender,
+    recipient_public_key=recipient.public_key(),
+)
+with TemporaryDirectory() as d:
+    ledger = ReplayLedger(Path(d) / "admission.sqlite3")
+    assert open_record(
+        root, expected_lane="world48", expected_parent_sha256=None,
+        sender_public_key=sender.public_key(),
+        recipient_private_key=recipient, replay_ledger=ledger,
+    ) == b"observed native result"
+    continuation = seal_record(
+        b"continuation", lane="world48", event_id="move-2",
+        parent_sha256=envelope_digest(root), sender_private_key=sender,
+        recipient_public_key=recipient.public_key(),
+    )
+    assert open_record(
+        continuation, expected_lane="world48",
+        expected_parent_sha256=envelope_digest(root),
+        sender_public_key=sender.public_key(),
+        recipient_private_key=recipient, replay_ledger=ledger,
+    ) == b"continuation"
+```
+
+Run the focused suite from the repository root:
+
+```sh
+python -m pip install 'cryptography>=45,<47'
+python -W error::ResourceWarning -m unittest discover -s network/tests -p test_security_continuation.py -v
+```
+
+## Threat model and limits
+
+Demonstrated: actual encrypted round-trip; failed signature and wrong
+recipient/pin; tampered metadata or ciphertext; wrong lane/parent; oversized
+records; duplicate event admission after process restart; and mathematical
+noninterference between protected and probing motion under interleaving.
+
+Not demonstrated: secure production key custody, authenticated human identity,
+distributed replay consensus, tamper-resistant storage, a sandbox,
+resistance to offline exhaustive analysis, physical-world safety, universal
+cryptographic security, or continuous unattended protective action.
+
+An authentic signature means **these bytes were signed by this key**, not
+that the underlying observation is scientifically correct. A digest links a
+specified parent envelope; it does not verify the parent automatically.
+A hostile host can roll back or replace the local replay ledger. Private
+research also requires confidentiality of appropriate metadata, protected
+endpoints and backups. Do not commit private keys or plaintext records.
+
+## Existing work stays intact
+
+The specialized W13 encrypted native evidence vault continues to use its
+own independently reverified source records. B14/B15 remains the current
+operator key enrollment/revocation policy for its specific lane. These new
+interfaces are opt-in; **no live runtime or network endpoint is rewired** by
+this change.
+
+Before connecting it to other researchers or real-world control:
+authenticate and enroll the signer, secure persistent key material and
+recovery, enforce the gate at every native entry point, coordinate replay
+across machines, test concurrent/adversarial operations, and get an
+independent security review.
+
+The design goal is continuous observation of bounded movement with actual
+evidence of which boundaries held; it does not promise perpetual hindrance.
