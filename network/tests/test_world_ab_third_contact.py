@@ -237,7 +237,7 @@ class WorldThirdContactTests(unittest.TestCase):
             self.assertAlmostEqual(h["incoming_contact_normal_rate"],-h["outgoing_contact_normal_rate"],delta=TOL)
             self.assertTrue(independent_check(c))
 
-    def test_two_no-contact_cases_do_not_invent_a_new_motion(self):
+    def test_two_no_contact_cases_do_not_invent_a_new_motion(self):
         for angle in (0.,20.):
             c=attempt(angle)
             self.assertEqual(c["status"],"NO_QUALIFYING_THIRD_CONTACT")
