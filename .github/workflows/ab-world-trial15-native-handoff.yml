@@ -1,0 +1,135 @@
+name: A/B WORLD Trial15 bounded body-support source evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial15_handoff.py'
+      - 'network/tests/test_ab_world_trial15_handoff.py'
+      - 'work/ab_world/TRIAL15_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial15-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-disc-square-support-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout general A/B source reporter
+        uses: actions/checkout@v4
+      - name: Checkout exact original WORLD15 source
+        uses: actions/checkout@v4
+        with:
+          ref: 65339494abaccac3c4dd20aa89439af057ec3035
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently check A/B carrier and negative controls
+        run: python -m unittest -v network.tests.test_ab_world_trial15_handoff
+      - name: Execute original WORLD15 and its independent support geometry oracle
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_body_support \
+            network.tests.test_world_ab_relation_morph \
+            network.tests.test_world_ab_oblique_rotation \
+            network.tests.test_world_ab_iterated_surfaces
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_body_support import run, trial
+          from network.tests.test_world_ab_body_support import independent_witness
+          native=run()
+          assert len(native["cases"])==8
+          assert all(c["status"]=="TWO_MODELED_CONTACTS" and
+                     independent_witness(c) for c in native["cases"])
+          refused=trial("fixed-square",angle=30.)
+          assert refused["status"]=="NO_ADMITTED_INTERIOR_CONTACT"
+          assert refused["contacts"]==[] and refused["frames"]==[]
+          assert refused["receiver"] is None
+          assert not native["real_material_behavior_observed"]
+          Path("../trial15-original-native.json").write_text(
+              json.dumps(native,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial15-original-refusal.json").write_text(
+              json.dumps(refused,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial15-source-verdict.json").write_text(
+              json.dumps({"original_source_commit":"65339494abaccac3c4dd20aa89439af057ec3035",
+                          "native_independent_support_witness":True,
+                          "completed_disc_and_fixed_square_cases":8,
+                          "unsupported_endpoint_not_a_physical_miss":True,
+                          "free_square_rotation_solved":False,
+                          "hardware_contact_measured":False},
+                          sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          PY
+      - name: Record each source body movement with causal receiver and refusal
+        run: |
+          python -m work.ab_world.world_trial15_handoff \
+            --native trial15-original-native.json \
+            --refusal trial15-original-refusal.json \
+            --source-commit 65339494abaccac3c4dd20aa89439af057ec3035 \
+            > trial15-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          output=json.load(open("trial15-ab-carrier.json"))
+          assert output["ledger_witness"]["valid"]
+          assert output["completed_source_cases"]==8
+          assert output["unsupported_endpoint_cases"]==1
+          assert output["ledger_witness"]["pages_verified"]==9
+          assert output["ledger_witness"]["observations_recorded"]==25
+          assert output["preserved_motion_frames"]>=96
+          assert output["receiver_created_after_source_contact"]
+          assert not output["free_square_rotation_solved"]
+          assert not output["actual_physical_contact_measured"]
+          assert not output["physical_endpoint_miss_established"]
+          assert digest(output["page_manifest"])==output["page_manifest_sha256"]
+          Path("trial15-ab-pages").mkdir(exist_ok=True)
+          for i,page in enumerate(output["ledger_pages"]):
+              assert page["case"]==i and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"]==output["page_manifest"]["ordered_case_heads"][i]["head_hash"]
+              with open(f"trial15-ab-pages/case-{i:02d}.json","w") as f:
+                  json.dump(page["receipt"],f,sort_keys=True,indent=2)
+          unsupported=output["ledger_pages"][-1]["receipt"]
+          assert "derived-receiver" not in unsupported["final"]["objects"]
+          assert "constrained-square" in unsupported["final"]["objects"]
+          with open("trial15-ab-manifest.json","w") as f:
+              json.dump(output["page_manifest"],f,sort_keys=True,indent=2)
+          print(json.dumps({"completed_body_cases":8,
+                            "unsupported_endpoint_cases":1,
+                            "motion_frames":output["preserved_motion_frames"],
+                            "ledger_operations":output["ledger_witness"]["steps_verified"],
+                            "physically_observed_contacts":0},sort_keys=True))
+          PY
+          for case in $(seq -w 0 8); do
+            python -m work.ab_world.construction --verify "trial15-ab-pages/case-$case.json" > "trial15-ab-pages/verdict-$case.json"
+          done
+          python - <<'PY'
+          import json
+          for i in range(9):
+              assert json.load(open(f"trial15-ab-pages/verdict-{i:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_body_support.py \
+            original-world/network/tests/test_world_ab_body_support.py \
+            trial15-original-native.json trial15-original-refusal.json \
+            trial15-source-verdict.json trial15-ab-carrier.json \
+            trial15-ab-manifest.json trial15-ab-pages/case-*.json \
+            trial15-ab-pages/verdict-*.json > trial15-source-digests.txt
+      - name: Retain original source and A/B causal body support evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial15-constrained-body-support
+          path: |
+            trial15-original-native.json
+            trial15-original-refusal.json
+            trial15-source-verdict.json
+            trial15-ab-carrier.json
+            trial15-ab-manifest.json
+            trial15-ab-pages/
+            trial15-source-digests.txt
+          retention-days: 30
