@@ -21,12 +21,21 @@ NOTICE = (
     "personal information, secrets, or other people's private messages. "
     "Typing elsewhere on your device is never monitored. No information "
     "is sent over a network or saved to disk by this experiment. "
-    "You can end the session or clear the transcript at any time."
+    "This is a fictional word-maze with decoy key signposts, not a route "
+    "to any real keys. You can end the session or clear the transcript at any time."
 )
 MAX_MESSAGE = 280
 MAX_RECORDS = 64
 MAX_SESSIONS = 8
-ROOMS = ("threshold", "turn", "mirror", "passage")
+# These are fictional signposts, not positions, distances, or real key hints.
+# Neither message text nor a requested direction can force key access.
+BRANCHED_WORDS = (
+    "A sign reads: KEYS FOLLOW THE MOVEMENT. The passage turns into another passage.",
+    "A marker points toward the keys. Its arrow opens onto a different branch.",
+    "The route looks closer to the keys. The next doorway contains another direction.",
+    "A corridor promises the final key. At its end is only another branching sign.",
+)
+DIRECTIONS = ("with the movement", "against the movement")
 _EMAIL = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.I)
 _BEARER = re.compile(r"\bBearer\s+[^\s]+", re.I)
 _SECRET_FIELD = re.compile(
@@ -39,18 +48,22 @@ _CONTROL = re.compile(r"[\x00-\x1f\x7f]")
 
 @dataclass(frozen=True)
 class SubmittedApproach:
-    """Redacted submitted message and model-only room; no device metadata."""
+    """Redacted submitted words + fictitious branch from observed presence."""
     message: str
-    room: str
-    step: int
+    branch_words: str
+    direction: str
+    presence_movement: int
+    branch_number: int
 
 
 class ConsentApproachRecorder:
     """Small bounded in-memory transcript visible only to the local host.
 
     This cannot capture typing until the participant explicitly submits an
-    entire message. The host may pass its EXISTING shared A/B boundary;
-    this class does not construct, read, or mutate cryptographic keys.
+    entire message. The host may pass its EXISTING shared A/B boundary.
+    Messages DO NOT advance bipolar motion: only the separately driven
+    native presence does. The branch merely reads its current direction,
+    never a secret, a real key, or a real key location.
     """
 
     def __init__(self, boundary: KeyApproachBoundary | None = None):
@@ -93,13 +106,19 @@ class ConsentApproachRecorder:
                 raise PermissionError("no active consented research session")
             if self._total >= MAX_RECORDS:
                 raise ValueError("in-memory transcript limit reached; clear before continuing")
-            # A participant's submitted approach moves the probe trajectory,
-            # never protected keys or native authenticated admission.
-            observed = self.boundary.approach()
+            # Read the moving world: a submitted message does not MOVE it.
+            # No key access, no crypto operation, and no protected/probe
+            # trajectory is driven by participant words.
+            motion = self.boundary.snapshot()
+            branch_number = len(self._sessions[session]) + 1
+            branch_index = (motion.presence_movements + branch_number - 1) % len(BRANCHED_WORDS)
+            direction = DIRECTIONS[0 if motion.presence_orientation > 0 else 1]
             entry = SubmittedApproach(
                 message=redacted,
-                room=ROOMS[(observed.step - 1) % len(ROOMS)],
-                step=observed.step,
+                branch_words=BRANCHED_WORDS[branch_index],
+                direction=direction,
+                presence_movement=motion.presence_movements,
+                branch_number=branch_number,
             )
             self._sessions[session].append(entry)
             self._total += 1
@@ -142,8 +161,9 @@ def local_demo(*, stdin: TextIO, stdout: TextIO) -> int:
         stdout.write("No transcript created.\n")
         return 0
     session = recorder.open_session(accepted_notice=True)
-    stdout.write("Type messages; /show displays stored messages, /erase clears, "
-                 "/quit exits and erases.\n")
+    stdout.write("The world moves by itself. Every submitted message reveals "
+                 "another fictional branch, never a key. /show displays "
+                 "stored branches, /erase clears, /quit exits.\n")
     with NativePresenceRunner(recorder.boundary, interval_seconds=0.04):
         while True:
             stdout.write("A/B> ")
@@ -157,14 +177,18 @@ def local_demo(*, stdin: TextIO, stdout: TextIO) -> int:
                 return 0
             if line.strip() == "/show":
                 for entry in recorder.session_transcript(session):
-                    stdout.write(f"[{entry.step} {entry.room}] {entry.message}\n")
+                    stdout.write(
+                        f"[branch {entry.branch_number}, presence {entry.presence_movement}] "
+                        f"{entry.message} -> {entry.branch_words}\n")
                 continue
             try:
                 entry = recorder.submit(session, line.rstrip("\r\n"))
             except (ValueError, PermissionError) as exc:
                 stdout.write(f"Not recorded: {exc}\n")
                 continue
-            stdout.write(f"Observed approach {entry.step} — room: {entry.room}\n")
+            stdout.write(
+                f"Branch {entry.branch_number} ({entry.direction}, "
+                f"presence {entry.presence_movement}): {entry.branch_words}\n")
     recorder.erase_session(session)
     stdout.write("Session ended; transcript erased from memory.\n")
     return 0
