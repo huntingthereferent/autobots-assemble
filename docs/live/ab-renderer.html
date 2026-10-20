@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>A/B · Native Renderer</title>
+<style>
+:root{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;color:#e4eaf3;background:#080e19}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh}
+a{color:#89cddf}
+header{display:flex;justify-content:space-between;align-items:center;gap:18px;border-bottom:1px solid #283647;padding:20px clamp(16px,3vw,38px)}
+.brand{letter-spacing:.09em;font-weight:800;font-size:20px}.sub{font-size:11px;letter-spacing:.17em;color:#8495ae;margin-top:6px}
+header nav{display:flex;gap:18px;font-size:12px}
+main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px;max-width:1700px;margin:auto;padding:22px clamp(12px,2vw,30px)}
+.panel{background:#0e1625;border:1px solid #2d3b50;border-radius:12px;overflow:hidden}
+.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:14px 18px;border-bottom:1px solid #26374e}
+.topline h1{font-size:15px;margin:0;font-weight:600;letter-spacing:.04em}
+.eyebrow{font-size:11px;letter-spacing:.13em;color:#58cdd8}.muted{color:#94a1b5}
+#frame{position:relative;height:min(75vh,770px);min-height:460px}
+#ab-canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}
+.legend{position:absolute;top:18px;left:18px;background:#0b1120dd;border:1px solid #26374e;padding:9px 12px;font-size:11px;display:flex;gap:16px;pointer-events:none}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;background:var(--swatch)}
+.sidenote{padding:16px 18px;border-top:1px solid #26374e;color:#94a1b5;font-size:12px;line-height:1.65}
+aside{display:flex;flex-direction:column;gap:18px}
+section.unit{padding:20px;border-bottom:1px solid #26374e}
+section.unit:last-child{border:0}
+h2{margin:0 0 15px;font-size:12px;text-transform:uppercase;letter-spacing:.12em;color:#91a8bc;font-weight:600}
+.datum{font-size:27px;margin:4px 0 16px;font-variant-numeric:tabular-nums;letter-spacing:.06em}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{font:inherit;cursor:pointer;color:#dceaf5;border:1px solid #3a4c60;background:#152438;border-radius:7px;padding:12px 6px;font-size:13px}
+button:hover:not(:disabled){background:#20364d;border-color:#6b93ad}
+button:focus-visible{outline:2px solid #44d9d5;outline-offset:2px}
+button:disabled{opacity:.35;cursor:not-allowed}
+button.action-a{color:#44d9d5}button.action-b{color:#c1aaff}
+.line{margin:10px 0 0;font-size:12px;line-height:1.7;overflow-wrap:anywhere}
+.minitext{font-size:11px;color:#8193a7;line-height:1.7}
+#history{color:#f3c56b;word-break:break-all}
+#source{font-size:11px;color:#8aa9bf;overflow-wrap:anywhere}
+#status{font-size:11px;line-height:1.7;letter-spacing:.02em;color:#78d3ca}
+#status[data-status="error"]{color:#ef9a9a}
+footer{max-width:1700px;margin:0 auto;padding:0 32px 30px;color:#8295aa;font-size:11px;line-height:1.7}
+@media(max-width:900px){main{grid-template-columns:1fr;gap:10px}aside{display:grid;grid-template-columns:1fr 1fr}#frame{height:60vh;min-height:390px}}
+@media(max-width:560px){header{align-items:flex-start;flex-direction:column}aside{grid-template-columns:1fr}#frame{height:52vh;min-height:330px}.legend{gap:10px;flex-wrap:wrap}}
+</style>
+<script defer src="./ab-renderer.js"></script>
+</head>
+<body>
+<header>
+  <div><div class="brand">A/B / NATIVE RENDERER</div><div class="sub">SOURCE FIRST · VIEW SECOND</div></div>
+  <nav><a href="./work.html">Workstation</a><a href="../../views/motion/README.md">Source motion</a></nav>
+</header>
+<main>
+  <article class="panel">
+    <div class="topline"><h1>Finite motion / connected states</h1><div class="eyebrow">RENDER LANE 01</div></div>
+    <div id="frame">
+      <canvas id="ab-canvas" aria-label="Read-only A/B finite-state graph; buttons and keyboard move the highlighted state through original transitions"></canvas>
+      <div class="legend"><span><i class="swatch" style="--swatch:#44d9d5"></i>A</span><span><i class="swatch" style="--swatch:#ad90fa"></i>B</span><span><i class="swatch" style="--swatch:#f3c56b"></i>recorded history</span></div>
+    </div>
+    <div class="sidenote">
+      Drag to pan · wheel to zoom · click a node to <strong>inspect</strong> (not move). Horizontal grouping uses recorded minimum transition count; distances, positions and animated markers are presentation only.
+    </div>
+  </article>
+  <aside>
+    <div class="panel">
+      <section class="unit">
+        <h2>Current finite state</h2>
+        <div class="datum" id="current-state">—</div>
+        <h2>Inspecting</h2>
+        <div class="line" id="selected-state">—</div>
+      </section>
+      <section class="unit">
+        <h2>Move in the original source</h2>
+        <div class="grid2"><button id="step-a" class="action-a" type="button">A →</button><button id="step-b" class="action-b" type="button">B →</button><button id="undo" type="button" disabled>↶ History</button><button id="reset" type="button">↺ Origin</button><button id="play" type="button">▶ Replay</button><button id="fit" type="button">⌗ Fit view</button></div>
+        <div class="minitext" style="margin-top:12px">Keys: A, B, Backspace, R, P</div>
+      </section>
+      <section class="unit">
+        <h2>Observed action order</h2>
+        <div class="line" id="history">∅</div>
+        <div class="minitext">Backspace reverses <em>your navigation history</em>, not an assumed mathematical inverse.</div>
+      </section>
+      <section class="unit">
+        <h2>Source / validation</h2>
+        <div id="status" role="status" aria-live="polite">Loading source model…</div>
+        <p id="source" class="line">Source not yet loaded</p>
+        <p class="minitext">Declared F₃³ example (φ = 0,1,2). Does not establish universal A/B structure or WORLD physics.</p>
+      </section>
+    </div>
+  </aside>
+</main>
+<footer>
+  A/B-owned scene adapter and Canvas2D painter. Godot source informed architectural separation only; no Godot dependency, code, physics, or engine runtime. Independent verifier and source history remain inspectable in the repository.
+</footer>
+</body>
+</html>
