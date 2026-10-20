@@ -105,7 +105,7 @@ def carry(native: dict[str, Any], source_commit: str) -> dict[str, Any]:
     counts = dict.fromkeys(STATUSES, 0)
     retained_frames = 0
     for index, (offset, angle) in enumerate(
-            (offset, angle) for offset in OFFSETS for angle in ANGLES, 1):
+            ((offset, angle) for offset in OFFSETS for angle in ANGLES), 1):
         # The original grid is deliberately ordered: surface rotation outer,
         # incoming incidence inner. Reject any substituted or dropped case.
         case = cases[index - 1]
