@@ -210,7 +210,7 @@ button.inline{font:11px var(--mono);padding:6px 10px;margin:5px 8px 5px 0}
       const files=app.commits.get(run.head_sha);
       for(const f of files.slice(0,100)){
         const row=elem('div',undefined,'tiny');row.append(document.createTextNode((f.status||'change')+' · '));
-        if(safePath(f.filename))row.append(anchor(f.filename,'https://github.com/'+REPO+'/commit/'+run.head_sha+'#diff-'+String(f.sha||'').slice(0,40)));
+        if(safePath(f.filename))row.append(anchor(f.filename,'https://github.com/'+REPO+'/blob/'+run.head_sha+'/'+f.filename.split('/').map(encodeURIComponent).join('/')));
         else row.append(elem('span',f.filename||'unknown path'));
         row.append(document.createTextNode(' · +'+(f.additions??'?')+' / -'+(f.deletions??'?')));out.append(row);
       }
