@@ -1,0 +1,46 @@
+name: ARC3 actual original SP80 stage2 vertical four-bar native controls
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_vertical_pairwise.py'
+      - '.github/workflows/arc3-sp80-stage2-vertical-pairwise.yml'
+jobs:
+  genuine-original-stage2-vertical-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install official public original game SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Freeze real native stage2 4-bar vertical control design
+        run: |
+          python - <<'PY'
+          from itertools import product
+          from work.arc3.native_sp80_stage2_vertical_pairwise import (
+             MAIN,CONTROLS,PROGRAMS,VALUES,STAGE1_WITNESSES)
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(MAIN)==27 and len(CONTROLS)==9
+          assert len(PROGRAMS)==36 and len(set(MAIN+CONTROLS))==36
+          assert len(STAGE1_WITNESSES)==2
+          for i in range(4):
+              for j in range(i+1,4):
+                  assert set((row[i],row[j]) for row in MAIN)==set(product(VALUES,repeat=2))
+          for _,_,word in PROGRAMS:
+              actions=parse_plan(word)
+              assert sum(n==6 for n,xy in actions)==4
+              assert actions[-1][0]==5
+              assert all(n!=6 or xy is not None for n,xy in actions)
+          print('Unit only: authentic SP80 source vertical control words frozen')
+          PY
+      - name: Execute actual native SP80 stage2 vertical control experiment
+        run: python -m work.arc3.native_sp80_stage2_vertical_pairwise --out runtime/data/arc3/sp80-stage2-vertical-pairwise.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-vertical-pairwise
+          path: runtime/data/arc3/sp80-stage2-vertical-pairwise.*
+          if-no-files-found: error
+          retention-days: 14
