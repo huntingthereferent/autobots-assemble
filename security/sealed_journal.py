@@ -81,6 +81,7 @@ class SealedRuntimeJournal(RuntimeJournal):
                 raise SealedJournalError("wrong key or damaged journal header") from exc
             previous = ZERO
             expected_seq = 1
+            protected_admissions = {}
             for seq, prev, nonce, cipher, digest in db.execute(
                     "SELECT seq, prev, nonce, cipher, digest FROM records ORDER BY seq"):
                 if seq != expected_seq or prev != previous or len(nonce) != 12:
@@ -94,11 +95,28 @@ class SealedRuntimeJournal(RuntimeJournal):
                 if not 0 < len(plain) <= MAX_RECORD:
                     raise SealedJournalError("invalid decrypted record size")
                 try:
-                    self._replay(json.loads(plain.decode("utf-8")), line_number=seq)
+                    record = json.loads(plain.decode("utf-8"))
+                    protected = record.get("_sealed_admission")
+                    if protected is not None:
+                        if (type(protected) is not dict
+                                or set(protected) != {"token", "digest"}
+                                or type(protected["token"]) is not str
+                                or len(protected["token"]) != 64
+                                or type(protected["digest"]) is not str
+                                or not DIGEST.fullmatch(protected["digest"])):
+                            raise SealedJournalError("invalid encrypted replay identity")
+                        token = bytes.fromhex(protected["token"])
+                        if token in protected_admissions:
+                            raise SealedJournalError("duplicate encrypted replay identity")
+                        protected_admissions[token] = bytes.fromhex(protected["digest"])
+                    self._replay(record, line_number=seq)
                 except (UnicodeError, ValueError, TypeError, KeyError) as exc:
                     raise SealedJournalError("invalid decrypted runtime record") from exc
                 previous = digest
                 expected_seq += 1
+            actual_admissions = dict(db.execute("SELECT token, digest FROM admitted"))
+            if actual_admissions != protected_admissions:
+                raise SealedJournalError("replay table differs from authenticated native history")
             self._committed_records = expected_seq - 1
 
     def _connect(self):
@@ -142,13 +160,6 @@ class SealedRuntimeJournal(RuntimeJournal):
         self._append_record(record, admission=admission)
 
     def _append_record(self, record: dict, *, admission: tuple[str, str, str] | None = None) -> None:
-        try:
-            raw = json.dumps(record, sort_keys=True, separators=(",", ":"),
-                             ensure_ascii=True, allow_nan=False).encode("ascii")
-        except (TypeError, ValueError) as exc:
-            raise SealedJournalError("invalid runtime record") from exc
-        if not 0 < len(raw) <= MAX_RECORD:
-            raise SealedJournalError("unbounded runtime record")
         token = None
         signed_digest = None
         if admission is not None:
@@ -159,6 +170,17 @@ class SealedRuntimeJournal(RuntimeJournal):
             if not isinstance(envelope_sha, str) or not DIGEST.fullmatch(envelope_sha):
                 raise EnvelopeError("invalid envelope digest")
             signed_digest = bytes.fromhex(envelope_sha)
+            if "_sealed_admission" in record:
+                raise SealedJournalError("internal replay metadata must not be caller supplied")
+            record = {**record, "_sealed_admission":
+                      {"token": token.hex(), "digest": envelope_sha}}
+        try:
+            raw = json.dumps(record, sort_keys=True, separators=(",", ":"),
+                             ensure_ascii=True, allow_nan=False).encode("ascii")
+        except (TypeError, ValueError) as exc:
+            raise SealedJournalError("invalid runtime record") from exc
+        if not 0 < len(raw) <= MAX_RECORD:
+            raise SealedJournalError("unbounded runtime record")
         with closing(self._connect()) as db:
             db.execute("BEGIN IMMEDIATE")
             row = db.execute("SELECT seq, digest FROM records ORDER BY seq DESC LIMIT 1").fetchone()
