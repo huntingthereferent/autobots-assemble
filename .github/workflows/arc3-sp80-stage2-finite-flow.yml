@@ -1,0 +1,40 @@
+name: ARC3 genuine SP80 finite screen path source-native contrast
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_finite_flow_contrast.py'
+      - '.github/workflows/arc3-sp80-stage2-finite-flow.yml'
+jobs:
+  authentic-source-flow-proposal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Freeze bounded screen geometry proposals before source native moves
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_finite_flow_contrast import PROGRAMS,finite_screen_proxy
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(PROGRAMS)==16
+          for label,delta,word,positions in PROGRAMS:
+             plan=parse_plan(word)
+             assert sum(a==6 for a,_ in plan)==4
+             assert plan[-1][0]==5
+             assert all(a!=6 or coords is not None for a,coords in plan)
+             assert isinstance(finite_screen_proxy(positions)['unverified_proxy_terminals'],list)
+          print('Prospective sixteen screen geometry probes frozen; model is NOT native physics.')
+          PY
+      - name: Evaluate all candidates against real original Arcade.NORMAL SP80 SDK
+        run: python -m work.arc3.native_sp80_stage2_finite_flow_contrast --out runtime/data/arc3/original-sp80-finite-flow-contrast.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-finite-flow-contrast
+          path: runtime/data/arc3/original-sp80-finite-flow-contrast.*
+          if-no-files-found: error
+          retention-days: 14
