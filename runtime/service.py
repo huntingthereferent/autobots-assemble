@@ -52,6 +52,7 @@ class EcosystemService:
         native_observer: Observer | None = None,
         closure_admitter: ClosureAdmitter | None = None,
         repository_work_file: str | Path | None = None,
+        protected_runtime_key: bytes | None = None,
     ) -> None:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
@@ -72,11 +73,20 @@ class EcosystemService:
         self.calendar = CalendarStore(
             self.data_dir / "calendar.jsonl"
         )
-        self.runtime = HandoffRuntime(
-            event_store=RuntimeJournal(
-                self.data_dir / "runtime.jsonl"
-            )
-        )
+        # Explicit opt-in to native encrypted records. Never silently mix
+        # the legacy plaintext journal with a new encrypted history.
+        legacy = self.data_dir / "runtime.jsonl"
+        sealed = self.data_dir / "runtime.sealed.sqlite"
+        if protected_runtime_key is None:
+            if sealed.exists() or sealed.is_symlink():
+                raise ValueError("sealed runtime exists; provide its trusted key")
+            event_store = RuntimeJournal(legacy)
+        else:
+            if legacy.exists() or legacy.is_symlink():
+                raise ValueError("plaintext runtime exists; explicit migration required")
+            from security.sealed_journal import SealedRuntimeJournal
+            event_store = SealedRuntimeJournal(sealed, key=protected_runtime_key)
+        self.runtime = HandoffRuntime(event_store=event_store)
         self.trace = TraceStore(
             self.data_dir / "traversal.jsonl"
         )
