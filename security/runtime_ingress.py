@@ -6,6 +6,7 @@ operator-pinned actor keys, never from self-described envelope contents.
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from hashlib import sha256
 import json
 from typing import Any
 
@@ -99,6 +100,28 @@ class IngressAuthority:
     receiver_actor: str
     signer_public_key: Ed25519PublicKey
     receiver_private_key: X25519PrivateKey
+    operator_pin_ledger: object | None = None
+
+    def source_key(self) -> tuple[str, str, str]:
+        """Fixed operator key scope, independent of the incoming envelope."""
+        from cryptography.hazmat.primitives import serialization
+        raw = self.signer_public_key.public_bytes(
+            serialization.Encoding.Raw, serialization.PublicFormat.Raw)
+        return (
+            f"ab-ingress:{self.lane}:{self.signer_actor}:{self.receiver_actor}",
+            "ab-security-ingress-v1",
+            sha256(raw).hexdigest(),
+        )
+
+    def require_current_operator_pin(self) -> None:
+        """Re-read B14 current trust on EVERY native ingress movement."""
+        if self.operator_pin_ledger is None:
+            return  # direct API is an explicitly trusted local/test integration
+        from systems.workspace.b14_operator_pin_ledger import OperatorPinLedger
+        if not isinstance(self.operator_pin_ledger, OperatorPinLedger):
+            raise PermissionError("B14 operator trust ledger required")
+        source, edition, pin = self.source_key()
+        self.operator_pin_ledger.require_current(source, edition, pin)
 
     def __post_init__(self):
         if (not isinstance(self.lane, str) or not self.lane.strip()
@@ -128,6 +151,7 @@ class AuthenticatedHandoffIngress:
         self.authority = authority
 
     def _open(self, envelope: dict, expected_parent_sha256: str | None) -> bytes:
+        self.authority.require_current_operator_pin()
         return open_record(envelope, expected_lane=self.authority.lane,
                            expected_parent_sha256=expected_parent_sha256,
                            sender_public_key=self.authority.signer_public_key,
