@@ -1,0 +1,70 @@
+name: NIH P2 source-reported publication boundary
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_source_reported_posting_gate.py'
+      - 'systems/workspace/fixtures/nih_p2_original_adjacent_source_receipt_39421372666.json'
+      - 'network/tests/test_nih_p2_source_reported_posting_gate.py'
+      - '.github/workflows/nih-p2-source-reported-posting-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  external-semantics-and-conditional-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify exact archived original source and falsify semantic promotion
+        run: |
+          python -m unittest -v \
+            network.tests.test_nih_p2_source_reported_posting_gate \
+            network.tests.test_nih_p2_official_adjacent_status
+      - name: Independently retrieve original NLM posting-field definition
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-publishing"
+          python -m systems.workspace.nih_p2_source_reported_posting_gate \
+            --output "$RUNNER_TEMP/nih-p2-publishing/source-posting-conditional.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-p2-publishing/source-posting-conditional.json"
+          v=json.loads(p.read_text())
+          assert v["schema"]=="nih-p2-source-reported-posting-comparison/v1"
+          assert v["external_semantics"]["source_defines_last_update_posted_as_public_availability"]
+          assert v["real_original_source_artifact"]["run_id"]==39421372666
+          assert v["real_original_source_artifact"]["artifact_id"]==12264180158
+          assert [r["selected_status_if_source_reported_posting_is_used"] for r in
+                  v["conditional_comparisons"]]==[
+                      "UNAVAILABLE","Recruiting","Recruiting","Completed","Completed"]
+          for field in (
+              "original_version_first_public_independently_authenticated",
+              "known_at_admitted_to_original_W13",
+              "clinical_fact_valid_at_authenticated",
+              "NIH_phase2_real_temporal_benchmark_completed",
+              "original_W13_journal_modified",
+              "source_original_bodies_copied",
+          ):
+              assert v[field] is False, field
+          assert all(x["historical_record_valid_at"]=="UNAVAILABLE"
+                     for x in v["source_version_events"])
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-publishing" &&
+            sha256sum source-posting-conditional.json > sha256.txt)
+      - name: Retain bounded public-source semantics and conditional comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-source-reported-publishing-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-publishing/
+          retention-days: 30
+          if-no-files-found: warn
