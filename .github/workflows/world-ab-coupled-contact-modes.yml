@@ -1,0 +1,59 @@
+name: WORLD — Coupled Contact Modes Trial 13
+on:
+  push:
+    branches:
+      - 'experiment/world-trial13-coupled-contact-modes-20261019'
+    paths:
+      - '.github/workflows/world-ab-coupled-contact-modes.yml'
+      - 'systems/workspace/world_ab_coupled_contact_modes.py'
+      - 'network/tests/test_world_ab_coupled_contact_modes.py'
+      - 'docs/world_ab_coupled_contact_modes.html'
+      - 'scripts/verify_world_ab_coupled_contact_browser.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-coupled-contact-native-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Independent 1330-mode coupled impact oracle and earlier WORLD regressions
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_coupled_contact_modes \
+            network.tests.test_world_ab_friction_spin_trial \
+            network.tests.test_world_ab_contact_discrimination \
+            network.tests.test_world_ab_active_set_trial \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+      - name: Install Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Verify unchanged Trial09 original and all 1330 coupled contact browser modes
+        run: |
+          python -m scripts.verify_world_ab_coupled_contact_browser --output-dir "$RUNNER_TEMP/world-trial13"
+      - name: Retain entire source, native and Chromium hypotheses and screenshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world-trial13-coupled-contact-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/world-trial13/world_trial13_native.json
+            ${{ runner.temp }}/world-trial13/world_trial13_browser.json
+            ${{ runner.temp }}/world-trial13/world_trial13_chromium.png
+            ${{ runner.temp }}/world-trial13/world_trial13_verification.json
+            docs/world_ab_coupled_contact_modes.html
+            docs/world_ab_two_contact_stress.html
+            docs/world_ab_junction_geometry.js
+          retention-days: 30
+          if-no-files-found: warn
