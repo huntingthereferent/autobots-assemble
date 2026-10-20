@@ -265,7 +265,8 @@ class IdeaFrontier:
                 "execution_authorized": False,
             })
         visible.sort(key=lambda x: (x["relationship"], x["revision"]))
-        visible_revisions = {x["revision"] for x in visible[:MAX_FRONTIER]}
+        visible_revisions = {x["revision"] for x in visible[:MAX_FRONTIER]
+                             if x["same_step_id_present"]}
         # A peer's help proposal is visible to its TARGET only if the
         # originating branch is directly related and belongs to the same
         # source-recorded idea. Never broadcast to unrelated workers.
@@ -284,6 +285,7 @@ class IdeaFrontier:
             for e in events
             if e["type"] == "HELP_PROPOSED" and e["idea_id"] == idea_id
             and e["target_revision"] == revision
+            and e["source_step_id"] == step_id
             and e["source_revision"] in visible_revisions
         ][:MAX_FRONTIER]
         # The originating worker may also see only reviews of its OWN
@@ -297,6 +299,7 @@ class IdeaFrontier:
             for e in events
             if e["type"] == "HELP_PROPOSED" and e["idea_id"] == idea_id
             and e["source_revision"] == revision and e["worker"] == worker
+            and e["source_step_id"] == step_id
             and e["target_revision"] in visible_revisions
             and _sha(e) in decisions
         ][:MAX_FRONTIER]
@@ -439,6 +442,7 @@ class IdeaFrontier:
             raise ValueError("backtracking must go to the directly witnessed parent")
         if kind == "HELP" and (
                 related["relationship"] not in {"SHARED_PARENT", "DIRECT_CHILD"}
+                or not related["same_step_id_present"]
                 or related["worker"] == worker):
             raise ValueError("help requires another recorded worker at a visible branch")
         record = {
