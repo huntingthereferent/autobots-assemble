@@ -1,0 +1,38 @@
+name: ARC3 original SP80 stage2 joint four-bar native factorial
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_four_bar_joint.py'
+      - '.github/workflows/arc3-sp80-stage2-four-bar-joint.yml'
+jobs:
+  original-SP80-native-stage2-four-bar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Verify original source stage2 movement-cell freeze
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_four_bar_joint import PROGRAMS,MAIN,CONTROLS,CHOICES,RESETS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(MAIN)==36 and len(CONTROLS)==4 and len(PROGRAMS)==40 and RESETS==2
+          assert CHOICES=={'B':(0,2),'L':(2,3,4),'M':(0,2),'U':(2,3,4)}
+          for name,actions in PROGRAMS:
+             parsed=parse_plan(actions)
+             assert parsed[-1][0]==5 and sum(action==6 for action,xy in parsed)==4
+             assert all(action!=6 or xy is not None for action,xy in parsed)
+          print('Original stage2 source 4-bar source action factorial frozen')
+          PY
+      - name: Execute actual level2 four-bar actions after genuine SDK level1 to2 witness
+        run: python -m work.arc3.native_sp80_stage2_four_bar_joint --out runtime/data/arc3/sp80-stage2-four-bar-joint.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-four-bar-joint
+          path: runtime/data/arc3/sp80-stage2-four-bar-joint.*
+          if-no-files-found: error
+          retention-days: 14
