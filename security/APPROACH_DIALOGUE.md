@@ -137,3 +137,15 @@ networked honeypot, silent surveillance, or worker execution interface
 are reachable from the toy branch output. Testing a fictional
 code-language prompt does not certify code-injection resilience
 of every surrounding application; those are different trust boundaries.
+
+## Browser view — actual native presence, fictional graph
+
+The [optional loopback browser](BRANCH_BROWSER.md) uses this same
+Python recorder and native presence source. It does not reconstruct
+the A/B movement in JavaScript or share any key material. The page
+requires a consent click, displays the current bipolar orientation
+and finite story node, accepts one submitted message and `along`/
+`side` navigation, and provides Erase and exit. The submitted text
+appears only in the local in-memory session and is rendered as text,
+not executed HTML/JavaScript. There is no public website or
+automatic recording of other device input.
