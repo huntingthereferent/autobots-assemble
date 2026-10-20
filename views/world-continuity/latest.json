@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-20T07:03:03.496536+00:00",
-  "content_sha256": "7af09d6c7ec339b2f784eeab8d4ef41f09996c3cd718dd19144f4e89783edb83",
+  "checked_at": "2026-10-20T13:02:47.899348+00:00",
+  "content_sha256": "436fef900a1873377f213a9ce15515d316fe0aa37a5d1404eb72e413f15f5989",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 8,
-      "max_magnitude": 5.3,
+      "count": 4,
+      "max_magnitude": 2.4,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,154 +22,86 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026utumtk",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T06:04:39.783000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026utumtk",
+        "source_id": "ci41349695",
+        "observed_at": "2026-10-20T13:02:47.308012Z",
+        "source_updated_at": "2026-10-20T12:15:48.260000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41349695",
         "entity_type": "event",
-        "canonical_key": "event:aka2026utumtk",
+        "canonical_key": "event:ci41349695",
         "payload": {
-          "magnitude": 1.7,
-          "place": "67 km ESE of Cantwell, Alaska",
-          "longitude": -147.686,
-          "latitude": 63.173,
-          "depth_km": 8.7,
-          "occurred_at": "2026-10-20T06:03:03.988000+00:00"
+          "magnitude": 1.43,
+          "place": "1 km NW of Brawley, CA",
+          "longitude": -115.540666666667,
+          "latitude": 32.987,
+          "depth_km": 9.89,
+          "occurred_at": "2026-10-20T12:04:30.740000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026utuqkw",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T06:26:08.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026utuqkw",
+        "source_id": "ci41349703",
+        "observed_at": "2026-10-20T13:02:47.308012Z",
+        "source_updated_at": "2026-10-20T12:09:16.315000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41349703",
         "entity_type": "event",
-        "canonical_key": "event:aka2026utuqkw",
+        "canonical_key": "event:ci41349703",
         "payload": {
-          "magnitude": 3.2,
-          "place": "36 km ENE of Noatak, Alaska",
-          "longitude": -162.203,
-          "latitude": 67.73,
-          "depth_km": 5.0,
-          "occurred_at": "2026-10-20T06:07:18.515000+00:00"
+          "magnitude": 0.99,
+          "place": "21 km ESE of Little Lake, CA",
+          "longitude": -117.680833333333,
+          "latitude": 35.8875,
+          "depth_km": 4.65,
+          "occurred_at": "2026-10-20T12:05:56.810000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026utuyoy",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T06:18:04.071000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026utuyoy",
+        "source_id": "nn00925999",
+        "observed_at": "2026-10-20T13:02:47.308012Z",
+        "source_updated_at": "2026-10-20T12:09:34.318000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00925999",
         "entity_type": "event",
-        "canonical_key": "event:aka2026utuyoy",
+        "canonical_key": "event:nn00925999",
         "payload": {
-          "magnitude": 2.0,
-          "place": "80 km SE of Ugashik, Alaska",
-          "longitude": -156.3,
-          "latitude": 57.106,
-          "depth_km": 5.0,
-          "occurred_at": "2026-10-20T06:16:42.366000+00:00"
+          "magnitude": 1.53,
+          "place": "26 km S of Dyer, Nevada",
+          "longitude": -118.0243,
+          "latitude": 37.4295,
+          "depth_km": 4.2401,
+          "occurred_at": "2026-10-20T12:07:08.266000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "ci41349599",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T06:46:41.450000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41349599",
+        "source_id": "us6000u3ll",
+        "observed_at": "2026-10-20T13:02:47.308012Z",
+        "source_updated_at": "2026-10-20T12:56:23.040000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u3ll",
         "entity_type": "event",
-        "canonical_key": "event:ci41349599",
+        "canonical_key": "event:us6000u3ll",
         "payload": {
-          "magnitude": 1.7,
-          "place": "12 km ENE of Ridgecrest, CA",
-          "longitude": -117.556833333333,
-          "latitude": 35.6763333333333,
-          "depth_km": 5.56,
-          "occurred_at": "2026-10-20T06:35:38.740000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75452386",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T06:47:27.908000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452386",
-        "entity_type": "event",
-        "canonical_key": "event:nc75452386",
-        "payload": {
-          "magnitude": 1.1,
-          "place": "6 km WNW of Cobb, CA",
-          "longitude": -122.785163879395,
-          "latitude": 38.8351669311523,
-          "depth_km": 2.28999996185303,
-          "occurred_at": "2026-10-20T06:13:05.870000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us6000u3k5",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T06:41:22.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u3k5",
-        "entity_type": "event",
-        "canonical_key": "event:us6000u3k5",
-        "payload": {
-          "magnitude": 5.3,
-          "place": "209 km NW of Port-Olry, Vanuatu",
-          "longitude": 165.5203,
-          "latitude": -13.9011,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-20T06:29:22.938000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us6000u3ka",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T06:55:59.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u3ka",
-        "entity_type": "event",
-        "canonical_key": "event:us6000u3ka",
-        "payload": {
-          "magnitude": 5.1,
-          "place": "263 km WSW of Yanglong, China",
-          "longitude": 95.6436,
-          "latitude": 37.9037,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-20T06:41:23.116000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us6000u3kb",
-        "observed_at": "2026-10-20T07:03:03.052230Z",
-        "source_updated_at": "2026-10-20T07:01:18.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u3kb",
-        "entity_type": "event",
-        "canonical_key": "event:us6000u3kb",
-        "payload": {
-          "magnitude": 3.1,
-          "place": "19 km ESE of Pleasanton, Texas",
-          "longitude": -98.2901,
-          "latitude": 28.9002,
-          "depth_km": 9.328,
-          "occurred_at": "2026-10-20T06:55:40.243000+00:00"
+          "magnitude": 2.4,
+          "place": "18 km SSW of Jal, New Mexico",
+          "longitude": -103.2937,
+          "latitude": 31.9688,
+          "depth_km": 3.514,
+          "occurred_at": "2026-10-20T12:22:36.396000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-20T07:03:03.174815Z",
-      "source_updated_at": "2026-10-20T03:14:52Z",
+      "observed_at": "2026-10-20T13:02:47.485369Z",
+      "source_updated_at": "2026-10-20T11:50:11Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54521,
-        "forks_count": 13232,
+        "stargazers_count": 54524,
+        "forks_count": 13243,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -178,7 +110,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-20T07:03:03.481805Z",
+      "observed_at": "2026-10-20T13:02:47.833434Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -200,7 +132,8 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count"
+        "forks_count",
+        "stargazers_count"
       ]
     },
     "pypi": {
