@@ -60,3 +60,34 @@ Reproduce the exact-match and negative-link checks:
 ```sh
 python -m unittest -v network.tests.test_work_activity_ui
 ```
+
+## Full GitHub Actions execution history
+
+The public [Workstation](../../docs/live/work.html) no longer relies on visitors
+clicking through batches of 100 GitHub runs. The authenticated, read-only source
+adapter in [workflow_history.py](workflow_history.py) retrieves **all currently
+accessible repository Actions run pages**, independently preserving their GitHub
+identities, commit SHA, status, and original URL. The
+[scheduled publication workflow](../../.github/workflows/workstation-run-index.yml)
+runs every three hours, and also after the index program or Work page changes. It
+publishes [workflow-runs-index.json](workflow-runs-index.json) to `main` only
+when the API source reported count agrees with the individually recorded IDs.
+A partial fetch fails publication rather than labeling an incomplete sample
+complete.
+
+The browser then loads the published complete index in one download while
+showing only the first 20 rows initially for responsiveness. Its existing
+two-minute **GitHub API check of the latest 100** updates recent statuses and
+takes precedence over older snapshot statuses. Search operates over the
+retrieved archive, not just the displayed rows. An unavailable/stale index
+is explicitly labeled; the fallback older-page control stays available.
+Archival freshness is the `collected_at` time, not a claim that every historical
+job is currently running. A deleted, inaccessible, or missing workflow run
+cannot be recreated from this index. No worker journals or secrets are exposed.
+
+Reproduce the archive safeguards:
+
+```sh
+python -m unittest -v network.tests.test_workflow_history network.tests.test_work_activity_ui
+```
+
