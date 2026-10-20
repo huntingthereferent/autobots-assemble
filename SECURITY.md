@@ -32,3 +32,7 @@ enrolled actor keys; see [the HTTP ingress boundary](security/HTTP_INGRESS.md).
 Legacy local APIs and plaintext native journals are **not** protected merely
 because the signed endpoint exists. Do not publish the service by changing
 the bind address or adding an unaudited reverse proxy.
+
+## Protected native journal (opt-in)
+
+The optional [encrypted runtime journal](security/SEALED_JOURNAL.md) encrypts only the native handoff history. It is not a whole-workstation encryption guarantee. Existing plaintext journals cannot be silently migrated or replaced; key custody, backup and recovery remain operator responsibilities. Signed HTTP admission requires a current operator-enrolled signer key, and revoked keys are checked again on subsequent requests.
