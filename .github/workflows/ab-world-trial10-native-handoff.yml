@@ -88,8 +88,16 @@ jobs:
           assert not record["physical_outcome_chosen"]
           assert not record["original_frictional_contact_solved"]
           assert not record["source_dynamics_verified_by_adapter"]
-          with open("trial10-ab-ledger.json","w") as handle:
-              json.dump(record["ledger_receipt"], handle, indent=2, sort_keys=True)
+          assert record["ledger_witness"]["pages_verified"] == 5
+          assert len(record["ledger_pages"]) == 5
+          for page_index, page in enumerate(record["ledger_pages"]):
+              assert page["witness"]["valid"]
+              assert page["first_case"] == page_index * 7
+              assert page["last_case"] == page_index * 7 + 6
+              with open(f"trial10-ab-ledger-{page_index}.json","w") as handle:
+                  json.dump(page["receipt"], handle, indent=2, sort_keys=True)
+          with open("trial10-ab-manifest.json","w") as handle:
+              json.dump(record["page_manifest"], handle, indent=2, sort_keys=True)
           print(json.dumps({
               "cases": record["cases"],
               "alternatives": record["alternatives"],
@@ -99,16 +107,25 @@ jobs:
               "ledger_steps": record["ledger_witness"]["steps_verified"],
           }, sort_keys=True))
           PY
-          python -m work.ab_world.construction --verify trial10-ab-ledger.json > trial10-ab-verdict.json
+          for page in 0 1 2 3 4; do
+            python -m work.ab_world.construction --verify "trial10-ab-ledger-$page.json" > "trial10-ab-verdict-$page.json"
+          done
           python - <<'PY'
           import json
-          assert json.load(open("trial10-ab-verdict.json"))["valid"]
+          from work.ab_world.construction import digest
+          record=json.load(open("trial10-ab-carrier.json"))
+          assert len(record["ledger_pages"]) == 5
+          assert digest(record["page_manifest"]) == record["page_manifest_sha256"]
+          for index, page in enumerate(record["ledger_pages"]):
+              assert json.load(open(f"trial10-ab-verdict-{index}.json"))["valid"]
+              assert page["receipt"]["head_hash"] == record["page_manifest"]["ordered_rotation_pages"][index]["head_hash"]
           PY
           sha256sum \
             original-world/systems/workspace/world_ab_active_set_trial.py \
             original-world/network/tests/test_world_ab_active_set_trial.py \
             trial10-original-native.json trial10-original-verdict.json \
-            trial10-ab-carrier.json trial10-ab-verdict.json > trial10-source-hashes.txt
+            trial10-ab-carrier.json trial10-ab-manifest.json \
+            trial10-ab-ledger-*.json trial10-ab-verdict-*.json > trial10-source-hashes.txt
       - name: Retain original and general-world evidence, including rejections
         uses: actions/upload-artifact@v4
         with:
@@ -117,7 +134,8 @@ jobs:
             trial10-original-native.json
             trial10-original-verdict.json
             trial10-ab-carrier.json
-            trial10-ab-ledger.json
-            trial10-ab-verdict.json
+            trial10-ab-manifest.json
+            trial10-ab-ledger-*.json
+            trial10-ab-verdict-*.json
             trial10-source-hashes.txt
           retention-days: 30
