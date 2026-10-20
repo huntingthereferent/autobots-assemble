@@ -230,3 +230,9 @@ B14 and observer SQLite cannot commit policy and observation together.
 A revocation may race with the final SQLite write. A compromised local
 operator ledger is also not a trusted independent PKI authority. See
 [the certificate lifecycle contract](WITNESS_TRANSPORT.md).
+
+## SEC-21 — bipolar approach at real key-use ingress (bounded)
+
+The existing `security.finite_motion.BipolarBoundary` is now connected to the actual signed native ingress through an operator-only `KeyApproachBoundary`. An incoming approach can move the independent probe trajectory; a **durably accepted native movement** advances the protected trajectory. Invalid signatures, unauthorized actor claims and replays leave that trajectory unchanged. The 141-test security CI includes a key derivation guard and unchanged disposable signing/recipient-key test. [Observed relationship and limits](KEY_APPROACH.md).
+
+**Still open:** this event-driven harness does not by itself prove uninterrupted native movement in the absence of input; it does not constitute cryptographic authorization, passive traffic secrecy, general leak resistance or a guarantee against key theft. The existing crypto, trust enrollment and server protections remain necessary. A compromised host still has privileged access outside this ingress.
