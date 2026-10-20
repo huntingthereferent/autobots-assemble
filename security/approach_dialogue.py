@@ -14,6 +14,7 @@ from threading import RLock
 from typing import TextIO
 
 from .key_approach import KeyApproachBoundary, NativePresenceRunner
+from .branch_world import START, PREFERENCES, branch_view, follow, audit_graph
 
 NOTICE = (
     "A/B approach experiment: messages you deliberately submit here will be "
@@ -105,6 +106,8 @@ class SubmittedApproach:
     presence_movement: int
     branch_number: int
     form: str
+    branch_node: str
+    exits: tuple[str, str]
 
 
 class ConsentApproachRecorder:
@@ -124,7 +127,9 @@ class ConsentApproachRecorder:
             raise TypeError("existing A/B key approach boundary required")
         self.boundary = boundary
         self._lock = RLock()
+        audit_graph()  # graph must be closed, finite and rooted
         self._sessions: dict[str, list[SubmittedApproach]] = {}
+        self._cursors: dict[str, str] = {}
         self._total = 0
 
     @staticmethod
@@ -144,13 +149,21 @@ class ConsentApproachRecorder:
                 raise ValueError("bounded session limit reached")
             session = token_urlsafe(24)
             self._sessions[session] = []
+            self._cursors[session] = START
             return session
 
-    def submit(self, session: str, message: str) -> SubmittedApproach:
-        """Capture ONLY a complete, deliberate message submitted to this API."""
+    def submit(self, session: str, message: str, *,
+               exit_choice: str = "along") -> SubmittedApproach:
+        """Read current presence and follow only a fictional graph edge.
+
+        Choosing a story exit never advances, stops or changes bipolar motion.
+        Code/instruction-shaped input is only classified as inert text.
+        """
         if (type(message) is not str or not 0 < len(message) <= MAX_MESSAGE
                 or not message.strip() or _CONTROL.search(message)):
             raise ValueError("one bounded printable submitted message required")
+        if type(exit_choice) is not str or exit_choice not in PREFERENCES:
+            raise ValueError("story exit must be along or side")
         redacted = self._redact(message)
         with self._lock:
             if session not in self._sessions:
@@ -169,6 +182,11 @@ class ConsentApproachRecorder:
             direction = DIRECTIONS[0 if motion.presence_orientation > 0 else 1]
             form = _language_form(redacted)
             branches = BRANCHED_WORDS if form == "words" else CODE_BRANCHES[form]
+            current = branch_view(self._cursors[session],
+                                  movement_orientation=motion.presence_orientation)
+            next_node = follow(current, exit_choice)
+            next_view = branch_view(next_node,
+                                    movement_orientation=motion.presence_orientation)
             entry = SubmittedApproach(
                 message=redacted,
                 branch_words=branches[position % len(branches)],
@@ -176,7 +194,10 @@ class ConsentApproachRecorder:
                 presence_movement=position,
                 branch_number=branch_number,
                 form=form,
+                branch_node=next_node,
+                exits=(next_view.along, next_view.side),
             )
+            self._cursors[session] = next_node
             self._sessions[session].append(entry)
             self._total += 1
             return entry
@@ -202,10 +223,12 @@ class ConsentApproachRecorder:
             if records is None:
                 raise PermissionError("unknown research session")
             self._total -= len(records)
+            del self._cursors[session]
 
     def clear_all(self) -> None:
         with self._lock:
             self._sessions.clear()
+            self._cursors.clear()
             self._total = 0
 
 
@@ -218,9 +241,10 @@ def local_demo(*, stdin: TextIO, stdout: TextIO) -> int:
         stdout.write("No transcript created.\n")
         return 0
     session = recorder.open_session(accepted_notice=True)
-    stdout.write("The world moves by itself. Every submitted message reveals "
-                 "another fictional branch, never a key. /show displays "
-                 "stored branches, /erase clears, /quit exits.\n")
+    stdout.write("The world moves independently. Type words to follow the "
+                 "current swing, or prefix '/side ' to take the other "
+                 "fictional exit; neither changes bipolar motion. "
+                 "/show displays the transcript, /erase clears, /quit exits.\n")
     with NativePresenceRunner(recorder.boundary, interval_seconds=0.04):
         while True:
             stdout.write("A/B> ")
@@ -236,16 +260,25 @@ def local_demo(*, stdin: TextIO, stdout: TextIO) -> int:
                 for entry in recorder.session_transcript(session):
                     stdout.write(
                         f"[branch {entry.branch_number}, presence {entry.presence_movement}] "
-                        f"{entry.message} -> {entry.branch_words}\n")
+                        f"{entry.message} -> {entry.branch_node}: "
+                        f"{entry.branch_words}\n")
                 continue
+            choice, message = "along", line.rstrip("\r\n")
+            if message.startswith("/side "):
+                choice, message = "side", message[6:]
+            elif message.startswith("/along "):
+                message = message[7:]
             try:
-                entry = recorder.submit(session, line.rstrip("\r\n"))
+                entry = recorder.submit(session, message, exit_choice=choice)
             except (ValueError, PermissionError) as exc:
                 stdout.write(f"Not recorded: {exc}\n")
                 continue
             stdout.write(
                 f"Branch {entry.branch_number} ({entry.direction}, "
-                f"presence {entry.presence_movement}): {entry.branch_words}\n")
+                f"presence {entry.presence_movement}, node {entry.branch_node}): "
+                f"{entry.branch_words}\n"
+                f"  Next fictional exits: along -> {entry.exits[0]}, "
+                f"side -> {entry.exits[1]}\n")
     recorder.erase_session(session)
     stdout.write("Session ended; transcript erased from memory.\n")
     return 0
