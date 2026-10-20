@@ -176,8 +176,9 @@ def carry(native: dict[str, Any], source_commit: str) -> dict[str, Any]:
                 sensor = sensors[sensor_index]
                 require(type(sensor) is dict and
                         sensor.get("virtual_time") == time and
-                        sensor.get("position_quantum") == quantum and
-                        sensor.get("measured_reading") is None,
+                        sensor.get("position_quantum") == quantum,
+                        "hypothetical sampling time or precision substituted")
+                require(sensor.get("measured_reading") is None,
                         "hypothetical sensor substituted with measured reading")
                 parts = sensor.get("hypothetical_reading_partitions")
                 require(type(parts) is list and 1 <= len(parts) <= live and
