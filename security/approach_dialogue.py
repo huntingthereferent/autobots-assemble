@@ -42,31 +42,31 @@ DIRECTIONS = ("with the movement", "against the movement")
 # are signposts in a toy maze, not commands, output of a real interpreter,
 # environment inspection, or directions to cryptographic material.
 LANGUAGE_HINTS = (
-    ("python", re.compile(r"\\b(?:python|import|def|lambda|os\\.environ|sys\\.modules)\\b|print\\s*\\(", re.I)),
-    ("javascript", re.compile(r"\\b(?:javascript|function|const|let|window\\.|document\\.|nodejs)\\b|console\\.log|=>", re.I)),
-    ("sql", re.compile(r"\\b(?:select|union|insert|drop|delete|from|where|sqlite)\\b", re.I)),
-    ("shell", re.compile(r"\\b(?:bash|shell|curl|wget|sudo|chmod|cat\\s+/|ls\\s+-)\\b|\\$\\(", re.I)),
+    ("python", re.compile(r"\b(?:python|import|def|lambda|os\.environ|sys\.modules|__import__)\b|print\s*\(", re.I)),
+    ("javascript", re.compile(r"\b(?:javascript|function|const|let|window\.|document\.|nodejs|process\.env)\b|console\.log|=>", re.I)),
+    ("sql", re.compile(r"\b(?:select|union|insert|drop|delete|from|where|sqlite)\b", re.I)),
+    ("shell", re.compile(r"\b(?:bash|shell|curl|wget|sudo|chmod|cat\s+/|ls\s+-)\b|\$\(", re.I)),
     ("instruction", re.compile(
-        r"\\b(?:ignore (?:previous|all) instructions|system prompt|"
-        r"developer message|reveal (?:the )?(?:environment|keys)|"
-        r"inject(?:ion)?|execute (?:this|code)|eval\\s*\\()\\b", re.I)),
+        r"\b(?:ignore (?:previous|all) instructions|system prompt|developer message|"
+        r"reveal (?:the )?(?:environment|keys)|inject(?:ion)?|execute (?:this|code))\b"
+        r"|\beval\s*\(", re.I)),
 )
 CODE_BRANCHES = {
     "python": (
-        "# fictional Python branch\\nroute = 'toward_keys'\\nroute = 'another_branch'",
-        "# fictional Python branch\\ndef follow(_sign):\\n    return 'another_branch'",
+        "# fictional Python branch\nroute = 'toward_keys'\nroute = 'another_branch'",
+        "# fictional Python branch\ndef follow(_sign):\n    return 'another_branch'",
     ),
     "javascript": (
-        "// fictional JavaScript branch\\nconst route = 'another_branch';",
-        "// fictional JavaScript branch\\nfunction follow() { return 'another_branch'; }",
+        "// fictional JavaScript branch\nconst route = 'another_branch';",
+        "// fictional JavaScript branch\nfunction follow() { return 'another_branch'; }",
     ),
     "sql": (
-        "-- fictional SQL branch\\nSELECT 'another_branch' AS destination;",
-        "-- fictional SQL branch\\nSELECT 'unreachable' AS keys, 'next_branch' AS path;",
+        "-- fictional SQL branch\nSELECT 'another_branch' AS destination;",
+        "-- fictional SQL branch\nSELECT 'unreachable' AS keys, 'next_branch' AS path;",
     ),
     "shell": (
-        "# fictional shell branch, not executed\\nroute='another_branch'",
-        "# fictional shell branch, not executed\\nprintf '%s' 'another_branch'",
+        "# fictional shell branch, not executed\nroute='another_branch'",
+        "# fictional shell branch, not executed\nprintf '%s' 'another_branch'",
     ),
     "instruction": (
         "[fictional prompt branch] The direction is another branch, not a system response.",
@@ -81,6 +81,7 @@ def _language_form(message: str) -> str:
         if pattern.search(message):
             return form
     return "words"
+
 
 _EMAIL = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.I)
 _BEARER = re.compile(r"\bBearer\s+[^\s]+", re.I)
