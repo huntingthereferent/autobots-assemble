@@ -1,0 +1,11 @@
+# WORLD Trial 12 — friction, spin, and the still-missing contact choice
+
+Trial 11 established that a **necessary** static friction cone by itself did not discriminate the frictionless Trial 10 responses. Instead of promoting that failed filter as a solved physical law, Trial 12 **applies the actual, existing Trial 06 single-contact constitutive function** `physical_impulse` without changing any source or earlier result.
+
+At each of the 35 original Trial 09 contact setups (one true original source geometry; four explicitly labeled altered-segment controls), evaluate **one active face at a time**, for both A and B, at three predeclared coefficients `mu=0,0.2,0.4` and two initial angular velocities `omega=0,2`: **420 comparisons**. The original radius 0.25, moment of inertia 0.03125, restitution e=1, impact time 0.35, bounded 24×6 WORLD and 1.5-horizon/31-frame schedule remain unchanged.
+
+Constitutive assumptions per single face: `J_n=-2(v·n)`, `v_t=v·t-omega*r`, `J_t=clamp(-v_t/(1+r²/I), ±mu J_n)`; velocity `v'=v+J_n n+J_t t`; spin `omega'=omega-r J_t/I`. These are **one-contact hypotheses** only. Outgoing velocity must not point inward toward **either** original finite segment, total translational plus rotational energy must not increase, Coulomb impulse cap must hold, and 31 connected finite observation frames must remain inside WORLD and never penetrate a source face. Rejected outputs retain attempted impulses but **no claimed completed motion**.
+
+Negative controls: at mu=0, omega=0, the one-contact acceptance classifications must reproduce Trial10 exactly. An independent verifier reconstructs all impulses, angular updates, energy, smooth separation, endpoints, world boundary, provenance and resulting frames from original source definitions, and tests deliberately corrupted results. Real Chromium must independently construct and compare the same grid from the unchanged Trial09 browser source, not read native JSON as a substitute.
+
+**What this cannot claim:** that a one-face impact is actually what happens at simultaneous two-face contact; that the second face's constraint determines the correct contact order; a simultaneous Coulomb frictional manifold, an Earth material, a built physical blueprint, or independently observed velocity/spin. Do not select a branch from the 420 hypothetical candidates.
