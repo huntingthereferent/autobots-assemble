@@ -171,6 +171,80 @@ class WorkflowEditorHTTPTests(unittest.TestCase):
         self.assertEqual(status, 400)
         self.assertIn("not visible", denial["error"])
 
+    def test_native_peer_help_review_only_local_recipient_and_no_adoption(self):
+        from runtime.engine import HandoffRuntime
+        from runtime.journal import RuntimeJournal
+        from runtime.repository_tasks import admit_active_work, read_active_work
+        store = Path(self.tmp.name)
+        runtime = HandoffRuntime(event_store=RuntimeJournal(store / "runtime.jsonl"))
+        idea = read_active_work(ROOT / "TASKS.md")[0]
+        admit_active_work(runtime, ROOT / "TASKS.md", actor_id="james")
+        _, original = self.fetch("GET", "/api/example")
+        _, root_pin = self.fetch("POST", "/api/pin",
+                                 {"draft": original, "reason": "Source root"},
+                                 authorized=True)
+        one = json.loads(json.dumps(original))
+        one["parent_revision"] = root_pin["revision"]
+        one["steps"][0]["label"] = "Branch alpha source"
+        two = json.loads(json.dumps(original))
+        two["parent_revision"] = root_pin["revision"]
+        two["steps"][0]["label"] = "Branch beta source"
+        _, alpha = self.fetch("POST", "/api/pin",
+                              {"draft": one, "reason": "Source alpha"},
+                              authorized=True)
+        _, beta = self.fetch("POST", "/api/pin",
+                             {"draft": two, "reason": "Source beta"},
+                             authorized=True)
+        for record, worker in ((root_pin, "james"), (alpha, "james"),
+                               (beta, "worker-B")):
+            code, data = self.fetch("POST", "/api/idea-bind", {
+                "idea_id": idea.source_id, "revision": record["revision"],
+                "worker": worker, "reason": "Explicit source witness association",
+            }, authorized=True)
+            self.assertEqual(code, 200, data)
+        request = {"idea_id": idea.source_id, "revision": beta["revision"],
+                   "step_id": "count", "worker": "worker-B",
+                   "target_revision": alpha["revision"], "kind": "HELP",
+                   "reason": "Current declared source step differs"}
+        code, proposed = self.fetch("POST", "/api/idea-propose", request,
+                                    authorized=True)
+        self.assertEqual(code, 200, proposed)
+        native = {"handoff_id": "repo-work-" + idea.source_id,
+                  "revision": alpha["revision"], "step_id": "count"}
+        code, view = self.fetch("POST", "/api/idea-native-frontier", native,
+                               authorized=True)
+        self.assertEqual(code, 200, view)
+        self.assertEqual(len(view["incoming_peer_help"]), 1)
+        ref = view["incoming_peer_help"][0]["proposal_ref"]
+        blocked_request = {**native, "proposal_ref": ref,
+                           "decision": "INSPECT", "reason": "Scoped review"}
+        code, _ = self.fetch("POST", "/api/idea-native-review",
+                             blocked_request, authorized=False)
+        self.assertEqual(code, 403)
+        code, _ = self.fetch("POST", "/api/idea-native-review",
+                             {**blocked_request, "proposal_ref": "0"*64},
+                             authorized=True)
+        self.assertEqual(code, 400)
+        before = (store / "runtime.jsonl").read_bytes()
+        code, accepted = self.fetch("POST", "/api/idea-native-review",
+                                    blocked_request, authorized=True)
+        self.assertEqual(code, 200, accepted)
+        self.assertTrue(accepted["recorded"])
+        self.assertFalse(accepted["event"]["branch_adopted"])
+        self.assertEqual(before, (store / "runtime.jsonl").read_bytes())
+        code, again = self.fetch("POST", "/api/idea-native-review",
+                                 {**blocked_request, "decision": "DECLINE"},
+                                 authorized=True)
+        self.assertEqual(code, 400)
+        self.assertIn("already reviewed", again["error"])
+        code, peer = self.fetch("POST", "/api/idea-frontier", {
+            "idea_id": idea.source_id, "revision": beta["revision"],
+            "step_id": "count", "worker": "worker-B",
+        }, authorized=True)
+        self.assertEqual(code, 200, peer)
+        self.assertEqual(peer["outgoing_help_reviews"][0]["review"], "INSPECT")
+        self.assertFalse(peer["outgoing_help_reviews"][0]["branch_adopted"])
+
     def test_ui_can_edit_branch_diff_without_running_workers(self):
         _, draft = self.fetch("GET", "/api/example")
         _, parent = self.fetch("POST", "/api/pin",
