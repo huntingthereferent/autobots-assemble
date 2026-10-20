@@ -57,6 +57,7 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 <label for="idea-handoff">Existing source-owned handoff ID (for worker movement)</label>
 <input id="idea-handoff" placeholder="repo-work-&lt;recorded task ID&gt;">
 <button id="idea-native-observe">Observe from native handoff</button>
+<button id="idea-native-evidence">Reverify evidence at this step</button>
 <p class="note">A worker movement requires an actual live handoff, matching its source task and assigned actor. A label-only preview is not a native movement.</p>
 <pre id="idea-view">No worker view selected.</pre>
 <label for="idea-target">Visible related branch (never auto-ranked)</label>
@@ -317,6 +318,18 @@ el("idea-native-observe").onclick=async()=>{
       x.from_worker+" · "+x.state+" · "+x.from_revision.slice(0,8)])]);
   message("Native handoff checked. Only this recorded task's first-hop branch relationships are visible.");
  }catch(e){frontierIsNative=false;currentFrontier=null;message(e.message,true);}
+};
+el("idea-native-evidence").onclick=async()=>{
+ try{
+  const {row}=selection();
+  if(!row||!frontierIsNative||!currentFrontier)
+    throw Error("Inspect an actual source-owned handoff and step first.");
+  const result=await request("/api/idea-native-evidence",{
+    handoff_id:el("idea-handoff").value.trim(),
+    revision:row.revision,step_id:el("idea-step").value});
+  el("idea-view").textContent=JSON.stringify(result,null,2);
+  message("Reverified only source-linked native results at this step. No branch automatically ranked or adopted.");
+ }catch(e){message(e.message,true);}
 };
 async function ideaProposal(kind){
  try{
