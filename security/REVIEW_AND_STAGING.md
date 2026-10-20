@@ -12,7 +12,7 @@ document do not constitute an independent external security assessment.
 | ID | Severity for external deployment | Finding | Resolution / next boundary |
 | --- | --- | --- | --- |
 | SEC-01 | Fixed on draft branch | Recovery validated the operator-signed recovery envelope but did **not** independently validate the supplied journal checkpoint signature. A valid recovery-envelope signer could present altered checkpoint bytes as if independently anchored. | Require `trusted_checkpoint_public_key` in `recover_journal_key`; verify the checkpoint's Ed25519 signature before decrypting. Regression signs an escrow against deliberately forged checkpoint bytes. |
-| SEC-02 | BLOCKER | The existing service still exposes other trusted-local HTTP paths (tasks, Ohayo, notes and projections) and trusted Python calls. Signing worker results does not make the entire service authenticated. | Local staging only. Do **not** expose the HTTP service through a public host, port forwarding, or a reverse proxy. A separate complete authentication/authorization review is required. |
+| SEC-02 | PARTIALLY FIXED; production BLOCKER | The signed-result-only fence did not block Ohayo/task admission, other mutation endpoints or private GET reads. A loopback caller could bypass the intended signed ingress or observe protected data. | Signed-only HTTP mode now denies **all** unsigned POST routes and all API GET routes from first signer registration; signed routes return minimal non-decrypted receipts. This is local Handler enforcement, **not** privileged Python, multi-user or remote authorization. Do **not** publish the service through a proxy. |
 | SEC-03 | BLOCKER | Other local stores, workstation source files, workflow artifacts, backup copies and process memory remain outside the sealed journal. | Data inventory, separate encrypted storage policies and least-privilege protections before handling private research. |
 | SEC-04 | BLOCKER | Journal and replay ledger are distinct commits. A crash between admission and journal write consumes the event ID but may not write the handoff. | Design/test single transactional admission or an operator-authorized recovery protocol before production. No automatic replay. |
 | SEC-05 | BLOCKER | Signed journal checkpoint proves an **observed prefix** only if a newer checkpoint and its independently pinned signer survive outside the database's rollback domain. | Operator controls off-host anchoring, versioned retention, restore authorization and independent auditing; local preflight cannot prove this. |
@@ -93,3 +93,27 @@ and a separate explicit go-live authorization.
 
 **No unattended activation, internet exposure, or migration is authorized by
 this file.**
+
+## Additional adversarial review findings
+
+- **SEC-10 — fixed on draft branch:** Protected-mode HTTP initially
+  denied just unsigned agent/result endpoints, leaving Ohayo, task
+  admission, personal mutations and private projections open. An
+  allowlist fence now refuses every other HTTP mutation and all unsigned
+  API GET reads **before JSON parsing**. The default local prototype
+  stays unchanged until a signer is registered.
+- **SEC-11 — fixed on draft branch:** Signed native HTTP response payloads
+  previously reflected decrypted handoff inputs and result outputs.
+  The signed routes now return only handoff ID and status. Integration
+  tests place distinctive private markers in inputs, metadata, output
+  and witness source and assert that response bodies disclose none.
+- **SEC-12 — remains a deployment blocker:** Registered signed-only HTTP
+  ingress is not a trust boundary around trusted Python code, native
+  agent adapters, arbitrary local files, or unprotected process memory.
+  Registration must be complete before HTTP listener startup; this PR
+  does not implement a hardened multi-user service or independently
+  attested signer key custody.
+
+The legacy dashboard's HTTP API is deliberately unavailable while
+signed-only mode is enabled. Do not treat this as an accidental UI
+regression or silently re-enable unsigned reads for convenience.
