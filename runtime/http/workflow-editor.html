@@ -65,6 +65,13 @@ pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:
 <input id="idea-reason" placeholder="What in this local view calls for a different path?">
 <button id="idea-back">Propose backward movement</button>
 <button id="idea-help">Offer help on peer branch</button>
+<label for="idea-incoming">Help addressed to this exact native step</label>
+<select id="idea-incoming"></select>
+<label for="idea-review-reason">Reason for reviewing or declining help</label>
+<input id="idea-review-reason" placeholder="What can be observed from this specific branch?">
+<button id="idea-inspect">Mark for bounded inspection</button>
+<button id="idea-decline">Decline this help</button>
+<p class="note">Reviewing a peer proposal is not adopting its branch or verifying a better result.</p>
 <p class="note">Only recorded first-hop relations are visible to worker logic. These actions record review proposals—not worker execution, automatic merges or proof of superiority.</p>
 <hr>
 <h2>Workflow</h2>
@@ -252,6 +259,7 @@ el("idea-current").onchange=()=>{
  el("idea-worker").value=row?.worker||"";
  options("idea-step",pin?.draft.steps.map(s=>[s.id,s.id+" · "+s.label])||[]);
  currentFrontier=null;frontierIsNative=false;
+ options("idea-incoming",[["","Observe native help first"]]);
  options("idea-target",[["","Inspect first-hop frontier first"]]);
 };
 el("idea-bind").onclick=async()=>{
@@ -280,6 +288,7 @@ el("idea-observe").onclick=async()=>{
    idea_id:activeIdeaId,revision:row.revision,
    worker:row.worker,step_id:el("idea-step").value});
   frontierIsNative=false;
+  options("idea-incoming",[["","Native handoff required to review help"]]);
   el("idea-view").textContent=JSON.stringify(currentFrontier,null,2);
   options("idea-target",[["","Choose a visible first-hop branch"],
     ...currentFrontier.visible_branches.map(x=>[x.revision,
@@ -303,6 +312,9 @@ el("idea-native-observe").onclick=async()=>{
   options("idea-target",[["","Choose a visible direct branch"],
     ...currentFrontier.visible_branches.map(x=>[x.revision,
       x.relationship+" · "+x.worker+" · "+x.revision.slice(0,8)])]);
+  options("idea-incoming",[["","Choose an incoming local help proposal"],
+    ...currentFrontier.incoming_peer_help.map(x=>[x.proposal_ref,
+      x.from_worker+" · "+x.state+" · "+x.from_revision.slice(0,8)])]);
   message("Native handoff checked. Only this recorded task's first-hop branch relationships are visible.");
  }catch(e){frontierIsNative=false;currentFrontier=null;message(e.message,true);}
 };
@@ -322,6 +334,25 @@ async function ideaProposal(kind){
   message(kind+" proposal saved; no worker executed, switched or promoted.");
  }catch(e){message(e.message,true);}
 }
+async function reviewIncomingHelp(decision){
+ try{
+  const {row}=selection();
+  if(!row||!currentFrontier||!frontierIsNative)
+    throw Error("Inspect the current native worker handoff first.");
+  const proposal=el("idea-incoming").value;
+  if(!proposal||!currentFrontier.incoming_peer_help.some(x=>x.proposal_ref===proposal))
+    throw Error("Choose help that is actually visible from this step.");
+  const result=await request("/api/idea-native-review",{
+    handoff_id:el("idea-handoff").value.trim(),
+    revision:row.revision,step_id:el("idea-step").value,
+    proposal_ref:proposal,decision,reason:el("idea-review-reason").value});
+  el("idea-view").textContent=JSON.stringify(result,null,2);
+  message("Help review recorded. No branch adopted or worker executed.");
+  await el("idea-native-observe").onclick();
+ }catch(e){message(e.message,true);}
+}
+el("idea-inspect").onclick=()=>reviewIncomingHelp("INSPECT");
+el("idea-decline").onclick=()=>reviewIncomingHelp("DECLINE");
 el("idea-back").onclick=()=>ideaProposal("BACKTRACK");
 el("idea-help").onclick=()=>ideaProposal("HELP");
 
