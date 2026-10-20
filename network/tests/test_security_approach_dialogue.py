@@ -41,7 +41,7 @@ class ConsentedBranchedWordsTests(TestCase):
         self.assertEqual([r.branch_number for r in records], list(range(1, 6)))
         self.assertEqual([r.message for r in records], messages)
         self.assertEqual({r.branch_words for r in records}, {BRANCHED_WORDS[0]})
-        self.assertEqual({r.direction for r in records}, {"with the movement"})
+        self.assertEqual({r.direction for r in records}, {"along the positive swing"})
         self.assertEqual({r.presence_movement for r in records}, {0})
         self.assertEqual({r.form for r in records}, {"words"})
         self.assertEqual(len(self.log.session_transcript(session)), 5)
@@ -53,11 +53,11 @@ class ConsentedBranchedWordsTests(TestCase):
         self.boundary._presence_tick()  # trusted local test driver
         branch = self.log.submit(session, "where next?")
         self.assertEqual(branch.branch_words, BRANCHED_WORDS[1])
-        self.assertEqual(branch.direction, "against the movement")
+        self.assertEqual(branch.direction, "along the negative swing")
         self.boundary._presence_tick()
         next_branch = self.log.submit(session, "show another")
         self.assertEqual(next_branch.branch_words, BRANCHED_WORDS[2])
-        self.assertEqual(next_branch.direction, "with the movement")
+        self.assertEqual(next_branch.direction, "along the positive swing")
         snapshot = self.boundary.snapshot()
         self.assertEqual(snapshot.presence_movements, 2)
         self.assertEqual(snapshot.approach_movements, 0)
@@ -96,7 +96,7 @@ class ConsentedBranchedWordsTests(TestCase):
         self.boundary._presence_tick()
         second = self.log.submit(session, source)
         self.assertEqual(second.branch_words, CODE_BRANCHES["python"][1])
-        self.assertEqual(second.direction, "against the movement")
+        self.assertEqual(second.direction, "along the negative swing")
         self.assertEqual(self.boundary.snapshot().approach_movements, 0)
 
     def test_separate_sessions_get_branches_from_same_world(self):
