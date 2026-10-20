@@ -23,3 +23,12 @@ be confined to systems you own or are authorized to assess.
 Security components under `security/` are opt-in until a caller explicitly
 integrates their trust and admission boundaries. Legacy experimental code is
 not automatically covered. See [the security lane's model and limits](security/README.md).
+## HTTP entrance
+
+This server is intentionally loopback-only, including the legacy routes.
+A cross-origin browser request is not an authenticated worker. The optional
+authenticated handoff endpoints remain disabled without independently
+enrolled actor keys; see [the HTTP ingress boundary](security/HTTP_INGRESS.md).
+Legacy local APIs and plaintext native journals are **not** protected merely
+because the signed endpoint exists. Do not publish the service by changing
+the bind address or adding an unaudited reverse proxy.
