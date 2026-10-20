@@ -1,6 +1,6 @@
 # Workstation
 
-[Workstation](work.html) · [Referent audit](audit.html) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
 
@@ -14,9 +14,11 @@ The display makes no artificial relationship between a GitHub Actions workflow a
 
 Source failure is visible and **does not turn missing data into zeros or imply active work has stopped**. Public GitHub API requests can be rate-limited. Browser checks have no credentials or write access.
 
-## Referent-first live audit
+## Referent-first live audit in the Workstation
 
-The [Referent audit](audit.html) starts from a particular named project referent (ARC Run, World48, WORLD Trials, W13, NIH, A/B or Workstation), not a global list. The source-path and branch-prefix rules are disclosed in the page source; unmatched evidence remains unassigned. Under a referent, GitHub workflow families expand into workflows, exact runs, actual jobs and ordered steps. Branch and commit links expose observed source lineage. The open PRs are a separate proposed-change channel, not proof of execution. The research column uses exactly recorded source `next`, `boundary`, wall and movement entries, with path and line locators when available. Research records can be historical; the viewer never silently promotes them to active tasks.
+The public `/live/` entry stays the single workstation destination. `work.html#audit` selects its embedded audit tab without opening another page; `audit.html` is a reusable same-origin source component, not another navigation destination. The embedded height follows its actual content, and the original Workstation execution and research sections remain available from the same URL.
+
+The [Referent audit](work.html#audit) starts from a particular named project referent (ARC Run, World48, WORLD Trials, W13, NIH, A/B or Workstation), not a global list. The source-path and branch-prefix rules are disclosed in the page source; unmatched evidence remains unassigned. Under a referent, GitHub workflow families expand into workflows, exact runs, actual jobs and ordered steps. Branch and commit links expose observed source lineage. The open PRs are a separate proposed-change channel, not proof of execution. The research column uses exactly recorded source `next`, `boundary`, wall and movement entries, with path and line locators when available. Research records can be historical; the viewer never silently promotes them to active tasks.
 
 The live sources are the public GitHub Actions and PR APIs, polled every two minutes while visible (or rechecked on an already configured tickserver event), and the periodically committed research source projection. A tick is only a request to refresh original evidence. "Observed" counts refer to fetched pages, not all history; older workflow-run pages can be explicitly loaded. Source errors retain the prior display with a visible stale/partial warning. Original private runtime journals are not published by this page.
 
