@@ -1,0 +1,37 @@
+name: ARC3 original SP80 native level2 baseline actions and source legal inventory
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_action_inventory.py'
+      - '.github/workflows/arc3-sp80-stage2-action-inventory.yml'
+jobs:
+  original-native-stage2-actions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine original public ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Freeze original source prerequisite level2 and legal candidate actions
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_action_inventory import SOURCE_STAGE0,SOURCE_STAGE1,PROGRAMS,RESETS,STAGE2_ROOT_BARS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert SOURCE_STAGE0=='454545'
+          assert SOURCE_STAGE1=='6@24,37 4 4 6@32,25 6@12,17 4 4 4 5'
+          assert len(PROGRAMS)==24 and RESETS==2 and len(STAGE2_ROOT_BARS)==4
+          assert all(a!=6 or xy is not None for _,word in PROGRAMS for a,xy in parse_plan(word))
+          print('Native stage2 baseline and first-action controls prospectively frozen')
+          PY
+      - name: Replay first genuine source level2 then execute actual original SDK controls
+        run: python -m work.arc3.native_sp80_stage2_action_inventory --out runtime/data/arc3/sp80-stage2-action-inventory.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-action-inventory
+          path: runtime/data/arc3/sp80-stage2-action-inventory.*
+          if-no-files-found: error
+          retention-days: 14
