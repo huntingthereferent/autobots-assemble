@@ -144,7 +144,7 @@ def check(out):
                         if candidate["impulses"] is not None:raise ValueError("invented singular impulses")
                     elif len(computed)==4:
                         if candidate["impulses"] is None or any(abs(x-y)>3e-7 for x,y in zip(candidate["impulses"],computed)):
-                            raise ValueError("rejected impulse differs from independent equations")
+                            raise ValueError(f"case {i}, w={w}, mu={mu}, mode={mode}: rejected impulses mismatch actual={candidate['impulses']} independent={computed}")
                     continue
                 admitted+=1
                 impulse,fin,pre,post,energy_pre,energy_post=computed
