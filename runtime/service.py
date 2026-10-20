@@ -53,6 +53,8 @@ class EcosystemService:
         closure_admitter: ClosureAdmitter | None = None,
         repository_work_file: str | Path | None = None,
         protected_runtime_key: bytes | None = None,
+        trusted_runtime_checkpoint: dict[str, Any] | None = None,
+        trusted_checkpoint_public_key: Any | None = None,
     ) -> None:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
@@ -77,6 +79,12 @@ class EcosystemService:
         # the legacy plaintext journal with a new encrypted history.
         legacy = self.data_dir / "runtime.jsonl"
         sealed = self.data_dir / "runtime.sealed.sqlite"
+        if (trusted_runtime_checkpoint is None) != (trusted_checkpoint_public_key is None):
+            raise ValueError("both signed checkpoint and pinned public key must be supplied")
+        if trusted_runtime_checkpoint is not None and protected_runtime_key is None:
+            raise ValueError("checkpoint needs the encrypted runtime key")
+        if trusted_runtime_checkpoint is not None and not sealed.is_file():
+            raise ValueError("cannot recover missing sealed history from a checkpoint")
         if protected_runtime_key is None:
             if sealed.exists() or sealed.is_symlink():
                 raise ValueError("sealed runtime exists; provide its trusted key")
@@ -86,6 +94,10 @@ class EcosystemService:
                 raise ValueError("plaintext runtime exists; explicit migration required")
             from security.sealed_journal import SealedRuntimeJournal
             event_store = SealedRuntimeJournal(sealed, key=protected_runtime_key)
+            if trusted_runtime_checkpoint is not None:
+                from security.journal_checkpoint import verify_checkpoint
+                verify_checkpoint(event_store, trusted_runtime_checkpoint,
+                                  trusted_checkpoint_public_key)
         self.runtime = HandoffRuntime(event_store=event_store)
         self.trace = TraceStore(
             self.data_dir / "traversal.jsonl"
