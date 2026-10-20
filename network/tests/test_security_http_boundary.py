@@ -220,6 +220,26 @@ class SignedHttpIntegrationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.ingress("submit")
 
+    def test_signed_result_policy_refuses_all_unsigned_worker_routes(self):
+        self.ingress("submit")
+        self.ingress("result")
+        status, _ = self.request("/api/security/handoffs", {"envelope": self.seal()})
+        self.assertEqual(status, 201)
+        status, _ = self.request("/api/handoffs/task-1/result",
+                                 {"actor_id": "worker", "status": "COMPLETE",
+                                  "evidence": [{"condition": "native", "kind": "measured",
+                                                "source": "untrusted"}]})
+        self.assertEqual(status, 403)
+        self.assertEqual(self.service.runtime.state("task-1").status, "READY")
+        status, _ = self.request("/api/agents/unknown/result",
+                                 {"actor_id": "worker", "status": "COMPLETE"})
+        self.assertEqual(status, 403)
+        status, _ = self.request("/api/agents/activate",
+                                 {"actor_id": "owner", "surface": "ohayo",
+                                  "instance_id": "fake"})
+        self.assertEqual(status, 403)
+        self.assertEqual(self.service.runtime.state("task-1").status, "READY")
+
     def test_revocation_blocks_existing_registered_ingress(self):
         self.ingress("submit")
         source = "ab-ingress:native:owner:worker"
