@@ -100,3 +100,9 @@ native journal. They do not install or expose a production service.
 ## Opt-in encrypted storage
 
 The same `EcosystemService` supports `protected_runtime_key=<32 independently managed bytes>` for a new, encrypted native handoff history. See [the protected journal record and recovery contract](SEALED_JOURNAL.md). Default execution does **not** automatically enable this; additional service logs and user data remain separate plaintext stores.
+
+## Signed-worker-only local HTTP policy
+
+When the trusted host registers the `result` signed ingress, the service refuses the old unsigned `POST /api/handoffs/{id}/result`, `POST /api/agents/{id}/result`, and `POST /api/agents/activate` paths, rather than leaving a bypass around the enrolled worker key. The original localhost behavior remains unchanged until the operator explicitly installs that policy.
+
+The signed native-result route does not yet support agent-lineage result semantics. A trusted operator must keep external agents off these interfaces until a separate authenticated lineage contract exists. The `/api/ohayo` and other local application APIs still require their own deployment-specific authorization and storage review. Native Python callers of the runtime remain outside this HTTP gate.
