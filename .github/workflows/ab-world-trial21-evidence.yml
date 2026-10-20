@@ -1,0 +1,52 @@
+name: A/B WORLD Trial21 original source and neutral evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial21_handoff.py'
+      - 'network/tests/test_ab_world_trial21_handoff.py'
+      - 'work/ab_world/TRIAL21_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial21-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  trial21-source-and-ledger:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: 75a78478b3a437f55e8efc138d746c8096dae8d9
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent original numerical source verification
+        working-directory: original-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact
+          python -c "import json; from pathlib import Path; from systems.workspace.world_ab_third_contact import run; from network.tests.test_world_ab_third_contact import independent_check; x=run(); assert all(independent_check(c) for c in x['cases']); assert x['candidate_third_impulses']==6; Path('../trial21-original-native.json').write_text(json.dumps(x,sort_keys=True,indent=2))"
+          python -c "import json; from pathlib import Path; from systems.workspace.world_ab_rotating_receiver import run; from network.tests.test_world_ab_rotating_receiver import independent_check; x=run(); assert all(independent_check(c) for c in x['cases']); Path('../trial21-original-prior20.json').write_text(json.dumps(x,sort_keys=True,indent=2))"
+      - name: Verify A/B transport negative controls
+        run: python -m unittest -v network.tests.test_ab_world_trial21_handoff
+      - name: Carry source and replay independent A/B receipts
+        run: |
+          python -m work.ab_world.world_trial21_handoff --native trial21-original-native.json --source20 trial21-original-prior20.json > trial21-ab-carrier.json
+          python -c "import json; from work.ab_world.verify_construction import verify_receipt; x=json.load(open('trial21-ab-carrier.json')); assert x['conditional_third_impulses']==6 and x['real_impulses_measured']==0 and all(verify_receipt(p['receipt'])['valid'] for p in x['ledger_pages'])"
+          sha256sum trial21-original-native.json trial21-original-prior20.json trial21-ab-carrier.json > trial21-evidence.sha256
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: trial21-original-source-and-ab-ledgers
+          path: |
+            trial21-original-native.json
+            trial21-original-prior20.json
+            trial21-ab-carrier.json
+            trial21-evidence.sha256
+          if-no-files-found: warn
+          retention-days: 30
