@@ -204,6 +204,39 @@ authorized handler review of a same-step peer proposal in the original
 `HandoffRuntime`. It checks that no review implies branch adoption or
 task completion, and that unadmitted or mismatched tasks do not execute.
 
+## Source-owned results only at the current frontier
+
+A worker's `BoundedWorkerContext.observe_native_results()` now rechecks
+the original source-owned finite correspondence or Factory simulation
+results **only where a user has explicitly associated an independently
+verified native job with this exact pinned step or a first-hop related
+branch's matching step**. Source re-verification runs again on every read;
+stale edition files or mismatched saved result records fail closed.
+
+The return is limited to:
+- the exact native result (or explicit **NO_ATTACHED_NATIVE_RESULT**) at
+  the current source-owned handoff's selected pinned step;
+- results from immediate visible parent/child/sibling revisions **with
+  the same declared step ID**;
+- a scoped comparison only when source-owned native worker families and
+  operation inputs match and jobs are distinct (and Factory simulation
+  order IDs are distinct).
+
+It does **not** assume source-linked jobs implement the whole workflow
+step, authenticate a worker's identity, imply branch superiority, execute
+a task, or expose unrelated ideas' job records. The journal is replayed
+for integrity, but unrelated entries are filtered rather than surfaced.
+Native results remain data from a separately owned execution family.
+If a source-native result isn't attached, workers see **unknown**, not a
+generated prediction or invented work history.
+
+The local editor has an **Reverify evidence at this step** control using
+the same source-owned native handoff/step gate
+(`POST /api/idea-native-evidence`). The focused
+`test_workflow_native_results` suite verifies two real finite subprocess
+results at a task's matching branches, absent evidence, stale source drift
+and exclusion of results from a different idea.
+
 ## Source-bound tests
 
 ```sh
