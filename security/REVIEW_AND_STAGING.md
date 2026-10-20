@@ -269,16 +269,24 @@ A separate `security.approach_dialogue` module provides a bounded
 A user who acknowledges the notice may submit at most 280 printable
 characters per complete message. The experiment stores a maximum of
 64 messages and eight sessions **in the local process's memory**, with
-per-session erasure; its toy rooms are merely labels on the existing
-A/B probe trajectory. It never intercepts unrelated keystrokes,
-password fields, browser traffic, or private key material, and does
-not alter native worker admission.
+per-session erasure. The corrected toy maze reads the independently
+clocked bipolar **presence** snapshot; messages cannot advance its
+trajectory. Both current orientations point along the observed swing
+into an explicitly fictional new branch rather than an actual key.
+Lexically code-shaped input (Python/JavaScript/SQL/shell) and
+instruction-shaped injection text select inert, static syntax/prompt
+branches. Nothing is evaluated, executed or passed to the host shell.
+It never intercepts unrelated keystrokes, password fields, browser
+traffic, or private key material, and does not alter native worker admission.
 
 Negative tests confirm no recording without affirmative consent,
 bad session refusal, overlong/control-character rejection, memory
 erasure, finite limits, unchanged native protected movement, and
-best-effort redaction of ordinary token/email patterns. CI checks
-the separate local CLI entrance.
+best-effort redaction of ordinary token/email patterns.
+Regression checks now include no bipolar movement on message submission,
+route direction following independently changed presence, code and prompt
+injection treated as inert data, and explicit guards against eval/shell/
+subprocess execution. CI checks the separate local CLI entrance.
 
 **Not cleared for publication/remote use:** simple redaction cannot
 guarantee no personal information is submitted; consent, visibility,
