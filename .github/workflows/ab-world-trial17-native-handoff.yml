@@ -1,0 +1,135 @@
+name: A/B WORLD Trial17 first finite recontact numerical evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial17_handoff.py'
+      - 'network/tests/test_ab_world_trial17_handoff.py'
+      - 'work/ab_world/TRIAL17_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial17-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-first-return-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout A/B source-specific carrier
+        uses: actions/checkout@v4
+      - name: Checkout immutable original WORLD17
+        uses: actions/checkout@v4
+        with:
+          ref: 02b2f6ca97717eb3bf959d120a2c32a6ae856543
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check carrier negative controls and causal model limits
+        run: python -m unittest -v network.tests.test_ab_world_trial17_handoff
+      - name: Run independent original first return oracle and prior square regressions
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_square_first_recontact \
+            network.tests.test_world_ab_rotating_square_clearance \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_body_support
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_square_first_recontact import run
+          from network.tests.test_world_ab_square_first_recontact import independent_check
+          result=run()
+          assert len(result["cases"])==8
+          assert result["first_return_candidates"]==6
+          assert result["no_return"]==2
+          assert all(independent_check(case) for case in result["cases"])
+          assert not result["built_any_new_object"]
+          assert not result["actual_physical_impact_verified"]
+          assert all(not case["second_impulse_or_further_motion_solved"]
+                     and not case["derived_receiver_built"]
+                     and not case["physical_sensor_evidence"]
+                     for case in result["cases"])
+          Path("../trial17-original-native.json").write_text(
+              json.dumps(result,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial17-source-verdict.json").write_text(
+              json.dumps({"original_source_commit":"02b2f6ca97717eb3bf959d120a2c32a6ae856543",
+                          "independent_bracket_vs_dense_polygon_sweep":True,
+                          "source_candidate_returns":6,"no_line_crossing_in_window":2,
+                          "numerically_bracketed_not_formally_certified":True,
+                          "real_contact_response_selected":False,
+                          "next_receiver_constructed":False},
+                          sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          PY
+      - name: Carry finite source root evidence into eight bounded A/B receipts
+        run: |
+          python -m work.ab_world.world_trial17_handoff \
+            --native trial17-original-native.json \
+            --source-commit 02b2f6ca97717eb3bf959d120a2c32a6ae856543 \
+            > trial17-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          carrier=json.load(open("trial17-ab-carrier.json"))
+          assert carrier["ledger_witness"]["valid"]
+          assert carrier["original_controls"]==8
+          assert carrier["first_return_candidates"]==6
+          assert carrier["no_return"]==2
+          assert carrier["ledger_witness"]["pages_verified"]==8
+          assert carrier["ledger_witness"]["observations_recorded"]==16
+          assert carrier["ledger_witness"]["steps_verified"]==52
+          assert carrier["modeled_second_impulses_selected"]==0
+          assert carrier["derived_receivers_built"]==0
+          assert carrier["observed_material_contacts"]==0
+          assert not carrier["continuation_after_return_verified"]
+          assert digest(carrier["page_manifest"])==carrier["page_manifest_sha256"]
+          Path("trial17-ab-pages").mkdir(exist_ok=True)
+          for index,page in enumerate(carrier["ledgers"]):
+              assert page["case"]==index and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"]==carrier["page_manifest"]["ordered_case_heads"][index]["head_hash"]
+              assert "movement-derived-receiver" not in page["receipt"]["final"]["objects"]
+              with open(f"trial17-ab-pages/case-{index:02d}.json","w") as file:
+                  json.dump(page["receipt"],file,sort_keys=True,indent=2)
+          with open("trial17-ab-manifest.json","w") as file:
+              json.dump(carrier["page_manifest"],file,sort_keys=True,indent=2)
+          print(json.dumps({
+              "first_return_candidates":carrier["first_return_candidates"],
+              "no_new_crossing":carrier["no_return"],
+              "native_root_records":carrier["source_root_records"],
+              "A_B_operations":carrier["ledger_witness"]["steps_verified"],
+              "second_impulses_selected":0,
+              "derived_receivers_constructed":0},sort_keys=True))
+          PY
+          for n in $(seq 0 7); do
+            case=$(printf '%02d' "$n")
+            python -m work.ab_world.construction --verify "trial17-ab-pages/case-$case.json" > "trial17-ab-pages/verdict-$case.json"
+          done
+          python - <<'PY'
+          import json
+          for index in range(8):
+              assert json.load(open(f"trial17-ab-pages/verdict-{index:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_square_first_recontact.py \
+            original-world/network/tests/test_world_ab_square_first_recontact.py \
+            trial17-original-native.json trial17-source-verdict.json \
+            trial17-ab-carrier.json trial17-ab-manifest.json \
+            trial17-ab-pages/case-*.json trial17-ab-pages/verdict-*.json \
+            > trial17-source-hashes.txt
+      - name: Retain original bracket evidence and neutral verified receipts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial17-finite-first-return-roots
+          path: |
+            trial17-original-native.json
+            trial17-source-verdict.json
+            trial17-ab-carrier.json
+            trial17-ab-manifest.json
+            trial17-ab-pages/
+            trial17-source-hashes.txt
+          retention-days: 30
