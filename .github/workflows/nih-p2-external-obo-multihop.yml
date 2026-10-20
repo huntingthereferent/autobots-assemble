@@ -1,0 +1,101 @@
+name: NIH P2 original OBO finite multi-hop verification
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/ab_finite_original_uri_multihop.py'
+      - 'systems/workspace/nih_p2_external_obo_multihop_trial.py'
+      - 'network/tests/test_nih_p2_external_obo_multihop_trial.py'
+      - 'systems/workspace/NIH_P2_ORIGINAL_OBO_FINITE_MULTIHOP.md'
+      - '.github/workflows/nih-p2-external-obo-multihop.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nih-p2-original-multihop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  original-obo-source-multihop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original graph oracle and bounded external OWL evaluation
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Retrieve exact immutable original OWL source release
+        env:
+          ORIGINAL_OBO_COMMIT: 091f4761ec84657cc336d623e02006d6c351722c
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-multihop-originals" "$RUNNER_TEMP/nih-p2-multihop-evidence"
+          python - <<'PY'
+          from urllib.request import urlopen,Request
+          from pathlib import Path
+          import hashlib,os
+          from systems.workspace import nih_phase2_external_obo_graph_trial as a
+          root="https://raw.githubusercontent.com/oborel/obo-relations/"+os.environ["ORIGINAL_OBO_COMMIT"]+"/"
+          dest=Path(os.environ["RUNNER_TEMP"])/"nih-p2-multihop-originals"
+          for filename in a.SOURCE_FILES:
+              url=root+filename
+              with urlopen(Request(url,headers={"User-Agent":"AB-P2-Original-OBO-ReadOnly/1.0"}),timeout=45) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("source host or immutable commit mismatch")
+                  raw=response.read(5_000_001)
+              if hashlib.sha256(raw).hexdigest()!=a.PINNED_WHOLE_SOURCE_SHA256[filename]:
+                  raise ValueError("source does not match separately verified frozen OBO evidence")
+              (dest/filename).write_bytes(raw)
+              print(filename,len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Test source-based 1-6 hop witness semantics and actual external graph
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-p2-multihop-originals/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-p2-multihop-originals/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_external_obo_multihop_trial
+      - name: Replay original 402 source-based questions against independent SPARQL
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-p2-multihop-originals/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-p2-multihop-originals/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_external_obo_multihop_trial \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/nih-p2-multihop-evidence/real-original-multihop.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-p2-multihop-evidence/real-original-multihop.json"
+          d=json.loads(p.read_text())
+          assert d["schema"]=="nih-p2-original-obo-finite-multihop-v1"
+          assert d["original_external_source_commit"]=="091f4761ec84657cc336d623e02006d6c351722c"
+          assert d["original_external_benchmark_cases"]==402
+          assert d["original_source_rdf_triples"]==8319
+          assert d["original_hierarchy_edges"]==802
+          assert d["previously_exposed_three_hop_only_static_reachable_misses"]==87
+          assert d["recovered_real_source_longer_temporal_paths_at_latest_cutoff"]>0
+          assert d["original_two_hop_exact_oracle_mismatches"]==0
+          assert d["unresolved_or_out_of_scope_spaql_reachability_cases"]==sum(
+              not x["agrees_with_independent_temporal_SPARQL"] for x in d["cases"])
+          assert d["time_labels_are_synthetic"] is True
+          assert d["source_original_publication_clocks_known"] is False
+          assert d["original_W13_emitted_temporal_python_modified"] is False
+          assert d["original_W13_journal_modified"] is False
+          assert d["official_NIH_Phase2_benchmark_reproduced"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-multihop-evidence" && sha256sum real-original-multihop.json > sha256.txt)
+      - name: Retain derived source path evidence, not third-party OWL original files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-original-multihop-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-multihop-evidence/
+          if-no-files-found: warn
+          retention-days: 30
