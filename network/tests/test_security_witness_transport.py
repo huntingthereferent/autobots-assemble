@@ -296,6 +296,35 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
             context=self.wrong_context)[0], 403)
         self.assertEqual(self.observer.current(
             "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
+        # A replacement certificate becomes usable only in a separately
+        # reconfigured receiver with the new operator-approved DER pin.
+        replacement = WitnessOnlyHTTPServer(
+            ("127.0.0.1", 0), tls_context=self.server_context,
+            observer=self.observer,
+            client_pins={other_pin: ("alpha", self.source_key.public_key())},
+            independently_retained_anchors={
+                "alpha": (self.anchor, self.observer_key.public_key())},
+            operator_pin_ledger=self.operator_pins)
+        self.addCleanup(replacement.server_close)
+        thread = threading.Thread(target=replacement.serve_forever, daemon=True)
+        thread.start()
+        try:
+            conn = HTTPSConnection("127.0.0.1", replacement.server_port,
+                                   timeout=5, context=self.wrong_context)
+            try:
+                raw = json.dumps({"source_id": "alpha", "bundle": bundle}).encode("utf-8")
+                conn.request("POST", "/v1/witness", body=raw,
+                             headers={"Content-Type": "application/json"})
+                response = conn.getresponse()
+                self.assertEqual(response.status, 200)
+                self.assertEqual(json.loads(response.read())["observed_sequence"], 1)
+            finally:
+                conn.close()
+        finally:
+            replacement.shutdown()
+            thread.join(timeout=4)
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 1)
 
     def test_revocation_during_witness_verification_refuses_commit(self):
         bundle = self.next_bundle("one")
