@@ -1,0 +1,61 @@
+name: NIH P2 original status-version contrast
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_original_version_status_contrast.py'
+      - 'network/tests/test_nih_p2_original_version_status_contrast.py'
+      - '.github/workflows/nih-p2-original-version-status-contrast.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  official-version-status-contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install real independent public browser
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Reject invented change, fabricated first-public timestamps and header leakage
+        run: |
+          python -m unittest -v \
+            network.tests.test_nih_p2_official_history_browser_access \
+            network.tests.test_nih_p2_official_history_status_fields \
+            network.tests.test_nih_p2_original_version_status_contrast
+      - name: Witness exact original status comparison in independent Chromium
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-actual-status-contrast"
+          python -m systems.workspace.nih_p2_original_version_status_contrast \
+            --out-dir "$RUNNER_TEMP/nih-p2-actual-status-contrast"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"nih-p2-actual-status-contrast/original-status-contrast.json"
+          x=json.loads(p.read_text())
+          assert x["schema"]=="nih-p2-official-original-status-contrast/v1"
+          assert [v["version"] for v in x["records"]]==[105,260]
+          assert x["two_original_version_fields_witnessed"]
+          assert x["observed_status_changed"] is True
+          assert x["first_public_version_timestamp"]=="UNAVAILABLE"
+          assert x["known_at_admitted_to_W13"] is False
+          assert x["historical_temporal_benchmark_completed"] is False
+          assert x["original_twelve_job_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-actual-status-contrast" &&
+            sha256sum original-status-contrast.json > sha256.txt)
+      - name: Preserve only redacted exact-version source receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-official-status-contrast-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-actual-status-contrast/
+          retention-days: 30
+          if-no-files-found: warn
