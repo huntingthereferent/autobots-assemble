@@ -35,7 +35,7 @@ BRANCHED_WORDS = (
     "The route looks closer to the keys. The next doorway contains another direction.",
     "A corridor promises the final key. At its end is only another branching sign.",
 )
-DIRECTIONS = ("with the movement", "against the movement")
+DIRECTIONS = ("along the positive swing", "along the negative swing")
 
 # A strictly lexical router: submitted source code or prompt-injection text
 # is treated as words, NEVER interpreted or evaluated. These static snippets
