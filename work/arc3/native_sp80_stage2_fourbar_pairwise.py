@@ -95,8 +95,6 @@ def source_stage2_commit(trial,raw):
         if event["native_action"]!=5:
             continue
         step=event["phase_step"]
-        prev=(raw["witness_"+str(len(trial["full_original_SDK_action_records"])-len(events)-6)][-1]
-              if step==1 else raw["stage2_"+str(step-1)][-1])
         # First stage2 commit is always after at least four clicks.
         assert step>1
         previous=raw["stage2_"+str(step-1)][-1]
