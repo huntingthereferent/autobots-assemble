@@ -1,0 +1,42 @@
+name: ARC3 original SP80 source stage2 heldout and native baseline
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_boundary_holdout.py'
+      - 'work/arc3/native_sp80_stage2_baseline.py'
+      - '.github/workflows/arc3-sp80-stage2-boundary.yml'
+jobs:
+  original-stage2-boundary-holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic native ARC public SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Assert frozen original stage2 success witnesses and boundary controls
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_boundary_holdout import FIXED,RESETS
+          from work.arc3.native_sp80_stage2_baseline import STAGE1_WITNESSES,STAGE2_FIRST_ACTIONS
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(FIXED)==22 and RESETS==2
+          assert len(STAGE1_WITNESSES)==2 and STAGE2_FIRST_ACTIONS==(0,1,2,3,4,5)
+          assert dict(FIXED)['witness_A_F2L0U3']==dict(STAGE1_WITNESSES)['A']
+          assert dict(FIXED)['witness_B_F2L2U3']==dict(STAGE1_WITNESSES)['B']
+          assert all(all(a!=6 or xy is not None for a,xy in parse_plan(w)) for _,w in FIXED)
+          print('UNIT ONLY: source stage2 witness words fixed before fresh original games')
+          PY
+      - name: Run true original SP80 stage1 level2 witness neighbors
+        run: python -m work.arc3.native_sp80_stage2_boundary_holdout --out runtime/data/arc3/stage2-boundary-holdout.json
+      - name: Run original SDK stage2 entry and read legal next controls
+        run: python -m work.arc3.native_sp80_stage2_baseline --out runtime/data/arc3/stage2-native-baseline.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-boundary-and-baseline
+          path: runtime/data/arc3/stage2-*.*
+          if-no-files-found: error
+          retention-days: 14
