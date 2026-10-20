@@ -1,0 +1,71 @@
+name: Workstation complete Actions run index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/live/work.html'
+      - 'views/traces/workflow_history.py'
+      - 'network/tests/test_workflow_history.py'
+      - '.github/workflows/workstation-run-index.yml'
+  pull_request:
+    paths:
+      - 'docs/live/work.html'
+      - 'views/traces/workflow_history.py'
+      - 'network/tests/test_workflow_history.py'
+      - '.github/workflows/workstation-run-index.yml'
+  schedule:
+    - cron: '23 */3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: workstation-source-run-index
+  cancel-in-progress: false
+
+jobs:
+  source-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test multi-page source identities and negative completeness boundaries
+        run: python -m unittest -v network.tests.test_workflow_history network.tests.test_work_activity_ui
+
+  index:
+    needs: source-test
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Collect complete authenticated GitHub Actions source index
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m views.traces.workflow_history
+      - name: Publish source-owned index without changing research or workers
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add views/traces/workflow-runs-index.json
+          if git diff --cached --quiet; then echo 'No archived source change'; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refresh GitHub Actions source run index'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
