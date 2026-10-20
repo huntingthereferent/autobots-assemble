@@ -1,0 +1,40 @@
+name: ARC3 true SP80 level2 four-bar click and movement controls
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_four_bar_clicks.py'
+      - '.github/workflows/arc3-sp80-stage2-bar-clicks.yml'
+jobs:
+  genuine-original-native-stage2-clicks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC3 public native SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Validate prospective source pixels and click-word controls
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_four_bar_clicks import (
+              PROGRAMS,SELECTABLE_PIXEL_CONTROLS,RESETS)
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(PROGRAMS)==20 and RESETS==2
+          assert len(SELECTABLE_PIXEL_CONTROLS)==6
+          for name,p in PROGRAMS:
+              actions=parse_plan(p)
+              assert actions[0][0]==6 and actions[-1][0]==5
+              assert all(a!=6 or xy is not None for a,xy in actions)
+          print('UNIT ONLY: original SDK coordinate native click cases frozen')
+          PY
+      - name: Execute genuine native SP80 stage2 source four-bar click tests
+        run: python -m work.arc3.native_sp80_stage2_four_bar_clicks --out runtime/data/arc3/stage2-four-bar-clicks.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-four-bar-clicks
+          path: runtime/data/arc3/stage2-four-bar-clicks.*
+          if-no-files-found: error
+          retention-days: 14
