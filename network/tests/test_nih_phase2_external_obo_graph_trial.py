@@ -98,12 +98,12 @@ class IndependentExternalOBOTests(unittest.TestCase):
     def test_07_wrong_original_sources_and_missing_data_cannot_pass(self):
         with self.assertRaises(ValueError):
             a.admit_sources({})
-        with self.assertRaises(ValueError):
+        with self.assertRaises(FileNotFoundError):
             a.admit_sources({"ro-base.owl":"/missing", "core.owl":"/missing"})
         with TemporaryDirectory() as folder:
             p=Path(folder)
             f=p/"fake.owl";f.write_text("<html>invented graph</html>")
-            with self.assertRaises((ValueError,Exception)):
+            with self.assertRaises(ValueError):
                 a.admit_sources({"ro-base.owl":f,"core.owl":f})
 
 
