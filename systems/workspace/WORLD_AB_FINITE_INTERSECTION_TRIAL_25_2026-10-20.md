@@ -16,6 +16,8 @@ The source tests overlap by rotating each finite source segment into the moving 
 
 The independent witness uses a *different geometric calculation*: reconstruct the square as four points in world coordinates, then use the **separating-axis theorem** on the finite segment and square, with the square's two local normals and the finite segment's normal. For each actual source angle and both faces it independently checks the entire declared grid, first onset, finite overlap windows, bracketed candidate, original source ancestry and source status. A synthetic translating-square case demonstrates an independently expected first finite overlap.
 
+The source also records a **same-face temporal comparison** for the earliest detected overlap, contrasting its two grid-bracketing times only with original Trial23 finite-face vertex roots on that exact face. It independently labels agreement within grid resolution, prior-vertex-earlier, prior-vertex-later, or no prior eligible vertex. This is a comparison of numerical source candidates, not a fourth-contact selection.
+
 These are finite **numerical detection** and candidate brackets. They do not certify every possible short between-sample collision or tangency, formally prove the first possible contact time, or select any impulse response. Any movement after a detected candidate is still a counterfactual ballistic projection, not a witnessed material trajectory. Sources 22–24 remain intact as separate feature evidence.
 
 ## Gate and next question
