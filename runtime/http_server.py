@@ -319,6 +319,22 @@ class Handler(BaseHTTPRequestHandler):
         try:
             payload = read_json(self)
             with LOCK:
+                if parsed.path == "/api/security/handoffs":
+                    self.send_json(SERVICE.authenticated_submit(payload), 201)
+                    return
+
+                if (parsed.path.startswith("/api/security/handoffs/")
+                        and parsed.path.endswith("/result")):
+                    handoff_id = parsed.path.removeprefix(
+                        "/api/security/handoffs/"
+                    ).removesuffix("/result").strip("/")
+                    if not handoff_id or "/" in handoff_id:
+                        raise ValueError("single handoff ID required")
+                    self.send_json(
+                        SERVICE.authenticated_return_result(handoff_id, payload)
+                    )
+                    return
+
                 if parsed.path == "/api/ohayo":
                     if self.client_address[0] not in {"127.0.0.1", "::1"}:
                         self.send_json({"error": "ohayo mutation is loopback-only"}, 403)
@@ -458,6 +474,9 @@ class Handler(BaseHTTPRequestHandler):
                         )
                     )
                     return
+        except PermissionError:
+            self.send_json({"error": "authenticated ingress unavailable or unauthorized"}, 403)
+            return
         except KeyError as exc:
             self.fail(exc, 404)
             return
