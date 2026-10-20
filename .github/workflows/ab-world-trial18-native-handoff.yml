@@ -1,0 +1,133 @@
+name: A/B WORLD Trial18 hypothetical local second impulses
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial18_handoff.py'
+      - 'network/tests/test_ab_world_trial18_handoff.py'
+      - 'work/ab_world/TRIAL18_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial18-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-source-local-impact-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout bounded A/B source-specific carrier
+        uses: actions/checkout@v4
+      - name: Checkout pinned original WORLD18 source
+        uses: actions/checkout@v4
+        with:
+          ref: 8f9600adcee76f830ac7eb769603e615f14179c9
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify negative tests for hypothetical contact and source integrity
+        run: python -m unittest -v network.tests.test_ab_world_trial18_handoff
+      - name: Execute original local second-impulse hypothesis and independent oracle
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_local_recontact_impulse \
+            network.tests.test_world_ab_square_first_recontact \
+            network.tests.test_world_ab_rotating_square_clearance \
+            network.tests.test_world_ab_oblique_impact
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_local_recontact_impulse import run
+          from network.tests.test_world_ab_local_recontact_impulse import verify
+          source=run()
+          assert len(source["cases"])==8
+          assert source["cases_with_candidate_impulse"]==6
+          assert source["cases_without_recontact"]==2
+          assert source["cases_with_sampled_post_overlap"]==0
+          assert all(verify(case) for case in source["cases"])
+          assert not source["material_contact_response_proven"]
+          assert not source["created_any_new_receiver"]
+          assert not source["general_rotating_contact_solver"]
+          Path("../trial18-original-native.json").write_text(
+              json.dumps(source,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial18-original-verdict.json").write_text(
+              json.dumps({"source_commit":"8f9600adcee76f830ac7eb769603e615f14179c9",
+                          "native_independent_momentum_energy_and_clearance_verifier":True,
+                          "conditional_second_impulses":6,
+                          "no_recontact_no_impulse":2,
+                          "no_detected_local_overlap_does_not_prove_continuity":True,
+                          "physical_contacts_measured":0},
+                         sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          PY
+      - name: Replay eight A/B conditional source histories and independent receipt witness
+        run: |
+          python -m work.ab_world.world_trial18_handoff \
+            --native trial18-original-native.json \
+            --source-commit 8f9600adcee76f830ac7eb769603e615f14179c9 \
+            > trial18-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          record=json.load(open("trial18-ab-carrier.json"))
+          native=json.load(open("trial18-original-native.json"))
+          assert record["ledger_witness"]["valid"]
+          assert record["candidate_second_impulses"]==6
+          assert record["absent_first_returns"]==2
+          assert record["hypothetical_postreturn_samples"]==198
+          assert record["source_sampled_overlap_cases"]==native["cases_with_sampled_post_overlap"]
+          assert record["ledger_witness"]["pages_verified"]==8
+          assert record["ledger_witness"]["observations_recorded"]==212
+          assert record["ledger_witness"]["steps_verified"]==446
+          assert record["receivers_constructed"]==0
+          assert record["material_second_impulses_observed"]==0
+          assert not record["valid_sustained_postcontact_motion_proven"]
+          assert not record["source_model_verified_by_adapter"]
+          assert digest(record["page_manifest"])==record["page_manifest_sha256"]
+          Path("trial18-ab-pages").mkdir(exist_ok=True)
+          for n,page in enumerate(record["ledger_pages"]):
+              assert page["case"]==n and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"]==record["page_manifest"]["ordered_case_heads"][n]["head_hash"]
+              assert "movement-derived-receiver" not in page["receipt"]["final"]["objects"]
+              with open(f"trial18-ab-pages/case-{n:02d}.json","w") as file:
+                  json.dump(page["receipt"],file,sort_keys=True,indent=2)
+          with open("trial18-ab-manifest.json","w") as file:
+              json.dump(record["page_manifest"],file,sort_keys=True,indent=2)
+          print(json.dumps({"source_model_second_impulses":6,
+                            "first_returns_absent":2,
+                            "hypothetical_local_samples":198,
+                            "ledger_steps":record["ledger_witness"]["steps_verified"],
+                            "real_impacts_selected":0},sort_keys=True))
+          PY
+          for n in $(seq 0 7); do
+            case=$(printf '%02d' "$n")
+            python -m work.ab_world.construction --verify "trial18-ab-pages/case-$case.json" > "trial18-ab-pages/verdict-$case.json"
+          done
+          python - <<'PY'
+          import json
+          for n in range(8):
+              assert json.load(open(f"trial18-ab-pages/verdict-{n:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_local_recontact_impulse.py \
+            original-world/network/tests/test_world_ab_local_recontact_impulse.py \
+            trial18-original-native.json trial18-original-verdict.json \
+            trial18-ab-carrier.json trial18-ab-manifest.json \
+            trial18-ab-pages/case-*.json trial18-ab-pages/verdict-*.json \
+            > trial18-source-hashes.txt
+      - name: Retain source and bounded hypothetical second-impact evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial18-local-impulse-hypotheses
+          path: |
+            trial18-original-native.json
+            trial18-original-verdict.json
+            trial18-ab-carrier.json
+            trial18-ab-manifest.json
+            trial18-ab-pages/
+            trial18-source-hashes.txt
+          retention-days: 30
