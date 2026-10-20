@@ -234,7 +234,8 @@ policy/journal commit or a production CA revocation service.
 
 [Key-approach motion and noninterference evidence](KEY_APPROACH.md) now link the *already existing* `BipolarBoundary` to the real `AuthenticatedHandoffIngress`. Each external approach moves only the bounded probe; the protected trajectory moves only after a cryptographically authenticated and successfully committed native handoff/result. **Neither key material nor key identity is changed by the bipolar model**. Negative tests include 250 invalid approaches, signature refusal before private-key derivation, bad native actors, replay attempts, and unchanged disposable test keys.
 
-The model is event-driven and does **not** itself generate continuous idle-time motion. It does not hide all public envelope metadata or guarantee safety from a compromised local host. Authenticated signatures and native evidence checks still control actual admission; bipolar motion is the observation-layer relationship, not a new cipher.
+The approach/admission trajectories are event-driven; independently clocked
+presence is opt-in and documented below. It does not hide all public envelope metadata or guarantee safety from a compromised local host. Authenticated signatures and native evidence checks still control actual admission; bipolar motion is the observation-layer relationship, not a new cipher.
 
 ## Independently continuing bipolar presence
 
@@ -265,9 +266,12 @@ ordinary vetted cryptography and operator trust policies.
 allow a willing participant to type an entire submitted message into an
 **explicit local A/B experiment**. Only complete messages deliberately
 submitted after an informational consent notice appear in a bounded,
-in-memory transcript. The recorded probe steps cycle through
-`threshold → turn → mirror → passage`; they never count as native worker
-admission and never access protected keys.
+in-memory transcript. Submissions now **read** the independently
+moving bipolar presence: they never step, reverse or stop it. The
+observed orientation points to an explicitly fictional branch of words,
+which always leads to another branch rather than any real key. Code-like
+input selects a static Python, JavaScript, SQL, shell or prompt-shaped
+signpost; no submitted code or instructions are ever executed.
 
 This is **not** a covert keylogger, OS keyboard hook, recording service,
 honeypot for unsuspecting people, public network listener, or log of
