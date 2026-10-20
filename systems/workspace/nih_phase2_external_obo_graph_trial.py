@@ -213,7 +213,8 @@ def execute(files):
             static=sparql_oracle(rows,src,tgt,p,known,valid,ignore_clocks=True)
             temporal_all_paths=sparql_oracle(rows,src,tgt,p,known,valid,ignore_clocks=False)
             cases.append({
-                "source_domain":domain,"source_path_category":path_type,\n                "source_subject":src,"source_object":tgt,
+                "source_domain":domain,"source_path_category":path_type,
+                "source_subject":src,"source_object":tgt,
                 "source_predicate":p,"test_known_at_synthetic":known,
                 "test_target_at_synthetic":valid,
                 "AB_two_hop":ab["path_exists"],
