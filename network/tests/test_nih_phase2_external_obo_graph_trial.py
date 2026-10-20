@@ -66,6 +66,10 @@ class IndependentExternalOBOTests(unittest.TestCase):
         self.assertGreater(len(edges),400)
         self.assertEqual(set(sources),{"ro-base.owl","core.owl"})
         self.assertEqual({x["version"] for x in sources.values()},{"2026-09-04"})
+        self.assertEqual(
+            {n:x["sha256"] for n,x in sources.items()},
+            a.PINNED_WHOLE_SOURCE_SHA256,
+        )
         self.assertTrue(all(len(x["sha256"])==64 for x in sources.values()))
         self.assertTrue(any(x[3]=="biological-classes" for x in edges))
         self.assertTrue(any(x[3]=="relation-types" for x in edges))
@@ -78,6 +82,13 @@ class IndependentExternalOBOTests(unittest.TestCase):
                          report["scored_cases"])
         self.assertGreater(report["full_static_true_cases"],0)
         self.assertGreater(report["static_future_leakage_cases"],0)
+        self.assertGreater(report["original_three_hop_only_case_count"],0)
+        self.assertGreater(report["static_reasoner_reachable_three_hop_AB_misses"],0)
+        self.assertTrue(any(
+            row["source_path_category"]=="three-hop-without-shorter"
+            and row["full_external_graph_static_RDF_property_path_plus"]
+            and not row["AB_two_hop"] for row in report["cases"]
+        ))
         self.assertTrue(report["synthetic_clock_overlay_only"])
         self.assertFalse(report["source_original_edge_publication_times_authenticated"])
         self.assertFalse(report["NIH_Phase2_reproduced"])
