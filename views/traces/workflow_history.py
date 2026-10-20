@@ -126,7 +126,16 @@ def fetch_from_github(token, repo=REPO):
 
 def main():
     token = os.environ.get("GH_TOKEN", "")
-    doc = collect(fetch_from_github(token))
+    fetch_page = fetch_from_github(token)
+    # Concurrent GitHub runs can shift page offsets during the first walk.
+    # Start afresh on an inconsistent snapshot; never patch gaps with guesses.
+    for attempt in range(3):
+        doc = collect(fetch_page)
+        if doc["complete"]:
+            break
+        if attempt < 2:
+            print("Source changed during collection or returned partial pages; retrying a fresh walk")
+            time.sleep(3 * (attempt + 1))
     if not doc["runs"]:
         raise RuntimeError("GitHub returned no valid recorded workflow identities")
     if not doc["complete"]:
