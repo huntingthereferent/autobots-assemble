@@ -8,6 +8,8 @@ import json
 import mimetypes
 import os
 import threading
+from ipaddress import ip_address
+from urllib.parse import urlsplit
 
 from runtime.service import EcosystemService
 from runtime.research_board import load_research_board
@@ -25,8 +27,10 @@ HOST = os.environ.get("HOST", "127.0.0.1")
 PORT = int(os.environ.get("PORT", "8040"))
 LOCK = threading.RLock()
 POOL_ENABLED = os.environ.get("CONTINUITY_AGENT_POOL", "").lower() in {"1", "true", "yes"}
-if POOL_ENABLED and HOST not in {"127.0.0.1", "::1", "localhost"}:
-    raise ValueError("Continuity agent pool is local-only")
+# Existing service endpoints include unsiged mutable records and private state.
+# No remote bind is safe until external authentication and storage are audited.
+if HOST not in {"127.0.0.1", "::1", "localhost"}:
+    raise ValueError("Ecosystem HTTP entrance is loopback-only; external access requires a separate authenticated gateway")
 if POOL_ENABLED:
     from runtime.pool_evaluator import ContinuityPoolEvaluator
     POOL_EVALUATOR = ContinuityPoolEvaluator(ROOT.parent)
@@ -43,11 +47,63 @@ if POOL_EVALUATOR is not None:
     POOL_BOOT = connect_pool(SERVICE, ROOT.parent)
 
 
+MAX_HTTP_JSON = 1_500_000
+
+
+def _loopback(value):
+    try:
+        return ip_address(value).is_loopback
+    except ValueError:
+        return value == "localhost"
+
+
+def trusted_http_request(handler, *, write=False):
+    """Fail closed for browser-origin, DNS rebinding and off-host requests.
+
+    Loopback access is a transport boundary, NOT a local-user authentication
+    claim. Dedicated signed API operations require their own enrolled keys.
+    """
+    if not _loopback(handler.client_address[0]):
+        return False
+    port = handler.server.server_port
+    host = handler.headers.get("Host", "")
+    try:
+        target = urlsplit("http://" + host)
+        if (not _loopback(target.hostname or "") or target.port != port
+                or target.username is not None or target.password is not None
+                or target.path or target.query or target.fragment):
+            return False
+        origin = handler.headers.get("Origin")
+        if origin is not None:
+            o = urlsplit(origin)
+            if (o.scheme != "http" or o.hostname != target.hostname
+                    or o.port != port or o.username is not None
+                    or o.password is not None or o.path or o.query or o.fragment):
+                return False
+    except ValueError:
+        return False
+    if handler.headers.get("Sec-Fetch-Site", "").casefold() in {"cross-site", "same-site"}:
+        return False
+    if write:
+        if handler.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
+            return False
+        try:
+            size = int(handler.headers.get("Content-Length", "0"))
+        except ValueError:
+            return False
+        if not 0 < size <= MAX_HTTP_JSON or handler.headers.get("Transfer-Encoding"):
+            return False
+    return True
+
+
 def read_json(handler):
     size = int(handler.headers.get("Content-Length", "0"))
-    if size <= 0:
-        return {}
-    return json.loads(handler.rfile.read(size).decode("utf-8"))
+    if not 0 < size <= MAX_HTTP_JSON:
+        raise ValueError("bounded JSON body required")
+    obj = json.loads(handler.rfile.read(size).decode("utf-8"))
+    if type(obj) is not dict:
+        raise ValueError("JSON object required")
+    return obj
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -76,6 +132,9 @@ class Handler(BaseHTTPRequestHandler):
         )
 
     def do_GET(self):
+        if not trusted_http_request(self):
+            self.send_json({"error": "loopback host and same-origin request required"}, 403)
+            return
         parsed = urlparse(self.path)
         query = parse_qs(parsed.query)
 
@@ -253,6 +312,9 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(raw)
 
     def do_POST(self):
+        if not trusted_http_request(self, write=True):
+            self.send_json({"error": "bounded same-origin JSON request on loopback required"}, 403)
+            return
         parsed = urlparse(self.path)
         try:
             payload = read_json(self)
