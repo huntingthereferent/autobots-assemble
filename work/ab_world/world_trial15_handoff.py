@@ -204,7 +204,7 @@ def carry(native: dict, refusal: dict, source_commit: str = PIN) -> dict:
             "unsupported endpoint candidate promoted to a contact")
     declined_plan = {
         "schema": PLAN, "referent": "WORLD15 / square endpoint ambiguity",
-        "limits": {"objects": 2, "relations": 0, "steps": 3},
+        "limits": {"objects": 2, "relations": 1, "steps": 3},
         "steps": [
             {"op": "introduce", "id": "finite-input-source",
              "state": deepcopy(refusal["source"]), "basis": owner},
