@@ -120,8 +120,10 @@ def trial(body, *, angle=0., anchor=SOURCE):
     representative = add(p1, contact_offset(body, n))
     tangent = (-n[1], n[0])
     along = dot(sub(representative, anchor), tangent)
+    # A corner outside the finite interior can still encounter an endpoint.
+    # Endpoint dynamics are NOT solved here, so do not call it a physical miss.
     if abs(along) >= SPAN/2-EPS:
-        return {**baseline, "status": "MISSED_FINITE_SOURCE",
+        return {**baseline, "status": "NO_ADMITTED_INTERIOR_CONTACT",
                 "receiver": None, "contacts": [], "frames": []}
     if any(not (R <= p1[i] <= FOOTPRINT[i]-R) for i in range(2)):
         return {**baseline, "status": "SOURCE_OUTSIDE_WORLD",
@@ -140,7 +142,7 @@ def trial(body, *, angle=0., anchor=SOURCE):
     second_point = add(p2, contact_offset(body,n2))
     t2 = (-n2[1], n2[0])
     if abs(dot(sub(second_point,a2),t2)) >= SPAN/2-EPS:
-        return {**baseline, "status": "MISSED_DERIVED_FINITE_FACE",
+        return {**baseline, "status": "NO_ADMITTED_DERIVED_INTERIOR_CONTACT",
                 "receiver": None, "contacts": [], "frames": []}
     if any(not (R <= p2[i] <= FOOTPRINT[i]-R) for i in range(2)):
         return {**baseline, "status": "RECEIVER_OUTSIDE_WORLD",
