@@ -1,0 +1,98 @@
+name: NIH P2 external OBO graph vs static RDF reasoning
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_phase2_external_obo_graph_trial.py'
+      - 'network/tests/test_nih_phase2_external_obo_graph_trial.py'
+      - 'systems/workspace/NIH_PHASE2_EXTERNAL_OBO_GRAPH_TRIAL.md'
+      - '.github/workflows/nih-p2-external-obo-static-vs-temporal.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Superseded branch-push experiments should not clog the independent verifier.
+concurrency:
+  group: nih-p2-obo-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  original-ontology-graph-reasoning:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install original graph/SPARQL and bounded OWL RL rule evaluator
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Retrieve exact public source-owner ontology release files
+        env:
+          ORIGINAL_OBO_COMMIT: 091f4761ec84657cc336d623e02006d6c351722c
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/external-obo" "$RUNNER_TEMP/nih-p2-external"
+          python - <<'PY'
+          from urllib.request import urlopen,Request
+          import hashlib,os
+          from pathlib import Path
+          root="https://raw.githubusercontent.com/oborel/obo-relations/"+os.environ["ORIGINAL_OBO_COMMIT"]+"/"
+          dest=Path(os.environ["RUNNER_TEMP"])/"external-obo"
+          for n in ("ro-base.owl","core.owl"):
+              url=root+n
+              with urlopen(Request(url,headers={"User-Agent":"AB-P2-Original-OBO-ReadOnly/1.0"}),timeout=35) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("source host, immutable exact commit or response changed")
+                  raw=response.read(5_000_001)
+              if not 5000<len(raw)<5_000_000:
+                  raise ValueError("original ontology source too small or too large")
+              (dest/n).write_bytes(raw)
+              print(n,len(raw),hashlib.sha256(raw).hexdigest())
+          PY
+      - name: Check narrow source-graph reasoning and independent RDF oracles
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/external-obo/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/external-obo/core.owl
+        run: python -m unittest -v network.tests.test_nih_phase2_external_obo_graph_trial
+      - name: Run real external OBO graph and stronger static-KG reasoner comparison
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/external-obo/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/external-obo/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_phase2_external_obo_graph_trial \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/nih-p2-external/obo-original-temporal-vs-static.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          f=Path(os.environ["RUNNER_TEMP"])/"nih-p2-external/obo-original-temporal-vs-static.json"
+          d=json.loads(f.read_text())
+          assert d["schema"]=="nih-phase2-external-obo-original-rdf-inference-comparison/v1"
+          assert d["original_source_git_commit"]=="091f4761ec84657cc336d623e02006d6c351722c"
+          assert d["scored_cases"]>=90
+          assert d["scored_cases"]==d["AB_equals_independent_exact_two_hop_cases"]
+          assert d["static_future_leakage_cases"]>0
+          assert d["original_three_hop_only_case_count"]>0
+          assert d["static_reasoner_reachable_three_hop_AB_misses"]>0
+          assert d["source_original_edge_publication_times_authenticated"] is False
+          assert d["actual_original_disjointness_with_synthetic_inconsistent_fixture"]["owlrl_error_signal_count"]>0
+          assert d["actual_original_disjointness_with_synthetic_inconsistent_fixture"]["full_owl_dl_consistency_verified"] is False
+          assert d["NIH_Phase2_reproduced"] is False
+          assert d["original_W13_engine_modified"] is False
+          assert d["original_raw_ontology_files_redistributed"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-external" && sha256sum obo-original-temporal-vs-static.json > sha256.txt)
+      - name: Retain derived source and answers, not third party ontology files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-phase2-external-obo-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-external/
+          retention-days: 30
+          if-no-files-found: warn
