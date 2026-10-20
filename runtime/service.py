@@ -60,6 +60,7 @@ class EcosystemService:
         self.data_dir.mkdir(parents=True, exist_ok=True)
         # Explicit trusted-host configuration only. Never enroll keys from HTTP.
         self._security_ingresses = {}
+        self._native_security_presence = None  # trusted opt-in; no auto thread
         # A sealed history must never open legacy HTTP routes even during
         # the interval before operator signers are enrolled.
         self._protected_runtime = protected_runtime_key is not None
@@ -625,6 +626,43 @@ class EcosystemService:
             raise PermissionError("HTTP ingress requires the active B14 operator key policy")
         ingress.authority.require_current_operator_pin()
         self._security_ingresses[role] = ingress
+
+    def start_local_key_presence(self, *, interval_seconds: float = 0.02) -> None:
+        """Trusted native host starts bipolar presence independent of requests.
+
+        Never exposed through HTTP. This only observes a finite trajectory;
+        it does not rekey, decrypt, authorize work or claim continuous
+        cryptographic protection.
+        """
+        from security.sealed_journal import SealedRuntimeJournal
+        from security.key_approach import NativePresenceRunner
+        if not isinstance(self.runtime.event_store, SealedRuntimeJournal):
+            raise PermissionError("key presence requires sealed native runtime")
+        if self._native_security_presence is not None:
+            raise ValueError("key presence is already configured")
+        a = self._security_ingresses.get("submit")
+        b = self._security_ingresses.get("result")
+        if a is None or b is None or a.key_approach is not b.key_approach:
+            raise PermissionError("both signer roles and shared native presence required")
+        x, y = a.authority, b.authority
+        if (x.lane != y.lane or x.signer_actor != y.receiver_actor
+                or x.receiver_actor != y.signer_actor):
+            raise PermissionError("reciprocal native actor/lane scope required")
+        if x.operator_pin_ledger is None or y.operator_pin_ledger is None:
+            raise PermissionError("operator-pinned signer authority required")
+        x.require_current_operator_pin()
+        y.require_current_operator_pin()
+        runner = NativePresenceRunner(a.key_approach, interval_seconds=interval_seconds)
+        runner.start()
+        self._native_security_presence = runner
+
+    def stop_local_key_presence(self) -> None:
+        """Trusted local lifecycle control; safe even when never started."""
+        runner = self._native_security_presence
+        if runner is None:
+            return
+        runner.stop()
+        self._native_security_presence = None
 
     def authenticated_submit(self, payload: dict[str, Any]) -> dict[str, Any]:
         """Only operator-installed, authenticated external handoffs are admitted."""
