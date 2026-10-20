@@ -1,0 +1,134 @@
+name: A/B WORLD Trial19 nominal interval-separation source evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial19_handoff.py'
+      - 'network/tests/test_ab_world_trial19_handoff.py'
+      - 'work/ab_world/TRIAL19_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial19-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-nominal-math-to-bounded-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout bounded neutral A/B recorder
+        uses: actions/checkout@v4
+      - name: Checkout immutable original WORLD19 mathematical source
+        uses: actions/checkout@v4
+        with:
+          ref: cd6fba355d82a6af25772bb08b0ce10c2b491d51
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify original Trial04,17,18,19 geometry and whole-interval extrema
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_square_first_recontact \
+            network.tests.test_world_ab_local_recontact_impulse \
+            network.tests.test_world_ab_continuous_separation
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from systems.workspace.world_ab_continuous_separation import run
+          from network.tests.test_world_ab_continuous_separation import independent_check
+          report=run()
+          assert report["conditional_continuous_clearance_count"] == 6
+          assert report["no_second_impulse_count"] == 2
+          assert report["inconclusive_count"] == 0
+          assert len(report["cases"]) == 8
+          assert all(independent_check(case) for case in report["cases"])
+          assert not report["all_earth_physics_verified"]
+          assert not report["physics_engine_created"]
+          assert not report["new_receiver_created"]
+          Path("../trial19-original-native.json").write_text(
+              json.dumps(report, sort_keys=True, indent=2, allow_nan=False)+"\n")
+          Path("../trial19-original-verdict.json").write_text(
+              json.dumps({
+                  "pinned_source":"cd6fba355d82a6af25772bb08b0ce10c2b491d51",
+                  "independent_corner_extrema_verified":True,
+                  "conditional_nominal_separations":6,
+                  "no_second_impulse_controls":2,
+                  "formal_floating_point_certificates":0,
+                  "real_material_measurements":0,
+                  "receivers_constructed":0
+              },sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Test separate neutral A/B record and source-identity negative controls
+        run: python -m unittest -v network.tests.test_ab_world_trial19_handoff
+      - name: Preserve original conditional bound evidence in eight independent receipts
+        run: |
+          python -m work.ab_world.world_trial19_handoff \
+            --native trial19-original-native.json > trial19-ab-carrier.json
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          carrier=json.load(open("trial19-ab-carrier.json"))
+          assert carrier["ledger_witness"]["valid"]
+          assert carrier["ledger_witness"]["pages_verified"] == 8
+          assert carrier["source_cases"] == 8
+          assert carrier["conditional_nominal_separation_cases"] == 6
+          assert carrier["no_second_impulse_controls"] == 2
+          assert carrier["mathematical_intervals_formally_certified"] == 0
+          assert carrier["physical_contacts_measured"] == 0
+          assert carrier["postcontact_material_trajectories_verified"] == 0
+          assert carrier["receivers_constructed"] == 0
+          assert digest(carrier["manifest"]) == carrier["manifest_sha256"]
+          folder=Path("trial19-ab-pages")
+          folder.mkdir(exist_ok=True)
+          for page in carrier["ledger_pages"]:
+              idx=page["index"]
+              receipt=page["receipt"]
+              assert verify_receipt(receipt)["valid"]
+              assert receipt["head_hash"] == carrier["manifest"]["ordered_pages"][idx]["head_hash"]
+              assert set(receipt["final"]["objects"]) == {
+                  "original-finite-source-face","conditional-rotating-square"}
+              assert receipt["final"]["comparisons"]["conditional-separation-versus-no-proof"]["result"] == (
+                  "DIFFERENT" if page["conditional_whole_interval_separation"] else "MATCH")
+              folder.joinpath(f"case-{idx:02d}.json").write_text(
+                  json.dumps(receipt,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("trial19-ab-manifest.json").write_text(
+              json.dumps(carrier["manifest"],sort_keys=True,indent=2)+"\n")
+          print(json.dumps({"source_cases":8,"independent_ledger_pages":8,
+                            "conditional_full_interval_math":6,
+                            "real_physical_certificates":0,
+                            "ledger_operations":carrier["ledger_witness"]["steps_verified"]},
+                            sort_keys=True))
+          PY
+          for n in $(seq 0 7); do
+            page=$(printf '%02d' "$n")
+            python -m work.ab_world.construction \
+              --verify "trial19-ab-pages/case-$page.json" > "trial19-ab-pages/verdict-$page.json"
+          done
+          sha256sum \
+            original-world/systems/workspace/world_ab_continuous_separation.py \
+            original-world/network/tests/test_world_ab_continuous_separation.py \
+            trial19-original-native.json trial19-original-verdict.json \
+            trial19-ab-carrier.json trial19-ab-manifest.json \
+            trial19-ab-pages/case-*.json trial19-ab-pages/verdict-*.json \
+            > trial19-source-digests.txt
+      - name: Retain native source oracle and reconstructed A/B evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial19-whole-interval-conditional-math
+          path: |
+            trial19-original-native.json
+            trial19-original-verdict.json
+            trial19-ab-carrier.json
+            trial19-ab-manifest.json
+            trial19-ab-pages/
+            trial19-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
