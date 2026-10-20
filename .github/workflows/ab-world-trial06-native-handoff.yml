@@ -1,0 +1,103 @@
+name: A/B WORLD Trial06 continuous native movement handoff
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial06_handoff.py'
+      - 'network/tests/test_ab_world_trial06_handoff.py'
+      - 'work/ab_world/TRIAL06_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial06-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-continuous-source-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout general A/B construction carrier
+        uses: actions/checkout@v4
+      - name: Checkout pinned independent original WORLD source
+        uses: actions/checkout@v4
+        with:
+          ref: 75a78478b3a437f55e8efc138d746c8096dae8d9
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Exercise carrier cases and negative controls
+        run: python -m unittest -v network.tests.test_ab_world_trial06_handoff
+      - name: Execute original native continuous trajectories and independent physics witness
+        working-directory: original-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_junction_continuous network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_junction_continuous import run
+          from network.tests.test_world_ab_junction_continuous import check
+          result = run()
+          assert check(result)
+          assert len(result["probe_levels"]) == 10
+          assert result["completed_cases"] == 10
+          assert result["unresolved_cases"] == []
+          Path("../trial06-original-native.json").write_text(
+              json.dumps(result, sort_keys=True, indent=2) + "\n",
+              encoding="utf-8")
+          Path("../trial06-original-verdict.json").write_text(
+              json.dumps({
+                  "source_commit": "75a78478b3a437f55e8efc138d746c8096dae8d9",
+                  "native_replay_checked": True,
+                  "connected_complete_count": result["completed_cases"],
+                  "source_claim": "nominal virtual mechanics, not physical measurements",
+              }, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+          PY
+      - name: Carry time-ordered native frames and check independent A/B ledger
+        run: |
+          python -m work.ab_world.world_trial06_handoff \
+            --native trial06-original-native.json \
+            --source-commit 75a78478b3a437f55e8efc138d746c8096dae8d9 \
+            > trial06-ab-motion-receipt.json
+          python - <<'PY'
+          import json
+          original = json.load(open("trial06-original-native.json"))
+          record = json.load(open("trial06-ab-motion-receipt.json"))
+          assert record["ledger_witness"]["valid"]
+          assert record["probes_carried"] == 10
+          assert record["trajectories_carried"] == 20
+          assert record["sampled_frames_carried"] >= 300
+          assert record["connected_completed"] == 10
+          assert record["connected_unresolved"] == []
+          assert record["ledger_witness"]["objects_live"] == 22
+          assert record["ledger_witness"]["observations_recorded"] == 20
+          assert len(record["ledger_witness"]["comparisons"]) == 10
+          assert not record["native_dynamics_verified_by_this_adapter"]
+          assert not record["physical_measurements_verified"]
+          assert not record["multicontact_solver_inferred"]
+          assert original["multi_contact_manifold_solver"] is False
+          print(json.dumps({
+              "witnessed_ledger_steps": record["ledger_witness"]["steps_verified"],
+              "source_probe_count": record["probes_carried"],
+              "frames": record["sampled_frames_carried"],
+              "distinct_motion_paths": record["trajectories_carried"]
+          }, sort_keys=True))
+          PY
+          python -m work.ab_world.construction --verify trial06-ab-motion-receipt.json > /dev/null || true
+          sha256sum \
+            original-world/systems/workspace/world_ab_junction_continuous.py \
+            original-world/network/tests/test_world_ab_junction_continuous.py \
+            trial06-original-native.json trial06-original-verdict.json \
+            trial06-ab-motion-receipt.json > trial06-ab-source-hashes.txt
+      - name: Preserve original source observations and general A/B witness
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial06-native-continuity
+          path: |
+            trial06-original-native.json
+            trial06-original-verdict.json
+            trial06-ab-motion-receipt.json
+            trial06-ab-source-hashes.txt
+          retention-days: 30
