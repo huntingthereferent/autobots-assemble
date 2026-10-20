@@ -312,3 +312,27 @@ code-like input remaining inert, and both directions through the
 actual CLI. This is not proof of resistance to host compromise, false
 metadata disclosure, malicious processes or unreviewed real HTTP
 entrances. It is **not** an operational honeypot or a public route.
+
+## SEC-25 — local graphical branch viewer, not a deployed honeypot
+
+A new dedicated [opt-in loopback maze browser](BRANCH_BROWSER.md) offers
+a responsive HTML view of the actual Python-owned `KeyApproachBoundary`,
+its independently clocked `NativePresenceRunner` and the bounded
+`branch_world` graph. The browser owns no alternate motion clock.
+The handler has only seven fixed routes, a consented in-memory session
+token, strict same-origin/loopback checks, limited JSON, and in-memory
+erase. It has **no** reference to the native worker service, signed
+key ingress, private keys, real filesystem paths or command interpreters.
+
+Actual localhost HTTP integration tests cover incoming consent/session
+rules, native idle ticks without message submissions, code-like input
+as inert static text, error paths, cross-origin refusal and transcript
+erasure. Client JavaScript renders supplied text through `textContent`,
+not markup. The page includes no third-party dependencies.
+
+**Not resolved:** localhost HTTP does not authenticate operating-system
+processes, and browser HTML/CSS/JS has not been independently replayed
+under Chromium in CI. Closing a tab does not erase a session until the
+local server is stopped or Erase is selected. Redaction remains
+best-effort. Nothing is deployed, and this is not a true adversarial
+sandbox, no-leak defense or production intrusion detector.
