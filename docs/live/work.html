@@ -720,7 +720,7 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
   }
   async function selectRun(id,focus=false){
     if(!Number.isSafeInteger(id)||id<1)return;const r=app.runs.find(x=>x.id===id);if(!r)return;
-    app.selection=id;renderRuns();
+    app.selection=id;app.selectedUpdated=r.updated;renderRuns();
     if($("revision-panel").open)loadRevision(r);
     else $("revision-scope").textContent="Run "+r.id+" · open for exact source paths";
     const area=$("detail");area.replaceChildren();
@@ -761,7 +761,7 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
     const match=v=>String(v||"").toLowerCase().includes(q);
     const items=r.records.filter(x=>(type==="all"||x.source_type===type)&&(!q||[x.label,x.path,x.state,x.source_type,x.scope,x.next,x.boundary].some(match)));
     const area=$("research-records");area.replaceChildren();
-    for(const rec of items){
+    for(const rec of items.slice(0,app.recordVisible)){
       const item=el("article",undefined,"record");const head=el("header");
       head.append(el("h3",rec.label||rec.path),pill(rec.state||"unknown"));item.append(head);
       item.append(el("p",rec.source_type+" · "+(rec.scope||"original recorded result")));
@@ -770,11 +770,12 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
       const href=srcLink(rec.path);if(href)item.append(href);area.append(item);
     }
     if(!items.length)area.append(el("p","No matching source records.","no-source"));
-    $("research-count").textContent=items.length+" / "+r.records.length+" source records";
+    $("research-count").textContent=Math.min(items.length,app.recordVisible)+" / "+items.length+" matches · "+r.records.length+" records";
+    $("show-more-records").hidden=items.length<=app.recordVisible;
     const movements=Array.isArray(r.movements) ? r.movements : [];
     const matching=movements.filter(x=>!q||[x.title,x.path,x.state,x.boundary,x.next].some(match));
     const mv=$("research-movements");mv.replaceChildren();
-    for(const m of matching.slice(0,120)){
+    for(const m of matching.slice(0,app.movementVisible)){
       const item=el("article",undefined,"record");
       const head=el("header");
       head.append(el("h3",m.title||m.path),pill(m.state||"unknown"));item.append(head);
@@ -785,15 +786,17 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
       mv.append(item);
     }
     if(!matching.length)mv.append(el("p","No source-labeled movements match.","no-source"));
-    $("movement-count").textContent=matching.length+" / "+movements.length+" recorded source locators"+(matching.length>120?" (first 120 shown)":"");
+    $("movement-count").textContent=Math.min(matching.length,app.movementVisible)+" / "+matching.length+" matches · "+movements.length+" source locators";
+    $("show-more-movements").hidden=matching.length<=app.movementVisible;
     const walls=r.walls.filter(x=>!q||[x.text,x.path,x.kind].some(match)),box=$("research-walls");box.replaceChildren();
-    for(const w of walls){
+    for(const w of walls.slice(0,app.wallVisible)){
       const card=el("article",undefined,"wall");card.append(el("p",w.text||"Original wall"));
       card.append(el("small",w.kind==="source-recorded-wall"?"Explicit structured wall":"Documented heading only"));
       const ref=srcLink(w.path,w.line);if(ref)card.append(el("div",undefined,"fine"),ref);box.append(card);
     }
     if(!walls.length)box.append(el("p","No matching wall records.","no-source"));
-    $("wall-count").textContent=walls.length+" / "+r.walls.length+" original source locators";
+    $("wall-count").textContent=Math.min(walls.length,app.wallVisible)+" / "+walls.length+" matches · "+r.walls.length+" source locators";
+    $("show-more-walls").hidden=walls.length<=app.wallVisible;
   }
   async function loadResearch(){try{const json=await getJSON(SOURCE+"?v="+Math.floor(Date.now()/PERIOD));
       if(json?.schema!=="workstation-live-projection/v1"||!Array.isArray(json.records)||!Array.isArray(json.walls)||!Array.isArray(json.movements))throw Error("Unexpected workstation source schema");
@@ -902,8 +905,14 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
   });
   $("workflow-filter").addEventListener("change",()=>{app.runVisible=20;renderRuns()});
   $("load-older").addEventListener("click",loadOlder);
-  $("source-search").addEventListener("input",renderResearch);
-  $("source-filter").addEventListener("change",renderResearch);
+  function resetResearchLimits(){
+    app.recordVisible=16;app.movementVisible=18;app.wallVisible=12;renderResearch();
+  }
+  $("source-search").addEventListener("input",resetResearchLimits);
+  $("source-filter").addEventListener("change",resetResearchLimits);
+  $("show-more-records").addEventListener("click",()=>{app.recordVisible+=16;renderResearch()});
+  $("show-more-movements").addEventListener("click",()=>{app.movementVisible+=18;renderResearch()});
+  $("show-more-walls").addEventListener("click",()=>{app.wallVisible+=12;renderResearch()});
   $("tick-form").addEventListener("submit",e=>{
     e.preventDefault();if(!connectTick($("tick-url").value.trim()))$("tick-url").focus();
   });
