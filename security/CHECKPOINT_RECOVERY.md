@@ -47,6 +47,9 @@ or envelope is automatically saved by the implementation.
 `recover_journal_key` requires:
 
 - The independently confirmed original journal identity and signed checkpoint.
+- A **separately pinned checkpoint signer public key**, checked against
+  the checkpoint Ed25519 signature before any envelope decryption. A
+  recovery-envelope signature never substitutes for checkpoint authority.
 - The operator's independently enrolled **public** signing key.
 - The recovery recipient's X25519 **private** key, held outside the original
   workstation.
@@ -90,3 +93,14 @@ signed sequence, a forked valid encrypted database, a different journal,
 tampered anchors, wrong signer, unverified concurrent movement, wrong escrow
 recipient, package replay, wrong journal key, and a recovered key opening the
 original native runtime records.
+
+## Adversarial review correction
+
+The initial recovery implementation accepted signed checkpoint bytes as
+parent context without independently validating their Ed25519 signature
+during offline recovery. This has been corrected: the recovery call now
+requires `trusted_checkpoint_public_key` and verifies it before opening
+the operator-signed recovery envelope. A regression constructs a
+*cryptographically valid* operator recovery envelope referencing a forged
+checkpoint and confirms refusal. See [security review and local
+staging](REVIEW_AND_STAGING.md).
