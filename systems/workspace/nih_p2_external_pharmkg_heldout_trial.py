@@ -26,7 +26,7 @@ COMMIT="a7daec6b4d6c785c157b8cf693a4651756cb8647"
 SOURCE_FILES={
     "train.tsv":"9047084dd741eab80499c19a5d11d80143d99906",
     "test.tsv":"6f842d19d8fd49017335ac71e2e7e9479ed75595",
-    "valid.tsv":"1f82ceb4ac9b1eb4b8f9c98dccb531553501f4977",
+    "valid.tsv":"1f82ceb4ac678581401ead95f8a000d975bc0288",
 }
 # Frozen selection before observing source-specific model performance.
 RELATIONS=("GG","T","P","I")
