@@ -48,6 +48,19 @@ class BoundedWorkerContext:
             target_revision=target_revision, kind=kind, reason=reason)
 
 
+    def review_help(self, *, proposal_ref: str, decision: str,
+                    reason: str) -> dict:
+        """Record a decision on help addressed to THIS worker's native step.
+
+        INSPECT means useful to investigate, not a claim that the other
+        branch is better. No native reroute or source operation is invoked.
+        """
+        return self._frontier.review_help_from_native_handoff(
+            self._runtime, handoff_id=self._position.handoff_id,
+            revision=self._position.revision, step_id=self._position.step_id,
+            proposal_ref=proposal_ref, decision=decision, reason=reason)
+
+
 NativeWorkerHandler = Callable[[Handoff, BoundedWorkerContext], ExecutionResult]
 
 
