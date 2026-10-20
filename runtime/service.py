@@ -443,6 +443,8 @@ class EcosystemService:
         return rows
 
     def activate_agent(self, payload: dict[str, Any]) -> dict[str, Any]:
+        if "result" in self._security_ingresses:
+            raise PermissionError("unsigned agent activation disabled under signed worker policy")
         activated = self.agent_bridge.activate(payload)
         if self.agent_lineage.evaluate is not None:
             self.agent_lineage.run_until_idle(activated["root"])
@@ -450,6 +452,8 @@ class EcosystemService:
         return activated
 
     def agent_result(self, agent_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+        if "result" in self._security_ingresses:
+            raise PermissionError("unsigned agent result disabled under signed worker policy")
         returned = self.agent_bridge.result(agent_id, payload)
         if self.agent_lineage.evaluate is not None:
             root = returned["lineage"]["root"]
@@ -649,6 +653,8 @@ class EcosystemService:
         *,
         actor_id: str,
     ) -> dict[str, Any]:
+        if "result" in self._security_ingresses:
+            raise PermissionError("unsigned handoff result disabled under signed worker policy")
         if self.runtime.get(handoff_id).metadata.get("agent_lineage") is True:
             raise ValueError("agent lineage results require POST /api/agents/{id}/result")
         evidence = tuple(
