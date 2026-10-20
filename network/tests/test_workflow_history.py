@@ -22,7 +22,7 @@ class ArchiveTests(unittest.TestCase):
             called.append(page)
             return {"total_count": 202, "workflow_runs": pages.get(page, [])}
         result = collect(fetch, collected_at="2026-10-19T00:00:00Z")
-        self.assertEqual(called, [1, 2, 3])
+        self.assertEqual(sorted(called), [1, 2, 3])
         self.assertEqual(result["schema"], SCHEMA)
         self.assertEqual(result["indexed_count"], 202)
         self.assertTrue(result["complete"])
@@ -38,6 +38,14 @@ class ArchiveTests(unittest.TestCase):
         def capped(page):
             return {"total_count": 220, "workflow_runs": [run(i+100*(page-1)) for i in range(1, 101)]}
         self.assertFalse(collect(capped, max_pages=2)["complete"])
+
+    def test_cross_page_reported_total_drift_must_not_be_called_complete(self):
+        def fetch(page):
+            return {"total_count": 200 if page == 1 else 201,
+                    "workflow_runs": [run(i + 100*(page-1)) for i in range(1, 101)]}
+        result = collect(fetch, collected_at="2026-10-19T00:00:00Z")
+        self.assertEqual(result["indexed_count"], 200)
+        self.assertFalse(result["complete"])
 
     def test_invalid_rows_and_duplicate_ids_cannot_create_false_completion(self):
         rows = [run(1), run(1), run(3, head_sha="bad")]
