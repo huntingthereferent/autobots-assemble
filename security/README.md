@@ -216,3 +216,16 @@ certificates and separately owned source/observer journals on one
 runner. Neither real internet transport nor physical multi-host
 resilience is established. Security preflight for public deployment
 remains blocked.
+
+## Certificate authorization on witness transport (SEC-20)
+
+The [observer transport's certificate lifecycle](WITNESS_TRANSPORT.md)
+uses the existing local B14 operator-pin ledger rather than treating
+a successful TLS handshake as indefinite authority. A trusted operator
+must separately enroll each source's exact client-certificate DER digest.
+The receiver checks current enrollment at construction, on each witness
+request and after the proof checks before persisting an observation.
+Tests cover revocation of an already-running client, rotation that
+requires trusted listener reconfiguration, corrupt policy, and denial
+when revocation occurs during proof verification. This is not an atomic
+policy/journal commit or a production CA revocation service.
