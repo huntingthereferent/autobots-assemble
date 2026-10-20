@@ -20,6 +20,7 @@ from runtime.journal import handoff_from_dict, handoff_to_dict
 from .continuation import (EnvelopeError, ReplayLedger, open_record, seal_record,
                            verify_record, envelope_digest)
 from .sealed_journal import SealedRuntimeJournal
+from .key_approach import KeyApproachBoundary
 
 HANDOFF_VERSION = "ab-runtime-handoff/v1"
 RESULT_VERSION = "ab-runtime-result/v1"
@@ -144,7 +145,14 @@ def _serialize_authenticated_movement(method):
     @wraps(method)
     def locked(self, *args, **kwargs):
         with self.runtime._authenticated_admission_lock:
-            return method(self, *args, **kwargs)
+            # Approach is observed without access to key bytes. Only a
+            # successfully committed native movement advances the separate
+            # protected trajectory. The actual cryptographic and witness
+            # checks are still the sole admission authority.
+            self.key_approach.approach()
+            result = method(self, *args, **kwargs)
+            self.key_approach.admitted()
+            return result
     return locked
 
 
@@ -165,6 +173,7 @@ class AuthenticatedHandoffIngress:
         self.runtime = runtime
         self.ledger = ledger
         self.authority = authority
+        self.key_approach = KeyApproachBoundary()
 
     def _open(self, envelope: dict, expected_parent_sha256: str | None) -> bytes:
         self.authority.require_current_operator_pin()
