@@ -10,6 +10,7 @@ from hashlib import sha256
 from http.client import HTTPSConnection
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from unittest.mock import patch
 import json
 import os
 import ssl
@@ -24,7 +25,7 @@ from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
 from runtime.engine import HandoffRuntime
 from runtime.handoff import Handoff
 from security.journal_checkpoint import issue_checkpoint
-from security.observer_anchor import issue_observer_anchor
+from security.observer_anchor import issue_observer_anchor, verify_observer_anchor
 from security.remote_witness import RemoteWitnessLedger, export_witness_span
 from security.witness_transport import (
     WitnessOnlyHTTPServer, witness_client_pin_source, WITNESS_CLIENT_EDITION)
@@ -277,7 +278,9 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
             "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 1)
 
     def test_operator_rotation_disables_old_certificate_until_new_listener(self):
-        other_pin = sha256(self.wrong_cert.read_bytes()).hexdigest()
+        other_pin = sha256(x509.load_pem_x509_certificate(
+            self.wrong_cert.read_bytes()).public_bytes(
+                serialization.Encoding.DER)).hexdigest()
         self.operator_pins.rotate(
             source_name=witness_client_pin_source("alpha"),
             source_edition=WITNESS_CLIENT_EDITION,
@@ -291,6 +294,29 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
         self.assertEqual(self.request(
             {"source_id": "alpha", "bundle": bundle},
             context=self.wrong_context)[0], 403)
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
+
+    def test_revocation_during_witness_verification_refuses_commit(self):
+        bundle = self.next_bundle("one")
+        true_verifier = verify_observer_anchor
+        called = []
+        def revoke_during_check(*args, **kwargs):
+            value = true_verifier(*args, **kwargs)
+            if not called:
+                self.operator_pins.revoke(
+                    source_name=witness_client_pin_source("alpha"),
+                    source_edition=WITNESS_CLIENT_EDITION,
+                    pin_sha256=self.client_pin, confirm_pin_sha256=self.client_pin,
+                    operator_ref="fixture-operator",
+                    verification_ref="revoked-after-tls-admission")
+                called.append(True)
+            return value
+        with patch("security.witness_transport.verify_observer_anchor",
+                   side_effect=revoke_during_check):
+            status, doc = self.request({"source_id": "alpha", "bundle": bundle})
+        self.assertEqual(status, 403)
+        self.assertEqual(len(called), 1)
         self.assertEqual(self.observer.current(
             "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
 
