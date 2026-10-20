@@ -54,7 +54,7 @@ class WorkInvestigationPageTests(unittest.TestCase):
 
     def test_workflow_status_and_native_steps_need_real_api(self):
         p=WORK.read_text(encoding="utf-8")
-        self.assertIn('API+"/actions/runs?per_page=50"',p)
+        self.assertIn('API+"/actions/runs?per_page=100&page=1"',p)
         self.assertIn('API+"/actions/runs/"+id+"/jobs?per_page=100"',p)
         self.assertIn("Array.isArray(j.workflow_runs)",p)
         self.assertIn("Array.isArray(json.jobs)",p)
@@ -62,7 +62,7 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertIn("r.head_sha",p)
         self.assertIn("r.conclusion||null",p)
         self.assertIn("no current status inferred",p.lower())
-        self.assertIn("if(!document.hidden)refresh()",p)
+        self.assertIn("if(!document.hidden&&Date.now()>=app.rateLimitUntil",p)
         self.assertIn("Select an observed workflow",p)
 
     def test_commit_revision_comparison_requires_exact_source_path(self):
@@ -145,6 +145,37 @@ assert.equal(revisionLink("research/foo", "invalid-sha"),null);
         self.assertTrue(any(x["kind"]=="source-recorded-wall" for x in v["walls"]))
         self.assertGreater(len(v["movements"]),0)
         self.assertTrue(any(x["evidence"]=="documented-heading-only" for x in v["movements"]))
+
+
+    def test_workflow_catalog_and_paginated_history_are_observed_not_fabricated(self):
+        p=WORK.read_text(encoding="utf-8")
+        self.assertIn('id="workflow-catalog"',p)
+        self.assertIn('id="workflow-filter"',p)
+        self.assertIn('id="history-chart"',p)
+        self.assertIn('id="load-older"',p)
+        self.assertIn('API+"/actions/workflows?per_page=100"',p)
+        self.assertIn('API+"/actions/runs?per_page=100&page="+page',p)
+        self.assertIn("if(runs.length<100||!runs.length)app.olderExhausted=true",p)
+        self.assertIn("app.runs=[...previous.values()].sort",p)
+        self.assertIn("Bars summarize the currently retrieved pages only",p)
+        self.assertIn("not automatically an active worker",p)
+        self.assertNotIn('API+"/actions/runs?per_page=50"',p)
+
+    def test_tickstream_only_triggers_original_source_refresh(self):
+        p=WORK.read_text(encoding="utf-8")
+        self.assertIn('id="tick-form"',p)
+        self.assertIn('id="tick-status"',p)
+        self.assertIn("new EventSource(safe,{withCredentials:false})",p)
+        self.assertIn('connection.addEventListener("tick",onServerTick)',p)
+        self.assertIn("app.streamTicks++",p)
+        self.assertIn("if(parsed.protocol!==\"https:\"",p)
+        self.assertIn("parsed.username||parsed.password||parsed.search||parsed.hash",p)
+        self.assertIn("TICK_REFRESH_GAP",p)
+        self.assertIn("app.rateLimitUntil=Date.now()+15*60*1000",p)
+        self.assertIn("app.lastAttempt=Date.now()",p)
+        self.assertIn("A server event is a prompt to recheck original evidence, never a worker result.",p)
+        self.assertIn("GitHub auto-check continues",p)
+        self.assertIn("no current status inferred",p.lower())
 
     @unittest.skipUnless(shutil.which("node"),"Node.js needed for syntax check")
     def test_inline_program_valid_javascript(self):

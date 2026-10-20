@@ -205,6 +205,56 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   html { scroll-behavior:auto; }
   button { transition:none; }
 }
+
+/* Research workstation: distinct source layers, observation windows, live transport. */
+.lab-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0}
+.lab-strip>div{background:#101d26;border:1px solid var(--line);border-radius:11px;padding:15px 17px;min-width:0;display:flex;flex-direction:column;gap:3px}
+.lab-label{color:var(--blue);font:600 10px/1.5 var(--data-font);letter-spacing:.105em;text-transform:uppercase}
+.lab-strip strong{font-weight:650;font-size:13px}
+.lab-strip small{color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.stream-toolbar{display:flex;align-items:start;gap:18px;justify-content:space-between;margin-bottom:15px;border-bottom:1px solid var(--line);padding:8px 4px 19px}
+.stream-readout{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0;font-size:12px}
+.stream-readout strong{font-weight:650}.stream-readout small{color:var(--muted);font:11px/1.6 var(--data-font)}
+.tick-settings{width:min(490px,100%);font-size:12px}
+.tick-settings>summary{font-size:12px;color:var(--blue);font-weight:650;cursor:pointer;text-align:right}
+.tick-settings p{color:var(--muted);line-height:1.65;margin:12px 0}
+.tick-form{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:7px;margin-bottom:8px}
+.tick-form label{grid-column:1/-1;color:var(--muted);font-size:11px}
+.tick-form input{min-width:0}
+.tick-settings #tick-status{display:block;color:var(--muted);overflow-wrap:anywhere}
+.notebook{border:1px solid #354b59;background:#111e27;border-radius:12px;padding:19px;margin:20px 0 4px}
+.notebook-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:17px}
+.notebook-heading h2{font-size:17px;margin-top:4px}
+.notebook-heading small{color:var(--muted);font:11px/1.5 var(--data-font);text-align:right}
+.history-chart{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;min-height:116px;align-items:end}
+.hist-day{min-width:0;display:flex;flex-direction:column;gap:5px}
+.hist-bars{height:80px;display:flex;flex-direction:column;justify-content:end;gap:2px}
+.hist-bar{min-height:2px;display:block;border-radius:3px;max-height:80px}
+.hist-bar.passed{background:#81cda9}.hist-bar.failed{background:#e0a09b}.hist-bar.other{background:#739eae}
+.hist-day strong{font:11px/1.3 var(--data-font);color:var(--text)}
+.hist-day small{font:10px/1.4 var(--data-font);color:var(--muted)}
+.notebook>.fine{margin:16px 0 0}
+.index-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 15px;border-top:1px solid var(--line);background:#162630}
+.index-footer button{font-size:11px;min-height:36px;padding:8px 12px}
+.index-footer button:disabled{opacity:.45;cursor:not-allowed}
+.index-footer small{color:var(--muted);font:10px/1.5 var(--data-font);text-align:right}
+.run-tools{justify-content:flex-end}
+.run-tools label{white-space:nowrap}.run-tools select{min-width:150px;max-width:230px}
+.registry-panel{margin:16px 0}
+.registry-summary{display:flex;gap:15px;justify-content:space-between;align-items:center;background:#172733;cursor:pointer;padding:16px 19px}
+.registry-summary span:first-child{display:flex;flex-direction:column;gap:4px}
+.registry-summary strong{font-size:14px}
+.registry-summary small{color:var(--muted);font:11px/1.5 var(--data-font);text-align:right}
+.workflow-catalog{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#2c4150;border-top:1px solid var(--line)}
+.workflow-row{min-width:0;background:var(--panel);padding:13px 15px;display:flex;flex-direction:column;gap:5px}
+.workflow-row strong{font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.workflow-row small{font:10.5px/1.6 var(--data-font);color:var(--muted)}
+.workflow-row a{font-size:11px}
+.registry-note{padding:0 18px 12px;margin:13px 0}
+@media(max-width:1000px){.workflow-catalog{grid-template-columns:repeat(2,minmax(0,1fr))}.run-tools{justify-content:start}.run-tools label{flex-wrap:wrap}}
+@media(max-width:720px){.lab-strip{grid-template-columns:1fr}.stream-toolbar{flex-direction:column}.tick-settings>summary{text-align:left}.history-chart{gap:5px}.notebook{padding:14px}.notebook-heading{align-items:start;flex-direction:column}.workflow-catalog{grid-template-columns:1fr}.run-tools{width:100%}.run-tools label{width:100%}.run-tools select{max-width:none;flex:1}}
+@media(max-width:440px){.tick-form{grid-template-columns:1fr 1fr}.tick-form input{grid-column:1/-1}.hist-day small{font-size:9px}.hist-day strong{font-size:9.5px}.history-chart{gap:3px}.index-footer{flex-direction:column;align-items:stretch}.index-footer small{text-align:left}}
+
 </style>
 </head>
 <body>
@@ -227,20 +277,48 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   </div>
   <div id="feed-error" class="notice" hidden></div>
   <div class="metrics" aria-label="Observed workflow state counts">
-    <div class="metric metric-running"><strong data-stat="running">—</strong><small>RUNNING NOW</small></div>
-    <div class="metric metric-queued"><strong data-stat="queued">—</strong><small>QUEUED / WAITING</small></div>
-    <div class="metric metric-failed"><strong data-stat="failed">—</strong><small>RECENT FAILURES</small></div>
-    <div class="metric metric-passed"><strong data-stat="passed">—</strong><small>RECENT PASSES</small></div>
+    <div class="metric metric-running"><strong data-stat="running">—</strong><small>RUNNING · LATEST 100</small></div>
+    <div class="metric metric-queued"><strong data-stat="queued">—</strong><small>QUEUED · LATEST 100</small></div>
+    <div class="metric metric-failed"><strong data-stat="failed">—</strong><small>FAILED · LATEST 100</small></div>
+    <div class="metric metric-passed"><strong data-stat="passed">—</strong><small>PASSED · LATEST 100</small></div>
   </div>
-  <p class="fine">Counts describe the latest accessible GitHub workflow sample, not all workers or events. Unavailable data is never shown as zero.</p>
+  <p class="fine">Counts describe the latest retrieved GitHub page (up to 100 runs), not all workers or events. Older loaded pages are displayed separately. Unavailable data is never shown as zero.</p>
 </section>
+  <section class="lab-strip" aria-label="Source boundaries">
+    <div><span class="lab-label">01 / EXECUTION SOURCE</span><strong>GitHub Actions</strong><small>Runs, jobs and steps · observed</small></div>
+    <div><span class="lab-label">02 / RESEARCH SOURCE</span><strong>Committed research</strong><small>Moves, records, source walls</small></div>
+    <div><span class="lab-label">03 / EVENT CHANNEL</span><strong id="stream-summary">GitHub polling</strong><small id="tick-summary">No tickserver transport configured</small></div>
+  </section>
+  <div class="stream-toolbar">
+    <div class="stream-readout"><span class="indicator" id="stream-dot"></span><strong id="stream-label">GitHub auto-check enabled</strong><small id="next-check">Preparing next verification</small></div>
+    <details class="tick-settings">
+      <summary>Connect tickserver</summary>
+      <p>A tickserver is an optional live event transport. It must expose an HTTPS Server-Sent Events (SSE) URL accessible from this browser with CORS enabled. Ticks trigger source checks; they do not constitute verified worker results.</p>
+      <form id="tick-form" class="tick-form">
+        <label for="tick-url">Event stream URL</label>
+        <input id="tick-url" type="url" inputmode="url" autocomplete="off" placeholder="https://your-server.example/events" aria-describedby="tick-status">
+        <button type="submit">Connect</button><button type="button" id="tick-disconnect">Disconnect</button>
+      </form>
+      <small id="tick-status" role="status">Not connected. GitHub auto-check remains available.</small>
+    </details>
+  </div>
+  <section class="notebook" aria-labelledby="window-title">
+    <div class="notebook-heading"><div><span class="lab-label">OBSERVATION WINDOW</span><h2 id="window-title">Run history, not a fixed sample</h2></div><small id="history-window">Loading first page…</small></div>
+    <div class="history-chart" id="history-chart" aria-label="Observed run outcomes by day"><p class="no-source">Loading dated source runs…</p></div>
+    <p class="fine">Bars summarize the currently retrieved pages only. Load older runs to extend the observation window; a missing date in this sample does not establish inactivity.</p>
+  </section>
 <section id="executions" aria-label="Actual GitHub work execution">
   <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Runs, jobs, and steps reported by GitHub.</p></div>
-    <div class="tools"><label for="run-filter">Show <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label></div></div>
+    <div class="tools run-tools"><label for="run-filter">Result <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label><label for="workflow-filter">Workflow <select id="workflow-filter"><option value="all">Every workflow</option></select></label></div></div>
   <div class="workspace">
-    <div class="pane"><header><strong>Runs</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div></div>
+    <div class="pane"><header><strong>Runs · source index</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div><div class="index-footer"><button id="load-older" type="button" disabled>Load 100 older runs</button><small id="history-state">First source page</small></div></div>
     <div class="pane"><header><strong>Run details</strong><small id="details-scope">Choose a source run</small></header><div id="detail" class="pane-content"><p class="no-source">Select an observed workflow to inspect its saved jobs, steps, SHA, and result. No work will be launched from this screen.</p></div></div>
   </div>
+  <details class="pane registry-panel" id="workflow-registry" open>
+    <summary class="registry-summary"><span><span class="lab-label">SOURCE REGISTRY</span><strong>Workflow catalog</strong></span><small id="workflow-scope">Loading workflow definitions…</small></summary>
+    <div id="workflow-catalog" class="workflow-catalog"><p class="no-source">Reading original workflow definitions…</p></div>
+    <p class="fine registry-note">Catalog entries identify workflow definitions. A registered workflow is not automatically an active worker or a completed research result.</p>
+  </details>
   <div class="pane revision-pane" aria-labelledby="revision-title">
     <header><strong id="revision-title">Source revision for selected run</strong><small id="revision-scope">Select a run</small></header>
     <div id="revision-evidence" class="record-list"><p class="no-source">GitHub commit evidence loads after selecting a workflow execution.</p></div>
@@ -269,9 +347,15 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   const REPO="huntingthereferent/autobots-assemble";
   const API="https://api.github.com/repos/"+REPO;
   const SOURCE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/research-live.json";
-  const PERIOD=180000;
+  const PERIOD=120000; // GitHub API budget: one background source check per two minutes.
+  const TICK_REFRESH_GAP=90000;
+  const MAX_CATALOG_PAGE=100;
+  const TICK_STORAGE="workstationTrustedTickSSEv1";
   const $=id=>document.getElementById(id);
-  const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,checked:null};
+  const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
+    checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],
+    catalog:[],catalogLoaded:false,stream:null,streamUrl:"",streamTicks:0,lastTick:0,
+    lastStreamStatus:"not configured",rateLimitUntil:0,lastAttempt:0};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
@@ -283,16 +367,119 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   function readRuns(j){if(!j||!Array.isArray(j.workflow_runs))throw Error("Unexpected GitHub workflow response");
     return j.workflow_runs.filter(r=>Number.isSafeInteger(r.id)&&r.id>0&&isSHA(r.head_sha)&&
       typeof r.name==="string"&&["queued","waiting","pending","in_progress","completed"].includes(r.status))
-      .slice(0,50).map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
+      .slice(0,100).map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
         conclusion:r.conclusion||null,url:r.html_url,created:r.created_at,updated:r.updated_at,
         runNumber:r.run_number,branch:r.head_branch||"",event:r.event||"unknown"}));}
-  function currentStates(){return app.runs.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
+
+  function mergeRuns(incoming){
+    const previous=new Map(app.runs.map(r=>[r.id,r]));
+    for(const r of incoming){
+      const old=previous.get(r.id);
+      if(old&&(old.updated!==r.updated||old.status!==r.status||old.conclusion!==r.conclusion))
+        app.jobCache.delete(r.id);
+      previous.set(r.id,r);
+    }
+    app.runs=[...previous.values()].sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id);
+    renderMetrics();renderRuns();renderHistory();renderCatalog();
+  }
+  function renderHistory(){
+    const day=24*60*60*1000;
+    const today=new Date();const utc=Date.UTC(today.getUTCFullYear(),today.getUTCMonth(),today.getUTCDate());
+    const days=Array.from({length:7},(_,i)=>{
+      const date=new Date(utc-(6-i)*day);return {key:date.toISOString().slice(0,10),label:date.toLocaleDateString(undefined,{month:"short",day:"numeric",timeZone:"UTC"}),passed:0,failed:0,other:0};
+    });
+    const byDay=new Map(days.map(d=>[d.key,d]));
+    for(const r of app.runs){
+      const d=new Date(r.created||"");if(!Number.isFinite(d.getTime()))continue;
+      const group=byDay.get(d.toISOString().slice(0,10));if(!group)continue;
+      const result=statusOf(r);
+      group[result==="success"?"passed":(["failure","cancelled","timed_out"].includes(result)?"failed":"other")]++;
+    }
+    const max=Math.max(1,...days.map(d=>d.passed+d.failed+d.other));
+    const chart=$("history-chart");chart.replaceChildren();
+    for(const d of days){
+      const total=d.passed+d.failed+d.other;const column=el("div",undefined,"hist-day");
+      const bars=el("div",undefined,"hist-bars");
+      for(const kind of ["other","failed","passed"]){
+        if(!d[kind])continue;
+        const bar=el("span",undefined,"hist-bar "+kind);
+        bar.style.height=Math.max(2,80*d[kind]/max)+"px";
+        bar.title=d.key+" · "+d[kind]+" "+kind+" run(s) in retrieved pages";
+        bars.append(bar);
+      }
+      const name=el("strong",d.label);const count=el("small",total+" sampled");
+      column.append(bars,name,count);chart.append(column);
+    }
+    const total=app.runs.length,oldest=app.runs[total-1];
+    $("history-window").textContent=total+" loaded · UTC last 7 days";
+    $("history-state").textContent=app.olderExhausted?"All retrievable pages loaded":total+" indexed"+(app.reportedTotal===null?"":" / "+app.reportedTotal+" reported");
+    $("load-older").disabled=app.olderExhausted||app.olderLoading;
+  }
+  function updateWorkflowFilter(){
+    const control=$("workflow-filter"),old=control.value;
+    const names=[...new Set([...app.catalog.map(x=>x.name),...app.runs.map(x=>x.name)])].filter(Boolean).sort((a,b)=>a.localeCompare(b));
+    control.replaceChildren(Object.assign(el("option","Every workflow"),{value:"all"}));
+    for(const name of names){const o=el("option",name);o.value=name;control.append(o);}
+    control.value=old==="all"||names.includes(old)?old:"all";
+  }
+  function renderCatalog(){
+    updateWorkflowFilter();
+    const target=$("workflow-catalog");target.replaceChildren();
+    if(!app.catalogLoaded){
+      target.append(el("p","Workflow source catalog not available yet.","no-source"));return;
+    }
+    const counts=new Map();
+    for(const r of app.runs)counts.set(r.name,(counts.get(r.name)||0)+1);
+    const sorted=[...app.catalog].sort((a,b)=>(counts.get(b.name)||0)-(counts.get(a.name)||0)||a.name.localeCompare(b.name));
+    $("workflow-scope").textContent=sorted.length+" registered workflows · "+app.runs.length+" sampled runs";
+    for(const workflow of sorted){
+      const article=el("article",undefined,"workflow-row");
+      article.append(el("strong",workflow.name));
+      article.append(el("small",workflow.state+" · "+(counts.get(workflow.name)||0)+" runs in loaded sample"));
+      const filename=workflow.path.split("/").pop();
+      if(filename&&/^[\w.-]+\.ya?ml$/.test(filename)){
+        article.append(link("Open workflow source ↗","https://github.com/"+REPO+"/blob/main/"+workflow.path));
+      }
+      target.append(article);
+    }
+    if(!sorted.length)target.append(el("p","No workflow definitions reported in this source response.","no-source"));
+    if(sorted.length===MAX_CATALOG_PAGE)target.append(el("p","Catalog shows at most the first 100 definitions returned by GitHub.","no-source"));
+  }
+  async function loadCatalog(){
+    try{
+      const json=await getJSON(API+"/actions/workflows?per_page=100");
+      if(!json||!Array.isArray(json.workflows))throw Error("Workflow array unavailable");
+      app.catalog=json.workflows.filter(w=>Number.isSafeInteger(w.id)&&typeof w.name==="string"&&
+        typeof w.path==="string"&&w.path.startsWith(".github/workflows/")&&
+        ["active","disabled_manually","disabled_inactivity","deleted"].includes(w.state));
+      app.catalogLoaded=true;renderCatalog();
+    }catch(e){
+      $("workflow-scope").textContent="Workflow catalog unavailable";
+      $("workflow-catalog").replaceChildren(el("p","Could not read workflow definitions: "+e.message+". Run history remains separate.","no-source"));
+      updateWorkflowFilter();
+    }
+  }
+  async function loadOlder(){
+    if(app.olderLoading||app.olderExhausted||app.reading)return;
+    app.olderLoading=true;$("load-older").disabled=true;$("history-state").textContent="Reading page "+app.nextPage+"…";
+    try{
+      const page=app.nextPage;
+      const data=await getJSON(API+"/actions/runs?per_page=100&page="+page);
+      const runs=readRuns(data);
+      app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
+      app.nextPage=page+1;
+      if(runs.length<100||!runs.length)app.olderExhausted=true;
+      mergeRuns(runs);
+    }catch(e){$("history-state").textContent="Could not read older source page: "+e.message;}
+    finally{app.olderLoading=false;renderHistory();}
+  }
+  function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
   function renderMetrics(){const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
-  function filteredRuns(){const f=$("run-filter").value;return app.runs.filter(r=>f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success"))}
+  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value;return app.runs.filter(r=>(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
-    $("runs-scope").textContent=subset.length+" / "+app.runs.length+" recent source runs";
+    $("runs-scope").textContent=subset.length+" shown / "+app.runs.length+" retrieved source runs";
     for(const r of subset){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
       btn.type="button";const head=el("div",undefined,"run-title");
       head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
@@ -451,21 +638,86 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
       const selected=app.runs.find(r=>r.id===app.selection);
       if(selected&&app.commitCache.has(selected.head))renderRevision(selected,app.commitCache.get(selected.head));}
     catch(e){$("research-scope").textContent="Research data unavailable: "+e.message;if(!app.research){$("research-records").replaceChildren(el("p","Original record data unavailable.","no-source"));$("research-walls").replaceChildren(el("p","Original wall data unavailable.","no-source"))}}}
-  async function refresh(){
-    if(app.reading)return;app.reading=true;$("check-now").disabled=true;
+
+  function tickDisplay(){
+    const connected=app.stream&&app.stream.readyState===EventSource.OPEN;
+    $("stream-dot").className="indicator "+(connected?"ok":app.lastStreamStatus==="error"?"error":"");
+    $("stream-label").textContent=connected?"Tickserver transport connected":"GitHub auto-check active";
+    $("stream-summary").textContent=connected?"Tickserver notifications":"GitHub polling";
+    $("tick-summary").textContent=connected?app.streamTicks+" event(s) observed · source checks separate":
+      (app.streamUrl?"Stream waiting / unavailable":"No tickserver transport configured");
+    if(app.streamUrl){
+      $("tick-status").textContent=connected?"Stream connected · "+app.streamTicks+" event(s) received. Ticks request GitHub verification, not worker execution.":
+      (app.lastStreamStatus==="error"?"Stream not reachable or CORS denied; GitHub auto-check continues.":"Stream connecting · GitHub auto-check continues.");
+    }
+  }
+  function safeTickUrl(value){
     try{
-      const data=await getJSON(API+"/actions/runs?per_page=50");
+      const parsed=new URL(value);
+      if(parsed.protocol!=="https:"||!parsed.hostname||parsed.username||parsed.password||parsed.search||parsed.hash)
+        return null;
+      if(parsed.hostname==="github.com"||parsed.hostname==="api.github.com")return null;
+      return parsed.href;
+    }catch{return null;}
+  }
+  function persistTick(value){try{if(value)localStorage.setItem(TICK_STORAGE,value);else localStorage.removeItem(TICK_STORAGE)}catch{}}
+  function disconnectTick(){
+    if(app.stream){app.stream.close();app.stream=null;}
+    app.streamUrl="";app.streamTicks=0;app.lastStreamStatus="not configured";
+    persistTick("");$("tick-url").value="";$("tick-status").textContent="Not connected. GitHub auto-check remains available.";
+    tickDisplay();
+  }
+  function onServerTick(){
+    app.streamTicks++;app.lastTick=Date.now();tickDisplay();
+    // A server event is a prompt to recheck original evidence, never a worker result.
+    if(!document.hidden&&!app.reading&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=TICK_REFRESH_GAP))refresh();
+  }
+  function connectTick(value){
+    const safe=safeTickUrl(value);
+    if(!safe||typeof EventSource!=="function"){
+      $("tick-status").textContent="Requires a reachable HTTPS SSE endpoint without credentials or query tokens, with CORS enabled.";
+      return false;
+    }
+    if(app.stream)app.stream.close();
+    app.streamUrl=safe;app.streamTicks=0;app.lastStreamStatus="connecting";
+    $("tick-url").value=safe;persistTick(safe);
+    const connection=new EventSource(safe,{withCredentials:false});app.stream=connection;
+    connection.onopen=()=>{if(app.stream!==connection)return;app.lastStreamStatus="connected";tickDisplay();};
+    connection.onerror=()=>{if(app.stream!==connection)return;app.lastStreamStatus="error";tickDisplay();};
+    connection.onmessage=onServerTick;
+    connection.addEventListener("tick",onServerTick);
+    connection.addEventListener("workstation-refresh",onServerTick);
+    tickDisplay();return true;
+  }
+  function updateNextCheck(){
+    const next=Math.max((app.lastAttempt||0)+PERIOD,app.rateLimitUntil||0);
+    const remaining=Math.max(0,Math.ceil((next-Date.now())/1000));
+    $("next-check").textContent=(app.rateLimitUntil>Date.now()?"API retry paused ":"Next GitHub check in ")+remaining+"s"+
+      (app.checked?" · last verified "+new Date(app.checked).toLocaleTimeString():" · no verified sample yet");
+  }
+  async function refresh(){
+    if(app.reading)return;app.reading=true;app.lastAttempt=Date.now();$("check-now").disabled=true;
+    try{
+      const data=await getJSON(API+"/actions/runs?per_page=100&page=1");
       const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
-      app.runs=runs;app.checked=Date.now();app.jobCache.clear();renderMetrics();
-      if(!app.selection||!runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
-      renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="Observed GitHub work";
+      app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
+      app.latestPage=runs;
+      app.checked=Date.now();
+      mergeRuns(runs);
+      app.rateLimitUntil=0;
+      if(runs.length<100&&app.nextPage===2)app.olderExhausted=true;
+      renderHistory();
+      if(!app.selection||!app.runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
+      renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="GitHub source observed";
       $("last-read").textContent="checked "+new Date(app.checked).toLocaleString();
+      updateNextCheck();
       $("feed-error").hidden=true;
       // Job detail requires an exact user selection or first source run.
       await selectRun(app.selection);
     }catch(e){
       $("live-dot").className="indicator error";
       $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
+      if(/403|429|rate limit/i.test(e.message))app.rateLimitUntil=Date.now()+15*60*1000;
       $("feed-error").textContent="Could not refresh the execution source: "+e.message+". Displayed results may be stale; no current status inferred.";
       if(!app.runs.length)$("runs").replaceChildren(el("p","No verified execution sample loaded.","no-source"));
     }finally{app.reading=false;$("check-now").disabled=false}
@@ -473,10 +725,24 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   }
   $("check-now").addEventListener("click",refresh);
   $("run-filter").addEventListener("change",renderRuns);
+  $("workflow-filter").addEventListener("change",renderRuns);
+  $("load-older").addEventListener("click",loadOlder);
   $("source-search").addEventListener("input",renderResearch);
   $("source-filter").addEventListener("change",renderResearch);
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh()});
-  setInterval(()=>{if(!document.hidden)refresh()},PERIOD);
+  $("tick-form").addEventListener("submit",e=>{
+    e.preventDefault();if(!connectTick($("tick-url").value.trim()))$("tick-url").focus();
+  });
+  $("tick-disconnect").addEventListener("click",disconnectTick);
+  let stored="";try{stored=localStorage.getItem(TICK_STORAGE)||""}catch{}
+  if(stored)connectTick(stored);else tickDisplay();
+  document.addEventListener("visibilitychange",()=>{
+    if(!document.hidden&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=PERIOD))refresh();
+  });
+  setInterval(()=>{
+    updateNextCheck();
+    if(!document.hidden&&!app.reading&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=PERIOD))refresh();
+  },10000);
+  loadCatalog();
   refresh();
 })();
 </script>
