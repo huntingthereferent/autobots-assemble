@@ -106,3 +106,7 @@ security certification.
 [External checkpoints and offline recovery](CHECKPOINT_RECOVERY.md) add independently signed records of the journal's authenticated prefix. An old but valid database is rejected when the operator supplies a newer authentic signed checkpoint during service restart. The checkpoint must be held outside the database's rollback domain; none is automatically created or published.
 
 An operator may separately encrypt the verified 32-byte journal key to an offline recipient public key for controlled disaster recovery. Recovered bytes are only returned to the authorized caller in memory, and restarting the native runtime still requires validation against the trusted checkpoint. This is not automatic key management, rotation or multi-store backup protection.
+
+## Native encrypted first-admission transaction
+
+The [atomic native admission contract](ATOMIC_ADMISSION.md) joins signed envelope replay identity and the native encrypted SUBMISSION/RESULT record in one sealed SQLite commit. The encrypted event authenticates the replay token/digest; restart checks the complete replay table against this record chain, detecting removal or replacement even when the event ciphertext itself is unchanged. A record committed before a lost HTTP acknowledgement remains a single movement after restart. The legacy JSONL and offline key-recovery paths are separate and not retroactively atomic.
