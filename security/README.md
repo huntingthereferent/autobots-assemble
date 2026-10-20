@@ -145,3 +145,9 @@ describes the optional signed worker endpoints on the actual
 `runtime.http_server`. The server is loopback-only, and the signed
 endpoints are disabled by default until a trusted host installs pinned keys.
 This does not turn unconfigured web clients into authenticated researchers.
+
+## Sealed native journal and operator key lifecycle
+
+[Sealed journal — encrypted native records, recovery boundaries, and key custody](SEALED_JOURNAL.md) documents the optional AES-256-GCM journal. The default service still uses its historical plaintext journal until a trusted host explicitly opts into a new protected history. Existing plaintext data is never silently migrated, deleted or overridden.
+
+Signed HTTP ingress now requires the repository's existing B14 operator-enrolled Ed25519 signing key ledger. Each request checks current enrollment, including after operator rotation and revocation. No HTTP request can enroll a signing key. The private journal encryption key is **not** the B14 signing key, and revoking a signing key cannot restore a lost encryption key.
