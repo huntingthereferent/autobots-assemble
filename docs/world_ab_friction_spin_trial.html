@@ -1,0 +1,167 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WORLD Trial 12 / Friction and Spin Hypotheses</title>
+<style>
+body{font:16px system-ui;background:#10232f;color:#ebf3fa;max-width:1100px;margin:auto;padding:24px}
+h1{font-size:1.6rem}p{color:#bdcbd8;line-height:1.5}a{color:#9bd9fc}
+select,button{font:inherit;background:#315064;color:#f5f9fd;border:1px solid #7197ad;border-radius:5px;padding:8px;margin:3px}
+canvas{width:100%;background:#071927;border-radius:6px}
+pre{font-size:11px;white-space:pre-wrap;max-height:400px;overflow:auto}
+#source{display:none}
+</style></head><body>
+<h1>WORLD · Trial 12 / Single-contact friction and spin</h1>
+<p><a href="world_ab_active_set_trial.html">Original Trial 10 alternatives</a> · <a href="world_ab_contact_discrimination.html">Trial 11 missing evidence</a>.
+Original Trial 06 restitution, mass, inertia, finite surfaces and boundary are unchanged. This computes counterfactual <strong>single-face</strong> impacts under coefficients 0, 0.2, 0.4 and initial spins 0 or 2. It does <strong>not</strong> solve simultaneous frictional contact, select which face collides first, or establish a real material response.</p>
+<button id="run">Calculate 420 friction/spin controls</button>
+<label>Source case <select id="case"></select></label>
+<label>Face, friction and spin <select id="candidate"></select></label>
+<button id="previous">Previous frame</button><button id="next">Next frame</button><button id="reset">Reset</button>
+<p id="status" aria-live="polite">No comparison completed.</p>
+<canvas id="scene" width="960" height="295" aria-label="Unchanged finite two-face geometry and selected candidate trajectory"></canvas>
+<details><summary>Native-comparable source and complete friction-spin candidate receipts</summary><pre id="receipts"></pre></details>
+<iframe id="source" src="world_ab_active_set_trial.html" title="Original unmodified Trial 10 page, with Trial 09 source"></iframe>
+<script>
+'use strict';
+window.worldTrial12=(()=>{
+const R=.25,I=.03125,STEP=.05,HORIZON=1.5,LEAD=.35,SPEED=2,EPS=1e-8,MUS=[0,.2,.4],SPINS=[0,2];
+const rd=x=>+x.toFixed(9),copy=x=>JSON.parse(JSON.stringify(x)),dot=(a,b)=>a[0]*b[0]+a[1]*b[1],
+add=(a,b)=>[a[0]+b[0],a[1]+b[1]],mul=(c,a)=>[c*a[0],c*a[1]];
+let report=null,parent=null,original=null,index=0,candidateIndex=0,frameIndex=0;
+function nearest(p,seg){
+ const a=seg.endpoints[0],b=seg.endpoints[1],v=[b[0]-a[0],b[1]-a[1]];
+ const t=Math.max(0,Math.min(1,((p[0]-a[0])*v[0]+(p[1]-a[1])*v[1])/dot(v,v)));
+ return Math.hypot(p[0]-a[0]-t*v[0],p[1]-a[1]-t*v[1]);
+}
+function simulate(source,face_index,mu,omega){
+ const angle=source.incoming_angle_degrees,rad=angle*Math.PI/180;
+ const vin=[-SPEED*Math.cos(rad),-SPEED*Math.sin(rad)];
+ const ns=source.normals.map(x=>[...x]),start=source.start_center,center=source.contact_center;
+ const face=source.surfaces[face_index],n=ns[face_index],t=[-n[1],n[0]];
+ const normal_speed=dot(vin,n),slip=dot(vin,t)-R*omega;
+ if(normal_speed>=-EPS)throw Error('incoming trial not approaching original active face');
+ const jn=-2*normal_speed,desired=-slip/(1+R*R/I),jt=Math.max(-mu*jn,Math.min(mu*jn,desired));
+ const outgoing=add(vin,add(mul(jn,n),mul(jt,t))),outspin=omega-R*jt/I;
+ const eb=.5*dot(vin,vin)+.5*I*omega*omega,ea=.5*dot(outgoing,outgoing)+.5*I*outspin*outspin;
+ if(!(jn>0)||Math.abs(jt)>mu*jn+2e-8||Math.abs(dot(outgoing,n)+normal_speed)>3e-8||ea>eb+2e-8)throw Error('original isolated friction impulse law rejected');
+ const rec={face_index,face_id:face.id,friction_coefficient:mu,incoming_spin:omega,
+    incoming_velocity:vin.map(z=>rd(z)),normal:n.map(z=>rd(z)),
+    incoming_normal_speed:rd(normal_speed),incoming_tangential_slip:rd(slip),
+    normal_impulse:rd(jn),tangential_impulse:rd(jt),
+    slip_regime:Math.abs(desired)<=mu*jn+1e-8?'stick-candidate':'sliding-cap',
+    outgoing_velocity:outgoing.map(z=>rd(z)),
+    outgoing_spin:rd(outspin),outgoing_tangential_slip:rd(dot(outgoing,t)-R*outspin),
+    energy_before:rd(eb),energy_after:rd(ea),friction_cone_satisfied:true};
+ const reject=why=>({...rec,status:'rejected-'+why,reason:why,frames:[],finite_horizon_verified:false});
+ if(ns.some(k=>dot(vin,k)>=-EPS||dot(outgoing,k)<-EPS))return reject('other-face-inward');
+ const frames=[];
+ for(let i=0;i<=Math.round(HORIZON/STEP);i++){
+  const clock=i*STEP,pre=clock<=LEAD,position=pre?add(start,mul(clock,vin)):add(center,mul(clock-LEAD,outgoing));
+  const velocity=clock<LEAD?vin:outgoing,spin=clock<LEAD?omega:outspin;
+  const orientation=pre?omega*clock:omega*LEAD+outspin*(clock-LEAD);
+  if(!(R-1e-9<=position[0]&&position[0]<=24-R+1e-9&&R-1e-9<=position[1]&&position[1]<=6-R+1e-9))return reject('world-edge');
+  if(source.surfaces.some(s=>nearest(position,s)<R-3e-7))return reject('penetration');
+  frames.push({time:rd(clock),position:position.map(z=>rd(z)),velocity:velocity.map(z=>rd(z)),spin:rd(spin),orientation:rd(orientation)});
+ }
+ return {...rec,status:'admissible-single-active',reason:null,frames,finite_horizon_verified:true};
+}
+function calculate(parent,original){
+ if(parent.schema!=='world-ab-two-contact-active-set-enumeration/v1'||original.schema!=='world-ab-two-contact-incidence-stress/v1'||parent.cases.length!==35||original.cases.length!==35)
+  throw Error('original source receipts unavailable');
+ const cases=original.cases.map((c,index)=>{
+  const old=parent.cases[index];
+  if(old.incoming_angle_degrees!==c.incoming_angle_degrees||old.surface_B_rotation_degrees!==c.surface_B_rotation_degrees)
+   throw Error('original case identity drift');
+  const options=[];
+  for(const w of SPINS)for(const mu of MUS)for(const f of [0,1])options.push(simulate(c,f,mu,w));
+  for(const face of [0,1]){
+   const cur=options.find(q=>q.friction_coefficient===0&&q.incoming_spin===0&&q.face_index===face);
+   if((cur.status==='admissible-single-active')!==(old.alternatives[face].status==='admissible-local-model'))
+    throw Error('Trial10 frictionless control was rewritten');
+  }
+  return {original_index:index,incoming_angle_degrees:c.incoming_angle_degrees,
+    surface_B_rotation_degrees:c.surface_B_rotation_degrees,geometry_kind:c.geometry_kind,
+    source_ids:c.surfaces.map(s=>s.id),original_trial10_classification:old.classification,
+    original_trial09_two_active_status:c.status,options,
+    actual_active_contact_observed:false,real_collision_outcome_selected:false};
+ });
+ const by_parameter=[];
+ for(const w of SPINS)for(const mu of MUS){
+  const groups=cases.map(c=>c.options.filter(q=>q.friction_coefficient===mu&&q.incoming_spin===w&&q.status==='admissible-single-active'));
+  by_parameter.push({starting_spin:w,friction_coefficient:mu,
+   accepted_single_face_candidates:groups.reduce((sum,g)=>sum+g.length,0),
+   cases_with_any_admissible_single_face:groups.filter(g=>g.length>0).length,
+   cases_with_two_admissible_single_faces:groups.filter(g=>g.length===2).length,
+   cases_with_no_admissible_single_face:groups.filter(g=>g.length===0).length});
+ }
+ return {schema:'world-ab-single-active-friction-spin-controls/v1',
+   source_trial09_schema:original.schema,source_trial10_schema:parent.schema,
+   original_source_geometry:copy(original.original_source_geometry),
+   original_trial10_counts:copy(parent.counts),
+   original_trial09_two_active_counts:copy(original.counts),
+   incoming_angle_grid:copy(original.incoming_angle_grid),
+   source_rotation_grid:copy(original.surface_rotation_grid),
+   friction_grid:copy(MUS),starting_spin_grid:copy(SPINS),
+   restitution:1,radius:R,inertia:I,cases,by_parameter,
+   original_trial06_friction:.4,original_trial06_two_contact_solver_unchanged:true,
+   frictional_simultaneous_two_contact_manifold_solved:false,actual_active_contact_observed:false,
+   sequential_real_contacts_measured:false,real_material_equivalence:false,
+   physical_blueprint_generated:false};
+}
+const can=document.getElementById('scene'),ctx=can.getContext('2d'),X=x=>20+x*38,Y=y=>15+y*42;
+function render(){
+ ctx.fillStyle='#071927';ctx.fillRect(0,0,can.width,can.height);
+ if(!report)return;
+ const source=original.cases[index],opt=report.cases[index].options[candidateIndex];
+ source.surfaces.forEach((s,i)=>{
+  ctx.strokeStyle=i?'#84cbab':'#e5ad79';ctx.lineWidth=3;ctx.beginPath();
+  ctx.moveTo(X(s.endpoints[0][0]),Y(s.endpoints[0][1]));
+  ctx.lineTo(X(s.endpoints[1][0]),Y(s.endpoints[1][1]));ctx.stroke();
+ });
+ const points=opt.frames.length?opt.frames.slice(0,frameIndex+1).map(f=>f.position):[source.start_center,source.contact_center];
+ ctx.strokeStyle=opt.frames.length?'#8edbf9':'#c88589';ctx.lineWidth=2;ctx.beginPath();
+ points.forEach((p,i)=>i?ctx.lineTo(X(p[0]),Y(p[1])):ctx.moveTo(X(p[0]),Y(p[1])));ctx.stroke();
+ const at=points.at(-1);ctx.fillStyle='#f5e6bb';ctx.beginPath();ctx.arc(X(at[0]),Y(at[1]),R*38,0,Math.PI*2);ctx.fill();
+ if(opt.frames.length){
+  const theta=opt.frames[frameIndex].orientation;
+  ctx.strokeStyle='#243944';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(X(at[0]),Y(at[1]));
+  ctx.lineTo(X(at[0])+R*38*Math.cos(theta),Y(at[1])+R*38*Math.sin(theta));ctx.stroke();
+ }
+ document.getElementById('status').textContent='Case '+(index+1)+'/35 | single active '+opt.face_index+
+  ' | friction '+opt.friction_coefficient+', initial spin '+opt.incoming_spin+
+  ' | '+opt.status+' | tangential impulse '+opt.tangential_impulse+
+  ' | outgoing spin '+opt.outgoing_spin+' | frame '+frameIndex+
+  ' | actual two-face collision outcome NOT OBSERVED';
+}
+function chooseCase(){
+ index=Number(document.getElementById('case').value);candidateIndex=frameIndex=0;
+ document.getElementById('candidate').value='0';render();
+}
+document.getElementById('run').onclick=()=>{
+ try{
+  const frame=document.getElementById('source').contentWindow;
+  if(!frame?.worldTrial10)throw Error('original Trial10 source not loaded');
+  frame.document.getElementById('run').click();
+  parent=frame.worldTrial10.receipt();original=frame.worldTrial10.upstream();
+  report=calculate(parent,original);index=candidateIndex=frameIndex=0;
+  const cases=document.getElementById('case');cases.innerHTML='';
+  report.cases.forEach((c,i)=>{const x=document.createElement('option');x.value=String(i);x.textContent=(i+1)+': '+c.incoming_angle_degrees+'° / '+c.surface_B_rotation_degrees+'°';cases.append(x);});
+  const choices=document.getElementById('candidate');choices.innerHTML='';
+  report.cases[0].options.forEach((q,i)=>{const x=document.createElement('option');x.value=String(i);x.textContent='Face '+q.face_index+' · μ '+q.friction_coefficient+' · spin '+q.incoming_spin;choices.append(x);});
+  document.getElementById('receipts').textContent=JSON.stringify(report,null,2);
+  render();
+ }catch(e){report=null;document.getElementById('status').textContent='Rejected: '+e.message;}
+};
+document.getElementById('case').onchange=chooseCase;
+document.getElementById('candidate').onchange=()=>{
+ if(report){candidateIndex=Number(document.getElementById('candidate').value);frameIndex=0;render();}
+};
+document.getElementById('next').onclick=()=>{if(report){frameIndex=Math.min(30,frameIndex+1);render();}};
+document.getElementById('previous').onclick=()=>{if(report){frameIndex=Math.max(0,frameIndex-1);render();}};
+document.getElementById('reset').onclick=()=>{
+ report=parent=original=null;index=candidateIndex=frameIndex=0;
+ document.getElementById('case').innerHTML='';document.getElementById('candidate').innerHTML='';
+ document.getElementById('receipts').textContent='';document.getElementById('status').textContent='No comparison completed.';render();
+};
+render();
+return {receipt:()=>report?copy(report):null,parent:()=>parent?copy(parent):null,
+ upstream:()=>original?copy(original):null,selection:()=>({case:index,candidate:candidateIndex,frame:frameIndex})};
+})();
+</script></body></html>
