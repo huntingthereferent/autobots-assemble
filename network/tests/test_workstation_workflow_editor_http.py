@@ -276,7 +276,7 @@ class WorkflowEditorHTTPTests(unittest.TestCase):
         self.assertEqual(view["current_step_native_evidence"]["status"],
                          "NO_ATTACHED_NATIVE_RESULT")
         self.assertEqual(view["visible_related_step_evidence"], [])
-        self.assertTrue(view["other_ideas_not_read"])
+        self.assertTrue(view["other_ideas_not_exposed"])
         self.assertFalse(view["branch_quality_ranked"])
         status, _ = self.fetch("POST", "/api/idea-native-evidence",
                                {**request, "step_id": "unknown-step"},
