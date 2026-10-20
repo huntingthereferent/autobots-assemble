@@ -99,7 +99,7 @@ class SourcePostingBoundaryTests(TestCase):
             with self.assertRaises(ValueError):
                 gate.run(live=True)
 
-    def test_07_scope_cannot_claim clinical_event_when_registry_record_changes(self):
+    def test_07_scope_cannot_claim_clinical_event_when_registry_record_changes(self):
         result = gate.movement(gate.authenticate_receipt(gate.EVIDENCE.read_bytes()),
                                semantic_fixture())
         self.assertEqual([e["historical_record_valid_at"]
