@@ -75,3 +75,25 @@ remains READY until the existing scheduler acts on it.
 
 No existing history is migrated or touched by adding this code. It does
 not execute a worker, enroll keys, deploy a service or authorize merging.
+
+## One-runtime concurrent signed movements
+
+The same native `HandoffRuntime` now supplies an admission lock shared by
+both authenticated submit and result ingresses. It covers the complete
+signed request's scope checks, previous-event observation, native witness
+validation and SQLite commit. This avoids treating SQLite's write lock as
+protection for separately changing in-memory runtime state.
+
+Deterministic threaded regression tests check two independent submissions,
+two submissions of the same signed envelope, and two different signed
+results referencing the same previous event. Only the first of the two
+conflicting results may advance that native lineage; the other is refused
+as stale. The tests re-open the encrypted journal and check the persisted
+records, replay count and native status.
+
+This lock applies to signed admissions **sharing the same in-process
+runtime instance**. It does not serialize arbitrary privileged callers of
+`HandoffRuntime`, independent runtime objects, separate host processes or
+remote machines. Different stale native instances are rejected by the
+existing sequence guard and must be reconciled by restarting from the
+trusted history. No distributed exactly-once claim is made.
