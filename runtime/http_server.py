@@ -136,6 +136,12 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({"error": "loopback host and same-origin request required"}, 403)
             return
         parsed = urlparse(self.path)
+        # In signed-only mode there is no authenticated GET protocol yet.
+        # A loopback connection is not a reader identity. Deny private
+        # projections instead of leaking source histories over legacy APIs.
+        if SERVICE.signed_http_only and parsed.path.startswith("/api/"):
+            self.send_json({"error": "unsigned research reads disabled under signed HTTP policy"}, 403)
+            return
         query = parse_qs(parsed.query)
 
         try:
@@ -316,6 +322,13 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({"error": "bounded same-origin JSON request on loopback required"}, 403)
             return
         parsed = urlparse(self.path)
+        if SERVICE.signed_http_only:
+            signed_submission = parsed.path == "/api/security/handoffs"
+            signed_result = (parsed.path.startswith("/api/security/handoffs/")
+                             and parsed.path.endswith("/result"))
+            if not (signed_submission or signed_result):
+                self.send_json({"error": "unsigned HTTP mutation disabled under signed policy"}, 403)
+                return
         try:
             payload = read_json(self)
             with LOCK:
