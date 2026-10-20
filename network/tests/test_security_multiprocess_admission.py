@@ -42,8 +42,8 @@ def _independent_process_worker(base, journal_key, mode, suffix,
             runtime, ledger,
             IngressAuthority("multiprocess", actor, peer,
                              signer.public_key(), recipient))
-        if mode == "submit":
-            handoff = Handoff(handoff_id="job-" + suffix,
+        if mode in {"submit", "duplicate"}:
+            handoff = Handoff(handoff_id=("same-job" if mode == "duplicate" else "job-" + suffix),
                               referent="bounded-movement",
                               from_actor="owner", to_actor="worker",
                               required_relation="observe")
@@ -66,7 +66,7 @@ def _independent_process_worker(base, journal_key, mode, suffix,
             responses.put(("error", suffix, "synchronization timeout"))
             return
         try:
-            if mode == "submit":
+            if mode in {"submit", "duplicate"}:
                 state = ingress.submit(envelope)
             else:
                 state = ingress.return_result(envelope, handoff_id="shared")
@@ -141,6 +141,60 @@ class SeparateProcessNativeTests(unittest.TestCase):
             self.path, key=self.key))
         self.assertEqual(len(rebuilt.snapshot()), 1)
         self.assertEqual(len(rebuilt.event_store.all()), 1)
+
+    def test_independent_reencrypted_same_event_id_admits_once(self):
+        decisions = self._race("duplicate")
+        self.assertEqual(sorted(x[0] for x in decisions), ["committed", "stale"])
+        self.assertEqual(self._counts(), (1, 1))
+        # Once both processes exit, a brand-new signer still cannot reuse
+        # the event ID by choosing fresh ciphertext and a new envelope.
+        from security.continuation import EnvelopeError
+        from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+        from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
+        rebuilt = HandoffRuntime(event_store=SealedRuntimeJournal(self.path, key=self.key))
+        signer, recipient = Ed25519PrivateKey.generate(), X25519PrivateKey.generate()
+        ledger = ReplayLedger(self.base / "new-signer-ledger.sqlite")
+        ingress = AuthenticatedHandoffIngress(
+            rebuilt, ledger,
+            IngressAuthority("multiprocess", "owner", "worker",
+                             signer.public_key(), recipient))
+        retry = seal_handoff(
+            Handoff(handoff_id="same-job", referent="bounded-movement",
+                    from_actor="owner", to_actor="worker",
+                    required_relation="observe"),
+            lane="multiprocess", parent_sha256=None,
+            sender_private_key=signer,
+            recipient_public_key=recipient.public_key())
+        with self.assertRaisesRegex(EnvelopeError, "replayed"):
+            ingress.submit(retry)
+        self.assertEqual(self._counts(), (1, 1))
+
+    def test_fresh_signed_continuation_after_stale_process_reloads(self):
+        decisions = self._race("submit")
+        self.assertEqual(sorted(x[0] for x in decisions), ["committed", "stale"])
+        # No automatic reapplication of a stale signed movement; the new
+        # caller independently reloads the observed actual journal first.
+        rebuilt = HandoffRuntime(event_store=SealedRuntimeJournal(self.path, key=self.key))
+        existing = {h.handoff_id for h in rebuilt.event_store.handoffs()}
+        self.assertEqual(len(existing), 1)
+        signer, recipient = Ed25519PrivateKey.generate(), X25519PrivateKey.generate()
+        ledger = ReplayLedger(self.base / "fresh-continuation-replay.sqlite")
+        ingress = AuthenticatedHandoffIngress(
+            rebuilt, ledger,
+            IngressAuthority("multiprocess", "owner", "worker",
+                             signer.public_key(), recipient))
+        handoff = Handoff(
+            handoff_id="fresh-after-observation", referent="continue-observed",
+            from_actor="owner", to_actor="worker",
+            required_relation="observe")
+        ticket = seal_handoff(handoff, lane="multiprocess", parent_sha256=None,
+                              sender_private_key=signer,
+                              recipient_public_key=recipient.public_key())
+        self.assertEqual(ingress.submit(ticket).status, "READY")
+        self.assertEqual(self._counts(), (2, 2))
+        final = HandoffRuntime(event_store=SealedRuntimeJournal(self.path, key=self.key))
+        self.assertEqual({h.handoff_id for h in final.event_store.handoffs()},
+                         existing | {"fresh-after-observation"})
 
     def test_independent_results_cannot_both_extend_same_native_parent(self):
         runtime = HandoffRuntime(event_store=SealedRuntimeJournal(
