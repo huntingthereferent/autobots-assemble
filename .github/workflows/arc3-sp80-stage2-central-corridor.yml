@@ -1,0 +1,46 @@
+name: ARC3 original SP80 stage2 four-bar central corridor native test
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_central_corridor.py'
+      - '.github/workflows/arc3-sp80-stage2-central-corridor.yml'
+jobs:
+  real-original-native-stage2-corridor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Verify frozen source-native balanced central corridor controls
+        run: |
+          python - <<'PY'
+          from itertools import product
+          from work.arc3.native_sp80_stage2_central_corridor import (
+             MAIN,CONTROLS,PROGRAMS,U,M,LL,BOTTOM,STAGE1_WITNESSES)
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(MAIN)==27 and len(CONTROLS)==9 and len(PROGRAMS)==36
+          assert len(set(MAIN+CONTROLS))==36 and len(STAGE1_WITNESSES)==2
+          for i in range(4):
+              for j in range(i+1,4):
+                  vals=(U,M,LL,BOTTOM)
+                  assert set((x[i],x[j]) for x in MAIN)==set(product(vals[i],vals[j]))
+          for name,steps,word in PROGRAMS:
+              actions=parse_plan(word)
+              assert sum(x==6 for x,xy in actions)==4
+              assert actions[-1][0]==5
+              assert all(x!=6 or xy is not None for x,xy in actions)
+          print('UNIT ONLY: original SDK inward-corridor full frame controls predeclared')
+          PY
+      - name: Execute genuine SDK original stage2 inward four-bar movement
+        run: python -m work.arc3.native_sp80_stage2_central_corridor --out runtime/data/arc3/sp80-stage2-central-corridor.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-central-corridor
+          path: runtime/data/arc3/sp80-stage2-central-corridor.*
+          if-no-files-found: error
+          retention-days: 14
