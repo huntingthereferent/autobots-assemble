@@ -9,9 +9,9 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
 from runtime.engine import HandoffRuntime
 from runtime.handoff import Handoff
-from security.continuation import EnvelopeError, ReplayLedger
+from security.continuation import EnvelopeError, ReplayLedger, seal_record
 from security.journal_checkpoint import issue_checkpoint, verify_checkpoint
-from security.key_recovery import issue_recovery_envelope, recover_journal_key
+from security.key_recovery import issue_recovery_envelope, recover_journal_key, LANE, _anchor
 from security.sealed_journal import SealedRuntimeJournal, SealedJournalError
 
 
@@ -77,6 +77,20 @@ class OfflineJournalKeyRecoveryTests(unittest.TestCase):
         with self.assertRaises(SealedJournalError):
             self.recover(envelope, trusted_checkpoint_public_key=
                          Ed25519PrivateKey.generate().public_key())
+
+    def test_operator_signed_escrow_does_not_make_forged_checkpoint_trusted(self):
+        # Directly construct a valid operator-signed envelope around a forged
+        # checkpoint. Recovery used to accept this without checking checkpoint
+        # authority, because the operator envelope itself was well signed.
+        forged = {**self.anchor, "head_digest": "a" * 64}
+        candidate = seal_record(
+            self.key, lane=LANE, event_id=forged["journal_identity"],
+            parent_sha256=_anchor(forged),
+            sender_private_key=self.operator,
+            recipient_public_key=self.recovery_recipient.public_key(),
+        )
+        with self.assertRaises(SealedJournalError):
+            self.recover(candidate, signed_checkpoint=forged)
 
     def test_wrong_journal_identity_refused(self):
         with self.assertRaisesRegex(EnvelopeError, "identity mismatch"):
