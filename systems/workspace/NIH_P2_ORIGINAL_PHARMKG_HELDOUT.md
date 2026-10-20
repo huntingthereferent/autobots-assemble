@@ -51,3 +51,27 @@ The dedicated GitHub Action retrieves all three immutable published source files
 ### What to do with the actual failures
 
 If held-out link ranking is weak, that is valuable falsification: relationship traversal on original biomedical ontology hierarchies **does not by itself establish general biomedical knowledge inference**. Need typed heterogeneous multirelation query semantics, actual longitudinal event/time data, held-out real time-stamped gold and external static graph baselines, then OWL satisfiability and scalable KG metrics. **Do not return to Phase 1 source-history loops just to collect dates.**
+
+
+## Observed actual original held-out result — October 20, 2026
+
+The [original-source GitHub run #39476489005](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39476489005) succeeded **7/7 focused admission and source-leakage checks**. All source TSV bytes were independently authenticated against source-owner pinned original Git blob SHA-1; no original TSV bodies were retained. [Derived task-by-task artifact #12289721506](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39476489005/artifacts/12289721506), archive SHA-256 `012d30b3d979627ca148a307d37b56ff9e5699e3687e4e5a5f980ada81b76454`.
+
+**Original entire published data:** training **400,788 physical rows (386,768 unique; 14,020 duplicates)**, test **50,036 physical rows (49,771 unique; 265 duplicates)**, validation **49,536 physical rows (49,267 unique; 269 duplicates)**. The original file bytes are unchanged, and source duplicates are counted separately rather than being silently discarded. The source README's test/validation count labels do not match the actual named files; exact immutable files and file names take priority over the README table.
+
+| Original source relation code | Held-out positive questions | Questions with alternate same-relation source path | Mean filtered rank of source-positive target |
+| --- | ---: | ---: | ---: |
+| `GG` | 16 | **15** | 1.7500 |
+| `I` | 16 | **8** | 3.3125 |
+| `P` | 16 | **0** | 5.0000 |
+| `T` | 16 | **0** | 5.0000 |
+
+**All 64 actual fixed held-out original biomedical link questions:** A/B same-relation source paths **Hits@1 = 13/64**, **Hits@3 = 23/64**, tie-aware **MRR = 0.410417** on **nine candidates each** (one original test-positive plus eight *unlabeled* alternative tails). Independent full-training-graph static shortest-path ranker produced **Hits@1 = 13/64**, exactly matching A/B; **zero source-path existence/length disagreements across 576 candidates**. This is no quantified static-KG advantage, so no NIH Phase 2 correctness claim.
+
+The score is a *small filtered link-ranking proxy*, **not directly comparable** to PharmKG's originally published MRR/Hits@K over its own evaluation protocol or to a real biomedical clinical performance metric. We did not train the original authors' embedding models. Source-owner `data/preprocess.py` explicitly uses `sklearn.model_selection.train_test_split(random_state=2020)`, not source event timestamps; therefore the published held-out split **cannot** establish historical `known_at`/clinical `valid_at`. Alternative candidate tails were only filtered to avoid original known positives; they are not verified negatives.
+
+### Capability boundary that directly follows from this evidence
+
+The current **same-relation** 2-3-hop A/B query has a source-preserving path witness, but it fails to find an alternate path for any of the **32 held-out `P`/`T`** cases. This exposes the limitation of assuming that biomedical inference repeats the same predicate along every hop. The next substantive investigation should derive *explicit heterogeneous relation composition* from **training-only, independently justified biomedical metapath schemas**, then freeze those schemas **before** scoring a separate held-out test partition. Never deduce a clinical recommendation from mere graph connectivity, tune a rule using held-out labels without keeping a fresh holdout, or claim improved temporal performance absent actual source event times.
+
+Original W13 journal/executable, World48 and A/B ownership remain unchanged. PR remains draft; full repository-wide CI is separate from the successful focused run.
