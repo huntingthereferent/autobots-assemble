@@ -379,14 +379,23 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
 #runs-scope{font-variant-numeric:tabular-nums}
 #load-older[hidden]{display:none}
 @media(max-width:600px){#history-state{flex-basis:100%;text-align:left}}
+/* The audit is part of this workstation, not a second destination. */
+[hidden]{display:none!important}
+.audit-host{max-width:1600px;margin:0 auto;padding:24px clamp(13px,2.6vw,38px) 65px}
+.audit-host .section-top{margin:5px 0 16px}
+.audit-host .subtitle{max-width:950px}
+.audit-frame{display:block;width:100%;min-height:940px;height:940px;border:0;border-radius:7px;background:transparent}
+body.audit-active>header{border-bottom-color:#406173}
+body.audit-active nav #audit-tab{color:var(--text);background:#233b48}
+@media(max-width:760px){.audit-host{padding:15px 8px 40px}.audit-frame{border-radius:0}}
 </style>
 </head>
 <body>
 <header>
   <strong>HUNTING THE REFERENT <span class="brand-sub">/ WORK</span></strong>
-  <nav aria-label="Workstation sections"><a href="../game/">GAME · WORLD48</a><a href="#executions" aria-current="page">EXECUTIONS</a><a href="#research">RESEARCH</a><a href="audit.html">AUDIT</a><a href="trace.html">TRACE</a><a href="https://github.com/huntingthereferent/autobots-assemble">GITHUB</a></nav>
+  <nav aria-label="Workstation sections"><a href="../game/">GAME · WORLD48</a><a href="#executions" id="executions-tab">EXECUTIONS</a><a href="#research" id="research-tab">RESEARCH</a><a href="#audit" id="audit-tab">AUDIT</a><a href="trace.html">TRACE</a><a href="https://github.com/huntingthereferent/autobots-assemble">GITHUB</a></nav>
 </header>
-<main>
+<main id="workstation-main">
 <section class="overview" aria-labelledby="title">
   <div class="hero-layout">
     <div class="hero-copy">
@@ -467,6 +476,16 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
   <p class="fine">A documentation heading is not a failed run or a newly discovered wall. A historical checkpoint is not a live worker. Open the original evidence to inspect what was actually established.</p>
 </section>
 </main>
+<section id="audit" class="audit-host" aria-labelledby="audit-heading" hidden>
+  <div class="section-top">
+    <div>
+      <p class="eyebrow">03 / Source-bound project audit</p>
+      <h2 id="audit-heading">Audit by project referent</h2>
+      <p class="subtitle">ARC Run, World48, NIH and other project roots: inspect source-owned branches, executions, job steps, recorded next movements and unresolved evidence in one workstation.</p>
+    </div>
+  </div>
+  <iframe id="audit-frame" class="audit-frame" data-src="audit.html?embedded=1" title="Project referent audit: live execution lineage and source-recorded research" loading="eager"></iframe>
+</section>
 <footer>Read-only / evidence-first. Public runs poll periodically; recorded research updates when its committed source projection changes. The source records, not this screen, determine what has been verified.</footer>
 <script>
 "use strict";
@@ -908,6 +927,7 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
       (app.checked?" · last verified "+new Date(app.checked).toLocaleTimeString():" · no verified sample yet");
   }
   async function refresh(){
+    if($("workstation-main").hidden)return; // Audit tab owns visible source refreshes.
     if(app.reading)return;app.reading=true;app.lastAttempt=Date.now();$("check-now").disabled=true;
     try{
       const data=await getJSON(API+"/actions/runs?per_page=100&page=1");
@@ -972,10 +992,45 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
     updateNextCheck();
     if(!document.hidden&&!app.reading&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=PERIOD))refresh();
   },10000);
+  // Same-page audit tab. The child maintains its own read-only evidence model
+  // so its referent namespace cannot silently join a CI run to research.
+  const auditFrame=$("audit-frame");
+  const auditHost=$("audit");
+  const workstationMain=$("workstation-main");
+  let wasAudit=false;
+  function selectWorkstationView(){
+    const isAudit=location.hash==="#audit";
+    workstationMain.hidden=isAudit;
+    auditHost.hidden=!isAudit;
+    document.body.classList.toggle("audit-active",isAudit);
+    $("audit-tab").setAttribute("aria-current",isAudit?"page":"false");
+    $("executions-tab").setAttribute("aria-current",!isAudit&&location.hash!=="#research"?"page":"false");
+    $("research-tab").setAttribute("aria-current",!isAudit&&location.hash==="#research"?"page":"false");
+    if(isAudit){
+      if(!auditFrame.hasAttribute("src"))auditFrame.setAttribute("src",auditFrame.dataset.src);
+      window.scrollTo(0,0);
+    }else if(wasAudit){
+      // Returning to the execution view reconfirms original data rather
+      // than treating stale records from the hidden view as live.
+      refresh();
+      const target=location.hash&&document.getElementById(location.hash.slice(1));
+      if(target)requestAnimationFrame(()=>target.scrollIntoView());
+    }
+    wasAudit=isAudit;
+  }
+  window.addEventListener("hashchange",selectWorkstationView);
+  window.addEventListener("message",event=>{
+    if(event.origin!==location.origin||event.source!==auditFrame.contentWindow)return;
+    if(!event.data||event.data.type!=="referent-audit:resize")return;
+    const height=event.data.height;
+    if(typeof height!=="number"||!Number.isFinite(height)||height<300||height>200000)return;
+    auditFrame.style.height=Math.max(940,Math.ceil(height)+12)+"px";
+  });
+  selectWorkstationView();
   loadCatalog();
   refresh();
   loadRunArchive();
-  setInterval(()=>{if(!document.hidden)loadRunArchive()},ARCHIVE_CHECK);
+  setInterval(()=>{if(!document.hidden&&!$("workstation-main").hidden)loadRunArchive()},ARCHIVE_CHECK);
 })();
 </script>
 </body>

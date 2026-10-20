@@ -48,9 +48,25 @@ class ReferentAuditUITests(unittest.TestCase):
         self.assertIn('id="runs"', page)
         self.assertIn('id="next"', page)
         self.assertIn('id="research"', page)
-        self.assertIn('href="audit.html"', WORK.read_text(encoding="utf-8"))
-        self.assertIn('href="audit.html"', TRACE.read_text(encoding="utf-8"))
-        self.assertIn('[Referent audit](audit.html)', DOC.read_text(encoding="utf-8"))
+        self.assertIn('href="#audit"', WORK.read_text(encoding="utf-8"))
+        self.assertIn('href="work.html#audit"', TRACE.read_text(encoding="utf-8"))
+        self.assertIn('[Referent audit](work.html#audit)', DOC.read_text(encoding="utf-8"))
+
+    def test_audit_is_embedded_in_existing_workstation_not_separate_navigation(self):
+        page = WORK.read_text(encoding="utf-8")
+        child = PAGE.read_text(encoding="utf-8")
+        self.assertIn('<main id="workstation-main">', page)
+        self.assertIn('<section id="audit" class="audit-host"', page)
+        self.assertIn('data-src="audit.html?embedded=1"', page)
+        self.assertIn('href="#audit"', page)
+        self.assertNotIn('href="audit.html">AUDIT</a>', page)
+        self.assertIn('if(!auditFrame.hasAttribute("src"))', page)
+        self.assertIn('event.origin!==location.origin', page)
+        self.assertIn('event.source!==auditFrame.contentWindow', page)
+        self.assertIn('auditFrame.style.height=', page)
+        self.assertIn('new ResizeObserver(announceSize)', child)
+        self.assertIn("window.parent.postMessage({type:'referent-audit:resize',height},location.origin)", child)
+        self.assertIn("document.documentElement.classList.add('embedded')", child)
 
     def test_live_evidence_and_historical_research_are_separate(self):
         js = source_script()
