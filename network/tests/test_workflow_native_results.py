@@ -14,6 +14,9 @@ from systems.workspace.process_handoff import CorrespondenceWorkBridge, WORKER_I
 from systems.workspace.workflow_draft import SCHEMA
 from systems.workspace.workflow_pins import WorkflowPins
 from systems.workspace.workflow_native_results import WorkflowNativeResults, NativeResultBoundary
+from systems.workspace.workflow_idea_frontier import IdeaFrontier
+from systems.workspace.workflow_native_continuation import NativePosition, BoundedWorkerContext
+from runtime.repository_tasks import admit_active_work, read_active_work
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "work" / "arc_like_maze" / "chatbot"
@@ -109,6 +112,66 @@ class NativeResultWorkstationTests(unittest.TestCase):
         self.assertFalse(diff["automatic_pin_promotion"])
         self.assertEqual(len(self.pins.list_pins()), 2)
         self.assertEqual(len(self.results.list_records()), 2)
+
+    def native_idea_context(self, revision: str, first: dict,
+                            second: dict) -> BoundedWorkerContext:
+        active = read_active_work(ROOT / "TASKS.md")[0].source_id
+        admit_active_work(self.runtime, ROOT / "TASKS.md", actor_id="james")
+        frontier = IdeaFrontier(ROOT, self.data)
+        frontier.bind(idea_id=active, revision=first["revision"],
+                      worker="james", reason="Original explicitly witnessed task")
+        frontier.bind(idea_id=active, revision=second["revision"],
+                      worker="james", reason="Known directly pinned continuation")
+        return BoundedWorkerContext(frontier, self.runtime,
+                                    NativePosition("repo-work-" + active,
+                                                   second["revision"], "finite"))
+
+    def test_native_worker_sees_reverified_result_only_at_current_and_parent_step(self):
+        native_original = self.run_native("baseline", "visible-finite-original")
+        native_branch = self.run_native("another", "visible-finite-branch")
+        parent, child, first, second = self.setup_pins()
+        self.results.attach(parent, step_id="finite", job_id=native_original)
+        self.results.attach(child, step_id="finite", job_id=native_branch)
+        context = self.native_idea_context(second["revision"], first, second)
+        before = (self.data / "runtime.jsonl").read_bytes()
+        observed = context.observe_native_results()
+        self.assertEqual(observed["current_step_native_evidence"]["native"]["native_job_id"],
+                         native_branch)
+        self.assertEqual(len(observed["visible_related_step_evidence"]), 1)
+        peer = observed["visible_related_step_evidence"][0]
+        self.assertEqual(peer["revision"], first["revision"])
+        self.assertEqual(peer["native"]["native_job_id"], native_original)
+        self.assertEqual(peer["comparison"], "SAME_OPERATION_INPUTS_REVERIFIED")
+        self.assertTrue(peer["matching_observed_result"])
+        self.assertFalse(peer["quality_superiority_proven"])
+        self.assertTrue(observed["other_ideas_not_read"])
+        self.assertTrue(observed["operator_association_is_not_source_execution_proof"])
+        self.assertFalse(observed["branch_quality_ranked"])
+        self.assertFalse(observed["native_jobs_reexecuted"])
+        self.assertEqual((self.data / "runtime.jsonl").read_bytes(), before)
+
+    def test_unverified_or_missing_native_result_never_assumed(self):
+        parent, child, first, second = self.setup_pins()
+        context = self.native_idea_context(second["revision"], first, second)
+        observed = context.observe_native_results()
+        self.assertEqual(observed["current_step_native_evidence"]["status"],
+                         "NO_ATTACHED_NATIVE_RESULT")
+        self.assertEqual(observed["visible_related_step_evidence"][0]["status"],
+                         "NO_ATTACHED_NATIVE_RESULT")
+        self.assertNotIn("native", observed["visible_related_step_evidence"][0])
+        self.assertFalse(observed["branch_quality_ranked"])
+
+    def test_visible_native_result_changed_after_attaching_fails_closed(self):
+        native_original = self.run_native("baseline", "drift-source-parent")
+        native_branch = self.run_native("another", "drift-source-child")
+        parent, child, first, second = self.setup_pins()
+        self.results.attach(parent, step_id="finite", job_id=native_original)
+        self.results.attach(child, step_id="finite", job_id=native_branch)
+        context = self.native_idea_context(second["revision"], first, second)
+        context.observe_native_results()  # verify before mutating the source
+        (self.desk._edition(WORKER_ID, "baseline") / FILES[0]).write_text("changed\\n")
+        with self.assertRaisesRegex(ValueError, "source changed"):
+            context.observe_native_results()
 
     def test_unpinned_workflow_cannot_claim_native_result(self):
         job = self.run_native("baseline", "finite-only")
