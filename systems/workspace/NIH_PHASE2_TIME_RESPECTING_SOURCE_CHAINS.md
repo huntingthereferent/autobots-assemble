@@ -31,9 +31,9 @@ The separate `nih_phase2_time_respecting_chain_trial` re-executes [PR #269's ori
 | Capability | Unchanged W13 | W13 plus source-chain operation |
 | --- | ---: | ---: |
 | Temporal source fact questions (nine) | 8/9 | 8/9 |
-| Longitudinal path questions (three) | 0/3 | *evaluated live* |
+| Longitudinal path questions (three) | 0/3 | **3/3** |
 | RDF entailment (one) | 0/1 | 0/1 |
-| **Total (13 predeclared practice questions)** | **8/13** | *evaluated live* |
+| **Total (13 predeclared practice questions)** | **8/13** | **11/13** |
 
 A later native PASS confirms the new **separately implemented A/B capability**, not an in-place update to the original W13 emitted Python or a new native journal checkpoint.
 
@@ -45,7 +45,7 @@ The code also generates **160 deterministic but unseen** example cases with:
 - Both synthetic biomedical-care and public-health-surveillance relationship patterns, including distinct subjects and deliberately misleading decoy paths.
 - Independently implemented **Cartesian-product enumeration** as an oracle; it checks **every exact observed path**, not just expected positive/negative percentages.
 
-The new suite separately covers equal-time ties, reversed events, cross-subject splicing, evidence arriving after query time, earlier event expiration, over-capacity witness enumeration, bad source dates and altered record provenance. Both positive and negative generated cases must occur.
+The final dedicated suite separately covers equal-time ties, reversed events, cross-subject splicing, evidence arriving after query time, earlier event expiration, over-capacity witness enumeration, bad source dates and altered record provenance. To avoid a misleading always-reject result, the 160 unseen cases are stratified: **60 positive** paths and **100 negative** paths, all matched exactly by the independent Cartesian-product oracle.
 
 This is meaningful *finite temporal source relationship construction* but remains a practice-world test, not original NIH shared clinical data, official Phase 2 completion, an OWL reasoner, or medically validated causal inference.
 
@@ -69,4 +69,4 @@ python -m systems.workspace.nih_phase2_time_respecting_chain_trial \
     --output-dir /tmp/nih-p2-chain-trial
 ```
 
-The focused GitHub Action must finish before recording the output scores in this document. It retains original fact-case results, path witnesses and 160 independent unseen-case comparisons.
+The [successful focused GitHub Actions run #39458532334](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39458532334) passed **21/21 tests** and retained [artifact #12281925933](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39458532334/artifacts/12281925933), ZIP SHA-256 `34e21a1e556a3579f5261b7eedea39eb46a6bdb4baa84acf3af698c0e0f9ae61`. It records all original factual outputs, ordered path witnesses and 160 distinct independent-oracle comparisons. This is practice-only and does not complete Phase 2.
