@@ -105,7 +105,8 @@ jobs:
                             "ledger_operations":output["ledger_witness"]["steps_verified"],
                             "physically_observed_contacts":0},sort_keys=True))
           PY
-          for case in $(seq -w 0 8); do
+          for n in $(seq 0 8); do
+            case=$(printf '%02d' "$n")
             python -m work.ab_world.construction --verify "trial15-ab-pages/case-$case.json" > "trial15-ab-pages/verdict-$case.json"
           done
           python - <<'PY'
