@@ -1,0 +1,135 @@
+name: A/B WORLD Trial11 counterfactual discriminating evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial11_handoff.py'
+      - 'network/tests/test_ab_world_trial11_handoff.py'
+      - 'work/ab_world/TRIAL11_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial11-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-source-hypotheses-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout general A/B carrier
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD Trial11 source at pinned commit
+        uses: actions/checkout@v4
+        with:
+          ref: ec2522164c2dc85f906d211fc780061171fd5e71
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test carrier and reject fabricated physical readings
+        run: python -m unittest -v network.tests.test_ab_world_trial11_handoff
+      - name: Run unchanged native Trial11 hypothesis source and independent oracle
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_contact_discrimination \
+            network.tests.test_world_ab_active_set_trial \
+            network.tests.test_world_ab_two_contact_stress \
+            network.tests.test_world_ab_two_contact_candidate \
+            network.tests.test_world_ab_junction_threshold \
+            network.tests.test_world_ab_junction_continuous \
+            network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_contact_discrimination import run
+          from network.tests.test_world_ab_contact_discrimination import check
+          source=run()
+          assert check(source)
+          assert len(source["cases"]) == 35
+          assert source["counts"]["ambiguous_cases"] == 26
+          assert source["counts"]["friction_cone_only_narrowed_cases"] == 0
+          assert source["counts"]["ambiguous_cases_with_hypothetical_distinguishing_sensor"] == 26
+          assert all(all(s["measured_reading"] is None for s in case["sensors"]) for case in source["cases"])
+          assert not source["actual_outcome_selected"]
+          assert source["friction_cone_check_is_necessary_not_sufficient"]
+          Path("../trial11-original-hypotheses.json").write_text(
+              json.dumps(source, indent=2, sort_keys=True)+"\n", encoding="utf-8")
+          Path("../trial11-original-verdict.json").write_text(
+              json.dumps({"pinned_original_commit": "ec2522164c2dc85f906d211fc780061171fd5e71",
+                          "native_independent_hypothesis_verification": True,
+                          "source_counts": source["counts"],
+                          "observed_physical_readings": 0,
+                          "frictional_outcome_resolved": False},
+                         indent=2, sort_keys=True)+"\n", encoding="utf-8")
+          PY
+      - name: Carry nine hypothetical sensor grids per case as finite source records
+        run: |
+          python -m work.ab_world.world_trial11_handoff \
+            --native trial11-original-hypotheses.json \
+            --source-commit ec2522164c2dc85f906d211fc780061171fd5e71 \
+            > trial11-ab-counterfactual-carrier.json
+          python - <<'PY'
+          import json
+          from work.ab_world.construction import digest
+          native=json.load(open("trial11-original-hypotheses.json"))
+          result=json.load(open("trial11-ab-counterfactual-carrier.json"))
+          assert result["ledger_witness"]["valid"]
+          assert result["ledger_witness"]["pages_verified"] == 5
+          assert result["ledger_witness"]["observations_recorded"] == 350
+          assert result["case_count"] == 35
+          assert result["hypothetical_sensor_settings"] == 315
+          assert result["source_counts"] == native["counts"]
+          assert result["physical_sensor_measurements"] == 0
+          assert not result["physical_contact_selected"]
+          assert not result["frictional_solver_proven"]
+          assert not result["source_physics_verified_by_adapter"]
+          assert digest(result["page_manifest"]) == result["page_manifest_sha256"]
+          assert len(result["ledger_pages"]) == 5
+          for index, page in enumerate(result["ledger_pages"]):
+              assert page["witness"]["valid"]
+              assert page["first_case"] == 7*index
+              assert page["last_case"] == 7*index+6
+              assert page["receipt"]["head_hash"] == result["page_manifest"]["ordered_rotation_pages"][index]["head_hash"]
+              with open(f"trial11-ab-ledger-{index}.json","w") as handle:
+                  json.dump(page["receipt"],handle,indent=2,sort_keys=True)
+          with open("trial11-ab-manifest.json","w") as handle:
+              json.dump(result["page_manifest"],handle,indent=2,sort_keys=True)
+          print(json.dumps({
+              "rotation_pages": result["ledger_witness"]["pages_verified"],
+              "hypothetical_reading_settings": result["hypothetical_sensor_settings"],
+              "ledger_steps": result["ledger_witness"]["steps_verified"],
+              "actual_measurements": result["physical_sensor_measurements"],
+              "native_summary": native["counts"],
+          },sort_keys=True))
+          PY
+          for page in 0 1 2 3 4; do
+            python -m work.ab_world.construction --verify "trial11-ab-ledger-$page.json" > "trial11-ab-verdict-$page.json"
+          done
+          python - <<'PY'
+          import json
+          for index in range(5):
+              assert json.load(open(f"trial11-ab-verdict-{index}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_contact_discrimination.py \
+            original-world/network/tests/test_world_ab_contact_discrimination.py \
+            trial11-original-hypotheses.json trial11-original-verdict.json \
+            trial11-ab-counterfactual-carrier.json trial11-ab-manifest.json \
+            trial11-ab-ledger-*.json trial11-ab-verdict-*.json \
+            > trial11-source-hashes.txt
+      - name: Retain source counterfactuals, original witness and A/B ledgers
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial11-hypothetical-source-readings
+          path: |
+            trial11-original-hypotheses.json
+            trial11-original-verdict.json
+            trial11-ab-counterfactual-carrier.json
+            trial11-ab-manifest.json
+            trial11-ab-ledger-*.json
+            trial11-ab-verdict-*.json
+            trial11-source-hashes.txt
+          retention-days: 30
