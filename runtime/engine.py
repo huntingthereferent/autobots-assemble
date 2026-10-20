@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, replace
 from pathlib import Path
 from typing import Callable, Iterable
+from threading import RLock
 import json
 
 from .handoff import (
@@ -53,6 +54,10 @@ class HandoffRuntime:
 
     def __init__(self, *, event_store: EventStore | None = None) -> None:
         self.event_store = event_store or EventStore()
+        # Shared by every authenticated ingress of this runtime (submit/result).
+        # The native state is in-memory, so a SQLite transaction alone does
+        # not serialize reads of last_event_id against concurrent returns.
+        self._authenticated_admission_lock = RLock()
         self._evidence_verifiers: dict[
             str, Callable[[Handoff, ExecutionResult], None]
         ] = {}
