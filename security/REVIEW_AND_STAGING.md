@@ -211,3 +211,22 @@ trust root, observer PKI, or disaster recovery system. The receiving
 operator is responsible for retaining authentic anchors outside the
 SQLite file's rollback domain. Passing CI does not prove such an
 independent custodian exists.
+
+## SEC-20 — live operator revocation of pinned TLS client certificates
+
+The witness-only TLS receiver now requires a separately maintained
+B14 `OperatorPinLedger`. Trusted enrollment scopes the exact DER
+certificate fingerprint to a locally pinned source ID. The running
+receiver checks that the certificate is still current on every
+incoming signed witness request, and repeats the check after proof
+verification before committing the observer advance. The test suite
+covers a valid observation before revocation, denied subsequent
+observations, rotation disabling the old certificate, missing enrollment,
+corrupted operator policy, and revocation during witness verification.
+
+**PARTIAL FIX, NOT PRODUCTION APPROVAL:** This denies subsequent
+requests and tested in-flight revocation before the second check, but
+B14 and observer SQLite cannot commit policy and observation together.
+A revocation may race with the final SQLite write. A compromised local
+operator ledger is also not a trusted independent PKI authority. See
+[the certificate lifecycle contract](WITNESS_TRANSPORT.md).
