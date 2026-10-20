@@ -1,0 +1,40 @@
+name: ARC3 original SP80 wide native stage2 four-bar holdout
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_wider_bar_holdout.py'
+      - '.github/workflows/arc3-sp80-stage2-wider-holdout.yml'
+jobs:
+  real-native-SP80-stage2-wider:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Check frozen native action offsets and source controls
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_wider_bar_holdout import (
+             PROGRAMS,ORTHOGONAL,CORNERS,STEPS,RESETS)
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(ORTHOGONAL)==27 and len(CORNERS)==9
+          assert len(PROGRAMS)==36 and STEPS==(0,3,5) and RESETS==2
+          for name,word in PROGRAMS:
+              actions=parse_plan(word)
+              assert actions[-1][0]==5
+              assert sum(a==6 for a,xy in actions)==4
+              assert all(a!=6 or xy is not None for a,xy in actions)
+          print('UNIT ONLY: independent genuine stage2 source offset holdout frozen')
+          PY
+      - name: Play original SP80 SDK wider four-bar source experiment
+        run: python -m work.arc3.native_sp80_stage2_wider_bar_holdout --out runtime/data/arc3/stage2-wider-bar-holdout.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-wider-bar-holdout
+          path: runtime/data/arc3/stage2-wider-bar-holdout.*
+          if-no-files-found: error
+          retention-days: 14

@@ -116,3 +116,6 @@ An **independent public SP80 replay** reproduced the six-action word 454545 adva
 ## Historical checkpoint — pre-color relation (bounded by longer histories)
 
 [SP80 native pre-color gate](runs/WINDOW48_SP80_NATIVE_OCCUPANCY_2026-10-18.md): Six new words, 24 clean official game resets, 216 actual actions. Without fitting any new geometry, a source-native pre-action color constraint removed all 50 previously overpredicted edge changes, leaving **50/50 exact ACTION4 full changed-pixel/native-color effects and all 1,680/1,680 actual transitions correctly included**. A plain unshifted identity control stayed 0/50 exact. Both earlier shifted geometry candidates remain tied. The relation uses an observed corresponding level-0 effect plus actual level-1 pre-action pixels; it cannot yet solve the stage autonomously or establish original F3-48 correspondence.
+
+
+**Independent wider stage2 negative witness (October 20):** 72 genuine source-native stage2 sessions, 2,248 SDK actions, 10,570 independently matched original frames, zero level3. [Native run #39359987158](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39359987158). Retain this as one bounded negative result; do not supersede newer four-bar selection and vertical controls.
