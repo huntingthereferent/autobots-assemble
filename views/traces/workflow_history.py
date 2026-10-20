@@ -45,24 +45,39 @@ def collect(fetch_page, *, max_pages=MAX_PAGES, collected_at=None):
     """Return first-party run identities. A page limit/invalid row is explicit."""
     if not 1 <= max_pages <= MAX_PAGES:
         raise ValueError("invalid bounded page budget")
+    first = fetch_page(1)
+    if not isinstance(first, dict) or not isinstance(first.get("workflow_runs"), list):
+        raise RuntimeError("GitHub response missing workflow_runs array")
+    reported_total = first.get("total_count")
+    if not isinstance(reported_total, int) or isinstance(reported_total, bool) or reported_total < 0:
+        raise RuntimeError("GitHub response missing integer total_count")
+    expected_pages = max(1, (reported_total + PAGE_SIZE - 1) // PAGE_SIZE)
+    planned_pages = min(max_pages, expected_pages)
+    # Bound parallelism: 8 authenticated source requests instead of a browser's
+    # 70+ anonymous reads or a long serial walk. Results are processed in page order.
+    from concurrent.futures import ThreadPoolExecutor
+    if planned_pages > 1:
+        with ThreadPoolExecutor(max_workers=min(8, planned_pages - 1)) as pool:
+            other = list(pool.map(fetch_page, range(2, planned_pages + 1)))
+    else:
+        other = []
     seen = {}
-    page = 1
-    reported_total = None
     fetched = 0
     malformed = 0
-    exhausted = False
-    while page <= max_pages:
-        response = fetch_page(page)
+    inconsistent_totals = False
+    processed_pages = 0
+    for page, response in enumerate([first, *other], 1):
         if not isinstance(response, dict) or not isinstance(response.get("workflow_runs"), list):
             raise RuntimeError("GitHub response missing workflow_runs array")
         total = response.get("total_count")
         if not isinstance(total, int) or isinstance(total, bool) or total < 0:
             raise RuntimeError("GitHub response missing integer total_count")
-        if reported_total is None:
-            reported_total = total
+        if total != reported_total:
+            inconsistent_totals = True
         rows = response["workflow_runs"]
         if len(rows) > PAGE_SIZE:
             raise RuntimeError("GitHub returned more rows than bounded page size")
+        processed_pages = page
         for entry in rows:
             fetched += 1
             run = normalize_run(entry)
@@ -70,12 +85,9 @@ def collect(fetch_page, *, max_pages=MAX_PAGES, collected_at=None):
                 malformed += 1
             else:
                 seen[run["id"]] = run
-        if len(rows) < PAGE_SIZE:
-            exhausted = True
-            break
-        page += 1
     runs = sorted(seen.values(), key=lambda r: (r["created_at"] or "", r["id"]), reverse=True)
-    complete = bool(exhausted and fetched == reported_total and malformed == 0
+    complete = bool(planned_pages == expected_pages and not inconsistent_totals
+                    and fetched == reported_total and malformed == 0
                     and len(runs) == reported_total)
     if collected_at is None:
         collected_at = datetime.now(timezone.utc).isoformat(timespec="seconds")
@@ -87,7 +99,7 @@ def collect(fetch_page, *, max_pages=MAX_PAGES, collected_at=None):
         "source_rows_seen": fetched,
         "indexed_count": len(runs),
         "invalid_source_rows": malformed,
-        "pages_read": page,
+        "pages_read": processed_pages,
         "complete": complete,
         "boundary": "A workflow run is not proof of a native verified research result; archived status is a source snapshot, not live telemetry.",
         "runs": runs,
