@@ -258,3 +258,23 @@ its phase is only observed while the trusted process runs. It does
 not obscure public envelope metadata, prevent key theft or grant
 cryptographic authorization. The key material remains governed by
 ordinary vetted cryptography and operator trust policies.
+
+## Explicitly submitted A/B approach dialogue (toy maze)
+
+[Consent-based message recorder and local maze demonstration](APPROACH_DIALOGUE.md)
+allow a willing participant to type an entire submitted message into an
+**explicit local A/B experiment**. Only complete messages deliberately
+submitted after an informational consent notice appear in a bounded,
+in-memory transcript. The recorded probe steps cycle through
+`threshold → turn → mirror → passage`; they never count as native worker
+admission and never access protected keys.
+
+This is **not** a covert keylogger, OS keyboard hook, recording service,
+honeypot for unsuspecting people, public network listener, or log of
+unsubmitted typing. Private keys and legitimate signed ingress remain
+untouched. Basic obvious credential/email patterns are redacted;
+such patterns are not comprehensive privacy protection. The operator
+must not deploy the experiment to others without separate data handling,
+consent and security review.
+
+Local demo from repository root: `python -m security.approach_dialogue`.
