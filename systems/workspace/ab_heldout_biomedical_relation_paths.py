@@ -65,7 +65,7 @@ def witness(index,*,head,relation,tail,max_hops=3):
             "source_edge_sha256":[], "source_path_hops":None,
             "direct_training_edge_exists":True,"exhaustive_within_bound":True,
         }
-    middle=sorted(first & ending-{head,tail})
+    middle=sorted((first & ending)-{head,tail})
     if middle:
         nodes=[head,middle[0],tail]
     elif max_hops==3:
