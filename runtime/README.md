@@ -396,3 +396,9 @@ The optional `/api/security/handoffs` and
 `HandoffRuntime` only after the host installs trusted key policy. Both
 routes return 403 by default. See [the HTTP security boundary](../security/HTTP_INGRESS.md)
 for the trust contract, recovery limitations and at-rest storage risk.
+
+## Optional signed checkpoint and local worker policy
+
+The encrypted journal can optionally require a preexisting independently signed checkpoint and a pinned Ed25519 public key at service startup. An empty replacement database or historical rollback below the anchored sequence is refused. See [the checkpoint and offline recovery record](../security/CHECKPOINT_RECOVERY.md).
+
+When a trusted host installs the authenticated `result` ingress, the former unsigned native and agent result/activation endpoints are refused in that process. Existing local workflows are unchanged if signed ingress is not installed. This HTTP policy does not intercept privileged Python methods.
