@@ -3,12 +3,12 @@ on:
   push:
     paths:
       - 'security/**'
-      - 'network/tests/test_security_continuation.py'
+      - 'network/tests/test_security_*.py'
       - '.github/workflows/ab-security-continuation.yml'
   pull_request:
     paths:
       - 'security/**'
-      - 'network/tests/test_security_continuation.py'
+      - 'network/tests/test_security_*.py'
       - '.github/workflows/ab-security-continuation.yml'
 permissions:
   contents: read
@@ -28,4 +28,4 @@ jobs:
       - name: Compile implementation
         run: python -m compileall -q security
       - name: Native security tests
-        run: python -W error::ResourceWarning -m unittest discover -s network/tests -p 'test_security_continuation.py' -v
+        run: python -W error::ResourceWarning -m unittest discover -s network/tests -p 'test_security_*.py' -v
