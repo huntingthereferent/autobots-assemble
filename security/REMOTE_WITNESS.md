@@ -90,3 +90,14 @@ wrong signers and origin, simultaneous observer updates, and same-signer
 fork exclusion.
 
 A passing test verifies these relationships in the stated scope only.
+
+## Authenticated local transfer laboratory
+
+The [mTLS witness-only receiver and independent observer anchors](WITNESS_TRANSPORT.md)
+offer an explicit transport seam for this **observation-only** protocol.
+Trusted operators separately pin TLS client certificates, source Ed25519
+signing keys, and observer-owned signed checkpoints. The loopback-only
+receiver accepts no worker commands, no automatic key enrollment, and
+no remote source journal decryption. The localhost TLS integration
+tests exercise this seam; actual physically separated hosts and
+production certificate custody remain outside current evidence.
