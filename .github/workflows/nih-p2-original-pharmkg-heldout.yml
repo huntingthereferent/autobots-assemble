@@ -1,0 +1,96 @@
+name: NIH P2 independent original PharmKG heldout biomedical links
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/ab_heldout_biomedical_relation_paths.py'
+      - 'systems/workspace/nih_p2_external_pharmkg_heldout_trial.py'
+      - 'network/tests/test_nih_p2_external_pharmkg_heldout_trial.py'
+      - 'systems/workspace/NIH_P2_ORIGINAL_PHARMKG_HELDOUT.md'
+      - '.github/workflows/nih-p2-original-pharmkg-heldout.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nih-p2-original-pharmkg-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  heldout-original-biomedical-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Retrieve exact source-owner published TRAIN TEST VALID biomedical triples
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pharmkg-original" "$RUNNER_TEMP/pharmkg-derived"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlopen,Request
+          import hashlib,os
+          from systems.workspace import nih_p2_external_pharmkg_heldout_trial as a
+          origin="https://raw.githubusercontent.com/"+a.ORIGIN+"/"+a.COMMIT+"/data/PharmKG-8k/"
+          output=Path(os.environ["RUNNER_TEMP"])/"pharmkg-original"
+          for name,digest in a.SOURCE_FILES.items():
+              url=origin+name
+              with urlopen(Request(url,headers={"User-Agent":"AB-P2-External-Heldout-Research/1.0"}),timeout=50) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("original source host, commit or route changed")
+                  raw=response.read(15_000_001)
+              if len(raw)>15_000_000 or a.git_blob_sha1(raw)!=digest:
+                  raise ValueError("source-owner immutable file identity mismatch")
+              (output/name).write_bytes(raw)
+              print(name,len(raw),hashlib.sha256(raw).hexdigest(),digest)
+          PY
+      - name: Execute source-integrity, heldout leak and path-oracle falsification
+        env:
+          PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/pharmkg-original/train.tsv
+          PHARMKG_ORIGINAL_TEST: ${{ runner.temp }}/pharmkg-original/test.tsv
+          PHARMKG_ORIGINAL_VALID: ${{ runner.temp }}/pharmkg-original/valid.tsv
+        run: python -m unittest -v network.tests.test_nih_p2_external_pharmkg_heldout_trial
+      - name: Recompute heldout biomedical link ranks vs independently capable static graph
+        env:
+          PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/pharmkg-original/train.tsv
+          PHARMKG_ORIGINAL_TEST: ${{ runner.temp }}/pharmkg-original/test.tsv
+          PHARMKG_ORIGINAL_VALID: ${{ runner.temp }}/pharmkg-original/valid.tsv
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_external_pharmkg_heldout_trial \
+            --train "$PHARMKG_ORIGINAL_TRAIN" \
+            --test "$PHARMKG_ORIGINAL_TEST" \
+            --valid "$PHARMKG_ORIGINAL_VALID" \
+            --output "$RUNNER_TEMP/pharmkg-derived/pharmkg-heldout-evaluation.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          f=Path(os.environ["RUNNER_TEMP"])/"pharmkg-derived/pharmkg-heldout-evaluation.json"
+          d=json.loads(f.read_text())
+          assert d["schema"]=="nih-p2-original-pharmkg-heldout-source-link-trial/v1"
+          assert d["original_source_commit"]=="a7daec6b4d6c785c157b8cf693a4651756cb8647"
+          assert d["heldout_test_questions"]==64
+          assert d["source_path_result_mismatches_vs_static_reasoner"]==0
+          assert d["AB_link_proxy_hits_at_1"]==d["independent_full_training_static_3hop_hits_at_1"]
+          assert d["static_training_graph_fed_test_or_validation_data"] is False
+          assert d["source_split_is_chronological"] is False
+          assert d["source_path_proves_direct_heldout_biomedical_relation"] is False
+          assert d["official_NIH_Phase2_benchmark_reproduced"] is False
+          assert d["original_W13_journal_modified"] is False
+          assert d["original_external_dataset_bodies_redistributed"] is False
+          PY
+          (cd "$RUNNER_TEMP/pharmkg-derived" && sha256sum pharmkg-heldout-evaluation.json > sha256.txt)
+      - name: Retain only derived original-source link path evidence and actual failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-original-pharmkg-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pharmkg-derived/
+          retention-days: 30
+          if-no-files-found: warn
