@@ -168,6 +168,18 @@ class WitnessOnlyHandler(BaseHTTPRequestHandler):
             verify_observer_anchor(
                 self.server.observer, anchor, source_public_key=authorized[1],
                 observer_public_key=observer_public_key)
+            # Revocation may arrive while the TLS body and signed
+            # observation proof are being checked. Re-read policy at the
+            # final application boundary as well. B14 and observer SQLite
+            # are NOT a shared transaction: fully race-free revocation
+            # still requires a coordinated production admission protocol.
+            try:
+                self.server.operator_pin_ledger.require_current(
+                    witness_client_pin_source(authorized[0]),
+                    WITNESS_CLIENT_EDITION, digest)
+            except (PermissionError, ValueError, OSError):
+                self._reply(403, {"error": "witness certificate revoked during verification"})
+                return
             checkpoint = self.server.observer.observe(
                 authorized[0], document["bundle"],
                 trusted_source_public_key=authorized[1])
