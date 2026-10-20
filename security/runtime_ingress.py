@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from hashlib import sha256
+from functools import wraps
 import json
 from typing import Any
 
@@ -134,6 +135,19 @@ class IngressAuthority:
             raise ValueError("explicit trusted actors and keys required")
 
 
+def _serialize_authenticated_movement(method):
+    """Hold one runtime lock across prior-state read, check, and native commit.
+
+    This is a single-process native ingress boundary, NOT distributed locking
+    or a lock around trusted direct Python callers.
+    """
+    @wraps(method)
+    def locked(self, *args, **kwargs):
+        with self.runtime._authenticated_admission_lock:
+            return method(self, *args, **kwargs)
+    return locked
+
+
 class AuthenticatedHandoffIngress:
     """Verify a sealed movement before delegating to the existing runtime.
 
@@ -176,6 +190,7 @@ class AuthenticatedHandoffIngress:
                     envelope_digest(envelope))
         return None
 
+    @_serialize_authenticated_movement
     def submit(self, envelope: dict, *, expected_parent_sha256: str | None = None):
         """Admit one authenticated native handoff without executing a worker."""
         raw = self._open(envelope, expected_parent_sha256)
@@ -195,6 +210,7 @@ class AuthenticatedHandoffIngress:
             return self.runtime.submit(handoff, admission=self._native_admission(envelope))
         return self.runtime.submit(handoff)
 
+    @_serialize_authenticated_movement
     def return_result(self, envelope: dict, *, handoff_id: str,
                       expected_parent_sha256: str | None = None):
         """Admit an authenticated, state-bound result from the assigned worker."""
