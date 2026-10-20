@@ -88,8 +88,9 @@ class Trial17FirstReturnHandoffTests(unittest.TestCase):
         created=next(i for i,x in enumerate(operations)
                      if x["op"]=="introduce" and x["id"]=="located-corner-return")
         self.assertEqual(created,first+1)
-        self.assertEqual(operations[-1]["label"] if "label" in operations[-1]
-                         else operations[-1]["op"],"connect")
+        self.assertEqual(operations[-1]["op"],"connect")
+        self.assertEqual(operations[-1]["label"],
+                         "numerically-bracketed-possible-contact")
 
     def test_03_no_return_case_not_silently_given_a_contact(self):
         v=sample()
