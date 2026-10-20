@@ -1,0 +1,76 @@
+name: NIH P2 retained original W13 world continuation
+on:
+  pull_request:
+    paths:
+      - 'scripts/nih_p2_original_world_resume.py'
+      - 'scripts/nih_p2_original_world_joint_witness.py'
+      - 'network/tests/test_nih_p2_original_world_joint_witness.py'
+      - 'scripts/nih_p2_original_world_revision.py'
+      - 'network/tests/test_nih_p2_original_world_revision.py'
+      - '.github/workflows/nih-p2-original-world-retained-continuation.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/nih_p2_original_world_resume.py'
+      - 'scripts/nih_p2_original_world_joint_witness.py'
+      - 'network/tests/test_nih_p2_original_world_joint_witness.py'
+      - 'scripts/nih_p2_original_world_revision.py'
+      - 'network/tests/test_nih_p2_original_world_revision.py'
+      - '.github/workflows/nih-p2-original-world-retained-continuation.yml'
+permissions:
+  contents: read
+  actions: read
+jobs:
+  resume-retained-twelve-job-game-world:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          path: control
+          persist-credentials: false
+      - uses: actions/checkout@v5
+        with:
+          ref: 34652b7b788fe21cc470273c953ae0ea1799b1e9
+          path: original
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install native source verifier and real Chromium
+        run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Reject false publication certainty, altered source versions and duplicate frames
+        run: |
+          cd control
+          python -m unittest -v network.tests.test_nih_p2_original_world_joint_witness network.tests.test_nih_p2_original_world_revision
+      - name: Retrieve only exact retained original W13 twelve-job world evidence
+        uses: actions/download-artifact@v4
+        with:
+          run-id: 39160329599
+          name: nih-phase1-world-publication-uncertainty-39160329599-1
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/source-world
+      - name: Restore exact original journal, reverify NIH P2 benchmark, play world again
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ORIGINAL_SOURCE_DIR: ${{ github.workspace }}/original
+        run: |
+          python -I "$GITHUB_WORKSPACE/control/scripts/nih_p2_original_world_resume.py"
+      - name: Preserve only new read-only game-world observations and source hashes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-nih-p2-world-reentry-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/continued-original-w13/retained-world-reentry-receipt.json
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-publication-uncertainty.json
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-publication-uncertainty.png
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-source-motion.json
+            ${{ runner.temp }}/continued-original-w13/nih-phase1-world-source-motion.png
+            ${{ runner.temp }}/continued-original-w13/nih-p2-original-world-joint-source-publication.json
+            ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.json
+            ${{ runner.temp }}/continued-original-w13/nih-p2-world-source-revision.png
+          retention-days: 30
+          if-no-files-found: warn
