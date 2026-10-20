@@ -181,6 +181,76 @@ class MutuallyAuthenticatedWitnessTransportTests(unittest.TestCase):
             self.request({"source_id": "alpha", "bundle": bundle},
                          context=self.no_cert_context)
 
+    def test_duplicate_json_fields_and_nonfinite_values_are_refused(self):
+        bundle = self.next_bundle("one")
+        # JSON with two source identities must never resolve by
+        # silently taking the last key or by parser disagreement.
+        raw = (b'{"source_id":"alpha","source_id":"other","bundle":' +
+               json.dumps(bundle).encode("utf-8") + b'}')
+        self.assertEqual(self.raw_request(raw)[0], 400)
+        self.assertEqual(self.raw_request(
+            b'{"source_id":"alpha","bundle":NaN}')[0], 400)
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
+
+    def test_duplicate_content_length_and_chunked_headers_are_refused(self):
+        payload = b'{"source_id":"alpha","bundle":{}}'
+        status, _ = self.raw_request(
+            payload, headers={"Content-Length": [str(len(payload)), "1"]})
+        self.assertEqual(status, 415)
+        status, _ = self.raw_request(
+            payload, headers={"Transfer-Encoding": "chunked"})
+        self.assertEqual(status, 415)
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
+
+    def test_observer_rollback_refused_before_any_new_transport_admission(self):
+        import sqlite3
+        old = self.root / "observer-old.sqlite"
+        with sqlite3.connect(self.observer.path) as current, sqlite3.connect(old) as copy:
+            current.backup(copy)
+        first = self.next_bundle("one")
+        self.assertEqual(self.request({"source_id": "alpha", "bundle": first})[0], 200)
+        current_anchor = issue_observer_anchor(
+            self.observer, "alpha",
+            source_public_key=self.source_key.public_key(),
+            observer_private_key=self.observer_key)
+        self.server.independent_anchors["alpha"] = (
+            current_anchor, self.observer_key.public_key())
+        second = self.next_bundle("two")
+        with sqlite3.connect(old) as original, sqlite3.connect(self.observer.path) as target_db:
+            original.backup(target_db)
+        self.assertEqual(self.request({"source_id": "alpha", "bundle": second})[0], 400)
+        self.assertEqual(self.observer.current(
+            "alpha", trusted_source_public_key=self.source_key.public_key())["sequence"], 0)
+
+    def raw_request(self, raw, *, headers=None):
+        import http.client
+        context = self.client_context
+        conn = HTTPSConnection(
+            "127.0.0.1", self.server.server_port, timeout=5, context=context)
+        try:
+            conn.connect()
+            sock = conn.sock
+            pairs = headers or {}
+            lines = ["POST /v1/witness HTTP/1.1",
+                     f"Host: 127.0.0.1:{self.server.server_port}",
+                     "Content-Type: application/json",
+                     "Connection: close"]
+            if "Content-Length" not in pairs:
+                lines.append(f"Content-Length: {len(raw)}")
+            for name, values in pairs.items():
+                if isinstance(values, list):
+                    lines.extend(f"{name}: {value}" for value in values)
+                else:
+                    lines.append(f"{name}: {values}")
+            sock.sendall(("\\r\\n".join(lines) + "\\r\\n\\r\\n").encode("ascii") + raw)
+            response = conn.response_class(sock)
+            response.begin()
+            return response.status, json.loads(response.read().decode("utf-8"))
+        finally:
+            conn.close()
+
     def test_endpoint_never_accepts_worker_commands_or_reads(self):
         self.assertEqual(self.request({}, method="GET")[0], 405)
         self.assertEqual(self.request({"actor_id": "owner"},
