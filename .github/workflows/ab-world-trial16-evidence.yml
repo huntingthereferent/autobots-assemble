@@ -1,0 +1,131 @@
+name: A/B WORLD Trial16 sampled rotation counterexample handoff
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial16_handoff.py'
+      - 'network/tests/test_ab_world_trial16_handoff.py'
+      - 'work/ab_world/TRIAL16_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial16-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-rotation-to-bounded-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout neutral A/B carrier
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD16 pinned mathematical source
+        uses: actions/checkout@v4
+        with:
+          ref: 6d22286b1fd129ae4011d1abb55dd4c320d58a5a
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify original Trial04 impact, Trial15 and Trial16 samples
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_body_support \
+            network.tests.test_world_ab_rotating_square_clearance
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_rotating_square_clearance import run
+          from network.tests.test_world_ab_rotating_square_clearance import verify
+          source = run()
+          assert len(source["cases"]) == 8
+          assert source["counts"] == {"sampled-overlap": 6, "sampled-no-overlap": 2}
+          assert all(verify(case) for case in source["cases"])
+          assert not source["physical_world_verified"]
+          assert not source["continuous_rotating_polygon_solver_present"]
+          Path("../trial16-original-native.json").write_text(
+              json.dumps(source,indent=2,sort_keys=True,allow_nan=False)+"\n")
+          Path("../trial16-original-verdict.json").write_text(json.dumps({
+              "source_commit":"6d22286b1fd129ae4011d1abb55dd4c320d58a5a",
+              "original_first_contact_independently_checked":True,
+              "rotating_polygon_samples_independently_checked":488,
+              "sampled_overlap_counterexamples":6,
+              "sampled_no_overlap_windows":2,
+              "receiver_constructions_witnessed":0,
+              "physical_material_measurements":0,
+              "continuous_clearance_verified":False,
+          },indent=2,sort_keys=True)+"\n")
+          PY
+      - name: Check neutral A/B fixture-based source boundary and negative tests
+        run: python -m unittest -v network.tests.test_ab_world_trial16_handoff
+      - name: Admit pinned source observations and independently verify eight ledgers
+        run: |
+          python -m work.ab_world.world_trial16_handoff \
+            --native trial16-original-native.json > trial16-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          carrier=json.load(open("trial16-ab-carrier.json"))
+          assert carrier["ledger_witness"]["valid"]
+          assert carrier["ledger_witness"]["pages_verified"] == 8
+          assert carrier["source_cases"] == 8
+          assert carrier["sampled_points_retained"] == 488
+          assert carrier["overlaps_refuting_projection"] == 6
+          assert carrier["sample_windows_without_detected_overlap"] == 2
+          assert carrier["receiver_constructions"] == carrier["second_impulses_solved"] == 0
+          assert carrier["real_physical_measurements"] == 0
+          assert not carrier["continuous_clearance_proven"]
+          assert digest(carrier["manifest"]) == carrier["manifest_sha256"]
+          folder=Path("trial16-ab-receipts")
+          folder.mkdir(exist_ok=True)
+          for page in carrier["pages"]:
+              index=page["index"]
+              receipt=page["receipt"]
+              assert verify_receipt(receipt)["valid"]
+              assert receipt["head_hash"] == carrier["manifest"]["ordered_pages"][index]["head_hash"]
+              compare=receipt["final"]["comparisons"]["unconstrained-no-overlap-prediction"]
+              assert compare["result"] == ("DIFFERENT" if page["first_detected_overlap_at"] is not None else "MATCH")
+              assert len(receipt["final"]["objects"]) == 2
+              folder.joinpath(f"case-{index:02}.json").write_text(
+                  json.dumps(receipt,indent=2,sort_keys=True,allow_nan=False)+"\n")
+          Path("trial16-ab-manifest.json").write_text(
+              json.dumps(carrier["manifest"],indent=2,sort_keys=True,allow_nan=False)+"\n")
+          print(json.dumps({
+              "verified_original_samples":488,
+              "independent_ab_ledgers":8,
+              "ab_steps":carrier["ledger_witness"]["steps_verified"],
+              "source_counterexamples":6,
+              "selected_physical_contacts":0,
+          },sort_keys=True))
+          PY
+          for n in $(seq 0 7); do
+            p=$(printf '%02d' "$n")
+            python -m work.ab_world.construction \
+              --verify "trial16-ab-receipts/case-$p.json" > "trial16-ab-receipts/verdict-$p.json"
+          done
+          sha256sum \
+            original-world/systems/workspace/world_ab_rotating_square_clearance.py \
+            original-world/network/tests/test_world_ab_rotating_square_clearance.py \
+            trial16-original-native.json trial16-original-verdict.json \
+            trial16-ab-carrier.json trial16-ab-manifest.json \
+            trial16-ab-receipts/case-*.json trial16-ab-receipts/verdict-*.json \
+            > trial16-source-digests.txt
+      - name: Retain native source, counterexamples and neutral A/B witness artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial16-rotating-square-source-refutations
+          path: |
+            trial16-original-native.json
+            trial16-original-verdict.json
+            trial16-ab-carrier.json
+            trial16-ab-manifest.json
+            trial16-ab-receipts/
+            trial16-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
