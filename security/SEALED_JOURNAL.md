@@ -100,3 +100,9 @@ python -W error::ResourceWarning -m unittest discover \
 
 This provides a working bounded research prototype; not a production
 security certification.
+
+## Anchoring and recovery
+
+[External checkpoints and offline recovery](CHECKPOINT_RECOVERY.md) add independently signed records of the journal's authenticated prefix. An old but valid database is rejected when the operator supplies a newer authentic signed checkpoint during service restart. The checkpoint must be held outside the database's rollback domain; none is automatically created or published.
+
+An operator may separately encrypt the verified 32-byte journal key to an offline recipient public key for controlled disaster recovery. Recovered bytes are only returned to the authorized caller in memory, and restarting the native runtime still requires validation against the trusted checkpoint. This is not automatic key management, rotation or multi-store backup protection.
