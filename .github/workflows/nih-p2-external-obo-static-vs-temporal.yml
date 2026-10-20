@@ -73,6 +73,8 @@ jobs:
           assert d["scored_cases"]>=90
           assert d["scored_cases"]==d["AB_equals_independent_exact_two_hop_cases"]
           assert d["static_future_leakage_cases"]>0
+          assert d["original_three_hop_only_case_count"]>0
+          assert d["static_reasoner_reachable_three_hop_AB_misses"]>0
           assert d["source_original_edge_publication_times_authenticated"] is False
           assert d["actual_original_disjointness_with_synthetic_inconsistent_fixture"]["owlrl_error_signal_count"]>0
           assert d["actual_original_disjointness_with_synthetic_inconsistent_fixture"]["full_owl_dl_consistency_verified"] is False
