@@ -93,14 +93,16 @@ class IdeaFrontierTests(unittest.TestCase):
         self.assertFalse(help_["event"]["worker_help_executed"])
         peer_view = self.index.worker_frontier(
             idea_id=self.idea, revision=peer["revision"], step_id="start", worker="worker-B")
-        self.assertEqual(peer_view["incoming_peer_help"], [{
-            "from_worker": "worker-A",
-            "from_revision": first["revision"],
-            "source_step_id": "start",
-            "reason": "Inspect peer branch source differences",
-            "relationship": "SHARED_PARENT",
-            "state": "PROPOSED_NOT_EXECUTED",
-        }])
+        self.assertEqual(len(peer_view["incoming_peer_help"]), 1)
+        proposed = peer_view["incoming_peer_help"][0]
+        self.assertEqual(proposed["from_worker"], "worker-A")
+        self.assertEqual(proposed["from_revision"], first["revision"])
+        self.assertEqual(proposed["source_step_id"], "start")
+        self.assertEqual(proposed["reason"], "Inspect peer branch source differences")
+        self.assertEqual(proposed["relationship"], "SHARED_PARENT")
+        self.assertEqual(proposed["state"], "AWAITING_REVIEW")
+        self.assertEqual(len(proposed["proposal_ref"]), 64)
+        self.assertFalse(proposed["worker_help_executed"])
         self.assertFalse(back["event"]["rewind_executed"])
         self.assertEqual(len(self.pins.list_pins()), 4)
         self.assertFalse((self.directory / "runtime.jsonl").exists())
