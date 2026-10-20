@@ -1,6 +1,6 @@
 # Workstation
 
-[Workstation](work.html) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Referent audit](audit.html) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
 
@@ -13,6 +13,12 @@ The research section loads `views/traces/research-live.json`, projected from nat
 The display makes no artificial relationship between a GitHub Actions workflow and a research record merely because both appear on the page. A future cross-system link needs an independently checkable source relationship.
 
 Source failure is visible and **does not turn missing data into zeros or imply active work has stopped**. Public GitHub API requests can be rate-limited. Browser checks have no credentials or write access.
+
+## Referent-first live audit
+
+The [Referent audit](audit.html) starts from a particular named project referent (ARC Run, World48, WORLD Trials, W13, NIH, A/B or Workstation), not a global list. The source-path and branch-prefix rules are disclosed in the page source; unmatched evidence remains unassigned. Under a referent, GitHub workflow families expand into workflows, exact runs, actual jobs and ordered steps. Branch and commit links expose observed source lineage. The open PRs are a separate proposed-change channel, not proof of execution. The research column uses exactly recorded source `next`, `boundary`, wall and movement entries, with path and line locators when available. Research records can be historical; the viewer never silently promotes them to active tasks.
+
+The live sources are the public GitHub Actions and PR APIs, polled every two minutes while visible (or rechecked on an already configured tickserver event), and the periodically committed research source projection. A tick is only a request to refresh original evidence. "Observed" counts refer to fetched pages, not all history; older workflow-run pages can be explicitly loaded. Source errors retain the prior display with a visible stale/partial warning. Original private runtime journals are not published by this page.
 
 ## Source provenance diagram
 
@@ -31,7 +37,7 @@ The public GitHub Pages site cannot inspect a private runtime journal. For local
 ## Test
 
 ```sh
-python -m unittest -v network.tests.test_work_activity_ui network.tests.test_live_source_field network.tests.test_research_observatory
+python -m unittest -v network.tests.test_referent_audit_ui network.tests.test_work_activity_ui network.tests.test_live_source_field network.tests.test_research_observatory
 python -m views.traces.research_live
 ```
 
