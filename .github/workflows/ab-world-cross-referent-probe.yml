@@ -1,0 +1,53 @@
+name: A/B cross-referent world probe
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'work/ab_world/**'
+      - 'network/tests/test_ab_world_cross_referent_probe.py'
+      - '.github/workflows/ab-world-cross-referent-probe.yml'
+      - 'systems/workspace/game_construction.py'
+      - 'systems/workspace/nih_scope_native.py'
+      - 'systems/workspace/nih_prototype_worker_source/prototype_worker.py'
+      - 'work/arc_like_maze/**'
+      - 'work/arc3/window48_world_export.py'
+      - 'network/tests/fixtures/nih_scope_example.json'
+
+jobs:
+  source-cross-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Execute source and negative-control tests
+        run: python -m unittest -v network.tests.test_ab_world_cross_referent_probe
+      - name: Save source-owned cross-referent observations
+        run: |
+          python -m work.ab_world.cross_referent_probe > ab-world-cross-referent.json
+          python -m work.ab_world.cross_referent_probe --with-world48 > ab-world-cross-referent-world48-control.json
+          python - <<'PY'
+          import json
+          a=json.load(open("ab-world-cross-referent.json"))
+          b=json.load(open("ab-world-cross-referent-world48-control.json"))
+          assert len(a["cases"]) == 4
+          assert a["cases"] == b["cases"]
+          assert a["world48_optional_observation"] is None
+          assert b["world48_optional_observation"]["nih_capacity_inferred"] is False
+          assert not a["general_world_completed"]
+          assert not a["physical_measurements_witnessed"]
+          assert not a["nih_original_historical_versions_authenticated"]
+          PY
+          sha256sum ab-world-cross-referent*.json > ab-world-cross-referent-sha256.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-cross-referent-source-evidence
+          path: |
+            ab-world-cross-referent.json
+            ab-world-cross-referent-world48-control.json
+            ab-world-cross-referent-sha256.txt
+          retention-days: 30
