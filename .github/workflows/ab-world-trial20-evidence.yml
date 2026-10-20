@@ -1,0 +1,143 @@
+name: A/B WORLD Trial20 conditional source-derived receiver evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial20_handoff.py'
+      - 'network/tests/test_ab_world_trial20_handoff.py'
+      - 'work/ab_world/TRIAL20_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial20-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-conditional-rotating-source-to-bounded-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout neutral A/B recorder
+        uses: actions/checkout@v4
+      - name: Checkout immutable original WORLD20 numerical source
+        uses: actions/checkout@v4
+        with:
+          ref: 2a02b76b13dfb779d937e239505bc537e410e13f
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify original Trial04,17,18,19,20 source and whole-interval geometry
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_square_first_recontact \
+            network.tests.test_world_ab_local_recontact_impulse \
+            network.tests.test_world_ab_continuous_separation \
+            network.tests.test_world_ab_rotating_receiver
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_rotating_receiver import run as run20
+          from network.tests.test_world_ab_rotating_receiver import independent_check
+          from systems.workspace.world_ab_local_recontact_impulse import run as run18
+          from network.tests.test_world_ab_local_recontact_impulse import verify
+          source=run20()
+          previous=run18()
+          assert len(source["cases"]) == len(previous["cases"]) == 8
+          assert all(independent_check(case) for case in source["cases"])
+          assert all(verify(case) for case in previous["cases"])
+          assert source["conditional_receiver_arrivals"] == 6
+          assert source["no_source_second_impulse"] == 2
+          assert not source["real_material_receiver_fabricated"]
+          assert not source["new_engine_or_world_created"]
+          assert not previous["material_contact_response_proven"]
+          Path("../trial20-original-native.json").write_text(
+              json.dumps(source,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../trial20-original-trial18.json").write_text(
+              json.dumps(previous,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../trial20-original-verdict.json").write_text(json.dumps({
+              "pinned_source":"2a02b76b13dfb779d937e239505bc537e410e13f",
+              "independent_rotating_source_and_receiver_extrema":True,
+              "original_trial18_impulses_reverified":True,
+              "conditional_receiver_geometries":6,
+              "no_source_second_impulse_controls":2,
+              "material_receivers_constructed":0,
+              "third_impulses_solved":0,
+              "real_physical_measurements":0
+          },sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Check neutral source-link, ancestry and negative controls
+        run: python -m unittest -v network.tests.test_ab_world_trial20_handoff
+      - name: Retain original source relationship through eight bounded A/B histories
+        run: |
+          python -m work.ab_world.world_trial20_handoff \
+            --native trial20-original-native.json \
+            --previous trial20-original-trial18.json > trial20-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          carrier=json.load(open("trial20-ab-carrier.json"))
+          assert carrier["ledger_witness"]["valid"]
+          assert carrier["ledger_witness"]["pages_verified"] == 8
+          assert carrier["source_conditional_receiver_arrivals"] == 6
+          assert carrier["no_second_impulse_controls"] == 2
+          assert carrier["source_candidate_model_frames"] == 66
+          assert carrier["real_material_receiver_constructions"] == 0
+          assert carrier["third_impulses_calculated_by_adapter"] == 0
+          assert carrier["real_physical_measurements"] == 0
+          assert carrier["formal_interval_certificates"] == 0
+          assert digest(carrier["manifest"]) == carrier["manifest_sha256"]
+          folder=Path("trial20-ab-pages")
+          folder.mkdir(exist_ok=True)
+          for page in carrier["ledger_pages"]:
+              idx=page["index"]
+              receipt=page["receipt"]
+              assert verify_receipt(receipt)["valid"]
+              assert receipt["head_hash"] == carrier["manifest"]["ordered_pages"][idx]["head_hash"]
+              has_receiver = "conditional-finite-receiver" in receipt["final"]["objects"]
+              assert has_receiver == page["conditional_receiver_reached"]
+              verdict = receipt["final"]["comparisons"]["receiver-versus-no-receiver-hypothesis"]["result"]
+              assert verdict == ("DIFFERENT" if has_receiver else "MATCH")
+              folder.joinpath(f"case-{idx:02d}.json").write_text(
+                  json.dumps(receipt,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("trial20-ab-manifest.json").write_text(
+              json.dumps(carrier["manifest"],sort_keys=True,indent=2)+"\n")
+          print(json.dumps({"original_conditional_receiver_cases":6,
+                            "original_no_impulse_controls":2,
+                            "source_model_frames":66,
+                            "independently_witnessed_ab_receipts":8,
+                            "real_material_receivers":0},sort_keys=True))
+          PY
+          for n in $(seq 0 7); do
+            page=$(printf '%02d' "$n")
+            python -m work.ab_world.construction \
+              --verify "trial20-ab-pages/case-$page.json" > "trial20-ab-pages/verdict-$page.json"
+          done
+          sha256sum \
+            original-world/systems/workspace/world_ab_rotating_receiver.py \
+            original-world/network/tests/test_world_ab_rotating_receiver.py \
+            trial20-original-native.json trial20-original-trial18.json \
+            trial20-original-verdict.json trial20-ab-carrier.json \
+            trial20-ab-manifest.json \
+            trial20-ab-pages/case-*.json trial20-ab-pages/verdict-*.json \
+            > trial20-source-digests.txt
+      - name: Retain source-owned rotated face geometry and neutral receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial20-conditional-rotating-receiver
+          path: |
+            trial20-original-native.json
+            trial20-original-trial18.json
+            trial20-original-verdict.json
+            trial20-ab-carrier.json
+            trial20-ab-manifest.json
+            trial20-ab-pages/
+            trial20-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
