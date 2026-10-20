@@ -23,6 +23,19 @@ MAX_REQUEST = 1_048_576
 HEX = re.compile(r"[0-9a-f]{64}\Z")
 
 
+def _unique_json_fields(pairs):
+    fields = {}
+    for key, value in pairs:
+        if key in fields:
+            raise ValueError("duplicate witness JSON field")
+        fields[key] = value
+    return fields
+
+
+def _reject_constant(_):
+    raise ValueError("nonfinite witness JSON")
+
+
 class WitnessOnlyHTTPServer(ThreadingHTTPServer):
     """Loopback-only mTLS test/staging endpoint; no deployment entrypoint."""
 
@@ -104,16 +117,21 @@ class WitnessOnlyHandler(BaseHTTPRequestHandler):
             if authorized is None:
                 self._reply(403, {"error": "unrecognized witness transport identity"})
                 return
-            if (self.headers.get("Transfer-Encoding") is not None
-                    or self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
+            lengths = self.headers.get_all("Content-Length", [])
+            content_types = self.headers.get_all("Content-Type", [])
+            if (self.headers.get_all("Transfer-Encoding", [])
+                    or len(lengths) != 1 or len(content_types) != 1
+                    or content_types[0].split(";", 1)[0].strip().lower()
                     != "application/json"):
                 self._reply(415, {"error": "bounded JSON required"})
                 return
-            length = int(self.headers.get("Content-Length", "0"))
+            length = int(lengths[0])
             if not 0 < length <= MAX_REQUEST:
                 self._reply(413, {"error": "invalid witness frame size"})
                 return
-            document = json.loads(self.rfile.read(length).decode("utf-8"))
+            document = json.loads(
+                self.rfile.read(length).decode("utf-8"),
+                object_pairs_hook=_unique_json_fields, parse_constant=_reject_constant)
             if (type(document) is not dict
                     or set(document) != {"source_id", "bundle"}
                     or document["source_id"] != authorized[0]):
