@@ -593,6 +593,9 @@ class EcosystemService:
             raise ValueError("ingress role must be a unique submit or result")
         if not isinstance(ingress, AuthenticatedHandoffIngress) or ingress.runtime is not self.runtime:
             raise ValueError("security ingress must use this exact native runtime")
+        if ingress.authority.operator_pin_ledger is None:
+            raise PermissionError("HTTP ingress requires the active B14 operator key policy")
+        ingress.authority.require_current_operator_pin()
         self._security_ingresses[role] = ingress
 
     def authenticated_submit(self, payload: dict[str, Any]) -> dict[str, Any]:
