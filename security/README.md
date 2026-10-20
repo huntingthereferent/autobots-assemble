@@ -157,3 +157,12 @@ Signed HTTP ingress now requires the repository's existing B14 operator-enrolled
 [Checkpoint and offline recovery](CHECKPOINT_RECOVERY.md) covers signed external anchors, rollback/fork detection, trusted restart, and a separately encrypted recovery envelope for the actual native journal key. Nothing publishes those checkpoints, stores a production private key, or automatically restores a workstation. The operator must retain an authentic checkpoint and separate recovery credentials outside the journal's failure domain.
 
 Once a trusted host registers a signed worker-result ingress, the legacy unsigned native-result and agent-result HTTP service methods refuse submissions; the signed native result path remains available. This opt-in boundary does not automatically authorize unreviewed local code that directly calls the underlying runtime.
+
+## Independent review and local staging
+
+[Review findings and controlled staging](REVIEW_AND_STAGING.md) records
+a recovered-checkpoint authentication defect fixed on this branch, the
+outstanding production blockers, and a read-only
+`check_staged_local_security` gate. A passing local staging gate **cannot
+authorize production use** or certify the operator's human identity or
+off-host checkpoint custody. No external professional review is claimed.
