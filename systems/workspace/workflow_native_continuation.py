@@ -38,6 +38,15 @@ class BoundedWorkerContext:
             self._runtime, handoff_id=self._position.handoff_id,
             revision=self._position.revision, step_id=self._position.step_id)
 
+    def observe_native_results(self) -> dict:
+        """Reverify only native results attached to this visible current step
+        and source-connected peer steps. This never ranks or executes branches.
+        """
+        from .workflow_native_frontier_evidence import NativeFrontierEvidence
+        return NativeFrontierEvidence(self._frontier).observe(
+            runtime=self._runtime, handoff_id=self._position.handoff_id,
+            revision=self._position.revision, step_id=self._position.step_id)
+
     def propose(self, *, kind: str, target_revision: str, reason: str) -> dict:
         """Append a source-checked proposal, not a movement or result."""
         if kind not in {"BACKTRACK", "HELP"}:
