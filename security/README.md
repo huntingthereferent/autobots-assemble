@@ -137,3 +137,11 @@ failure consumes that envelope ID and fails closed. Before deployment, address
 atomic cross-store recovery, distributed replay consensus, key revocation,
 concurrent results, and independent external audit. The experimental bipolar
 model is never used to authorize a worker.
+
+## Native HTTP entrance
+
+[HTTP ingress: admission, operator configuration, and limits](HTTP_INGRESS.md)
+describes the optional signed worker endpoints on the actual
+`runtime.http_server`. The server is loopback-only, and the signed
+endpoints are disabled by default until a trusted host installs pinned keys.
+This does not turn unconfigured web clients into authenticated researchers.
