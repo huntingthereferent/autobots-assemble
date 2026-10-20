@@ -1,0 +1,66 @@
+name: NIH P2 adjacent original status witness
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_official_adjacent_status.py'
+      - 'network/tests/test_nih_p2_official_adjacent_status.py'
+      - '.github/workflows/nih-p2-adjacent-original-status.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  official-adjacent-status-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install unauthenticated original-source Chromium
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Check source independence and falsification
+        run: |
+          python -m unittest -v \
+            network.tests.test_nih_p2_official_history_browser_access \
+            network.tests.test_nih_p2_official_history_status_fields \
+            network.tests.test_nih_p2_original_version_status_contrast \
+            network.tests.test_nih_p2_official_adjacent_status
+      - name: Read actual V259 and V260 and preserve either observed result
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-adjacent"
+          python -m systems.workspace.nih_p2_official_adjacent_status \
+            --out-dir "$RUNNER_TEMP/nih-p2-adjacent"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          f=Path(os.environ["RUNNER_TEMP"])/"nih-p2-adjacent/original-status-contrast.json"
+          d=json.loads(f.read_text())
+          assert d["schema"]=="nih-p2-official-adjacent-original-status/v1"
+          assert d["adjacent_version_pair_checked"]
+          assert [r["version"] for r in d["records"]]==[259,260]
+          assert d["two_original_version_fields_witnessed"]
+          assert type(d["observed_status_changed"]) is bool
+          assert d["first_public_version_timestamp"]=="UNAVAILABLE"
+          assert d["known_at_admitted_to_W13"] is False
+          assert d["historical_temporal_benchmark_completed"] is False
+          assert d["original_twelve_job_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-adjacent" &&
+            sha256sum original-status-contrast.json > sha256.txt)
+      - name: Preserve minimal redacted original source observations
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-adjacent-status-receipt
+          path: ${{ runner.temp }}/nih-p2-adjacent/
+          retention-days: 30
+          if-no-files-found: warn
