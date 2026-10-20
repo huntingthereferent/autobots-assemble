@@ -240,6 +240,31 @@ class SignedHttpIntegrationTests(unittest.TestCase):
             self.service.register_authenticated_ingress("submit", other)
         self.assertEqual(self.service.runtime.snapshot(), {})
 
+    def test_rotation_blocks_old_registered_signer(self):
+        self.ingress("submit")
+        source = "ab-ingress:native:owner:worker"
+        prior = self.trust.current(source, "ab-security-ingress-v1")
+        next_key = Ed25519PrivateKey.generate()
+        next_raw = next_key.public_key().public_bytes(
+            serialization.Encoding.Raw, serialization.PublicFormat.Raw)
+        later = sha256(next_raw).hexdigest()
+        self.trust.rotate(source_name=source, source_edition="ab-security-ingress-v1",
+                          prior_sha256=prior, new_pin_sha256=later,
+                          confirm_prior_sha256=prior, confirm_new_sha256=later,
+                          operator_ref="fixture-operator",
+                          verification_ref="fixture-key-rotation")
+        status, _ = self.request("/api/security/handoffs", {"envelope": self.seal()})
+        self.assertEqual(status, 403)
+        self.assertEqual(self.service.runtime.snapshot(), {})
+
+    def test_corrupted_operator_policy_fails_closed(self):
+        self.ingress("submit")
+        with (Path(self.tmp.name) / "operator-trust.jsonl").open("ab") as f:
+            f.write(b"invalid audit line\\n")
+        status, _ = self.request("/api/security/handoffs", {"envelope": self.seal()})
+        self.assertNotEqual(status, 201)
+        self.assertEqual(self.service.runtime.snapshot(), {})
+
     def test_revocation_blocks_signed_result_after_preparation(self):
         self.ingress("submit")
         self.ingress("result")
