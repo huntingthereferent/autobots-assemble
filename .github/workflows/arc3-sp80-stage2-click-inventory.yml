@@ -1,0 +1,44 @@
+name: ARC3 genuine original SP80 stage2 coordinate click inventory
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage2_click_inventory.py'
+      - '.github/workflows/arc3-sp80-stage2-click-inventory.yml'
+jobs:
+  original-native-stage2-source-clicks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original ARC game SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Freeze original stage2 click probes before playing source game
+        run: |
+          python - <<'PY'
+          from work.arc3.native_sp80_stage2_click_inventory import (
+             FROZEN_CLICK_CONTROLS,STAGE1_WITNESSES,RESETS)
+          from work.arc3.native_sp80_multi_select import parse_plan
+          assert len(FROZEN_CLICK_CONTROLS)==16
+          assert len(STAGE1_WITNESSES)==2 and RESETS==2
+          assert dict(FROZEN_CLICK_CONTROLS)["upper_color8"]=="6@12,21"
+          assert dict(FROZEN_CLICK_CONTROLS)["middle_color8"]=="6@44,29"
+          assert dict(FROZEN_CLICK_CONTROLS)["lower_color8"]=="6@12,33"
+          assert dict(FROZEN_CLICK_CONTROLS)["already_selected_color9"]=="6@40,41"
+          for name,word in FROZEN_CLICK_CONTROLS:
+              acts=parse_plan(word)
+              assert acts[0][0]==6 and acts[0][1] is not None
+              assert all(a!=6 or xy is not None for a,xy in acts)
+          print("Unit only: all genuine source stage2 coordinate controls frozen")
+          PY
+      - name: Execute actual original SP80 stage2 SDK actions and frame ledger
+        run: python -m work.arc3.native_sp80_stage2_click_inventory --out runtime/data/arc3/sp80-stage2-click-inventory.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage2-click-inventory
+          path: runtime/data/arc3/sp80-stage2-click-inventory.*
+          if-no-files-found: error
+          retention-days: 14
