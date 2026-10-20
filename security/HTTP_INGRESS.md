@@ -74,12 +74,7 @@ Loopback does not guarantee secrecy against other processes on the host.
 
 ## Persistent state and recovery
 
-The existing `RuntimeJournal` still writes admitted handoffs and result
-contents in plaintext JSONL. The transport envelope only protects data until
-it is admitted. The replay SQLite database and JSONL journal are separate
-stores; a journal write failure **consumes** that event ID and requires
-explicit operator reconciliation. Neither record store is tamper-resistant
-against a compromised host.
+The default `RuntimeJournal` persists admitted handoffs/results as plaintext JSONL and its replay ledger is a **separate commit**; journal write failure may consume the event ID and require operator reconciliation. The explicitly enabled `SealedRuntimeJournal` instead encrypts native events and [atomically commits signed native replay admission with the event](ATOMIC_ADMISSION.md). Neither design protects against a fully compromised host or whole-database rollback without independent trusted checkpoints.
 
 Signing-key enrollment, revocation, secure key custody, distributed replay
 consensus, protected at-rest journals, backup/recovery, and recovery from a
@@ -148,3 +143,7 @@ still fail with HTTP 403 until their respective roles and independently
 pinned keys are installed. A live encrypted journal by itself never
 enrolls a worker. Tests exercise this intermediate state with a fresh
 sealed journal and no signing keys.
+
+## Crash/restart safety of sealed native ingress
+
+Only the encrypted native journal path now writes the signed envelope's replay identity and the native event in **one SQLite transaction**. The replay token and signed digest are also authenticated inside the encrypted event, and restart compares the exact replay table with that authenticated chain. A failed transaction admits neither; a committed transaction survives acknowledgement loss and refuses a duplicate. No production history is migrated. The ordinary JSONL and offline recovery ledgers retain separate durability semantics. See [atomic admission](ATOMIC_ADMISSION.md).
