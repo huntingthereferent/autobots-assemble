@@ -180,6 +180,30 @@ The opt-in local editor also offers **Mark for bounded inspection** and
 **Decline this help** beside the native handoff inspection. Those controls
 require an existing source-owned handoff and an incoming proposal reference.
 
+## Live EcosystemService task entry
+
+The original `EcosystemService` now exposes the **opt-in**
+`run_repository_worker_with_frontier(handoff_id, revision, step_id,
+handler, allow_native_execution=True)` method. It operates on the
+service's already-recorded `repo-work-<source_id>` native handoff from
+`ohayo` and its **same durable** runtime journal. The original owner
+provides a real handler, which receives `BoundedWorkerContext`. That
+handler can observe and respond to local peer help while the native handoff
+is ACTIVE. Its source task and actor are rechecked before execution.
+
+Nothing executes with the default `allow_native_execution=False`; the
+service refuses a missing `TASKS.md` source, an unadmitted task, or
+a mismatched branch/worker. This is an explicit native execution
+integration point, **not** automatic assignment or a new generalized bot.
+The existing Continuity agent pool uses different original personal-task
+handoffs and remains unmodified.
+
+The test `network.tests.test_workflow_native_service_continuation`
+exercises a real `EcosystemService.ohayo` source admission, then an
+authorized handler review of a same-step peer proposal in the original
+`HandoffRuntime`. It checks that no review implies branch adoption or
+task completion, and that unadmitted or mismatched tasks do not execute.
+
 ## Source-bound tests
 
 ```sh
