@@ -129,7 +129,8 @@ def handler_for(root: Path, data_dir: Path, token: str):
                                  "/api/native-compare",
                                  "/api/idea-bind", "/api/idea-branches", "/api/idea-frontier",
                                  "/api/idea-propose", "/api/idea-native-frontier",
-                                 "/api/idea-native-propose", "/api/idea-native-review"):
+                                 "/api/idea-native-propose", "/api/idea-native-review",
+                                 "/api/idea-native-evidence"):
                 self._json({"error": "unknown action"}, 404)
                 return
             try:
@@ -144,12 +145,19 @@ def handler_for(root: Path, data_dir: Path, token: str):
                     ideas = IdeaFrontier(root, data_dir)
                     if self.path in ("/api/idea-native-frontier",
                                          "/api/idea-native-propose",
-                                         "/api/idea-native-review"):
+                                         "/api/idea-native-review",
+                                         "/api/idea-native-evidence"):
                         from runtime.engine import HandoffRuntime
                         from runtime.journal import RuntimeJournal
                         runtime = HandoffRuntime(
                             event_store=RuntimeJournal(data_dir / "runtime.jsonl"))
-                        if self.path == "/api/idea-native-review":
+                        if self.path == "/api/idea-native-evidence":
+                            from systems.workspace.workflow_native_frontier_evidence import NativeFrontierEvidence
+                            reply = NativeFrontierEvidence(ideas).observe(
+                                runtime=runtime, handoff_id=payload.get("handoff_id"),
+                                revision=payload.get("revision"),
+                                step_id=payload.get("step_id"))
+                        elif self.path == "/api/idea-native-review":
                             reply = ideas.review_help_from_native_handoff(
                                 runtime, handoff_id=payload.get("handoff_id"),
                                 revision=payload.get("revision"),
