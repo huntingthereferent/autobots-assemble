@@ -38,8 +38,35 @@ FROZEN=(
     ("mid_right3_upper_right_down3",middle(3)+" 6@40,18 2 2 2 5"),
     ("mid_right3_selected_left1_lowerleft1",middle(3)+" 6@20,18 3 6@46,33 3 5"),
     ("mid_right4_selected_left1_lowerleft1",middle(4)+" 6@20,18 3 6@46,33 3 5"),
+    # Follow-up, frozen from the actual first-pass source bin-3-vs-bin-4 contrast.
+    ("mid3_bottom_right1",middle(3)+" 6@40,42 4 5"),
+    ("mid4_bottom_right1",middle(4)+" 6@40,42 4 5"),
+    ("mid3_bottom_right2",middle(3)+" 6@40,42 4 4 5"),
+    ("mid4_bottom_right2",middle(4)+" 6@40,42 4 4 5"),
+    ("mid3_bottom_right3",middle(3)+" 6@40,42 4 4 4 5"),
+    ("mid4_bottom_right3",middle(4)+" 6@40,42 4 4 4 5"),
+    ("mid3_bottom_up1",middle(3)+" 6@40,42 1 5"),
+    ("mid3_bottom_up2",middle(3)+" 6@40,42 1 1 5"),
+    ("mid3_bottom_down1",middle(3)+" 6@40,42 2 5"),
+    ("mid3_bottom_down2",middle(3)+" 6@40,42 2 2 5"),
+    ("mid3_bottom_left3",middle(3)+" 6@40,42 3 3 3 5"),
+    ("mid4_bottom_left3",middle(4)+" 6@40,42 3 3 3 5"),
+    ("mid3_bottom_right1_lowerleft1",middle(3)+" 6@40,42 4 6@46,33 3 5"),
+    ("mid4_bottom_right1_lowerleft1",middle(4)+" 6@40,42 4 6@46,33 3 5"),
+    ("mid3_bottom_right1_lowerleft2",middle(3)+" 6@40,42 4 6@46,33 3 3 5"),
+    ("mid3_bottom_right2_lowerleft1",middle(3)+" 6@40,42 4 4 6@46,33 3 5"),
+    ("mid3_bottom_up_right1",middle(3)+" 6@40,42 1 4 5"),
+    ("mid3_bottom_down_right1",middle(3)+" 6@40,42 2 4 5"),
+    ("mid3_bottom_up_left2",middle(3)+" 6@40,42 1 3 3 5"),
+    ("mid3_bottom_down_left2",middle(3)+" 6@40,42 2 3 3 5"),
+    ("mid4_bottom_up_right1",middle(4)+" 6@40,42 1 4 5"),
+    ("mid4_bottom_down_right1",middle(4)+" 6@40,42 2 4 5"),
+    ("mid3_bottom_right1_upperdown2",middle(3)+" 6@40,42 4 6@40,18 2 2 5"),
+    ("mid3_bottom_right1_upperleft2",middle(3)+" 6@40,42 4 6@40,18 3 3 5"),
+    ("mid3_bottom_right1_selectedleft1",middle(3)+" 6@40,42 4 6@20,18 3 5"),
+    ("mid3_bottom_right1_selectedright1",middle(3)+" 6@40,42 4 6@20,18 4 5"),
 )
-assert len(FROZEN)==len(set(n for n,_ in FROZEN))==18
+assert len(FROZEN)==len(set(n for n,_ in FROZEN))==44
 assert all(parse_plan(s)[-1][0]==5 for _,s in FROZEN)
 
 def compact(row):
@@ -71,7 +98,7 @@ def main():
             print("ORIGINAL_SP80_MULTI_STEP_SOURCE_RESULT "+json.dumps({
                 k:v for k,v in entry_record.items() if k!="true_original_sdk_actions"
             },sort_keys=True),flush=True)
-    if len(records)!=36 or len(sha)!=1:
+    if len(records)!=88 or len(sha)!=1:
         raise AssertionError("Missing independent original SDK witness or root disagreement")
     summary={
        "kind":"ACTUAL_ORIGINAL_SP80_STAGE3_MULTI_STEP_SOURCE_PATH_CONTROLS",
