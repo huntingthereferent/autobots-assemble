@@ -1,0 +1,54 @@
+name: A/B owned native renderer
+
+on:
+  push:
+    paths:
+      - 'views/renderer_native/**'
+      - 'docs/live/ab-renderer*'
+      - 'network/tests/test_ab_native_renderer.py'
+      - 'network/browser_ab_renderer_check.py'
+      - '.github/workflows/ab-owned-renderer.yml'
+      - 'work/arc_like_maze/math.py'
+      - 'systems/workspace/ab_relational_cluster.py'
+  pull_request:
+    paths:
+      - 'views/renderer_native/**'
+      - 'docs/live/ab-renderer*'
+      - 'network/tests/test_ab_native_renderer.py'
+      - 'network/browser_ab_renderer_check.py'
+      - '.github/workflows/ab-owned-renderer.yml'
+      - 'work/arc_like_maze/math.py'
+      - 'systems/workspace/ab_relational_cluster.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  native-and-chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compare exported scene to native math and independent witness
+        run: |
+          python -m views.renderer_native.scene --check
+          python -m unittest -v network.tests.test_ab_native_renderer
+      - name: Install standalone headless Chromium test tooling
+        run: |
+          python -m pip install 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Replay A/B-owned Canvas renderer in real Chromium
+        run: |
+          python -m unittest -v network.browser_ab_renderer_check
+      - name: Retain actual browser screenshot and replay record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-owned-renderer-chromium-replay
+          path: build_ab_renderer_receipts/
+          if-no-files-found: warn
+          retention-days: 30
