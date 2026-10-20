@@ -1,0 +1,64 @@
+name: WORLD 15 body support motion
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_body_support.py'
+      - 'network/tests/test_world_ab_body_support.py'
+      - 'systems/workspace/WORLD_AB_BODY_SUPPORT_TRIAL_15_2026-10-20.md'
+      - '.github/workflows/world-ab-body-support.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_body_support.py'
+      - 'network/tests/test_world_ab_body_support.py'
+      - 'systems/workspace/WORLD_AB_BODY_SUPPORT_TRIAL_15_2026-10-20.md'
+      - '.github/workflows/world-ab-body-support.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  same-world-two-bodies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Replay original WORLD 04B/14 and independently verify both bodies
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_rotation \
+            network.tests.test_world_ab_relation_morph \
+            network.tests.test_world_ab_body_support
+      - name: Retain exact virtual contact history and independent audit
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_body_support import run
+          from network.tests.test_world_ab_body_support import independent_witness
+          data=run()
+          audit=[{"body":x["body"],"angle":x["source_angle"],
+                  "status":x["status"],"independent":independent_witness(x)}
+                 for x in data["cases"]]
+          record={"source":data,"independent_audit":audit}
+          payload=json.dumps(record,indent=2,sort_keys=True,allow_nan=False)+"\n"
+          folder=Path("world15-native-evidence")
+          folder.mkdir(exist_ok=True)
+          (folder/"body_comparison.json").write_text(payload,encoding="utf-8")
+          (folder/"body_comparison.sha256").write_text(
+            sha256(payload.encode()).hexdigest()+"  body_comparison.json\n",encoding="utf-8")
+          print("WORLD15: independently verified", len(audit),"modeled body/contact continuations")
+          PY
+      - name: Retain source model comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world15-two-bodies-same-source
+          path: world15-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
