@@ -106,7 +106,7 @@ def independent_check(record):
     corner=first["vertex_index"]
     n=tuple(receiver["normal"])
     before=tuple(original["velocity_after"])
-    spin=original["outgoing_spin"]
+    spin=original["angular_velocity_after"]
     center=(original["contact_center"][0]+DURATION*before[0],
             original["contact_center"][1]+DURATION*before[1])
     theta=original["contact_angle"]+DURATION*spin
