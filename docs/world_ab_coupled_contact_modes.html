@@ -1,0 +1,200 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WORLD Trial 13 — Coupled Contact Modes</title>
+<style>
+body{font:16px system-ui;color:#e1ecf7;background:#112434;max-width:1120px;margin:auto;padding:23px}
+h1{font-size:1.65rem}p{color:#bed1df;line-height:1.5}a{color:#8acef4}
+button,select{font:inherit;background:#30546b;color:#f2f9ff;padding:8px;border:1px solid #7da2b6;border-radius:5px;margin:3px}
+canvas{width:100%;background:#071b29;border-radius:6px}pre{font-size:11px;white-space:pre-wrap;max-height:400px;overflow:auto}
+#source{display:none}
+</style></head><body>
+<h1>WORLD · Trial 13 / Coupled two-contact hypotheses</h1>
+<p><a href="world_ab_friction_spin_trial.html">Trial 12 single-face friction controls</a> · <a href="world_ab_two_contact_stress.html">Original Trial 09 geometry and outcomes</a></p>
+<p>Two source-facing normal impulses and both tangential impulses act on one spinning disc. Stick and opposite sliding-direction modes are separately falsified. <strong>All accepted paths are conditional virtual predictions, not independently observed material responses.</strong> No simultaneous friction model is claimed generally solved.</p>
+<button id="run">Run all coupled contact modes</button>
+<label>Scenario <select id="case"></select></label>
+<label>Friction and starting spin <select id="parameter"></select></label>
+<label>Mode hypothesis <select id="mode"></select></label>
+<button id="previous">Previous sample</button><button id="next">Next sample</button><button id="reset">Reset</button>
+<p id="status" aria-live="polite">No source cases evaluated.</p>
+<canvas id="scene" width="960" height="290"></canvas>
+<details><summary>Complete source-preserving numerical receipts</summary><pre id="receipt"></pre></details>
+<iframe id="source" src="world_ab_two_contact_stress.html" title="Unmodified Trial 09 browser source"></iframe>
+<script>
+'use strict';
+window.worldTrial13=(()=>{
+const R=.25,I=.03125,STEP=.05,HORIZON=1.5,LEAD=.35,SPEED=2,EPS=1e-8;
+const MUS=[0,.2,.4],SPINS=[0,2],MODES=['stick','slip-positive','slip-negative'];
+const rd=z=>+z.toFixed(9),cp=z=>JSON.parse(JSON.stringify(z));
+const dot=(a,b)=>a.reduce((p,x,i)=>p+x*b[i],0);
+let receipt=null,source=null,selectedCase=0,selectedParam=0,selectedMode=0,sample=0;
+function nearest(p,s){
+ const a=s.endpoints[0],b=s.endpoints[1],ab=[b[0]-a[0],b[1]-a[1]];
+ const t=Math.max(0,Math.min(1,dot([p[0]-a[0],p[1]-a[1]],ab)/dot(ab,ab)));
+ return Math.hypot(p[0]-a[0]-t*ab[0],p[1]-a[1]-t*ab[1]);
+}
+function solve(A,b){
+ const n=b.length,rows=A.map((x,i)=>[...x,b[i]]);
+ if(rows.length!==n||rows.some(r=>r.length!==n+1))return null;
+ for(let c=0;c<n;c++){
+  let k=c;for(let i=c+1;i<n;i++)if(Math.abs(rows[i][c])>Math.abs(rows[k][c]))k=i;
+  if(Math.abs(rows[k][c])<1e-10)return null;
+  [rows[c],rows[k]]=[rows[k],rows[c]];
+  const inv=1/rows[c][c];
+  for(let j=c;j<=n;j++)rows[c][j]*=inv;
+  for(let i=0;i<n;i++){
+   if(i===c)continue;
+   const factor=rows[i][c];
+   for(let j=c;j<=n;j++)rows[i][j]-=factor*rows[c][j];
+  }
+ }
+ return rows.map(row=>row[n]);
+}
+function simulate(s,mu,omega,mode){
+ const normals=s.normals.map(n=>[...n]),tangents=normals.map(n=>[-n[1],n[0]]);
+ const inc=[-SPEED*Math.cos(s.incoming_angle_degrees*Math.PI/180),-SPEED*Math.sin(s.incoming_angle_degrees*Math.PI/180)];
+ const base=[inc[0],inc[1],omega],jac=[];
+ for(let k=0;k<2;k++){
+  jac.push([normals[k][0],normals[k][1],0]);
+  jac.push([tangents[k][0],tangents[k][1],-R]);
+ }
+ const invM=[1,1,1/I],K=jac.map(j=>jac.map(q=>j.reduce((sum,x,i)=>sum+x*q[i]*invM[i],0)));
+ const pre=jac.map(j=>dot(j,base));
+ const fixed={mode:[...mode],friction:mu,incoming_spin:omega,source_ids:s.surfaces.map(q=>q.id)};
+ const reject=(why,imp=null)=>({...fixed,status:'rejected-'+why,reason:why,impulses:imp?.map(z=>rd(z))??null,
+  outgoing_velocity:null,outgoing_spin:null,frames:[],continuous_clearance_verified:false});
+ if(pre[0]>=-EPS||pre[2]>=-EPS)return reject('nonincoming');
+ if(mu===0&&(mode[0]!=='frictionless'||mode[1]!=='frictionless'))return reject('not-frictionless-mode');
+ const A=[K[0].slice(),K[2].slice()],b=[-2*pre[0],-2*pre[2]];
+ for(let i=0;i<2;i++){
+  const label=mode[i],row=[0,0,0,0];let rhs=0;
+  if(label==='frictionless')row[2*i+1]=1;
+  else if(label==='stick'){for(let j=0;j<4;j++)row[j]=K[2*i+1][j];rhs=-pre[2*i+1];}
+  else{const sign=label==='slip-positive'?1:-1;row[2*i]=-mu*sign;row[2*i+1]=-1;}
+  A.push(row);b.push(rhs);
+ }
+ const lam=solve(A,b);
+ if(lam===null)return reject('dependent-mode-equations');
+ if(lam.some(x=>!Number.isFinite(x)))return reject('nonfinite');
+ if(lam[0]<=EPS||lam[2]<=EPS)return reject('nonpositive-normal',lam);
+ if([0,1].some(i=>Math.abs(lam[2*i+1])>mu*lam[2*i]+2e-8))return reject('friction-cone',lam);
+ const post=pre.map((x,i)=>x+dot(K[i],lam));
+ if(Math.abs(post[0]+pre[0])>3e-7||Math.abs(post[2]+pre[2])>3e-7)return reject('normal-restitution',lam);
+ for(let i=0;i<2;i++){
+  const slip=post[2*i+1];
+  if(mode[i]==='stick'&&Math.abs(slip)>3e-7)return reject('stick-residual',lam);
+  if(mode[i]==='slip-positive'&&slip<1e-7)return reject('sliding-direction',lam);
+  if(mode[i]==='slip-negative'&&slip>-1e-7)return reject('sliding-direction',lam);
+ }
+ const after=base.map((x,i)=>x+invM[i]*jac.reduce((sum,J,j)=>sum+J[i]*lam[j],0));
+ const v=[after[0],after[1]],w=after[2],eb=.5*dot(inc,inc)+.5*I*omega*omega,ea=.5*dot(v,v)+.5*I*w*w;
+ if(ea>eb+5e-8)return reject('energy-increase',lam);
+ if(normals.some(n=>dot(v,n)<-1e-8))return reject('inward-to-other-contact',lam);
+ const frames=[];
+ for(let i=0;i<=Math.round(HORIZON/STEP);i++){
+  const t=i*STEP,pos=t<=LEAD?s.start_center.map((x,k)=>x+t*inc[k]):s.contact_center.map((x,k)=>x+(t-LEAD)*v[k]);
+  if(!(R-1e-9<=pos[0]&&pos[0]<=24-R+1e-9&&R-1e-9<=pos[1]&&pos[1]<=6-R+1e-9))return reject('world-edge',lam);
+  if(s.surfaces.some(f=>nearest(pos,f)<R-3e-7))return reject('surface-penetration',lam);
+  frames.push({time:rd(t),position:pos.map(z=>rd(z)),
+   velocity:(t<LEAD?inc:v).map(z=>rd(z)),spin:rd(t<LEAD?omega:w),
+   orientation:rd(t<=LEAD?omega*t:omega*LEAD+w*(t-LEAD))});
+ }
+ return {...fixed,status:'admissible-coupled-mode',reason:null,
+   impulses:lam.map(z=>rd(z)),outgoing_velocity:v.map(z=>rd(z)),outgoing_spin:rd(w),
+   incoming_contact_speeds:pre.map(z=>rd(z)),outgoing_contact_speeds:post.map(z=>rd(z)),
+   energy_before:rd(eb),energy_after:rd(ea),frames,continuous_clearance_verified:true};
+}
+function calculate(original){
+ if(original.schema!=='world-ab-two-contact-incidence-stress/v1'||original.cases.length!==35)throw Error('original independent source missing');
+ const scenarios=original.cases.map((s,i)=>{
+  const groups=[];
+  for(const omega of SPINS)for(const mu of MUS){
+   const modePairs=mu===0?[['frictionless','frictionless']]:MODES.flatMap(a=>MODES.map(b=>[a,b]));
+   const options=modePairs.map(q=>simulate(s,mu,omega,q)),num=options.filter(x=>x.status==='admissible-coupled-mode').length;
+   if(mu===0&&omega===0&&(num>0)!==(s.status==='accepted-local-candidate'))throw Error('frictionless source status changed');
+   groups.push({starting_spin:omega,friction:mu,options,admissible_count:num,
+     classification:!num?'none':num>1?'multiple':'one',physical_outcome_selected:false});
+  }
+  return {original_index:i,incoming_angle_degrees:s.incoming_angle_degrees,
+   surface_B_rotation_degrees:s.surface_B_rotation_degrees,geometry_kind:s.geometry_kind,
+   source_ids:s.surfaces.map(q=>q.id),trial09_two_active_status:s.status,
+   groups,material_behavior_observed:false};
+ });
+ const aggregate=[];
+ for(let i=0;i<6;i++){
+  const groups=scenarios.map(c=>c.groups[i]);
+  aggregate.push({starting_spin:groups[0].starting_spin,friction:groups[0].friction,
+   admissible_modes:groups.reduce((n,g)=>n+g.admissible_count,0),
+   cases_with_one_mode:groups.filter(g=>g.classification==='one').length,
+   cases_with_multiple_modes:groups.filter(g=>g.classification==='multiple').length,
+   cases_with_no_mode:groups.filter(g=>g.classification==='none').length});
+ }
+ return {schema:'world-ab-coupled-two-contact-friction-modes/v1',
+  original_source_geometry:cp(original.original_source_geometry),
+  source_trial09_schema:original.schema,original_trial09_two_active_counts:cp(original.counts),
+  angle_grid:cp(original.incoming_angle_grid),rotation_grid:cp(original.surface_rotation_grid),
+  friction_grid:cp(MUS),starting_spin_grid:cp(SPINS),hypotheses:cp(MODES),
+  disc_radius:R,disc_inertia:I,normal_restitution:1,scenarios,aggregate,
+  original_trial06_friction:.4,source_original_trial06_simultaneous_stop_preserved:true,
+  general_simultaneous_friction_manifold_solved:false,
+  actual_joint_contact_impulses_measured:false,
+  physical_material_law_verified:false,real_blueprint_generated:false};
+}
+const can=document.getElementById('scene'),ctx=can.getContext('2d'),X=x=>18+x*38,Y=y=>16+y*42;
+function draw(){
+ ctx.fillStyle='#071b29';ctx.fillRect(0,0,can.width,can.height);
+ if(!receipt)return;
+ const q=receipt.scenarios[selectedCase].groups[selectedParam].options[selectedMode],s=source.cases[selectedCase];
+ s.surfaces.forEach((f,i)=>{
+  ctx.lineWidth=4;ctx.strokeStyle=i?'#81d5ae':'#f5ae85';ctx.beginPath();
+  ctx.moveTo(X(f.endpoints[0][0]),Y(f.endpoints[0][1]));
+  ctx.lineTo(X(f.endpoints[1][0]),Y(f.endpoints[1][1]));ctx.stroke();
+ });
+ const path=q.frames.length?q.frames.slice(0,sample+1).map(f=>f.position):[s.start_center,s.contact_center];
+ ctx.lineWidth=2;ctx.strokeStyle=q.frames.length?'#8ecff4':'#da9494';ctx.beginPath();
+ path.forEach((p,i)=>{if(i===0)ctx.moveTo(X(p[0]),Y(p[1]));else ctx.lineTo(X(p[0]),Y(p[1]));});ctx.stroke();
+ const point=path.at(-1);ctx.fillStyle='#e9deaf';ctx.beginPath();ctx.arc(X(point[0]),Y(point[1]),R*38,0,2*Math.PI);ctx.fill();
+ if(q.frames.length){
+  const angle=q.frames[sample].orientation;ctx.beginPath();ctx.strokeStyle='#293b4b';
+  ctx.moveTo(X(point[0]),Y(point[1]));
+  ctx.lineTo(X(point[0])+R*38*Math.cos(angle),Y(point[1])+R*38*Math.sin(angle));ctx.stroke();
+ }
+ document.getElementById('status').textContent='Original scenario '+(selectedCase+1)+
+  ' · µ='+q.friction+', ω='+q.incoming_spin+' · '+q.mode.join('/')+
+  ' · '+q.status+' · '+receipt.scenarios[selectedCase].groups[selectedParam].admissible_count+
+  ' modes in parameter group · virtual sample '+sample+'/30 · PHYSICAL CONTACT NOT OBSERVED';
+}
+function refreshModes(){
+ const el=document.getElementById('mode');el.innerHTML='';
+ const list=receipt.scenarios[selectedCase].groups[selectedParam].options;
+ list.forEach((q,i)=>{const opt=document.createElement('option');opt.value=String(i);
+  opt.textContent=q.mode.join('/')+' · '+q.status;el.append(opt);});
+ selectedMode=sample=0;draw();
+}
+document.getElementById('run').onclick=()=>{
+ try{
+  const frame=document.getElementById('source').contentWindow;
+  if(!frame?.worldTrial09)throw Error('unaltered Trial09 source not ready');
+  frame.document.getElementById('run').click();
+  source=frame.worldTrial09.receipt();
+  receipt=calculate(source);selectedCase=selectedParam=selectedMode=sample=0;
+  const cases=document.getElementById('case');cases.innerHTML='';
+  receipt.scenarios.forEach((s,i)=>{const e=document.createElement('option');e.value=String(i);e.textContent=(i+1)+': '+s.incoming_angle_degrees+'° / '+s.surface_B_rotation_degrees+'°';cases.append(e);});
+  const params=document.getElementById('parameter');params.innerHTML='';
+  receipt.scenarios[0].groups.forEach((g,i)=>{const e=document.createElement('option');e.value=String(i);e.textContent='µ '+g.friction+' · start spin '+g.starting_spin;params.append(e);});
+  refreshModes();document.getElementById('receipt').textContent=JSON.stringify(receipt,null,2);
+ }catch(e){receipt=null;document.getElementById('status').textContent='Experiment rejected: '+e.message;}
+};
+document.getElementById('case').onchange=()=>{if(receipt){selectedCase=Number(document.getElementById('case').value);refreshModes();}};
+document.getElementById('parameter').onchange=()=>{if(receipt){selectedParam=Number(document.getElementById('parameter').value);refreshModes();}};
+document.getElementById('mode').onchange=()=>{if(receipt){selectedMode=Number(document.getElementById('mode').value);sample=0;draw();}};
+document.getElementById('previous').onclick=()=>{if(receipt){sample=Math.max(0,sample-1);draw();}};
+document.getElementById('next').onclick=()=>{if(receipt){sample=Math.min(30,sample+1);draw();}};
+document.getElementById('reset').onclick=()=>{
+ receipt=source=null;selectedCase=selectedParam=selectedMode=sample=0;
+ ['case','parameter','mode'].forEach(id=>document.getElementById(id).innerHTML='');
+ document.getElementById('receipt').textContent='';
+ document.getElementById('status').textContent='No source cases evaluated.';draw();
+};
+draw();return {receipt:()=>receipt?cp(receipt):null,upstream:()=>source?cp(source):null,
+ selection:()=>({case:selectedCase,parameter:selectedParam,mode:selectedMode,frame:sample})};
+})();
+</script></body></html>
