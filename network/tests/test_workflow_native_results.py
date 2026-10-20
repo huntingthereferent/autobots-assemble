@@ -150,6 +150,29 @@ class NativeResultWorkstationTests(unittest.TestCase):
         self.assertFalse(observed["native_jobs_reexecuted"])
         self.assertEqual((self.data / "runtime.jsonl").read_bytes(), before)
 
+    def test_unrelated_idea_native_result_not_exposed_to_current_worker(self):
+        native_parent = self.run_native("baseline", "scoped-result-parent")
+        native_child = self.run_native("another", "scoped-result-child")
+        native_unrelated = self.run_native("baseline", "scoped-result-unrelated")
+        parent, child, first, second = self.setup_pins()
+        self.results.attach(parent, step_id="finite", job_id=native_parent)
+        self.results.attach(child, step_id="finite", job_id=native_child)
+        unrelated = workflow()
+        unrelated["title"] = "Other source idea with separate branch"
+        third = self.pins.pin_candidate(unrelated, ROOT, reason="Separate unrelated source idea")
+        self.results.attach(unrelated, step_id="finite", job_id=native_unrelated)
+        frontier = IdeaFrontier(ROOT, self.data)
+        other_idea = read_active_work(ROOT / "TASKS.md")[1].source_id
+        frontier.bind(idea_id=other_idea, revision=third["revision"],
+                      worker="worker-Z", reason="Separate source-recorded task")
+        context = self.native_idea_context(second["revision"], first, second)
+        observed = context.observe_native_results()
+        self.assertEqual(len(observed["visible_related_step_evidence"]), 1)
+        self.assertTrue(observed["other_ideas_not_exposed"])
+        self.assertNotIn(third["revision"], str(observed))
+        self.assertNotIn(native_unrelated, str(observed))
+        self.assertFalse(observed["branch_quality_ranked"])
+
     def test_unverified_or_missing_native_result_never_assumed(self):
         parent, child, first, second = self.setup_pins()
         context = self.native_idea_context(second["revision"], first, second)
