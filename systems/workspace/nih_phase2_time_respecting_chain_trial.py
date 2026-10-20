@@ -79,34 +79,57 @@ def _d(i):
 
 
 def generated_case(index,rng):
-    """Novel variable subjects, dates, evidence availability and orderings."""
+    """160 unseen cases stratified into valid and falsifying movements.
+
+    Change dates, knowledge time, subject binding, ordering and input row
+    order; do not allow easy always-false models to pass by chance.
+    """
     key="surveillance" if index%2 else "care"
     pattern=SURVEILLANCE_STAGES if key=="surveillance" else STAGES
     subject="fictional-region" if key=="surveillance" else "fictional-cohort"
     other="other-region" if key=="surveillance" else "other-cohort"
-    stamps=[rng.randrange(1,20) for _ in range(3)]
-    knowns=[min(26,stamps[i]+rng.randrange(0,8)) for i in range(3)]
+    variation=index%8
+    start=rng.randrange(1,12)
+    stamps=[start,start+rng.randrange(1,4),None]
+    stamps[2]=stamps[1]+rng.randrange(1,4)
+    if variation==2:
+        # Last observation happened before middle: false even if all known.
+        stamps[2]=stamps[0]
+    if variation==3:
+        # Strict movement: equal timestamps do not establish ordering.
+        stamps[1]=stamps[0]
+    knowns=[min(26,t+rng.randrange(0,3)) for t in stamps]
     rows=[]
     for k,(stage,t,seen) in enumerate(zip(pattern,stamps,knowns)):
+        recorded_subject=other if variation==6 and k==1 else subject
+        # Early observations can expire before the query target, unlike
+        # W13's current-snapshot-only filter.
+        end=31 if k==2 else min(31,t+rng.randrange(1,5))
         rows.append(prior.obs(
             f"generated-{index}-{k}",stage["predicate"],stage["object"],
-            _d(t),_d(31),_d(seen),source=f"synthetic-generated-{key}",
-            subject=subject))
-    # Decoy full path with a separate subject: never join across subjects.
+            _d(t),_d(end),_d(seen),source=f"synthetic-generated-{key}",
+            subject=recorded_subject))
+    # A misleading full path in another subject must never bridge the
+    # requested subject's missing or out-of-order evidence.
     for k,(stage,t) in enumerate(zip(pattern,(3,6,9))):
         rows.append(prior.obs(
             f"decoy-{index}-{k}",stage["predicate"],stage["object"],
-            _d(t),_d(31),_d(t),source=f"synthetic-decoy-{key}",subject=other))
-    # Same-token noise cannot create a path by jumping between subjects.
+            _d(t),_d(31),_d(t),source=f"synthetic-decoy-{key}",
+            subject=other))
     rows.append(prior.obs(
         f"noise-{index}","irrelevant","neutral",
         _d(rng.randrange(1,20)),_d(31),_d(1),
         source="synthetic-noise",subject=subject))
+    known=max(knowns)+rng.randrange(0,3)
+    target=max(stamps)+rng.randrange(0,3)
+    if variation==4:
+        # Event exists in time, but latest-stage evidence remains future-known.
+        known=knowns[2]-1
+    if variation==5:
+        # Knowledge arrived, but the final event has not happened by target.
+        target=stamps[2]-1
     rng.shuffle(rows)
-    known=_d(rng.randrange(1,30))
-    target=_d(rng.randrange(1,30))
-    return key,rows,pattern,known,target,subject
-
+    return key,rows,pattern,_d(known),_d(target),subject
 
 def run(*, output_dir:Path):
     output_dir.mkdir(parents=True,exist_ok=True)
