@@ -636,7 +636,9 @@ class EcosystemService:
         if type(envelope) is not dict:
             raise ValueError("sealed envelope must be an object")
         state = ingress.submit(envelope, expected_parent_sha256=None)
-        return self._handoff_view(state.handoff_id, state)
+        # Do not reflect decrypted inputs, expected outputs or metadata back
+        # to an arbitrary loopback client holding the signed envelope bytes.
+        return {"handoff_id": state.handoff_id, "status": state.status}
 
     def authenticated_return_result(self, handoff_id: str,
                                     payload: dict[str, Any]) -> dict[str, Any]:
@@ -653,7 +655,9 @@ class EcosystemService:
             raise ValueError("agent lineage requires its own authenticated contract")
         state = ingress.return_result(envelope, handoff_id=handoff_id,
                                       expected_parent_sha256=None)
-        return self._handoff_view(handoff_id, state)
+        # Results are persisted to the native journal, not revealed through
+        # the signed HTTP transport acknowledgement.
+        return {"handoff_id": handoff_id, "status": state.status}
 
     def return_result(
         self,
