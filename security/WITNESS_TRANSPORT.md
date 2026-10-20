@@ -111,3 +111,40 @@ python -W error::ResourceWarning -m unittest discover \
 The TLS and observer tests use temporary fixtures and destroy their
 certificates and decryption keys after the test. They do not deploy
 private keys into the workstation.
+
+## Operator certificate lifecycle (B14)
+
+The witness TLS listener requires an existing `OperatorPinLedger`
+containing the exact **DER SHA-256 client certificate fingerprint** for
+each pre-enrolled source. The local source name is
+`ab-witness-client:{source_id}`, edition `ab-witness-client-cert/v1`.
+The certificate digest, source Ed25519 public key and independently retained
+observer checkpoint are **separate inputs**. A TLS request cannot enroll
+or rotate any of them.
+
+The trusted host must enroll the certificate digest through B14 only
+after independent identity/certificate verification, **before constructing
+the witness listener**. Construction fails if the expected certificate
+pin is absent, revoked or no longer current. The running listener then
+re-reads the B14 policy at the start of every witness POST and again
+after checking the source/observer checkpoint, just before recording the
+movement. Revocation, rotation, or an invalid local operator policy
+file deny later witness requests even if an earlier TLS handshake
+succeeded. Already recorded movements are not erased.
+
+Rotating the certificate requires explicit operator enrollment of the
+new DER fingerprint, followed by trusted construction of a receiver
+with the new certificate-to-source map. The old listener does **not**
+silently trust a new certificate, and policy changes are never accepted
+from request JSON. Separately manage the CA chain and TLS private keys;
+pinning a leaf certificate does not constitute independent proof of
+a real person's identity.
+
+**Remaining race:** B14's local policy file and the observer SQLite
+database are not a single atomic transaction. A revocation after the
+final policy read but before SQLite COMMIT may allow an already in-flight
+observation. Production-grade immediate revocation would require a
+coordinated admission fence across the policy and observer commit. B14's
+unanchored local audit file can itself be replaced by a compromised host.
+This bounded test is not production PKI revocation, and does not support
+remote network deployment.
