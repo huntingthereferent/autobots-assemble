@@ -132,9 +132,10 @@ python -W error::ResourceWarning -m unittest discover -s network/tests -p 'test_
 the raw `HandoffRuntime.submit/run/return_result` methods away from
 untrusted callers and exclusively route their untrusted ingress through this
 adapter. Private keys and operator key enrollment remain external. Replay
-admission and runtime journal submission are two separate writes: a journal
-failure consumes that envelope ID and fails closed. Before deployment, address
-atomic cross-store recovery, distributed replay consensus, key revocation,
+admission and runtime journal submission are separate writes in the legacy
+JSONL lane. For the opt-in sealed native journal, replay and native event now
+commit in one SQLite transaction (see [atomic admission](ATOMIC_ADMISSION.md)).
+Before deployment, address legacy recovery, distributed replay, key revocation,
 concurrent results, and independent external audit. The experimental bipolar
 model is never used to authorize a worker.
 
@@ -176,3 +177,7 @@ handoff/result POSTs can reach the native service, and private legacy
 decrypted native work material, only the handoff ID and status. The normal
 local prototype retains its existing routes when no signer role is
 configured. This still does not cover privileged direct Python calls.
+
+## Native atomic replay admission
+
+[Atomic native admission](ATOMIC_ADMISSION.md) binds each signed replay token to its encrypted native SUBMISSION or RESULT record in a **single** SQLite commit on the opt-in sealed journal path. Restart verifies that the replay table exactly matches the authenticated encrypted history. Fault-injection tests exercise before-commit rollback and after-commit lost acknowledgements. The legacy JSONL lane and offline recovery ledger retain their separate transactions; distributed admission remains out of scope.
