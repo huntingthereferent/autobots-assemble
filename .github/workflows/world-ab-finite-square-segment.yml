@@ -53,7 +53,12 @@ jobs:
           (folder/"finite_source_square_overlaps.json").write_text(payload)
           (folder/"finite_source_square_overlaps.sha256").write_text(
               sha256(payload.encode()).hexdigest()+"  finite_source_square_overlaps.json\n")
+          from collections import Counter
+          timing=Counter(c["onset_vs_original_vertex_candidate"]["relationship"]
+                         for c in source["cases"]
+                         if c["onset_vs_original_vertex_candidate"] is not None)
           print(json.dumps({
+              "finite_onset_vs_source_vertex":dict(timing),
               "source_conditional_cases":source["source_third_impulse_cases"],
               "finite_intersection_detected_cases":source["finite_intersection_grid_cases"],
               "grid_no_intersection_cases":source["finite_grid_no_intersection_cases"],
