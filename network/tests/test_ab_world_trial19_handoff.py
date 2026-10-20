@@ -121,8 +121,7 @@ class Trial19CarrierTests(unittest.TestCase):
             data["cases"][1][key]=True
             with self.subTest(key=key),self.assertRaises(ValueError):carry(data)
         data=sample()
-        data["cases"][1]["source_candidate_impulse"]
-        ["selected_as_actual_material_response"]=True
+        data["cases"][1]["source_candidate_impulse"]["selected_as_actual_material_response"]=True
         with self.assertRaises(ValueError):carry(data)
 
     def test_incomplete_margin_and_changed_source_bounds_fail(self):
@@ -160,8 +159,7 @@ class Trial19CarrierTests(unittest.TestCase):
         forged["events"][-1]["effect"]={"physical":"certified"}
         with self.assertRaises(ValueError):verify_receipt(forged)
         forged=deepcopy(good)
-        forged["final"]["objects"]["conditional-rotating-square"]
-        ["physical_response_selected"]=True
+        forged["final"]["objects"]["conditional-rotating-square"]["physical_response_selected"]=True
         with self.assertRaises(ValueError):verify_receipt(forged)
 
 
