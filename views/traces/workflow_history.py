@@ -22,7 +22,7 @@ REPO = "huntingthereferent/autobots-assemble"
 OUTPUT = Path("views/traces/workflow-runs-index.json")
 PAGE_SIZE = 100
 MAX_PAGES = 400
-VALID_STATES = {"queued", "waiting", "pending", "in_progress", "completed"}
+VALID_STATES = {"queued", "waiting", "pending", "requested", "in_progress", "completed"}
 
 
 def normalize_run(raw):
