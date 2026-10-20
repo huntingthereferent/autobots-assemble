@@ -6,6 +6,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import os
 import unittest
+from time import monotonic, sleep
 
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey
@@ -70,6 +71,55 @@ class StagedLocalSecurityGateTests(unittest.TestCase):
         self.assertEqual(tuple(self.service.runtime.event_store.all()), self.initial)
         with self.assertRaises(TypeError):
             bool(decision)
+
+    def test_service_owned_presence_moves_without_work_or_http_calls(self):
+        self.install("submit")
+        self.install("result")
+        self.assertIs(
+            self.service._security_ingresses["submit"].key_approach,
+            self.service._security_ingresses["result"].key_approach)
+        boundary = self.service._security_ingresses["submit"].key_approach
+        self.assertEqual(boundary.snapshot().presence_movements, 0)
+        self.service.start_local_key_presence(interval_seconds=0.01)
+        try:
+            deadline = monotonic() + 2
+            while monotonic() < deadline and boundary.snapshot().presence_movements < 5:
+                sleep(0.01)
+            observed = boundary.snapshot()
+            self.assertGreaterEqual(observed.presence_movements, 5)
+            self.assertEqual(observed.protected_movements, 0)
+            self.assertEqual(observed.approach_movements, 0)
+            self.assertEqual(tuple(self.service.runtime.event_store.all()), self.initial)
+            with self.assertRaisesRegex(ValueError, "already configured"):
+                self.service.start_local_key_presence()
+        finally:
+            self.service.stop_local_key_presence()
+        stopped = boundary.snapshot()
+        sleep(0.05)
+        self.assertEqual(boundary.snapshot(), stopped)
+        self.assertIsNone(self.service._native_security_presence)
+
+    def test_service_presence_refuses_missing_roles_or_revoked_pins(self):
+        with self.assertRaises(PermissionError):
+            self.service.start_local_key_presence(interval_seconds=0.01)
+        self.install("submit")
+        with self.assertRaises(PermissionError):
+            self.service.start_local_key_presence(interval_seconds=0.01)
+        self.install("result")
+        authority = self.service._security_ingresses["result"].authority
+        source, edition, pin = authority.source_key()
+        self.trust.revoke(
+            source_name=source, source_edition=edition,
+            pin_sha256=pin, confirm_pin_sha256=pin,
+            operator_ref="test-operator", verification_ref="test-revoked-presence")
+        with self.assertRaises(PermissionError):
+            self.service.start_local_key_presence(interval_seconds=0.01)
+        self.assertIsNone(self.service._native_security_presence)
+
+    def test_plaintext_runtime_cannot_start_presence(self):
+        plain = EcosystemService(data_dir=self.root / "plain-presence")
+        with self.assertRaises(PermissionError):
+            plain.start_local_key_presence(interval_seconds=0.01)
 
     def test_remote_host_refused_even_with_valid_pins(self):
         self.install("submit")
