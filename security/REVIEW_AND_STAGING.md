@@ -156,3 +156,21 @@ Do **not** promote this to multi-host consensus or restart/retry
 automatically against an obsolete parent. A real secondary process must
 reload authentic, checkpointed evidence and obtain current authorization
 before issuing new work. See [atomic admission](ATOMIC_ADMISSION.md).
+
+## SEC-17 — separately owned source observation
+
+A new optional [offline witness exchange](REMOTE_WITNESS.md) exports at
+most 64 consecutive encrypted journal frames between a previously
+pinned source checkpoint and its next signed checkpoint. A separate
+observer stores source-specific witnessed prefixes and refuses
+missing/altered frames, old observations, the wrong signer, and
+conflicting signed histories that do not extend the already observed
+prefix. It never copies the source decryption key or admits source work.
+
+**Not resolved:** the cross-host gap is not a distributed protocol; two
+untrusted machines have not communicated over a real network, remote
+authorization and key custody remain operational decisions, and a
+remote source's signatures do not prove the truth of plaintext work.
+Observer SQLite state still requires independent retention to defend
+against observer-side rollback. Tests use isolated directories on the
+same CI machine. No production route is opened.
