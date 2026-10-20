@@ -245,6 +245,45 @@ class WorkflowEditorHTTPTests(unittest.TestCase):
         self.assertEqual(peer["outgoing_help_reviews"][0]["review"], "INSPECT")
         self.assertFalse(peer["outgoing_help_reviews"][0]["branch_adopted"])
 
+    def test_native_evidence_reader_requires_true_local_handoff_and_current_step(self):
+        from runtime.engine import HandoffRuntime
+        from runtime.journal import RuntimeJournal
+        from runtime.repository_tasks import admit_active_work, read_active_work
+        state = Path(self.tmp.name)
+        runtime = HandoffRuntime(event_store=RuntimeJournal(state / "runtime.jsonl"))
+        idea = read_active_work(ROOT / "TASKS.md")[0]
+        admit_active_work(runtime, ROOT / "TASKS.md", actor_id="james")
+        _, example = self.fetch("GET", "/api/example")
+        _, pin = self.fetch("POST", "/api/pin",
+                            {"draft": example, "reason": "Source native view"},
+                            authorized=True)
+        status, receipt = self.fetch("POST", "/api/idea-bind", {
+            "idea_id": idea.source_id, "revision": pin["revision"],
+            "worker": "james", "reason": "Exact original task association",
+        }, authorized=True)
+        self.assertEqual(status, 200, receipt)
+        request = {
+            "handoff_id": "repo-work-" + idea.source_id,
+            "revision": pin["revision"], "step_id": "count",
+        }
+        original = (state / "runtime.jsonl").read_bytes()
+        status, denied = self.fetch("POST", "/api/idea-native-evidence",
+                                    request, authorized=False)
+        self.assertEqual(status, 403)
+        status, view = self.fetch("POST", "/api/idea-native-evidence",
+                                  request, authorized=True)
+        self.assertEqual(status, 200, view)
+        self.assertEqual(view["current_step_native_evidence"]["status"],
+                         "NO_ATTACHED_NATIVE_RESULT")
+        self.assertEqual(view["visible_related_step_evidence"], [])
+        self.assertTrue(view["other_ideas_not_read"])
+        self.assertFalse(view["branch_quality_ranked"])
+        status, _ = self.fetch("POST", "/api/idea-native-evidence",
+                               {**request, "step_id": "unknown-step"},
+                               authorized=True)
+        self.assertEqual(status, 400)
+        self.assertEqual(original, (state / "runtime.jsonl").read_bytes())
+
     def test_ui_can_edit_branch_diff_without_running_workers(self):
         _, draft = self.fetch("GET", "/api/example")
         _, parent = self.fetch("POST", "/api/pin",
