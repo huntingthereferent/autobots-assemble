@@ -151,3 +151,9 @@ This does not turn unconfigured web clients into authenticated researchers.
 [Sealed journal — encrypted native records, recovery boundaries, and key custody](SEALED_JOURNAL.md) documents the optional AES-256-GCM journal. The default service still uses its historical plaintext journal until a trusted host explicitly opts into a new protected history. Existing plaintext data is never silently migrated, deleted or overridden.
 
 Signed HTTP ingress now requires the repository's existing B14 operator-enrolled Ed25519 signing key ledger. Each request checks current enrollment, including after operator rotation and revocation. No HTTP request can enroll a signing key. The private journal encryption key is **not** the B14 signing key, and revoking a signing key cannot restore a lost encryption key.
+
+## Independent signed checkpoints and offline key recovery
+
+[Checkpoint and offline recovery](CHECKPOINT_RECOVERY.md) covers signed external anchors, rollback/fork detection, trusted restart, and a separately encrypted recovery envelope for the actual native journal key. Nothing publishes those checkpoints, stores a production private key, or automatically restores a workstation. The operator must retain an authentic checkpoint and separate recovery credentials outside the journal's failure domain.
+
+Once a trusted host registers a signed worker-result ingress, the legacy unsigned native-result and agent-result HTTP service methods refuse submissions; the signed native result path remains available. This opt-in boundary does not automatically authorize unreviewed local code that directly calls the underlying runtime.
