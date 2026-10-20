@@ -41,6 +41,8 @@ def _compatible(source: dict[str, Any], target: dict[str, Any]) -> bool:
 def _validate_links(
     nodes: dict[str, GraphNode],
     links: list[GraphLink],
+    *,
+    allow_missing: bool = False,
 ) -> tuple[dict[str, set[str]], dict[str, int]]:
     adjacency = {name: set() for name in nodes}
     indegree = {name: 0 for name in nodes}
@@ -95,7 +97,7 @@ def _validate_links(
             if link.target_node == node_name
         }
         for input_name, contract in node.manifest.get("inputs", {}).items():
-            if contract.get("required", True) and input_name not in supplied | linked:
+            if not allow_missing and contract.get("required", True) and input_name not in supplied | linked:
                 raise GraphError(
                     f"{node_name} missing required input relation: {input_name}"
                 )
@@ -125,6 +127,24 @@ def _topological_order(
             "graph contains a cycle; explicit state/time recursion is not defined"
         )
     return order
+
+
+
+def validate_graph(
+    nodes: dict[str, GraphNode],
+    links: list[GraphLink],
+    *,
+    allow_missing: bool = False,
+) -> list[str]:
+    """Check graph contracts and cycles without executing ANY implementation.
+
+    Construction-time editing may allow missing inputs as unresolved openings;
+    native execution keeps its original strict required-input validation.
+    """
+    if not nodes:
+        raise GraphError("graph must contain at least one node")
+    adjacency, indegree = _validate_links(nodes, links, allow_missing=allow_missing)
+    return _topological_order(nodes, adjacency, indegree)
 
 
 def execute_graph(

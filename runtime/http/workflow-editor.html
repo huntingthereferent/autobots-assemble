@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Workstation — Workflow Branches</title>
+<style>
+:root{color-scheme:dark;--bg:#11151c;--panel:#1b222c;--muted:#a1adbb;--line:#39475a;--accent:#66b3a3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#e2e9f1;font:14px/1.45 system-ui,Segoe UI,sans-serif}
+header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap}
+header strong{font-size:18px}small,.muted{color:var(--muted)}
+main{max-width:1600px;margin:auto;padding:20px}h1{font-size:24px;margin:0 0 6px}h2{font-size:16px;margin:0 0 12px}
+p{color:var(--muted)}.layout{display:grid;grid-template-columns:minmax(280px,350px) minmax(450px,1fr) minmax(260px,320px);gap:14px;align-items:start}
+.panel{padding:16px;border-radius:12px;border:1px solid var(--line);background:var(--panel);min-width:0}
+label{display:block;color:var(--muted);font-size:12px;margin:10px 0 5px}
+input,select,textarea{font:inherit;width:100%;color:#e2e9f1;background:#111821;border:1px solid var(--line);padding:9px;border-radius:7px}
+textarea{font:12px/1.5 ui-monospace,Consolas,monospace;resize:vertical;min-height:90px}
+button{color:#e2e9f1;background:#25454a;border:1px solid #4a7074;padding:9px 11px;border-radius:7px;cursor:pointer;font:inherit;margin:5px 4px 0 0}
+button:hover{background:#326168}.quiet{background:transparent}.danger{background:#472c34}
+.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row>button{flex:0 0 auto}
+hr{border:0;border-top:1px solid var(--line);margin:15px 0}
+#graph{overflow:auto;border:1px solid var(--line);border-radius:9px;background:#141d27;min-height:360px}
+#graph svg{min-width:590px;display:block}
+#nodes button{display:block;width:100%;text-align:left;background:#26313e;border-color:#455767;margin:4px 0}
+#nodes button.active{border-color:var(--accent);background:#1d403f}
+#idea-list button{width:100%;text-align:left;background:#253440;font-size:13px;margin:3px 0}
+#idea-list button.active{border-color:var(--accent);background:#1e4642}
+#idea-view{max-height:245px;min-height:50px}
+#links div{border-bottom:1px solid var(--line);padding:5px 0;display:flex;justify-content:space-between;gap:6px}
+#links span{overflow-wrap:anywhere;font-family:monospace;font-size:12px}
+pre{background:#0b121a;color:#b8c6d4;border-radius:8px;padding:12px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:300px;overflow:auto;font-size:12px}
+#message{margin-top:12px;padding:10px;border-radius:8px;border:1px solid #466e68;background:#18302e;overflow-wrap:anywhere}
+#message.err{border-color:#925e5e;background:#3b2228}
+.note{font-size:12px;color:var(--muted)}
+@media(max-width:1150px){.layout{grid-template-columns:1fr 1fr}.last{grid-column:1/-1}}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.last{grid-column:auto}}
+</style></head>
+<body>
+<header><strong>Workstation / Workflow Branches</strong><small>Local-only construction · No worker execution</small></header>
+<main>
+<h1>Construct, branch, compare, pin.</h1>
+<p>Edit a workflow without replacing its earlier versions. Generation uses declared source interfaces; ambiguous relationships stay unresolved. Pin a promising branch, and inspect exactly what changed.</p>
+<div class="layout">
+<section class="panel">
+<h2>Ideas <small class="muted">existing task checklist</small></h2>
+<p class="note">These are exactly the active MOVE entries from TASKS.md. An idea is not a completion claim. Click one to inspect or change its branches.</p>
+<div id="idea-list"></div>
+<p class="note" id="idea-selected">Select an idea. Other relationships remain hidden until linked.</p>
+<label for="idea-worker">Worker label for this pinned branch</label>
+<input id="idea-worker" placeholder="existing native worker label">
+<button id="idea-bind">Associate selected pin with idea</button>
+<label for="idea-current">Linked branch for this idea</label>
+<select id="idea-current"></select>
+<button id="idea-fork">Fork this pinned branch for structural changes</button>
+<label for="idea-step">Worker's current step</label>
+<select id="idea-step"></select>
+<button id="idea-observe">Preview first-hop by label</button>
+<label for="idea-handoff">Existing source-owned handoff ID (for worker movement)</label>
+<input id="idea-handoff" placeholder="repo-work-&lt;recorded task ID&gt;">
+<button id="idea-native-observe">Observe from native handoff</button>
+<button id="idea-native-evidence">Reverify evidence at this step</button>
+<p class="note">A worker movement requires an actual live handoff, matching its source task and assigned actor. A label-only preview is not a native movement.</p>
+<pre id="idea-view">No worker view selected.</pre>
+<label for="idea-target">Visible related branch (never auto-ranked)</label>
+<select id="idea-target"></select>
+<label for="idea-reason">Observed reason to revisit or help</label>
+<input id="idea-reason" placeholder="What in this local view calls for a different path?">
+<button id="idea-back">Propose backward movement</button>
+<button id="idea-help">Offer help on peer branch</button>
+<label for="idea-incoming">Help addressed to this exact native step</label>
+<select id="idea-incoming"></select>
+<label for="idea-review-reason">Reason for reviewing or declining help</label>
+<input id="idea-review-reason" placeholder="What can be observed from this specific branch?">
+<button id="idea-inspect">Mark for bounded inspection</button>
+<button id="idea-decline">Decline this help</button>
+<p class="note">Reviewing a peer proposal is not adopting its branch or verifying a better result.</p>
+<p class="note">Only recorded first-hop relations are visible to worker logic. These actions record review proposals—not worker execution, automatic merges or proof of superiority.</p>
+<hr>
+<h2>Workflow</h2>
+<label for="title">Goal</label><input id="title">
+<label for="provenance">Source / provenance</label><input id="provenance">
+<label for="parent">Pinned parent revision</label><input id="parent" readonly>
+<label for="pinned">Saved pins</label><select id="pinned"></select>
+<button id="branch">Branch from pinned</button><button id="refresh" class="quiet">Refresh pins</button>
+<hr><h2>Steps</h2><div id="nodes"></div>
+<label for="new-manifest">Add known source operation</label><select id="new-manifest"></select>
+<button id="add-step">+ Add step</button>
+<hr><h2>Relations</h2>
+<label><input id="generate" type="checkbox" style="width:auto"> Generate unique compatible links</label>
+<div id="links"></div>
+<label for="source-step">Source step</label><select id="source-step"></select>
+<label for="source-output">Source output</label><select id="source-output"></select>
+<label for="target-step">Target step</label><select id="target-step"></select>
+<label for="target-input">Target input</label><select id="target-input"></select>
+<button id="add-link">+ Link steps</button>
+</section>
+<section class="panel">
+<h2>Workflow graph</h2>
+<div id="graph" role="img" aria-label="Proposed workflow nodes and connections"></div>
+<div style="margin-top:12px"><button id="preview">Preview / Generate</button><button id="compare">Compare parent</button><button id="record">Record B9 proposal</button></div>
+<p class="note">A validated construction remains proposed. Recording it does not admit, execute, or verify a worker.</p>
+<hr><h2>Selected step</h2>
+<div id="edit-step"><p>Choose a node to edit.</p></div>
+<hr><h2>Structural report</h2><pre id="report">Open a draft to preview.</pre>
+</section>
+<section class="panel last">
+<h2>Retain a good branch</h2>
+<p class="note">Pin exact revisions without overwriting ancestors. A measured improvement can pin a candidate, but the metric needs independent source verification before it is treated as witnessed.</p>
+<button id="pin">Pin current branch</button>
+<hr><h2>Quality comparison</h2>
+<label for="metric">Metric</label><input id="metric" value="verified_checks">
+<div class="row"><div><label for="baseline">Parent result</label><input id="baseline" type="number" value="6"></div><div><label for="branch-result">Branch result</label><input id="branch-result" type="number" value="7"></div></div>
+<label for="direction">Improvement</label><select id="direction"><option value="HIGHER">Higher</option><option value="LOWER">Lower</option></select>
+<label for="scope">Comparison scope</label><input id="scope" placeholder="Same source and inputs">
+<label for="source">Source reference</label><input id="source" placeholder="repo:...">
+<label for="witness">Witness record</label><input id="witness" placeholder="run:...">
+<button id="discover">Pin improving branch</button>
+<p class="note">Typed measurements remain unverified. This local page cannot create native verification receipts.</p>
+<hr><h2>A/B native source ancestry</h2>
+<p class="note">Paste existing worker records with native source paths and SHA-256 values. Bind workflow step IDs to existing native task IDs. A/B rechecks the original bytes; a graph is not execution proof.</p>
+<button id="ab-load-native">Load original local bot records</button>
+<p class="note">Reads the original Continuity worker journal, if present, and rechecks referenced source bytes. Local journal actor identity is not authenticated.</p>
+<label for="ab-records">Recorded native worker sources (JSON list)</label>
+<textarea id="ab-records" placeholder='[{"task_id":"native-task","native_sources":[{"source":"runtime/file.py","sha256":"..."}]}]' rows="5"></textarea>
+<label for="ab-bindings">Workflow step → native task (JSON object)</label>
+<textarea id="ab-bindings" placeholder='{"step1":"native-task"}' rows="3"></textarea>
+<button id="ab-preview">Inspect A/B ancestry</button>
+<button id="ab-record">Attach to pinned revision</button>
+<button id="ab-history">Show source-link history</button>
+<p class="note">Only local source references are retained, in a separate append-only record. Actual code and original worker journals remain in place. Attaching requires an existing pin.</p>
+<hr><h2>Source-verified native results</h2>
+<p class="note">Supported sources: finite correspondence process and Factory machine-stage simulation. Both use their original source-owned verifier. This page never executes workers or treats simulated output as physical production.</p>
+<label for="native-job">Exact existing native job ID</label><input id="native-job" placeholder="Native completed job ID">
+<label for="native-step">Workflow step ID</label><input id="native-step" placeholder="Step to bind result to">
+<button id="native-inspect">Reverify native result</button>
+<button id="native-attach">Attach to pinned step</button>
+<label for="parent-step">Same pinned-parent step ID (for comparison)</label><input id="parent-step" placeholder="Parent workflow step ID">
+<button id="native-compare">Compare pinned native results</button>
+<button id="native-history">Native result history</button>
+<p class="note">A reverified computation is not proof of whole-workflow quality. Changed inputs are incomparable and no branch is automatically promoted.</p>
+<hr><h2>Portable drafts</h2><button id="export">Export JSON</button><button id="import">Import JSON</button><input id="file" type="file" accept=".json,application/json" hidden>
+<div id="message" role="status">Loading…</div>
+</section>
+</div>
+</main>
+<script>
+"use strict";
+const TOKEN="__EDITOR_TOKEN__",el=id=>document.getElementById(id);
+let draft=null,catalog=[],pins=[],selected="",lastPreview=null;
+let activeIdeas=[],activeIdeaId="",ideaBranches=[],currentFrontier=null;
+let frontierIsNative=false;
+const copy=x=>JSON.parse(JSON.stringify(x));
+function message(s,bad=false){el("message").textContent=s;el("message").className=bad?"err":"";}
+async function request(route,data){
+ const opts=data===undefined?{}:{method:"POST",headers:{"Content-Type":"application/json","X-Workstation-Token":TOKEN},body:JSON.stringify(data)};
+ const response=await fetch(route,opts),result=await response.json();
+ if(!response.ok||result.error)throw new Error(result.error||"Request failed");return result;
+}
+function options(id,rows,selectedValue){
+ const sel=el(id);sel.replaceChildren();
+ for(const [value,label] of rows){const o=document.createElement("option");o.value=value;o.textContent=label;sel.append(o);}
+ if(selectedValue!==undefined)sel.value=selectedValue;
+}
+function manifest(step){return catalog.find(x=>x.path===draft.steps.find(s=>s.id===step)?.manifest);}
+function snapshot(){if(!draft)return;draft.title=el("title").value;draft.provenance=el("provenance").value;draft.auto_connect=el("generate").checked;}
+function uniqueName(){let i=1;while(draft.steps.some(s=>s.id==="step"+i))i++;return "step"+i;}
+function ports(){
+ const a=manifest(el("source-step").value),b=manifest(el("target-step").value);
+ options("source-output",Object.keys(a?.outputs||{}).map(x=>[x,x]));
+ options("target-input",Object.keys(b?.inputs||{}).map(x=>[x,x]));
+}
+function edit(){
+ const host=el("edit-step");host.replaceChildren();
+ const step=draft.steps.find(x=>x.id===selected);
+ if(!step){host.textContent="Select a node.";return;}
+ const addInput=(name,value,action,multiline=false)=>{
+ const l=document.createElement("label");l.textContent=name;const i=document.createElement(multiline?"textarea":"input");i.value=value;i.onchange=()=>action(i.value);host.append(l,i);};
+ addInput("Label",step.label,x=>{step.label=x;render();});
+ addInput("Declared external inputs (JSON)",JSON.stringify(step.inputs||{},null,2),x=>{
+  try{const value=JSON.parse(x);if(!value||Array.isArray(value)||typeof value!=="object")throw Error("Inputs require an object");step.inputs=value;message("Inputs edited. Preview to validate.");}
+  catch(e){message(e.message,true);}
+ },true);
+ const l=document.createElement("label");l.textContent="Source manifest";host.append(l);
+ const select=document.createElement("select");for(const m of catalog){let o=document.createElement("option");o.value=m.path;o.textContent=m.label;select.append(o);}
+ select.value=step.manifest;select.onchange=()=>{step.manifest=select.value;step.inputs={};lastPreview=null;render();};host.append(select);
+ const button=document.createElement("button");button.textContent=step.path_role==="ALTERNATIVE"?"Mark required":"Mark alternative";
+ button.onclick=()=>{step.path_role=step.path_role==="ALTERNATIVE"?"REQUIRED":"ALTERNATIVE";lastPreview=null;render();};host.append(button);
+ const remove=document.createElement("button");remove.className="danger";remove.textContent="Remove step";
+ remove.onclick=()=>{draft.steps=draft.steps.filter(x=>x.id!==selected);draft.links=draft.links.filter(x=>x.from!==selected&&x.to!==selected);selected=draft.steps[0]?.id||"";lastPreview=null;render();};host.append(remove);
+}
+function svgGraph(){
+ const zone=el("graph");zone.replaceChildren();
+ const ns="http://www.w3.org/2000/svg",steps=draft.steps,links=lastPreview?.draft?.links||draft.links;
+ const height=80+Math.ceil(steps.length/3)*132;
+ const svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox","0 0 670 "+height);svg.setAttribute("height",Math.max(height,360));
+ const locations={};steps.forEach((s,i)=>locations[s.id]={x:28+(i%3)*216,y:35+Math.floor(i/3)*132});
+ for(const a of links){
+  const x=locations[a.from],y=locations[a.to];if(!x||!y)continue;
+  const line=document.createElementNS(ns,"path"),x1=x.x+170,y1=x.y+55,x2=y.x,y2=y.y+20;
+  line.setAttribute("d","M "+x1+" "+y1+" Q "+((x1+x2)/2)+" "+((y1+y2)/2)+" "+x2+" "+y2);
+  line.setAttribute("stroke","#6babb0");line.setAttribute("stroke-width","2");line.setAttribute("fill","none");svg.append(line);
+ }
+ steps.forEach(s=>{
+ const at=locations[s.id],g=document.createElementNS(ns,"g"),box=document.createElementNS(ns,"rect");
+ box.setAttribute("x",at.x);box.setAttribute("y",at.y);box.setAttribute("width","177");box.setAttribute("height","62");box.setAttribute("rx","9");
+ box.setAttribute("fill",s.path_role==="ALTERNATIVE"?"#40372b":"#254142");
+ box.setAttribute("stroke",s.id===selected?"#bdede2":s.path_role==="ALTERNATIVE"?"#cba566":"#739da2");
+ box.setAttribute("stroke-width",s.id===selected?"3":"1.5");g.append(box);
+ for(const [line,text] of [[19,s.id],[43,s.label.slice(0,26)]]){
+ const t=document.createElementNS(ns,"text");t.setAttribute("x",at.x+10);t.setAttribute("y",at.y+line);t.setAttribute("font-size",line===19?"13":"10");t.setAttribute("fill","#e6edf5");t.textContent=text;g.append(t);}
+ g.style.cursor="pointer";g.onclick=()=>{selected=s.id;render();};svg.append(g);});
+ zone.append(svg);
+}
+function render(){
+ if(!draft)return;el("title").value=draft.title;el("provenance").value=draft.provenance;
+ el("parent").value=draft.parent_revision||"";el("generate").checked=!!draft.auto_connect;
+ options("new-manifest",catalog.map(x=>[x.path,x.label]));
+ const nodes=el("nodes");nodes.replaceChildren();
+ for(const st of draft.steps){let b=document.createElement("button");b.className=st.id===selected?"active":"";b.textContent=(st.path_role==="ALTERNATIVE"?"↳ ":"")+st.id+" — "+st.label;b.onclick=()=>{selected=st.id;render();};nodes.append(b);}
+ const links=el("links");links.replaceChildren();
+ draft.links.forEach((link,index)=>{const line=document.createElement("div"),text=document.createElement("span");text.textContent=link.from+"."+link.output+" → "+link.to+"."+link.input;
+ const btn=document.createElement("button");btn.textContent="×";btn.onclick=()=>{draft.links.splice(index,1);lastPreview=null;render();};line.append(text,btn);links.append(line);});
+ options("source-step",draft.steps.map(x=>[x.id,x.id]));
+ options("target-step",draft.steps.map(x=>[x.id,x.id]));
+ ports();edit();svgGraph();
+}
+async function pinsRefresh(){pins=await request("/api/pins");options("pinned",[["","Select pinned edition"],...pins.map(x=>[x.revision,x.draft.title+" · "+x.revision.slice(0,8)])]);}
+async function action(route,extra={}){try{snapshot();const result=await request(route,{draft,...extra});el("report").textContent=JSON.stringify(result,null,2);lastPreview=route==="/api/preview"?result:null;svgGraph();message("Recorded: "+route);if(route==="/api/pin"||route==="/api/consider")await pinsRefresh();return result;}catch(e){message(e.message,true);return null;}}
+
+function selectedIdea(){return activeIdeas.find(x=>x.idea_id===activeIdeaId);}
+async function loadIdeas(){
+ activeIdeas=await request("/api/ideas");
+ const list=el("idea-list");list.replaceChildren();
+ for(const idea of activeIdeas){
+  const btn=document.createElement("button");btn.className=idea.idea_id===activeIdeaId?"active":"";
+  btn.textContent="□ "+idea.title+" ("+idea.bound_branches+" branches)";
+  btn.onclick=async()=>{try{activeIdeaId=idea.idea_id;currentFrontier=null;await loadIdeas();await loadIdeaBranches();}
+                        catch(e){message(e.message,true);}};
+  list.append(btn);
+ }
+ el("idea-selected").textContent=selectedIdea()
+   ?selectedIdea().title+" — "+selectedIdea().state+" — source "+selectedIdea().source_link
+   :"Choose one existing active source task.";
+}
+async function loadIdeaBranches(){
+ ideaBranches=activeIdeaId
+   ?await request("/api/idea-branches",{idea_id:activeIdeaId}):[];
+ options("idea-current",[["","Select an explicitly associated pinned branch"],
+  ...ideaBranches.map(x=>[x.revision,x.worker+" · "+x.title+" · "+x.revision.slice(0,8)])]);
+ options("idea-target",[["","No visible branch selected"]]);
+ options("idea-step",[["","Select a current step"]]);
+ el("idea-view").textContent="Choose a recorded branch and step to inspect its local frontier.";
+}
+function selection(){
+ const row=ideaBranches.find(x=>x.revision===el("idea-current").value);
+ const pin=pins.find(p=>p.revision===row?.revision);
+ return {row,pin};
+}
+el("idea-current").onchange=()=>{
+ const {row,pin}=selection();
+ el("idea-worker").value=row?.worker||"";
+ options("idea-step",pin?.draft.steps.map(s=>[s.id,s.id+" · "+s.label])||[]);
+ currentFrontier=null;frontierIsNative=false;
+ options("idea-incoming",[["","Observe native help first"]]);
+ options("idea-target",[["","Inspect first-hop frontier first"]]);
+};
+el("idea-bind").onclick=async()=>{
+ try{
+  const rev=el("pinned").value;
+  if(!activeIdeaId||!rev)throw Error("Select an existing source task and an already pinned workflow.");
+  await request("/api/idea-bind",{
+   idea_id:activeIdeaId,revision:rev,worker:el("idea-worker").value,
+   reason:"Operator explicitly associated existing workflow pin with current task checklist idea"});
+  await loadIdeas();await loadIdeaBranches();
+  message("Recorded explicit idea → pinned branch relationship. No native execution.");
+ }catch(e){message(e.message,true);}
+};
+el("idea-fork").onclick=()=>{
+ const {row,pin}=selection();
+ if(!row||!pin){message("Select a related pinned branch first.",true);return;}
+ draft=copy(pin.draft);draft.parent_revision=pin.revision;draft.title+=" — structural alternative";
+ selected=draft.steps[0]?.id||"";lastPreview=null;render();
+ el("pinned").value=pin.revision;
+ message("Opened a new proposed workflow edition from this pinned branch. Original remains intact.");
+};
+el("idea-observe").onclick=async()=>{
+ try{
+  const {row}=selection();if(!row)throw Error("Choose an explicitly bound branch.");
+  currentFrontier=await request("/api/idea-frontier",{
+   idea_id:activeIdeaId,revision:row.revision,
+   worker:row.worker,step_id:el("idea-step").value});
+  frontierIsNative=false;
+  options("idea-incoming",[["","Native handoff required to review help"]]);
+  el("idea-view").textContent=JSON.stringify(currentFrontier,null,2);
+  options("idea-target",[["","Choose a visible first-hop branch"],
+    ...currentFrontier.visible_branches.map(x=>[x.revision,
+      x.relationship+" · "+x.worker+" · "+x.revision.slice(0,8)])]);
+  message("Observed only the current step and source-recorded first-hop relationships.");
+ }catch(e){message(e.message,true);}
+};
+el("idea-native-observe").onclick=async()=>{
+ try{
+  const {row}=selection();
+  if(!row)throw Error("Choose a bound source workflow branch.");
+  const handoffId=el("idea-handoff").value.trim();
+  if(!handoffId)throw Error("An existing native handoff ID is required.");
+  currentFrontier=await request("/api/idea-native-frontier",{
+    handoff_id:handoffId,revision:row.revision,step_id:el("idea-step").value});
+  frontierIsNative=true;
+  if(currentFrontier.idea.idea_id!==activeIdeaId||
+     currentFrontier.position.worker!==row.worker)
+    throw Error("Native handoff does not fit selected idea and worker position.");
+  el("idea-view").textContent=JSON.stringify(currentFrontier,null,2);
+  options("idea-target",[["","Choose a visible direct branch"],
+    ...currentFrontier.visible_branches.map(x=>[x.revision,
+      x.relationship+" · "+x.worker+" · "+x.revision.slice(0,8)])]);
+  options("idea-incoming",[["","Choose an incoming local help proposal"],
+    ...currentFrontier.incoming_peer_help.map(x=>[x.proposal_ref,
+      x.from_worker+" · "+x.state+" · "+x.from_revision.slice(0,8)])]);
+  message("Native handoff checked. Only this recorded task's first-hop branch relationships are visible.");
+ }catch(e){frontierIsNative=false;currentFrontier=null;message(e.message,true);}
+};
+el("idea-native-evidence").onclick=async()=>{
+ try{
+  const {row}=selection();
+  if(!row||!frontierIsNative||!currentFrontier)
+    throw Error("Inspect an actual source-owned handoff and step first.");
+  const result=await request("/api/idea-native-evidence",{
+    handoff_id:el("idea-handoff").value.trim(),
+    revision:row.revision,step_id:el("idea-step").value});
+  el("idea-view").textContent=JSON.stringify(result,null,2);
+  message("Reverified only source-linked native results at this step. No branch automatically ranked or adopted.");
+ }catch(e){message(e.message,true);}
+};
+async function ideaProposal(kind){
+ try{
+  const {row}=selection();
+  if(!row||!currentFrontier||!frontierIsNative)
+    throw Error("Inspect a valid native source-owned handoff before proposing movement.");
+  if(currentFrontier.position.revision!==row.revision||
+     currentFrontier.position.step_id!==el("idea-step").value)
+     throw Error("Worker position changed; inspect first.");
+  const result=await request("/api/idea-native-propose",{
+   kind,handoff_id:el("idea-handoff").value.trim(),revision:row.revision,
+   step_id:el("idea-step").value,
+   target_revision:el("idea-target").value,reason:el("idea-reason").value});
+  el("idea-view").textContent=JSON.stringify(result,null,2);
+  message(kind+" proposal saved; no worker executed, switched or promoted.");
+ }catch(e){message(e.message,true);}
+}
+async function reviewIncomingHelp(decision){
+ try{
+  const {row}=selection();
+  if(!row||!currentFrontier||!frontierIsNative)
+    throw Error("Inspect the current native worker handoff first.");
+  const proposal=el("idea-incoming").value;
+  if(!proposal||!currentFrontier.incoming_peer_help.some(x=>x.proposal_ref===proposal))
+    throw Error("Choose help that is actually visible from this step.");
+  const result=await request("/api/idea-native-review",{
+    handoff_id:el("idea-handoff").value.trim(),
+    revision:row.revision,step_id:el("idea-step").value,
+    proposal_ref:proposal,decision,reason:el("idea-review-reason").value});
+  el("idea-view").textContent=JSON.stringify(result,null,2);
+  message("Help review recorded. No branch adopted or worker executed.");
+  await el("idea-native-observe").onclick();
+ }catch(e){message(e.message,true);}
+}
+el("idea-inspect").onclick=()=>reviewIncomingHelp("INSPECT");
+el("idea-decline").onclick=()=>reviewIncomingHelp("DECLINE");
+el("idea-back").onclick=()=>ideaProposal("BACKTRACK");
+el("idea-help").onclick=()=>ideaProposal("HELP");
+
+el("title").onchange=snapshot;el("provenance").onchange=snapshot;el("generate").onchange=()=>{snapshot();lastPreview=null;svgGraph();};
+el("source-step").onchange=ports;el("target-step").onchange=ports;
+el("add-step").onclick=()=>{const m=el("new-manifest").value;if(!m)return;const id=uniqueName();draft.steps.push({id,label:id,manifest:m,path_role:"ALTERNATIVE",inputs:{}});selected=id;lastPreview=null;render();};
+el("add-link").onclick=()=>{draft.links.push({from:el("source-step").value,output:el("source-output").value,to:el("target-step").value,input:el("target-input").value});lastPreview=null;render();};
+el("branch").onclick=()=>{const pin=pins.find(x=>x.revision===el("pinned").value);if(!pin){message("Choose a pin.",true);return;}draft=copy(pin.draft);draft.parent_revision=pin.revision;draft.title+=" — branch";lastPreview=null;selected=draft.steps[0]?.id||"";render();message("New branch created; original pin preserved.");};
+el("refresh").onclick=()=>pinsRefresh().catch(e=>message(e.message,true));
+el("preview").onclick=()=>action("/api/preview");el("compare").onclick=()=>action("/api/diff");el("record").onclick=()=>action("/api/commit");
+el("pin").onclick=()=>{const reason=prompt("Why preserve this workflow revision?");if(reason?.trim())action("/api/pin",{reason:reason.trim()});};
+el("discover").onclick=()=>action("/api/consider",{assessment:{metric:el("metric").value,parent_value:Number(el("baseline").value),branch_value:Number(el("branch-result").value),direction:el("direction").value,comparison_scope:el("scope").value,source_ref:el("source").value,witness_ref:el("witness").value}});
+function abInputs(){
+ const sources=JSON.parse(el("ab-records").value),bindings=JSON.parse(el("ab-bindings").value);
+ if(!Array.isArray(sources)||!bindings||Array.isArray(bindings)||typeof bindings!=="object")
+  throw Error("A/B records require a list and step bindings require an object.");
+ return {source_records:sources,step_bindings:bindings};
+}
+el("ab-load-native").onclick=async()=>{
+ try{
+  const result=await request("/api/ab-native-records");
+  el("ab-records").value=JSON.stringify(result.source_records,null,2);
+  el("report").textContent=JSON.stringify({source_events:result.source_events,
+      records:result.source_records.length, actor_identity_authenticated:false},null,2);
+  message("Loaded "+result.source_records.length+" original native task source records. Bind workflow steps to those task IDs.");
+ }catch(e){message(e.message,true);}
+};
+el("ab-preview").onclick=()=>{
+ try{action("/api/ab-preview",abInputs());}catch(e){message(e.message,true);}
+};
+el("ab-record").onclick=()=>{
+ try{action("/api/ab-record",abInputs());}catch(e){message(e.message,true);}
+};
+el("ab-history").onclick=async()=>{
+ try{const rows=await request("/api/ab-links");el("report").textContent=JSON.stringify(rows,null,2);message("Read saved A/B source ancestry links.");}
+ catch(e){message(e.message,true);}
+};
+el("native-inspect").onclick=async()=>{
+ try{const result=await request("/api/native-inspect",{job_id:el("native-job").value});
+  el("report").textContent=JSON.stringify(result,null,2);
+  message("Fresh source-owned finite-result verification completed without execution.");
+ }catch(e){message(e.message,true);}
+};
+el("native-attach").onclick=async()=>{
+ try{snapshot();const result=await request("/api/native-attach",{draft,
+    step_id:el("native-step").value,job_id:el("native-job").value});
+  el("report").textContent=JSON.stringify(result,null,2);
+  message(result.recorded?"Attached freshly reverified native result to pinned workflow step.":"Exact native result is already attached.");
+ }catch(e){message(e.message,true);}
+};
+el("native-compare").onclick=async()=>{
+ try{snapshot();const view=await request("/api/preview",{draft});
+  const result=await request("/api/native-compare",{
+    parent_revision:draft.parent_revision,branch_revision:view.revision,
+    parent_step_id:el("parent-step").value,branch_step_id:el("native-step").value});
+  el("report").textContent=JSON.stringify(result,null,2);
+  message("Reverified both native editions. This compares bounded computation, not overall workflow quality.");
+ }catch(e){message(e.message,true);}
+};
+el("native-history").onclick=async()=>{
+ try{const result=await request("/api/native-results");
+  el("report").textContent=JSON.stringify(result,null,2);
+  message("Read "+result.length+" original native-result associations.");
+ }catch(e){message(e.message,true);}
+};
+el("export").onclick=()=>{snapshot();const blob=new Blob([JSON.stringify(draft,null,2)],{type:"application/json"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="workflow-draft.json";a.click();URL.revokeObjectURL(url);};
+el("import").onclick=()=>el("file").click();
+el("file").onchange=async e=>{try{const file=e.target.files[0];if(!file)return;const obj=JSON.parse(await file.text());if(!Array.isArray(obj.steps))throw Error("Invalid draft");draft=obj;selected=draft.steps[0]?.id||"";lastPreview=null;render();message("Imported. Preview to validate.");}catch(err){message(err.message,true);}};
+(async()=>{try{catalog=await request("/api/manifests");draft=await request("/api/example");selected=draft.steps[0]?.id||"";await pinsRefresh();await loadIdeas();await loadIdeaBranches();render();message("Ready. Ideas use existing source tasks; workers see only local graph frontiers.");}catch(e){message("Setup error: "+e.message,true);}})();
+</script>
+</body></html>

@@ -1,0 +1,79 @@
+name: workstation-ab-bridge
+on:
+  push:
+    paths:
+      - 'systems/workspace/workflow_ab_bridge.py'
+      - 'systems/workspace/workflow_idea_frontier.py'
+      - 'network/tests/test_workflow_native_continuation.py'
+      - 'network/tests/test_workflow_native_service_continuation.py'
+      - 'runtime/service.py'
+      - 'systems/workspace/workflow_native_continuation.py'
+      - 'network/tests/test_workflow_idea_frontier.py'
+      - 'network/tests/test_workflow_native_results.py'
+      - 'network/tests/test_workflow_factory_native_results.py'
+      - 'systems/workspace/workflow_native_results.py'
+      - 'systems/workspace/workflow_native_frontier_evidence.py'
+      - 'systems/workspace/workflow_draft.py'
+      - 'systems/workspace/workflow_pins.py'
+      - 'systems/workspace/workflow_editor_server.py'
+      - 'runtime/ab_tool_worker.py'
+      - 'runtime/http/workflow-editor.html'
+      - 'network/tests/test_workstation_ab_workflow_bridge.py'
+      - 'network/tests/test_workstation_ab_workflow_http.py'
+      - '.github/workflows/workstation-ab-bridge.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/workflow_ab_bridge.py'
+      - 'systems/workspace/workflow_idea_frontier.py'
+      - 'network/tests/test_workflow_native_continuation.py'
+      - 'network/tests/test_workflow_native_service_continuation.py'
+      - 'runtime/service.py'
+      - 'systems/workspace/workflow_native_continuation.py'
+      - 'network/tests/test_workflow_idea_frontier.py'
+      - 'network/tests/test_workflow_native_results.py'
+      - 'network/tests/test_workflow_factory_native_results.py'
+      - 'systems/workspace/workflow_native_results.py'
+      - 'systems/workspace/workflow_native_frontier_evidence.py'
+      - 'systems/workspace/workflow_draft.py'
+      - 'systems/workspace/workflow_pins.py'
+      - 'systems/workspace/workflow_editor_server.py'
+      - 'runtime/ab_tool_worker.py'
+      - 'runtime/http/workflow-editor.html'
+      - 'network/tests/test_workstation_ab_workflow_bridge.py'
+      - 'network/tests/test_workstation_ab_workflow_http.py'
+      - '.github/workflows/workstation-ab-bridge.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install real A/B tool and B9 native dependencies
+        run: |
+          python -m pip install ./tools/ab-provenance 'cryptography>=45,<47'
+      - name: Verify real A/B to editable workflow source gate
+        run: |
+          python -m unittest -v \
+            network.tests.test_workstation_ab_workflow_bridge \
+            network.tests.test_workflow_idea_frontier \
+            network.tests.test_workflow_native_continuation \
+            network.tests.test_workflow_native_service_continuation \
+            network.tests.test_workflow_native_results \
+            network.tests.test_workflow_factory_native_results \
+            network.tests.test_workstation_ab_workflow_http \
+            network.tests.test_workstation_workflow_draft \
+            network.tests.test_workstation_workflow_pins \
+            network.tests.test_workstation_workflow_editor_http \
+            network.tests.test_ab_tool_native_workers \
+            network.tests.test_pool_evaluator \
+            network.tests.test_program_foundation
+      - name: Demonstrate installed A/B CLI remains the source
+        run: |
+          ab --help
+          python -m systems.workspace.workflow_draft preview --draft examples/workstation_workflow_draft.json

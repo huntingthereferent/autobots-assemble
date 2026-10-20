@@ -212,6 +212,37 @@ class EcosystemService:
         """Advance executable work while leaving unavailable actors READY."""
         return self.orchestrator.run_until_idle(max_steps=max_steps)
 
+    def run_repository_worker_with_frontier(
+        self, *, handoff_id: str, revision: str, step_id: str,
+        handler, allow_native_execution: bool = False,
+    ):
+        """Run an explicitly supplied source-owner handler on an admitted task.
+
+        Uses the EXISTING durable runtime and original TASKS.md handoff. The
+        Workstation provides a local read/review context, not a new worker or
+        a permission to execute. Original result witnesses remain authoritative.
+        """
+        if allow_native_execution is not True:
+            raise PermissionError("explicit native execution authorization required")
+        if self.repository_work_file is None or self.repository_work_file.name != "TASKS.md":
+            raise ValueError("source-recorded TASKS.md must be configured in this service")
+        if not callable(handler):
+            raise TypeError("authorized source-owner handler required")
+        from systems.workspace.workflow_idea_frontier import IdeaFrontier
+        from systems.workspace.workflow_native_continuation import (
+            NativePosition, ScopedRepositoryWorker,
+        )
+        source_root = self.repository_work_file.parent
+        worker = ScopedRepositoryWorker(
+            runtime=self.runtime,
+            frontier=IdeaFrontier(source_root, self.data_dir),
+            position=NativePosition(handoff_id, revision, step_id),
+            handler=handler,
+        )
+        # This uses runtime.run on the already-admitted original handoff.
+        # No worker identity, source idea, branch or native result is forged.
+        return worker.run(allow_native_execution=True)
+
     def add_note(self, payload: dict[str, Any]) -> dict[str, Any]:
         note = self.personal.add_note(
             Note.create(

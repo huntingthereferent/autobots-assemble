@@ -1,0 +1,47 @@
+name: workstation-workflow-drafts
+on:
+  push:
+    paths:
+      - 'foundation/program_kernel/graph.py'
+      - 'systems/workspace/workflow_draft.py'
+      - 'systems/workspace/workflow_pins.py'
+      - 'systems/workspace/workflow_editor_server.py'
+      - 'runtime/http/workflow-editor.html'
+      - 'network/tests/test_workstation_workflow_editor_http.py'
+      - 'network/tests/test_workstation_workflow_draft.py'
+      - 'network/tests/test_workstation_workflow_pins.py'
+      - '.github/workflows/workstation-workflow-drafts.yml'
+  pull_request:
+    paths:
+      - 'foundation/program_kernel/graph.py'
+      - 'systems/workspace/workflow_draft.py'
+      - 'systems/workspace/workflow_pins.py'
+      - 'systems/workspace/workflow_editor_server.py'
+      - 'runtime/http/workflow-editor.html'
+      - 'network/tests/test_workstation_workflow_editor_http.py'
+      - 'network/tests/test_workstation_workflow_draft.py'
+      - 'network/tests/test_workstation_workflow_pins.py'
+      - '.github/workflows/workstation-workflow-drafts.yml'
+  workflow_dispatch:
+
+jobs:
+  draft-graph-and-pins:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'cryptography>=45,<47'
+      - name: Verify edit, generate, branch, pin, and fail-closed boundaries
+        run: |
+          python -m unittest -v \
+            network.tests.test_workstation_workflow_draft \
+            network.tests.test_workstation_workflow_pins \
+            network.tests.test_workstation_workflow_editor_http \
+            network.tests.test_program_foundation \
+            network.tests.test_workstation_construction
+      - name: No app hosted or workflows executed by construction
+        run: |
+          python -m systems.workspace.workflow_draft preview --draft examples/workstation_workflow_draft.json
