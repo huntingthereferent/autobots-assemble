@@ -102,6 +102,15 @@ class AnchoredJournalTests(unittest.TestCase):
         with self.assertRaisesRegex(SealedJournalError, "changed outside runtime"):
             issue_checkpoint(a.event_store, self.signer)
 
+    def test_checkpoint_cannot_sign_a_corrupted_atomic_replay_table(self):
+        native = self.runtime()
+        native.submit(self.task("protected"), admission=("research", "event-one", "b"*64))
+        self.assertEqual(issue_checkpoint(native.event_store, self.signer)["sequence"], 1)
+        with sqlite3.connect(self.file) as db:
+            db.execute("DELETE FROM admitted")
+        with self.assertRaisesRegex(SealedJournalError, "replay table differs"):
+            issue_checkpoint(native.event_store, self.signer)
+
     def test_service_only_admits_trusted_anchor_on_restart(self):
         root = self.root / "service"
         service = EcosystemService(data_dir=root, protected_runtime_key=self.key)
