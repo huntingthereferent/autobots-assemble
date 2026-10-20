@@ -169,8 +169,8 @@ class GenericTimeRespectingChainTests(unittest.TestCase):
         r=self.report["unseen_generated"]
         self.assertEqual(r["cases"],160)
         self.assertEqual(r["verified_by_independent_cartesian_oracle"],160)
-        self.assertGreater(r["positive_cases"],0)
-        self.assertGreater(r["negative_cases"],0)
+        self.assertGreaterEqual(r["positive_cases"],40)
+        self.assertGreaterEqual(r["negative_cases"],80)
         self.assertEqual(r["positive_cases"]+r["negative_cases"],160)
         self.assertEqual(set(x["domain"] for x in r["cases_detail"]),
                          {"care","surveillance"})
