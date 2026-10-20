@@ -106,15 +106,111 @@ def collect(fetch_page, *, max_pages=MAX_PAGES, collected_at=None):
     }
 
 
+
+def collect_frozen_history(fetch_page, *, cutoff=None, start=None,
+                           partition_max=900, max_windows=128):
+    """Index all available source IDs through one fixed UTC cutoff.
+
+    GitHub caps created-filter searches at 1,000 results. Split at UTC
+    second boundaries until each search has <=900 source records, then
+    collect every page. Newer runs cannot shift the frozen windows.
+    The newest 100 are checked separately in the browser.
+    """
+    if cutoff is None:
+        cutoff = int(time.time()) - 60
+    if start is None:
+        start = int(datetime(2018, 1, 1, tzinfo=timezone.utc).timestamp())
+    if not isinstance(cutoff, int) or not isinstance(start, int) or start > cutoff:
+        raise ValueError("invalid immutable UTC observation interval")
+    if not (1 <= partition_max <= 900 and 1 <= max_windows <= 512):
+        raise ValueError("invalid source-partition budget")
+
+    def stamp(second):
+        return datetime.fromtimestamp(second, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+    pending = [(start, cutoff)]
+    windows = []
+    requests = 0
+    while pending:
+        if len(pending) + len(windows) > max_windows:
+            raise RuntimeError("Exhausted bounded source partition budget")
+        lower, upper = pending.pop()
+        window = stamp(lower) + ".." + stamp(upper)
+        first = fetch_page(1, window)
+        requests += 1
+        if not isinstance(first, dict) or not isinstance(first.get("workflow_runs"), list):
+            raise RuntimeError("GitHub date-scoped response missing workflow_runs")
+        total = first.get("total_count")
+        if not isinstance(total, int) or isinstance(total, bool) or total < 0:
+            raise RuntimeError("GitHub date-scoped response missing integer count")
+        if total > partition_max:
+            midpoint = lower + (upper - lower) // 2
+            if midpoint >= upper:
+                raise RuntimeError("More than search cap events share a UTC second")
+            pending.append((midpoint + 1, upper))
+            pending.append((lower, midpoint))
+        else:
+            windows.append((window, total, first))
+    seen = {}
+    raw_rows = 0
+    malformed = 0
+    pages_read = requests
+    inconsistent = False
+    from concurrent.futures import ThreadPoolExecutor
+    for window, total, first in windows:
+        page_count = max(1, (total + PAGE_SIZE - 1) // PAGE_SIZE)
+        if page_count > 10:
+            raise RuntimeError("GitHub capped date range was not narrowed")
+        if page_count > 1:
+            with ThreadPoolExecutor(max_workers=min(8, page_count - 1)) as pool:
+                other = list(pool.map(lambda p: fetch_page(p, window), range(2, page_count + 1)))
+        else:
+            other = []
+        pages_read += len(other)
+        for response in [first, *other]:
+            if not isinstance(response, dict) or not isinstance(response.get("workflow_runs"), list):
+                raise RuntimeError("GitHub page missing workflow_runs")
+            if response.get("total_count") != total:
+                inconsistent = True
+            for entry in response["workflow_runs"]:
+                raw_rows += 1
+                run = normalize_run(entry)
+                if run is None:
+                    malformed += 1
+                else:
+                    seen[run["id"]] = run
+    declared = sum(item[1] for item in windows)
+    rows = sorted(seen.values(), key=lambda r: (r["created_at"] or "", r["id"]), reverse=True)
+    complete = (not inconsistent and malformed == 0 and raw_rows == declared
+                and len(rows) == declared)
+    return {
+        "schema": SCHEMA,
+        "source": "GitHub Actions repository workflow runs; source execution metadata only",
+        "collected_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "cutoff_at": stamp(cutoff),
+        "reported_total": declared,
+        "source_rows_seen": raw_rows,
+        "indexed_count": len(rows),
+        "invalid_source_rows": malformed,
+        "pages_read": pages_read,
+        "windows_read": len(windows),
+        "complete": complete,
+        "boundary": "Complete for accessible GitHub run identities through cutoff_at, not a live worker feed. Newer run statuses come from separate GitHub polling.",
+        "runs": rows,
+    }
+
+
 def fetch_from_github(token, repo=REPO):
     if not re.fullmatch(r"[\w.-]+/[\w.-]+", repo):
         raise ValueError("invalid repository")
     if not token:
         raise RuntimeError("GITHUB_TOKEN missing; cannot build full authenticated source index")
 
-    def page(number):
-        url = "https://api.github.com/repos/" + repo + "/actions/runs?" + urllib.parse.urlencode(
-            {"per_page": PAGE_SIZE, "page": number})
+    def page(number, created=None):
+        params = {"per_page": PAGE_SIZE, "page": number}
+        if created is not None:
+            params["created"] = created
+        url = "https://api.github.com/repos/" + repo + "/actions/runs?" + urllib.parse.urlencode(params)
         request = urllib.request.Request(url, headers={
             "Accept": "application/vnd.github+json",
             "Authorization": "Bearer " + token,
@@ -139,15 +235,14 @@ def fetch_from_github(token, repo=REPO):
 def main():
     token = os.environ.get("GH_TOKEN", "")
     fetch_page = fetch_from_github(token)
-    # Concurrent GitHub runs can shift page offsets during the first walk.
-    # Start afresh on an inconsistent snapshot; never patch gaps with guesses.
-    for attempt in range(3):
-        doc = collect(fetch_page)
+    # An immutable creation-time cutoff avoids races with newly queued work.
+    # Partition each GitHub search below its documented 1,000-result cap.
+    for attempt in range(2):
+        doc = collect_frozen_history(fetch_page)
         if doc["complete"]:
             break
-        if attempt < 2:
-            print("Source changed during collection or returned partial pages; retrying a fresh walk")
-            time.sleep(3 * (attempt + 1))
+        if attempt == 0:
+            print("Frozen source windows shifted or returned partial pages; retrying", flush=True)
     if not doc["runs"]:
         raise RuntimeError("GitHub returned no valid recorded workflow identities")
     if not doc["complete"]:
