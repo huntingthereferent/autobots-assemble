@@ -43,6 +43,7 @@ class OfflineJournalKeyRecoveryTests(unittest.TestCase):
         values = dict(
             trusted_journal_identity=self.anchor["journal_identity"],
             signed_checkpoint=self.anchor,
+            trusted_checkpoint_public_key=self.checkpoint_signer.public_key(),
             trusted_operator_public_key=self.operator.public_key(),
             offline_recovery_private_key=self.recovery_recipient,
             recovery_ledger=ReplayLedger(self.path / "recovery.sqlite"))
@@ -66,6 +67,16 @@ class OfflineJournalKeyRecoveryTests(unittest.TestCase):
     def test_untrusted_operator_key_refused(self):
         with self.assertRaises(EnvelopeError):
             self.recover(trusted_operator_public_key=Ed25519PrivateKey.generate().public_key())
+
+    def test_untrusted_checkpoint_signature_refused_during_recovery(self):
+        envelope = self.package()
+        tampered = {**self.anchor, "head_digest": "0" * 64}
+        # This was formerly accepted if the recipient/operator keys matched.
+        with self.assertRaises(SealedJournalError):
+            self.recover(envelope, signed_checkpoint=tampered)
+        with self.assertRaises(SealedJournalError):
+            self.recover(envelope, trusted_checkpoint_public_key=
+                         Ed25519PrivateKey.generate().public_key())
 
     def test_wrong_journal_identity_refused(self):
         with self.assertRaisesRegex(EnvelopeError, "identity mismatch"):
