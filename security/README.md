@@ -99,3 +99,41 @@ independent security review.
 
 The design goal is continuous observation of bounded movement with actual
 evidence of which boundaries held; it does not promise perpetual hindrance.
+
+
+## Authenticated native runtime ingress (draft review)
+
+`security/runtime_ingress.py` is an opt-in entrance to the real
+`runtime.engine.HandoffRuntime`; it does not replace the existing
+scheduler, durable journal, or native witness contracts.
+
+- `seal_handoff` and `AuthenticatedHandoffIngress.submit` sign, encrypt and
+  admit a real `Handoff` only after checking the pre-pinned signer public key,
+  the operator-selected lane, exact parent digest, signed event identity,
+  claimed source actor, and destination actor.
+- `seal_result` and `AuthenticatedHandoffIngress.return_result` bind a
+  signed `ExecutionResult` to the runtime's last event, enforce the assigned
+  worker identity, and pass the result through the existing native evidence
+  requirements instead of inventing new completion semantics.
+- The separately configured `IngressAuthority` supplies fixed actor/key
+  policy. Neither actor identity nor key enrollment is inferred from the
+  received message. Admission does not start a worker.
+- Focused tests use actual `HandoffRuntime` and `RuntimeJournal` instances,
+  restart state, check replay, wrong actors, changed ancestry, stale returns,
+  and unsupported evidence.
+
+Run all focused tests:
+
+```sh
+python -W error::ResourceWarning -m unittest discover -s network/tests -p 'test_security_*.py' -v
+```
+
+**Trust boundary:** This is not a global interceptor. Applications must keep
+the raw `HandoffRuntime.submit/run/return_result` methods away from
+untrusted callers and exclusively route their untrusted ingress through this
+adapter. Private keys and operator key enrollment remain external. Replay
+admission and runtime journal submission are two separate writes: a journal
+failure consumes that envelope ID and fails closed. Before deployment, address
+atomic cross-store recovery, distributed replay consensus, key revocation,
+concurrent results, and independent external audit. The experimental bipolar
+model is never used to authorize a worker.
