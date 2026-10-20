@@ -77,9 +77,13 @@ def issue_checkpoint(journal: SealedRuntimeJournal,
         b"ab-journal-checkpoint-signature/v1|" + _canonical(body)).hex()}
 
 
-def verify_checkpoint(journal: SealedRuntimeJournal, checkpoint: dict,
-                      trusted_public_key: Ed25519PublicKey) -> None:
-    """Reject a current history that cannot include an independently signed prefix."""
+def verify_checkpoint_signature(checkpoint: dict,
+                                trusted_public_key: Ed25519PublicKey) -> None:
+    """Authenticate checkpoint bytes without needing the sealed journal.
+
+    Used for offline recovery; the recovered journal MUST be verified again
+    against this independently pinned checkpoint before execution resumes.
+    """
     if not isinstance(trusted_public_key, Ed25519PublicKey):
         raise TypeError("independently pinned checkpoint public key required")
     if type(checkpoint) is not dict or set(checkpoint) != FIELDS:
@@ -99,6 +103,10 @@ def verify_checkpoint(journal: SealedRuntimeJournal, checkpoint: dict,
             b"ab-journal-checkpoint-signature/v1|" + _canonical(body))
     except (ValueError, InvalidSignature) as exc:
         raise SealedJournalError("checkpoint signature invalid") from exc
+def verify_checkpoint(journal: SealedRuntimeJournal, checkpoint: dict,
+                      trusted_public_key: Ed25519PublicKey) -> None:
+    """Reject a current history that cannot include an independently signed prefix."""
+    verify_checkpoint_signature(checkpoint, trusted_public_key)
     identity, count, digests = _snapshot(journal)
     if checkpoint["journal_identity"] != identity:
         raise SealedJournalError("checkpoint belongs to different journal")
