@@ -1,0 +1,45 @@
+{
+  "adjacent_version_pair_checked": true,
+  "first_public_version_timestamp": "UNAVAILABLE",
+  "historical_temporal_benchmark_completed": false,
+  "known_at_admitted_to_W13": false,
+  "nih_submission_or_clinical_verdict": false,
+  "observed_status_changed": true,
+  "original_twelve_job_W13_modified": false,
+  "records": [
+    {
+      "clinical_result_inferred": false,
+      "first_public_version_timestamp_independently_authenticated": false,
+      "observed_overall_status": "Recruiting",
+      "observed_version_local_last_update_posted": "2022-10-27",
+      "observed_version_local_qc_submitted": "2022-10-26",
+      "original_version_fields_witnessed": true,
+      "original_visible_text_sha256": "c150ef7d6634746c84793d6d93894b2cfbb1ab9e087854c633512777f714c752",
+      "posted_date_qualifier": "Actual",
+      "retrieved_utc": "2026-10-20T12:20:05.565698+00:00",
+      "source_url": "https://clinicaltrials.gov/study/NCT00001756?a=259&tab=history",
+      "submitted_in_original_selected_version": "2022-10-26",
+      "version": 259,
+      "version_local_status_section_sha256": "15686eddad1cefde4a155db9c6a773053d2438ffa6c3826a3f3a0f7b383b0d"
+    },
+    {
+      "clinical_result_inferred": false,
+      "first_public_version_timestamp_independently_authenticated": false,
+      "observed_overall_status": "Completed",
+      "observed_version_local_last_update_posted": "2022-11-07",
+      "observed_version_local_qc_submitted": "2022-11-04",
+      "original_version_fields_witnessed": true,
+      "original_visible_text_sha256": "913e01081c92aaa509c76f548c556b64077301d68913d5293d17a5b0ef59cc3b",
+      "posted_date_qualifier": "Actual",
+      "retrieved_utc": "2026-10-20T12:20:06.046294+00:00",
+      "source_url": "https://clinicaltrials.gov/study/NCT00001756?a=260&tab=history",
+      "submitted_in_original_selected_version": "2022-11-04",
+      "version": 260,
+      "version_local_status_section_sha256": "45cc2eabdb3de23db8df56870070b67d8e4fb562ae8847e2275f120692d64a4a"
+    }
+  ],
+  "schema": "nih-p2-official-adjacent-original-status/v1",
+  "source_owner": "ClinicalTrials.gov / U.S. National Library of Medicine",
+  "study": "NCT00001756",
+  "two_original_version_fields_witnessed": true
+}
