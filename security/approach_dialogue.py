@@ -8,7 +8,6 @@ research/maze instrument; it does not control access to cryptographic keys.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from hashlib import sha256
 from secrets import token_urlsafe
 import re
 from threading import RLock
@@ -35,7 +34,7 @@ _SECRET_FIELD = re.compile(
     r"access[_-]?token|private[_-]?key)\s*[:=]\s*\S+", re.I
 )
 _PRIVATE_KEY = re.compile(r"-----BEGIN [A-Z ]*PRIVATE KEY-----", re.I)
-_CONTROL = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
+_CONTROL = re.compile(r"[\x00-\x1f\x7f]")
 
 
 @dataclass(frozen=True)
