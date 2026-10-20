@@ -294,3 +294,21 @@ retention, encrypted storage if any, participant withdrawal and
 independent privacy review would all require explicit operational
 policy. There is no secretly monitored target or network-facing
 logger. See [bounded experiment](APPROACH_DIALOGUE.md).
+
+## SEC-24 — closed finite maze graph, not a key route
+
+The opt-in A/B dialogue prototype now has a ten-node, twenty-directed-edge
+fictional [branch graph](../security/branch_world.py). Every node has
+two continuations, with **zero terminal key-access states**. The
+participant's story choice advances only an in-memory fictional cursor.
+Observed independent bipolar presence orders those exits and selects
+the wording; submitted messages and navigation do not move the
+bipolar driver, encrypted journal, native worker or cryptographic keys.
+
+The suite explores 10,000 fictional edges per orientation/choice
+combination, validates closure and rejects unknown paths or illegal
+choices. It also tests independent story cursors for consented sessions,
+code-like input remaining inert, and both directions through the
+actual CLI. This is not proof of resistance to host compromise, false
+metadata disclosure, malicious processes or unreviewed real HTTP
+entrances. It is **not** an operational honeypot or a public route.
