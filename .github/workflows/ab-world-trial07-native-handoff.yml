@@ -1,0 +1,103 @@
+name: A/B WORLD Trial07 unresolved native junction evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial07_handoff.py'
+      - 'network/tests/test_ab_world_trial07_handoff.py'
+      - 'work/ab_world/TRIAL07_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial07-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-original-tie-and-carry-unknown:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout general A/B carrier
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD Trial07 source at pinned commit
+        uses: actions/checkout@v4
+        with:
+          ref: bda4bc271a985965558fc8f0d48e89fee07161d0
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run carrier witness and false-promotion controls
+        run: python -m unittest -v network.tests.test_ab_world_trial07_handoff
+      - name: Execute original tie detector and its native independent verifier
+        working-directory: original-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_junction_threshold network.tests.test_world_ab_junction_continuous network.tests.test_world_ab_connected_routing
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_junction_threshold import run
+          from network.tests.test_world_ab_junction_threshold import verify
+          source=run()
+          assert verify(source)
+          assert len(source["probes"]) == 9
+          assert source["probes"][4]["status"] == "unresolved-multiple-contacts"
+          assert source["probes"][4]["observed_contacts"] == 0
+          assert source["simultaneous_contact_solver"] is False
+          Path("../world-trial07-original.json").write_text(
+              json.dumps(source, sort_keys=True, indent=2)+"\n",
+              encoding="utf-8")
+          Path("../world-trial07-original-verdict.json").write_text(
+              json.dumps({
+                  "source_commit": "bda4bc271a985965558fc8f0d48e89fee07161d0",
+                  "independent_native_verifier_passed": True,
+                  "simultaneous_impulse_solved": False,
+                  "source_tie_entry_y": source["junction_contact"]["entry_y"],
+              }, sort_keys=True, indent=2)+"\n", encoding="utf-8")
+          PY
+      - name: Record source ambiguity without converting it into an impulse
+        run: |
+          python -m work.ab_world.world_trial07_handoff \
+            --native world-trial07-original.json \
+            --source-commit bda4bc271a985965558fc8f0d48e89fee07161d0 \
+            > world-trial07-ab-carrier.json
+          python - <<'PY'
+          import json
+          x=json.load(open("world-trial07-ab-carrier.json"))
+          assert x["ledger_witness"]["valid"]
+          assert x["ledger_witness"]["steps_verified"] == 32
+          assert x["ledger_witness"]["observations_recorded"] == 10
+          assert x["ledger_witness"]["comparisons"] == {}
+          assert x["native_tie_status"] == "unresolved-multiple-contacts"
+          assert x["native_tie_contacts"] == 0
+          assert x["outgoing_impulse_decided"] is False
+          assert not x["source_authenticated_by_adapter"]
+          assert not x["native_physics_verified_by_adapter"]
+          with open("world-trial07-ab-ledger.json","w") as f:
+              json.dump(x["world_receipt"],f,sort_keys=True,indent=2)
+          PY
+          python -m work.ab_world.construction --verify world-trial07-ab-ledger.json > world-trial07-ab-ledger-verdict.json
+          python - <<'PY'
+          import json
+          assert json.load(open("world-trial07-ab-ledger-verdict.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_junction_threshold.py \
+            original-world/network/tests/test_world_ab_junction_threshold.py \
+            world-trial07-original.json \
+            world-trial07-original-verdict.json \
+            world-trial07-ab-carrier.json \
+            world-trial07-ab-ledger-verdict.json > world-trial07-handoff-digests.txt
+      - name: Retain original source and independent witnesses
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial07-ambiguous-source
+          path: |
+            world-trial07-original.json
+            world-trial07-original-verdict.json
+            world-trial07-ab-carrier.json
+            world-trial07-ab-ledger.json
+            world-trial07-ab-ledger-verdict.json
+            world-trial07-handoff-digests.txt
+          retention-days: 30
