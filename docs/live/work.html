@@ -355,7 +355,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
     checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,
     catalog:[],catalogLoaded:false,stream:null,streamUrl:"",streamTicks:0,lastTick:0,
-    lastStreamStatus:"not configured",rateLimitUntil:0};
+    lastStreamStatus:"not configured",rateLimitUntil:0,lastAttempt:0};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
@@ -371,7 +371,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
         conclusion:r.conclusion||null,url:r.html_url,created:r.created_at,updated:r.updated_at,
         runNumber:r.run_number,branch:r.head_branch||"",event:r.event||"unknown"}));}
 
-  function mergeRuns(incoming,replaceRecent=false){
+  function mergeRuns(incoming){
     const previous=new Map(app.runs.map(r=>[r.id,r]));
     for(const r of incoming){
       const old=previous.get(r.id);
@@ -670,7 +670,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   function onServerTick(){
     app.streamTicks++;app.lastTick=Date.now();tickDisplay();
     // A server event is a prompt to recheck original evidence, never a worker result.
-    if(!document.hidden&&!app.reading&&(!app.checked||Date.now()-app.checked>=TICK_REFRESH_GAP))refresh();
+    if(!document.hidden&&!app.reading&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=TICK_REFRESH_GAP))refresh();
   }
   function connectTick(value){
     const safe=safeTickUrl(value);
@@ -690,17 +690,22 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     tickDisplay();return true;
   }
   function updateNextCheck(){
-    const remaining=app.checked?Math.max(0,Math.ceil((PERIOD-(Date.now()-app.checked))/1000)):0;
-    $("next-check").textContent=app.checked?"Next GitHub source check in "+remaining+"s · last checked "+new Date(app.checked).toLocaleTimeString():"Awaiting first source check";
+    const next=Math.max((app.lastAttempt||0)+PERIOD,app.rateLimitUntil||0);
+    const remaining=Math.max(0,Math.ceil((next-Date.now())/1000));
+    $("next-check").textContent=(app.rateLimitUntil>Date.now()?"API retry paused ":"Next GitHub check in ")+remaining+"s"+
+      (app.checked?" · last verified "+new Date(app.checked).toLocaleTimeString():" · no verified sample yet");
   }
   async function refresh(){
-    if(app.reading)return;app.reading=true;$("check-now").disabled=true;
+    if(app.reading)return;app.reading=true;app.lastAttempt=Date.now();$("check-now").disabled=true;
     try{
       const data=await getJSON(API+"/actions/runs?per_page=100&page=1");
       const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
       app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
       app.checked=Date.now();
       mergeRuns(runs);
+      app.rateLimitUntil=0;
+      if(runs.length<100&&app.nextPage===2)app.olderExhausted=true;
+      renderHistory();
       if(!app.selection||!app.runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
       renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="GitHub source observed";
       $("last-read").textContent="checked "+new Date(app.checked).toLocaleString();
@@ -711,6 +716,7 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
     }catch(e){
       $("live-dot").className="indicator error";
       $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
+      if(/403|429|rate limit/i.test(e.message))app.rateLimitUntil=Date.now()+15*60*1000;
       $("feed-error").textContent="Could not refresh the execution source: "+e.message+". Displayed results may be stale; no current status inferred.";
       if(!app.runs.length)$("runs").replaceChildren(el("p","No verified execution sample loaded.","no-source"));
     }finally{app.reading=false;$("check-now").disabled=false}
@@ -728,10 +734,12 @@ footer { max-width:1440px; margin:auto; border-top:1px solid var(--line); paddin
   $("tick-disconnect").addEventListener("click",disconnectTick);
   let stored="";try{stored=localStorage.getItem(TICK_STORAGE)||""}catch{}
   if(stored)connectTick(stored);else tickDisplay();
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh()});
+  document.addEventListener("visibilitychange",()=>{
+    if(!document.hidden&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=PERIOD))refresh();
+  });
   setInterval(()=>{
     updateNextCheck();
-    if(!document.hidden&&!app.reading&&(!app.checked||Date.now()-app.checked>=PERIOD))refresh();
+    if(!document.hidden&&!app.reading&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=PERIOD))refresh();
   },10000);
   loadCatalog();
   refresh();
