@@ -160,9 +160,13 @@ def trial(angle):
                 "receiver":None,"next_contact":None,"frames":[]}
     source_normal=tuple(old["source_first_contact"]["normal"])
     source_anchor=tuple(WALL_CENTER)
-    for index,s in enumerate(((-1.,0.),(1.,0.),(0.,-1.),(0.,1.))):
-        a=(0.,0.) if index in (0,2) else (WORLD[0],WORLD[1])
-        # For right and top edges use a point with the relevant bound.
+    perimeter=(
+        ((1.,0.),(0.,0.)),
+        ((-1.,0.),(WORLD[0],0.)),
+        ((0.,1.),(0.,0.)),
+        ((0.,-1.),(0.,WORLD[1])),
+    )
+    for s,a in perimeter:
         ok,reason,_=_check(h,s,a,DURATION,"world")
         if not ok:
             return {**common,"status":"UNRESOLVED_"+reason,
