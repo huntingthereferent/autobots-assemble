@@ -48,10 +48,42 @@ are left untouched. This is **not** a replacement for their authentication.
   raw database bytes in the tested examples.
 
 These tests use the existing trusted handoff runtime, encrypted journal,
-replay checks and genuine standard cryptographic keys. They do not
-demonstrate a perpetual, autonomous native movement when no event is
-occurring. The current observation is *event-driven*; any future tie to an
-independent world-motion driver must be evidenced by real native movement.
+replay checks and genuine standard cryptographic keys.
+
+## Independent idle-time presence (opt-in)
+
+The trusted host may now explicitly create `NativePresenceRunner` against
+the very same `KeyApproachBoundary` used by its native signed ingress. The
+driver uses a real `monotonic_ns` clock and an independent native thread
+to advance a **separate bipolar presence trajectory**. It runs even if
+no external approaches occur and no handoff or worker result is admitted.
+
+`EcosystemService.start_local_key_presence()` requires the sealed native
+journal, two reciprocally scoped operator-pinned signed ingress roles, and
+the same shared key-approach object. It starts no worker and exposes no HTTP
+operation. `stop_local_key_presence()` stops the trusted local driver.
+
+Presence ticks must **never masquerade as committed native evidence**.
+The existing native protected/admitted trajectory still advances only
+after a cryptographically authenticated durable movement. The new
+presence trajectory is an independently observed finite motion; its
+counts are operator-local, and neither keys nor native record hashes
+change as a consequence of clock movement.
+
+Regression tests start the actual native driver, observe at least five
+ticks with **zero requests**, verify no native journal events were added,
+interleave hundreds of external approaches with idle presence, check
+shared state across both trusted signer roles, and verify the thread stops
+without continuing motion. Neither construction nor import automatically
+starts background execution.
+
+**Limit:** clocked finite ticks are not proof of physically continuous
+motion at every instant, nor do they imply that an intruder cannot learn
+a key. The native presence runner is explicitly opt-in, single-process,
+memory-resident, and stops when its host stops. Restart semantics,
+durable independent world-motion witnesses, external presence sensors,
+and physical-host tests remain unproved. Its oscillation is **not**
+cryptographic authorization or a secrecy guarantee.
 
 ## Bounds that cannot be skipped
 
