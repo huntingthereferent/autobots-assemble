@@ -144,7 +144,7 @@ class NativeResultWorkstationTests(unittest.TestCase):
         self.assertEqual(peer["comparison"], "SAME_OPERATION_INPUTS_REVERIFIED")
         self.assertTrue(peer["matching_observed_result"])
         self.assertFalse(peer["quality_superiority_proven"])
-        self.assertTrue(observed["other_ideas_not_read"])
+        self.assertTrue(observed["other_ideas_not_exposed"])
         self.assertTrue(observed["operator_association_is_not_source_execution_proof"])
         self.assertFalse(observed["branch_quality_ranked"])
         self.assertFalse(observed["native_jobs_reexecuted"])
