@@ -1,0 +1,17 @@
+; A/B native finite source projection in Godot 4.7.
+; This is a viewer, not a physics or AI runtime.
+config_version=5
+
+[application]
+config/name="A/B Native Finite Motion"
+run/main_scene="res://main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+
+[display]
+window/size/viewport_width=1440
+window/size/viewport_height=800
+window/stretch/mode="canvas_items"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
