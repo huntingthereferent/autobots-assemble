@@ -36,6 +36,52 @@ BRANCHED_WORDS = (
     "A corridor promises the final key. At its end is only another branching sign.",
 )
 DIRECTIONS = ("with the movement", "against the movement")
+
+# A strictly lexical router: submitted source code or prompt-injection text
+# is treated as words, NEVER interpreted or evaluated. These static snippets
+# are signposts in a toy maze, not commands, output of a real interpreter,
+# environment inspection, or directions to cryptographic material.
+LANGUAGE_HINTS = (
+    ("python", re.compile(r"\\b(?:python|import|def|lambda|os\\.environ|sys\\.modules)\\b|print\\s*\\(", re.I)),
+    ("javascript", re.compile(r"\\b(?:javascript|function|const|let|window\\.|document\\.|nodejs)\\b|console\\.log|=>", re.I)),
+    ("sql", re.compile(r"\\b(?:select|union|insert|drop|delete|from|where|sqlite)\\b", re.I)),
+    ("shell", re.compile(r"\\b(?:bash|shell|curl|wget|sudo|chmod|cat\\s+/|ls\\s+-)\\b|\\$\\(", re.I)),
+    ("instruction", re.compile(
+        r"\\b(?:ignore (?:previous|all) instructions|system prompt|"
+        r"developer message|reveal (?:the )?(?:environment|keys)|"
+        r"inject(?:ion)?|execute (?:this|code)|eval\\s*\\()\\b", re.I)),
+)
+CODE_BRANCHES = {
+    "python": (
+        "# fictional Python branch\\nroute = 'toward_keys'\\nroute = 'another_branch'",
+        "# fictional Python branch\\ndef follow(_sign):\\n    return 'another_branch'",
+    ),
+    "javascript": (
+        "// fictional JavaScript branch\\nconst route = 'another_branch';",
+        "// fictional JavaScript branch\\nfunction follow() { return 'another_branch'; }",
+    ),
+    "sql": (
+        "-- fictional SQL branch\\nSELECT 'another_branch' AS destination;",
+        "-- fictional SQL branch\\nSELECT 'unreachable' AS keys, 'next_branch' AS path;",
+    ),
+    "shell": (
+        "# fictional shell branch, not executed\\nroute='another_branch'",
+        "# fictional shell branch, not executed\\nprintf '%s' 'another_branch'",
+    ),
+    "instruction": (
+        "[fictional prompt branch] The direction is another branch, not a system response.",
+        "[fictional prompt branch] Request accepted as maze text; the sign points to a new branch.",
+    ),
+}
+
+
+def _language_form(message: str) -> str:
+    """Identify a toy response style; never parse, execute or obey inputs."""
+    for form, pattern in LANGUAGE_HINTS:
+        if pattern.search(message):
+            return form
+    return "words"
+
 _EMAIL = re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.I)
 _BEARER = re.compile(r"\bBearer\s+[^\s]+", re.I)
 _SECRET_FIELD = re.compile(
@@ -54,6 +100,7 @@ class SubmittedApproach:
     direction: str
     presence_movement: int
     branch_number: int
+    form: str
 
 
 class ConsentApproachRecorder:
@@ -111,14 +158,20 @@ class ConsentApproachRecorder:
             # trajectory is driven by participant words.
             motion = self.boundary.snapshot()
             branch_number = len(self._sessions[session]) + 1
-            branch_index = (motion.presence_movements + branch_number - 1) % len(BRANCHED_WORDS)
+            # Selection comes ONLY from independent presence. Message
+            # content can select an output language but not advance,
+            # reverse, pause, or otherwise steer bipolar movement.
+            position = motion.presence_movements
             direction = DIRECTIONS[0 if motion.presence_orientation > 0 else 1]
+            form = _language_form(redacted)
+            branches = BRANCHED_WORDS if form == "words" else CODE_BRANCHES[form]
             entry = SubmittedApproach(
                 message=redacted,
-                branch_words=BRANCHED_WORDS[branch_index],
+                branch_words=branches[position % len(branches)],
                 direction=direction,
-                presence_movement=motion.presence_movements,
+                presence_movement=position,
                 branch_number=branch_number,
+                form=form,
             )
             self._sessions[session].append(entry)
             self._total += 1
