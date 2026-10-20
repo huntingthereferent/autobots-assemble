@@ -570,14 +570,24 @@
       "evidence": "documented-heading-only",
       "boundary": "This is a recorded heading, not a native verified execution.",
       "next": ""
+    },
+    {
+      "id": "heading:work/ab_world/GENERAL_CONSTRUCTION.md#L41",
+      "path": "work/ab_world/GENERAL_CONSTRUCTION.md",
+      "line": 41,
+      "title": "Next movement toward the physical layer",
+      "state": "DOCUMENTED_MOVEMENT",
+      "evidence": "documented-heading-only",
+      "boundary": "This is a recorded heading, not a native verified execution.",
+      "next": ""
     }
   ],
   "source_totals": {
-    "source_files": 1665,
+    "source_files": 1672,
     "structured_records": 16,
     "original_wall_entries": 13,
     "documented_wall_headings": 12,
-    "documented_movement_headings": 23
+    "documented_movement_headings": 24
   },
   "boundary": "Research entries are source-owned states; the browser's event roots and ancestry must come from GitHub directly. Presence in one display does not establish a causal relationship."
 }
