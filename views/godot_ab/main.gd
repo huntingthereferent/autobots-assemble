@@ -85,9 +85,7 @@ func _load_native_data() -> bool:
     var expected: Dictionary = {
         "schema": SCHEMA,
         "source": "work.arc_like_maze.math.World",
-        "phi": [0, 1, 2],
         "depth": 3,
-        "origin": [0, 0, 0],
         "state_count": 27,
         "positions": "editorial BFS-depth projection; no physical distance claim",
     }
@@ -95,6 +93,12 @@ func _load_native_data() -> bool:
         if _source.get(field) != expected[field]:
             return _fail("model identity/boundary mismatch at " + str(field)
                 + ": got " + str(_source.get(field)))
+    # JSON numbers are imported by Godot as floats. Check the exact
+    # admissible finite values, not Variant array element types.
+    if not _valid_state(_source.get("phi")) or _key(_source["phi"]) != "0,1,2":
+        return _fail("finite phi values differ from selected source")
+    if not _valid_state(_source.get("origin")) or _key(_source["origin"]) != "0,0,0":
+        return _fail("finite origin values differ from selected source")
     var nodes: Variant = _source.get("nodes")
     if not (nodes is Array) or nodes.size() != 27:
         return _fail("wrong finite node count")
@@ -106,7 +110,7 @@ func _load_native_data() -> bool:
         if _rows.has(k):
             return _fail("duplicated native state")
         for action in ["A", "B"]:
-            if not _valid_state(row.get(action)) or row[action] != _step(state, action):
+            if not _valid_state(row.get(action)) or _key(row[action]) != _key(_step(state, action)):
                 return _fail("A/B edge contradicts source finite rules")
         if typeof(row.get("depth")) != TYPE_INT and typeof(row.get("depth")) != TYPE_FLOAT:
             return _fail("invalid graph depth")
@@ -143,7 +147,8 @@ func _load_native_data() -> bool:
     var trace: Variant = _source.get("demo_states")
     if not (actions is String) or actions.length() > 64 or not (trace is Array):
         return _fail("unbounded or missing native sample trace")
-    if trace.size() != actions.length() + 1 or trace[0] != _source["origin"]:
+    if (trace.size() != actions.length() + 1 or not _valid_state(trace[0])
+            or _key(trace[0]) != _key(_source["origin"])):
         return _fail("sample trace has wrong endpoints")
     var sample: Array = _source["origin"]
     for i in range(actions.length()):
@@ -151,7 +156,7 @@ func _load_native_data() -> bool:
         if action != "A" and action != "B":
             return _fail("unknown native action in sample")
         sample = _rows[_key(sample)][action]
-        if sample != trace[i + 1]:
+        if not _valid_state(trace[i + 1]) or _key(sample) != _key(trace[i + 1]):
             return _fail("sample sequence does not replay through native edges")
     _current = origin
     _inspected = origin
