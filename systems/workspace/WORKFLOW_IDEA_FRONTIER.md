@@ -153,6 +153,33 @@ or task completion; rejects wrong assignments and other handoffs; and checks
 the default no-execution gate. This confirms the integration contract, not
 unsupervised autonomous coding.
 
+## Two-way help review, without invented adoption
+
+A related worker can propose help only where the **same recorded step ID**
+exists at a first-hop child or sibling branch. Each incoming proposal is
+referenced by a digest of its actual append-only `HELP_PROPOSED` record
+and is displayed only at its addressed **native task, revision, step**.
+
+The recipient's existing native callback can call
+`BoundedWorkerContext.review_help(proposal_ref=..., decision="INSPECT" |
+"DECLINE", reason=...)`. The Workstation checks the current native
+handoff and confirms that precise proposal is visible from its current
+position. An `INSPECT` decision means *worth looking at*, **not** a verified
+improvement or permission to adopt code or reroute tasks. `DECLINE` records
+a bounded negative review. Both are immutable once recorded; conflicting
+second reviews fail closed.
+
+The review is `HELP_REVIEWED` in the same append-only idea journal.
+It becomes visible to the original proposer through
+`outgoing_help_reviews` **only while the target branch remains in the
+proposer's first-hop view**. Unrelated ideas, other steps, distant branches
+and hidden peer graphs remain unavailable. A review cannot execute another
+worker, modify a pin, or mark a native task complete.
+
+The opt-in local editor also offers **Mark for bounded inspection** and
+**Decline this help** beside the native handoff inspection. Those controls
+require an existing source-owned handoff and an incoming proposal reference.
+
 ## Source-bound tests
 
 ```sh
