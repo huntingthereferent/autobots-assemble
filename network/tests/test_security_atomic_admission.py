@@ -185,6 +185,33 @@ class AtomicSealedAdmissionTests(unittest.TestCase):
         self.assertEqual(self.ingress.submit(second).status, "READY")
         self.assertEqual(self.counts(), (2, 2))
 
+    def test_replay_table_corruption_is_detected_against_encrypted_chain(self):
+        self.ingress.submit(self.signed())
+        assert self.counts() == (1, 1)
+        for kind in ("delete", "change", "extra"):
+            alternate = self.base / (kind + ".sealed.sqlite")
+            with sqlite3.connect(self.file) as src, sqlite3.connect(alternate) as dst:
+                src.backup(dst)
+            with sqlite3.connect(alternate) as db:
+                if kind == "delete":
+                    db.execute("DELETE FROM admitted")
+                elif kind == "change":
+                    db.execute("UPDATE admitted SET digest=?", (bytes(32),))
+                else:
+                    db.execute("INSERT INTO admitted VALUES (?, ?)",
+                               (os.urandom(32), os.urandom(32)))
+            with self.subTest(kind=kind):
+                with self.assertRaisesRegex(SealedJournalError, "replay table differs"):
+                    SealedRuntimeJournal(alternate, key=self.key)
+
+    def test_direct_native_event_and_signed_identity_can_coexist(self):
+        self.runtime.submit(self.task("native"))
+        self.ingress.submit(self.signed())
+        self.assertEqual(self.counts(), (2, 1))
+        self.restart()
+        self.assertEqual(self.runtime.get("native").handoff_id, "native")
+        self.assertEqual(self.runtime.get("task-1"), self.task())
+
     def test_historical_sealed_database_without_atomic_table_refused(self):
         self.runtime.submit(self.task())
         with sqlite3.connect(self.file) as db:
