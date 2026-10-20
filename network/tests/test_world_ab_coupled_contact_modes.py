@@ -46,7 +46,10 @@ def classify(src,mu,omega,mode):
         if max(abs(q-p) for q,p in zip(normal,prior))>2e-7:
             raise ValueError("measured normal not source face normal")
         if abs(distance(center,face)-R)>3e-7:raise ValueError("source contact center drift")
-        n.append(normal)
+        # Independently verify the measured finite-face normal, but use the
+        # exact recorded 9dp input for the impulse algebra. Replacing it with
+        # higher precision shifts ill-conditioned impulse magnitudes.
+        n.append(tuple(prior))
     tangent=[(-q[1],q[0]) for q in n]
     vectors=[]
     for ni,ti in zip(n,tangent):
