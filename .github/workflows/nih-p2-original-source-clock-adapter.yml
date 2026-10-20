@@ -1,0 +1,101 @@
+name: NIH P2 two original source clocks
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_two_original_source_clocks.py'
+      - 'network/tests/test_nih_p2_two_original_source_clocks.py'
+      - '.github/workflows/nih-p2-original-source-clock-adapter.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  original-source-clock-admission:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Download exact retained original registry V259 V260 receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: nih-p2-adjacent-status-receipt
+          run-id: 39421372666
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/nih-orig-registry
+      - name: Download exact retained independent two-whole-AACT-source comparison
+        uses: actions/download-artifact@v4
+        with:
+          name: nih-independent-aact-v259-v260-39424382213-1
+          run-id: 39424382213
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/nih-orig-aact
+      - name: Check original exact source JSON SHA-256 and retained report provenance
+        env:
+          NIH_P2_ORIGINAL_REGISTRY_JSON: ${{ runner.temp }}/nih-orig-registry/original-status-contrast.json
+          NIH_P2_ORIGINAL_AACT_JSON: ${{ runner.temp }}/nih-orig-aact/independent-aact-original-version-corroboration.json
+        run: |
+          python - <<'PY'
+          import hashlib,os
+          from pathlib import Path
+          pair=(
+              ("NIH_P2_ORIGINAL_REGISTRY_JSON",
+               "9adf3d0419b89a8c098b97b61bbfec874d5833b69bdf0fced213628188ad5540"),
+              ("NIH_P2_ORIGINAL_AACT_JSON",
+               "549d7cc2343c49818f54eeba8ce5c4ee3a8b44f84cf796d6361702d2e6c81e2e"),
+          )
+          for env,digest in pair:
+              source=Path(os.environ[env]).read_bytes()
+              assert hashlib.sha256(source).hexdigest()==digest,env
+          PY
+      - name: Run independent source-family and time-boundary negative controls
+        env:
+          NIH_P2_ORIGINAL_REGISTRY_JSON: ${{ runner.temp }}/nih-orig-registry/original-status-contrast.json
+          NIH_P2_ORIGINAL_AACT_JSON: ${{ runner.temp }}/nih-orig-aact/independent-aact-original-version-corroboration.json
+        run: |
+          python -m unittest -v network.tests.test_nih_p2_two_original_source_clocks
+      - name: Run separate conditional source clock and preserve minimal witness
+        env:
+          NIH_P2_ORIGINAL_REGISTRY_JSON: ${{ runner.temp }}/nih-orig-registry/original-status-contrast.json
+          NIH_P2_ORIGINAL_AACT_JSON: ${{ runner.temp }}/nih-orig-aact/independent-aact-original-version-corroboration.json
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-source-clocks"
+          python -m systems.workspace.nih_p2_two_original_source_clocks \
+            --registry-source "$NIH_P2_ORIGINAL_REGISTRY_JSON" \
+            --aact-source "$NIH_P2_ORIGINAL_AACT_JSON" \
+            --output "$RUNNER_TEMP/nih-p2-source-clocks/source-clocks.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-p2-source-clocks/source-clocks.json"
+          data=json.loads(out.read_text())
+          assert data["schema"]=="nih-p2-two-original-source-clocks-independent-archive-oracle/v1"
+          assert len(data["conditional_registry_publication_queries"]) == 6
+          assert len(data["independent_aact_owner_attested_archive_checks"]) == 2
+          assert data["archive_controls_match_both_source_statuses"] is True
+          assert data["real_as_known_at_independently_authenticated"] is False
+          assert data["real_clinical_valid_at_known"] is False
+          assert data["historical_NIH_P2_benchmark_completed"] is False
+          assert data["original_W13_journal_modified"] is False
+          assert data["World48_required"] is False
+          assert data["source_archive_bodies_redistributed"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-source-clocks" && sha256sum source-clocks.json > sha256.txt)
+      - name: Preserve only bounded source-clock observations (no original study bodies)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-two-source-clocks-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-source-clocks/
+          retention-days: 30
+          if-no-files-found: warn
