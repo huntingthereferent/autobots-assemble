@@ -195,8 +195,36 @@ class SignedHttpIntegrationTests(unittest.TestCase):
                                     {"envelope": sealed})
         self.assertEqual(status, 200)
         self.assertEqual(doc["status"], "COMPLETE")
-        self.assertEqual(doc["output"], {"measured": True})
+        self.assertEqual(doc, {"handoff_id": "task-1", "status": "COMPLETE"})
+        self.assertEqual(self.service.runtime.state("task-1").output, {"measured": True})
         self.assertEqual(len(self.service.runtime.event_store.for_handoff("task-1")), 2)
+
+    def test_signed_http_response_never_reflects_decrypted_input_or_evidence(self):
+        self.ingress("submit")
+        self.ingress("result")
+        private_task = replace(self.task(), inputs={"private": "UNIQUE_PRIVATE_BOUND_8927"},
+                               metadata={"private": "UNIQUE_PRIVATE_META_782"})
+        status, receipt = self.request("/api/security/handoffs",
+                                       {"envelope": self.seal(private_task)})
+        self.assertEqual(status, 201)
+        self.assertEqual(receipt, {"handoff_id": "task-1", "status": "READY"})
+        self.assertNotIn("PRIVATE", json.dumps(receipt))
+        prior = self.service.runtime.state("task-1").last_event_id
+        private_result = ExecutionResult(status="COMPLETE",
+                            output={"private": "UNIQUE_PRIVATE_OUTPUT_147"},
+                            evidence=(EvidenceRecord(condition="native", kind="measured",
+                               source="UNIQUE_PRIVATE_SOURCE_583"),))
+        ticket = seal_result("task-1", prior, private_result, event_id="return-secret",
+                             lane="native", parent_sha256=None,
+                             sender_private_key=self.worker_key,
+                             recipient_public_key=self.recipient.public_key())
+        status, receipt = self.request("/api/security/handoffs/task-1/result",
+                                        {"envelope": ticket})
+        self.assertEqual(status, 200)
+        self.assertEqual(receipt, {"handoff_id": "task-1", "status": "COMPLETE"})
+        self.assertNotIn("PRIVATE", json.dumps(receipt))
+        self.assertEqual(self.service.runtime.state("task-1").output["private"],
+                         "UNIQUE_PRIVATE_OUTPUT_147")
 
     def test_attacker_chosen_parent_digest_is_not_trusted(self):
         self.ingress("submit")
