@@ -93,7 +93,7 @@ class IdeaFrontier:
                 raise ValueError("idea relationship journal ancestry/content mismatch")
             data = row["data"]
             if (data.get("schema") != SCHEMA or data.get("type") not in
-                    {"BIND", "BACKTRACK_PROPOSED", "HELP_PROPOSED"}):
+                    {"BIND", "BACKTRACK_PROPOSED", "HELP_PROPOSED", "HELP_REVIEWED"}):
                 raise ValueError("unknown idea journal event type")
             events.append(data)
             parent = row["hash"]
@@ -269,15 +269,36 @@ class IdeaFrontier:
         # A peer's help proposal is visible to its TARGET only if the
         # originating branch is directly related and belongs to the same
         # source-recorded idea. Never broadcast to unrelated workers.
+        events = self._read()
+        decisions = {e["proposal_ref"]: e for e in events
+                     if e["type"] == "HELP_REVIEWED"}
         incoming = [
-            {"from_worker": e["worker"], "from_revision": e["source_revision"],
+            {"proposal_ref": _sha(e),
+             "from_worker": e["worker"], "from_revision": e["source_revision"],
              "source_step_id": e["source_step_id"], "reason": e["reason"],
              "relationship": e["witnessed_relation"],
-             "state": "PROPOSED_NOT_EXECUTED"}
-            for e in self._read()
+             "state": ("AWAITING_REVIEW" if _sha(e) not in decisions
+                       else decisions[_sha(e)]["decision"]),
+             "review_reason": (decisions[_sha(e)]["reason"] if _sha(e) in decisions else None),
+             "worker_help_executed": False}
+            for e in events
             if e["type"] == "HELP_PROPOSED" and e["idea_id"] == idea_id
             and e["target_revision"] == revision
             and e["source_revision"] in visible_revisions
+        ][:MAX_FRONTIER]
+        # The originating worker may also see only reviews of its OWN
+        # proposals addressed to an immediately visible related branch.
+        outgoing = [
+            {"proposal_ref": _sha(e),
+             "target_revision": e["target_revision"],
+             "review": decisions[_sha(e)]["decision"],
+             "reason": decisions[_sha(e)]["reason"],
+             "branch_adopted": False}
+            for e in events
+            if e["type"] == "HELP_PROPOSED" and e["idea_id"] == idea_id
+            and e["source_revision"] == revision and e["worker"] == worker
+            and e["target_revision"] in visible_revisions
+            and _sha(e) in decisions
         ][:MAX_FRONTIER]
         return {
             "idea": {"idea_id": idea_id, "title": idea.title,
@@ -289,6 +310,7 @@ class IdeaFrontier:
                               for key in adjacent[:MAX_FRONTIER]],
             "visible_branches": visible[:MAX_FRONTIER],
             "incoming_peer_help": incoming,
+            "outgoing_help_reviews": outgoing,
             "other_branches_hidden": max(0, len(visible) - MAX_FRONTIER),
             "claimed_global_worker_visibility": False,
             "current_view_authenticated_as_worker": False,
@@ -342,6 +364,48 @@ class IdeaFrontier:
                 "actor_identity_authenticated": False,
             },
         }
+
+    def review_help_from_native_handoff(
+        self, runtime: HandoffRuntime, *, handoff_id: str,
+        revision: str, step_id: str, proposal_ref: str,
+        decision: str, reason: str,
+    ) -> dict:
+        """Receive and review ONLY an addressed first-hop proposal.
+
+        INSPECT requests another bounded review; DECLINE explicitly rejects
+        assistance. Neither choice adopts the source branch or runs it.
+        """
+        if decision not in {"INSPECT", "DECLINE"}:
+            raise ValueError("review decision must be INSPECT or DECLINE")
+        if not isinstance(proposal_ref, str) or not _SHA.fullmatch(proposal_ref):
+            raise ValueError("exact source proposal reference required")
+        reason = _word(reason, "local review reason")
+        view = self.native_handoff_frontier(
+            runtime, handoff_id=handoff_id, revision=revision,
+            step_id=step_id)
+        matches = [p for p in view["incoming_peer_help"]
+                   if p["proposal_ref"] == proposal_ref]
+        if len(matches) != 1:
+            raise ValueError("help proposal not visible at this native position")
+        incoming = matches[0]
+        record = {
+            "schema": SCHEMA, "type": "HELP_REVIEWED",
+            "idea_id": view["idea"]["idea_id"],
+            "proposal_ref": proposal_ref,
+            "source_revision": incoming["from_revision"],
+            "target_revision": revision, "reviewer": view["position"]["worker"],
+            "step_id": step_id,
+            "decision": decision, "reason": reason,
+            "branch_adopted": False, "worker_help_executed": False,
+            "execution_authorized": False,
+        }
+        previous = [e for e in self._read()
+                    if e["type"] == "HELP_REVIEWED" and e["proposal_ref"] == proposal_ref]
+        if previous:
+            if len(previous) == 1 and previous[0] == record:
+                return {"recorded": False, "event": record}
+            raise ValueError("help proposal already reviewed; do not rewrite history")
+        return self._append(record)
 
     def propose_from_native_handoff(
         self, runtime: HandoffRuntime, *, handoff_id: str,
