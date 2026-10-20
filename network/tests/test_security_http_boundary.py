@@ -7,6 +7,9 @@ from http.client import HTTPConnection
 from http.server import ThreadingHTTPServer
 from io import BytesIO
 from pathlib import Path
+from hashlib import sha256
+from cryptography.hazmat.primitives import serialization
+from systems.workspace.b14_operator_pin_ledger import OperatorPinLedger
 from tempfile import TemporaryDirectory
 import json
 import threading
@@ -100,6 +103,7 @@ class SignedHttpIntegrationTests(unittest.TestCase):
         self.worker_key = Ed25519PrivateKey.generate()
         self.recipient = X25519PrivateKey.generate()
         self.ledger = ReplayLedger(Path(self.tmp.name) / "replay.sqlite")
+        self.trust = OperatorPinLedger(Path(self.tmp.name) / "operator-trust.jsonl")
         self.original_service = server_module.SERVICE
         server_module.SERVICE = self.service
         self.addCleanup(setattr, server_module, "SERVICE", self.original_service)
@@ -125,9 +129,18 @@ class SignedHttpIntegrationTests(unittest.TestCase):
             actor, peer, signer = "owner", "worker", self.owner_key
         else:
             actor, peer, signer = "worker", "owner", self.worker_key
+        pub = signer.public_key().public_bytes(
+            serialization.Encoding.Raw, serialization.PublicFormat.Raw)
+        digest = sha256(pub).hexdigest()
+        source = f"ab-ingress:native:{actor}:{peer}"
+        if self.trust.current(source, "ab-security-ingress-v1") is None:
+            self.trust.enroll(source_name=source, source_edition="ab-security-ingress-v1",
+                              pin_sha256=digest, confirm_pin_sha256=digest,
+                              operator_ref="fixture-operator",
+                              verification_ref="fixture-out-of-band-check")
         entry = AuthenticatedHandoffIngress(self.service.runtime, self.ledger,
                     IngressAuthority("native", actor, peer,
-                                     signer.public_key(), self.recipient))
+                                     signer.public_key(), self.recipient, self.trust))
         self.service.register_authenticated_ingress(role, entry)
 
     def request(self, path, payload, extra=None):
@@ -206,6 +219,46 @@ class SignedHttpIntegrationTests(unittest.TestCase):
         self.ingress("submit")
         with self.assertRaises(ValueError):
             self.ingress("submit")
+
+    def test_revocation_blocks_existing_registered_ingress(self):
+        self.ingress("submit")
+        source = "ab-ingress:native:owner:worker"
+        old = self.trust.current(source, "ab-security-ingress-v1")
+        self.trust.revoke(source_name=source, source_edition="ab-security-ingress-v1",
+                          pin_sha256=old, confirm_pin_sha256=old,
+                          operator_ref="fixture-operator",
+                          verification_ref="fixture-revoke-evidence")
+        status, _ = self.request("/api/security/handoffs", {"envelope": self.seal()})
+        self.assertEqual(status, 403)
+        self.assertEqual(self.service.runtime.snapshot(), {})
+
+    def test_operator_pin_is_mandatory_not_self_enrollment(self):
+        other = AuthenticatedHandoffIngress(self.service.runtime, self.ledger,
+                    IngressAuthority("native", "owner", "worker",
+                                     self.owner_key.public_key(), self.recipient))
+        with self.assertRaisesRegex(PermissionError, "operator key policy"):
+            self.service.register_authenticated_ingress("submit", other)
+        self.assertEqual(self.service.runtime.snapshot(), {})
+
+    def test_revocation_blocks_signed_result_after_preparation(self):
+        self.ingress("submit")
+        self.ingress("result")
+        status, _ = self.request("/api/security/handoffs", {"envelope": self.seal()})
+        self.assertEqual(status, 201)
+        source = "ab-ingress:native:worker:owner"
+        old = self.trust.current(source, "ab-security-ingress-v1")
+        result = ExecutionResult(status="UNKNOWN", output={}, evidence=())
+        ticket = seal_result("task-1", self.service.runtime.state("task-1").last_event_id,
+                             result, event_id="result-revoked", lane="native",
+                             parent_sha256=None, sender_private_key=self.worker_key,
+                             recipient_public_key=self.recipient.public_key())
+        self.trust.revoke(source_name=source, source_edition="ab-security-ingress-v1",
+                          pin_sha256=old, confirm_pin_sha256=old,
+                          operator_ref="fixture-operator",
+                          verification_ref="fixture-result-revoked")
+        status, _ = self.request("/api/security/handoffs/task-1/result", {"envelope": ticket})
+        self.assertEqual(status, 403)
+        self.assertEqual(self.service.runtime.state("task-1").status, "READY")
 
 
 if __name__ == "__main__":
