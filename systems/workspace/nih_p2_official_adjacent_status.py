@@ -19,7 +19,9 @@ from . import nih_p2_official_history_browser_access as source
 from . import nih_p2_official_history_status_fields as earlier
 
 SCHEMA = "nih-p2-official-adjacent-original-status/v1"
-# Predeclared adjacent source versions. If V259 submission date is incorrect,\n# live source admission must refuse the record, never silently change it.\nVERSIONS = {259: "2022-10-26", 260: "2022-11-04"}
+# Predeclared adjacent source versions. If V259 submission date is incorrect,
+# live source admission must refuse the record, never silently change it.
+VERSIONS = {259: "2022-10-26", 260: "2022-11-04"}
 STATUS = earlier.VALID_STATUS
 POSTED = earlier.POSTED
 DAY = earlier.DAY
