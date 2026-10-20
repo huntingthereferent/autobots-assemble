@@ -202,6 +202,13 @@ class ConsentApproachRecorder:
             self._total += 1
             return entry
 
+    def session_position(self, session: str) -> str:
+        """Only a consented participant can view their fictional cursor."""
+        with self._lock:
+            if session not in self._cursors:
+                raise PermissionError("unknown research session")
+            return self._cursors[session]
+
     def session_transcript(self, session: str) -> tuple[SubmittedApproach, ...]:
         with self._lock:
             if session not in self._sessions:
