@@ -16,7 +16,9 @@ from cryptography.hazmat.primitives.asymmetric.x25519 import X25519PrivateKey, X
 from runtime.engine import HandoffRuntime
 from runtime.handoff import EvidenceRecord, ExecutionResult, Handoff
 from runtime.journal import handoff_from_dict, handoff_to_dict
-from .continuation import EnvelopeError, ReplayLedger, open_record, seal_record
+from .continuation import (EnvelopeError, ReplayLedger, open_record, seal_record,
+                           verify_record, envelope_digest)
+from .sealed_journal import SealedRuntimeJournal
 
 HANDOFF_VERSION = "ab-runtime-handoff/v1"
 RESULT_VERSION = "ab-runtime-result/v1"
@@ -135,9 +137,9 @@ class IngressAuthority:
 class AuthenticatedHandoffIngress:
     """Verify a sealed movement before delegating to the existing runtime.
 
-    Direct runtime methods remain trusted application APIs. Replay admission
-    and the runtime journal are separate stores, so a journal failure consumes
-    the event ID and fails closed instead of automatically retrying.
+    Direct runtime methods remain trusted application APIs. Sealed journal
+    ingress atomically commits replay admission WITH the native event. Legacy
+    JSONL ingress still uses a separate durable replay ledger.
     """
 
     def __init__(self, runtime: HandoffRuntime, ledger: ReplayLedger,
@@ -152,11 +154,27 @@ class AuthenticatedHandoffIngress:
 
     def _open(self, envelope: dict, expected_parent_sha256: str | None) -> bytes:
         self.authority.require_current_operator_pin()
+        store = self.runtime.event_store
+        if isinstance(store, SealedRuntimeJournal):
+            # Read-only early duplicate check; actual replay uniqueness is
+            # enforced in the SAME SQLite commit as native movement.
+            store.require_new(self.authority.lane, envelope.get("event_id"))
+            return verify_record(
+                envelope, expected_lane=self.authority.lane,
+                expected_parent_sha256=expected_parent_sha256,
+                sender_public_key=self.authority.signer_public_key,
+                recipient_private_key=self.authority.receiver_private_key)
         return open_record(envelope, expected_lane=self.authority.lane,
                            expected_parent_sha256=expected_parent_sha256,
                            sender_public_key=self.authority.signer_public_key,
                            recipient_private_key=self.authority.receiver_private_key,
                            replay_ledger=self.ledger)
+
+    def _native_admission(self, envelope: dict) -> tuple[str, str, str] | None:
+        if isinstance(self.runtime.event_store, SealedRuntimeJournal):
+            return (self.authority.lane, envelope["event_id"],
+                    envelope_digest(envelope))
+        return None
 
     def submit(self, envelope: dict, *, expected_parent_sha256: str | None = None):
         """Admit one authenticated native handoff without executing a worker."""
@@ -173,6 +191,8 @@ class AuthenticatedHandoffIngress:
                 or handoff.from_actor != self.authority.signer_actor
                 or handoff.to_actor != self.authority.receiver_actor):
             raise EnvelopeError("handoff actor or event identity not authorized")
+        if isinstance(self.runtime.event_store, SealedRuntimeJournal):
+            return self.runtime.submit(handoff, admission=self._native_admission(envelope))
         return self.runtime.submit(handoff)
 
     def return_result(self, envelope: dict, *, handoff_id: str,
@@ -204,6 +224,11 @@ class AuthenticatedHandoffIngress:
             raise EnvelopeError("invalid native result evidence") from exc
         if raw != normalized:
             raise EnvelopeError("noncanonical native result evidence")
+        admission = self._native_admission(envelope)
+        if admission is not None:
+            return self.runtime.return_result(
+                handoff_id, actor_id=self.authority.signer_actor,
+                result=result, admission=admission)
         return self.runtime.return_result(handoff_id,
                                           actor_id=self.authority.signer_actor,
                                           result=result)
