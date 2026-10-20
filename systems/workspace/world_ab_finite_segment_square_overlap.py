@@ -161,6 +161,7 @@ def attempt(angle):
         if before22["status"]!="NO_ADMITTED_THIRD_IMPULSE":
             raise ValueError("original third impulse absent but later candidate present")
         return {**base,"status":"NO_ADMITTED_THIRD_IMPULSE",
+                "onset_vs_original_vertex_candidate":None,
                 "face_results":[],"first_detected_bracket":None,
                 "faces_with_sampled_intersection":0,
                 "finite_intersection_candidates":[]}
@@ -178,6 +179,38 @@ def attempt(angle):
     ]
     candidates.sort(key=lambda x:(x["bracket"]["bisected_transition_time"],
                                   x["face"]))
+    # The source's previous geometric candidate is kept distinct from a finite
+    # overlap onset. Compare ONLY the same original finite face, never a world
+    # boundary or a different source line, and preserve the grid uncertainty.
+    comparison=None
+    if candidates:
+        winner=candidates[0]
+        onset=winner["bracket"]
+        same_face_vertices=[
+            x["dt_after_third_impulse"]
+            for x in before23["eligible_geometry_roots"]
+            if x["surface"]==winner["face"] and
+               x["feature_classification"]=="FINITE_FACE_INTERIOR_CANDIDATE"
+        ]
+        earliest=min(same_face_vertices) if same_face_vertices else None
+        first_grid=onset["first_grid_intersection_at"]
+        last_clear=onset["last_grid_separated_at"]
+        relation=("NO_PRIOR_VERTEX_CANDIDATE_ON_THIS_FINITE_FACE"
+                  if earliest is None else
+                  "SOURCE_VERTEX_TIME_INSIDE_FIRST_GRID_BRACKET"
+                  if last_clear-3e-7 <= earliest <= first_grid+3e-7 else
+                  "SOURCE_VERTEX_TIME_BEFORE_FIRST_GRID_BRACKET"
+                  if earliest<last_clear else
+                  "SOURCE_VERTEX_TIME_AFTER_FIRST_GRID_BRACKET")
+        comparison={
+            "face":winner["face"],
+            "source_first_finite_vertex_time":earliest,
+            "first_grid_clear_time":last_clear,
+            "first_grid_overlap_time":first_grid,
+            "relationship":relation,
+            "same_face_only":True,
+            "numerical_grid_not_certified_first_contact":True,
+        }
     if any(r["start_intersected"] for r in records):
         status="PREEXISTING_FINITE_INTERSECTION_AT_WINDOW_START_UNRESOLVED"
     elif candidates:
@@ -185,6 +218,7 @@ def attempt(angle):
     else:
         status="NO_FINITE_INTERSECTION_DETECTED_ON_GRID_ONLY"
     return {**base,"status":status,
+            "onset_vs_original_vertex_candidate":comparison,
             "face_results":records,
             "first_detected_bracket":candidates[0] if candidates else None,
             "faces_with_sampled_intersection":sum(
