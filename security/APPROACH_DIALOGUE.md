@@ -31,12 +31,36 @@ all signposts → "another branch"
 never → actual key access, code execution, filesystem or worker API
 ```
 
-The textual response changes with the **observed** presence count and
+The textual signpost changes with the **observed** presence count and
 orientation. Sending multiple messages during the same observed presence
-state returns the same branch style/text (for a given language). Waiting
-for the separately moving presence changes the current branch. Session
-submission counts exist for an operator's transcript only and do not
-determine the direction, route, or motion of the world.
+state returns the same signpost text for a given language, while story
+navigation may move the participant's **fictional cursor**. Waiting
+for the separately moving presence changes the visible signpost.
+Session submission counts exist only for the consented transcript;
+they do not determine the direction, orientation or clock of A/B presence.
+
+## A real finite maze, but fictional exits
+
+The bounded [branch-world graph](branch_world.py) now has ten named story
+nodes, with two outgoing passages at each node, all remaining inside the
+same closed fictional world. A participant's locally tracked node starts
+at `threshold`. The independent current bipolar orientation determines
+the ordering of two visible exits: `along` or `side`. **Both follow the
+observed swing**, and both lead only to another story node.
+
+This separates two relationships that must not be confused:
+
+- A/B presence is independently clocked; no message can start, stop,
+  speed up, reverse, or rewrite it.
+- A participant may explore a fictional route with words or `/side`.
+  This moves a **story cursor**, not the bipolar state, a native worker,
+  or a real cryptographic key.
+
+The graph has no key node and no terminal privilege transition. The
+verification suite walks 10,000 consecutive edges for each combination
+of observed orientation and user exit choice, rejecting unknown nodes,
+invalid orientations and injected exit names. This is a closed **toy
+graph**, not proof of security for every external interface.
 
 ## "They injected code to check if it's real"
 
@@ -72,10 +96,14 @@ python -m security.approach_dialogue
 
 Read the notice and type exactly `AGREE` to start. Submitted lines
 are the only input recorded; ordinary device typing elsewhere is never
-monitored. Use `/show` to inspect submitted text and branches;
-`/erase` clears transcripts and ends the session; `/quit` ends and
-erases its own session. The native presence driver runs only during
-the explicitly started demo.
+monitored. An ordinary message follows the currently displayed `along`
+story exit; `/side your message` chooses the other fictional exit;
+`/along your message` explicitly uses the default. Both actions only
+change the session's story position, never A/B presence. Each response
+prints the next two fictional exits. Use `/show` to inspect submitted
+text and branches; `/erase` clears transcripts and ends the session;
+`/quit` ends and erases its own session. The native presence driver
+runs only during the explicitly started demo.
 
 There is no HTTP route or network transfer. Everything stays in the
 local process's bounded memory, and no real key, private runtime
@@ -90,7 +118,8 @@ redacted before recording. **Redaction is best-effort and not a
 guarantee that users cannot submit personal information.**
 
 Regression tests check consent, erasure, bounds, idle-clock movement,
-message noninterference, orientation-following word/code branches,
+message noninterference, closed-graph route traversal,
+orientation-following word/code branches,
 injection-shaped submissions as inert data, and absence of calls to
 `eval`, `os.system`, and subprocess execution on these paths.
 
