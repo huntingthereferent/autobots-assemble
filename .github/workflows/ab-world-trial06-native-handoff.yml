@@ -85,12 +85,22 @@ jobs:
               "distinct_motion_paths": record["trajectories_carried"]
           }, sort_keys=True))
           PY
-          python -m work.ab_world.construction --verify trial06-ab-motion-receipt.json > /dev/null || true
+          python - <<'PY'
+          import json
+          record=json.load(open("trial06-ab-motion-receipt.json"))
+          with open("trial06-ab-ledger.json", "w") as handle:
+              json.dump(record["world_receipt"], handle, sort_keys=True, indent=2)
+          PY
+          python -m work.ab_world.construction --verify trial06-ab-ledger.json > trial06-ab-ledger-verdict.json
+          python - <<'PY'
+          import json
+          assert json.load(open("trial06-ab-ledger-verdict.json"))["valid"]
+          PY
           sha256sum \
             original-world/systems/workspace/world_ab_junction_continuous.py \
             original-world/network/tests/test_world_ab_junction_continuous.py \
             trial06-original-native.json trial06-original-verdict.json \
-            trial06-ab-motion-receipt.json > trial06-ab-source-hashes.txt
+            trial06-ab-motion-receipt.json trial06-ab-ledger-verdict.json > trial06-ab-source-hashes.txt
       - name: Preserve original source observations and general A/B witness
         uses: actions/upload-artifact@v4
         with:
@@ -99,5 +109,7 @@ jobs:
             trial06-original-native.json
             trial06-original-verdict.json
             trial06-ab-motion-receipt.json
+            trial06-ab-ledger.json
+            trial06-ab-ledger-verdict.json
             trial06-ab-source-hashes.txt
           retention-days: 30
