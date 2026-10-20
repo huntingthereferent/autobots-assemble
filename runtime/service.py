@@ -55,6 +55,8 @@ class EcosystemService:
     ) -> None:
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
+        # Explicit trusted-host configuration only. Never enroll keys from HTTP.
+        self._security_ingresses = {}
         self.repository_work_file = (Path(repository_work_file).resolve()
                                      if repository_work_file is not None else None)
         if self.repository_work_file is not None and not self.repository_work_file.is_file():
@@ -573,6 +575,47 @@ class EcosystemService:
             payload["agent_note"] = "Read-only report; activation uses POST /api/ohayo."
             payload["repository_work"] = self.connections()["repository_work"]
         return payload
+
+    def register_authenticated_ingress(self, role: str, ingress) -> None:
+        """Install trusted local key policy; HTTP has no enrollment endpoint."""
+        from security.runtime_ingress import AuthenticatedHandoffIngress
+        if role not in {"submit", "result"} or role in self._security_ingresses:
+            raise ValueError("ingress role must be a unique submit or result")
+        if not isinstance(ingress, AuthenticatedHandoffIngress) or ingress.runtime is not self.runtime:
+            raise ValueError("security ingress must use this exact native runtime")
+        self._security_ingresses[role] = ingress
+
+    def authenticated_submit(self, payload: dict[str, Any]) -> dict[str, Any]:
+        """Only operator-installed, authenticated external handoffs are admitted."""
+        ingress = self._security_ingresses.get("submit")
+        if ingress is None:
+            raise PermissionError("authenticated handoff ingress is not configured")
+        if type(payload) is not dict or set(payload) != {"envelope"}:
+            raise ValueError("one sealed envelope required")
+        # A caller-supplied expected-parent digest must never establish ancestry.
+        # Root events only until a trusted parent registry is attached.
+        envelope = payload["envelope"]
+        if type(envelope) is not dict:
+            raise ValueError("sealed envelope must be an object")
+        state = ingress.submit(envelope, expected_parent_sha256=None)
+        return self._handoff_view(state.handoff_id, state)
+
+    def authenticated_return_result(self, handoff_id: str,
+                                    payload: dict[str, Any]) -> dict[str, Any]:
+        """Admit a signed worker result without trusting HTTP actor_id."""
+        ingress = self._security_ingresses.get("result")
+        if ingress is None:
+            raise PermissionError("authenticated result ingress is not configured")
+        if type(payload) is not dict or set(payload) != {"envelope"}:
+            raise ValueError("one sealed envelope required")
+        envelope = payload["envelope"]
+        if type(envelope) is not dict:
+            raise ValueError("sealed envelope must be an object")
+        if self.runtime.get(handoff_id).metadata.get("agent_lineage") is True:
+            raise ValueError("agent lineage requires its own authenticated contract")
+        state = ingress.return_result(envelope, handoff_id=handoff_id,
+                                      expected_parent_sha256=None)
+        return self._handoff_view(handoff_id, state)
 
     def return_result(
         self,
