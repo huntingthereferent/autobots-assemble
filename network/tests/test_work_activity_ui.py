@@ -62,7 +62,7 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertIn("r.head_sha",p)
         self.assertIn("r.conclusion||null",p)
         self.assertIn("no current status inferred",p.lower())
-        self.assertIn("if(!document.hidden)refresh()",p)
+        self.assertIn("if(!document.hidden&&Date.now()>=app.rateLimitUntil",p)
         self.assertIn("Select an observed workflow",p)
 
     def test_commit_revision_comparison_requires_exact_source_path(self):
@@ -171,6 +171,8 @@ assert.equal(revisionLink("research/foo", "invalid-sha"),null);
         self.assertIn("if(parsed.protocol!==\"https:\"",p)
         self.assertIn("parsed.username||parsed.password||parsed.search||parsed.hash",p)
         self.assertIn("TICK_REFRESH_GAP",p)
+        self.assertIn("app.rateLimitUntil=Date.now()+15*60*1000",p)
+        self.assertIn("app.lastAttempt=Date.now()",p)
         self.assertIn("A server event is a prompt to recheck original evidence, never a worker result.",p)
         self.assertIn("GitHub auto-check continues",p)
         self.assertIn("no current status inferred",p.lower())
