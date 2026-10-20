@@ -1,0 +1,58 @@
+name: A/B general world construction witness
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'work/ab_world/construction.py'
+      - 'work/ab_world/verify_construction.py'
+      - 'work/ab_world/w13_source_handoff.py'
+      - 'work/ab_world/GENERAL_CONSTRUCTION.md'
+      - 'network/tests/test_ab_world_construction.py'
+      - 'network/tests/test_ab_world_w13_source_handoff.py'
+      - 'network/tests/fixtures/ab_world_construction_example.json'
+      - '.github/workflows/ab-world-general-construction.yml'
+
+jobs:
+  verify-native-construction:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run independent reconstruction and failure controls
+        run: python -m unittest -v network.tests.test_ab_world_construction network.tests.test_ab_world_w13_source_handoff
+      - name: Produce and independently replay a concrete receipt
+        run: |
+          python -m work.ab_world.construction --plan network/tests/fixtures/ab_world_construction_example.json > ab-world-construction-receipt.json
+          python -m work.ab_world.construction --verify ab-world-construction-receipt.json > ab-world-construction-verdict.json
+          python - <<'PY'
+          import json
+          trace = json.load(open("ab-world-construction-receipt.json"))
+          check = json.load(open("ab-world-construction-verdict.json"))
+          assert check["valid"] and check["steps_verified"] == 6
+          assert trace["final"]["comparisons"]["angle-contrast"]["result"] == "DIFFERENT"
+          assert not check["physical_behavior_verified"]
+          assert not check["external_source_authenticated"]
+          PY
+          python -m work.ab_world.w13_source_handoff > ab-world-w13-source.json
+          python - <<'PY'
+          import json
+          p=json.load(open('ab-world-w13-source.json'))
+          assert p['native_source_replay']['valid'] and p['world_ledger_witness']['valid']
+          assert p['source_consistent_with_independent_contract']
+          assert not p['physically_measured']
+          PY
+          sha256sum ab-world-construction-*.json ab-world-w13-source.json > ab-world-construction-digests.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-construction-local-evidence
+          path: |
+            ab-world-construction-receipt.json
+            ab-world-construction-verdict.json
+            ab-world-w13-source.json
+            ab-world-construction-digests.txt
+          retention-days: 30

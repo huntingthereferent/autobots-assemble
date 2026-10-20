@@ -1,0 +1,13 @@
+{
+  "schema": "ab-world-construction-plan/v1",
+  "referent": "assembly-trial / source-reported alignment",
+  "limits": {"objects": 4, "relations": 3, "steps": 12},
+  "steps": [
+    {"op": "introduce", "id": "support", "state": {"role": "support", "position": {"value": 0, "unit": "mm", "basis": "declared"}}, "basis": {"kind": "declared", "source": "trial/assembly-plan"}},
+    {"op": "introduce", "id": "moving-part", "state": {"role": "moving-part", "angle": {"value": 0, "unit": "deg", "basis": "declared"}}, "basis": {"kind": "declared", "source": "trial/assembly-plan"}},
+    {"op": "connect", "id": "joint", "from": "support", "to": "moving-part", "label": "candidate-revolute-relationship", "state": {"constraint": "hypothesis, not physically enforced"}, "basis": {"kind": "declared", "source": "trial/connection-proposal"}},
+    {"op": "revise", "entity": "object", "id": "moving-part", "after": {"role": "moving-part", "angle": {"value": 30, "unit": "deg", "basis": "declared"}}, "basis": {"kind": "source-execution", "source": "trial/declared-movement-run"}},
+    {"op": "observe", "id": "angle-reading", "entity": "object", "subject": "moving-part", "reading": {"angle": {"value": 29.8, "unit": "deg"}}, "basis": {"kind": "external-report", "source": "trial/unverified-encoder-report"}},
+    {"op": "compare", "id": "angle-contrast", "observation": "angle-reading", "expected": {"angle": {"value": 30, "unit": "deg"}}, "basis": {"kind": "declared", "source": "trial/expected-angle"}}
+  ]
+}
