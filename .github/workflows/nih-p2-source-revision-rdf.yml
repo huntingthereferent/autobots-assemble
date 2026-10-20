@@ -1,0 +1,73 @@
+name: NIH P2 original W13 plus revision and bounded RDF inference
+
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/ab_source_revision_relation.py'
+      - 'systems/workspace/ab_bounded_rdf_source_composition.py'
+      - 'systems/workspace/nih_phase2_source_revision_rdf_trial.py'
+      - 'network/tests/test_nih_phase2_source_revision_rdf_trial.py'
+      - 'systems/workspace/NIH_PHASE2_SOURCE_REVISION_RDF.md'
+      - '.github/workflows/nih-p2-source-revision-rdf.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-revision-and-real-RDF-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install RDF graph dependency
+        run: python -m pip install 'rdflib>=7,<8'
+      - name: Check original W13, generic source chain and new revision/RDF controls
+        run: |
+          python -m unittest -v \
+            network.tests.test_nih_phase2_direct_reproduction \
+            network.tests.test_nih_phase2_time_respecting_chain_trial \
+            network.tests.test_nih_phase2_source_revision_rdf_trial
+      - name: Run exact original 13 Phase2 practice cases and 320 new unseen movements
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-p2-revision-rdf"
+          python -m systems.workspace.nih_phase2_source_revision_rdf_trial \
+            --output-dir "$RUNNER_TEMP/nih-p2-revision-rdf"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          f=Path(os.environ["RUNNER_TEMP"])/"nih-p2-revision-rdf/nih-phase2-source-revision-rdf.json"
+          data=json.loads(f.read_text())
+          assert data["schema"]=="nih-phase2-direct-revision-and-rdf-composition-trial/v1"
+          assert data["original_W13"]=={"W13":8,"static":6,"cases":13}
+          assert data["source_chain_only_pass"]==11
+          assert data["source_revision_and_RDF_composition_pass"]==13
+          assert data["source_revision_and_RDF_composition_fail"]==0
+          assert data["unseen_revision_cases"]["independent_oracle_cases"]==160
+          assert data["unseen_RDF_cases"]["independent_oracle_cases"]==160
+          assert data["unseen_RDF_cases"]["positive"]>=40
+          assert data["unseen_RDF_cases"]["negative"]>=80
+          assert data["real_OWL_property_chain_axiom_engine_implemented"] is False
+          assert data["OWL_inconsistency_check_implemented"] is False
+          assert data["real_historical_biomedical_KG_data_tested"] is False
+          assert data["official_NIH_Phase2_reproduction_completed"] is False
+          assert data["original_W13_temporal_python_modified"] is False
+          assert data["original_W13_journal_modified"] is False
+          assert data["World48_required"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-p2-revision-rdf" &&
+            sha256sum nih-phase2-source-revision-rdf.json > sha256.txt)
+      - name: Preserve actual executable answers, original RDF triples and unseen source comparisons
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-phase2-revision-rdf-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-p2-revision-rdf/
+          retention-days: 30
+          if-no-files-found: warn
