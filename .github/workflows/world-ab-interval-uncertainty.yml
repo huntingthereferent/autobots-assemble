@@ -1,0 +1,73 @@
+name: WORLD 27 source interval uncertainty audit
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_interval_uncertainty_audit.py'
+      - 'network/tests/test_world_ab_interval_uncertainty_audit.py'
+      - 'systems/workspace/WORLD_AB_UNKNOWN_INTERVAL_AUDIT_TRIAL_27_2026-10-20.md'
+      - '.github/workflows/world-ab-interval-uncertainty.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_interval_uncertainty_audit.py'
+      - 'network/tests/test_world_ab_interval_uncertainty_audit.py'
+      - 'systems/workspace/WORLD_AB_UNKNOWN_INTERVAL_AUDIT_TRIAL_27_2026-10-20.md'
+      - '.github/workflows/world-ab-interval-uncertainty.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-original-uncertainty-classification:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recheck original WORLD interval and geometric source
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_interval_uncertainty_audit
+      - name: Independently preserve every overlap/unknown/clearance interval class
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_interval_uncertainty_audit import (
+              run,HIT,UNKNOWN,COVERED
+          )
+          from network.tests.test_world_ab_interval_uncertainty_audit import independent_check
+          source=run()
+          witnesses=[{"angle":c["angle"],"independent_world_sat_and_envelope":independent_check(c)}
+                     for c in source["cases"]]
+          assert len(witnesses)==8 and all(x["independent_world_sat_and_envelope"] for x in witnesses)
+          assert source["source_conditional_impulse_cases"]==6
+          assert source["no_impulse_controls"]==2
+          assert source["selected_fourth_impulses"]==0
+          assert source["physical_measurements"]==0
+          assert sum(source["classified_face_intervals"].values())==6*2*2048
+          root=Path("world27-native-evidence")
+          root.mkdir(exist_ok=True)
+          payload=json.dumps({"source":source,"independent_witness":witnesses},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (root/"source_interval_uncertainty_partition.json").write_text(payload)
+          (root/"source_interval_uncertainty_partition.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  source_interval_uncertainty_partition.json\n")
+          print(json.dumps({
+              "source_sampled_overlap_adjacent_intervals":source["classified_face_intervals"][HIT],
+              "separated_sample_endpoints_but_unknown":source["classified_face_intervals"][UNKNOWN],
+              "nominally_supported_clearance_intervals":source["classified_face_intervals"][COVERED],
+              "cases_with_clear_endpoint_unknowns":source["cases_with_unobserved_only_uncertainty"],
+              "no_impulse_controls":source["no_impulse_controls"],
+              "physical_fourth_impacts":0},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world27-original-sampled-versus-unknown-intervals
+          path: world27-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
