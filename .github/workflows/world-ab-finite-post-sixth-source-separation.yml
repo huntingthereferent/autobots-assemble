@@ -1,0 +1,93 @@
+name: WORLD 43 finite original post-sixth separation
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_finite_post_sixth_source_separation.py'
+      - 'network/tests/test_world_ab_finite_post_sixth_source_separation.py'
+      - 'systems/workspace/WORLD_AB_FINITE_POST_SIXTH_SOURCE_SEPARATION_TRIAL_43_2026-10-21.md'
+      - '.github/workflows/world-ab-finite-post-sixth-source-separation.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_finite_post_sixth_source_separation.py'
+      - 'network/tests/test_world_ab_finite_post_sixth_source_separation.py'
+      - 'systems/workspace/WORLD_AB_FINITE_POST_SIXTH_SOURCE_SEPARATION_TRIAL_43_2026-10-21.md'
+      - '.github/workflows/world-ab-finite-post-sixth-source-separation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-finite-separation-independent-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent original finite SAT separation and false-line-contact tests
+        run: python -m unittest -v network.tests.test_world_ab_finite_post_sixth_source_separation
+      - name: Retain finite source and independent CCW SAT witness with checksum
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_finite_post_sixth_source_separation import run
+          from network.tests.test_world_ab_finite_post_sixth_source_separation import verify
+          source=run()
+          witnesses=[{"angle":x["angle"],"status":x["status"],
+                      "independent_original_finite_source_replay":verify(x)}
+                     for x in source["cases"]]
+          assert len(witnesses)==8 and all(x["independent_original_finite_source_replay"] for x in witnesses)
+          assert source["inactive_original_controls"]==7
+          assert source["admitted_post_sixth_finite_models"]+source["prior_horizon_unresolved"]==1
+          assert source["admitted_post_sixth_finite_models"]==source[
+              "complete_finite_windows"]+source["first_finite_unknown_models"]
+          assert source["material_seventh_contacts"]==0 and source["seventh_impulses"]==0
+          folder=Path("world43-native-evidence");folder.mkdir(exist_ok=True)
+          payload=json.dumps({"original_source":source,"independent_witness":witnesses},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"post_sixth_finite_original_separation.json").write_text(payload)
+          (folder/"post_sixth_finite_original_separation.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  post_sixth_finite_original_separation.json\n")
+          print(json.dumps({"admitted_finite_models":source["admitted_post_sixth_finite_models"],
+              "source_t42_unresolved":source["prior_horizon_unresolved"],
+              "complete_finite_windows":source["complete_finite_windows"],
+              "first_unknown_finite_windows":source["first_finite_unknown_models"],
+              "inactive_original_cases":source["inactive_original_controls"],
+              "real_seventh_contacts":0},sort_keys=True))
+          for case in source["cases"]:
+              if case["original_conditional_model_at_sixth"] is not None:
+                  unknown=case["first_finite_original_unknown"]
+                  print(json.dumps({"angle":case["angle"],
+                    "status":case["status"],
+                    "nominally_supported_prefix_end":case["nominally_supported_prefix_end"],
+                    "original_finite_face_count":case["original_finite_face_count"],
+                    "accepted_finite_intervals":len(case["original_accepted_intervals"]),
+                    "first_uncertified_interval":(
+                        [unknown["start"],unknown["end"]] if unknown is not None else None),
+                    "material_seventh_contact":False},sort_keys=True))
+          PY
+      - name: Retain original finite WORLD43 evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world43-original-finite-source-separation
+          path: world43-native-evidence/
+          retention-days: 30
+          if-no-files-found: warn
+
+  inherited-original-world-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reverify original native WORLD04–42 source lineage
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature network.tests.test_world_ab_whole_contact_configuration network.tests.test_world_ab_post_fifth_local_clearance network.tests.test_world_ab_post_fifth_contiguous_prefix network.tests.test_world_ab_first_post_fifth_guard_limit network.tests.test_world_ab_local_zero_gap_after_guard network.tests.test_world_ab_sixth_conditional_normal_law network.tests.test_world_ab_post_sixth_local_clearance network.tests.test_world_ab_first_post_sixth_guard_limit
