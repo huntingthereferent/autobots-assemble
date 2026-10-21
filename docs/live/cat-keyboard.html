@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0a1018">
+<meta name="description" content="A tiny, offline cat orchestra. Play melodic synthesized meows, record a tune, and make a 16-step cat loop.">
+<title>MEOW LAB 2 · Workstation sound keyboard</title>
+<style>
+:root{color-scheme:dark;--ink:#25172e;--base:#201829;--deep:#17111f;--card:#30243b;--card2:#3b2b48;--line:#685575;--lilac:#cab0ff;--pink:#ffb2ba;--mint:#aef1cc;--lemon:#ffe8a0;--cream:#fff6e9;--muted:#c8bad3;--shadow:0 28px 80px #0a0711a6}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:radial-gradient(ellipse at 85% 10%,#543c66 0,transparent 35%),radial-gradient(ellipse at 0% 55%,#3c2a4b 0,transparent 40%),var(--base);color:var(--cream);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--mint);outline-offset:4px}button:disabled{cursor:not-allowed;opacity:.45}a{color:inherit}.shell{max-width:1300px;margin:auto;padding:0 clamp(16px,3.2vw,45px) 65px}
+.top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:15px;padding:24px 0 36px}.logo{font-weight:950;letter-spacing:-.05em;font-size:22px;text-decoration:none}.logo span{color:var(--pink)}.nav{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.nav a{font-size:12px;font-weight:800;letter-spacing:.05em;text-decoration:none;padding:9px 12px;border:1px solid #786383;border-radius:99px}.nav a:hover{background:#51405c}.live{font:700 10px/1.4 ui-monospace,monospace;letter-spacing:.08em;color:var(--mint);display:flex;align-items:center;gap:7px}.live:before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(320px,.86fr);gap:35px;align-items:center}.eyebrow{display:flex;align-items:center;gap:9px;color:var(--mint);font:800 11px ui-monospace,monospace;text-transform:uppercase;letter-spacing:.15em}.eyebrow:before{content:"";width:25px;height:2px;background:var(--mint)}h1{font-size:clamp(55px,8vw,117px);line-height:.89;letter-spacing:-.095em;margin:26px 0 26px;font-weight:1000}h1 em{font-style:normal;color:var(--pink)}.hero p{color:#dbcfe2;font-size:16px;max-width:460px;margin:0 0 25px}.hero-tags{display:flex;gap:9px;flex-wrap:wrap}.tag{padding:8px 11px;border:1px solid #6c5279;border-radius:99px;font:750 11px ui-monospace,monospace;color:#e7d8ee}.stage{position:relative;min-height:380px;border:2px solid #c2a0d0;border-radius:32px;background:radial-gradient(circle at 50% 10%,#ffe9db 0,#e7ccf7 60%,#b9a1d6 100%);box-shadow:var(--shadow);overflow:hidden;display:grid;place-items:center;isolation:isolate}.stage:before{content:"";position:absolute;inset:14px;border:2px dashed #82669866;border-radius:23px;pointer-events:none}.stage-caption{position:absolute;top:25px;left:27px;color:#674c73;font:900 11px ui-monospace,monospace;letter-spacing:.15em}.stage-voice{position:absolute;bottom:24px;left:0;right:0;color:#5b3d66;text-align:center;font:950 13px ui-monospace,monospace;letter-spacing:.12em}.cat-svg{width:min(80%,360px);height:auto;overflow:visible;filter:drop-shadow(0px 20px 13px #5d427448);transform-origin:50% 70%;transition:transform .18s}.stage.singing .cat-svg{animation:bop .23s ease-in-out infinite alternate}.stage.singing .cat-mouth{transform:scaleY(1.7);transform-origin:50% 55%}.cat-face{fill:var(--fur,#d79e86)}.cat-ear{fill:var(--ear,#ec8397)}.cat-belly{fill:var(--belly,#fff2e5)}.cat-eye{fill:#2c2330}.cat-mouth{transition:transform .12s}.stage .note{position:absolute;font-weight:1000;font-size:34px;color:#9e69ae;opacity:.4;animation:float 3s ease-in-out infinite}.stage .note.a{top:24%;left:12%}.stage .note.b{top:36%;right:11%;animation-delay:.8s}.stage .note.c{bottom:22%;left:14%;animation-delay:1.5s}
+.card{background:linear-gradient(155deg,#3a2b45,#2d2238);border:1px solid #6a5574;border-radius:26px;box-shadow:0 12px 40px #110c186b}.instrument{margin-top:38px;padding:clamp(17px,3vw,30px)}.section-head{display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:15px;margin-bottom:22px}.section-head h2{font-size:clamp(22px,3vw,34px);letter-spacing:-.05em;line-height:1.1;margin:0 0 7px}.section-head p{font-size:13px;color:var(--muted);margin:0}.chip{font:850 11px ui-monospace,monospace;border:1px solid #866c92;padding:10px 12px;border-radius:99px;color:var(--mint);white-space:nowrap}.cat-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:22px}.cat-btn{color:var(--cream);border:1px solid #715d7d;background:#342840;border-radius:17px;display:flex;align-items:center;gap:12px;padding:12px 13px;text-align:left;min-width:0;transition:transform .12s,background .12s,border-color .12s}.cat-btn:hover{transform:translateY(-2px);background:#453253}.cat-btn[aria-pressed=true]{background:#5c3f69;border:2px solid var(--pink);padding:11px 12px;box-shadow:inset 0 0 0 1px #ffccd366}.cat-btn .avatar{flex:none;display:grid;place-items:center;background:var(--tone);color:#30213b;border-radius:12px;font-size:24px;width:45px;height:45px}.cat-btn strong{display:block;font-size:14px;line-height:1.2}.cat-btn small{display:block;color:#cdbcce;font-size:11px;margin-top:4px}
+.desk-controls{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:17px}.control-group{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.control-label{font:800 10px ui-monospace,monospace;letter-spacing:.07em;color:var(--muted);margin-right:5px;text-transform:uppercase}.small-btn{background:#4a3656;color:var(--cream);border:1px solid #816d8d;border-radius:12px;padding:9px 13px;min-height:42px;font-weight:800}.small-btn:hover{background:#614972}.small-btn[aria-pressed=true]{background:var(--mint);color:var(--ink);border-color:var(--mint)}.octave{min-width:75px;text-align:center;font:900 17px ui-monospace,monospace}.vol{accent-color:var(--pink);width:108px}.toggle{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:760;cursor:pointer}.toggle input{accent-color:var(--mint);width:16px;height:16px}
+.keyboard-rail{background:#1d1527;padding:15px 15px 18px;border:1px solid #786089;border-radius:22px;box-shadow:inset 0 -5px 0 #120e19}.piano{position:relative;display:flex;height:clamp(150px,21vw,240px);user-select:none;touch-action:none}.piano-key{touch-action:none;user-select:none;position:relative;display:flex;align-items:end;justify-content:center;padding:0 0 17px;border:0;border-radius:0 0 10px 10px;transition:background .07s,transform .07s;min-width:0;-webkit-tap-highlight-color:transparent}.white-key{width:12.5%;flex:1;background:linear-gradient(#fff9ed,#f0e4f2);color:#58446b;border:2px solid #30203f;border-top:none;box-shadow:inset 0 -10px 0 #c9bfd3}.white-key:hover{background:#fff}.white-key.is-pressed{background:var(--lemon);transform:translateY(5px);box-shadow:inset 0 -3px 0 #e4b46a}.black-key{position:absolute;top:0;height:60%;width:8.2%;z-index:2;background:linear-gradient(#5c4668,#231827);color:#f2e6f8;border:2px solid #201324;border-top:none;box-shadow:inset 0 -7px 0 #100c16,4px 5px 9px #1d142556;transform:translateX(-50%)}.black-key:hover{background:#6c4e7e}.black-key.is-pressed{background:#b47ec5;transform:translate(-50%,4px);box-shadow:inset 0 -3px 0 #785989}.piano-key .key-hint{font:850 12px ui-monospace,monospace;opacity:.78}.white-key .note-name{position:absolute;top:13px;font:800 10px ui-monospace,monospace;opacity:.4}.black-key .key-hint{font-size:10px}.hint{margin:12px 3px 0;color:#bfafc9;font-size:12px}.hint strong{color:var(--cream)}.display-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:14px;padding:10px 14px;border:1px solid #604e6e;border-radius:13px;background:#241a2d}.display-bar strong{font:900 17px ui-monospace,monospace;color:var(--lemon)}.display-bar span{font:700 11px ui-monospace,monospace;color:var(--muted)}
+.studio{display:grid;grid-template-columns:1fr 1.15fr;gap:18px;margin-top:20px}.studio .card{padding:25px;min-width:0}.studio h2{font-size:22px;letter-spacing:-.04em;margin:0 0 7px}.studio p{margin:0 0 18px;font-size:13px;color:var(--muted)}.action-row{display:flex;gap:9px;flex-wrap:wrap}.action{color:var(--ink);font-weight:900;background:var(--pink);border:0;border-radius:12px;padding:12px 17px;min-height:44px}.action:hover{filter:brightness(1.08)}.action.alt{background:#55435e;border:1px solid #8b7295;color:var(--cream)}.action.mint{background:var(--mint)}.action[aria-pressed=true]{background:var(--lemon)}.record-led{width:9px;height:9px;background:#8a6979;border-radius:50%;display:inline-block;margin-right:5px}.record-led.hot{background:#ff777d;box-shadow:0 0 0 5px #ff7c8736;animation:blink 1s infinite}.tape{margin:20px 0 12px;border:1px dashed #80688e;background:#241a2e;border-radius:12px;min-height:90px;padding:15px}.tape .counter{font:950 32px ui-monospace,monospace;color:var(--cream)}.tape small{display:block;color:var(--muted);font-size:11px;margin-top:6px}.tape-dots{display:flex;gap:3px;height:20px;align-items:end;margin-top:10px}.tape-dots i{display:block;width:5px;border-radius:4px;background:var(--pink);opacity:.8}.file-input{display:none}.small-note{font-size:11px!important;line-height:1.6;color:#d0c0d7}.grid-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:14px 0}.tempo{accent-color:var(--mint);width:105px}.seq-wrap{overflow-x:auto;max-width:100%;padding:2px 0}.seq{display:grid;grid-template-columns:37px repeat(16,minmax(23px,1fr));gap:4px;min-width:490px}.seq-label{font:850 11px ui-monospace,monospace;display:flex;align-items:center;color:#dfd0e7}.step{aspect-ratio:1;min-width:0;border:1px solid #6f597b;background:#493954;border-radius:5px;padding:0;transition:background .07s}.step[data-beat="true"]{border-left:2px solid #b9a0c7}.step.on{background:var(--pink);border-color:#ffcada}.step.playing{outline:2px solid var(--mint);outline-offset:1px}.step.on.playing{background:var(--lemon)}.seq-numbers{display:grid;grid-template-columns:37px repeat(16,minmax(23px,1fr));gap:4px;min-width:490px;margin-bottom:7px}.seq-numbers small{text-align:center;font:650 10px ui-monospace,monospace;color:#bba4c8}.seq-numbers small:nth-child(4n + 2){color:var(--mint)}.footer{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#af9abf;font-size:11px;margin:24px 2px}.footer a{color:#e7d0f8}.notice{font:750 12px ui-monospace,monospace;color:var(--mint);min-height:21px;margin-top:12px}
+@keyframes bop{from{transform:rotate(-3deg) translateY(1px)}to{transform:rotate(3deg) translateY(-6px)}}@keyframes float{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-14px) rotate(12deg)}}@keyframes blink{50%{opacity:.1}}@media(max-width:850px){.hero{grid-template-columns:1fr}.stage{min-height:320px}.hero h1{font-size:clamp(57px,13vw,93px)}.studio{grid-template-columns:1fr}.cat-picker{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.top{padding:16px 0 22px}.nav{gap:6px}.nav a{font-size:10px;padding:7px 9px}.stage{min-height:260px}.cat-picker{gap:7px}.cat-btn{gap:8px;padding:9px}.cat-btn[aria-pressed=true]{padding:8px}.cat-btn .avatar{width:36px;height:36px;font-size:20px}.instrument{padding:13px}.keyboard-rail{padding:7px 7px 10px;border-radius:14px}.piano{height:176px}.white-key{border-width:1px}.piano-key .key-hint{font-size:10px}.black-key .key-hint{font-size:9px}.section-head{margin-bottom:15px}.studio .card{padding:18px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* V2 distinct workstation-native sound-instrument skin */
+:root{--ink:#0b131c;--base:#0a1018;--deep:#080e14;--card:#14202a;--card2:#1c2b35;--line:#3a5663;--lilac:#9bebdf;--pink:#ffa990;--mint:#d7fb8c;--lemon:#ffe48b;--cream:#edf6f2;--muted:#aec4cc;--shadow:0 25px 70px #01040988}
+body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent 70%),#0a1018}
+.shell{max-width:1420px}.top{padding:15px 0 20px}.logo{font:900 22px ui-monospace,Consolas,monospace;letter-spacing:-.065em}.logo span{color:var(--mint)}.nav a{border-color:#334b56}.nav a:hover{background:#223741}
+.hero{grid-template-columns:minmax(0,1fr) minmax(230px,.52fr);gap:18px;margin-bottom:20px}.hero h1{font-size:clamp(49px,7vw,94px);line-height:.85;letter-spacing:-.09em;margin:18px 0}.hero h1 em{color:var(--mint)}.hero p{font-size:14px;max-width:650px;color:#b8d0d6}.tag{border-color:#4f6a70;color:#b1d8c4}
+.stage{min-height:240px;background:radial-gradient(circle at 40% 20%,#275568,#172a37 58%,#0f1d29 100%);border-color:#487783;border-radius:23px}.stage:before{border-color:#a2c6c040}.stage-caption,.stage-voice{color:#b9ddd7}.cat-svg{width:min(62%,230px)}.stage .note{color:#a5f1ba}
+.card{background:linear-gradient(158deg,#192b34,#101a24);border-color:#3a5660;border-radius:17px}.instrument{margin-top:15px}.cat-btn{background:#172832;border-color:#42616e;border-radius:11px}.cat-btn:hover{background:#223943}.cat-btn[aria-pressed=true]{background:#2a4d50;border-color:var(--mint);box-shadow:inset 0 0 0 1px var(--mint)}.cat-btn .avatar{border-radius:9px}.chip{border-color:#638080}.keyboard-rail{background:#050b13;border-color:#4a6c75;border-radius:17px}.piano{height:clamp(165px,18vw,225px)}.white-key{background:linear-gradient(#f1fff6,#c8ddda);color:#28504a;border-color:#1a2b32;box-shadow:inset 0 -12px 0 #98b7b2}.white-key.is-pressed{background:#d7fb8c;box-shadow:inset 0 -4px #8ebb50}.black-key{background:linear-gradient(#365460,#0b1822);border-color:#071018;box-shadow:inset 0 -8px #03080e,4px 5px 8px #01040988}.black-key.is-pressed{background:#84cbbb}.small-btn,.action.alt{background:#203640;border-color:#44636d}.action{background:var(--pink)}.action.mint{background:var(--mint)}.display-bar{background:#0e1e28;border-color:#41626e}
+.soundbank{margin:10px 0 20px;border:1px solid #47727b;border-radius:19px;background:linear-gradient(155deg,#162e34,#101b26);padding:clamp(18px,2.8vw,30px)}
+.bank-header{display:flex;gap:12px;justify-content:space-between;align-items:start;flex-wrap:wrap}.bank-title{font-size:clamp(30px,4vw,53px);line-height:.95;letter-spacing:-.06em;margin:10px 0 9px}.bank-title span{color:var(--mint)}.bank-lead{color:#a6c2c8;max-width:720px;font-size:13px;margin:0 0 18px}
+.bank-grid{display:grid;grid-template-columns:minmax(0,1.28fr) minmax(245px,.8fr);gap:16px}.bank-scope{border:1px solid #3b5963;border-radius:12px;background:#08151c;overflow:hidden}.bank-scope-head{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-bottom:1px solid #253d44;font:700 11px ui-monospace,monospace;gap:8px;flex-wrap:wrap;color:#b8d9dd}
+#sound-wave{width:100%;height:160px;display:block;background:repeating-linear-gradient(90deg,transparent 0 52px,#172c32 53px),repeating-linear-gradient(0deg,transparent 0 39px,#172c32 40px)}
+.bank-slots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:10px 0}.bank-slot{color:#f3f7f5;min-height:78px;background:#11232d;border:1px solid #41606c;border-radius:10px;text-align:left;padding:10px;display:flex;flex-direction:column;gap:4px}.bank-slot strong{font-size:13px}.bank-slot small{font:700 10px ui-monospace,monospace;color:#a6c2c8;word-break:break-word}.bank-slot[aria-pressed=true]{border-color:var(--mint);background:#204341}
+.bank-editor{padding:16px;border:1px solid #44636d;border-radius:12px;background:#11222c;display:flex;flex-direction:column;gap:12px}.bank-editor label{display:flex;flex-direction:column;gap:6px;font:800 10px ui-monospace,monospace;letter-spacing:.08em;color:#b8d5d6}.bank-editor select,.bank-editor input[type=range]{width:100%;max-width:100%}.bank-editor select{font:700 13px system-ui;background:#20333d;border:1px solid #466573;border-radius:8px;color:#f0f8f5;padding:10px}
+.bank-actions{display:flex;gap:7px;flex-wrap:wrap}.bank-actions button{font-size:12px;padding:10px 11px;min-height:39px}.bank-editor input[type=file]{font-size:11px;max-width:100%}.bank-editor input[type=file]::file-selector-button{background:#cee98c;border:0;border-radius:7px;padding:9px;margin-right:8px;color:#16212a;font-weight:800;cursor:pointer}
+.bank-status{font:650 11px/1.6 ui-monospace,monospace;color:#b7d1d2;word-break:break-word;border-left:2px solid var(--mint);padding-left:10px;min-height:35px}.bank-evidence{color:#91b4ba;font:10px/1.6 ui-monospace,monospace;word-break:break-all}.bank-export{align-self:start;background:#d7fb8c;color:#14272a;border:0;border-radius:9px;padding:11px 16px;font-weight:900}.bank-pill{border:1px solid #416c70;border-radius:30px;padding:8px 11px;font:800 11px ui-monospace,monospace;color:var(--mint);white-space:nowrap}.bank-help{font-size:11px;line-height:1.65;color:#abc7c7;margin:11px 0 0}
+@media(max-width:850px){.bank-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.stage{min-height:210px}.hero h1{font-size:clamp(52px,12vw,85px)}}@media(max-width:520px){.bank-slots{grid-template-columns:repeat(2,minmax(0,1fr))}.soundbank{padding:15px}.bank-title{font-size:38px}.bank-editor{padding:12px}#sound-wave{height:125px}}
+
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top"><a href="cat-keyboard.html" class="logo">meow<span>lab 2</span><span aria-hidden="true"> ✳</span></a><div class="nav"><span class="live">OFFLINE INSTRUMENT</span><a href="#soundbank">SOUNDS</a><a href="#play">PLAY</a><a href="#studio">STUDIO</a><a href="work.html">← WORKSTATION</a></div></header>
+<main>
+<section class="hero" aria-labelledby="hero-title"><div><div class="eyebrow">Your new favorite instrument</div><h1 id="hero-title">SWALLOW<br><em>SOUNDS.</em><br>PLAY CATS.</h1><p>A real playable sound bank. Four cat voices, thirteen keys, your own samples, waveform motion, and a path into the native A/B workstation.</p><div class="hero-tags"><span class="tag">⌨ TYPE TO PLAY</span><span class="tag">☞ TAP FRIENDLY</span><span class="tag">♫ NO SAMPLES NEEDED</span></div></div>
+<div class="stage" id="cat-stage" aria-label="Animated illustration of the current singing cat"><div class="stage-caption">LIVE CAT CAM / NOT REALLY</div><span class="note a" aria-hidden="true">♪</span><span class="note b" aria-hidden="true">♫</span><span class="note c" aria-hidden="true">✦</span>
+<svg class="cat-svg" viewBox="0 0 390 345" role="img" aria-label="Smiling illustrated cat"><ellipse cx="196" cy="297" rx="123" ry="29" fill="#5b416d45"/><path d="M95 181 Q48 143 68 86 Q78 61 94 57 L144 96 Q191 81 239 96 L298 56 Q326 107 303 177 Q335 209 325 249 Q304 310 196 316 Q90 311 67 250 Q52 213 95 181Z" class="cat-face"/><path d="M84 88 L105 145 L139 108Z M297 85 L287 151 L247 106Z" class="cat-ear"/><ellipse cx="195" cy="251" rx="80" ry="54" class="cat-belly"/><ellipse cx="144" cy="178" rx="13" ry="19" class="cat-eye"/><ellipse cx="246" cy="178" rx="13" ry="19" class="cat-eye"/><ellipse cx="147" cy="171" rx="4" ry="6" fill="white"/><ellipse cx="250" cy="171" rx="4" ry="6" fill="white"/><path d="M182 207 Q195 217 208 207 Q194 199 182 207Z" fill="#a65a7a"/><path class="cat-mouth" d="M195 213 Q187 232 178 218 M195 213 Q204 232 213 218" fill="none" stroke="#623d59" stroke-width="5" stroke-linecap="round"/><ellipse cx="111" cy="215" rx="21" ry="10" fill="#ed9f9f85"/><ellipse cx="280" cy="215" rx="21" ry="10" fill="#ed9f9f85"/><g fill="none" stroke="#6b4c66" stroke-width="3" stroke-linecap="round"><path d="M120 215 L55 204 M118 225 L48 231 M270 215 L334 204 M272 225 L341 232"/></g><path d="M124 277 Q103 310 86 293 M267 277 Q295 310 308 293" fill="none" stroke="#9d6d78" stroke-width="15" stroke-linecap="round"/></svg>
+<div id="stage-name" class="stage-voice">MISO IS READY TO SING</div></div></section>
+
+<section class="soundbank" id="soundbank" aria-label="Swallow Sounds audio bank">
+<div class="bank-header"><div><div class="eyebrow">A/B WORKSTATION / SOUND INTAKE / V2</div><h2 class="bank-title">SWALLOW <span>SOUNDS.</span></h2><p class="bank-lead">Four editable sound slots. Start with four original synthesized cat calls, or swallow your own WAV/MP3. The entire keyboard will play the selected sound across thirteen pitches.</p></div><span class="bank-pill">4 SOUND SLOTS · 13 PITCHES</span></div>
+<div class="bank-grid"><div>
+<div class="bank-scope"><div class="bank-scope-head"><span id="wave-title">MISO / ORIGINAL SOUND</span><span id="wave-length">READY TO PLAY</span></div><canvas id="sound-wave" width="900" height="190" aria-label="Waveform of selected sound"></canvas></div>
+<div class="bank-slots" id="bank-slots" aria-label="Cat sound slots">
+<button class="bank-slot" data-slot="miso" aria-pressed="true"><strong>01 / Miso</strong><small>Original cat call</small></button>
+<button class="bank-slot" data-slot="mochi" aria-pressed="false"><strong>02 / Mochi</strong><small>Original cat call</small></button>
+<button class="bank-slot" data-slot="nori" aria-pressed="false"><strong>03 / Nori</strong><small>Original cat call</small></button>
+<button class="bank-slot" data-slot="bean" aria-pressed="false"><strong>04 / Bean</strong><small>Original cat call</small></button></div>
+<p class="bank-help">Original sounds are generated by mathematical synthesis in the browser. Imported sounds stay local and unverified until run through the native workstation worker.</p></div>
+<div class="bank-editor">
+<label>DESTINATION SOUND SLOT<select id="bank-target"><option value="miso">01 · Miso</option><option value="mochi">02 · Mochi</option><option value="nori">03 · Nori</option><option value="bean">04 · Bean</option></select></label>
+<label>IMPORT WAV / MP3 SOURCE<input type="file" id="sound-file" accept="audio/wav,audio/mpeg,audio/ogg,audio/flac,.wav,.mp3,.ogg,.flac"></label>
+<label>CLIP START POSITION <span id="clip-position-label">0%</span><input type="range" id="clip-position" min="0" max="100" value="0"></label>
+<div class="bank-actions"><button type="button" class="small-btn" id="swallow-sound">SWALLOW INTO SLOT</button><button type="button" class="small-btn" id="audition-sound">▶ AUDITION</button><button type="button" class="small-btn" id="reset-sound">↻ ORIGINAL</button></div>
+<div class="bank-status" id="bank-status" role="status">Choose an imported sound or play an original cat call.</div><div class="bank-evidence" id="bank-evidence">SOURCE: ORIGINAL MATHEMATICAL SYNTHESIS / NOT A SUNO BACKEND</div>
+<button type="button" class="bank-export" id="handoff-sound">↓ EXPORT PCM16 WAV + MANIFEST</button>
+<p class="bank-help">To obtain a native PASS, process the exported WAV through <code>systems.workspace.audio_motion_bridge</code>. Importing or clicking does not itself run a workstation worker.</p>
+</div></div>
+</section>
+<section id="play" class="instrument card" aria-labelledby="play-title"><div class="section-head"><div><h2 id="play-title">The cat keyboard <span aria-hidden="true">🐾</span></h2><p>Choose your vocalist, then give those paws a workout.</p></div><span class="chip" id="note-count">13 KEYS · 1 OCTAVE</span></div>
+<div class="cat-picker" role="group" aria-label="Cat vocalist"><button type="button" class="cat-btn" data-cat="miso" aria-pressed="true" style="--tone:#f7bd9d"><span class="avatar" aria-hidden="true">🐱</span><span><strong>Miso</strong><small>Classic meow</small></span></button><button type="button" class="cat-btn" data-cat="mochi" aria-pressed="false" style="--tone:#f5daf5"><span class="avatar" aria-hidden="true">😺</span><span><strong>Mochi</strong><small>Little squeak</small></span></button><button type="button" class="cat-btn" data-cat="nori" aria-pressed="false" style="--tone:#c7b6d7"><span class="avatar" aria-hidden="true">😼</span><span><strong>Nori</strong><small>Velvet croon</small></span></button><button type="button" class="cat-btn" data-cat="bean" aria-pressed="false" style="--tone:#ffe1a8"><span class="avatar" aria-hidden="true">😸</span><span><strong>Bean</strong><small>Drama queen</small></span></button></div>
+<div class="desk-controls"><div class="control-group"><span class="control-label">OCTAVE</span><button type="button" class="small-btn" id="octave-down" aria-label="Lower octave">−</button><span id="octave-display" class="octave" aria-live="polite">C4</span><button type="button" class="small-btn" id="octave-up" aria-label="Raise octave">+</button></div><div class="control-group"><label class="control-label" for="volume">VOLUME</label><input type="range" id="volume" class="vol" min="0" max="100" value="68" aria-label="Master volume"><label class="toggle"><input type="checkbox" id="echo"> Echo</label><label class="toggle"><input type="checkbox" id="purr"> Purr</label></div></div>
+<div class="keyboard-rail"><div class="piano" id="piano" role="group" aria-label="Chromatic meow keyboard, C through C one octave higher"></div></div>
+<div class="display-bar"><strong id="now-playing" aria-live="polite">♪ READY TO MEOW</strong><span id="audio-status" role="status">Tap a key to enable sound</span></div><p class="hint"><strong>Computer keys:</strong> A W S E D F T G Y H U J K &nbsp;·&nbsp; Touch and drag across the piano &nbsp;·&nbsp; Multiple notes at once</p>
+</section>
+<section class="studio" id="studio" aria-label="Cat music studio"><div class="card"><h2>Little tape recorder <span aria-hidden="true">⏺</span></h2><p>Record your actual performance, replay it, or save the notes to bring back later.</p><div class="action-row"><button type="button" class="action" id="rec" aria-pressed="false"><span id="rec-led" class="record-led"></span> Record</button><button type="button" class="action alt" id="play-tape">▶ Replay</button><button type="button" class="action alt" id="stop-tape">■ Stop</button></div><div class="tape"><div id="tape-clock" class="counter">00:00</div><small id="tape-label">A blank tape, waiting for your masterpiece.</small><div class="tape-dots" id="tape-dots" aria-hidden="true"></div></div><div class="action-row"><button type="button" class="small-btn" id="export">↓ Save song</button><button type="button" class="small-btn" id="import">↑ Load song</button><button type="button" class="small-btn" id="clear-tape">Clear tape</button><input class="file-input" type="file" id="song-file" accept="application/json,.json"></div><p class="small-note">Saved songs are small JSON note scores, not audio files. Everything runs locally in your browser; no accounts, uploads or tracking.</p></div>
+<div class="card"><h2>16-step meow studio <span aria-hidden="true">✳</span></h2><p>Tap squares to arrange a loop. Layer notes, choose your speed, and make it weird.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play loop</button><button type="button" class="action alt" id="loop-clear">Clear</button><button type="button" class="action alt" id="preset">Surprise me</button></div><div class="grid-controls"><label for="tempo" class="control-label">BPM</label><input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output><span class="control-label">· 16 STEPS / 4 BARS</span></div><div class="seq-wrap"><div class="seq-numbers" id="seq-numbers"></div><div class="seq" id="seq" role="group" aria-label="16 step pattern editor"></div></div><div class="notice" role="status" id="studio-status">STUDIO IS READY.</div></div></section>
+</main><footer class="footer"><span>MEOW LAB 2 · ORIGINAL SOUNDS + USER IMPORTS · NATIVE WORKSTATION HANDOFF</span><span><a href="work.html">Return to workstation ↗</a></span></footer></div>
+<script>
+(()=>{'use strict';
+// Pure, testable score rules; DOM and audio are deliberately kept outside them.
+const NOTES=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B','C'];
+const SHORTCUTS=['KeyA','KeyW','KeyS','KeyE','KeyD','KeyF','KeyT','KeyG','KeyY','KeyH','KeyU','KeyJ','KeyK'];
+const ROW_NOTES=[12,9,7,4,0];
+const CATS={
+  miso:{name:'Miso',fur:'#d79e86',ear:'#ed869c',belly:'#fff2e5',pitch:1,glide:.19,attack:.026,brightness:1,vibrato:13},
+  mochi:{name:'Mochi',fur:'#f8e9dc',ear:'#ef9fba',belly:'#fffefa',pitch:2,glide:.26,attack:.015,brightness:1.22,vibrato:25},
+  nori:{name:'Nori',fur:'#555066',ear:'#b98bab',belly:'#cfc3d5',pitch:.5,glide:.12,attack:.065,brightness:.76,vibrato:8},
+  bean:{name:'Bean',fur:'#edbb6a',ear:'#e88594',belly:'#fff1c8',pitch:1,glide:.31,attack:.035,brightness:1.07,vibrato:33}
+};
+function hz(midi){return 440*Math.pow(2,(midi-69)/12)}
+function midiFor(index,octave){return 60+(octave-4)*12+index}
+function validScore(data){
+ if(!data||data.schema!=='meow-machine/score-v1'||!Array.isArray(data.events)||data.events.length>2000)return null;
+ let prev=-1,held=new Map();const events=[];
+ for(const e of data.events){
+  if(!e||!Number.isFinite(e.ms)||e.ms<0||e.ms>120000||e.ms<prev||!Number.isInteger(e.note)||e.note<36||e.note>96||!['on','off'].includes(e.type)||!Object.hasOwn(CATS,e.cat)||typeof e.id!=='string'||!/^n\d{1,5}$/.test(e.id))return null;
+  const key=e.id;if(e.type==='on'){if(held.has(key)||held.size>=16)return null;held.set(key,{note:e.note,cat:e.cat})}else{const start=held.get(key);if(!start||start.note!==e.note||start.cat!==e.cat)return null;held.delete(key)}
+  prev=e.ms;events.push({ms:e.ms,note:e.note,type:e.type,cat:e.cat,id:e.id});
+ }
+ if(held.size)return null;
+ return {schema:'meow-machine/score-v1',events};
+}
+function patternPreset(index){
+ const grid=Array.from({length:5},()=>Array(16).fill(false));
+ const sequences=[[[4,0],[2,2],[1,4],[2,6],[3,8],[2,10],[1,12],[0,14]],[[4,0],[4,4],[2,2],[2,6],[1,8],[3,10],[2,12],[0,14]],[[4,0],[2,1],[1,3],[0,4],[2,6],[3,8],[1,10],[2,12],[0,14],[0,15]]];
+ for(const [r,c] of sequences[index%sequences.length])grid[r][c]=true;
+ return grid;
+}
+const $=id=>document.getElementById(id);
+let cat='miso',octave=4,volume=.68,echo=false,audio=null,master=null,echoInput=null,purrNodes=null;
+const active=new Map(),keys=new Map();let pressedPointer=new Map();let noteSerial=0,recording=false,recordStart=0,events=[],tapeTime=0,tapePlaying=false,scheduled=[],recTimer=0;
+let loopPlaying=false,loopTimer=null,loopTick=0,loopIndex=0,loopLast=-1,loopNotes=new Map(),presetIndex=0;
+let grid=patternPreset(0);
+function status(s){$('audio-status').textContent=s}
+function studioStatus(s){$('studio-status').textContent=s}
+function initializeAudio(){
+ if(audio)return true;
+ const Klass=window.AudioContext||window.webkitAudioContext;
+ if(!Klass){status('Web Audio is unavailable in this browser');return false}
+ try{audio=new Klass();master=audio.createGain();master.gain.value=volume*.65;
+  const limiter=audio.createDynamicsCompressor();limiter.threshold.value=-18;limiter.knee.value=15;limiter.ratio.value=6;limiter.attack.value=.003;limiter.release.value=.18;master.connect(limiter);limiter.connect(audio.destination);
+  echoInput=audio.createGain();const d=audio.createDelay(.6),f=audio.createGain(),wet=audio.createGain();d.delayTime.value=.245;f.gain.value=.25;wet.gain.value=.23;echoInput.connect(d);d.connect(wet);wet.connect(master);d.connect(f);f.connect(d);status('Sound on · workstation sound bank');initializeSoundBank();return true;
+ }catch(err){status('Could not start audio: '+err.message);audio=null;return false}
+}
+function unlockAudio(){if(!initializeAudio())return false;if(audio.state==='suspended')audio.resume().catch(()=>status('Tap the keyboard again to allow audio'));return true}
+function holdSound(midi,identifier,voiceName=cat,record=true){
+ if(active.has(identifier))releaseSound(identifier,record);
+ if(!unlockAudio())return;
+ if(playBankSample(midi,identifier,voiceName,record))return;
+ const voice=CATS[voiceName]||CATS.miso,t=audio.currentTime,freq=hz(midi)*voice.pitch;
+ const amp=audio.createGain();amp.gain.setValueAtTime(.0001,t);amp.gain.exponentialRampToValueAtTime(.48,t+voice.attack);amp.gain.setTargetAtTime(.24,t+voice.attack+.1,.25);
+ const pre=audio.createGain();pre.gain.value=.55;
+ const osc1=audio.createOscillator();osc1.type='sawtooth';const osc2=audio.createOscillator();osc2.type='triangle';
+ for(const [osc,ratio] of [[osc1,1],[osc2,1.004]]){
+  osc.frequency.setValueAtTime(freq*ratio*(1-voice.glide),t);
+  osc.frequency.exponentialRampToValueAtTime(freq*ratio*1.085,t+.11);
+  osc.frequency.exponentialRampToValueAtTime(freq*ratio,t+.31);
+  osc.connect(pre);
+ }
+ const filter=audio.createBiquadFilter();filter.type='lowpass';filter.Q.value=2.2;filter.frequency.setValueAtTime(540*voice.brightness,t);filter.frequency.exponentialRampToValueAtTime(1900*voice.brightness,t+.14);filter.frequency.exponentialRampToValueAtTime(680*voice.brightness,t+.38);pre.connect(filter);filter.connect(amp);amp.connect(master);if(echo)amp.connect(echoInput);
+ const lfo=audio.createOscillator(),mod=audio.createGain();lfo.frequency.value=5.5;lfo.type='sine';mod.gain.value=voice.vibrato;lfo.connect(mod);mod.connect(osc1.detune);mod.connect(osc2.detune);
+ osc1.start(t);osc2.start(t);lfo.start(t);
+ active.set(identifier,{oscillators:[osc1,osc2,lfo],amp,midi,voiceName});paintPressed();setStage(true);
+ $('now-playing').textContent='♪ '+(NOTES[(midi%12+12)%12]||'NOTE')+Math.floor(midi/12-1)+' · '+voice.name.toUpperCase();
+ if(record&&recording)logEvent('on',midi,voiceName,identifier);
+}
+function releaseSound(identifier,record=true){
+ const v=active.get(identifier);if(!v)return;active.delete(identifier);
+ if(audio){const t=audio.currentTime;v.amp.gain.cancelScheduledValues(t);v.amp.gain.setTargetAtTime(.0001,t,.055);for(const o of v.oscillators){try{o.stop(t+.32)}catch{} }}
+ if(record&&recording)logEvent('off',v.midi,v.voiceName,identifier);
+ paintPressed();setStage(active.size>0);if(!active.size)$('now-playing').textContent='♪ READY TO MEOW';
+}
+function releaseAll(){for(const id of [...active.keys()])releaseSound(id);pressedPointer.clear()}
+function paintPressed(){const held=new Set([...active.values()].map(v=>v.midi));for(const b of keys.values()){const midi=midiFor(Number(b.dataset.note),octave);b.classList.toggle('is-pressed',held.has(midi));b.setAttribute('aria-pressed',held.has(midi)?'true':'false')}}
+function setStage(playing){$('cat-stage').classList.toggle('singing',playing);$('stage-name').textContent=CATS[cat].name.toUpperCase()+(playing?' IS SINGING!':' IS READY TO SING')}
+function pickCat(id){if(!CATS[id])return;cat=id;for(const b of document.querySelectorAll('.cat-btn'))b.setAttribute('aria-pressed',String(b.dataset.cat===id));const s=$('cat-stage').style;s.setProperty('--fur',CATS[id].fur);s.setProperty('--ear',CATS[id].ear);s.setProperty('--belly',CATS[id].belly);setStage(active.size>0)}
+function changeOctave(shift){const next=Math.max(3,Math.min(5,octave+shift));if(next!==octave){releaseAll();octave=next;$('octave-display').textContent='C'+octave;paintPressed()}}
+function togglePurr(on){if(!on){if(purrNodes){for(const x of purrNodes.sources){try{x.stop()}catch{}}purrNodes=null}return}if(!unlockAudio()){$('purr').checked=false;return}if(purrNodes)return;
+ const t=audio.currentTime;const bass=audio.createOscillator(),motor=audio.createOscillator(),depth=audio.createGain(),output=audio.createGain(),low=audio.createBiquadFilter();bass.type='triangle';bass.frequency.value=59;motor.type='square';motor.frequency.value=22;depth.gain.value=.025;output.gain.value=.034;low.type='lowpass';low.frequency.value=170;motor.connect(depth);depth.connect(output.gain);bass.connect(low);low.connect(output);output.connect(master);bass.start(t);motor.start(t);purrNodes={sources:[bass,motor]};}
+function addKeys(){const piano=$('piano');for(let i=0;i<13;i++){
+ const black=[1,3,6,8,10].includes(i),b=document.createElement('button');b.type='button';b.className='piano-key '+(black?'black-key':'white-key');b.dataset.note=String(i);b.setAttribute('aria-label',NOTES[i]+(4+(i===12?1:0))+' ('+SHORTCUTS[i].slice(3)+')');b.setAttribute('aria-pressed','false');b.title=NOTES[i]+' · '+SHORTCUTS[i].slice(3);b.innerHTML='<span class="key-hint">'+SHORTCUTS[i].slice(3)+'</span>';
+ if(black){const preceding=[0,2,5,7,9].indexOf(i-1);b.style.left=([1,3,6,8,10].indexOf(i)===-1?'0':[12.5,25,50,62.5,75][[1,3,6,8,10].indexOf(i)])+'%';}else{const name=document.createElement('span');name.className='note-name';name.textContent=NOTES[i];b.append(name)}
+ if(black)piano.append(b);else piano.insertBefore(b,piano.querySelector('.black-key'));
+ keys.set(i,b);
+ b.addEventListener('pointerdown',e=>{if(e.button!==0&&e.pointerType==='mouse')return;e.preventDefault();b.setPointerCapture(e.pointerId);const id='p'+e.pointerId;pressedPointer.set(e.pointerId,i);holdSound(midiFor(i,octave),id)});
+ b.addEventListener('pointermove',e=>{if(!pressedPointer.has(e.pointerId))return;const node=document.elementFromPoint(e.clientX,e.clientY)?.closest('.piano-key');if(!node||!piano.contains(node))return;const next=Number(node.dataset.note);if(pressedPointer.get(e.pointerId)===next)return;releaseSound('p'+e.pointerId);pressedPointer.set(e.pointerId,next);holdSound(midiFor(next,octave),'p'+e.pointerId)});
+ const end=e=>{if(!pressedPointer.has(e.pointerId))return;pressedPointer.delete(e.pointerId);releaseSound('p'+e.pointerId)};b.addEventListener('pointerup',end);b.addEventListener('pointercancel',end);b.addEventListener('lostpointercapture',end);
+ b.addEventListener('click',e=>{if(e.detail===0){holdSound(midiFor(i,octave),'access'+i);setTimeout(()=>releaseSound('access'+i),260)}});
+ }
+}
+function logEvent(type,midi,catName,identifier){
+ let ms=Math.max(0,Math.round(performance.now()-recordStart));if(ms>120000||(type==='on'&&events.length>=1980)){stopRecording();status('Tape limit reached: 2 minutes / 2,000 events');return}
+ if(type==='on'){const id='n'+(++noteSerial);recIds.set(identifier,id);events.push({ms,type,note:midi,cat:catName,id});}
+ else {const id=recIds.get(identifier);if(id){events.push({ms,type,note:midi,cat:catName,id});recIds.delete(identifier)}}
+ tapeTime=Math.max(tapeTime,ms);updateTape();
+}
+const recIds=new Map();
+function startRecording(){stopTape();releaseAll();events=[];tapeTime=0;noteSerial=0;recIds.clear();recording=true;recordStart=performance.now();$('rec').setAttribute('aria-pressed','true');$('rec-led').classList.add('hot');$('tape-label').textContent='Recording · play the cat keyboard';recTimer=setInterval(updateTape,150);updateTape()}
+function stopRecording(){if(!recording)return;recording=false;clearInterval(recTimer);const ms=Math.max(tapeTime,Math.min(120000,Math.round(performance.now()-recordStart)));for(const [identifier,id] of recIds){const v=active.get(identifier);if(v&&events.length<2000)events.push({ms,type:'off',note:v.midi,cat:v.voiceName,id})}recIds.clear();tapeTime=ms;$('rec').setAttribute('aria-pressed','false');$('rec-led').classList.remove('hot');if(!events.length)$('tape-label').textContent='No notes recorded yet.';else $('tape-label').textContent=(events.length/2|0)+' cat notes captured. Ready to replay.';updateTape()}
+function clock(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function updateTape(){const ms=recording?performance.now()-recordStart:tapeTime;$('tape-clock').textContent=clock(ms);const container=$('tape-dots');container.replaceChildren();const ons=events.filter(e=>e.type==='on').slice(-42);for(let i=0;i<ons.length;i++){const dot=document.createElement('i');dot.style.height=(5+(ons[i].note%12)*1.1)+'px';container.append(dot)}}
+function stopTape(){for(const timer of scheduled)clearTimeout(timer);scheduled=[];for(const id of [...active.keys()])if(id.startsWith('tape'))releaseSound(id,false);tapePlaying=false;if(!recording)$('tape-label').textContent=events.length?'Tape ready.':'A blank tape, waiting for your masterpiece.'}
+function playTape(){stopRecording();stopLoop();stopTape();if(!events.length){$('tape-label').textContent='Record a tune first.';return}if(!unlockAudio())return;tapePlaying=true;$('tape-label').textContent='Playing back your cat masterpiece…';for(const e of events){scheduled.push(setTimeout(()=>{if(!tapePlaying)return;const id='tape'+e.id;if(e.type==='on')holdSound(e.note,id,e.cat,false);else releaseSound(id,false)},e.ms))}scheduled.push(setTimeout(()=>{stopTape();$('tape-label').textContent='Playback complete · encore?'},Math.min(121000,tapeTime+550)))}
+function saveSong(){stopRecording();const score={schema:'meow-machine/score-v1',events};if(!validScore(score)){status('Record a complete score before saving');return}const blob=new Blob([JSON.stringify(score,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='my-cat-song.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);status('Song score saved locally')}
+async function loadSong(file){if(!file)return;try{if(file.size>180000)throw Error('File too large');const data=JSON.parse(await file.text());const clean=validScore(data);if(!clean)throw Error('Not a valid meow-machine score');stopRecording();stopTape();events=clean.events;tapeTime=events.length?events.at(-1).ms:0;updateTape();$('tape-label').textContent=(events.length/2|0)+' notes loaded. Ready to replay.';status('Song loaded · tap Replay')}catch(e){status('Could not load song: '+e.message)}finally{$('song-file').value=''}}
+function makeGrid(){const nums=$('seq-numbers'),seq=$('seq');nums.replaceChildren();seq.replaceChildren();const empty=document.createElement('small');nums.append(empty);for(let col=0;col<16;col++){let n=document.createElement('small');n.textContent=col%4===0?String(col/4+1):'·';nums.append(n)}for(let row=0;row<5;row++){
+ const label=document.createElement('div');label.className='seq-label';label.textContent=NOTES[ROW_NOTES[row]];seq.append(label);
+ for(let col=0;col<16;col++){const b=document.createElement('button');b.type='button';b.className='step';b.dataset.row=String(row);b.dataset.col=String(col);b.dataset.beat=String(col%4===0);b.setAttribute('aria-label',NOTES[ROW_NOTES[row]]+', step '+(col+1));b.addEventListener('click',()=>{grid[row][col]=!grid[row][col];paintGrid()});seq.append(b)}
+ }paintGrid()}
+function paintGrid(){for(const b of $('seq').querySelectorAll('.step')){const row=+b.dataset.row,col=+b.dataset.col;b.classList.toggle('on',grid[row][col]);b.classList.toggle('playing',loopPlaying&&col===loopLast);b.setAttribute('aria-pressed',grid[row][col]?'true':'false')}}
+function loopStep(){if(!loopPlaying)return;const current=loopIndex%16;for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();for(let row=0;row<5;row++)if(grid[row][current]){const id='loop'+row;const midi=midiFor(ROW_NOTES[row],octave);holdSound(midi,id,cat,false);loopNotes.set(id,true)}loopLast=current;loopIndex++;paintGrid()}
+function scheduleLoop(){if(!loopPlaying)return;loopStep();loopTimer=setTimeout(scheduleLoop,60000/+ $('tempo').value/4)}
+function stopLoop(){loopPlaying=false;clearTimeout(loopTimer);loopTimer=null;for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();loopLast=-1;paintGrid();$('loop-play').textContent='▶ Play loop';$('loop-play').setAttribute('aria-pressed','false');studioStatus('STUDIO IS READY.')}
+function startLoop(){stopRecording();stopTape();if(!unlockAudio())return;loopPlaying=true;loopIndex=0;$('loop-play').textContent='■ Stop loop';$('loop-play').setAttribute('aria-pressed','true');studioStatus('YOUR CAT BAND IS PLAYING');scheduleLoop()}
+
+/* Audio bank: content-addressed user imports + four mathematically constructed cat calls.
+   Browser observations are never labeled as host-native workstation verifications. */
+const SOUND_NAMES={miso:'Miso',mochi:'Mochi',nori:'Nori',bean:'Bean'};
+const soundSlots=Object.create(null);
+let soundSource=null,sourceInfo=null,bankReady=false,soundPreparing=false;
+function hashHex(arrayBuffer){
+ if(!crypto||!crypto.subtle)return Promise.resolve('secure-context-required');
+ return crypto.subtle.digest('SHA-256',arrayBuffer).then(b=>Array.from(new Uint8Array(b),n=>n.toString(16).padStart(2,'0')).join('')).catch(()=> 'hash-unavailable');
+}
+function makeCatSound(name){
+ const cfg={miso:[235,.22,.12],mochi:[335,.35,.25],nori:[175,.12,.07],bean:[270,.46,.24]}[name];
+ const rate=24000,len=24000*1.05,b=audio.createBuffer(1,len,rate),ch=b.getChannelData(0);
+ let phase=0,noise=127;for(let i=0;i<len;i++){
+  const t=i/rate,p=i/(len-1);
+  const bend=1-cfg[1]+cfg[1]*Math.sin(Math.PI*Math.min(1,p*1.18));
+  const modulation=1+.027*Math.sin(2*Math.PI*(5+cfg[2]*13)*t);
+  phase+=2*Math.PI*cfg[0]*bend*modulation/rate;
+  noise=(noise*1664525+1013904223)>>>0;
+  const breath=((noise/4294967296)*2-1)*.022;
+  const open=Math.min(1,t/.065)*Math.min(1,(1.05-t)/.18);
+  const harmonic=Math.sin(phase)+.48*Math.sin(2*phase+.13)+.23*Math.sin(3*phase+.6);
+  ch[i]=Math.max(-.98,Math.min(.98,(harmonic*.42+breath)*Math.pow(Math.max(0,open),1.1)));
+ }
+ return b;
+}
+function initializeSoundBank(){
+ if(!audio||bankReady)return;bankReady=true;
+ for(const id of Object.keys(SOUND_NAMES))soundSlots[id]={buffer:makeCatSound(id),root:60,origin:'original-synthesis',source:id+'.math',sha:'none'};
+ refreshSoundBank();
+}
+function bankMessage(message){$('bank-status').textContent=message}
+function selectSoundSlot(name){
+ if(!SOUND_NAMES[name])return;
+ $('bank-target').value=name;pickCat(name);refreshSoundBank();
+}
+function refreshSoundBank(){
+ if(!bankReady)return;
+ const slot=$('bank-target').value||'miso',entry=soundSlots[slot];
+ for(const b of document.querySelectorAll('.bank-slot')){
+  const id=b.dataset.slot,item=soundSlots[id];
+  b.setAttribute('aria-pressed',String(id===slot));
+  b.querySelector('small').textContent=item.origin==='local-file'?'IMPORTED AUDIO':'SYNTHESIZED CAT';
+ }
+ $('wave-title').textContent=SOUND_NAMES[slot].toUpperCase()+' / '+entry.origin.toUpperCase().replace('-',' ');
+ $('wave-length').textContent=entry.buffer.duration.toFixed(2)+'s · '+entry.buffer.sampleRate+' Hz';
+ $('bank-evidence').textContent='SOURCE: '+entry.source+' · '+entry.origin+' · SHA256: '+entry.sha;
+ drawSoundWave(entry.buffer);
+}
+function drawSoundWave(buffer){
+ const canvas=$('sound-wave'),ctx=canvas.getContext('2d');if(!ctx)return;
+ const w=canvas.width,h=canvas.height;
+ ctx.clearRect(0,0,w,h);ctx.fillStyle='#08151c';ctx.fillRect(0,0,w,h);
+ ctx.strokeStyle='#1b3640';ctx.lineWidth=1;
+ for(let k=0;k<=10;k++){ctx.beginPath();ctx.moveTo(k*w/10,0);ctx.lineTo(k*w/10,h);ctx.stroke()}
+ for(let k=0;k<=4;k++){ctx.beginPath();ctx.moveTo(0,k*h/4);ctx.lineTo(w,k*h/4);ctx.stroke()}
+ const pcm=buffer.getChannelData(0),stride=Math.max(1,Math.floor(pcm.length/w));
+ ctx.beginPath();ctx.strokeStyle='#cfff83';ctx.lineWidth=2;
+ for(let x=0;x<w;x++){const start=Math.floor(x*pcm.length/w),end=Math.min(pcm.length,start+stride);let lo=1,hi=-1;
+  for(let j=start;j<end;j++){lo=Math.min(lo,pcm[j]);hi=Math.max(hi,pcm[j])}
+  ctx.moveTo(x,h/2-lo*h*.41);ctx.lineTo(x,h/2-hi*h*.41);
+ }ctx.stroke();
+}
+function playBankSample(midi,id,voiceName,record){
+ const entry=soundSlots[voiceName];if(!entry?.buffer)return false;
+ const now=audio.currentTime,source=audio.createBufferSource(),amp=audio.createGain();
+ source.buffer=entry.buffer;source.playbackRate.value=Math.pow(2,(midi-entry.root)/12);
+ amp.gain.setValueAtTime(.0001,now);
+ amp.gain.exponentialRampToValueAtTime(.48,now+.018);
+ amp.gain.setTargetAtTime(.38,now+.13,.19);
+ source.connect(amp);amp.connect(master);if(echo)amp.connect(echoInput);
+ source.start(now);
+ active.set(id,{oscillators:[source],amp,midi,voiceName});
+ paintPressed();setStage(true);
+ $('now-playing').textContent='♪ '+(NOTES[(midi%12+12)%12]||'NOTE')+Math.floor(midi/12-1)+' · '+voiceName.toUpperCase()+' SAMPLE';
+ if(record&&recording)logEvent('on',midi,voiceName,id);
+ return true;
+}
+function pcmWav(samples,rate){
+ const total=44+samples.length*2,a=new ArrayBuffer(total),d=new DataView(a);
+ const tag=(p,t)=>{for(let i=0;i<t.length;i++)d.setUint8(p+i,t.charCodeAt(i))};
+ tag(0,'RIFF');d.setUint32(4,total-8,true);tag(8,'WAVE');tag(12,'fmt ');
+ d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);
+ d.setUint32(24,rate,true);d.setUint32(28,rate*2,true);d.setUint16(32,2,true);d.setUint16(34,16,true);
+ tag(36,'data');d.setUint32(40,samples.length*2,true);
+ for(let i=0;i<samples.length;i++)d.setInt16(44+i*2,Math.max(-32768,Math.min(32767,Math.round(samples[i]*32767))),true);
+ return a;
+}
+function downloaded(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),15000)}
+function handoffSample(){
+ if(!unlockAudio())return;
+ initializeSoundBank();
+ const id=$('bank-target').value,item=soundSlots[id];if(!item)return;
+ const data=item.buffer.getChannelData(0),out=new Float32Array(8192),rate=16000;
+ for(let i=0;i<out.length;i++){const pos=i*item.buffer.sampleRate/rate,lo=Math.floor(pos),hi=Math.min(lo+1,data.length-1),alpha=pos-lo;
+   out[i]=lo>=data.length?0:data[lo]*(1-alpha)+data[hi]*alpha;
+ }
+ const wav=pcmWav(out,rate),name='ab-cat-'+id+'-source.wav';
+ downloaded(new Blob([wav],{type:'audio/wav'}),name);
+ hashHex(wav).then(sha=>{
+  const manifest={schema:'meow-lab/source-handoff/v1',source_name:item.source,
+    source_kind:item.origin,original_content_sha256:item.sha,
+    native_input_wav:name,native_input_sha256:sha,
+    pcm_format:'mono PCM16',sample_rate:rate,frames:8192,
+    root_note:item.root,target_note:60,
+    workstation_command:'python -m systems.workspace.audio_motion_bridge --data-dir runtime/data --source-wav '+name+' --version cat-audio-v1 --root-note 60 --note 67 --copy-source --execute --out moved-'+name,
+    native_verification:'NOT_RUN_BY_BROWSER'};
+  downloaded(new Blob([JSON.stringify(manifest,null,2)],{type:'application/json'}),'ab-cat-'+id+'-source.json');
+  bankMessage('WAV and source manifest exported. Native verification has NOT run in this browser.');
+ });
+}
+async function swallowSound(){
+ const file=$('sound-file').files?.[0];
+ if(!file){bankMessage('Choose your own WAV/MP3 before swallowing. Originals already work.');return}
+ if(soundPreparing)return;
+ soundPreparing=true;$('swallow-sound').disabled=true;
+ try{
+  if(file.size<128||file.size>25_000_000)throw Error('Audio source must be 128 bytes – 25 MB');
+  if(!unlockAudio())throw Error('Browser audio unavailable');
+  bankMessage('Reading source and calculating content hash…');
+  const bytes=await file.arrayBuffer();
+  const [hash,decoded]=await Promise.all([hashHex(bytes),audio.decodeAudioData(bytes.slice(0))]);
+  if(decoded.numberOfChannels<1||decoded.numberOfChannels>2||decoded.length<1||decoded.duration>180||decoded.sampleRate<8000||decoded.sampleRate>192000)
+   throw Error('Use browser-decodable mono/stereo audio shorter than 3 minutes');
+  const percent=Number($('clip-position').value)/100,maxStart=Math.max(0,decoded.duration-2.6);
+  const offset=Math.floor(percent*maxStart*decoded.sampleRate),length=Math.min(Math.ceil(2.6*decoded.sampleRate),decoded.length-offset);
+  if(length<128)throw Error('Too few audio samples');
+  const clip=audio.createBuffer(1,length,decoded.sampleRate),out=clip.getChannelData(0);
+  const channels=Array.from({length:decoded.numberOfChannels},(_,i)=>decoded.getChannelData(i));
+  for(let i=0;i<length;i++){let sum=0;for(const ch of channels)sum+=Number.isFinite(ch[offset+i])?ch[offset+i]:0;out[i]=Math.max(-1,Math.min(1,sum/channels.length))}
+  const slot=$('bank-target').value;
+  releaseAll();soundSlots[slot]={buffer:clip,root:60,origin:'local-file',source:file.name.slice(0,90),sha:hash};
+  selectSoundSlot(slot);
+  bankMessage('Swallowed '+file.name+' → '+SOUND_NAMES[slot]+' · '+length+' mono frames · unverified browser import');
+  status('Imported source selected · play the keyboard');
+ }catch(e){bankMessage('Source not accepted: '+e.message)}
+ finally{soundPreparing=false;$('swallow-sound').disabled=false}
+}
+function auditionSound(){
+ if(!unlockAudio())return;
+ const id=$('bank-target').value,tag='bank-preview';releaseSound(tag,false);
+ holdSound(60,tag,id,false);setTimeout(()=>releaseSound(tag,false),650);
+}
+function resetSound(){
+ if(!unlockAudio())return;
+ const id=$('bank-target').value;
+ releaseAll();soundSlots[id]={buffer:makeCatSound(id),root:60,origin:'original-synthesis',source:id+'.math',sha:'none'};
+ refreshSoundBank();bankMessage('Restored the original '+SOUND_NAMES[id]+' synthesis.');
+}
+function bindSoundBank(){
+ for(const btn of document.querySelectorAll('.bank-slot'))btn.addEventListener('click',()=>{if(unlockAudio())selectSoundSlot(btn.dataset.slot)});
+ $('bank-target').addEventListener('change',e=>{if(unlockAudio())selectSoundSlot(e.target.value)});
+ $('clip-position').addEventListener('input',e=>$('clip-position-label').textContent=e.target.value+'%');
+ $('swallow-sound').addEventListener('click',swallowSound);
+ $('audition-sound').addEventListener('click',auditionSound);
+ $('reset-sound').addEventListener('click',resetSound);
+ $('handoff-sound').addEventListener('click',handoffSample);
+ if(unlockAudio())initializeSoundBank();
+}
+
+function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');for(const b of document.querySelectorAll('.cat-btn'))b.addEventListener('click',()=>pickCat(b.dataset.cat));$('octave-down').addEventListener('click',()=>changeOctave(-1));$('octave-up').addEventListener('click',()=>changeOctave(1));$('volume').addEventListener('input',e=>{volume=e.target.value/100;if(master)master.gain.setTargetAtTime(volume*.65,audio.currentTime,.02)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>togglePurr(e.target.checked));
+ document.addEventListener('keydown',e=>{if(e.repeat||e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)||document.activeElement?.isContentEditable)return;const i=SHORTCUTS.indexOf(e.code);if(i<0)return;e.preventDefault();holdSound(midiFor(i,octave),'key'+e.code)});
+ document.addEventListener('keyup',e=>{if(!SHORTCUTS.includes(e.code))return;releaseSound('key'+e.code)});
+ window.addEventListener('blur',()=>{stopLoop();stopTape();releaseAll();togglePurr(false);$('purr').checked=false});document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseAll();stopLoop();stopTape();togglePurr(false);$('purr').checked=false}});
+ $('rec').addEventListener('click',()=>recording?stopRecording():startRecording());$('play-tape').addEventListener('click',playTape);$('stop-tape').addEventListener('click',()=>{stopRecording();stopTape()});$('clear-tape').addEventListener('click',()=>{stopRecording();stopTape();events=[];tapeTime=0;recIds.clear();updateTape();$('tape-label').textContent='A blank tape, waiting for your masterpiece.'});$('export').addEventListener('click',saveSong);$('import').addEventListener('click',()=>$('song-file').click());$('song-file').addEventListener('change',e=>loadSong(e.target.files?.[0]));
+ $('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{grid=Array.from({length:5},()=>Array(16).fill(false));paintGrid();studioStatus('CLEARED · YOUR TURN')});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;grid=patternPreset(presetIndex);paintGrid();studioStatus(['MOONLIGHT MEOWS','THE CATWALK','ZOOMIES'][presetIndex]+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');}
+bind();
+})();
+</script>
+</body>
+</html>

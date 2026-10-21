@@ -1,0 +1,29 @@
+name: meow-lab-v2-browser
+
+on:
+  pull_request:
+    paths:
+      - "docs/live/cat-keyboard.html"
+      - "network/tests/test_cat_keyboard_ui.py"
+      - "network/tests/test_meow_lab_browser.py"
+      - ".github/workflows/meow-lab-v2-browser.yml"
+  workflow_dispatch:
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: python -m pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Verify native score and page semantics
+        run: python -m unittest -v network.tests.test_cat_keyboard_ui
+      - name: Test real sound file ingestion, download and mobile keyboard
+        run: python -m unittest -v network.tests.test_meow_lab_browser
