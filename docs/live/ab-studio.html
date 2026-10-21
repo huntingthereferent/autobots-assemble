@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A/B Studio · Independent Audio Workstation</title>
+<meta name="description" content="Local-first multitrack arrangement, MIDI instruments, audio clips, mixer, A/B snapshots, and WAV export.">
+<link rel="stylesheet" href="ab-studio.css"><script src="audio-intake-core.js" defer></script><script src="ab-studio.js" defer></script></head>
+<body>
+<header class="top"><div class="brand"><a href="work.html">HUNTING THE REFERENT / WORK</a><strong>A/B <span>STUDIO</span></strong><small>LOCAL MULTITRACK · V0.1</small></div>
+<div class="top-links"><a href="cat-keyboard.html">MEOW LAB 2 ↗</a><a href="suno-intake.html">AUDIO INTAKE ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble">SOURCE ↗</a></div></header>
+<div class="transport" role="toolbar" aria-label="Transport">
+<button id="play" class="primary">▶ Play</button><button id="stop">■ Stop</button><button id="record">● Mic record</button>
+<span class="divider"></span><label>BPM <input id="bpm" type="number" min="40" max="240" value="120"></label>
+<label>METER <select id="meter"><option>4/4</option><option>3/4</option><option>6/8</option><option>5/4</option></select></label>
+<label>SNAP <select id="snap"><option value="1">1 beat</option><option value=".5">1/8</option><option value=".25" selected>1/16</option><option value="0">Off</option></select></label>
+<label><input type="checkbox" id="loop"> Loop range</label>
+<label>FROM <input id="loop-start" type="number" min="0" max="128" value="0" step="1"></label>
+<label>TO <input id="loop-end" type="number" min="1" max="128" value="16" step="1"></label>
+<strong id="clock">001 · 01 · 00</strong>
+<output id="audio-state">Audio idle</output></div>
+<div class="menubar" role="toolbar" aria-label="Project and editing">
+<button id="new-project">New</button><button id="save-project">Save project</button><button id="open-project">Open project</button><button id="import-audio">Import audio</button><button id="import-midi">Import MIDI</button>
+<span class="divider"></span>
+<button id="add-midi">+ MIDI track</button><button id="add-audio">+ Audio track</button>
+<button id="undo" title="Undo (Ctrl+Z)">↶ Undo</button><button id="redo" title="Redo (Ctrl+Shift+Z)">↷ Redo</button>
+<button id="export-wav" class="accent">↓ Mix WAV</button><button id="export-midi">↓ MIDI</button><button id="export-stems">↓ Stems WAV</button>
+<input id="audio-file" type="file" accept="audio/*,.wav,.mp3,.ogg" multiple hidden>
+<input id="midi-file" type="file" accept=".mid,.midi,audio/midi" hidden>
+<input id="project-file" type="file" accept=".json,application/json" hidden></div>
+<div class="workspace">
+<aside class="browser panel">
+<div class="panel-title"><b>01 / SOURCE & COMPOSITION</b><small>Local inputs</small></div>
+<div class="inset"><label>PROJECT <input id="project-name" value="Untitled movement"></label><p class="minor">Files stay in this browser session; downloads only occur on command. No Suno account/API connection.</p></div>
+<div class="group-title">Instruments & sources</div><div id="instruments" class="source-items"></div>
+<div class="group-title">Imported audio</div><div id="assets" class="source-items"><span class="muted">No media loaded</span></div>
+<div class="group-title">Project history</div><div id="event-log" class="log"></div>
+</aside>
+<main class="arrangement panel">
+<div class="panel-title"><b>02 / ARRANGEMENT</b><div><small id="arrangement-stats">0 tracks</small> <label>ZOOM <input id="zoom" type="range" min="32" max="100" value="54"></label></div></div>
+<div class="arrangement-scroll" id="arrangement-scroll">
+<div class="arrangement-inner" id="arrangement-inner"><div id="ruler" class="ruler"></div><div id="lanes"></div><div id="playhead" class="playhead"></div></div></div>
+<div class="arrange-help">Drag a clip horizontally to reposition · click to select · double-click a MIDI clip to edit notes · right-click a clip for options.</div>
+<div class="statusbar" id="status" role="status">Ready · add a track or play the example session</div>
+</main>
+<aside class="inspector panel">
+<div class="panel-title"><b>03 / SELECTED RELATION</b><small id="selection-label">TRACK</small></div>
+<div id="inspector-body" class="inset"></div>
+<div class="group-title">A/B states · compare changes</div>
+<div class="inset"><div class="abbar"><button id="store-a">Store A</button><button id="store-b">Store B</button></div>
+<div class="abbar"><button id="recall-a">Recall A</button><button id="recall-b">Recall B</button></div>
+<div id="ab-info" class="minor">A and B are explicit user snapshots, not an automatic quality judgment.</div></div>
+<div class="group-title">Master output</div><div class="inset"><label>MASTER <input id="master-volume" type="range" min="0" max="1.5" step=".01" value=".8"></label>
+<canvas id="master-meter" height="26" aria-label="Master audio level"></canvas><p class="minor">Audio is synthesized and mixed by the browser Web Audio engine. Source hashes identify bytes, not authorship.</p></div>
+</aside>
+</div>
+<section class="editor panel">
+<div class="panel-title"><b>04 / CLIP EDITOR & PLAYABLE KEYS</b><small id="editor-label">Select a MIDI clip</small></div>
+<div class="editor-flex"><div class="note-editor"><div class="editbar"><label>GRID <select id="note-grid"><option value=".25">1/16</option><option value=".5">1/8</option><option value="1">1/4</option></select></label><label>NOTE LEN <select id="note-length"><option value=".25">1/16</option><option value=".5" selected>1/8</option><option value="1">1/4</option><option value="2">1/2</option></select></label><button id="quantize">Quantize</button><button id="duplicate">Duplicate clip</button><button id="split">Split at cursor</button><button id="delete-clip">Delete clip</button></div>
+<div id="piano-roll" class="roll"><p class="minor">Choose a MIDI clip to edit its notes here.</p></div></div>
+<div class="play-panel"><div class="key-title">MUSICAL TYPING <span>A W S E D F T G Y H U J K</span></div><div id="keys" class="keys"></div>
+<div class="key-desc">Keys C4–C5 play the selected MIDI instrument. Click a piano-roll cell to add or remove a note. Select a track for its channel settings.</div></div></div>
+</section>
+<footer><span>Independent implementation inspired by common DAW concepts and published Suno Studio workflows. Not affiliated with Suno. No proprietary generation model, private APIs or stem-separation service.</span><span>© 2026 James Muneoka · All Rights Reserved</span></footer>
+<dialog id="clip-menu"><div id="clip-menu-title">Clip actions</div><button id="context-duplicate">Duplicate</button><button id="context-delete">Delete</button><button id="context-close">Cancel</button></dialog>
+</body></html>
