@@ -51,10 +51,10 @@ function hz(midi){return 440*Math.pow(2,(midi-69)/12)}
 function midiFor(index,octave){return 60+(octave-4)*12+index}
 function validScore(data){
  if(!data||data.schema!=='meow-machine/score-v1'||!Array.isArray(data.events)||data.events.length>2000)return null;
- let prev=-1,held=new Set();const events=[];
+ let prev=-1,held=new Map();const events=[];
  for(const e of data.events){
   if(!e||!Number.isFinite(e.ms)||e.ms<0||e.ms>120000||e.ms<prev||!Number.isInteger(e.note)||e.note<36||e.note>96||!['on','off'].includes(e.type)||!Object.hasOwn(CATS,e.cat)||typeof e.id!=='string'||!/^n\d{1,5}$/.test(e.id))return null;
-  const key=e.id;if(e.type==='on'){if(held.has(key)||held.size>=16)return null;held.add(key)}else{if(!held.has(key))return null;held.delete(key)}
+  const key=e.id;if(e.type==='on'){if(held.has(key)||held.size>=16)return null;held.set(key,{note:e.note,cat:e.cat})}else{const start=held.get(key);if(!start||start.note!==e.note||start.cat!==e.cat)return null;held.delete(key)}
   prev=e.ms;events.push({ms:e.ms,note:e.note,type:e.type,cat:e.cat,id:e.id});
  }
  if(held.size)return null;
@@ -128,14 +128,14 @@ function addKeys(){const piano=$('piano');for(let i=0;i<13;i++){
  }
 }
 function logEvent(type,midi,catName,identifier){
- let ms=Math.max(0,Math.round(performance.now()-recordStart));if(ms>120000||events.length>=1998){recording=false;clearInterval(recTimer);$('rec').setAttribute('aria-pressed','false');$('rec-led').classList.remove('hot');status('Tape limit reached: 2 minutes / 2,000 events');return}
+ let ms=Math.max(0,Math.round(performance.now()-recordStart));if(ms>120000||(type==='on'&&events.length>=1980)){stopRecording();status('Tape limit reached: 2 minutes / 2,000 events');return}
  if(type==='on'){const id='n'+(++noteSerial);recIds.set(identifier,id);events.push({ms,type,note:midi,cat:catName,id});}
  else {const id=recIds.get(identifier);if(id){events.push({ms,type,note:midi,cat:catName,id});recIds.delete(identifier)}}
  tapeTime=Math.max(tapeTime,ms);updateTape();
 }
 const recIds=new Map();
 function startRecording(){stopTape();releaseAll();events=[];tapeTime=0;noteSerial=0;recIds.clear();recording=true;recordStart=performance.now();$('rec').setAttribute('aria-pressed','true');$('rec-led').classList.add('hot');$('tape-label').textContent='Recording · play the cat keyboard';recTimer=setInterval(updateTape,150);updateTape()}
-function stopRecording(){if(!recording)return;const ids=[...active.entries()].filter(([id])=>recIds.has(id));for(const [id,v] of ids)logEvent('off',v.midi,v.voiceName,id);recording=false;clearInterval(recTimer);$('rec').setAttribute('aria-pressed','false');$('rec-led').classList.remove('hot');if(!events.length)$('tape-label').textContent='No notes recorded yet.';else $('tape-label').textContent=(events.length/2|0)+' cat notes captured. Ready to replay.';updateTape()}
+function stopRecording(){if(!recording)return;recording=false;clearInterval(recTimer);const ms=Math.max(tapeTime,Math.min(120000,Math.round(performance.now()-recordStart)));for(const [identifier,id] of recIds){const v=active.get(identifier);if(v&&events.length<2000)events.push({ms,type:'off',note:v.midi,cat:v.voiceName,id})}recIds.clear();tapeTime=ms;$('rec').setAttribute('aria-pressed','false');$('rec-led').classList.remove('hot');if(!events.length)$('tape-label').textContent='No notes recorded yet.';else $('tape-label').textContent=(events.length/2|0)+' cat notes captured. Ready to replay.';updateTape()}
 function clock(ms){const s=Math.floor(ms/1000);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 function updateTape(){const ms=recording?performance.now()-recordStart:tapeTime;$('tape-clock').textContent=clock(ms);const container=$('tape-dots');container.replaceChildren();const ons=events.filter(e=>e.type==='on').slice(-42);for(let i=0;i<ons.length;i++){const dot=document.createElement('i');dot.style.height=(5+(ons[i].note%12)*1.1)+'px';container.append(dot)}}
 function stopTape(){for(const timer of scheduled)clearTimeout(timer);scheduled=[];for(const id of [...active.keys()])if(id.startsWith('tape'))releaseSound(id,false);tapePlaying=false;if(!recording)$('tape-label').textContent=events.length?'Tape ready.':'A blank tape, waiting for your masterpiece.'}
