@@ -76,7 +76,7 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     if(/(?:ab_world|world_trial|world_continuity|square_contact|motion_contact)/.test(s))return 'world';
     if(/(?:arc3|sp80|ft09|sk48|ls20|arc_native|arc_agi|arc_like_maze|\/arc3\/)/.test(s))return 'arc';
     if(/(?:workstation|workspace|handoff|process_worker|agent_lineage|agent_service|audit_ui|research_observatory|research_live)/.test(s))return 'workstation';
-    if(/(?:^|\/)(?:ab_|finite_|correspondence|language_referent)|\/arc_like_maze\/chatbot\//.test(s))return 'ab';
+    if(/(?:test_ab_|test_finite_|test_correspondence|test_language_referent|\/ab_|\/finite_|\/correspondence|\/language_referent|\/arc_like_maze\/chatbot\/)/.test(s))return 'ab';
     return 'other';
   }
   function isTestPath(path){
