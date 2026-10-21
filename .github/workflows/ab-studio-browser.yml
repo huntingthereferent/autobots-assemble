@@ -1,0 +1,26 @@
+name: ab-studio-browser
+on:
+  pull_request:
+    paths:
+      - "docs/live/ab-studio*"
+      - "docs/live/work.html"
+      - "docs/live/README.md"
+      - "network/tests/test_ab_studio.py"
+      - ".github/workflows/ab-studio-browser.yml"
+  workflow_dispatch:
+jobs:
+  source-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: python -m pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Source contract and real Chromium interaction
+        run: python -m unittest -v network.tests.test_ab_studio
