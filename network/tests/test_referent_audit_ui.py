@@ -1,4 +1,4 @@
-"""Referent audit regression: no inferred execution or globally flattened source states."""
+"""Source-pinned project audit: inspect individual tests, not live execution telemetry."""
 from html.parser import HTMLParser
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -6,121 +6,107 @@ import shutil
 import subprocess
 import unittest
 
-ROOT = Path(__file__).resolve().parents[2]
-PAGE = ROOT / "docs/live/audit.html"
-WORK = ROOT / "docs/live/work.html"
-TRACE = ROOT / "docs/live/trace.html"
-DOC = ROOT / "docs/live/README.md"
-
+ROOT=Path(__file__).resolve().parents[2]
+PAGE=ROOT/"docs/live/audit.html"
+WORK=ROOT/"docs/live/work.html"
+DOC=ROOT/"docs/live/README.md"
 
 class ScriptCollector(HTMLParser):
     def __init__(self):
-        super().__init__()
-        self.in_script = False
-        self.scripts = []
-
-    def handle_starttag(self, name, attrs):
-        if name == "script":
-            self.in_script = True
-            self.scripts.append("")
-
-    def handle_data(self, value):
-        if self.in_script:
-            self.scripts[-1] += value
-
-    def handle_endtag(self, name):
-        if name == "script":
-            self.in_script = False
-
+        super().__init__();self.scripts=[];self.active=False
+    def handle_starttag(self,tag,attrs):
+        if tag=="script":self.active=True;self.scripts.append("")
+    def handle_data(self,data):
+        if self.active:self.scripts[-1]+=data
+    def handle_endtag(self,tag):
+        if tag=="script":self.active=False
 
 def source_script():
-    collector = ScriptCollector()
-    collector.feed(PAGE.read_text(encoding="utf-8"))
-    assert len(collector.scripts) == 1, "one auditable inline program expected"
-    return collector.scripts[0]
+    parser=ScriptCollector();parser.feed(PAGE.read_text(encoding="utf-8"))
+    assert len(parser.scripts)==1,"one auditable inline source program expected"
+    return parser.scripts[0]
 
+class SourceTestAuditUITests(unittest.TestCase):
+    def test_entry_remains_in_workstation(self):
+        page=PAGE.read_text(encoding="utf-8")
+        host=WORK.read_text(encoding="utf-8")
+        self.assertIn("<title>Referent audit · Hunting the Referent</title>",page)
+        for element in ('id="referents"','id="test-files"','id="case-source"','id="research"','id="export"'):
+            self.assertIn(element,page)
+        self.assertIn('data-src="audit.html?embedded=1"',host)
+        self.assertIn('href="#audit"',host)
+        self.assertIn('event.origin!==location.origin',host)
+        self.assertIn('event.source!==auditFrame.contentWindow',host)
+        self.assertIn("window.parent.postMessage({type:'referent-audit:resize',height",page)
+        self.assertIn('[Referent audit](work.html#audit)',DOC.read_text(encoding="utf-8"))
 
-class ReferentAuditUITests(unittest.TestCase):
-    def test_project_referent_is_the_root_and_workstation_links_to_it(self):
-        page = PAGE.read_text(encoding="utf-8")
-        self.assertIn("<title>Referent audit · Hunting the Referent</title>", page)
-        self.assertIn('id="referents"', page)
-        self.assertIn('id="runs"', page)
-        self.assertIn('id="next"', page)
-        self.assertIn('id="research"', page)
-        self.assertIn('href="#audit"', WORK.read_text(encoding="utf-8"))
-        self.assertIn('href="work.html#audit"', TRACE.read_text(encoding="utf-8"))
-        self.assertIn('[Referent audit](work.html#audit)', DOC.read_text(encoding="utf-8"))
+    def test_not_a_live_monitor_or_counter_dashboard(self):
+        js=source_script();page=PAGE.read_text(encoding="utf-8")
+        for forbidden in ('/actions/runs','setInterval(','new EventSource','run-count','metric-runs','live monitoring dashboard'):
+            self.assertNotIn(forbidden,js)
+        self.assertNotIn('id="metric-runs"',page)
+        self.assertIn('not live monitoring',page.lower())
+        self.assertIn("API+'/git/trees/'+sha+'?recursive=1'",js)
+        self.assertIn("API+'/branches/main'",js)
+        self.assertIn("state.head+':'+path",js)
+        self.assertIn("const r=await fetch(url,{cache:'no-store'})",js)
 
-    def test_audit_is_embedded_in_existing_workstation_not_separate_navigation(self):
-        page = WORK.read_text(encoding="utf-8")
-        child = PAGE.read_text(encoding="utf-8")
-        self.assertIn('<main id="workstation-main">', page)
-        self.assertIn('<section id="audit" class="audit-host"', page)
-        self.assertIn('data-src="audit.html?embedded=1"', page)
-        self.assertIn('href="#audit"', page)
-        self.assertNotIn('href="audit.html">AUDIT</a>', page)
-        self.assertIn('if(!auditFrame.hasAttribute("src"))', page)
-        self.assertIn('event.origin!==location.origin', page)
-        self.assertIn('event.source!==auditFrame.contentWindow', page)
-        self.assertIn('auditFrame.style.height=', page)
-        self.assertIn('new ResizeObserver(announceSize)', child)
-        self.assertIn("window.parent.postMessage({type:'referent-audit:resize',height},location.origin)", child)
-        self.assertIn("document.documentElement.classList.add('embedded')", child)
+    def test_no_invented_test_execution(self):
+        js=source_script();page=PAGE.read_text(encoding="utf-8")
+        for required in ("function parseCases(text)", "function openFile(path)", "function advance(step)",
+                         "function renderCase()", "sourceURL(path,c.line)", "line:i+j+1",
+                         "not a witnessed pass", "function exportReviews()","source_commit:state.head",
+                         "statement:'Human assessments of test source; no test execution"):
+            self.assertIn(required,js)
+        self.assertIn("Dynamic tests and tests using other naming conventions may be missing.",page)
+        self.assertIn("Source declarations are not execution results.",page)
+        self.assertIn("state.reviews.set(key",js)
+        self.assertNotIn(".innerHTML",js)
+        self.assertNotIn("eval(",js)
 
-    def test_live_evidence_and_historical_research_are_separate(self):
-        js = source_script()
-        self.assertIn("API+'/actions/runs?per_page=100&page=1'", js)
-        self.assertIn("API+'/actions/runs/'+run.id+'/jobs?per_page=100'", js)
-        self.assertIn("API+'/commits/'+run.head_sha+'?per_page=100'", js)
-        self.assertIn("API+'/pulls?state=open&per_page=100'", js)
-        self.assertIn("views/traces/research-live.json", js)
-        self.assertIn("Array.isArray(data.jobs)", js)
-        self.assertIn("Array.isArray(results[2].value.records)", js)
-        self.assertIn("app.jobs.delete(r.id)", js)
-        self.assertIn("app.rateLimitUntil", js)
-        self.assertIn("x.path", js)
-        self.assertIn("r.next", js)
-        self.assertIn("m.line", js)
-        self.assertIn("w.line", js)
-        self.assertIn("no matching runs in the fetched history window".lower(),
-                      PAGE.read_text(encoding="utf-8").lower())
-        self.assertIn("not a claim the workflow executed", js.lower())
-        self.assertNotIn("Math.random(", js)
-        self.assertNotIn("canvas", PAGE.read_text(encoding="utf-8").lower())
-
-    @unittest.skipUnless(shutil.which("node"), "Node.js required for browser script parsing")
-    def test_browser_js_parses(self):
+    @unittest.skipUnless(shutil.which("node"),"Node.js required")
+    def test_source_script_parses(self):
         with TemporaryDirectory() as d:
-            f = Path(d) / "audit.js"
-            f.write_text(source_script(), encoding="utf-8")
-            run = subprocess.run(["node", "--check", str(f)],
-                                 text=True, capture_output=True)
-            self.assertEqual(run.returncode, 0, run.stderr)
+            path=Path(d)/"audit.js";path.write_text(source_script(),encoding="utf-8")
+            run=subprocess.run(["node","--check",str(path)],capture_output=True,text=True)
+            self.assertEqual(run.returncode,0,run.stderr)
 
-    @unittest.skipUnless(shutil.which("node"), "Node.js required for namespace ownership test")
-    def test_referent_path_and_branch_rules_do_not_conflate_world48_and_arc(self):
-        script = source_script()
-        section = script[script.index("  const RULES=["):script.index("  function family(")]
-        assertions = r"""
-const assert = require('node:assert/strict');
-assert.equal(referent('.github/workflows/arc3-window48-native-composites.yml'), 'world48');
-assert.equal(referent('.github/workflows/arc3-sp80-action4-saturation.yml'), 'arc-run');
-assert.equal(referent('research/dives/ARC3-TRACE-001/dive.json'), 'arc-run');
-assert.equal(referent('research/dives/W13-NATIVE-RECEIPT-001/dive.json'), 'w13');
-assert.equal(referent('.github/workflows/nih-p2-source-variation.yml'), 'nih');
-assert.equal(referent('.github/workflows/ab-relational-cluster.yml'), 'ab');
-assert.equal(referent('.github/workflows/tests.yml'), 'unassigned');
-assert.equal(referent('', 'experiment/arc-sp80-stage2'), 'arc-run');
-assert.equal(prReferent({title:'WORLD Trial 13: controlled evidence',head:{ref:'misc/unlisted'}}), 'world');
-assert.equal(prReferent({title:'A surprising turn',head:{ref:'misc/unlisted'}}), 'unassigned');
+    @unittest.skipUnless(shutil.which("node"),"Node.js required")
+    def test_test_cases_recover_actual_source_lines(self):
+        js=source_script()
+        functions=js[js.index("  function projectForPath(path)"):js.index("  const state=")]
+        parsing=js[js.index("  function parseCases(text)"):js.index("  function selectedFiles()")]
+        fixture=r"""
+const assert=require('node:assert/strict');
+const src=[
+'class Verification(unittest.TestCase):',
+'    def test_small(self):',
+'        self.assertEqual(2+2,4)',
+'    def test_bound(self):',
+'        assert 7 > 2',
+'',
+'def test_external():',
+'    with pytest.raises(ValueError):',
+'        raise ValueError()',
+].join('\n');
+const cases=parseCases(src);
+assert.equal(cases.length,3);
+assert.deepEqual(cases.map(c=>c.name),['Verification.test_small','Verification.test_bound','test_external']);
+assert.deepEqual(cases.map(c=>c.line),[2,4,7]);
+assert.deepEqual(cases.map(c=>c.checks[0].line),[3,5,8]);
+assert.equal(projectForPath('network/tests/test_arc3_sp80_stage3.py'),'arc');
+assert.equal(projectForPath('network/tests/test_ab_world_trial16.py'),'world');
+assert.equal(projectForPath('network/tests/test_nih_p2_ontology.py'),'nih');
+assert.equal(projectForPath('network/tests/test_workstation_http.py'),'workstation');
+assert.equal(projectForPath('network/tests/test_ab_information.py'),'ab');
+assert.equal(projectForPath('network/tests/test_ambiguous.py'),'other');
+assert.equal(isTestPath('network/tests/test_examples.py'),true);
+assert.equal(isTestPath('README.md'),false);
 """
         with TemporaryDirectory() as d:
-            f = Path(d) / "namespaces.js"
-            f.write_text(section + assertions, encoding="utf-8")
-            run = subprocess.run(["node", str(f)], text=True, capture_output=True)
-            self.assertEqual(run.returncode, 0, run.stderr)
+            path=Path(d)/"case-inspection.js";path.write_text(functions+parsing+fixture,encoding="utf-8")
+            run=subprocess.run(["node",str(path)],capture_output=True,text=True)
+            self.assertEqual(run.returncode,0,run.stderr)
 
-
-if __name__ == "__main__":
+if __name__=="__main__":
     unittest.main()
