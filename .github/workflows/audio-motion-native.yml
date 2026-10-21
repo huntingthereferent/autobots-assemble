@@ -1,0 +1,33 @@
+name: audio-motion-native
+
+on:
+  push:
+    paths:
+      - "systems/workspace/audio_motion_*.py"
+      - "systems/workspace/audio_motion_worker_source/**"
+      - "network/tests/test_audio_motion_workstation.py"
+      - "network/tests/test_suno_export_intake.py"
+      - ".github/workflows/audio-motion-native.yml"
+  pull_request:
+    paths:
+      - "systems/workspace/audio_motion_*.py"
+      - "systems/workspace/audio_motion_worker_source/**"
+      - "network/tests/test_audio_motion_workstation.py"
+      - "network/tests/test_suno_export_intake.py"
+      - ".github/workflows/audio-motion-native.yml"
+  workflow_dispatch:
+
+jobs:
+  native-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Execute real private source editions and host-owned replay
+        run: python -m unittest -v network.tests.test_audio_motion_workstation network.tests.test_suno_export_intake
