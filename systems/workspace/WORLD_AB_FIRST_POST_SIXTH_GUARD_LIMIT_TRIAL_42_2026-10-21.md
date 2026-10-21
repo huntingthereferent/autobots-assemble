@@ -27,3 +27,7 @@ Source uses the trigonometric cosine/derivative phase approach from the earlier 
 Stack above Trial41 PR #362. Do **not** merge WORLD42 before Trial41's corrected exact-head native, inherited WORLD and complete protocol gates pass and Trial41 merges into the same experimental WORLD branch. After that parent merge, retarget WORLD42 to the original WORLD branch; require exact-head focused independent native verification, retained source + independent witness with SHA-256, inherited WORLD04–41 regressions, workspace-continuity and full repository protocol.
 
 Neutral A/B main, ARC, NIH, W13, WORLD48, DAW and All Rights Reserved license are unchanged.
+
+## Native verification runtime correction (October 21)
+
+The first WORLD42 push and PR dedicated workflows were **cancelled by the 35-minute job budget**, not by a numerical assertion. Both runs independently completed all **3 focused unit tests successfully** (one in approximately 30 minutes); they were cancelled during the later, separate source+independent witness artifact replay. No complete WORLD42 artifact was retained, and these cancelled workflow runs must **not** be interpreted as successful evidence. The dedicated workflow now grants **90 minutes** to the focused native unit-test plus separately retained evidence replay, and **60 minutes** to inherited WORLD regressions. The source equations, all 24 original constraints, independent witness, and repository-wide protocol gate are unchanged. A new exact-head completed green workflow and retained evidence remain mandatory for merging.
