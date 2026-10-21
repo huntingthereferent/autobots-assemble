@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-21T01:02:22.556287+00:00",
-  "content_sha256": "5ef9ef69721202009c1a5005ca059a43c0085167cfa81effe3c60ffbb436a47c",
+  "checked_at": "2026-10-21T07:05:15.975889+00:00",
+  "content_sha256": "d50253971a96e8c1c3bc4b27feb877fedc6c3a79fb1c7d43096ed5a2568de2d9",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 3,
-      "max_magnitude": 2.27,
+      "count": 2,
+      "max_magnitude": 1.61,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,61 +22,44 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026uvexfa",
-        "observed_at": "2026-10-21T01:02:22.008235Z",
-        "source_updated_at": "2026-10-21T00:17:51.977000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uvexfa",
+        "source_id": "nc75452806",
+        "observed_at": "2026-10-21T07:05:15.498686Z",
+        "source_updated_at": "2026-10-21T06:52:20.658000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452806",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uvexfa",
+        "canonical_key": "event:nc75452806",
         "payload": {
-          "magnitude": 2.1,
-          "place": "63 km SE of Denali National Park, Alaska",
-          "longitude": -150.987,
-          "latitude": 63.082,
-          "depth_km": 124.3,
-          "occurred_at": "2026-10-21T00:14:37.492000+00:00"
+          "magnitude": 1.59,
+          "place": "8 km W of Cobb, CA",
+          "longitude": -122.815002441406,
+          "latitude": 38.8359985351562,
+          "depth_km": 1.82000005245209,
+          "occurred_at": "2026-10-21T06:20:06.570000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "hv75061531",
-        "observed_at": "2026-10-21T01:02:22.008235Z",
-        "source_updated_at": "2026-10-21T00:49:50.770000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75061531",
+        "source_id": "nc75452811",
+        "observed_at": "2026-10-21T07:05:15.498686Z",
+        "source_updated_at": "2026-10-21T06:48:05.766000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452811",
         "entity_type": "event",
-        "canonical_key": "event:hv75061531",
+        "canonical_key": "event:nc75452811",
         "payload": {
-          "magnitude": 2.27,
-          "place": "26 km E of Honaunau-Napoopoo, Hawaii",
-          "longitude": -155.617492675781,
-          "latitude": 19.4138336181641,
-          "depth_km": 42.8800010681152,
-          "occurred_at": "2026-10-21T00:46:16.190000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75452731",
-        "observed_at": "2026-10-21T01:02:22.008235Z",
-        "source_updated_at": "2026-10-21T00:56:40.126000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452731",
-        "entity_type": "event",
-        "canonical_key": "event:nc75452731",
-        "payload": {
-          "magnitude": 1.09,
-          "place": "6 km WNW of Cobb, CA",
-          "longitude": -122.790664672852,
-          "latitude": 38.8346672058105,
-          "depth_km": 2.10999989509583,
-          "occurred_at": "2026-10-21T00:55:04.920000+00:00"
+          "magnitude": 1.61,
+          "place": "8 km ESE of Cloverdale, CA",
+          "longitude": -122.933334350586,
+          "latitude": 38.7784996032715,
+          "depth_km": 4.05000019073486,
+          "occurred_at": "2026-10-21T06:46:31.260000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-21T01:02:22.138756Z",
-      "source_updated_at": "2026-10-20T22:41:58Z",
+      "observed_at": "2026-10-21T07:05:15.624929Z",
+      "source_updated_at": "2026-10-21T05:39:36Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
@@ -84,7 +67,7 @@
         "full_name": "psf/requests",
         "default_branch": "main",
         "stargazers_count": 54532,
-        "forks_count": 12811,
+        "forks_count": 12810,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -93,7 +76,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-21T01:02:22.453546Z",
+      "observed_at": "2026-10-21T07:05:15.934407Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -115,8 +98,7 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count",
-        "stargazers_count"
+        "forks_count"
       ]
     },
     "pypi": {
