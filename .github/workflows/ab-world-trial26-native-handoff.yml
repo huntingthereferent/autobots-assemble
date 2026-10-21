@@ -1,0 +1,153 @@
+name: A/B WORLD Trial26 bounded between-sample uncertainty
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial26_handoff.py'
+      - 'network/tests/test_ab_world_trial26_handoff.py'
+      - 'work/ab_world/TRIAL26_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial26-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-native-sat-margin-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout general A/B source carrier
+        uses: actions/checkout@v4
+      - name: Checkout pinned original WORLD26
+        uses: actions/checkout@v4
+        with:
+          ref: d9a735b1a5473c0f2646778996c89e70af0d28fd
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test refusal of invented contacts and unknown interval mutations
+        run: python -m unittest -v network.tests.test_ab_world_trial26_handoff
+      - name: Run original WORLD25/26 independent geometric and velocity bound witnesses
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_finite_segment_square_overlap \
+            network.tests.test_world_ab_between_sample_clearance
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_finite_segment_square_overlap import run as run25
+          from systems.workspace.world_ab_between_sample_clearance import run as run26
+          from network.tests.test_world_ab_between_sample_clearance import verify
+          src25,src26=run25(),run26()
+          assert len(src25["cases"])==len(src26["cases"])==8
+          assert src26["conditional_third_impulse_cases"]==6
+          assert src26["no_source_third_impulse_controls"]==2
+          assert all(verify(c) for c in src26["cases"])
+          assert src26["actual_hardware_measurements"]==0
+          assert src26["fourth_impulses_selected"]==0
+          assert not src26["new_physics_engine"]
+          for label,data in (("trial26-original-source25.json",src25),
+                             ("trial26-original-native.json",src26)):
+              Path("../"+label).write_text(
+                  json.dumps(data,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial26-original-verdict.json").write_text(
+              json.dumps({
+                  "source_commit":"d9a735b1a5473c0f2646778996c89e70af0d28fd",
+                  "independent_world_axis_sat_margin_check":True,
+                  "independent_velocity_envelope_recomputed":True,
+                  "native_case_counts":{
+                      "conditional":src26["conditional_third_impulse_cases"],
+                      "refused":src26["no_source_third_impulse_controls"],
+                      "fully_nominally_covered":src26["cases_with_both_faces_nominally_covered"],
+                      "unresolved":src26["cases_with_unresolved_intervals"],
+                      "uncovered_face_intervals":src26["total_uncovered_face_intervals"],
+                  },
+                  "continuous_real_material_clearance_proven":False,
+                  "outward_rounded_floating_certificate":False,
+                  "fourth_impulses_selected":0,
+              },sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          PY
+      - name: Replay full nominal bounds with bounded unknown-interval evidence chunks
+        run: |
+          python -m work.ab_world.world_trial26_handoff \
+            --native trial26-original-native.json \
+            --source25 trial26-original-source25.json \
+            > trial26-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          native=json.load(open("trial26-original-native.json"))
+          carrier=json.load(open("trial26-ab-carrier.json"))
+          assert carrier["ledger_witness"]["valid"]
+          assert carrier["original_cases"]==8
+          assert carrier["source_conditional_cases"]==6
+          assert carrier["source_absent_controls"]==2
+          assert carrier["nominally_covered_both_faces_cases"]==native["cases_with_both_faces_nominally_covered"]
+          assert carrier["cases_with_unknown_intervals"]==native["cases_with_unresolved_intervals"]
+          assert carrier["uncovered_source_intervals"]==native["total_uncovered_face_intervals"]
+          assert carrier["uncertainty_chunk_size"]==128
+          assert carrier["ledger_witness"]["pages_verified"]==8+carrier["uncertainty_chunks"]
+          assert carrier["fourth_impulses_selected"]==0
+          assert carrier["actual_physical_impacts"]==0
+          assert not carrier["continuous_material_clearance_proven"]
+          assert not carrier["formal_outward_interval_proof"]
+          assert digest(carrier["manifest"])==carrier["manifest_sha256"]
+          Path("trial26-ab-pages").mkdir(exist_ok=True)
+          for i,p in enumerate(carrier["ledger_summaries"]):
+              assert p["case"]==i and p["witness"]["valid"]
+              assert p["receipt"]["head_hash"]==carrier["manifest"]["case_heads"][i]["head_hash"]
+              with open(f"trial26-ab-pages/case-{i:02d}.json","w") as f:
+                  json.dump(p["receipt"],f,indent=2,sort_keys=True)
+          for i,p in enumerate(carrier["ledger_uncertainty_chunks"]):
+              assert p["witness"]["valid"]
+              assert p["receipt"]["head_hash"]==carrier["manifest"]["uncertainty_heads"][i]["head_hash"]
+              with open(f"trial26-ab-pages/unknown-{i:04d}.json","w") as f:
+                  json.dump(p["receipt"],f,indent=2,sort_keys=True)
+          with open("trial26-ab-manifest.json","w") as f:
+              json.dump(carrier["manifest"],f,indent=2,sort_keys=True)
+          print(json.dumps({
+              "conditionally_modeled":carrier["source_conditional_cases"],
+              "nominally_covered_both_faces":carrier["nominally_covered_both_faces_cases"],
+              "source_uncertainties":carrier["uncovered_source_intervals"],
+              "uncertainty_pages":carrier["uncertainty_chunks"],
+              "verified_ab_operations":carrier["ledger_witness"]["steps_verified"],
+              "material_certificates":0,
+          },sort_keys=True))
+          PY
+          for file in trial26-ab-pages/*.json; do
+            python -m work.ab_world.construction --verify "$file" > "${file%.json}.verdict.json"
+          done
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          receipts=list(Path("trial26-ab-pages").glob("*.json"))
+          verd=list(Path("trial26-ab-pages").glob("*.verdict.json"))
+          assert len(receipts)==len(verd)*2
+          assert all(json.loads(p.read_text())["valid"] for p in verd)
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_finite_segment_square_overlap.py \
+            original-world/systems/workspace/world_ab_between_sample_clearance.py \
+            original-world/network/tests/test_world_ab_between_sample_clearance.py \
+            trial26-original-source25.json trial26-original-native.json \
+            trial26-original-verdict.json trial26-ab-carrier.json \
+            trial26-ab-manifest.json trial26-ab-pages/*.json \
+            > trial26-source-hashes.txt
+      - name: Retain original and independently verified interval uncertainties
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial26-nominal-between-sample-uncertainties
+          path: |
+            trial26-original-source25.json
+            trial26-original-native.json
+            trial26-original-verdict.json
+            trial26-ab-carrier.json
+            trial26-ab-manifest.json
+            trial26-ab-pages/
+            trial26-source-hashes.txt
+          retention-days: 30
