@@ -1,0 +1,110 @@
+name: A/B WORLD30 original local-clearance receipts
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial30_handoff.py'
+      - 'network/tests/test_ab_world_trial30_handoff.py'
+      - 'work/ab_world/TRIAL30_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial30-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-original-clearance-and-neutral-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout neutral A/B recording layer
+        uses: actions/checkout@v4
+      - name: Checkout unchanged original WORLD30 source at immutable SHA
+        uses: actions/checkout@v4
+        with:
+          ref: 38461711e48d59c859b855772bf8a33119c45b78
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reexecute original numerical laws and independent WORLD30 witness
+        working-directory: original-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from systems.workspace.world_ab_post_fourth_local_clearance import run as current
+          from systems.workspace.world_ab_first_finite_response_qualification import run as former
+          from network.tests.test_world_ab_post_fourth_local_clearance import verify
+          source=current()
+          parent=former()
+          assert len(source["cases"])==len(parent["cases"])==8
+          assert all(verify(case) for case in source["cases"])
+          assert source["source_qualified_fourth_candidates"]==3
+          assert source["locally_separated_conditional_candidates"]==3
+          assert source["post_candidate_geometry_unresolved"]==0
+          assert source["no_qualified_source_response"]==5
+          assert source["real_material_impacts_witnessed"]==0
+          assert source["selected_actual_fourth_impulses"]==0
+          Path("../world30-original-native.json").write_text(
+              json.dumps(source,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../world30-original-prior29.json").write_text(
+              json.dumps(parent,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../world30-original-verdict.json").write_text(json.dumps({
+              "pinned_source":"38461711e48d59c859b855772bf8a33119c45b78",
+              "original_postresponse_plane_witness_verified":True,
+              "conditional_short_local_separations":3,
+              "actual_impulses_selected":0,
+              "later_fifth_impulses":0,
+              "physical_measurements":0
+          },sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Test independent neutral transport negative controls
+        run: python -m unittest -v network.tests.test_ab_world_trial30_handoff
+      - name: Replay source-attributed A/B bounds and all eight finite histories
+        run: |
+          python -m work.ab_world.world_trial30_handoff --native world30-original-native.json --prior29 world30-original-prior29.json > world30-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          x=json.load(open("world30-ab-carrier.json"))
+          assert x["qualified_local_clearances"]==3
+          assert x["source_unresolved_local_cases"]==0
+          assert x["without_original_fourth_candidate"]==5
+          assert x["physical_fourth_impacts_selected"]==0
+          assert x["fifth_impulses_computed"]==0
+          assert x["actual_post_contact_motion_authenticated"]==0
+          assert x["ledger_witness"]["valid"]
+          assert x["ledger_witness"]["pages_verified"]==8
+          assert x["manifest_digest"]==digest(x["manifest"])
+          folder=Path("world30-ab-pages")
+          folder.mkdir(exist_ok=True)
+          for p in x["ledger_pages"]:
+              rec=p["receipt"]
+              assert verify_receipt(rec)["valid"]
+              assert rec["head_hash"]==x["manifest"]["ordered_ledger_heads"][p["index"]]["head_hash"]
+              folder.joinpath(f'case-{p["index"]:02d}.json').write_text(
+                  json.dumps(rec,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("world30-ab-manifest.json").write_text(
+              json.dumps(x["manifest"],sort_keys=True,indent=2)+"\n")
+          PY
+          sha256sum world30-original-native.json world30-original-prior29.json world30-original-verdict.json world30-ab-carrier.json world30-ab-manifest.json world30-ab-pages/case-*.json > world30-ab-source-digests.txt
+      - name: Retain source-owned original and neutral A/B evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world30-conditional-clearance-ledgers
+          path: |
+            world30-original-native.json
+            world30-original-prior29.json
+            world30-original-verdict.json
+            world30-ab-carrier.json
+            world30-ab-manifest.json
+            world30-ab-pages/
+            world30-ab-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
