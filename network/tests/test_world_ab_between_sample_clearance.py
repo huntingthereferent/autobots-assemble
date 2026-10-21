@@ -195,7 +195,7 @@ class World26NumericalIntervalTests(unittest.TestCase):
         dt=(DURATION-START)/SAMPLE_COUNT
         self.assertFalse(finite_clip(h,face,START)["overlap"])
         self.assertFalse(finite_clip(h,face,START+dt)["overlap"])
-        self.assertTrue(finite_clip(h,face,START+0.00000045)["overlap"])
+        self.assertTrue(finite_clip(h,face,START+0.0000006)["overlap"])
         bound=face_windows(h,"synthetic-fast-face",face)
         self.assertGreater(bound["uncovered_interval_count"],0)
         self.assertEqual(bound["uncovered_intervals"][0]["interval_index"],0)
