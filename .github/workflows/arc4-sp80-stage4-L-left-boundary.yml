@@ -1,0 +1,28 @@
+name: ARC4 genuine SP80 left boundary after full-cup L piece
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_L_left_boundary.py'
+      - '.github/workflows/arc4-sp80-stage4-L-left-boundary.yml'
+jobs:
+  authentic-original-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original source SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile genuine stage4 source
+        run: python -m compileall -q work/arc3/native_sp80_stage4_L_left_boundary.py
+      - name: Run 48 original SDK full-cup left-boundary contrasts
+        run: python -m work.arc3.native_sp80_stage4_L_left_boundary --out runtime/data/arc4/original-sp80-stage4-L-left-boundary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage4-L-left-boundary
+          path: runtime/data/arc4/original-sp80-stage4-L-left-boundary.*
+          if-no-files-found: error
+          retention-days: 14
