@@ -173,7 +173,7 @@ class Source27ThreeWayCarrierTests(unittest.TestCase):
             carry(a,b,c)
         a,b,c=fixture()
         c["cases"][1]["source_trial25_intersecting_grid_samples"]=99
-        with self.assertRaisesRegex(ValueError,"original three source stages"):
+        with self.assertRaisesRegex(ValueError,"source25 sampled-overlap counts"):
             carry(a,b,c)
 
     def test_04_controls_without_model_impulse_acquire_no_face_or_collision(self):
