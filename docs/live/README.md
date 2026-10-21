@@ -1,8 +1,12 @@
 # Workstation
 
-[Workstation](work.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
+
+## Native audio intake (Suno export compatibility)
+
+[Audio intake](suno-intake.html) is an **independent local, source-first instrument** for user-supplied WAV/MP3 and MIDI files, including files exported through Suno's documented workflows. It provides bounded waveform observation, SHA-256 content identities where supported, audio slicing, playback-rate pitch mapping, PCM16 WAV export, MIDI note/timing inspection, and a provenance manifest. It does **not** connect to Suno accounts, scrape Suno, use private APIs, copy Suno software, or create new generated music. [Scope and evidence](../../work/projects/suno-export-intake/README.md).
 
 ## Evidence boundaries
 
