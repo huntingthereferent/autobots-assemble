@@ -144,6 +144,14 @@ def carry(native27: dict[str,Any],native25: dict[str,Any],
                 row.get("original_source_third_impulse")==
                 x25.get("source_third_impulse")==x26.get("source_third_impulse"),
                 "original three source stages or third-impulse ancestry altered")
+        earlier_faces=x25.get("face_results")
+        require(type(earlier_faces) is list and
+                all(type(f) is dict and
+                    type(f.get("intersecting_grid_samples")) is int
+                    for f in earlier_faces) and
+                x26.get("source_trial25_intersecting_grid_samples") ==
+                sum(f["intersecting_grid_samples"] for f in earlier_faces),
+                "original source25 sampled-overlap counts and WORLD26 ancestry diverged")
         for key,value in (
             ("source_original_window",[START,END]),
             ("source_intervals_per_face",N),
