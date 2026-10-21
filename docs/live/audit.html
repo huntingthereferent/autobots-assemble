@@ -2,411 +2,299 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a1118">
 <title>Referent audit · Hunting the Referent</title>
-<meta name="description" content="Live read-only audit, grouped by the project's actual referent and source paths, with executable history and source-recorded next steps.">
+<meta name="description" content="Read-only project data audit: individual source-pinned test cases, assertions, research records, and an exportable human review ledger.">
 <style>
-:root{color-scheme:dark;--bg:#091118;--panel:#121f29;--raised:#1a2b36;--line:#304651;--text:#eaf2f5;--dim:#a5bbc6;--blue:#8ed3ef;--green:#9bdcba;--amber:#f0cc92;--red:#f1abaa;--mono:ui-monospace,SFMono-Regular,Consolas,monospace;--sans:Inter,"Segoe UI",system-ui,sans-serif}
-*{box-sizing:border-box}body{margin:0;min-width:320px;background:radial-gradient(900px 500px at 55% -250px,#1c3947,transparent),var(--bg);color:var(--text);font:13px/1.65 var(--sans)}
-a{color:#afe4f6;text-decoration:none}a:hover{text-decoration:underline}button,input{font:inherit;color:inherit;background:#172a35;border:1px solid #405865;border-radius:8px;padding:9px 12px}button{cursor:pointer}button:hover{background:#254150}button:focus-visible,input:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:13px clamp(16px,3vw,45px);border-bottom:1px solid var(--line);background:#0c1720}
-.brand{font:700 12px var(--sans);letter-spacing:.07em}.top nav{display:flex;gap:8px;flex-wrap:wrap}.top nav a{padding:7px 10px;color:var(--dim);font-size:11px;border-radius:6px}.top nav a[aria-current]{background:#233846;color:var(--text)}
-.shell{max-width:1600px;margin:auto;padding:28px clamp(13px,2.7vw,38px) 65px}
-.hero{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;padding:10px 0 24px;border-bottom:1px solid var(--line)}
-.eyebrow{font:600 10px var(--mono);letter-spacing:.13em;color:var(--blue);text-transform:uppercase}.hero h1{font-size:clamp(28px,3.3vw,44px);letter-spacing:-.04em;font-weight:650;line-height:1.15;margin:10px 0}
-.hero p{color:var(--dim);max-width:810px;line-height:1.7;margin:7px 0 0}.controls{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.controls input{width:min(330px,78vw)}
-.statusbar{margin:14px 0 22px;display:flex;gap:10px 24px;flex-wrap:wrap;align-items:center;color:var(--dim);font:11px/1.7 var(--mono)}
-.pulse{width:8px;height:8px;display:inline-block;background:#758b98;border-radius:50%;margin-right:7px}.pulse.ok{background:var(--green)}.pulse.bad{background:var(--red)}
-.layout{display:grid;grid-template-columns:minmax(215px,260px) minmax(0,1fr);gap:20px;align-items:start}
-.side{border:1px solid var(--line);background:var(--panel);border-radius:12px;position:sticky;top:12px;overflow:hidden}
-.side h2{font-size:11px;letter-spacing:.11em;color:var(--dim);padding:15px 16px;border-bottom:1px solid var(--line);margin:0;text-transform:uppercase}
-.ref-btn{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;width:100%;border:0;border-bottom:1px solid #273b47;border-radius:0;background:none;padding:12px 16px;font-size:13px;min-height:50px}
-.ref-btn[aria-pressed=true]{box-shadow:inset 3px 0 var(--blue);background:#1d3542;color:#fff}.ref-btn small{font:11px var(--mono);color:var(--dim)}
-.note{padding:15px;color:var(--dim);font-size:11px;line-height:1.8}
-.main{min-width:0}.overview{background:linear-gradient(120deg,#152934,#111d26);border:1px solid #3b5360;border-radius:12px;padding:23px 25px;margin-bottom:20px}
-.breadcrumb{color:var(--blue);font:11px var(--mono);letter-spacing:.02em}.overview h2{font-size:clamp(23px,2.5vw,33px);letter-spacing:-.03em;margin:8px 0 6px}.overview p{margin:0;color:var(--dim)}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:20px}.metric{background:#0d1b24;padding:12px 13px;border:1px solid var(--line);border-radius:8px;min-width:0}.metric strong{font:500 25px/1.1 var(--mono)}.metric small{display:block;color:var(--dim);font:10px/1.5 var(--mono);margin-top:7px}
-.split{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.85fr);gap:18px}
-.section{min-width:0;margin-bottom:23px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:15px;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:12px}.section-head h3{font-size:17px;letter-spacing:-.015em;font-weight:650;margin:0}.section-head small{font:10px var(--mono);color:var(--dim)}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.family{border-bottom:1px solid var(--line)}.family:last-child{border-bottom:0}
-details>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px}
-details>summary::-webkit-details-marker{display:none}details>summary:before{content:"▸";color:var(--blue);margin-right:3px}details[open]>summary:before{content:"▾"}
-.summary-main{min-width:0;flex:1}.summary-main strong{display:block;font-size:12px;overflow-wrap:anywhere}.summary-main small{display:block;color:var(--dim);font:10px/1.6 var(--mono);overflow-wrap:anywhere;margin-top:4px}
-.family>summary{background:var(--raised)}.tree{padding:3px 0 8px 16px;border-left:1px solid #405764;margin-left:17px}
-.runitem{border-bottom:1px solid #2b404b}.runitem:last-child{border-bottom:0}.runitem>summary{padding:12px 14px}.run-detail{padding:5px 15px 17px 23px;color:var(--dim);font:11px/1.8 var(--mono)}
-.run-detail p{margin:5px 0 9px}.pill{display:inline-block;flex:none;border:1px solid #60717e;border-radius:6px;color:#d8e4ea;padding:3px 7px;font:600 10px var(--mono);white-space:nowrap}
-.pill.success{color:var(--green);border-color:#427460}.pill.failure,.pill.cancelled,.pill.timed_out{color:var(--red);border-color:#a55e62}.pill.in_progress,.pill.queued{color:var(--blue);border-color:#487a91}
-.source-row{padding:13px 15px;border-bottom:1px solid #293d48}.source-row:last-child{border:0}.source-row strong{font-size:12px;display:block;overflow-wrap:anywhere}.source-row .sub{display:block;color:var(--dim);font:10px/1.65 var(--mono);margin:5px 0;overflow-wrap:anywhere}
-.source-row p{margin:7px 0;color:#c0d3dd;font-size:12px;overflow-wrap:anywhere}.source-row .next{border-left:2px solid var(--blue);padding-left:12px}.source-row .wall{border-left:2px solid var(--amber);padding-left:12px;color:var(--amber)}
-.source-row details>summary{padding:6px 0}.source-row details>summary:before{font-size:12px}
-.job{border-left:2px solid #4a6574;margin:10px 0;padding:8px 10px;background:#182b36}.job strong{color:var(--text)}.job ol{margin:6px 0 0;padding-left:22px}.job li{padding:3px 0}.job li span{color:#9bdcba}.tiny{font:10px/1.7 var(--mono);color:var(--dim)}.empty{margin:0;padding:20px;color:var(--dim);font-size:12px}.caution{padding:12px 15px;font:11px/1.7 var(--mono);color:var(--amber);border:1px solid #685943;border-radius:8px;margin:13px 0}
-button.inline{font:11px var(--mono);padding:6px 10px;margin:5px 8px 5px 0}
-.pager{text-align:center;margin:13px 0}.footer{border-top:1px solid var(--line);padding-top:20px;margin-top:20px;color:var(--dim);font:11px/1.8 var(--mono)}
-@media(max-width:1020px){.split{grid-template-columns:1fr}.side{position:static}}@media(max-width:680px){.layout{grid-template-columns:1fr}.side{position:static}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{align-items:start}.controls input{width:100%}}
-/* The standalone source component also fits within the same Workstation page. */
-html.embedded body{background:transparent}
-html.embedded .top{display:none}
-html.embedded .shell{max-width:none;margin:0;padding:4px 1px 20px}
-html.embedded .hero{padding:4px 0 17px}
-html.embedded .hero h1,html.embedded .hero .eyebrow{display:none}
-html.embedded .statusbar{margin:12px 0 18px}
+:root{color-scheme:dark;--bg:#091118;--panel:#121f29;--raised:#1a2b36;--line:#304651;--text:#eaf2f5;--dim:#a5bbc6;--blue:#8ed3ef;--amber:#f0cc92;--mono:ui-monospace,Consolas,monospace;--sans:Inter,"Segoe UI",system-ui,sans-serif}
+*{box-sizing:border-box}body{background:var(--bg);color:var(--text);font:13px/1.6 var(--sans);margin:0;min-width:300px}a{color:#afe4f6;text-decoration:none}a:hover{text-decoration:underline}
+button,input,select,textarea{font:inherit;color:inherit;background:#172a35;border:1px solid #405865;border-radius:7px;padding:8px 10px}button{cursor:pointer}button:hover{background:#254150}button:disabled{opacity:.5;cursor:not-allowed}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:12px clamp(12px,3vw,36px);border-bottom:1px solid var(--line)}
+.top nav{display:flex;gap:15px}.brand{font-weight:650;letter-spacing:.08em}
+.shell{max-width:1580px;margin:auto;padding:22px clamp(12px,2.7vw,38px) 75px}
+.eyebrow,.tiny{font:11px/1.8 var(--mono);color:var(--dim)}.eyebrow{color:var(--blue);letter-spacing:.1em;text-transform:uppercase}
+h1{font-size:clamp(26px,3vw,39px);margin:7px 0 10px;letter-spacing:-.025em}h2{font-size:18px;margin:0 0 12px}h3{font-size:14px;margin:0 0 8px}p{margin:7px 0 13px}.muted{color:var(--dim)}.lead{max-width:1000px;color:#c4d7e0}
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:16px 0 22px}.toolbar input{min-width:225px;flex:1}.toolbar button{white-space:nowrap}
+.layout{display:grid;grid-template-columns:minmax(185px,235px) minmax(220px,330px) minmax(0,1fr);gap:15px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.panel-head{background:var(--raised);padding:12px 14px;border-bottom:1px solid var(--line)}
+.panel-head h2{font-size:13px;margin:0}.panel-head small{color:var(--dim);display:block;font:10px/1.5 var(--mono)}
+.list{max-height:680px;overflow:auto}.list button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #2b404b;border-radius:0;background:transparent;padding:12px 14px;overflow-wrap:anywhere;font-size:12px}.list button[aria-current=true]{box-shadow:inset 3px 0 var(--blue);background:#1c3645}.list button small{display:block;font:10px/1.5 var(--mono);color:var(--dim);margin-top:4px}
+.view{padding:16px;min-height:425px}.case-head{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:10px}.case-nav{display:flex;gap:8px;flex-wrap:wrap}
+.code{padding:12px;border:1px solid #354c5b;border-radius:6px;background:#09151e;font:11px/1.55 var(--mono);white-space:pre;overflow:auto;max-height:440px;tab-size:4}
+.checks{margin:8px 0 15px;padding:0;list-style:none}.checks li{padding:7px 9px;border-bottom:1px solid var(--line);font:11px var(--mono);overflow-wrap:anywhere}
+.assess{display:grid;gap:7px;margin-top:20px}.assess select,.assess textarea{width:100%}.assess textarea{min-height:95px}.assessment-note{border-left:2px solid var(--amber);padding:8px 12px;background:#302a24;color:#f2d9ad;margin:13px 0;font-size:11px}
+.meta{font:11px/1.7 var(--mono);color:var(--dim);overflow-wrap:anywhere}.meta a{overflow-wrap:anywhere}.summary{padding:14px}.research{margin-top:18px}.research details{border-top:1px solid var(--line);padding:10px 14px}.research summary{cursor:pointer;font-size:12px;overflow-wrap:anywhere}.research p{font-size:11px}.notice{border:1px solid #6a5b44;padding:11px 14px;color:#f0cd94;border-radius:8px;margin:12px 0}.footer{margin-top:25px;padding-top:16px;border-top:1px solid var(--line);color:var(--dim);font-size:11px}
+@media(max-width:1090px){.layout{grid-template-columns:190px minmax(0,1fr)}.detail{grid-column:1/-1}}@media(max-width:630px){.layout{grid-template-columns:1fr}.detail{grid-column:auto}.list{max-height:270px}}
+html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
 </style>
 </head>
 <body>
-<header class="top"><a class="brand" href="work.html">HUNTING THE REFERENT <span style="color:var(--blue)">/ AUDIT</span></a>
-<nav aria-label="Workstation"><a href="work.html">WORKSTATION</a><a href="work.html#audit" aria-current="page">AUDIT</a><a href="trace.html">PROVENANCE</a><a href="../game/">WORLD48 GAME</a></nav></header>
+<header class="top"><a class="brand" href="work.html">HUNTING THE REFERENT / AUDIT</a><nav><a href="work.html">WORKSTATION</a><a href="work.html#audit">AUDIT</a><a href="trace.html">PROVENANCE</a></nav></header>
 <main class="shell">
-<section class="hero"><div><div class="eyebrow">REFERENT / SOURCE-BOUND AUDIT / READ ONLY</div><h1>Audit viewer</h1><p>Choose the project referent. Follow the source-owned lines of work through branch, workflow, run, job and step, alongside recorded results, unresolved walls, and proposed next tests. These are two separately attributed evidence streams—not an invented causal chain.</p></div>
-<div class="controls"><input type="search" id="search" placeholder="Filter within the selected referent" aria-label="Filter selected referent"><button id="refresh" type="button">Refresh sources</button></div></section>
-<div class="statusbar" role="status"><span><i class="pulse" id="pulse"></i><span id="connection">No fresh source read yet</span></span><span id="time">—</span><span id="sample">Bounded public source sample</span><span id="ticks">GitHub polling · two minutes</span></div>
-<div class="layout"><aside class="side" aria-label="Select project referent"><h2>Project referent</h2><div id="referents"></div><p class="note">Referents are anchored by exact, disclosed source-path and branch-prefix rules. Unmatched material stays unassigned. Classification is not proof that a workflow executed a research record.</p></aside>
-<div class="main">
-<section class="overview"><span class="breadcrumb" id="breadcrumb">REFERENT / ARC RUN</span><h2 id="heading">ARC Run</h2><p id="description">Live execution evidence and the separately committed investigation ledger.</p>
-<div class="metrics"><div class="metric"><strong id="metric-runs">—</strong><small>OBSERVED RUNS</small></div><div class="metric"><strong id="metric-active">—</strong><small>QUEUED / RUNNING</small></div><div class="metric"><strong id="metric-failed">—</strong><small>FAILED / CANCELLED</small></div><div class="metric"><strong id="metric-sources">—</strong><small>SOURCE RECORDS</small></div></div></section>
-<div id="alert" role="status" hidden></div>
-<div class="split"><div>
-<section class="section" id="executions"><div class="section-head"><h3>Observed execution lineage</h3><small id="run-window">GitHub Actions · first 100 latest</small></div>
-<p class="tiny">Referent → workflow family → workflow → exact run → jobs → ordered steps. A green workflow result verifies only its recorded checks. Branch names and SHAs belong to GitHub source records.</p>
-<div class="panel" id="runs"><p class="empty">Loading GitHub runs…</p></div><div class="pager"><button id="older" type="button">Load older 100 runs</button><div class="tiny" id="older-state">The live API is paginated; this is not all history.</div></div></section>
-<section class="section"><div class="section-head"><h3>Open branches and proposed changes</h3><small>GitHub pull requests · not execution</small></div><div class="panel" id="prs"><p class="empty">Reading open PR records…</p></div></section>
-</div><div>
-<section class="section"><div class="section-head"><h3>Recorded next movements</h3><small>Source-owned, historical until reconfirmed</small></div><div class="panel" id="next"><p class="empty">Reading next steps from the original research projection…</p></div></section>
-<section class="section"><div class="section-head"><h3>Research &amp; unresolved boundaries</h3><small id="research-scope">Structured results + source headings</small></div><div class="panel" id="research"><p class="empty">Reading source records…</p></div></section>
-</div></div></div></div>
-<footer class="footer">This viewer never starts workers or treats a ticking connection as a result. Workflow data is fetched live from GitHub when possible. Research history is a periodically committed source projection; no private runtime journals are exposed. An absent match, older page, unpublished journal or failed API response cannot establish that no work exists.</footer>
+<div class="eyebrow">Source-owned project inspection / not live monitoring</div>
+<h1>Research data audit</h1>
+<p class="lead">Choose a project, then a test file. Inspect individual test definitions, source assertions, and recorded JSON data entries, one at a time. Record a human assessment with a note and export it. <strong>Source declarations are not execution results.</strong></p>
+<div class="toolbar"><select id="mode" aria-label="Choose audit material"><option value="tests">Test definitions</option><option value="data">Recorded JSON data</option></select><input id="search" type="search" aria-label="Find source file" placeholder="Find a source file in the selected project"><button id="reload" type="button">Reload source snapshot</button><button id="export" type="button">Export review ledger</button></div>
+<div class="meta" id="snapshot" role="status">Reading the repository source tree…</div>
+<div class="notice" id="alert" role="alert" hidden></div>
+<div class="layout">
+<aside class="panel"><div class="panel-head"><h2>Project</h2><small>Explicit source-name routing; unmatched remains unassigned</small></div><div id="referents" class="list"></div></aside>
+<section class="panel"><div class="panel-head"><h2 id="file-heading">Source test files</h2><small>Choose a source file; inspect individual records or tests</small></div><div id="test-files" class="list"><p class="summary muted">Loading test-source paths…</p></div></section>
+<section class="panel detail"><div class="panel-head"><h2>Individual source review</h2><small id="test-position">Select a file to inspect test definitions</small></div><div id="case-source" class="view"><p class="muted">Choose a test or JSON evidence file to examine entries one by one.</p></div></section>
+</div>
+<section class="panel research"><div class="panel-head"><h2>Source-recorded investigation evidence</h2><small>From the published research projection. Independent of a test's assertions or verdict.</small></div><div id="research" class="summary">Reading existing research source records…</div></section>
+<p class="footer">This is an inspection and annotation tool. It does not run tests, declare tests passed, audit private journals, or update the repository. Tests and JSON data are discovered from tracked source paths, not from a fabricated status dashboard. JSON parsing is not semantic validation. Dynamic tests and tests using other naming conventions may be missing. Source SHA and line links are retained in exported reviews. An unavailable source is unknown, not evidence of absence. The separate executions section of Workstation remains available for GitHub job outcomes.</p>
 </main>
 <script>
 'use strict';
 (() => {
-  const embedded=new URLSearchParams(location.search).get('embedded')==='1'&&window.parent!==window;
-  if(embedded){
-    document.documentElement.classList.add('embedded');
-    const announceSize=()=>{
-      const height=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);
-      window.parent.postMessage({type:'referent-audit:resize',height},location.origin);
-    };
-    if(typeof ResizeObserver==='function'){
-      const watcher=new ResizeObserver(announceSize);
-      watcher.observe(document.body);
-    }
-    window.addEventListener('resize',announceSize);
-    window.addEventListener('load',announceSize);
-    requestAnimationFrame(announceSize);
-  }
   const REPO='huntingthereferent/autobots-assemble';
   const API='https://api.github.com/repos/'+REPO;
   const RESEARCH='https://raw.githubusercontent.com/'+REPO+'/main/views/traces/research-live.json';
-  const PERIOD=120000, GAP=90000;
   const $=id=>document.getElementById(id);
+  const elem=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n};
+  const link=(text,url)=>{const a=elem('a',text);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a};
   const REFS=[
-    {id:'arc-run',label:'ARC Run',description:'Native ARC investigations and SP80 experiments.'},
-    {id:'world48',label:'World48',description:'The finite World48 construction and native experiment branches.'},
-    {id:'world',label:'WORLD Trials',description:'Physical world motion experiments, separate from World48.'},
-    {id:'w13',label:'W13 / Game',description:'W13 owner, native verifier and temporal handoffs.'},
-    {id:'nih',label:'NIH',description:'NIH phase 1/2 research and source comparisons.'},
-    {id:'ab',label:'A/B',description:'A/B finite tools, research and selected source-swallow lanes.'},
-    {id:'workstation',label:'Workstation',description:'Workstation construction and delivery workflows.'},
-    {id:'unassigned',label:'Unassigned',description:'Source identities with no declared referent-path rule.'}
+    {id:'arc',name:'ARC / SP80'},
+    {id:'world48',name:'World48'},
+    {id:'world',name:'WORLD motion'},
+    {id:'w13',name:'W13 / game'},
+    {id:'nih',name:'NIH'},
+    {id:'ab',name:'A/B finite research'},
+    {id:'workstation',name:'Workstation'},
+    {id:'other',name:'Unassigned tests'},
+    {id:'all',name:'All indexed test files'}
   ];
-  // These are exact namespace rules for organization, not guesses about causality.
-  // More specific namespaces (World48, W13) precede the broad ARC/Workstation roots.
-  const RULES=[
-    ['world48',/^(?:\.github\/workflows\/(?:arc3-window48|world48)|docs\/window48|work\/arc3\/window48|work\/world48|views\/world-continuity\/)/i],
-    ['w13',/^(?:\.github\/workflows\/(?:w13-|game-w13|game-worker-ready|owner-game-ready|owner-ready-cross-run|owner-temporal-handoff|workstation-w13)|research\/dives\/W13-|systems\/workspace\/(?:W13_|GAME_W13_|game_w13_|w13_))/i],
-    ['arc-run',/^(?:\.github\/workflows\/arc3-|research\/dives\/ARC3-TRACE-001\/|research\/arc_native_runs\/|work\/arc3\/)/i],
-    ['nih',/^(?:\.github\/workflows\/nih-|systems\/workspace\/(?:NIH_|nih_))/i],
-    ['ab',/^(?:\.github\/workflows\/ab-|systems\/workspace\/(?:AB_|ab_))/i],
-    ['world',/^(?:\.github\/workflows\/(?:world-continuity|world-)|systems\/workspace\/WORLD_)/i],
-    ['workstation',/^(?:\.github\/workflows\/workstation-|docs\/live\/|runtime\/http\/workstation|systems\/workspace\/WORKSTATION_)/i]
-  ];
-  const BRANCH_RULES=[
-    ['world48',/^(?:experiment\/(?:world48|arc-window48)|world48)/i],
-    ['arc-run',/^(?:experiment\/arc(?:3|-sp80)|arc3?[-/])/i],
-    ['world',/^(?:experiment\/world-trial|world-trial)/i],
-    ['nih',/^(?:experiment\/nih-|nih-)/i],
-    ['w13',/^(?:experiment\/w13-|w13-)/i],
-    ['ab',/^(?:swallow-|experiment\/ab-)/i],
-    ['workstation',/^(?:design\/workstation-|workstation-)/i]
-  ];
-  function referent(path,branch=''){
-    const p=typeof path==='string'?path:'';
-    for(const [id,pattern] of RULES)if(pattern.test(p))return id;
-    for(const [id,pattern] of BRANCH_RULES)if(pattern.test(branch))return id;
-    return 'unassigned';
+  // Test-file ownership is a navigation rule, not proof of an execution relationship.
+  function projectForPath(path){
+    const s=String(path||'').toLowerCase();
+    if(/(?:world48|window48)/.test(s))return 'world48';
+    if(/(?:w13|game_w13|owner_native|owner_verifier|cross_run)/.test(s))return 'w13';
+    if(/(?:nih|aact|clinical|temporal_kg|ontology|metapath|pharmkg)/.test(s))return 'nih';
+    if(/(?:ab_world|world_trial|world_continuity|square_contact|motion_contact)/.test(s))return 'world';
+    if(/\/arc_like_maze\/chatbot\//.test(s))return 'ab';
+    if(/(?:arc3|sp80|ft09|sk48|ls20|arc_native|arc_agi|arc_like_maze|\/arc3\/)/.test(s))return 'arc';
+    if(/(?:workstation|workspace|handoff|process_worker|agent_lineage|agent_service|audit_ui|research_observatory|research_live)/.test(s))return 'workstation';
+    if(/(?:test_ab_|test_finite_|test_correspondence|test_language_referent|\/ab_|\/finite_|\/correspondence|\/language_referent|\/arc_like_maze\/chatbot\/)/.test(s))return 'ab';
+    return 'other';
   }
-  function prReferent(p){
-    const branch=p?.head?.ref||'';
-    const chosen=referent('',branch);
-    if(chosen!=='unassigned')return chosen;
-    const t=typeof p?.title==='string'?p.title:'';
-    if(/^WORLD Trial \d+\b/i.test(t))return 'world';
-    if(/^ARC SP80\b/i.test(t))return 'arc-run';
-    return 'unassigned';
+  function isTestPath(path){
+    if(!/\.py$/.test(path))return false;
+    const name=path.split('/').pop();
+    return /^test_[\w-]+\.py$/.test(name)||/_test\.py$/.test(name)||/\/tests\/[^/]+\.py$/.test(path)||/\/browser_[^/]+_check\.py$/.test(path);
   }
-  function family(ref,path,branch=''){
-    const s=(path+' '+branch).toLowerCase();
-    if(ref==='arc-run')return s.includes('sp80')?'SP80':'Other ARC3';
-    if(ref==='world48')return s.includes('window48')?'Window48':'World48 sources';
-    if(ref==='nih')return s.includes('phase1')||s.includes('phase-1')?'Phase 1':'Phase 2 / other NIH';
-    if(ref==='w13')return s.includes('owner')?'Owner / verification':'W13 native / handoff';
-    if(ref==='world')return s.includes('trial')?'Motion trials':'World continuity';
-    if(ref==='ab')return s.includes('swallow')?'Source-swallow':'A/B core';
-    if(ref==='workstation')return s.includes('delivery')?'Delivery':'Construction / integration';
-    return 'Unassigned source';
+  function isDataPath(path){
+    return /\.json$/.test(path)&&/^(?:research\/|work\/|evidence\/|views\/|network\/tests\/fixtures\/|state\/|docs\/)/.test(path);
   }
-  function elem(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n}
-  function anchor(text,url){const a=elem('a',text);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
-  function safePath(s){return typeof s==='string'&&/^[\w./-]+$/.test(s)&&!s.split('/').includes('..')}
-  function srcURL(path,line){return 'https://github.com/'+REPO+'/blob/main/'+path.split('/').map(encodeURIComponent).join('/')+(Number.isInteger(line)?'#L'+line:'')}
-  function sourceLink(text,path,line){return safePath(path)?anchor(text,srcURL(path,line)):elem('span','Invalid source path')}
-  function stateClass(s){return ['success','failure','cancelled','timed_out','in_progress','queued'].includes(s)?s:''}
-  function badge(s){return elem('span',String(s||'unknown').replaceAll('_',' ').toUpperCase(),'pill '+stateClass(s))}
-  function status(r){return r.status==='completed'?(r.conclusion||'unknown'):r.status||'unknown'}
-  function date(s){const t=Date.parse(s||'');return Number.isFinite(t)?new Date(t).toLocaleString():'no source timestamp'}
-  async function json(url){const res=await fetch(url,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!res.ok)throw Error('HTTP '+res.status);return res.json()}
-  const app={selected:new URLSearchParams(location.search).get('referent')||'arc-run',
-    runs:[],prs:null,research:null,runLoaded:false,prsLoaded:false,sourceLoaded:false,
-    runsTotal:null,checked:0,lastAttempt:0,reading:false,olderPage:2,olderBusy:false,
-    jobs:new Map(),commits:new Map(),rateLimitUntil:0,tick:null,ticks:0};
-  if(!REFS.some(x=>x.id===app.selected))app.selected='arc-run';
-  function setAlert(m){const a=$('alert');a.hidden=!m;a.className='caution';a.textContent=m||''}
-  function filterText(s){return !($('search').value.trim())||String(s||'').toLowerCase().includes($('search').value.trim().toLowerCase())}
-  function refCount(id){return app.runs.filter(x=>referent(x.path,x.head_branch)===id).length}
-  function renderSide(){
+  function parseData(text){
+    const data=JSON.parse(text),out=[];
+    const push=(name,value)=>out.push({name,line:null,checks:[],body:JSON.stringify(value,null,2),data:true});
+    if(Array.isArray(data))data.forEach((value,i)=>push('['+i+']',value));
+    else if(data&&typeof data==='object'){
+      for(const [name,value] of Object.entries(data)){
+        if(Array.isArray(value))value.forEach((item,i)=>push(name+'['+i+']',item));
+        else push(name,value);
+      }
+    }else push('value',data);
+    return out;
+  }
+  const state={project:'arc',mode:'tests',head:'',files:[],dataFiles:[],selected:'',cases:[],position:0,source:'',research:null,reviews:new Map(),readCache:new Map(),loading:false};
+  let embedded=new URLSearchParams(location.search).get('embedded')==='1'&&window.parent!==window;
+  if(embedded){
+    document.documentElement.classList.add('embedded');
+    const resize=()=>window.parent.postMessage({type:'referent-audit:resize',height:Math.max(document.body.scrollHeight,document.documentElement.scrollHeight)},location.origin);
+    if(typeof ResizeObserver==='function')new ResizeObserver(resize).observe(document.body);
+    window.addEventListener('load',resize);window.addEventListener('resize',resize);requestAnimationFrame(resize);
+  }
+  const urlProject=new URLSearchParams(location.search).get('referent');
+  if(REFS.some(r=>r.id===urlProject))state.project=urlProject;
+  function alert(message){$('alert').hidden=!message;$('alert').textContent=message||''}
+  function sourceURL(path,line){return 'https://github.com/'+REPO+'/blob/'+state.head+'/'+path.split('/').map(encodeURIComponent).join('/')+(line?'#L'+line:'')}
+  async function json(url){const r=await fetch(url,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});if(!r.ok)throw Error('HTTP '+r.status);return r.json()}
+  async function sourceText(path){
+    const key=state.head+':'+path;
+    if(state.readCache.has(key))return state.readCache.get(key);
+    const url='https://raw.githubusercontent.com/'+REPO+'/'+state.head+'/'+path.split('/').map(encodeURIComponent).join('/');
+    const r=await fetch(url,{cache:'no-store'});
+    if(!r.ok)throw Error('Source HTTP '+r.status);
+    const text=await r.text();state.readCache.set(key,text);return text;
+  }
+  function parseCases(text){
+    const lines=text.split(/\r?\n/),cases=[],classes=[];
+    for(let i=0;i<lines.length;i++){
+      const raw=lines[i],indent=(raw.match(/^\s*/)||[''])[0].length;
+      const klass=raw.match(/^\s*class\s+([A-Za-z_]\w*)\s*[:(]/);
+      if(klass){while(classes.length&&classes[classes.length-1].indent>=indent)classes.pop();classes.push({indent,name:klass[1]});}
+      const test=raw.match(/^\s*(?:async\s+)?def\s+(test_[A-Za-z_]\w*)\s*\(/);
+      if(!test)continue;
+      while(classes.length&&classes[classes.length-1].indent>=indent)classes.pop();
+      let end=i+1;
+      while(end<lines.length){
+        const v=lines[end],sp=(v.match(/^\s*/)||[''])[0].length;
+        if(v.trim()&&sp<=indent&&!v.trim().startsWith('#'))break;
+        end++;
+      }
+      const body=lines.slice(i,end);
+      const checks=[];
+      for(let j=0;j<body.length;j++){
+        if(/\bassert\s+|\bassert[A-Z]\w*\s*\(|\bpytest\.raises\s*\(|\bself\.fail\s*\(|\braise\s+AssertionError/.test(body[j]))
+          checks.push({line:i+j+1,statement:body[j].trim()});
+      }
+      cases.push({name:(classes.length?classes[classes.length-1].name+'.':'')+test[1],line:i+1,end,checks,body:body.join('\n')});
+    }
+    return cases;
+  }
+  function selectedFiles(){
+    const q=$('search').value.trim().toLowerCase();
+    const files=state.mode==='data'?state.dataFiles:state.files;
+    return files.filter(f=>(state.project==='all'||projectForPath(f.path)===state.project)&&(!q||f.path.toLowerCase().includes(q)));
+  }
+  function renderProjects(){
     const dest=$('referents');dest.replaceChildren();
-    for(const r of REFS){const b=elem('button',undefined,'ref-btn');b.type='button';b.setAttribute('aria-pressed',String(r.id===app.selected));
-      b.append(elem('span',r.label),elem('small',app.runLoaded?String(refCount(r.id)):'—'));
-      b.onclick=()=>{app.selected=r.id;history.replaceState(null,'','?referent='+encodeURIComponent(r.id));render();};dest.append(b)}
-  }
-  function renderMetrics(){
-    const id=app.selected, ref=REFS.find(x=>x.id===id);
-    $('heading').textContent=ref.label;$('breadcrumb').textContent='REFERENT / '+ref.label.toUpperCase();
-    $('description').textContent=ref.description;
-    const sample=app.runs.filter(x=>referent(x.path,x.head_branch)===id);
-    const source=app.research?.records?.filter(x=>referent(x.path)===id)||[];
-    $('metric-runs').textContent=app.runLoaded?sample.length:'—';
-    $('metric-active').textContent=app.runLoaded?sample.filter(x=>['queued','in_progress','waiting','pending'].includes(x.status)).length:'—';
-    $('metric-failed').textContent=app.runLoaded?sample.filter(x=>['failure','cancelled','timed_out'].includes(status(x))).length:'—';
-    $('metric-sources').textContent=app.sourceLoaded?source.length:'—';
-  }
-  function addDetailJobs(panel,run){
-    const btn=elem('button','Read original job / step records','inline');btn.type='button';panel.append(btn);
-    const out=elem('div');panel.append(out);
-    btn.onclick=async()=>{
-      if(!app.jobs.has(run.id)){
-        btn.disabled=true;out.replaceChildren(elem('p','Fetching exact GitHub job records…','tiny'));
-        try{const data=await json(API+'/actions/runs/'+run.id+'/jobs?per_page=100');
-          if(!Array.isArray(data.jobs))throw Error('Unexpected job schema');
-          const jobs=data.jobs.filter(x=>!x.run_id||x.run_id===run.id);
-          app.jobs.set(run.id,jobs);
-        }catch(e){out.replaceChildren(elem('p','Job source unavailable: '+e.message+'. No steps inferred.','caution'));btn.disabled=false;return}
-      }
-      btn.disabled=false;const jobs=app.jobs.get(run.id);out.replaceChildren();
-      if(!jobs.length){out.append(elem('p','No job records returned. Not evidence of no execution.','tiny'));return}
-      for(const j of jobs){
-        const card=elem('div',undefined,'job');
-        card.append(elem('strong',(j.name||'Job')+' · '+(j.conclusion||j.status||'unknown')));
-        if(Number.isSafeInteger(j.id))card.append(document.createTextNode(' · '),anchor('GitHub job ↗','https://github.com/'+REPO+'/actions/runs/'+run.id+'/job/'+j.id));
-        if(!Array.isArray(j.steps))card.append(elem('p','Steps not included in the source response.','tiny'));
-        else{const ol=elem('ol');for(const step of j.steps){const li=elem('li');li.append(elem('span',step.name||'unnamed step'),document.createTextNode(' · '+(step.conclusion||step.status||'unknown')));ol.append(li)}card.append(ol)}
-        out.append(card);
-      }
-      if(jobs.length===100)out.append(elem('p','First 100 GitHub jobs returned; further pages are not yet loaded.','tiny'));
-    };
-  }
-  function addCommitFiles(panel,run){
-    const btn=elem('button','Inspect revision paths / changed lines ↗','inline');btn.type='button';panel.append(btn);
-    const out=elem('div');panel.append(out);
-    btn.onclick=async()=>{
-      if(!/^[0-9a-f]{40}$/.test(run.head_sha||''))return;
-      if(!app.commits.has(run.head_sha)){
-        btn.disabled=true;out.replaceChildren(elem('p','Reading commit file-diff metadata…','tiny'));
-        try{const v=await json(API+'/commits/'+run.head_sha+'?per_page=100');
-          if(v.sha!==run.head_sha||!Array.isArray(v.files))throw Error('Commit did not match run SHA');
-          app.commits.set(run.head_sha,v.files);
-        }catch(e){out.replaceChildren(elem('p','Revision unavailable: '+e.message,'caution'));btn.disabled=false;return}
-      }
-      btn.disabled=false;out.replaceChildren(elem('p','These are commit changes, NOT a claim the workflow executed the changed code.','tiny'));
-      const files=app.commits.get(run.head_sha);
-      for(const f of files.slice(0,100)){
-        const row=elem('div',undefined,'tiny');row.append(document.createTextNode((f.status||'change')+' · '));
-        if(safePath(f.filename))row.append(anchor(f.filename,'https://github.com/'+REPO+'/blob/'+run.head_sha+'/'+f.filename.split('/').map(encodeURIComponent).join('/')));
-        else row.append(elem('span',f.filename||'unknown path'));
-        row.append(document.createTextNode(' · +'+(f.additions??'?')+' / -'+(f.deletions??'?')));out.append(row);
-      }
-      out.append(anchor('View exact commit diff and lines ↗','https://github.com/'+REPO+'/commit/'+run.head_sha));
-      if(files.length>=100)out.append(elem('p','The GitHub commit file list may be paginated.','tiny'));
-    };
-  }
-  function makeRun(run){
-    const d=elem('details',undefined,'runitem');const sum=elem('summary');const main=elem('div',undefined,'summary-main');
-    main.append(elem('strong','#'+run.run_number+' · '+(run.head_branch||'branch unknown')),elem('small',date(run.created_at)+' · '+run.head_sha.slice(0,12)));
-    sum.append(main,badge(status(run)));d.append(sum);
-    const box=elem('div',undefined,'run-detail');
-    box.append(elem('p','Trigger '+(run.event||'unknown')+' · '+(run.status||'unknown')+' · Source SHA '+run.head_sha));
-    box.append(anchor('GitHub execution #'+run.id+' ↗','https://github.com/'+REPO+'/actions/runs/'+run.id));
-    box.append(elem('p','Run source is separate from any research record; no matching experiment is presumed.'));
-    addDetailJobs(box,run);addCommitFiles(box,run);d.append(box);return d;
-  }
-  function renderRuns(){
-    const target=$('runs');target.replaceChildren();
-    $('run-window').textContent=app.runLoaded?app.runs.length+' fetched executions · '+(app.runsTotal??'unknown')+' total in repository':'GitHub source not read';
-    $('older').disabled=app.olderBusy||!app.runLoaded||app.runs.length===0;
-    if(!app.runLoaded){target.append(elem('p','Live GitHub execution source unavailable; no activity count inferred.','empty'));return}
-    const selected=app.runs.filter(r=>referent(r.path,r.head_branch)===app.selected&&
-      filterText([r.name,r.path,r.head_branch,r.head_sha,status(r)].join(' ')));
-    if(!selected.length){target.append(elem('p','No matching runs in the fetched history window. Older branches and private executions are not ruled out.','empty'));return}
-    const byFamily=new Map();
-    for(const r of selected){
-      const group=family(app.selected,r.path,r.head_branch);
-      if(!byFamily.has(group))byFamily.set(group,new Map());
-      const workflows=byFamily.get(group),p=r.path||r.name;
-      if(!workflows.has(p))workflows.set(p,[]);
-      workflows.get(p).push(r);
-    }
-    for(const [name,workflows] of byFamily){
-      const f=elem('details',undefined,'family');f.open=true;
-      const fs=elem('summary');const fm=elem('div',undefined,'summary-main');
-      const n=[...workflows.values()].reduce((sum,r)=>sum+r.length,0);
-      fm.append(elem('strong',name),elem('small',workflows.size+' workflow(s) · '+n+' observed execution(s)'));fs.append(fm);f.append(fs);
-      const fbody=elem('div',undefined,'tree');
-      for(const [path,runs] of workflows){
-        const w=elem('details',undefined,'family');
-        const ws=elem('summary');const wm=elem('div',undefined,'summary-main');
-        wm.append(elem('strong',runs[0].name),elem('small',path+' · '+runs.length+' recorded run(s)'));ws.append(wm,badge(status(runs[0])));w.append(ws);
-        const wbody=elem('div',undefined,'tree');for(const run of runs)wbody.append(makeRun(run));w.append(wbody);fbody.append(w);
-      }
-      f.append(fbody);target.append(f);
+    for(const ref of REFS){
+      const b=elem('button',ref.name);b.type='button';b.setAttribute('aria-current',String(ref.id===state.project));
+      b.onclick=()=>{state.project=ref.id;state.selected='';state.cases=[];state.position=0;history.replaceState(null,'','?referent='+encodeURIComponent(ref.id)+(embedded?'&embedded=1':''));render();};
+      dest.append(b);
     }
   }
-  function renderPRs(){
-    const target=$('prs');target.replaceChildren();
-    if(!app.prsLoaded){target.append(elem('p','Open PR source unavailable; no absence inferred.','empty'));return}
-    const matches=app.prs.filter(p=>prReferent(p)===app.selected&&filterText([p.title,p.head?.ref,p.number].join(' ')));
-    if(!matches.length){target.append(elem('p','No open PRs in this fetched page match the referent.','empty'));return}
-    for(const p of matches){
-      const row=elem('article',undefined,'source-row');
-      row.append(anchor('#'+p.number+' · '+p.title,'https://github.com/'+REPO+'/pull/'+p.number));
-      row.append(elem('span',(p.head?.ref||'unknown branch')+' → '+(p.base?.ref||'unknown target')+' · '+date(p.updated_at),'sub'));
-      row.append(elem('p','Open change request · '+(p.draft?'draft':'proposed')+'; merge, validation and actual execution are separate evidence.'));target.append(row);
-    }
-    if(app.prs.length>=100)target.append(elem('p','First 100 open PRs only.','tiny'));
-  }
-  function researchRecords(){return (app.research?.records||[]).filter(x=>referent(x.path)===app.selected)}
-  function showNext(){
-    const target=$('next');target.replaceChildren();
-    if(!app.sourceLoaded){target.append(elem('p','Research source unavailable. Recorded next actions cannot be inferred.','empty'));return}
-    const list=researchRecords().filter(r=>r.next&&filterText([r.label,r.path,r.next,r.state].join(' ')));
-    if(!list.length){target.append(elem('p','No explicitly recorded next movement in this referent and published projection. This is not a completed-work claim.','empty'));return}
-    for(const r of list){
-      const row=elem('article',undefined,'source-row');
-      row.append(elem('strong',r.label),elem('span',r.state+' · '+r.source_type,'sub'));
-      row.append(elem('p',r.next,'next'));
-      row.append(sourceLink('Open original source ↗',r.path));target.append(row);
+  function renderFiles(){
+    const dest=$('test-files');dest.replaceChildren();
+    $('file-heading').textContent=state.mode==='data'?'Recorded data files':'Source test files';
+    if(!state.head){dest.append(elem('p','No verified source snapshot available.','summary'));return}
+    const paths=selectedFiles();
+    if(!paths.length){dest.append(elem('p','No matching indexed source files. This does not establish that the project has no tests or data.','summary muted'));return}
+    for(const f of paths){
+      const b=elem('button');b.type='button';b.setAttribute('aria-current',String(state.selected===f.path));
+      b.append(elem('span',f.path.split('/').pop()),elem('small',f.path));
+      b.onclick=()=>{openFile(f.path)};
+      dest.append(b);
     }
   }
-  function showResearch(){
-    const target=$('research');target.replaceChildren();
-    if(!app.sourceLoaded){target.append(elem('p','Research source unavailable; no claims filled in.','empty'));return}
-    const records=researchRecords(), movements=(app.research.movements||[]).filter(x=>referent(x.path)===app.selected);
-    const walls=(app.research.walls||[]).filter(x=>referent(x.path)===app.selected);
-    const paths=new Map();
-    for(const r of records){if(!paths.has(r.path))paths.set(r.path,{record:null,moves:[],walls:[]});paths.get(r.path).record=r}
-    for(const m of movements){if(!paths.has(m.path))paths.set(m.path,{record:null,moves:[],walls:[]});paths.get(m.path).moves.push(m)}
-    for(const w of walls){if(!paths.has(w.path))paths.set(w.path,{record:null,moves:[],walls:[]});paths.get(w.path).walls.push(w)}
-    let shown=0;
-    for(const [path,info] of paths){
-      if(!filterText([path,info.record?.label,info.record?.state,...info.moves.map(x=>x.title),...info.walls.map(x=>x.text)].join(' ')))continue;
-      shown++;const row=elem('article',undefined,'source-row'),d=elem('details'),summary=elem('summary');
-      const main=elem('span',info.record?.label||path,'summary-main');summary.append(main);d.append(summary);
-      d.append(elem('span',(info.record?.source_type||'HEADING LOCATOR')+' · '+(info.record?.state||'not a native result'),'sub'));
-      d.append(sourceLink('Open source path ↗',path));
-      if(info.record?.boundary)d.append(elem('p','Recorded boundary: '+info.record.boundary,'wall'));
-      if(info.record?.next)d.append(elem('p','Next from original record: '+info.record.next,'next'));
-      for(const m of info.moves){const p=elem('p','Movement: '+m.title+' ['+m.evidence+']');d.append(p,sourceLink('Source movement ↗',path,m.line))}
-      for(const w of info.walls){d.append(elem('p','Wall: '+w.text+' ['+w.kind+']','wall'),sourceLink('Wall source ↗',path,w.line))}
-      row.append(d);target.append(row);
-    }
-    if(!shown)target.append(elem('p','No indexed research record or heading matches here. The published projection is bounded; this is not a complete repository audit.','empty'));
-    $('research-scope').textContent=records.length+' structured · '+movements.length+' movement locators · '+walls.length+' walls';
-  }
-  function render(){renderSide();renderMetrics();renderRuns();renderPRs();showNext();showResearch()}
-  function mergeRuns(rows){
-    const m=new Map(app.runs.map(x=>[x.id,x]));
-    for(const r of rows){
-      const prev=m.get(r.id);
-      if(prev&&(prev.updated_at!==r.updated_at||prev.status!==r.status||prev.conclusion!==r.conclusion))app.jobs.delete(r.id);
-      m.set(r.id,r);
-    }
-    app.runs=[...m.values()].sort((a,b)=>Date.parse(b.created_at)-Date.parse(a.created_at)||b.id-a.id);
-  }
-  function readRuns(p){
-    if(!p||!Array.isArray(p.workflow_runs))throw Error('Invalid workflow schema');
-    const runs=p.workflow_runs.filter(x=>Number.isSafeInteger(x.id)&&x.id>0&&
-      /^[0-9a-f]{40}$/.test(x.head_sha||'')&&typeof x.path==='string'&&typeof x.name==='string');
-    return runs;
-  }
-  async function refresh(){
-    if(app.reading)return;app.reading=true;app.lastAttempt=Date.now();$('refresh').disabled=true;setAlert('');
-    const results=await Promise.allSettled([
-      json(API+'/actions/runs?per_page=100&page=1'),
-      json(API+'/pulls?state=open&per_page=100'),
-      json(RESEARCH+'?v='+Math.floor(Date.now()/PERIOD))
-    ]);
-    const issues=[];
-    if(results[0].status==='fulfilled'){
-      try{const body=results[0].value;const runs=readRuns(body);mergeRuns(runs);app.runLoaded=true;app.runsTotal=Number.isSafeInteger(body.total_count)?body.total_count:null;app.checked=Date.now();}
-      catch(e){issues.push('Runs: '+e.message)}
-    }else issues.push('Runs: '+results[0].reason.message);
-    if(results[1].status==='fulfilled'&&Array.isArray(results[1].value)){
-      app.prs=results[1].value;app.prsLoaded=true;
-    }else issues.push('PRs: '+(results[1].reason?.message||'bad source response'));
-    if(results[2].status==='fulfilled'&&results[2].value?.schema==='workstation-live-projection/v1'&&
-      Array.isArray(results[2].value.records)&&Array.isArray(results[2].value.movements)&&Array.isArray(results[2].value.walls)){
-      app.research=results[2].value;app.sourceLoaded=true;
-    }else issues.push('Research projection unavailable or invalid');
-    if(issues.length){
-      setAlert('Source check incomplete. '+issues.join(' · ')+'. Earlier displayed values may be stale. No missing activity was inferred.');
-      if(issues.some(x=>/403|429/.test(x)))app.rateLimitUntil=Date.now()+15*60000;
-    }else app.rateLimitUntil=0;
-    $('pulse').className='pulse '+(issues.length?'bad':'ok');
-    $('connection').textContent=issues.length?'Partial / failed source read':'GitHub + source projection read';
-    $('time').textContent=app.checked?'Last GitHub run read: '+new Date(app.checked).toLocaleString():'No confirmed live read';
-    $('sample').textContent=app.runs.length+' loaded runs / '+(app.runsTotal??'unknown')+' repository-total · projection capped';
-    app.reading=false;$('refresh').disabled=false;render();
-  }
-  async function loadOlder(){
-    if(app.olderBusy||!app.runLoaded||app.olderPage>50)return;
-    const page=app.olderPage;app.olderBusy=true;$('older').disabled=true;
-    $('older-state').textContent='Reading source page '+page+'…';
+  async function openFile(path){
+    state.selected=path;state.cases=[];state.source='';state.position=0;
+    renderFiles();$('test-position').textContent=path;$('case-source').replaceChildren(elem('p','Reading exact source at '+state.head.slice(0,12)+'…','muted'));
     try{
-      const p=await json(API+'/actions/runs?per_page=100&page='+page);
-      const rows=readRuns(p);mergeRuns(rows);
-      if(rows.length<100){app.olderPage=51;$('older-state').textContent='No additional full source page in this window.'}
-      else{app.olderPage++;$('older-state').textContent=app.runs.length+' retrieved execution records; up to 50 pages can be loaded.'}
-    }catch(e){$('older-state').textContent='Older history unavailable: '+e.message+'. Current sample retained.'}
-    app.olderBusy=false;render();
-    if(app.olderPage>50)$('older').disabled=true;
+      const text=await sourceText(path);
+      if(state.selected!==path)return;
+      state.source=text;
+      try{state.cases=state.mode==='data'?parseData(text):parseCases(text)}
+      catch(e){$('case-source').replaceChildren(elem('p','Data parse failed: '+e.message+'. Inspect original source; no entries were inferred.','notice'));return}
+      renderCase();
+    }catch(e){if(state.selected===path)$('case-source').replaceChildren(elem('p','Source unavailable: '+e.message+'. Nothing inferred.','notice'));}
   }
-  function setupTick(){
-    let url='';try{url=localStorage.getItem('workstationTrustedTickSSEv1')||''}catch{}
-    if(!url||typeof EventSource!=='function')return;
-    try{const u=new URL(url);if(u.protocol!=='https:'||u.username||u.password||u.search||u.hash)return;
-      const es=new EventSource(u.href,{withCredentials:false});app.tick=es;
-      const touched=()=>{app.ticks++;$('ticks').textContent=app.ticks+' tick notifications · source checks separately verified';
-        if(!document.hidden&&!app.reading&&Date.now()-app.lastAttempt>=GAP&&Date.now()>=app.rateLimitUntil)refresh();};
-      es.onmessage=touched;es.addEventListener('tick',touched);es.addEventListener('workstation-refresh',touched);
-      es.onerror=()=>{$('ticks').textContent='Tickserver unreachable · GitHub polling continues'};
-    }catch{}
+  function advance(step){
+    const next=state.position+step;
+    if(next>=0&&next<state.cases.length){state.position=next;renderCase();return}
+    const paths=selectedFiles().map(f=>f.path),i=paths.indexOf(state.selected);
+    const nextFile=paths[i+(step>0?1:-1)];
+    if(nextFile)openFile(nextFile).then(()=>{if(step<0&&state.cases.length){state.position=state.cases.length-1;renderCase()}});
   }
-  $('refresh').addEventListener('click',refresh);
-  $('older').addEventListener('click',loadOlder);
-  $('search').addEventListener('input',render);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Date.now()-app.lastAttempt>=PERIOD&&Date.now()>=app.rateLimitUntil)refresh()});
-  setInterval(()=>{if(!document.hidden&&!app.reading&&Date.now()-app.lastAttempt>=PERIOD&&Date.now()>=app.rateLimitUntil)refresh()},10000);
-  render();setupTick();refresh();
+  function renderCase(){
+    const dest=$('case-source');dest.replaceChildren();
+    const path=state.selected;
+    if(!path){dest.append(elem('p','Choose a source test file.','muted'));return}
+    if(!state.cases.length){
+      dest.append(elem('h3',state.mode==='data'?'No entries parsed':'No named test cases parsed'));
+      dest.append(elem('p',state.mode==='data'?'Empty data structure or unrecognized source. Open the original file.':'The file may contain parametrized, dynamically produced, or differently named tests. Inspect complete source before concluding it contains no tests.','muted'));
+      dest.append(link('Open complete original source ↗',sourceURL(path)));
+      dest.append(elem('pre',state.source,'code'));return;
+    }
+    const c=state.cases[state.position];
+    $('test-position').textContent=(state.position+1)+' / '+state.cases.length+' in selected file · '+state.head.slice(0,12);
+    const nav=elem('div',undefined,'case-head'),controls=elem('div',undefined,'case-nav');
+    const prev=elem('button',c.data?'← Previous record':'← Previous test');prev.onclick=()=>advance(-1);
+    const next=elem('button',c.data?'Next record →':'Next test →');next.onclick=()=>advance(1);
+    controls.append(prev,next);nav.append(elem('h3',c.name),controls);dest.append(nav);
+    dest.append(elem('p',c.data?'Parsed JSON entry. Source contents only; not independently validated.':'Defined at line '+c.line+'; test declaration only, not a witnessed pass.','meta'));
+    dest.append(link(c.data?'Open pinned data file ↗':'Inspect exact lines in GitHub ↗',sourceURL(path,c.line)));
+    if(c.data)dest.append(elem('p','Selected structured datum · '+c.name+'. Parsing JSON does not validate its origin, meaning or correctness.','assessment-note'));
+    else if(!c.checks.length)dest.append(elem('div','No direct assertions recognized by the source scanner. This does not mean the test has no checks.','assessment-note'));
+    else{
+      dest.append(elem('h3','Declared checks / assertions'));
+      const ul=elem('ul',undefined,'checks');
+      for(const check of c.checks){
+        const li=elem('li');
+        li.append(link('L'+check.line,sourceURL(path,check.line)),document.createTextNode('  '+check.statement));
+        ul.append(li);
+      }
+      dest.append(ul);
+    }
+    dest.append(elem('h3',c.data?'Original JSON value':'Original source · full test block'),elem('pre',c.body,'code'));
+    const key=state.head+':'+path+':'+(c.data?c.name:c.line);const previous=state.reviews.get(key)||{assessment:'not-reviewed',note:''};
+    const form=elem('div',undefined,'assess');
+    form.append(elem('h3','Human audit note'));
+    form.append(elem('p','An assessment records your review of source/evidence. It is not a GitHub test outcome.','tiny'));
+    const label=elem('label','Assessment');label.htmlFor='assessment';form.append(label);
+    const select=elem('select');select.id='assessment';
+    for(const [value,text] of [['not-reviewed','Not reviewed'],['needs-evidence','Evidence insufficient / needs independent run'],['source-consistent','Source appears consistent (not verified execution)'],['contradiction','Contradiction or defect observed']]){
+      const o=elem('option',text);o.value=value;select.append(o);
+    }
+    select.value=previous.assessment;form.append(select);
+    const labelNote=elem('label','Observation and evidence locator');labelNote.htmlFor='review-note';form.append(labelNote);
+    const note=elem('textarea');note.id='review-note';note.value=previous.note;note.placeholder='What evidence did you inspect? What would falsify the finding?';form.append(note);
+    const save=()=>{const file=[...state.files,...state.dataFiles].find(x=>x.path===path);state.reviews.set(key,{project:projectForPath(path),type:c.data?'data-entry':'test-definition',path,source_blob:file?.sha||null,line:c.line,record:c.name,assessment:select.value,note:note.value})};
+    select.onchange=save;note.oninput=save;form.append(elem('p','Notes stay in this browser page until exported; not stored in GitHub.','tiny'));dest.append(form);
+  }
+  function renderResearch(){
+    const dest=$('research');dest.replaceChildren();
+    if(!state.research){dest.append(elem('p','Published research projection unavailable. No missing records inferred.','muted'));return}
+    const route=(p)=>{const a=projectForPath(p);return a==='other'?'other':a};
+    const records=(state.research.records||[]).filter(r=>state.project==='all'||route(r.path)===state.project);
+    const movements=(state.research.movements||[]).filter(r=>state.project==='all'||route(r.path)===state.project);
+    const walls=(state.research.walls||[]).filter(r=>state.project==='all'||route(r.path)===state.project);
+    const combined=[...records.map(r=>({kind:'record',r})),...movements.map(r=>({kind:'movement',r})),...walls.map(r=>({kind:'wall',r}))];
+    if(!combined.length){dest.append(elem('p','No research items matched the bounded projection. This is not a full repository inventory.','muted'));return}
+    for(const {kind,r} of combined.slice(0,200)){
+      const d=elem('details'),s=elem('summary',(r.label||r.title||r.text||r.path)+' · '+kind);d.append(s);
+      const p=elem('p',r.path+' · '+(r.state||r.evidence||r.kind||'source only'),'meta');d.append(p);
+      if(r.next)d.append(elem('p','Recorded next: '+r.next));
+      if(r.boundary)d.append(elem('p','Boundary: '+r.boundary));
+      if(r.text&&kind==='wall')d.append(elem('p',r.text));
+      if(r.path)d.append(link('Original research record ↗','https://github.com/'+REPO+'/blob/main/'+r.path+(Number.isInteger(r.line)?'#L'+r.line:'')));
+      dest.append(d);
+    }
+    if(combined.length>200)dest.append(elem('p','Showing first 200 matching research entries; this projection is bounded.','muted'));
+  }
+  function render(){renderProjects();renderFiles();renderCase();renderResearch()}
+  async function load(){
+    alert('');state.head='';state.files=[];state.selected='';state.cases=[];state.research=null;
+    $('snapshot').textContent='Reading source snapshot…';render();
+    try{
+      const branch=await json(API+'/branches/main');
+      const sha=branch?.commit?.sha;
+      if(!/^[a-f0-9]{40}$/.test(sha||''))throw Error('No valid Git commit identity');
+      const tree=await json(API+'/git/trees/'+sha+'?recursive=1');
+      if(tree.truncated||!Array.isArray(tree.tree))throw Error('Git tree truncated or invalid; refusing a partial test catalogue');
+      state.head=sha;
+      state.files=tree.tree.filter(x=>x.type==='blob'&&isTestPath(x.path)).map(x=>({path:x.path,sha:x.sha})).sort((a,b)=>a.path.localeCompare(b.path));
+      state.dataFiles=tree.tree.filter(x=>x.type==='blob'&&isDataPath(x.path)).map(x=>({path:x.path,sha:x.sha})).sort((a,b)=>a.path.localeCompare(b.path));
+      $('snapshot').textContent='Pinned source: '+sha+' · inspect tracked test definitions or JSON evidence. No run results are inferred.';
+    }catch(e){alert('Repository test-source index unavailable: '+e.message+'. No coverage is inferred.')}
+    try{
+      const r=await json(RESEARCH);
+      if(r.schema==='workstation-live-projection/v1'&&Array.isArray(r.records)&&Array.isArray(r.movements)&&Array.isArray(r.walls))state.research=r;
+    }catch(e){alert('Published research source unavailable: '+e.message+'. Test-source inspection, if loaded, is still available.')}
+    render();
+  }
+  function exportReviews(){
+    const rows=[...state.reviews.entries()].map(([key,review])=>({source_key:key,...review}));
+    const body={schema:'manual-test-source-review/v1',repository:REPO,source_commit:state.head,
+      statement:'Human assessments of test source; no test execution or automatic verdict',reviews:rows};
+    const blob=new Blob([JSON.stringify(body,null,2)+'\n'],{type:'application/json'});
+    const url=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=url;a.download='source-audit-'+(state.head.slice(0,12)||'unknown')+'.json';a.click();
+    setTimeout(()=>URL.revokeObjectURL(url),0);
+  }
+  $('search').addEventListener('input',renderFiles);
+  $('mode').addEventListener('change',()=>{
+    state.mode=$('mode').value;state.selected='';state.cases=[];state.position=0;render();
+  });
+  $('reload').addEventListener('click',load);
+  $('export').addEventListener('click',exportReviews);
+  load();
 })();
 </script>
-</body></html>
+</body>
+</html>
