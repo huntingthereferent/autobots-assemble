@@ -38,7 +38,7 @@ class CatKeyboardTests(unittest.TestCase):
         for marker in ("MEOW LAB 2 · Workstation sound keyboard", "window.AudioContext",
                        "pointerdown", "prefers-reduced-motion",
                        "meow-machine/score-v1", "stopRecording",
-                       "patternPreset", "16-step melody · selected bar", "id=\"sound-file\"", "function swallowSound()",
+                       "patternPreset", "8-bar melody loop", "id=\"sound-file\"", "function swallowSound()",
                        "function playBankSample(", "function handoffSample()",
                        "function tunedVoice(", "function renderTunedPreview(",
                        "if(soundSlots[voiceName]?.origin===\'local-file\'",
@@ -72,7 +72,7 @@ class CatKeyboardTests(unittest.TestCase):
         pure = script[script.index("const NOTES="):script.index("const $=id=>")]
         checks = r"""
 const vm=require('node:vm'),a=require('node:assert/strict');
-const m=vm.runInNewContext(process.env.CAT_RULES+'\n({hz,midiFor,validScore,patternPreset,SHORTCUTS,CHORD_LIBRARY,parseChordSymbol,progressionFromSymbols,realizeProgression,validUserTemplates,defaultBars,cloneBars,validBars,validBranches,realizeBar,nextStep,BAR_COUNT,STEPS_PER_BAR})');
+const m=vm.runInNewContext(process.env.CAT_RULES+'\n({hz,midiFor,validScore,patternPreset,SHORTCUTS,CHORD_LIBRARY,parseChordSymbol,progressionFromSymbols,realizeProgression,validUserTemplates,defaultBars,cloneBars,validBars,validBranches,realizeBar,nextStep,melodyIndexFor,modernLayerState,MODERN_PROFILES,BAR_COUNT,MELODY_BARS,STEPS_PER_BAR})');
 a.equal(m.SHORTCUTS.length,13);
 a.equal(m.midiFor(0,4),60);a.equal(m.midiFor(12,5),84);
 a.equal(Math.round(m.hz(69)),440);
@@ -92,9 +92,9 @@ const named=(id,key)=>m.realizeProgression(m.CHORD_LIBRARY.find(t=>t.id===id),ke
 a.equal(named('pop-lift',0),'C G Am F');
 a.equal(named('pop-lift',2),'D A Bm G');
 a.equal(named('dark-pop',9),'Am F C G');
-a.equal(named('minor-cadence',9),'Am Dm E Am');
-a.equal(named('jazz-turnaround',0),'Cmaj7 Am7 Dm7 G7');
-a.equal(named('blues',0),'C7 F7 C7 G7');
+a.equal(named('club-drive',9),'Am G F G');
+a.equal(named('rnb-space',0),'Cmaj7 Em7 Am7 Fmaj7');
+a.equal(named('country-pop',0),'C F Am G');
 for(const t of m.CHORD_LIBRARY){
  const p=m.realizeProgression(t,0);a.equal(p.length,4);
  a(p.every(c=>c.notes.length>=3&&c.notes.length<=4&&c.notes.every(n=>Number.isInteger(n)&&n>=48&&n<=82)));
@@ -133,6 +133,22 @@ a.equal(m.validBranches([{...branch,tempo:999}]),null);
 a.equal(m.validBranches(Array.from({length:25},(_,i)=>({...branch,id:'branch-'+(i+1)}))),null);
 m.validBranches([branch])[0].bars[5].notes[1][7]=false;
 a.equal(copy[5].notes[1][7],true);
+
+
+a.equal(m.MELODY_BARS,8);
+a.equal(m.melodyIndexFor(0),0);a.equal(m.melodyIndexFor(7),7);
+a.equal(m.melodyIndexFor(8),0);a.equal(m.melodyIndexFor(15),7);
+a.equal(Object.keys(m.MODERN_PROFILES).length,9);
+for(const p of Object.values(m.MODERN_PROFILES)){
+ a.equal(p.patterns.length,4);
+ a(p.patterns.every(v=>v.every(step=>Number.isInteger(step)&&step>=0&&step<16)));
+}
+a.equal(m.defaultBars()[0].profile,'pop');
+a.equal(m.validBars(m.defaultBars()).length,16);
+a.equal(m.validBars(m.defaultBars().map((b,i)=>i===3?{...b,layers:[false,1,false,true]}:b)),null);
+a.equal(m.validBars(m.defaultBars().map((b,i)=>i===2?{...b,profile:'unknown'}:b)),null);
+// Historical saved branches (pre-layer schema) must still parse.
+a.equal(m.validBars(m.defaultBars().map(({chord,notes})=>({chord,notes}))).length,16);
 
 """
         result = subprocess.run(["node", "-e", checks], text=True,
