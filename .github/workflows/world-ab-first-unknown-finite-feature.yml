@@ -1,0 +1,86 @@
+name: WORLD 34 first original unknown finite feature
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_first_unknown_finite_feature.py'
+      - 'network/tests/test_world_ab_first_unknown_finite_feature.py'
+      - 'systems/workspace/WORLD_AB_FIRST_UNKNOWN_FINITE_FEATURE_TRIAL_34_2026-10-20.md'
+      - '.github/workflows/world-ab-first-unknown-finite-feature.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_first_unknown_finite_feature.py'
+      - 'network/tests/test_world_ab_first_unknown_finite_feature.py'
+      - 'systems/workspace/WORLD_AB_FIRST_UNKNOWN_FINITE_FEATURE_TRIAL_34_2026-10-20.md'
+      - '.github/workflows/world-ab-first-unknown-finite-feature.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independently-check-source-first-unknown-finite-contact:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original source ancestry and separate WORLD34 finite SAT verifier
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature
+      - name: Preserve source-owned finite first-unknown geometry and independent witness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_first_unknown_finite_feature import run
+          from network.tests.test_world_ab_first_unknown_finite_feature import verify
+          source=run()
+          witnessed=[{"angle":x["angle"],"status":x["status"],
+                      "independent_finite_segment_world_SAT":verify(x)}
+                     for x in source["cases"]]
+          assert len(witnessed)==8 and all(x["independent_finite_segment_world_SAT"] for x in witnessed)
+          assert source["source_first_unknown_cases"]==1
+          assert source["inactive_source_controls"]==7
+          assert source["finite_overlap_transition_cases"]<=1
+          assert source["uniquely_incoming_finite_corner_cases"]<=1
+          assert source["material_contacts_measured"]==0
+          assert source["fifth_impulses_selected"]==0
+          folder=Path("world34-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"source":source,"independent_witness":witnessed},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"first_original_unverified_finite_model_feature.json").write_text(payload)
+          (folder/"first_original_unverified_finite_model_feature.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  first_original_unverified_finite_model_feature.json\n")
+          print(json.dumps({
+              "original_first_unknown_cases":source["source_first_unknown_cases"],
+              "finite_model_transition_cases":source["finite_overlap_transition_cases"],
+              "unique_incoming_finite_model_corner_cases":source["uniquely_incoming_finite_corner_cases"],
+              "noncandidate_source_controls":source["inactive_source_controls"],
+              "fifth_impulses_selected":0},sort_keys=True))
+          for case in source["cases"]:
+              if case["source_first_unknown_subinterval"] is not None:
+                  first=case["earliest_local_model_candidate"]
+                  print(json.dumps({
+                      "angle":case["angle"],
+                      "source_unknown_interval":case["source_first_unknown_subinterval"]["start"],
+                      "original_status":case["status"],
+                      "source_first_finite_model_transition_time":
+                          first["refined_model_transition_time"] if first is not None else None,
+                      "source_finite_face":first["source_face"] if first is not None else None,
+                      "unique_incoming_corner":case["unique_incoming_source_feature"],
+                      "actual_fifth_impulse":None
+                  },sort_keys=True))
+          PY
+      - name: Retain full source geometry and independent witness
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world34-original-first-unknown-finite-feature
+          path: world34-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
