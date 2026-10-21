@@ -47,6 +47,16 @@ class CatKeyboardTests(unittest.TestCase):
         for forbidden in ("<script src=", "fetch(", "EventSource"):
             self.assertNotIn(forbidden, page)
 
+    def test_roseys_high_note_page_preserved(self):
+        rosey = (ROOT / "docs/live/roseys-cat-keyboard.html").read_text(encoding="utf-8")
+        studio = PAGE.read_text(encoding="utf-8")
+        self.assertIn('href="roseys-cat-keyboard.html"', studio)
+        for marker in ("Real chord progressions", "HIGH_SHORTCUTS", "KEY_COUNT=25",
+                       "TEMPLATES", "save", "chords", "tapetext"):
+            self.assertIn(marker, rosey)
+        self.assertIn("id=\"sound-file\"", studio)
+        self.assertIn("CHORD_LIBRARY", studio)
+
     @unittest.skipUnless(shutil.which("node"), "Node.js needed")
     def test_note_math_scores_and_pattern_validation(self):
         parser = Script()
