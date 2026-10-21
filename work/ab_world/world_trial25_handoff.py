@@ -73,7 +73,7 @@ def validate_face(rec: dict[str, Any], face: str) -> list[dict[str, Any]]:
         demand(0 <= a <= b <= INTERVALS and a > previous_last + 1 and
                window.get("first_sample_time") == grid_time(a) and
                window.get("last_sample_time") == grid_time(b),
-               "finite overlap grid window order, timing or separation changed")
+               "finite overlap windows: grid order, timing or separation changed")
         previous_last = b
         seen += b-a+1
     demand(seen == count and
@@ -180,7 +180,7 @@ def carry(native: dict[str, Any], original23: dict[str, Any],
                c.get("fourth_impulse_solved") is False and
                c.get("new_receiver_created") is False and
                c.get("formally_certified_continuous_collision_detection") is False,
-               "grid bounds, material scope or fourth impact misrepresented")
+               "physical scope / grid bounds or fourth impact misrepresented")
         impulse = c["source_third_impulse"]
         admitted_here = impulse is not None
         steps = [
