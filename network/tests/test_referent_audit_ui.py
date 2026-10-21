@@ -31,7 +31,7 @@ class SourceTestAuditUITests(unittest.TestCase):
         page=PAGE.read_text(encoding="utf-8")
         host=WORK.read_text(encoding="utf-8")
         self.assertIn("<title>Referent audit · Hunting the Referent</title>",page)
-        for element in ('id="referents"','id="test-files"','id="case-source"','id="research"','id="export"'):
+        for element in ('id="referents"','id="test-files"','id="case-source"','id="research"','id="export"','id="mode"'):
             self.assertIn(element,page)
         self.assertIn('data-src="audit.html?embedded=1"',host)
         self.assertIn('href="#audit"',host)
@@ -53,7 +53,7 @@ class SourceTestAuditUITests(unittest.TestCase):
 
     def test_no_invented_test_execution(self):
         js=source_script();page=PAGE.read_text(encoding="utf-8")
-        for required in ("function parseCases(text)", "function openFile(path)", "function advance(step)",
+        for required in ("function parseCases(text)", "function parseData(text)", "function openFile(path)", "function advance(step)",
                          "function renderCase()", "sourceURL(path,c.line)", "line:i+j+1",
                          "not a witnessed pass", "function exportReviews()","source_commit:state.head",
                          "statement:'Human assessments of test source; no test execution"):
@@ -61,6 +61,10 @@ class SourceTestAuditUITests(unittest.TestCase):
         self.assertIn("Dynamic tests and tests using other naming conventions may be missing.",page)
         self.assertIn("Source declarations are not execution results.",page)
         self.assertIn("state.reviews.set(key",js)
+        self.assertIn("source_blob:file?.sha||null",js)
+        self.assertIn("state.mode==='data'?parseData(text):parseCases(text)",js)
+        self.assertIn("state.dataFiles=tree.tree.filter",js)
+        self.assertIn("No run results are inferred.",js)
         self.assertNotIn(".innerHTML",js)
         self.assertNotIn("eval(",js)
 
@@ -102,6 +106,12 @@ assert.equal(projectForPath('network/tests/test_ab_information.py'),'ab');
 assert.equal(projectForPath('network/tests/test_ambiguous.py'),'other');
 assert.equal(isTestPath('network/tests/test_examples.py'),true);
 assert.equal(isTestPath('README.md'),false);
+const records=parseData('{"cases":[{"id":"a","actual":4},{"id":"b","actual":5}],"verdict":"unknown"}');
+assert.deepEqual(records.map(r=>r.name),['cases[0]','cases[1]','verdict']);
+assert.equal(records[0].data,true);
+assert.ok(records[1].body.includes('"actual": 5'));
+assert.equal(isDataPath('research/dives/ARC3-TRACE-001/dive.json'),true);
+assert.equal(isDataPath('work/arc3/native_probe.py'),false);
 """
         with TemporaryDirectory() as d:
             path=Path(d)/"case-inspection.js";path.write_text(functions+parsing+fixture,encoding="utf-8")
