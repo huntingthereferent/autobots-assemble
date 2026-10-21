@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a1018">
-<meta name="description" content="A local-first cat keyboard with sampled sounds, real chord progressions, saved templates, and a 16-step cat sequencer.">
+<meta name="description" content="Tuned cat keyboard with navigable sixteen-bar arrangements, saved branches and chord progressions.">
 <title>MEOW LAB 2 · Workstation sound keyboard</title>
 <style>
 :root{color-scheme:dark;--ink:#25172e;--base:#201829;--deep:#17111f;--card:#30243b;--card2:#3b2b48;--line:#685575;--lilac:#cab0ff;--pink:#ffb2ba;--mint:#aef1cc;--lemon:#ffe8a0;--cream:#fff6e9;--muted:#c8bad3;--shadow:0 28px 80px #0a0711a6}
@@ -35,6 +35,24 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 @media(max-width:850px){.bank-grid{grid-template-columns:1fr}.hero{grid-template-columns:1fr}.stage{min-height:210px}.hero h1{font-size:clamp(52px,12vw,85px)}}@media(max-width:520px){.bank-slots{grid-template-columns:repeat(2,minmax(0,1fr))}.soundbank{padding:15px}.bank-title{font-size:38px}.bank-editor{padding:12px}#sound-wave{height:125px}}
 
 .harmony{margin-top:20px;padding:clamp(18px,3vw,27px)}.harmony h2{font-size:clamp(22px,3vw,30px);letter-spacing:-.04em;margin:0 0 7px}.harmony p{font-size:13px;color:var(--muted);margin:0 0 15px}.harmony-controls{display:grid;grid-template-columns:minmax(0,1fr) 130px auto;align-items:end;gap:12px}.harmony label{display:grid;gap:5px;color:var(--muted);font:800 11px ui-monospace,monospace}.harmony select,.harmony input[type=text]{min-width:0;width:100%;border:1px solid #856c92;border-radius:11px;padding:11px;background:#241a2d;color:var(--cream);font:700 13px system-ui,sans-serif}.harmony .action{white-space:nowrap}.chord-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:18px 0}.chord-tile{min-width:0;background:#241a2d;border:1px solid #715d7d;border-radius:13px;padding:15px 10px;text-align:center}.chord-tile strong{display:block;font:950 clamp(18px,3vw,26px) ui-monospace,monospace;color:var(--lemon)}.chord-tile small{display:block;font:750 10px ui-monospace,monospace;color:var(--muted);margin-top:5px}.chord-tile.active{border-color:var(--mint);box-shadow:inset 0 0 0 1px var(--mint)}.custom-harmony{display:grid;grid-template-columns: minmax(135px,1fr) minmax(180px,2fr) auto auto;gap:10px;align-items:end;padding-top:16px;border-top:1px solid #685575}.harmony .small-note{margin-top:10px!important}.harmony #harmony-status{min-height:21px;margin-top:12px;color:var(--mint);font:750 12px ui-monospace,monospace}@media(max-width:800px){.custom-harmony{grid-template-columns:1fr 1fr}.harmony-controls{grid-template-columns:1fr 110px}.harmony-controls>.action{grid-column:1/-1}}@media(max-width:480px){.harmony-controls,.custom-harmony{grid-template-columns:1fr}.harmony-controls>.action{grid-column:auto}.chord-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+.harmony .chord-list{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px}
+.bar-tile{min-width:0;min-height:74px;border:1px solid #715d7d;background:#241a2d;color:var(--cream);border-radius:12px;padding:9px 4px;text-align:center}
+.bar-tile small{display:block;font:700 10px ui-monospace,monospace;color:var(--muted)}
+.bar-tile strong{display:block;font:900 clamp(14px,2vw,22px) ui-monospace,monospace;color:var(--lemon)}
+.bar-tile.selected{border:2px solid var(--mint);padding:8px 3px;background:#453757}
+.bar-tile.playing{box-shadow:inset 0 0 0 2px var(--pink)}
+.branch-panel{padding:16px;margin-top:16px;border:1px solid var(--line);border-radius:16px;background:#21192bc9}
+.bar-actions,.branch-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.bar-actions strong{color:var(--lemon);font:800 12px ui-monospace,monospace}
+.bar-actions label,.branch-fields label{display:grid;gap:5px;color:var(--muted);font:750 11px ui-monospace,monospace}
+.branch-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.bar-actions input[type=text],.branch-fields input,.branch-fields select{min-width:0;width:100%;padding:10px;background:#251a30;color:var(--cream);border:1px solid #856c92;border-radius:9px}
+.bar-actions input[type=text]{width:114px}
+.branch-status{min-height:22px;color:var(--mint);font:700 12px ui-monospace,monospace}
+@media(max-width:780px){.harmony .chord-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:480px){.branch-fields{grid-template-columns:1fr}.harmony .chord-list{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
 </style>
 </head>
@@ -74,11 +92,21 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 <div class="display-bar"><strong id="now-playing" aria-live="polite">♪ READY TO MEOW</strong><span id="audio-status" role="status">Tap a key to enable sound</span></div><p class="hint"><strong>Computer keys:</strong> A W S E D F T G Y H U J K &nbsp;·&nbsp; Touch and drag across the piano &nbsp;·&nbsp; Multiple notes at once</p>
 </section>
 <section class="studio" id="studio" aria-label="Cat music studio"><div class="card"><h2>Little tape recorder <span aria-hidden="true">⏺</span></h2><p>Record your actual performance, replay it, or save the notes to bring back later.</p><div class="action-row"><button type="button" class="action" id="rec" aria-pressed="false"><span id="rec-led" class="record-led"></span> Record</button><button type="button" class="action alt" id="play-tape">▶ Replay</button><button type="button" class="action alt" id="stop-tape">■ Stop</button></div><div class="tape"><div id="tape-clock" class="counter">00:00</div><small id="tape-label">A blank tape, waiting for your masterpiece.</small><div class="tape-dots" id="tape-dots" aria-hidden="true"></div></div><div class="action-row"><button type="button" class="small-btn" id="export">↓ Save song</button><button type="button" class="small-btn" id="import">↑ Load song</button><button type="button" class="small-btn" id="clear-tape">Clear tape</button><input class="file-input" type="file" id="song-file" accept="application/json,.json"></div><p class="small-note">Saved songs are small JSON note scores, not audio files. Everything runs locally in your browser; no accounts, uploads or tracking.</p></div>
-<div class="card"><h2>16-step meow studio <span aria-hidden="true">✳</span></h2><p>Tap squares to arrange a loop. Layer notes, choose your speed, and make it weird.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play loop</button><button type="button" class="action alt" id="loop-clear">Clear</button><button type="button" class="action alt" id="preset">Surprise me</button></div><div class="grid-controls"><label for="tempo" class="control-label">BPM</label><input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output><span class="control-label">· 16 STEPS / 4 BARS</span></div><div class="seq-wrap"><div class="seq-numbers" id="seq-numbers"></div><div class="seq" id="seq" role="group" aria-label="16 step pattern editor"></div></div><div class="notice" role="status" id="studio-status">STUDIO IS READY.</div></div></section>
+<div class="card"><h2>16-step melody · selected bar <span aria-hidden="true">✳</span></h2><p>Each of your 16 bars has its own 16-step melody. Choose the bar below, then edit the notes here.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play arrangement</button><button type="button" class="action alt" id="loop-clear">Clear bar</button><button type="button" class="action alt" id="preset">Pattern for bar</button></div><div class="grid-controls"><label for="tempo" class="control-label">BPM</label><input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output><span class="control-label">· 16 STEPS PER BAR · 16 BARS</span></div><div class="seq-wrap"><div class="seq-numbers" id="seq-numbers"></div><div class="seq" id="seq" role="group" aria-label="16 step pattern editor"></div></div><div class="notice" role="status" id="studio-status">STUDIO IS READY.</div></div></section>
 <section class="harmony card" id="harmony" aria-labelledby="harmony-title">
-<h2 id="harmony-title">Real chords. Tiny cat band. ♫</h2><p>Choose a real four-chord progression. Generate it in any key, then press <strong>Play loop</strong> in the studio: one chord per bar, repeating with your own 16-step melody.</p>
-<div class="harmony-controls"><label for="progression-template">PROGRESSION TEMPLATE<select id="progression-template"></select></label><label for="progression-key">KEY<select id="progression-key"></select></label><button type="button" class="action mint" id="generate-progression">♫ Generate chords</button></div>
-<div id="chord-list" class="chord-list" role="group" aria-label="Four-bar chord progression"></div>
+<h2 id="harmony-title">16 bars · branching arrangements ♫</h2><p>Move through sixteen individually editable bars. Each bar owns its chord and melody. Apply a four-chord template to one group of four bars, then continue to the next group without replacing what came before.</p>
+<div class="harmony-controls"><label for="progression-template">PROGRESSION TEMPLATE<select id="progression-template"></select></label><label for="progression-key">KEY<select id="progression-key"></select></label><button type="button" class="action mint" id="generate-progression">♫ Fill selected four bars</button></div>
+
+<div class="branch-panel">
+<div class="bar-actions"><button type="button" class="small-btn" id="bar-prev">← Previous</button><strong id="bar-number">BAR 01 / 16</strong><button type="button" class="small-btn" id="bar-next">Next →</button><button type="button" class="small-btn" id="play-from-bar">▶ Play from here</button><label class="toggle"><input type="checkbox" id="follow-bar" checked> Follow playback</label><label class="toggle"><input type="checkbox" id="repeat-arrangement" checked> Loop 16 bars</label></div>
+<div id="chord-list" class="chord-list" role="group" aria-label="Sixteen navigable arrangement bars"></div>
+<div class="bar-actions"><label for="bar-chord">SELECTED BAR CHORD<input type="text" id="bar-chord" maxlength="8" placeholder="Am7 / blank = rest"></label><button class="small-btn" id="set-bar-chord" type="button">Set chord</button><button class="small-btn" id="copy-previous-bar" type="button">Copy previous bar</button></div>
+<p class="small-note">The 16-step grid above edits this bar only. Each bar can have a different chord and melody.</p>
+</div>
+<div class="branch-panel"><h3>Save arrangement branches</h3><p class="small-note">Each branch is a finite snapshot of all sixteen bars, including notes, chords and tempo. Save a new branch to try an alternative without replacing the original.</p>
+<div class="branch-fields"><label for="branch-name">NEW BRANCH NAME<input type="text" id="branch-name" maxlength="48" placeholder="Verse · different chorus"></label><label for="branch-select">SAVED BRANCHES<select id="branch-select"><option value="">Choose a saved branch…</option></select></label></div>
+<div class="branch-actions"><button type="button" class="small-btn" id="branch-save-new">Save as new branch</button><button type="button" class="small-btn" id="branch-update">Update selected</button><button type="button" class="small-btn" id="branch-load">Load selected</button><button type="button" class="small-btn" id="branch-delete">Delete selected</button><button type="button" class="small-btn" id="branch-export">↓ Back up branches</button><button type="button" class="small-btn" id="branch-import">↑ Restore branches</button><input class="file-input" type="file" id="branch-file" accept="application/json,.json"></div>
+<div id="branch-status" class="branch-status" aria-live="polite" role="status">WORKING ARRANGEMENT · NOT YET SAVED</div></div>
 <div class="custom-harmony"><label for="progression-name">TEMPLATE NAME<input type="text" id="progression-name" maxlength="48" placeholder="My cat ballad"></label><label for="progression-chords">FOUR CHORDS<input type="text" id="progression-chords" maxlength="64" placeholder="Am F C G" aria-describedby="chord-format"></label><button type="button" id="save-progression" class="small-btn">Save template</button><button type="button" id="delete-progression" class="small-btn">Delete custom</button></div>
 <p class="small-note" id="chord-format">Use four standard chord names separated by spaces or commas, e.g. C G Am F or Dm7 G7 Cmaj7 Am7. Supports major, minor, 7, maj7, m7, dim, aug and sus chords. Saved templates stay in this browser and transpose with the key selector.</p>
 <div class="action-row"><button type="button" class="small-btn" id="export-progressions">↓ Back up templates</button><button type="button" class="small-btn" id="import-progressions">↑ Restore templates</button><input class="file-input" type="file" id="progression-file" accept="application/json,.json"></div>
@@ -171,13 +199,53 @@ function realizeProgression(template,tonic){
  }
  return out;
 }
+
+const BAR_COUNT=16,STEPS_PER_BAR=16,ARRANGEMENT_SCHEMA='meow-machine/arrangement-branches-v1';
+function freshBar(step){return {chord:step?step.slice():null,notes:Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false))}}
+function defaultBars(){return Array.from({length:BAR_COUNT},(_,i)=>freshBar(CHORD_LIBRARY[0].steps[i%4]))}
+function cloneBar(bar){return {chord:bar.chord?bar.chord.slice():null,notes:bar.notes.map(row=>row.slice())}}
+function cloneBars(list){return list.map(cloneBar)}
+function validBars(list){
+ if(!Array.isArray(list)||list.length!==BAR_COUNT)return null;
+ const out=[];
+ for(const b of list){
+  if(!b||!Object.hasOwn(b,'chord')||!(b.chord===null||(Array.isArray(b.chord)&&b.chord.length===2&&Number.isInteger(b.chord[0])&&b.chord[0]>=0&&b.chord[0]<12&&typeof b.chord[1]==='string'&&Object.hasOwn(CHORD_INTERVALS,b.chord[1]))))return null;
+  if(!Array.isArray(b.notes)||b.notes.length!==5||!b.notes.every(r=>Array.isArray(r)&&r.length===STEPS_PER_BAR&&r.every(n=>typeof n==='boolean')))return null;
+  out.push(cloneBar(b));
+ }
+ return out;
+}
+function validBranches(data){
+ if(!Array.isArray(data)||data.length>24)return null;
+ const ids=new Set(),out=[];
+ for(const b of data){
+  if(!b||typeof b.id!=='string'||!/^branch-[1-9]\d{0,3}$/.test(b.id)||ids.has(b.id)||typeof b.name!=='string'||!b.name.trim()||b.name.length>48||
+    !Number.isInteger(b.tempo)||b.tempo<65||b.tempo>180)return null;
+  const clean=validBars(b.bars);if(!clean)return null;
+  ids.add(b.id);out.push({id:b.id,name:b.name.trim(),tempo:b.tempo,bars:clean});
+ }
+ return out;
+}
+function realizeBar(step){
+ if(!step)return {name:'—',notes:[]};
+ const [pc,quality]=step;
+ if(!Number.isInteger(pc)||pc<0||pc>11||!Object.hasOwn(CHORD_INTERVALS,quality))return null;
+ return {name:PITCH_CLASSES[pc]+CHORD_SUFFIX[quality],notes:CHORD_INTERVALS[quality].map(v=>48+pc+v)};
+}
+function nextStep(index,repeat){
+ if(!Number.isInteger(index)||index<0||index>BAR_COUNT*STEPS_PER_BAR)return null;
+ return index===BAR_COUNT*STEPS_PER_BAR?(repeat?0:null):index;
+}
+
 const $=id=>document.getElementById(id);
 let cat='miso',octave=4,volume=.68,echo=false,audio=null,master=null,echoInput=null,purrNodes=null;
 const active=new Map(),keys=new Map();let pressedPointer=new Map();let noteSerial=0,recording=false,recordStart=0,events=[],tapeTime=0,tapePlaying=false,scheduled=[],recTimer=0;
-let loopPlaying=false,loopTimer=null,loopTick=0,loopIndex=0,loopLast=-1,loopNotes=new Map(),presetIndex=0;
-let grid=patternPreset(0);
+let loopPlaying=false,loopTimer=null,loopTick=0,loopIndex=0,loopLast=-1,playingBar=-1,loopNotes=new Map(),presetIndex=0;
+let bars=defaultBars(),selectedBar=0,grid=bars[0].notes,arrangementDirty=false;
+let savedBranches=[],activeBranchId=null;
+const BRANCH_STORAGE_KEY='meow-machine/arrangement-branches-v1';
 const TEMPLATE_STORAGE_KEY='meow-machine/chord-templates-v1';
-let customProgressions=[],selectedTemplate='pop-lift',selectedKey=0,currentProgression=realizeProgression(CHORD_LIBRARY[0],0);
+let customProgressions=[],selectedTemplate='pop-lift',selectedKey=0;
 const harmonyNotes=new Set();
 function status(s){$('audio-status').textContent=s}
 function studioStatus(s){$('studio-status').textContent=s}
@@ -359,25 +427,60 @@ function fillTemplateSelector(){
  sel.value=selectedTemplate;
  $('delete-progression').disabled=!selectedTemplate.startsWith('custom-');
 }
+
 function paintHarmony(){
- const list=$('chord-list');list.replaceChildren();
- for(let i=0;i<4;i++){
-  const tile=document.createElement('div');tile.className='chord-tile';tile.classList.toggle('active',loopPlaying&&Math.floor(loopLast/4)===i);
-  const name=document.createElement('strong');name.textContent=currentProgression[i].name;
-  const sub=document.createElement('small');sub.textContent='BAR '+(i+1)+' · STEP '+(i*4+1);
-  tile.append(name,sub);list.append(tile);
+ const list=$('chord-list');
+ if(list.childElementCount!==BAR_COUNT){
+  list.replaceChildren();
+  for(let i=0;i<BAR_COUNT;i++){
+   const btn=document.createElement('button');btn.type='button';btn.className='bar-tile';
+   btn.setAttribute('aria-label','Select bar '+(i+1));
+   for(const tag of ['small','strong','small'])btn.append(document.createElement(tag));
+   btn.addEventListener('click',()=>selectBar(i));list.append(btn);
+  }
+ }
+ for(let i=0;i<BAR_COUNT;i++){
+  const b=list.children[i],chord=realizeBar(bars[i].chord);
+  b.children[0].textContent='BAR '+String(i+1).padStart(2,'0');
+  b.children[1].textContent=chord.name;
+  b.children[2].textContent=bars[i].notes.flat().filter(Boolean).length+' NOTES';
+  b.classList.toggle('selected',i===selectedBar);
+  b.classList.toggle('playing',loopPlaying&&playingBar===i);
+  b.setAttribute('aria-pressed',String(i===selectedBar));
  }
 }
-function applyProgression(){
- if(loopPlaying)stopLoop();
- selectedTemplate=$('progression-template').value;selectedKey=Number($('progression-key').value);
- const t=allProgressions().find(t=>t.id===selectedTemplate);
- const result=realizeProgression(t,selectedKey);
- if(!result){harmonyStatus('Choose a valid chord template and key');return}
- currentProgression=result;
- $('delete-progression').disabled=!selectedTemplate.startsWith('custom-');
- paintHarmony();harmonyStatus(t.name+' · '+PITCH_CLASSES[selectedKey]+' · Four real chords ready to play');
+function selectBar(index){
+ if(!Number.isInteger(index)||index<0||index>=BAR_COUNT)return;
+ selectedBar=index;grid=bars[index].notes;
+ $('bar-number').textContent='BAR '+String(index+1).padStart(2,'0')+' / 16';
+ $('bar-chord').value=bars[index].chord?realizeBar(bars[index].chord).name:'';
+ $('copy-previous-bar').disabled=index===0;
+ $('seq').setAttribute('aria-label','16 step editor for bar '+(index+1));
+ paintGrid();paintHarmony();
 }
+function dirtyBars(){arrangementDirty=true;$('branch-status').textContent='UNSAVED CHANGES · Save a new branch or update selected';paintHarmony()}
+function setBarChord(){
+ const value=$('bar-chord').value.trim(),c=value?parseChordSymbol(value):null;
+ if(value&&!c){harmonyStatus('Invalid chord name · try Am, Cmaj7, F♯m7, or leave blank for a rest');return}
+ bars[selectedBar].chord=c?[c.pc,c.quality]:null;
+ dirtyBars();selectBar(selectedBar);harmonyStatus('Changed chord at bar '+(selectedBar+1)+' only');
+}
+function copyPreviousBar(){
+ if(selectedBar===0)return;
+ bars[selectedBar]=cloneBar(bars[selectedBar-1]);dirtyBars();selectBar(selectedBar);
+ harmonyStatus('Copied previous bar into bar '+(selectedBar+1));
+}
+function applyProgression(){
+ selectedTemplate=$('progression-template').value;selectedKey=Number($('progression-key').value);
+ const t=allProgressions().find(v=>v.id===selectedTemplate),real=realizeProgression(t,selectedKey);
+ if(!real){harmonyStatus('Select a valid progression and key');return}
+ const start=Math.floor(selectedBar/4)*4;
+ for(let i=0;i<4;i++)bars[start+i].chord=[(selectedKey+t.steps[i][0])%12,t.steps[i][1]];
+ $('delete-progression').disabled=!selectedTemplate.startsWith('custom-');
+ dirtyBars();selectBar(selectedBar);
+ harmonyStatus('Filled bars '+(start+1)+'–'+(start+4)+' · other bars preserved');
+}
+
 function saveProgression(){
  const name=$('progression-name').value.trim(),steps=progressionFromSymbols($('progression-chords').value,selectedKey);
  if(!name||name.length>48||!steps){harmonyStatus('Enter a template name and four valid chords, e.g. Am F C G');return}
@@ -433,22 +536,155 @@ function initializeHarmony(){
  $('import-progressions').addEventListener('click',()=>$('progression-file').click());
  $('progression-file').addEventListener('change',e=>importProgressions(e.target.files?.[0]));
 }
-function makeGrid(){const nums=$('seq-numbers'),seq=$('seq');nums.replaceChildren();seq.replaceChildren();const empty=document.createElement('small');nums.append(empty);for(let col=0;col<16;col++){let n=document.createElement('small');n.textContent=col%4===0?String(col/4+1):'·';nums.append(n)}for(let row=0;row<5;row++){
- const label=document.createElement('div');label.className='seq-label';label.textContent=NOTES[ROW_NOTES[row]];seq.append(label);
- for(let col=0;col<16;col++){const b=document.createElement('button');b.type='button';b.className='step';b.dataset.row=String(row);b.dataset.col=String(col);b.dataset.beat=String(col%4===0);b.setAttribute('aria-label',NOTES[ROW_NOTES[row]]+', step '+(col+1));b.addEventListener('click',()=>{grid[row][col]=!grid[row][col];paintGrid()});seq.append(b)}
- }paintGrid()}
-function paintGrid(){for(const b of $('seq').querySelectorAll('.step')){const row=+b.dataset.row,col=+b.dataset.col;b.classList.toggle('on',grid[row][col]);b.classList.toggle('playing',loopPlaying&&col===loopLast);b.setAttribute('aria-pressed',grid[row][col]?'true':'false')}}
-function loopStep(){if(!loopPlaying)return;const current=loopIndex%16;
- if(current%4===0){
-  for(const id of harmonyNotes)releaseSound(id,false);
-  harmonyNotes.clear();
-  const chord=currentProgression[current/4];
-  chord.notes.forEach((note,index)=>{const id='chord'+index;holdSound(note,id,cat,false);harmonyNotes.add(id)});
- }for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();for(let row=0;row<5;row++)if(grid[row][current]){const id='loop'+row;const midi=midiFor(ROW_NOTES[row],octave);holdSound(midi,id,cat,false);loopNotes.set(id,true)}loopLast=current;loopIndex++;paintGrid();paintHarmony()}
-function scheduleLoop(){if(!loopPlaying)return;loopStep();loopTimer=setTimeout(scheduleLoop,60000/+ $('tempo').value/4)}
-function stopLoop(){loopPlaying=false;clearTimeout(loopTimer);loopTimer=null;
- for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();loopLast=-1;paintGrid();paintHarmony();$('loop-play').textContent='▶ Play loop';$('loop-play').setAttribute('aria-pressed','false');studioStatus('STUDIO IS READY.')}
-function startLoop(){stopRecording();stopTape();if(!unlockAudio())return;loopPlaying=true;loopIndex=0;$('loop-play').textContent='■ Stop loop';$('loop-play').setAttribute('aria-pressed','true');studioStatus('YOUR CAT BAND IS PLAYING');scheduleLoop()}
+
+function storedBranches(){try{return validBranches(JSON.parse(window.localStorage.getItem(BRANCH_STORAGE_KEY)||'[]'))||[]}catch{return []}}
+function storeBranches(){
+ try{window.localStorage.setItem(BRANCH_STORAGE_KEY,JSON.stringify(savedBranches));return true}
+ catch{$('branch-status').textContent='Storage unavailable · back up branches as JSON';return false}
+}
+function refreshBranchSelector(){
+ const select=$('branch-select'),chosen=select.value||activeBranchId||'';
+ select.replaceChildren();const o=document.createElement('option');o.value='';o.textContent='Choose a saved branch…';select.append(o);
+ for(const b of savedBranches){const o=document.createElement('option');o.value=b.id;o.textContent=b.name;select.append(o)}
+ select.value=savedBranches.some(b=>b.id===chosen)?chosen:'';
+}
+function saveNewBranch(){
+ const name=$('branch-name').value.trim();
+ if(!name||name.length>48){$('branch-status').textContent='Give this new branch a name';return}
+ if(savedBranches.length>=24){$('branch-status').textContent='24 branches maximum; back up or delete one';return}
+ let i=1;while(savedBranches.some(b=>b.id==='branch-'+i))i++;
+ const entry={id:'branch-'+i,name,tempo:Number($('tempo').value),bars:cloneBars(bars)};
+ savedBranches.push(entry);activeBranchId=entry.id;arrangementDirty=false;
+ const ok=storeBranches();refreshBranchSelector();$('branch-select').value=entry.id;$('branch-name').value='';
+ $('branch-status').textContent=ok?'Saved '+name+' · all 16 bars':'Branch only in this session · export a backup';
+}
+function updateBranch(){
+ const b=savedBranches.find(v=>v.id===$('branch-select').value);
+ if(!b){$('branch-status').textContent='Choose an existing branch to update';return}
+ b.bars=cloneBars(bars);b.tempo=Number($('tempo').value);activeBranchId=b.id;arrangementDirty=false;
+ const ok=storeBranches();$('branch-status').textContent=ok?'Updated '+b.name:'Updated in this session · export backup';
+}
+function loadBranch(){
+ const b=savedBranches.find(v=>v.id===$('branch-select').value);
+ if(!b){$('branch-status').textContent='Choose a saved branch to load';return}
+ stopLoop();bars=cloneBars(b.bars);activeBranchId=b.id;arrangementDirty=false;
+ $('tempo').value=b.tempo;$('tempo-read').textContent=b.tempo;selectBar(0);
+ $('branch-status').textContent='Loaded '+b.name+' · move through bars 1–16';
+}
+function deleteBranch(){
+ const id=$('branch-select').value,b=savedBranches.find(v=>v.id===id);
+ if(!b){$('branch-status').textContent='Choose saved branch to delete';return}
+ savedBranches=savedBranches.filter(v=>v.id!==id);if(activeBranchId===id)activeBranchId=null;
+ storeBranches();refreshBranchSelector();
+ $('branch-status').textContent='Deleted saved '+b.name+' · working bars stay intact';
+}
+function exportBranches(){
+ downloadJson({schema:ARRANGEMENT_SCHEMA,branches:savedBranches,working:{bars:cloneBars(bars),tempo:Number($('tempo').value)}},'meow-16-bar-branches.json');
+ $('branch-status').textContent='Downloaded all saved branches plus working 16 bars';
+}
+async function importBranches(file){
+ if(!file)return;
+ try{
+  if(file.size>350000)throw Error('Backup is too large');
+  const data=JSON.parse(await file.text());
+  if(!data||data.schema!==ARRANGEMENT_SCHEMA)throw Error('Not a branch backup');
+  const imported=validBranches(data.branches);if(!imported)throw Error('Invalid branches');
+  const draft=data.working,clean=draft?validBars(draft.bars):null;
+  if(draft&&(!clean||!Number.isInteger(draft.tempo)||draft.tempo<65||draft.tempo>180))throw Error('Invalid working bars');
+  const combined=savedBranches.map(v=>({...v,bars:cloneBars(v.bars)}));
+  for(const b of imported){
+   if(combined.length>=24)throw Error('Maximum 24 saved branches');
+   let n=1;while(combined.some(v=>v.id==='branch-'+n))n++;
+   combined.push({...b,id:'branch-'+n});
+  }
+  if(!validBranches(combined))throw Error('Invalid combined branches');
+  savedBranches=combined;storeBranches();refreshBranchSelector();
+  if(clean){stopLoop();bars=clean;activeBranchId=null;arrangementDirty=true;selectedBar=0;grid=bars[0].notes;
+   $('tempo').value=draft.tempo;$('tempo-read').textContent=draft.tempo;selectBar(0);}
+  $('branch-status').textContent='Restored '+imported.length+' branches'+(clean?' and working bars':'');
+ }catch(e){$('branch-status').textContent='Restore rejected: '+e.message}
+ finally{$('branch-file').value=''}
+}
+function initializeBranches(){
+ savedBranches=storedBranches();refreshBranchSelector();selectBar(0);
+ $('bar-prev').addEventListener('click',()=>selectBar(Math.max(0,selectedBar-1)));
+ $('bar-next').addEventListener('click',()=>selectBar(Math.min(BAR_COUNT-1,selectedBar+1)));
+ $('play-from-bar').addEventListener('click',()=>{stopLoop();startLoop()});
+ $('set-bar-chord').addEventListener('click',setBarChord);
+ $('bar-chord').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();setBarChord()}});
+ $('copy-previous-bar').addEventListener('click',copyPreviousBar);
+ $('branch-save-new').addEventListener('click',saveNewBranch);
+ $('branch-update').addEventListener('click',updateBranch);
+ $('branch-load').addEventListener('click',loadBranch);
+ $('branch-delete').addEventListener('click',deleteBranch);
+ $('branch-export').addEventListener('click',exportBranches);
+ $('branch-import').addEventListener('click',()=>$('branch-file').click());
+ $('branch-file').addEventListener('change',e=>importBranches(e.target.files?.[0]));
+ $('tempo').addEventListener('change',dirtyBars);
+}
+
+
+function makeGrid(){
+ const nums=$('seq-numbers'),seq=$('seq');nums.replaceChildren();seq.replaceChildren();
+ nums.append(document.createElement('small'));
+ for(let c=0;c<STEPS_PER_BAR;c++){const n=document.createElement('small');n.textContent=c%4===0?String(c/4+1):'·';nums.append(n)}
+ for(let r=0;r<5;r++){
+  const label=document.createElement('div');label.className='seq-label';label.textContent=NOTES[ROW_NOTES[r]];seq.append(label);
+  for(let c=0;c<STEPS_PER_BAR;c++){
+   const b=document.createElement('button');b.type='button';b.className='step';
+   b.dataset.row=String(r);b.dataset.col=String(c);b.dataset.beat=String(c%4===0);
+   b.setAttribute('aria-label',NOTES[ROW_NOTES[r]]+', step '+(c+1));
+   b.addEventListener('click',()=>{grid[r][c]=!grid[r][c];dirtyBars();paintGrid()});seq.append(b);
+  }
+ }
+ paintGrid();
+}
+function paintGrid(){
+ for(const b of $('seq').querySelectorAll('.step')){
+  const r=+b.dataset.row,c=+b.dataset.col;
+  b.classList.toggle('on',grid[r][c]);
+  b.classList.toggle('playing',loopPlaying&&playingBar===selectedBar&&c===loopLast);
+  b.setAttribute('aria-pressed',String(grid[r][c]));
+ }
+}
+function loopStep(){
+ if(!loopPlaying)return;
+ const index=nextStep(loopIndex,$('repeat-arrangement').checked);
+ if(index===null){stopLoop();studioStatus('FINISHED · 16 BARS PLAYED');return}
+ loopIndex=index;
+ const barIndex=Math.floor(index/STEPS_PER_BAR),step=index%STEPS_PER_BAR,bar=bars[barIndex];
+ if(step===0){
+  for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();
+  const chord=realizeBar(bar.chord);
+  chord.notes.forEach((note,i)=>{const id='chord'+i;holdSound(note,id,cat,false);harmonyNotes.add(id)});
+  if($('follow-bar').checked)selectBar(barIndex);
+ }
+ for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();
+ for(let r=0;r<5;r++)if(bar.notes[r][step]){
+  const id='loop'+r;holdSound(midiFor(ROW_NOTES[r],octave),id,cat,false);loopNotes.set(id,true);
+ }
+ playingBar=barIndex;loopLast=step;loopIndex++;
+ paintGrid();paintHarmony();
+ studioStatus('PLAYING BAR '+String(barIndex+1).padStart(2,'0')+' / 16 · BEAT '+(Math.floor(step/4)+1));
+}
+function scheduleLoop(){
+ if(!loopPlaying)return;
+ loopStep();if(loopPlaying)loopTimer=setTimeout(scheduleLoop,60000/Number($('tempo').value)/4);
+}
+function stopLoop(){
+ loopPlaying=false;clearTimeout(loopTimer);loopTimer=null;
+ for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();
+ for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();
+ playingBar=-1;loopLast=-1;paintGrid();paintHarmony();
+ $('loop-play').textContent='▶ Play arrangement';$('loop-play').setAttribute('aria-pressed','false');
+ studioStatus('STUDIO IS READY.');
+}
+function startLoop(){
+ stopRecording();stopTape();if(!unlockAudio())return;
+ loopPlaying=true;loopIndex=selectedBar*STEPS_PER_BAR;playingBar=-1;loopLast=-1;
+ $('loop-play').textContent='■ Stop playback';$('loop-play').setAttribute('aria-pressed','true');
+ studioStatus('PLAYING FROM BAR '+(selectedBar+1));scheduleLoop();
+}
 
 /* Audio bank: content-addressed user imports + four mathematically constructed cat calls.
    Browser observations are never labeled as host-native workstation verifications. */
@@ -613,12 +849,12 @@ function bindSoundBank(){
  if(unlockAudio())initializeSoundBank();
 }
 
-function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeHarmony();for(const b of document.querySelectorAll('.cat-btn'))b.addEventListener('click',()=>pickCat(b.dataset.cat));$('octave-down').addEventListener('click',()=>changeOctave(-1));$('octave-up').addEventListener('click',()=>changeOctave(1));$('volume').addEventListener('input',e=>{volume=e.target.value/100;if(master)master.gain.setTargetAtTime(volume*.65,audio.currentTime,.02)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>togglePurr(e.target.checked));
+function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeHarmony();initializeBranches();for(const b of document.querySelectorAll('.cat-btn'))b.addEventListener('click',()=>pickCat(b.dataset.cat));$('octave-down').addEventListener('click',()=>changeOctave(-1));$('octave-up').addEventListener('click',()=>changeOctave(1));$('volume').addEventListener('input',e=>{volume=e.target.value/100;if(master)master.gain.setTargetAtTime(volume*.65,audio.currentTime,.02)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>togglePurr(e.target.checked));
  document.addEventListener('keydown',e=>{if(e.repeat||e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)||document.activeElement?.isContentEditable)return;const i=SHORTCUTS.indexOf(e.code);if(i<0)return;e.preventDefault();holdSound(midiFor(i,octave),'key'+e.code)});
  document.addEventListener('keyup',e=>{if(!SHORTCUTS.includes(e.code))return;releaseSound('key'+e.code)});
  window.addEventListener('blur',()=>{stopLoop();stopTape();releaseAll();togglePurr(false);$('purr').checked=false});document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseAll();stopLoop();stopTape();togglePurr(false);$('purr').checked=false}});
  $('rec').addEventListener('click',()=>recording?stopRecording():startRecording());$('play-tape').addEventListener('click',playTape);$('stop-tape').addEventListener('click',()=>{stopRecording();stopTape()});$('clear-tape').addEventListener('click',()=>{stopRecording();stopTape();events=[];tapeTime=0;recIds.clear();updateTape();$('tape-label').textContent='A blank tape, waiting for your masterpiece.'});$('export').addEventListener('click',saveSong);$('import').addEventListener('click',()=>$('song-file').click());$('song-file').addEventListener('change',e=>loadSong(e.target.files?.[0]));
- $('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{grid=Array.from({length:5},()=>Array(16).fill(false));paintGrid();studioStatus('CLEARED · YOUR TURN')});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;grid=patternPreset(presetIndex);paintGrid();studioStatus(['MOONLIGHT MEOWS','THE CATWALK','ZOOMIES'][presetIndex]+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');}
+ $('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{bars[selectedBar].notes=Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false));grid=bars[selectedBar].notes;dirtyBars();paintGrid();studioStatus('CLEARED BAR '+(selectedBar+1))});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;bars[selectedBar].notes=patternPreset(presetIndex);grid=bars[selectedBar].notes;dirtyBars();paintGrid();studioStatus('PATTERN FOR BAR '+(selectedBar+1)+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');}
 bind();
 })();
 </script>

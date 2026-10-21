@@ -38,13 +38,14 @@ class CatKeyboardTests(unittest.TestCase):
         for marker in ("MEOW LAB 2 · Workstation sound keyboard", "window.AudioContext",
                        "pointerdown", "prefers-reduced-motion",
                        "meow-machine/score-v1", "stopRecording",
-                       "patternPreset", "16-step meow studio", "id=\"sound-file\"", "function swallowSound()",
+                       "patternPreset", "16-step melody · selected bar", "id=\"sound-file\"", "function swallowSound()",
                        "function playBankSample(", "function handoffSample()",
                        "function tunedVoice(", "function renderTunedPreview(",
                        "if(soundSlots[voiceName]?.origin===\'local-file\'",
                        "native_verification:\'NOT_RUN_BY_BROWSER\'", "CHORD_LIBRARY",
                        "Save template", "realizeProgression",
-                       "meow-machine/chord-templates-v1"):
+                       "meow-machine/chord-templates-v1", "ARRANGEMENT_SCHEMA",
+                       "function validBranches(", "function selectBar(", "function startLoop("):
             self.assertIn(marker, page)
         for forbidden in ("<script src=", "fetch(", "EventSource"):
             self.assertNotIn(forbidden, page)
@@ -71,7 +72,7 @@ class CatKeyboardTests(unittest.TestCase):
         pure = script[script.index("const NOTES="):script.index("const $=id=>")]
         checks = r"""
 const vm=require('node:vm'),a=require('node:assert/strict');
-const m=vm.runInNewContext(process.env.CAT_RULES+'\n({hz,midiFor,validScore,patternPreset,SHORTCUTS,CHORD_LIBRARY,parseChordSymbol,progressionFromSymbols,realizeProgression,validUserTemplates})');
+const m=vm.runInNewContext(process.env.CAT_RULES+'\n({hz,midiFor,validScore,patternPreset,SHORTCUTS,CHORD_LIBRARY,parseChordSymbol,progressionFromSymbols,realizeProgression,validUserTemplates,defaultBars,cloneBars,validBars,validBranches,realizeBar,nextStep,BAR_COUNT,STEPS_PER_BAR})');
 a.equal(m.SHORTCUTS.length,13);
 a.equal(m.midiFor(0,4),60);a.equal(m.midiFor(12,5),84);
 a.equal(Math.round(m.hz(69)),440);
@@ -111,6 +112,28 @@ a.equal(m.validUserTemplates([...good,...good]),null);
 a.equal(m.validUserTemplates([{...good[0],steps:[[99,'maj'],[7,'maj'],[9,'min'],[5,'maj']]}]),null);
 a.equal(m.validUserTemplates([{...good[0],name:''}]),null);
 a.equal(m.validUserTemplates(Array.from({length:25},(_,i)=>({...good[0],id:'custom-'+(i+1)}))),null);
+
+a.equal(m.BAR_COUNT,16);a.equal(m.STEPS_PER_BAR,16);
+const bars=m.defaultBars();a.equal(bars.length,16);
+a.equal(bars.map(b=>m.realizeBar(b.chord).name).slice(0,4).join(' '),'C G Am F');
+a(bars.every(b=>b.notes.length===5&&b.notes.every(row=>row.length===16)));
+const copy=m.cloneBars(bars);copy[5].notes[1][7]=true;copy[5].chord=[11,'min'];
+a.equal(bars[5].notes[1][7],false);
+a.equal(m.realizeBar(copy[5].chord).name,'Bm');
+a.equal(m.validBars(copy).length,16);
+a.equal(m.validBars(copy.slice(1)),null);
+a.equal(m.validBars(copy.map((b,i)=>i===0?{...b,chord:[99,'maj']}:b)),null);
+a.equal(m.nextStep(255,false),255);
+a.equal(m.nextStep(256,true),0);
+a.equal(m.nextStep(256,false),null);
+const branch={id:'branch-1',name:'Verse',tempo:112,bars:copy};
+a.equal(m.validBranches([branch]).length,1);
+a.equal(m.validBranches([branch,branch]),null);
+a.equal(m.validBranches([{...branch,tempo:999}]),null);
+a.equal(m.validBranches(Array.from({length:25},(_,i)=>({...branch,id:'branch-'+(i+1)}))),null);
+m.validBranches([branch])[0].bars[5].notes[1][7]=false;
+a.equal(copy[5].notes[1][7],true);
+
 """
         result = subprocess.run(["node", "-e", checks], text=True,
                                 capture_output=True, timeout=10,

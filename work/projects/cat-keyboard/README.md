@@ -29,9 +29,18 @@ The source directory must contain between one and four of `miso.wav`, `mochi.wav
 
 ## Real chord progressions and Rosey's keyboard
 
-The integrated [Meow Lab 2 keyboard](../../../docs/live/cat-keyboard.html#harmony) now includes nine defined four-chord progressions and transposition into all twelve keys. A four-chord template can be entered by name (for example, `Am F C G`), saved locally, deleted, or backed up/restored as bounded JSON. Playing the 16-step sequencer layers one chord per four steps over the editable melody, using the existing procedural or source-selected cat sound bank. Browser storage is not a native workstation event or a cross-device sync.
+The integrated [Meow Lab 2 keyboard](../../../docs/live/cat-keyboard.html#harmony) now includes nine defined four-chord progressions and transposition into all twelve keys. A four-chord template can be entered by name (for example, `Am F C G`), saved locally, deleted, or backed up/restored as bounded JSON. The sixteen-bar arrangement has its own 16-step melody and chord for **each** bar, totaling 256 sixteenth-note steps. Playback advances bar by bar through the full composition; it does not repeat the first four chords unless you choose to arrange that repetition. Four-chord templates fill only the currently selected group of four bars. Browser storage is not a native workstation event or a cross-device sync.
 
 [Rosey's Kawaii Cat Keyboard — tuned higher-notes edition](../../../docs/live/roseys-cat-keyboard.html) is separately preserved as a standalone browser instrument with a scrollable 25-key, two-octave keyboard, tuned kawaii meows, built-in and saved chord progressions, and recording. It remains independent of the native Swallow Sounds bank; Meow Lab 2 is still the workstation-linked sound intake instrument. Both run locally in the browser, without uploading a child's performance.
+
+
+## Finite sixteen-bar arrangement branches
+
+Each bar is an independently editable chord (including rest) plus five melodic rows of sixteen sixteenth-note steps. The bar strip shows all sixteen bars; Previous/Next, click-to-select, and the optional Follow playback setting move the editor among them. The 16-step sequencer always edits only the selected bar. Playback starts at that bar, traverses forward, and can either loop the whole sixteen bars or stop after bar 16. Copy previous bar, clear bar and replace the current bar's pattern are bounded local edits.
+
+The nine four-chord templates and any user-created chord templates remain available, but applying one changes **only the selected four-bar section** (bars 1–4, 5–8, 9–12 or 13–16); all other chords and per-bar note patterns remain untouched.
+
+The **saved arrangement branches** are independent local snapshots with sixteen complete bar states and tempo. Save as new forks the current working arrangement; Update selected is an explicit overwrite of a chosen saved branch; Load selected restores it. There is a strict 24-saved-branch limit, a schema-validated JSON backup/restore format, and a copy of the unsaved working arrangement in each export. No browser save implies a native worker execution or a remote repository write.
 
 ## Verification
 
