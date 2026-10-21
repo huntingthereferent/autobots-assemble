@@ -54,6 +54,32 @@ class MeowLabBrowserTests(unittest.TestCase):
                 finally:
                     browser.close()
 
+    def test_real_chords_saved_templates_and_loop(self):
+        with sync_playwright() as p:
+            browser=p.chromium.launch(headless=True,args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
+            try:
+                page=browser.new_page(accept_downloads=True)
+                errors=[]
+                page.on("pageerror",lambda error:errors.append(str(error)))
+                page.goto(PAGE.as_uri(),wait_until="domcontentloaded")
+                self.assertEqual(page.locator("#progression-template option").count(),9)
+                self.assertEqual(page.locator("#chord-list .chord-tile").count(),4)
+                page.locator("#progression-template").select_option("pop-lift")
+                page.locator("#progression-key").select_option("2")
+                self.assertEqual(page.locator("#chord-list .chord-tile strong").all_inner_texts(),["D","A","Bm","G"])
+                page.locator("#progression-name").fill("Rosey's song")
+                page.locator("#progression-chords").fill("Dm G A D")
+                page.locator("#save-progression").click()
+                self.assertEqual(page.locator("#progression-template option").count(),10)
+                self.assertEqual(page.locator("#chord-list .chord-tile strong").all_inner_texts(),["Dm","G","A","D"])
+                page.locator("#loop-play").click()
+                page.wait_for_function("document.querySelectorAll('#chord-list .chord-tile.active').length === 1",timeout=10000)
+                page.locator("#loop-play").click()
+                self.assertEqual(page.locator("#chord-list .chord-tile.active").count(),0)
+                self.assertFalse(errors,errors)
+            finally:
+                browser.close()
+
     def test_mobile_layout_and_sounds(self):
         with sync_playwright() as p:
             browser=p.chromium.launch(headless=True,args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
