@@ -94,7 +94,7 @@ def check(row):
         return True
     bounds=original["clearance_bounds"]
     reported=row.get("per_original_constraint_limits")
-    if len(bounds)!=len(reported)!=24:
+    if len(bounds)!=24 or len(reported)!=24:
         raise ValueError("original constraint list not preserved")
     analytical=[]
     for a,b in zip(bounds,reported):
