@@ -1,0 +1,110 @@
+name: A/B WORLD31 original first-limit receipts
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial31_handoff.py'
+      - 'network/tests/test_ab_world_trial31_handoff.py'
+      - 'work/ab_world/TRIAL31_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial31-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-world31-source-and-eight-neutral-receipts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout neutral A/B recorder
+        uses: actions/checkout@v4
+      - name: Checkout immutable original WORLD31 mathematical source
+        uses: actions/checkout@v4
+        with:
+          ref: 3adab3834913f3b8948a99725e9457c62c2d524b
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recheck original WORLD source and independent analytic threshold witness
+        working-directory: original-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from systems.workspace.world_ab_first_envelope_limit import run as current
+          from systems.workspace.world_ab_post_fourth_local_clearance import run as earlier
+          from network.tests.test_world_ab_first_envelope_limit import check
+          source=current(); former=earlier()
+          assert len(source["cases"])==len(former["cases"])==8
+          assert all(check(c) for c in source["cases"])
+          assert source["qualified_original_responses"]==3
+          assert source["cases_with_prior_envelope_limit"]==3
+          assert source["cases_clear_through_horizon"]==0
+          assert source["without_qualified_response"]==5
+          assert source["contact_features_solved"]==0
+          assert source["fifth_impulses_computed"]==0
+          Path("../world31-original-native.json").write_text(
+              json.dumps(source,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../world31-original-prior30.json").write_text(
+              json.dumps(former,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../world31-source-verdict.json").write_text(json.dumps({
+              "pinned_original_commit":"3adab3834913f3b8948a99725e9457c62c2d524b",
+              "independent_original_analytic_limit_witness":True,
+              "sufficient_bound_limit_cases":3,
+              "physical_contacts_measured":0,
+              "fifth_impulses_selected":0,
+              "post_limit_motion_authenticated":0
+          },sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Test independent neutral A/B receipt and adversarial source controls
+        run: python -m unittest -v network.tests.test_ab_world_trial31_handoff
+      - name: Reconstruct all eight original-source-attributed neutral receipts
+        run: |
+          python -m work.ab_world.world_trial31_handoff --native world31-original-native.json --prior30 world31-original-prior30.json > world31-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          r=json.load(open("world31-ab-carrier.json"))
+          assert r["source_bound_limit_cases"]==3
+          assert r["source_full_horizon_cases"]==0
+          assert r["without_qualified_fourth_response"]==5
+          assert r["real_fifth_contacts"]==0
+          assert r["fifth_impulses_selected"]==0
+          assert r["authenticated_postlimit_movements"]==0
+          assert r["new_receivers"]==0
+          assert r["ledger_witness"]["valid"]
+          assert r["ledger_witness"]["pages_verified"]==8
+          assert digest(r["manifest"])==r["manifest_sha256"]
+          folder=Path("world31-ab-pages")
+          folder.mkdir(exist_ok=True)
+          for page in r["ledger_pages"]:
+              receipt=page["receipt"]
+              assert verify_receipt(receipt)["valid"]
+              assert r["manifest"]["ordered_receipts"][page["index"]]["head_hash"]==receipt["head_hash"]
+              folder.joinpath(f'case-{page["index"]:02d}.json').write_text(
+                  json.dumps(receipt,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("world31-ab-manifest.json").write_text(
+              json.dumps(r["manifest"],sort_keys=True,indent=2)+"\n")
+          PY
+          sha256sum world31-original-native.json world31-original-prior30.json world31-source-verdict.json world31-ab-carrier.json world31-ab-manifest.json world31-ab-pages/case-*.json > world31-ab-source-digests.txt
+      - name: Retain exact original source and neutral source-attributed evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ab-world31-original-first-envelope-limit-receipts
+          path: |
+            world31-original-native.json
+            world31-original-prior30.json
+            world31-source-verdict.json
+            world31-ab-carrier.json
+            world31-ab-manifest.json
+            world31-ab-pages/
+            world31-ab-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
