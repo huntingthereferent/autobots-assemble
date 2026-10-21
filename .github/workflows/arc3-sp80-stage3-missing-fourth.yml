@@ -1,0 +1,28 @@
+name: ARC3 original SP80 restore fourth source cup
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage3_missing_fourth.py'
+      - '.github/workflows/arc3-sp80-stage3-missing-fourth.yml'
+jobs:
+  actual-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile native fourth cup intervention
+        run: python -m compileall -q work/arc3/native_sp80_stage3_missing_fourth.py
+      - name: Test 28 genuine original SP80 missing fourth cup games
+        run: python -m work.arc3.native_sp80_stage3_missing_fourth --out runtime/data/arc3/original-sp80-stage3-missing-fourth.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage3-missing-fourth-source
+          path: runtime/data/arc3/original-sp80-stage3-missing-fourth.*
+          if-no-files-found: error
+          retention-days: 14
