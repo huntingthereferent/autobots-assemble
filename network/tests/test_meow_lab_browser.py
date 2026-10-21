@@ -111,6 +111,16 @@ class MeowLabBrowserTests(unittest.TestCase):
                 self.assertEqual(len(data["branches"]),2)
                 self.assertEqual(len(data["working"]["bars"]),16)
                 self.assertEqual(len(data["working"]["bars"][0]["notes"][0]),16)
+                # Persistent saves survive reopening the page.
+                page.reload(wait_until="domcontentloaded")
+                self.assertEqual(page.locator("#branch-select option").count(),3)
+                page.locator("#branch-select").select_option("branch-1")
+                page.locator("#branch-load").click()
+                self.assertEqual(page.locator("#chord-list .bar-tile strong").all_inner_texts()[15],"F")
+                # Restoring a backup forks imported branches instead of overwriting IDs.
+                page.locator("#branch-file").set_input_files(download.value.path())
+                page.wait_for_function("document.querySelector('#branch-status').textContent.includes('Restored')",timeout=10000)
+                self.assertEqual(page.locator("#branch-select option").count(),5)
                 page.locator("#chord-list .bar-tile").nth(15).click()
                 page.locator("#repeat-arrangement").uncheck()
                 page.locator("#tempo").evaluate("(e)=>{e.value='180';e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}))}")
