@@ -90,8 +90,8 @@ def summarize_trial(case, witness, word, row, stacks):
             "sdk_level_after": record.get("official_source_level_after"),
             "sdk_state_before": record.get("official_source_state_before"),
             "sdk_state_after": record.get("official_source_state_after"),
-            "sdk_source_pre_sha256": record.get("actual_source_before_sha"),
-            "sdk_source_post_sha256": record.get("actual_source_after_sha"),
+            "sdk_source_pre_blake2b16": record.get("actual_source_before_sha"),
+            "sdk_source_post_blake2b16": record.get("actual_source_after_sha"),
             "original_legal_before": record.get("original_legal_before"),
             "source_admission": record.get("admission", "SDK_RETURNED"),
         }
@@ -99,25 +99,25 @@ def summarize_trial(case, witness, word, row, stacks):
             frames = np.asarray(stack)
             before = root if index == 1 else stacks["stage3_" + str(index - 1)][-1]
             after = frames[-1]
-            if receipt["sdk_source_pre_sha256"] != hash_frame(before):
+            if receipt["sdk_source_pre_blake2b16"] != hash_frame(before):
                 raise AssertionError("Original SDK pre-frame SHA disagreement")
-            if receipt["sdk_source_post_sha256"] != hash_frame(after):
+            if receipt["sdk_source_post_blake2b16"] != hash_frame(after):
                 raise AssertionError("Original SDK post-frame SHA disagreement")
             receipt.update({
                 "original_sdk_animation_frame_count": len(frames),
                 "full_sdk_animation_sha256": stack_digest(frames),
                 "actual_prepost_changed_pixel_count": int(np.count_nonzero(before != after)),
-                "original_sdk_returned_frame_sha256": [hash_frame(f) for f in frames],
+                "original_sdk_returned_frame_blake2b16": [hash_frame(f) for f in frames],
             })
             if native_action == 5:
                 pours.append({
                     "native_step": index,
                     "official_level_after": receipt["sdk_level_after"],
-                    "original_pre_sha256": receipt["sdk_source_pre_sha256"],
-                    "original_after_sha256": receipt["sdk_source_post_sha256"],
+                    "original_pre_blake2b16": receipt["sdk_source_pre_blake2b16"],
+                    "original_after_blake2b16": receipt["sdk_source_post_blake2b16"],
                     "identical_terminal_image_to_previous_pour": (
                         None if prior_pour_terminal is None
-                        else prior_pour_terminal == receipt["sdk_source_post_sha256"]
+                        else prior_pour_terminal == receipt["sdk_source_post_blake2b16"]
                     ),
                     "actual_intervening_source_actions": [
                         r["original_action"]
@@ -126,7 +126,7 @@ def summarize_trial(case, witness, word, row, stacks):
                     "sdk_animation_frame_count": len(frames),
                     "sdk_animation_sha256": receipt["full_sdk_animation_sha256"],
                 })
-                prior_pour_terminal = receipt["sdk_source_post_sha256"]
+                prior_pour_terminal = receipt["sdk_source_post_blake2b16"]
                 last_pour_index = index
         observations.append(receipt)
 
@@ -134,7 +134,7 @@ def summarize_trial(case, witness, word, row, stacks):
         "frozen_case": case,
         "independent_sdk_witness": witness,
         "exact_original_native_word": word,
-        "verified_source_root_sha256": row["original_verified_stage3_root"]["original_source_sha256"],
+        "verified_source_root_blake2b16": row["original_verified_stage3_root"]["original_source_sha256"],
         "original_sdk_official_level": row["official_original_final_level"],
         "original_sdk_official_state": row["official_original_final_state"],
         "original_sdk_advanced_to_4_or_WIN": row["official_original_level4_or_WIN"],
@@ -157,14 +157,16 @@ def observation_pairs(records):
             if event.get("full_sdk_animation_sha256") is None:
                 continue
             key = (
-                event["sdk_source_pre_sha256"], event["original_action"],
+                event["sdk_source_pre_blake2b16"], event["original_action"],
                 event["sdk_level_before"], event["sdk_state_before"],
+                tuple(event.get("original_click_xy") or ()),
+                tuple(event.get("original_legal_before") or ()),
             )
             indexed[key].append({
                 "case": row["frozen_case"],
                 "witness": row["independent_sdk_witness"],
                 "native_step": event["native_step"],
-                "source_post_sha256": event["sdk_source_post_sha256"],
+                "source_post_blake2b16": event["sdk_source_post_blake2b16"],
                 "official_sdk_level_after": event["sdk_level_after"],
                 "official_sdk_state_after": event["sdk_state_after"],
                 "sdk_animation_sha256": event["full_sdk_animation_sha256"],
@@ -175,15 +177,17 @@ def observation_pairs(records):
     for key, entries in sorted(indexed.items(), key=lambda item: str(item[0])):
         if len(entries) < 2:
             continue
-        terminal = {(e["source_post_sha256"],
+        terminal = {(e["source_post_blake2b16"],
                      e["official_sdk_level_after"],
                      e["official_sdk_state_after"]) for e in entries}
         animations = {e["sdk_animation_sha256"] for e in entries}
         item = {
-            "pre_source_sha256": key[0],
+            "pre_source_blake2b16": key[0],
             "action": key[1],
             "source_level_before": key[2],
             "source_state_before": key[3],
+            "original_input_click_xy": list(key[4]),
+            "original_sdk_legal_before": list(key[5]),
             "cases": entries,
         }
         comparable.append(item)
@@ -204,9 +208,10 @@ def self_test():
         return {
             "frozen_case": name, "independent_sdk_witness": "TEST",
             "actual_original_sdk_actions": [{
-                "sdk_source_pre_sha256": "shared", "original_action": 5,
+                "sdk_source_pre_blake2b16": "shared", "original_action": 5,
+                "original_click_xy": None, "original_legal_before": [1, 2, 3, 4, 5, 6],
                 "sdk_level_before": 3, "sdk_state_before": "NOT_FINISHED",
-                "sdk_source_post_sha256": after,
+                "sdk_source_post_blake2b16": after,
                 "sdk_level_after": 3, "sdk_state_after": "NOT_FINISHED",
                 "full_sdk_animation_sha256": anim, "native_step": 1,
             }],
@@ -232,7 +237,7 @@ def main():
             row, stacks = real_trial(witness, entry, name, word)
             record = summarize_trial(name, witness, word, row, stacks)
             records.append(record)
-            roots.add(record["verified_source_root_sha256"])
+            roots.add(record["verified_source_root_blake2b16"])
             for phase, stack in stacks.items():
                 original_arrays[f"{name}_{witness}_{phase}"] = stack
             print("ORIGINAL_SP80_POUR_STATE_CASE " + json.dumps({
@@ -240,7 +245,7 @@ def main():
                 "official_level": record["original_sdk_official_level"],
                 "sdk_state": record["original_sdk_official_state"],
                 "source_pour_terminal_shas": [
-                    x["original_after_sha256"] for x in record["genuine_original_pour_sequence"]
+                    x["original_after_blake2b16"] for x in record["genuine_original_pour_sequence"]
                 ],
             }, sort_keys=True), flush=True)
     if len(records) != 32 or len(roots) != 1:
@@ -258,9 +263,11 @@ def main():
         "source_antecedent_native_run": 39545364349,
         "original_source_reset_games": len(records),
         "frozen_native_plans": FROZEN,
-        "original_source_stage3_root_sha256": next(iter(roots)),
+        "original_source_stage3_root_blake2b16": next(iter(roots)),
         "original_sdk_final_level_histogram": dict(Counter(
             str(r["original_sdk_official_level"]) for r in records)),
+        "original_sdk_final_state_histogram": dict(Counter(
+            str(r["original_sdk_official_state"]) for r in records)),
         "genuine_original_source_level4_or_WIN_count": len(successes),
         "genuine_original_source_progress_witnesses": successes,
         "source_observation_sufficiency_test": source_comparison,
