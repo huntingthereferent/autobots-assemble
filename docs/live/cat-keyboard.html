@@ -190,7 +190,11 @@ const MODERN_PROFILES={
  synth:{label:'Synth pulse',patterns:[[0,4,8,12],[4,12],[0,3,7,10,14],[0,8,12]]},
  indie:{label:'Indie offbeat',patterns:[[0,6,8,14],[4,12],[0,6,10],[2,10]]}
 };
-function modernLayerState(profile,bar){const section=Math.floor(bar/4);return [true,section!==0,section!==0,section>=1]}
+function modernLayerState(profile,bar){
+ // Four distinct sections: opening pocket → build → full hook → spacious return.
+ const section=Math.floor(bar/4);
+ return [true,section===1||section===2,true,section===2||section===3];
+}
 function melodyIndexFor(bar){return bar%MELODY_BARS}
 
 function parseChordSymbol(value){
@@ -676,7 +680,7 @@ function initializeBranches(){
 
 function paintLayers(){
  const b=bars[selectedBar],profile=MODERN_PROFILES[b.profile]||MODERN_PROFILES.pop;
- $('layer-profile').textContent=profile.label.toUpperCase()+' · BAR '+String(selectedBar+1).padStart(2,'0');
+ $('layer-profile').textContent=profile.label.toUpperCase()+' · '+['OPEN','BUILD','HOOK','RETURN'][Math.floor(selectedBar/4)]+' · BAR '+String(selectedBar+1).padStart(2,'0');
  const view=$('layer-preview');view.replaceChildren();
  for(let i=0;i<4;i++){
   $('layer-toggle-'+i).checked=b.layers[i];
