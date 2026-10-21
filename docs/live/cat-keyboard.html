@@ -657,7 +657,7 @@ function selectBar(index){
  $('melody-location').textContent='EDITING MELODY '+(melodyIndexFor(index)+1)+'/8 · ARRANGEMENT BAR '+(index+1)+'/16'+(index>=8?' · SHARED WITH BAR '+(melodyIndexFor(index)+1):'');
  paintLayers();
  $('seq').setAttribute('aria-label','16 step editor for looping melody bar '+(melodyIndexFor(index)+1));
- paintCadence();paintGrid();paintHarmony();
+ paintCadence();paintGrid();paintHarmony();updatePinButton();
 }
 function dirtyBars(){arrangementDirty=true;$('branch-status').textContent='UNSAVED CHANGES · Save a new branch or update selected';paintHarmony()}
 function setBarChord(){
