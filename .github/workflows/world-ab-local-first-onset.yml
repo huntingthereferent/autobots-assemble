@@ -1,0 +1,69 @@
+name: WORLD 28 first finite-onset numerical witness
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_local_finite_onset.py'
+      - 'network/tests/test_world_ab_local_finite_onset.py'
+      - 'systems/workspace/WORLD_AB_LOCAL_FIRST_ONSET_TRIAL_28_2026-10-20.md'
+      - '.github/workflows/world-ab-local-first-onset.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_local_finite_onset.py'
+      - 'network/tests/test_world_ab_local_finite_onset.py'
+      - 'systems/workspace/WORLD_AB_LOCAL_FIRST_ONSET_TRIAL_28_2026-10-20.md'
+      - '.github/workflows/world-ab-local-first-onset.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-local-finite-onset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original WORLD source and independent local onset math
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset
+      - name: Retain original local source brackets and independent finite SAT witness
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_local_finite_onset import run
+          from network.tests.test_world_ab_local_finite_onset import verify
+          source=run()
+          witness=[{"angle":case["angle"],"independent_world_sat_first_onset":verify(case)}
+                   for case in source["cases"]]
+          assert all(item["independent_world_sat_first_onset"] for item in witness)
+          assert source["admitted_third_impulse_cases"]==6
+          assert source["no_source_impulse_controls"]==2
+          assert source["actual_material_contacts_measured"]==0
+          assert source["fourth_impulses_solved"]==0
+          folder=Path("world28-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"source":source,"independent_witness":witness},
+                             indent=2,sort_keys=True,allow_nan=False)+"\n"
+          (folder/"first_finite_onset_source.json").write_text(payload)
+          (folder/"first_finite_onset_source.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  first_finite_onset_source.json\n")
+          print(json.dumps({
+              "source_numeric_first_onset_cases":source["cases_with_numeric_first_finite_onset"],
+              "cases_correlated_with_vertex_candidates":source["cases_with_vertex_corrobated_onset"],
+              "earlier_unknown_clear_sample_gaps":source["earlier_clear_endpoint_uncertainty_cases"],
+              "source_no_impulse_controls":source["no_source_impulse_controls"],
+              "actual_fourth_impulses":0},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world28-original-local-first-finite-onset
+          path: world28-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
