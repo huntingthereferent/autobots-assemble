@@ -5,8 +5,8 @@ const $=id=>document.getElementById(id);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const copy=x=>JSON.parse(JSON.stringify(x));
-const inst=['drums','bass','keys','lead','pad'];
-const colors={drums:'#a4a2df',bass:'#76c7ae',keys:'#9ebad7',lead:'#e4ac84',pad:'#bba6d4',audio:'#d7ac70'};
+const inst=['drums','bass','keys','lead','pad','meow','sampler'];
+const colors={drums:'#a4a2df',bass:'#76c7ae',keys:'#9ebad7',lead:'#e4ac84',pad:'#bba6d4',meow:'#b9e19f',sampler:'#e2c489',audio:'#d7ac70'};
 let serial=0;const id=prefix=>prefix+'-'+(++serial)+'-'+Date.now().toString(36);
 const assets=new Map();
 const empty=()=>({schema:'ab-studio-v1',name:'Untitled movement',bpm:120,meter:'4/4',master:.8,tracks:[]});
@@ -19,7 +19,7 @@ function mutate(fn,label){remember();fn();if(label)log(label);render();}
 function findTrack(){return project.tracks.find(x=>x.id===selected.track);}
 function findClip(){const t=findTrack();return t&&t.clips.find(x=>x.id===selected.clip);}
 function createTrack(type,name){return {id:id('t'),type,name:name||type.toUpperCase()+' '+(project.tracks.length+1),instrument:type==='audio'?'none':type,
-gain:.78,pan:0,filter:18000,drive:0,delay:0,mute:false,solo:false,auto:[],clips:[]};}
+sampleAssetId:null,gain:.78,pan:0,filter:18000,drive:0,delay:0,mute:false,solo:false,auto:[],clips:[]};}
 function addTrack(type){mutate(()=>{const t=createTrack(type);project.tracks.push(t);selected={track:t.id,clip:null};},'Added '+type+' track');}
 function midiClip(t,beat,length,notes,name){const c={id:id('c'),kind:'midi',name:name||'Pattern',beat,length,notes:notes||[]};t.clips.push(c);return c;}
 function note(n,s,d=.5,v=.8){return {n,s,d,v};}
@@ -93,7 +93,7 @@ function renderInspector(){
 const t=findTrack(),c=findClip();$('selection-label').textContent=c?'CLIP + TRACK':t?'TRACK':'NONE';
 if(!t){$('inspector-body').innerHTML='<p class="minor">Choose a track to inspect its signal flow.</p>';return;}
 $('inspector-body').innerHTML='<label>NAME <input id="track-name" value="'+esc(t.name)+'" maxlength="80"></label>'+
-'<div class="control-row"><label>TYPE <input value="'+esc(t.type)+'" disabled></label><label>INSTRUMENT <select id="instrument">'+(t.type==='audio'?'<option>none</option>':inst.map(n=>'<option '+(t.instrument===n?'selected':'')+'>'+n+'</option>').join(''))+'</select></label></div>'+
+'<div class="control-row"><label>TYPE <input value="'+esc(t.type)+'" disabled></label><label>INSTRUMENT <select id="instrument">'+(t.type==='audio'?'<option>none</option>':inst.map(n=>'<option '+(t.instrument===n?'selected':'')+'>'+n+'</option>').join(''))+'</select></label></div>'+ (t.instrument==='sampler'?'<label>SAMPLED SOURCE · ROOT C4 <select id="sampler-asset"><option value="">Select imported audio</option>'+[...assets.values()].map(a=>'<option value="'+esc(a.id)+'" '+(t.sampleAssetId===a.id?'selected':'')+'>'+esc(a.name)+'</option>').join('')+'</select></label>':'')+
 '<div class="control-row"><label>GAIN <input id="track-gain" type="range" min="0" max="1.5" step=".01" value="'+t.gain+'"></label><label>PAN <input id="track-pan" type="range" min="-1" max="1" step=".05" value="'+t.pan+'"></label></div>'+
 '<div class="control-row"><label>LOWPASS Hz <input id="track-filter" type="range" min="160" max="20000" step="10" value="'+t.filter+'"></label><label>DRIVE <input id="track-drive" type="range" min="0" max=".95" step=".05" value="'+t.drive+'"></label><label>DELAY <input id="track-delay" type="range" min="0" max=".55" step=".05" value="'+t.delay+'"></label></div>'+
 '<div class="control-row"><button id="auto-add">+ Volume point at cursor</button><button id="delete-track">Delete track</button></div>'+
@@ -101,6 +101,7 @@ $('inspector-body').innerHTML='<label>NAME <input id="track-name" value="'+esc(t
 (c?'<div class="group-title">CLIP · '+esc(c.kind)+'</div><div class="control-row"><label>START BEAT <input id="clip-start" type="number" min="0" max="63" step=".25" value="'+c.beat+'"></label><label>LEN BEATS <input id="clip-length" type="number" min=".25" max="64" step=".25" value="'+c.length+'"></label></div><label>CLIP NAME <input id="clip-name" maxlength="80" value="'+esc(c.name)+'"></label>':'');
 $('track-name').onchange=e=>mutate(()=>{t.name=e.target.value.slice(0,80);},'Renamed track');
 $('instrument').onchange=e=>mutate(()=>{t.instrument=e.target.value;},'Changed instrument');
+if($('sampler-asset'))$('sampler-asset').onchange=e=>mutate(()=>{t.sampleAssetId=e.target.value||null;},'Selected local sampler source');
 for(const [el,key] of [['track-gain','gain'],['track-pan','pan'],['track-filter','filter'],['track-drive','drive'],['track-delay','delay']])$(el).onchange=e=>mutate(()=>{t[key]=Number(e.target.value);},'Changed '+key);
 $('auto-add').onclick=()=>mutate(()=>{t.auto=t.auto.filter(x=>Math.abs(x.beat-cursor)>.001);t.auto.push({beat:cursor,value:t.gain});t.auto.sort((a,b)=>a.beat-b.beat);},'Added automation point');
 $('delete-track').onclick=()=>mutate(()=>{project.tracks=project.tracks.filter(x=>x.id!==t.id);selected={track:null,clip:null};},'Removed track');
@@ -139,24 +140,25 @@ for(const p of t.auto.filter(x=>x.beat>fromBeat&&x.beat<=toBeat))gain.gain.linea
 if(t.delay>0){const delay=ctx.createDelay(1),wet=ctx.createGain(),feedback=ctx.createGain();delay.delayTime.value=.22;wet.gain.value=t.delay;feedback.gain.value=.18;pan.connect(delay);delay.connect(wet);wet.connect(output);delay.connect(feedback);feedback.connect(delay);}
 return input;
 }
-function noteSchedule(ctx,dest,n,when,duration,instrument,velocity){
+function noteSchedule(ctx,dest,n,when,duration,instrument,velocity,sampleBuffer=null){
 const vol=clamp((velocity||.7),.03,1);
 const env=ctx.createGain();env.gain.setValueAtTime(.0001,when);
 const end=when+Math.max(.025,duration);
 env.gain.linearRampToValueAtTime(instrument==='pad'?.12*vol:.3*vol,when+(instrument==='pad'?.11:.008));
 env.gain.setTargetAtTime(.0001,Math.max(when+.015,end-.055),.024);env.connect(dest);
+if(instrument==='sampler'){if(!sampleBuffer)return;const rate=C.pitchRate(n.n,60),src=ctx.createBufferSource();src.buffer=sampleBuffer;src.playbackRate.value=rate;src.connect(env);src.start(when,0,Math.min(sampleBuffer.duration,Math.max(.001,duration*rate)));sources.push(src);return;}
 if(instrument==='drums'){
 if(n.n===38||n.n===42||n.n===46){const length=Math.min(.30,duration+.06),frames=Math.max(256,Math.ceil(ctx.sampleRate*length)),buf=ctx.createBuffer(1,frames,ctx.sampleRate),arr=buf.getChannelData(0);for(let i=0;i<frames;i++){const x=Math.sin(i*12.9898+78.233)*43758.5453;arr[i]=(x-Math.floor(x))*2-1;}const noise=ctx.createBufferSource();noise.buffer=buf;const f=ctx.createBiquadFilter();f.type='highpass';f.frequency.value=n.n===38?680:4400;noise.connect(f);f.connect(env);noise.start(when);noise.stop(Math.min(end,when+length));sources.push(noise);return;}
 const o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(155,when);o.frequency.exponentialRampToValueAtTime(46,when+.14);o.connect(env);o.start(when);o.stop(Math.min(end,when+.22));sources.push(o);return;
 }
 const o=ctx.createOscillator();o.type={bass:'sawtooth',keys:'triangle',pad:'sine',lead:'square'}[instrument]||'triangle';
-o.frequency.value=440*Math.pow(2,(n.n-69)/12);o.connect(env);o.start(when);o.stop(end+.08);sources.push(o);
+const f=440*Math.pow(2,(n.n-69)/12);if(instrument==='meow'){o.type='sawtooth';o.frequency.setValueAtTime(f*1.3,when);o.frequency.exponentialRampToValueAtTime(f,when+Math.min(.15,duration*.55));}else o.frequency.value=f;o.connect(env);o.start(when);o.stop(end+.08);sources.push(o);
 }
 function schedule(ctx,p,fromBeat,toBeat,out,at,localAssets=assets){
 const spb=60/p.bpm;
 for(const t of p.tracks){const target=strip(ctx,t,out,fromBeat,toBeat,at);
 for(const c of t.clips){const endBeat=c.beat+c.length;if(c.beat>=toBeat||endBeat<=fromBeat)continue;
-if(c.kind==='midi'){for(const n of c.notes){const b=c.beat+n.s,e=b+n.d;if(e<=fromBeat||b>=toBeat)continue;const st=Math.max(b,fromBeat),dur=Math.min(e,toBeat)-st;noteSchedule(ctx,target,n,at+(st-fromBeat)*spb,dur*spb,t.instrument,n.v);}}
+if(c.kind==='midi'){for(const n of c.notes){const b=c.beat+n.s,e=b+n.d;if(e<=fromBeat||b>=toBeat)continue;const st=Math.max(b,fromBeat),dur=Math.min(e,toBeat)-st;noteSchedule(ctx,target,n,at+(st-fromBeat)*spb,dur*spb,t.instrument,n.v,localAssets.get(t.sampleAssetId)?.buffer);}}
 else if(c.kind==='audio'){const asset=localAssets.get(c.assetId);if(!asset||!asset.buffer)continue;
 const st=Math.max(c.beat,fromBeat),dur=Math.min(endBeat,toBeat)-st;
 const rate=asset.buffer.duration/Math.max(.01,c.length*spb);
@@ -216,7 +218,7 @@ function removeClip(){const t=findTrack(),c=findClip();if(!t||!c)return;mutate((
 function duplicateClip(){const t=findTrack(),c=findClip();if(!t||!c)return;if(c.beat+c.length*2>64){notice('Not enough room to duplicate here',true);return;}mutate(()=>{const x=copy(c);x.id=id('c');x.beat+=x.length;x.name+=' copy';t.clips.push(x);selected.clip=x.id;},'Duplicated clip');}
 function splitClip(){const t=findTrack(),c=findClip();if(!t||!c||cursor<=c.beat+.01||cursor>=c.beat+c.length-.01){notice('Place cursor within selected clip before splitting',true);return;}mutate(()=>{const left=cursor-c.beat,right=c.length-left;const other=copy(c);other.id=id('c');other.beat=cursor;other.length=right;c.length=left;if(c.kind==='midi'){other.notes=c.notes.filter(n=>n.s+n.d>left).map(n=>({...n,s:Math.max(0,n.s-left),d:Math.min(n.s+n.d-left,right)-Math.max(0,n.s-left)}));c.notes=c.notes.filter(n=>n.s<left).map(n=>({...n,d:Math.min(n.d,left-n.s)}));}else other.offset=(c.offset||0)+left;t.clips.push(other);selected.clip=other.id;},'Split clip');}
 function buildKeys(){const keys=$('keys'),white=[60,62,64,65,67,69,71,72],black=[61,63,66,68,70];keys.innerHTML='';white.forEach(n=>{const b=document.createElement('button');b.className='key';b.textContent=noteName(n);b.onclick=()=>audition(n);keys.append(b);});const positions=[12.5,25,50,62.5,75];black.forEach((n,i)=>{const b=document.createElement('button');b.className='key sharp';b.style.left=positions[i]+'%';b.textContent=noteName(n);b.onclick=()=>audition(n);keys.append(b);});}
-async function audition(n){try{const ctx=context();await ctx.resume();const t=findTrack();noteSchedule(ctx,master,{n},ctx.currentTime+.005,.4,t?.instrument||'keys',.8);}catch(e){notice('Keyboard: '+e.message,true);}}
+async function audition(n){try{const ctx=context();await ctx.resume();const t=findTrack();noteSchedule(ctx,master,{n},ctx.currentTime+.005,.4,t?.instrument||'keys',.8,assets.get(t?.sampleAssetId)?.buffer);}catch(e){notice('Keyboard: '+e.message,true);}}
 function wire(){
 $('play').onclick=play;$('stop').onclick=()=>{stop();cursor=0;renderClock();};$('record').onclick=recordMic;
 $('add-midi').onclick=()=>addTrack('midi');$('add-audio').onclick=()=>addTrack('audio');
