@@ -26,7 +26,7 @@ from systems.workspace.world_ab_oblique_impact import HALF
 
 CCW=((-HALF,-HALF),(HALF,-HALF),(HALF,HALF),(-HALF,HALF))
 SOURCE_ORDER=(0,3,1,2)
-NUMERICAL_TOL=2e-7
+NUMERICAL_TOL=2e-9
 
 
 def dot(a,b):return a[0]*b[0]+a[1]*b[1]
