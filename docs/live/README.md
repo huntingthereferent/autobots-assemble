@@ -1,8 +1,16 @@
 # Workstation
 
-[Workstation](work.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
+
+## Meow Lab 2 — Swallow Sounds keyboard
+
+[Meow Lab 2](cat-keyboard.html) is a visibly redesigned playable instrument with four locally synthesized cat calls, four replaceable sound slots, source-file import (browser-decodable WAV/MP3 and other supported formats), waveform display, 13-note sampled keyboard, and the original recorder/sequencer. User audio files remain in browser memory. Import records a source label and SHA-256 digest where WebCrypto is available; **it does not mean the native workstation ran**.
+
+The native path is `systems.workspace.audio_sound_bank`, which accepts up to four named, selected PCM16 WAVs (`miso.wav`, `mochi.wav`, `nori.wav`, `bean.wav`), copies an exact source edition, admits separate jobs in the existing runtime journal, executes the reviewed source worker, independently replays each result, writes original lineage and movement events to the existing workspace journal, and exports verified WAVs plus a manifest. A newly imported sound is never implicitly treated as native-verified. The browser WAV-and-JSON handoff export can be fed into the real local worker.
+
+These creative audio operations are not Suno model copies or ARC/NIH/WORLD evidence. The GitHub Pages site is read-only; the native Python runner is opt-in. [Project instructions](../../work/projects/cat-keyboard/README.md).
 
 ## Native audio intake (Suno export compatibility)
 

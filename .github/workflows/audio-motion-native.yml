@@ -4,15 +4,19 @@ on:
   push:
     paths:
       - "systems/workspace/audio_motion_*.py"
+      - "systems/workspace/audio_sound_bank.py"
       - "systems/workspace/audio_motion_worker_source/**"
       - "network/tests/test_audio_motion_workstation.py"
+      - "network/tests/test_audio_sound_bank.py"
       - "network/tests/test_suno_export_intake.py"
       - ".github/workflows/audio-motion-native.yml"
   pull_request:
     paths:
       - "systems/workspace/audio_motion_*.py"
+      - "systems/workspace/audio_sound_bank.py"
       - "systems/workspace/audio_motion_worker_source/**"
       - "network/tests/test_audio_motion_workstation.py"
+      - "network/tests/test_audio_sound_bank.py"
       - "network/tests/test_suno_export_intake.py"
       - ".github/workflows/audio-motion-native.yml"
   workflow_dispatch:
@@ -30,4 +34,4 @@ jobs:
         with:
           node-version: "22"
       - name: Execute real private source editions and host-owned replay
-        run: python -m unittest -v network.tests.test_audio_motion_workstation network.tests.test_suno_export_intake
+        run: python -m unittest -v network.tests.test_audio_motion_workstation network.tests.test_audio_sound_bank network.tests.test_suno_export_intake
