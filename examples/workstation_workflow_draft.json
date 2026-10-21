@@ -1,0 +1,38 @@
+{
+  "schema": "workstation-workflow-draft/v1",
+  "title": "Compare two workflow paths without changing the original",
+  "provenance": "user-reviewed, illustrative workflow source",
+  "auto_connect": true,
+  "steps": [
+    {
+      "id": "count",
+      "label": "Normalize and count input",
+      "manifest": "foundation/program_examples/stateless.json",
+      "inputs": {
+        "text": "one two three"
+      }
+    },
+    {
+      "id": "describe",
+      "label": "Describe the recorded count",
+      "manifest": "foundation/program_examples/composition_target.json"
+    },
+    {
+      "id": "alternative",
+      "label": "Alternative processing path",
+      "manifest": "foundation/program_examples/stateless.json",
+      "path_role": "ALTERNATIVE",
+      "inputs": {
+        "text": "one two three"
+      }
+    }
+  ],
+  "links": [
+    {
+      "from": "count",
+      "output": "count",
+      "to": "describe",
+      "input": "count"
+    }
+  ]
+}
