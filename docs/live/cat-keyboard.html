@@ -191,25 +191,117 @@ function initializeAudio(){
  }catch(err){status('Could not start audio: '+err.message);audio=null;return false}
 }
 function unlockAudio(){if(!initializeAudio())return false;if(audio.state==='suspended')audio.resume().catch(()=>status('Tap the keyboard again to allow audio'));return true}
+
+const TUNED_VOICES={
+ miso:{fur:'#d99f82',ear:'#f09bad',belly:'#fff4e3',attack:.023,swoop:29,vibrato:2.8,body:.68,sparkle:.13,mouth:1.00,formant1:710,formant2:1810,level:1.00},
+ mochi:{fur:'#f7e9de',ear:'#e2a1b7',belly:'#ffffff',attack:.010,swoop:48,vibrato:4.0,body:.57,sparkle:.26,mouth:1.25,formant1:875,formant2:2260,level:.93},
+ nori:{fur:'#555065',ear:'#c69cb6',belly:'#d8cfdb',attack:.045,swoop:16,vibrato:2.0,body:.84,sparkle:.06,mouth:.73,formant1:600,formant2:1480,level:1.07},
+ bean:{fur:'#e9bc6e',ear:'#e88595',belly:'#fff1c8',attack:.014,swoop:60,vibrato:4.6,body:.59,sparkle:.19,mouth:1.38,formant1:800,formant2:2160,level:.95}
+};
+
+// Built-in cat notes use Rosey's exact tuned oscillator and resonant mouth patch.
+// The MIDI fundamental stays in tune; the changing mouth and onset add character.
+function tunedVoice(ctx,destination,midi,voice,backingNote=false){
+ const v=TUNED_VOICES[voice]||TUNED_VOICES.miso;
+ const now=ctx.currentTime;
+ const base=440*Math.pow(2,(midi-69)/12);
+ const backing=backingNote;
+ const onset=base*Math.pow(2,-v.swoop/1200);
+ const settle=now+(backing?.052:.095);
+ const env=ctx.createGain();
+ const tone=ctx.createGain();
+ const low=ctx.createBiquadFilter();low.type='lowpass';low.Q.value=.6;
+ low.frequency.setValueAtTime(backing?1450:2750,now);
+ low.frequency.linearRampToValueAtTime(backing?1150:2080,now+.28);
+ tone.connect(low);low.connect(env);env.connect(destination);
+ 
+ const oscs=[];
+ function harmonic(mult,type,level){
+  const osc=ctx.createOscillator(),gain=ctx.createGain();
+  osc.type=type;gain.gain.value=level;
+  osc.frequency.setValueAtTime(onset*mult,now);
+  osc.frequency.exponentialRampToValueAtTime(base*mult,settle);
+  osc.connect(gain);gain.connect(tone);osc.start(now);oscs.push(osc);
+  return osc;
+ }
+ // A soft, pure fundamental plus carefully scaled harmonic 'sparkles', not a buzzy sawtooth.
+ const fundamental=harmonic(1,'sine',v.body);
+ harmonic(1,'triangle',.30);
+ harmonic(2,'sine',backing?v.sparkle*.45:v.sparkle);
+ if(!backing)harmonic(3,'sine',v.sparkle*.24);
+ // Two moving resonances imitate a tiny cat's 'mew-ow' mouth shape.
+ // Resonances do not change the fundamental pitch.
+ if(!backing){
+  const mouth=ctx.createOscillator();mouth.type='triangle';
+  mouth.frequency.setValueAtTime(onset,now);
+  mouth.frequency.exponentialRampToValueAtTime(base,settle);
+  const f1=ctx.createBiquadFilter(),f2=ctx.createBiquadFilter();
+  const g1=ctx.createGain(),g2=ctx.createGain();
+  f1.type='bandpass';f1.Q.value=1.25;
+  f2.type='bandpass';f2.Q.value=2.2;
+  f1.frequency.setValueAtTime(v.formant1*1.32,now);
+  f1.frequency.exponentialRampToValueAtTime(v.formant1*.82,now+.22);
+  f1.frequency.exponentialRampToValueAtTime(v.formant1*.96,now+.43);
+  f2.frequency.setValueAtTime(v.formant2*1.22,now);
+  f2.frequency.exponentialRampToValueAtTime(v.formant2*.66,now+.24);
+  f2.frequency.exponentialRampToValueAtTime(v.formant2*.90,now+.44);
+  g1.gain.value=.24*v.mouth;
+  g2.gain.value=.15*v.mouth;
+  mouth.connect(f1);mouth.connect(f2);
+  f1.connect(g1);f2.connect(g2);g1.connect(tone);g2.connect(tone);
+  mouth.start(now);oscs.push(mouth);
+ }
+ // Tiny vibrato starts only AFTER the attack resolves to the exact played note.
+ // All fundamentals share one modulation, so their relative harmonic tuning stays stable.
+ if(!backing){
+  const lfo=ctx.createOscillator(),amount=ctx.createGain();
+  lfo.type='sine';lfo.frequency.value=5.6;
+  amount.gain.setValueAtTime(0,now);
+  amount.gain.linearRampToValueAtTime(v.vibrato,now+.30);
+  lfo.connect(amount);
+  for(const osc of oscs)amount.connect(osc.detune);
+  lfo.start(now);oscs.push(lfo);
+ }
+ const peak=(backing?.095:.18)*v.level;
+ env.gain.setValueAtTime(.0001,now);
+ env.gain.linearRampToValueAtTime(peak,now+v.attack);
+ if(!backing){
+  env.gain.linearRampToValueAtTime(peak*.78,now+v.attack+.11);
+  env.gain.linearRampToValueAtTime(peak*.96,now+v.attack+.20);
+  env.gain.setTargetAtTime(peak*.45,now+v.attack+.26,.20);
+ }else{
+  env.gain.setTargetAtTime(peak*.55,now+v.attack,.33);
+ }
+
+ return {oscillators:oscs,amp:env};
+}
+function renderTunedPreview(name,expected){
+ // Render the *same* tuned patch at C4 to back the source waveform/PCM export.
+ const Offline=window.OfflineAudioContext||window.webkitOfflineAudioContext;
+ if(!Offline)return;
+ try{
+  const ctx=new Offline(1,24000,24000),part=tunedVoice(ctx,ctx.destination,60,name,false);
+  const end=.62;part.amp.gain.cancelScheduledValues(end);
+  part.amp.gain.setTargetAtTime(.0001,end,.055);
+  for(const osc of part.oscillators)osc.stop(.98);
+  ctx.startRendering().then(buffer=>{
+   if(soundSlots[name]!==expected)return; // Imported source or newer reset takes priority.
+   soundSlots[name]={...expected,buffer,source:name+'.tuned-math'};
+   refreshSoundBank();
+  }).catch(()=>{});
+ }catch{}
+}
 function holdSound(midi,identifier,voiceName=cat,record=true){
  if(active.has(identifier))releaseSound(identifier,record);
  if(!unlockAudio())return;
- if(playBankSample(midi,identifier,voiceName,record))return;
- const voice=CATS[voiceName]||CATS.miso,t=audio.currentTime,freq=hz(midi)*voice.pitch;
- const amp=audio.createGain();amp.gain.setValueAtTime(.0001,t);amp.gain.exponentialRampToValueAtTime(.48,t+voice.attack);amp.gain.setTargetAtTime(.24,t+voice.attack+.1,.25);
- const pre=audio.createGain();pre.gain.value=.55;
- const osc1=audio.createOscillator();osc1.type='sawtooth';const osc2=audio.createOscillator();osc2.type='triangle';
- for(const [osc,ratio] of [[osc1,1],[osc2,1.004]]){
-  osc.frequency.setValueAtTime(freq*ratio*(1-voice.glide),t);
-  osc.frequency.exponentialRampToValueAtTime(freq*ratio*1.085,t+.11);
-  osc.frequency.exponentialRampToValueAtTime(freq*ratio,t+.31);
-  osc.connect(pre);
- }
- const filter=audio.createBiquadFilter();filter.type='lowpass';filter.Q.value=2.2;filter.frequency.setValueAtTime(540*voice.brightness,t);filter.frequency.exponentialRampToValueAtTime(1900*voice.brightness,t+.14);filter.frequency.exponentialRampToValueAtTime(680*voice.brightness,t+.38);pre.connect(filter);filter.connect(amp);amp.connect(master);if(echo)amp.connect(echoInput);
- const lfo=audio.createOscillator(),mod=audio.createGain();lfo.frequency.value=5.5;lfo.type='sine';mod.gain.value=voice.vibrato;lfo.connect(mod);mod.connect(osc1.detune);mod.connect(osc2.detune);
- osc1.start(t);osc2.start(t);lfo.start(t);
- active.set(identifier,{oscillators:[osc1,osc2,lfo],amp,midi,voiceName});paintPressed();setStage(true);
- $('now-playing').textContent='♪ '+(NOTES[(midi%12+12)%12]||'NOTE')+Math.floor(midi/12-1)+' · '+voice.name.toUpperCase();
+ // Only imported audio uses sample playback. Original voices are live tuned meows.
+ if(soundSlots[voiceName]?.origin==='local-file'&&playBankSample(midi,identifier,voiceName,record))return;
+ const v=CATS[voiceName]||CATS.miso;
+ const part=tunedVoice(audio,master,midi,voiceName,identifier.startsWith('chord'));
+ if(echo)part.amp.connect(echoInput);
+ active.set(identifier,{...part,midi,voiceName});
+ paintPressed();setStage(true);
+ $('now-playing').textContent='♫ '+(NOTES[(midi%12+12)%12]||'NOTE')+Math.floor(midi/12-1)+' · '+v.name.toUpperCase()+' TUNED';
  if(record&&recording)logEvent('on',midi,voiceName,identifier);
 }
 function releaseSound(identifier,record=true){
@@ -385,7 +477,10 @@ function makeCatSound(name){
 }
 function initializeSoundBank(){
  if(!audio||bankReady)return;bankReady=true;
- for(const id of Object.keys(SOUND_NAMES))soundSlots[id]={buffer:makeCatSound(id),root:60,origin:'original-synthesis',source:id+'.math',sha:'none'};
+ for(const id of Object.keys(SOUND_NAMES)){
+  const entry={buffer:makeCatSound(id),root:60,origin:'original-synthesis',source:id+'.math',sha:'none'};
+  soundSlots[id]=entry;renderTunedPreview(id,entry);
+ }
  refreshSoundBank();
 }
 function bankMessage(message){$('bank-status').textContent=message}
@@ -503,8 +598,9 @@ function auditionSound(){
 function resetSound(){
  if(!unlockAudio())return;
  const id=$('bank-target').value;
- releaseAll();soundSlots[id]={buffer:makeCatSound(id),root:60,origin:'original-synthesis',source:id+'.math',sha:'none'};
- refreshSoundBank();bankMessage('Restored the original '+SOUND_NAMES[id]+' synthesis.');
+ releaseAll();const entry={buffer:makeCatSound(id),root:60,origin:'original-synthesis',source:id+'.math',sha:'none'};
+ soundSlots[id]=entry;renderTunedPreview(id,entry);
+ refreshSoundBank();bankMessage('Restored the tuned '+SOUND_NAMES[id]+' synthesis.');
 }
 function bindSoundBank(){
  for(const btn of document.querySelectorAll('.bank-slot'))btn.addEventListener('click',()=>{if(unlockAudio())selectSoundSlot(btn.dataset.slot)});

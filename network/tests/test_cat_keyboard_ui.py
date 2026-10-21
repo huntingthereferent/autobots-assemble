@@ -40,6 +40,8 @@ class CatKeyboardTests(unittest.TestCase):
                        "meow-machine/score-v1", "stopRecording",
                        "patternPreset", "16-step meow studio", "id=\"sound-file\"", "function swallowSound()",
                        "function playBankSample(", "function handoffSample()",
+                       "function tunedVoice(", "function renderTunedPreview(",
+                       "if(soundSlots[voiceName]?.origin===\'local-file\'",
                        "native_verification:\'NOT_RUN_BY_BROWSER\'", "CHORD_LIBRARY",
                        "Save template", "realizeProgression",
                        "meow-machine/chord-templates-v1"):
