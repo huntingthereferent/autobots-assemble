@@ -51,6 +51,21 @@ The independent September 2026 ChordSonic user-submission study reported I–V�
 
 From these observations, the instrument builds **nine original reusable symbolic combinations** of four-chord movements and four layers: **pulse** (kick-like transient), **percussion** (backbeat/hi-hat-like transient), **bass** (root-based synth), and **atmosphere** (light high-register tone). The four rhythmic patterns in each profile are original 16-step events; section density varies by group of four arrangement bars. Each layer can be disabled independently per bar and is generated locally in Web Audio. The musician's own eight-bar melody stays separate and repeats through the sixteen-bar arrangement. There are no commercial stems, chord claims about specific tracks, copyrighted hooks, audio downloads from charts, or external model calls.
 
+Three concrete **source-described layer relationships** in the time window helped shape the archetypes; their descriptions are not stems:
+
+| Charting song | Public description of layers | Independent structural abstraction |
+| --- | --- | --- |
+| Ella Langley, *Choosin' Texas* | July 29 Guardian: mid-tempo two-step; guitar and pedal steel foreground; contemporary recording finish | Country-pop: understated pulse and bass with optional atmosphere |
+| Sienna Spiro, *Great Expectation* | Official Charts: vocal-led piano/guitar/bass/keyboards with orchestral, brass and string textures, growing in intensity | Vocal pop: sparse first group of bars that can add percussion, bass and atmosphere in later groups |
+| HUGEL / Imael Angel / Ultra Naté, *Movin' to the Sun* | August 23 production review: percussion-forward Afro-Latin/house shuffle, lean low end and vocal focus | Club: four-on-floor pulse with distinct percussion, bass and atmosphere switches |
+
+These are **design analogies**, not claims about exact notes, chords, kick placement, tempo, sound stems or mixing in any source recording. The programmed patterns were created independently.
+
+Production-observation references:
+- https://www.theguardian.com/music/2026/jul/29/ella-langley-choosin-texas-song-of-the-year
+- https://www.officialcharts.com/songs/sienna-spiro-great-expectation/
+- https://dopamine-machine.com/blog/hugel-ultra-nate-movin-to-the-sun-beatport-house-2026
+
 Public context examined:
 - October 17, 2026 Hot 100 snapshot: https://creativedisc.com/2026/10/billboard-hot-100-17-october-2026/
 - September 2026 UK singles chart listing: https://www.officialcharts.com/charts/singles-chart/20260904/7501/
