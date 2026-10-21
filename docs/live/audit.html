@@ -35,17 +35,17 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
 <main class="shell">
 <div class="eyebrow">Source-owned project inspection / not live monitoring</div>
 <h1>Research data audit</h1>
-<p class="lead">Choose a project, then a test file. Examine each declared test case separately: its exact source, assertions, and research records. Record a human assessment with a note and export it. <strong>Source declarations are not execution results.</strong></p>
-<div class="toolbar"><input id="search" type="search" aria-label="Find a test file" placeholder="Find a test file in the selected project"><button id="reload" type="button">Reload source snapshot</button><button id="export" type="button">Export review ledger</button></div>
+<p class="lead">Choose a project, then a test file. Inspect individual test definitions, source assertions, and recorded JSON data entries, one at a time. Record a human assessment with a note and export it. <strong>Source declarations are not execution results.</strong></p>
+<div class="toolbar"><select id="mode" aria-label="Choose audit material"><option value="tests">Test definitions</option><option value="data">Recorded JSON data</option></select><input id="search" type="search" aria-label="Find source file" placeholder="Find a source file in the selected project"><button id="reload" type="button">Reload source snapshot</button><button id="export" type="button">Export review ledger</button></div>
 <div class="meta" id="snapshot" role="status">Reading the repository source tree…</div>
 <div class="notice" id="alert" role="alert" hidden></div>
 <div class="layout">
 <aside class="panel"><div class="panel-head"><h2>Project</h2><small>Explicit source-name routing; unmatched remains unassigned</small></div><div id="referents" class="list"></div></aside>
-<section class="panel"><div class="panel-head"><h2>Source test files</h2><small>Files are named as tests; individual cases are read from original content</small></div><div id="test-files" class="list"><p class="summary muted">Loading test-source paths…</p></div></section>
-<section class="panel detail"><div class="panel-head"><h2>Individual test review</h2><small id="test-position">Select a file to inspect test definitions</small></div><div id="case-source" class="view"><p class="muted">Choose a test file on the left to examine its cases one by one.</p></div></section>
+<section class="panel"><div class="panel-head"><h2 id="file-heading">Source test files</h2><small>Choose a source file; inspect individual records or tests</small></div><div id="test-files" class="list"><p class="summary muted">Loading test-source paths…</p></div></section>
+<section class="panel detail"><div class="panel-head"><h2>Individual source review</h2><small id="test-position">Select a file to inspect test definitions</small></div><div id="case-source" class="view"><p class="muted">Choose a test or JSON evidence file to examine entries one by one.</p></div></section>
 </div>
 <section class="panel research"><div class="panel-head"><h2>Source-recorded investigation evidence</h2><small>From the published research projection. Independent of a test's assertions or verdict.</small></div><div id="research" class="summary">Reading existing research source records…</div></section>
-<p class="footer">This is an inspection and annotation tool. It does not run tests, declare tests passed, audit private journals, or update the repository. Tests are discovered from tracked Python test-like paths, not from a fabricated status dashboard. Dynamic tests and tests using other naming conventions may be missing. Source SHA and line links are retained in exported reviews. An unavailable source is unknown, not evidence of absence. The separate executions section of Workstation remains available for GitHub job outcomes.</p>
+<p class="footer">This is an inspection and annotation tool. It does not run tests, declare tests passed, audit private journals, or update the repository. Tests and JSON data are discovered from tracked source paths, not from a fabricated status dashboard. JSON parsing is not semantic validation. Dynamic tests and tests using other naming conventions may be missing. Source SHA and line links are retained in exported reviews. An unavailable source is unknown, not evidence of absence. The separate executions section of Workstation remains available for GitHub job outcomes.</p>
 </main>
 <script>
 'use strict';
@@ -74,6 +74,7 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     if(/(?:w13|game_w13|owner_native|owner_verifier|cross_run)/.test(s))return 'w13';
     if(/(?:nih|aact|clinical|temporal_kg|ontology|metapath|pharmkg)/.test(s))return 'nih';
     if(/(?:ab_world|world_trial|world_continuity|square_contact|motion_contact)/.test(s))return 'world';
+    if(/\/arc_like_maze\/chatbot\//.test(s))return 'ab';
     if(/(?:arc3|sp80|ft09|sk48|ls20|arc_native|arc_agi|arc_like_maze|\/arc3\/)/.test(s))return 'arc';
     if(/(?:workstation|workspace|handoff|process_worker|agent_lineage|agent_service|audit_ui|research_observatory|research_live)/.test(s))return 'workstation';
     if(/(?:test_ab_|test_finite_|test_correspondence|test_language_referent|\/ab_|\/finite_|\/correspondence|\/language_referent|\/arc_like_maze\/chatbot\/)/.test(s))return 'ab';
@@ -84,7 +85,22 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     const name=path.split('/').pop();
     return /^test_[\w-]+\.py$/.test(name)||/_test\.py$/.test(name)||/\/tests\/[^/]+\.py$/.test(path)||/\/browser_[^/]+_check\.py$/.test(path);
   }
-  const state={project:'arc',head:'',files:[],selected:'',cases:[],position:0,source:'',research:null,reviews:new Map(),readCache:new Map(),loading:false};
+  function isDataPath(path){
+    return /\.json$/.test(path)&&/^(?:research\/|work\/|evidence\/|views\/|network\/tests\/fixtures\/|state\/|docs\/)/.test(path);
+  }
+  function parseData(text){
+    const data=JSON.parse(text),out=[];
+    const push=(name,value)=>out.push({name,line:null,checks:[],body:JSON.stringify(value,null,2),data:true});
+    if(Array.isArray(data))data.forEach((value,i)=>push('['+i+']',value));
+    else if(data&&typeof data==='object'){
+      for(const [name,value] of Object.entries(data)){
+        if(Array.isArray(value))value.forEach((item,i)=>push(name+'['+i+']',item));
+        else push(name,value);
+      }
+    }else push('value',data);
+    return out;
+  }
+  const state={project:'arc',mode:'tests',head:'',files:[],dataFiles:[],selected:'',cases:[],position:0,source:'',research:null,reviews:new Map(),readCache:new Map(),loading:false};
   let embedded=new URLSearchParams(location.search).get('embedded')==='1'&&window.parent!==window;
   if(embedded){
     document.documentElement.classList.add('embedded');
@@ -132,7 +148,8 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
   }
   function selectedFiles(){
     const q=$('search').value.trim().toLowerCase();
-    return state.files.filter(f=>(state.project==='all'||projectForPath(f.path)===state.project)&&(!q||f.path.toLowerCase().includes(q)));
+    const files=state.mode==='data'?state.dataFiles:state.files;
+    return files.filter(f=>(state.project==='all'||projectForPath(f.path)===state.project)&&(!q||f.path.toLowerCase().includes(q)));
   }
   function renderProjects(){
     const dest=$('referents');dest.replaceChildren();
@@ -144,9 +161,10 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
   }
   function renderFiles(){
     const dest=$('test-files');dest.replaceChildren();
+    $('file-heading').textContent=state.mode==='data'?'Recorded data files':'Source test files';
     if(!state.head){dest.append(elem('p','No verified source snapshot available.','summary'));return}
     const paths=selectedFiles();
-    if(!paths.length){dest.append(elem('p','No indexed test files match this filter and declared routing. This does not establish that the project has no tests.','summary muted'));return}
+    if(!paths.length){dest.append(elem('p','No matching indexed source files. This does not establish that the project has no tests or data.','summary muted'));return}
     for(const f of paths){
       const b=elem('button');b.type='button';b.setAttribute('aria-current',String(state.selected===f.path));
       b.append(elem('span',f.path.split('/').pop()),elem('small',f.path));
@@ -160,7 +178,10 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     try{
       const text=await sourceText(path);
       if(state.selected!==path)return;
-      state.source=text;state.cases=parseCases(text);renderCase();
+      state.source=text;
+      try{state.cases=state.mode==='data'?parseData(text):parseCases(text)}
+      catch(e){$('case-source').replaceChildren(elem('p','Data parse failed: '+e.message+'. Inspect original source; no entries were inferred.','notice'));return}
+      renderCase();
     }catch(e){if(state.selected===path)$('case-source').replaceChildren(elem('p','Source unavailable: '+e.message+'. Nothing inferred.','notice'));}
   }
   function advance(step){
@@ -175,8 +196,8 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     const path=state.selected;
     if(!path){dest.append(elem('p','Choose a source test file.','muted'));return}
     if(!state.cases.length){
-      dest.append(elem('h3','No named test cases parsed'));
-      dest.append(elem('p','The file may contain parametrized, dynamically produced, or differently named tests. Inspect the complete source before concluding it contains no tests.','muted'));
+      dest.append(elem('h3',state.mode==='data'?'No entries parsed':'No named test cases parsed'));
+      dest.append(elem('p',state.mode==='data'?'Empty data structure or unrecognized source. Open the original file.':'The file may contain parametrized, dynamically produced, or differently named tests. Inspect complete source before concluding it contains no tests.','muted'));
       dest.append(link('Open complete original source ↗',sourceURL(path)));
       dest.append(elem('pre',state.source,'code'));return;
     }
@@ -186,9 +207,10 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     const prev=elem('button','← Previous test');prev.onclick=()=>advance(-1);
     const next=elem('button','Next test →');next.onclick=()=>advance(1);
     controls.append(prev,next);nav.append(elem('h3',c.name),controls);dest.append(nav);
-    dest.append(elem('p','Defined at line '+c.line+'; test declaration only, not a witnessed pass.','meta'));
-    dest.append(link('Inspect exact lines in GitHub ↗',sourceURL(path,c.line)));
-    if(!c.checks.length)dest.append(elem('div','No direct assertions recognized by the source scanner. This does not mean the test has no checks.','assessment-note'));
+    dest.append(elem('p',c.data?'Parsed JSON entry. Source contents only; not independently validated.':'Defined at line '+c.line+'; test declaration only, not a witnessed pass.','meta'));
+    dest.append(link(c.data?'Open pinned data file ↗':'Inspect exact lines in GitHub ↗',sourceURL(path,c.line)));
+    if(c.data)dest.append(elem('p','Selected structured datum · '+c.name+'. Parsing JSON does not validate its origin, meaning or correctness.','assessment-note'));
+    else if(!c.checks.length)dest.append(elem('div','No direct assertions recognized by the source scanner. This does not mean the test has no checks.','assessment-note'));
     else{
       dest.append(elem('h3','Declared checks / assertions'));
       const ul=elem('ul',undefined,'checks');
@@ -199,8 +221,8 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
       }
       dest.append(ul);
     }
-    dest.append(elem('h3','Original source · full test block'),elem('pre',c.body,'code'));
-    const key=state.head+':'+path+':'+c.line;const previous=state.reviews.get(key)||{assessment:'not-reviewed',note:''};
+    dest.append(elem('h3',c.data?'Original JSON value':'Original source · full test block'),elem('pre',c.body,'code'));
+    const key=state.head+':'+path+':'+(c.data?c.name:c.line);const previous=state.reviews.get(key)||{assessment:'not-reviewed',note:''};
     const form=elem('div',undefined,'assess');
     form.append(elem('h3','Human audit note'));
     form.append(elem('p','An assessment records your review of source/evidence. It is not a GitHub test outcome.','tiny'));
@@ -212,7 +234,7 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     select.value=previous.assessment;form.append(select);
     const labelNote=elem('label','Observation and evidence locator');labelNote.htmlFor='review-note';form.append(labelNote);
     const note=elem('textarea');note.id='review-note';note.value=previous.note;note.placeholder='What evidence did you inspect? What would falsify the finding?';form.append(note);
-    const save=()=>{state.reviews.set(key,{project:projectForPath(path),path,line:c.line,test:c.name,assessment:select.value,note:note.value})};
+    const save=()=>{state.reviews.set(key,{project:projectForPath(path),type:c.data?'data-entry':'test-definition',path,line:c.line,record:c.name,assessment:select.value,note:note.value})};
     select.onchange=save;note.oninput=save;form.append(elem('p','Notes stay in this browser page until exported; not stored in GitHub.','tiny'));dest.append(form);
   }
   function renderResearch(){
@@ -247,7 +269,8 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
       if(tree.truncated||!Array.isArray(tree.tree))throw Error('Git tree truncated or invalid; refusing a partial test catalogue');
       state.head=sha;
       state.files=tree.tree.filter(x=>x.type==='blob'&&isTestPath(x.path)).map(x=>({path:x.path,sha:x.sha})).sort((a,b)=>a.path.localeCompare(b.path));
-      $('snapshot').textContent='Pinned source: '+sha+' · '+state.files.length+' test-like files indexed (not test outcomes).';
+      state.dataFiles=tree.tree.filter(x=>x.type==='blob'&&isDataPath(x.path)).map(x=>({path:x.path,sha:x.sha})).sort((a,b)=>a.path.localeCompare(b.path));
+      $('snapshot').textContent='Pinned source: '+sha+' · inspect tracked test definitions or JSON evidence. No run results are inferred.';
     }catch(e){alert('Repository test-source index unavailable: '+e.message+'. No coverage is inferred.')}
     try{
       const r=await json(RESEARCH);
@@ -265,6 +288,9 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     setTimeout(()=>URL.revokeObjectURL(url),0);
   }
   $('search').addEventListener('input',renderFiles);
+  $('mode').addEventListener('change',()=>{
+    state.mode=$('mode').value;state.selected='';state.cases=[];state.position=0;render();
+  });
   $('reload').addEventListener('click',load);
   $('export').addEventListener('click',exportReviews);
   load();
