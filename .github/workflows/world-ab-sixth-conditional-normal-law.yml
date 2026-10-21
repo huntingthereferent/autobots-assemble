@@ -1,0 +1,88 @@
+name: WORLD 40 original sixth conditional normal law
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_sixth_conditional_normal_law.py'
+      - 'network/tests/test_world_ab_sixth_conditional_normal_law.py'
+      - 'systems/workspace/WORLD_AB_SIXTH_CONDITIONAL_NORMAL_LAW_TRIAL_40_2026-10-21.md'
+      - '.github/workflows/world-ab-sixth-conditional-normal-law.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_sixth_conditional_normal_law.py'
+      - 'network/tests/test_world_ab_sixth_conditional_normal_law.py'
+      - 'systems/workspace/WORLD_AB_SIXTH_CONDITIONAL_NORMAL_LAW_TRIAL_40_2026-10-21.md'
+      - '.github/workflows/world-ab-sixth-conditional-normal-law.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-independent-sixth-law:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent original WORLD40 finite SAT and sixth normal response verification
+        run: python -m unittest -v network.tests.test_world_ab_sixth_conditional_normal_law
+      - name: Retain source response plus independent full-geometry witness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_sixth_conditional_normal_law import run
+          from network.tests.test_world_ab_sixth_conditional_normal_law import verify
+          report=run()
+          witness=[{"angle":x["angle"],"status":x["status"],
+                    "independent_original_finite_and_elastic_law_verified":verify(x)}
+                   for x in report["cases"]]
+          assert len(witness)==8 and all(x["independent_original_finite_and_elastic_law_verified"] for x in witness)
+          assert report["original_sixth_model_candidates"]==1
+          assert report["inactive_original_controls"]==7
+          assert report["conditionally_qualified_sixth_responses"]+report[
+              "unresolved_original_sixth_configurations"]==1
+          assert report["real_sixth_impacts"]==0 and report["selected_sixth_impulses"]==0
+          folder=Path("world40-native-evidence");folder.mkdir(exist_ok=True)
+          payload=json.dumps({"source":report,"independent":witness},sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"original_sixth_conditional_normal_law.json").write_text(payload)
+          (folder/"original_sixth_conditional_normal_law.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  original_sixth_conditional_normal_law.json\n")
+          print(json.dumps({"source_qualified_responses":report["conditionally_qualified_sixth_responses"],
+              "source_unresolved":report["unresolved_original_sixth_configurations"],
+              "inactive_controls":report["inactive_original_controls"],
+              "material_sixth_impulses":0},sort_keys=True))
+          for x in report["cases"]:
+              if x["source_face"] is not None:
+                  print(json.dumps({"angle":x["angle"],"status":x["status"],
+                    "source_face":x["source_face"],"original_corner":x["source_corner"],
+                    "source_time":x["source_first_original_zero_gap_time"],
+                    "selected_finite_intersects":x["original_selected_face_finite_clip_intersects"],
+                    "other_finite_intersects":x["original_other_face_finite_clip_intersects"],
+                    "conditional_sixth_response":x["conditional_sixth_response"],
+                    "physical_sixth_impact":False},sort_keys=True))
+          PY
+      - name: Retain independent original WORLD40 source response artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world40-original-conditional-sixth-response
+          path: world40-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  inherited-original-world-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Full original source-owned WORLD experimental native regression lineage
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature network.tests.test_world_ab_whole_contact_configuration network.tests.test_world_ab_post_fifth_local_clearance network.tests.test_world_ab_post_fifth_contiguous_prefix network.tests.test_world_ab_first_post_fifth_guard_limit network.tests.test_world_ab_local_zero_gap_after_guard
