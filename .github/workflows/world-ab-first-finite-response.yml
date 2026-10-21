@@ -1,0 +1,74 @@
+name: WORLD 29 original finite feature qualification
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_first_finite_response_qualification.py'
+      - 'network/tests/test_world_ab_first_finite_response_qualification.py'
+      - 'systems/workspace/WORLD_AB_FIRST_FINITE_RESPONSE_TRIAL_29_2026-10-20.md'
+      - '.github/workflows/world-ab-first-finite-response.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_first_finite_response_qualification.py'
+      - 'network/tests/test_world_ab_first_finite_response_qualification.py'
+      - 'systems/workspace/WORLD_AB_FIRST_FINITE_RESPONSE_TRIAL_29_2026-10-20.md'
+      - '.github/workflows/world-ab-first-finite-response.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-first-finite-source-candidate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent original finite feature and conditional elastic law checks
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification
+      - name: Preserve original source response qualifications and refusals
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_first_finite_response_qualification import run
+          from network.tests.test_world_ab_first_finite_response_qualification import verify
+          source=run()
+          independently=[{"angle":c["angle"],"qualifying_status":c["status"],
+                          "independent_contact_and_elastic_witness":verify(c)}
+                         for c in source["cases"]]
+          assert len(independently)==8
+          assert all(c["independent_contact_and_elastic_witness"] for c in independently)
+          assert source["original_finite_first_onset_cases"]==3
+          assert source["absent_source_impulse_controls"]==2
+          assert source["actual_fourth_impulses_selected"]==0
+          assert source["material_impacts_witnessed"]==0
+          assert source["post_response_trajectories_solved"]==0
+          folder=Path("world29-source-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"original_source":source,"independent_witness":independently},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"first_finite_contact_qualification.json").write_text(payload)
+          (folder/"first_finite_contact_qualification.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  first_finite_contact_qualification.json\n")
+          print(json.dumps({
+              "source_first_finite_onset_cases":source["original_finite_first_onset_cases"],
+              "qualifying_hypothetical_responses":source["conditionally_qualifying_responses"],
+              "refused_or_competing_finite_features":source["unresolved_finite_feature_cases"],
+              "no_original_third_impulse_controls":source["absent_source_impulse_controls"],
+              "measured_fourth_impacts":0,
+              "selected_real_contact_laws":0
+          },sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world29-original-first-finite-source-qualifications
+          path: world29-source-evidence/
+          if-no-files-found: warn
+          retention-days: 30
