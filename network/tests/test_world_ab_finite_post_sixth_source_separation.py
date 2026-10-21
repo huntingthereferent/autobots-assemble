@@ -7,6 +7,7 @@ from a line crossing outside a finite segment.
 """
 from __future__ import annotations
 from copy import deepcopy
+from functools import lru_cache
 from math import cos,sin,hypot,isfinite
 import unittest
 
@@ -132,14 +133,19 @@ def check_record(record,model,faces,world,a,b):
     return bool(all_clear)
 
 
+@lru_cache(maxsize=16)
+def original_independent_ancestry(angle):
+    old=prior42(angle)
+    if not verify42(old):
+        raise ValueError("WORLD42 independent original guard witness failed")
+    return old,prior40(angle)
+
+
 def verify(row):
     angle=row.get("angle")
     if row.get("schema")!=SCHEMA or angle not in ANGLES:
         raise ValueError("WORLD43 source angle/schema invalid")
-    prior=prior42(angle)
-    if not verify42(prior):
-        raise ValueError("WORLD42 independent original guard witness failed")
-    before=prior40(angle)
+    prior,before=original_independent_ancestry(angle)
     fixed={
         "source_trial42_schema":prior["schema"],
         "source_trial42_status":prior["status"],
