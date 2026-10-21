@@ -21,7 +21,7 @@ This project uses independent musical math and Web Audio: seconds per quarter be
 | Timeline | Up to 64 beats; move, length edit, split, duplicate, snap, zoom | No cross-track drag or elastic time warp |
 | Sources | WAV/MP3 or browser-decodable audio, imported MIDI, microphone permission | No stem separation or AI audio generation |
 | Composition | 25-note piano roll, 13-key musical typing, five oscillator/noise instruments | No rich sample-library synthesis |
-| Time | BPM 40–240, playback, looping, nominal time-signature selector | Ruler currently assumes four quarter notes per bar |
+| Time | BPM 40–240, playback, looping, meter-derived ruler and bar transport | 6/8 modeled as three quarter-note durations per bar; no advanced rhythmic grouping |
 | Processing | Track lowpass, drive, delay, gain, pan | No plugins, convolution, sidechain |
 | Automation | Linearly interpolated track volume points | No editable graphical curve |
 | Mixing | Solo, mute, master gain, live analyser, offline output | No true-peak or LUFS metering |
