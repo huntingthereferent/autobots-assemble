@@ -69,6 +69,7 @@ a.equal(m.validScore({...s,events:s.events.slice(0,1)}),null);
 a.equal(m.validScore({...s,events:[s.events[1],s.events[0]]}),null);
 a.equal(m.validScore({...s,events:[{...s.events[0],cat:'unknown'},s.events[1]]}),null);
 a.equal(m.validScore({...s,events:[{...s.events[0],note:99},s.events[1]]}),null);
+a.equal(m.validScore({...s,events:[s.events[0],{...s.events[1],note:62}]}),null);
 """
         result = subprocess.run(["node", "-e", checks], text=True,
                                 capture_output=True, timeout=10,
