@@ -159,6 +159,58 @@ class StudioNativeTests(unittest.TestCase):
         with self.assertRaises((OSError,ValueError)):
             read_wav_session(manifest)
 
+    def test_multiple_tempo_resample_and_mix_variants(self):
+        bridge=self.native()
+        for i,(bpm,numerator,denominator,pan,solo) in enumerate([
+            (83,2,3,-1000,False),(143,3,2,1000,True),(201,4,3,0,False)]):
+            item=example()
+            item["bpm"]=bpm
+            item["tracks"][0]["clips"][0]["rate_num"]=numerator
+            item["tracks"][0]["clips"][0]["rate_den"]=denominator
+            item["tracks"][0]["pan"]=pan
+            item["tracks"][1]["solo"]=solo
+            job=bridge.admit("v1",item,from_actor="owner")
+            state=bridge.execute(job.handoff_id,allow_local_execution=True)
+            with self.subTest(i=i):
+                self.assertEqual(state.status,"COMPLETE")
+                self.assertEqual(state.output["result"],expected_result(item))
+                self.assertTrue(bridge.reverify(job.handoff_id)["reverified"])
+
+    def test_manifest_symlink_and_outside_path_rejected(self):
+        item=example()
+        audio=self.root/"authorized.wav"
+        make_wav(audio,item["sources"][0]["pcm"])
+        alias=self.root/"alias.wav"
+        try:alias.symlink_to(audio)
+        except OSError:self.skipTest("symlink creation unavailable")
+        original={k:deepcopy(v) for k,v in item.items() if k!="sources"}
+        original["schema"]="ab-studio-wav-intake/v1"
+        original["sources"]=[{"id":"a","path":"alias.wav"}]
+        manifest=self.root/"session.json"
+        manifest.write_text(json.dumps(original),encoding="utf8")
+        with self.assertRaises(ValueError):
+            read_wav_session(manifest)
+        original["sources"][0]["path"]="../not-authorized.wav"
+        manifest.write_text(json.dumps(original),encoding="utf8")
+        with self.assertRaises(ValueError):
+            read_wav_session(manifest)
+
+    def test_shipped_example_is_a_valid_native_session(self):
+        manifest=Path(__file__).resolve().parents[2]/"work/projects/ab-studio-native/example-session.json"
+        row=json.loads(manifest.read_text(encoding="utf8"))
+        self.assertEqual(row["schema"],"ab-studio-wav-intake/v1")
+        self.assertEqual(len(row["tracks"]),2)
+        with TemporaryDirectory() as folder:
+            session=Path(folder)/"example.json"
+            sample=Path(folder)/"meow.wav"
+            with wave.open(str(sample),"wb") as out:
+                out.setnchannels(1);out.setsampwidth(2);out.setframerate(16000)
+                out.writeframes(struct.pack("<"+"h"*8192,*([3000]*8192)))
+            session.write_text(json.dumps(row),encoding="utf8")
+            data=read_wav_session(session)
+            self.assertEqual(data["duration_ticks"],960)
+            self.assertEqual(expected_result(data)["frames"],8000)
+
     def test_cli_uses_real_source_editions_and_independent_job(self):
         request=example()
         sample=self.root/"clip.wav"
