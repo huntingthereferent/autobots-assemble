@@ -68,6 +68,31 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 #layer-profile{font:750 11px ui-monospace,monospace;color:var(--mint)}
 @media(max-width:480px){.layer-lane{grid-template-columns:72px repeat(16,minmax(0,1fr));gap:2px}.layer-lane strong{font-size:8px}}
 
+
+/* Pinned eight-bar melody editor and independent chord cadence per arrangement bar. */
+.melody-editor-bar{border:1px solid #827092;background:#241c30;border-radius:14px;padding:12px;margin:15px 0}
+.melody-editor-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:9px}
+.melody-editor-top strong{font:800 12px ui-monospace,monospace;color:var(--mint)}
+.melody-pins{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:6px;margin:10px 0}
+.melody-pin{border:1px solid #8a729b;background:#322440;color:var(--cream);border-radius:9px;padding:10px 3px;min-height:44px;font:900 12px ui-monospace,monospace}
+.melody-pin.is-selected{border:2px solid var(--mint);background:#504066;color:#fff;padding:9px 2px}
+.melody-pin.is-playing{box-shadow:inset 0 -4px 0 var(--pink)}
+.pin-button[aria-pressed=true]{background:var(--mint)!important;color:#1d1624!important;border-color:var(--mint)!important}
+.melody-editor-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.melody-editor-actions .small-btn{font-size:11px}
+.melody-editor-note{font:700 11px ui-monospace,monospace;color:var(--muted);margin:8px 0 0}
+.cadence-panel{padding:12px;border:1px solid #83718d;border-radius:12px;background:#291f35;margin-top:12px}
+.cadence-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.cadence-head strong{font:850 12px ui-monospace,monospace;color:var(--lemon)}
+.cadence-head label{font:750 11px ui-monospace,monospace;color:var(--muted);display:flex;align-items:center;gap:7px}
+.cadence-head select{background:#241a2d;color:var(--cream);border:1px solid #856c92;border-radius:9px;padding:9px}
+.cadence-steps{display:grid;grid-template-columns:repeat(16,minmax(0,1fr));gap:4px}
+.cadence-step{min-width:0;min-height:36px;border:1px solid #796484;background:#211929;border-radius:6px;color:var(--muted);font:750 10px ui-monospace,monospace}
+.cadence-step:nth-child(4n+1){border-left:3px solid #8e75a6}
+.cadence-step.on{background:#c3a9f6;color:#201727;border-color:var(--mint)}
+.cadence-step.playing{box-shadow:inset 0 0 0 2px var(--pink)}
+@media(max-width:470px){.melody-pin{font-size:10px;min-height:40px}.cadence-steps{gap:2px}.cadence-step{font-size:9px;min-height:32px}}
+
 </style>
 </head>
 <body>
@@ -106,7 +131,14 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 <div class="display-bar"><strong id="now-playing" aria-live="polite">♪ READY TO MEOW</strong><span id="audio-status" role="status">Tap a key to enable sound</span></div><p class="hint"><strong>Computer keys:</strong> A W S E D F T G Y H U J K &nbsp;·&nbsp; Touch and drag across the piano &nbsp;·&nbsp; Multiple notes at once</p>
 </section>
 <section class="studio" id="studio" aria-label="Cat music studio"><div class="card"><h2>Little tape recorder <span aria-hidden="true">⏺</span></h2><p>Record your actual performance, replay it, or save the notes to bring back later.</p><div class="action-row"><button type="button" class="action" id="rec" aria-pressed="false"><span id="rec-led" class="record-led"></span> Record</button><button type="button" class="action alt" id="play-tape">▶ Replay</button><button type="button" class="action alt" id="stop-tape">■ Stop</button></div><div class="tape"><div id="tape-clock" class="counter">00:00</div><small id="tape-label">A blank tape, waiting for your masterpiece.</small><div class="tape-dots" id="tape-dots" aria-hidden="true"></div></div><div class="action-row"><button type="button" class="small-btn" id="export">↓ Save song</button><button type="button" class="small-btn" id="import">↑ Load song</button><button type="button" class="small-btn" id="clear-tape">Clear tape</button><input class="file-input" type="file" id="song-file" accept="application/json,.json"></div><p class="small-note">Saved songs are small JSON note scores, not audio files. Everything runs locally in your browser; no accounts, uploads or tracking.</p></div>
-<div class="card"><h2>8-bar melody loop <span aria-hidden="true">✳</span></h2><p>Write eight melody bars, looping twice across sixteen chord and layer bars. Editing melody at bar 9 edits melody bar 1, and so on.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play arrangement</button><button type="button" class="action alt" id="loop-clear">Clear bar</button><button type="button" class="action alt" id="preset">Pattern for bar</button></div><div class="grid-controls"><label for="tempo" class="control-label">BPM</label><input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output><span class="control-label">· 16 STEPS × 8 MELODY BARS</span></div><p class="small-note" id="melody-location">EDITING MELODY 1 / 8 · ARRANGEMENT BAR 1 / 16</p><div class="seq-wrap"><div class="seq-numbers" id="seq-numbers"></div><div class="seq" id="seq" role="group" aria-label="16 step pattern editor"></div></div><div class="notice" role="status" id="studio-status">STUDIO IS READY.</div></div></section>
+<div class="card"><h2>8-bar melody loop <span aria-hidden="true">✳</span></h2><p>Write eight melody bars, looping twice across sixteen chord and layer bars. Editing melody at bar 9 edits melody bar 1, and so on.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play arrangement</button><button type="button" class="action alt" id="loop-clear">Clear bar</button><button type="button" class="action alt" id="preset">Pattern for bar</button></div><div class="grid-controls"><label for="tempo" class="control-label">BPM</label><input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output><span class="control-label">· 16 STEPS × 8 MELODY BARS</span></div>
+<div class="melody-editor-bar" id="melody-editor-bar">
+<div class="melody-editor-top"><strong>MELODY EDIT PINS · 1–8</strong><button type="button" class="small-btn pin-button" id="pin-melody" aria-pressed="false">📌 Pin this melody</button></div>
+<div id="melody-pins" class="melody-pins" role="group" aria-label="Eight melody edit slots"></div>
+<div class="melody-editor-actions"><button type="button" class="small-btn" id="melody-back">← Melody</button><button type="button" class="small-btn" id="melody-forward">Melody →</button><button type="button" class="small-btn" id="melody-undo">↶ Undo melody edit</button><button type="button" class="small-btn" id="melody-copy">Copy previous melody</button></div>
+<p class="melody-editor-note" id="pin-status">Unpinned: playback may move your editor when Follow playback is on. Select a melody above to pin it while the chords keep moving.</p>
+</div>
+<p class="small-note" id="melody-location">EDITING MELODY 1 / 8 · ARRANGEMENT BAR 1 / 16</p><div class="seq-wrap"><div class="seq-numbers" id="seq-numbers"></div><div class="seq" id="seq" role="group" aria-label="16 step pattern editor"></div></div><div class="notice" role="status" id="studio-status">STUDIO IS READY.</div></div></section>
 <section class="harmony card" id="harmony" aria-labelledby="harmony-title">
 <h2 id="harmony-title">16 arrangement bars · modern layer structures ♫</h2><p>Sixteen bars carry different chords and production layers beneath your repeating 8-bar melody. New original structural presets are informed by current pop, dance, R&B, country-pop and indie trends rather than copies of specific songs.</p>
 <div class="harmony-controls"><label for="progression-template">MODERN PROGRESSION<select id="progression-template"></select></label><label for="progression-key">KEY<select id="progression-key"></select></label><button type="button" class="action mint" id="generate-progression">♫ Fill selected four bars</button></div>
@@ -115,7 +147,14 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 <div class="bar-actions"><button type="button" class="small-btn" id="bar-prev">← Previous</button><strong id="bar-number">BAR 01 / 16</strong><button type="button" class="small-btn" id="bar-next">Next →</button><button type="button" class="small-btn" id="play-from-bar">▶ Play from here</button><label class="toggle"><input type="checkbox" id="follow-bar" checked> Follow playback</label><label class="toggle"><input type="checkbox" id="repeat-arrangement" checked> Loop 16 bars</label></div>
 <div id="chord-list" class="chord-list" role="group" aria-label="Sixteen navigable arrangement bars"></div>
 <div class="bar-actions"><label for="bar-chord">SELECTED BAR CHORD<input type="text" id="bar-chord" maxlength="8" placeholder="Am7 / blank = rest"></label><button class="small-btn" id="set-bar-chord" type="button">Set chord</button><button class="small-btn" id="copy-previous-bar" type="button">Copy previous bar</button></div>
-<p class="small-note">Melody 1–8 repeats during arrangement bars 9–16. Chord and layer settings remain independent for all sixteen bars.</p>
+<p class="small-note">Melody 1–8 repeats during arrangement bars 9–16. Chord, cadence, and layer settings remain independent for all sixteen bars.</p>
+<div class="cadence-panel" aria-labelledby="cadence-title">
+<div class="cadence-head"><strong id="cadence-title">CHORD CADENCE · BAR 01</strong>
+<label for="cadence-preset">RHYTHM<select id="cadence-preset"><option value="custom">Custom</option><option value="sustain">Sustain (1 hit)</option><option value="half">Half notes (2 hits)</option><option value="quarter">Quarter notes (4 hits)</option><option value="offbeat">Offbeat (4 hits)</option><option value="syncopated">Syncopated (5 hits)</option></select></label>
+<button type="button" class="small-btn" id="cadence-copy">Copy previous cadence</button></div>
+<div class="cadence-steps" id="cadence-grid" role="group" aria-label="Chord retrigger rhythm for selected arrangement bar"></div>
+<p class="small-note">Tap each step to retrigger the current bar's chord. Each bar can use a different rhythmic cadence; these edits save with arrangement branches.</p>
+</div>
 </div>
 <div class="layer-board" id="layer-board"><h3>Production layers · selected bar</h3><p>These are original timing structures, not song stems. Fill a four-bar section to choose its groove, then independently enable pulse, percussion, bass and atmosphere in any bar.</p><div id="layer-profile">BRIGHT POP · BAR 1</div>
 <div class="layer-toggle-row"><label><input id="layer-toggle-0" type="checkbox"> Pulse</label><label><input id="layer-toggle-1" type="checkbox"> Percussion</label><label><input id="layer-toggle-2" type="checkbox"> Bass</label><label><input id="layer-toggle-3" type="checkbox"> Atmosphere</label></div>
@@ -240,9 +279,29 @@ function realizeProgression(template,tonic){
 
 
 const BAR_COUNT=16,MELODY_BARS=8,STEPS_PER_BAR=16,ARRANGEMENT_SCHEMA='meow-machine/arrangement-branches-v1';
-function freshBar(step,i=0){return {chord:step?step.slice():null,notes:Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false)),profile:'pop',layers:modernLayerState('pop',i)}}
+
+// Sixteenth-note chord attacks. These independent finite rhythms do not transpose music.
+const CADENCE_PRESETS={
+ sustain:[0],half:[0,8],quarter:[0,4,8,12],offbeat:[2,6,10,14],syncopated:[0,3,7,10,14]
+};
+function cadenceFromPreset(name){
+ if(!Object.hasOwn(CADENCE_PRESETS,name))return null;
+ return Array.from({length:STEPS_PER_BAR},(_,i)=>CADENCE_PRESETS[name].includes(i));
+}
+function cadenceName(values){
+ for(const name of Object.keys(CADENCE_PRESETS)){
+  const check=cadenceFromPreset(name);
+  if(values.every((v,i)=>v===check[i]))return name;
+ }
+ return 'custom';
+}
+function validCadence(values){
+ return Array.isArray(values)&&values.length===STEPS_PER_BAR&&values.every(v=>typeof v==='boolean');
+}
+
+function freshBar(step,i=0){return {chord:step?step.slice():null,notes:Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false)),profile:'pop',layers:modernLayerState('pop',i),cadence:cadenceFromPreset('half')}}
 function defaultBars(){return Array.from({length:BAR_COUNT},(_,i)=>freshBar(CHORD_LIBRARY[0].steps[i%4],i))}
-function cloneBar(b){return {chord:b.chord?b.chord.slice():null,notes:b.notes.map(row=>row.slice()),profile:b.profile||'pop',layers:(b.layers||[true,false,false,false]).slice()}}
+function cloneBar(b){return {chord:b.chord?b.chord.slice():null,notes:b.notes.map(row=>row.slice()),profile:b.profile||'pop',layers:(b.layers||[true,false,false,false]).slice(),cadence:(b.cadence||cadenceFromPreset('sustain')).slice()}}
 function cloneBars(list){return list.map(cloneBar)}
 function validBars(list){
  if(!Array.isArray(list)||list.length!==BAR_COUNT)return null;
@@ -253,6 +312,7 @@ function validBars(list){
   if(!Array.isArray(b.notes)||b.notes.length!==5||!b.notes.every(row=>Array.isArray(row)&&row.length===STEPS_PER_BAR&&row.every(v=>typeof v==='boolean')))return null;
   if(b.profile!==undefined&&(typeof b.profile!=='string'||!Object.hasOwn(MODERN_PROFILES,b.profile)))return null;
   if(b.layers!==undefined&&(!Array.isArray(b.layers)||b.layers.length!==4||!b.layers.every(v=>typeof v==='boolean')))return null;
+  if(b.cadence!==undefined&&!validCadence(b.cadence))return null;
   const clean=cloneBar(b);if(b.layers===undefined)clean.layers=modernLayerState(clean.profile,i);
   result.push(clean);
  }
@@ -283,7 +343,7 @@ const $=id=>document.getElementById(id);
 let cat='miso',octave=4,volume=.68,echo=false,audio=null,master=null,echoInput=null,purrNodes=null;
 const active=new Map(),keys=new Map();let pressedPointer=new Map();let noteSerial=0,recording=false,recordStart=0,events=[],tapeTime=0,tapePlaying=false,scheduled=[],recTimer=0;
 let loopPlaying=false,loopTimer=null,loopTick=0,loopIndex=0,loopLast=-1,playingBar=-1,loopNotes=new Map(),presetIndex=0;
-let bars=defaultBars(),selectedBar=0,grid=bars[0].notes,arrangementDirty=false;
+let bars=defaultBars(),selectedBar=0,grid=bars[0].notes,arrangementDirty=false,editorPinned=false,melodyUndo=[];
 let savedBranches=[],activeBranchId=null;
 const BRANCH_STORAGE_KEY='meow-machine/arrangement-branches-v1';
 const TEMPLATE_STORAGE_KEY='meow-machine/chord-templates-v1';
@@ -470,6 +530,102 @@ function fillTemplateSelector(){
  $('delete-progression').disabled=!selectedTemplate.startsWith('custom-');
 }
 
+
+function defaultCadenceForProfile(name){
+ return {vocal:'sustain',alt:'half',club:'quarter',rnb:'syncopated',rap:'offbeat',country:'half',synth:'quarter',indie:'offbeat',pop:'half'}[name]||'half';
+}
+function paintMelodyPins(){
+ const list=$('melody-pins');
+ if(list.childElementCount!==MELODY_BARS){
+  list.replaceChildren();
+  for(let i=0;i<MELODY_BARS;i++){
+   const btn=document.createElement('button');btn.type='button';btn.className='melody-pin';
+   btn.addEventListener('click',()=>{editorPinned=true;selectBar(i);updatePinButton()});
+   list.append(btn);
+  }
+ }
+ for(let i=0;i<MELODY_BARS;i++){
+  const btn=list.children[i];btn.textContent='M'+(i+1);
+  btn.classList.toggle('is-selected',melodyIndexFor(selectedBar)===i);
+  btn.classList.toggle('is-playing',loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===i);
+  btn.setAttribute('aria-pressed',String(melodyIndexFor(selectedBar)===i));
+  btn.setAttribute('aria-label','Edit and pin melody bar '+(i+1));
+ }
+}
+function updatePinButton(){
+ $('pin-melody').setAttribute('aria-pressed',String(editorPinned));
+ $('pin-melody').textContent=editorPinned?'📌 Pinned · unpin':'📌 Pin this melody';
+ $('pin-status').textContent=editorPinned?
+  'Pinned to melody '+(melodyIndexFor(selectedBar)+1)+'/8. Playhead and chords move without shifting these notes.':
+  'Unpinned: Follow playback moves the editor. Click an M1–M8 slot to pin it.';
+ paintMelodyPins();
+}
+function recordMelodyUndo(){
+ const index=melodyIndexFor(selectedBar);
+ melodyUndo.push({index,notes:bars[index].notes.map(row=>row.slice())});
+ if(melodyUndo.length>24)melodyUndo.shift();
+ $('melody-undo').disabled=false;
+}
+function undoMelodyEdit(){
+ const last=melodyUndo.pop();if(!last)return;
+ bars[last.index].notes=last.notes.map(row=>row.slice());
+ grid=bars[melodyIndexFor(selectedBar)].notes;
+ dirtyBars();paintGrid();paintHarmony();
+ $('melody-undo').disabled=melodyUndo.length===0;
+ studioStatus('RESTORED PREVIOUS EDIT IN MELODY '+(last.index+1));
+}
+function moveMelody(delta){
+ editorPinned=true;const next=Math.max(0,Math.min(MELODY_BARS-1,melodyIndexFor(selectedBar)+delta));
+ selectBar(next);updatePinButton();
+}
+function paintCadence(){
+ const bar=bars[selectedBar],grid=$('cadence-grid');
+ if(grid.childElementCount!==STEPS_PER_BAR){
+  grid.replaceChildren();
+  for(let i=0;i<STEPS_PER_BAR;i++){
+   const btn=document.createElement('button');btn.type='button';btn.className='cadence-step';
+   btn.setAttribute('aria-label','Toggle chord attack at sixteenth step '+(i+1));
+   btn.addEventListener('click',()=>{
+    bars[selectedBar].cadence[i]=!bars[selectedBar].cadence[i];
+    dirtyBars();paintCadence();paintHarmony();
+   });grid.append(btn);
+  }
+ }
+ $('cadence-title').textContent='CHORD CADENCE · BAR '+String(selectedBar+1).padStart(2,'0');
+ $('cadence-preset').value=cadenceName(bar.cadence);
+ $('cadence-copy').disabled=selectedBar===0;
+ for(let i=0;i<STEPS_PER_BAR;i++){
+  const btn=grid.children[i];btn.textContent=String(i+1);
+  btn.classList.toggle('on',bar.cadence[i]);
+  btn.classList.toggle('playing',loopPlaying&&playingBar===selectedBar&&loopLast===i);
+  btn.setAttribute('aria-pressed',String(bar.cadence[i]));
+ }
+}
+function initializeMelodyAndCadence(){
+ paintMelodyPins();updatePinButton();
+ $('melody-undo').disabled=true;
+ $('pin-melody').addEventListener('click',()=>{editorPinned=!editorPinned;updatePinButton()});
+ $('melody-back').addEventListener('click',()=>moveMelody(-1));
+ $('melody-forward').addEventListener('click',()=>moveMelody(1));
+ $('melody-copy').addEventListener('click',()=>{
+  const idx=melodyIndexFor(selectedBar);
+  if(idx===0)return;recordMelodyUndo();
+  bars[idx].notes=bars[idx-1].notes.map(row=>row.slice());grid=bars[idx].notes;
+  dirtyBars();paintGrid();paintHarmony();
+ });
+ $('melody-undo').addEventListener('click',undoMelodyEdit);
+ $('cadence-preset').addEventListener('change',e=>{
+  const pattern=cadenceFromPreset(e.target.value);
+  if(!pattern)return;
+  bars[selectedBar].cadence=pattern;dirtyBars();paintCadence();
+ });
+ $('cadence-copy').addEventListener('click',()=>{
+  if(selectedBar===0)return;
+  bars[selectedBar].cadence=bars[selectedBar-1].cadence.slice();
+  dirtyBars();paintCadence();
+ });
+}
+
 function paintHarmony(){
  const list=$('chord-list');
  if(list.childElementCount!==BAR_COUNT){
@@ -485,7 +641,7 @@ function paintHarmony(){
   const b=list.children[i],chord=realizeBar(bars[i].chord);
   b.children[0].textContent='BAR '+String(i+1).padStart(2,'0');
   b.children[1].textContent=chord.name;
-  b.children[2].textContent='M'+(melodyIndexFor(i)+1)+' · '+bars[i].layers.filter(Boolean).length+' LAYERS';
+  b.children[2].textContent='M'+(melodyIndexFor(i)+1)+' · '+bars[i].cadence.filter(Boolean).length+' HITS';
   b.classList.toggle('selected',i===selectedBar);
   b.classList.toggle('playing',loopPlaying&&playingBar===i);
   b.setAttribute('aria-pressed',String(i===selectedBar));
@@ -494,13 +650,14 @@ function paintHarmony(){
 function selectBar(index){
  if(!Number.isInteger(index)||index<0||index>=BAR_COUNT)return;
  selectedBar=index;grid=bars[melodyIndexFor(index)].notes;
+ paintMelodyPins();
  $('bar-number').textContent='BAR '+String(index+1).padStart(2,'0')+' / 16';
  $('bar-chord').value=bars[index].chord?realizeBar(bars[index].chord).name:'';
  $('copy-previous-bar').disabled=index===0;
  $('melody-location').textContent='EDITING MELODY '+(melodyIndexFor(index)+1)+'/8 · ARRANGEMENT BAR '+(index+1)+'/16'+(index>=8?' · SHARED WITH BAR '+(melodyIndexFor(index)+1):'');
  paintLayers();
  $('seq').setAttribute('aria-label','16 step editor for looping melody bar '+(melodyIndexFor(index)+1));
- paintGrid();paintHarmony();
+ paintCadence();paintGrid();paintHarmony();updatePinButton();
 }
 function dirtyBars(){arrangementDirty=true;$('branch-status').textContent='UNSAVED CHANGES · Save a new branch or update selected';paintHarmony()}
 function setBarChord(){
@@ -513,7 +670,8 @@ function copyPreviousBar(){
  if(selectedBar===0)return;
  const from=bars[selectedBar-1],into=bars[selectedBar];
  into.chord=from.chord?from.chord.slice():null;into.layers=from.layers.slice();into.profile=from.profile;
- if(selectedBar<MELODY_BARS)into.notes=from.notes.map(row=>row.slice());
+ if(selectedBar<MELODY_BARS){recordMelodyUndo();into.notes=from.notes.map(row=>row.slice())}
+ into.cadence=from.cadence.slice();
  dirtyBars();selectBar(selectedBar);
  harmonyStatus('Copied previous chord/layers'+(selectedBar<MELODY_BARS?' and melody':'')+' to bar '+(selectedBar+1));
 }
@@ -524,11 +682,11 @@ function applyProgression(){
  const start=Math.floor(selectedBar/4)*4;
  for(let i=0;i<4;i++){
   const bar=bars[start+i];bar.chord=[(selectedKey+t.steps[i][0])%12,t.steps[i][1]];
-  if(t.profile&&MODERN_PROFILES[t.profile]){bar.profile=t.profile;bar.layers=modernLayerState(t.profile,start+i)}
+  if(t.profile&&MODERN_PROFILES[t.profile]){bar.profile=t.profile;bar.layers=modernLayerState(t.profile,start+i);bar.cadence=cadenceFromPreset(defaultCadenceForProfile(t.profile))}
  }
  $('delete-progression').disabled=!selectedTemplate.startsWith('custom-');
  dirtyBars();selectBar(selectedBar);
- harmonyStatus('Filled bars '+(start+1)+'–'+(start+4)+' with chords'+(t.profile?' and structural layers':'')+' · melody unchanged');
+ harmonyStatus('Filled bars '+(start+1)+'–'+(start+4)+' with chords'+(t.profile?' + cadence + structural layers':'')+' · melody unchanged');
 }
 
 function saveProgression(){
@@ -617,7 +775,7 @@ function updateBranch(){
 function loadBranch(){
  const b=savedBranches.find(v=>v.id===$('branch-select').value);
  if(!b){$('branch-status').textContent='Choose a saved branch to load';return}
- stopLoop();bars=cloneBars(b.bars);activeBranchId=b.id;arrangementDirty=false;
+ stopLoop();bars=cloneBars(b.bars);melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=b.id;arrangementDirty=false;
  $('tempo').value=b.tempo;$('tempo-read').textContent=b.tempo;selectBar(0);
  $('branch-status').textContent='Loaded '+b.name+' · move through bars 1–16';
 }
@@ -649,7 +807,7 @@ async function importBranches(file){
   }
   if(!validBranches(combined))throw Error('Invalid combined branches');
   savedBranches=combined;storeBranches();refreshBranchSelector();
-  if(clean){stopLoop();bars=clean;activeBranchId=null;arrangementDirty=true;selectedBar=0;grid=bars[0].notes;
+  if(clean){stopLoop();bars=clean;melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=null;arrangementDirty=true;selectedBar=0;grid=bars[0].notes;
    $('tempo').value=draft.tempo;$('tempo-read').textContent=draft.tempo;selectBar(0);}
   $('branch-status').textContent='Restored '+imported.length+' branches'+(clean?' and working bars':'');
  }catch(e){$('branch-status').textContent='Restore rejected: '+e.message}
@@ -719,7 +877,7 @@ function makeGrid(){
    const b=document.createElement('button');b.type='button';b.className='step';
    b.dataset.row=String(r);b.dataset.col=String(c);b.dataset.beat=String(c%4===0);
    b.setAttribute('aria-label',NOTES[ROW_NOTES[r]]+', step '+(c+1));
-   b.addEventListener('click',()=>{grid[r][c]=!grid[r][c];dirtyBars();paintGrid()});seq.append(b);
+   b.addEventListener('click',()=>{recordMelodyUndo();grid[r][c]=!grid[r][c];dirtyBars();paintGrid()});seq.append(b);
   }
  }
  paintGrid();
@@ -740,9 +898,12 @@ function loopStep(){
  const barIndex=Math.floor(index/STEPS_PER_BAR),step=index%STEPS_PER_BAR,bar=bars[barIndex];
  if(step===0){
   for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();
+  if($('follow-bar').checked&&!editorPinned)selectBar(barIndex);
+ }
+ if(bar.cadence[step]){
+  for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();
   const chord=realizeBar(bar.chord);
   chord.notes.forEach((note,i)=>{const id='chord'+i;holdSound(note,id,cat,false);harmonyNotes.add(id)});
-  if($('follow-bar').checked)selectBar(barIndex);
  }
  for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();
  playModernLayers(bar,step);
@@ -751,7 +912,7 @@ function loopStep(){
   const id='loop'+r;holdSound(midiFor(ROW_NOTES[r],octave),id,cat,false);loopNotes.set(id,true);
  }
  playingBar=barIndex;loopLast=step;loopIndex++;
- paintGrid();paintHarmony();
+ paintGrid();paintHarmony();paintCadence();paintMelodyPins();
  studioStatus('BAR '+String(barIndex+1).padStart(2,'0')+'/16 · MELODY '+(melodyIndexFor(barIndex)+1)+'/8 · BEAT '+(Math.floor(step/4)+1));
 }
 function scheduleLoop(){
@@ -762,7 +923,7 @@ function stopLoop(){
  loopPlaying=false;clearTimeout(loopTimer);loopTimer=null;
  for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();
  for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();
- playingBar=-1;loopLast=-1;paintGrid();paintHarmony();
+ playingBar=-1;loopLast=-1;paintGrid();paintHarmony();paintCadence();paintMelodyPins();
  $('loop-play').textContent='▶ Play arrangement';$('loop-play').setAttribute('aria-pressed','false');
  studioStatus('STUDIO IS READY.');
 }
@@ -936,12 +1097,12 @@ function bindSoundBank(){
  if(unlockAudio())initializeSoundBank();
 }
 
-function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeHarmony();initializeBranches();for(const b of document.querySelectorAll('.cat-btn'))b.addEventListener('click',()=>pickCat(b.dataset.cat));$('octave-down').addEventListener('click',()=>changeOctave(-1));$('octave-up').addEventListener('click',()=>changeOctave(1));$('volume').addEventListener('input',e=>{volume=e.target.value/100;if(master)master.gain.setTargetAtTime(volume*.65,audio.currentTime,.02)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>togglePurr(e.target.checked));
+function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeHarmony();initializeBranches();initializeMelodyAndCadence();for(const b of document.querySelectorAll('.cat-btn'))b.addEventListener('click',()=>pickCat(b.dataset.cat));$('octave-down').addEventListener('click',()=>changeOctave(-1));$('octave-up').addEventListener('click',()=>changeOctave(1));$('volume').addEventListener('input',e=>{volume=e.target.value/100;if(master)master.gain.setTargetAtTime(volume*.65,audio.currentTime,.02)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>togglePurr(e.target.checked));
  document.addEventListener('keydown',e=>{if(e.repeat||e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)||document.activeElement?.isContentEditable)return;const i=SHORTCUTS.indexOf(e.code);if(i<0)return;e.preventDefault();holdSound(midiFor(i,octave),'key'+e.code)});
  document.addEventListener('keyup',e=>{if(!SHORTCUTS.includes(e.code))return;releaseSound('key'+e.code)});
  window.addEventListener('blur',()=>{stopLoop();stopTape();releaseAll();togglePurr(false);$('purr').checked=false});document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseAll();stopLoop();stopTape();togglePurr(false);$('purr').checked=false}});
  $('rec').addEventListener('click',()=>recording?stopRecording():startRecording());$('play-tape').addEventListener('click',playTape);$('stop-tape').addEventListener('click',()=>{stopRecording();stopTape()});$('clear-tape').addEventListener('click',()=>{stopRecording();stopTape();events=[];tapeTime=0;recIds.clear();updateTape();$('tape-label').textContent='A blank tape, waiting for your masterpiece.'});$('export').addEventListener('click',saveSong);$('import').addEventListener('click',()=>$('song-file').click());$('song-file').addEventListener('change',e=>loadSong(e.target.files?.[0]));
- $('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{bars[melodyIndexFor(selectedBar)].notes=Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false));grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('CLEARED BAR '+(selectedBar+1))});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;bars[melodyIndexFor(selectedBar)].notes=patternPreset(presetIndex);grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('PATTERN FOR BAR '+(selectedBar+1)+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');}
+ $('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{recordMelodyUndo();bars[melodyIndexFor(selectedBar)].notes=Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false));grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('CLEARED BAR '+(selectedBar+1))});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;recordMelodyUndo();bars[melodyIndexFor(selectedBar)].notes=patternPreset(presetIndex);grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('PATTERN FOR BAR '+(selectedBar+1)+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');}
 bind();
 })();
 </script>

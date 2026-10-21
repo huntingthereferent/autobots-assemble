@@ -72,7 +72,7 @@ class CatKeyboardTests(unittest.TestCase):
         pure = script[script.index("const NOTES="):script.index("const $=id=>")]
         checks = r"""
 const vm=require('node:vm'),a=require('node:assert/strict');
-const m=vm.runInNewContext(process.env.CAT_RULES+'\n({hz,midiFor,validScore,patternPreset,SHORTCUTS,CHORD_LIBRARY,parseChordSymbol,progressionFromSymbols,realizeProgression,validUserTemplates,defaultBars,cloneBars,validBars,validBranches,realizeBar,nextStep,melodyIndexFor,modernLayerState,MODERN_PROFILES,BAR_COUNT,MELODY_BARS,STEPS_PER_BAR})');
+const m=vm.runInNewContext(process.env.CAT_RULES+'\n({hz,midiFor,validScore,patternPreset,SHORTCUTS,CHORD_LIBRARY,parseChordSymbol,progressionFromSymbols,realizeProgression,validUserTemplates,defaultBars,cloneBars,validBars,validBranches,realizeBar,nextStep,melodyIndexFor,modernLayerState,MODERN_PROFILES,BAR_COUNT,MELODY_BARS,STEPS_PER_BAR,CADENCE_PRESETS,cadenceFromPreset,cadenceName,validCadence})');
 a.equal(m.SHORTCUTS.length,13);
 a.equal(m.midiFor(0,4),60);a.equal(m.midiFor(12,5),84);
 a.equal(Math.round(m.hz(69)),440);
@@ -149,6 +149,28 @@ a.equal(m.validBars(m.defaultBars().map((b,i)=>i===3?{...b,layers:[false,1,false
 a.equal(m.validBars(m.defaultBars().map((b,i)=>i===2?{...b,profile:'unknown'}:b)),null);
 // Historical saved branches (pre-layer schema) must still parse.
 a.equal(m.validBars(m.defaultBars().map(({chord,notes})=>({chord,notes}))).length,16);
+
+a.equal(Object.keys(m.CADENCE_PRESETS).length,5);
+a.equal(m.cadenceFromPreset('sustain').filter(Boolean).length,1);
+a.equal(m.cadenceFromPreset('half').filter(Boolean).length,2);
+a.equal(m.cadenceFromPreset('quarter').filter(Boolean).length,4);
+a.equal(m.cadenceFromPreset('offbeat').filter(Boolean).length,4);
+a.equal(m.cadenceFromPreset('syncopated').filter(Boolean).length,5);
+a.equal(m.cadenceFromPreset('wrong'),null);
+a.equal(m.cadenceName(m.cadenceFromPreset('quarter')),'quarter');
+a.equal(m.cadenceName(Array(16).fill(false)),'custom');
+a(m.validCadence(m.cadenceFromPreset('half')));
+a.equal(m.validCadence(Array(15).fill(false)),false);
+a.equal(m.validCadence(Array(16).fill(1)),false);
+const oldSaved=m.defaultBars().map(({chord,notes,profile,layers})=>({chord,notes,profile,layers}));
+const recovered=m.validBars(oldSaved);
+a.equal(recovered.length,16);
+a.equal(recovered[0].cadence.filter(Boolean).length,1); // Original once-per-bar behavior
+const rhythm=m.defaultBars();rhythm[7].cadence=m.cadenceFromPreset('syncopated');
+const safe=m.cloneBars(rhythm);safe[7].cadence[0]=false;
+a.equal(rhythm[7].cadence[0],true);
+a.equal(m.validBars(rhythm).length,16);
+a.equal(m.validBars(rhythm.map((bar,i)=>i===3?{...bar,cadence:[true,1,...Array(14).fill(false)]}:bar)),null);
 
 """
         result = subprocess.run(["node", "-e", checks], text=True,
