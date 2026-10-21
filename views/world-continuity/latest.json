@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-21T07:05:15.975889+00:00",
-  "content_sha256": "d50253971a96e8c1c3bc4b27feb877fedc6c3a79fb1c7d43096ed5a2568de2d9",
+  "checked_at": "2026-10-21T17:21:10.340345+00:00",
+  "content_sha256": "ca4120bc4eb1be7bace4b312b3f5c35833763a47e3a5505b565430219c450e1b",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 2,
-      "max_magnitude": 1.61,
+      "count": 7,
+      "max_magnitude": 2.4,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,52 +22,137 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "nc75452806",
-        "observed_at": "2026-10-21T07:05:15.498686Z",
-        "source_updated_at": "2026-10-21T06:52:20.658000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452806",
+        "source_id": "aka2026uwlhvr",
+        "observed_at": "2026-10-21T17:21:10.005693Z",
+        "source_updated_at": "2026-10-21T16:29:22.609000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uwlhvr",
         "entity_type": "event",
-        "canonical_key": "event:nc75452806",
+        "canonical_key": "event:aka2026uwlhvr",
         "payload": {
-          "magnitude": 1.59,
-          "place": "8 km W of Cobb, CA",
-          "longitude": -122.815002441406,
-          "latitude": 38.8359985351562,
-          "depth_km": 1.82000005245209,
-          "occurred_at": "2026-10-21T06:20:06.570000+00:00"
+          "magnitude": 0.7,
+          "place": "69 km WNW of Tyonek, Alaska",
+          "longitude": -152.342,
+          "latitude": 61.282,
+          "depth_km": 1.5,
+          "occurred_at": "2026-10-21T16:26:30.959000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "nc75452811",
-        "observed_at": "2026-10-21T07:05:15.498686Z",
-        "source_updated_at": "2026-10-21T06:48:05.766000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452811",
+        "source_id": "aka2026uwloao",
+        "observed_at": "2026-10-21T17:21:10.005693Z",
+        "source_updated_at": "2026-10-21T16:38:02.646000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uwloao",
         "entity_type": "event",
-        "canonical_key": "event:nc75452811",
+        "canonical_key": "event:aka2026uwloao",
         "payload": {
-          "magnitude": 1.61,
-          "place": "8 km ESE of Cloverdale, CA",
-          "longitude": -122.933334350586,
-          "latitude": 38.7784996032715,
-          "depth_km": 4.05000019073486,
-          "occurred_at": "2026-10-21T06:46:31.260000+00:00"
+          "magnitude": 2.4,
+          "place": "24 km ESE of Nabesna, Alaska",
+          "longitude": -142.561,
+          "latitude": 62.301,
+          "depth_km": 5.0,
+          "occurred_at": "2026-10-21T16:33:36.253000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "aka2026uwmfvh",
+        "observed_at": "2026-10-21T17:21:10.005693Z",
+        "source_updated_at": "2026-10-21T17:08:57.427000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uwmfvh",
+        "entity_type": "event",
+        "canonical_key": "event:aka2026uwmfvh",
+        "payload": {
+          "magnitude": 2.3,
+          "place": "42 km SSW of Nikolski, Alaska",
+          "longitude": -169.151,
+          "latitude": 52.598,
+          "depth_km": 0.0,
+          "occurred_at": "2026-10-21T16:54:09.101000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "aka2026uwmglw",
+        "observed_at": "2026-10-21T17:21:10.005693Z",
+        "source_updated_at": "2026-10-21T16:55:24.010000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uwmglw",
+        "entity_type": "event",
+        "canonical_key": "event:aka2026uwmglw",
+        "payload": {
+          "magnitude": 1.0,
+          "place": "82 km NNW of Karluk, Alaska",
+          "longitude": -154.944,
+          "latitude": 58.267,
+          "depth_km": 5.0,
+          "occurred_at": "2026-10-21T16:54:51.350000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "aka2026uwmkfz",
+        "observed_at": "2026-10-21T17:21:10.005693Z",
+        "source_updated_at": "2026-10-21T17:00:36.923000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uwmkfz",
+        "entity_type": "event",
+        "canonical_key": "event:aka2026uwmkfz",
+        "payload": {
+          "magnitude": 2.0,
+          "place": "93 km NW of Yakutat, Alaska",
+          "longitude": -140.743,
+          "latitude": 60.214,
+          "depth_km": 5.0,
+          "occurred_at": "2026-10-21T16:59:12.602000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "ci41350127",
+        "observed_at": "2026-10-21T17:21:10.005693Z",
+        "source_updated_at": "2026-10-21T17:01:57.463000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41350127",
+        "entity_type": "event",
+        "canonical_key": "event:ci41350127",
+        "payload": {
+          "magnitude": 2.38,
+          "place": "11 km NE of Kernville, CA",
+          "longitude": -118.3575,
+          "latitude": 35.8326666666667,
+          "depth_km": 12.15,
+          "occurred_at": "2026-10-21T16:35:16.680000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "nc75452906",
+        "observed_at": "2026-10-21T17:21:10.005693Z",
+        "source_updated_at": "2026-10-21T17:07:20.745000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452906",
+        "entity_type": "event",
+        "canonical_key": "event:nc75452906",
+        "payload": {
+          "magnitude": 1.25,
+          "place": "8 km ENE of Alum Rock, CA",
+          "longitude": -121.744003295898,
+          "latitude": 37.40283203125,
+          "depth_km": 1.25,
+          "occurred_at": "2026-10-21T16:48:00.200000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-21T07:05:15.624929Z",
-      "source_updated_at": "2026-10-21T05:39:36Z",
+      "observed_at": "2026-10-21T17:21:10.106865Z",
+      "source_updated_at": "2026-10-21T16:44:14Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54532,
-        "forks_count": 12810,
+        "stargazers_count": 54535,
+        "forks_count": 12816,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -76,7 +161,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-21T07:05:15.934407Z",
+      "observed_at": "2026-10-21T17:21:10.284315Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -98,7 +183,8 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count"
+        "forks_count",
+        "stargazers_count"
       ]
     },
     "pypi": {
