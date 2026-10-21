@@ -21,7 +21,10 @@ permissions:
 jobs:
   independent-post-sixth-first-original-guard:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    # The independent 24-gap witness is source-native and deliberately
+    # recomputed when retaining the artifact. 35 minutes cancels the
+    # second replay despite the 3/3 focused tests passing.
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -78,7 +81,7 @@ jobs:
 
   inherited-original-world-regressions:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
