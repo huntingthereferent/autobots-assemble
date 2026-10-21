@@ -16,6 +16,7 @@ line crossing OUTSIDE a finite source face actually matters.
 from __future__ import annotations
 
 from math import cos,sin,hypot,isfinite
+from functools import lru_cache
 from systems.workspace.world_ab_first_post_sixth_guard_limit import (
     attempt as prior42, SCHEMA as SOURCE42
 )
@@ -164,9 +165,15 @@ def refine(model,faces,world,a,b,depth,accepted):
         model,faces,world,mid,b,depth+1,accepted)
 
 
+@lru_cache(maxsize=16)
+def original_lineage(angle):
+    # Bounded original source records are immutable for this observation.
+    return prior42(angle),prior40(angle)
+
+
+@lru_cache(maxsize=16)
 def attempt(angle):
-    old=prior42(angle)
-    before=prior40(angle)
+    old,before=original_lineage(angle)
     base={
         "schema":SCHEMA,"angle":float(angle),
         "source_trial42_schema":SOURCE42,
