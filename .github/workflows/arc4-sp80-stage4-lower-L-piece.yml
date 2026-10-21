@@ -1,0 +1,28 @@
+name: ARC4 original SP80 native lower L-shaped object movement
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_lower_L_piece.py'
+      - '.github/workflows/arc4-sp80-stage4-lower-L-piece.yml'
+jobs:
+  original-source-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Verify native source trial compiles
+        run: python -m compileall -q work/arc3/native_sp80_stage4_lower_L_piece.py
+      - name: Run 48 original SDK stage4 lower L-shaped piece movement games
+        run: python -m work.arc3.native_sp80_stage4_lower_L_piece --out runtime/data/arc4/original-sp80-stage4-lower-L-piece.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage4-lower-L-piece
+          path: runtime/data/arc4/original-sp80-stage4-lower-L-piece.*
+          if-no-files-found: error
+          retention-days: 14
