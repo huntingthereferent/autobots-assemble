@@ -149,6 +149,59 @@ class MeowLabBrowserTests(unittest.TestCase):
             finally:
                 browser.close()
 
+
+    def test_pin_melody_and_edit_chord_rhythm_while_playing(self):
+        with sync_playwright() as p:
+            browser=p.chromium.launch(headless=True,args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
+            try:
+                page=browser.new_page()
+                errors=[]
+                page.on("pageerror",lambda error:errors.append(str(error)))
+                page.goto(PAGE.as_uri(),wait_until="domcontentloaded")
+                self.assertEqual(page.locator("#melody-pins .melody-pin").count(),8)
+                self.assertEqual(page.locator("#cadence-grid .cadence-step").count(),16)
+                self.assertEqual(page.locator("#cadence-grid .cadence-step.on").count(),2)
+                page.locator("#melody-pins .melody-pin").nth(2).click()
+                self.assertEqual(page.locator("#pin-melody").get_attribute("aria-pressed"),"true")
+                self.assertIn("MELODY 3/8",page.locator("#melody-location").inner_text())
+                page.locator("#seq .step[data-row='1'][data-col='6']").click()
+                self.assertEqual(page.locator("#seq .step.on").count(),1)
+                page.locator("#melody-undo").click()
+                self.assertEqual(page.locator("#seq .step.on").count(),0)
+                page.locator("#seq .step[data-row='1'][data-col='6']").click()
+                page.locator("#melody-pins .melody-pin").nth(3).click()
+                self.assertEqual(page.locator("#seq .step.on").count(),0)
+                page.locator("#melody-copy").click()
+                self.assertEqual(page.locator("#seq .step.on").count(),1)
+                page.locator("#melody-undo").click()
+                self.assertEqual(page.locator("#seq .step.on").count(),0)
+                # Per-bar cadence is independent of the looping eight-bar melody.
+                page.locator("#chord-list .bar-tile").nth(2).click()
+                page.locator("#cadence-preset").select_option("quarter")
+                self.assertEqual(page.locator("#cadence-grid .cadence-step.on").count(),4)
+                page.locator("#cadence-grid .cadence-step").nth(3).click()
+                self.assertEqual(page.locator("#cadence-preset").input_value(),"custom")
+                self.assertEqual(page.locator("#cadence-grid .cadence-step.on").count(),5)
+                page.locator("#chord-list .bar-tile").nth(3).click()
+                self.assertEqual(page.locator("#cadence-grid .cadence-step.on").count(),2)
+                page.locator("#cadence-copy").click()
+                self.assertEqual(page.locator("#cadence-grid .cadence-step.on").count(),5)
+                page.locator("#chord-list .bar-tile").nth(2).click()
+                self.assertEqual(page.locator("#cadence-grid .cadence-step.on").count(),5)
+                # Follow playback would jump to bar 16, but edit pin must remain at bar 15.
+                page.locator("#chord-list .bar-tile").nth(14).click()
+                page.locator("#repeat-arrangement").uncheck()
+                page.locator("#tempo").evaluate("(e)=>{e.value='180';e.dispatchEvent(new Event('input',{bubbles:true}))}")
+                self.assertEqual(page.locator("#pin-melody").get_attribute("aria-pressed"),"true")
+                page.locator("#play-from-bar").click()
+                page.wait_for_function("document.querySelector('#studio-status').textContent.includes('BAR 16/16')",timeout=13000)
+                self.assertIn("BAR 15 / 16",page.locator("#bar-number").inner_text())
+                self.assertIn("MELODY 7/8",page.locator("#melody-location").inner_text())
+                page.locator("#loop-play").click()
+                self.assertFalse(errors,errors)
+            finally:
+                browser.close()
+
     def test_mobile_layout_and_sounds(self):
         with sync_playwright() as p:
             browser=p.chromium.launch(headless=True,args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
