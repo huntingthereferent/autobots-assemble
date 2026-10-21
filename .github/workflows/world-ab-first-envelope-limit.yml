@@ -1,0 +1,73 @@
+name: WORLD 31 first conservative source envelope limit
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_first_envelope_limit.py'
+      - 'network/tests/test_world_ab_first_envelope_limit.py'
+      - 'systems/workspace/WORLD_AB_FIRST_ENVELOPE_LIMIT_TRIAL_31_2026-10-20.md'
+      - '.github/workflows/world-ab-first-envelope-limit.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_first_envelope_limit.py'
+      - 'network/tests/test_world_ab_first_envelope_limit.py'
+      - 'systems/workspace/WORLD_AB_FIRST_ENVELOPE_LIMIT_TRIAL_31_2026-10-20.md'
+      - '.github/workflows/world-ab-first-envelope-limit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  first-nominal-envelope-limit-independent-analytic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original WORLD30 constraints and independent WORLD31 analytic thresholds
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit
+      - name: Retain original per-plane limiting inequality and analytic witness
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_first_envelope_limit import run
+          from network.tests.test_world_ab_first_envelope_limit import check
+          source=run()
+          independently=[{"angle":c["angle"],"status":c["status"],
+                          "independent_analytic_limit_witness":check(c)}
+                         for c in source["cases"]]
+          assert len(independently)==8 and all(x["independent_analytic_limit_witness"] for x in independently)
+          assert source["qualified_original_responses"]==3
+          assert source["without_qualified_response"]==5
+          assert source["cases_clear_through_horizon"]+source["cases_with_prior_envelope_limit"]==3
+          assert source["contact_features_solved"]==0
+          assert source["fifth_impulses_computed"]==0
+          folder=Path("world31-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"source":source,"independent_witness":independently},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"first_nominal_envelope_limits.json").write_text(payload)
+          (folder/"first_nominal_envelope_limits.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  first_nominal_envelope_limits.json\n")
+          print(json.dumps({
+              "original_qualified_fourth_responses":source["qualified_original_responses"],
+              "supported_through_0_25_cases":source["cases_clear_through_horizon"],
+              "source_first_envelope_limit_before_0_25_cases":source["cases_with_prior_envelope_limit"],
+              "no_original_response_controls":source["without_qualified_response"],
+              "first_limit_is_not_fifth_contact":True,
+              "actual_fifth_impulses":0},sort_keys=True))
+          PY
+      - name: Retain numerical source and independent analytic evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world31-original-first-envelope-limits
+          path: world31-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
