@@ -1,0 +1,28 @@
+name: ARC3 genuine SP80 stage3 vertical marked-source pair
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage3_vertical_marked_pair.py'
+      - '.github/workflows/arc3-sp80-stage3-vertical-marked-pair.yml'
+jobs:
+  actual-original-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original game SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile genuine source trial
+        run: python -m compileall -q work/arc3/native_sp80_stage3_vertical_marked_pair.py
+      - name: Execute 54 genuine vertical-middle native source games
+        run: python -m work.arc3.native_sp80_stage3_vertical_marked_pair --out runtime/data/arc3/original-sp80-stage3-vertical-marked-pair.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage3-vertical-marked-pair
+          path: runtime/data/arc3/original-sp80-stage3-vertical-marked-pair.*
+          if-no-files-found: error
+          retention-days: 14
