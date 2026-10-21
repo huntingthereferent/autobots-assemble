@@ -35,7 +35,7 @@ These are sibling functional relations answering one question: which DAW operati
 
 Browser sources: up to 16 assets, 25 MB per file, decoded duration ≤180 seconds. Project JSON exports cap at 52 MB, open at 55 MB. Imported MIDI parser uses the existing local audio-intake-core.js; initial import retains at most 2,048 note events. The browser performs no network fetch, Suno API access, remote audio upload or automatic localStorage persistence. Project audio data is retained in memory until explicit user export.
 
-Imported audio clips represent duration in beats. If tempo changes, their sample playback rate changes and pitch can change. This is not pitch-preserving warp/time-stretch. A/B snapshots do not copy media bytes, but retain references to loaded assets. Saving the project explicitly embeds the authorized audio data for later reopen.
+Imported audio clips represent duration in beats. If tempo changes, their sample playback rate changes and pitch can change. This is not pitch-preserving warp/time-stretch. A/B snapshots do not duplicate media bytes, but retain references to loaded assets. Saving the project explicitly embeds the authorized audio data, both A/B snapshots and recent edit descriptions for later reopen. On load, a saved source digest is independently rechecked where WebCrypto is available; missing referenced audio is rejected instead of silently substituted.
 
 ## Witness plan
 
