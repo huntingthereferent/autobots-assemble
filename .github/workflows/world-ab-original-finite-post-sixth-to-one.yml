@@ -1,0 +1,95 @@
+name: WORLD 45 original finite-segment prefix to 1.00
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_original_finite_post_sixth_to_one.py'
+      - 'network/tests/test_world_ab_original_finite_post_sixth_to_one.py'
+      - 'systems/workspace/WORLD_AB_ORIGINAL_FINITE_POST_SIXTH_TRIAL_45_2026-10-21.md'
+      - '.github/workflows/world-ab-original-finite-post-sixth-to-one.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_original_finite_post_sixth_to_one.py'
+      - 'network/tests/test_world_ab_original_finite_post_sixth_to_one.py'
+      - 'systems/workspace/WORLD_AB_ORIGINAL_FINITE_POST_SIXTH_TRIAL_45_2026-10-21.md'
+      - '.github/workflows/world-ab-original-finite-post-sixth-to-one.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-finite-adjacent-window-independent-verifier:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify original finite source and perimeter continuation
+        run: python -m unittest -v network.tests.test_world_ab_original_finite_post_sixth_to_one
+      - name: Retain original finite source and independent witness evidence
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_original_finite_post_sixth_to_one import run
+          from network.tests.test_world_ab_original_finite_post_sixth_to_one import verify
+          original=run()
+          independent=[{"angle":x["angle"],"status":x["status"],
+                        "original_ccw_finite_prefix_independently_verified":verify(x)}
+                       for x in original["cases"]]
+          assert len(independent)==8 and all(x[
+              "original_ccw_finite_prefix_independently_verified"] for x in independent)
+          assert original["inactive_source_controls"]==7
+          assert (original["admitted_original_finite_sources"]+
+                  original["prior_original_source_unresolved"])==1
+          assert original["admitted_original_finite_sources"]==(
+              original["fully_supported_1_00_horizons"]+
+              original["first_unknown_0_75_1_00_cases"])
+          assert original["actual_seventh_impacts"]==0
+          assert original["calculated_seventh_impulses"]==0
+          d=Path("world45-native-evidence");d.mkdir(exist_ok=True)
+          payload=json.dumps({"original_source":original,"independent_replay":independent},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (d/"next_original_finite_post_sixth_prefix.json").write_text(payload)
+          (d/"next_original_finite_post_sixth_prefix.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  next_original_finite_post_sixth_prefix.json\n")
+          print(json.dumps({"qualified_source_models":original["admitted_original_finite_sources"],
+              "complete_original_to_1_00":original["fully_supported_1_00_horizons"],
+              "first_original_unknown":original["first_unknown_0_75_1_00_cases"],
+              "inactive_original_controls":original["inactive_source_controls"],
+              "material_seventh_impacts":0},sort_keys=True))
+          for case in original["cases"]:
+              if case["conditional_sixth_pose"] is not None:
+                  unknown=case["first_unknown_original_interval"]
+                  print(json.dumps({"angle":case["angle"],
+                    "status":case["status"],
+                    "admitted_prefix_endpoint":case["supported_finite_prefix_end"],
+                    "accepted_original_intervals":len(case["accepted_original_intervals"]),
+                    "first_unresolved_original_slab":[unknown["start"],unknown["end"]]
+                        if unknown else None,
+                    "physical_seventh_collision":False},sort_keys=True))
+          PY
+      - name: Retain native original finite WORLD45 witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world45-original-finite-contiguous-prefix
+          path: world45-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  inherited-original-world-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reverify original WORLD04–44 source-native lineage
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature network.tests.test_world_ab_whole_contact_configuration network.tests.test_world_ab_post_fifth_local_clearance network.tests.test_world_ab_post_fifth_contiguous_prefix network.tests.test_world_ab_first_post_fifth_guard_limit network.tests.test_world_ab_local_zero_gap_after_guard network.tests.test_world_ab_sixth_conditional_normal_law network.tests.test_world_ab_post_sixth_local_clearance network.tests.test_world_ab_first_post_sixth_guard_limit network.tests.test_world_ab_finite_post_sixth_source_separation network.tests.test_world_ab_next_finite_post_sixth_prefix
