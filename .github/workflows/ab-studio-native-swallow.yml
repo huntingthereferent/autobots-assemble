@@ -1,0 +1,20 @@
+name: ab-studio-native-swallow
+on:
+  pull_request:
+    paths:
+      - "systems/workspace/studio_*"
+      - "work/projects/ab-studio-native/**"
+      - "network/tests/test_studio_workstation.py"
+      - ".github/workflows/ab-studio-native-swallow.yml"
+  workflow_dispatch:
+jobs:
+  independent-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Native workstation copy, actual child, host replay and negative controls
+        run: python -m unittest -v network.tests.test_studio_workstation
