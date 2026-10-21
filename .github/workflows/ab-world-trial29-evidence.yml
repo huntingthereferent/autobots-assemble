@@ -1,0 +1,109 @@
+name: A/B WORLD29 source qualification receipts
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial29_handoff.py'
+      - 'network/tests/test_ab_world_trial29_handoff.py'
+      - 'work/ab_world/TRIAL29_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial29-evidence.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-original-model-and-neutral-ab-ledgers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout neutral A/B source recorder
+        uses: actions/checkout@v4
+      - name: Checkout immutable original WORLD29 numerical source
+        uses: actions/checkout@v4
+        with:
+          ref: 74ecad19a43c6bc093151198fd18cfecf80334cc
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently run original WORLD29 contact geometry and elastic source tests
+        working-directory: original-world
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          from systems.workspace.world_ab_first_finite_response_qualification import run as current
+          from systems.workspace.world_ab_local_finite_onset import run as previous
+          from network.tests.test_world_ab_first_finite_response_qualification import verify
+          a=current(); b=previous()
+          assert len(a["cases"])==len(b["cases"])==8
+          assert all(verify(c) for c in a["cases"])
+          assert a["original_finite_first_onset_cases"]==3
+          assert a["conditionally_qualifying_responses"]==3
+          assert a["absent_source_impulse_controls"]==2
+          assert a["material_impacts_witnessed"]==0
+          assert a["actual_fourth_impulses_selected"]==0
+          assert b["actual_material_contacts_measured"]==0
+          Path("../world29-original-native.json").write_text(
+              json.dumps(a,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../world29-original-prior28.json").write_text(
+              json.dumps(b,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("../world29-original-verdict.json").write_text(json.dumps({
+              "immutable_original_source":"74ecad19a43c6bc093151198fd18cfecf80334cc",
+              "independent_original_impulse_geometry_verified":True,
+              "hypothetical_math_candidates":3,
+              "actual_impulses_selected":0,
+              "postcontact_trajectories_selected":0},sort_keys=True,indent=2)+"\n")
+          PY
+      - name: Independently test neutral A/B source and tamper controls
+        run: python -m unittest -v network.tests.test_ab_world_trial29_handoff
+      - name: Carry independently owned source reports into eight finite A/B receipts
+        run: |
+          python -m work.ab_world.world_trial29_handoff --native world29-original-native.json --prior28 world29-original-prior28.json > world29-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          from work.ab_world.verify_construction import verify_receipt
+          x=json.load(open("world29-ab-carrier.json"))
+          assert x["qualified_mathematical_candidates"]==3
+          assert x["no_original_third_impulse_controls"]==2
+          assert x["no_first_finite_onset_controls"]==3
+          assert x["actual_impulses_selected"]==0
+          assert x["verified_post_contact_motion"]==0
+          assert x["new_receivers_built"]==0
+          assert x["ledger_witness"]["valid"]
+          assert x["ledger_witness"]["pages_verified"]==8
+          assert digest(x["manifest"])==x["manifest_sha256"]
+          out=Path("world29-ab-pages")
+          out.mkdir(exist_ok=True)
+          for p in x["ledger_pages"]:
+              r=p["receipt"]
+              assert verify_receipt(r)["valid"]
+              assert r["head_hash"]==x["manifest"]["ordered_ledger_heads"][p["index"]]["head_hash"]
+              assert set(r["final"]["objects"])=={
+                  "original-finite-source-record","conditional-square-model"}
+              out.joinpath(f'case-{p["index"]:02d}.json').write_text(
+                  json.dumps(r,sort_keys=True,indent=2,allow_nan=False)+"\n")
+          Path("world29-ab-manifest.json").write_text(
+              json.dumps(x["manifest"],sort_keys=True,indent=2)+"\n")
+          PY
+          sha256sum world29-original-native.json world29-original-prior28.json world29-original-verdict.json world29-ab-carrier.json world29-ab-manifest.json world29-ab-pages/case-*.json > world29-ab-source-digests.txt
+      - name: Retain exact pinned source and independent neutral receipt evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world29-original-hypothetical-contact-receipts
+          path: |
+            world29-original-native.json
+            world29-original-prior28.json
+            world29-original-verdict.json
+            world29-ab-carrier.json
+            world29-ab-manifest.json
+            world29-ab-pages/
+            world29-ab-source-digests.txt
+          if-no-files-found: warn
+          retention-days: 30
