@@ -1,0 +1,28 @@
+name: ARC4 original SP80 first leftmost upper source contact
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_leftmost_upper_contact.py'
+      - '.github/workflows/arc4-sp80-stage4-leftmost-upper-contact.yml'
+jobs:
+  genuine-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile original source experiment
+        run: python -m compileall -q work/arc3/native_sp80_stage4_leftmost_upper_contact.py
+      - name: Run 48 original SDK level4 leftmost upper stream contact games
+        run: python -m work.arc3.native_sp80_stage4_leftmost_upper_contact --out runtime/data/arc4/original-sp80-stage4-leftmost-upper-contact.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage4-leftmost-upper-contact
+          path: runtime/data/arc4/original-sp80-stage4-leftmost-upper-contact.*
+          if-no-files-found: error
+          retention-days: 14
