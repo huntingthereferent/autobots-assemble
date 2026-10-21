@@ -1,0 +1,153 @@
+name: A/B WORLD Trial25 full finite-segment square evidence
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial25_handoff.py'
+      - 'network/tests/test_ab_world_trial25_handoff.py'
+      - 'work/ab_world/TRIAL25_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial25-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-native-full-finite-intersection-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout bounded A/B source carrier
+        uses: actions/checkout@v4
+      - name: Checkout unchanged original WORLD25 source head
+        uses: actions/checkout@v4
+        with:
+          ref: c4190eff7d0147b53620322c1900fdb7dfc6b9c3
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test neutral carrier and reject forged geometry or impact
+        run: python -m unittest -v network.tests.test_ab_world_trial25_handoff
+      - name: Run original WORLD21-25 source and independent finite shape witnesses
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_third_contact \
+            network.tests.test_world_ab_first_post_third_candidate \
+            network.tests.test_world_ab_all_inward_finite_features \
+            network.tests.test_world_ab_rotating_edge_face_endpoint \
+            network.tests.test_world_ab_finite_segment_square_overlap
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_all_inward_finite_features import run as run23
+          from systems.workspace.world_ab_rotating_edge_face_endpoint import run as run24
+          from systems.workspace.world_ab_finite_segment_square_overlap import run as run25
+          from network.tests.test_world_ab_finite_segment_square_overlap import verify
+          src23,src24,src25 = run23(),run24(),run25()
+          assert len(src25["cases"])==len(src23["cases"])==len(src24["cases"])==8
+          assert src25["source_third_impulse_cases"]==6
+          assert src25["no_source_third_impulse_controls"]==2
+          assert src25["finite_intersection_grid_cases"]+src25["finite_grid_no_intersection_cases"]==6
+          assert all(verify(case) for case in src25["cases"])
+          assert src25["fourth_impulses_solved"]==0
+          assert src25["material_observations"]==0
+          assert not src25["new_engine_or_world"]
+          for name,source in (("trial25-source23.json",src23),
+                              ("trial25-source24.json",src24),
+                              ("trial25-original-native.json",src25)):
+              Path("../"+name).write_text(
+                  json.dumps(source,sort_keys=True,indent=2)+"\n",
+                  encoding="utf-8")
+          Path("../trial25-original-verdict.json").write_text(
+              json.dumps({"original_source_commit":"c4190eff7d0147b53620322c1900fdb7dfc6b9c3",
+                          "source_verifier":"independent world-coordinate separating-axis theorem",
+                          "original_third_impulse_candidates":6,
+                          "third_impulse_absent_controls":2,
+                          "native_grid_intersection_cases":src25["finite_intersection_grid_cases"],
+                          "native_grid_no_intersection_cases":src25["finite_grid_no_intersection_cases"],
+                          "original_virtual_world":[24.,6.],
+                          "samples_per_finite_face":2049,
+                          "material_contact_witnessed":False,
+                          "fourth_impulse_computed":False,
+                          "grid_does_not_certify_all_collision_times":True},
+                         sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          PY
+      - name: Preserve finite source alternatives and check bounded neutral ledger
+        run: |
+          python -m work.ab_world.world_trial25_handoff \
+            --native trial25-original-native.json \
+            --source23 trial25-source23.json \
+            --source24 trial25-source24.json \
+            > trial25-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          source=json.load(open("trial25-original-native.json"))
+          result=json.load(open("trial25-ab-carrier.json"))
+          assert result["ledger_witness"]["valid"]
+          assert result["ledger_witness"]["pages_verified"]==8
+          assert result["ledger_witness"]["observations_recorded"]==36
+          assert result["ledger_witness"]["steps_verified"]==92
+          assert result["conditionally_admitted"]==6
+          assert result["source_refusals"]==2
+          assert result["finite_grid_overlap_cases"]==source["finite_intersection_grid_cases"]
+          assert result["finite_grid_no_overlap_cases"]==source["finite_grid_no_intersection_cases"]
+          assert result["source_intersecting_grid_samples"]==source["total_intersecting_grid_samples"]
+          assert result["fourth_impulses_selected"]==0
+          assert result["material_impacts_observed"]==0
+          assert result["new_receivers_constructed"]==0
+          assert not result["finite_intersection_completeness_proven"]
+          assert digest(result["manifest"])==result["manifest_sha256"]
+          Path("trial25-ab-pages").mkdir(exist_ok=True)
+          for i,page in enumerate(result["ledger_pages"]):
+              assert page["index"]==i and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"]==result["manifest"]["ordered_receipts"][i]["head_hash"]
+              assert "fourth-impulse" not in page["receipt"]["final"]["objects"]
+              with open(f"trial25-ab-pages/case-{i:02d}.json","w") as f:
+                  json.dump(page["receipt"],f,sort_keys=True,indent=2)
+          with open("trial25-ab-manifest.json","w") as f:
+              json.dump(result["manifest"],f,sort_keys=True,indent=2)
+          print(json.dumps({"finite_grid_overlap_cases":result["finite_grid_overlap_cases"],
+                            "bounded_no_grid_overlap":result["finite_grid_no_overlap_cases"],
+                            "refused_without_third_impulse":result["source_refusals"],
+                            "total_source_intersecting_samples":result["source_intersecting_grid_samples"],
+                            "verified_ab_operations":result["ledger_witness"]["steps_verified"],
+                            "real_fourth_impulses":0},sort_keys=True))
+          PY
+          for n in $(seq 0 7); do
+            case=$(printf '%02d' "$n")
+            python -m work.ab_world.construction --verify "trial25-ab-pages/case-$case.json" > "trial25-ab-pages/verdict-$case.json"
+          done
+          python - <<'PY'
+          import json
+          for n in range(8):
+              assert json.load(open(f"trial25-ab-pages/verdict-{n:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_all_inward_finite_features.py \
+            original-world/systems/workspace/world_ab_rotating_edge_face_endpoint.py \
+            original-world/systems/workspace/world_ab_finite_segment_square_overlap.py \
+            original-world/network/tests/test_world_ab_finite_segment_square_overlap.py \
+            trial25-source23.json trial25-source24.json \
+            trial25-original-native.json trial25-original-verdict.json \
+            trial25-ab-carrier.json trial25-ab-manifest.json \
+            trial25-ab-pages/case-*.json trial25-ab-pages/verdict-*.json \
+            > trial25-source-hashes.txt
+      - name: Retain source and bounded A/B finite-geometry evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial25-original-full-finite-intersection
+          path: |
+            trial25-source23.json
+            trial25-source24.json
+            trial25-original-native.json
+            trial25-original-verdict.json
+            trial25-ab-carrier.json
+            trial25-ab-manifest.json
+            trial25-ab-pages/
+            trial25-source-hashes.txt
+          retention-days: 30
