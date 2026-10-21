@@ -151,11 +151,11 @@ def reconstruct(row):
     if row.get("source_feature_geometry_consistent") is not consistent:
         raise ValueError("source first incoming finite corner unsupported")
     competitors=[]
-    for name,n,anchor,span in planes:
-        if name==chosen_face or span is None:continue
-        tangent=(-n[1],n[0])
-        segment=[[anchor[0]-span*tangent[0]/2,anchor[1]-span*tangent[1]/2],
-                 [anchor[0]+span*tangent[0]/2,anchor[1]+span*tangent[1]/2]]
+    for other_name,other_n,other_anchor,other_span in planes:
+        if other_name==chosen_face or other_span is None:continue
+        tangent=(-other_n[1],other_n[0])
+        segment=[[other_anchor[0]-other_span*tangent[0]/2,other_anchor[1]-other_span*tangent[1]/2],
+                 [other_anchor[0]+other_span*tangent[0]/2,other_anchor[1]+other_span*tangent[1]/2]]
         model={"contact_center":h["center"],"contact_orientation":h["theta"],
                "outgoing_velocity":h["velocity"],"outgoing_spin":h["spin"]}
         competitors.append(sat_segment_square(model,segment,t))
