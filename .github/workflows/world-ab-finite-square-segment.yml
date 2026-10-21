@@ -1,0 +1,76 @@
+name: WORLD 25 finite source segment rotating square intersection
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_finite_segment_square_overlap.py'
+      - 'network/tests/test_world_ab_finite_segment_square_overlap.py'
+      - 'systems/workspace/WORLD_AB_FINITE_INTERSECTION_TRIAL_25_2026-10-20.md'
+      - '.github/workflows/world-ab-finite-square-segment.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_finite_segment_square_overlap.py'
+      - 'network/tests/test_world_ab_finite_segment_square_overlap.py'
+      - 'systems/workspace/WORLD_AB_FINITE_INTERSECTION_TRIAL_25_2026-10-20.md'
+      - '.github/workflows/world-ab-finite-square-segment.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  finite-original-source-sat-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recheck original source and independent finite-segment SAT witness
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap
+      - name: Retain original finite clipping source and separately reproduced SAT outcomes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_finite_segment_square_overlap import run
+          from network.tests.test_world_ab_finite_segment_square_overlap import verify
+          source=run()
+          witnessed=[{"angle":c["angle"],"status":c["status"],
+                      "independent_sat_verified":verify(c)} for c in source["cases"]]
+          assert len(witnessed)==8 and all(c["independent_sat_verified"] for c in witnessed)
+          assert source["source_third_impulse_cases"]==6
+          assert source["no_source_third_impulse_controls"]==2
+          assert source["material_observations"]==0
+          assert source["fourth_impulses_solved"]==0
+          folder=Path("world25-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"source":source,"independent_witness":witnessed},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"finite_source_square_overlaps.json").write_text(payload)
+          (folder/"finite_source_square_overlaps.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  finite_source_square_overlaps.json\n")
+          from collections import Counter
+          timing=Counter(c["onset_vs_original_vertex_candidate"]["relationship"]
+                         for c in source["cases"]
+                         if c["onset_vs_original_vertex_candidate"] is not None)
+          print(json.dumps({
+              "finite_onset_vs_source_vertex":dict(timing),
+              "source_conditional_cases":source["source_third_impulse_cases"],
+              "finite_intersection_detected_cases":source["finite_intersection_grid_cases"],
+              "grid_no_intersection_cases":source["finite_grid_no_intersection_cases"],
+              "total_grid_intersecting_samples":source["total_intersecting_grid_samples"],
+              "no_impulse_controls":source["no_source_third_impulse_controls"],
+              "actual_material_events":0},sort_keys=True))
+          PY
+      - name: Retain original model evidence and independent SAT verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world25-finite-segment-square-intersection
+          path: world25-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
