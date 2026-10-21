@@ -20,7 +20,7 @@ This project uses independent musical math and Web Audio: seconds per quarter be
 | Project | Named JSON session with embedded source bytes; undo/redo history | No autosave or cloud |
 | Timeline | Up to 64 beats; move, length edit, split, duplicate, snap, zoom | No cross-track drag or elastic time warp |
 | Sources | WAV/MP3 or browser-decodable audio, imported MIDI, microphone permission | No stem separation or AI audio generation |
-| Composition | 25-note piano roll, 13-key musical typing, five oscillator/noise instruments | No rich sample-library synthesis |
+| Composition | 25-note piano roll, 13-key musical typing, five standard oscillator/noise instruments plus a meow synth and a source-backed sample instrument | No rich sample-library synthesis |
 | Time | BPM 40–240, playback, looping, meter-derived ruler and bar transport | 6/8 modeled as three quarter-note durations per bar; no advanced rhythmic grouping |
 | Processing | Track lowpass, drive, delay, gain, pan | No plugins, convolution, sidechain |
 | Automation | Linearly interpolated track volume points | No editable graphical curve |
