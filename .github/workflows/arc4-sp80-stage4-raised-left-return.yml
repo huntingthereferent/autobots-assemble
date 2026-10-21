@@ -1,0 +1,28 @@
+name: ARC4 original SP80 raised-left return-down source test
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_raised_left_return.py'
+      - '.github/workflows/arc4-sp80-stage4-raised-left-return.yml'
+jobs:
+  real-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install real original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile finite genuine original stage4 trial
+        run: python -m compileall -q work/arc3/native_sp80_stage4_raised_left_return.py
+      - name: Execute 46 genuine original SP80 stage4 raised-left-return trials
+        run: python -m work.arc3.native_sp80_stage4_raised_left_return --out runtime/data/arc4/original-sp80-stage4-raised-left-return.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage4-raised-left-return
+          path: runtime/data/arc4/original-sp80-stage4-raised-left-return.*
+          if-no-files-found: error
+          retention-days: 14
