@@ -1,0 +1,28 @@
+name: ARC3 original SP80 center-gap catcher height and contact
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage3_center_gap_catcher.py'
+      - '.github/workflows/arc3-sp80-stage3-center-gap-catcher.yml'
+jobs:
+  genuine-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile actual original source trial
+        run: python -m compileall -q work/arc3/native_sp80_stage3_center_gap_catcher.py
+      - name: Execute 38 original SDK center-gap catcher trials
+        run: python -m work.arc3.native_sp80_stage3_center_gap_catcher --out runtime/data/arc3/original-sp80-stage3-center-gap-catcher.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage3-center-gap-catcher
+          path: runtime/data/arc3/original-sp80-stage3-center-gap-catcher.*
+          if-no-files-found: error
+          retention-days: 14
