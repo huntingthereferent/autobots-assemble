@@ -1,21 +1,16 @@
-"""Original SP80 SDK: independently move middle-center bar before spout-bar overlap.
+"""Original SP80 SDK: source disproves independent middle bar selection.
 
-The genuine stage3 entry source map shows separate red 3-cell bars at
-x8..16 and x20..28 around a palette4 movable-spout marker x17..19.
-The most-used verified near-miss moves the LEFT marked bar right4
-onto the middle-center bar, causing visual overlap. Previous broad
-placement trials did NOT isolate prior native movement of the other
-middle-center object.
+The original stage3 source looks like two red sections at x8..16 and
+x20..28 separated by a darker palette4 spout marker x17..19. Earlier
+work treated them as separate movable bars. The authentic native run
+#39559686706 tested actual click x22,y30 while these sections were still
+visually separated: it selects a linked 54-pixel palette9 assembly, and
+an original ACTION4 moves BOTH red sections and the palette4 marker by
+three source pixels, just like click x10,y30. This is a real falsification
+of the prior independent-bar conjecture, not a private physics model.
+The frozen action words are retained for complete original provenance.
 
-This predeclared finite intervention clicks ORIGINAL middle-center
-source coordinate x22,y30 while the objects are still separated,
-moves only that selected original bar, THEN selects the spout-bearing
-left bar x10,y30 and places it by four original right movements.
-The actual original SDK pixel clicked/selection/levels/action ledger
-and ALL frames are the evidence; not assumptions about identity,
-which piece stays selected or a hidden fluid model.
-
-Only genuine SDK levels_completed>=4 or WIN is progress.
+Only the genuine SDK levels_completed>=4 or WIN proves progression.
 """
 from __future__ import annotations
 
@@ -146,6 +141,23 @@ def main():
                 if ev.get("original_action")==6
                 and ev.get("original_click_xy")==[22,30]
             ]
+            # Native selection fragments after actual x22,y30 click.
+            # Two red source sections are selected together in the real
+            # SDK even though a palette4 marker separates them visually.
+            for click_receipt in source_center_clicks:
+                selected_stack=stacks.get("stage3_"+str(click_receipt["index"]))
+                if selected_stack is not None:
+                    components=color_components(selected_stack[-1])
+                    click_receipt["actual_selected_middle_palette9_sections"]=[
+                        {"bbox":v["bbox"],"pixels":v["pixels"]}
+                        for v in components
+                        if v["palette"]==9 and 20<=v["bbox"][1]<=39
+                    ]
+                    click_receipt["actual_middle_palette4_markers"]=[
+                        {"bbox":v["bbox"],"pixels":v["pixels"]}
+                        for v in components
+                        if v["palette"]==4 and 20<=v["bbox"][1]<=39
+                    ]
             row={
                 "precommitted_original_source_case":name,
                 "authentic_independent_source_witness":witness,
