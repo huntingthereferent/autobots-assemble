@@ -1,0 +1,28 @@
+name: ARC3 authentic SP80 stage3 multi-step source paths
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage3_multi_step_paths.py'
+      - '.github/workflows/arc3-sp80-stage3-multi-step-paths.yml'
+jobs:
+  original-sdk-multi-step:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine SDK and numpy
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Verify native source code compiles
+        run: python -m compileall -q work/arc3/native_sp80_stage3_multi_step_paths.py
+      - name: Native SDK multi-step grouped-middle path test from actual level3
+        run: python -m work.arc3.native_sp80_stage3_multi_step_paths --out runtime/data/arc3/original-sp80-stage3-multi-step.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage3-multi-step-source
+          path: runtime/data/arc3/original-sp80-stage3-multi-step.*
+          if-no-files-found: error
+          retention-days: 14
