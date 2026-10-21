@@ -105,6 +105,10 @@ class StudioBrowserTests(unittest.TestCase):
             p.locator("#audio-file").set_input_files(str(wav_file))
             p.wait_for_function("document.querySelectorAll('#assets button').length===1", timeout=12000)
             self.assertEqual(p.locator(".clip").count(), 4)
+            p.locator("#store-a").click()
+            p.locator("#bpm").fill("134")
+            p.locator("#bpm").dispatch_event("change")
+            p.locator("#store-b").click()
             with p.expect_download(timeout=15000) as dl:
                 p.locator("#save-project").click()
             archive = Path(d) / "saved.abstudio.json"
