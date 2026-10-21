@@ -1,0 +1,86 @@
+name: WORLD 38 first original post-fifth guard limit
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_first_post_fifth_guard_limit.py'
+      - 'network/tests/test_world_ab_first_post_fifth_guard_limit.py'
+      - 'systems/workspace/WORLD_AB_FIRST_POST_FIFTH_GUARD_LIMIT_TRIAL_38_2026-10-21.md'
+      - '.github/workflows/world-ab-first-post-fifth-guard-limit.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_first_post_fifth_guard_limit.py'
+      - 'network/tests/test_world_ab_first_post_fifth_guard_limit.py'
+      - 'systems/workspace/WORLD_AB_FIRST_POST_FIFTH_GUARD_LIMIT_TRIAL_38_2026-10-21.md'
+      - '.github/workflows/world-ab-first-post-fifth-guard-limit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-first-guard-limit-and-independent-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify first original gap guard limit
+        run: python -m unittest -v network.tests.test_world_ab_first_post_fifth_guard_limit
+      - name: Retain original source limit and separate witness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_first_post_fifth_guard_limit import run
+          from network.tests.test_world_ab_first_post_fifth_guard_limit import verify
+          report=run()
+          witnesses=[{"angle":r["angle"],"status":r["status"],"independent_world_phase_verification":verify(r)} for r in report["cases"]]
+          assert len(witnesses)==8 and all(w["independent_world_phase_verification"] for w in witnesses)
+          assert report["source_qualified_cases"]==1 and report["inactive_original_cases"]==7
+          assert report["complete_horizon_cases"]+report["first_guard_limit_cases"]==1
+          assert report["physical_sixth_contacts"]==0 and report["sixth_impulses"]==0
+          folder=Path("world38-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"original_source":report,"independent_replay":witnesses},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"first_original_post_fifth_guard_limit.json").write_text(payload)
+          (folder/"first_original_post_fifth_guard_limit.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  first_original_post_fifth_guard_limit.json\n")
+          print(json.dumps({"source_qualified_cases":report["source_qualified_cases"],
+              "first_guard_limit_cases":report["first_guard_limit_cases"],
+              "complete_horizon_cases":report["complete_horizon_cases"],
+              "inactive_controls":report["inactive_original_cases"],
+              "real_sixth_impulses":0},sort_keys=True))
+          for case in report["cases"]:
+              if case["nominally_supported_until"] is not None:
+                  print(json.dumps({"angle":case["angle"],
+                    "status":case["status"],
+                    "source_guard_boundary":case["first_source_guard_limit"],
+                    "supported_prefix_end":case["nominally_supported_until"],
+                    "coearliest_source_features":case["coearliest_source_guard_features"],
+                    "physical_sixth_impact":False},sort_keys=True))
+          PY
+      - name: Retain WORLD38 original source plus independent witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world38-original-first-guard-limit
+          path: world38-native-evidence/
+          retention-days: 30
+          if-no-files-found: warn
+
+  inherited-native-world-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run full prior WORLD experimental native regression lineage
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature network.tests.test_world_ab_whole_contact_configuration network.tests.test_world_ab_post_fifth_local_clearance network.tests.test_world_ab_post_fifth_contiguous_prefix
