@@ -1,0 +1,157 @@
+name: A/B WORLD Trial27 sampled versus unknown finite intervals
+
+on:
+  pull_request:
+    paths:
+      - 'work/ab_world/world_trial27_handoff.py'
+      - 'network/tests/test_ab_world_trial27_handoff.py'
+      - 'work/ab_world/TRIAL27_SOURCE_HANDOFF.md'
+      - '.github/workflows/ab-world-trial27-native-handoff.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-independent-three-way-intervals-to-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout neutral A/B source reporter
+        uses: actions/checkout@v4
+      - name: Checkout original WORLD27 verified source commit
+        uses: actions/checkout@v4
+        with:
+          ref: d1268d30c58825500354137ebdd3b140a131a84e
+          path: original-world
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reject forged source overlap and false material outcome
+        run: python -m unittest -v network.tests.test_ab_world_trial27_handoff
+      - name: Independently reconstruct source WORLD25-27 finite interval classes
+        working-directory: original-world
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_finite_segment_square_overlap \
+            network.tests.test_world_ab_between_sample_clearance \
+            network.tests.test_world_ab_interval_uncertainty_audit
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from systems.workspace.world_ab_finite_segment_square_overlap import run as run25
+          from systems.workspace.world_ab_between_sample_clearance import run as run26
+          from systems.workspace.world_ab_interval_uncertainty_audit import (
+              run as run27,HIT,UNKNOWN,COVERED
+          )
+          from network.tests.test_world_ab_interval_uncertainty_audit import independent_check
+          parent25,parent26,source=run25(),run26(),run27()
+          assert len(source["cases"])==len(parent25["cases"])==len(parent26["cases"])==8
+          assert all(independent_check(c) for c in source["cases"])
+          assert source["source_conditional_impulse_cases"]==6
+          assert source["no_impulse_controls"]==2
+          assert source["classified_face_intervals"]=={
+              HIT:2290,UNKNOWN:0,COVERED:22286}
+          assert source["cases_with_unobserved_only_uncertainty"]==0
+          assert source["physical_measurements"]==0
+          assert source["selected_fourth_impulses"]==0
+          for name,data in (
+              ("trial27-original-source25.json",parent25),
+              ("trial27-original-source26.json",parent26),
+              ("trial27-original-native.json",source),
+          ):
+              Path("../"+name).write_text(
+                  json.dumps(data,sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          Path("../trial27-original-verdict.json").write_text(
+              json.dumps({
+                  "pinned_source_commit":"d1268d30c58825500354137ebdd3b140a131a84e",
+                  "independent_world_axis_sat_and_original_margin_oracle":True,
+                  "original_source_cases":8,
+                  "sampled_overlap_adjacent_intervals":2290,
+                  "clear_endpoint_but_unproved_intervals":0,
+                  "nominal_separation_intervals":22286,
+                  "real_material_impacts_witnessed":0,
+                  "formal_outward_rounded_proof":False,
+                  "fourth_impulses_selected":0,
+              },sort_keys=True,indent=2)+"\n",encoding="utf-8")
+          PY
+      - name: Transport actual three-way source partition as eight bounded A/B records
+        run: |
+          python -m work.ab_world.world_trial27_handoff \
+            --native trial27-original-native.json \
+            --source25 trial27-original-source25.json \
+            --source26 trial27-original-source26.json \
+            > trial27-ab-carrier.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from work.ab_world.construction import digest
+          source=json.load(open("trial27-original-native.json"))
+          result=json.load(open("trial27-ab-carrier.json"))
+          assert result["ledger_witness"]["valid"]
+          assert result["original_angle_controls"]==8
+          assert result["conditional_third_impulse_cases"]==6
+          assert result["no_original_impulse_controls"]==2
+          assert result["ledger_witness"]["pages_verified"]==8
+          assert result["ledger_witness"]["steps_verified"]==100
+          assert result["ledger_witness"]["observations_recorded"]==36
+          assert result["sampled_overlap_adjacent_intervals"]==2290
+          assert result["clear_endpoint_unknown_intervals"]==0
+          assert result["nominal_covered_intervals"]==22286
+          assert result["fourth_impulses_selected"]==0
+          assert result["material_impacts_measured"]==0
+          assert not result["formally_rounded_certificate"]
+          assert not result["actual_continuous_contact_response_solved"]
+          assert digest(result["manifest"])==result["manifest_sha256"]
+          Path("trial27-ab-pages").mkdir(exist_ok=True)
+          for i,page in enumerate(result["ledger_pages"]):
+              assert page["case"]==i and page["witness"]["valid"]
+              assert page["receipt"]["head_hash"]==result["manifest"]["ordered_receipt_heads"][i]["head_hash"]
+              assert "new-receiver" not in page["receipt"]["final"]["objects"]
+              with open(f"trial27-ab-pages/case-{i:02d}.json","w") as file:
+                  json.dump(page["receipt"],file,sort_keys=True,indent=2)
+          with open("trial27-ab-manifest.json","w") as file:
+              json.dump(result["manifest"],file,sort_keys=True,indent=2)
+          print(json.dumps({
+              "original_sample_overlap_adjacent":result["sampled_overlap_adjacent_intervals"],
+              "clear_endpoints_unproved":result["clear_endpoint_unknown_intervals"],
+              "nominally_supported_intervals":result["nominal_covered_intervals"],
+              "source_cases":8,
+              "bounded_ab_operations":result["ledger_witness"]["steps_verified"],
+              "real_material_impacts":0,
+          },sort_keys=True))
+          PY
+          for n in $(seq 0 7); do
+            case=$(printf '%02d' "$n")
+            python -m work.ab_world.construction --verify "trial27-ab-pages/case-$case.json" > "trial27-ab-pages/verdict-$case.json"
+          done
+          python - <<'PY'
+          import json
+          for n in range(8):
+              assert json.load(open(f"trial27-ab-pages/verdict-{n:02d}.json"))["valid"]
+          PY
+          sha256sum \
+            original-world/systems/workspace/world_ab_finite_segment_square_overlap.py \
+            original-world/systems/workspace/world_ab_between_sample_clearance.py \
+            original-world/systems/workspace/world_ab_interval_uncertainty_audit.py \
+            original-world/network/tests/test_world_ab_interval_uncertainty_audit.py \
+            trial27-original-source25.json trial27-original-source26.json \
+            trial27-original-native.json trial27-original-verdict.json \
+            trial27-ab-carrier.json trial27-ab-manifest.json \
+            trial27-ab-pages/case-*.json trial27-ab-pages/verdict-*.json \
+            > trial27-source-digests.txt
+      - name: Retain original and neutral three-way finite evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ab-world-trial27-native-sampled-versus-unknown
+          path: |
+            trial27-original-source25.json
+            trial27-original-source26.json
+            trial27-original-native.json
+            trial27-original-verdict.json
+            trial27-ab-carrier.json
+            trial27-ab-manifest.json
+            trial27-ab-pages/
+            trial27-source-digests.txt
+          retention-days: 30
