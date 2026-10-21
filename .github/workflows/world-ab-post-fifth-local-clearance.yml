@@ -1,0 +1,77 @@
+name: WORLD 36 hypothetical fifth local clearance
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_post_fifth_local_clearance.py'
+      - 'network/tests/test_world_ab_post_fifth_local_clearance.py'
+      - 'systems/workspace/WORLD_AB_POST_FIFTH_LOCAL_CLEARANCE_TRIAL_36_2026-10-20.md'
+      - '.github/workflows/world-ab-post-fifth-local-clearance.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_post_fifth_local_clearance.py'
+      - 'network/tests/test_world_ab_post_fifth_local_clearance.py'
+      - 'systems/workspace/WORLD_AB_POST_FIFTH_LOCAL_CLEARANCE_TRIAL_36_2026-10-20.md'
+      - '.github/workflows/world-ab-post-fifth-local-clearance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  original-fifth-separation-independent-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original WORLD lineage regressions and independent WORLD36 clearance witness
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature network.tests.test_world_ab_whole_contact_configuration network.tests.test_world_ab_post_fifth_local_clearance
+      - name: Preserve original source state and independent numerical witness
+        run: |
+          python - <<'PY'
+          import json
+          from hashlib import sha256
+          from pathlib import Path
+          from systems.workspace.world_ab_post_fifth_local_clearance import run
+          from network.tests.test_world_ab_post_fifth_local_clearance import check
+          data=run()
+          witness=[{"angle":x["angle"],"status":x["status"],"independent_24_plane_corner_witness":check(x)}
+                   for x in data["cases"]]
+          assert len(witness)==8 and all(x["independent_24_plane_corner_witness"] for x in witness)
+          assert data["original_conditional_fifth_responses"]==1
+          assert data["without_qualified_fifth_response"]==7
+          assert data["nominal_short_clearance_cases"]+data["locally_unresolved_cases"]==1
+          assert data["physical_fifth_impacts"]==0 and data["sixth_impulses"]==0
+          folder=Path("world36-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"original_source":data,"independent_replay":witness},
+                             indent=2,sort_keys=True,allow_nan=False)+"\n"
+          (folder/"post_fifth_local_clearance.json").write_text(payload)
+          (folder/"post_fifth_local_clearance.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  post_fifth_local_clearance.json\n")
+          print(json.dumps({
+              "conditional_fifth_cases":data["original_conditional_fifth_responses"],
+              "nominal_clearance_supported":data["nominal_short_clearance_cases"],
+              "unresolved_post_fifth_cases":data["locally_unresolved_cases"],
+              "inactive_controls":data["without_qualified_fifth_response"],
+              "physical_sixth_impulses":0},sort_keys=True))
+          for row in data["cases"]:
+              if row["same_original_24_constraints"]:
+                  print(json.dumps({"angle":row["angle"],"status":row["status"],
+                      "clearance_window":row["declared_local_horizon"],
+                      "supported_original_constraints":row["supported_original_constraints"],
+                      "unresolved_original_constraints":row["unresolved_original_constraints"],
+                      "physical_sixth_contact":None},sort_keys=True))
+          PY
+      - name: Retain bounded original WORLD36 source and independent numerical witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world36-original-post-fifth-local-clearance
+          path: world36-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
