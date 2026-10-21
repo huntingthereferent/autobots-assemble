@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rosey's Kawaii Meow Machine ♡ Extra High Notes</title>
+<style>
+:root{--night:#1e1629;--panel:#30223e;--panel2:#40304c;--edge:#765b8d;--pink:#ffb6d2;--green:#b9f3d7;--yellow:#ffe4a6;--txt:#fff8f5;--muted:#cfbed9}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 90% 5%,#694276 0,transparent 40%),radial-gradient(ellipse at 3% 70%,#473054 0,transparent 40%),var(--night);color:var(--txt);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--green);outline-offset:3px}.wrap{max-width:1120px;margin:auto;padding:18px clamp(14px,3vw,30px) 45px}.head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}.logo{font-weight:1000;font-size:clamp(22px,4vw,31px);letter-spacing:-1px}.logo span{color:var(--pink)}.pill{border:1px solid #93779e;border-radius:20px;padding:7px 12px;font-size:12px;color:var(--green);font-weight:750}.hero{display:grid;grid-template-columns:1.1fr .85fr;align-items:center;gap:22px}.hero h1{font-size:clamp(46px,7.5vw,83px);letter-spacing:-.07em;line-height:.94;margin:7px 0 13px}.hero h1 em{font-style:normal;color:var(--pink)}.hero p{color:#e1d4e7;max-width:430px;margin:0 0 15px}.tags{display:flex;gap:8px;flex-wrap:wrap}.tags span{font-size:11px;font-weight:850;border-radius:16px;border:1px solid #796384;padding:7px 10px}.catstage{min-height:263px;display:grid;place-items:center;position:relative;overflow:hidden;border-radius:26px;border:3px solid #cba9d3;background:radial-gradient(ellipse at 50% 30%,#ffeae4,#e7c7f8 70%,#b6a1d9)}.catstage svg{width:75%;max-height:270px;filter:drop-shadow(0 17px 15px #72558255);transition:transform .15s}.catstage.singing svg{animation:bop .22s infinite alternate}.catstage .float{position:absolute;color:#9a6fae;font-size:35px;font-weight:900}.catstage .a{top:17px;left:16px}.catstage .b{right:24px;top:35px}.catstage .c{left:30px;bottom:18px}.catstage .who{position:absolute;right:15px;bottom:12px;letter-spacing:.09em;font:850 11px ui-monospace,monospace;color:#654873}@keyframes bop{from{transform:rotate(-3deg) translateY(0)}to{transform:rotate(3deg) translateY(-8px)}}.box{border-radius:24px;border:1px solid #755a87;background:linear-gradient(155deg,#3a2b47,#2a2035);padding:clamp(15px,3vw,26px);margin-top:18px;box-shadow:0 15px 34px #0c071244}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}.section-head h2,h2{font-size:clamp(21px,3vw,30px);margin:0 0 5px;letter-spacing:-.04em}.muted{color:var(--muted);font-size:13px;margin:3px 0 13px}.voices{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}.voice{color:var(--txt);background:var(--panel2);border:1px solid #86689a;border-radius:14px;padding:9px 8px;font-weight:800}.voice small{font-size:10px;display:block;color:var(--muted)}.voice[aria-pressed=true]{border-color:var(--pink);background:#62446e;box-shadow:inset 0 0 0 1px var(--pink)}.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0}.controls label{font-size:12px;font-weight:700}.btn{background:var(--pink);color:#27182e;font-weight:900;border:0;border-radius:11px;padding:10px 15px;min-height:42px}.btn:hover{filter:brightness(1.07)}.btn.alt{background:#60486e;color:white;border:1px solid #9676a5}.btn.green{background:var(--green)}.btn:disabled{opacity:.5;cursor:not-allowed}input[type=range]{accent-color:var(--pink);max-width:135px}.keysrail{padding:12px;border-radius:18px;background:#1b1425;border:1px solid #856b97;overflow-x:auto;scrollbar-color:#e5addc #332440;scrollbar-width:thin;scroll-behavior:smooth}.keys{position:relative;display:flex;height:clamp(160px,23vw,221px);min-width:790px;width:100%;touch-action:pan-x;user-select:none}.key{touch-action:pan-x;border:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:17px;position:relative;-webkit-tap-highlight-color:transparent}.white{flex:1;min-width:0;border:1px solid #4c3657;border-top:0;border-radius:0 0 9px 9px;background:linear-gradient(#fffaf1,#e8ddec);color:#49365a;box-shadow:inset 0 -9px #c9b9d5}.white.pressed{background:var(--yellow);box-shadow:inset 0 -3px #deb97f}.black{position:absolute;z-index:2;top:0;height:61%;width:calc(100% / 15 * .64);transform:translateX(-50%);border:1px solid #150e1a;border-radius:0 0 7px 7px;background:linear-gradient(#655271,#231827);box-shadow:inset 0 -8px #110c19,3px 5px 6px #10091588;color:#f7edfa}.black.pressed{background:#b485c8;box-shadow:inset 0 -4px #6d4780}.key span{font:900 clamp(10px,1.5vw,13px) ui-monospace,monospace}.key .note-name{position:absolute;top:12px;font:850 11px ui-monospace,monospace;opacity:.62}.key .shortcut{font-size:11px;opacity:.8}.white.high-key{background:linear-gradient(#fff4fa,#efdde9)}.black.high-key{background:linear-gradient(#6a4b76,#2f1d3c)}.white.high-key.pressed{background:var(--yellow)}.black.high-key.pressed{background:#b485c8}.piano-nav{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin:11px 0 0}.piano-nav .btn{font-size:12px;padding:8px 12px;min-height:37px}.piano-nav .note{flex:1;min-width:150px}.range-pill{font:800 12px ui-monospace,monospace;color:var(--green);border:1px solid #9274a6;border-radius:20px;padding:7px 11px}.now{display:flex;gap:12px;justify-content:space-between;margin:13px 0 0;align-items:center;flex-wrap:wrap;font-size:13px}.now strong{color:var(--yellow)}.now span{color:var(--green)}.studio{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}.studio>.box{min-width:0}.field{display:grid;gap:5px;font:800 11px ui-monospace,monospace;color:var(--muted)}select,input[type=text]{width:100%;min-width:0;background:#201729;border:1px solid #846994;border-radius:10px;color:var(--txt);padding:11px;font:700 14px system-ui}.choose{display:grid;grid-template-columns:minmax(0,1fr) 100px auto;gap:11px;align-items:end}.chords{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:16px 0}.chord{padding:13px 7px;border:1px solid #7a6290;background:#241a30;border-radius:13px;text-align:center}.chord strong{font:900 clamp(17px,2.4vw,27px) ui-monospace,monospace;color:var(--yellow)}.chord small{display:block;color:var(--muted);font-size:11px;margin-top:5px}.chord.active{border-color:var(--green);box-shadow:inset 0 0 0 1px var(--green)}.make{border-top:1px solid #674f7b;padding-top:15px;display:grid;grid-template-columns:1fr 1.3fr auto;gap:10px;align-items:end}.tiny{font-size:12px;color:var(--muted);margin:10px 0}.status{font:750 12px ui-monospace,monospace;color:var(--green);min-height:20px;margin-top:10px}.stepscroll{overflow:auto;width:100%}.stepboard{min-width:470px}.rowlead{display:grid;grid-template-columns:39px repeat(16,minmax(21px,1fr));gap:4px;align-items:center;margin:5px 0}.notelabel{font:850 12px ui-monospace,monospace;color:var(--yellow);text-align:center}.step{height:26px;background:#4f3a5b;border:1px solid #71567f;border-radius:5px;padding:0}.step.on{background:var(--pink)}.step.hit{outline:2px solid var(--green);outline-offset:1px}.beatlabels{display:grid;grid-template-columns:39px repeat(16,minmax(21px,1fr));gap:4px;text-align:center;font-size:10px;color:var(--muted)}.beatlabels span:nth-child(4n+2){color:var(--green)}.tape{border:1px dashed #806b94;background:#201729;padding:18px;border-radius:14px;margin:15px 0}.tape strong{font:900 32px ui-monospace,monospace}.tape small{display:block;color:var(--muted)}.footer{color:#bca9ca;font-size:12px;text-align:center;margin-top:28px}.footer a{color:var(--pink)}.wide-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.hidden{display:none}.note{font-size:12px;color:var(--muted)}@media(max-width:770px){.hero{grid-template-columns:1fr}.hero h1{font-size:57px}.catstage{min-height:225px}.studio{grid-template-columns:1fr}.choose{grid-template-columns:1fr 90px}.choose .btn{grid-column:1/-1}.make{grid-template-columns:1fr 1fr}.make button{grid-column:1/-1}.chords{gap:5px}.chord{padding:12px 3px}}@media(max-width:470px){.voices{grid-template-columns:repeat(2,1fr)}.choose,.make{grid-template-columns:1fr}.catstage{min-height:204px}.keysrail{padding:6px}.keys{height:175px;min-width:790px}.key span{font-size:9px}.chord small{font-size:9px}.hero h1{font-size:49px}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head><body><div class="wrap">
+<header class="head"><div class="logo">meow<span>machine</span> 🐾</div><div class="pill">MADE FOR ROSEY · PLAY OFFLINE</div></header>
+<section class="hero"><div><div class="pill" style="display:inline-block">WELCOME TO THE CAT BAND ✨</div><h1>MAKE<br><em>SOME</em><br>MEOWS!</h1><p>Choose a cat, press the piano keys, and make a REAL song with real chords. Nothing is uploaded, and you don't need an account!</p><div class="tags"><span>🎹 PLAY KEYS</span><span>♡ KAWAII TUNED MEOWS</span><span>🎵 REAL CHORDS</span><span>💾 SAVE YOUR MUSIC</span></div></div>
+<div id="stage" class="catstage" aria-label="Illustrated singing cat"><span class="float a">♪</span><span class="float b">♫</span><span class="float c">✦</span><svg viewBox="0 0 390 340" role="img" aria-label="Smiling cat"><ellipse cx="195" cy="303" rx="125" ry="25" fill="#75547d52"/><path d="M94 180 Q49 136 68 82 Q77 59 95 57 L144 97 Q193 80 238 97 L296 56 Q327 111 305 179 Q334 205 321 253 Q290 318 193 314 Q88 306 69 251 Q51 209 94 180Z" fill="var(--fur,#d99f82)"/><path d="M85 85 L107 147 L140 108 Z M296 86 L284 148 L248 106Z" fill="var(--ear,#f09bad)"/><ellipse cx="195" cy="256" rx="79" ry="50" fill="var(--belly,#fff4e3)"/><ellipse cx="143" cy="177" rx="13" ry="18" fill="#37273c"/><ellipse cx="246" cy="177" rx="13" ry="18" fill="#37273c"/><circle cx="148" cy="170" r="4" fill="white"/><circle cx="251" cy="171" r="4" fill="white"/><path d="M182 207 Q195 217 208 207 Q194 199 182 207Z" fill="#a65e83"/><path d="M195 215 Q182 236 176 217 M195 215 Q206 235 215 218" fill="none" stroke="#633e5c" stroke-width="5" stroke-linecap="round"/><circle cx="111" cy="215" r="15" fill="#ef9f9f99"/><circle cx="279" cy="215" r="15" fill="#ef9f9f99"/><g fill="none" stroke="#6b4b68" stroke-width="3" stroke-linecap="round"><path d="M118 211 L50 202 M119 225 L50 230 M271 211 L340 202 M271 225 L342 230"/></g></svg><span id="catname" class="who">MISO IS READY TO SING</span></div></section>
+<section class="box" aria-labelledby="play-heading"><div class="section-head"><div><h2 id="play-heading">🐱 The cat keyboard</h2><p class="muted">Now TWO octaves of kawaii meows! Play the lower notes with A W S E D F T G Y H U J K. Scroll right for even higher notes ♫</p></div><span class="pill">25 KEYS · 2 OCTAVES</span></div><div class="voices" role="group" aria-label="Select a singing cat"><button class="voice" data-cat="miso" aria-pressed="true">🐱 Miso<small>Soft little mew ♡</small></button><button class="voice" data-cat="mochi" aria-pressed="false">😺 Mochi<small>Bubble squeak ✨</small></button><button class="voice" data-cat="nori" aria-pressed="false">😼 Nori<small>Sleepy lullaby ☁</small></button><button class="voice" data-cat="bean" aria-pressed="false">😸 Bean<small>Happy nyan! ♫</small></button></div><div class="controls"><button class="btn alt" id="octdown" aria-label="Lower octave">−</button><strong id="octlabel">C4–C6</strong><button class="btn alt" id="octup" aria-label="Raise octave">+</button><label for="volume">Volume</label><input type="range" id="volume" min="0" max="100" value="65"><label><input type="checkbox" id="echo"> Echo</label><label><input type="checkbox" id="purr"> Purr</label></div><div class="keysrail" id="keysrail" aria-label="Scrollable two-octave piano"><div id="keys" class="keys" role="group" aria-label="Two-octave chromatic cat keyboard"></div></div><div class="piano-nav"><button type="button" class="btn alt" id="see-low">← Lower notes</button><button type="button" class="btn alt" id="see-high">Higher notes ↑ →</button><span class="range-pill" id="range-label">C4 to C6</span><span class="note">Swipe or use these buttons to reach the pink high keys 💗</span></div><div class="now"><strong id="playing">♪ READY TO MEOW</strong><span id="audio-msg" role="status">Tap a piano key to start sound</span></div></section>
+<section class="box" aria-labelledby="chord-heading"><h2 id="chord-heading">🎶 Real chord progressions</h2><p class="muted">Pick a song pattern. The cat band plays one chord per bar, not random notes!</p><div class="choose"><label class="field">SONG TEMPLATE<select id="template"></select></label><label class="field">KEY<select id="tonic"></select></label><button class="btn green" id="generate">♫ Load chords</button></div><div id="chordlist" class="chords" aria-label="Four bars of chords"></div><div class="controls"><button class="btn" id="playloop">▶ Play the cat band</button><button class="btn alt" id="surprise">🐾 Another song</button><label for="bpm">Speed</label><input id="bpm" type="range" min="70" max="165" value="112"><output id="bpmlabel">112 BPM</output></div><div id="harmony-msg" class="status" role="status">CHOOSE A SONG TO GET STARTED.</div><h3 style="margin:22px 0 7px">💖 Save your own chord templates</h3><p class="muted">Type four chords, name the song, and save it in this browser.</p><div class="make"><label class="field">MY SONG NAME<input id="customname" type="text" maxlength="48" placeholder="Rosey's kitty anthem"></label><label class="field">FOUR CHORDS<input id="customchords" type="text" maxlength="64" placeholder="Am F C G"></label><button class="btn alt" id="savecustom">💾 Save template</button></div><p class="tiny">Examples: <strong>C G Am F</strong>, <strong>Am F C G</strong>, or <strong>Dm7 G7 Cmaj7 Am7</strong>. Select the key that matches the first chord's home key before saving. Templates can transpose to a new key later.</p><div class="wide-actions"><button class="btn alt" id="deletecustom">Delete selected custom</button><button class="btn alt" id="backup">↓ Back up templates</button><button class="btn alt" id="restore">↑ Restore templates</button><input id="restorefile" type="file" accept=".json,application/json" class="hidden"></div></section>
+<section class="studio"><section class="box" aria-labelledby="beat-heading"><h2 id="beat-heading">✳ Add a meow melody</h2><p class="muted">Tap the pink squares to make notes sing over each chord. Each group of four squares is one bar.</p><div class="stepscroll"><div class="stepboard"><div class="beatlabels" id="beatlabels"></div><div id="melody"></div></div></div><div class="wide-actions"><button class="btn alt" id="newmelody">✨ Another melody</button><button class="btn alt" id="clearmelody">Clear squares</button></div><p class="note">Every generated melody uses notes from the selected chords. You can change the squares yourself.</p></section><section class="box" aria-labelledby="tape-heading"><h2 id="tape-heading">⏺ Little tape recorder</h2><p class="muted">Play the piano yourself, record your meows, and save them to play again.</p><div class="wide-actions"><button class="btn" id="record">⏺ Record</button><button class="btn alt" id="replay">▶ Replay</button><button class="btn alt" id="stoptape">■ Stop</button></div><div class="tape"><strong id="clock">00:00</strong><small id="tapetext">A blank tape. What will Rosey play?</small></div><div class="wide-actions"><button class="btn alt" id="savesong">↓ Save song</button><button class="btn alt" id="loadsong">↑ Load song</button><button class="btn alt" id="cleartape">Clear tape</button><input type="file" class="hidden" id="songfile" accept=".json,application/json"></div><p class="note">This saves a note-score JSON, not audio. Saved keyboard recordings and custom chord templates are separate files.</p><div id="tape-msg" class="status" role="status"></div></section></section>
+<footer class="footer">🐾 Meow Machine • Rosey's standalone preview • Works offline in a modern browser. No sound files, accounts, uploads, or tracking.</footer>
+</div><script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id), NAMES=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+const SHORTCUTS=['KeyA','KeyW','KeyS','KeyE','KeyD','KeyF','KeyT','KeyG','KeyY','KeyH','KeyU','KeyJ','KeyK'];
+// A–K play the original octave; the Z-row continues upward to C6.
+const HIGH_SHORTCUTS=['KeyZ','KeyX','KeyC','KeyV','KeyB','KeyN','KeyM','Comma','Period','Slash','Semicolon','Quote'];
+const ALL_SHORTCUTS=SHORTCUTS.concat(HIGH_SHORTCUTS);
+const KEY_COUNT=25;
+const Q={maj:[0,4,7],min:[0,3,7],dom7:[0,4,7,10],maj7:[0,4,7,11],min7:[0,3,7,10],dim:[0,3,6],aug:[0,4,8],sus2:[0,2,7],sus4:[0,5,7]};
+const SUFFIX={maj:'',min:'m',dom7:'7',maj7:'maj7',min7:'m7',dim:'dim',aug:'aug',sus2:'sus2',sus4:'sus4'};
+const TEMPLATES=[
+{id:'pop',name:'Pop lift • I–V–vi–IV',steps:[[0,'maj'],[7,'maj'],[9,'min'],[5,'maj']]},
+{id:'sad',name:'Heartbreak pop • vi–IV–I–V',steps:[[9,'min'],[5,'maj'],[0,'maj'],[7,'maj']]},
+{id:'retro',name:'Doo-wop • I–vi–IV–V',steps:[[0,'maj'],[9,'min'],[5,'maj'],[7,'maj']]},
+{id:'classic',name:'Classic • I–IV–V–I',steps:[[0,'maj'],[5,'maj'],[7,'maj'],[0,'maj']]},
+{id:'dark',name:'Dark pop • i–VI–III–VII',steps:[[0,'min'],[8,'maj'],[3,'maj'],[10,'maj']]},
+{id:'minor',name:'Minor cadence • i–iv–V–i',steps:[[0,'min'],[5,'min'],[7,'maj'],[0,'min']]},
+{id:'jazz',name:'Jazz • Imaj7–vi7–ii7–V7',steps:[[0,'maj7'],[9,'min7'],[2,'min7'],[7,'dom7']]},
+{id:'blues',name:'Blues • I7–IV7–I7–V7',steps:[[0,'dom7'],[5,'dom7'],[0,'dom7'],[7,'dom7']]},
+{id:'dream',name:'Dreamy • Imaj7–V–vi7–IVmaj7',steps:[[0,'maj7'],[7,'maj'],[9,'min7'],[5,'maj7']]}
+];
+// Every cat sings exactly the note played: identity changes the timbre, NOT the musical octave.
+// swoop is a brief expressive rise in cents, resolving to the exact 12-TET note.
+// The two formants imitate a little 'mee-ow' vowel and are separate from the pitch.
+const VOICES={
+ miso:{fur:'#d99f82',ear:'#f09bad',belly:'#fff4e3',attack:.023,swoop:29,vibrato:2.8,body:.68,sparkle:.13,mouth:1.00,formant1:710,formant2:1810,level:1.00},
+ mochi:{fur:'#f7e9de',ear:'#e2a1b7',belly:'#ffffff',attack:.010,swoop:48,vibrato:4.0,body:.57,sparkle:.26,mouth:1.25,formant1:875,formant2:2260,level:.93},
+ nori:{fur:'#555065',ear:'#c69cb6',belly:'#d8cfdb',attack:.045,swoop:16,vibrato:2.0,body:.84,sparkle:.06,mouth:.73,formant1:600,formant2:1480,level:1.07},
+ bean:{fur:'#e9bc6e',ear:'#e88595',belly:'#fff1c8',attack:.014,swoop:60,vibrato:4.6,body:.59,sparkle:.19,mouth:1.38,formant1:800,formant2:2160,level:.95}
+};
+const STORAGE='meow-machine/rose-templates-v1';
+function parseChord(str){const m=/^([A-Ga-g])([#b♯♭]?)(maj7|m7|dim|aug|sus2|sus4|m|7)?$/i.exec(str.trim());if(!m)return null;const pc={C:0,D:2,E:4,F:5,G:7,A:9,B:11}[m[1].toUpperCase()];const acc=m[2]==='#'||m[2]==='♯'?1:m[2]==='b'||m[2]==='♭'?-1:0;const quality=({'':'maj',m:'min','7':'dom7',maj7:'maj7',m7:'min7',dim:'dim',aug:'aug',sus2:'sus2',sus4:'sus4'})[(m[3]||'').toLowerCase()];return quality?{pc:(pc+acc+12)%12,quality}:null}
+function parseProgression(str,tonic){const parts=str.trim().split(/[\s,|]+/).filter(Boolean);if(parts.length!==4)return null;const parsed=parts.map(parseChord);return parsed.every(Boolean)?parsed.map(c=>[(c.pc-tonic+12)%12,c.quality]):null}
+function validTemplates(data){if(!Array.isArray(data)||data.length>24)return null;let ids=new Set();let items=[];for(let t of data){if(!t||typeof t.id!=='string'||!/^custom-[a-z0-9-]{1,40}$/.test(t.id)||ids.has(t.id)||typeof t.name!=='string'||t.name.trim().length<1||t.name.length>48||!Array.isArray(t.steps)||t.steps.length!==4||!t.steps.every(s=>Array.isArray(s)&&s.length===2&&Number.isInteger(s[0])&&s[0]>=0&&s[0]<12&&typeof s[1]==='string'&&Object.hasOwn(Q,s[1])))return null;ids.add(t.id);items.push({id:t.id,name:t.name.trim(),steps:t.steps.map(s=>[s[0],s[1]])})}return items}
+function realize(t,tonic){if(!t||!Array.isArray(t.steps)||t.steps.length!==4)return [];return t.steps.map(([step,q])=>{const pc=(tonic+step)%12;return{name:NAMES[pc]+SUFFIX[q],notes:Q[q].map(interval=>48+pc+interval)}})}
+let cat='miso',oct=4,audio=null,master=null,delayIn=null,echo=false,volume=.65;
+let custom=[],selected='pop',tonic=0,chords=realize(TEMPLATES[0],0),lead=Array.from({length:5},()=>Array(16).fill(false)),patternNum=0;
+let playing=false,playTimer=null,stepIndex=0,lastStep=-1,playingIds=new Set(),held=new Map(),pointers=new Map(),purrNodes=null;
+let record=false,records=[],recStart=0,recTimer=null,tapeLength=0,tapePlaying=false,tapeTimers=[],recId=0,recHolds=new Map();
+function noteLabel(midi){return NAMES[((midi%12)+12)%12]+(Math.floor(midi/12)-1)}
+function status(text){$('audio-msg').textContent=text}function harmonyStatus(text){$('harmony-msg').textContent=text}function tapeStatus(text){$('tape-msg').textContent=text}
+function unlock(){if(!audio){try{const A=window.AudioContext||window.webkitAudioContext;if(!A){status('This browser does not support sound');return false}audio=new A();master=audio.createGain();master.gain.value=volume*.47;const limit=audio.createDynamicsCompressor();limit.threshold.value=-19;limit.knee.value=18;limit.ratio.value=5;limit.attack.value=.003;limit.release.value=.16;master.connect(limit);limit.connect(audio.destination);delayIn=audio.createGain();const delay=audio.createDelay(.6),wet=audio.createGain(),feedback=audio.createGain();delay.delayTime.value=.24;feedback.gain.value=.21;wet.gain.value=.16;delayIn.connect(delay);delay.connect(wet);wet.connect(master);delay.connect(feedback);feedback.connect(delay);status('KAWAII MODE ON ♡ · PERFECTLY TUNED 🎵')}catch(e){status('Could not start audio: '+e.message);return false}}if(audio.state==='suspended')audio.resume().catch(()=>status('Tap again to allow sound'));return true}
+// Tuned kawaii 'mew' synthesis. All harmonics derive from the MIDI fundamental;
+// vowel formants and cute pitch onset cannot silently transpose a selected note.
+function makeSound(midi,id,voice=cat,log=true){
+ if(held.has(id))stopSound(id,log);
+ if(!unlock())return;
+ const v=VOICES[voice]||VOICES.miso;
+ const now=audio.currentTime;
+ const base=440*Math.pow(2,(midi-69)/12);
+ const backing=id.startsWith('chord');
+ const onset=base*Math.pow(2,-v.swoop/1200);
+ const settle=now+(backing?.052:.095);
+ const env=audio.createGain();
+ const tone=audio.createGain();
+ const low=audio.createBiquadFilter();low.type='lowpass';low.Q.value=.6;
+ low.frequency.setValueAtTime(backing?1450:2750,now);
+ low.frequency.linearRampToValueAtTime(backing?1150:2080,now+.28);
+ tone.connect(low);low.connect(env);env.connect(master);
+ if(echo)env.connect(delayIn);
+ const oscs=[];
+ function harmonic(mult,type,level){
+  const osc=audio.createOscillator(),gain=audio.createGain();
+  osc.type=type;gain.gain.value=level;
+  osc.frequency.setValueAtTime(onset*mult,now);
+  osc.frequency.exponentialRampToValueAtTime(base*mult,settle);
+  osc.connect(gain);gain.connect(tone);osc.start(now);oscs.push(osc);
+  return osc;
+ }
+ // A soft, pure fundamental plus carefully scaled harmonic 'sparkles', not a buzzy sawtooth.
+ const fundamental=harmonic(1,'sine',v.body);
+ harmonic(1,'triangle',.30);
+ harmonic(2,'sine',backing?v.sparkle*.45:v.sparkle);
+ if(!backing)harmonic(3,'sine',v.sparkle*.24);
+ // Two moving resonances imitate a tiny cat's 'mew-ow' mouth shape.
+ // Resonances do not change the fundamental pitch.
+ if(!backing){
+  const mouth=audio.createOscillator();mouth.type='triangle';
+  mouth.frequency.setValueAtTime(onset,now);
+  mouth.frequency.exponentialRampToValueAtTime(base,settle);
+  const f1=audio.createBiquadFilter(),f2=audio.createBiquadFilter();
+  const g1=audio.createGain(),g2=audio.createGain();
+  f1.type='bandpass';f1.Q.value=1.25;
+  f2.type='bandpass';f2.Q.value=2.2;
+  f1.frequency.setValueAtTime(v.formant1*1.32,now);
+  f1.frequency.exponentialRampToValueAtTime(v.formant1*.82,now+.22);
+  f1.frequency.exponentialRampToValueAtTime(v.formant1*.96,now+.43);
+  f2.frequency.setValueAtTime(v.formant2*1.22,now);
+  f2.frequency.exponentialRampToValueAtTime(v.formant2*.66,now+.24);
+  f2.frequency.exponentialRampToValueAtTime(v.formant2*.90,now+.44);
+  g1.gain.value=.24*v.mouth;
+  g2.gain.value=.15*v.mouth;
+  mouth.connect(f1);mouth.connect(f2);
+  f1.connect(g1);f2.connect(g2);g1.connect(tone);g2.connect(tone);
+  mouth.start(now);oscs.push(mouth);
+ }
+ // Tiny vibrato starts only AFTER the attack resolves to the exact played note.
+ // All fundamentals share one modulation, so their relative harmonic tuning stays stable.
+ if(!backing){
+  const lfo=audio.createOscillator(),amount=audio.createGain();
+  lfo.type='sine';lfo.frequency.value=5.6;
+  amount.gain.setValueAtTime(0,now);
+  amount.gain.linearRampToValueAtTime(v.vibrato,now+.30);
+  lfo.connect(amount);
+  for(const osc of oscs)amount.connect(osc.detune);
+  lfo.start(now);oscs.push(lfo);
+ }
+ const peak=(backing?.095:.18)*v.level;
+ env.gain.setValueAtTime(.0001,now);
+ env.gain.linearRampToValueAtTime(peak,now+v.attack);
+ if(!backing){
+  env.gain.linearRampToValueAtTime(peak*.78,now+v.attack+.11);
+  env.gain.linearRampToValueAtTime(peak*.96,now+v.attack+.20);
+  env.gain.setTargetAtTime(peak*.45,now+v.attack+.26,.20);
+ }else{
+  env.gain.setTargetAtTime(peak*.55,now+v.attack,.33);
+ }
+ held.set(id,{midi,voice,osc:oscs,env});
+ paintKeys();$('stage').classList.add('singing');
+ $('catname').textContent=voice.toUpperCase()+' IS SINGING!';
+ $('playing').textContent='♫ '+noteLabel(midi)+' · '+voice.toUpperCase()+' ♡';
+ if(log)logNote('on',midi,voice,id);
+}
+function stopSound(id,log=true){const e=held.get(id);if(!e)return;held.delete(id);if(audio){const t=audio.currentTime;e.env.gain.cancelScheduledValues(t);e.env.gain.setTargetAtTime(.0001,t,.045);for(const o of e.osc){try{o.stop(t+.28)}catch{}}}if(log)logNote('off',e.midi,e.voice,id);paintKeys();if(!held.size){$('stage').classList.remove('singing');$('catname').textContent=cat.toUpperCase()+' IS READY TO SING';$('playing').textContent='♪ READY TO MEOW'}}
+function paintKeys(){for(const e of $('keys').querySelectorAll('.key')){const pressed=[...held.values()].some(h=>h.midi===rangeMidi(Number(e.dataset.i)));e.classList.toggle('pressed',pressed);e.setAttribute('aria-pressed',String(pressed));e.setAttribute('aria-label',noteLabel(rangeMidi(Number(e.dataset.i)))+' cat piano key')}}
+function allStop(){for(const id of [...held.keys()])stopSound(id);pointers.clear()}
+function setCat(name){if(!VOICES[name])return;cat=name;for(const b of document.querySelectorAll('.voice'))b.setAttribute('aria-pressed',String(b.dataset.cat===name));const s=$('stage').style;s.setProperty('--fur',VOICES[name].fur);s.setProperty('--ear',VOICES[name].ear);s.setProperty('--belly',VOICES[name].belly);$('catname').textContent=name.toUpperCase()+' IS READY TO SING'}
+function shortcutText(code){return code.startsWith('Key')?code.slice(3):({Comma:',',Period:'.',Slash:'/',Semicolon:';',Quote:"'"}[code]||'')}
+function rangeMidi(i){return 60+(oct-4)*12+i}
+function updateRange(){
+ $('octlabel').textContent='C'+oct+'–C'+(oct+2);
+ $('range-label').textContent='C'+oct+' to C'+(oct+2);
+ $('octdown').disabled=oct===3;
+ $('octup').disabled=oct===5;
+ for(const key of $('keys').querySelectorAll('.white')){const i=Number(key.dataset.i),label=key.querySelector('.note-name');if(label)label.textContent=NAMES[i%12]+(i%12===0?String(oct+Math.floor(i/12)):'')}
+ paintKeys();
+}
+function scrollKeys(high){const rail=$('keysrail');rail.scrollTo({left:high?rail.scrollWidth-rail.clientWidth:0,behavior:'smooth'})}
+function piano(){
+ const root=$('keys');let whiteBefore=0;
+ // Whites occupy fifteen equal cells. Blacks sit exactly at the preceding white boundary.
+ for(let i=0;i<KEY_COUNT;i++){
+  const isBlack=[1,3,6,8,10].includes(i%12),midi=rangeMidi(i);
+  const code=ALL_SHORTCUTS[i],b=document.createElement('button');
+  b.type='button';b.className='key '+(isBlack?'black':'white')+(i>=12?' high-key':'');
+  b.dataset.i=String(i);b.title=noteLabel(midi)+(code?' • '+shortcutText(code):'');
+  b.setAttribute('aria-label',noteLabel(midi)+' cat piano key');
+  b.setAttribute('aria-pressed','false');
+  if(isBlack)b.style.left=((whiteBefore/15)*100)+'%';
+  else{
+   const name=document.createElement('span');name.className='note-name';name.textContent=NAMES[i%12]+(i%12===0?String(oct+Math.floor(i/12)):'');b.append(name);
+   whiteBefore++;
+  }
+  if(code){const hint=document.createElement('span');hint.className='shortcut';hint.textContent=shortcutText(code);b.append(hint)}
+  root.append(b);
+  b.addEventListener('pointerdown',e=>{
+   if(e.pointerType==='mouse'&&e.button!==0)return;
+   e.preventDefault();b.setPointerCapture(e.pointerId);
+   const id='p'+e.pointerId;pointers.set(e.pointerId,i);makeSound(rangeMidi(i),id)
+  });
+  const end=e=>{if(pointers.has(e.pointerId)){pointers.delete(e.pointerId);stopSound('p'+e.pointerId)}};
+  b.addEventListener('pointerup',end);
+  b.addEventListener('pointercancel',end);
+  b.addEventListener('lostpointercapture',end);
+  b.addEventListener('click',e=>{if(e.detail===0){const id='click'+i;makeSound(rangeMidi(i),id);setTimeout(()=>stopSound(id),230)}});
+ }
+ if(whiteBefore!==15)throw Error('Piano white key layout mismatch');
+ updateRange();
+}
+function showTemplates(){const s=$('template');s.replaceChildren();for(const t of [...TEMPLATES,...custom]){const opt=document.createElement('option');opt.value=t.id;opt.textContent=t.name;s.append(opt)}if(![...TEMPLATES,...custom].some(t=>t.id===selected))selected='pop';s.value=selected;$('deletecustom').disabled=!selected.startsWith('custom-')}
+function showChords(){const el=$('chordlist');el.replaceChildren();chords.forEach((c,i)=>{const div=document.createElement('div');div.className='chord'+(playing&&Math.floor(lastStep/4)===i?' active':'');const a=document.createElement('strong');a.textContent=c.name;const b=document.createElement('small');b.textContent='BAR '+(i+1);div.append(a,b);el.append(div)})}
+function apply(){if(playing)stopLoop();selected=$('template').value;tonic=Number($('tonic').value);const t=[...TEMPLATES,...custom].find(t=>t.id===selected);if(!t)return;chords=realize(t,tonic);showChords();$('deletecustom').disabled=!selected.startsWith('custom-');harmonyStatus(t.name+' · '+NAMES[tonic]+' · FOUR REAL CHORDS LOADED');drawMelody()}
+function store(){try{localStorage.setItem(STORAGE,JSON.stringify(custom));return true}catch{return false}}
+function saveCustom(){const name=$('customname').value.trim(),steps=parseProgression($('customchords').value,tonic);if(!name||!steps){harmonyStatus('Enter a song name and four real chords, like Am F C G');return}if(custom.length>=24){harmonyStatus('24 template limit: back up or delete a template first');return}let id=1;while([...TEMPLATES,...custom].some(t=>t.id==='custom-'+id))id++;const entry={id:'custom-'+id,name,steps};custom.push(entry);selected=entry.id;const ok=store();showTemplates();apply();$('customname').value='';$('customchords').value='';if(!ok)harmonyStatus('Template works for this session; use Back up templates to keep it')}
+function deleteCustom(){if(!selected.startsWith('custom-'))return;custom=custom.filter(t=>t.id!==selected);selected='pop';store();showTemplates();apply();harmonyStatus('CUSTOM TEMPLATE DELETED')}
+function download(obj,filename){const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+async function restore(file){if(!file)return;try{if(file.size>25000)throw Error('File too large');const obj=JSON.parse(await file.text());if(obj.schema!=='meow-machine/chord-templates-v1')throw Error('Not a chord-template backup');const checked=validTemplates(obj.templates);if(!checked)throw Error('Invalid chord templates');const combined=custom.slice();for(const t of checked){const idx=combined.findIndex(c=>c.id===t.id);if(idx===-1)combined.push(t);else combined[idx]=t}if(!validTemplates(combined))throw Error('Too many templates');custom=combined;store();showTemplates();apply();harmonyStatus('RESTORED '+checked.length+' CHORD TEMPLATES')}catch(e){harmonyStatus('Could not restore: '+e.message)}finally{$('restorefile').value=''}}
+function melodyNote(row,bar){const notes=chords[bar].notes;const pc=(notes[Math.min(row,notes.length-1)]%12+12)%12;return 72+pc+(row===4?12:0)}
+function drawMelody(){const base=$('melody');base.replaceChildren();const labels=$('beatlabels');labels.replaceChildren();const empty=document.createElement('span');labels.append(empty);for(let i=0;i<16;i++){const p=document.createElement('span');p.textContent=i%4===0?String(i/4+1):'·';labels.append(p)}for(let row=0;row<5;row++){const div=document.createElement('div');div.className='rowlead';const label=document.createElement('span');label.className='notelabel';label.textContent=row===4?'♪+':'♪'+(row+1);div.append(label);for(let col=0;col<16;col++){const step=document.createElement('button');step.type='button';step.className='step'+(lead[row][col]?' on':'')+(playing&&col===lastStep?' hit':'');step.setAttribute('aria-label','Melody note '+(row+1)+', bar '+(Math.floor(col/4)+1)+', beat '+(col%4+1));step.setAttribute('aria-pressed',String(lead[row][col]));step.addEventListener('click',()=>{lead[row][col]=!lead[row][col];drawMelody()});div.append(step)}base.append(div)}}
+function makeMelody(){lead=Array.from({length:5},()=>Array(16).fill(false));patternNum=(patternNum+1)%4;for(let bar=0;bar<4;bar++){const hits=patternNum===0?[[0,0],[1,2],[2,3]]:patternNum===1?[[0,0],[2,1],[1,3]]:patternNum===2?[[3,0],[1,2],[0,3]]:[[0,0],[2,2],[4,3]];for(const [row,beat] of hits)lead[row][bar*4+beat]=true}drawMelody()}
+function releaseBand(){for(const id of playingIds)stopSound(id,false);playingIds.clear()}
+function beat(){if(!playing)return;const s=stepIndex%16;const bar=Math.floor(s/4);if(s%4===0){releaseBand();chords[bar].notes.forEach((n,j)=>{const id='chord'+j;makeSound(n,id,cat,false);playingIds.add(id)})}for(let r=0;r<5;r++)if(lead[r][s]){const id='lead'+r+'-'+s;makeSound(melodyNote(r,bar),id,cat,false);setTimeout(()=>stopSound(id,false),Math.min(450,60000/Number($('bpm').value)*.75))}lastStep=s;stepIndex++;showChords();drawMelody();playTimer=setTimeout(beat,60000/Number($('bpm').value))}
+function startLoop(){stopRecord();stopTape();if(!unlock())return;playing=true;stepIndex=0;lastStep=-1;$('playloop').textContent='■ Stop cat band';harmonyStatus('THE CAT BAND IS PLAYING! 🐾');beat()}
+function stopLoop(){playing=false;clearTimeout(playTimer);releaseBand();for(const id of [...held.keys()])if(id.startsWith('lead'))stopSound(id,false);lastStep=-1;$('playloop').textContent='▶ Play the cat band';showChords();drawMelody()}
+function tick(ms){let seconds=Math.floor(ms/1000);return String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0')}
+function updateTape(){const t=record?Math.min(120000,performance.now()-recStart):tapeLength;$('clock').textContent=tick(t)}
+function logNote(type,midi,voice,id){if(!record)return;const ms=Math.min(120000,Math.round(performance.now()-recStart));if(ms>=120000||records.length>=1999){stopRecord();tapeStatus('RECORDING LIMIT REACHED');return}if(type==='on'){const ref='n'+(++recId);recHolds.set(id,ref);records.push({ms,type,note:midi,cat:voice,id:ref})}else{const ref=recHolds.get(id);if(!ref)return;recHolds.delete(id);records.push({ms,type,note:midi,cat:voice,id:ref})}tapeLength=ms;updateTape()}
+function startRecord(){stopLoop();stopTape();allStop();records=[];recHolds.clear();tapeLength=0;recId=0;recStart=performance.now();record=true;$('record').textContent='■ Finish recording';$('tapetext').textContent='RECORDING... MAKE SOME MEOWS!';recTimer=setInterval(updateTape,200);updateTape()}
+function stopRecord(){if(!record)return;const ms=Math.min(120000,Math.round(performance.now()-recStart));for(const [source,id] of recHolds){const v=held.get(source);if(v&&records.length<2000)records.push({ms,type:'off',note:v.midi,cat:v.voice,id})}record=false;recHolds.clear();clearInterval(recTimer);tapeLength=Math.max(tapeLength,ms);$('record').textContent='⏺ Record';$('tapetext').textContent=records.length?(Math.floor(records.length/2)+' notes recorded! Ready to replay.'):'No notes recorded yet.';updateTape()}
+function stopTape(){tapePlaying=false;for(const t of tapeTimers)clearTimeout(t);tapeTimers=[];for(const id of [...held.keys()])if(id.startsWith('tape-'))stopSound(id,false)}
+function replay(){stopRecord();stopLoop();stopTape();if(!records.length){tapeStatus('RECORD SOMETHING FIRST');return}if(!unlock())return;tapePlaying=true;$('tapetext').textContent='PLAYING YOUR MEOW MASTERPIECE';for(const ev of records){tapeTimers.push(setTimeout(()=>{if(!tapePlaying)return;const id='tape-'+ev.id;if(ev.type==='on')makeSound(ev.note,id,ev.cat,false);else stopSound(id,false)},ev.ms))}tapeTimers.push(setTimeout(()=>{stopTape();$('tapetext').textContent='ALL DONE! PLAY IT AGAIN?'},Math.min(120550,tapeLength+500)))}
+function validTape(data){if(!data||data.schema!=='meow-machine/score-v1'||!Array.isArray(data.events)||data.events.length>2000)return null;let prev=-1,active=new Map(),events=[];for(const e of data.events){if(!e||!Number.isFinite(e.ms)||e.ms<0||e.ms>120000||e.ms<prev||!Number.isInteger(e.note)||e.note<36||e.note>96||!['on','off'].includes(e.type)||!Object.hasOwn(VOICES,e.cat)||typeof e.id!=='string'||!/^n\d{1,5}$/.test(e.id))return null;if(e.type==='on'){if(active.has(e.id)||active.size>=16)return null;active.set(e.id,[e.note,e.cat])}else{const a=active.get(e.id);if(!a||a[0]!==e.note||a[1]!==e.cat)return null;active.delete(e.id)}events.push({ms:e.ms,type:e.type,note:e.note,cat:e.cat,id:e.id});prev=e.ms}return active.size?null:events}
+async function loadTape(file){if(!file)return;try{if(file.size>180000)throw Error('File too large');const obj=JSON.parse(await file.text());const result=validTape(obj);if(!result)throw Error('Not a valid cat keyboard recording');stopRecord();stopTape();records=result;tapeLength=records.at(-1)?.ms||0;updateTape();$('tapetext').textContent=Math.floor(records.length/2)+' notes loaded';tapeStatus('SONG LOADED! TAP REPLAY')}catch(e){tapeStatus('Could not load song: '+e.message)}finally{$('songfile').value=''}}
+function purr(on){if(!on){if(purrNodes){for(const o of purrNodes){try{o.stop()}catch{}}purrNodes=null}return}if(!unlock()){$('purr').checked=false;return}const osc=audio.createOscillator(),lfo=audio.createOscillator(),gain=audio.createGain(),low=audio.createBiquadFilter();osc.type='triangle';osc.frequency.value=61;lfo.type='sine';lfo.frequency.value=21;gain.gain.value=.025;low.type='lowpass';low.frequency.value=120;osc.connect(low);low.connect(gain);gain.connect(master);osc.start();lfo.start();purrNodes=[osc,lfo]}
+function bind(){piano();setCat('miso');try{custom=validTemplates(JSON.parse(localStorage.getItem(STORAGE)||'[]'))||[]}catch{custom=[]}showTemplates();for(let i=0;i<12;i++){const opt=document.createElement('option');opt.value=String(i);opt.textContent=NAMES[i];$('tonic').append(opt)}$('tonic').value='0';apply();makeMelody();for(const btn of document.querySelectorAll('.voice'))btn.addEventListener('click',()=>setCat(btn.dataset.cat));$('octdown').addEventListener('click',()=>{allStop();oct=Math.max(3,oct-1);updateRange()});$('octup').addEventListener('click',()=>{allStop();oct=Math.min(5,oct+1);updateRange()});$('see-low').addEventListener('click',()=>scrollKeys(false));$('see-high').addEventListener('click',()=>scrollKeys(true));$('volume').addEventListener('input',e=>{volume=Number(e.target.value)/100;if(master&&audio)master.gain.setTargetAtTime(volume*.47,audio.currentTime,.01)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>purr(e.target.checked));
+ $('template').addEventListener('change',apply);$('tonic').addEventListener('change',apply);$('generate').addEventListener('click',()=>{apply();makeMelody()});$('surprise').addEventListener('click',()=>{const options=TEMPLATES.filter(t=>t.id!==selected);const idx=Math.floor(Math.random()*options.length);selected=options[idx].id;$('template').value=selected;apply();makeMelody();harmonyStatus('NEW REAL PROGRESSION • '+chords.map(c=>c.name).join(' – '))});$('playloop').addEventListener('click',()=>playing?stopLoop():startLoop());$('bpm').addEventListener('input',e=>$('bpmlabel').textContent=e.target.value+' BPM');$('newmelody').addEventListener('click',makeMelody);$('clearmelody').addEventListener('click',()=>{lead=Array.from({length:5},()=>Array(16).fill(false));drawMelody()});$('savecustom').addEventListener('click',saveCustom);$('deletecustom').addEventListener('click',deleteCustom);$('backup').addEventListener('click',()=>{download({schema:'meow-machine/chord-templates-v1',templates:custom},'rosey-cat-chord-templates.json');harmonyStatus('TEMPLATES BACKED UP AS A FILE')});$('restore').addEventListener('click',()=>$('restorefile').click());$('restorefile').addEventListener('change',e=>restore(e.target.files[0]));
+ $('record').addEventListener('click',()=>record?stopRecord():startRecord());$('replay').addEventListener('click',replay);$('stoptape').addEventListener('click',()=>{stopRecord();stopTape()});$('savesong').addEventListener('click',()=>{stopRecord();const obj={schema:'meow-machine/score-v1',events:records};if(!records.length||!validTape(obj)){tapeStatus('RECORD A COMPLETE SONG FIRST');return}download(obj,'rosey-cat-song.json');tapeStatus('SONG SAVED AS A FILE')});$('loadsong').addEventListener('click',()=>$('songfile').click());$('songfile').addEventListener('change',e=>loadTape(e.target.files[0]));$('cleartape').addEventListener('click',()=>{stopRecord();stopTape();records=[];tapeLength=0;updateTape();$('tapetext').textContent='A blank tape. What will Rosey play?'});
+ document.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.altKey||e.metaKey||['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;const i=ALL_SHORTCUTS.indexOf(e.code);if(i===-1)return;e.preventDefault();makeSound(rangeMidi(i),'key-'+e.code)});document.addEventListener('keyup',e=>{if(ALL_SHORTCUTS.includes(e.code))stopSound('key-'+e.code)});window.addEventListener('blur',()=>{stopLoop();stopTape();allStop();purr(false);$('purr').checked=false});document.addEventListener('visibilitychange',()=>{if(document.hidden){stopLoop();stopTape();allStop();purr(false);$('purr').checked=false}})}
+bind();
+})();
+</script></body></html>

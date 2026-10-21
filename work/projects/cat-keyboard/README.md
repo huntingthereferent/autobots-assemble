@@ -21,6 +21,13 @@ python -m systems.workspace.audio_sound_bank \
 
 The source directory must contain between one and four of `miso.wav`, `mochi.wav`, `nori.wav`, `bean.wav`. Native audio accepts ordinary non-symlink 16-bit mono WAV files with a sample rate from 8–96kHz and at least 128 frames; it moves at most 8192 source frames per file. **The bounded output can be imported back into Meow Lab 2**. Use a new version name when doing a new edition copy. The output includes native-reverified PCM WAVs, per-slot SHA-256 records, exact job IDs, and `sound-bank-manifest.json`. The native runner is invoked explicitly; it does not host a service.
 
+
+## Real chord progressions and Rosey's keyboard
+
+The integrated [Meow Lab 2 keyboard](../../../docs/live/cat-keyboard.html#harmony) now includes nine defined four-chord progressions and transposition into all twelve keys. A four-chord template can be entered by name (for example, `Am F C G`), saved locally, deleted, or backed up/restored as bounded JSON. Playing the 16-step sequencer layers one chord per four steps over the editable melody, using the existing procedural or source-selected cat sound bank. Browser storage is not a native workstation event or a cross-device sync.
+
+[Rosey's Kawaii Cat Keyboard — tuned higher-notes edition](../../../docs/live/roseys-cat-keyboard.html) is separately preserved as a standalone browser instrument with a scrollable 25-key, two-octave keyboard, tuned kawaii meows, built-in and saved chord progressions, and recording. It remains independent of the native Swallow Sounds bank; Meow Lab 2 is still the workstation-linked sound intake instrument. Both run locally in the browser, without uploading a child's performance.
+
 ## Verification
 
 - `python -m unittest -v network.tests.test_audio_motion_workstation network.tests.test_audio_sound_bank network.tests.test_suno_export_intake network.tests.test_cat_keyboard_ui`
