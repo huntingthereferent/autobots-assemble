@@ -255,7 +255,7 @@ function saveProgression(){
  if(customProgressions.length>=24){harmonyStatus('24 custom templates maximum · back up or delete one first');return}
  let n=1;while(allProgressions().some(t=>t.id==='custom-'+n))n++;
  const entry={id:'custom-'+n,name,steps};
- customProgressions.push(entry);selectedTemplate=entry.id;storeTemplates();fillTemplateSelector();applyProgression();
+ customProgressions.push(entry);selectedTemplate=entry.id;const persisted=storeTemplates();fillTemplateSelector();applyProgression();if(!persisted)harmonyStatus('Template works this session; browser storage is blocked, so back it up as JSON');
  $('progression-name').value='';$('progression-chords').value='';
 }
 function deleteProgression(){
