@@ -157,8 +157,14 @@ def read_wav_session(file:str|Path)->dict:
     for desc in item["sources"]:
         if type(desc)!=dict or set(desc)!={"id","path"} or not isinstance(desc["path"],str) or not desc["path"].lower().endswith(".wav"):
             raise ValueError("source manifest fields")
-        path=(filename.parent/desc["path"]).resolve(strict=True)
-        if path.is_symlink() or not path.is_file() or path.stat().st_size>200000:
+        relative=Path(desc["path"])
+        if relative.is_absolute() or not relative.parts or ".." in relative.parts:
+            raise ValueError("source path must remain in selected session directory")
+        declared=filename.parent/relative
+        if declared.is_symlink() or any(parent.is_symlink() for parent in list(declared.parents)[:len(relative.parts)]):
+            raise ValueError("symlink WAV source forbidden")
+        path=declared.resolve(strict=True)
+        if not path.is_relative_to(filename.parent.resolve()) or not path.is_file() or path.stat().st_size>200000:
             raise ValueError("invalid WAV path or size")
         with wave.open(str(path),"rb") as sound:
             if sound.getnchannels()!=1 or sound.getsampwidth()!=2 or sound.getcomptype()!="NONE" or sound.getframerate()!=item["sample_rate"] or not 1<=sound.getnframes()<=8192:
