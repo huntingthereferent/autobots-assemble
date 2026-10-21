@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-20T18:57:49.165891+00:00",
-  "content_sha256": "dec1228b5bb87c22947ef3074d48533e827583c826609bce9cf4a08d060084df",
+  "checked_at": "2026-10-21T01:02:22.556287+00:00",
+  "content_sha256": "5ef9ef69721202009c1a5005ca059a43c0085167cfa81effe3c60ffbb436a47c",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 4,
-      "max_magnitude": 5.1,
+      "count": 3,
+      "max_magnitude": 2.27,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,86 +22,69 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026uussbk",
-        "observed_at": "2026-10-20T18:57:48.666886Z",
-        "source_updated_at": "2026-10-20T18:10:07.556000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uussbk",
+        "source_id": "aka2026uvexfa",
+        "observed_at": "2026-10-21T01:02:22.008235Z",
+        "source_updated_at": "2026-10-21T00:17:51.977000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uvexfa",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uussbk",
+        "canonical_key": "event:aka2026uvexfa",
         "payload": {
-          "magnitude": 1.7,
-          "place": "28 km W of Kalifornsky, Alaska",
-          "longitude": -151.793,
-          "latitude": 60.46,
-          "depth_km": 78.9,
-          "occurred_at": "2026-10-20T18:08:51.707000+00:00"
+          "magnitude": 2.1,
+          "place": "63 km SE of Denali National Park, Alaska",
+          "longitude": -150.987,
+          "latitude": 63.082,
+          "depth_km": 124.3,
+          "occurred_at": "2026-10-21T00:14:37.492000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026uusvca",
-        "observed_at": "2026-10-20T18:57:48.666886Z",
-        "source_updated_at": "2026-10-20T18:17:07.340000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uusvca",
+        "source_id": "hv75061531",
+        "observed_at": "2026-10-21T01:02:22.008235Z",
+        "source_updated_at": "2026-10-21T00:49:50.770000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75061531",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uusvca",
+        "canonical_key": "event:hv75061531",
         "payload": {
-          "magnitude": 2.7,
-          "place": "88 km NNW of Karluk, Alaska",
-          "longitude": -154.78,
-          "latitude": 58.348,
-          "depth_km": 103.4,
-          "occurred_at": "2026-10-20T18:12:36.729000+00:00"
+          "magnitude": 2.27,
+          "place": "26 km E of Honaunau-Napoopoo, Hawaii",
+          "longitude": -155.617492675781,
+          "latitude": 19.4138336181641,
+          "depth_km": 42.8800010681152,
+          "occurred_at": "2026-10-21T00:46:16.190000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "nc75452636",
-        "observed_at": "2026-10-20T18:57:48.666886Z",
-        "source_updated_at": "2026-10-20T18:32:45.274000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452636",
+        "source_id": "nc75452731",
+        "observed_at": "2026-10-21T01:02:22.008235Z",
+        "source_updated_at": "2026-10-21T00:56:40.126000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75452731",
         "entity_type": "event",
-        "canonical_key": "event:nc75452636",
+        "canonical_key": "event:nc75452731",
         "payload": {
-          "magnitude": 1.06,
-          "place": "7 km NW of The Geysers, CA",
-          "longitude": -122.820663452148,
-          "latitude": 38.8158340454102,
-          "depth_km": 2.33999991416931,
-          "occurred_at": "2026-10-20T18:31:08.910000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us6000u3p1",
-        "observed_at": "2026-10-20T18:57:48.666886Z",
-        "source_updated_at": "2026-10-20T18:46:31.146000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u3p1",
-        "entity_type": "event",
-        "canonical_key": "event:us6000u3p1",
-        "payload": {
-          "magnitude": 5.1,
-          "place": "39 km W of Mosteiros, Portugal",
-          "longitude": -26.2588,
-          "latitude": 37.9575,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-20T18:07:18.131000+00:00"
+          "magnitude": 1.09,
+          "place": "6 km WNW of Cobb, CA",
+          "longitude": -122.790664672852,
+          "latitude": 38.8346672058105,
+          "depth_km": 2.10999989509583,
+          "occurred_at": "2026-10-21T00:55:04.920000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-20T18:57:48.786469Z",
-      "source_updated_at": "2026-10-20T15:52:46Z",
+      "observed_at": "2026-10-21T01:02:22.138756Z",
+      "source_updated_at": "2026-10-20T22:41:58Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54524,
-        "forks_count": 12982,
+        "stargazers_count": 54532,
+        "forks_count": 12811,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -110,7 +93,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-20T18:57:49.124310Z",
+      "observed_at": "2026-10-21T01:02:22.453546Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -132,7 +115,8 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count"
+        "forks_count",
+        "stargazers_count"
       ]
     },
     "pypi": {
