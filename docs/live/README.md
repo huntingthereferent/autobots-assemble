@@ -1,8 +1,12 @@
 # Workstation
 
-[Workstation](work.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [A/B Studio](ab-studio.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
+
+## A/B Studio — local-first DAW
+
+[A/B Studio](ab-studio.html) is an independent experimental multitrack workstation built beside the cat keyboard and audio intake, not a Suno copy. The browser demonstrates MIDI patterns, editable piano roll, note audition, synthetic drum/bass/keys/lead/pad sounds, playable keyboard, audio file import, microphone takes where browser permission is granted, timeline clip moves/splits/duplicates, track volume/pan/EQ lowpass/drive/delay, mute and solo, volume automation points, loop transport, A/B project snapshots, undo/redo, offline WAV mixing, separate WAV track bounces, standard MIDI export, and self-contained project JSON with imported audio bytes. No source media is uploaded. Audio clips resample when project tempo changes; this changes pitch and is not warp/time-stretch. Browser playback, offline render and hash calculation are browser operations and **are not native verified workstation executions**. Limits: 64 beats of arrangement, 16 assets, 25 MB per imported file, 90 seconds per WAV export; see [independent project record](../../work/projects/ab-studio/README.md). Advanced stem separation, AI generation, plugin hosting and real-time sidechain are not implemented.
 
 ## Meow Lab 2 — Swallow Sounds keyboard
 
