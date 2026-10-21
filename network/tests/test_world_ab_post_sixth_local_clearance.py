@@ -262,9 +262,21 @@ class WORLD41Tests(unittest.TestCase):
 
     def test_original_selected_departure_bound_refuses_wrong_direction(self):
         from systems.workspace.world_ab_post_sixth_local_clearance import slab
-        h={"center":[0.,0.],"theta":0.,"velocity":[-2.,0.],"spin":0.}
-        planes=[("synthetic_original",(1.,0.),(-HALF,-HALF),1.0)]
-        candidate=slab(h,planes,("synthetic_original",0),0.,.002)
+        # Preserve the same six original planes and all 24 plane/corner
+        # relationships even in the negative-direction test. The previous
+        # one-plane fixture tested the topology guard, not outward motion.
+        ancestor=original21(10.)
+        planes=original_planes(ancestor,10.)
+        face,n,anchor,span=next(z for z in planes if z[3] is not None)
+        self.assertEqual(len(planes),6)
+        self.assertEqual(sum(z[3] is not None for z in planes),2)
+        # Corner zero starts on this original plane but moves *inward*.
+        h={"center":[anchor[0]+HALF,anchor[1]+HALF],
+           "theta":0.,"velocity":[-2.*n[0],-2.*n[1]],"spin":0.}
+        candidate=slab(h,planes,(face,0),0.,.002)
+        self.assertEqual(candidate["all_original_constraints_checked"],24)
+        self.assertEqual(len(candidate["bounds"]),24)
+        self.assertLess(candidate["selected_corner_initial_outgoing_normal_rate"],0)
         self.assertFalse(candidate["interval_nominally_supported"])
 
     def test_physical_seventh_and_tampered_original_gap_refused(self):
