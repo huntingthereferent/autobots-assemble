@@ -1,0 +1,28 @@
+name: ARC3 source-native SP80 second early stream catcher
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage3_second_stream_catch.py'
+      - '.github/workflows/arc3-sp80-stage3-second-stream-catch.yml'
+jobs:
+  original-native:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Check native source syntax
+        run: python -m compileall -q work/arc3/native_sp80_stage3_second_stream_catch.py
+      - name: Test 28 source SDK second-stream interception sessions
+        run: python -m work.arc3.native_sp80_stage3_second_stream_catch --out runtime/data/arc3/original-sp80-stage3-second-stream-catch.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage3-second-stream-catch
+          path: runtime/data/arc3/original-sp80-stage3-second-stream-catch.*
+          if-no-files-found: error
+          retention-days: 14
