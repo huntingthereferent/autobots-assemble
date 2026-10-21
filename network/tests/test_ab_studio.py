@@ -119,6 +119,7 @@ class StudioBrowserTests(unittest.TestCase):
             p.locator("#project-file").set_input_files(str(archive))
             p.wait_for_function("document.querySelectorAll('.lane').length===4", timeout=12000)
             self.assertEqual(p.locator("#assets button").count(), 1)
+            self.assertIn("Δ BPM 14", p.locator("#ab-info").inner_text())
             with p.expect_download(timeout=30000) as bounce:
                 p.locator("#export-wav").click()
             self.assertTrue(bounce.value.suggested_filename.endswith(".wav"))
