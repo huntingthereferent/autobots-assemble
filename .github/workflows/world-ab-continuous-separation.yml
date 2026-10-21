@@ -1,0 +1,64 @@
+name: WORLD 19 continuous square source separation
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_continuous_separation.py'
+      - 'network/tests/test_world_ab_continuous_separation.py'
+      - 'systems/workspace/WORLD_AB_CONTINUOUS_SEPARATION_TRIAL_19_2026-10-20.md'
+      - '.github/workflows/world-ab-continuous-separation.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_continuous_separation.py'
+      - 'network/tests/test_world_ab_continuous_separation.py'
+      - 'systems/workspace/WORLD_AB_CONTINUOUS_SEPARATION_TRIAL_19_2026-10-20.md'
+      - '.github/workflows/world-ab-continuous-separation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  interval-mathematical-clearance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Replay original WORLD 04/17/18 and independently challenge analytic 19
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_square_first_recontact \
+            network.tests.test_world_ab_local_recontact_impulse \
+            network.tests.test_world_ab_continuous_separation
+      - name: Retain source and independently verified entire-interval math
+        run: |
+          python - <<'PY'
+          import json
+          from hashlib import sha256
+          from pathlib import Path
+          from systems.workspace.world_ab_continuous_separation import run
+          from network.tests.test_world_ab_continuous_separation import independent_check
+          source=run()
+          record={"model":source,"independent_extrema_oracle":[
+              {"angle":row["original_source_angle"],
+               "status":row["status"],"checked":independent_check(row)}
+              for row in source["cases"]]}
+          payload=json.dumps(record,indent=2,sort_keys=True,allow_nan=False)+"\n"
+          folder=Path("world19-native-evidence")
+          folder.mkdir(exist_ok=True)
+          (folder/"continuous_separation.json").write_text(payload,encoding="utf8")
+          (folder/"continuous_separation.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  continuous_separation.json\n",
+              encoding="utf8")
+          print("WORLD19 full-interval conditional clearances:",source["conditional_continuous_clearance_count"])
+          print("WORLD19 no-second-impulse controls:",source["no_second_impulse_count"])
+          PY
+      - name: Preserve bounded mathematical source evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world19-analytical-continuous-source-clearance
+          path: world19-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30

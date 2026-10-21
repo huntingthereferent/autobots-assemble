@@ -1,0 +1,92 @@
+name: WORLD 42 first original post-sixth guard limit
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_first_post_sixth_guard_limit.py'
+      - 'network/tests/test_world_ab_first_post_sixth_guard_limit.py'
+      - 'systems/workspace/WORLD_AB_FIRST_POST_SIXTH_GUARD_LIMIT_TRIAL_42_2026-10-21.md'
+      - '.github/workflows/world-ab-first-post-sixth-guard-limit.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_first_post_sixth_guard_limit.py'
+      - 'network/tests/test_world_ab_first_post_sixth_guard_limit.py'
+      - 'systems/workspace/WORLD_AB_FIRST_POST_SIXTH_GUARD_LIMIT_TRIAL_42_2026-10-21.md'
+      - '.github/workflows/world-ab-first-post-sixth-guard-limit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-post-sixth-first-original-guard:
+    runs-on: ubuntu-latest
+    # The independent 24-gap witness is source-native and deliberately
+    # recomputed when retaining the artifact. 35 minutes cancels the
+    # second replay despite the 3/3 focused tests passing.
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independently verify all original post-sixth guard boundaries
+        run: python -m unittest -v network.tests.test_world_ab_first_post_sixth_guard_limit
+      - name: Preserve first original guard boundary and independent witness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_first_post_sixth_guard_limit import run
+          from network.tests.test_world_ab_first_post_sixth_guard_limit import verify
+          source=run()
+          witness=[{"angle":x["angle"],"status":x["status"],
+                    "independent_original_sine_phase_verified":verify(x)}
+                   for x in source["cases"]]
+          assert len(witness)==8 and all(x["independent_original_sine_phase_verified"] for x in witness)
+          assert source["inactive_source_controls"]==7
+          assert source["eligible_post_sixth_models"]+source["unresolved_previous_window_models"]==1
+          assert source["eligible_post_sixth_models"]==source["first_guard_limit_models"]+source[
+              "all_original_guard_full_horizon_models"]
+          assert source["real_seventh_impacts"]==0 and source["seventh_impulses"]==0
+          d=Path("world42-native-evidence")
+          d.mkdir(exist_ok=True)
+          content=json.dumps({"original_source":source,"independent_replay":witness},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (d/"first_original_post_sixth_guard_limit.json").write_text(content)
+          (d/"first_original_post_sixth_guard_limit.sha256").write_text(
+              sha256(content.encode()).hexdigest()+"  first_original_post_sixth_guard_limit.json\n")
+          print(json.dumps({"eligible_original_models":source["eligible_post_sixth_models"],
+              "first_guard_limit_cases":source["first_guard_limit_models"],
+              "full_horizon_cases":source["all_original_guard_full_horizon_models"],
+              "prior_window_unresolved":source["unresolved_previous_window_models"],
+              "inactive_cases":source["inactive_source_controls"],
+              "physical_seventh_impulses":0},sort_keys=True))
+          for x in source["cases"]:
+              if x["status"] not in ("NO_ADMITTED_SIXTH_SOURCE",):
+                  print(json.dumps({"angle":x["angle"],"status":x["status"],
+                    "guard_limit":x["first_original_guard_limit"],
+                    "supported_endpoint":x["supported_horizon_endpoint"],
+                    "seventh_contact_measured":False},sort_keys=True))
+          PY
+      - name: Retain WORLD42 source and separate independent guard result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world42-original-post-sixth-first-guard
+          path: world42-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  inherited-original-world-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Reverify original WORLD04–41 finite model regressions
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature network.tests.test_world_ab_whole_contact_configuration network.tests.test_world_ab_post_fifth_local_clearance network.tests.test_world_ab_post_fifth_contiguous_prefix network.tests.test_world_ab_first_post_fifth_guard_limit network.tests.test_world_ab_local_zero_gap_after_guard network.tests.test_world_ab_sixth_conditional_normal_law network.tests.test_world_ab_post_sixth_local_clearance

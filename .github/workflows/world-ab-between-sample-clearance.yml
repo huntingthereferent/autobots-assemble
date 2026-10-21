@@ -1,0 +1,73 @@
+name: WORLD 26 nominal between-sample finite clearance witness
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_between_sample_clearance.py'
+      - 'network/tests/test_world_ab_between_sample_clearance.py'
+      - 'systems/workspace/WORLD_AB_BETWEEN_SAMPLE_CLEARANCE_TRIAL_26_2026-10-20.md'
+      - '.github/workflows/world-ab-between-sample-clearance.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_between_sample_clearance.py'
+      - 'network/tests/test_world_ab_between_sample_clearance.py'
+      - 'systems/workspace/WORLD_AB_BETWEEN_SAMPLE_CLEARANCE_TRIAL_26_2026-10-20.md'
+      - '.github/workflows/world-ab-between-sample-clearance.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-fixed-axis-time-envelope-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original WORLD and independent between-grid interval tests
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance
+      - name: Independently record all original finite face interval classifications
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_between_sample_clearance import run
+          from network.tests.test_world_ab_between_sample_clearance import verify
+          source=run()
+          original=[{"angle":c["angle"],"status":c["status"],
+                     "independent_world_sat_intervals_verified":verify(c)}
+                    for c in source["cases"]]
+          assert len(original)==8 and all(x["independent_world_sat_intervals_verified"] for x in original)
+          assert source["conditional_third_impulse_cases"]==6
+          assert source["no_source_third_impulse_controls"]==2
+          assert source["fourth_impulses_selected"]==0
+          assert source["actual_hardware_measurements"]==0
+          folder=Path("world26-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"source":source,"independent_witness":original},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"between_sample_nominal_clearance.json").write_text(payload)
+          (folder/"between_sample_nominal_clearance.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  between_sample_nominal_clearance.json\n")
+          print(json.dumps({
+              "source_cases":source["conditional_third_impulse_cases"],
+              "nominal_full_face_both_clear_cases":source["cases_with_both_faces_nominally_covered"],
+              "cases_containing_unknown_intervals":source["cases_with_unresolved_intervals"],
+              "uncovered_face_intervals":source["total_uncovered_face_intervals"],
+              "no_impulse_controls":source["no_source_third_impulse_controls"],
+              "actual_material_measurements":0,
+              "certified_floating_point_intervals":0},sort_keys=True))
+          PY
+      - name: Preserve original source reports and independent interval check
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world26-between-sample-nominal-clearance
+          path: world26-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30

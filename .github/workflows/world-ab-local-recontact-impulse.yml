@@ -1,0 +1,63 @@
+name: WORLD 18 local angular recontact impulse
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_local_recontact_impulse.py'
+      - 'network/tests/test_world_ab_local_recontact_impulse.py'
+      - 'systems/workspace/WORLD_AB_LOCAL_SECOND_IMPULSE_TRIAL_18_2026-10-20.md'
+      - '.github/workflows/world-ab-local-recontact-impulse.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_local_recontact_impulse.py'
+      - 'network/tests/test_world_ab_local_recontact_impulse.py'
+      - 'systems/workspace/WORLD_AB_LOCAL_SECOND_IMPULSE_TRIAL_18_2026-10-20.md'
+      - '.github/workflows/world-ab-local-recontact-impulse.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-world-second-impulse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Replay prior source contacts and independent local candidate physics
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_rotating_square_clearance \
+            network.tests.test_world_ab_square_first_recontact \
+            network.tests.test_world_ab_local_recontact_impulse
+      - name: Retain exact mathematical impulse candidates and independent measurements
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_local_recontact_impulse import run
+          from network.tests.test_world_ab_local_recontact_impulse import verify
+          data=run()
+          evidence={"model":data,"independent_verifier":[
+              {"angle":case["angle"],"verified":verify(case),"status":case["status"]}
+              for case in data["cases"]]}
+          raw=json.dumps(evidence,sort_keys=True,indent=2,allow_nan=False)+"\n"
+          folder=Path("world18-native-evidence")
+          folder.mkdir(exist_ok=True)
+          (folder/"second_impulse_candidates.json").write_text(raw,encoding="utf8")
+          (folder/"second_impulse_candidates.sha256").write_text(
+              sha256(raw.encode()).hexdigest()+"  second_impulse_candidates.json\n",
+              encoding="utf8")
+          print("WORLD18 modeled second impulses:", data["cases_with_candidate_impulse"])
+          print("WORLD18 refused sampled overlap:", data["cases_with_sampled_post_overlap"])
+          PY
+      - name: Preserve recorded source and hypothesis evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world18-original-square-second-impulse-hypotheses
+          path: world18-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30

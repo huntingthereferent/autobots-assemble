@@ -1,0 +1,86 @@
+name: WORLD 32 finite geometry at first conservative limit
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_geometry_at_first_envelope_limit.py'
+      - 'network/tests/test_world_ab_geometry_at_first_envelope_limit.py'
+      - 'systems/workspace/WORLD_AB_GEOMETRY_AT_FIRST_LIMIT_TRIAL_32_2026-10-20.md'
+      - '.github/workflows/world-ab-geometry-first-limit.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_geometry_at_first_envelope_limit.py'
+      - 'network/tests/test_world_ab_geometry_at_first_envelope_limit.py'
+      - 'systems/workspace/WORLD_AB_GEOMETRY_AT_FIRST_LIMIT_TRIAL_32_2026-10-20.md'
+      - '.github/workflows/world-ab-geometry-first-limit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-first-limit-finite-sat-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Original source and independent first-limit finite SAT comparison
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit
+      - name: Preserve original first source feature and independent finite geometry witness
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from hashlib import sha256
+          from systems.workspace.world_ab_geometry_at_first_envelope_limit import run
+          from network.tests.test_world_ab_geometry_at_first_envelope_limit import verify
+          source=run()
+          independent=[{"angle":c["angle"],"status":c["status"],
+                        "independent_world_coordinate_SAT":verify(c)}
+                       for c in source["cases"]]
+          assert len(independent)==8 and all(x["independent_world_coordinate_SAT"] for x in independent)
+          assert source["source_limit_model_cases"]==3
+          assert source["without_qualified_fourth_response"]==5
+          assert (source["finite_intersection_at_evidence_limit_cases"]+
+                  source["finite_shapes_separated_at_limit_cases"]+
+                  source["ambiguous_or_grazing_limit_cases"])==3
+          assert source["actual_material_impacts_measured"]==0
+          assert source["fifth_impulses_solved"]==0
+          folder=Path("world32-native-evidence")
+          folder.mkdir(exist_ok=True)
+          payload=json.dumps({"source":source,"independent_witness":independent},
+                             sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"geometry_at_original_first_limit.json").write_text(payload)
+          (folder/"geometry_at_original_first_limit.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  geometry_at_original_first_limit.json\n")
+          print(json.dumps({
+              "source_first_limit_model_cases":source["source_limit_model_cases"],
+              "finite_intersection_at_bound_limit":source["finite_intersection_at_evidence_limit_cases"],
+              "finite_shapes_separated_at_limit":source["finite_shapes_separated_at_limit_cases"],
+              "grazing_or_perimeter_unknown":source["ambiguous_or_grazing_limit_cases"],
+              "no_qualified_response_controls":source["without_qualified_fourth_response"],
+              "real_fifth_impulses":0},sort_keys=True))
+          for c in source["cases"]:
+              if c["source_first_nominal_limit"] is not None:
+                  print(json.dumps({
+                      "angle":c["angle"],
+                      "first_limit_time":c["source_first_nominal_limit"],
+                      "finite_model_geometry_status":c["status"],
+                      "limiting_corners":[{"plane":x["source_plane"],
+                                           "corner":x["source_corner_index"],
+                                           "signed_gap":x["actual_signed_gap_in_conditional_model"]}
+                                          for x in c["limiting_corner_model_states"]]
+                  },sort_keys=True))
+          PY
+      - name: Retain original source and separate world-coordinate witness
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: world32-original-first-limit-finite-geometry
+          path: world32-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30

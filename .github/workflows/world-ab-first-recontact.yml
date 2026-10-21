@@ -1,0 +1,64 @@
+name: WORLD 17 rotating-square first finite recontact
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_square_first_recontact.py'
+      - 'network/tests/test_world_ab_square_first_recontact.py'
+      - 'systems/workspace/WORLD_AB_FIRST_RECONTACT_TRIAL_17_2026-10-20.md'
+      - '.github/workflows/world-ab-first-recontact.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_square_first_recontact.py'
+      - 'network/tests/test_world_ab_square_first_recontact.py'
+      - 'systems/workspace/WORLD_AB_FIRST_RECONTACT_TRIAL_17_2026-10-20.md'
+      - '.github/workflows/world-ab-first-recontact.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-finite-first-return:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Recheck original first square contact and WORLD16 and independently locate WORLD17 first recontact
+        run: |
+          python -m unittest -v \
+            network.tests.test_world_ab_oblique_impact \
+            network.tests.test_world_ab_rotating_square_clearance \
+            network.tests.test_world_ab_square_first_recontact
+      - name: Retain actual numerical first-contact brackets and independent witness
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_square_first_recontact import run
+          from network.tests.test_world_ab_square_first_recontact import independent_check
+          data=run()
+          evidence={"source":data,"independent_witness":[
+              {"angle":case["source_angle"],
+               "status":case["status"],
+               "verified":independent_check(case)}
+              for case in data["cases"]]}
+          payload=json.dumps(evidence,sort_keys=True,indent=2,allow_nan=False)+"\n"
+          path=Path("world17-native-evidence")
+          path.mkdir(exist_ok=True)
+          (path/"first_recontact.json").write_text(payload,encoding="utf8")
+          (path/"first_recontact.sha256").write_text(
+              sha256(payload.encode()).hexdigest()+"  first_recontact.json\n",
+              encoding="utf8")
+          print("WORLD17 first finite-return candidates:",data["first_return_candidates"])
+          print("WORLD17 no-return short-window controls:",data["no_return"])
+          PY
+      - name: Retain model and independent replay
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world17-original-rotating-square-first-finite-return
+          path: world17-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30

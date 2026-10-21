@@ -1,0 +1,75 @@
+name: WORLD 23 all inward finite-feature candidates
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_all_inward_finite_features.py'
+      - 'network/tests/test_world_ab_all_inward_finite_features.py'
+      - 'systems/workspace/WORLD_AB_ALL_INWARD_FINITE_TRIAL_23_2026-10-20.md'
+      - '.github/workflows/world-ab-all-inward-finite.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_all_inward_finite_features.py'
+      - 'network/tests/test_world_ab_all_inward_finite_features.py'
+      - 'systems/workspace/WORLD_AB_ALL_INWARD_FINITE_TRIAL_23_2026-10-20.md'
+      - '.github/workflows/world-ab-all-inward-finite.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  all-inward-roots-and-independent-finite-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Native source 04 18 20 21 22 and independent WORLD23 all-root verification
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features
+      - name: Record source-owned all-root comparison and independent check
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from hashlib import sha256
+          import json
+          from systems.workspace.world_ab_all_inward_finite_features import run
+          from network.tests.test_world_ab_all_inward_finite_features import verify
+          source=run()
+          witness=[{"angle":c["angle"],"status":c["status"],
+                    "independently_checked":verify(c)} for c in source["cases"]]
+          assert len(witness)==8 and all(x["independently_checked"] for x in witness)
+          assert source["conditional_third_impulse_inputs"]==6
+          assert source["without_third_impulse"]==2
+          assert source["physical_measurements"]==0
+          assert source["fourth_impulses_selected"]==0
+          folder=Path("world23-native-evidence")
+          folder.mkdir(exist_ok=True)
+          result=json.dumps({"source":source,"independent_witness":witness},
+                            sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"all_inward_finite_candidates.json").write_text(result)
+          (folder/"all_inward_finite_candidates.sha256").write_text(
+              sha256(result.encode()).hexdigest()+"  all_inward_finite_candidates.json\n")
+          print(json.dumps({
+              "source_cases_with_first_eligible":source["first_eligible_cases"],
+              "source_eligible_root_free_windows":source["root_free_eligible_windows"],
+              "all_inward_roots":source["total_inward_root_candidates"],
+              "trial22_first_per_pair_roots":source["trial22_first_per_pair_candidates"],
+              "new_later_roots":source["additional_inward_roots_beyond_trial22_first"],
+              "cases_with_new_later_root":source["cases_with_new_later_root"],
+              "roots_outside_finite_faces":source["outside_finite_face_candidates"],
+              "endpoint_uncertainties":source["endpoint_uncertainties"],
+              "near_tangent_uncertainties":source["near_tangent_uncertainties"],
+              "real_fourth_impulses":0},sort_keys=True))
+          PY
+      - name: Preserve source numerical evidence and hash
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world23-all-inward-root-candidate-evidence
+          path: world23-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
