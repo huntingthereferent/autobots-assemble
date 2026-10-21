@@ -195,7 +195,7 @@ def carry(native26: dict[str,Any], native25: dict[str,Any],
                     ]
                     receipt=run_plan({"schema":PLAN,
                         "referent":f"WORLD26 / source unknown {i}/{j}/{chunk_index}",
-                        "limits":{"objects":1,"relations":0,"steps":len(steps)},
+                        "limits":{"objects":1,"relations":1,"steps":len(steps)},
                         "steps":steps})
                     chunk_witness=verify_receipt(receipt)
                     chunks.append({
