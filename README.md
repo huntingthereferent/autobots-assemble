@@ -10,7 +10,7 @@ The public work view reads actual GitHub workflow runs and native job/step resul
 
 The mathematics, ARC and world experiments, AI-assisted software, workers, and verification harnesses are **ways to investigate and retain evidence**, not competing purposes or a claim that one method explains the universe. [Start with James's account](https://github.com/huntingthereferent/huntingthereferent#the-human-wall).
 
-**Study the interaction, not just the instruments:** [James as participant — proposed cue-word human–AI interaction study](research/human-ai-cue-observation/README.md) sets out a small, consent-based, remotely observable protocol: an external word, natural conversation, recorded corrections and independently checkable disagreements. It is a proposal, not a claim of rarity, a psychological diagnosis, a recruited study or a funded position.
+**Study James's observed thinking, not just the instruments:** [James as the study — changing problem frames and conceptual relationships](research/human-ai-cue-observation/README.md) proposes a remote, participant-led investigation of how expressed questions, distinctions, corrections and relationships move through conversation and artifacts. A word cue is one possible starting condition, not the research subject. This is a proposal, not a claim of rarity, a diagnosis, or an existing funded study.
 
 An inspectable collection of code, mathematical experiments, system prototypes, and test records. The projects address different questions; they are not parts of a claimed universal theory or one finished platform.
 
