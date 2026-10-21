@@ -1,0 +1,90 @@
+name: WORLD 39 original first zero-gap local probe
+
+on:
+  push:
+    paths:
+      - 'systems/workspace/world_ab_local_zero_gap_after_guard.py'
+      - 'network/tests/test_world_ab_local_zero_gap_after_guard.py'
+      - 'systems/workspace/WORLD_AB_FIRST_ZERO_GAP_AFTER_GUARD_TRIAL_39_2026-10-21.md'
+      - '.github/workflows/world-ab-first-zero-gap-after-guard.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/world_ab_local_zero_gap_after_guard.py'
+      - 'network/tests/test_world_ab_local_zero_gap_after_guard.py'
+      - 'systems/workspace/WORLD_AB_FIRST_ZERO_GAP_AFTER_GUARD_TRIAL_39_2026-10-21.md'
+      - '.github/workflows/world-ab-first-zero-gap-after-guard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-original-zero-gap-probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent original world-coordinate local zero-gap probe tests
+        run: python -m unittest -v network.tests.test_world_ab_local_zero_gap_after_guard
+      - name: Preserve original finite feature probe and independent witness hashes
+        run: |
+          python - <<'PY'
+          import json
+          from hashlib import sha256
+          from pathlib import Path
+          from systems.workspace.world_ab_local_zero_gap_after_guard import run
+          from network.tests.test_world_ab_local_zero_gap_after_guard import check
+          report=run()
+          witness=[{"angle":c["angle"],"status":c["status"],
+                    "independent_original_zero_gap_probe":check(c)}
+                   for c in report["cases"]]
+          assert len(witness)==8 and all(c["independent_original_zero_gap_probe"] for c in witness)
+          assert report["inactive_source_controls"]==7
+          assert (report["qualified_numerical_zero_gap_features"]+
+                  report["unresolved_local_zero_gap_features"])==1
+          assert report["measured_sixth_contacts"]==0
+          assert report["selected_sixth_impulses"]==0
+          folder=Path("world39-native-evidence")
+          folder.mkdir(exist_ok=True)
+          data=json.dumps({"original_source":report,"independent_replay":witness},
+                          sort_keys=True,indent=2,allow_nan=False)+"\n"
+          (folder/"original_first_local_zero_gap_probe.json").write_text(data)
+          (folder/"original_first_local_zero_gap_probe.sha256").write_text(
+              sha256(data.encode()).hexdigest()+"  original_first_local_zero_gap_probe.json\n")
+          print(json.dumps({"qualified_original_model_zero_gaps":report["qualified_numerical_zero_gap_features"],
+              "unresolved_model_zero_gap_cases":report["unresolved_local_zero_gap_features"],
+              "inactive_controls":report["inactive_source_controls"],"physical_impulses":0},sort_keys=True))
+          for row in report["cases"]:
+              if row["guard_time"] is not None:
+                  print(json.dumps({"source_angle":row["angle"],
+                    "status":row["status"],"source_face":row["selected_source_face"],
+                    "source_corner":row["selected_corner"],
+                    "guard_time":row["guard_time"],
+                    "numerical_zero_gap_time":row["bracketed_first_zero_time"],
+                    "source_competing_original_constraints_clear":row[
+                        "all_23_other_original_constraints_strictly_separated"],
+                    "material_sixth_contact":False},sort_keys=True))
+          PY
+      - name: Retain WORLD39 native first local zero-gap probe
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: world39-original-first-local-zero-gap
+          path: world39-native-evidence/
+          if-no-files-found: warn
+          retention-days: 30
+
+  inherited-original-world-regressions:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run original source-owned WORLD04 through WORLD38 native regressions
+        run: |
+          python -m unittest -v network.tests.test_world_ab_oblique_impact network.tests.test_world_ab_local_recontact_impulse network.tests.test_world_ab_rotating_receiver network.tests.test_world_ab_third_contact network.tests.test_world_ab_first_post_third_candidate network.tests.test_world_ab_all_inward_finite_features network.tests.test_world_ab_rotating_edge_face_endpoint network.tests.test_world_ab_finite_segment_square_overlap network.tests.test_world_ab_between_sample_clearance network.tests.test_world_ab_local_finite_onset network.tests.test_world_ab_first_finite_response_qualification network.tests.test_world_ab_post_fourth_local_clearance network.tests.test_world_ab_first_envelope_limit network.tests.test_world_ab_geometry_at_first_envelope_limit network.tests.test_world_ab_local_plane_prefix network.tests.test_world_ab_first_unknown_finite_feature network.tests.test_world_ab_whole_contact_configuration network.tests.test_world_ab_post_fifth_local_clearance network.tests.test_world_ab_post_fifth_contiguous_prefix network.tests.test_world_ab_first_post_fifth_guard_limit
