@@ -46,17 +46,18 @@ $('instruments').querySelectorAll('button').forEach(b=>b.onclick=()=>{addTrack('
 $('assets').innerHTML=assets.size?[...assets.values()].map(x=>'<button class="source-item" data-asset="'+esc(x.id)+'"><span>'+esc(x.name.slice(0,25))+'</span><small>'+Math.round(x.bytes.length/1024)+'KB</small></button>').join(''):'<span class="muted">Import a WAV/MP3 to add sound</span>';
 $('assets').querySelectorAll('button').forEach(b=>b.onclick=()=>placeAudio(b.dataset.asset));
 }
+function beatsPerBar(){return project.meter==='3/4'||project.meter==='6/8'?3:project.meter==='5/4'?5:4;}
 function renderTimeline(){
-const total=64;
+const total=64,barBeats=beatsPerBar();
 const grid=$('ruler');grid.innerHTML='';
 const trackWidth=total*pxBeat;
 $('arrangement-inner').style.width=(172+trackWidth)+'px';
 grid.style.width=(172+trackWidth)+'px';
-for(let beat=0;beat<total;beat+=4){const l=document.createElement('div');l.className='bar-label';l.style.width=(4*pxBeat)+'px';l.textContent='BAR '+(Math.floor(beat/4)+1);grid.append(l);}
+for(let beat=0;beat<total;beat+=barBeats){const l=document.createElement('div');l.className='bar-label';l.style.width=(Math.min(barBeats,total-beat)*pxBeat)+'px';l.textContent='BAR '+(Math.floor(beat/barBeats)+1);grid.append(l);}
 grid.onclick=e=>{const r=grid.getBoundingClientRect();cursor=clamp(Math.round((e.clientX-r.left-172)/pxBeat*4)/4,0,64);renderClock();};
 const laneHost=$('lanes');laneHost.innerHTML='';
 for(const t of project.tracks){
-const row=document.createElement('div');row.className='lane';row.innerHTML='<div class="lane-head '+(selected.track===t.id?'selected':'')+'"><div class="lane-title">'+esc(t.name)+'</div><div class="lane-type">'+esc(t.type==='audio'?'audio':'MIDI · '+t.instrument)+'</div><div class="lane-actions"><button data-action="mute" class="'+(t.mute?'active':'')+'">M</button><button data-action="solo" class="'+(t.solo?'active':'')+'">S</button><button data-action="add">+ Clip</button></div></div><div class="lane-body" style="--bar-w:'+(4*pxBeat)+'px;width:'+trackWidth+'px"></div>';
+const row=document.createElement('div');row.className='lane';row.innerHTML='<div class="lane-head '+(selected.track===t.id?'selected':'')+'"><div class="lane-title">'+esc(t.name)+'</div><div class="lane-type">'+esc(t.type==='audio'?'audio':'MIDI · '+t.instrument)+'</div><div class="lane-actions"><button data-action="mute" class="'+(t.mute?'active':'')+'">M</button><button data-action="solo" class="'+(t.solo?'active':'')+'">S</button><button data-action="add">+ Clip</button></div></div><div class="lane-body" style="--bar-w:'+(barBeats*pxBeat)+'px;width:'+trackWidth+'px"></div>';
 const head=row.querySelector('.lane-head');head.onclick=e=>{if(e.target.closest('button'))return;selected={track:t.id,clip:null};render();};
 head.querySelector('[data-action=mute]').onclick=()=>mutate(()=>{t.mute=!t.mute;},'Mute '+t.name+' '+t.mute);
 head.querySelector('[data-action=solo]').onclick=()=>mutate(()=>{t.solo=!t.solo;},'Solo '+t.name+' '+t.solo);
@@ -120,7 +121,7 @@ function renderAB(){const a=snapshots.A,b=snapshots.B;const summary=p=>p?p.track
 let diff='';if(a&&b){const ca=a.tracks.reduce((n,t)=>n+t.clips.length,0),cb=b.tracks.reduce((n,t)=>n+t.clips.length,0);diff='<br>Δ tracks '+(b.tracks.length-a.tracks.length)+' · Δ clips '+(cb-ca)+' · Δ BPM '+(b.bpm-a.bpm)+' · same state '+(JSON.stringify(a)===JSON.stringify(b)?'YES':'NO');}
 $('ab-info').innerHTML='A: '+summary(a)+'<br>B: '+summary(b)+diff+'<br><small>Recall restores arrangement/mix controls, not removed source bytes.</small>';
 }
-function renderClock(){const bar=Math.floor(cursor/4)+1,beat=Math.floor(cursor%4)+1,sub=Math.round(cursor%1*100);$('clock').textContent=String(bar).padStart(3,'0')+' · '+String(beat).padStart(2,'0')+' · '+String(sub).padStart(2,'0');$('playhead').style.left=(172+cursor*pxBeat)+'px';}
+function renderClock(){const barBeats=beatsPerBar(),bar=Math.floor(cursor/barBeats)+1,beat=Math.floor(cursor%barBeats)+1,sub=Math.round(cursor%1*100);$('clock').textContent=String(bar).padStart(3,'0')+' · '+String(beat).padStart(2,'0')+' · '+String(sub).padStart(2,'0');$('playhead').style.left=(172+cursor*pxBeat)+'px';}
 function context(){if(!audio){audio=new (window.AudioContext||window.webkitAudioContext)();master=audio.createGain();analyser=audio.createAnalyser();analyser.fftSize=256;master.connect(analyser);analyser.connect(audio.destination);}master.gain.value=project.master;return audio;}
 function distortionCurve(amount){const curve=new Float32Array(1024);const k=amount*100;for(let i=0;i<1024;i++){const x=i/512-1;curve[i]=(1+k)*x/(1+k*Math.abs(x));}return curve;}
 function strip(ctx,t,output,fromBeat,toBeat,at){
