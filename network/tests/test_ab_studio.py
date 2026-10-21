@@ -109,7 +109,7 @@ class StudioBrowserTests(unittest.TestCase):
             p.locator("#instrument").select_option("sampler")
             p.locator("#sampler-asset").select_option(index=1)
             p.locator("#keys button").first.click()
-            self.assertIn("sampler", p.locator(".lane").nth(2).locator(".lane-type").inner_text())
+            self.assertIn("sampler", p.locator(".lane").nth(2).locator(".lane-type").inner_text().lower())
             p.locator("#store-a").click()
             p.locator("#bpm").fill("134")
             p.locator("#bpm").dispatch_event("change")
