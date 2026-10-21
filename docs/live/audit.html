@@ -204,8 +204,8 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     const c=state.cases[state.position];
     $('test-position').textContent=(state.position+1)+' / '+state.cases.length+' in selected file · '+state.head.slice(0,12);
     const nav=elem('div',undefined,'case-head'),controls=elem('div',undefined,'case-nav');
-    const prev=elem('button','← Previous test');prev.onclick=()=>advance(-1);
-    const next=elem('button','Next test →');next.onclick=()=>advance(1);
+    const prev=elem('button',c.data?'← Previous record':'← Previous test');prev.onclick=()=>advance(-1);
+    const next=elem('button',c.data?'Next record →':'Next test →');next.onclick=()=>advance(1);
     controls.append(prev,next);nav.append(elem('h3',c.name),controls);dest.append(nav);
     dest.append(elem('p',c.data?'Parsed JSON entry. Source contents only; not independently validated.':'Defined at line '+c.line+'; test declaration only, not a witnessed pass.','meta'));
     dest.append(link(c.data?'Open pinned data file ↗':'Inspect exact lines in GitHub ↗',sourceURL(path,c.line)));
@@ -234,7 +234,7 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     select.value=previous.assessment;form.append(select);
     const labelNote=elem('label','Observation and evidence locator');labelNote.htmlFor='review-note';form.append(labelNote);
     const note=elem('textarea');note.id='review-note';note.value=previous.note;note.placeholder='What evidence did you inspect? What would falsify the finding?';form.append(note);
-    const save=()=>{state.reviews.set(key,{project:projectForPath(path),type:c.data?'data-entry':'test-definition',path,line:c.line,record:c.name,assessment:select.value,note:note.value})};
+    const save=()=>{const file=[...state.files,...state.dataFiles].find(x=>x.path===path);state.reviews.set(key,{project:projectForPath(path),type:c.data?'data-entry':'test-definition',path,source_blob:file?.sha||null,line:c.line,record:c.name,assessment:select.value,note:note.value})};
     select.onchange=save;note.oninput=save;form.append(elem('p','Notes stay in this browser page until exported; not stored in GitHub.','tiny'));dest.append(form);
   }
   function renderResearch(){
