@@ -1,0 +1,28 @@
+name: ARC3 original SP80 upstream no-boundary fourth-cup source
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage3_no_boundary_fourth_cup.py'
+      - '.github/workflows/arc3-sp80-stage3-no-boundary-fourth-cup.yml'
+jobs:
+  original-sdk-upstream:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original SDK and numpy
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Verify original source trial compiles
+        run: python -m compileall -q work/arc3/native_sp80_stage3_no_boundary_fourth_cup.py
+      - name: Run original SP80 source upstream fourth-cup trial
+        run: python -m work.arc3.native_sp80_stage3_no_boundary_fourth_cup --out runtime/data/arc3/original-sp80-stage3-no-boundary-fourth-cup.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: original-sp80-stage3-no-boundary-fourth-cup
+          path: runtime/data/arc3/original-sp80-stage3-no-boundary-fourth-cup.*
+          if-no-files-found: error
+          retention-days: 14
