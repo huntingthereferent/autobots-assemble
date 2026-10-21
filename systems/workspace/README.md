@@ -62,6 +62,12 @@ print(workspace_view(store, actor_id="james"))
 
 This example is illustrative and **does not assert** that those projects currently share the depicted interface.
 
+## Native Studio audio component — actual workstation source swallow
+
+The [independent Studio component](../../work/projects/ab-studio-native/README.md) is an explicit executable worker inside the **existing writable Process Workstation and HandoffRuntime**, not a new browser-only imitation. Selected local mono PCM16 WAVs and MIDI notes become one finite timeline request; the worker is copied into a fingerprinted private edition, admitted as READY, actually executed in a child, independently replayed by the host, and recorded in the same original RuntimeJournal and WorkspaceStore when returned. The output is a native-witnessed stereo WAV and pinned job ID.
+
+The workstation and its source-copy/versioning system are not read-only; only their **viewers** are. This audio component uses precisely that distinction. Existing creative audio intake and the Meow Lab remain intact. Run source/negative checks with: python -m unittest -v network.tests.test_studio_workstation. No GitHub Pages UI click runs a private worker by itself; ARC, WORLD and NIH witness boundaries remain separate.
+
 ## Two-process workstation witness
 
 The [local two-process setup](TWO_PROCESS_WORKSTATION.md) creates real version-pinned finite computation and simulated Factory machine-stage jobs in the **same** private runtime journal, with source-owned native verification and the read-only workstation viewer. It is opt-in (`--execute`); running the viewer alone never creates or executes a worker. Both jobs remain separate by their native realization and evidence scopes.
