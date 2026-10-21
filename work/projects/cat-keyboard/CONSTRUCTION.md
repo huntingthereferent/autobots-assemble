@@ -3,8 +3,8 @@
 - **Referent:** a playable cat keyboard, not a depiction or decorative page.
 - **Scope:** self-contained HTML/CSS/Web Audio with independent bounded score validation.
 - **Entrypoint:** `docs/live/cat-keyboard.html` linked from `docs/live/work.html`.
-- **Source data:** 13 chromatic note mappings, four deterministic voice profiles, finite 16-step grid.
-- **Outputs:** synthesized live sound, local note-score playback, validated JSON interchange.
-- **Boundaries:** no claims about native workstation worker execution; no remote services, private journals, microphone capture, or publication of user-made scores.
-- **Native checks:** Python tests and Node syntax/pure-score validation; Chromium desktop and mobile interaction checks done locally before proposal. Browser sound perception is not independently verified in a listening test.
+- **Source data:** 13 chromatic note mappings, four deterministic voice profiles, finite 16-step grid, and nine defined functional chord templates transposable to 12 keys.
+- **Outputs:** synthesized live sound, local note-score playback, validated JSON interchange, a four-bar playable chord track, and custom templates stored locally with bounded JSON backup/restore.
+- **Boundaries:** no claims about native workstation worker execution; no remote services, private journals, microphone capture, or publication of user-made scores. Browser-local custom templates are explicitly user-created and limited to 24; saved scores and saved templates are separate formats.
+- **Native checks:** Python tests and Node syntax/pure-score/chord progression validation; Chromium desktop and mobile interaction checks done locally before proposal. Browser sound perception is not independently verified in a listening test.
 - **Next:** human playback/volume feedback and a final deployed GitHub Pages browser check after review/merge.
