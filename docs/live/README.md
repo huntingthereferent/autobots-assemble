@@ -1,8 +1,12 @@
 # Workstation
 
-[Workstation](work.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Cat Keyboard](cat-keyboard.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
+
+## Separate creative instrument
+
+[Meow Machine](cat-keyboard.html) is a self-contained browser instrument linked from the Workstation navigation. Its keyboard, scores, and 16-step sequencer are independent of the read-only research evidence feed. It does not claim worker execution or create scientific results. See [the project note](../../work/projects/cat-keyboard/README.md).
 
 ## Evidence boundaries
 
