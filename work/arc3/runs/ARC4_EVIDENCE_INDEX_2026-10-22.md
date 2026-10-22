@@ -103,6 +103,23 @@ The original level3 and level4 frames each have four source palette11 connected 
 
 Configured original Actions artifact retention 90 days; separate durable copy **NOT VERIFIED**. No cross-branch merging or status promotion.
 
+## Native full-frame upper-vertical palette-mask comparison
+
+**Independent exact-frame archive analysis; not a newly executed SDK trial.** Source: [genuine original SDK right × upper run #39766706911](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911), [original JSON + complete NPZ frame artifact #12421295935](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911/artifacts/12421295935). Verified artifact ZIP SHA-256 `ac607d630c259fb8840a47842c3da9bc8478c8a940c95f804f91574d2feccc04`; embedded JSON SHA-256 `14d3309d4f93d5c22f078d65129e2d8c808b3f923e38e0ba47840471befb00c8`, original full-frame NPZ SHA-256 `46824cff5cd113fafe2898ab0cc4c82b071f705f83d444f8ac0ccd0320c4ba7e`.
+
+Comparing entire original returned ACTION5 frame arrays at **all 34 matching animation indices**, for each fixed right-bar condition with upper `LEFT1` versus `LEFT1+UP1` and `LEFT1+DOWN1`, finds **zero pixel differences in the complete palette-13 mask in every comparison**. This is exact per-pixel equality across the native frame stacks, not merely equality of cup-fill timestamps. The original native A and B stage1 entrance witnesses independently produce identical outcomes.
+
+| Native right bar | Upper displacement compared with LEFT1 | Source palette-13 mask differences, all frames | Source palette-6 mask differences, all frames | Palette-6 differences excluding upper field and row63 |
+| --- | --- | ---: | ---: | ---: |
+| LEFT1 | UP1 | 0 | 1,350 | 99 |
+| LEFT1 | DOWN1 | 0 | 1,431 | 105 |
+| LEFT2 | UP1 | 0 | 1,305 | 93 |
+| LEFT2 | DOWN1 | 0 | 1,386 | 99 |
+
+The separately measured exclusion region is the visible upper field `x=24..39,y=15..28` plus row63, so the nonzero outside-region palette-6 differences show that the displacement is **not solely a static change of the drawn selected object or HUD**. These differences occur in source animation frames14–32 depending on condition. However, they do **not** change any palette-13 pixel across the 34-frame comparison, and all twelve original SDK trials remain `levels_completed=4, NOT_FINISHED` (zero level5/WIN).
+
+**Scope:** original SDK source observation and exact frame-index-aligned comparisons only; no inference of fluid mechanics, private objective, timing equivalence, or general upper-bar irrelevance. This does not substitute for the separately queued [same-game repeated ACTION5 trial #39768996710](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710), whose live outcome must be checked before claiming it.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
