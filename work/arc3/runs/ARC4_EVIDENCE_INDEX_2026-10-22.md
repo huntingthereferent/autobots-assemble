@@ -29,6 +29,12 @@ This index identifies original GitHub sources; it does **not** imply that remote
 - ZIP SHA-256 `a88075b03d5a0b22d9e55bc5797beadf0a138e683af1d790483e2b8e0a38700c`, artifact ID `12405441391`, size `26118` bytes, configured retention **90 days**. Durable independent archive: **NOT VERIFIED**.
 - This establishes an **observed nonadvancing one-step movement**; it does not decode the game objective or support untested movement generalization.
 
+## Verified horizontal source contrast, Lane B draft
+
+[Native run #39754427647](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647); [raw artifact #12414579575](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647/artifacts/12414579575), ZIP SHA256 `4757ad60c0aef5bee60727f659c2c9e1293026ce600fa2eb9e88fa732e2b8f20`. Artifact retention 90 days; durable copy independent of Actions **NOT VERIFIED**.
+
+Twelve original-SDK native resets (six frozen upper-bar words × independently authenticated A/B original entrances), all official stage4, none level5/WIN. With same D3 lower arrangement, observed source top-left 45-pixel cup first fully palette13 at frame25 for upper LEFT1/LEFT1→UP1/LEFT1→DOWN1, not for unchanged, LEFT2, or LEFT1→RIGHT1. Selected native bbox x26–37 for the positive horizontal placement, x29–40 for no horizontal movement or reversed LEFT1→RIGHT1, x23–34 for LEFT2. First measured right/top boundary event frame21 across controls. No hidden mechanical or WIN predicate inference.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
