@@ -24,6 +24,12 @@
       "layer": "ecosystem_social_movement",
       "status": "approved",
       "path": "design/visual-provenance/templates/continuity_social_hub_v1.json"
+    },
+    {
+      "template_id": "meow_lab2_retro_audio_v1",
+      "layer": "interactive_music_instrument",
+      "status": "candidate",
+      "path": "design/visual-provenance/templates/meow_lab2_retro_audio_v1.json"
     }
   ]
 }

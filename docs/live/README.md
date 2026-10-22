@@ -8,9 +8,9 @@ The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, n
 
 [Pony Trail](pony-trail.html) is a self-contained, original little horse-jumping game in HTML Canvas, designed for keyboard and touch. Three ponies, three colorful trails, moving obstacles, carrots and golden horseshoes, pause/restart, optional synthesized audio and a local best-distance score are available. The game has no third-party script, network call, sign-in or chat, and can run from a saved HTML file. It is a creative play page linked from the Workstation header. **Playing it is not a native workstation execution, a scientific experiment or audit evidence.** See [project scope](../../work/projects/horse-riding/README.md).
 
-## Meow Lab 2 — Swallow Sounds keyboard
+## Meow Lab 2 — sound import and retro cat studio
 
-[Meow Lab 2](cat-keyboard.html) is a visibly redesigned playable instrument with four locally synthesized cat calls, four replaceable sound slots, source-file import (browser-decodable WAV/MP3 and other supported formats), waveform display, 13-note sampled keyboard, and the original recorder/sequencer. User audio files remain in browser memory. Import records a source label and SHA-256 digest where WebCrypto is available; **it does not mean the native workstation ran**.
+[Meow Lab 2](cat-keyboard.html) is a playable modern-retro cat music instrument with four locally synthesized cat calls, four replaceable sound slots, source-file import (browser-decodable WAV/MP3 and other supported formats), waveform display, 13-note sampled keyboard, and the original recorder/sequencer. User audio files remain in browser memory. Import records a source label and SHA-256 digest where WebCrypto is available; **it does not mean the native workstation ran**.
 
 The native path is `systems.workspace.audio_sound_bank`, which accepts up to four named, selected PCM16 WAVs (`miso.wav`, `mochi.wav`, `nori.wav`, `bean.wav`), copies an exact source edition, admits separate jobs in the existing runtime journal, executes the reviewed source worker, independently replays each result, writes original lineage and movement events to the existing workspace journal, and exports verified WAVs plus a manifest. A newly imported sound is never implicitly treated as native-verified. The browser WAV-and-JSON handoff export can be fed into the real local worker.
 

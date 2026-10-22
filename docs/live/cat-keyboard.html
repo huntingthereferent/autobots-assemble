@@ -4,7 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#0a1018">
-<meta name="description" content="Tuned cat keyboard with navigable sixteen-bar arrangements, saved branches and chord progressions.">
+<meta name="description" content="Meow Lab 2: a modern-retro cat music studio with four voices, local sample import, and sixteen-bar arrangements.">
+<meta name="visual-template" content="meow_lab2_retro_audio_v1">
 <title>MEOW LAB 2 · Workstation sound keyboard</title>
 <style>
 :root{color-scheme:dark;--ink:#25172e;--base:#201829;--deep:#17111f;--card:#30243b;--card2:#3b2b48;--line:#685575;--lilac:#cab0ff;--pink:#ffb2ba;--mint:#aef1cc;--lemon:#ffe8a0;--cream:#fff6e9;--muted:#c8bad3;--shadow:0 28px 80px #0a0711a6}
@@ -94,18 +95,46 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 @media(max-width:470px){.melody-pin{font-size:10px;min-height:40px}.cadence-steps{gap:2px}.cadence-step{font-size:9px;min-height:32px}}
 
 </style>
+<link rel="stylesheet" href="meowlab2-retro.css">
 </head>
 <body>
 <div class="shell">
 <header class="top"><a href="cat-keyboard.html" class="logo">meow<span>lab 2</span><span aria-hidden="true"> ✳</span></a><div class="nav"><span class="live">OFFLINE INSTRUMENT</span><a href="#soundbank">SOUNDS</a><a href="#play">PLAY</a><a href="#studio">STUDIO</a><a href="#harmony">CHORDS</a><a href="roseys-cat-keyboard.html">ROSEY’S KEYS</a><a href="work.html">← WORKSTATION</a></div></header>
 <main>
-<section class="hero" aria-labelledby="hero-title"><div><div class="eyebrow">Your new favorite instrument</div><h1 id="hero-title">SWALLOW<br><em>SOUNDS.</em><br>PLAY CATS.</h1><p>A real playable sound bank. Four cat voices, thirteen keys, your own samples, waveform motion, and a path into the native A/B workstation.</p><div class="hero-tags"><span class="tag">⌨ TYPE TO PLAY</span><span class="tag">☞ TAP FRIENDLY</span><span class="tag">♫ NO SAMPLES NEEDED</span></div></div>
-<div class="stage" id="cat-stage" aria-label="Animated illustration of the current singing cat"><div class="stage-caption">LIVE CAT CAM / NOT REALLY</div><span class="note a" aria-hidden="true">♪</span><span class="note b" aria-hidden="true">♫</span><span class="note c" aria-hidden="true">✦</span>
-<svg class="cat-svg" viewBox="0 0 390 345" role="img" aria-label="Smiling illustrated cat"><ellipse cx="196" cy="297" rx="123" ry="29" fill="#5b416d45"/><path d="M95 181 Q48 143 68 86 Q78 61 94 57 L144 96 Q191 81 239 96 L298 56 Q326 107 303 177 Q335 209 325 249 Q304 310 196 316 Q90 311 67 250 Q52 213 95 181Z" class="cat-face"/><path d="M84 88 L105 145 L139 108Z M297 85 L287 151 L247 106Z" class="cat-ear"/><ellipse cx="195" cy="251" rx="80" ry="54" class="cat-belly"/><ellipse cx="144" cy="178" rx="13" ry="19" class="cat-eye"/><ellipse cx="246" cy="178" rx="13" ry="19" class="cat-eye"/><ellipse cx="147" cy="171" rx="4" ry="6" fill="white"/><ellipse cx="250" cy="171" rx="4" ry="6" fill="white"/><path d="M182 207 Q195 217 208 207 Q194 199 182 207Z" fill="#a65a7a"/><path class="cat-mouth" d="M195 213 Q187 232 178 218 M195 213 Q204 232 213 218" fill="none" stroke="#623d59" stroke-width="5" stroke-linecap="round"/><ellipse cx="111" cy="215" rx="21" ry="10" fill="#ed9f9f85"/><ellipse cx="280" cy="215" rx="21" ry="10" fill="#ed9f9f85"/><g fill="none" stroke="#6b4c66" stroke-width="3" stroke-linecap="round"><path d="M120 215 L55 204 M118 225 L48 231 M270 215 L334 204 M272 225 L341 232"/></g><path d="M124 277 Q103 310 86 293 M267 277 Q295 310 308 293" fill="none" stroke="#9d6d78" stroke-width="15" stroke-linecap="round"/></svg>
+<section class="hero" aria-labelledby="hero-title"><div><div class="eyebrow">YOUR POCKET CAT STUDIO</div><h1 id="hero-title">TUNE<br><em>MEOWS.</em><br>MAKE MUSIC.</h1><p>A real playable sound bank. Four cat voices, thirteen keys, your own samples, waveform motion, and a path into the native A/B workstation.</p><div class="hero-tags"><span class="tag">⌨ TYPE TO PLAY</span><span class="tag">☞ TAP FRIENDLY</span><span class="tag">♫ NO SAMPLES NEEDED</span></div></div>
+<div class="stage" id="cat-stage" aria-label="Retro cat music illustration that reacts while notes play"><div class="stage-caption">MEOW FM / CHANNEL 02</div><span class="note a" aria-hidden="true">♪</span><span class="note b" aria-hidden="true">♫</span><span class="note c" aria-hidden="true">✦</span>
+<svg class="cat-svg" viewBox="0 0 390 345" role="img" aria-label="Original retro cat DJ with headphones and a tiny star badge">
+<g aria-hidden="true" fill="#fff2be"><path d="M52 78h9v-9h7v9h9v7h-9v9h-7v-9h-9zM313 94h8v-8h6v8h8v6h-8v8h-6v-8h-8z"/><rect x="47" y="155" width="12" height="12"/><rect x="339" y="175" width="12" height="12"/></g>
+<ellipse cx="198" cy="305" rx="126" ry="19" fill="#242744" opacity=".5"/>
+<path d="M291 244 Q350 224 343 276 Q340 301 308 293" fill="none" stroke="#222341" stroke-width="33" stroke-linecap="round"/>
+<path d="M291 244 Q350 224 343 276 Q340 301 308 293" fill="none" stroke="var(--fur,#d79e86)" stroke-width="24" stroke-linecap="round"/>
+<path d="M112 230 Q96 208 82 248 Q70 299 136 307 L255 307 Q318 300 307 244 Q301 209 276 230Z" fill="#222441"/>
+<path d="M118 229 Q95 253 119 298 Q199 324 272 297 Q294 255 273 229Z" fill="var(--fur,#d79e86)"/>
+<path d="M142 255 Q198 240 249 255 L263 300 Q200 325 133 300Z" fill="var(--belly,#fff2e5)"/>
+<path d="M97 241 Q65 263 98 288 M292 245 Q322 263 292 288" fill="none" stroke="#232440" stroke-width="15" stroke-linecap="round"/>
+<path d="M96 242 Q77 267 100 284 M291 243 Q309 265 290 284" fill="none" stroke="var(--fur,#d79e86)" stroke-width="9" stroke-linecap="round"/>
+<path d="M82 121 L79 64 L137 91 Q196 57 255 91 L315 64 L310 122 Q330 150 323 195 Q317 264 196 266 Q73 265 69 195 Q63 151 82 121Z" fill="#262443"/>
+<path class="cat-face" d="M89 120 L88 79 L140 105 Q196 78 252 105 L305 79 L302 120 Q323 149 312 194 Q305 252 196 255 Q85 252 78 194 Q67 150 89 120Z"/>
+<path class="cat-ear" d="M104 109 L102 91 L133 111Z M289 108 L290 90 L260 112Z"/>
+<path d="M98 115 Q196 61 294 115" fill="none" stroke="#252642" stroke-width="23" stroke-linecap="round"/>
+<path d="M98 115 Q196 61 294 115" fill="none" stroke="#ffe1a0" stroke-width="11" stroke-linecap="round"/>
+<rect x="68" y="133" width="38" height="68" rx="13" fill="#272744"/>
+<rect x="77" y="142" width="22" height="51" rx="8" fill="#9ee8dc"/>
+<rect x="288" y="133" width="38" height="68" rx="13" fill="#272744"/>
+<rect x="295" y="142" width="22" height="51" rx="8" fill="#9ee8dc"/>
+<path d="M168 118 L181 126 L171 138 M224 118 L210 126 L220 138" stroke="#24243f" stroke-width="5" fill="none" stroke-linecap="round"/>
+<ellipse cx="150" cy="178" rx="18" ry="25" class="cat-eye"/><ellipse cx="242" cy="178" rx="18" ry="25" class="cat-eye"/>
+<ellipse cx="155" cy="169" rx="6" ry="9" fill="#fff6ee"/><ellipse cx="247" cy="169" rx="6" ry="9" fill="#fff6ee"/>
+<ellipse cx="117" cy="207" rx="22" ry="12" fill="#ff9bad" opacity=".75"/><ellipse cx="275" cy="207" rx="22" ry="12" fill="#ff9bad" opacity=".75"/>
+<path d="M183 207 Q196 221 210 207 Q197 200 183 207Z" fill="#5c3b63"/>
+<path class="cat-mouth" d="M196 217 Q183 235 174 222 M196 217 Q210 235 218 222" fill="none" stroke="#28243b" stroke-width="5" stroke-linecap="round"/>
+<g stroke="#302943" stroke-width="3" stroke-linecap="round" fill="none"><path d="M110 221 L55 213 M109 232 L54 237 M282 221 L337 213 M284 232 L339 237"/></g>
+<path d="M194 277 l7 -13 7 13 14 2 -10 10 3 13 -14 -6 -13 6 2 -13 -10 -10Z" fill="#ffe2a3" stroke="#302943" stroke-width="3"/>
+</svg>
 <div id="stage-name" class="stage-voice">MISO IS READY TO SING</div></div></section>
 
-<section class="soundbank" id="soundbank" aria-label="Swallow Sounds audio bank">
-<div class="bank-header"><div><div class="eyebrow">A/B WORKSTATION / SOUND INTAKE / V2</div><h2 class="bank-title">SWALLOW <span>SOUNDS.</span></h2><p class="bank-lead">Four editable sound slots. Start with four original synthesized cat calls, or swallow your own WAV/MP3. The entire keyboard will play the selected sound across thirteen pitches.</p></div><span class="bank-pill">4 SOUND SLOTS · 13 PITCHES</span></div>
+<section class="soundbank" id="soundbank" aria-label="Local sound import bank">
+<div class="bank-header"><div><div class="eyebrow">A/B WORKSTATION / SOUND INTAKE / V2</div><h2 class="bank-title">YOUR <span>SOUND BANK.</span></h2><p class="bank-lead">Four editable sound slots. Start with original synthesized cat calls or import your own WAV/MP3. Play your sound across thirteen tuned keys.</p></div><span class="bank-pill">4 SOUND SLOTS · 13 PITCHES</span></div>
 <div class="bank-grid"><div>
 <div class="bank-scope"><div class="bank-scope-head"><span id="wave-title">MISO / ORIGINAL SOUND</span><span id="wave-length">READY TO PLAY</span></div><canvas id="sound-wave" width="900" height="190" aria-label="Waveform of selected sound"></canvas></div>
 <div class="bank-slots" id="bank-slots" aria-label="Cat sound slots">
@@ -118,14 +147,14 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 <label>DESTINATION SOUND SLOT<select id="bank-target"><option value="miso">01 · Miso</option><option value="mochi">02 · Mochi</option><option value="nori">03 · Nori</option><option value="bean">04 · Bean</option></select></label>
 <label>IMPORT WAV / MP3 SOURCE<input type="file" id="sound-file" accept="audio/wav,audio/mpeg,audio/ogg,audio/flac,.wav,.mp3,.ogg,.flac"></label>
 <label>CLIP START POSITION <span id="clip-position-label">0%</span><input type="range" id="clip-position" min="0" max="100" value="0"></label>
-<div class="bank-actions"><button type="button" class="small-btn" id="swallow-sound">SWALLOW INTO SLOT</button><button type="button" class="small-btn" id="audition-sound">▶ AUDITION</button><button type="button" class="small-btn" id="reset-sound">↻ ORIGINAL</button></div>
+<div class="bank-actions"><button type="button" class="small-btn" id="import-sound">IMPORT INTO SLOT</button><button type="button" class="small-btn" id="audition-sound">▶ AUDITION</button><button type="button" class="small-btn" id="reset-sound">↻ ORIGINAL</button></div>
 <div class="bank-status" id="bank-status" role="status">Choose an imported sound or play an original cat call.</div><div class="bank-evidence" id="bank-evidence">SOURCE: ORIGINAL MATHEMATICAL SYNTHESIS / NOT A SUNO BACKEND</div>
 <button type="button" class="bank-export" id="handoff-sound">↓ EXPORT PCM16 WAV + MANIFEST</button>
 <p class="bank-help">To obtain a native PASS, process the exported WAV through <code>systems.workspace.audio_motion_bridge</code>. Importing or clicking does not itself run a workstation worker.</p>
 </div></div>
 </section>
 <section id="play" class="instrument card" aria-labelledby="play-title"><div class="section-head"><div><h2 id="play-title">The cat keyboard <span aria-hidden="true">🐾</span></h2><p>Choose your vocalist, then give those paws a workout.</p></div><span class="chip" id="note-count">13 KEYS · 1 OCTAVE</span></div>
-<div class="cat-picker" role="group" aria-label="Cat vocalist"><button type="button" class="cat-btn" data-cat="miso" aria-pressed="true" style="--tone:#f7bd9d"><span class="avatar" aria-hidden="true">🐱</span><span><strong>Miso</strong><small>Classic meow</small></span></button><button type="button" class="cat-btn" data-cat="mochi" aria-pressed="false" style="--tone:#f5daf5"><span class="avatar" aria-hidden="true">😺</span><span><strong>Mochi</strong><small>Little squeak</small></span></button><button type="button" class="cat-btn" data-cat="nori" aria-pressed="false" style="--tone:#c7b6d7"><span class="avatar" aria-hidden="true">😼</span><span><strong>Nori</strong><small>Velvet croon</small></span></button><button type="button" class="cat-btn" data-cat="bean" aria-pressed="false" style="--tone:#ffe1a8"><span class="avatar" aria-hidden="true">😸</span><span><strong>Bean</strong><small>Drama queen</small></span></button></div>
+<div class="cat-picker" role="group" aria-label="Cat vocalist"><button type="button" class="cat-btn" data-cat="miso" aria-pressed="true" style="--tone:#f7bd9d"><span class="avatar" aria-hidden="true"><span class="mini-cat"></span></span><span><strong>Miso</strong><small>Classic meow</small></span></button><button type="button" class="cat-btn" data-cat="mochi" aria-pressed="false" style="--tone:#f5daf5"><span class="avatar" aria-hidden="true"><span class="mini-cat"></span></span><span><strong>Mochi</strong><small>Little squeak</small></span></button><button type="button" class="cat-btn" data-cat="nori" aria-pressed="false" style="--tone:#c7b6d7"><span class="avatar" aria-hidden="true"><span class="mini-cat"></span></span><span><strong>Nori</strong><small>Velvet croon</small></span></button><button type="button" class="cat-btn" data-cat="bean" aria-pressed="false" style="--tone:#ffe1a8"><span class="avatar" aria-hidden="true"><span class="mini-cat"></span></span><span><strong>Bean</strong><small>Drama queen</small></span></button></div>
 <div class="desk-controls"><div class="control-group"><span class="control-label">OCTAVE</span><button type="button" class="small-btn" id="octave-down" aria-label="Lower octave">−</button><span id="octave-display" class="octave" aria-live="polite">C4</span><button type="button" class="small-btn" id="octave-up" aria-label="Raise octave">+</button></div><div class="control-group"><label class="control-label" for="volume">VOLUME</label><input type="range" id="volume" class="vol" min="0" max="100" value="68" aria-label="Master volume"><label class="toggle"><input type="checkbox" id="echo"> Echo</label><label class="toggle"><input type="checkbox" id="purr"> Purr</label></div></div>
 <div class="keyboard-rail"><div class="piano" id="piano" role="group" aria-label="Chromatic meow keyboard, C through C one octave higher"></div></div>
 <div class="display-bar"><strong id="now-playing" aria-live="polite">♪ READY TO MEOW</strong><span id="audio-status" role="status">Tap a key to enable sound</span></div><p class="hint"><strong>Computer keys:</strong> A W S E D F T G Y H U J K &nbsp;·&nbsp; Touch and drag across the piano &nbsp;·&nbsp; Multiple notes at once</p>
@@ -1047,11 +1076,11 @@ function handoffSample(){
   bankMessage('WAV and source manifest exported. Native verification has NOT run in this browser.');
  });
 }
-async function swallowSound(){
+async function importSound(){
  const file=$('sound-file').files?.[0];
- if(!file){bankMessage('Choose your own WAV/MP3 before swallowing. Originals already work.');return}
+ if(!file){bankMessage('Choose your own WAV/MP3 before importing. Originals already work.');return}
  if(soundPreparing)return;
- soundPreparing=true;$('swallow-sound').disabled=true;
+ soundPreparing=true;$('import-sound').disabled=true;
  try{
   if(file.size<128||file.size>25_000_000)throw Error('Audio source must be 128 bytes – 25 MB');
   if(!unlockAudio())throw Error('Browser audio unavailable');
@@ -1069,10 +1098,10 @@ async function swallowSound(){
   const slot=$('bank-target').value;
   releaseAll();soundSlots[slot]={buffer:clip,root:60,origin:'local-file',source:file.name.slice(0,90),sha:hash};
   selectSoundSlot(slot);
-  bankMessage('Swallowed '+file.name+' → '+SOUND_NAMES[slot]+' · '+length+' mono frames · unverified browser import');
+  bankMessage('Imported '+file.name+' → '+SOUND_NAMES[slot]+' · '+length+' mono frames · unverified browser import');
   status('Imported source selected · play the keyboard');
  }catch(e){bankMessage('Source not accepted: '+e.message)}
- finally{soundPreparing=false;$('swallow-sound').disabled=false}
+ finally{soundPreparing=false;$('import-sound').disabled=false}
 }
 function auditionSound(){
  if(!unlockAudio())return;
@@ -1090,7 +1119,7 @@ function bindSoundBank(){
  for(const btn of document.querySelectorAll('.bank-slot'))btn.addEventListener('click',()=>{if(unlockAudio())selectSoundSlot(btn.dataset.slot)});
  $('bank-target').addEventListener('change',e=>{if(unlockAudio())selectSoundSlot(e.target.value)});
  $('clip-position').addEventListener('input',e=>$('clip-position-label').textContent=e.target.value+'%');
- $('swallow-sound').addEventListener('click',swallowSound);
+ $('import-sound').addEventListener('click',importSound);
  $('audition-sound').addEventListener('click',auditionSound);
  $('reset-sound').addEventListener('click',resetSound);
  $('handoff-sound').addEventListener('click',handoffSample);

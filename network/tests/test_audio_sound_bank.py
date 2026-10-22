@@ -19,7 +19,7 @@ def write_wave(path, f=220):
         w.writeframes(struct.pack("<"+"h"*len(values),*values))
 
 
-class SwallowSoundsTests(unittest.TestCase):
+class SoundBankIntakeTests(unittest.TestCase):
     def test_four_sources_move_through_real_workstation(self):
         with TemporaryDirectory() as temp:
             root=Path(temp);src=root/"input";src.mkdir()

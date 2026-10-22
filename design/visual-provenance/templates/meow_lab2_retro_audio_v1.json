@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "template_id": "meow_lab2_retro_audio_v1",
+  "name": "Meow Lab 2 — Modern-Retro Cat Studio",
+  "layer": "interactive_music_instrument",
+  "status": "candidate",
+  "intent": "Make Meow Lab 2 feel like Rosey's own playable retro music hardware: distinctive drawn cat musicians, an inviting performance surface and readable sixteen-bar music tools. Source receipts and audio behavior remain independent of the presentation.",
+  "witnesses": [
+    {
+      "kind": "internal",
+      "source": "docs/live/cat-keyboard.html (pre-redesign at commit 217b30ade99d2eae8af2a90d61a6a262712545ee)",
+      "observed_on": "2026-10-21",
+      "notes": "Direct source audit found mixed purple/teal skins, a generic smiling SVG cat, four emoji cat selectors and imported-sound language using 'swallow'."
+    },
+    {
+      "kind": "internal",
+      "source": "docs/live/roseys-cat-keyboard.html",
+      "observed_on": "2026-10-21",
+      "notes": "Sibling playable instrument establishes Rosey's playful cat-music identity and accessible keyboard behavior, not a copy target."
+    },
+    {
+      "kind": "internal",
+      "source": "network/tests/test_meow_lab_browser.py",
+      "observed_on": "2026-10-21",
+      "notes": "Executable witness for keyboard, sound import, download, storage, 16-bar navigation and melody pinning; presentation must not break these interactions."
+    }
+  ],
+  "grammar": {
+    "layout": "Single strong instrument headline and animated illustration, then sound bank, cat selection/keyboard, recording, melody and arrangement tools; mobile stacks without hiding capabilities.",
+    "hierarchy": "Play and sample selection are immediately legible. Advanced sixteen-bar editing stays accessible below the performance surface.",
+    "density": "Expressive poster-like top section; compact, labeled workstation controls where editing requires precision.",
+    "controls": "Hardware-like square buttons and visible active states; readable keyboard note markers, cat voice buttons, file import, waveform and clear source status.",
+    "surface": "Flat midnight-plum ink, cream, peach, mint and lilac; small grid, hard offset shadows, cassette/arcade labels. No stock imagery, glossy AI gradient cards or branded assets.",
+    "typography": "Friendly heavyweight display lettering for personality; high-contrast monospace for musical state and evidence data.",
+    "illustration": "Original hand-built cat DJ with headphones, star badge and waveform-ready animation, plus four CSS-drawn miniature face marks; colors track selected voice.",
+    "motion": "Brief singing response to notes; static, comprehensible state under prefers-reduced-motion.",
+    "evidence": "Imported browser audio shows local-file receipt and remains unverified; only native workstation handoff can produce independent execution evidence."
+  },
+  "avoid": [
+    "generic emoji as primary character identity",
+    "borrowed verbs that hide import semantics",
+    "unrelated product branding",
+    "neon-gradient dashboard clichés",
+    "invented native PASS states",
+    "screenshot copying or unlicensed character art",
+    "decorative motion that obscures controls"
+  ],
+  "adaptation_rules": [
+    "Preserve all current sound synthesis, sample import, source manifests, download and native handoff behavior.",
+    "Keep the thirteen-note keyboard, sixteen chord bars, eight melody bars, saved branches and per-bar cadence semantics intact.",
+    "Use plain source verbs: import into a browser slot, export a WAV/manifest, and admit to a native worker; never collapse these distinct events.",
+    "Draw the cat characters locally; do not import emoji illustrations, stock mascots, trademarks or proprietary sound assets.",
+    "Expose song-state and selected cat states in text and aria attributes, not solely through color.",
+    "Honor narrow mobile layouts and reduced motion.",
+    "Keep visual verification provisional until screenshot review and Chromium interaction checks pass."
+  ],
+  "review": {
+    "confidence": "medium",
+    "notes": "Code-level and visual-contract audit completed on 2026-10-21. Candidate awaiting rendered screenshot review; no claim of external style-source observation or approved native result."
+  }
+}

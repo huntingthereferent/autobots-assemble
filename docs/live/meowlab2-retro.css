@@ -1,0 +1,133 @@
+/* Meow Lab 2 / modern-retro cat studio
+   Hand-drawn interface grammar: cassette hardware, arcade labels, flat inks.
+   Layout and characters are original; no third-party visual assets. */
+:root{
+  color-scheme:dark;--ink:#18182c;--base:#17182e;--deep:#0e1021;
+  --card:#282a48;--card2:#343756;--line:#72779a;
+  --lilac:#c3b7ff;--pink:#ffa9b9;--mint:#98ead9;
+  --lemon:#ffe2a3;--cream:#fff4e9;--muted:#d2d0df;
+  --shadow:7px 8px 0 #0b0c1a;
+}
+body{
+  background:#181a32;
+  background-image:repeating-linear-gradient(90deg,transparent 0 61px,#ffffff08 62px 63px),
+    repeating-linear-gradient(0deg,transparent 0 61px,#ffffff08 62px 63px);
+  color:var(--cream);
+  font-family:"Trebuchet MS",Verdana,system-ui,sans-serif;
+}
+.shell{max-width:1420px}
+.top{border-bottom:2px solid #73779d;padding:18px 0 19px;margin-bottom:22px}
+.logo{font:1000 23px/1 "Trebuchet MS",Verdana,sans-serif;letter-spacing:-.065em;text-transform:lowercase}
+.logo span{color:var(--pink)}.logo span:last-child{color:var(--lemon)}
+.nav{gap:7px}.nav a{border:1px solid #777c9f;border-radius:7px;background:#252743;color:#f9ebed}
+.nav a:hover{background:#404168;color:var(--lemon)}
+.live{color:var(--mint)}.live:before{border-radius:2px}
+.eyebrow{color:var(--lemon)}
+.hero{gap:22px;grid-template-columns:minmax(0,1fr) minmax(280px,.72fr);margin-bottom:25px}
+.hero h1{font-family:Impact,"Arial Black","Trebuchet MS",sans-serif;font-weight:900;font-size:clamp(53px,7vw,102px);line-height:.91;letter-spacing:-.035em;text-transform:uppercase;margin:17px 0 24px}
+.hero h1 em{color:var(--pink);text-shadow:4px 4px 0 #593d63}
+.hero p{color:#e0dcea;font-size:15px}
+.tag{border:1px solid #7d82a6;border-radius:6px;background:#242741;color:var(--lemon)}
+.stage{
+  background:#5c5a92;
+  background-image:linear-gradient(#ffffff10 1px,transparent 1px),linear-gradient(90deg,#ffffff10 1px,transparent 1px);
+  background-size:22px 22px;
+  min-height:335px;border:3px solid var(--lemon);border-radius:15px;
+  box-shadow:8px 9px 0 #080c21;overflow:hidden;
+}
+.stage:before{inset:11px;border:2px solid #e8d3aa88;border-radius:6px}
+.stage:after{
+  content:"STEREO • 02";position:absolute;top:19px;right:17px;
+  font:900 11px ui-monospace,monospace;letter-spacing:.11em;color:#fff1d2;
+}
+.stage-caption{z-index:1;color:#fff1d2;font-size:10px;top:20px;left:20px}
+.stage-voice{z-index:1;bottom:12px;left:10%;right:10%;background:#242943;
+  border:2px solid #f0dba7;border-radius:4px;padding:6px 4px;color:var(--mint);
+  font:900 12px ui-monospace,monospace;letter-spacing:.06em}
+.cat-svg{width:min(84%,345px);height:auto;filter:drop-shadow(6px 8px 0 #20244377)}
+.stage .note{color:var(--lemon);opacity:.87}
+.stage .note.a{left:9%;top:27%}.stage .note.b{right:9%;top:33%}
+.card,.soundbank{
+  background:#292b49;border:2px solid #8588ad;border-radius:13px;
+  box-shadow:6px 6px 0 #0e1024;
+}
+.instrument{margin-top:20px}
+.section-head h2,.studio h2,.harmony h2{font-family:"Trebuchet MS",Verdana,sans-serif;letter-spacing:-.045em}
+.chip,.bank-pill{border:1px solid var(--mint);border-radius:5px;color:var(--mint)}
+.cat-btn,.bank-slot{
+  border:2px solid #777ba1;border-radius:9px;background:#353756;box-shadow:3px 3px 0 #17182d;
+  transition:background .12s,transform .12s;
+}
+.cat-btn:hover,.bank-slot:hover{background:#47476d;transform:translateY(-2px)}
+.cat-btn[aria-pressed=true],.bank-slot[aria-pressed=true]{
+  background:#49446a;border:2px solid var(--pink);padding:12px 13px;
+  box-shadow:inset 0 0 0 1px #ffe7b2,3px 3px 0 #15162a;
+}
+.cat-btn .avatar{
+  width:49px;height:49px;border-radius:5px;position:relative;
+  background:#1f2440;border:1px solid #c6b6d8;overflow:hidden;color:transparent;font-size:0;
+}
+.mini-cat{display:block;position:absolute;left:8px;top:9px;width:31px;height:31px;
+  background:var(--tone);clip-path:polygon(0 0,30% 20%,70% 20%,100% 0,100% 100%,0 100%)}
+.mini-cat:before{
+  content:"";position:absolute;top:16px;left:7px;width:4px;height:5px;background:#29243b;
+  box-shadow:14px 0 0 #29243b;
+}
+.mini-cat:after{
+  content:"";position:absolute;left:13px;top:23px;width:7px;height:4px;
+  border:2px solid #29243b;border-top:0;border-radius:0 0 7px 7px;
+}
+.cat-btn small{color:#ddd7e8}
+.small-btn,.action.alt{background:#3d4262;border:1px solid #969bbb;color:var(--cream);border-radius:6px}
+.small-btn:hover,.action.alt:hover{background:#535779}
+.action,.bank-export{background:var(--pink);color:#221a2e;border:2px solid #fcebd3;border-radius:7px;box-shadow:3px 3px 0 #16192a}
+.action.mint{background:var(--mint)}.action:hover,.bank-export:hover{filter:brightness(1.06)}
+.keyboard-rail{background:#10142a;border:2px solid #aaa0c4;border-radius:10px}
+.white-key{background:#fff3e3;border:2px solid #292b47;border-top:0;box-shadow:inset 0 -10px 0 #d2c3c1}
+.white-key.is-pressed{background:var(--lemon)}
+.black-key{background:#373750;border-color:#1c1a2e;box-shadow:inset 0 -7px 0 #141426,4px 5px 8px #090c19}
+.black-key.is-pressed{background:var(--lilac)}
+.display-bar,.tape,.bank-scope,.bank-editor,.layer-board,.branch-panel,.melody-editor-bar,.cadence-panel{
+ background:#20243f;border:1px solid #777d9f;border-radius:8px
+}
+.soundbank{margin:18px 0 23px;padding:clamp(18px,2.8vw,28px)}
+.bank-title{font-family:Impact,"Arial Black",sans-serif;letter-spacing:.005em}
+.bank-title span{color:var(--pink)}
+.bank-lead,.bank-help{color:#dfdae5}
+.bank-scope-head{background:#373857;color:#fff2d4;border-color:#767a9c}
+#sound-wave{background:#141a31;background-image:linear-gradient(#77779a30 1px,transparent 1px),
+ linear-gradient(90deg,#77779a30 1px,transparent 1px);background-size:30px 30px}
+.bank-slot[aria-pressed=true]{padding:10px}
+.bank-editor select,.harmony select,.harmony input[type=text],.bar-actions input[type=text],
+.branch-fields input,.branch-fields select,.cadence-head select{
+ background:#343754;border-color:#9393ad;color:var(--cream);border-radius:6px;
+}
+.bank-editor input[type=file]::file-selector-button{background:var(--lemon);color:#24223b}
+.bank-evidence{color:#c9cfdb}
+.bank-status{color:#d8e6e6}
+.bank-export{background:var(--mint)}
+.harmony .chord-list .bar-tile,.chord-tile{
+ background:#303451;border:1px solid #777d9f;border-radius:7px
+}
+.harmony .chord-list .bar-tile.selected{background:#4a496c;border:2px solid var(--mint)}
+.layer-cell,.step,.cadence-step{background:#343653;border-color:#757b9b}
+.step.on,.cadence-step.on{background:var(--pink);border-color:var(--lemon);color:#22243c}
+.melody-pin{background:#34385b;border:1px solid #8588a6;border-radius:6px}
+.melody-pin.is-selected{background:#585481;border-color:var(--mint)}
+.footer{border-top:1px solid #777c9c;padding-top:18px;color:#d5cddd}
+@media(max-width:850px){
+ .hero{grid-template-columns:1fr}
+ .stage{min-height:295px}
+ .hero h1{font-size:clamp(53px,12vw,87px)}
+}
+@media(max-width:520px){
+ .stage{min-height:265px}
+ .cat-svg{width:min(80%,270px)}
+ .cat-btn[aria-pressed=true]{padding:8px}
+ .cat-btn .avatar{width:43px;height:43px}
+ .mini-cat{left:5px;top:6px}
+ .nav a{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+ .stage.singing .cat-svg{animation:none}
+}
