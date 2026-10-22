@@ -694,13 +694,13 @@ footer{border-top-color:#253942}
   const SOURCE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/research-live.json";
   const ARCHIVE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/workflow-runs-index.json";
   const ARCHIVE_CHECK=15*60*1000; // Source index is published by a scheduled Actions job.
-  const PERIOD=120000; // GitHub API budget: one background source check per two minutes.
+  const PERIOD=300000; // Five-minute polling to protect the public GitHub API allowance.
   const MAX_CATALOG_PAGE=100;
   const $=id=>document.getElementById(id);
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
     checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],
     catalog:[],catalogLoaded:false,rateLimitUntil:0,lastAttempt:0,
-    archiveLoading:false,archiveComplete:false,archiveAt:null,archiveIndexed:0,archiveError:null,liveAvailable:false,
+    archiveLoading:false,archiveComplete:false,archiveAt:null,archiveIndexed:0,archiveError:null,liveAvailable:false,liveError:null,
     runVisible:20,catalogVisible:16,recordVisible:16,movementVisible:18,wallVisible:12,
     selectedUpdated:null,catalogNextPage:2,catalogExhausted:false,catalogTotal:null,catalogLoading:false,followups:new Map()};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
@@ -874,7 +874,7 @@ footer{border-top-color:#253942}
       if(app.latestPage.length)mergeRuns(app.latestPage);
       app.archiveComplete=true;app.archiveAt=doc.collected_at;
       app.archiveIndexed=doc.indexed_count;app.olderExhausted=true;
-      $("feed-error").hidden=true;
+      if(!app.liveAvailable)showRecordedSource();
     }catch(e){
       app.archiveError=e.message;
       // Do not claim the first public API page is a complete source archive.
@@ -1121,6 +1121,22 @@ footer{border-top-color:#253942}
       if(selected&&app.commitCache.has(selected.head))renderRevision(selected,app.commitCache.get(selected.head));}
     catch(e){$("research-scope").textContent="Research data unavailable: "+e.message;if(!app.research){$("research-records").replaceChildren(el("p","Original record data unavailable.","no-source"));$("research-walls").replaceChildren(el("p","Original wall data unavailable.","no-source"))}}}
 
+  // Historical source data remains inspectable, without claiming a live queue state.
+  function showRecordedSource(){
+    const archived=app.archiveComplete,available=archived||app.runs.length>0;
+    $("live-dot").className=available?"indicator":"indicator error";
+    $("feed-state").textContent=archived?"Archive available · live check failed":
+      available?"Recorded runs · live check failed":"Source unavailable";
+    $("last-read").textContent=archived?"archive "+safeDate(app.archiveAt):
+      app.checked?"last verified "+safeDate(new Date(app.checked).toISOString()):"no verified source yet";
+    $("feed-error").hidden=false;
+    const retained=archived?"Published archive collected "+safeDate(app.archiveAt)+". ":
+      available?"Previously verified run records remain inspectable. ":"No execution records are currently accessible. ";
+    $("feed-error").textContent="Live GitHub check failed"+(app.liveError?": "+app.liveError:"")+". "+
+      retained+"Queued and running counts are unknown until a successful API check. Archived statuses are historical, not live.";
+    renderMetrics();
+  }
+
   function updateNextCheck(){
     const next=Math.max((app.lastAttempt||0)+PERIOD,app.rateLimitUntil||0);
     const remaining=Math.max(0,Math.ceil((next-Date.now())/1000));
@@ -1135,7 +1151,7 @@ footer{border-top-color:#253942}
       const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
       app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
       app.latestPage=runs;
-      app.checked=Date.now();app.liveAvailable=true;
+      app.checked=Date.now();app.liveAvailable=true;app.liveError=null;
       mergeRuns(runs);
       app.rateLimitUntil=0;
       if(runs.length<100&&app.nextPage===2&&!app.archiveComplete)app.olderExhausted=true;
@@ -1152,11 +1168,9 @@ footer{border-top-color:#253942}
         await selectRun(app.selection);
       }
     }catch(e){
-      $("live-dot").className="indicator error";
-      $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
-      app.liveAvailable=false;renderMetrics();
+      app.liveAvailable=false;app.liveError=e.message;
       if(/403|429|rate limit/i.test(e.message))app.rateLimitUntil=Date.now()+15*60*1000;
-      $("feed-error").textContent="Could not refresh the execution source: "+e.message+". Displayed results may be stale; no current status inferred.";
+      showRecordedSource();
       if(!app.runs.length)$("runs").replaceChildren(el("p","No verified execution sample loaded.","no-source"));
     }finally{
       // The source observation spans both GitHub runs and the research projection.
