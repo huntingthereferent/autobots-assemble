@@ -81,7 +81,9 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
         version_id = str(metadata.get("worker_version") or "")
         edition = known.get((worker_id, version_id))
         pinned = metadata.get("edition_fingerprint")
-        if edition is None:
+        if metadata.get("source_system") == "inspector-gadget":
+            source_state = "GITHUB_RUN_OBSERVED" if state.output.get("source_verified") is True else "GITHUB_RUN_UNVERIFIED"
+        elif edition is None:
             source_state = "EDITION_NOT_REGISTERED"
         elif edition["state"] != "AVAILABLE":
             source_state = "EDITION_UNREADABLE"
@@ -100,7 +102,8 @@ def workstation_snapshot(*, root: str | Path, runtime: Any,
             "required_relation": handoff.required_relation,
             "source_system": metadata.get("source_system"),
             "preferred_selection_event": metadata.get("preferred_selection_event"),
-            "realization": "simulated" if metadata.get("source_system") == "factory"
+            "realization": "source-observation" if metadata.get("source_system") == "inspector-gadget"
+                           else "simulated" if metadata.get("source_system") == "factory"
                            else "cryptographic-check" if metadata.get("native_evidence_verifier") == "integrated-cp30-three-scope-attestation-v1"
                            else "computed",
             "actor_id": handoff.to_actor,
