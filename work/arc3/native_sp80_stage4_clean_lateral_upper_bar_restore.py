@@ -144,13 +144,13 @@ def main():
             }
             records.append(row)
             for k,f in raw.items():frames_all[f"{case}_{witness}_{k}"]=f
-            print("ORIGINAL_SP80_CLEAN_BRANCH_L_CASE "+json.dumps({
+            print("ORIGINAL_SP80_CLEAN_LATERAL_UPPER_BAR_CASE "+json.dumps({
                 "case":case,"witness":witness,
                 "sdk_level":row["genuine_original_sdk_final_level"],
                 "sdk_state":row["genuine_original_sdk_final_state"],
                 "source":observed,
             },sort_keys=True),flush=True)
-    if len(records)!=48 or len(roots)!=1:raise AssertionError("Missing genuine original SDK A/B entries")
+    if len(records)!=18 or len(roots)!=1:raise AssertionError("Missing genuine original SDK A/B entries")
     for case,_ in FROZEN:
         pair=[v for v in records if v["predeclared_native_source_case"]==case]
         if len(pair)!=2 or (
@@ -171,8 +171,8 @@ def main():
         "left_border":r["actual_original_frame_observations"]["first_native_left_border_color_transition"]}
         for r in records if r["actual_original_frame_observations"]["first_four_simultaneous_cup_pixels"] is not None]
     summary={
-        "kind":"TRUE_ORIGINAL_SP80_LEVEL4_CLEAN_MIDDLE_BRANCH_LATERAL_RESTORATION",
-        "authentic_source_antecedent_run":39633351640,
+        "kind":"TRUE_ORIGINAL_SP80_LEVEL4_CLEAN_LATERAL_UPPER_BAR_RESTORATION",
+        "authentic_source_antecedent_run":39633965255,
         "original_sdk_independent_fresh_resets":len(records),
         "prospectively_frozen_original_words":FROZEN,
         "real_original_level4_root_hash":next(iter(roots)),
@@ -187,7 +187,7 @@ def main():
     args.out.parent.mkdir(parents=True,exist_ok=True)
     args.out.write_text(json.dumps(summary,indent=2)+"\n")
     np.savez_compressed(args.out.with_suffix(".npz"),**frames_all)
-    print("ORIGINAL_SP80_CLEAN_BRANCH_L_SUMMARY "+json.dumps({
+    print("ORIGINAL_SP80_CLEAN_LATERAL_UPPER_BAR_SUMMARY "+json.dumps({
         k:v for k,v in summary.items() if k not in ("prospectively_frozen_original_words","original_native_full_receipts")
     },sort_keys=True),flush=True)
 if __name__=="__main__":
