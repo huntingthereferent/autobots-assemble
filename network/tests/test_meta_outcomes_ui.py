@@ -32,13 +32,17 @@ class DailyOutcomeUI(unittest.TestCase):
         self.assertIn("later.href=r.laterSuccess.url",HTML)
         self.assertIn("not proof",HTML.lower())
 
-    def test_historical_failures_are_neutral_and_followup_passes_visible(self):
-        self.assertIn('LATER PASSES / RECENT',HTML)
-        self.assertIn('id="followup-count"',HTML)
-        self.assertIn('HISTORICAL FAILED RUNS / TODAY',HTML)
+    def test_red_counter_is_current_health_not_historical_failures(self):
+        self.assertIn("CURRENT ISSUES",HTML)
+        self.assertIn('id="current-open"',HTML)
+        self.assertIn('id="historical-failed"',HTML)
+        self.assertIn('meta-observations/health.json',HTML)
+        self.assertIn('id="health-list"',HTML)
+        self.assertIn('id="inspect-open"',HTML)
+        self.assertIn("clears its earlier failed state",HTML)
         self.assertIn('label:"PAST FAILURE",cls:"neutral"',HTML)
         self.assertIn('label:"LATER PASS",cls:"good"',HTML)
-        self.assertIn('Matching workflow + branch · latest 100/source',HTML)
+        self.assertNotIn('id="followup-count"',HTML)
         self.assertNotIn('label:r.conclusion?.toUpperCase()||"FAILED",cls:"bad"',HTML)
 
 if __name__=="__main__":
