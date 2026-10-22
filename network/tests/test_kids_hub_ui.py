@@ -27,10 +27,9 @@ class KidsHubTests(unittest.TestCase):
     def test_meta_has_accessible_kids_entry_without_replacing_workstation(self):
         html = META.read_text(encoding="utf-8")
         self.assertIn('href="kids.html">KIDS</a>', html)
-        self.assertIn('id="kids"', html)
-        self.assertIn('class="kids-main-link" href="kids.html"', html)
-        self.assertIn('href="cat-keyboard.html"', html)
-        self.assertIn('href="pony-trail.html"', html)
+        self.assertNotIn('class="kids-access"', html)
+        self.assertNotIn('class="kids-main-link"', html)
+        self.assertIn('href="kids.html">KIDS</a>', html)
         self.assertIn('id="queued"', html)
         self.assertIn('id="running"', html)
         self.assertIn('id="trend"', html)
