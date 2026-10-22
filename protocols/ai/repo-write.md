@@ -4,7 +4,7 @@
 
 Prevent a write from destroying the relation/provenance structure the repository is meant to preserve.
 
-Repository additions are also subject to `ai.james`. Cleanup/removal review is governed separately by `ai.purge`.
+Repository additions must be authorized by the current request and repository evidence. Cleanup/removal review is governed separately by `ai.purge`.
 
 ## Before writing
 
