@@ -27,8 +27,11 @@
     if(samples.length&&t<=samples[samples.length-1].t)return;
     const runs=snapshot.latestPage;
     const known=new Map(runs.map(r=>[r.id,r]));
-    const waiting=runs.filter(r=>status(r)==="queued").length;
-    const working=runs.filter(r=>status(r)==="running").length;
+    const waiting=complete?totals.queued:runs.filter(r=>status(r)==="queued").length;
+    const totals=snapshot.liveTotals;
+    const complete=totals&&Number.isSafeInteger(totals.queued)&&totals.queued>=0&&
+      Number.isSafeInteger(totals.running)&&totals.running>=0;
+    const working=complete?totals.running:runs.filter(r=>status(r)==="running").length;
     // Only count arrivals that we actually see, since an individual completed
     // run might be dropped from a latest-100 API page before the next poll.
     let arrivedNow=0,finishedNow=0;
@@ -49,7 +52,7 @@
     if(firstAt===null){firstAt=t;firstWaiting=waiting;}
     totalSamples++;
     previous=known;
-    samples.push({t,waiting,working,arrivedNow,finishedNow});
+    samples.push({t,waiting,working,arrivedNow,finishedNow,complete:!!complete});
     if(samples.length>WINDOW)samples.shift();
     render();
   }
@@ -67,7 +70,7 @@
       q.style.height=(r.waiting?Math.max(3,r.waiting/high*62):2)+"px";
       running.style.height=(r.working?Math.max(3,r.working/high*62):2)+"px";
       col.title=new Date(r.t).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",hour12:true})+
-        " · "+r.waiting+" queued / "+r.working+" running (latest-page sample)";
+        " · "+r.waiting+" queued / "+r.working+" running ("+(r.complete?"GitHub status totals":"latest-page sample")+")";
       col.append(q,running);target.append(col);
     }
   }
@@ -117,7 +120,7 @@
       }else if(latest.waiting>0&&windowFinishes===0){
         state="NO COMPLETIONS";explanation="A backlog remains, but no completions were observed during the window.";
       }else if(latest.waiting===0&&latest.working===0){
-        state="IDLE";explanation="No queued or running workflow appears in the latest 100-run page.";
+        state="IDLE";explanation="No queued or running workflow appears in the latest source observation.";
       }else if(latest.waiting===0){
         state="NO VISIBLE BACKLOG";explanation="Useful capacity might be waiting for more work; runner capacity is not established.";
       }else{
@@ -135,7 +138,7 @@
     toText("eq-in",arrivalsPerHour===null?"—":numeric(arrivalsPerHour)+"/h");
     toText("eq-out",finishesPerHour===null?"—":numeric(finishesPerHour)+"/h");
     toText("eq-boundary",
-      "Only latest-100 GitHub workflow RUNS sampled during this browser session. "+ 
+      (latest.complete?"Queue/running counts from complete GitHub status-filtered workflow totals. ":"Only latest-100 GitHub workflow RUNS sampled. ")+ 
       "Arrival and completion rates are lower-bound detections between polls; fast runs may be missed. "+
       "All displayed rates and averages use the last sixty minutes of available observations. "+
       "Running and waiting averages are sampled, not measured runner/job utilization. "+
