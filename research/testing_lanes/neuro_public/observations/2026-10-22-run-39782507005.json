@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "PUBLIC_OPENNEURO_METADATA_ONLY",
+  "run_id": 39782507005,
+  "run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39782507005",
+  "source_code_commit": "f1b7181271d60e484f2b41bfac0a94c00909a5eb",
+  "ci_offline_contract": "success",
+  "ci_fixed_source_probe": "success",
+  "observation": {
+    "endpoint": "https://openneuro.org/crn/graphql",
+    "human_imaging_fetched": false,
+    "identity": {
+      "dataset_id": "ds000224",
+      "doi": "10.18112/openneuro.ds000224.v1.0.1",
+      "metadata_fields_confirmed": [
+        "dataset.id",
+        "dataset.name",
+        "snapshot.id",
+        "snapshot.tag",
+        "snapshot.description.DatasetDOI"
+      ],
+      "scientific_results_tested": false,
+      "snapshot_id": "ds000224:1.0.1",
+      "snapshot_tag": "1.0.1",
+      "source_data_admitted": false
+    },
+    "observed_at_utc": "2026-10-22T12:57:52.095906+00:00",
+    "provider": "OpenNeuro",
+    "query_mode": "fixed_public_metadata_only",
+    "raw_response_bytes": 294,
+    "raw_response_sha256": "1cfc7ea2a470186ac613ebd8887ed6578bf0f1d83647a3979d3f500715f1f875",
+    "response_status": 200,
+    "rights_review": "REQUIRED_PER_RECORD",
+    "schema_version": 1,
+    "scientific_status": "NOT_TESTED",
+    "source_data_archived": false,
+    "source_id": "ds000224",
+    "state": "PUBLIC_SNAPSHOT_METADATA_OBSERVED",
+    "version": "1.0.1"
+  },
+  "boundary": "This confirms a fixed public GraphQL dataset/snapshot/DOI identity only; no raw imaging data, files, or participant records were queried or archived. NEURO main lane still needs record-specific research rights, ethics review and scientific study/test selection. Not a neuroscience experiment.",
+  "neuro_parent_lane_scientific_state": "NOT_TESTED",
+  "neuro_parent_lane_dataset_admission": "REQUIRED"
+}
