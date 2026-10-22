@@ -1,0 +1,32 @@
+{
+  "schema": "meta-workstation/handoffs-v1",
+  "source_of_truth": "huntingthereferent/autobots-assemble",
+  "records": [
+    {
+      "id": "AB-20261022-001",
+      "date": "2026-10-22",
+      "kind": "SOURCE_MIRROR",
+      "from": "A",
+      "to": "B",
+      "lane": "WORKSTATION",
+      "status": "VERIFIED",
+      "source_commit": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
+      "description": "All 1,942 original non-workflow files matched by Git blob SHA after replacement on B main. A's workflows were deliberately not activated on B.",
+      "evidence_url": "https://github.com/aeren-research/continuum-oscillator/pull/17"
+    },
+    {
+      "id": "AB-20261022-002",
+      "date": "2026-10-22",
+      "kind": "WORKFLOW_LIBRARY",
+      "from": "A",
+      "to": "B",
+      "lane": "WORKSTATION",
+      "status": "COPIED_INACTIVE",
+      "source_commit": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
+      "description": "All 241 original workflow definitions matched as inactive library files on B. This does not imply 241 active B workflows.",
+      "evidence_url": "https://github.com/aeren-research/continuum-oscillator/actions/runs/39828502339"
+    }
+  ],
+  "next_admission": "B research execution lanes remain unassigned until selected and independently verified.",
+  "privacy": "No private GitHub run contents embedded in public records."
+}
