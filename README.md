@@ -8,6 +8,8 @@ The public work view reads actual GitHub workflow runs and native job/step resul
 
 **Independent research · finite mathematics · language · computational experiments · research infrastructure**
 
+**Start with the [account research report](https://github.com/huntingthereferent/huntingthereferent)** for the referent, mathematical constructions, relationship between lanes, and dated evidence. This repository is the implementation and execution record; its pages should be read through their specific tests and witnesses, not as unrelated products.
+
 ## Research system and evidence
 
 The repository records a developing general-purpose research and construction environment: finite mathematics, language and referent investigations, interactive worlds, software foundations, bounded workers, handoffs, and audit records. Each investigation retains its own evidence and test boundary; a result in one domain is not automatically established in another.
