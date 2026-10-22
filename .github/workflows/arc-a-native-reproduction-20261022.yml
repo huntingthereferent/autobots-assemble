@@ -1,0 +1,26 @@
+name: ARC A native SP80 reproduction
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/arc-a-native-reproduction-20261022.yml'
+  workflow_dispatch:
+jobs:
+  native-reproduction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install native ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Run original native SP80 matched geometry replication
+        run: python -m work.arc3.native_sp80_matched_geometry --out runtime/data/arc3/arc-a-native-reproduction.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc-a-native-reproduction
+          path: runtime/data/arc3/arc-a-native-reproduction.*
+          if-no-files-found: warn
+          retention-days: 14
