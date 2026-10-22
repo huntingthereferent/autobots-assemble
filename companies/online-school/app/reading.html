@@ -1,0 +1,18 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#192840">
+<title>Reading Room · Online School</title><meta name="description" content="A focused reading room with original practice passages and optional voice.">
+<link rel="stylesheet" href="./reading.css"></head><body>
+<header class="top"><a href="./">← School Home</a><span>ONLINE SCHOOL <b>/ READING ROOM</b></span><a href="./practice.html">Practice Lab ↗</a></header>
+<main class="shell"><div class="hero"><p class="tag">WORDS · STORIES · QUESTIONS</p><h1>A story at <em>your pace.</em></h1><p>Read quietly, listen, or tap a word to hear it. No timers or automatic scores. Your answers belong to you.</p></div>
+<div class="layout"><aside class="rail"><h2>Choose your reading</h2><label for="learner">Reader</label><select id="learner"><option value="">Reading learner records…</option></select>
+<label for="story">Pick a story</label><select id="story"></select>
+<div class="controls"><button type="button" id="listen">▶ Hear the story</button><button type="button" id="stop">■ Stop voice</button></div>
+<div class="settings"><label for="size">Text size</label><select id="size"><option value="normal">Comfortable</option><option value="large">Large</option><option value="extra">Extra large</option></select></div>
+<details class="custom"><summary>Use your own passage instead</summary><label for="custom-text">Paste or write a passage (kept on this screen only)</label><textarea id="custom-text" rows="5" maxlength="4000" placeholder="Your own reading text…"></textarea><button type="button" id="use-custom">Use this passage</button><button type="button" id="restore">Return to story</button></details>
+<p id="voice-state" class="small" role="status">Voice support depends on this browser. Reading works without it.</p></aside>
+<section class="reader"><div class="reader-head"><span id="story-level">PRACTICE STORY</span><span>Tap a word for help</span></div><h2 id="story-title">Your story</h2>
+<div class="reading-paper" id="reading-paper" data-size="normal" aria-label="Reading passage"></div>
+<div class="story-question"><p>AFTER READING</p><h3 id="question">What happened in the story?</h3><label for="answer">Explain it your way</label><textarea id="answer" rows="4" maxlength="2200" placeholder="I noticed… I think… The part I remember is…"></textarea></div>
+</section></div>
+<section class="reflection"><div><p class="tag">YOUR OWN RECORD</p><h2>Keep a note of what happened.</h2><p>Saving is optional. It records the reading and the response you choose to share, not a claim that a skill is mastered.</p></div>
+<div><label for="reflection">Something I noticed, found hard, or want to try again</label><textarea id="reflection" rows="3" maxlength="1200" placeholder="I needed help with… / I understood…"></textarea><button id="save" type="button" disabled>Save reading observation</button><p id="save-state" role="status" aria-live="polite"></p></div></section>
+</main><script src="./reading-core.js"></script><script src="./reading.js"></script></body></html>
