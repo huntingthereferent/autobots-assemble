@@ -69,7 +69,14 @@ def make_plan(audit: dict, proposal: dict) -> dict:
     pieces = original_word.strip().split()
     if not pieces or pieces[-1] != "5" or pieces.count("5") != 1:
         raise ValueError("Original word needs exactly one terminal native ACTION5")
-    new_word = " ".join(pieces[:-1] + ["6@" + str(click[0]) + "," + str(click[1]), str(action), "5"])
+    # Continue the already-selected genuine native object. An extra re-click
+    # would alter selection history and confound a one-movement comparison.
+    last_clicks = [part for part in pieces[:-1] if part.startswith("6@")]
+    if not last_clicks or last_clicks[-1] != "6@" + str(click[0]) + "," + str(click[1]):
+        raise ValueError("Proposed click is not the latest genuine selected object")
+    if pieces[-2] not in ("1", "2", "3", "4"):
+        raise ValueError("Selected native object lacks a preceding movement receipt")
+    new_word = " ".join(pieces[:-1] + [str(action), "5"])
     return {
         "kind": "ARC4_SOURCE_PINNED_INTERVENTION_PLAN",
         "source_audit_kind": KIND,
@@ -78,10 +85,11 @@ def make_plan(audit: dict, proposal: dict) -> dict:
         "source_contact_row": row, "contact_x": x, "contact_frame": frame,
         "verified_native_click_xy_from_receipts": click,
         "new_native_action": action,
+        "preserves_existing_native_selection_without_extra_click": True,
         "original_native_action_word": original_word,
         "intervention_native_action_word": new_word,
         "paired_original_sdk_witnesses": ["A", "B"],
-        "limits": "Click is receipt-attested in the frozen source word, but the proposed movement and any effect are untested. Native SDK run required; pixels do not imply success.",
+        "limits": "The existing selected object is source-receipt-attested; one movement is appended without re-clicking. All effects are untested. Only native SDK status counts as progression.",
     }
 
 def main() -> None:
