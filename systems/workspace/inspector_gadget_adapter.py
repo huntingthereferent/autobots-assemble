@@ -15,6 +15,7 @@ import sys
 import urllib.request
 
 from runtime.engine import HandoffRuntime
+from runtime.journal import RuntimeJournal
 from runtime.handoff import EvidenceRecord, ExecutionResult, Handoff
 from systems.workspace.audit_to_action import process
 
@@ -169,7 +170,7 @@ def _verify_result(handoff, result):
         raise ValueError("Inspector Gadget source observation evidence rejected")
 
 
-def activate(selection, *, repo, token, fetcher=fetch_run):
+def activate(selection, *, repo, token, fetcher=fetch_run, journal_path=None):
     """Execute one REAL source-observation worker in the owning workflow context."""
     # Reapply the exact scanner validation to untrusted matrix/event inputs.
     row = _selection({"id": selection.get("finding_id"), "kind": "candidate",
@@ -205,8 +206,9 @@ def activate(selection, *, repo, token, fetcher=fetch_run):
                     "Expected cancellations must not automatically trigger a repair."),
         metadata={"native_evidence_verifier": VERIFIER, "title": "Inspector Gadget source observation",
                   "source_system": "inspector-gadget", "worker_id": "inspector-gadget",
+                  "worker_version": "github-source-v1", "workstation_worker": True,
                   "source_run_id": row["run_id"]})
-    runtime = HandoffRuntime()
+    runtime = HandoffRuntime(event_store=RuntimeJournal(journal_path) if journal_path else None)
     runtime.register_evidence_verifier(VERIFIER, _verify_result)
     runtime.submit(handoff)
     state = runtime.run(job_id, SourceObservationWorker(job_id, repo, token, fetcher))
@@ -232,7 +234,8 @@ def main(argv):
     else:
         selection = json.loads(Path(source).read_text(encoding="utf-8"))
     _write(output, activate(selection, repo=os.environ.get("GITHUB_REPOSITORY", ""),
-                            token=os.environ.get("GITHUB_TOKEN", "")))
+                            token=os.environ.get("GITHUB_TOKEN", ""),
+                            journal_path=Path(output).with_name("inspector-gadget-runtime.jsonl")))
 
 
 if __name__ == "__main__":
