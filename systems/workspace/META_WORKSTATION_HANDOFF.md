@@ -23,6 +23,18 @@ The October 22 verified A source snapshot is `ef00d95d2c2335f9f63ef2b83c8bfa5152
 4. When shifting work between workstations, record lane ID, source repo/ref, destination repo/ref, actual run URL, observation/witness, decision, and open limits. Do not overwrite prior source versions; do not automatically duplicate research.
 5. Use the shared meta viewer as the public, navigation-grade display. Each repository's GitHub Actions journal remains its authoritative execution source. Never copy private logs or credentials into public records without explicit authorization.
 
+## Departure and receipt evidence — same existing pipeline
+
+The canonical source-side handoff journal is [`docs/live/meta-handoffs.json`](../../docs/live/meta-handoffs.json). The [Meta observation journal](https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/handoffs.json) checks its declared departures against the other repository's actual source-owned expectations, content bytes and acknowledgement.
+
+- **Before any data leaves:** write a source-side `DEPARTED` record with unique transfer ID, lane, source and destination repositories, exact source commit and payload SHA-256, source and receiving paths, and UTC departure timestamp. The receiver must never be assumed to know merely because a source workflow was queued.
+- **Before treating the incoming data as expected:** write a matching `expectations[]` record to the *destination's own* `docs/live/meta-handoffs.json` with that same transfer ID, exact SHA, lane and destination path. A missing expectation is distinguishable from missing payload bytes.
+- **After delivery:** check actual receiver content against the source's commit-pinned SHA-256. Only a separate matching receiver `received[]` acknowledgement with its own time admits `RECEIVED_VERIFIED`. A successful GitHub workflow alone cannot stand in for an arrival.
+- **Failure/visibility:** distinguish `DEPARTED_NO_EXPECTATION`, `EXPECTED_NOT_ARRIVED`, `DESTINATION_DIGEST_MISMATCH`, `ARRIVED_UNACKNOWLEDGED`, `ACKNOWLEDGEMENT_MISMATCH`, `ORPHAN_EXPECTATION`, `UNKNOWN_DESTINATION` and an overdue unacknowledged departure. If either account is inaccessible, status is **UNKNOWN**, never zero or successful.
+- **If no data left:** record `BLOCKED_PRE_DEPARTURE` instead of fabricating `DEPARTED`. Never create receiver `EXPECTED` or `RECEIVED` on the source's behalf. The probe currently recorded in the source journal is blocked on second-account access; there has been no new transfer.
+
+The checker is `systems/workspace/meta_transfer.py`, with focused source tests in `network/tests/test_meta_transfer.py`. It is observational: no cron, ChatGPT window, or viewer automatically copies code or admits an ineligible NIH/ARC/WORLD workflow. The existing shared meta viewer shows the check and links to the source evidence.
+
 ## Current execution boundary
 
 The meta workstation is the **default operational screen** for both nodes, not an autonomous scheduler. It shows a combined observed equilibrium timeline and both source-owned GitHub job journals; it is not the sole research proof. It displays GitHub workflows actually visible to its source; it does not create jobs, make a second run counter authoritative, automatically start work on B, or infer scientific validity from workflow success.
