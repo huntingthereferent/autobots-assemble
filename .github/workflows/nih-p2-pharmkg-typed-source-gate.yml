@@ -1,0 +1,80 @@
+name: NIH P2 original PharmKG semantic-type source boundary
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_original_typed_semantics_gate.py'
+      - 'network/tests/test_nih_p2_original_typed_semantics_gate.py'
+      - '.github/workflows/nih-p2-pharmkg-typed-source-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-pharmkg-typed-source-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  original-source-relation-roles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Download source-owner pinned original README and entire training source
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/pharmkg-original" "$RUNNER_TEMP/pharmkg-report"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from systems.workspace import nih_p2_external_pharmkg_heldout_trial as s
+          from systems.workspace import nih_p2_original_typed_semantics_gate as g
+          import os
+          root="https://raw.githubusercontent.com/"+s.ORIGIN+"/"+s.COMMIT+"/"
+          targets={
+              "README.md":("README.md",g.OWNER_README_BLOB),
+              "train.tsv":("data/PharmKG-8k/train.tsv",s.SOURCE_FILES["train.tsv"])
+          }
+          folder=Path(os.environ["RUNNER_TEMP"])/"pharmkg-original"
+          for name,(relative,digest) in targets.items():
+              url=root+relative
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Type-Evidence/1.0"}),timeout=45) as r:
+                  if r.status!=200 or r.geturl()!=url:
+                      raise ValueError("source owner URL changed")
+                  raw=r.read(15_000_001)
+              if len(raw)>15_000_000 or s.git_blob_sha1(raw)!=digest:
+                  raise ValueError("original source blob is unverified")
+              (folder/name).write_bytes(raw)
+          PY
+      - name: Independently recount source roles and reject unsupported type assertions
+        env:
+          PHARMKG_ORIGINAL_README: ${{ runner.temp }}/pharmkg-original/README.md
+          PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/pharmkg-original/train.tsv
+        run: |
+          set -euo pipefail
+          python -m unittest -v network.tests.test_nih_p2_original_typed_semantics_gate
+          python -m systems.workspace.nih_p2_original_typed_semantics_gate \
+            --readme "$PHARMKG_ORIGINAL_README" \
+            --train "$PHARMKG_ORIGINAL_TRAIN" \
+            --output "$RUNNER_TEMP/pharmkg-report/relation-role-profile.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"pharmkg-report/relation-role-profile.json").read_text())
+          assert x["schema"]=="nih-p2-pharmkg-source-role-profile-and-type-evidence-gate-v1"
+          assert x["independent_count_verification"]=="PASS"
+          assert x["type_grounded_metapath_rule_admission"]=="REFUSED_MISSING_SOURCE_OWNER_SEMANTICS"
+          assert x["test_and_valid_used"] is False
+          assert x["clinical_biomedical_entailment_authenticated"] is False
+          assert x["original_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/pharmkg-report" && sha256sum relation-role-profile.json > sha256.txt)
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-typed-source-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/pharmkg-report/
+          retention-days: 30
+          if-no-files-found: warn
