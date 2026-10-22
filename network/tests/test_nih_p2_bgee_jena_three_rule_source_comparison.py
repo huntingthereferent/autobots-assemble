@@ -53,6 +53,37 @@ class JenaThreeRuleExactSourceTests(unittest.TestCase):
         original["full_combined"].remove(premises[1])
         self.assertEqual(set(original["full_combined"].query(trial.CONSTRUCT).graph),set())
 
+    def test_each_single_original_rule_removal_has_distinct_static_consequence_set(self):
+        example,triples=fixture()
+        expected={
+            "omit-genex":{"forward":0,"genomic":0,"inverse":0},
+            "omit-genomic":{"forward":1,"genomic":0,"inverse":1},
+            "omit-inverse":{"forward":1,"genomic":1,"inverse":0},
+        }
+        for mode in trial.PREMISE_MODES:
+            entailed,counts=trial.independently_infer_with_removed_premise(
+                example["full_combined"],triples,mode)
+            self.assertEqual(counts,expected[mode])
+            self.assertEqual(len(entailed),sum(expected[mode].values()))
+            self.assertEqual(len(example["full_combined"]),4)
+            self.assertTrue(all(t in example["full_combined"] for t in triples))
+
+    def test_source_axiom_deletion_cannot_be_silent_if_source_missing(self):
+        original,triples=fixture()
+        original["full_combined"].remove(triples[1])
+        with self.assertRaisesRegex(ValueError,"premises"):
+            trial.independently_infer_with_removed_premise(
+                original["full_combined"],triples,"omit-inverse")
+
+    def test_unsupported_multiple_or_unknown_source_deletion_refused(self):
+        original,triples=fixture()
+        with self.assertRaises(ValueError):
+            trial.independently_infer_with_removed_premise(
+                original["full_combined"],triples,"omit-unknown")
+        with self.assertRaises(ValueError):
+            trial.independently_infer_with_removed_premise(
+                original["full_combined"],triples[:2],"omit-inverse")
+
     def test_real_input_not_a_clinical_outcome_claim(self):
         self.assertNotEqual(trial.GENOMIC,owner.RO_EXPRESSED)
         self.assertNotEqual(trial.GENOMIC,owner.RO_EXPRESSES)
