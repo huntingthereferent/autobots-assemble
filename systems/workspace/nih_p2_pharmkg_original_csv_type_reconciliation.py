@@ -14,6 +14,35 @@ SCHEMA = "nih-p2-pharmkg-original-csv-train-id-type-reconciliation-v1"
 ORIGINAL_RAW_GIT_BLOB = "7ac5b6d87a7d183566229592fb411b5dc9a9742e"
 MAX_BYTES = 27000000
 MAX_ROWS = 600000
+ORIGINAL_OWNER_PREPROCESS_BLOB="8fc71ebd0a90c81ac7e6b5b89185374ee281bfc9"
+
+def original_preprocess_source_projection(raw):
+    """Authenticate author preprocessing contract; never run untrusted source."""
+    import ast
+    if not isinstance(raw,bytes) or source.git_blob_sha1(raw)!=ORIGINAL_OWNER_PREPROCESS_BLOB:
+        raise ValueError("author preprocessing source blob does not match")
+    tree=ast.parse(raw.decode("utf-8"))
+    projections=[]
+    for node in ast.walk(tree):
+        if not isinstance(node,ast.Subscript) or not isinstance(node.value,ast.Name) or node.value.id!="df":
+            continue
+        sl=node.slice
+        if isinstance(sl,(ast.List,ast.Tuple)):
+            values=[x.value for x in sl.elts if isinstance(x,ast.Constant)]
+            if len(values)==len(sl.elts) and len(values)==3:
+                projections.append(values)
+    exact=["Entity1_ID","relation","Entity2_ID"]
+    if projections.count(exact)!=1:
+        raise ValueError("source-owned direct CSV projection was not found uniquely")
+    return {
+        "owner_preprocess_git_blob_sha1":ORIGINAL_OWNER_PREPROCESS_BLOB,
+        "direct_raw_projection_fields":exact,
+        "author_pipeline_source_proven":True,
+        "published_clean_split_lineage_proven":False,
+        "raw_ID_crosswalk_documented_in_author_pipeline":False,
+    }
+
+
 def normalized(value):
     return re.sub(r"[^a-z0-9]", "", value.casefold())
 def reconcile(reader, train):
@@ -79,13 +108,16 @@ def reconcile(reader, train):
         "full_entity_semantic_type_validation_proven":False,
         "original_train_coverage_digest":sha256("\n".join(sorted("\t".join(t) for t in matched)).encode()).hexdigest(),
     }
-def audit(raw_path,train_path):
+def audit(raw_path,train_path,preprocess_path=None):
     raw=Path(raw_path).read_bytes()
     if len(raw)>MAX_BYTES or source.git_blob_sha1(raw)!=ORIGINAL_RAW_GIT_BLOB:
         raise ValueError("original raw author CSV Git blob mismatch")
     train,receipt=source.read_source(train_path,"train.tsv")
     from io import StringIO
     report=reconcile(csv.DictReader(StringIO(raw.decode("utf-8-sig"))),train)
+    if preprocess_path is not None:
+        report["author_original_preprocessing_contract"]=original_preprocess_source_projection(
+            Path(preprocess_path).read_bytes())
     report.update({"schema":SCHEMA,"original_raw_git_blob":ORIGINAL_RAW_GIT_BLOB,
                    "original_train_blob":receipt["git_blob_sha1"],
                    "original_source_commit":source.COMMIT,
@@ -97,9 +129,10 @@ def main():
     p=argparse.ArgumentParser()
     p.add_argument("--raw",required=True,type=Path)
     p.add_argument("--train",required=True,type=Path)
+    p.add_argument("--preprocess",type=Path)
     p.add_argument("--output",required=True,type=Path)
     a=p.parse_args()
-    result=audit(a.raw,a.train)
+    result=audit(a.raw,a.train,preprocess_path=a.preprocess)
     a.output.parent.mkdir(parents=True,exist_ok=True)
     a.output.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
     print(json.dumps({k:result[k] for k in
