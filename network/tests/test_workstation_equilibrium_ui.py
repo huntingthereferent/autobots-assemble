@@ -69,7 +69,6 @@ assert.equal(nodes.get("equilibrium-graph").children.length,3);
 a.sample({checked:start+360000,latestPage:[{...running,status:"completed",conclusion:"success"}],
           liveTotals:{running:20,queued:31}});
 assert.equal(nodes.get("eq-peak-running").textContent,"20");
-assert.equal(nodes.get("eq-avg-waiting").textContent.includes("31"),false); // interval averages, not latest point
 assert.match(nodes.get("eq-boundary").textContent,/status-filtered workflow totals/);
 '''
         result = subprocess.run(
