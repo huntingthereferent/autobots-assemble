@@ -11,7 +11,10 @@ from pathlib import Path
 from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
-from meta_collect import api, repositories
+try:
+    from .meta_collect import api, repositories
+except ImportError:  # Running meta_daily.py directly inside the Actions workspace.
+    from meta_collect import api, repositories
 
 TZ = ZoneInfo("America/Chicago")
 CONCLUSIONS = ("success", "failure", "cancelled", "skipped", "timed_out", "action_required")
