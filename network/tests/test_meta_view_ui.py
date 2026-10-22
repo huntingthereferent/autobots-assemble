@@ -42,5 +42,21 @@ class MetaControlDeckTests(unittest.TestCase):
                        text=True, check=True, capture_output=True, timeout=15)
 
 
+    def test_observer_uses_current_registry_repositories(self):
+        from tempfile import TemporaryDirectory
+        import json
+        from systems.workspace.meta_collect import repositories
+        with TemporaryDirectory() as folder:
+            path = Path(folder) / "meta-registry.json"
+            path.write_text(json.dumps({
+                "schema": "meta-workstation/registry-v1",
+                "nodes": [
+                    {"id": "A", "repo": "huntingthereferent/autobots-assemble"},
+                    {"id": "B", "repo": "aeren-research/new-workstation-name"}
+                ]
+            }))
+            self.assertEqual(repositories(path)["B"], "aeren-research/new-workstation-name")
+
+
 if __name__ == "__main__":
     unittest.main()
