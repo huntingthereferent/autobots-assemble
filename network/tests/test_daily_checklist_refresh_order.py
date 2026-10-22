@@ -18,7 +18,7 @@ const html=fs.readFileSync(process.argv[1],"utf8");
 const start=html.indexOf("async function refresh(){");
 const end=html.indexOf('$("#daily-form").addEventListener',start);
 assert(start>=0 && end>start);
-const stats={textContent:""},form={hidden:false},error={hidden:false};
+const stats={textContent:""},form={hidden:false},error={hidden:true};
 const list={children:[],replaceChildren(...items){this.children=items},append(x){this.children.push(x)}};
 const controls={"#daily-stats":stats,"#daily-list":list,"#daily-form":form,"#daily-error":error};
 const pending=[];
