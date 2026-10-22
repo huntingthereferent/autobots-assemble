@@ -147,6 +147,57 @@ def compare_types(original_types, full_types, oracle, support, provenance):
     }
 
 
+def original_role_type_partition(original_types, full_types, oracle, gene_nodes, target_nodes):
+    """E21 diagnostic: partition original-node type consequences by source role.
+
+    This classifies *subjects*, not OWL inference rules or biology. Gene/target
+    roles come exclusively from authenticated Bgee original mapping edges.
+    """
+    if gene_nodes & target_nodes:
+        raise ValueError("original mapped gene and target scopes overlap")
+    native = gene_nodes | target_nodes
+    if any(s not in native or p != RDF.type for s, p, o in full_types | original_types | oracle):
+        raise ValueError("unmapped subject or predicate leaked into source role audit")
+    if not original_types <= full_types:
+        raise ValueError("source owner type missing from full closure")
+    if not oracle <= full_types:
+        raise ValueError("restricted source RDFS witness absent from full closure")
+    inferred = full_types - original_types
+    supported = inferred & oracle
+    residual = inferred - oracle
+    buckets = {}
+    for name, subjects in (("original_gene_role", gene_nodes), ("original_target_role", target_nodes)):
+        own = {t for t in original_types if t[0] in subjects}
+        this_inferred = {t for t in inferred if t[0] in subjects}
+        yes = this_inferred & supported
+        no = this_inferred & residual
+        if len(yes) + len(no) != len(this_inferred):
+            raise ValueError("source role RDFS partition did not reconcile")
+        buckets[name] = {
+            "original_source_node_count": len(subjects),
+            "source_authored_type_statements": len(own),
+            "full_profile_inferred_type_statements": len(this_inferred),
+            "limited_RDFS_supported_inferred": len(yes),
+            "remaining_not_explained_by_limited_RDFS": len(no),
+            "remaining_subject_statement_sha256": receipts.digest_set(no),
+        }
+    for field, expected in (
+        ("source_authored_type_statements", len(original_types)),
+        ("full_profile_inferred_type_statements", len(inferred)),
+        ("limited_RDFS_supported_inferred", len(supported)),
+        ("remaining_not_explained_by_limited_RDFS", len(residual)),
+    ):
+        if sum(item[field] for item in buckets.values()) != expected:
+            raise ValueError("original subject-role type totals do not reconcile")
+    return {
+        "role_partition": buckets,
+        "gene_target_roles_are_original_source_observations": True,
+        "role_diagnostic_is_not_full_OWL_rule_provenance": True,
+        "new_biological_type_annotations_inferred": False,
+        "official_NIH_result": False,
+    }
+
+
 def execute(archive,owner_files,ro_files):
     original=source.verified_owner_input(archive,owner_files,ro_files)
     four.original_four_source_axioms(original)
@@ -175,6 +226,8 @@ def execute(archive,owner_files,ro_files):
     if all_types!=independent:
         raise ValueError("whole original node RDF type native and declarative SPARQL scans disagree")
     result=compare_types(source_types,all_types,witness,support,provenance)
+    result["E21_original_subject_role_partition"] = original_role_type_partition(
+        source_types,all_types,witness,genes,targets)
     result.update({
         "schema":SCHEMA,
         "status":"COMPLETED_SOURCE_RDFS_TYPE_WITNESS_PARTITION",
