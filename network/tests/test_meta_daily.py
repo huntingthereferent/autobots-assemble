@@ -55,7 +55,7 @@ class DailySourceTests(unittest.TestCase):
             start,end=created.split("..")
             span=(dt.datetime.fromisoformat(end.replace("Z","+00:00"))-
                   dt.datetime.fromisoformat(start.replace("Z","+00:00"))).total_seconds()
-            return {"total_count":1200 if span>100000 else 600}
+            return {"total_count":1200 if span>50000 else 600}
         count=github_count("a/b","2026-10-22T05:00:00Z..2026-10-23T04:59:59Z",
                            status="success",getter=get,split_threshold=1000)
         self.assertEqual(count,1200)
