@@ -22,6 +22,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - name: Install author mapping module RDF parser dependency
+        run: python -m pip install 'rdflib>=7,<8'
       - name: Original SQL scanner unit tests with rejected tampering and traversal
         run: python -m unittest -v network.tests.test_nih_p2_original_bgee_archive_intake
       - name: Fetch original author's single ZIP and corroborate complete Git blob from the owner's API
