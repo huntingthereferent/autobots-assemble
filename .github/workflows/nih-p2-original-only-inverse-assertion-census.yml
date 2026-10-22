@@ -1,0 +1,84 @@
+name: NIH P2 original-only inverse assertion census
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_ro_original_inverse_instance_census.py'
+      - 'network/tests/test_nih_p2_ro_original_inverse_instance_census.py'
+      - '.github/workflows/nih-p2-original-only-inverse-assertion-census.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-original-inverse-instance-census-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authenticated-original-inverse-facts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install independent RDFLib and OWL RL verification engine
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Retrieve whole original source-owner release with exact SHA256 pins
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/obo-original" "$RUNNER_TEMP/nih-original-fact-evidence"
+          python - <<'PY'
+          from systems.workspace import nih_phase2_external_obo_graph_trial as s
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          import os,hashlib
+          out=Path(os.environ["RUNNER_TEMP"])/"obo-original"
+          for name in s.SOURCE_FILES:
+              url=s.SOURCE_URL+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Original-Inverse-Assertion-Census/1.0"}),timeout=60) as r:
+                  if r.status!=200 or r.geturl()!=url:
+                      raise ValueError("external owner immutable source URL differs")
+                  raw=r.read(5_000_001)
+              if hashlib.sha256(raw).hexdigest()!=s.PINNED_WHOLE_SOURCE_SHA256[name]:
+                  raise ValueError("source-owner complete original OWL SHA256 mismatch")
+              (out/name).write_bytes(raw)
+          PY
+      - name: Negative controls, direct ORIGINAL facts, static oracle, OWL RL
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_ro_original_inverse_instance_census
+      - name: Census only original triples under named original inverse predicates
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_ro_original_inverse_instance_census \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/nih-original-fact-evidence/original-only-inverse-census.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"nih-original-fact-evidence/original-only-inverse-census.json").read_text())
+          assert x["schema"]=="nih-p2-ro-original-inverse-property-assertion-census-v1"
+          assert x["source_rdf_triples"]==8319
+          assert x["source_named_inverse_axiom_declarations"]==123
+          assert x["independent_original_source_inverse_predictions"]==x["independent_original_only_SPARQL_CONSTRUCT_predictions"]
+          assert x["whole_original_OWL_RL_agrees_on_source_inverse_predictions"] is True
+          assert x["input_contains_no_injected_synthetic_assertions"] is True
+          assert x["original_patient_level_records_used"] is False
+          assert x["original_W13_modified"] is False
+          assert x["official_NIH_benchmark"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-original-fact-evidence" && sha256sum original-only-inverse-census.json > sha256.txt)
+      - name: Retain only derived original-only census evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-original-only-inverse-census-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-original-fact-evidence/
+          retention-days: 30
+          if-no-files-found: warn
