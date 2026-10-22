@@ -174,3 +174,17 @@ The cross-lane observations establish that (1) off-cup palette6 appears before t
 Next experiment should not repeat cup-fill or same-game pour tests already exhausted. Before authorizing a new native intervention, lane B should cite the exact lane-A source receipt and select one controlled manipulation that changes the off-cup first-arrival location while holding the lower arrangement and source entry fixed, with an explicit negative control and original A/B witnesses. If no intervention can be grounded to a genuine selectable object/action receipt, stop at source analysis rather than inventing a move. Only official original SDK level >=5 or WIN counts as progress.
 
 Retention note: the lane-A workflow states a 90-day artifact retention setting; this is not a verified durable archive. The PR #450 raw artifact's durable external copy is not established by its successful upload alone. All experimental PRs remain separate and unmerged.
+
+
+## Artifact custody and Lane B novelty gate — 2026-10-22 19:20Z
+
+The PR #450 cup-transition run's artifact metadata is now pinned explicitly:
+- Original SDK run: [#39827860639](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39827860639), source commit `54073b79ec17a6f37dc6c18d8561aff35974fb15`.
+- Artifact: [#12446962893](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39827860639/artifacts/12446962893), `original-sp80-cup-transition-timeline`.
+- Uploaded ZIP digest: `sha256:d05f93ff4e7f6f104a2974bc3ee3ba0b5cd3c95a979b1096ee9eb2b6530fd2ac`.
+- Size: 53,747 bytes; configured expiry: 2027-01-20 18:02:15Z. This is a GitHub-hosted artifact with expiry, not a verified durable external archive.
+- Original SDK job completed successfully; 8 fresh resets, four frozen conditions × A/B witnesses, all official level4 `NOT_FINISHED`, zero level5/WIN.
+
+Lane B novelty check against its existing approved intervention: the source-pinned upper-bar DOWN1 comparison has already been run and independently reproduced on earlier heads. It changed the selected bbox but did not change measured cup/border timing or produce official advancement. Therefore it is not a new candidate and must not be relabeled as one. PR #450 provides a new cup-transition comparison, but the visual x11–13 versus x26–28 contrast alone does not identify a causal action. Do not dispatch another native run until the candidate action is tied to a genuine native click/selection receipt and its positive/negative source cases are frozen on the same lower arrangement and original entry state. If no such new candidate is evidenced, record a bounded stop rather than recycle an exhausted intervention.
+
+Verification snapshot: on commit `09ace467e92d87cbcaa93b985e3c97f41693cee3`, ARC direct observation and 48-law mathematical conformance completed successfully. The repository-wide `protocol-tests` job was still running at the last poll; do not report the branch as fully green until that job completes. No PR was merged.
