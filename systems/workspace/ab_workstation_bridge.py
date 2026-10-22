@@ -1,9 +1,9 @@
 """Verified adapter from the finite A/B journal into workstation observations.
 
 This adapter carries exact journal-entry/movement identities across the boundary.
-The A/B journal remains the source of truth; workstation callbacks replay it on
-each pass. A coordination lane is not a worker and a collision is not a general
-cross-domain proof.
+A caller must bind trajectory paths to actual workstation lane IDs explicitly;
+the verifier never infers that identity from a relation label. The A/B journal
+remains the source of truth and is fully replayed on every verification.
 """
 from __future__ import annotations
 
@@ -13,7 +13,6 @@ from typing import Any
 
 from .ab_relational_cluster import _strict_object, read_history
 from .workstation_continuation import Observation
-
 
 _PREFIX = "abcluster/v1"
 
@@ -27,7 +26,6 @@ def _journal_rows(path: str | Path) -> list[dict[str, Any]]:
     journal = Path(path)
     if not journal.exists():
         return []
-    # read_history independently replays every row and fails closed on tampering.
     read_history(journal)
     return [json.loads(line, object_pairs_hook=_strict_object)
             for line in journal.read_text(encoding="utf-8").splitlines()]
@@ -35,7 +33,7 @@ def _journal_rows(path: str | Path) -> list[dict[str, Any]]:
 
 def _resolve_ref(journal_path: str | Path, ref: str) -> tuple[dict, dict]:
     parts = ref.split(":")
-    if len(parts) != 5 or parts[0] != "abcluster/v1":
+    if len(parts) != 5 or parts[0] != _PREFIX:
         raise ValueError("unsupported A/B witness reference")
     _, entry_hash, word, action, kind = parts
     for row in _journal_rows(journal_path):
@@ -50,10 +48,29 @@ def _resolve_ref(journal_path: str | Path, ref: str) -> tuple[dict, dict]:
 
 
 class ABClusterWitnessVerifier:
-    """Caller-supplied workstation verifiers grounded in independently replayed A/B rows."""
+    """Workstation verifiers grounded in independently replayed A/B rows.
 
+    bind_lane() records the explicit trajectory-to-workstation identity mapping.
+    Persist that mapping with the host's native journal and rebuild it on restart.
+    """
     def __init__(self, journal_path: str | Path):
         self.journal_path = Path(journal_path)
+        self.path_to_lane: dict[str, str] = {}
+        self.lane_to_path: dict[str, str] = {}
+
+    def bind_lane(self, path: str, lane_id: str) -> None:
+        if not isinstance(path, str) or not isinstance(lane_id, str) or not lane_id.strip():
+            raise ValueError("trajectory path and lane identity are required")
+        prior_lane = self.path_to_lane.get(path)
+        prior_path = self.lane_to_path.get(lane_id)
+        if (prior_lane is not None and prior_lane != lane_id) or (
+                prior_path is not None and prior_path != path):
+            raise ValueError("trajectory/lane identity binding conflicts")
+        self.path_to_lane[path] = lane_id
+        self.lane_to_path[lane_id] = path
+
+    def _lane_matches(self, path: str, lane_id: str) -> bool:
+        return self.path_to_lane.get(path) == lane_id and self.lane_to_path.get(lane_id) == path
 
     def verify_observation(self, observation: Observation) -> bool:
         try:
@@ -61,11 +78,15 @@ class ABClusterWitnessVerifier:
         except (ValueError, OSError, KeyError, TypeError):
             return False
         if observation.kind == "BRANCH":
-            return movement["kind"] == "BRANCH" and observation.relation == movement["word"]
+            return (movement["kind"] == "BRANCH"
+                    and observation.relation == movement["word"]
+                    and self._lane_matches(movement["from"], observation.lane_id))
         if observation.kind == "RELATION":
-            return movement["kind"] in ("BRANCH", "CONNECTION") and (
-                observation.relation == "state:" + ",".join(map(str, movement["to"]))
-            )
+            if movement["kind"] not in ("BRANCH", "CONNECTION"):
+                return False
+            trajectory = movement["word"] if movement["kind"] == "BRANCH" else movement["from"]
+            return (observation.relation == "state:" + ",".join(map(str, movement["to"]))
+                    and self._lane_matches(trajectory, observation.lane_id))
         return False
 
     def verify_connection(self, left: Observation, right: Observation) -> bool:
@@ -76,8 +97,6 @@ class ABClusterWitnessVerifier:
             _, b = _resolve_ref(self.journal_path, right.witness_ref)
         except (ValueError, OSError, KeyError, TypeError):
             return False
-        # Both witnesses must independently describe distinct paths reaching
-        # the exact same state. A shared label by itself never authorizes a join.
         return (a["word"] != b["word"] and a["to"] == b["to"]
                 and left.relation == right.relation
                 and left.relation == "state:" + ",".join(map(str, a["to"]))
@@ -86,7 +105,7 @@ class ABClusterWitnessVerifier:
 
 
 def movement_ref(entry_hash: str, movement: dict[str, Any]) -> str:
-    """Public stable witness identity for one independently replayed movement."""
+    """Stable witness identity for one independently replayed movement."""
     return _ref(entry_hash, movement)
 
 
