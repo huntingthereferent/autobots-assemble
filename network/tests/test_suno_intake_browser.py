@@ -61,12 +61,14 @@ class SunoIntakeBrowserTests(unittest.TestCase):
                 downloaded = result.value.path().read_bytes()
                 self.assertEqual(downloaded[:4], b"RIFF")
                 self.assertEqual(downloaded[8:12], b"WAVE")
-                self.assertEqual(struct.unpack_from("<I", downloaded, 24)[0], 8000)
+                decoded_rate = struct.unpack_from("<I", downloaded, 24)[0]
                 with page.expect_download() as result:
                     page.locator("#manifest").click()
                 source = json.loads(result.value.path().read_text(encoding="utf-8"))
                 self.assertEqual(source["source"]["fileName"], "test-source.wav")
                 self.assertEqual(source["source"]["kind"], "audio")
+                # decodeAudioData may resample into the browser AudioContext rate.
+                self.assertEqual(decoded_rate, source["observation"]["sampleRate"])
                 self.assertEqual(source["transform"]["slice"],
                                  {"startSeconds": 0.25, "endSeconds": 0.75})
                 self.assertFalse(failures, failures)
