@@ -8,6 +8,8 @@ on:
     paths:
       - ".github/workflows/meta-workstation-observations.yml"
       - "systems/workspace/meta_collect.py"
+      - "systems/workspace/meta_daily.py"
+      - "network/tests/test_meta_daily.py"
       - "systems/workspace/meta_route.py"
       - "docs/live/meta-registry.json"
       - "network/tests/test_meta_route.py"
@@ -33,6 +35,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python3 systems/workspace/meta_collect.py --registry docs/live/meta-registry.json --history-path "$RUNNER_TEMP/ab-meta-observations/history.json"
+      - name: Count full-day GitHub outcomes including later passes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 systems/workspace/meta_daily.py \
+            --registry docs/live/meta-registry.json \
+            --output "$RUNNER_TEMP/ab-meta-observations/daily.json"
+      - name: Test daily outcome contract
+        run: python3 -m unittest -v network.tests.test_meta_daily
       - name: Test evidence-gated routing contract
         run: python3 -m unittest -v network.tests.test_meta_route
       - name: Write routing advice next to immutable observations
@@ -46,6 +57,6 @@ jobs:
           cd "$RUNNER_TEMP/ab-meta-observations"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add history.json routing.json
+          git add history.json routing.json daily.json
           git commit -m "Record source-owned A B status counts"
           git push origin HEAD:meta-observations
