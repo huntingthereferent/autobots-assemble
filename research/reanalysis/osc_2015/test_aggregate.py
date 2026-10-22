@@ -54,6 +54,14 @@ class PublishedAggregateTests(unittest.TestCase):
         self.assertFalse(result["raw_data_archived"])
         self.assertEqual(result["counts"]["paired"], 1)
 
+    def test_original_non_utf8_free_text_does_not_change_numeric_flags(self):
+        raw = (HEADER + "row1,1,0,\n").encode("ascii").replace(b",\n", bytes([0x84]) + b"\n")
+        # A non-UTF-8 byte in a valid free-text column must not break ASCII flags.
+        raw = b"Local.ID,T.sign.O.131,T.sign.R.132,Notes\nrow1,1,0,\x84\n"
+        result = inspect_bytes(raw, check_source=False)
+        self.assertEqual(result["counts"]["paired"], 1)
+        self.assertEqual(result["counts"]["original"], 1)
+
     def test_pinned_metadata_witness(self):
         self.assertEqual(BYTES, 288855)
         self.assertEqual(BLOB_SHA, "6c8ce0b93b9a83ac42669745bd1054da7c22a687")
