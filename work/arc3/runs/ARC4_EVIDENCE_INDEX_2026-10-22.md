@@ -35,6 +35,14 @@ This index identifies original GitHub sources; it does **not** imply that remote
 
 Twelve original-SDK native resets (six frozen upper-bar words × independently authenticated A/B original entrances), all official stage4, none level5/WIN. With same D3 lower arrangement, observed source top-left 45-pixel cup first fully palette13 at frame25 for upper LEFT1/LEFT1→UP1/LEFT1→DOWN1, not for unchanged, LEFT2, or LEFT1→RIGHT1. Selected native bbox x26–37 for the positive horizontal placement, x29–40 for no horizontal movement or reversed LEFT1→RIGHT1, x23–34 for LEFT2. First measured right/top boundary event frame21 across controls. No hidden mechanical or WIN predicate inference.
 
+## Lane B: same-coordinate native histories and exact pixel audit
+
+[Original same-position run #39754800592](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754800592), [source artifact #12415351323](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754800592/artifacts/12415351323), ZIP SHA256 `3ecfa8fd00ff5fad6b3aa4843c97f1f092fd2b37d394ad8dc5390f4fc18b7414`. Reproduced by [run #39755328707](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39755328707) with a standalone every-pixel verifier and combined [artifact #12415019473](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39755328707/artifacts/12415019473), SHA256 `a64546e50db61ca07a986e6afc142b85eec4b7501f5516ba2c670fcdf58b544a`.
+
+Five real upper-bar action histories × independently witnessed original SDK A/B entrance = **10 native resets, 0 level5/WIN**. All selected native bboxes `[26,20,37,22]`; cup first-full and measured boundary event timings identical; official level4 `NOT_FINISHED`.
+
+For each of the four three-movement detours compared against direct LEFT1, both original SDK witnesses record exactly two differences just before pour: `(10,63)` and `(11,63)` each palette14→0, and exactly one difference `(11,63)` palette14→0 for **every one of 34 native animation frames**, with **zero differences across rows0–62**. The prior left/bottom boundary scan excluded row63. The exact observed bottom-row difference is not interpreted as game mechanics or objective logic. Configured retention 90 days; durable independent copies of these two GitHub artifacts **NOT VERIFIED**.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
