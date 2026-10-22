@@ -2,7 +2,7 @@
 
 **State:** implementation and tests can run independently; real native intervention is **gated**, not yet executed.
 
-## Relationship to lane A
+## Relationship to [lane A — PR #407](https://github.com/huntingthereferent/autobots-assemble/pull/407)
 Consume the exact emitted native JSON source record from lane A (not an imagined fluid simulator). Select a specific **first source-color-6 arrival outside cup windows** at row5 or row8, including both witnesses' identical frame/x record. Identify an already-authenticated native selectable-object click in the actual action receipts. Candidate hypothesis must be written separately and admitted with `python -m work.arc3.arc4_intervention_gate --audit AUDIT.json --proposal PROPOSAL.json --out PLAN.json`.
 
 ## Intervention
