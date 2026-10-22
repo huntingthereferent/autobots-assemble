@@ -403,7 +403,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
    renderMetrics(total);$("stamp").textContent="Checked "+localTime(new Date());$("dot").className="dot ok";$("source-state").textContent="CHECKED";
    $("status-note").textContent="Both source journals read successfully. Counts include currently waiting and executing workflow runs.";
   }else{
-   for(const id of["queued","running","passed","failed","flow-queue","flow-running","flow-done"])$(id).textContent="—";
+   for(const id of["queued","running","flow-queue","flow-running","flow-done"])$(id).textContent="—";renderDaily();
    for(const id of["beads-queue","beads-running","beads-done"])beads(id,[],"none");
    $("stamp").textContent="Partial source / try refresh";$("dot").className="dot warn";$("source-state").textContent="PARTIAL";
    $("status-note").textContent="A GitHub source was unavailable; unknown work is not zero. Accessible runs remain linked below.";
