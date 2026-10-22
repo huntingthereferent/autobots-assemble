@@ -38,7 +38,7 @@ RO_EXPRESSES=OBO["RO_0002292"]
 
 
 def git_blob(raw):
-    return sha1(b"blob "+str(len(raw)).encode()+b"\\0"+raw).hexdigest()
+    return sha1(b"blob "+str(len(raw)).encode()+bytes([0])+raw).hexdigest()
 
 
 def validate_exact_owner(files):
@@ -113,7 +113,7 @@ def examine(ontop_files,ro_files):
     r2=Graph().parse(data=decoded["bgee_v14_genex.r2rml"],format="turtle")
     obda=decoded["bgee_v14_genex.obda"]
     for mapping in ("Gene_IsExpressedIn_anatEntity","Gene_IsExpressedIn_expressionCondition"):
-        if obda.count("mappingId\\t"+mapping+"\\n")!=1:
+        if obda.count("mappingId"+chr(9)+mapping+chr(10))!=1:
             raise ValueError("original Ontop mapping ID not authenticated "+mapping)
     rows=[map_statement(r2,mapping) for mapping in MAPS]
     if (GENEX.isExpressedIn,RDFS.subPropertyOf,RO_EXPRESSED) not in genex:
@@ -179,7 +179,7 @@ def main():
     files={name:getattr(args,name.split(".")[1]) for name in FILES}
     x=examine(files,{"ro-base.owl":args.ro_base,"core.owl":args.core})
     args.output.parent.mkdir(parents=True,exist_ok=True)
-    args.output.write_text(json.dumps(x,sort_keys=True,indent=2)+"\\n")
+    args.output.write_text(json.dumps(x,sort_keys=True,indent=2)+chr(10))
     print(json.dumps({
        "author_source_mappings":len(x["author_R2RML_mappings"]),
        "original_RO_inverse_pair":x["source_owner_original_RO_0002206_inverseOf_RO_0002292"],
