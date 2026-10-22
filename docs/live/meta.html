@@ -260,16 +260,16 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   const r=dailySummary,now=Date.now();
   const all=r?.schema==="meta-workstation/daily-runs-v1"&&r?.all_sources===true&&r?.timezone==="America/Chicago"&&r?.local_date===chicagoDay(new Date())&&r?.totals;
   const t=all?r.totals:null;
-  const verified=t&&["created","success","failure","cancelled","skipped","timed_out","action_required","other"].every(k=>valid(t[k]))&&Number.isFinite(Date.parse(r.observed_at));
+  const verified=t&&["success","failure","cancelled","skipped","timed_out","action_required","known_outcome_runs_lower_bound"].every(k=>valid(t[k]))&&Number.isFinite(Date.parse(r.observed_at));
   $("passed").textContent=verified?t.success.toLocaleString():"—";
   $("failed").textContent=verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—";
   $("cancelled").textContent="Cancelled today: "+(verified?t.cancelled.toLocaleString():"—");
   $("skipped").textContent="Skipped today: "+(verified?t.skipped.toLocaleString():"—");
-  $("other-outcomes").textContent="Other states: "+(verified?t.other.toLocaleString():"—");
+  $("other-outcomes").textContent="Active/other states: not included in outcome totals";
   if(verified){
    const age=Math.max(0,now-Date.parse(r.observed_at));
    const suffix=age>90*60000?" · STALE SNAPSHOT":"";
-   $("day-basis").textContent=t.created.toLocaleString()+" runs created today · America/Chicago · checked "+localTime(r.observed_at)+suffix;
+   $("day-basis").textContent=t.known_outcome_runs_lower_bound.toLocaleString()+" runs with recorded outcomes today · America/Chicago · checked "+localTime(r.observed_at)+suffix;
    $("passed-note").textContent="Full-day source totals · "+localTime(r.observed_at);
    $("failed-note").textContent="Past failures/timeout/action-required · not open issues";
   }else{
