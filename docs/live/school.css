@@ -59,6 +59,7 @@ body.is-play .hero{padding:25px 0 16px}
 .pattern-beat[data-tone="1"]{background:#dfedff!important;border-color:#afcffa!important}.pattern-beat[data-tone="2"]{background:#e9e1ff!important;border-color:#d1bef7!important}
 .pattern-beat[data-tone="3"]{background:#daf2df!important;border-color:#ace6bb!important}.pattern-beat[data-tone="4"]{background:#ffe4e9!important;border-color:#f7b7c8!important}
 .pattern-beat.is-playing{transform:translateY(-8px);box-shadow:0 10px 0 #354f89;border-color:#385fa9!important}
+.pattern-name{display:grid;gap:6px;font-size:12px;font-weight:750;color:#5b6881;max-width:360px;margin-bottom:16px}.pattern-name input{padding:11px 13px;border:1px solid #ced8e8;border-radius:9px;min-height:42px;background:#fff;color:#223046}
 .pattern-controls{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
 .pattern-room .fine a{color:#395acf;font-weight:750}
 @media(max-width:1080px){.play-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.pattern-beats{gap:5px}.pattern-beat strong{font-size:26px}}
