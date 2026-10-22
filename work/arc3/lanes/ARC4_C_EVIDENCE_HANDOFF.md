@@ -45,6 +45,12 @@ All three branches begin from the same main baseline and target main independent
 - The observed four-cup pixels do not capture every off-cup/boundary event.
 - GitHub Actions artifacts have per-run retention; a URL alone is **not** a durable archival guarantee. Keep an evidence index with checksum, commit, run ID and actual copied raw bytes before expiry.
 
+## Verified later October 22 movement-order result
+
+[Native SDK order-contrast run #39775056684](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775056684), [full original JSON/NPZ #12423663752](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775056684/artifacts/12423663752), ZIP SHA-256 `7b46395f958143d6e469e9a9b1ae3c63d605afce17b925e0a35dd3019ecee1a4`: 8 genuine independent original SDK resets, all official level4 NOT_FINISHED, zero level5/WIN. After the first visually four-cup-complete but unsuccessful ACTION5, the original SDK genuinely selects the right bar. An additional real RIGHT-bar LEFT1 or RIGHT1, followed by a source re-click of the upper bar and another ACTION5, reproduces the matched **direct movement-before-pour** case at every x,y pixel in y0..62 across every one of 34 returned frames. Only bottom display row y63 differs. Two A/B entrance witnesses agree. This is **source visible-history equivalence under specifically frozen actions**, not verified equality of hidden engine state or a solved stage4 predicate.
+
+Current next discriminator: propose native frame/source-receipt histories with *measurably different* responses in board rows0..62 or actual SDK status. Do not endlessly repeat four-cup visual positives, no-move multiple pours, row63 effects or the two already-paired post-pour right-bar moves. [Full evidence and source hash ledger](../runs/ARC4_EVIDENCE_INDEX_2026-10-22.md) controls resumptions. The previously described repeated-pour study is still valid, but the newer verified order comparison is the latest frontier.
+
 ## Resume — current verified source checkpoint (October 22, 2026)
 
 **Official original SDK: level 4/6, no level5 or WIN**, including all new genuine Stage4 native experiments; the older PR #398 material above is historical, not the latest evidence boundary.
