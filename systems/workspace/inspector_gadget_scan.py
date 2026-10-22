@@ -24,7 +24,7 @@ def build_report(runs, since):
     for run in runs:
         if not isinstance(run.get("id"), int) or not classify(run):
             continue
-        created = run.get("created_at") or ""
+        created = run.get("updated_at") or run.get("created_at") or ""
         if created < since:
             continue
         key = (run.get("workflow_id"), run.get("name") or "unnamed", run.get("conclusion"))
@@ -39,6 +39,9 @@ def build_report(runs, since):
             "event": conclusion,
             "count": len(members),
             "run_ids": [r["id"] for r in members],
+            "owner": "source workflow / " + name,
+            "dispatch_state": "awaiting_source_verification",
+            "verification_gate": "source run conclusion and cause verified before repair",
             "sources": [r.get("html_url") for r in members],
             "head_shas": sorted({r["head_sha"] for r in members if r.get("head_sha")}),
             "observation": f"{len(members)} {conclusion} run(s) observed for {name}; root cause not established",
@@ -48,7 +51,7 @@ def build_report(runs, since):
     return {"schema": "inspector-gadget/workflow-scan/v1", "since": since, "scanned": len(runs), "findings": findings}
 
 
-def fetch_runs(repo, token, pages=3):
+def fetch_runs(repo, token, pages=10):
     if not token:
         raise ValueError("GITHUB_TOKEN is required")
     if "/" not in repo:
