@@ -22,13 +22,21 @@ These creative audio operations are not Suno model copies or ARC/NIH/WORLD evide
 
 ## Evidence boundaries
 
-The Workstation reads actual **public GitHub Actions workflow runs** on opening and every three minutes while visible. It displays the *latest observed 50* runs, counts queued/running/passed/failed outcomes within that sample, and lets a viewer inspect the real GitHub jobs and ordered steps for one selected workflow. It uses exact GitHub execution IDs and commit hashes. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
+The Workstation reads the latest 100 **public GitHub Actions workflow runs** on opening and approximately every two minutes while visible. A separately published source-owned run index supplies the accessible historical archive; if it is unavailable, the viewer explicitly identifies the latest-page sample as incomplete. Exact GitHub execution IDs, revisions, jobs, and step results remain available for inspection. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
 
 The research section loads `views/traces/research-live.json`, projected from native research checkpoints, ARC experiments, pinned statuses and explicit walls. Original `next` and `boundary` fields are preserved when recorded. These are **historical source states**, not a claim that all their workers are currently executing. Nothing is invented from a file name or decorative animation.
 
 The display makes no artificial relationship between a GitHub Actions workflow and a research record merely because both appear on the page. A future cross-system link needs an independently checkable source relationship.
 
 Source failure is visible and **does not turn missing data into zeros or imply active work has stopped**. Public GitHub API requests can be rate-limited. Browser checks have no credentials or write access.
+
+## Flow control deck and calendar journal
+
+The public Workstation's control deck is a read-only, source-bound visualization of GitHub Actions. Queue and in-motion counts reflect the latest observed run states. The daily passed/not-passed values are **outcomes for runs created today in the browser's local calendar**, not completions that necessarily happened today. The daily clearance ratio is today's created runs currently marked completed, divided by all runs created today; it is not measured execution efficiency, a dispatch guarantee, or an estimate of GitHub capacity. The last-hour intake and 12-hour bar strip use actual workflow creation timestamps. A 12-marker light row represents up to twelve observed records and is not a capacity bar. Animated running indicators illustrate the same retained status, never synthesize progress.
+
+The movement/change list is session-only and shows status transitions **detected between successful source checks**, not precise execution event times. On first opening, it establishes a baseline rather than inventing transition history. Public source errors leave the UI explicitly stale.
+
+The run journal starts on **Today**, with period selectors for **Day**, **Month**, **Year**, and **All**, plus previous/next navigation. Local calendar ranges filter original timestamped run IDs without modifying the source archive. Listed execution timestamps use a 12-hour clock; the seven-day observation chart uses matching local calendar boundaries. Older source history may be incomplete if the published archive cannot be verified.
 
 ## Data audit in the Workstation
 
