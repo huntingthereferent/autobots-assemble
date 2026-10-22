@@ -97,15 +97,53 @@ def independent_rule_set_comparison(observed,oracle):
     return baseline.digest_set(observed)
 
 
+def inspect_jena_nt(path):
+    """Treat both missing and oversized external output as hard failures."""
+    path=Path(path)
+    if not path.is_file() or path.stat().st_size>MAX_JENA_OUTPUT_LINES*350:
+        raise ValueError("missing or unreasonable independent Jena inference artifact")
+    if path.read_bytes().count(b"\\n")>MAX_JENA_OUTPUT_LINES:
+        raise ValueError("external inferred statement count over finite cap")
+    graph=Graph()
+    graph.parse(str(path),format="nt")
+    return set(graph)
+
+
+def verify_premise_ablations(original,omitted_subproperty,omitted_inverse):
+    """Counterfactual in-memory *source-owned premise deletion*, not new source.
+
+    A missing original GenEx subproperty should remove both consequence types.
+    A missing original RO inverseOf should preserve forward but remove reverse.
+    Full Jena source-rule results are compared separately by verify().
+    """
+    original_edges=original["source_edges"]
+    expected_forward={(s,bridge.RO_EXPRESSED,o) for s,p,o in original_edges}
+    if len(expected_forward)!=len(original_edges):
+        raise ValueError("source forward edges are not one-to-one")
+    if omitted_subproperty:
+        raise ValueError("Jena still emitted consequences after deletion of sole subproperty axiom: "+
+                         str(len(omitted_subproperty)))
+    missing=expected_forward-omitted_inverse
+    unexpected=omitted_inverse-expected_forward
+    if missing or unexpected:
+        raise ValueError("Jena inverse-axiom ablation disagrees with independent source-only oracle: "+
+                         json.dumps({"missing_forward":len(missing),
+                                     "unexpected_or_remaining_inverse":len(unexpected)}))
+    return {
+        "control_removed_original_GenEx_subproperty_in_memory":True,
+        "ablation_without_subproperty_inferred_triples":len(omitted_subproperty),
+        "ablation_without_inverse_expected_forward":len(expected_forward),
+        "ablation_without_inverse_forward_triples":len(omitted_inverse),
+        "ablation_without_inverse_reverse_triples":0,
+        "ablation_preserves_unmodified_original_owner_source_files":True,
+        "ablation_is_alternative_rule_premise_test_not_biomedical_claim":True,
+        "ablation_without_inverse_SHA256":baseline.digest_set(omitted_inverse),
+    }
+
+
 def verify(original,jena_nt):
     """Strict exact equality with the full independent source-only oracle."""
-    if not Path(jena_nt).exists() or Path(jena_nt).stat().st_size>MAX_JENA_OUTPUT_LINES*350:
-        raise ValueError("missing or unreasonable Jena alternative reasoner output size")
-    if Path(jena_nt).read_bytes().count(b"\n")>MAX_JENA_OUTPUT_LINES:
-        raise ValueError("Jena output exceeds finite independent comparison cap")
-    jena=Graph()
-    jena.parse(str(jena_nt),format="nt")
-    observed=set(jena)
+    observed=inspect_jena_nt(jena_nt)
     oracle=original["independent"]
     # Keep *unexpected* conclusions as counterexamples rather than
     # silently filtering or treating them as model superiority.
@@ -159,6 +197,8 @@ def main():
         ap.add_argument("--"+n,type=Path,required=True)
     ap.add_argument("--input-nt",type=Path)
     ap.add_argument("--jena-nt",type=Path)
+    ap.add_argument("--omitted-subproperty-nt",type=Path)
+    ap.add_argument("--omitted-inverse-nt",type=Path)
     ap.add_argument("--output",type=Path)
     a=ap.parse_args()
     author={"bgee_v14_genex."+k:getattr(a,k) for k in ("obda","owl","r2rml")}
@@ -171,6 +211,13 @@ def main():
         if a.jena_nt is None or a.output is None:
             raise ValueError("source comparison needs exact Jena output and evidence destination")
         evidence=verify(original,a.jena_nt)
+        if (a.omitted_subproperty_nt is None) != (a.omitted_inverse_nt is None):
+            raise ValueError("both independent source-premise ablations required together")
+        if a.omitted_subproperty_nt is not None:
+            controls=verify_premise_ablations(
+                original,inspect_jena_nt(a.omitted_subproperty_nt),
+                inspect_jena_nt(a.omitted_inverse_nt))
+            evidence.update(controls)
         a.output.parent.mkdir(parents=True,exist_ok=True)
         a.output.write_text(json.dumps(evidence,indent=2,sort_keys=True)+chr(10))
         print(json.dumps({
