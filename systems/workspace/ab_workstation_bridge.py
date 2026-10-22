@@ -3,6 +3,7 @@
 Exact A/B movement identities cross the boundary as witness refs. Trajectory
 bindings are persisted as events in the workstation's existing RuntimeJournal,
 not in a competing sidecar file. Every verifier call replays the A/B source.
+The empty trajectory string is the actual root path in the finite cluster.
 """
 from __future__ import annotations
 
@@ -97,7 +98,8 @@ class ABClusterWitnessVerifier:
         self.lane_to_path[lane_id] = path
 
     def bind_lane(self, path: str, lane_id: str) -> None:
-        if not isinstance(path, str) or not path or not isinstance(lane_id, str) or not lane_id.strip():
+        # path may be "" because the finite cluster represents its root that way.
+        if not isinstance(path, str) or not isinstance(lane_id, str) or not lane_id.strip():
             raise ValueError("trajectory path and lane identity are required")
         if self.workstation_data_dir is None:
             raise ValueError("workstation data directory required for durable lane binding")
