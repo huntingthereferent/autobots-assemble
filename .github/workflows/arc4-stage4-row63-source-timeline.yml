@@ -1,0 +1,46 @@
+name: ARC4 lane B stepwise original source row63 audit
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/audit_native_sp80_stage4_row63_timeline.py'
+      - '.github/workflows/arc4-stage4-row63-source-timeline.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authenticated-source-timeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical reader
+        run: python -m pip install numpy
+      - name: Download only the fixed source SDK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: arc4-original-stage4-path-length-native-evidence
+          run-id: 39757263041
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/arc4/frozen-path-length-native
+      - name: Verify original source JSON and NPZ bytes
+        run: |
+          echo 'd393610b2f8e553343b2322dc8eaa5b9ff8e2dd49f608c3fb01693c127bb79df  runtime/data/arc4/frozen-path-length-native/arc4-same-position-path-lengths.json' | sha256sum -c -
+          echo 'da58e6c1896884095ab394d0736947ff8ad3cdb9997a3f5578fcfd5592b69288  runtime/data/arc4/frozen-path-length-native/arc4-same-position-path-lengths.npz' | sha256sum -c -
+      - name: Reconstruct every original movement row63
+        run: |
+          python -m work.arc3.audit_native_sp80_stage4_row63_timeline \
+            --json runtime/data/arc4/frozen-path-length-native/arc4-same-position-path-lengths.json \
+            --npz runtime/data/arc4/frozen-path-length-native/arc4-same-position-path-lengths.npz \
+            --out runtime/data/arc4/original-sp80-stage4-row63-timeline.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-stepwise-source-row63-timeline
+          path: runtime/data/arc4/original-sp80-stage4-row63-timeline.json
+          retention-days: 90
+          if-no-files-found: error
