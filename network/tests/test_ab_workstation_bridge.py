@@ -112,11 +112,14 @@ class ABWorkstationBridgeTests(unittest.TestCase):
         self.assertTrue(self.verifier.verify_observation(left))
         self.assertTrue(self.verifier.verify_observation(right))
         self.assertTrue(self.verifier.verify_connection(left, right))
+        wrong_lane = Observation("wrong", "unbound-lane", "RELATION", relation,
+                                 left.witness_ref, "", 3)
+        self.assertFalse(self.verifier.verify_connection(wrong_lane, right))
         same_lane = Observation("right2", "lane-left", "RELATION", relation,
-                                right.witness_ref, "", 3)
+                                right.witness_ref, "", 4)
         self.assertFalse(self.verifier.verify_connection(left, same_lane))
         mismatched = Observation("right3", "lane-right", "RELATION", "state:9,9,9",
-                                 right.witness_ref, "", 4)
+                                 right.witness_ref, "", 5)
         self.assertFalse(self.verifier.verify_connection(left, mismatched))
 
     def test_binding_survives_verifier_restart_from_native_journal(self):
