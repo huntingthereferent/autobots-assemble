@@ -89,18 +89,18 @@ const scenes={
  sunset:{sky:"#ffaabc",top:"#ffe2ae",hill:"#d4c69c",far:"#b3aaab",grass:"#9ac28e",soil:"#bf8b80",cloud:"#fff0d4",leaf:"#8da47c",night:false},
  night:{sky:"#343668",top:"#827bb9",hill:"#526f88",far:"#4b637c",grass:"#618c7d",soil:"#736d81",cloud:"#b5aacc",leaf:"#466b70",night:true}
 };
-let horse="cocoa",scene="meadow",mode="ready",items=[],distance=0,carrots=0,lives=3,best=0,vy=0,jumpY=0,t=0,spawnIn=1,invulnerable=0,keys={},soundOn=false,audio=null,last=0;
+let horse="cocoa",scene="meadow",lastScene="meadow",sceneFade=0,scroll=0,mode="ready",items=[],distance=0,carrots=0,lives=3,best=0,vy=0,jumpY=0,t=0,spawnIn=1,invulnerable=0,keys={},soundOn=false,audio=null,last=0;
 try{best=Math.max(0,Math.floor(Number(localStorage.getItem("pony-trail-best-v1"))||0))}catch(e){}
 function label(){ $("lives").textContent=String(lives);$("carrots").textContent=String(carrots);$("distance").textContent=Math.floor(distance)+" m";$("best").textContent=best+" m";}
 function message(s){$("status").textContent=s;}
-function reset(){mode="ready";items=[];distance=0;carrots=0;lives=3;vy=0;jumpY=0;t=0;spawnIn=1.2;invulnerable=0;keys={};$("start").textContent="▶ Start riding";$("pause").textContent="⏸ Pause";label();}
+function reset(){mode="ready";items=[];distance=0;carrots=0;lives=3;vy=0;jumpY=0;t=0;scroll=0;spawnIn=1.2;invulnerable=0;keys={};$("start").textContent="▶ Start riding";$("pause").textContent="Ⅱ Pause";label();}
 function start(){if(mode==="paused"){mode="running";$("pause").textContent="⏸ Pause";message("Keep going, rider!");return;}reset();mode="running";$("start").textContent="↻ Start over";message("Go, pony, go! Collect carrots and leap over fences.");}
 function pause(){if(mode==="running"){mode="paused";$("pause").textContent="▶ Resume";message("Your pony is having a little rest.");}else if(mode==="paused"){mode="running";$("pause").textContent="⏸ Pause";message("Back on the trail!");}}
 function tone(frequency,seconds,kind){if(!soundOn)return;try{if(!audio)audio=new(window.AudioContext||window.webkitAudioContext)();if(audio.state==="suspended")audio.resume();const o=audio.createOscillator(),g=audio.createGain(),now=audio.currentTime;o.type=kind||"sine";o.frequency.setValueAtTime(frequency,now);o.frequency.exponentialRampToValueAtTime(frequency*1.22,now+seconds);g.gain.setValueAtTime(.075,now);g.gain.exponentialRampToValueAtTime(.001,now+seconds);o.connect(g);g.connect(audio.destination);o.start(now);o.stop(now+seconds);}catch(e){}}
 function leap(){if(mode==="ready"||mode==="over"){start();}if(mode!=="running")return;if(jumpY===0){vy=-690;tone(340,.12,"triangle");}}
 function finish(){mode="over";$("start").textContent="↻ Ride again";$("pause").textContent="⏸ Pause";const oldBest=best;best=Math.max(best,Math.floor(distance));if(best>oldBest){try{localStorage.setItem("pony-trail-best-v1",String(best))}catch(e){}}label();message("Great riding! You found "+carrots+" carrots. Want to go again?");tone(210,.3,"sine");}
 function spawner(){const isObstacle=Math.random()<.56;const choice=isObstacle?(Math.random()<.64?"fence":"puddle"):(Math.random()<.85?"carrot":"star");items.push({x:W+35,type:choice,w:choice==="fence"?49:choice==="puddle"?73:34,hit:false,phase:Math.random()*6.28});}
-function update(dt){if(mode!=="running")return;t+=dt;const speed=Math.max(190,Math.min(465,270+distance*.14))+(keys.ArrowRight?95:0)-(keys.ArrowLeft?75:0);distance+=speed*dt/14;if(invulnerable>0)invulnerable-=dt;if(jumpY<0||vy<0){vy+=1750*dt;jumpY+=vy*dt;if(jumpY>=0){jumpY=0;vy=0;}}
+function update(dt){if(mode!=="running")return;t+=dt;const speed=Math.max(190,Math.min(465,270+distance*.14))+(keys.ArrowRight?95:0)-(keys.ArrowLeft?75:0);distance+=speed*dt/14;scroll+=speed*dt;if(invulnerable>0)invulnerable-=dt;if(jumpY<0||vy<0){vy+=1750*dt;jumpY+=vy*dt;if(jumpY>=0){jumpY=0;vy=0;}}
 spawnIn-=dt;if(spawnIn<=0){spawner();spawnIn=.85+Math.random()*.55-Math.min(.16,distance/2200);}
 for(const item of items){item.x-=speed*dt;const x=item.x;if(item.hit)continue;
  if(item.type==="fence"||item.type==="puddle"){const top=item.type==="fence"?ground-51:ground-14;if(x<horsex+42&&x+item.w>horsex-43&&ground-10+jumpY>top&&ground-85+jumpY<ground){item.hit=true;if(invulnerable<=0){lives--;invulnerable=1.3;tone(160,.18,"sawtooth");if(lives<=0){finish();return}else message("Oop! Jump earlier next time. You have "+lives+" hearts left.");}}}
@@ -110,16 +110,152 @@ function ellipse(x,y,rx,ry,color){ctx.fillStyle=color;ctx.beginPath();ctx.ellips
 function line(x1,y1,x2,y2,color,width){ctx.strokeStyle=color;ctx.lineWidth=width;ctx.lineCap="round";ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();}
 function polygon(points,color){ctx.fillStyle=color;ctx.beginPath();points.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fill();}
 function round(x,y,w,h,r,c){ctx.fillStyle=c;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill();}
-function sky(s){let grad=ctx.createLinearGradient(0,0,0,ground);grad.addColorStop(0,s.sky);grad.addColorStop(1,s.top);ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
- const sunX=scene==="night"?802:790,sunY=87;ellipse(sunX,sunY,scene==="night"?35:43,scene==="night"?35:43,scene==="night"?"#e5e6ff":"#ffefb5");
- if(scene==="night"){ellipse(sunX+17,sunY-11,34,34,s.sky);for(let i=0;i<26;i++){const x=(i*137+39)%W,y=(i*73+19)%205;ellipse(x,y,1.4+(i%3),1.4+(i%3),"#f8f2ff");}}
- for(let i=0;i<6;i++){const x=((i*238-t*9)%(W+330)+W+330)%(W+330)-100,y=68+(i%3)*43;ellipse(x,y,58,19,s.cloud);ellipse(x+35,y-9,40,24,s.cloud);ellipse(x-29,y-14,39,25,s.cloud);}
- ctx.fillStyle=s.hill;ctx.beginPath();ctx.moveTo(0,310);ctx.quadraticCurveTo(190,160,430,293);ctx.quadraticCurveTo(690,165,960,288);ctx.lineTo(W,ground);ctx.lineTo(0,ground);ctx.fill();
- ctx.fillStyle=s.far;ctx.beginPath();ctx.moveTo(0,333);ctx.quadraticCurveTo(255,244,570,337);ctx.quadraticCurveTo(800,250,960,324);ctx.lineTo(W,ground);ctx.lineTo(0,ground);ctx.fill();
- for(let i=0;i<10;i++){const x=((i*145-t*20)%(W+180)+W+180)%(W+180)-50,y=ground-33-(i%3)*5;line(x,y,x,ground-6,"#715a6e",10);ellipse(x,y-19,28,38,s.leaf);ellipse(x+14,y-28,22,27,s.leaf);}
- ctx.fillStyle=s.grass;ctx.fillRect(0,ground-21,W,34);ctx.fillStyle=s.soil;ctx.fillRect(0,ground+9,W,H-ground);
- for(let i=0;i<27;i++){const x=((i*69-t*70)%(W+100)+W+100)%(W+100)-40,y=ground+25+(i%4)*13;line(x,y,x-8,y,"#f9ddb4",3);}
- for(let i=0;i<32;i++){const x=((i*113-t*70)%(W+140)+W+140)%(W+140)-70,y=ground-5+(i%3)*7;ellipse(x,y,3.7,3.7,i%2?"#ffe7fb":"#fff9c8");ellipse(x,y,1.4,1.4,"#f7ac52");}
+// Original Canvas scenery. Visual study: layered depth, readable silhouettes,
+// warm environmental detail. No third-party art, sprite sheets or network assets.
+const trailNames={meadow:"WILDFLOWER MEADOW",sunset:"GOLDEN HOUR RIDGE",night:"MOONLIT WOODS"};
+const trailDescriptions={meadow:"daisies, little birds and a blue sky.",sunset:"tall grasses, amber light and drifting leaves.",night:"quiet pines, stars and dancing fireflies."};
+function wrap(n,size){return (n%size+size)%size;}
+function hillBand(color,base,amp,frequency,phase){
+ ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(0,H);
+ for(let x=0;x<=W+22;x+=22){
+  const y=base+Math.sin((x+phase)*frequency)*amp+Math.sin((x+phase)*frequency*.47+1.7)*amp*.55;
+  ctx.lineTo(x,y);
+ }
+ ctx.lineTo(W,H);ctx.closePath();ctx.fill();
+}
+function tree(x,y,size,s,kind,far){
+ ctx.save();ctx.translate(x,y);ctx.scale(size,size);
+ if(kind==="night"){
+   line(0,18,0,-53,far?"#536778":"#3e5763",7);
+   for(let layer=0;layer<3;layer++){
+    const yy=-64+layer*22;
+    polygon([[0,yy-29],[-24-layer*9,yy+26],[24+layer*9,yy+26]],layer===0?s.leaf:far?"#496d78":"#345e62");
+   }
+ }else if(kind==="sunset"){
+   line(0,17,-2,-48,far?"#948276":"#745d5a",8);
+   for(let b=0;b<5;b++){
+    const xx=[-27,-8,16,31,3][b],yy=[-45,-72,-65,-42,-37][b];
+    ellipse(xx,yy,21+(b%2)*4,24,far?"#b9a08c":(b%2?"#b77d6c":"#d19a72"));
+   }
+   for(let b=0;b<4;b++)ellipse([-28,18,8,-8][b],[-48,-59,-80,-35][b],4,3,"#e8b78e");
+ }else{
+   line(0,17,1,-49,far?"#9f8d79":"#866d6a",8);
+   line(0,-35,-19,-64,far?"#9f8d79":"#866d6a",4);
+   for(let b=0;b<6;b++){
+    const xx=[-27,-5,18,35,8,-21][b],yy=[-56,-82,-71,-52,-43,-37][b];
+    ellipse(xx,yy,23+(b%2)*3,25,far?"#9bd1a2":(b%2?"#6eaf84":"#82bf89"));
+   }
+   for(let b=0;b<5;b++)ellipse([-29,18,7,-9,31][b],[-54,-69,-81,-39,-50][b],3.4,4,b%2?"#f8d9e6":"#fff0b8");
+ }
+ ctx.restore();
+}
+function flower(x,y,kind,n){
+ const stem=kind==="night"?"#85a9a2":kind==="sunset"?"#a68d64":"#6b9b66";
+ line(x,y,x+(n%2?3:-3),y-10-(n%3)*4,stem,2);
+ const yy=y-11-(n%3)*4;
+ if(kind==="sunset"){
+  ellipse(x,yy,4,9,n%2?"#dfb275":"#e8c28e");line(x,yy-8,x+2,yy-12,"#efcb91",1);
+ }else if(kind==="night"){
+  ellipse(x,yy,3,3,"#b0d3c1");ellipse(x,yy,1,1,"#f2e8c8");
+ }else{
+  for(let p=0;p<5;p++){const angle=p*2*Math.PI/5;ellipse(x+Math.cos(angle)*5,yy+Math.sin(angle)*5,4.3,4.3,n%2?"#fff0df":"#f5d5eb");}
+  ellipse(x,yy,3.7,3.7,"#e9af58");
+ }
+}
+function cloud(x,y,scale,color){
+ ctx.save();ctx.translate(x,y);ctx.scale(scale,scale);
+ ellipse(0,10,72,18,color);ellipse(-33,1,34,25,color);ellipse(2,-10,44,33,color);ellipse(40,4,30,22,color);
+ ctx.restore();
+}
+function bird(x,y,flap,silhouette){
+ ctx.strokeStyle=silhouette;ctx.lineWidth=2.6;ctx.lineCap="round";
+ ctx.beginPath();ctx.moveTo(x-13,y-3);ctx.quadraticCurveTo(x-6,y-11-flap,x,y);
+ ctx.quadraticCurveTo(x+6,y-11+flap,x+13,y-3);ctx.stroke();
+}
+function landscape(s,kind){
+ const night=kind==="night",sunset=kind==="sunset";
+ const grad=ctx.createLinearGradient(0,0,0,ground);
+ grad.addColorStop(0,s.sky);grad.addColorStop(.66,s.top);grad.addColorStop(1,night?"#b3adc6":sunset?"#f5d8b1":"#d7efda");
+ ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
+ const sunX=772,sunY=night?92:sunset?169:103;
+ // A controlled soft glow, not a screen-wide gradient pasted over the scene.
+ const glow=ctx.createRadialGradient(sunX,sunY,8,sunX,sunY,night?103:140);
+ glow.addColorStop(0,night?"#f5f1d847":sunset?"#fff0b55a":"#fff7b450");glow.addColorStop(1,"#ffffff00");
+ ctx.fillStyle=glow;ctx.fillRect(sunX-150,sunY-150,300,300);
+ ellipse(sunX,sunY,night?29:sunset?44:38,night?29:sunset?44:38,night?"#f7f3df":sunset?"#ffdfae":"#fff3ba");
+ if(night){
+  ellipse(sunX+15,sunY-12,27,27,s.sky);
+  for(let i=0;i<45;i++){const x=wrap(i*197+47,W),y=14+wrap(i*89+31,197);
+   const shimmer=.72+.2*Math.sin(t*1.1+i*1.8);
+   ctx.globalAlpha*=shimmer;ellipse(x,y,i%8===0?2.3:1.2,i%8===0?2.3:1.2,"#f7eed6");ctx.globalAlpha/=shimmer;
+  }
+ }
+ for(let i=0;i<6;i++){
+  const x=wrap(i*247+40-scroll*.035,W+420)-140,y=51+(i%3)*48;
+  cloud(x,y,.66+(i%3)*.14,night?"#a7a4c4":sunset?"#f8d4c3":"#faf6e8");
+ }
+ if(!night)for(let i=0;i<3;i++)bird(wrap(i*331+145-scroll*.065,W+260)-95,100+i*26,Math.sin(t*5+i)*3,sunset?"#b67777":"#779e9e");
+ // Each ridge follows the actual riding distance; near layers pass faster.
+ hillBand(night?"#76849b":sunset?"#ccb4a0":"#aad4b7",253,18,.006,scroll*.08);
+ hillBand(s.hill,292,29,.009,scroll*.15);
+ hillBand(s.far,329,17,.013,scroll*.26);
+ for(let i=0;i<11;i++){
+  const x=wrap(i*157+35-scroll*.31,W+260)-130;
+  const yy=345+(i%3)*5;
+  tree(x,yy,.39+(i%3)*.1,s,kind,true);
+ }
+ // Midground landmarks pass the pony more slowly than roadside flowers.
+ for(let i=0;i<8;i++){
+  const x=wrap(i*246+125-scroll*.57,W+320)-160,y=369+(i%2)*10;
+  tree(x,y,.75+(i%3)*.15,s,kind,false);
+ }
+ // A proper trail: verge, worn earth and small scrolling stones.
+ ctx.fillStyle=s.grass;ctx.fillRect(0,374,W,23);
+ ctx.fillStyle=night?"#6c6174":sunset?"#ae7c72":"#b58d70";ctx.fillRect(0,388,W,72);
+ ctx.fillStyle=s.soil;ctx.fillRect(0,402,W,58);
+ ctx.fillStyle=night?"#8d8290":sunset?"#d6a38b":"#d6ab83";
+ ctx.fillRect(0,392,W,6);
+ for(let i=0;i<42;i++){
+  const x=wrap(i*83+23-scroll*1.05,W+110)-55, y=415+(i*19)%47;
+  ellipse(x,y,2+(i%4),1.2,i%4===0?"#ffffff45":"#745d6745");
+ }
+ // Flowing flowers and tufts along the path edge, passing at full ride speed.
+ for(let i=0;i<34;i++){
+  const x=wrap(i*71+29-scroll*1.08,W+100)-50,y=383-(i%3)*3;
+  if(i%3===0)flower(x,y,kind,i);else{
+   line(x,y,x-3,y-9,night?"#7e9f96":sunset?"#9d9e75":"#6d9e68",2);
+   line(x,y,x+4,y-13,night?"#7e9f96":sunset?"#9d9e75":"#6d9e68",2);
+  }
+ }
+}
+function flyingObjects(kind){
+ // Passing details, not a random particle soup: deterministic positions tied to scroll.
+ for(let i=0;i<15;i++){
+  const par=.4+(i%4)*.18,x=wrap(141+i*223-scroll*par,W+210)-100;
+  const y=64+wrap(i*97+31,292)+Math.sin(t*1.2+i)*7;
+  if(kind==="night"){
+   const radius=2.4+(i%3);
+   const halo=ctx.createRadialGradient(x,y,0,x,y,13);
+   halo.addColorStop(0,"#fff3aeba");halo.addColorStop(1,"#fff3ae00");
+   ctx.fillStyle=halo;ctx.fillRect(x-13,y-13,26,26);ellipse(x,y,radius,radius,"#fff0ab");
+  }else if(kind==="sunset"){
+   ctx.save();ctx.translate(x,y);ctx.rotate(.6+Math.sin(t+i)*.4);
+   ellipse(0,0,5,2.7,i%2?"#ad7266":"#f6d8a6");line(-7,1,7,-1,"#9d6e59",1);ctx.restore();
+  }else{
+   if(i%4===0){
+    ellipse(x-5,y,5.5,3.5,"#f5cadb");ellipse(x+5,y,5.5,3.5,"#f2dba8");ellipse(x,y+3,2.1,5,"#866983");
+   }else{
+    ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(t+i)*.8);
+    ellipse(0,0,4.2,2.2,i%2?"#f2d4e3":"#fff3d5");ctx.restore();
+   }
+  }
+ }
+}
+function sky(s){
+ if(sceneFade>0&&lastScene!==scene){
+  landscape(scenes[lastScene],lastScene);
+  ctx.save();ctx.globalAlpha=1-sceneFade;landscape(s,scene);ctx.restore();
+ }else landscape(s,scene);
 }
 function horseArt(){const c=horses[horse];const bounce=mode==="running"&&jumpY===0?Math.sin(t*13)*3:0;const legSwing=mode==="running"&&jumpY===0?Math.sin(t*18)*13:0;
  ctx.save();ctx.translate(horsex,ground-56+jumpY+bounce);if(invulnerable>0&&Math.floor(t*13)%2===0)ctx.globalAlpha=.55;
@@ -153,17 +289,22 @@ function obstacles(){for(const i of items){if(i.type==="fence"){round(i.x,ground
  else if(i.type==="carrot")carrot(i.x,ground-57+Math.sin(t*4+i.phase)*5);
  else star(i.x,ground-132+Math.sin(t*3+i.phase)*7);}}
 function overlay(title,desc){round(200,105,560,172,24,"#fff9fff0");ctx.textAlign="center";ctx.fillStyle="#85499b";ctx.font="bold 41px Trebuchet MS, sans-serif";ctx.fillText(title,480,173);ctx.fillStyle="#624767";ctx.font="20px Trebuchet MS, sans-serif";ctx.fillText(desc,480,214);ctx.font="bold 17px Trebuchet MS, sans-serif";ctx.fillText("Press Start or tap JUMP to ride",480,249);ctx.textAlign="left";}
-function draw(){sky(scenes[scene]);obstacles();horseArt();if(mode==="ready")overlay("Ready, rider? 🐴","A happy pony adventure awaits!");if(mode==="paused")overlay("Rest stop 🌸","Press Resume when you're ready.");if(mode==="over")overlay("Great ride! ⭐","You rode "+Math.floor(distance)+" meters and found "+carrots+" carrots!");}
-function frame(ts){const dt=last?Math.min(.04,(ts-last)/1000):0;last=ts;update(dt);draw();requestAnimationFrame(frame);}
+function drawTrailPlate(){
+ ctx.save();round(20,18,246,43,7,scene==="night"?"#292e55d8":"#fff9e2e6");
+ ctx.fillStyle=scene==="night"?"#f7eedc":"#5d5161";ctx.font="bold 12px Trebuchet MS, sans-serif";ctx.letterSpacing="1px";
+ ctx.fillText(trailNames[scene],35,44);ctx.restore();
+}
+function draw(){sky(scenes[scene]);obstacles();horseArt();flyingObjects(scene);drawTrailPlate();if(mode==="ready")overlay("Ready, rider? 🐴","A happy pony adventure awaits!");if(mode==="paused")overlay("Rest stop 🌸","Press Resume when you're ready.");if(mode==="over")overlay("Great ride! ⭐","You rode "+Math.floor(distance)+" meters and found "+carrots+" carrots!");}
+function frame(ts){const dt=last?Math.min(.04,(ts-last)/1000):0;last=ts;update(dt);if(sceneFade>0)sceneFade=Math.max(0,sceneFade-dt*2);draw();requestAnimationFrame(frame);}
 document.querySelectorAll("[data-horse]").forEach(btn=>btn.addEventListener("click",()=>{horse=btn.dataset.horse;document.querySelectorAll("[data-horse]").forEach(b=>{const yes=b===btn;b.classList.toggle("active",yes);b.setAttribute("aria-pressed",String(yes));});message("Meet "+btn.textContent.trim()+"! 🐴");}));
-$("trail").addEventListener("change",e=>{scene=e.target.value;message("Beautiful choice! Your new trail is ready.");});
+$("trail").addEventListener("change",e=>{const next=e.target.value;if(next===scene)return;lastScene=scene;scene=next;sceneFade=1;document.documentElement.dataset.scene=scene;$("trail-hint").textContent=trailNames[scene]+" — "+trailDescriptions[scene];message("Now riding the "+trailNames[scene].toLowerCase()+". Watch the scenery change!");});
 $("start").addEventListener("click",start);$("jump").addEventListener("click",leap);$("pause").addEventListener("click",pause);
-$("sound").addEventListener("click",()=>{soundOn=!soundOn;$("sound").textContent=soundOn?"🔊 Sound on":"🔇 Sound off";$("sound").setAttribute("aria-pressed",String(soundOn));if(soundOn)tone(490,.12);});
+$("sound").addEventListener("click",()=>{soundOn=!soundOn;$("sound").textContent=soundOn?"♫ Sound on":"♫ Sound off";$("sound").setAttribute("aria-pressed",String(soundOn));if(soundOn)tone(490,.12);});
 document.addEventListener("keydown",e=>{if(["Space","ArrowUp","ArrowLeft","ArrowRight"].includes(e.code)&&!["BUTTON","SELECT","INPUT"].includes(document.activeElement.tagName))e.preventDefault();if(e.repeat&&["Space","ArrowUp"].includes(e.code))return;if(e.code==="Space"||e.code==="ArrowUp")leap();if(e.code==="KeyP")pause();if(e.code==="KeyR")start();if(e.code==="ArrowLeft"||e.code==="ArrowRight")keys[e.code]=true;});
 document.addEventListener("keyup",e=>{if(e.code==="ArrowLeft"||e.code==="ArrowRight")keys[e.code]=false;});
 window.addEventListener("blur",()=>{keys={};if(mode==="running")pause();});
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&mode==="running")pause();});
-reset();message("Choose your pony, then press Start riding!");requestAnimationFrame(frame);
+document.documentElement.dataset.scene=scene;reset();message("Choose your pony, pick a trail, then start riding.");requestAnimationFrame(frame);
 })();
 </script>
 </body>
