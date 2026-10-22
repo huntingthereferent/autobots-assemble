@@ -172,6 +172,9 @@ def choose_d2_heldout(test,train):
     Exclude prior original, mixed, broad/full, and separate A tail-role
     selections. No model feature depends on TEST answers.
     """
+    # Build the 386k-row source index exactly once. Rebuilding it within
+    # a 50k-row generator made the identical cohort needlessly expensive.
+    train_set=set(train)
     prior_source=set(original.select_test(test,train))
     prior_mixed=set(previous.untouched_new_heldout(test,train)[0])
     earlier_full=set(broad.choose_new(test,train))
@@ -183,10 +186,10 @@ def choose_d2_heldout(test,train):
     for rel in mixed.RELATIONS:
         elig=sorted((t for t in test if t[1]==rel and
                      t not in prior_source and t not in prior_mixed and
-                     t not in set(train)),
+                     t not in train_set),
                     key=lambda t:(hash_source(("\t".join(t)+"|"+a_salt).encode()).hexdigest(),t))
         prior_roles.update(elig[:16])
-    excluded=prior_source|prior_mixed|earlier_full|prior_roles|set(train)
+    excluded=prior_source|prior_mixed|earlier_full|prior_roles|train_set
     cohort=[]
     for rel in mixed.RELATIONS:
         eligible=sorted(
