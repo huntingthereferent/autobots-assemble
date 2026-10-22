@@ -9,7 +9,8 @@
 .overview .metric-running{--flow-color:#71d6e4;--flow-glow:rgba(80,199,219,.15)}
 .overview .metric-queued{--flow-color:#f3c07b;--flow-glow:rgba(241,169,85,.14)}
 .overview .metric-passed{--flow-color:#94e5a9;--flow-glow:rgba(98,222,146,.14)}
-.overview .metric-failed{--flow-color:#ec98ad;--flow-glow:rgba(239,118,140,.12)}
+.overview .metric-failed{--flow-color:#a9bbc3;--flow-glow:rgba(153,176,187,.08)}
+.overview .metric-followups{--flow-color:#94e5a9;--flow-glow:rgba(98,222,146,.14)}
 .metric-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .metric-top span{font:700 10px/1.4 var(--data-font);color:#c6d7dc;letter-spacing:.14em}
 .metric-glyph{font-size:20px;font-weight:400;color:var(--flow-color);opacity:.85}
@@ -20,6 +21,14 @@
 .flow-level i{display:block;flex:1;min-width:0;height:5px;border-radius:1px;background:#253a43;border:1px solid #36515a;transition:background .5s,box-shadow .5s}
 .flow-level i.on{background:var(--flow-color);border-color:var(--flow-color);box-shadow:0 0 9px var(--flow-glow)}
 .overview .metric small{margin:6px 0 0;color:#9fb6bc;letter-spacing:0;font-size:10px;font-weight:500}
+.outcome-ledger{display:flex;flex-wrap:wrap;align-items:center;gap:6px 22px;padding:10px 13px;margin:0 0 12px;background:#0a171b;border:1px solid #2b4149;border-radius:7px;font:10px/1.6 var(--data-font);color:#b4c7ce}
+.outcome-ledger>span:first-child{font-weight:700;letter-spacing:.1em;color:#8ed5d6}
+.outcome-ledger b{color:#c4d2d7;font-weight:650}
+.outcome-ledger small{flex-basis:100%;color:#93a8b3;font-size:10px}
+.state.later_pass{border-color:#48836d;color:var(--green)}
+.state.failure,.state.cancelled,.state.neutral{border-color:#526a75;color:#b1c5ce}
+.hist-bar.failed{background:#738b96}
+.steps li.failed{border-left-color:#738b96}
 .flow-snapshots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid #2d4750;border-radius:8px;overflow:hidden;background:#09141a}
 .flow-snapshots>div{display:flex;align-items:baseline;gap:9px;justify-content:space-between;min-width:0;padding:12px 14px;border-right:1px solid #2d4750}
 .flow-snapshots>div:last-child{border-right:0}
