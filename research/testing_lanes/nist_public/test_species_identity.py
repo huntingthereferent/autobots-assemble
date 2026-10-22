@@ -5,7 +5,7 @@ from species_identity import URL, CAS, INCHI_KEY, MAX_BYTES, classify, observe
 
 def page(*, h1="Water", cas=CAS, formula="H<sub>2</sub>O",
          key=INCHI_KEY, webbook="NIST Chemistry WebBook"):
-    return (f"""<!doctype html><html><body><header>{webbook}</header>
+    return (f"""<!doctype html><html><body><h1>{webbook}</h1>
       <h1>{h1}</h1>
       <ul><li>Formula: {formula}</li>
         <li>Molecular weight: 18.0153</li>
