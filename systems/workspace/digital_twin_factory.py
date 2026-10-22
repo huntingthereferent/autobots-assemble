@@ -135,7 +135,7 @@ def _run(*argv: str) -> str:
 
 def birth_twin(*, source: str, target: str, source_sha: str, confirm: str,
                visibility: str = "private") -> dict:
-    """Provision an EMPTY destination and mirror history; keep all Actions disabled.
+    """Provision an EMPTY destination and copy all branch/tag history; keep Actions disabled.
 
     Requires locally installed git + gh authenticated AS THE TARGET OWNER.
     Never overwrites existing repositories or copies another account's secrets.
@@ -154,8 +154,8 @@ def birth_twin(*, source: str, target: str, source_sha: str, confirm: str,
     if exists.returncode == 0:
         raise FileExistsError("Destination must be a NEW, empty repository")
     with tempfile.TemporaryDirectory(prefix="digital-twin-") as temporary:
-        clone = str(Path(temporary) / "mirror.git")
-        _run("git", "clone", "--mirror",
+        clone = str(Path(temporary) / "source.git")
+        _run("git", "clone", "--bare",
              f"https://github.com/{source_owner}/{source_repo}.git", clone)
         head = _run("git", "-C", clone, "rev-parse", "refs/heads/main")
         if head != source_sha:
@@ -176,7 +176,7 @@ def birth_twin(*, source: str, target: str, source_sha: str, confirm: str,
     return {
         "schema": "digital-twin-birth/v1", "source": source, "target": target,
         "pinned_main_sha": source_sha, "verified_main_sha": source_sha,
-        "history_mirrored": True, "actions_enabled": False,
+        "branch_and_tag_history_cloned": True, "actions_enabled": False,
         "independent_workloads_started": False,
         "next": "Audit workflow triggers and configure an explicit lane allowlist before enabling Actions",
     }
