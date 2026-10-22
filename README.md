@@ -6,7 +6,7 @@
 
 The public work view reads actual GitHub workflow runs and native job/step results, with original workstation research and walls alongside them. Runs only show what GitHub executed; saved research findings are separate historical evidence. The earlier animated source graph remains optional at [trace.html](docs/live/trace.html). Local private process handoffs remain available only through the loopback workstation viewer.
 
-**James Muneoka · Independent research · Human problem-solving**
+**Independent research · finite mathematics · language · computational experiments · research infrastructure**
 
 **Why this repository exists:** [The Human Wall](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/THE_HUMAN_WALL.md) is the question at the root of James's work. He is investigating whether the vastness of what humans learn about reality can spill into local problems as disproportionate uncertainty, imagined possibilities, and explanations that drift from observation — and whether that relationship can become normal across different layers. This is a working research question, not an established universal cause of human behavior.
 
