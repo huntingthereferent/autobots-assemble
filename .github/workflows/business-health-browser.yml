@@ -1,0 +1,24 @@
+name: business-health-browser
+
+on:
+  pull_request:
+    paths:
+      - "money/products/P002_business-health-tracker/app/**"
+      - "network/tests/test_business_health_browser.py"
+      - ".github/workflows/business-health-browser.yml"
+  workflow_dispatch:
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: node money/products/P002_business-health-tracker/app/test.mjs
+      - run: python -m pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Verify obsolete AI responses cannot displace current calculated state
+        run: python -m unittest -v network.tests.test_business_health_browser

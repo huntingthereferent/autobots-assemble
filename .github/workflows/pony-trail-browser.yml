@@ -1,0 +1,24 @@
+name: pony-trail-browser
+
+on:
+  pull_request:
+    paths:
+      - "docs/live/pony-trail.html"
+      - "network/tests/test_pony_trail_ui.py"
+      - "network/tests/test_pony_trail_browser.py"
+      - ".github/workflows/pony-trail-browser.yml"
+  workflow_dispatch:
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Source and input-boundary checks
+        run: python -m unittest -v network.tests.test_pony_trail_ui network.tests.test_pony_trail_browser

@@ -1,0 +1,25 @@
+name: suno-intake-browser
+
+on:
+  pull_request:
+    paths:
+      - "docs/live/suno-intake.html"
+      - "docs/live/audio-intake-core.js"
+      - "network/tests/test_suno_export_intake.py"
+      - "network/tests/test_suno_intake_browser.py"
+      - ".github/workflows/suno-intake-browser.yml"
+  workflow_dispatch:
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Verify audio math, direction source and real browser movement
+        run: python -m unittest -v network.tests.test_suno_export_intake network.tests.test_suno_intake_browser

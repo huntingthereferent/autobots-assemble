@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "source_id": "gwosc",
+  "name": "Gravitational Wave Open Science Center",
+  "documentation_url": "https://gwosc.org/api/",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "gravitational-wave event and strain catalog",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": "GET",
+    "url": "https://gwosc.org/api/v2/event-versions?format=api&pagesize=1",
+    "mode": "explicit_opt_in",
+    "expected_format": "json",
+    "scope": "One versioned gravitational-wave event-catalog record, page size one; no strain files, no full event series",
+    "max_bytes": 300000,
+    "redirects": "deny",
+    "timeout_seconds": 15
+  },
+  "access": "public_limited",
+  "boundary": "Official API v2 and event version must be selected before scientific interpretation; documentation GET alone is not event evidence.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED",
+  "probe_revision_note": "Follow documented API v2 event-versions resource and explicit pagesize=1. First 2026-10-22 /api/ source wall remains archived; current revised endpoint is a candidate until independently observed."
+}

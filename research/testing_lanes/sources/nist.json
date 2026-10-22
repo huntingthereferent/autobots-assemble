@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "nist",
+  "name": "NIST Chemistry WebBook",
+  "documentation_url": "https://webbook.nist.gov/chemistry/",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "scientific reference property database",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": null,
+    "url": null,
+    "mode": "manual_review_required",
+    "expected_format": null,
+    "scope": "Specific chemical page to select after data field and condition contract",
+    "max_bytes": null,
+    "redirects": "deny",
+    "timeout_seconds": null
+  },
+  "access": "manual_rights_review",
+  "boundary": "Reference values depend on chemical ID, state, pressure, temperature and units. Review NIST Standard Reference Data reuse terms before harvesting.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}

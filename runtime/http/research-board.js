@@ -9,6 +9,7 @@ const lanes = {
   OPEN: "open",
 };
 let knownCheckpoints = [];
+let boardRequestSerial = 0;
 
 function textNode(tag, value, className = "") {
   const node = document.createElement(tag);
@@ -154,15 +155,18 @@ function renderBoard(data) {
 }
 
 async function loadBoard(checkpoint = "") {
+  const serial = ++boardRequestSerial;
   const error = el("research-error");
   error.hidden = true;
   try {
     const path = "/api/research-board" + (checkpoint ? "?checkpoint=" + encodeURIComponent(checkpoint) : "");
     const response = await fetch(path, {cache:"no-store"});
     const data = await response.json();
+    if (serial !== boardRequestSerial) return;
     if (!response.ok || data.available === false) throw new Error(data.error || data.reason || "Board source unavailable");
     renderBoard(data);
   } catch (err) {
+    if (serial !== boardRequestSerial) return;
     error.textContent = err.message || String(err);
     error.hidden = false;
     // Never retain stale cards from an older checkpoint after an error.

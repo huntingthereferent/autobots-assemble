@@ -69,7 +69,25 @@ async function save(){
  if(!worksheet)return;
  worksheet.title=$("#ws-title").value||worksheet.title;worksheet.knowledge_goal=$("#knowledge-goal").value;worksheet.instructions=$("#instructions").value;worksheet.learner=$("#learner").value;worksheet.subject=$("#subject").value;worksheet.page_size=$("#page-size").value;worksheet.columns=Number($("#columns").value);worksheet.include_answer_key=$("#answer-key-toggle").checked;worksheet.variant=$("#variant").value;
  const r=await fetch("/api/worksheets",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(worksheet)});const data=await r.json();if(r.ok){worksheet=data;renderAll();loadLibrary()}else alert(data.error||"Could not save")}
-async function loadLibrary(){const r=await fetch("/api/worksheets");const data=await r.json();library.innerHTML="";(data.worksheets||[]).forEach(ws=>{const b=document.createElement("button");b.className="library-item";b.type="button";b.innerHTML=`<strong>${ws.title}</strong><span>${ws.template||"custom"} · ${ws.level||"standard"} · ${ws.items?.length||0} items</span>`;b.onclick=()=>{worksheet=ws;hydrate();renderAll()};library.append(b)})}
+async function loadLibrary(){
+ const r=await fetch("/api/worksheets");
+ if(!r.ok)throw Error("Could not load worksheet library");
+ const data=await r.json();
+ library.replaceChildren();
+ (Array.isArray(data.worksheets)?data.worksheets:[]).forEach(ws=>{
+  const b=document.createElement("button");
+  b.className="library-item";
+  b.type="button";
+  const title=document.createElement("strong");
+  title.textContent=ws.title||"Untitled worksheet";
+  const detail=document.createElement("span");
+  detail.textContent=(ws.template||"custom")+" · "+(ws.level||"standard")+
+   " · "+(Array.isArray(ws.items)?ws.items.length:0)+" items";
+  b.append(title,detail);
+  b.onclick=()=>{worksheet=ws;hydrate();renderAll()};
+  library.append(b);
+ });
+}
 function hydrate(){if(!worksheet)return;$("#template").value=worksheet.template||"custom";renderFields();$("#level").value=worksheet.level||"standard";$("#variant").value=worksheet.variant||"A";$("#ws-title").value=worksheet.title||"";$("#knowledge-goal").value=worksheet.knowledge_goal||"";$("#learner").value=worksheet.learner||"";$("#subject").value=worksheet.subject||"";$("#instructions").value=worksheet.instructions||"";$("#page-size").value=worksheet.page_size||"letter";$("#columns").value=String(worksheet.columns||1);$("#seed").value=worksheet.seed||1;$("#answer-key-toggle").checked=worksheet.include_answer_key!==false}
 $("#template").onchange=renderFields;$("#generate-worksheet").onclick=generate;$("#save-worksheet").onclick=save;$("#print-worksheet").onclick=()=>window.print();$("#answer-key-toggle").onchange=()=>{if(worksheet){worksheet.include_answer_key=$("#answer-key-toggle").checked;renderAll()}};$("#columns").onchange=()=>{if(worksheet){worksheet.columns=Number($("#columns").value);renderAll()}};$("#page-size").onchange=()=>{if(worksheet){worksheet.page_size=$("#page-size").value;renderAll()}};
 $("#add-question").onclick=()=>{if(!worksheet)worksheet={...payload(),items:[],title:$("#ws-title").value||"Untitled Worksheet",worksheet_id:""};worksheet.items.push({prompt:"New question",answer:"",kind:"response",lines:2});renderAll()};

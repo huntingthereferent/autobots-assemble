@@ -25,6 +25,10 @@ The initial goal may simply be:
 
 The dive protocol then turns that broad entry into bounded source movements without pretending the whole field is one solved question.
 
+## Cross-disciplinary testing contexts
+
+The [research test lane registry](testing_lanes/README.md) contains separate candidate test contexts linked to official source catalogs. They are not downloaded studies or verified experiments. Each context has an explicit question, measurement, failure condition and provenance boundary. Workstation intake remains bounded and observation-only until source-specific records are admitted.
+
 ## Durable outputs
 
 Exploratory sessions that are worth keeping belong under [`research/dives/`](dives/).

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "pubmed",
+  "name": "PubMed / NCBI E-utilities",
+  "documentation_url": "https://www.ncbi.nlm.nih.gov/books/NBK25499/",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "biomedical bibliographic index",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": "GET",
+    "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=26315443%5Buid%5D&retmode=json",
+    "mode": "explicit_opt_in",
+    "expected_format": "json",
+    "scope": "PMID 26315443 search result identity; no full text",
+    "max_bytes": 300000,
+    "redirects": "deny",
+    "timeout_seconds": 15
+  },
+  "access": "public_limited",
+  "boundary": "Identifiers, retractions, revisions and publication types need checking; abstracts and articles have separate terms.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}

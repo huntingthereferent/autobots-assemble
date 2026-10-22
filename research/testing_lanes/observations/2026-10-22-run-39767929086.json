@@ -1,0 +1,213 @@
+{
+  "schema_version": 1,
+  "observation_kind": "PUBLIC_METADATA_SOURCE_ADMISSION",
+  "observed_run_id": 39767929086,
+  "observed_run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39767929086",
+  "workflow_job_id": 119788239268,
+  "source_code_commit": "b0ff39f00a109c2a17d1d2aeace3847ac0b3ffad",
+  "observed_utc_date": "2026-10-22",
+  "source_contracts_current_status": "Historical observation; later source probes may use revised endpoints.",
+  "boundary": "Public source structural metadata and exact response hashes only; not a scientific validation, license grant, record-level data admission or proof that future requests succeed.",
+  "source_status_counts": {
+    "metadata_observed": 11,
+    "source_wall": 2,
+    "manual_not_probed": 5
+  },
+  "observations": [
+    {
+      "body_sha256": "b2a39cf5d916cfc05f78e15e5acae368a68c245d827935445f2f6423ff0d7414",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:51.412618+00:00",
+      "response_bytes": 61560,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "openalex",
+      "source_url": "https://api.openalex.org/works/https://doi.org/10.1126/science.aac4716",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "250d2f45939c61a01cec648a9ada5e3ecbd89bd13e38d0336caebc0f486f7817",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:51.854327+00:00",
+      "response_bytes": 8014,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "crossref",
+      "source_url": "https://api.crossref.org/works/10.1126/science.aac4716",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "3c94d24b5a2388e82abe86f690dcff408d1ec3910a5a48582b25dd30715d6a14",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:52.595862+00:00",
+      "response_bytes": 5521,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "osf",
+      "source_url": "https://api.osf.io/v2/nodes/?page%5Bsize%5D=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "error_class": "HTTPError",
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "zenodo",
+      "source_url": "https://zenodo.org/api/records/?q=reproducibility&size=1",
+      "state": "SOURCE_WALL"
+    },
+    {
+      "body_sha256": "7e408fec68984cfcf25f360ca267e706bc5ef27284a17351f78429660c14acd0",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:54.061014+00:00",
+      "response_bytes": 1910,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "openml",
+      "source_url": "https://www.openml.org/api/v1/json/data/61",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "eab981544435f02f026ef0098ba218b0d7cbb74d937ecbb084d9b1ec310902e3",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:54.204569+00:00",
+      "response_bytes": 1430,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "hf",
+      "source_url": "https://huggingface.co/api/datasets?limit=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "3058bc9daa0f9a47f2b6a335e6fc6688cc2d3afd8647a0d229bc7861522fec28",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:54.642555+00:00",
+      "response_bytes": 181,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "pubmed",
+      "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=26315443%5Buid%5D&retmode=json",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "70169e0f79c9ce6f2de41c5bb073e0b0721875aac07020e0ae5b8e75d3ddb5b6",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:54.898798+00:00",
+      "response_bytes": 28787,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "ctgov",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies?query.term=diabetes&pageSize=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "1e24a6c3db7d4b93b5b52f9c823f419a6d3f96341303bb83c01a13d6d3be19a6",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:55.231788+00:00",
+      "response_bytes": 125,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "pubchem",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/962/property/MolecularFormula/JSON",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "84951bebc119977a946682d165ba15cbbff02febcfe5ebb732eb5a3a7f8ba253",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:08:55.627718+00:00",
+      "response_bytes": 130816,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "earthdata",
+      "source_url": "https://cmr.earthdata.nasa.gov/search/collections.json?short_name=MOD13Q1&page_size=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "error_class": "HTTPError",
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "gwosc",
+      "source_url": "https://gwosc.org/api/",
+      "state": "SOURCE_WALL"
+    },
+    {
+      "body_sha256": "b7d97d40e1d86955bac3ca5bbc4fe534f1872c505479392e029e37f99d8e605c",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:09:02.514182+00:00",
+      "response_bytes": 294,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "worldbank",
+      "source_url": "https://api.worldbank.org/v2/country/US/indicator/SP.POP.TOTL?format=json&per_page=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "8ae58ef1d0d3dbaa3628b83bdcf3dce0758205c995430c44bf1a6a00bcb71617",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T11:09:03.707829+00:00",
+      "response_bytes": 87139,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "nvd",
+      "source_url": "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2021-44228",
+      "state": "METADATA_OBSERVED"
+    }
+  ],
+  "manual_gates": [
+    "physionet",
+    "openneuro",
+    "nist",
+    "noaa",
+    "oecd"
+  ],
+  "scientific_experiments_run": 0,
+  "dataset_files_downloaded": false,
+  "unresolved_source_walls": [
+    "zenodo",
+    "gwosc"
+  ],
+  "previous_results_never_overwritten": true
+}

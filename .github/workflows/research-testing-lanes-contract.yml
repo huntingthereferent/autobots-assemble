@@ -1,0 +1,29 @@
+name: research-testing-lanes-contract
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/**"
+      - ".github/workflows/research-testing-lanes-contract.yml"
+  push:
+    branches: [main]
+    paths:
+      - "research/testing_lanes/**"
+      - ".github/workflows/research-testing-lanes-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check research lane registry
+        run: python research/testing_lanes/lane_registry.py check
+      - name: Test admission boundaries
+        run: python -m unittest discover -s research/testing_lanes -p "test_*.py" -v

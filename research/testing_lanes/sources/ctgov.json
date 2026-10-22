@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "ctgov",
+  "name": "ClinicalTrials.gov",
+  "documentation_url": "https://clinicaltrials.gov/data-api/api",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "clinical-trial registry",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": "GET",
+    "url": "https://clinicaltrials.gov/api/v2/studies?query.term=diabetes&pageSize=1",
+    "mode": "explicit_opt_in",
+    "expected_format": "json",
+    "scope": "One public trial metadata search result",
+    "max_bytes": 300000,
+    "redirects": "deny",
+    "timeout_seconds": 15
+  },
+  "access": "public_limited",
+  "boundary": "Registration, result submission and clinical efficacy are separate. Never infer patient-level outcomes from registry status.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}
