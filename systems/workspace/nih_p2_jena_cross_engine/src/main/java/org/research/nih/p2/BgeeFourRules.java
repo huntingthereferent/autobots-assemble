@@ -72,7 +72,7 @@ public final class BgeeFourRules {
     }
 
     public static void main(String[] args) throws IOException {
-        if(args.length!=2 && args.length!=4) throw new IllegalArgumentException(
+        if(args.length!=2 && args.length!=3) throw new IllegalArgumentException(
             "Pass authenticated original N-Triples input, ephemeral result path and optional one-premise ablation");
         String mode=args.length==3 ? args[2] : "full";
         if(!mode.equals("full") && !mode.equals("omit-genex") &&
