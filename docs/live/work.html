@@ -628,9 +628,9 @@ footer{border-top-color:#253942}
   </div>
   <div class="refresh-readout" role="status"><span class="indicator" aria-hidden="true"></span><strong>Automatic GitHub source checks</strong><small id="next-check">Preparing next verification</small></div>
   <details class="notebook" id="history-panel">
-    <summary class="notebook-heading"><span><span class="lab-label">OBSERVATION WINDOW</span><strong id="window-title">Run activity by day</strong></span><small id="history-window">Loading first page…</small></summary>
+    <summary class="notebook-heading"><span><span class="lab-label">OBSERVATION WINDOW</span><strong id="window-title">Run activity for selected period</strong></span><small id="history-window">Loading first page…</small></summary>
     <div class="history-chart" id="history-chart" aria-label="Observed run outcomes by day"><p class="no-source">Loading dated source runs…</p></div>
-    <p class="fine">Bars summarize the currently retrieved pages only. Load older runs to extend the observation window; a missing date in this sample does not establish inactivity.</p>
+    <p class="fine">Bars summarize the currently retrieved pages only, using the selected journal range. Results are last-recorded statuses, not observed completion times. A missing date in this sample does not establish inactivity.</p>
   </details>
 <section id="executions" aria-label="Actual GitHub work execution">
   <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Select a run to inspect its jobs, steps, exact revision and source boundaries.</p></div>
@@ -699,7 +699,7 @@ footer{border-top-color:#253942}
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
     checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],
     catalog:[],catalogLoaded:false,rateLimitUntil:0,lastAttempt:0,
-    archiveLoading:false,archiveComplete:false,archiveAt:null,archiveIndexed:0,archiveError:null,
+    archiveLoading:false,archiveComplete:false,archiveAt:null,archiveIndexed:0,archiveError:null,liveAvailable:false,
     runVisible:20,catalogVisible:16,recordVisible:16,movementVisible:18,wallVisible:12,
     selectedUpdated:null,catalogNextPage:2,catalogExhausted:false,catalogTotal:null,catalogLoading:false};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
@@ -729,36 +729,35 @@ footer{border-top-color:#253942}
     if(app.latestPage.length)renderMetrics();renderRuns();renderHistory();renderCatalog();
   }
   function renderHistory(){
-    const today=new Date();today.setHours(0,0,0,0);
-    const keyOf=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
-    const days=Array.from({length:7},(_,i)=>{
-      const date=new Date(today.getFullYear(),today.getMonth(),today.getDate()-(6-i));
-      return {key:keyOf(date),label:date.toLocaleDateString(undefined,{month:"short",day:"numeric"}),passed:0,failed:0,other:0};
-    });
-    const byDay=new Map(days.map(d=>[d.key,d]));
+    const range=window.WorkstationFlow.historyBins(app.runs);
+    const days=range.bins.map(bin=>({...bin,passed:0,failed:0,other:0}));
     for(const r of app.runs){
-      const d=new Date(r.created||"");if(!Number.isFinite(d.getTime()))continue;
-      const group=byDay.get(keyOf(d));if(!group)continue;
+      const timestamp=Date.parse(r.created||"");
+      if(!Number.isFinite(timestamp))continue;
+      const group=days.find(d=>timestamp>=d.start&&timestamp<d.end);
+      if(!group)continue;
       const result=statusOf(r);
       group[result==="success"?"passed":(["failure","cancelled","timed_out"].includes(result)?"failed":"other")]++;
     }
     const max=Math.max(1,...days.map(d=>d.passed+d.failed+d.other));
     const chart=$("history-chart");chart.replaceChildren();
+    chart.style.gridTemplateColumns="repeat("+days.length+", minmax("+(days.length>12?"31px":"44px")+", 1fr))";
+    chart.setAttribute("aria-label","Indexed workflow results · "+range.label);
     for(const d of days){
-      const total=d.passed+d.failed+d.other;const column=el("div",undefined,"hist-day");
-      const bars=el("div",undefined,"hist-bars");
+      const total=d.passed+d.failed+d.other,column=el("div",undefined,"hist-day"),bars=el("div",undefined,"hist-bars");
       for(const kind of ["other","failed","passed"]){
         if(!d[kind])continue;
         const bar=el("span",undefined,"hist-bar "+kind);
         bar.style.height=Math.max(2,80*d[kind]/max)+"px";
-        bar.title=d.key+" · "+d[kind]+" "+kind+" run(s) in retrieved pages";
+        bar.title=d.tooltip+" · "+d[kind]+" "+kind+" run(s) in retrieved index (last recorded outcome)";
         bars.append(bar);
       }
-      const name=el("strong",d.label);const count=el("small",total+" sampled");
-      column.append(bars,name,count);chart.append(column);
+      column.append(bars,el("strong",d.label),el("small",total+" indexed"));
+      chart.append(column);
     }
+    $("window-title").textContent=range.title;
     const total=app.runs.length;
-    $("history-window").textContent=total+" indexed IDs · local last 7 days";
+    $("history-window").textContent=range.label+" · "+days.length+" intervals · "+total+" indexed IDs";
     if(app.archiveComplete){
       $("history-state").textContent=total+" source IDs available · "+app.archiveIndexed+
         " archived "+safeDate(app.archiveAt)+"; latest GitHub checks separate";
@@ -893,14 +892,18 @@ footer{border-top-color:#253942}
   function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
-  function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
-  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
+  function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked,liveAvailable:app.liveAvailable});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
+  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();
+    const live=app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000;
+    const liveIds=new Set(live?app.latestPage.map(r=>r.id):[]);
+    return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&liveIds.has(r.id)&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
     $("runs-scope").textContent=window.WorkstationFlow.scopeLabel(subset.length,Math.min(subset.length,app.runVisible))+" · "+app.runs.length+" indexed";
     for(const r of subset.slice(0,app.runVisible)){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
       btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
       const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
       btn.append(el("p",r.branch+" · "+r.head.slice(0,10)+" · "+safeDate(r.created)));
+      if(["queued","in_progress"].includes(statusOf(r))&&!app.latestPage.some(x=>x.id===r.id))btn.append(el("small","Historical state — not verified live","fine"));
       btn.addEventListener("click",()=>selectRun(r.id,true));area.append(btn);
     }
     $("show-more-runs").hidden=subset.length<=app.runVisible;
@@ -988,6 +991,7 @@ footer{border-top-color:#253942}
     const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
     header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
     header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
+    if(["queued","in_progress"].includes(statusOf(r))&&!app.latestPage.some(x=>x.id===r.id))header.append(el("p","Archived status: this run is not included in the latest live API sample.","fine"));
     if(plausible(r.url,"run"))header.append(link("Open original workflow run ↗",r.url));
     header.append(el("p","Source jobs and steps below are read from GitHub. A successful workflow proves only its declared checks.","fine"));
     area.append(header);$("details-scope").textContent="Run "+r.id+" · "+r.head.slice(0,10);
@@ -1080,7 +1084,7 @@ footer{border-top-color:#253942}
       const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
       app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
       app.latestPage=runs;
-      app.checked=Date.now();
+      app.checked=Date.now();app.liveAvailable=true;
       mergeRuns(runs);
       app.rateLimitUntil=0;
       if(runs.length<100&&app.nextPage===2&&!app.archiveComplete)app.olderExhausted=true;
@@ -1099,6 +1103,7 @@ footer{border-top-color:#253942}
     }catch(e){
       $("live-dot").className="indicator error";
       $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
+      app.liveAvailable=false;renderMetrics();
       if(/403|429|rate limit/i.test(e.message))app.rateLimitUntil=Date.now()+15*60*1000;
       $("feed-error").textContent="Could not refresh the execution source: "+e.message+". Displayed results may be stale; no current status inferred.";
       if(!app.runs.length)$("runs").replaceChildren(el("p","No verified execution sample loaded.","no-source"));
@@ -1130,6 +1135,7 @@ footer{border-top-color:#253942}
   });
   setInterval(()=>{
     updateNextCheck();
+    if(window.WorkstationFlow.tick())renderMetrics();
     if(!document.hidden&&!app.reading&&Date.now()>=app.rateLimitUntil&&(!app.lastAttempt||Date.now()-app.lastAttempt>=PERIOD))refresh();
   },10000);
   // Same-page audit tab. The child maintains its own read-only evidence model
@@ -1166,7 +1172,7 @@ footer{border-top-color:#253942}
     if(typeof height!=="number"||!Number.isFinite(height)||height<300||height>200000)return;
     auditFrame.style.height=Math.max(940,Math.ceil(height)+12)+"px";
   });
-  window.WorkstationFlow.install(()=>{app.runVisible=20;renderRuns();});
+  window.WorkstationFlow.install(()=>{app.runVisible=20;renderRuns();renderHistory();});
   selectWorkstationView();
   loadCatalog();
   refresh();
