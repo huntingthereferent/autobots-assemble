@@ -33,12 +33,14 @@ PARENTS=(
     ("clean_D4L2_L4U2","6@24,33 2 2 2 2 3 3","6@34,42 3 3 3 3 1 1"),
 )
 TOP="6@34,21 3"
+CUP={"lateral":(5,35,10,43),"upper_left":(17,5,25,10),
+     "upper_middle":(35,5,43,10),"upper_right":(47,5,55,10)}
 CONTROLS=(
     ("repeat_without_intervening_action","5"),
-    ("selected_top_left_after_first_pour","3 5"),
-    ("selected_top_right_after_first_pour","4 5"),
-    ("selected_top_up_after_first_pour","1 5"),
-    ("selected_top_down_after_first_pour","2 5"),
+    ("selected_top_left_after_first_pour","6@34,21 3 5"),
+    ("selected_top_right_after_first_pour","6@34,21 4 5"),
+    ("selected_top_up_after_first_pour","6@34,21 1 5"),
+    ("selected_top_down_after_first_pour","6@34,21 2 5"),
     ("click_right_middle_then_left1","6@46,33 3 5"),
     ("click_lower_L_then_left1","6@34,42 3 5"),
     ("click_left_middle_then_up1","6@24,33 1 5"),
