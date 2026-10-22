@@ -18,7 +18,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 CID = 2519
 SOURCE_URL = (
     "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/"
-    "2519/property/MolecularFormula,MolecularWeight,CanonicalSMILES/JSON"
+    "2519/property/MolecularFormula,MolecularWeight,ConnectivitySMILES/JSON"
 )
 MAX_BYTES = 100_000
 TIMEOUT = 15
