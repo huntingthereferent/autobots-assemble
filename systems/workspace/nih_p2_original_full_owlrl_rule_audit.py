@@ -17,8 +17,7 @@ import argparse
 import json
 
 from rdflib import Graph, URIRef, RDF, RDFS, OWL
-from owlrl import DeductiveClosure, OWLRL_Semantics
-
+ 
 from . import nih_phase2_external_obo_graph_trial as source
 from . import nih_p2_obo_owlrl_source_entailment as earlier
 
@@ -138,6 +137,7 @@ def examine(graph):
     derived=Graph()
     for triple in graph:
         derived.add(triple)
+    from owlrl import DeductiveClosure, OWLRL_Semantics
     DeductiveClosure(OWLRL_Semantics, rdfs_closure=True).expand(derived)
     if len(derived)>MAX_MATERIALIZED_TRIPLES:
         raise ValueError("OWL RL complete-graph materialization exceeded capacity")
