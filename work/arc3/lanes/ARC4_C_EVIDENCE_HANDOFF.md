@@ -16,6 +16,10 @@ The latest [draft PR #398](https://github.com/huntingthereferent/autobots-assemb
 
 **These are pixel events, not an official WIN rule.** Top, right, and bottom early source transitions still require an event-order audit. Reversible post-pour tests in [draft #392](https://github.com/huntingthereferent/autobots-assemble/pull/392) returned 24/24 official level4 results and did not establish a movement-history cause.
 
+## New independently replayed source-event finding
+
+The separate [lane A native run #39729756294](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294) passed its 10 original SDK resets. In all three visual-positive source conditions, the **first measured top and right boundary changes occurred at frame21** despite no observed left/bottom boundary changes. This reinforces that "clean lateral" meant a *specific left-side observation*, not that all boundaries were quiet. The frozen lane A events are indexed [here](../runs/ARC4_EVIDENCE_INDEX_2026-10-22.md). The run has zero official level5/WIN.
+
 ## Independent lanes, no silent data promotion
 
 - **A — original-frame event order:** [PR #407: contract and original-native audit](https://github.com/huntingthereferent/autobots-assemble/pull/407) (separate experimental branch). Freeze three source-positive conditions and matched controls. Independently measure first original source-frame events at all four boundaries and outside cup windows. Preserve complete JSON/NPZ.
