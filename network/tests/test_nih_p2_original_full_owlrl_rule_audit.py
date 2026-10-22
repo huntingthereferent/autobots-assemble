@@ -2,11 +2,12 @@
 from __future__ import annotations
 
 import os
+import importlib.util
 from pathlib import Path
 import unittest
 
 from rdflib import Graph, URIRef, RDF, RDFS, OWL
-from owlrl import DeductiveClosure, OWLRL_Semantics
+HAS_OWLRL=importlib.util.find_spec("owlrl") is not None
 
 from systems.workspace import nih_p2_original_full_owlrl_rule_audit as trial
 
@@ -40,6 +41,7 @@ class OriginalFullOWLRLRuleAuditTests(unittest.TestCase):
             g.add(t)
         self.g=g
 
+    @unittest.skipUnless(HAS_OWLRL,"optional OWL RL package required for materializer fixture")
     def test_all_nonasserted_sound_property_rule_instances_materialize(self):
         expected,counts=trial.independently_expected(self.g)
         self.assertGreaterEqual(len(expected),7)
@@ -57,6 +59,7 @@ class OriginalFullOWLRLRuleAuditTests(unittest.TestCase):
             self.assertNotIn((s,p,o),self.g)
         reasoned=Graph()
         reasoned += self.g
+        from owlrl import DeductiveClosure, OWLRL_Semantics
         DeductiveClosure(OWLRL_Semantics,rdfs_closure=True).expand(reasoned)
         missing=[t for t in expected if t not in reasoned]
         # A documented engine-specific *schema serialization* boundary,
