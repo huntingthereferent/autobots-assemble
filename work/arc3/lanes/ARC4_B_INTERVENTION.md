@@ -32,5 +32,20 @@ Six frozen upper-bar source action histories from identical verified D3L2/L3U2 l
 
 Next frozen test within this independent lane: different genuine movement histories that **end at the same source-selected upper-bar bounding box**, to determine whether tested cup fill depends only on apparent final placement or also the actual native movement path. Do not infer hidden-engine action rules.
 
+## Identical upper-bar coordinates from different native histories — source verified
+
+First original SDK run: [#39754800592](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754800592), raw [artifact #12415351323](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754800592/artifacts/12415351323), SHA-256 `3ecfa8fd00ff5fad6b3aa4843c97f1f092fd2b37d394ad8dc5390f4fc18b7414`.
+
+Exact source-pixel verification was then made a standalone Python audit `work/arc3/audit_arc4_same_position_pixel_diff.py`. It passed as an independent CI step on [run #39755328707](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39755328707); combined native-source and pixel-comparison [artifact #12415019473](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39755328707/artifacts/12415019473), SHA-256 `a64546e50db61ca07a986e6afc142b85eec4b7501f5516ba2c670fcdf58b544a`. Both artifacts have configured 90-day retention; no separate durable repo archive of the raw ZIP has been verified.
+
+Five frozen original SDK upper movement paths (direct LEFT1; LEFT→RIGHT→LEFT; LEFT→UP→DOWN; LEFT→DOWN→UP; LEFT→LEFT→RIGHT), two independent native entrances each = **10/10 genuine original SDK games**. All end with selected-bar bbox `[26,20,37,22]`, all cup first-full frames `lateral=13`, `top_left=25`, `top_middle=21`, `top_right=21`, first top/right boundary change 21, and official level4 NOT_FINISHED (zero level5/WIN).
+
+Precise difference of each longer history against direct LEFT1, verified on both entrance witnesses:
+- Immediately before ACTION5: original pixel source row63 `(x10,y63)` and `(x11,y63)` are palette14 with direct LEFT1 and palette0 in longer histories. This is **2 source pixels**; the semantics of that display region are unknown.
+- At the final original pour frame: only `(x11,y63)` differs (14 vs 0).
+- Across all **34 native pour animation frames**, each longer history and direct LEFT1 differ in precisely one pixel per aligned frame (`x11,y63`). There are **zero** differing pixel-frame values in rows `y0..62` across all 34 frames, for every compared history and both witnesses.
+
+The original "bottom border" audit used only rows `y59..62`, excluding the last row `y63`. The earlier claim is restricted to that measured slice, not the full image bottom edge. Thus **the original visible interior animation is identical for these five observed movement histories, while a bottom-row pixel is different**. That is not proof of hidden game-state equivalence or a general movement law.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
