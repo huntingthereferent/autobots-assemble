@@ -83,5 +83,15 @@ The frozen original D3 lower arrangement and final upper LEFT1→ACTION5 were un
 
 **Measured limit:** native row63 responds to additional selection actions **even with no added movement**. These results do not support an upper-bar-specific movement signal. They do not establish the actual semantics of row63, a general input counter, or whether it participates in the source game's official objective. The next narrowly frozen experiment compares source-authenticated background/object/upper selections without any extra movement.
 
+## Object/background click-only source controls — independently reproduced
+
+[Original SDK click-only run #39760058838](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39760058838), [complete original-source JSON/NPZ artifact #12416998822](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39760058838/artifacts/12416998822), ZIP SHA256 `12951757474f724765a8f00ec0edc2d484398382a7f00b6585f221775a960acc`, 90-day artifact retention configured (durable independent copy unverified).
+
+Seven prospectively frozen source `ACTION6` click sequences, two independent original SDK entrance witnesses each: **14/14 original SP80 games reached official level4 NOT_FINISHED; no level5/WIN**. Lower original arrangement and final upper LEFT1→ACTION5 frozen. Compare no extra click, one extra authenticated click at right bar (46,33), background (5,16), upper bar (34,21), two clicks at right bar, two clicks at background, and one right then one background click. Original action receipts, actual pixel under click, pre-pour original frame and entire native pour stack were retained.
+
+**Observed first palette14 pixel in source row63 before ACTION5:** no extra click x10; one extra click at any tested target x11; two extra clicks at any tested targets x12. **Pre-pour rows y0..62 were identical to the baseline** in every condition; all four measured cup first-full frame ordinals were unchanged (lateral13, top-left25, top-middle/right21). Original native A/B observations agreed. The row63 change therefore is not specific to movement of an upper bar nor to selecting the right/upper bar: background clicks also produce it in this controlled source arrangement.
+
+The source-only result suggests a rendered input-history correlate, but does **not** prove what row63 internally represents (an action counter, timer, HUD, resource display, or other mechanism) or that it is irrelevant to actual native WIN logic. No objective conclusion or inferred hidden-state equivalence is licensed. Further work requires an independent source contrast tied to the game's official `levels_completed`, not more unrestricted row63 counting.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
