@@ -1,12 +1,12 @@
 {
   "schema": "meta-workstation/registry-v1",
-  "description": "Source-owned operational navigation and lane placement for the two live public GitHub workstations. Meta is the default viewer; native research evidence remains in each originating repo.",
+  "description": "GitHub source registry for the combined workstation pipeline. Node identity, placement, and cross-account routing are operational details, not visible dashboard categories.",
   "source_of_truth": "huntingthereferent/autobots-assemble",
   "updated_at": "2026-10-22",
   "nodes": [
     {
       "id": "A",
-      "label": "Original",
+      "label": "Workstation 01",
       "repo": "huntingthereferent/autobots-assemble",
       "visibility": "public",
       "viewer": "https://huntingthereferent.github.io/autobots-assemble/live/work.html",
@@ -17,25 +17,26 @@
     },
     {
       "id": "B",
-      "label": "Dessy",
+      "label": "Workstation 02",
       "repo": "aeren-research/continuum-oscillator",
       "visibility": "public",
       "viewer": "https://aeren-research.github.io/continuum-oscillator/live/work.html",
       "journal": "https://github.com/aeren-research/continuum-oscillator/actions",
       "mode": "live-public-api",
       "source_ref": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
-      "scope": "Verified code mirror; B independent source-contract tests active; copied research workflows remain inactive pending explicit per-lane admission."
+      "scope": "Public independent workstation; source mirror verified. One research contract workflow active; other copied workflow definitions remain inactive pending admission.",
+      "formal_name": "AEREN Research & Development"
     }
   ],
   "lane_rules": [
     {
       "id": "B-CONTRACT",
-      "title": "B / Research source contract",
+      "title": "Independent research source contract",
       "match": [
-        "dessy · independent research lane contract"
+        "aeren research · independent research lane contract"
       ],
       "node": "B",
-      "admission": "B's first individually enabled workflow. This runs source-registry and boundary tests; it does not prove research replication.",
+      "admission": "Independent research source contract enabled on the second repository; not proof of scientific replication.",
       "admitted_nodes": [
         "B"
       ],
@@ -152,7 +153,7 @@
     "authority": "GitHub records for each repository; this index records placement, not permission to start jobs",
     "routing": "A/B routing hints are computed from independent GitHub observation snapshots. Before every next batch, read routing.json and verify exact Actions/workflow eligibility. Never auto-dispatch; never transfer an unadmitted lane; do not infer slowdown from one count.",
     "oscillation": "Record source and target revision, lane, job URL, result, provenance and explicit acceptance before transferring state",
-    "b_privacy": "B is currently public. Its GitHub Actions API can be read without login; public source does not prove that B's independent research workflows are activated. If B is made private again, the meta viewer must mark it unavailable rather than displaying zero.",
+    "b_privacy": "The second repository is currently public and its Actions API is readable. If visibility changes, missing source access must be reported as unknown, never zero.",
     "recovery": "Open the shared meta dashboard first. Read both repos' handoff files and GitHub Actions journals. Browser displays public job state; ChatGPT may use the linked accounts to handle separate code/actions."
   },
   "dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/meta.html",
