@@ -22,12 +22,21 @@ class ABWorkstationBridgeTests(unittest.TestCase):
     def fill_until_connection(self):
         for _ in range(12):
             result = advance(self.data, execute=True, workers=3)
+            rows = replayed_rows(self.journal)
+            for row in rows:
+                for collision in row["movements"]:
+                    if (collision["kind"] != "CONNECTION" or not collision["existing_word"]
+                            or collision["from"] == collision["existing_word"]):
+                        continue
+                    prior = next((m for candidate in rows for m in candidate["movements"]
+                                  if m["kind"] == "BRANCH"
+                                  and m["word"] == collision["existing_word"]
+                                  and m["to"] == collision["to"]), None)
+                    if prior is not None:
+                        return rows
             if result["status"] == "QUIET":
                 break
-            rows = replayed_rows(self.journal)
-            if any(m["kind"] == "CONNECTION" for row in rows for m in row["movements"]):
-                return rows
-        self.fail("finite A/B cluster did not produce a witnessed collision")
+        self.fail("finite A/B cluster did not produce a cross-trajectory collision")
 
     def test_exact_replayed_branch_witness_is_accepted_only_for_bound_parent_lane(self):
         advance(self.data, execute=True)
