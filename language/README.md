@@ -1,6 +1,6 @@
 # Language — Referent and Evidence
 
-[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [Separations](SEPARATIONS.md) · [Pragmatics](PRAGMATICS.md) · [Current writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md)
+[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [Separations](SEPARATIONS.md) · [Pragmatics](PRAGMATICS.md)
 
 **James is James at every layer.** A change of register, context, software representation, or mathematical notation does not imply a different speaker. The language referent and the earlier A/B terminology designate the same continuing inquiry; particular finite operators `A` and `B` retain their own specified mathematical meanings.
 
