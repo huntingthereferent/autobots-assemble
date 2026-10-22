@@ -33,7 +33,7 @@ A branch need not be discarded to return. We can keep what it exposed, identify 
 
 When the investigation reaches a specified mathematical or software task, use the [evidence contract](LANGUAGE_REFERENT_CONTRACT.md) and the mathematical model's native proof conditions. Distinguish observation from inference, implementation from execution, and a particular finite result from a universal claim. When a representation drifts, correct the representation while preserving the intended referent and prior evidence.
 
-**Writing:** The [current writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md) is the public source index. Do not republish material removed from it.
+**Source withdrawal:** The retired public writing archive is no longer part of the current research record. Do not republish removed material.
 
 **Grounding:** [Current naming and scope note](LANGUAGE_REFERENT_GROUND_2026-10-13.md) · [historical A/B language page](AB_LANGUAGE.md) · [historical ground record](AB_Ground_Record_Current_Note_2026-10-11.md) · [formal finite mathematics](work/arc_like_maze/README.md) · [entry](ENTRY.md).
 
