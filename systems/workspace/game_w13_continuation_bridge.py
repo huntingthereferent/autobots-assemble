@@ -30,7 +30,8 @@ class GameW13ContinuationVerifier:
         return HandoffRuntime(event_store=RuntimeJournal(self.data_dir / "runtime.jsonl"))
 
     def verify_observation(self, observation: Observation) -> bool:
-        if (observation.kind != "BRANCH"
+        if (not isinstance(observation.witness_ref, str)
+                or observation.kind != "BRANCH"
                 or observation.capability != CAPABILITY
                 or observation.relation != RELATION
                 or not observation.witness_ref.startswith(WITNESS_PREFIX)):
