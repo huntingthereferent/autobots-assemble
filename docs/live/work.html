@@ -567,9 +567,10 @@ footer{border-top-color:#253942}
     <article class="metric metric-queued"><div class="metric-top"><span>IN QUEUE / NOW</span><span class="metric-glyph" aria-hidden="true">◇</span></div><strong data-stat="queued">—</strong><div class="flow-level" aria-hidden="true"></div><small>Queued at the latest observation</small></article>
     <article class="metric metric-running"><div class="metric-top"><span>IN MOTION / NOW</span><span class="metric-glyph" aria-hidden="true">↗</span></div><strong data-stat="running">—</strong><div class="flow-level" aria-hidden="true"></div><small>Workflow executions in progress</small></article>
     <article class="metric metric-passed"><div class="metric-top"><span>PASSED / TODAY</span><span class="metric-glyph" aria-hidden="true">✦</span></div><strong data-stat="passed">—</strong><div class="flow-level" aria-hidden="true"></div><small>Runs created today, now successful</small></article>
-    <article class="metric metric-failed"><div class="metric-top"><span>NOT PASSED / TODAY</span><span class="metric-glyph" aria-hidden="true">×</span></div><strong data-stat="failed">—</strong><div class="flow-level" aria-hidden="true"></div><small>Today-created failed / cancelled / timed out</small></article>
+    <article class="metric metric-followups"><div class="metric-top"><span>LATER PASSES / INDEX</span><span class="metric-glyph" aria-hidden="true">↺</span></div><strong data-stat="followups">—</strong><div class="flow-level" aria-hidden="true"></div><small>Earlier failures followed by matching passing runs</small></article>
   </div>
-  <div class="flow-snapshots" aria-label="Flow and clearance readings for runs created today">
+  <div class="outcome-ledger" aria-label="Historical run outcomes"><span>RECORDED OUTCOMES · TODAY</span><span><b data-stat="failed">—</b> failed / timed out / action required</span><span><b id="cancelled-today">—</b> cancelled</span><small>Earlier attempts, not unresolved tests. Follow-ups match workflow and branch in the retrieved index.</small></div>
+   <div class="flow-snapshots" aria-label="Flow and clearance readings for runs created today">
     <div><span>CREATED TODAY</span><strong id="flow-created">—</strong></div>
     <div><span>RESOLVED TODAY*</span><strong id="flow-cleared">—</strong></div>
     <div><span>CLEARANCE*</span><strong id="flow-clearance">—</strong></div>
@@ -634,7 +635,7 @@ footer{border-top-color:#253942}
   </details>
 <section id="executions" aria-label="Actual GitHub work execution">
   <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Select a run to inspect its jobs, steps, exact revision and source boundaries.</p></div>
-    <div class="tools run-tools"><label for="run-search">Find <input id="run-search" type="search" placeholder="Workflow, branch, SHA…" autocomplete="off" aria-label="Search retrieved workflow runs"></label><label for="run-filter">Result <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label><label for="workflow-filter">Workflow <select id="workflow-filter"><option value="all">Every workflow</option></select></label></div></div>
+    <div class="tools run-tools"><label for="run-search">Find <input id="run-search" type="search" placeholder="Workflow, branch, SHA…" autocomplete="off" aria-label="Search retrieved workflow runs"></label><label for="run-filter">Result <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Earlier failed / cancelled</option><option value="followups">Earlier failures with later pass</option><option value="success">Passed</option></select></label><label for="workflow-filter">Workflow <select id="workflow-filter"><option value="all">Every workflow</option></select></label></div></div>
   <div class="journal-nav" id="journal-controls" aria-label="Run journal period">
     <div class="journal-modes" role="group" aria-label="Choose journal range"><button id="journal-today" type="button" aria-pressed="true">Today</button><button type="button" data-journal-mode="day" aria-pressed="false">Day</button><button type="button" data-journal-mode="month" aria-pressed="false">Month</button><button type="button" data-journal-mode="year" aria-pressed="false">Year</button><button type="button" data-journal-mode="all" aria-pressed="false">All</button></div>
     <div class="journal-shift"><button id="journal-prev" type="button" aria-label="Previous period">←</button><strong id="journal-title">TODAY</strong><button id="journal-next" type="button" aria-label="Next period" disabled>→</button></div>
@@ -701,21 +702,22 @@ footer{border-top-color:#253942}
     catalog:[],catalogLoaded:false,rateLimitUntil:0,lastAttempt:0,
     archiveLoading:false,archiveComplete:false,archiveAt:null,archiveIndexed:0,archiveError:null,liveAvailable:false,
     runVisible:20,catalogVisible:16,recordVisible:16,movementVisible:18,wallVisible:12,
-    selectedUpdated:null,catalogNextPage:2,catalogExhausted:false,catalogTotal:null,catalogLoading:false};
+    selectedUpdated:null,catalogNextPage:2,catalogExhausted:false,catalogTotal:null,catalogLoading:false,followups:new Map()};
   function el(tag,text,cls){const x=document.createElement(tag);if(text!==undefined)x.textContent=String(text);if(cls)x.className=cls;return x}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
   const isSHA=sha=>typeof sha==="string"&&/^[0-9a-f]{40}$/.test(sha);
   function safeDate(value){const d=Date.parse(value||"");return Number.isFinite(d)?new Date(d).toLocaleString(undefined,{year:"numeric",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"no source timestamp"}
   function statusOf(x){if(x.status==="queued"||x.status==="waiting"||x.status==="pending"||x.status==="requested")return "queued";if(x.status==="in_progress")return "in_progress";if(x.status==="completed"){return x.conclusion||"unknown"}return "unknown"}
-  function pill(s){return el("span",s.replaceAll("_"," ").toUpperCase(),"state "+(s==="success"||s==="failure"||s==="in_progress"||s==="queued"||s==="cancelled"?s:"neutral"))}
+  function pill(s){return el("span",s.replaceAll("_"," ").toUpperCase(),"state "+(s==="success"||s==="later_pass"||s==="in_progress"||s==="queued"?s:"neutral"))}
+  function runBadge(r){const s=statusOf(r);return ["failure","timed_out","action_required"].includes(s)?(app.followups.has(r.id)?"later_pass":"past_failure"):s}
   async function getJSON(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("HTTP "+r.status+(r.status===403?" / public API rate limit":""));return r.json()}
   function readRuns(j){if(!j||!Array.isArray(j.workflow_runs))throw Error("Unexpected GitHub workflow response");
     return j.workflow_runs.filter(r=>Number.isSafeInteger(r.id)&&r.id>0&&isSHA(r.head_sha)&&
       typeof r.name==="string"&&["queued","waiting","pending","requested","in_progress","completed"].includes(r.status))
       .map(r=>({id:r.id,name:r.name,head:r.head_sha,status:r.status,
         conclusion:r.conclusion||null,url:r.html_url,created:r.created_at,updated:r.updated_at,
-        runNumber:r.run_number,branch:r.head_branch||"",event:r.event||"unknown"}));}
+        runNumber:r.run_number,branch:r.head_branch||"",workflowId:r.workflow_id||null,event:r.event||"unknown"}));}
 
   function mergeRuns(incoming){
     const previous=new Map(app.runs.map(r=>[r.id,r]));
@@ -729,6 +731,7 @@ footer{border-top-color:#253942}
       previous.set(r.id,r);
     }
     app.runs=[...previous.values()].sort((a,b)=>Date.parse(b.created)-Date.parse(a.created)||b.id-a.id);
+    app.followups=window.WorkstationFlow.followingPasses(app.runs);
     if(app.latestPage.length)renderMetrics();renderRuns();renderHistory();renderCatalog();
   }
   function renderHistory(){
@@ -740,7 +743,7 @@ footer{border-top-color:#253942}
       const group=days.find(d=>timestamp>=d.start&&timestamp<d.end);
       if(!group)continue;
       const result=statusOf(r);
-      group[result==="success"?"passed":(["failure","cancelled","timed_out"].includes(result)?"failed":"other")]++;
+      group[result==="success"?"passed":(["failure","cancelled","timed_out","action_required"].includes(result)?"failed":"other")]++;
     }
     const max=Math.max(1,...days.map(d=>d.passed+d.failed+d.other));
     const chart=$("history-chart");chart.replaceChildren();
@@ -752,7 +755,7 @@ footer{border-top-color:#253942}
         if(!d[kind])continue;
         const bar=el("span",undefined,"hist-bar "+kind);
         bar.style.height=Math.max(2,80*d[kind]/max)+"px";
-        bar.title=d.tooltip+" · "+d[kind]+" "+kind+" run(s) in retrieved index (last recorded outcome)";
+        bar.title=d.tooltip+" · "+d[kind]+" "+(kind==="failed"?"historical non-success incl. cancellations":kind)+" run(s) in retrieved index (last recorded outcome)";
         bars.append(bar);
       }
       column.append(bars,el("strong",d.label),el("small",total+" indexed"));
@@ -894,12 +897,12 @@ footer{border-top-color:#253942}
   }
   function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
-    else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
+    else if(s==="failure"||s==="timed_out"||s==="action_required")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
   function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked,liveAvailable:app.liveAvailable});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
   function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();
     const live=app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000;
     const liveIds=new Set(live?app.latestPage.map(r=>r.id):[]);
-    return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&liveIds.has(r.id)&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
+    return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&liveIds.has(r.id)&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out","action_required"].includes(statusOf(r)))||(f==="followups"&&app.followups.has(r.id))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
     if(app.selection!==null&&!subset.some(r=>r.id===app.selection)){
       app.selection=null;app.selectedUpdated=null;
@@ -909,8 +912,9 @@ footer{border-top-color:#253942}
     $("runs-scope").textContent=window.WorkstationFlow.scopeLabel(subset.length,Math.min(subset.length,app.runVisible))+" · "+app.runs.length+" indexed";
     for(const r of subset.slice(0,app.runVisible)){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
       btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
-      const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
+      const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(runBadge(r)));btn.append(head);
       btn.append(el("p",r.branch+" · "+r.head.slice(0,10)+" · "+safeDate(r.created)));
+       if(app.followups.has(r.id))btn.append(el("small","Original: "+statusOf(r).toUpperCase()+" · later matching workflow passed","fine"));
       if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.latestPage.some(x=>x.id===r.id)))btn.append(el("small","Last recorded state — not verified current","fine"));
       btn.addEventListener("click",()=>selectRun(r.id,true));area.append(btn);
     }
@@ -1023,11 +1027,16 @@ footer{border-top-color:#253942}
     if($("revision-panel").open)loadRevision(r);
     else $("revision-scope").textContent="Run "+r.id+" · open for exact source paths";
     const area=$("detail");area.replaceChildren();
-    const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
+    const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(runBadge(r)));
     header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
     header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
     if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.latestPage.some(x=>x.id===r.id)))header.append(el("p","Recorded status, not a verified current execution. See the live source indicator.","fine"));
     if(plausible(r.url,"run"))header.append(link("Open original workflow run ↗",r.url));
+     const passedLater=app.followups.get(r.id);
+     if(passedLater){
+       header.append(el("p","Historical outcome: "+String(r.conclusion).toUpperCase()+". A later same-workflow/branch run passed; the individual earlier test repair is not independently verified.","fine"));
+       if(plausible(passedLater.url,"run"))header.append(link("Open later passing run ↗",passedLater.url));
+     }
     header.append(el("p","Source jobs and steps below are read from GitHub. A successful workflow proves only its declared checks.","fine"));
     area.append(header);$("details-scope").textContent="Run "+r.id+" · "+r.head.slice(0,10);
     if(focus&&window.matchMedia("(max-width:980px)").matches)
