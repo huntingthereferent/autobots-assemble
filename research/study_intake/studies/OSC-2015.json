@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "OSC-2015-REPRODUCIBILITY",
+  "lane_ids": [
+    "PSY",
+    "META",
+    "LIT"
+  ],
+  "title": "Estimating the reproducibility of psychological science",
+  "doi": "10.1126/science.aac4716",
+  "year": 2015,
+  "journal": "Science",
+  "article_url": "https://doi.org/10.1126/science.aac4716",
+  "independent_catalog_url": "https://pubmed.ncbi.nlm.nih.gov/26315443/",
+  "research_question": "Do public metadata services agree on the identification of this published study, with source-specific retrieval witnesses?",
+  "measurement": "Normalized DOI, article title and publication year compared independently across Crossref and OpenAlex",
+  "counterexample": "Different DOI or materially different title/year, missing source, or source version ambiguity",
+  "scope": "Bibliographic identity only. No study statistics, hypotheses or replication results are independently recomputed.",
+  "scientific_evidence_status": "NOT_REPRODUCED",
+  "metadata_receipt_status": "NOT_RETRIEVED",
+  "study_data_ingested": false,
+  "data_privacy": "Public bibliographic metadata only; no participant-level data",
+  "source_docs": [
+    "https://www.crossref.org/documentation/retrieve-metadata/rest-api/",
+    "https://help.openalex.org/api/",
+    "https://help.openalex.org/api/authentication/"
+  ],
+  "access_review": "Only named public metadata API records; do not fetch articles or supplemental datasets.",
+  "reference_checked_utc_date": "2026-10-22"
+}
