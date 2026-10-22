@@ -157,6 +157,35 @@ def _cp30_route_fixture(handoff: Handoff, state: HandoffState) -> Inspection:
         ],
     }
 
+def _inspector_gadget(handoff: Handoff, state: HandoffState) -> Inspection:
+    """Project an already-recorded GitHub source observation; never activate here."""
+    query = handoff.inputs
+    output = state.output if isinstance(state.output, dict) else {}
+    return {
+        "kind": "inspector-gadget-source-observation",
+        "title": "Inspector Gadget / source-owned CI observation",
+        "scope": "GitHub Actions workflow outcome only; no owning-lane test or repair",
+        "inputs": [
+            _row("Owning workflow", query.get("lane", "not recorded")),
+            _row("GitHub run ID", query.get("run_id", "not recorded")),
+            _row("Reported conclusion", query.get("event", "not recorded")),
+        ],
+        "outputs": [
+            _row("Source comparison", "matched" if output.get("source_verified") is True
+                 else "not verified"),
+            _row("Handoff state", state.status),
+            _row("Repair dispatched", "no"),
+            _row("Next owner action", output.get("next", "verify the original run")),
+        ],
+        "notes": [
+            "This observation checks a GitHub workflow run against its pinned source.",
+            "An observed CI failure is not necessarily a defect; cancellations may be expected.",
+            "A completed Inspector worker does not complete or repair the owning research lane.",
+            "Viewer panels show saved journal evidence and do not rerun the source observer.",
+        ],
+    }
+
+
 # Names come from the existing *native evidence verifier* contracts. Mapping
 # to an inspector never registers, invokes or replaces those verifiers.
 DEFAULT_INSPECTORS: dict[str, Inspector] = {
@@ -164,6 +193,7 @@ DEFAULT_INSPECTORS: dict[str, Inspector] = {
     "workstation.factory.machine.simulation.v1": _factory_machine,
     "integrated-cp30-three-scope-attestation-v1": _integrated_cp30,
     "integrated-cp30-synthetic-route-audit-v1": _cp30_route_fixture,
+    "inspector-gadget-github-run-v1": _inspector_gadget,
 }
 
 
