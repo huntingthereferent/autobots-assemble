@@ -90,7 +90,7 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
         graph=fixture()
         witnessed,support,provenance=e20.explicit_rdfs_type_oracle(
             graph,set(),{GENE,TARGET},e20.direct_owner_schema(graph))
-        with self.assertRaisesRegex(ValueError,"source asserted"):
+        with self.assertRaisesRegex(ValueError,"original owner RDF types disappeared"):
             e20.compare_types({(OTHER,RDF.type,V)},witnessed,witnessed,support,provenance)
 
     def test_cyclic_source_subclass_ancestry_is_finite(self):
