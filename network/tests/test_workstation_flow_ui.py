@@ -18,16 +18,13 @@ class WorkstationFlowTests(unittest.TestCase):
         css = STYLES.read_text(encoding="utf-8")
         self.assertIn('src="workstation-flow.js"', page)
         self.assertIn('href="workstation-flow.css"', page)
-        for name in ("queued", "running", "passed", "indexed"):
+        for name in ("queued", "running", "passed", "followups", "failed"):
             self.assertIn(f'data-stat="{name}"', page)
         for period in ("day", "month", "year", "all"):
             self.assertIn(f'data-journal-mode="{period}"', page)
         self.assertIn('id="journal-today"', page)
         self.assertIn("window.WorkstationFlow.matches(r)", page)
         self.assertIn('app.runs.length+" indexed"', page)
-        self.assertIn("RUNS INDEXED", page)
-        self.assertNotIn("NOT PASSED / TODAY", page)
-        self.assertIn('setStat("indexed",source.length)', flow)
         self.assertIn("latestPage", flow)
         self.assertIn("archiveComplete", flow)
         self.assertIn("runs created today", page.lower())
@@ -35,6 +32,21 @@ class WorkstationFlowTests(unittest.TestCase):
         self.assertIn("prefers-reduced-motion:reduce", css)
         self.assertNotIn("requestAnimationFrame", flow)
         self.assertNotIn("fetch(", flow)
+
+    def test_historical_failures_and_cancellations_are_not_red_kpis(self):
+        page=PAGE.read_text(encoding="utf-8")
+        flow=FLOW.read_text(encoding="utf-8")
+        css=STYLES.read_text(encoding="utf-8")
+        self.assertIn("LATER PASSES / INDEX",page)
+        self.assertIn("RECORDED OUTCOMES · TODAY",page)
+        self.assertNotIn("NOT PASSED / TODAY",page)
+        self.assertIn('data-stat="followups"',page)
+        self.assertIn('id="cancelled-today"',page)
+        self.assertIn('f==="followups"&&app.followups.has(r.id)',page)
+        self.assertIn("followingPasses(records)",flow)
+        self.assertIn('r.conclusion==="cancelled"',flow)
+        self.assertIn(".hist-bar.failed{background:#738b96}",css)
+        self.assertIn(".state.later_pass",css)
 
     @unittest.skipUnless(shutil.which("node"), "Node.js needed to validate journal date handling")
     def test_journal_dates_and_clock_are_not_all_history(self):
@@ -64,6 +76,27 @@ assert.match(f.clock(afternoon.getTime()), /5:30.*PM/i);
         self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
 
 
+    @unittest.skipUnless(shutil.which("node"), "Node.js required for matched follow-up source inference")
+    def test_later_passes_require_a_newer_same_workflow_and_branch(self):
+        script = r'''
+const assert=require("node:assert/strict"),fs=require("node:fs"),vm=require("node:vm");
+global.window={};vm.runInThisContext(fs.readFileSync(process.argv[1],"utf8"));
+const f=window.WorkstationFlow.followingPasses;
+const at=h=>new Date(2026,9,22,h).toISOString();
+const a={id:10,name:"ARC",branch:"main",status:"completed",conclusion:"failure",created:at(9)};
+const b={...a,id:11,conclusion:"success",created:at(10)};
+const c={...a,id:12,name:"NIH",conclusion:"success",created:at(11)};
+const d={...a,id:13,branch:"other",conclusion:"success",created:at(12)};
+const e={...a,id:14,conclusion:"cancelled",created:at(8)};
+const matched=f([c,a,e,d,b]);
+assert.equal(matched.size,1);
+assert.equal(matched.get(10).id,11);
+assert.equal(matched.has(14),false);
+assert.equal(f([a]).size,0);
+'''
+        run=subprocess.run(["node","-e",script,str(FLOW)],text=True,capture_output=True,cwd=ROOT)
+        self.assertEqual(run.returncode,0,run.stdout+run.stderr)
+
     @unittest.skipUnless(shutil.which("node"), "Node.js needed for archive/live regression")
     def test_archived_queue_does_not_become_live_and_journal_bins_change(self):
         script = r'''
@@ -79,7 +112,7 @@ class Element{
  closest(){return {querySelector:()=>new Element()};}
 }
 const byId=new Map(),stats=new Map();
-for(const name of ["queued","running","passed","indexed"])stats.set(name,new Element());
+for(const name of ["queued","running","passed","followups","failed"])stats.set(name,new Element());
 const modes=["day","month","year","all"].map(mode=>{const e=new Element();e.dataset.journalMode=mode;return e;});
 global.document={
  getElementById(id){if(!byId.has(id))byId.set(id,new Element());return byId.get(id);},
