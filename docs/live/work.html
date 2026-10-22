@@ -990,6 +990,31 @@ footer{border-top-color:#253942}
       }
     }
   }
+  function elapsedBetween(before,after){
+    const start=Date.parse(before||""),end=Date.parse(after||"");
+    return Number.isFinite(start)&&Number.isFinite(end)&&end>=start?end-start:null;
+  }
+  function readableDuration(ms){
+    if(!Number.isFinite(ms)||ms<0)return "unavailable";
+    const sec=Math.round(ms/1000);
+    return sec>=3600?Math.floor(sec/3600)+"h "+Math.floor((sec%3600)/60)+"m":
+      sec>=60?Math.floor(sec/60)+"m "+(sec%60)+"s":sec+"s";
+  }
+  function jobTimingSummary(jobs){
+    const waits=[],runs=[];
+    for(const j of jobs){
+      const wait=elapsedBetween(j.created_at,j.started_at);
+      const duration=elapsedBetween(j.started_at,j.completed_at);
+      if(wait!==null)waits.push(wait);
+      if(duration!==null)runs.push(duration);
+    }
+    if(!waits.length&&!runs.length)return null;
+    const avg=a=>Math.round(a.reduce((n,x)=>n+x,0)/a.length);
+    return "Observed job timings (first "+jobs.length+" jobs): "+
+      (waits.length?readableDuration(avg(waits))+" mean created-to-start wait across "+waits.length:"no valid wait intervals")+
+      " · "+(runs.length?readableDuration(avg(runs))+" mean started-to-finished duration across "+runs.length:"no valid duration intervals")+
+      ". These do not determine total runner capacity.";
+  }
   async function selectRun(id,focus=false){
     if(!Number.isSafeInteger(id)||id<1)return;const r=app.runs.find(x=>x.id===id);if(!r)return;
     app.selection=id;app.selectedUpdated=r.updated;renderRuns();
@@ -1010,13 +1035,18 @@ footer{border-top-color:#253942}
       const json=app.jobCache.has(id)?app.jobCache.get(id):await getJSON(API+"/actions/runs/"+id+"/jobs?per_page=100");
       if(!json||!Array.isArray(json.jobs))throw Error("Missing job array");
       app.jobCache.set(id,json);if(app.selection!==id)return;
-      pane.remove();for(const [index,j] of json.jobs.slice(0,100).entries()){
+      const covered=json.jobs.slice(0,100),timings=jobTimingSummary(covered);
+      if(timings)header.append(el("p",timings,"fine"));
+      pane.remove();for(const [index,j] of covered.entries()){
         const b=el("details",undefined,"job-section");b.open=index===0;
         const title=el("summary",undefined,"job-summary");
         title.append(el("strong",j.name||"Job"),pill(statusOf(j)));
         b.append(title);
         const inside=el("div",undefined,"detail-body");
         inside.append(el("p","Job "+j.id+" · Started "+safeDate(j.started_at)+" · Ended "+safeDate(j.completed_at),"fine"));
+        const wait=elapsedBetween(j.created_at,j.started_at),runtime=elapsedBetween(j.started_at,j.completed_at);
+        if(wait!==null)inside.append(el("p","Source created-to-start wait: "+readableDuration(wait),"fine"));
+        if(runtime!==null)inside.append(el("p","Source started-to-finished duration: "+readableDuration(runtime),"fine"));
         if(plausible(j.html_url))inside.append(link("Inspect this job on GitHub ↗",j.html_url));
         if(Array.isArray(j.steps)&&j.steps.length)appendStepList(inside,j.steps);
         else inside.append(el("p","No steps included in the source response; not interpreted as an empty execution.","no-source"));
