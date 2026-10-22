@@ -708,15 +708,16 @@ footer{border-top-color:#253942}
     if(app.latestPage.length)renderMetrics();renderRuns();renderHistory();renderCatalog();
   }
   function renderHistory(){
-    const day=24*60*60*1000;
-    const today=new Date();const utc=Date.UTC(today.getUTCFullYear(),today.getUTCMonth(),today.getUTCDate());
+    const today=new Date();today.setHours(0,0,0,0);
+    const keyOf=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
     const days=Array.from({length:7},(_,i)=>{
-      const date=new Date(utc-(6-i)*day);return {key:date.toISOString().slice(0,10),label:date.toLocaleDateString(undefined,{month:"short",day:"numeric",timeZone:"UTC"}),passed:0,failed:0,other:0};
+      const date=new Date(today.getFullYear(),today.getMonth(),today.getDate()-(6-i));
+      return {key:keyOf(date),label:date.toLocaleDateString(undefined,{month:"short",day:"numeric"}),passed:0,failed:0,other:0};
     });
     const byDay=new Map(days.map(d=>[d.key,d]));
     for(const r of app.runs){
       const d=new Date(r.created||"");if(!Number.isFinite(d.getTime()))continue;
-      const group=byDay.get(d.toISOString().slice(0,10));if(!group)continue;
+      const group=byDay.get(keyOf(d));if(!group)continue;
       const result=statusOf(r);
       group[result==="success"?"passed":(["failure","cancelled","timed_out"].includes(result)?"failed":"other")]++;
     }
@@ -736,7 +737,7 @@ footer{border-top-color:#253942}
       column.append(bars,name,count);chart.append(column);
     }
     const total=app.runs.length;
-    $("history-window").textContent=total+" indexed IDs · UTC last 7 days";
+    $("history-window").textContent=total+" indexed IDs · local last 7 days";
     if(app.archiveComplete){
       $("history-state").textContent=total+" source IDs available · "+app.archiveIndexed+
         " archived "+safeDate(app.archiveAt)+"; latest GitHub checks separate";
