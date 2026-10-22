@@ -1,0 +1,28 @@
+name: ARC4 lane A native event-order audit
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_event_order_audit.py'
+      - '.github/workflows/arc4-event-order-lane.yml'
+jobs:
+  source-event-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile audit source
+        run: python -m compileall -q work/arc3/native_sp80_stage4_event_order_audit.py
+      - name: Replay 10 original SDK runs and record ordered events
+        run: python -m work.arc3.native_sp80_stage4_event_order_audit --out runtime/data/arc4/arc4-event-order-audit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-source-owned-event-order
+          path: runtime/data/arc4/arc4-event-order-audit.*
+          if-no-files-found: error
+          retention-days: 90
