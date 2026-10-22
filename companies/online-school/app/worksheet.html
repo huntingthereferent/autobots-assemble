@@ -8,6 +8,7 @@
   <meta name="visual-template" content="notegpt_math_generator_v1">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./worksheet.css">
+  <link rel="stylesheet" href="./worksheet-refresh.css">
 </head>
 <body>
   <main class="shell worksheet-shell">
@@ -15,7 +16,7 @@
       <div>
         <p class="eyebrow">Online School</p>
         <h1>Worksheet Studio</h1>
-        <p class="sub">Build the page around the knowledge path, then edit every line before it prints.</p>
+        <p class="sub">Start with a useful page. Change every question. Print something worth keeping.</p>
       </div>
       <div class="studio-actions">
         <a class="ghost button-link" href="./">← School</a>
@@ -26,6 +27,16 @@
 
     <section class="studio-grid">
       <aside class="studio-controls no-print">
+        <section class="starter-kits" aria-labelledby="kits-title">
+          <p class="eyebrow">START HERE / ONE CLICK</p>
+          <h2 id="kits-title">What are we making?</h2>
+          <div class="starter-grid">
+            <button type="button" data-kit="math"><span>＋</span><strong>Math warm-up</strong><small>Focused arithmetic</small></button>
+            <button type="button" data-kit="words"><span>abc</span><strong>Word practice</strong><small>Spelling and patterns</small></button>
+            <button type="button" data-kit="reflection"><span>✦</span><strong>Think & write</strong><small>Observe, explain, question</small></button>
+          </div>
+          <p id="kit-feedback" class="kit-feedback" role="status" aria-live="polite">Choose a starting point, then edit the page below.</p>
+        </section>
         <div class="control-card">
           <p class="eyebrow">Generate</p>
           <label>Template
@@ -101,6 +112,7 @@
 
           <button id="generate-worksheet" class="primary wide" type="button">Generate worksheet</button>
           <p id="worksheet-error" class="error" hidden></p>
+          <p id="worksheet-edit-status" class="edit-status" aria-live="polite">Edit the page, then save it to the library.</p>
         </div>
 
         <div class="control-card">
@@ -162,5 +174,6 @@
     </section>
   </main>
   <script src="./worksheet.js" defer></script>
+  <script src="./worksheet-presets.js" defer></script>
 </body>
 </html>
