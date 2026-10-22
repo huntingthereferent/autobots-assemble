@@ -77,6 +77,49 @@ def profile(rows):
     return observed
 
 
+def cross_relation_role_overlap(rows):
+    """Source-only directed overlap: TRAIN identifier roles, never clinical types.
+
+    The independent oracle reconstructs every set by a separate exhaustive
+    input scan. No TEST or VALID row can supply a role or a class label.
+    """
+    if not rows or type(rows) is not list:
+        raise ValueError("original training triples are required")
+    if any(type(t) is not tuple or len(t)!=3 or t[1] not in CODES
+           or any(type(v) is not str or not v for v in t) for t in rows):
+        raise ValueError("unknown predicate or malformed source role input")
+    role_sets = {}
+    for code in CODES:
+        role_sets[(code,"head")]={h for h,r,t in rows if r==code}
+        role_sets[(code,"tail")]={t for h,r,t in rows if r==code}
+    out={}
+    for code_a in CODES:
+        for role_a in ("head","tail"):
+            for code_b in CODES:
+                for role_b in ("head","tail"):
+                    key=f"{code_a}:{role_a}|{code_b}:{role_b}"
+                    n=len(role_sets[(code_a,role_a)] & role_sets[(code_b,role_b)])
+                    independent = len({
+                        item_a[0 if role_a=="head" else 2]
+                        for item_a in rows if item_a[1]==code_a
+                        if any(item_b[1]==code_b and
+                               item_a[0 if role_a=="head" else 2] ==
+                               item_b[0 if role_b=="head" else 2]
+                               for item_b in rows)
+                    })
+                    if n!=independent:
+                        raise ValueError("independent original TRAIN role scan differs")
+                    out[key]=n
+    return {
+        "original_train_unique_source_identifiers":len(
+            {x for h,r,t in rows for x in (h,t)}),
+        "directed_relation_role_overlap_counts":out,
+        "authenticated_entity_class_labels_from_roles":False,
+        "valid_or_test_labels_used":False,
+        "original_source_relation_directions_are_semantically_proven":False,
+    }
+
+
 def execute(*,readme_file:Path,train_file:Path):
     owner=original_overview(readme_file.read_bytes())
     train,train_id=source.read_source(train_file,"train.tsv")
@@ -88,6 +131,7 @@ def execute(*,readme_file:Path,train_file:Path):
         "original_owner_metadata":owner,
         "entire_original_train_source_identity":train_id,
         "training_only_relation_code_profile":output,
+        "training_only_cross_relation_source_roles":cross_relation_role_overlap(train),
         "original_training_source_unique_rows":len(train),
         "independent_count_verification":"PASS",
         "external_owner_semantic_entity_id_mapping":"UNAVAILABLE_FROM_PINNED_README_AND_TRAIN_TSV",
