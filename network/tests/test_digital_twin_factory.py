@@ -1,4 +1,4 @@
-"""No-network contract tests for digital twin factory admission."""
+import json\n"""No-network contract tests for digital twin factory admission."""
 import unittest
 from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
