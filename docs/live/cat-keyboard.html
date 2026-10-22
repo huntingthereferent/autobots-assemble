@@ -172,7 +172,7 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 </section>
 <section class="beat-starter card" id="beat" aria-labelledby="beat-title">
 <div class="beat-header"><div><span class="eyebrow">SONG WORKBENCH / SIMPLE MODE</span><h2 id="beat-title">1 · Make a beat</h2><p>Pick a groove, put four chords underneath it, then draw a melody.</p></div><button type="button" class="action mint" id="beat-play">▶ Play song</button></div>
-<div class="beat-controls"><label for="groove-preset">BEAT FEEL<select id="groove-preset"><option value="pop">Pop · steady bounce</option><option value="club">Dance · four on the floor</option><option value="rap">Half-time · laid back</option><option value="rnb">R&B · loose pocket</option><option value="indie">Indie · offbeat</option></select></label><button type="button" class="small-btn" id="apply-groove">Use groove for all 16 bars</button><div class="beat-help">Kick → snare → bass → texture. Changing the groove leaves chords and melody alone.</div></div>
+<div class="beat-controls"><label for="tempo">TEMPO / BPM<input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output></label><label for="groove-preset">BEAT FEEL<select id="groove-preset"><option value="pop">Pop · steady bounce</option><option value="club">Dance · four on the floor</option><option value="rap">Half-time · laid back</option><option value="rnb">R&B · loose pocket</option><option value="indie">Indie · offbeat</option></select></label><button type="button" class="small-btn" id="apply-groove">Use groove for all 16 bars</button><div class="beat-help">Kick → snare → bass → texture. Changing the groove leaves chords and melody alone.</div></div>
 <div class="transport-readout"><div id="beat-now" class="transport-now" aria-live="off">NOT PLAYING · Press Play song</div><div id="edit-now" class="transport-edit">EDITING · BAR 01 · MELODY M1</div></div>
 <p class="beat-links"><a href="#harmony">2 · Choose four chords ↓</a><a href="#studio">3 · Draw a melody ↓</a></p></section>
 <section class="harmony card" id="harmony" aria-labelledby="harmony-title">
@@ -207,7 +207,7 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 <div id="harmony-status" role="status" aria-live="polite">FOUR CHORDS · NO RANDOM PICKS</div></details>
 </section>
 <section class="studio" id="studio" aria-label="Cat music studio"><div class="card"><h2>Little tape recorder <span aria-hidden="true">⏺</span></h2><p>Record your actual performance, replay it, or save the notes to bring back later.</p><div class="action-row"><button type="button" class="action" id="rec" aria-pressed="false"><span id="rec-led" class="record-led"></span> Record</button><button type="button" class="action alt" id="play-tape">▶ Replay</button><button type="button" class="action alt" id="stop-tape">■ Stop</button></div><div class="tape"><div id="tape-clock" class="counter">00:00</div><small id="tape-label">A blank tape, waiting for your masterpiece.</small><div class="tape-dots" id="tape-dots" aria-hidden="true"></div></div><div class="action-row"><button type="button" class="small-btn" id="export">↓ Save song</button><button type="button" class="small-btn" id="import">↑ Load song</button><button type="button" class="small-btn" id="clear-tape">Clear tape</button><input class="file-input" type="file" id="song-file" accept="application/json,.json"></div><p class="small-note">Saved songs are small JSON note scores, not audio files. Everything runs locally in your browser; no accounts, uploads or tracking.</p></div>
-<div class="card"><h2>3 · Draw the eight-bar melody <span aria-hidden="true">✳</span></h2><p>Pink ▶ shows the melody you hear. Mint EDIT is the melody opened in your grid. Eight melodies play twice as the chords move across sixteen bars.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play arrangement</button><button type="button" class="action alt" id="loop-clear">Clear bar</button><button type="button" class="action alt" id="preset">Pattern for bar</button></div><div class="grid-controls"><label for="tempo" class="control-label">BPM</label><input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output><span class="control-label">· 16 STEPS × 8 MELODY BARS</span></div>
+<div class="card"><h2>3 · Draw the eight-bar melody <span aria-hidden="true">✳</span></h2><p>Pink ▶ shows the melody you hear. Mint EDIT is the melody opened in your grid. Eight melodies play twice as the chords move across sixteen bars.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play arrangement</button><button type="button" class="action alt" id="loop-clear">Clear bar</button><button type="button" class="action alt" id="preset">Pattern for bar</button></div><div class="grid-controls"><span class="control-label">16 STEPS × 8 MELODY BARS · TEMPO IN BEAT WORKBENCH ↑</span></div>
 <div class="melody-editor-bar" id="melody-editor-bar">
 <div class="melody-editor-top"><strong>MELODY PICKER · HEAR vs EDIT</strong><button type="button" class="small-btn pin-button" id="pin-melody" aria-pressed="false">📌 Pin this melody</button></div>
 <div id="melody-pins" class="melody-pins" role="group" aria-label="Eight melody edit slots"></div>
@@ -614,8 +614,7 @@ function updatePinButton(){
   'Follow mode: selecting a chord bar opens its corresponding melody. Choose M1–M8 to pin a melody.';
  paintMelodyLocation();paintMelodyPins();
 }
-function recordMelodyUndo(){
- const index=melodyEditIndex;
+function recordMelodyUndo(index=melodyEditIndex){
  melodyUndo.push({index,notes:bars[index].notes.map(row=>row.slice())});
  if(melodyUndo.length>24)melodyUndo.shift();
  $('melody-undo').disabled=false;
@@ -734,7 +733,7 @@ function copyPreviousBar(){
  if(selectedBar===0)return;
  const from=bars[selectedBar-1],into=bars[selectedBar];
  into.chord=from.chord?from.chord.slice():null;into.layers=from.layers.slice();into.profile=from.profile;
- if(selectedBar<MELODY_BARS){recordMelodyUndo();into.notes=from.notes.map(row=>row.slice())}
+ if(selectedBar<MELODY_BARS){recordMelodyUndo(selectedBar);into.notes=from.notes.map(row=>row.slice())}
  into.cadence=from.cadence.slice();
  dirtyBars();selectBar(selectedBar);
  harmonyStatus('Copied previous chord/layers'+(selectedBar<MELODY_BARS?' and melody':'')+' to bar '+(selectedBar+1));
@@ -785,7 +784,7 @@ function saveProgression(){
 function deleteProgression(){
  if(!selectedTemplate.startsWith('custom-'))return;
  customProgressions=customProgressions.filter(t=>t.id!==selectedTemplate);selectedTemplate='pop-lift';
- storeTemplates();fillTemplateSelector();applyProgression();harmonyStatus('Custom progression deleted');
+ storeTemplates();fillTemplateSelector();previewProgression();harmonyStatus('Custom progression deleted · song unchanged');
 }
 function downloadJson(data,filename){
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
@@ -809,7 +808,7 @@ async function importProgressions(file){
    if(index>=0)merged[index]=t;else merged.push(t);
   }
   if(!validUserTemplates(merged))throw Error('Too many templates (max 24)');
-  customProgressions=merged;storeTemplates();fillTemplateSelector();applyProgression();
+  customProgressions=merged;storeTemplates();fillTemplateSelector();previewProgression();
   harmonyStatus(entries.length+' custom templates restored locally');
  }catch(err){harmonyStatus('Could not load chord templates: '+err.message)}
  finally{$('progression-file').value=''}
