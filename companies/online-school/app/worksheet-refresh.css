@@ -1,0 +1,27 @@
+/* Worksheet Studio — editor and physical paper remain visually distinct. */
+body{background:linear-gradient(150deg,#eef0f0,#f8f5ee 35%,#f1f3f0);color:#1a2b3d}
+.worksheet-shell{width:min(1540px,calc(100% - 32px));padding:28px 0 80px}
+.worksheet-top{background:linear-gradient(120deg,#20384f,#182d41);color:#fff;padding:28px 30px;border-radius:24px;margin-bottom:22px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+.worksheet-top h1{font-size:clamp(2rem,3.2vw,3.6rem);letter-spacing:-.06em;line-height:1.05;margin:4px 0 10px}
+.worksheet-top .eyebrow{color:#b4ebd6}.worksheet-top .sub{color:#c3d5df;font-size:.82rem;max-width:62ch}
+.worksheet-top .studio-actions{flex-wrap:wrap}.worksheet-top .studio-actions a,.worksheet-top .studio-actions button{border-radius:12px;min-height:42px;padding:9px 15px;font-weight:850;white-space:nowrap}
+.worksheet-top .ghost{background:transparent;color:#fff;border:1px solid #6f8796}.worksheet-top .primary{background:#c7f29e;color:#182c3e;border:0}
+.studio-grid{grid-template-columns:minmax(295px,395px) minmax(0,1fr);gap:22px}
+.studio-controls{top:16px;gap:13px}.control-card{border:1px solid #d5dddc;border-radius:19px;padding:22px;background:#fffefa;box-shadow:0 5px 23px #1c344010}
+.starter-kits{padding:22px;background:#dfeee9;border:1px solid #c2d9d0;border-radius:22px;box-shadow:0 12px 25px #1f42421c}
+.starter-kits .eyebrow{color:#32695a;font-size:.64rem}.starter-kits h2{font-size:1.28rem;letter-spacing:-.055em;margin:4px 0 14px}
+.starter-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.starter-grid button{border:1px solid #b8c7c4;border-radius:12px;background:#fffefa;padding:11px 8px;text-align:left;min-height:95px;display:flex;flex-direction:column;align-items:start}
+.starter-grid button:hover,.starter-grid button[aria-pressed="true"]{border-color:#276c5e;background:#e5f9d6}
+.starter-grid button>span{font-size:1.25rem;font-weight:850;color:#366c62}.starter-grid strong{font-size:.71rem;line-height:1.2;margin-top:auto}.starter-grid small{font-size:.61rem;line-height:1.2;color:#60756b;margin-top:4px}
+.kit-feedback{margin:11px 0 0;color:#46736a;font-size:.72rem}.edit-status{font-size:.74rem;min-height:20px;margin:12px 0 0;color:#48766a;font-weight:750}
+.control-card label{font-size:.78rem;color:#344a58}.control-card label input,.control-card label select,.control-card label textarea{border:1px solid #cad5d4;border-radius:10px;padding:10px 12px;background:#fff;color:#1c2f3c;max-width:100%}
+.control-card .primary{background:#223e53;color:#fff;border:0;border-radius:11px;padding:12px}.control-card .primary:hover{background:#385c6f}
+.question-row{background:#f2f7f3;border:1px solid #d7e4de;border-radius:13px;padding:13px}.question-row-head{border-bottom:1px solid #d8e5df;margin-bottom:8px;padding-bottom:7px}
+.library-item{border-radius:11px;background:#fff;border-color:#d8e2dd;padding:12px}.library-item:hover{border-color:#76af9a}
+.paper-wrap{border-radius:22px;background:#dce2e0;padding:25px 18px;box-shadow:inset 0 1px 4px #1d304410}
+.worksheet-paper{border-radius:4px;box-shadow:0 8px 25px #162e3426;color:#171b21}.worksheet-header h2{letter-spacing:-.04em}
+:where(a,button,input,select,textarea):focus-visible{outline:3px solid #856de3;outline-offset:3px}
+@media(max-width:1100px){.studio-grid{grid-template-columns:1fr}.studio-controls{position:static;overflow:visible;max-height:none}.starter-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:650px){.worksheet-shell{width:min(100% - 18px,1540px);padding-top:14px}.worksheet-top{border-radius:18px;padding:22px;align-items:start;flex-direction:column}.paper-wrap{padding:9px}.worksheet-paper{padding:16px;min-height:auto}.student-line{flex-wrap:wrap}.starter-grid{grid-template-columns:1fr 1fr 1fr}.starter-grid button{min-height:105px}.worksheet-top .studio-actions{width:100%}}
+@media print{.worksheet-shell{width:auto;padding:0}.worksheet-top,.starter-kits,.studio-controls,.edit-status{display:none!important}.paper-wrap{padding:0;background:none;box-shadow:none}.worksheet-paper{border-radius:0;box-shadow:none;padding:.5in .55in;min-height:11in!important}.answer-paper[hidden]{display:none!important}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
