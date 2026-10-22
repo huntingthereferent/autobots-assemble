@@ -1,0 +1,31 @@
+{
+  "complete": false,
+  "errors": {
+    "B": "HTTPError: HTTP Error 404: Not Found"
+  },
+  "limits": "Read-only API observations; no background transport or execution. A successful source job is not a receipt. Missing destination data is UNKNOWN, never proof that no work exists.",
+  "observed_at": "2026-10-22T23:59:24Z",
+  "schema": "meta-workstation/transfer-health-v1",
+  "source_nodes_observed": [
+    "A"
+  ],
+  "summary": {
+    "blocked_or_attention": 1,
+    "no_traffic_asserted": false,
+    "unverified_destination": true,
+    "verified": 0
+  },
+  "transfers": [
+    {
+      "attention": true,
+      "delivery": "NOT_SENT",
+      "from": "A",
+      "id": "AB-20261022-003",
+      "lane": "WORKSTATION",
+      "reason": "Receiver unavailable: secondary account returned HTTP 403 account-suspended response; original repository API returned 404. No payload was sent. No EXPECTED or RECEIVED evidence was written at the destination. Do not infer the secondary source contains this new transfer contract.",
+      "source_commit": "23542b444fd609890d114e3062274035024ced40",
+      "status": "BLOCKED_PRE_DEPARTURE",
+      "to": "B"
+    }
+  ]
+}

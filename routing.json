@@ -1,6 +1,6 @@
 {
   "schema": "meta-workstation/routing-advice-v1",
-  "generated_at": "2026-10-22T22:49:06Z",
+  "generated_at": "2026-10-22T23:59:24Z",
   "last_paired_observation": "2026-10-22T22:48:42Z",
   "signal": "NO_CLEAR_PRESSURE",
   "reason": "No independently supported node-switch signal in the sampled waiting-run counts.",
