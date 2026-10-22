@@ -1,9 +1,1 @@
-{
-  "schema": "ab-meta-observations/v1",
-  "source": "github-actions-api",
-  "nodes": [
-    "A",
-    "B"
-  ],
-  "samples": []
-}
+{"schema":"ab-meta-observations/v1","source":"github-actions-api","nodes":["A","B"],"samples":[{"ts":"2026-10-22T18:56:06Z","nodes":{"A":{"repo":"huntingthereferent/autobots-assemble","observed":true,"in_progress":16,"queued":2,"pending":0,"waiting":0,"latest_run_id":39835676460},"B":{"repo":"aeren-research/continuum-oscillator","observed":true,"in_progress":1,"queued":0,"pending":0,"waiting":0,"latest_run_id":39835445386}}}],"last_updated":"2026-10-22T18:56:06Z"}
