@@ -191,5 +191,34 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
             e20.original_anonymous_class_premise_census(
                 Graph(),set(),set(),{(GENE,RDF.type,V)})
 
+
+    def test_e24_source_anonymous_restrictions_and_intersections_fingerprinted(self):
+        from rdflib.namespace import OWL
+        r=BNode("r"),BNode("i")
+        # Synthetic fixture only; source-connected CI reauthenticates owners.
+        graph=Graph()
+        graph.add((r[0],RDF.type,OWL.Restriction))
+        graph.add((r[0],OWL.onProperty,P))
+        graph.add((r[0],OWL.someValuesFrom,X))
+        graph.add((r[1],OWL.intersectionOf,BNode("rdf-list")))
+        result=e20.original_anonymous_constructor_fingerprint(
+            graph,set(),{(GENE,RDF.type,r[0]),(TARGET,RDF.type,r[0]),
+                         (GENE,RDF.type,r[1])},set())
+        self.assertEqual(result["original_anonymous_class_term_count"],2)
+        self.assertEqual(result["original_anonymous_type_statement_count"],3)
+        self.assertEqual(sum(k["anonymous_class_term_count"]
+                             for k in result["source_constructor_profiles"]),2)
+        self.assertEqual(sum(k["residual_original_node_type_statements"]
+                             for k in result["source_constructor_profiles"]),3)
+        profiles=result["source_constructor_profiles"]
+        self.assertTrue(any("someValuesFrom" in p["original_author_predicate_features"] for p in profiles))
+        self.assertTrue(any("intersectionOf" in p["original_author_predicate_features"] for p in profiles))
+        self.assertFalse(result["bnode_identifiers_or_raw_owner_triples_exported"])
+
+    def test_e24_rejects_missing_source_oracle_statement(self):
+        with self.assertRaisesRegex(ValueError,"boundary changed"):
+            e20.original_anonymous_constructor_fingerprint(
+                Graph(),set(),set(),{(GENE,RDF.type,V)})
+
 if __name__=="__main__":
     unittest.main()
