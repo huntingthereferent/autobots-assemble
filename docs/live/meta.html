@@ -41,7 +41,9 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
 </div>
 <div class="section-heading"><div><div class="micro">01 / allocation ledger</div><h2>Who owns what?</h2><p>Recorded assignments, not a scheduler. A lane stays on A until a real B execution is admitted.</p></div><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Open source registry ↗</a></div>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Research lane</th><th>Node</th><th>Placement / admission</th></tr></thead><tbody id="lane-rows"><tr><td colspan="3">Reading declared lane registry…</td></tr></tbody></table></div></div>
-<div class="section-heading"><div><div class="micro">02 / source journals</div><h2>Jobs in motion</h2><p>Each row links to the owning repository's real GitHub run. No invented work or statuses.</p></div><div class="actionbar"><button id="view-all" aria-pressed="true">All accessible</button><button id="view-a" aria-pressed="false">A</button><button id="view-b" aria-pressed="false">B</button></div></div>
+<div class="section-heading"><div><div class="micro">02 / transfer journal</div><h2>What moved between A and B?</h2><p>Recorded, source-linked handoffs. A copied workflow is not a launched lane.</p></div><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Open handoff records ↗</a></div>
+<div class="panel"><div class="table-wrap"><table><thead><tr><th>Event</th><th>Movement</th><th>Recorded outcome</th></tr></thead><tbody id="handoff-rows"><tr><td colspan="3">Reading recorded cross-node handoffs…</td></tr></tbody></table></div></div>
+<div class="section-heading"><div><div class="micro">03 / source journals</div><h2>Jobs in motion</h2><p>Each row links to the owning repository's real GitHub run. No invented work or statuses.</p></div><div class="actionbar"><button id="view-all" aria-pressed="true">All accessible</button><button id="view-a" aria-pressed="false">A</button><button id="view-b" aria-pressed="false">B</button></div></div>
 <div class="layout">
   <section class="panel"><div class="panel-head"><strong>Latest observed workflow runs</strong><span class="tag" id="runs-source">GITHUB API</span></div><div class="run-list" id="run-list"><div class="empty">Awaiting workflow runs…</div></div></section>
   <aside class="panel"><div class="panel-head"><strong>Continuity / handoff</strong><span class="tag">SOURCE-OWNED</span></div><div class="panel-body">
@@ -52,7 +54,7 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
     <input class="file-upload" id="b-import" type="file" accept=".json,application/json" aria-label="Load private B JSON run journal locally">
     <p class="muted" id="b-import-note" style="font-size:11px">Expected JSON: repository, captured_at, workflow_runs. No credentials or network uploads.</p>
     <p class="snapshot" id="registry-date">Registry not yet read.</p>
-    <p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/systems/workspace/META_WORKSTATION_HANDOFF.md">Reround / reground handoff ↗</a></p>
+    <p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/systems/workspace/META_WORKSTATION_HANDOFF.md">Reground handoff ↗</a></p>
   </div></aside>
 </div>
 </main>
@@ -90,6 +92,16 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
     $("lane-rows").innerHTML=lanes.map(l=>'<tr><td class="lane-name">'+esc(l.title)+'</td><td class="lane-owner">'+esc(l.node)+'</td><td><span class="lane-note">'+esc(l.admission)+'</span></td></tr>').join("")||'<tr><td colspan="3">No admitted lanes recorded.</td></tr>';
     $("registry-date").textContent="Registry: "+String(registry?.updated_at||"unknown")+" · shared source: "+String(registry?.source_of_truth||"unknown");
   }
+  async function readHandoffs(){
+    let j;
+    try{j=await json("https://raw.githubusercontent.com/"+A+"/main/docs/live/meta-handoffs.json")}catch(e){j=await json("meta-handoffs.json")}
+    if(j.schema!=="meta-workstation/handoffs-v1"||!Array.isArray(j.records))throw Error("Invalid shared handoff journal");
+    $("handoff-rows").innerHTML=j.records.map(r=>{
+      const url=String(r.evidence_url||"");
+      const link=url.startsWith("https://github.com/")?'<a target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Evidence ↗</a>':"No source link";
+      return '<tr><td><strong>'+esc(r.id)+'</strong><div class="lane-note">'+esc(r.date)+' · '+esc(r.kind)+'</div></td><td class="lane-owner">'+esc(r.from)+' → '+esc(r.to)+'</td><td><span class="status '+esc(r.status)+'">'+esc(r.status)+'</span><div class="lane-note">'+esc(r.description)+'</div>'+link+'</td></tr>';
+    }).join("");
+  }
   async function json(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("GitHub/source HTTP "+r.status);return r.json()}
   async function readRegistry(){
     try{registry=await json(source)}catch(e){registry=await json("meta-registry.json")}
@@ -112,6 +124,7 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
     $("last-read").textContent="Checking GitHub source…";
     try{
       if(!registry)await readRegistry();
+      await readHandoffs().catch(e=>{$("handoff-rows").innerHTML='<tr><td colspan="3">Shared handoff journal unavailable; check source records.</td></tr>'});
       await readA();
       $("pulse-dot").className="dot ok";
       $("last-read").textContent="A checked "+date(new Date().toISOString())+" · B "+(bLocal?"local import":"private");
