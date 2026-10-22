@@ -17,3 +17,7 @@ The indicator publisher's [API documentation](https://datahelpdesk.worldbank.org
 **Offline first:** `python -m unittest discover -s research/studies/econ_worldbank_us_population -p "test_*.py" -v`. Default experiment state is `UNOBSERVED`. Bounded opt-in: `python research/studies/econ_worldbank_us_population/experiment.py --live --output wdi-derived.json`. The CI workflow preserves a derived-only receipt for the exact run, and a source wall remains a failed research run rather than a claim of success.
 
 This is one independently scoped **ECON** lane. No other lane is promoted by this result.
+
+## First measured witness (2026-10-22)
+
+The [single-source WDI run 39785188011](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39785188011) produced [a derived, ten-year per-year error witness](observations/2026-10-22-run-39785188011.json). The exact retrieval SHA-256 was `39dbc6b900f4a4f44fd42001346d71be15df08b605e44463329265fbfdc5bdbc`. On the revised-snapshot 2014–2023 backtest, persistence MAE was **2,002,877 persons**, drift MAE **546,083.24 persons**. Preserve the counterexample: in **2021**, drift had a higher absolute error (**1,430,534.6**) than persistence (**522,062.0**). The aggregate winner is not universally superior, and historical publication vintages were not reconstructed. All 14 original negative controls and the archived-witness control are checked independently.
