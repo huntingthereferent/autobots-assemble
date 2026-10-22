@@ -1,5 +1,7 @@
 """Offline NIST species identity tests. Every HTTP response is synthetic."""
 import unittest
+import json
+from pathlib import Path
 from species_identity import URL, CAS, INCHI_KEY, MAX_BYTES, classify, observe
 
 
@@ -93,6 +95,23 @@ class NistIdentityTests(unittest.TestCase):
         self.assertEqual(x["state"], "SOURCE_WALL")
         self.assertEqual(x["error_class"], "ValueError")
         self.assertNotIn("body_sha256", x)
+
+    def test_archived_live_identity_does_not_promote_reference_data(self):
+        path = Path(__file__).parent / "observations" / "2026-10-22-run-39829436886.json"
+        archive = json.loads(path.read_text(encoding="utf-8"))
+        receipt = archive["observation"]
+        self.assertEqual(archive["github_run_id"], 39829436886)
+        self.assertEqual(archive["source_code_commit"], "9297cf776e39a5811600c1eeb744c242c37ccc57")
+        self.assertEqual(receipt["state"], "PUBLIC_SPECIES_METADATA_OBSERVED")
+        self.assertEqual(receipt["species_identity_url"], URL)
+        self.assertEqual(receipt["body_sha256"],
+                         "8023fe6471994151e2a0cdf1716f1dba0c3bb872f953882b8c55ef968774843d")
+        self.assertTrue(all(receipt["identity"]["metadata_identity_checks"].values()))
+        self.assertEqual(receipt["identity"]["scientific_measurements_admitted"], 0)
+        self.assertFalse(receipt["data_compilation_copied"])
+        self.assertFalse(archive["source_response_retained"])
+        self.assertEqual(archive["rights_review"], "REQUIRED_PER_RECORD")
+        self.assertEqual(archive["science_status"], "NOT_TESTED")
 
     def test_invalid_encoding_is_wall(self):
         x = observe(opener=Transport(b"\xff\xfe\xfa"))
