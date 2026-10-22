@@ -3,263 +3,232 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="dark">
-<title>Meta workstation · Hunting the Referent</title>
-<meta name="description" content="Combined source-backed workflow activity, equilibrium and execution journal.">
+<meta name="theme-color" content="#0a1015">
+<title>Research workstation · Hunting the Referent</title>
+<meta name="description" content="A single observed research workstation surface: queue, execution, outcomes and measured flow.">
 <style>
-:root{color-scheme:dark;--bg:#0a1015;--panel:#101b23;--panel2:#16252e;--line:#33444d;--text:#e9f0f3;--muted:#9eb2bd;--blue:#8ec6d6;--green:#9ce1bc;--yellow:#efca92;--red:#f0aaa7;--data-font:"SFMono-Regular",Consolas,"Liberation Mono",monospace;--body-font:Inter,"Segoe UI",system-ui,-apple-system,sans-serif}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-width:320px;background:var(--bg);color:var(--text);font:14px/1.6 var(--body-font);-webkit-font-smoothing:antialiased}
-a{color:#b5e3f4;text-decoration:none;text-underline-offset:3px}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-button,input,select{font:inherit;color:var(--text);background:#162630;border:1px solid #3c5260;border-radius:8px;padding:9px 12px;min-height:38px}button{cursor:pointer}button:hover{background:#233b48;border-color:#90ccdf}
-.site-header{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:0 max(19px,calc((100vw - 1450px)/2));min-height:59px;background:rgba(12,21,28,.97);border-bottom:1px solid #2b3c48}
-.brand{font-size:12px;font-weight:700;letter-spacing:.08em}.brand span{color:var(--blue)}.site-header nav{display:flex;flex-wrap:wrap;gap:4px}.site-header nav a{font:650 11px var(--body-font);padding:10px 12px;border-radius:7px;color:var(--muted);white-space:nowrap}.site-header nav a:hover,.site-header nav a[aria-current="page"]{color:var(--text);background:#1b2d39;text-decoration:none}
-main{max-width:1510px;margin:auto;padding:24px clamp(16px,3vw,40px) 70px}.eyebrow{font:650 10px/1.5 var(--data-font);letter-spacing:.13em;color:var(--blue);text-transform:uppercase}
-h1,h2,h3,p{margin-top:0}h1{font-size:clamp(30px,3.15vw,40px);font-weight:650;letter-spacing:-.035em;line-height:1.15;margin:9px 0}h2{font-size:clamp(19px,2vw,23px);font-weight:650;letter-spacing:-.025em;margin:0}h3{font-size:13px;margin:0}p{color:var(--muted)}
-.overview{border:1px solid #344850;background:#101c24;border-radius:10px;padding:23px 27px 18px}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,300px);gap:28px;align-items:start}.intro{max-width:760px;margin:8px 0 0;font-size:13px;color:#b1c3cd}.feed{border:1px solid #36515e;background:#0e1c26;padding:14px 15px;border-radius:9px}.feed-label{color:var(--muted);font:650 10px var(--data-font);letter-spacing:.09em}.feed-status{display:flex;align-items:center;gap:8px;margin:11px 0 0;font-size:12px}.pulse-dot{height:8px;width:8px;background:#6e8591;border-radius:50%;flex:none}.pulse-dot.ok{background:var(--green)}.pulse-dot.error{background:var(--red)}#read-time{font:10px/1.5 var(--data-font);margin:8px 0 0;overflow-wrap:anywhere}#refresh{width:100%;margin-top:10px}
-.flow-kicker{display:flex;align-items:center;gap:10px;margin:23px 0 9px;color:var(--blue);font:700 10px var(--data-font);letter-spacing:.12em}.flow-kicker:before{content:"";background:#86dacf;width:7px;height:7px;border-radius:2px;box-shadow:0 0 11px #65c5c6}
-.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.metric{position:relative;background:#101f29;border:1px solid #334a57;border-top:2px solid var(--tone,var(--blue));padding:16px 17px 14px;border-radius:10px;min-width:0;min-height:128px}
-.metric-top{display:flex;justify-content:space-between;align-items:center;gap:4px;color:var(--muted);font:600 10px/1.5 var(--data-font);letter-spacing:.05em}.metric-glyph{color:var(--tone,var(--blue));font-size:17px}.metric strong{font:500 clamp(26px,2.7vw,37px)/1.15 var(--data-font);font-variant-numeric:tabular-nums;color:var(--tone,var(--text));display:block;margin-top:14px}.metric small{color:var(--muted);display:block;font:10px/1.4 var(--data-font);margin-top:9px}
-.flow-snapshots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin:11px 0 0;background:#2d4350;border:1px solid #344a55;border-radius:8px;overflow:hidden}.flow-snapshots>div{padding:12px 14px;background:#14232c;min-width:0}.flow-snapshots span{display:block;color:var(--muted);font:600 9.5px var(--data-font)}.flow-snapshots strong{font:600 17px/1.7 var(--data-font);font-variant-numeric:tabular-nums}
-.flow-field{border:1px solid #35505d;background:#0e1a22;border-radius:10px;margin-top:12px;padding:16px 18px}.field-top{display:flex;align-items:center;justify-content:space-between;gap:15px}.field-top strong{font:700 10px var(--data-font);letter-spacing:.09em}.field-top small{font:10px var(--data-font);color:var(--muted)}.field-lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:13px}.field-lane{background:#13232d;border:1px solid #304852;border-radius:7px;padding:11px 12px;min-width:0}.field-lane-head{display:flex;justify-content:space-between;gap:6px;align-items:center;font:650 10px var(--data-font);color:var(--muted)}.field-lane-head b{color:var(--text);font-size:13px}.beads{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;min-height:25px}.beads a{font:16px/1 var(--data-font);color:var(--blue);text-decoration:none}.beads .success{color:var(--green)}.beads .failure{color:var(--red)}.field-lane small{display:block;color:var(--muted);margin-top:8px;font:10px/1.5 var(--data-font)}.fine{color:var(--muted);font:11px/1.6 var(--body-font);margin:11px 0 0}
-.section-top{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:15px;margin:35px 0 14px;padding-bottom:13px;border-bottom:1px solid var(--line)}.section-top .subtitle{font-size:12px;color:var(--muted);margin:6px 0 0}
-.equilibrium{background:linear-gradient(125deg,#101a20,#0a1319 65%,#12242a);border:1px solid #35545e;border-radius:10px;padding:18px 19px}.equilibrium-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}.equilibrium-head strong{font:600 11px var(--data-font);color:#afede0}.range-tools{display:flex;flex-wrap:wrap;gap:6px}.range-tools button{font:11px var(--data-font);padding:7px 10px;min-height:34px}.range-tools button[aria-pressed=true]{background:#244452;border-color:#8ec6d6}.chart-status{display:flex;gap:18px;flex-wrap:wrap;align-items:center;margin:15px 0 3px;font:11px var(--data-font);color:var(--muted)}.chart-status strong{color:var(--text);font-size:13px}#chart{display:block;background:#0b1720;width:100%;height:auto;border:1px solid #29404a;border-radius:7px;max-height:300px}.legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;color:var(--muted);font:10px var(--data-font);margin-top:12px}.legend i{display:inline-block;width:19px;height:3px;vertical-align:middle;margin-right:5px}.legend .running{background:var(--blue)}.legend .waiting{background:var(--yellow)}
-.work-tools{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.work-tools input{min-width:190px;flex:1}.work-tools select{min-width:145px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 16px;background:#192934;border-bottom:1px solid #344956}.panel-head strong{font-size:12px}.panel-head small{font:10px var(--data-font);color:var(--muted)}.runs{max-height:580px;overflow:auto}.run{display:flex;align-items:start;justify-content:space-between;gap:15px;padding:14px 17px;border-bottom:1px solid #2c3d49}.run:last-child{border-bottom:0}.run>div{min-width:0}.run a{font-weight:620;font-size:12px;overflow-wrap:anywhere}.run p{margin:4px 0 0;font:10px/1.5 var(--data-font)}.state{border:1px solid #637d8b;color:#c8dce6;border-radius:6px;padding:3px 7px;font:700 10px var(--data-font);white-space:nowrap}.state.in_progress,.state.queued,.state.pending,.state.waiting{border-color:#5e8da5;color:var(--blue)}.state.success{border-color:#457c67;color:var(--green)}.state.failure,.state.cancelled,.state.timed_out{border-color:#995b60;color:var(--red)}.empty{padding:24px 17px;color:var(--muted);font-size:12px}.list-footer{border-top:1px solid var(--line);padding:12px 16px;background:#162630;display:flex;justify-content:space-between;align-items:center;gap:12px}.list-footer small{color:var(--muted);font:10px var(--data-font)}.list-footer button:disabled{opacity:.4}
-.details{margin-top:18px}.details summary{padding:14px 17px;background:#162630;cursor:pointer;font-weight:650;font-size:12px}.details .detail-content{padding:17px}.details p{font-size:12px}.source-links{display:flex;gap:14px;flex-wrap:wrap}.source-links a{font-size:12px}.routing-title{font:650 12px var(--data-font);color:var(--blue)}.detail-note{border-left:2px solid #597b89;padding:10px 14px;background:#12222c;margin:12px 0}.detail-row{padding:8px 0;border-top:1px solid #2c3e49;font:11px/1.55 var(--data-font);color:var(--muted)}.detail-row:first-child{border:0}.detail-row strong{color:var(--text)}
-footer{max-width:1510px;margin:auto;border-top:1px solid var(--line);padding:20px clamp(16px,3vw,40px) 32px;color:var(--muted);font-size:11px}
-@media(max-width:1000px){.metric{min-height:120px}.hero{grid-template-columns:1fr}.feed{display:flex;align-items:center;flex-wrap:wrap;gap:12px}.feed-status{margin:0}#refresh{width:auto;margin:0}}
-@media(max-width:760px){.site-header{display:block;padding:11px 16px 6px}.site-header nav{flex-wrap:nowrap;overflow-x:auto;padding:7px 0 4px}.site-header nav a{padding:9px 11px}main{padding-top:17px}.overview{padding:17px 15px}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-snapshots{grid-template-columns:repeat(2,minmax(0,1fr))}.field-lanes{gap:6px}.field-lane{padding:9px 8px}.field-lane-head{font-size:9px}.beads{gap:3px}.equilibrium{padding:14px}.section-top{margin-top:28px}.work-tools{width:100%}.work-tools input{min-width:100%}}
-@media(max-width:420px){.field-lanes{grid-template-columns:1fr}.field-lane{padding:10px 12px}.site-header nav a{font-size:10px}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+:root{color-scheme:dark;--bg:#0a1015;--panel:#101b23;--panel2:#16252e;--line:#33444d;--text:#e9f0f3;--muted:#9eb2bd;--blue:#8ec6d6;--green:#9ce1bc;--yellow:#efca92;--red:#f0aaa7;--font:Inter,"Segoe UI",system-ui,sans-serif;--data:"SFMono-Regular",Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;min-width:320px;background:var(--bg);color:var(--text);font:14px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+a{color:#aed9e8;text-decoration:none;text-underline-offset:3px}a:hover{text-decoration:underline}
+button,input,select{font:inherit}button,select,input{color:var(--text);background:#142631;border:1px solid #3c5260;border-radius:7px;padding:9px 12px;min-height:38px}button{cursor:pointer}button:hover{border-color:var(--blue)}button[aria-pressed=true]{background:#203d4a;border-color:#83c2d5}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.topbar{min-height:59px;border-bottom:1px solid #2d3f48;background:#0c151b;display:flex;align-items:center;justify-content:space-between;gap:15px;padding:10px max(20px,calc((100vw - 1440px)/2));flex-wrap:wrap}
+.brand{font-size:12px;font-weight:750;letter-spacing:.09em}.brand b{color:#91cbdd;font-weight:600}
+.topbar nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:11px;font-weight:650;letter-spacing:.04em}
+main{max-width:1510px;margin:auto;padding:25px clamp(16px,3vw,40px) 70px}
+.eyebrow{font:650 10px/1.5 var(--data);color:var(--blue);letter-spacing:.125em;text-transform:uppercase}
+.hero{display:flex;justify-content:space-between;align-items:start;gap:20px;flex-wrap:wrap;padding-bottom:19px}
+h1{font-size:clamp(29px,3vw,41px);letter-spacing:-.037em;line-height:1.2;margin:7px 0 8px;font-weight:675}
+h2{font-size:20px;font-weight:650;letter-spacing:-.025em;line-height:1.3;margin:0}
+.hero p{color:#b9cad3;max-width:710px;margin:0;font-size:13px}
+.refresh{display:flex;align-items:center;justify-content:flex-end;gap:13px;flex-wrap:wrap}
+.source{font:11px/1.5 var(--data);color:var(--muted);display:flex;align-items:center;gap:9px}
+.dot{width:8px;height:8px;background:#738a95;border-radius:50%;flex:none}.dot.ok{background:var(--green)}.dot.warn{background:var(--yellow)}
+.strip-label{margin:0 0 10px;display:flex;align-items:center;gap:9px;color:var(--blue);font:650 10px var(--data);letter-spacing:.125em}
+.strip-label:before{content:"";width:7px;height:7px;background:#88d0d8;border-radius:2px;box-shadow:0 0 12px #518d97}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.metric{position:relative;min-width:0;border:1px solid #354c57;border-top:2px solid #638999;border-radius:9px;background:#101e27;padding:16px 18px;min-height:131px;overflow:hidden}
+.metric b{display:block;font:550 clamp(28px,3.1vw,43px)/1.3 var(--data);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.metric span{display:block;font:650 10px/1.5 var(--data);color:var(--muted);letter-spacing:.04em;margin-top:10px}
+.metric small{font-size:10px;color:#8da8b6;display:block;margin-top:3px}.metric.queue{border-top-color:var(--yellow)}.metric.running{border-top-color:var(--blue)}.metric.passed{border-top-color:var(--green)}.metric.notpassed{border-top-color:var(--red)}
+.metric.queue b{color:var(--yellow)}.metric.running b{color:var(--blue)}.metric.passed b{color:var(--green)}.metric.notpassed b{color:var(--red)}
+.flowfield{margin-top:13px;padding:16px 19px;background:#101c24;border:1px solid #344c57;border-radius:9px}
+.flow-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;font:650 10px var(--data);letter-spacing:.08em;color:#a8d4db}
+.flow-heading small{color:var(--muted);font-size:10px;letter-spacing:0;font-weight:500}
+.flow-tracks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px;margin-top:15px}
+.track{min-width:0}.track-head{display:flex;align-items:baseline;justify-content:space-between;gap:7px;margin-bottom:7px}.track-head span{color:var(--muted);font:10px var(--data)}.track-head strong{font:600 15px var(--data)}
+.cells{display:flex;gap:4px;min-height:17px;align-items:center}.cell{width:10px;height:10px;flex:none;transform:rotate(45deg);border:1px solid #395663;background:#172731}.cell.on-queue{background:#dbb983;border-color:#dbb983}.cell.on-running{background:#83c7d4;border-color:#83c7d4}.cell.on-done{background:#8bd4af;border-color:#8bd4af}
+.section-top{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:30px 0 14px;padding-bottom:13px;border-bottom:1px solid var(--line)}
+.subtitle{font-size:12px;color:var(--muted);margin:6px 0 0}.section-top .eyebrow{display:block;margin-bottom:6px}
+.options{display:flex;gap:5px;align-items:center;flex-wrap:wrap}.options button{font:11px var(--data);min-height:35px;padding:6px 11px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.plot-head{display:flex;justify-content:space-between;align-items:start;gap:16px;flex-wrap:wrap;padding:19px 20px 0}
+.plot-head strong{font-size:14px}.plot-head p{font-size:11px;color:var(--muted);margin:5px 0}
+.tag{font:10px var(--data);color:#b8cfdb;border:1px solid #475e6a;padding:5px 8px;border-radius:6px;white-space:nowrap}
+#trend{display:block;width:calc(100% - 38px);height:auto;max-height:240px;margin:9px 19px 0;background:#0b171e;border:1px solid #283d47;border-radius:6px}
+.legend{display:flex;align-items:center;gap:20px;flex-wrap:wrap;padding:12px 20px 0;color:var(--muted);font:11px var(--data)}
+.legend i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:7px}.legend .r{background:#8ec6d6}.legend .q{background:#efca92}
+.fine{font-size:11px;line-height:1.6;color:var(--muted);margin:9px 20px 17px}
+.work-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.44fr);gap:15px}
+.panel-title{padding:14px 17px;background:#182a34;border-bottom:1px solid #354950;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px}
+.work-controls{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid #2c4049;align-items:center}
+.work-controls input{flex:1 1 170px;min-width:100px}.work-controls select{flex:0 1 185px;min-width:145px}
+.runlist{max-height:570px;overflow-y:auto}.run{padding:13px 17px;border-bottom:1px solid #293c47;display:flex;align-items:start;justify-content:space-between;gap:10px}
+.run:last-child{border:0}.run h3{font-size:12.5px;font-weight:620;line-height:1.55;margin:0}.run h3 a{color:var(--text)}.run small{display:block;color:var(--muted);font:10px/1.7 var(--data);margin-top:4px}
+.state{font:650 10px/1.5 var(--data);white-space:nowrap;color:#b2c4cf;border:1px solid #4e6570;border-radius:5px;padding:3px 7px}.state.running{color:var(--blue);border-color:#457b8c}.state.good{color:var(--green);border-color:#4b8065}.state.bad{color:var(--red);border-color:#87585d}
+.empty{color:var(--muted);font-size:12px;padding:19px}
+.side-body{padding:18px;font-size:12px;color:#b7cbd5}.side-body p{margin:7px 0}.side-body a{font-size:12px}
+.journal-line{padding:12px 0;border-bottom:1px solid #2b404a}.journal-line:last-child{border-bottom:0}
+.journal-line b{font:650 11px var(--data);color:#c2dce5;display:block}.journal-line small{font:11px/1.6 var(--data);color:var(--muted)}
+details.more{margin-top:18px;border:1px solid #334751;border-radius:8px;background:#0c161d}
+details.more summary{padding:14px 16px;cursor:pointer;font-size:12px;color:#b9d6df;font-weight:600}
+.more-content{border-top:1px solid var(--line);padding:14px 18px;font-size:12px;color:var(--muted)}
+.more-content a{font-size:12px}.more-content p{margin:7px 0}
+footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;padding:20px clamp(16px,3vw,40px)}
+@media(max-width:920px){.work-layout{grid-template-columns:1fr}}
+@media(max-width:660px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:12px;min-height:114px}.metric b{font-size:30px}.flow-tracks{gap:7px}.cells{gap:2px}.cell{width:7px;height:7px}.plot-head{padding:15px 14px 0}#trend{width:calc(100% - 26px);margin:8px 13px 0}.legend{padding-left:14px}.fine{margin:9px 14px 16px}.topbar{padding:12px 16px}.work-controls{padding:12px}.hero{padding-bottom:14px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-<header class="site-header">
-<strong class="brand">HUNTING THE REFERENT <span>/ WORKSTATION</span></strong>
-<nav aria-label="Workstation views">
-<a href="meta.html" aria-current="page">META</a>
-<a href="work.html">EXECUTIONS</a>
-<a href="research-sources.html">SOURCES</a>
-<a href="audit.html">AUDIT</a>
-<a href="https://github.com/huntingthereferent" target="_blank" rel="noopener noreferrer">MAIN GITHUB ↗</a>
-</nav>
-</header>
+<header class="topbar"><div class="brand">HUNTING THE REFERENT <b>/ WORKSTATION</b></div>
+<nav aria-label="Workstation navigation"><a href="work.html">SOURCE VIEW</a><a href="research-sources.html">RESEARCH</a><a href="audit.html">AUDIT</a><a href="https://github.com/huntingthereferent">GITHUB ↗</a></nav></header>
 <main>
-<section class="overview" aria-label="Observed workflow activity">
-<div class="hero">
-<div><p class="eyebrow">Source-backed / live executions</p><h1>Research workstation</h1><p class="intro">One view of the work in motion. The queue, execution history and observed equilibrium—without making the routing machinery another dashboard.</p></div>
-<div class="feed"><span class="feed-label">GITHUB OBSERVATION</span><div class="feed-status" role="status"><span class="pulse-dot" id="source-dot"></span><strong id="source-state">Reading source journals</strong></div><p id="read-time">Checking source records…</p><button id="refresh" type="button">Refresh source ↻</button></div>
-</div>
-<div class="flow-kicker">CONTROL DECK / GITHUB ACTIONS</div>
-<div class="metrics" aria-label="Combined observed workflow-run counts">
-<article class="metric" style="--tone:#efca92"><div class="metric-top"><span>IN QUEUE / NOW</span><span class="metric-glyph">◇</span></div><strong id="queued">—</strong><small>Observed waiting workflow runs</small></article>
-<article class="metric" style="--tone:#8ec6d6"><div class="metric-top"><span>IN MOTION / NOW</span><span class="metric-glyph">↗</span></div><strong id="running">—</strong><small>Observed in-progress workflow runs</small></article>
-<article class="metric" style="--tone:#9ce1bc"><div class="metric-top"><span>PASSED / TODAY*</span><span class="metric-glyph">✦</span></div><strong id="passed">—</strong><small>Within the retrieved run sample</small></article>
-<article class="metric" style="--tone:#f0aaa7"><div class="metric-top"><span>NOT PASSED / TODAY*</span><span class="metric-glyph">×</span></div><strong id="failed">—</strong><small>Failed, cancelled or timed out · sample</small></article>
-</div>
-<div class="flow-snapshots">
-<div><span>CREATED TODAY*</span><strong id="created">—</strong></div>
-<div><span>RESOLVED TODAY*</span><strong id="resolved">—</strong></div>
-<div><span>NEW / LAST 60M*</span><strong id="arrivals">—</strong></div>
-<div><span>OBSERVED / TOTAL</span><strong id="indexed">—</strong></div>
-</div>
-<div class="flow-field" aria-label="Source-backed workflow flow field">
-<div class="field-top"><strong>FLOW FIELD / OBSERVED RUNS</strong><small>Real linked run markers · 14 per lane maximum</small></div>
-<div class="field-lanes">
-<div class="field-lane"><div class="field-lane-head"><span>01 / WAITING</span><b id="flow-queued">—</b></div><div class="beads" id="beads-queued"></div><small id="note-queued">Awaiting sources</small></div>
-<div class="field-lane"><div class="field-lane-head"><span>02 / EXECUTING</span><b id="flow-running">—</b></div><div class="beads" id="beads-running"></div><small id="note-running">Awaiting sources</small></div>
-<div class="field-lane"><div class="field-lane-head"><span>03 / RESOLVED TODAY*</span><b id="flow-resolved">—</b></div><div class="beads" id="beads-resolved"></div><small id="note-resolved">Awaiting sources</small></div>
-</div>
-<p class="fine">* Day totals use runs created today among retrieved records. They are not exhaustive job counts or exact completion times. Source IDs link to GitHub; animation does not create work.</p>
-</div>
+<section class="hero"><div><span class="eyebrow">Observed execution / live work</span><h1>Research workstation</h1><p>One view of work moving through the pipeline. Actual GitHub executions, recorded outcomes, and measured flow.</p></div>
+<div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><button id="refresh" type="button">Refresh ↻</button></div></section>
+<div class="strip-label">CONTROL DECK / ACTUAL WORK</div>
+<section class="metrics" aria-label="Combined source-observed workflow counts">
+<article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
+<article class="metric running"><b id="running">—</b><span>IN MOTION / NOW</span><small>Executing workflow runs</small></article>
+<article class="metric passed"><b id="passed">—</b><span>PASSED / TODAY*</span><small>Retrieved sample only</small></article>
+<article class="metric notpassed"><b id="failed">—</b><span>NOT PASSED / TODAY*</span><small>Retrieved sample only</small></article>
 </section>
-<div class="section-top"><div><p class="eyebrow">Observed balance</p><h2>Equilibrium watch</h2><p class="subtitle">Combined actual running and waiting workflow counts, preserved between browser visits.</p></div><div class="range-tools" aria-label="Observation period"><button data-range="day" aria-pressed="true">Today</button><button data-range="24h" aria-pressed="false">24 hours</button><button data-range="7d" aria-pressed="false">7 days</button><button data-range="30d" aria-pressed="false">30 days</button><button data-range="365d" aria-pressed="false">Year</button></div></div>
-<section class="equilibrium" aria-label="Combined source-observed workflow history">
-<div class="equilibrium-head"><strong id="eq-state">Awaiting verified measurements</strong><span class="eyebrow" id="eq-last">OBSERVING</span></div>
-<div class="chart-status"><span>RUNNING <strong id="eq-running">—</strong></span><span>WAITING <strong id="eq-waiting">—</strong></span><span id="eq-samples">— source checks</span></div>
-<svg id="chart" viewBox="0 0 900 225" role="img" aria-label="Actual combined workflow counts over source observation time"><text x="28" y="112" fill="#9eb2bd" font-size="12">Reading source observations…</text></svg>
-<div class="legend"><span><i class="running"></i> RUNNING</span><span><i class="waiting"></i> WAITING</span><span>Sampled counts, not a capacity limit</span></div>
-<p class="fine" id="eq-note">GitHub records observations independently of this page. Data gaps remain gaps, not estimated movement.</p>
-</section>
-<section id="executions">
-<div class="section-top"><div><p class="eyebrow">Execution journal</p><h2>Latest workflow runs</h2><p class="subtitle">Every entry opens its originating GitHub run, with its native evidence and exact revision.</p></div><div class="work-tools"><input id="search" type="search" placeholder="Find workflow…" aria-label="Filter workflow runs"><select id="result" aria-label="Filter workflow state"><option value="all">All results</option><option value="active">Active / waiting</option><option value="success">Passed</option><option value="failure">Not passed</option></select></div></div>
-<div class="panel"><div class="panel-head"><strong>Source index · recent executions</strong><small id="run-scope">Loading indexed runs…</small></div><div id="runs" class="runs" aria-live="polite"><p class="empty">Loading GitHub observations…</p></div><div class="list-footer"><button id="more" type="button" hidden>Show 30 more</button><small>Retrieved sample · open source run for full details</small></div></div>
-</section>
-<details class="panel details" id="source-boundaries"><summary>Source journals & pipeline routing <span style="color:#9eb2bd;font-weight:400">· inspect</span></summary><div class="detail-content">
-<p>Workstation placement and handoff are maintained in GitHub, not in the visible counters. This panel is reference-only; changing the viewer cannot move a job.</p>
-<p class="routing-title" id="routing-status">Reading routing record</p><p id="routing-reason">No decision is inferred from the viewer alone.</p>
-<div class="source-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json" target="_blank" rel="noopener noreferrer">Routing evidence ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json" target="_blank" rel="noopener noreferrer">Observation journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json" target="_blank" rel="noopener noreferrer">Pipeline registry ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json" target="_blank" rel="noopener noreferrer">Transfer history ↗</a></div>
-<div id="source-list" style="margin-top:15px"><p class="fine">Loading source locations…</p></div>
-<p class="fine">Research source verification is distinct from a successful workflow run. Missing source readings are unknown, not zero. Routing recommendations never autonomously dispatch jobs to another ChatGPT window.</p>
+<section class="flowfield" aria-label="Actual workflow state visualization">
+<div class="flow-heading"><span>FLOW FIELD / OBSERVED EXECUTIONS</span><small>Each lit diamond corresponds to a retrieved workflow run · up to 16 per state</small></div>
+<div class="flow-tracks"><div class="track"><div class="track-head"><span>01 / WAITING</span><strong id="flow-queue">—</strong></div><div class="cells" id="beads-queue"></div></div>
+<div class="track"><div class="track-head"><span>02 / EXECUTING</span><strong id="flow-running">—</strong></div><div class="cells" id="beads-running"></div></div>
+<div class="track"><div class="track-head"><span>03 / RESOLVED*</span><strong id="flow-done">—</strong></div><div class="cells" id="beads-done"></div></div></div></section>
+<div class="section-top"><div><span class="eyebrow">Measurement / observed history</span><h2>Equilibrium</h2><p class="subtitle">Source-sampled running and waiting counts, together over time.</p></div>
+<div class="options" id="ranges" aria-label="Journal time range"><button data-range="today" aria-pressed="true">Today</button><button data-range="7d">7 days</button><button data-range="30d">Month</button><button data-range="365d">Year</button></div></div>
+<section class="panel" aria-label="Combined workload trend">
+<div class="plot-head"><div><strong id="trend-state">Loading measured history</strong><p id="trend-note">No inferred history or fabricated executions.</p></div><span id="points" class="tag">MEASURED SAMPLES</span></div>
+<svg id="trend" viewBox="0 0 940 220" role="img" aria-label="Observed total running and queued workflow runs over time"><text x="30" y="110" fill="#9eb2bd" font-size="13">Reading observations…</text></svg>
+<div class="legend"><span><i class="r"></i> RUNNING</span><span><i class="q"></i> WAITING</span><span id="last-point">Awaiting measurements</span></div>
+<p class="fine">The historical journal records real GitHub workflow-run samples, normally every 30 minutes. A blank interval is missing evidence, not zero activity.</p></section>
+<div class="section-top"><div><span class="eyebrow">Executions / source journal</span><h2>Recent work</h2><p class="subtitle">Follow a real run to its original GitHub jobs and verification steps.</p></div><span id="count-note" class="source">Reading latest executions</span></div>
+<div class="work-layout"><section class="panel"><div class="panel-title"><strong>Workflow journal</strong><span class="tag">SOURCE-LINKED</span></div>
+<div class="work-controls"><input id="search" type="search" placeholder="Find a workflow…" aria-label="Find workflow"><select id="status" aria-label="Filter workflow status"><option value="all">All results</option><option value="active">Active</option><option value="passed">Passed</option><option value="failed">Not passed</option></select></div>
+<div id="runs" class="runlist"><p class="empty">Checking source work…</p></div></section>
+<aside class="panel"><div class="panel-title"><strong>Observation notes</strong><span id="source-state" class="tag">CHECKING</span></div><div class="side-body">
+<div class="journal-line"><b>Live execution</b><p id="status-note">Counting current source-owned running and waiting workflows.</p></div>
+<div class="journal-line"><b>Continuity</b><p id="routing-note">Reading recorded pipeline guidance.</p></div>
+<div class="journal-line"><b>Research evidence</b><p>A completed workflow is an execution result, not a scientific conclusion. Inspect the original source and native test evidence.</p></div>
+<a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Observation journal ↗</a></div></aside></div>
+<details class="more"><summary>Pipeline records &amp; source references</summary><div class="more-content">
+<p>Work placement, repository identities, admission rules and cross-window handoffs are recorded by the pipeline. They do not need a separate set of cards on the viewer.</p>
+<p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Lane registry ↗</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Verified transfers ↗</a></p>
 </div></details>
 </main>
-<footer>Source-owned observations · actual GitHub Actions · original research remains separate from executed jobs.</footer>
+<footer>Execution counts are observations, not capacity claims. *Today's results cover retrieved recent runs and may undercount the full day. The viewer never starts jobs or assigns research lanes.</footer>
 <script>
-(function(){
 "use strict";
-const CANON="huntingthereferent/autobots-assemble", BASE="https://raw.githubusercontent.com/"+CANON+"/main/docs/live/";
-const $=id=>document.getElementById(id);
-const S={registry:null,runs:[],counts:null,observations:[],range:"day",filter:"all",search:"",visible:25,reading:false,sourceAt:null,failedSources:0,routing:null};
-const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const clock=x=>{const d=new Date(x);return Number.isFinite(+d)?d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"unknown"};
-const state=r=>r.status==="completed"?(r.conclusion||"completed"):r.status;
-const active=s=>["in_progress","queued","pending","waiting"].includes(s);
-const failed=s=>["failure","cancelled","timed_out","action_required","startup_failure"].includes(s);
-const n=x=>Number.isSafeInteger(x)&&x>=0;
-const todayStart=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()};
-async function json(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("HTTP "+r.status);return r.json()}
-async function sourceFile(name){try{return await json(BASE+name)}catch{return json(name)}}
-function safeRun(r,repo){
- const id=Number(r?.id);if(!Number.isSafeInteger(id)||id<=0)return null;
- return {id,repo,name:String(r.name||"Unnamed workflow"),status:String(r.status||"unknown"),conclusion:String(r.conclusion||""),created_at:String(r.created_at||""),url:"https://github.com/"+repo+"/actions/runs/"+id};
-}
-function localSample(){
- const t=todayStart(),now=Date.now(),rows=S.runs.filter(r=>Date.parse(r.created_at)>=t);
- return {created:rows.length,passed:rows.filter(r=>state(r)==="success").length,failed:rows.filter(r=>failed(state(r))).length,resolved:rows.filter(r=>r.status==="completed").length,arrivals:S.runs.filter(r=>Date.parse(r.created_at)>=now-3600000).length};
-}
-function setText(id,v){$(id).textContent=String(v)}
-function metrics(){
- const m=localSample(),c=S.counts;
- for(const k of ["created","passed","failed","resolved","arrivals"])setText(k,S.runs.length?m[k]:S.runs.length===0&&S.sourceAt?0:"—");
- setText("indexed",S.runs.length||"—");
- setText("queued",c?nstr(c.waiting):"—");
- setText("running",c?nstr(c.running):"—");
- setText("flow-queued",c?nstr(c.waiting):"—");
- setText("flow-running",c?nstr(c.running):"—");
- setText("flow-resolved",S.sourceAt?m.resolved:"—");
- function markers(id,group,color){
-   const area=$(id);const recent=group.slice(0,14);
-   area.innerHTML=recent.map(r=>'<a href="'+r.url+'" target="_blank" rel="noopener noreferrer" title="'+esc(r.name)+'" class="'+color+'">◆</a>').join("")||'<span class="fine">No matching runs in retrieved sample</span>';
+(()=>{
+ const REPOS=["huntingthereferent/autobots-assemble","aeren-research/continuum-oscillator"];
+ const ROOT="https://api.github.com/repos/";
+ const $=id=>document.getElementById(id);
+ const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+ const localTime=s=>{const v=new Date(s);return Number.isFinite(+v)?v.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"Unknown time"};
+ const valid=n=>Number.isSafeInteger(n)&&n>=0;
+ const statuses=["in_progress","queued","pending","waiting"];
+ let observed=[],runs=[],range="today",busy=false,allReady=false;
+ async function get(url){const r=await fetch(url,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
+ async function node(repo){
+  const root=ROOT+repo+"/actions/runs";
+  const response=await Promise.all([...statuses.map(s=>get(root+"?status="+s+"&per_page=1")),get(root+"?per_page=65")]);
+  const counts=response.slice(0,4).map(r=>r.total_count);
+  if(counts.some(c=>!valid(c))||!Array.isArray(response[4].workflow_runs))throw Error("Invalid source");
+  const entries=response[4].workflow_runs.filter(r=>Number.isSafeInteger(r.id)&&r.id>0).map(r=>({id:r.id,repo,name:String(r.name||"Unnamed workflow"),status:r.status,conclusion:r.conclusion,created:r.created_at,url:"https://github.com/"+repo+"/actions/runs/"+r.id}));
+  return {running:counts[0],waiting:counts[1]+counts[2]+counts[3],entries};
  }
- const q=S.runs.filter(r=>["queued","pending","waiting"].includes(state(r)));
- const running=S.runs.filter(r=>state(r)==="in_progress");
- const resolved=S.runs.filter(r=>r.status==="completed"&&Date.parse(r.created_at)>=todayStart());
- markers("beads-queued",q,"queued");markers("beads-running",running,"in_progress");markers("beads-resolved",resolved,"success");
- setText("note-queued",q.length+" of waiting runs found in recent sample");
- setText("note-running",running.length+" of running runs found in recent sample");
- setText("note-resolved",resolved.length+" today-created resolved runs in sample");
-}
-const nstr=v=>Number(v).toLocaleString();
-function renderRuns(){
- const q=S.search,filter=S.filter;
- const rows=S.runs.filter(r=>(!q||r.name.toLowerCase().includes(q)||String(r.id).includes(q))&&(filter==="all"||(filter==="active"&&active(state(r)))||(filter==="success"&&state(r)==="success")||(filter==="failure"&&failed(state(r)))));
- $("run-scope").textContent=rows.length+" matching · "+S.runs.length+" indexed";
- $("runs").innerHTML=rows.length?rows.slice(0,S.visible).map(r=>{
-  const label=state(r),date=clock(r.created_at);
-  return '<article class="run"><div><a href="'+r.url+'" target="_blank" rel="noopener noreferrer">'+esc(r.name)+' ↗</a><p>'+esc(date)+' · RUN '+r.id+'</p></div><span class="state '+esc(label)+'">'+esc(label.toUpperCase().replaceAll("_"," "))+'</span></article>';
- }).join(""):'<p class="empty">No matching runs in the retrieved sample. A missing match does not establish inactivity.</p>';
- $("more").hidden=rows.length<=S.visible;
-}
-function registerSources(){
- const nodes=S.registry?.nodes||[];
- $("source-list").innerHTML=nodes.map(node=>'<div class="detail-row"><strong>'+esc(node.label)+'</strong> · <a target="_blank" rel="noopener noreferrer" href="https://github.com/'+esc(node.repo)+'/actions">GitHub journal ↗</a> · <a target="_blank" rel="noopener noreferrer" href="https://github.com/'+esc(node.repo)+'">Repository ↗</a></div>').join("");
-}
-function observe(sample){
- const nodes=sample?.nodes||{},a=nodes.A,b=nodes.B;
- if(!a?.observed||!b?.observed)return null;
- const fields=["in_progress","queued","pending","waiting"];
- if(fields.some(k=>!n(a[k])||!n(b[k])))return null;
- const t=Date.parse(sample.ts);
- if(!Number.isFinite(t))return null;
- return {t,r:a.in_progress+b.in_progress,w:a.queued+a.pending+a.waiting+b.queued+b.pending+b.waiting};
-}
-function sourceObservations(){
- const map=new Map();
- for(const raw of S.observations){const p=observe(raw);if(p)map.set(raw.ts,p)}
- return [...map.values()].sort((a,b)=>a.t-b.t);
-}
-function drawChart(){
- const now=Date.now(),start=S.range==="day"?todayStart():now-({"24h":86400000,"7d":604800000,"30d":2592000000,"365d":31536000000}[S.range]||86400000);
- const points=sourceObservations().filter(p=>p.t>=start&&p.t<=now+60000),svg=$("chart");
- setText("eq-samples",points.length+" recorded checks / selected period");
- if(!points.length){svg.innerHTML='<text x="25" y="108" fill="#9eb2bd" font-size="12">No verified observations in this period.</text>';setText("eq-state","Awaiting source observations");setText("eq-last","NOT OBSERVED");return}
- const max=Math.max(1,...points.map(x=>Math.max(x.r,x.w))),x0=52,x1=879,y0=14,y1=195;
- const low=points[0].t,high=points[points.length-1].t;
- const X=t=>x0+(low===high?.5:(t-low)/(high-low))*(x1-x0),Y=v=>y1-v/max*(y1-y0);
- let elements=[];
- for(let k=0;k<=4;k++){const v=max*k/4,y=Y(v);elements.push('<line x1="'+x0+'" y1="'+y.toFixed(1)+'" x2="'+x1+'" y2="'+y.toFixed(1)+'" stroke="#2b404c"/><text x="40" y="'+(y+3.7).toFixed(1)+'" fill="#91adba" font-size="10" font-family="monospace" text-anchor="end">'+Math.round(v)+'</text>')}
- for(const [key,col] of [["r","#8ec6d6"],["w","#efca92"]]){
-   let segment=[];
-   const emit=()=>{if(segment.length>1)elements.push('<polyline points="'+segment.join(" ")+'" fill="none" stroke="'+col+'" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>');else if(segment.length===1){const [x,y]=segment[0].split(",");elements.push('<circle cx="'+x+'" cy="'+y+'" r="3.5" fill="'+col+'"/>')}segment=[]};
-   for(let i=0;i<points.length;i++){
-    if(i>0&&points[i].t-points[i-1].t>90*60000)emit();
-    segment.push(X(points[i].t).toFixed(1)+","+Y(points[i][key]).toFixed(1));
-   }
-   emit();
+ const isFailed=r=>r.status==="completed"&&["failure","cancelled","timed_out","action_required"].includes(r.conclusion);
+ const isActive=r=>["in_progress","queued","pending","waiting","requested"].includes(r.status);
+ const isPassed=r=>r.status==="completed"&&r.conclusion==="success";
+ function badge(r){if(isActive(r))return{label:r.status==="in_progress"?"RUNNING":"WAITING",cls:"running"};if(isPassed(r))return{label:"PASSED",cls:"good"};if(isFailed(r))return{label:r.conclusion?.toUpperCase()||"NOT PASSED",cls:"bad"};return{label:String(r.conclusion||r.status||"UNKNOWN").toUpperCase(),cls:""}}
+ function isToday(ts){const d=new Date(ts),n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate()}
+ function beads(id,count,css){const el=$(id);el.replaceChildren();for(let i=0;i<16;i++){const span=document.createElement("i");span.className="cell"+(i<Math.min(16,count)?" on-"+css:"");el.append(span)}}
+ function renderMetrics(n){
+  $("queued").textContent=n.waiting;$("running").textContent=n.running;
+  const today=runs.filter(r=>isToday(r.created));
+  const passed=today.filter(isPassed).length,failed=today.filter(isFailed).length;
+  $("passed").textContent=passed;$("failed").textContent=failed;
+  $("flow-queue").textContent=n.waiting;$("flow-running").textContent=n.running;
+  $("flow-done").textContent=passed+failed;
+  beads("beads-queue",n.waiting,"queue");beads("beads-running",n.running,"running");beads("beads-done",passed+failed,"done");
+  $("count-note").textContent=runs.length+" most recent retrieved runs · "+today.length+" created today";
  }
- elements.push('<text x="'+x0+'" y="215" font-family="monospace" font-size="10" fill="#9eb2bd">'+esc(clock(new Date(low).toISOString()))+'</text>');
- elements.push('<text x="'+x1+'" y="215" text-anchor="end" font-family="monospace" font-size="10" fill="#9eb2bd">'+esc(clock(new Date(high).toISOString()))+'</text>');
- svg.innerHTML=elements.join("");
- const l=points[points.length-1],age=(now-l.t)/60000;
- setText("eq-state",points.length>1?"Observed workload / real source checks":"First recorded reading");
- setText("eq-last",age<=90?"RECORDED "+clock(new Date(l.t).toISOString()):"HISTORY · STALE");
- setText("eq-note","Last jointly verified reading: "+l.r+" in motion / "+l.w+" waiting · "+clock(new Date(l.t).toISOString())+". Consecutive points over 90 minutes apart are not connected.");
- if(!S.counts){setText("eq-running",nstr(l.r));setText("eq-waiting",nstr(l.w))}
-}
-async function loadHistory(){
- try{
-  const h=await json("https://raw.githubusercontent.com/"+CANON+"/meta-observations/history.json");
-  if(h.schema!=="ab-meta-observations/v1"||!Array.isArray(h.samples))throw Error("Invalid observation format");
-  const map=new Map(S.observations.map(s=>[s.ts,s]));
-  for(const s of h.samples)if(s&&typeof s.ts==="string")map.set(s.ts,s);
-  S.observations=[...map.values()].sort((a,b)=>Date.parse(a.ts)-Date.parse(b.ts));
-  drawChart();
- }catch(e){if(!S.observations.length)setText("eq-note","Observation archive unavailable. Only current GitHub checks can establish a reading.")}
-}
-async function loadRouting(){
- try{
-  const r=await json("https://raw.githubusercontent.com/"+CANON+"/meta-observations/routing.json");
-  if(r.schema!=="meta-workstation/routing-advice-v1")throw Error("Invalid routing record");
-  S.routing=r;
-  const age=Date.now()-Date.parse(r.generated_at),stale=!Number.isFinite(age)||age<0||age>90*60000;
-  setText("routing-status",stale?"Routing record is stale":r.signal==="A_BACKLOG"||r.signal==="B_BACKLOG"?"Backlog candidate recorded":r.signal==="NO_CLEAR_PRESSURE"?"No clear backlog pressure": "Routing still observing");
-  setText("routing-reason",stale?"The archived routing decision is too old to place new work.":r.reason+" Next tasks still require verified workflow admission.");
- }catch(e){setText("routing-status","Routing record unavailable");setText("routing-reason","No lane decision can be inferred from an unavailable record.")}
-}
-async function readNode(repo){
- const prefix="https://api.github.com/repos/"+repo+"/actions/runs";
- const [running,queued,pending,waiting,recent]=await Promise.all([
-  json(prefix+"?status=in_progress&per_page=1"),json(prefix+"?status=queued&per_page=1"),
-  json(prefix+"?status=pending&per_page=1"),json(prefix+"?status=waiting&per_page=1"),json(prefix+"?per_page=80")
- ]);
- if([running,queued,pending,waiting].some(x=>!n(x.total_count))||!Array.isArray(recent.workflow_runs))throw Error("Unexpected GitHub Actions response");
- return {running:running.total_count,waiting:queued.total_count+pending.total_count+waiting.total_count,runs:recent.workflow_runs.map(r=>safeRun(r,repo)).filter(Boolean),repo};
-}
-async function refresh(){
- if(S.reading)return;S.reading=true;$("refresh").disabled=true;setText("source-state","Reading GitHub executions");
- try{
-  if(!S.registry){const reg=await sourceFile("meta-registry.json");if(reg.schema!=="meta-workstation/registry-v1"||!Array.isArray(reg.nodes)||reg.nodes.length<2)throw Error("Invalid registry");S.registry=reg;registerSources()}
-  const outcomes=await Promise.allSettled(S.registry.nodes.map(n=>readNode(n.repo)));
-  const valid=outcomes.filter(x=>x.status==="fulfilled").map(x=>x.value),allGood=valid.length===S.registry.nodes.length;
-  S.failedSources=outcomes.length-valid.length;
-  const all=[...new Map(valid.flatMap(v=>v.runs).map(r=>[r.repo+":"+r.id,r])).values()];
-  all.sort((a,b)=>Date.parse(b.created_at)-Date.parse(a.created_at));
-  S.runs=all;S.sourceAt=Date.now();S.visible=25;
-  if(allGood){
-   S.counts={running:valid.reduce((n,x)=>n+x.running,0),waiting:valid.reduce((n,x)=>n+x.waiting,0)};
-   setText("source-state","Both source journals checked");$("source-dot").className="pulse-dot ok";
-   setText("read-time","Verified "+clock(new Date().toISOString())+" · latest 80 runs per source");
-   setText("eq-running",nstr(S.counts.running));setText("eq-waiting",nstr(S.counts.waiting));
-  }else{
-   S.counts=null;setText("source-state","Partial source observation");$("source-dot").className="pulse-dot error";
-   setText("read-time",valid.length+" of "+outcomes.length+" journals accessible · missing work is unknown");
+ function renderRuns(){
+  const text=$("search").value.trim().toLowerCase(),filter=$("status").value;
+  const subset=runs.filter(r=>r.name.toLowerCase().includes(text)&&(filter==="all"||filter==="active"&&isActive(r)||filter==="passed"&&isPassed(r)||filter==="failed"&&isFailed(r)));
+  const area=$("runs");area.replaceChildren();
+  if(!subset.length){area.innerHTML='<p class="empty">No matching runs in this retrieved sample; older jobs may exist.</p>';return}
+  for(const r of subset.slice(0,65)){
+   const b=badge(r),line=document.createElement("div");line.className="run";
+   const body=document.createElement("div"),title=document.createElement("h3"),a=document.createElement("a");a.textContent=r.name;a.href=r.url;a.rel="noopener noreferrer";a.target="_blank";title.append(a);body.append(title);
+   const small=document.createElement("small");small.textContent=localTime(r.created)+" · RUN "+r.id;body.append(small);
+   const tag=document.createElement("span");tag.className="state "+b.cls;tag.textContent=b.label;
+   line.append(body,tag);area.append(line);
   }
-  metrics();renderRuns();
- }catch(e){
-  S.counts=null;setText("source-state","Source unavailable");$("source-dot").className="pulse-dot error";
-  setText("read-time",String(e.message||e));metrics();renderRuns();
- }finally{drawChart();$("refresh").disabled=false;S.reading=false}
-}
-document.querySelectorAll("[data-range]").forEach(button=>button.addEventListener("click",()=>{S.range=button.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===button)));drawChart()}));
-$("result").addEventListener("change",e=>{S.filter=e.target.value;S.visible=25;renderRuns()});
-$("search").addEventListener("input",e=>{S.search=e.target.value.trim().toLowerCase();S.visible=25;renderRuns()});
-$("more").addEventListener("click",()=>{S.visible+=30;renderRuns()});
-$("refresh").addEventListener("click",refresh);
-(async()=>{await Promise.allSettled([loadHistory(),loadRouting(),refresh()])})();
-setInterval(()=>{if(document.visibilityState==="visible")loadHistory()},300000);
-setInterval(()=>{if(document.visibilityState==="visible")loadRouting()},300000);
-setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
+ }
+ function measured(x){
+  if(!x||typeof x!=="object")return null;const a=x.nodes?.A,b=x.nodes?.B;
+  const keys=["in_progress","queued","pending","waiting"];
+  if(!a?.observed||!b?.observed||keys.some(k=>!valid(a[k])||!valid(b[k])))return null;
+  const t=Date.parse(x.ts);if(!Number.isFinite(t))return null;
+  return{t,r:a.in_progress+b.in_progress,q:a.queued+b.queued+a.pending+b.pending+a.waiting+b.waiting};
+ }
+ function filtered(){
+  const now=Date.now(),d=new Date(),today=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
+  const min=range==="today"?today:now-({"7d":604800000,"30d":2592000000,"365d":31536000000}[range]||86400000);
+  return observed.map(measured).filter(p=>p&&p.t>=min&&p.t<=now+60000).sort((a,b)=>a.t-b.t);
+ }
+ function chart(){
+  const p=filtered(),svg=$("trend");svg.replaceChildren();$("points").textContent=p.length+" OBSERVATIONS";
+  const ns="http://www.w3.org/2000/svg";
+  const add=(name,attrs,text)=>{const n=document.createElementNS(ns,name);for(const [k,v]of Object.entries(attrs||{}))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=String(text);svg.append(n);return n};
+  if(!p.length){add("text",{x:28,y:95,fill:"#a8bec9","font-size":13},"No paired observations in this window");add("text",{x:28,y:119,fill:"#91a9b5","font-size":11},"Try a longer period. Missing observations are not zero.");$("trend-state").textContent="Collecting measured history";$("trend-note").textContent="No synthetic points or inferred capacity";return}
+  const left=52,right=922,top=15,bottom=193,max=Math.max(1,...p.map(x=>Math.max(x.r,x.q))),first=p[0].t,last=p[p.length-1].t;
+  const X=t=>left+(last===first?.5:(t-first)/(last-first))*(right-left);
+  const Y=v=>bottom-(v/max)*(bottom-top);
+  for(let i=0;i<5;i++){const n=max*i/4,y=Y(n);add("line",{x1:left,y1:y,x2:right,y2:y,stroke:"#30434c","stroke-width":.8});add("text",{x:43,y:y+4,"text-anchor":"end",fill:"#8ea9b6","font-size":10},Math.round(n))}
+  for(const [field,color]of[["r","#8ec6d6"],["q","#efca92"]]){
+   if(p.length===1)add("circle",{cx:X(first),cy:Y(p[0][field]),r:4,fill:color});
+   else add("polyline",{fill:"none",stroke:color,"stroke-width":2.5,"stroke-linejoin":"round","stroke-linecap":"round",points:p.map(e=>X(e.t).toFixed(2)+","+Y(e[field]).toFixed(2)).join(" ")});
+  }
+  add("text",{x:left,y:213,fill:"#93adba","font-size":10},localTime(new Date(first).toISOString()));
+  add("text",{x:right,y:213,fill:"#93adba","font-size":10,"text-anchor":"end"},localTime(new Date(last).toISOString()));
+  const l=p[p.length-1];$("trend-state").textContent=p.length===1?"First recorded source measurement":"Observed workload over time";
+  $("trend-note").textContent="Latest: "+l.r+" executing · "+l.q+" waiting";
+  $("last-point").textContent=localTime(new Date(l.t).toISOString());
+ }
+ async function history(){
+  try{
+   const data=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/history.json");
+   if(data.schema!=="ab-meta-observations/v1"||!Array.isArray(data.samples))throw Error("Unrecognized history");
+   observed=data.samples;chart();
+  }catch(e){$("trend-state").textContent="Historical journal unavailable";$("trend-note").textContent="The live workload check may still succeed";chart()}
+ }
+ async function routing(){
+  try{
+   const v=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/routing.json");
+   if(v.schema!=="meta-workstation/routing-advice-v1")throw Error("Unknown routing schema");
+   const age=Date.now()-Date.parse(v.generated_at);
+   $("routing-note").textContent=!Number.isFinite(age)||age>90*60*1000?"Last routing advice is stale; verify at next admission.":v.signal==="OBSERVING"?"Still measuring sustained congestion. No routing change warranted yet.":v.signal==="NO_CLEAR_PRESSURE"?"No sustained queue imbalance observed.":v.signal==="A_BACKLOG"||v.signal==="B_BACKLOG"?"A queue imbalance was observed. Eligible new work can be reviewed for rerouting.":"No verified routing change. ";
+  }catch(e){$("routing-note").textContent="Routing journal unavailable. Work assignments remain unchanged."}
+ }
+ async function refresh(){
+  if(busy)return;busy=true;$("refresh").disabled=true;$("stamp").textContent="Checking current executions…";$("source-state").textContent="READING";
+  const settled=await Promise.allSettled(REPOS.map(node));
+  const good=settled.filter(x=>x.status==="fulfilled").map(x=>x.value);
+  allReady=good.length===REPOS.length;
+  runs=good.flatMap(x=>x.entries).sort((a,b)=>Date.parse(b.created)-Date.parse(a.created));
+  if(allReady){
+   const total=good.reduce((a,n)=>({running:a.running+n.running,waiting:a.waiting+n.waiting}),{running:0,waiting:0});
+   renderMetrics(total);$("stamp").textContent="Checked "+localTime(new Date());$("dot").className="dot ok";$("source-state").textContent="LIVE";
+   $("status-note").textContent="Both source journals read successfully. Counts include currently waiting and executing workflow runs.";
+  }else{
+   for(const id of["queued","running","passed","failed","flow-queue","flow-running","flow-done"])$(id).textContent="—";
+   for(const id of["beads-queue","beads-running","beads-done"])beads(id,0,"none");
+   $("stamp").textContent="Partial source / try refresh";$("dot").className="dot warn";$("source-state").textContent="PARTIAL";
+   $("status-note").textContent="A GitHub source was unavailable; unknown work is not zero. Accessible runs remain linked below.";
+   $("count-note").textContent=runs.length+" retrieved runs · incomplete current source";
+  }
+  renderRuns();$("refresh").disabled=false;busy=false;
+ }
+ $("refresh").addEventListener("click",refresh);$("search").addEventListener("input",renderRuns);$("status").addEventListener("change",renderRuns);
+ document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));chart()}));
+ Promise.all([history(),routing(),refresh()]);
+ setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
+ setInterval(()=>{if(document.visibilityState==="visible"){history();routing()}},300000);
 })();
 </script>
-</body>
-</html>
+</body></html>
