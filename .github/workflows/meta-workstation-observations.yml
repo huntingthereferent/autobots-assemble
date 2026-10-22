@@ -30,6 +30,8 @@ jobs:
           git fetch origin meta-observations
           git worktree add --detach "$RUNNER_TEMP/ab-meta-observations" FETCH_HEAD
       - name: Capture source-owned job counts
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: python3 systems/workspace/meta_collect.py --history-path "$RUNNER_TEMP/ab-meta-observations/history.json"
       - name: Test evidence-gated routing contract
         run: python3 -m unittest -v network.tests.test_meta_route
