@@ -77,6 +77,7 @@ def sql_census(raw):
        "original_table_row_or_INSERT_statement_counts":dict(sorted(counts.items())),
        "original_source_globalexpression_calltypes":dict(sorted(positive.items())),
        "recognized_table_column_counts":{k:len(v) for k,v in sorted(headers.items())},
+       "recognized_table_column_names":{k:list(v) for k,v in sorted(headers.items())},
        "original_database_rows_executed_or_materialized":False,
        "frozen_author_mapping_join_executed":False,
        "source_rows_contain_patient_identifiers_claimed":False,
@@ -164,6 +165,8 @@ def main():
        "original_archive_git_blob_verified":result["git_blob_already_cross_checked_with_original_owner_api"],
        "source_SQL_members":len(result["original_sql_censuses"]),
        "source_expression_calls":result["source_measured_expression_rows"],
+       "source_table_schemas":[r["recognized_table_column_names"] for r in result["original_sql_censuses"]],
+       "source_table_row_counts":[r["original_table_row_or_INSERT_statement_counts"] for r in result["original_sql_censuses"]],
        "original_join_materialized":False,
        "NIH_completed":False},sort_keys=True))
 
