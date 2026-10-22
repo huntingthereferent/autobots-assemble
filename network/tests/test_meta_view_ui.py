@@ -30,8 +30,7 @@ class MetaControlDeckTests(unittest.TestCase):
         self.assertIn("meta-observations/history.json", page)
         self.assertIn("meta-observations/routing.json", page)
         self.assertIn("Promise.allSettled", page)
-        self.assertIn("Missing source", page if "Missing source" in page else
-                      "missing work is unknown")
+        self.assertTrue("Missing source" in page or "missing work is unknown" in page)
         self.assertIn("sample", page.lower())
 
     @unittest.skipUnless(shutil.which("node"), "Requires Node.js")
