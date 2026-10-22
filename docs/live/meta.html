@@ -26,33 +26,56 @@ main{max-width:1440px;margin:auto;padding:30px clamp(16px,3vw,40px) 80px}.micro{
 .actionbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.actionbar button[aria-pressed="true"]{background:#234453;border-color:#77bed4}.empty{color:var(--muted);font-size:12px;padding:14px}.context{padding:12px 15px;border-left:2px solid #57798a;background:#10202a;margin:11px 0;font-size:12px}.private{border-left-color:#a18ac8}.snapshot{margin-top:17px;font:11px/1.6 Consolas,monospace;color:var(--muted)}.file-upload{display:block;margin-top:10px;max-width:100%;font-size:11px}
 footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20px,calc((100vw - 1360px)/2));font-size:11px}
 @media(max-width:920px){.layout,.nodes{grid-template-columns:1fr}}@media(max-width:540px){.readings{gap:5px}.reading{padding:9px}.reading strong{font-size:25px}main{padding-top:22px}th,td{padding:10px 8px}.node{padding:15px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+.balance-panel{padding:18px 20px 13px;background:linear-gradient(160deg,#101d24,#0c151b);border-color:#38545e}
+.balance-top{display:flex;align-items:start;justify-content:space-between;gap:20px;flex-wrap:wrap}.balance-top strong{font-size:18px}
+.balance-top p{font-size:11px;max-width:680px}.balance-total{display:flex;gap:10px;flex-wrap:wrap}
+.balance-total>div{border-left:2px solid #80c9dd;min-width:128px;background:#0a141a;padding:10px 14px;border-radius:5px}
+.balance-total>div+div{border-color:#e7bb82}
+.balance-total span{color:var(--muted);font:10px Consolas,monospace;display:block}
+.balance-total strong{font:650 29px/1.5 Consolas,monospace;font-variant-numeric:tabular-nums}
+#balance-chart{display:block;width:100%;height:auto;max-height:260px;margin:20px 0 0;background:#091319;border:1px solid #29414b;border-radius:6px}
+.chart-legend{display:flex;gap:22px;flex-wrap:wrap;margin:13px 0 0;font:11px Consolas,monospace;color:var(--muted)}
+.chart-legend i{display:inline-block;width:18px;height:3px;vertical-align:middle;margin-right:6px}
+.key-r{background:#80c9dd}.key-q{background:#e7bb82}.balance-foot{font-size:11px;color:var(--muted);margin-top:15px}
+.filter-label{font:11px Consolas,monospace;color:var(--muted)}.filter-label select{background:#16252e;color:var(--text);padding:8px;border:1px solid var(--border);border-radius:6px}
+#range-controls button{font:11px Consolas,monospace}#range-controls button[aria-pressed="true"]{background:#244759;border-color:#80c9dd}
+@media(max-width:650px){.balance-panel{padding:12px}.balance-total{width:100%}.balance-total>div{flex:1}}
 </style>
 </head>
 <body>
 <header class="site"><div class="brand">HUNTING THE REFERENT <span>/ META WORKSTATION</span></div><nav aria-label="Cross-workstation navigation"><a href="work.html">WORKSTATION</a><a href="https://github.com/huntingthereferent/autobots-assemble/actions">A JOURNAL</a><a href="https://github.com/aeren-research/continuum-oscillator/actions">B JOURNAL ↗</a><a href="https://github.com/huntingthereferent">GITHUB ↗</a></nav></header>
 <main>
 <section class="hero">
-  <div><div class="micro">Layer above / execution placement</div><h1>Meta workstation</h1><p class="intro">Two workstations, one shared placement record. Follow which GitHub repository owns a lane, which jobs actually moved, and which handoffs remain open. No jobs start from this page.</p></div>
+  <div><div class="micro">Layer above / execution placement</div><h1>Meta workstation</h1><p class="intro">One operational surface for Original and Dessy. See both live queues, shared equilibrium history, lane ownership and the exact run journals. Jobs remain owned by their respective GitHub repositories.</p></div>
   <div><div class="pulse" role="status"><span id="pulse-dot" class="dot"></span><span id="last-read">Reading verified sources…</span></div><p style="text-align:right"><button type="button" id="refresh">Refresh observed state ↻</button></p></div>
 </section>
 <div class="nodes" id="nodes">
   <article class="node"><div class="node-top"><div class="identity"><span class="letter">A</span><div><h2>Original</h2><div class="repo">huntingthereferent/autobots-assemble</div></div></div><span class="tag" id="a-state">PUBLIC</span></div><div class="readings"><div class="reading"><strong id="a-running">—</strong><span>RUNNING</span></div><div class="reading"><strong id="a-queued">—</strong><span>QUEUED</span></div><div class="reading"><strong id="a-recent">—</strong><span>RECENT SAMPLE</span></div></div><p class="node-note" id="a-note">Awaiting GitHub Actions source.</p><div class="node-links"><a href="work.html">A Viewer ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/actions">A Jobs ↗</a></div></article>
-  <article class="node b"><div class="node-top"><div class="identity"><span class="letter">B</span><div><h2>Dessy</h2><div class="repo">aeren-research/continuum-oscillator</div></div></div><span class="tag" id="b-state">PRIVATE</span></div><div class="readings"><div class="reading"><strong id="b-running">—</strong><span>RUNNING</span></div><div class="reading"><strong id="b-queued">—</strong><span>QUEUED</span></div><div class="reading"><strong id="b-recent">—</strong><span>RECENT SAMPLE</span></div></div><p class="node-note" id="b-note">B's GitHub Actions journal is private. No public feed is connected; dashes do not mean zero.</p><div class="node-links"><a href="https://github.com/aeren-research/continuum-oscillator/actions">B Jobs (sign-in) ↗</a><a href="https://github.com/aeren-research/continuum-oscillator/blob/main/docs/live/work.html">B Viewer source ↗</a></div></article>
+  <article class="node b"><div class="node-top"><div class="identity"><span class="letter">B</span><div><h2>Dessy</h2><div class="repo">aeren-research/continuum-oscillator</div></div></div><span class="tag" id="b-state">CONNECTING</span></div><div class="readings"><div class="reading"><strong id="b-running">—</strong><span>RUNNING</span></div><div class="reading"><strong id="b-queued">—</strong><span>QUEUED</span></div><div class="reading"><strong id="b-recent">—</strong><span>RECENT SAMPLE</span></div></div><p class="node-note" id="b-note">Checking Dessy's live GitHub Actions journal.</p><div class="node-links"><a href="https://github.com/aeren-research/continuum-oscillator/actions">B Jobs ↗</a><a href="https://aeren-research.github.io/continuum-oscillator/live/work.html">B Viewer ↗</a></div></article>
 </div>
+<div class="section-heading"><div><div class="micro">00 / observed cluster equilibrium</div><h2>One line of sight · two workstations</h2><p>Actual sampled GitHub Actions workload over time. The lines record running and waiting <em>workflow runs</em>, not job slots or proven hardware capacity.</p></div><div class="actionbar" id="range-controls"><button type="button" data-range="day" aria-pressed="true">Today</button><button type="button" data-range="24h" aria-pressed="false">24 hours</button><button type="button" data-range="7d" aria-pressed="false">7 days</button><button type="button" data-range="30d" aria-pressed="false">30 days</button><button type="button" data-range="365d" aria-pressed="false">Year</button></div></div>
+<section class="panel balance-panel" aria-label="Source-observed A and B equilibrium line chart">
+  <div class="balance-top">
+    <div><div class="micro">LIVE / RECORDED OBSERVATIONS</div><strong id="balance-state">Awaiting first measured sample</strong><p id="balance-note" class="muted">Lines only appear for real observations; no invented history.</p></div>
+    <div class="balance-total"><div><span>COMBINED RUNNING</span><strong id="total-running">—</strong></div><div><span>COMBINED WAITING</span><strong id="total-waiting">—</strong></div></div>
+  </div>
+  <svg id="balance-chart" viewBox="0 0 900 230" role="img" aria-label="Observed A plus B running and waiting workflow counts over selected period"><text x="24" y="110" fill="#9cb2bf" font-size="13">Collecting verified observations…</text></svg>
+  <div class="chart-legend"><span><i class="key-r"></i> A + B running</span><span><i class="key-q"></i> A + B waiting</span><span id="sample-count">— observations</span></div>
+  <p class="balance-foot">Observation history is collected independently every 30 minutes on GitHub. While this page is open it also samples directly; readings are not interpolated into evidence. A queue is not a license to manufacture jobs. Samples may be missing if GitHub throttles or the collector fails.</p>
+</section>
 <div class="section-heading"><div><div class="micro">01 / allocation ledger</div><h2>Who owns what?</h2><p>Recorded assignments, not a scheduler. A lane stays on A until a real B execution is admitted.</p></div><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Open source registry ↗</a></div>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Research lane</th><th>Node</th><th>Placement / admission</th></tr></thead><tbody id="lane-rows"><tr><td colspan="3">Reading declared lane registry…</td></tr></tbody></table></div></div>
 <div class="section-heading"><div><div class="micro">02 / transfer journal</div><h2>What moved between A and B?</h2><p>Recorded, source-linked handoffs. A copied workflow is not a launched lane.</p></div><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Open handoff records ↗</a></div>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Event</th><th>Movement</th><th>Recorded outcome</th></tr></thead><tbody id="handoff-rows"><tr><td colspan="3">Reading recorded cross-node handoffs…</td></tr></tbody></table></div></div>
-<div class="section-heading"><div><div class="micro">03 / source journals</div><h2>Jobs in motion</h2><p>Each row links to the owning repository's real GitHub run. No invented work or statuses.</p></div><div class="actionbar"><button id="view-all" aria-pressed="true">All accessible</button><button id="view-a" aria-pressed="false">A</button><button id="view-b" aria-pressed="false">B</button></div></div>
+<div class="section-heading"><div><div class="micro">03 / source journals</div><h2>Jobs in motion</h2><p>Each row links to the owning repository's real GitHub run. No invented work or statuses.</p></div><div class="actionbar"><button id="view-all" aria-pressed="true">All accessible</button><button id="view-a" aria-pressed="false">A</button><button id="view-b" aria-pressed="false">B</button><label for="lane-filter" class="filter-label">Lane <select id="lane-filter"><option value="all">All lanes</option></select></label></div></div>
 <div class="layout">
   <section class="panel"><div class="panel-head"><strong>Latest observed workflow runs</strong><span class="tag" id="runs-source">GITHUB API</span></div><div class="run-list" id="run-list"><div class="empty">Awaiting workflow runs…</div></div></section>
   <aside class="panel"><div class="panel-head"><strong>Continuity / handoff</strong><span class="tag">SOURCE-OWNED</span></div><div class="panel-body">
     <div class="micro">A ↔ B</div><p>Both nodes use the same shared registry at A. B also retains its own local copy for regrounding.</p>
     <div class="context">A job appearing in a journal establishes an execution record, not a verified research finding or permission to transfer a lane.</div>
-    <div class="context private">B is private. The public viewer cannot read B's protected GitHub run list. An authorized B journal can be inspected in GitHub or loaded locally below; it is never uploaded from this page.</div>
-    <label for="b-import" class="micro">Optional private B journal · local only</label>
-    <input class="file-upload" id="b-import" type="file" accept=".json,application/json" aria-label="Load private B JSON run journal locally">
-    <p class="muted" id="b-import-note" style="font-size:11px">Expected JSON: repository, captured_at, workflow_runs. No credentials or network uploads.</p>
+    <div class="context">Both repositories currently expose public GitHub Actions metadata. Each job stays attached to its own journal. Changing lane assignments requires an accepted, committed registry change—not a visual button.</div>
+    <p><a href="https://github.com/huntingthereferent/autobots-assemble/edit/main/docs/live/meta-registry.json">Edit lane placement ↗</a> · <a href="https://github.com/aeren-research/continuum-oscillator/actions">Enable B lanes ↗</a></p>
     <p class="snapshot" id="registry-date">Registry not yet read.</p>
     <p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/systems/workspace/META_WORKSTATION_HANDOFF.md">Reground handoff ↗</a></p>
   </div></aside>
@@ -61,102 +84,150 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
 <footer>Source discipline: observed GitHub run, assigned lane, recorded handoff, and accepted research result are different states. Refresh displays observations; it does not execute or authorize work.</footer>
 <script>
 (function(){
-  "use strict";
-  const A="huntingthereferent/autobots-assemble",B="aeren-research/continuum-oscillator";
-  const source="https://raw.githubusercontent.com/"+A+"/main/docs/live/meta-registry.json";
-  const api="https://api.github.com/repos/"+A+"/actions/runs";
-  const $=id=>document.getElementById(id);
-  let registry=null, aRuns=[], bRuns=[], view="all", bLocal=false;
-  const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const date=s=>{const d=new Date(s);return Number.isFinite(d.getTime())?d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"unknown time"};
-  const state=r=>r.status==="completed"?(r.conclusion||"completed"):(r.status||"unknown");
-  function safeRun(r,repo){
-    const id=Number(r.id);
-    if(!Number.isSafeInteger(id)||id<=0)return null;
-    return {id,name:String(r.name||"Unnamed workflow"),status:String(r.status||"unknown"),conclusion:String(r.conclusion||""),created_at:r.created_at||null,repo,html_url:"https://github.com/"+repo+"/actions/runs/"+id};
+"use strict";
+const A="huntingthereferent/autobots-assemble",B="aeren-research/continuum-oscillator";
+const apiRoot="https://api.github.com/repos/";
+const $=id=>document.getElementById(id);
+const safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=s=>{const d=new Date(s);return Number.isFinite(+d)?d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"unknown"};
+let registry=null,handoffs=[],runs={A:[],B:[]},observations=[],view="all",laneFilter="all",range="day",refreshBusy=false;
+const validCount=n=>Number.isSafeInteger(n)&&n>=0;
+const nowISO=()=>new Date().toISOString();
+async function json(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("HTTP "+r.status);return r.json()}
+async function readDocument(path){
+  const canonical="https://raw.githubusercontent.com/"+A+"/main/docs/live/"+path;
+  try{return await json(canonical)}catch(e){return await json(path)}
+}
+function lane(name){
+  const v=String(name||"").toLowerCase();
+  const hit=(registry?.lane_rules||[]).find(l=>l.match?.some(p=>v.startsWith(String(p).toLowerCase())));
+  return hit?.id||"UNCLASSIFIED";
+}
+function safeRun(r,repo,node){
+  const id=Number(r.id);if(!Number.isSafeInteger(id)||id<=0)return null;
+  return {id,repo,node,name:String(r.name||"Unnamed workflow"),status:String(r.status||"unknown"),conclusion:String(r.conclusion||""),created_at:r.created_at||null,url:"https://github.com/"+repo+"/actions/runs/"+id};
+}
+const runStatus=r=>r.status==="completed"?(r.conclusion||"completed"):(r.status||"unknown");
+function renderRuns(){
+ const all=([...(view!=="B"?runs.A:[]),...(view!=="A"?runs.B:[])]).filter(r=>laneFilter==="all"||lane(r.name)===laneFilter);
+ all.sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
+ $("runs-source").textContent="GITHUB / "+(view==="all"?"A + B":view)+" LIVE";
+ $("run-list").innerHTML=all.length?all.slice(0,100).map(r=>'<div class="run"><span class="status '+safe(runStatus(r))+'">'+safe(runStatus(r).toUpperCase())+'</span><strong><a target="_blank" rel="noopener noreferrer" href="'+r.url+'">'+safe(r.name)+'</a></strong><small>'+safe(r.node==="A"?"A / ORIGINAL":"B / DESSY")+' · '+safe(lane(r.name))+' · '+safe(fmt(r.created_at))+' · RUN '+r.id+'</small></div>').join(""):'<div class="empty">No runs in the retrieved sample for this filter. It does not prove no matching jobs exist.</div>';
+}
+function renderLanes(){
+ $("lane-rows").innerHTML=(registry.lane_rules||[]).map(l=>'<tr><td class="lane-name">'+safe(l.title)+'</td><td class="lane-owner">'+safe(l.node)+'</td><td><span class="lane-note">'+safe(l.admission)+'</span></td></tr>').join("");
+ $("registry-date").textContent="Registry: "+String(registry.updated_at||"unknown")+" · canonical A";
+ const opts=['<option value="all">All lanes</option>',...registry.lane_rules.map(l=>'<option value="'+safe(l.id)+'">'+safe(l.title)+'</option>'),'<option value="UNCLASSIFIED">Unclassified</option>'];
+ $("lane-filter").innerHTML=opts.join("");
+}
+function renderHandoffs(){
+ $("handoff-rows").innerHTML=handoffs.map(r=>'<tr><td><strong>'+safe(r.id)+'</strong><div class="lane-note">'+safe(r.date)+' · '+safe(r.kind)+'</div></td><td class="lane-owner">'+safe(r.from)+' → '+safe(r.to)+'</td><td><span class="status">'+safe(r.status)+'</span><div class="lane-note">'+safe(r.description)+'</div><a target="_blank" rel="noopener noreferrer" href="'+safe(r.evidence_url)+'">Evidence ↗</a></td></tr>').join("")||'<tr><td colspan="3">No recorded transfers.</td></tr>';
+}
+async function readMetadata(){
+ const [reg,hand]=await Promise.all([readDocument("meta-registry.json"),readDocument("meta-handoffs.json")]);
+ if(reg.schema!=="meta-workstation/registry-v1"||!Array.isArray(reg.lane_rules)||hand.schema!=="meta-workstation/handoffs-v1"||!Array.isArray(hand.records))throw Error("Unrecognized meta source schema");
+ registry=reg;handoffs=hand.records;renderLanes();renderHandoffs();
+}
+async function readNode(node,repo){
+ const root=apiRoot+repo+"/actions/runs";
+ const kinds=["in_progress","queued","pending","waiting"];
+ const [a,b,c,d,latest]=await Promise.all([...kinds.map(s=>json(root+"?status="+s+"&per_page=1")),json(root+"?per_page=65")]);
+ const nums=[a,b,c,d].map(x=>x.total_count);
+ if(nums.some(x=>!validCount(x))||!Array.isArray(latest.workflow_runs))throw Error("Invalid Actions response for "+node);
+ const r={in_progress:nums[0],queued:nums[1],pending:nums[2],waiting:nums[3],observed:true};
+ runs[node]=latest.workflow_runs.map(x=>safeRun(x,repo,node)).filter(Boolean);
+ const key=node.toLowerCase();
+ $(key+"-running").textContent=r.in_progress.toLocaleString();
+ $(key+"-queued").textContent=(r.queued+r.pending+r.waiting).toLocaleString();
+ $(key+"-recent").textContent=runs[node].length;
+ $(key+"-state").textContent="LIVE · GITHUB";
+ $(key+"-note").textContent="Source counts for in-progress and waiting workflow runs. Recent sample: "+runs[node].length+"; direct links to each run below.";
+ return r;
+}
+function selectSamples(){
+ const ms=Date.now(),local=new Date(),start=range==="day"?new Date(local.getFullYear(),local.getMonth(),local.getDate()).getTime():ms-({"24h":86400000,"7d":7*86400000,"30d":30*86400000,"365d":365*86400000}[range]||86400000);
+ return observations.filter(x=>x&&Number.isFinite(Date.parse(x.ts))&&Date.parse(x.ts)>=start&&Date.parse(x.ts)<=ms+60000).sort((a,b)=>Date.parse(a.ts)-Date.parse(b.ts));
+}
+function measured(sample){
+ const a=sample.nodes?.A,b=sample.nodes?.B;
+ if(!a?.observed||!b?.observed)return null;
+ const fields=["in_progress","queued","pending","waiting"];
+ if([...fields.map(k=>a[k]),...fields.map(k=>b[k])].some(v=>!validCount(v)))return null;
+ return {t:Date.parse(sample.ts),r:a.in_progress+b.in_progress,q:a.queued+b.queued+a.pending+b.pending+a.waiting+b.waiting};
+}
+function renderChart(){
+ const p=selectSamples().map(measured).filter(Boolean);
+ $("sample-count").textContent=p.length+" jointly observed samples / selected window";
+ const svg=$("balance-chart"),W=900,H=230,x0=53,x1=878,y0=15,y1=199;
+ if(!p.length){
+  svg.innerHTML='<text x="24" y="100" fill="#9cb2bf" font-size="13">No joint source samples in this period yet.</text><text x="24" y="126" fill="#9cb2bf" font-size="11">Refresh or use a longer observation range.</text>';
+  $("balance-state").textContent="Waiting for verified paired measurements";
+  $("balance-note").textContent="Missing data are shown as missing; no fabricated line.";
+  return;
+ }
+ const lo=Math.min(...p.map(x=>x.t)),hi=Math.max(...p.map(x=>x.t));
+ const max=Math.max(1,...p.map(x=>Math.max(x.r,x.q)));
+ const X=t=>x0+(hi===lo?0.5:(t-lo)/(hi-lo))*(x1-x0);
+ const Y=v=>y1-v/max*(y1-y0);
+ let parts=[];
+ for(let k=0;k<=4;k++){const v=max*k/4,y=Y(v);parts.push('<line x1="'+x0+'" y1="'+y.toFixed(1)+'" x2="'+x1+'" y2="'+y.toFixed(1)+'" stroke="#263c47"/>');parts.push('<text x="42" y="'+(y+4).toFixed(1)+'" text-anchor="end" fill="#8ca9b7" font-family="monospace" font-size="10">'+Math.round(v)+'</text>')}
+ const poly=(field,color)=>{
+  const points=p.map(x=>X(x.t).toFixed(2)+","+Y(x[field]).toFixed(2)).join(" ");
+  return p.length>1?'<polyline fill="none" stroke="'+color+'" stroke-width="2.4" stroke-linejoin="round" points="'+points+'"/>':'<circle cx="'+X(p[0].t)+'" cy="'+Y(p[0][field])+'" r="4.5" fill="'+color+'"/>';
+ };
+ parts.push(poly("r","#80c9dd"),poly("q","#e7bb82"));
+ parts.push('<text x="'+x0+'" y="220" fill="#8ca9b7" font-family="monospace" font-size="10">'+safe(fmt(new Date(lo).toISOString()))+'</text>');
+ parts.push('<text x="'+x1+'" y="220" text-anchor="end" fill="#8ca9b7" font-family="monospace" font-size="10">'+safe(fmt(new Date(hi).toISOString()))+'</text>');
+ svg.innerHTML=parts.join("");
+ const l=p[p.length-1];
+ $("balance-state").textContent=p.length>1?"Observed balance · "+p.length+" snapshots":"First paired observation recorded";
+ $("balance-note").textContent="Last observed "+fmt(new Date(l.t).toISOString())+" · "+l.r+" running / "+l.q+" waiting across A+B.";
+}
+async function readHistory(){
+ try{
+  const h=await json("https://raw.githubusercontent.com/"+A+"/meta-observations/history.json");
+  if(h.schema==="ab-meta-observations/v1"&&Array.isArray(h.samples)){
+   const keys=new Set(observations.map(x=>x.ts));
+   for(const sample of h.samples){if(!keys.has(sample.ts)){observations.push(sample);keys.add(sample.ts)}}
+   observations.sort((a,b)=>Date.parse(a.ts)-Date.parse(b.ts));
+   renderChart();
   }
-  function assign(name){
-    const value=String(name||"").toLowerCase();
-    const lane=(registry?.lane_rules||[]).find(l=>l.match.some(p=>value.startsWith(String(p).toLowerCase())));
-    return lane?lane.id:"UNCLASSIFIED";
+ }catch(e){$("balance-note").textContent="Archived observations unavailable; current browser measurements will still appear."}
+}
+async function refresh(){
+ if(refreshBusy)return;refreshBusy=true;$("refresh").disabled=true;
+ $("last-read").textContent="Reading both GitHub journals…";
+ const outcomes=await Promise.allSettled([readNode("A",A),readNode("B",B)]);
+ const nodes={};
+ for(let i=0;i<2;i++){
+  const key=i===0?"A":"B",res=outcomes[i];
+  if(res.status==="fulfilled"){nodes[key]=res.value}
+  else{
+   nodes[key]={observed:false,error:String(res.reason?.message||res.reason)};
+   $(key.toLowerCase()+"-state").textContent="SOURCE UNAVAILABLE";
+   $(key.toLowerCase()+"-note").textContent=nodes[key].error+". Last values (if any) may be stale; unavailable does not mean zero.";
   }
-  function renderRuns(){
-    const list=view==="a"?aRuns:view==="b"?bRuns:aRuns.concat(bRuns);
-    list.sort((x,y)=>new Date(y.created_at||0)-new Date(x.created_at||0));
-    $("runs-source").textContent=view==="b"?(bLocal?"B LOCAL JOURNAL":"B PRIVATE"):(bLocal?"LIVE A + LOCAL B":"LIVE A");
-    if(!list.length){$("run-list").innerHTML='<div class="empty">'+(view==="b"&&!bLocal?"B journal is private. Sign into its GitHub Actions page or import an authorized JSON export locally.":"No accessible jobs in this view. Unknown is not zero.")+"</div>";return}
-    $("run-list").innerHTML=list.slice(0,65).map(r=>'<div class="run"><span class="status '+esc(state(r))+'">'+esc(state(r).toUpperCase())+'</span><strong><a target="_blank" rel="noopener noreferrer" href="'+r.html_url+'">'+esc(r.name)+'</a></strong><small>'+esc(r.repo===A?"A / ORIGINAL":"B / DESSY")+' · '+esc(assign(r.name))+' · '+esc(date(r.created_at))+' · RUN '+r.id+"</small></div>").join("");
-  }
-  function renderLanes(){
-    const lanes=registry?.lane_rules||[];
-    $("lane-rows").innerHTML=lanes.map(l=>'<tr><td class="lane-name">'+esc(l.title)+'</td><td class="lane-owner">'+esc(l.node)+'</td><td><span class="lane-note">'+esc(l.admission)+'</span></td></tr>').join("")||'<tr><td colspan="3">No admitted lanes recorded.</td></tr>';
-    $("registry-date").textContent="Registry: "+String(registry?.updated_at||"unknown")+" · shared source: "+String(registry?.source_of_truth||"unknown");
-  }
-  async function readHandoffs(){
-    let j;
-    try{j=await json("https://raw.githubusercontent.com/"+A+"/main/docs/live/meta-handoffs.json")}catch(e){j=await json("meta-handoffs.json")}
-    if(j.schema!=="meta-workstation/handoffs-v1"||!Array.isArray(j.records))throw Error("Invalid shared handoff journal");
-    $("handoff-rows").innerHTML=j.records.map(r=>{
-      const url=String(r.evidence_url||"");
-      const link=url.startsWith("https://github.com/")?'<a target="_blank" rel="noopener noreferrer" href="'+esc(url)+'">Evidence ↗</a>':"No source link";
-      return '<tr><td><strong>'+esc(r.id)+'</strong><div class="lane-note">'+esc(r.date)+' · '+esc(r.kind)+'</div></td><td class="lane-owner">'+esc(r.from)+' → '+esc(r.to)+'</td><td><span class="status '+esc(r.status)+'">'+esc(r.status)+'</span><div class="lane-note">'+esc(r.description)+'</div>'+link+'</td></tr>';
-    }).join("");
-  }
-  async function json(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("GitHub/source HTTP "+r.status);return r.json()}
-  async function readRegistry(){
-    try{registry=await json(source)}catch(e){registry=await json("meta-registry.json")}
-    if(registry.schema!=="meta-workstation/registry-v1"||!Array.isArray(registry.lane_rules)||!Array.isArray(registry.nodes))throw Error("Invalid shared registry");
-    renderLanes();
-  }
-  async function readA(){
-    const urls=[api+"?status=in_progress&per_page=1",api+"?status=queued&per_page=1",api+"?per_page=40"];
-    const [running,queued,recent]=await Promise.all(urls.map(json));
-    if(!Array.isArray(recent.workflow_runs))throw Error("Invalid GitHub runs response");
-    $("a-running").textContent=Number(running.total_count).toLocaleString();
-    $("a-queued").textContent=Number(queued.total_count).toLocaleString();
-    aRuns=recent.workflow_runs.map(r=>safeRun(r,A)).filter(Boolean);
-    $("a-recent").textContent=aRuns.length;
-    $("a-state").textContent="PUBLIC · LIVE";
-    $("a-note").textContent="GitHub API totals for running and queued workflows; latest "+aRuns.length+" runs below (not the full archive).";
-  }
-  async function refresh(){
-    $("refresh").disabled=true;
-    $("last-read").textContent="Checking GitHub source…";
-    try{
-      if(!registry)await readRegistry();
-      await readHandoffs().catch(e=>{$("handoff-rows").innerHTML='<tr><td colspan="3">Shared handoff journal unavailable; check source records.</td></tr>'});
-      await readA();
-      $("pulse-dot").className="dot ok";
-      $("last-read").textContent="A checked "+date(new Date().toISOString())+" · B "+(bLocal?"local import":"private");
-    }catch(e){
-      $("pulse-dot").className="dot fail";
-      $("last-read").textContent="Source unavailable: "+String(e.message||e);
-      $("a-note").textContent="Last A data may be stale; do not infer no work.";
-    }
-    renderRuns();$("refresh").disabled=false;
-  }
-  ["all","a","b"].forEach(n=>$("view-"+n).addEventListener("click",()=>{
-    view=n;["all","a","b"].forEach(k=>$("view-"+k).setAttribute("aria-pressed",String(k===n)));renderRuns();
-  }));
-  $("refresh").addEventListener("click",refresh);
-  $("b-import").addEventListener("change",async function(){
-    const file=this.files?.[0];if(!file)return;
-    if(file.size>2000000){$("b-import-note").textContent="File too large; maximum 2 MB.";return}
-    try{
-      const obj=JSON.parse(await file.text());
-      if(obj.repository!==B||!Array.isArray(obj.workflow_runs))throw Error("Wrong repository or run journal shape");
-      bRuns=obj.workflow_runs.map(r=>safeRun(r,B)).filter(Boolean);
-      bLocal=true;
-      const running=bRuns.filter(r=>r.status==="in_progress").length,queued=bRuns.filter(r=>r.status==="queued").length;
-      $("b-running").textContent=running+"*";$("b-queued").textContent=queued+"*";$("b-recent").textContent=bRuns.length;
-      $("b-state").textContent="LOCAL SNAPSHOT";
-      $("b-note").textContent="* Sampled journal, NOT live or exhaustive. Captured: "+date(obj.captured_at);
-      $("b-import-note").textContent="Loaded privately in this tab only. Nothing uploaded.";
-      renderRuns();
-    }catch(e){$("b-import-note").textContent="Invalid private journal: "+String(e.message||e)}
-  });
-  refresh();
-  setInterval(()=>{if(document.visibilityState==="visible")refresh()},360000);
+ }
+ if(nodes.A.observed&&nodes.B.observed){
+  $("total-running").textContent=(nodes.A.in_progress+nodes.B.in_progress).toLocaleString();
+  $("total-waiting").textContent=([nodes.A,nodes.B].reduce((sum,n)=>sum+n.queued+n.pending+n.waiting,0)).toLocaleString();
+  observations.push({ts:nowISO(),nodes});
+  if(observations.length>16000)observations=observations.slice(-16000);
+  $("pulse-dot").className="dot ok";
+  $("last-read").textContent="Both checked "+fmt(nowISO());
+ }else{
+  $("total-running").textContent="—";$("total-waiting").textContent="—";
+  $("pulse-dot").className="dot fail";$("last-read").textContent="Partial data · inspect node source status";
+ }
+ renderChart();renderRuns();$("refresh").disabled=false;refreshBusy=false;
+}
+["all","a","b"].forEach(v=>$("view-"+v).addEventListener("click",()=>{view=v.toUpperCase();if(v==="all")view="all";["all","a","b"].forEach(x=>$("view-"+x).setAttribute("aria-pressed",String(x===v)));renderRuns()}));
+$("lane-filter").addEventListener("change",e=>{laneFilter=e.target.value;renderRuns()});
+document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(v=>v.setAttribute("aria-pressed",String(v===b)));renderChart()}));
+$("refresh").addEventListener("click",refresh);
+(async()=>{try{await readMetadata()}catch(e){$("registry-date").textContent="Placement registry unavailable: "+String(e.message||e)}await Promise.all([readHistory(),refresh()])})();
+setInterval(()=>{if(document.visibilityState==="visible")refresh()},120000);
+setInterval(()=>{if(document.visibilityState==="visible")readHistory()},900000);
 })();
 </script>
 </body></html>
