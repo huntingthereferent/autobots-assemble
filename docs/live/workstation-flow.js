@@ -128,7 +128,8 @@
       bead.setAttribute("aria-label",bead.title);
       box.append(bead);
     }
-    if(totalCount>18){const more=document.createElement("span");more.className="flow-overflow";more.textContent="+"+number(totalCount-18);box.append(more);}
+    const shown=Math.min(18,items.length);
+    if(totalCount>shown){const more=document.createElement("span");more.className="flow-overflow";more.textContent="+"+number(totalCount-shown);box.append(more);}
     setText("flow-count-"+id,available?number(totalCount):"—");
     setText("flow-note-"+id,note);
   }
