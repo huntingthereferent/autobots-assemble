@@ -19,7 +19,7 @@ James types C in a ChatGPT window
 
 This is **human-orchestrated, tool-mediated multi-window coordination**. It should not be misclassified as absent simply because no always-on machine-to-machine coordinator runs. Its actual behavior is supported by the operator's ChatGPT sessions, GitHub PRs and check runs; any claim that an exact return was retained in the native private journal still requires that journal's witness.
 
-The separate [ChatGPT/workstation handoff proposal](../../systems/workspace/CHATGPT_HANDOFF.md) may be under review; do not replace or duplicate that protocol as a prerequisite to recognizing James's existing control loop. This document is a capacity instrument, not a new coordination authority.
+The separate [ChatGPT/workstation handoff proposal](https://github.com/huntingthereferent/autobots-assemble/pull/394) may be under review; do not replace or duplicate that protocol as a prerequisite to recognizing James's existing control loop. This document is a capacity instrument, not a new coordination authority.
 
 The unsolved questions are **measured capacity, recoverability across context-window boundaries, exact cross-source evidence when needed, and maximum effective concurrency under the operator loop**. Automated provisioning of another node is optional future infrastructure, not a definition of whether James already coordinates the factory.
 
