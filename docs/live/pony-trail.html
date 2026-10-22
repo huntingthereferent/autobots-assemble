@@ -353,7 +353,16 @@ document.querySelectorAll("[data-horse]").forEach(btn=>btn.addEventListener("cli
 $("trail").addEventListener("change",e=>{const next=e.target.value;if(next===scene)return;lastScene=scene;scene=next;sceneFade=1;document.documentElement.dataset.scene=scene;$("trail-hint").textContent=trailNames[scene]+" — "+trailDescriptions[scene];message("Now riding the "+trailNames[scene].toLowerCase()+". Watch the scenery change!");});
 $("start").addEventListener("click",start);$("jump").addEventListener("click",leap);$("pause").addEventListener("click",pause);
 $("sound").addEventListener("click",()=>{soundOn=!soundOn;$("sound").textContent=soundOn?"♫ Sound on":"♫ Sound off";$("sound").setAttribute("aria-pressed",String(soundOn));if(soundOn)tone(490,.12);});
-document.addEventListener("keydown",e=>{if(["Space","ArrowUp","ArrowLeft","ArrowRight"].includes(e.code)&&!["BUTTON","SELECT","INPUT"].includes(document.activeElement.tagName))e.preventDefault();if(e.repeat&&["Space","ArrowUp"].includes(e.code))return;if(e.code==="Space"||e.code==="ArrowUp")leap();if(e.code==="KeyP")pause();if(e.code==="KeyR")start();if(e.code==="ArrowLeft"||e.code==="ArrowRight")keys[e.code]=true;});
+document.addEventListener("keydown",e=>{
+  // Focused controls own their keystrokes; game shortcuts are for the play surface.
+  if(e.target instanceof Element&&e.target.closest('button,select,input,textarea,a,[contenteditable]'))return;
+  if(["Space","ArrowUp","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();
+  if(e.repeat&&["Space","ArrowUp"].includes(e.code))return;
+  if(e.code==="Space"||e.code==="ArrowUp")leap();
+  if(e.code==="KeyP")pause();
+  if(e.code==="KeyR")start();
+  if(e.code==="ArrowLeft"||e.code==="ArrowRight")keys[e.code]=true;
+});
 document.addEventListener("keyup",e=>{if(e.code==="ArrowLeft"||e.code==="ArrowRight")keys[e.code]=false;});
 window.addEventListener("blur",()=>{keys={};if(mode==="running")pause();});
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&mode==="running")pause();});
