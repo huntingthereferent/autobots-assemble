@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import unittest
-from rdflib import Graph,URIRef,RDF,RDFS
+from rdflib import Graph,URIRef,RDF,RDFS,BNode
 from systems.workspace import nih_p2_bgee_rdfs_type_witness_e20 as e20
 
 GENE=URIRef("urn:e20:original-gene")
@@ -144,14 +144,26 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
                        (GENE,RDF.type,obo)}
         result=e20.residual_type_class_inventory(original,full,original)
         self.assertEqual(result["original_full_profile_limited_oracle_residual_count"],3)
-        self.assertEqual(result["source_class_namespace_counts"]["OWL_vocabulary"],2)
-        self.assertEqual(result["source_class_namespace_counts"]["source_OBO_URI"],1)
-        self.assertTrue(result["class_namespace_is_not_inference_rule_provenance"])
+        self.assertEqual(result["source_class_term_family_counts"]["OWL_vocabulary"],2)
+        self.assertEqual(result["source_class_term_family_counts"]["source_OBO_URI"],1)
+        self.assertTrue(result["class_term_counts_are_not_inference_rule_provenance"])
 
     def test_e22_missing_independent_source_type_not_reported_as_residual(self):
         with self.assertRaisesRegex(ValueError,"missing"):
             e20.residual_type_class_inventory(
                 {(GENE,RDF.type,V)},set(),{(GENE,RDF.type,V)})
+
+
+    def test_e22_anonymous_class_identity_never_exported_as_persistent_URI(self):
+        a,b=BNode("first-native-anon"),BNode("second-native-anon")
+        other={(GENE,RDF.type,a),(TARGET,RDF.type,a),(GENE,RDF.type,b)}
+        r=e20.residual_type_class_inventory(set(),other,set())
+        self.assertEqual(r["distinct_anonymous_blank_node_class_terms"],2)
+        self.assertEqual(r["anonymous_blank_node_class_statement_counts"],[1,2])
+        self.assertEqual(r["source_class_term_family_counts"]
+                         ["anonymous_RDF_blank_node_class_term"],3)
+        self.assertEqual(r["top_named_class_URI_counts"],[])
+        self.assertTrue(r["anonymous_blank_node_labels_not_persistent_identifiers"])
 
 if __name__=="__main__":
     unittest.main()
