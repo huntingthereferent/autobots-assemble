@@ -311,6 +311,61 @@ def original_anonymous_class_premise_census(owner_graph, original_types, full_ty
     }
 
 
+def original_anonymous_constructor_fingerprint(owner_graph, original_types, full_types, restricted_oracle):
+    """E24 original-graph anonymous term constructor fingerprint, not rule proof.
+
+    Group by authored local RDF/OWL shape. Never export parser-generated BNode
+    labels, original source rows or a claimed stable anonymous-class crosswalk.
+    """
+    from rdflib.namespace import OWL
+    if not original_types <= full_types or not restricted_oracle <= full_types:
+        raise ValueError("original or RDFS closure boundary changed")
+    residual=(full_types-original_types)-restricted_oracle
+    instances=Counter(c for s,p,c in residual if p==RDF.type and isinstance(c,BNode))
+    patterns=Counter()
+    counts=Counter()
+    for cls,n in instances.items():
+        # The input graph is original authored OWL/RDF; the materialized
+        # full closure MUST NOT be used as evidence of original declarations.
+        outgoing=set(p for _,p,_ in owner_graph.triples((cls,None,None)))
+        incoming=set(p for _,p,_ in owner_graph.triples((None,None,cls)))
+        marks={
+            "restriction":(cls,RDF.type,OWL.Restriction) in owner_graph,
+            "onProperty":OWL.onProperty in outgoing,
+            "someValuesFrom":OWL.someValuesFrom in outgoing,
+            "allValuesFrom":OWL.allValuesFrom in outgoing,
+            "hasValue":OWL.hasValue in outgoing,
+            "intersectionOf":OWL.intersectionOf in outgoing,
+            "unionOf":OWL.unionOf in outgoing,
+            "complementOf":OWL.complementOf in outgoing,
+            "oneOf":OWL.oneOf in outgoing,
+            "equivalentClass":OWL.equivalentClass in outgoing or OWL.equivalentClass in incoming,
+            "subClassOf":RDFS.subClassOf in outgoing or RDFS.subClassOf in incoming,
+            "rdfListMember":RDF.first in outgoing or RDF.rest in outgoing,
+            "rdfListReference":RDF.first in incoming or RDF.rest in incoming,
+            "sourceTermSeen":bool(outgoing or incoming),
+        }
+        sig=tuple(k for k in sorted(marks) if marks[k])
+        patterns[sig]+=1
+        counts[sig]+=n
+    if sum(counts.values())!=sum(instances.values()):
+        raise ValueError("authored constructor group accounting diverged")
+    return {
+        "original_anonymous_class_term_count":len(instances),
+        "original_anonymous_type_statement_count":sum(instances.values()),
+        "source_constructor_profiles":[
+            {"original_author_predicate_features":list(sig),
+             "anonymous_class_term_count":patterns[sig],
+             "residual_original_node_type_statements":counts[sig]}
+            for sig in sorted(patterns)
+        ],
+        "bnode_identifiers_or_raw_owner_triples_exported":False,
+        "original_author_graph_only":True,
+        "constructors_not_causal_OWL_derivation_proof":True,
+        "official_NIH_scored":False,
+    }
+
+
 def execute(archive,owner_files,ro_files):
     original=source.verified_owner_input(archive,owner_files,ro_files)
     four.original_four_source_axioms(original)
@@ -344,6 +399,8 @@ def execute(archive,owner_files,ro_files):
     result["E22_residual_type_class_inventory"] = residual_type_class_inventory(
         source_types,all_types,witness)
     result["E23_original_anonymous_class_premises"] = original_anonymous_class_premise_census(
+        src,source_types,all_types,witness)
+    result["E24_anonymous_constructor_fingerprint"] = original_anonymous_constructor_fingerprint(
         src,source_types,all_types,witness)
     result.update({
         "schema":SCHEMA,
