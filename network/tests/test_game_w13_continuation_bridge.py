@@ -82,6 +82,17 @@ class GameW13ContinuationBridgeTests(unittest.TestCase):
             self.observation(witness_ref=WITNESS_PREFIX + "not-a-real-job")
         ))
 
+    def test_source_mutation_after_completion_invalidates_continuation_evidence(self):
+        run_job(data_dir=self.data, job_id=self.job_id, confirm_execute=self.job_id)
+        self.assertTrue(self.verifier.verify_observation(self.observation()))
+        edition = self.desk._edition("game-worlds-w13", "world-v1")
+        worker = edition / "game_worlds_worker.py"
+        worker.write_text(worker.read_text(encoding="utf8") + "\n# post-run mutation\n",
+                          encoding="utf8")
+        # A previously COMPLETE job is not durable evidence if its pinned source
+        # no longer matches the admitted fingerprint at the moment of use.
+        self.assertFalse(self.verifier.verify_observation(self.observation()))
+
     def test_malformed_witness_reference_fails_closed(self):
         from systems.workspace.workstation_continuation import Observation
         malformed = Observation(
