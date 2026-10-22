@@ -37,8 +37,8 @@ If the next action depends on which one is meant, clarify. Do not hard-code slan
 
 ## Example — observation, not a command
 
-James has described "swallowing" observations from several situations at once. The same word also occurs in the repository's technical `swallow X` operator. If the conversation is about what he is observing, selecting `LAYER.ABSORB` would be the wrong operation. Preserve the words and their context, then return UNKNOWN or candidates where necessary.
+The word *swallow* can describe a personal observation or invoke the repository's technical `swallow X` operator. If the conversation is about what he is observing, selecting `LAYER.ABSORB` would be the wrong operation. Preserve the words and their context, then return UNKNOWN or candidates where necessary.
 
-Likewise, "yes surfing :)" followed an explanation of *regrounding* in conversation. It is a metaphor and confirmation in that context, not an automatic instruction to move an engine. "Isn't that math?" introduces mathematics into the conversation and can itself be examined; a decoder should not require an external mathematics step to recognize that relation.
+Likewise, a conversational metaphor about regrounding is not automatically an instruction to move an engine. A question about mathematics is part of the current conversation; no separate external mathematics step is required just to recognize that context.
 
 **Reground instead of guessing:** recover the continuing relationship, what changed on the branch, and the intended return point. [Regrounding](../REGROUNDING.md). A decoder's selected shape remains one scoped interpretation, not the full human observation.

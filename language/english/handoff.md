@@ -31,12 +31,12 @@ Registers may compress the wording, but they may not omit information required f
 
 ## A handoff does not reset the person
 
-A handoff should identify the **current referent, meaningful detours and corrections, and where to return**. The same James can speak conversationally, technically, emotionally, sharply or playfully. Do not manufacture separate personas for those registers. When quoting him, retain his exact words; distinguish a compressed operational state from the human account.
+A handoff should identify the **current referent, meaningful detours and corrections, and where to return**. The same James can speak conversationally, technically, emotionally, sharply or playfully. Do not manufacture separate personas for those registers. When attributing words, use only currently published authorized writing; never reconstruct withdrawn quotations. Distinguish a compressed operational state from the human account.
 
 [Regrounding](../REGROUNDING.md) explains returning without discarding what an outward branch showed. Human-language continuity is not proven merely by preserving a packet ID.
 
 ## A handoff does not reset the person
 
-A handoff should identify the **current referent, meaningful detours and corrections, and where to return**. The same James can speak conversationally, technically, emotionally, sharply or playfully. Do not manufacture separate personas for those registers. When quoting him, retain his exact words; distinguish a compressed operational state from the human account.
+A handoff should identify the **current referent, meaningful detours and corrections, and where to return**. The same James can speak conversationally, technically, emotionally, sharply or playfully. Do not manufacture separate personas for those registers. When attributing words, use only currently published authorized writing; never reconstruct withdrawn quotations. Distinguish a compressed operational state from the human account.
 
 [Regrounding](../REGROUNDING.md) explains returning without discarding what an outward branch showed. Human-language continuity is not proven merely by preserving a packet ID.

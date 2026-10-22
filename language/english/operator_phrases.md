@@ -61,6 +61,4 @@ The `swallow X` operator above is explicitly about **repository layer absorption
 
 Likewise, *regrounding* and *surfing* come from his description of continuing a conversation while recovering orientation. They are not automatically new executable shape IDs, forced returns, or evidence of a physical oscillation.
 
-> yes surfing :)
-
-Verbatim James, October 13, 2026. See [Regrounding](../REGROUNDING.md). A direct quote must remain recognizable when moving between the plain, playful and technical surfaces.
+See [Regrounding](../REGROUNDING.md). Retired personal quotations must not be reused as example operator inputs.

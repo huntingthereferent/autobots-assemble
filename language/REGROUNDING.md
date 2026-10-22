@@ -11,7 +11,7 @@ Regrounding means returning to the relationship being investigated after a descr
 3. Retain supported information obtained while investigating the branch.
 4. Continue under the original evidence and authorization conditions, or leave the result UNKNOWN when the connection is unresolved.
 
-The language referent and the earlier A/B name identify the same continuing inquiry. A finite mathematical model or software protocol must nevertheless establish its own domain, tests, and verification.
+The language referent and the earlier A/B name identify the same referent and continuing inquiry. A finite mathematical model or software protocol must nevertheless establish its own domain, tests, and verification.
 
 This is a technical explanation, not a transcript or repository of retired personal quotations. A metaphor is not an executable command; silence is not proof of another person's intent. The currently published [writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md) remains separate.
 
