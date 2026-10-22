@@ -1,0 +1,75 @@
+name: NIH P2 TRAIN-only relation role ablation
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_train_tail_role_ablation.py'
+      - 'network/tests/test_nih_p2_train_tail_role_ablation.py'
+      - '.github/workflows/nih-p2-train-tail-role-ablation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-tail-role-ablation-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  original-source-role-candidate-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Authenticate original three complete PharmKG source-owner splits
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/source" "$RUNNER_TEMP/role-report"
+          python - <<'PY'
+          from systems.workspace import nih_p2_external_pharmkg_heldout_trial as s
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          import os
+          root="https://raw.githubusercontent.com/"+s.ORIGIN+"/"+s.COMMIT+"/data/PharmKG-8k/"
+          for name,sha in s.SOURCE_FILES.items():
+              url=root+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Original-Role-Ablation/1.0"}),timeout=45) as r:
+                  if r.status!=200 or r.geturl()!=url:raise ValueError("wrong original source URL")
+                  raw=r.read(15_000_001)
+              if len(raw)>15_000_000 or s.git_blob_sha1(raw)!=sha:
+                  raise ValueError("changed whole original source blob")
+              (Path(os.environ["RUNNER_TEMP"])/"source"/name).write_bytes(raw)
+          PY
+      - name: Execute independent source role tests and actual heldout trial
+        env:
+          PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/source/train.tsv
+          PHARMKG_ORIGINAL_TEST: ${{ runner.temp }}/source/test.tsv
+          PHARMKG_ORIGINAL_VALID: ${{ runner.temp }}/source/valid.tsv
+        run: |
+          set -euo pipefail
+          python -m unittest -v network.tests.test_nih_p2_train_tail_role_ablation
+          python -m systems.workspace.nih_p2_train_tail_role_ablation \
+            --train "$PHARMKG_ORIGINAL_TRAIN" \
+            --test "$PHARMKG_ORIGINAL_TEST" \
+            --valid "$PHARMKG_ORIGINAL_VALID" \
+            --output "$RUNNER_TEMP/role-report/role-coverage.json"
+          python - <<'PY'
+          from pathlib import Path
+          import os,json
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"role-report/role-coverage.json").read_text())
+          assert x["schema"]=="nih-p2-pharmkg-structural-tail-role-ablation-v1"
+          assert x["rank_full_source_entity_universe"]["total_questions"]==64
+          assert x["rank_train_observed_relation_tail_role"]["total_questions"]==64
+          assert x["candidate_restriction_is_source_structural_role_not_biomedical_class"] is True
+          assert x["published_semantic_composition_verified"] is False
+          assert x["official_NIH_benchmark"] is False
+          PY
+          (cd "$RUNNER_TEMP/role-report" && sha256sum role-coverage.json > sha256.txt)
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-train-tail-role-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/role-report/
+          retention-days: 30
+          if-no-files-found: warn

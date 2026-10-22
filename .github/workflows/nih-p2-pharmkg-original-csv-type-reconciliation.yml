@@ -1,0 +1,74 @@
+name: NIH P2 Lane A2 original PharmKG CSV metadata reconciliation
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_pharmkg_original_csv_type_reconciliation.py'
+      - 'network/tests/test_nih_p2_pharmkg_original_csv_type_reconciliation.py'
+      - '.github/workflows/nih-p2-pharmkg-original-csv-type-reconciliation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-owner-csv-schema:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Download immutable author CSV and cleaned TRAIN only
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-a2" lane-a2-receipts
+          python - <<'PY'
+          from systems.workspace import nih_p2_external_pharmkg_heldout_trial as source
+          from systems.workspace import nih_p2_pharmkg_original_csv_type_reconciliation as audit
+          from urllib.request import Request,urlopen
+          from pathlib import Path
+          import os
+          pin=(("PharmKG.csv","data/PharmKG.csv",audit.ORIGINAL_RAW_GIT_BLOB,audit.MAX_BYTES),
+               ("train.tsv","data/PharmKG-8k/train.tsv",source.SOURCE_FILES["train.tsv"],15000000),
+               ("preprocess.py","data/preprocess.py",audit.ORIGINAL_OWNER_PREPROCESS_BLOB,20000))
+          for filename,relative,blob,limit in pin:
+              url="https://raw.githubusercontent.com/"+source.ORIGIN+"/"+source.COMMIT+"/"+relative
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Author-CSV-Audit/1.0"}),timeout=90) as r:
+                  if r.status!=200 or r.geturl()!=url:raise ValueError("original owner URL mismatch")
+                  raw=r.read(limit+1)
+              if len(raw)>limit or source.git_blob_sha1(raw)!=blob:
+                  raise ValueError("original source Git blob did not match")
+              (Path(os.environ["RUNNER_TEMP"])/"nih-a2"/filename).write_bytes(raw)
+          print("authenticated original CSV and clean TRAIN")
+          PY
+      - name: Run source-scoped role/type reconciliation with negatives
+        env:
+          PHARMKG_AUTHOR_RAW: ${{ runner.temp }}/nih-a2/PharmKG.csv
+          PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/nih-a2/train.tsv
+          PHARMKG_OWNER_PREPROCESS: ${{ runner.temp }}/nih-a2/preprocess.py
+        run: |
+          set -euo pipefail
+          python -m unittest -v network.tests.test_nih_p2_pharmkg_original_csv_type_reconciliation
+          python -m systems.workspace.nih_p2_pharmkg_original_csv_type_reconciliation \
+            --raw "$PHARMKG_AUTHOR_RAW" --train "$PHARMKG_ORIGINAL_TRAIN" \
+            --preprocess "$PHARMKG_OWNER_PREPROCESS" \
+            --output lane-a2-receipts/source-train-id-type-reconciliation.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("lane-a2-receipts/source-train-id-type-reconciliation.json").read_text())
+          assert r["author_original_preprocessing_contract"]["author_pipeline_source_proven"]
+          assert not r["author_original_preprocessing_contract"]["published_clean_split_lineage_proven"]
+          assert not r["author_original_preprocessing_contract"]["raw_ID_crosswalk_documented_in_author_pipeline"]
+          assert not r["typed_biomedical_path_rule_admitted"]
+          PY
+          (cd lane-a2-receipts && sha256sum source-train-id-type-reconciliation.json > sha256.txt)
+      - name: Preserve derived counts only, not source rows or type-ID map
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-lane-a2-original-csv-reconciliation
+          path: lane-a2-receipts/
+          if-no-files-found: warn
+          retention-days: 30
