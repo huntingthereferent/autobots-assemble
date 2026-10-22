@@ -9,7 +9,7 @@
   "observation_status": "NOT_RUN",
   "probe": {
     "method": "GET",
-    "url": "https://gwosc.org/api/v2/event-versions?format=api&pagesize=1",
+    "url": "https://gwosc.org/api/v2/event-versions?format=json&pagesize=1",
     "mode": "explicit_opt_in",
     "expected_format": "json",
     "scope": "One versioned gravitational-wave event-catalog record, page size one; no strain files, no full event series",
@@ -28,5 +28,5 @@
   ],
   "rights_review": "REQUIRED_PER_RECORD",
   "scientific_outcome": "NOT_TESTED",
-  "probe_revision_note": "Follow documented API v2 event-versions resource and explicit pagesize=1. First 2026-10-22 /api/ source wall remains archived; current revised endpoint is a candidate until independently observed."
+  "probe_revision_note": "Source result at 2026-10-22T12:06 UTC showed JSONDecodeError because format=api asks for DRF browsable HTML. Use documented JSON renderer format=json with pagesize=1. Previous source walls retained in versioned archives; updated live result awaits Actions."
 }

@@ -160,7 +160,7 @@ def probe_one(source_id: str, cards: dict[str, dict], opener=None) -> dict:
                "state": "UNKNOWN", "scientific_claim_verified": False,
                "source_data_archived": False}
     try:
-        req = Request(url, headers={"Accept": "application/json,text/html;q=0.8",
+        req = Request(url, headers={"Accept": "application/json" if probe["expected_format"] == "json" else "text/html",
             "User-Agent": "Research-source-admission/1.0 (huntingthereferent/autobots-assemble)"})
         client = opener if opener is not None else build_opener(NoRedirect)
         with client.open(req, timeout=probe["timeout_seconds"]) as response:

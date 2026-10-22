@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "PUBLISHER_PUBLIC_CATALOG_METADATA_ONLY",
+  "github_run_id": 39803971022,
+  "github_run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39803971022",
+  "source_code_commit": "147f73d0861e5761b2d2fa8e381491bd907c91a1",
+  "offline_contract": "success",
+  "live_catalog_probe": "success",
+  "observation": {
+    "body_sha256": "3b276e71309b95d91ac2a66f41980ab9c1e91bced4c5fc7fe2d0c0c6b93c655f",
+    "clinical_data_access": "NOT_REQUESTED",
+    "identity": {
+      "checks": {
+        "canonical_title": true,
+        "public_access_class": true,
+        "publisher_license_label": true,
+        "version": true,
+        "version_doi": true
+      },
+      "license_compliance_review_completed": false,
+      "project_slug": "mitdb",
+      "published_access_label": "Database Open Access",
+      "published_license_label": "Open Data Commons Attribution License v1.0",
+      "recording_files_read": false,
+      "scientific_experiment_completed": false,
+      "version": "1.0.0",
+      "version_doi": "10.13026/C2F305"
+    },
+    "observed_at_utc": "2026-10-22T15:21:20.739529+00:00",
+    "provider": "PhysioNet",
+    "public_catalog_url": "https://physionet.org/content/mitdb/1.0.0/",
+    "recordings_fetched": false,
+    "response_bytes": 102993,
+    "response_status": 200,
+    "rights_review": "REQUIRED_BEFORE_DATA_USE",
+    "schema_version": 1,
+    "scientific_status": "NOT_TESTED",
+    "source_body_archived": false,
+    "source_id": "mitdb",
+    "source_scope": "public_dataset_landing_page_metadata_only",
+    "state": "PUBLIC_CATALOG_METADATA_OBSERVED",
+    "version": "1.0.0"
+  },
+  "scientific_status": "NOT_TESTED",
+  "dataset_file_rights_review": "REQUIRED",
+  "source_recordings_used": 0,
+  "raw_response_retained": false,
+  "scope": "Public metadata identity only. Never claim a physiology experiment, medical finding, clinical authorization or permission to ingest subject recordings."
+}
