@@ -103,6 +103,8 @@ jobs:
           assert x["exhaustive_sharded_OWL_RL_consequences_verified"]==50054
           assert x["missing_OWL_RL_consequences"]==0
           assert x["all_mapped_edges_covered_by_partitioned_reasoning"] is True
+          assert x["source_owner_original_whole_files_authenticated"] is True
+          assert x["source_ground_inputs_not_synthetic"] is True
           assert x["full_unpartitioned_RO_OWL_RL_closure_measured"] is False
           assert x["full_unpartitioned_Bgee_plus_RO_OWL_RL_closure_measured"] is False
           assert x["equal_capacity_SQL_static_reasoning_is_comparator_not_lift"] is True
