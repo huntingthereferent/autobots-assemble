@@ -11,6 +11,8 @@ OBS = BASE / "observations" / "2026-10-22-run-39767929086.json"
 HANDOFFS = BASE / "observations" / "2026-10-22-source-handoffs.json"
 SECOND_OBS = BASE / "observations" / "2026-10-22-run-39771470448.json"
 SECOND_HANDOFFS = BASE / "observations" / "2026-10-22-source-handoffs-run-39771470448.json"
+THIRD_OBS = BASE / "observations" / "2026-10-22-run-39779917319.json"
+THIRD_HANDOFFS = BASE / "observations" / "2026-10-22-source-handoffs-run-39779917319.json"
 
 
 class ArchivedSourceObservationsTests(unittest.TestCase):
@@ -141,6 +143,62 @@ class SecondSourceObservationTests(unittest.TestCase):
             self.assertEqual(rows[lane_id]["source_feed_status"], "SOURCE_METADATA_READY")
             self.assertIn("zenodo", rows[lane_id]["verified_source_ids"])
             self.assertNotIn("gwosc", rows[lane_id]["verified_source_ids"])
+
+
+
+class ThirdSourceObservationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.third = json.loads(THIRD_OBS.read_text(encoding="utf-8"))
+        cls.lanes = json.loads(THIRD_HANDOFFS.read_text(encoding="utf-8"))
+
+    def test_all_thirteen_public_sources_witnessed_on_exact_run(self):
+        doc = self.third
+        self.assertEqual(doc["observed_run_id"], 39779917319)
+        self.assertEqual(doc["source_code_commit"], "40171b6a7df1953097f45ee8ef2e8c0a6add966c")
+        self.assertEqual(doc["source_status_counts"], {
+            "metadata_observed": 13, "source_wall": 0, "manual_not_probed": 5
+        })
+        sources = doc["observations"]
+        self.assertEqual(len(sources), 13)
+        self.assertEqual(len({source["source_id"] for source in sources}), 13)
+        for record in sources:
+            self.assertEqual(record["state"], "METADATA_OBSERVED")
+            self.assertRegex(record["body_sha256"], "^[0-9a-f]{64}$")
+            self.assertTrue(record["inspection"]["semantic_record_verified"])
+            self.assertFalse(record["scientific_claim_verified"])
+            self.assertFalse(record["source_data_archived"])
+
+    def test_gwosc_is_metadata_not_waveform_measurement(self):
+        source = next(s for s in self.third["observations"] if s["source_id"] == "gwosc")
+        self.assertIn("format=json&pagesize=1", source["source_url"])
+        self.assertEqual(source["inspection"]["record_shape"], "expected_structure")
+        self.assertFalse(source["scientific_claim_verified"])
+
+    def test_all_21_lanes_witnessed_and_one_manual_access_wall(self):
+        doc = self.lanes
+        self.assertEqual(doc["source_feed_ready"], 20)
+        self.assertEqual(doc["waiting_source_feed"], 1)
+        self.assertEqual(doc["individual_lane_ci_jobs_passed"], 21)
+        self.assertEqual(doc["scientific_experiments_run"], 0)
+        self.assertEqual(len(doc["lanes"]), 21)
+        waiting = [row for row in doc["lanes"]
+                   if row["source_feed_status"] == "WAITING_FOR_SOURCES"]
+        self.assertEqual([row["lane_id"] for row in waiting], ["NEURO"])
+        for row in doc["lanes"]:
+            self.assertEqual(row["scientific_status"], "NOT_TESTED")
+            self.assertEqual(row["experiment_runs"], 0)
+        for code in ("PHY", "SPACE"):
+            row = next(x for x in doc["lanes"] if x["lane_id"] == code)
+            self.assertIn("gwosc", row["verified_source_ids"])
+            self.assertEqual(row["source_feed_status"], "SOURCE_METADATA_READY")
+
+    def test_older_11_and_12_provider_histories_are_unchanged(self):
+        first = json.loads(OBS.read_text(encoding="utf-8"))
+        second = json.loads(SECOND_OBS.read_text(encoding="utf-8"))
+        self.assertEqual(first["source_status_counts"]["metadata_observed"], 11)
+        self.assertEqual(second["source_status_counts"]["metadata_observed"], 12)
+        self.assertEqual(self.third["source_status_counts"]["metadata_observed"], 13)
 
 
 if __name__ == "__main__":
