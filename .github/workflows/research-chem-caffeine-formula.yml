@@ -1,0 +1,45 @@
+name: research-chem-caffeine-formula
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/chem_caffeine_formula.py"
+      - "research/testing_lanes/test_chem_caffeine_formula.py"
+      - ".github/workflows/research-chem-caffeine-formula.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run formula, identity, and negative controls
+        run: python -m unittest discover -s research/testing_lanes -p "test_chem_caffeine_formula.py" -v
+
+  bounded-record-check:
+    needs: offline-controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query one pinned PubChem record
+        run: |
+          mkdir -p chem_receipt
+          python research/testing_lanes/chem_caffeine_formula.py --live --output chem_receipt/CHEM-CAFFEINE-FORMULA-001.json
+      - name: Preserve selected properties and source hash only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: CHEM-CAFFEINE-FORMULA-001-receipt
+          path: chem_receipt/*.json
+          if-no-files-found: warn
+          retention-days: 30
