@@ -36,4 +36,20 @@ class OriginalRawRelationTests(unittest.TestCase):
         self.assertFalse(r["test_or_valid_label_used_for_model"])
         self.assertFalse(r["typed_biomedical_path_rule_admitted"])
         self.assertFalse(r["official_NIH_benchmark"])
+
+    def test_invented_or_changed_preprocessing_body_is_rejected(self):
+        with self.assertRaisesRegex(ValueError,"blob"):
+            trial.original_preprocess_source_projection(
+                b"df = df[['Entity1_ID','relation','Entity2_ID']]")
+
+    @unittest.skipUnless(RAW and TRAIN and os.getenv("PHARMKG_OWNER_PREPROCESS"),
+                         "needs all source owner files")
+    def test_author_preprocess_source_does_not_fill_missing_clean_crosswalk(self):
+        r=trial.audit(Path(RAW),Path(TRAIN),
+                      preprocess_path=Path(os.environ["PHARMKG_OWNER_PREPROCESS"]))
+        x=r["author_original_preprocessing_contract"]
+        self.assertTrue(x["author_pipeline_source_proven"])
+        self.assertFalse(x["published_clean_split_lineage_proven"])
+        self.assertFalse(x["raw_ID_crosswalk_documented_in_author_pipeline"])
+
 if __name__=="__main__":unittest.main()
