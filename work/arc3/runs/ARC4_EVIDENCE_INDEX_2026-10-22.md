@@ -9,6 +9,16 @@ This index identifies original GitHub sources; it does **not** imply that remote
 | Level4 clean-lateral antecedent | [39633965255](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39633965255) | Revisit run artifacts | [merged #379](https://github.com/huntingthereferent/autobots-assemble/pull/379) | Lateral/top-left coverage tradeoff |
 | Cross-arrangement frozen heldout | [39726675675](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39726675675) | [12403476986](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39726675675/artifacts/12403476986) | [draft #398](https://github.com/huntingthereferent/autobots-assemble/pull/398), `e2669a707abfdac7471df33f187cf65ac3bf9873` | 20 native resets, 0 official level5; 6 four-cup/no-left-border visual witnesses |
 
+## Separate source-event audit, not yet merged
+
+[Lane A draft PR #407](https://github.com/huntingthereferent/autobots-assemble/pull/407), [native run #39729756294](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294), [artifact #12404730856](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294/artifacts/12404730856), exact tested head `85fdfb889ca3f192b9d0805e67a5eb407fd842e0`.
+
+- Original 10/10 genuine SDK resets successful (five frozen words × independent A/B witnesses), 0 official stage5/WIN.
+- Visually positive source arrangements show first top and right boundary changes at source frame **21** even with no observed left or bottom changes. These are measurements, not a hidden objective interpretation.
+- Earliest new source-color6 outside cup windows in positive cases: row8/frame19 and row5/frame20 at x11–13. A matched native negative control (upper bar UP1) first showed row8/frame18 and row5/frame19 at x26–28. The timing/position contrast is observational only.
+- ZIP SHA-256 in workflow log: `d8234acc6fe50a270847a4333bd590fdbd6863e2f9db773702dc2de70eb3c5ba`, artifact ID `12404730856`, reported upload size `48075` bytes, configured retention **90 days**.
+- Durable copy location: **NOT VERIFIED**; this draft branch is not merged.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
