@@ -1,6 +1,6 @@
 # Workstation
 
-[Workstation](work.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Project guide](../../PROJECTS.md) · [Reading guide](../READING_GUIDE.md) · [Workstation](work.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
 
@@ -10,7 +10,7 @@ The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, n
 
 ## Meow Lab 2 — sound import and retro cat studio
 
-[Meow Lab 2](cat-keyboard.html) is a playable modern-retro cat music instrument with four locally synthesized cat calls, four replaceable sound slots, source-file import (browser-decodable WAV/MP3 and other supported formats), waveform display, 13-note sampled keyboard, and the original recorder/sequencer. User audio files remain in browser memory. Import records a source label and SHA-256 digest where WebCrypto is available; **it does not mean the native workstation ran**.
+[Meow Lab 2](cat-keyboard.html) is a playable modern-retro cat music instrument with four locally synthesized cat calls, four replaceable sound slots, source-file import (browser-decodable WAV/MP3 and other supported formats), waveform display, 13-note keyboard, beat/chord/melody sequencing, playhead tracking, and local recording controls. User audio files remain in browser memory. Import records a source label and SHA-256 digest where WebCrypto is available; **it does not mean the native workstation ran**.
 
 The native path is `systems.workspace.audio_sound_bank`, which accepts up to four named, selected PCM16 WAVs (`miso.wav`, `mochi.wav`, `nori.wav`, `bean.wav`), copies an exact source edition, admits separate jobs in the existing runtime journal, executes the reviewed source worker, independently replays each result, writes original lineage and movement events to the existing workspace journal, and exports verified WAVs plus a manifest. A newly imported sound is never implicitly treated as native-verified. The browser WAV-and-JSON handoff export can be fed into the real local worker.
 
@@ -22,7 +22,7 @@ These creative audio operations are not Suno model copies or ARC/NIH/WORLD evide
 
 ## Evidence boundaries
 
-The Workstation reads actual **public GitHub Actions workflow runs** on opening and every three minutes while visible. It displays the *latest observed 50* runs, counts queued/running/passed/failed outcomes within that sample, and lets a viewer inspect the real GitHub jobs and ordered steps for one selected workflow. It uses exact GitHub execution IDs and commit hashes. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
+The Workstation reads actual **public GitHub Actions workflow runs** on opening and every three minutes while visible. It initially requests **up to 100 recent runs**, allows older pages to be loaded, and can use the separately published complete run index when its source checks pass. Counts and timeline graphics must be read against the **actually retrieved window**; missing public data is not inactivity. A selected run can be opened to inspect real GitHub jobs and ordered steps. It uses exact GitHub execution IDs and commit hashes. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
 
 The research section loads `views/traces/research-live.json`, projected from native research checkpoints, ARC experiments, pinned statuses and explicit walls. Original `next` and `boundary` fields are preserved when recorded. These are **historical source states**, not a claim that all their workers are currently executing. Nothing is invented from a file name or decorative animation.
 
