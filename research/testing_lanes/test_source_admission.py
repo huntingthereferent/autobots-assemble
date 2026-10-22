@@ -103,6 +103,11 @@ class SourceAdmissionTests(unittest.TestCase):
         good = {"PropertyTable": {"Properties": [{"CID": 962, "MolecularFormula": "H2O"}]}}
         self.assertTrue(inspect_shape("pubchem", json.dumps(good).encode(), "json")["semantic_record_verified"])
 
+    def test_gwosc_v2_event_catalog_is_distinct_from_waveform(self):
+        outcome = inspect_shape("gwosc", json.dumps({"results": [], "results_count": 0}).encode(), "json")
+        self.assertTrue(outcome["semantic_record_verified"])
+        self.assertEqual(outcome["record_shape"], "expected_structure")
+
     def test_gwosc_html_is_not_an_event_witness(self):
         outcome = inspect_shape("gwosc", b"<html>public API documentation</html>", "html")
         self.assertFalse(outcome["semantic_record_verified"])
