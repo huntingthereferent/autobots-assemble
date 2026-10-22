@@ -1,5 +1,5 @@
 "use strict";
-(function(root,factory){const api=factory();if(typeof module==="object"&&module.exports)module.exports=api;root.SchoolScience=factory();})(typeof window==="object"?window:globalThis,function(){
+(function(root,factory){const api=factory();if(typeof module==="object"&&module.exports)module.exports=api;root.SchoolScience=api;})(typeof window==="object"?window:globalThis,function(){
 const CHALLENGES=[
 {id:"shadow",title:"Where does a shadow go?",question:"Does a shadow stay the same size and direction throughout the day?",materials:"Sunlight, paper, pencil and a safe place to observe",method:"Mark the same object's shadow at two different times. Record the clock times and the shape. Never look directly at the Sun."},
 {id:"water",title:"Which surface holds a drop?",question:"How does one drop of water behave on different surfaces?",materials:"A few drops of water, a spoon, a towel and two safe surfaces",method:"Ask an adult before using household surfaces. Put one small drop on each. Record how it moves or spreads. Dry everything afterward."},
