@@ -131,5 +131,37 @@ class FullSourceEntityRankingTests(unittest.TestCase):
         self.assertTrue(set(cohort).isdisjoint(used))
         self.assertEqual(cohort,trial.choose_d2_heldout(test,train))
 
+
+    def test_paired_rank_audit_frequency_path_counts_and_source_coverage(self):
+        cases=[
+            {"relation":"T","other_known_gold_excluded_from_filtered_rank":1,
+             "full_filtered_tie_aware_rank":10,"candidate_universe_count":20,
+             "source_path_score":0},
+            {"relation":"T","other_known_gold_excluded_from_filtered_rank":0,
+             "full_filtered_tie_aware_rank":1,"candidate_universe_count":20,
+             "source_path_score":1},
+        ]
+        baseline={"n":2,"individual_case_diagnostics":[
+            {"relation":"T","other_known_positives_excluded":1,
+             "filtered_tie_aware_rank":2},
+            {"relation":"T","other_known_positives_excluded":0,
+             "filtered_tie_aware_rank":4},
+        ]}
+        r=trial.paired_path_frequency_rank_audit(cases,baseline)
+        self.assertEqual(r["by_original_relation"]["T"]["frequency_better_rank"],1)
+        self.assertEqual(r["by_original_relation"]["T"]["path_better_rank"],1)
+        self.assertEqual(r["by_original_relation"]["T"]["path_source_witness_gold_cases"],1)
+        self.assertTrue(r["same_frozen_original_heldout_queries"])
+
+    def test_paired_rank_audit_refuses_mismatched_filter(self):
+        row={"relation":"GG","other_known_gold_excluded_from_filtered_rank":0,
+             "full_filtered_tie_aware_rank":4,"candidate_universe_count":12,
+             "source_path_score":0}
+        b={"n":1,"individual_case_diagnostics":[
+            {"relation":"GG","other_known_positives_excluded":1,
+             "filtered_tie_aware_rank":2}]}
+        with self.assertRaisesRegex(ValueError,"exact same"):
+            trial.paired_path_frequency_rank_audit([row],b)
+
 if __name__=="__main__":
     unittest.main()
