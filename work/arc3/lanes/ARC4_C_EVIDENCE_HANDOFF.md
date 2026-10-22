@@ -18,8 +18,8 @@ The latest [draft PR #398](https://github.com/huntingthereferent/autobots-assemb
 
 ## Independent lanes, no silent data promotion
 
-- **A — original-frame event order:** [contract](ARC4_A_EVENT_ORDER.md) (separate experimental branch). Freeze three source-positive conditions and matched controls. Independently measure first original source-frame events at all four boundaries and outside cup windows. Preserve complete JSON/NPZ.
-- **B — source-pinned intervention:** [contract](ARC4_B_INTERVENTION.md) (separate experimental branch). Gate a single new original SDK movement on the exact observed event coordinate and original selected-object receipts; no automated candidate selection from guessed physics. A green test gate alone does not mean a native experiment has occurred.
+- **A — original-frame event order:** [PR #407: contract and original-native audit](https://github.com/huntingthereferent/autobots-assemble/pull/407) (separate experimental branch). Freeze three source-positive conditions and matched controls. Independently measure first original source-frame events at all four boundaries and outside cup windows. Preserve complete JSON/NPZ.
+- **B — source-pinned intervention:** [PR #408: intervention contract and gate](https://github.com/huntingthereferent/autobots-assemble/pull/408) (separate experimental branch). Gate a single new original SDK movement on the exact observed event coordinate and original selected-object receipts; no automated candidate selection from guessed physics. A green test gate alone does not mean a native experiment has occurred.
 - **C — this evidence index:** update canonical status, provenance and artifact retention without changing game behavior, numeric results, the ARC-like F3 mathematics, NIH, or WORLD.
 
 All three branches begin from the same main baseline and target main independently; never treat an unmerged lane as part of the canonical code. Results of A may be imported as an explicit, source-pinned handoff into B, not as uncontrolled cross-branch rewriting.
