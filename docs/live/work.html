@@ -540,6 +540,7 @@ footer{border-top-color:#253942}
 }
 @media(prefers-reduced-motion:reduce){.prov-node{transition:none}.prov-node:hover{transform:none}}
 </style>
+<link rel="stylesheet" href="workstation-flow.css">
 </head>
 <body>
 <header>
@@ -560,13 +561,32 @@ footer{border-top-color:#253942}
     </div>
   </div>
   <div id="feed-error" class="notice" hidden></div>
-  <div class="metrics" aria-label="Observed workflow state counts">
-    <div class="metric metric-running"><strong data-stat="running">—</strong><small>RUNNING · LATEST 100</small></div>
-    <div class="metric metric-queued"><strong data-stat="queued">—</strong><small>QUEUED · LATEST 100</small></div>
-    <div class="metric metric-failed"><strong data-stat="failed">—</strong><small>FAILED · LATEST 100</small></div>
-    <div class="metric metric-passed"><strong data-stat="passed">—</strong><small>PASSED · LATEST 100</small></div>
+  <div class="flow-kicker"><span>CONTROL DECK / GITHUB ACTIONS</span><small id="flow-source">AWAITING VERIFIED SOURCE</small></div>
+  <div class="metrics" aria-label="Actual queued and running workflows, and outcomes for today's created runs">
+    <article class="metric metric-queued"><div class="metric-top"><span>IN QUEUE / NOW</span><span class="metric-glyph" aria-hidden="true">◇</span></div><strong data-stat="queued">—</strong><div class="flow-level" aria-hidden="true"></div><small>Queued at the latest observation</small></article>
+    <article class="metric metric-running"><div class="metric-top"><span>IN MOTION / NOW</span><span class="metric-glyph" aria-hidden="true">↗</span></div><strong data-stat="running">—</strong><div class="flow-level" aria-hidden="true"></div><small>Workflow executions in progress</small></article>
+    <article class="metric metric-passed"><div class="metric-top"><span>PASSED / TODAY</span><span class="metric-glyph" aria-hidden="true">✦</span></div><strong data-stat="passed">—</strong><div class="flow-level" aria-hidden="true"></div><small>Runs created today, now successful</small></article>
+    <article class="metric metric-failed"><div class="metric-top"><span>NOT PASSED / TODAY</span><span class="metric-glyph" aria-hidden="true">×</span></div><strong data-stat="failed">—</strong><div class="flow-level" aria-hidden="true"></div><small>Today-created failed / cancelled / timed out</small></article>
   </div>
-  <p class="fine">Latest GitHub sample (up to 100 runs). Not every worker or event; missing data is never counted as zero.</p>
+  <div class="flow-snapshots" aria-label="Flow and clearance readings for runs created today">
+    <div><span>CREATED TODAY</span><strong id="flow-created">—</strong></div>
+    <div><span>RESOLVED TODAY*</span><strong id="flow-cleared">—</strong></div>
+    <div><span>CLEARANCE*</span><strong id="flow-clearance">—</strong></div>
+    <div><span>NEW / LAST 60M</span><strong id="flow-arrivals">—</strong></div>
+  </div>
+  <div class="flow-station" aria-label="Workflow queue, active execution and completed-run movement">
+    <div class="flow-station-header"><b>FLOW FIELD / OBSERVED RUNS</b><small>Each diamond represents one real indexed run · 18 shown per lane</small></div>
+    <div class="flow-lanes">
+      <div class="flow-lane flow-lane-queued"><div class="flow-lane-head"><span>01 / WAITING</span><b id="flow-count-queued">—</b></div><div class="flow-beads" id="flow-beads-queued"></div><small class="flow-lane-note" id="flow-note-queued">Awaiting source</small></div>
+      <div class="flow-lane flow-lane-running"><div class="flow-lane-head"><span>02 / EXECUTING</span><b id="flow-count-running">—</b></div><div class="flow-beads" id="flow-beads-running"></div><small class="flow-lane-note" id="flow-note-running">Awaiting source</small></div>
+      <div class="flow-lane flow-lane-finished"><div class="flow-lane-head"><span>03 / RESOLVED TODAY*</span><b id="flow-count-finished">—</b></div><div class="flow-beads" id="flow-beads-finished"></div><small class="flow-lane-note" id="flow-note-finished">Awaiting source</small></div>
+    </div>
+    <div class="flow-below">
+      <div><div class="flow-activity-heading"><b>INTAKE PULSE / PAST 12 HOURS</b><small>Created runs by local clock hour</small></div><div class="flow-spark" id="flow-bars" aria-label="Observed workflow creations per hour in the past twelve hours"></div><p class="flow-last" id="flow-last">No verified live sample yet</p></div>
+      <div><div class="flow-activity-heading"><b>STATUS CHANGES / THIS VISIT</b><small>Detected between successful source checks</small></div><div class="flow-changes" id="flow-changes" aria-live="polite"><div class="flow-change">Waiting for two observations</div></div></div>
+    </div>
+    <p class="flow-notice">* “Resolved today” means runs <b>created today</b> that are now completed; it is not the number of completions occurring today. Clearance = completed / created today, not a capacity, speed, or efficiency guarantee. Sources refresh approximately every two minutes. Animated lights do not generate jobs.</p>
+  </div>
 </section>
 
   <figure class="provenance-figure" aria-labelledby="provenance-heading">
@@ -595,6 +615,11 @@ footer{border-top-color:#253942}
 <section id="executions" aria-label="Actual GitHub work execution">
   <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Select a run to inspect its jobs, steps, exact revision and source boundaries.</p></div>
     <div class="tools run-tools"><label for="run-search">Find <input id="run-search" type="search" placeholder="Workflow, branch, SHA…" autocomplete="off" aria-label="Search retrieved workflow runs"></label><label for="run-filter">Result <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Failed / cancelled</option><option value="success">Passed</option></select></label><label for="workflow-filter">Workflow <select id="workflow-filter"><option value="all">Every workflow</option></select></label></div></div>
+  <div class="journal-nav" id="journal-controls" aria-label="Run journal period">
+    <div class="journal-modes" role="group" aria-label="Choose journal range"><button id="journal-today" type="button" aria-pressed="true">Today</button><button type="button" data-journal-mode="day" aria-pressed="false">Day</button><button type="button" data-journal-mode="month" aria-pressed="false">Month</button><button type="button" data-journal-mode="year" aria-pressed="false">Year</button><button type="button" data-journal-mode="all" aria-pressed="false">All</button></div>
+    <div class="journal-shift"><button id="journal-prev" type="button" aria-label="Previous period">←</button><strong id="journal-title">TODAY</strong><button id="journal-next" type="button" aria-label="Next period" disabled>→</button></div>
+    <small id="journal-note">Local calendar time · original source IDs retained</small>
+  </div>
   <div class="workspace">
     <div class="pane"><header><strong>Runs · source index</strong><small id="runs-scope">Loading original source…</small></header><div id="runs" class="pane-content" aria-live="polite"><p class="no-source">Contacting GitHub…</p></div><div class="index-footer"><button id="show-more-runs" type="button" hidden>Show 20 more</button><button id="load-older" type="button" hidden disabled>Load 100 older runs (fallback)</button><small id="history-state">Reading full run archive…</small></div></div>
     <div class="pane"><header><strong>Run details</strong><small id="details-scope">Choose a source run</small></header><div id="detail" class="pane-content"><p class="no-source">Select an observed workflow to inspect its saved jobs, steps, SHA, and result. No work will be launched from this screen.</p></div></div>
@@ -638,6 +663,7 @@ footer{border-top-color:#253942}
   <iframe id="audit-frame" class="audit-frame" data-src="audit.html?embedded=1" title="Project data audit: individual test source, assertions and research records" loading="eager"></iframe>
 </section>
 <footer>Read-only / evidence-first. Public runs poll periodically; recorded research updates when its committed source projection changes. The source records, not this screen, determine what has been verified.</footer>
+<script src="workstation-flow.js"></script>
 <script>
 "use strict";
 (() => {
@@ -659,7 +685,7 @@ footer{border-top-color:#253942}
   function link(text,url,cls){const x=el("a",text,cls);x.href=url;x.target="_blank";x.rel="noopener noreferrer";return x}
   function plausible(url,kind){try{const x=new URL(url);return x.protocol==="https:"&&x.hostname==="github.com"&&x.pathname.startsWith("/"+REPO+"/")&&(kind!=="run"||x.pathname.includes("/actions/runs/"))}catch{return false}}
   const isSHA=sha=>typeof sha==="string"&&/^[0-9a-f]{40}$/.test(sha);
-  function safeDate(value){const d=Date.parse(value||"");return Number.isFinite(d)?new Date(d).toLocaleString():"no source timestamp"}
+  function safeDate(value){const d=Date.parse(value||"");return Number.isFinite(d)?new Date(d).toLocaleString(undefined,{year:"numeric",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"no source timestamp"}
   function statusOf(x){if(x.status==="queued"||x.status==="waiting"||x.status==="pending"||x.status==="requested")return "queued";if(x.status==="in_progress")return "in_progress";if(x.status==="completed"){return x.conclusion||"unknown"}return "unknown"}
   function pill(s){return el("span",s.replaceAll("_"," ").toUpperCase(),"state "+(s==="success"||s==="failure"||s==="in_progress"||s==="queued"||s==="cancelled"?s:"neutral"))}
   async function getJSON(url){const r=await fetch(url,{cache:"no-store",headers:{"Accept":"application/vnd.github+json"}});if(!r.ok)throw Error("HTTP "+r.status+(r.status===403?" / public API rate limit":""));return r.json()}
@@ -826,7 +852,7 @@ footer{border-top-color:#253942}
       app.archiveError=e.message;
       // Do not claim the first public API page is a complete source archive.
       // Keep explicit manual fallback available if the scheduled publisher fails.
-    }finally{app.archiveLoading=false;renderHistory();}
+    }finally{app.archiveLoading=false;renderHistory();renderMetrics();}
   }
   async function loadOlder(){
     if(app.olderLoading||app.olderExhausted||app.archiveComplete||app.reading)return;
@@ -845,10 +871,10 @@ footer{border-top-color:#253942}
   function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
-  function renderMetrics(){const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
-  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();return app.runs.filter(r=>(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
+  function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
+  function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
-    $("runs-scope").textContent=Math.min(subset.length,app.runVisible)+" / "+subset.length+" matching · "+app.runs.length+" retrieved";
+    $("runs-scope").textContent=window.WorkstationFlow.scopeLabel(subset.length,Math.min(subset.length,app.runVisible))+" · "+app.runs.length+" indexed";
     for(const r of subset.slice(0,app.runVisible)){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
       btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
       const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
@@ -1022,7 +1048,7 @@ footer{border-top-color:#253942}
     const next=Math.max((app.lastAttempt||0)+PERIOD,app.rateLimitUntil||0);
     const remaining=Math.max(0,Math.ceil((next-Date.now())/1000));
     $("next-check").textContent=(app.rateLimitUntil>Date.now()?"API retry paused ":"Next GitHub check in ")+remaining+"s"+
-      (app.checked?" · last verified "+new Date(app.checked).toLocaleTimeString():" · no verified sample yet");
+      (app.checked?" · last verified "+new Date(app.checked).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",hour12:true}):" · no verified sample yet");
   }
   async function refresh(){
     if($("workstation-main").hidden)return; // Audit tab owns visible source refreshes.
@@ -1039,7 +1065,7 @@ footer{border-top-color:#253942}
       renderHistory();
       if(!app.selection||!app.runs.some(r=>r.id===app.selection))app.selection=runs[0].id;
       renderRuns();$("live-dot").className="indicator ok";$("feed-state").textContent="GitHub source observed";
-      $("last-read").textContent="checked "+new Date(app.checked).toLocaleString();
+      $("last-read").textContent="checked "+new Date(app.checked).toLocaleString(undefined,{year:"numeric",month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true});
       updateNextCheck();
       $("feed-error").hidden=true;
       // Re-read jobs only when the selected run changes; polling run status remains source-backed.
@@ -1118,6 +1144,7 @@ footer{border-top-color:#253942}
     if(typeof height!=="number"||!Number.isFinite(height)||height<300||height>200000)return;
     auditFrame.style.height=Math.max(940,Math.ceil(height)+12)+"px";
   });
+  window.WorkstationFlow.install(()=>{app.runVisible=20;renderRuns();});
   selectWorkstationView();
   loadCatalog();
   refresh();
