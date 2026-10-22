@@ -66,7 +66,9 @@ jobs:
           assert r["schema"]=="nih-p2-original-obo-full-owlrl-finite-rule-audit-v1"
           assert r["original_rdf_triples"]==8319
           assert r["full_source_owlrl_materialized_rdf_triples"]>8319
-          assert r["all_local_rule_consequences_present_in_full_owlrl"] is True
+          assert r["engine_supported_rule_consequences_all_materialized"] is True
+          assert r["inverse_axiom_mirror_candidates_not_explicitly_materialized"]>0
+          assert r["all_candidate_rule_triples_materialized"] is False
           assert r["entire_source_OWL_RL_agrees_on_subproperty_closure"] is True
           assert r["whole_original_consistency_established"] is False
           assert r["OWL_DL_consistency_and_unsatisfiable_class_search"]=="NOT_MEASURED"
