@@ -61,7 +61,7 @@ This physical next movement is **not** the active mathematical-chatbot experimen
 
 ## Provenance and related contracts
 
-This record follows the 2026-10-11 discussion and the explicit correction that A/B is language, not mathematics or personal notation fluency; also covering couplesense, two-step physical motion, `101 / 010` complementarity, and “you can just jump to the other side to find where it should be ... and keep pushing p.”
+This record follows the 2026-10-11 discussion and the explicit correction that A/B is language, not mathematics or personal notation fluency; also covering couplesense, two-step physical motion, `101 / 010` complementarity
 
 - [A/B contract](AB_CONTRACT.md): application evidence boundary, not a definition of A/B.
 - [AI session grounding](protocols/ai/session.md) and [ENTRY](ENTRY.md): preserve the active referent across conversations and formal representations.

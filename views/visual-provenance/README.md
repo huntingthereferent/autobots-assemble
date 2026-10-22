@@ -16,7 +16,7 @@ The view intentionally places the **relationships** before follower counts, code
 
 | Area | Source | What the illustration does **not** establish |
 | --- | --- | --- |
-| Language and observation | [James's first-person record](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) | A universal definition of A/B mathematics |
+| Language and observation | [Current writing index](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md) | A universal definition of A/B mathematics |
 | A/B finite mathematics | [Declared constructions](../../work/arc_like_maze/README.md) | General equivalence outside the declared mathematical family |
 | Workstation continuation | [B2 witness-gated lanes](../../systems/workspace/WORKSTATION_CONTINUATION_B2.md) · [B4 verified next movement](../../systems/workspace/WORKSTATION_RETURN_CONTINUATION_B4.md) | A live unconstrained model-worker cluster |
 | Observational determination | [Continuous Handoff](../../language/handoff/CONTINUOUS_HANDOFF.md) · [B9 candidate construction](../../systems/workspace/WORKSTATION_CONSTRUCTION_B9.md) | Every possible route being observed or proven |

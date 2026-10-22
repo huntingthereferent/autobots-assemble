@@ -8,9 +8,6 @@
 
 James's investigation grew from observing relationships continuing as a conversation, activity or perspective changes. An observation may branch outward through other people and situations, become available again somewhere else, or show that a previous explanation lost what was being followed. Giving the ongoing inquiry a stable name lets a reader return to it without demanding that the relationships freeze.
 
-> Yes yes names are important so we can study them and not keep fucking up
-
-*James's verbatim words, October 13, 2026; unedited.*
 
 Names are reference points, not conclusions. Calling the language referent by name neither creates a new thing nor guarantees that the next explanation has preserved it.
 
@@ -26,17 +23,17 @@ Outward observation is not merely comparing one object at a time with James. The
 
 ## Human Drift and regrounding
 
-James later named the subject **Human Drift**. He had already tried *oscillating*, *chain reaction*, *drift control*, *regrounding*, and other expressions since September while working around the assistant's misunderstandings. The words did not constitute static synonyms. His different explanations were attempts to preserve one relationship while each correction added information. *Surfing* was one example, not the research subject. See [dated quotations and their movement](language/HUMAN_DRIFT.md).
+James later named the subject **Human Drift**. He had already tried *oscillating*, *chain reaction*, *drift control*, *regrounding*, and other expressions since September while working around the assistant's misunderstandings. The words did not constitute static synonyms. His different explanations were attempts to preserve one relationship while each correction added information. *Surfing* was one example, not the research subject. See [the technical Human Drift note](language/HUMAN_DRIFT.md).
 
 A branch need not be discarded to return. We can keep what it exposed, identify which relationship was actually being followed, and continue without declaring a new referent each time the description changes. This is a way James describes his own experience, not a proven historical account of how all humans once spoke or a mathematical model of oscillation.
 
-[The Human Drift record](language/HUMAN_DRIFT.md) preserves his dated words and corrections; [regrounding](language/REGROUNDING.md) preserves his account of returning from drift. Together they show his phrasing and connects this observation to pragmatics, the English shape bank, social movement, handoffs and technical scope. **The same person speaks across those surfaces.** His playfulness, care, sharpness, swearing, silence and precise technical correction aren't separate identities to be reconstructed for different pages.
+[Human Drift](language/HUMAN_DRIFT.md) describes observable correction boundaries; [regrounding](language/REGROUNDING.md) describes a way to return to the original question. Together they show his phrasing and connects this observation to pragmatics, the English shape bank, social movement, handoffs and technical scope. **The same person speaks across those surfaces.** His playfulness, care, sharpness, swearing, silence and precise technical correction aren't separate identities to be reconstructed for different pages.
 
 ## Study and verification
 
 When the investigation reaches a specified mathematical or software task, use the [evidence contract](LANGUAGE_REFERENT_CONTRACT.md) and the mathematical model's native proof conditions. Distinguish observation from inference, implementation from execution, and a particular finite result from a universal claim. When a representation drifts, correct the representation while preserving the intended referent and prior evidence.
 
-**Primary account:** [Language and Observation](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) preserves James's direct words, including swearing and corrections, separately from AI-assisted prose.
+**Writing:** The [current writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md) is the public source index. Do not republish material removed from it.
 
 **Grounding:** [Current naming and scope note](LANGUAGE_REFERENT_GROUND_2026-10-13.md) · [historical A/B language page](AB_LANGUAGE.md) · [historical ground record](AB_Ground_Record_Current_Note_2026-10-11.md) · [formal finite mathematics](work/arc_like_maze/README.md) · [entry](ENTRY.md).
 
@@ -54,4 +51,4 @@ For new explanatory writing, use **language referent**. For generic implementati
 | `tools/generate_work_views.py` | `tools/generate_ab_views.py` |
 | `NativeReferentEvaluator` | `NativeABEvaluator` (import alias) |
 
-Persisted keys and event references whose historical spelling includes `ab_` remain readable for compatibility. Existing mathematical generators `A` and `B`, their word compositions, and source filenames identifying a specific prior proof remain mathematical/historical evidence, not alternate names for the whole investigation. Do not rewrite original direct quotations.
+Persisted keys and event references whose historical spelling includes `ab_` remain readable for compatibility. Existing mathematical generators `A` and `B`, their word compositions, and source filenames identifying a specific prior proof remain mathematical/historical evidence, not alternate names for the whole investigation. Do not recover or republish quotations removed from the current writing archive.

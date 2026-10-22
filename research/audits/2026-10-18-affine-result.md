@@ -8,8 +8,7 @@ declared nine-world, three-dimensional F3 family.** No defect was found in this
 bounded audit. This does not audit the complete repository, external observations,
 the entry protocol's behavioral effectiveness, or the universal language referent.
 
-James supplied an external GitHub review and authorized continuation with
-“this is james diesel”. This record is AI-authored audit work, not James's
+James supplied an external GitHub review and authorized continuation. This record is AI-authored audit work, not James's
 verbatim research account or validation by an independent human researcher.
 
 ## Source and execution

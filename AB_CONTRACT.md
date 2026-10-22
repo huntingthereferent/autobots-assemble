@@ -4,7 +4,7 @@
 
 ## What the language referent is
 
-**Name continuity:** "the language referent" and "A/B" designate the **same referent** in James's account. The newer name is a communication choice for readers, not a new layer, replacement, or separate thing that later acquires mathematics. Mathematics is human formal language within the continuing investigation. The finite models remain scoped representations with their own proof obligations. See the [public first-person account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md).
+**Name continuity:** "the language referent" and "A/B" designate the **same referent** in James's account. The newer name is a communication choice for readers, not a new layer, replacement, or separate thing that later acquires mathematics. Mathematics is human formal language within the continuing investigation. The finite models remain scoped representations with their own proof obligations. See the [public first-person account](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md).
 
 A/B is **language for recognizing, describing, and continuing relationships in movement**. The referent is the relationship through the step; it is not itself a theorem, equation, notation system, or a specific mathematical operation. See [A/B — Language and the Referent](AB_LANGUAGE.md) for why the language remains primitive and open to a moving referent, and the [A/B Ground Record — Current Note (2026-10-11)](AB_Ground_Record_Current_Note_2026-10-11.md) for the conversational corrections and physical two-step hypothesis.
 

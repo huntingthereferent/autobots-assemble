@@ -18,7 +18,7 @@ A referent is not guaranteed to remain unchanged merely because a word does. Nam
 
 Mathematics is itself human language; saying we "need mathematics to understand" the referent already puts language, mathematics, and understanding into relation. Discussing and correcting that sentence is itself another observation of the same referent, not a newly created second referent. Particular formal proofs still need their exact domains and witnesses; this conversational observation is not a universal theorem.
 
-[James's language and observation report, with unedited quotations](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) preserves the direct speech behind this correction.
+Personal writing is indexed separately in the [current writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md).
 
 A/B is language for approaching those moving relationships. Human beings cannot directly hand one another an unexpressed thought; investigation needs ways to express, examine, and revise what is being encountered.
 
