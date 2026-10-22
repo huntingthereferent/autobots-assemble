@@ -53,7 +53,9 @@ def analyze(csv_text: str) -> dict:
         raise ValueError("missing statistical test columns")
     results = {
         side: {
+            "f_rows_seen": 0,
             "eligible_f_tests": 0,
+            "missing_f_inputs": 0,
             "reported_p_available": 0,
             "reported_p_agree": 0,
             "reported_p_disagree": 0,
@@ -76,14 +78,19 @@ def analyze(csv_text: str) -> dict:
         for kind, (side, flag) in SIDES.items():
             if row["T.Test.Statistic." + side] != "F":
                 continue
-            # A selected F record with missing statistic is NOT silently treated as a result.
+            slot = results[kind]
+            slot["f_rows_seen"] += 1
+            inputs = [row["T.df1." + side], row["T.df2." + side], row["T.Test.value." + side]]
+            # Incomplete source statistics are an explicit wall, not an observed result.
+            if any(value in ("", "NA") for value in inputs):
+                slot["missing_f_inputs"] += 1
+                continue
             degrees1 = _positive_float(row["T.df1." + side], "F df1")
             degrees2 = _positive_float(row["T.df2." + side], "F df2")
             statistic = _positive_float(row["T.Test.value." + side], "F statistic", allow_zero=True)
             p = float(f_distribution.sf(statistic, degrees1, degrees2))
             if not math.isfinite(p) or not 0 <= p <= 1:
                 raise ValueError("invalid calculated F survival probability")
-            slot = results[kind]
             slot["eligible_f_tests"] += 1
             supplied = row["T.pval.recalc." + side]
             if supplied in ("", "NA"):
@@ -109,7 +116,8 @@ def analyze(csv_text: str) -> dict:
         raise ValueError("empty source data")
     for slot in results.values():
         if (slot["reported_p_available"] + slot["reported_p_missing"] != slot["eligible_f_tests"]
-                or slot["flags_available"] + slot["flags_missing"] != slot["eligible_f_tests"]):
+                or slot["flags_available"] + slot["flags_missing"] != slot["eligible_f_tests"]
+                or slot["eligible_f_tests"] + slot["missing_f_inputs"] != slot["f_rows_seen"]):
             raise ValueError("incomplete F-test ledger")
     return {
         "total_source_rows": n_rows,
