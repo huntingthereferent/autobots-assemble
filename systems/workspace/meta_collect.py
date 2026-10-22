@@ -7,6 +7,7 @@ import argparse
 import datetime as dt
 import json
 import os
+import re
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -16,6 +17,20 @@ REPOS = {
     "B": "aeren-research/continuum-oscillator",
 }
 STATUSES = ("in_progress", "queued", "pending", "waiting")
+
+
+def repositories(registry_file):
+    """Resolve current node repositories by identity, not old GitHub slugs."""
+    doc = json.loads(registry_file.read_text(encoding="utf-8"))
+    if doc.get("schema") != "meta-workstation/registry-v1":
+        raise ValueError("Invalid meta registry")
+    nodes = {n.get("id"): n.get("repo") for n in doc.get("nodes", [])}
+    if set(nodes) != {"A", "B"}:
+        raise ValueError("Expected exactly two admitted workstations")
+    if any(not isinstance(v, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", v)
+           for v in nodes.values()):
+        raise ValueError("Invalid repository identifier")
+    return nodes
 
 
 def api(path):
@@ -45,14 +60,14 @@ def observe(repo):
     return result
 
 
-def update(path, now=None):
+def update(path, now=None, repos=None):
     now = now or dt.datetime.now(dt.timezone.utc)
     previous = json.loads(path.read_text(encoding="utf-8"))
     if previous.get("schema") != "ab-meta-observations/v1":
         raise ValueError("Unexpected meta-observation schema")
     sample = {
         "ts": now.isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "nodes": {key: observe(repo) for key, repo in REPOS.items()},
+        "nodes": {key: observe(repo) for key, repo in (repos or REPOS).items()},
     }
     if not any(node["observed"] for node in sample["nodes"].values()):
         raise RuntimeError("No valid GitHub observations; do not insert fabricated data")
@@ -75,5 +90,6 @@ def update(path, now=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--history-path", required=True, type=Path)
+    parser.add_argument("--registry", type=Path)
     args = parser.parse_args()
-    update(args.history_path)
+    update(args.history_path, repos=repositories(args.registry) if args.registry else REPOS)
