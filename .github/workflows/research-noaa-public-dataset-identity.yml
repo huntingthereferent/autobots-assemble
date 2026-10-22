@@ -1,0 +1,45 @@
+name: research-noaa-public-dataset-identity
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/noaa_public/**"
+      - ".github/workflows/research-noaa-public-dataset-identity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run independent publisher and supersession negative checks
+        run: python -m unittest discover -s research/testing_lanes/noaa_public -p "test_*.py" -v
+      - name: Assert offline default
+        run: python research/testing_lanes/noaa_public/catalog_identity.py
+
+  noaa-source-identity:
+    needs: offline-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: One named NOAA NCEI SSODv2 catalog identity request; no station files
+        run: python research/testing_lanes/noaa_public/catalog_identity.py --live --output noaa-ssodv2-receipt.json
+      - name: Preserve metadata hash or wall without source response body
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: noaa-ncei-ssodv2-metadata-source-receipt
+          path: noaa-ssodv2-receipt.json
+          if-no-files-found: warn
+          retention-days: 30
