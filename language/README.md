@@ -10,7 +10,6 @@ This directory houses technical descriptions of language handling and evidence. 
 | --- | --- |
 | [Human Drift](HUMAN_DRIFT.md) | Correcting descriptions of a continuing relation without asserting a universal mechanism |
 | [Regrounding](REGROUNDING.md) | Returning to evidence while keeping supported learning from a detour |
-| [Reading and referent](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) | Separating reported experience from inferred mechanism |
 | [Separations](SEPARATIONS.md) | Maintaining boundary distinctions across interpretation, source and action |
 | [Pragmatics](PRAGMATICS.md) | Context, ambiguity, and constraints on attributed meaning |
 | [Shape contract](SHAPE_CONTRACT.md) | Bounded operational labels |
