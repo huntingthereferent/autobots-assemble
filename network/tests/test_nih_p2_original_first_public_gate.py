@@ -34,8 +34,10 @@ def observed_clock():
             "source_retrieved_utc":"2026-10-20T00:00:00Z",
         }],
         "independent_aact_owner_attested_archive_checks":[
-            {"original_archive_is_time_authority":False},
-            {"original_archive_is_time_authority":False},
+            {"original_archive_is_time_authority":False,
+             "owner_attested_collection_day":"2022-11-04"},
+            {"original_archive_is_time_authority":False,
+             "owner_attested_collection_day":"2022-11-09"},
         ],
         "conditional_registry_publication_queries": [
             parent.conditional_source_status([
@@ -116,6 +118,32 @@ class HistoricalFirstPublicGateTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"reversed"):
             gate.independently_replay_reported_clock(changed)
 
+
+
+    def test_attested_archive_lag_does_not_convert_to_first_public_date(self):
+        report=observed_clock()
+        report["independent_aact_owner_attested_archive_checks"]=[
+            {"owner_attested_collection_day":"2022-11-04",
+             "original_archive_is_time_authority":False},
+            {"owner_attested_collection_day":"2022-11-09",
+             "original_archive_is_time_authority":False},
+        ]
+        r=gate.attested_archive_reported_post_date_gaps(report)
+        self.assertEqual([x["claimed_archive_minus_reported_post_days"]
+                          for x in r["conditional_owner_claim_calendar_gaps"]],[8,2])
+        self.assertEqual(r["verified_first_public_date_window"],"UNAVAILABLE")
+        self.assertTrue(r["owner_claim_lag_is_not_publication_delay"])
+
+    def test_archive_attestation_cannot_be_pretended_independently_observed(self):
+        report=observed_clock()
+        report["independent_aact_owner_attested_archive_checks"]=[
+            {"owner_attested_collection_day":"2022-10-01",
+             "original_archive_is_time_authority":False},
+            {"owner_attested_collection_day":"2022-11-09",
+             "original_archive_is_time_authority":False},
+        ]
+        with self.assertRaisesRegex(ValueError,"precedes"):
+            gate.attested_archive_reported_post_date_gaps(report)
 
 if __name__=="__main__":
     unittest.main()
