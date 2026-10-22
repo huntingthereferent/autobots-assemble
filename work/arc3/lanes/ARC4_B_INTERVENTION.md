@@ -1,6 +1,6 @@
 # ARC4 lane B — source-pinned intervention
 
-**State:** implementation and tests can run independently; real native intervention is **gated**, not yet executed.
+**State:** source-pinned gate tested and genuine original SDK interventions executed in isolated draft PR #408; all reported experiments still official level4. Subsequent unapproved candidates remain gated.
 
 ## Relationship to [lane A — PR #407](https://github.com/huntingthereferent/autobots-assemble/pull/407)
 Consume the exact emitted native JSON source record from lane A (not an imagined fluid simulator). Select a specific **first source-color-6 arrival outside cup windows** at row5 or row8, including both witnesses' identical frame/x record **and a matched negative control with a different native first arrival**. Merely finding the same pixel event in positive and negative cases is insufficient. Identify an already-authenticated native selectable-object click in the actual action receipts. The proposal must name both `case` and `contrast_case`; the positive must have a four-cup observation while the matched control does not. Candidate hypothesis must be written separately and admitted with `python -m work.arc3.arc4_intervention_gate --audit AUDIT.json --proposal PROPOSAL.json --out PLAN.json`.
