@@ -1,8 +1,13 @@
 # Workstation
 
-[Workstation](work.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Research sources](research-sources.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
+
+
+## Research sources and testing contexts
+
+[Research sources](research-sources.html) is the read-only, source-first entry for 18 individually documented provider families and 21 independent candidate test contexts. The page reads `research/testing_lanes/registry.json` from the public GitHub source rather than fabricating active research measurements in browser state. Clicking a testing context filters to its originally registered source dependencies; it is a navigation/inspection action, not evidence that the corresponding science was tested. Exact source admission states, provider access limits, isolated receipts, and scientific handoff gates are preserved in [source contracts](../../research/testing_lanes/sources/) and in [source admission implementation](../../research/testing_lanes/source_admission.py). Provider response success alone does not validate a paper or release restricted datasets.
 
 ## Pony Trail — horse riding browser game
 
