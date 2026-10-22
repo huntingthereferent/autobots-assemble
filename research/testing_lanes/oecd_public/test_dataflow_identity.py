@@ -60,6 +60,24 @@ class OECDSourceTests(unittest.TestCase):
         r = observe(opener=Transport(b"X" * (MAX_BYTES + 1)))
         self.assertEqual(r["state"], "SOURCE_WALL")
         self.assertNotIn("response_sha256", r)
+    def test_archived_identity_preserves_data_use_boundary(self):
+        from pathlib import Path
+        import json
+        archive = json.loads((Path(__file__).parent / "observations" /
+                            "2026-10-22-run-39831994691.json").read_text(encoding="utf-8"))
+        self.assertEqual(archive["github_run_id"], 39831994691)
+        r = archive["observation"]
+        self.assertEqual(r["state"], "PUBLIC_DATAFLOW_METADATA_OBSERVED")
+        self.assertEqual(r["source_url"], URL)
+        self.assertEqual(r["response_sha256"],
+                         "c5e17eb631f9eba763e6baf2fec612a7841642be84fd217ecb0ade2687416109")
+        self.assertTrue(all(r["identity"]["identity_checks"].values()))
+        self.assertEqual(r["identity"]["statistical_rows_read"], 0)
+        self.assertEqual(archive["source_rows_used"], 0)
+        self.assertFalse(archive["raw_response_retained"])
+        self.assertEqual(archive["rights_review"], "REQUIRED_PER_RECORD")
+        self.assertEqual(archive["scientific_status"], "NOT_TESTED")
+
     def test_safe_error_fields(self):
         r = observe(opener=Transport(xml(version="bad", label="")))
         self.assertEqual(r["failed_identity_checks"], ["exact_identity", "named_flow"])

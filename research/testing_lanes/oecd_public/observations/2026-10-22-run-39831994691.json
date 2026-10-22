@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "PUBLIC_OECD_SDMX_DATAFLOW_STRUCTURE_ONLY",
+  "github_run_id": 39831994691,
+  "github_run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39831994691",
+  "source_code_commit": "fc77da47fe928b31d555dd5b138dde6e4a5bbaa8",
+  "offline_contract": "success",
+  "live_structure_identity": "success",
+  "observation": {
+    "data_rows_downloaded": 0,
+    "identity": {
+      "agency": "OECD.SDD.TPS",
+      "country_values_fetched": false,
+      "dataflow": "DSD_BOP@DF_TIS",
+      "identity_checks": {
+        "exact_identity": true,
+        "named_flow": true,
+        "no_statistical_data": true,
+        "sdmx_structure_root": true,
+        "single_publisher_flow": true
+      },
+      "scientific_status": "NOT_TESTED",
+      "statistical_rows_read": 0,
+      "version": "1.0"
+    },
+    "observed_at_utc": "2026-10-22T18:35:00.081851+00:00",
+    "provider": "OECD SDMX Data Explorer",
+    "raw_source_archived": false,
+    "response_bytes": 7967,
+    "response_sha256": "c5e17eb631f9eba763e6baf2fec612a7841642be84fd217ecb0ade2687416109",
+    "response_status": 200,
+    "rights_review": "REQUIRED_PER_RECORD",
+    "schema_version": 1,
+    "scientific_status": "NOT_TESTED",
+    "scope": "one_public_sdmx_structure_only",
+    "source_url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.TPS/DSD_BOP%40DF_TIS/1.0?references=none",
+    "state": "PUBLIC_DATAFLOW_METADATA_OBSERVED"
+  },
+  "scientific_status": "NOT_TESTED",
+  "source_rows_used": 0,
+  "raw_response_retained": false,
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scope": "Confirmed published OECD structural dataflow identity, not statistical observations, dataset licensing or economic science claims."
+}
