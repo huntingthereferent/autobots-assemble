@@ -1,6 +1,6 @@
 # Hunting the Referent — research records and experiments
 
-**[META WORKSTATION · A ↔ B](https://huntingthereferent.github.io/autobots-assemble/live/meta.html)** · [Cross-window handoff](systems/workspace/META_WORKSTATION_HANDOFF.md) — shared placement, separate GitHub job journals, and Dessy reground.
+**[META WORKSTATION](https://huntingthereferent.github.io/autobots-assemble/live/meta.html)** · [Cross-window handoff](systems/workspace/META_WORKSTATION_HANDOFF.md) — one observed pipeline, separate source journals, and a shared window handoff.
 
 **[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
