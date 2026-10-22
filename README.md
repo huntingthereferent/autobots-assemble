@@ -8,11 +8,13 @@ The public work view reads actual GitHub workflow runs and native job/step resul
 
 **Independent research · finite mathematics · language · computational experiments · research infrastructure**
 
-**Why this repository exists:** [The Human Wall](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/THE_HUMAN_WALL.md) is the question at the root of James's work. He is investigating whether the vastness of what humans learn about reality can spill into local problems as disproportionate uncertainty, imagined possibilities, and explanations that drift from observation — and whether that relationship can become normal across different layers. This is a working research question, not an established universal cause of human behavior.
+## Research system and evidence
 
-The mathematics, ARC and world experiments, AI-assisted software, workers, and verification harnesses are **ways to investigate and retain evidence**, not competing purposes or a claim that one method explains the universe. [Start with James's account](https://github.com/huntingthereferent/huntingthereferent#the-human-wall).
+The repository records a developing general-purpose research and construction environment: finite mathematics, language and referent investigations, interactive worlds, software foundations, bounded workers, handoffs, and audit records. Each investigation retains its own evidence and test boundary; a result in one domain is not automatically established in another.
 
-An inspectable collection of code, mathematical experiments, system prototypes, and test records. The projects address different questions; they are not parts of a claimed universal theory or one finished platform.
+**Current reviewed evidence:** [Research register — October 21, 2026](https://github.com/huntingthereferent/huntingthereferent/blob/main/RESEARCH_REGISTER.md) · [Historical provenance and limits](https://github.com/huntingthereferent/huntingthereferent/blob/main/PROVENANCE.md) · [Research method](https://github.com/huntingthereferent/huntingthereferent/blob/main/docs/RESEARCH_METHOD.md) · [System expansion report](https://github.com/huntingthereferent/huntingthereferent).
+
+**Research background:** [The Human Wall](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/THE_HUMAN_WALL.md) is retained in the writing archive as historical context, not presented as an experimental finding. The existing tests do not establish a universal theory, a physically validated system, or a fully autonomous production platform.
 
 ## Selected work
 
