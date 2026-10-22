@@ -220,5 +220,38 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
             e20.original_anonymous_constructor_fingerprint(
                 Graph(),set(),set(),{(GENE,RDF.type,V)})
 
+
+    def test_e25_source_union_of_requires_original_member_antecedent(self):
+        from rdflib.namespace import OWL
+        union=BNode("anonymous-union")
+        first=BNode("list-start")
+        second=BNode("list-next")
+        g=Graph()
+        for item in [(union,OWL.unionOf,first),
+                     (first,RDF.first,X),
+                     (first,RDF.rest,second),
+                     (second,RDF.first,Y),
+                     (second,RDF.rest,RDF.nil)]:
+            g.add(item)
+        original={(GENE,RDF.type,X)}
+        full=original|{(GENE,RDF.type,union),(TARGET,RDF.type,union)}
+        r=e20.original_union_membership_premise_audit(g,original,full,original)
+        self.assertEqual(r["original_union_class_terms"],1)
+        self.assertEqual(r["original_union_residual_type_statements"],2)
+        self.assertEqual(r["types_with_materialized_union_member_type_antecedent"],1)
+        self.assertEqual(r["types_without_materialized_union_member_type_antecedent"],1)
+        self.assertTrue(r["antecedent_types_from_full_OWL_closure_not_independent_solver"])
+
+    def test_e25_original_source_union_cycle_refused(self):
+        from rdflib.namespace import OWL
+        union=BNode("cycle-union")
+        node=BNode("cycle-node")
+        g=Graph()
+        for tr in [(union,OWL.unionOf,node),(node,RDF.first,X),(node,RDF.rest,node)]:
+            g.add(tr)
+        with self.assertRaisesRegex(ValueError,"cyclic"):
+            e20.original_union_membership_premise_audit(
+                g,set(),{(GENE,RDF.type,union)},set())
+
 if __name__=="__main__":
     unittest.main()
