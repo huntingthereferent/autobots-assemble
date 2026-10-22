@@ -44,25 +44,26 @@ class VisibleHtml(HTMLParser):
         self.parts = []
         self.headings = []
         self.omit = 0
-        self.h1 = 0
+        self.h1_parts = None
 
     def handle_starttag(self, tag, attrs):
         if tag in ("script", "style", "noscript"):
             self.omit += 1
         if tag == "h1":
-            self.h1 += 1
+            self.h1_parts = []
 
     def handle_endtag(self, tag):
         if tag in ("script", "style", "noscript") and self.omit:
             self.omit -= 1
-        if tag == "h1" and self.h1:
-            self.h1 -= 1
+        if tag == "h1" and self.h1_parts is not None:
+            self.headings.append(" ".join(" ".join(self.h1_parts).split()))
+            self.h1_parts = None
 
     def handle_data(self, text):
         if not self.omit:
             self.parts.append(text)
-            if self.h1:
-                self.headings.append(text)
+            if self.h1_parts is not None:
+                self.h1_parts.append(text)
 
 
 def classify(raw: bytes) -> dict:
@@ -73,10 +74,10 @@ def classify(raw: bytes) -> dict:
     parser = VisibleHtml()
     parser.feed(html)
     rendered = " ".join(" ".join(parser.parts).split())
-    heading = " ".join(" ".join(parser.headings).split())
+    headings = parser.headings
     checks = {
         "publisher_webbook": "NIST Chemistry WebBook" in rendered,
-        "species_name": heading == NAME,
+        "species_name": NAME in headings,
         "cas_id": bool(re.search(r"\bCAS Registry Number\s*:\s*7732-18-5\b", rendered, re.I)),
         "formula": bool(re.search(r"\bFormula\s*:\s*H\s*2\s*O(?=\s*(?:Molecular weight|IUPAC Standard|CAS Registry Number|$))", rendered, re.I)),
         "inchi_key": INCHI_KEY in rendered,
