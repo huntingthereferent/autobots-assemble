@@ -22,7 +22,7 @@ Every source starts `DOCUMENTED_NOT_OBSERVED`. This means **official public docu
 | NIST WebBook | reference chemistry | manual data-rights/conditions review |
 | NASA Earthdata CMR | collection metadata | one bounded collection query |
 | NOAA CDO | climate observations | token and station/dataset selection gate |
-| GWOSC | gravitational-wave catalog | API entry documentation only; event version not selected |
+| GWOSC | gravitational-wave catalog | one bounded v2 event-catalog metadata page; event version still unselected |
 | World Bank | historical indicators | one indicator, country, year query |
 | OECD SDMX | structured statistics | select dataset-specific flow/query first |
 | NVD | published CVE metadata | one exact CVE advisory query |
