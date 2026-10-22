@@ -161,6 +161,7 @@ def _inspector_gadget(handoff: Handoff, state: HandoffState) -> Inspection:
     """Project an already-recorded GitHub source observation; never activate here."""
     query = handoff.inputs
     output = state.output if isinstance(state.output, dict) else {}
+    wall = output.get("wall") if isinstance(output.get("wall"), dict) else {}
     return {
         "kind": "inspector-gadget-source-observation",
         "title": "Inspector Gadget / source-owned CI observation",
@@ -174,12 +175,18 @@ def _inspector_gadget(handoff: Handoff, state: HandoffState) -> Inspection:
             _row("Source comparison", "matched" if output.get("source_verified") is True
                  else "not verified"),
             _row("Handoff state", state.status),
+            _row("Wall type", wall.get("kind", "not yet located")),
+            _row("Wall status", wall.get("wall_state", "not checked")),
+            _row("Failed step", wall.get("failed_step") or "not established"),
+            _row("Later same-obligation pass", wall.get("later_success_run_id") or "none observed"),
+            _row("Next chase movement", wall.get("next_movement", "inspect owner source")),
             _row("Repair dispatched", "no"),
             _row("Next owner action", output.get("next", "verify the original run")),
         ],
         "notes": [
             "This observation checks a GitHub workflow run against its pinned source.",
             "An observed CI failure is not necessarily a defect; cancellations may be expected.",
+            "A later passing step is only a candidate exit: the owning lane must validate its witness.",
             "A completed Inspector worker does not complete or repair the owning research lane.",
             "Viewer panels show saved journal evidence and do not rerun the source observer.",
         ],
