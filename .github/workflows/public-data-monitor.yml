@@ -404,6 +404,20 @@ jobs:
           # The browser job verifies the dashboard rendering and error boundaries.
           # Acquisition and integration workflows test real source behavior separately.
           # Use psql to avoid launching an extra API Python process under Docker.
+          # Frontend readiness does not guarantee the API has created its tables.
+          schema_ready=false
+          for i in {1..40}; do
+            tables=$(docker compose exec -T db psql -Atq -U monitor -d public_data_monitor \
+              -c "SELECT CASE WHEN to_regclass('public.source_runs') IS NOT NULL AND to_regclass('public.identity_decision_records') IS NOT NULL AND to_regclass('public.lifecycle_records') IS NOT NULL THEN 'ready' ELSE 'waiting' END" \
+              2>/dev/null) || tables=waiting
+            if [ "$tables" = ready ]; then schema_ready=true; break; fi
+            sleep 2
+          done
+          if [ "$schema_ready" != true ]; then
+            echo 'API schema was not ready; browser fixtures were not inserted.'
+            docker compose logs api
+            exit 1
+          fi
           docker compose exec -T db psql -v ON_ERROR_STOP=1 -U monitor -d public_data_monitor <<'SQL'
           INSERT INTO source_runs (source, started_at, finished_at, status, items_seen)
           VALUES
