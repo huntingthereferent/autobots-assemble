@@ -69,7 +69,7 @@ footer{margin-top:38px;border-top:1px solid var(--line);padding-top:16px;font-si
 <section class="hero" aria-labelledby="page-title">
 <p class="eyebrow">RESEARCH / SOURCE ADMISSION</p>
 <h1 id="page-title">Sources before experiments.</h1>
-<p>The original provider, what it can actually support, how to access it, and where its evidence stops. Select a test context to inspect its candidate sources. No catalog entry is itself a reproduced study.</p>
+<p>The original provider, what it can actually support, how to access it, and where its evidence stops. The displayed source observations are from a dated, archived run—not a live availability indicator. Select a test context to inspect its candidate sources. No catalog entry is itself a reproduced study.</p>
 <div class="meta">
 <div><span>DOCUMENTED SOURCES</span><strong id="source-count">—</strong></div>
 <div><span>TEST CONTEXTS</span><strong id="lane-count">—</strong></div>
@@ -97,9 +97,9 @@ footer{margin-top:38px;border-top:1px solid var(--line);padding-top:16px;font-si
 "use strict";
 const root="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/registry.json?ref=main";
 const repo="https://github.com/huntingthereferent/autobots-assemble/blob/main/research/testing_lanes/sources/";
-const firstObservation="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/observations/2026-10-22-run-39767929086.json?ref=main";
-const firstRun="https://github.com/huntingthereferent/autobots-assemble/actions/runs/39767929086";
-const laneObservation="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/observations/2026-10-22-source-handoffs.json?ref=main";
+const firstObservation="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/observations/2026-10-22-run-39771470448.json?ref=main";
+const firstRun="https://github.com/huntingthereferent/autobots-assemble/actions/runs/39771470448";
+const laneObservation="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/observations/2026-10-22-source-handoffs-run-39771470448.json?ref=main";
 const manual=new Set(["physionet","openneuro","nist","noaa","oecd"]);
 let registry=null, selected=null, observationRecords=new Map(), laneEvidence=new Map(), receiptStatus="NOT_LOADED";
 const get=id=>document.getElementById(id);
@@ -182,7 +182,7 @@ async function load(){
     if(observedEnvelope.encoding!=="base64"||!observedEnvelope.content)throw new Error("Observation bytes unavailable");
     const observedBytes=Uint8Array.from(atob(observedEnvelope.content.replace(/\s/g,"")),c=>c.charCodeAt(0));
     const observation=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(observedBytes));
-    if(observation.schema_version!==1||observation.observed_run_id!==39767929086||!Array.isArray(observation.observations))
+    if(observation.schema_version!==1||observation.observed_run_id!==39771470448||!Array.isArray(observation.observations))
       throw new Error("Unexpected source receipt schema");
     observationRecords=new Map();
     for(const receipt of observation.observations){
@@ -191,7 +191,7 @@ async function load(){
       observationRecords.set(receipt.source_id,receipt);
     }
     receiptStatus="HISTORICAL_RECEIPTS_LOADED";
-    get("source-state").textContent="VERSIONED REGISTRY · FIRST SOURCE RUN: "+observation.source_status_counts.metadata_observed+" OBSERVED / "+observation.source_status_counts.source_wall+" WALLS";
+    get("source-state").textContent="VERSIONED REGISTRY · ARCHIVED RUN #39771470448: "+observation.source_status_counts.metadata_observed+" OBSERVED / "+observation.source_status_counts.source_wall+" WALLS";
     draw();
   }catch{
     receiptStatus="RECEIPTS_UNAVAILABLE";
