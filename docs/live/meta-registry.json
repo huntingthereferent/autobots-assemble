@@ -1,0 +1,103 @@
+{
+  "schema": "meta-workstation/registry-v1",
+  "description": "Cross-node coordination index. Job state comes from each node's owned GitHub Actions journal; it is not evidence of scientific results.",
+  "source_of_truth": "huntingthereferent/autobots-assemble",
+  "updated_at": "2026-10-22",
+  "nodes": [
+    {
+      "id": "A",
+      "label": "Original",
+      "repo": "huntingthereferent/autobots-assemble",
+      "visibility": "public",
+      "viewer": "https://huntingthereferent.github.io/autobots-assemble/live/work.html",
+      "journal": "https://github.com/huntingthereferent/autobots-assemble/actions",
+      "mode": "live-public-api",
+      "source_ref": "main",
+      "scope": "Current original workstation; existing workflow definitions active where GitHub triggers admit work"
+    },
+    {
+      "id": "B",
+      "label": "Dessy",
+      "repo": "aeren-research/continuum-oscillator",
+      "visibility": "private",
+      "viewer": "https://github.com/aeren-research/continuum-oscillator/blob/main/docs/live/work.html",
+      "journal": "https://github.com/aeren-research/continuum-oscillator/actions",
+      "mode": "private-journal",
+      "source_ref": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
+      "scope": "Verified source mirror; 241 workflow definitions in inactive library; assignments require explicit admission"
+    }
+  ],
+  "lane_rules": [
+    {
+      "id": "ARC",
+      "title": "ARC",
+      "match": [
+        "arc3-",
+        "arc-"
+      ],
+      "node": "A",
+      "admission": "Observed original workflows; B has no active ARC workflow"
+    },
+    {
+      "id": "WORLD",
+      "title": "WORLD",
+      "match": [
+        "ab-world-",
+        "world48-",
+        "world-"
+      ],
+      "node": "A",
+      "admission": "Observed original workflows; B has no active WORLD workflow"
+    },
+    {
+      "id": "NIH",
+      "title": "NIH",
+      "match": [
+        "nih-"
+      ],
+      "node": "A",
+      "admission": "Observed original workflows; B has no active NIH workflow"
+    },
+    {
+      "id": "SOURCES",
+      "title": "Research sources",
+      "match": [
+        "research-",
+        "neuro-",
+        "sec-",
+        "applied-"
+      ],
+      "node": "A",
+      "admission": "Observed original workflows; candidate B transfer not admitted"
+    },
+    {
+      "id": "WORKSTATION",
+      "title": "Workstation",
+      "match": [
+        "workstation-",
+        "workspace-",
+        "ab-relational-"
+      ],
+      "node": "A",
+      "admission": "Existing original coordination and workstation workflows"
+    },
+    {
+      "id": "BOOTSTRAP",
+      "title": "B setup",
+      "match": [
+        "stage original workstation",
+        "capture original workflow",
+        "bootstrap original workstation"
+      ],
+      "node": "B",
+      "admission": "Only observed B bootstrap activity; not a research lane"
+    }
+  ],
+  "handoff": {
+    "authority": "GitHub records for each repository; this index records placement, not permission to start jobs",
+    "routing": "Unassigned lanes remain unassigned; do not duplicate work just because a twin exists",
+    "oscillation": "Record source and target revision, lane, job URL, result, provenance and explicit acceptance before transferring state",
+    "b_privacy": "B is private. Public Pages cannot fetch B's protected jobs; no B counters may be inferred as zero.",
+    "recovery": "Read this registry and both repository meta-workstation handoff files when regrounding in any ChatGPT window."
+  }
+}
