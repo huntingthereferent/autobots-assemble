@@ -10,7 +10,7 @@ from __future__ import annotations
 from collections import deque
 from typing import Any
 
-from work.arc3.window48_challenges import check_rooted_paths, rooted_roster
+from work.arc3.window48_challenges import check_rooted_paths
 from work.arc_like_maze.window_combined import family
 
 ROOT = (0, 0, 0)
@@ -20,9 +20,14 @@ POLICIES = ("breadth", "depth")
 def _challenge(challenge_id: int) -> tuple[int, int]:
     if type(challenge_id) is not int or not 0 <= challenge_id < 48:
         raise ValueError("challenge_id must be in 0..47")
-    # Intentionally discard the manifest's original example words.
-    left, right = rooted_roster()[challenge_id]["law_ids"]
-    return left, right
+    # Derive law IDs directly from the declared family. This path never
+    # loads the source roster or generates any saved answer words.
+    chart, position = divmod(challenge_id, 16)
+    reps = [i for i, world in enumerate(family()) if world.coefficient == chart]
+    first, second = reps[position], reps[(position + 1) % len(reps)]
+    if position == 15:
+        first, second = second, first
+    return first, second
 
 
 def _limits(budget: int, depth_bound: int, policy: str) -> None:
