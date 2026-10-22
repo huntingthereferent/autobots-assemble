@@ -143,6 +143,30 @@ class VisualProvenanceTests(unittest.TestCase):
         self.assertIn("composer-first participation", preserve)
         self.assertIn("source-system provenance", preserve)
 
+    def test_meow_lab2_retro_visual_source_binding_and_language(self):
+        binding = json.loads((ROOT / "docs/live/visual-provenance.json").read_text(encoding="utf-8"))
+        registry = json.loads((PROVENANCE / "registry.json").read_text(encoding="utf-8"))
+        self.assertIn(binding["template_id"], {item["template_id"] for item in registry["templates"]})
+        self.assertEqual(binding["template_id"], "meow_lab2_retro_audio_v1")
+        template = json.loads(
+            (PROVENANCE / "templates/meow_lab2_retro_audio_v1.json").read_text(encoding="utf-8")
+        )
+        self.assertEqual(template["status"], "candidate")
+        self.assertTrue(all(item["kind"] == "internal" for item in template["witnesses"]))
+        page = (ROOT / binding["surface_path"]).read_text(encoding="utf-8")
+        css = (ROOT / "docs/live/meowlab2-retro.css").read_text(encoding="utf-8")
+        self.assertIn('<meta name="visual-template" content="meow_lab2_retro_audio_v1">', page)
+        self.assertIn('href="meowlab2-retro.css"', page)
+        self.assertIn('class="cat-svg"', page)
+        self.assertIn('class="mini-cat"', page)
+        self.assertEqual(page.count('class="mini-cat"'), 4)
+        self.assertIn('id="import-sound"', page)
+        self.assertIn("Imported ", page)
+        self.assertNotIn("swallow", page.lower())
+        self.assertIn(".stage", css)
+        self.assertIn(".mini-cat", css)
+        self.assertIn("prefers-reduced-motion", css)
+
     def test_schema_contracts_exist(self):
         for name in ("visual-template.schema.json", "surface-binding.schema.json"):
             schema = json.loads((PROVENANCE / "schema" / name).read_text(encoding="utf-8"))

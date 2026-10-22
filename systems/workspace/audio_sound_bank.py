@@ -1,4 +1,4 @@
-"""Swallow Sounds: opt-in batch transport from audio files into native workstation movement.
+"""Meow Lab 2 sound intake: opt-in batch admission from audio files into native workstation movement.
 
 This is a source-owning adapter, not an API bridge to Suno. Each accepted WAV
 gets a separate actual HandoffRuntime job and independent host PCM verification.

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "surface_id": "meow_lab2_browser_studio",
+  "surface_path": "docs/live/cat-keyboard.html",
+  "template_id": "meow_lab2_retro_audio_v1",
+  "preserve": [
+    "Four authored cat voices and optional user-imported samples",
+    "Thirteen playable pitches and original recording controls",
+    "16 independent arrangement bars with eight looping melody bars",
+    "Source file SHA/manifest and native workstation boundary",
+    "Keyboard access, pointer/touch interaction and real-time status"
+  ],
+  "local_additions": [
+    "Original headphone cat DJ and four small hand-drawn selectable cat marks",
+    "Flat retro hardware surface with dark-ink grid and cassette labels",
+    "Import/export button copy matching actual operations",
+    "Screenshot-specific visual QA notes in the project README"
+  ],
+  "deviations": [
+    "No copying a specific game, music app, mascot or branded trade dress",
+    "A retro illustration does not imply a real camera or live audio service",
+    "Style uses CSS/SVG only, keeps synthesis and verified native path unchanged"
+  ],
+  "last_reviewed": "2026-10-21"
+}
