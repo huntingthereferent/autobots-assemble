@@ -1,33 +1,30 @@
-# Products
+# Products — reusable candidates and implementations
 
-This directory tracks reusable products whose primary goal is external economic value.
+This directory records product shapes that could be adapted or delivered for an external need. A recorded candidate is not automatically a working product, a sale, a contract or recurring revenue.
 
-A product is not A/B itself. A/B may be used to trace and build a product, but the resulting software, template, service, or artifact remains an implementation/evidence layer.
+## Products versus client-specific work
 
-## Boundary
+- `money/products/` keeps reusable source, design, tests, evidence and scoped variants.
+- A real client-specific request or sale should have its **own** requirement, authorization, acceptance and payment evidence. The old `jobs/` listing directory was retired; no current job ledger is assumed.
+- Product versions should preserve what changed, what was retained, the relevant source lineage and any test limitations.
 
-Products differ from one-off job records:
-
-- `jobs/` records externally bounded work for a specific opportunity or client.
-- `money/products/` records reusable product shapes that can be instantiated, customized, sold, or extended.
-- A client-specific sale can create a job record that points back to the product it instantiates.
-- Product changes must preserve provenance: what existed, what changed, what survived, and what was newly introduced.
+A product is an implementation, not a definition or proof of the [Language Referent](../../LANGUAGE_REFERENT.md).
 
 ## Product record
 
-Each product gets its own directory:
+Create files when they are needed by the actual project rather than empty placeholder directories.
 
 ```text
 money/products/P###_<name>/
-  PRODUCT.md
-  app/          # source when implementation begins
-  evidence/     # tests, screenshots, acceptance records when needed
-  variants/     # client/config variants when they become real
+  PRODUCT.md      # problem, intended user, current state and boundaries
+  app/            # implementation source when present
+  evidence/       # tests, artifacts and acceptance records when present
+  variants/       # supported product variants when present
 ```
 
-Do not create empty directories in advance. Add each layer only when the trace reaches it.
+## Recorded candidates
 
-## Current products
+- [P001 — Service Workflow](P001_service-workflow/PRODUCT.md) — parked, unvalidated candidate.
+- [P002 — Business Health Check](P002_business-health-tracker/PRODUCT.md) — source-recorded working proof derived from an external MVP brief; this description is **not** evidence of sale or payment.
 
-- [P001 — Service Workflow](P001_service-workflow/PRODUCT.md) — parked unvalidated candidate created before an external product scan.
-- [P002 — Business Health Check](P002_business-health-tracker/PRODUCT.md) — working proof traced from a current $300 external MVP brief.
+See [money overview](../README.md) and [full project guide](../../PROJECTS.md).
