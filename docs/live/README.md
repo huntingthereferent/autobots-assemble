@@ -4,7 +4,6 @@
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
 
-
 ## Research sources and testing contexts
 
 [Research sources](research-sources.html) is the read-only, source-first entry for 18 individually documented provider families and 21 independent candidate test contexts. The page reads `research/testing_lanes/registry.json` from the public GitHub source rather than fabricating active research measurements in browser state. Clicking a testing context filters to its originally registered source dependencies; it is a navigation/inspection action, not evidence that the corresponding science was tested. Exact source admission states, provider access limits, isolated receipts, and scientific handoff gates are preserved in [source contracts](../../research/testing_lanes/sources/) and in [source admission implementation](../../research/testing_lanes/source_admission.py). Provider response success alone does not validate a paper or release restricted datasets.
@@ -27,13 +26,29 @@ These creative audio operations are not Suno model copies or ARC/NIH/WORLD evide
 
 ## Evidence boundaries
 
-The Workstation reads actual **public GitHub Actions workflow runs** on opening and every three minutes while visible. It displays the *latest observed 50* runs, counts queued/running/passed/failed outcomes within that sample, and lets a viewer inspect the real GitHub jobs and ordered steps for one selected workflow. It uses exact GitHub execution IDs and commit hashes. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
+The Workstation reads the latest 100 **public GitHub Actions workflow runs** on opening and approximately every two minutes while visible. A separately published source-owned run index supplies the accessible historical archive; if it is unavailable, the viewer explicitly identifies the latest-page sample as incomplete. Exact GitHub execution IDs, revisions, jobs, and step results remain available for inspection. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
 
 The research section loads `views/traces/research-live.json`, projected from native research checkpoints, ARC experiments, pinned statuses and explicit walls. Original `next` and `boundary` fields are preserved when recorded. These are **historical source states**, not a claim that all their workers are currently executing. Nothing is invented from a file name or decorative animation.
 
 The display makes no artificial relationship between a GitHub Actions workflow and a research record merely because both appear on the page. A future cross-system link needs an independently checkable source relationship.
 
 Source failure is visible and **does not turn missing data into zeros or imply active work has stopped**. Public GitHub API requests can be rate-limited. Browser checks have no credentials or write access.
+
+## Flow control deck and calendar journal
+
+The public Workstation's control deck is a read-only, source-bound visualization of GitHub Actions. Queue and in-motion counts reflect the latest observed run states. The daily passed/not-passed values are **outcomes for runs created today in the browser's local calendar**, not completions that necessarily happened today. The daily clearance ratio is today's created runs currently marked completed, divided by all runs created today; it is not measured execution efficiency, a dispatch guarantee, or an estimate of GitHub capacity. The last-hour intake and 12-hour bar strip use actual workflow creation timestamps. A 12-marker light row represents up to twelve observed records and is not a capacity bar. Animated running indicators illustrate the same retained status, never synthesize progress.
+
+The movement/change list is session-only and shows status transitions **detected between successful source checks**, not precise execution event times. On first opening, it establishes a baseline rather than inventing transition history. Public source errors leave the UI explicitly stale.
+
+The run journal starts on **Today**, with period selectors for **Day**, **Month**, **Year**, and **All**, plus previous/next navigation. Local calendar ranges filter original timestamped run IDs without modifying the source archive. Listed execution timestamps use a 12-hour clock; the seven-day observation chart uses matching local calendar boundaries. Older source history may be incomplete if the published archive cannot be verified.
+
+## Equilibrium watch — live observation, not automatic load
+
+The control deck now also shows a **per-browser-session equilibrium watch**. It records successful public-GitHub workflow-run checks and displays observed average running count, peak running count, average waiting count, total queue change since the session baseline, and observed arrival/completion detection rates per hour. A paired chart shows sampled queued/running states. No new GitHub jobs are scheduled, no capacity limit is inferred from workflow counts, and no sample is fabricated between checks.
+
+The monitor calls the state a **steady candidate** only after multiple real checks across at least eight minutes, with approximately balanced detected flow and no substantial queue increase. It may instead describe backlog building, draining, no visible backlog, idling, or insufficient evidence. Results are lower-bound workflow-run **detections**, because the latest public API page contains at most 100 workflow runs and may miss fast runs between polls. A workflow run can contain multiple jobs, so neither peak running workflows nor session averages establish account job concurrency/utilization. Session-level equilibrium readings are not persisted into the historical daily/monthly/yearly source journal; only the source-run history has that durable indexing.
+
+This monitor does not automatically fill the queue: introducing enough work to reach steady useful throughput requires a separate authorized source-owned scheduler, job-level capacity verification, and cost/latency/failure boundaries. Saturating a queue alone is not evidence of efficiency.
 
 ## Data audit in the Workstation
 
