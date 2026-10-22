@@ -1,0 +1,31 @@
+name: ARC4 lane B authentic same-position path-length controls
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_same_position_path_lengths.py'
+      - '.github/workflows/arc4-stage4-same-position-path-lengths.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-stage4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 48
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile bounded native source audit
+        run: python -m compileall -q work/arc3/native_sp80_stage4_same_position_path_lengths.py
+      - name: Execute seven predeclared histories with native witnesses A/B
+        run: python -m work.arc3.native_sp80_stage4_same_position_path_lengths --out runtime/data/arc4/arc4-same-position-path-lengths.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-stage4-path-length-native-evidence
+          path: runtime/data/arc4/arc4-same-position-path-lengths.*
+          retention-days: 90
+          if-no-files-found: error
