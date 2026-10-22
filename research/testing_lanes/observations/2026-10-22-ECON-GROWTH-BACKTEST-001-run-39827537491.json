@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "ACTUAL_WORLD_BANK_ANN_GDP_GROWTH_BACKTEST",
+  "run_id": 39827537491,
+  "run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39827537491",
+  "workflow_result": "success",
+  "source_code_commit": "d5b514f9056ff1a543ec7884aeb53ca6c6c48f82",
+  "observation": {
+    "experiment_id": "ECON-GROWTH-BACKTEST-001",
+    "limits": [
+      "One country, one indicator and one frozen retrieval snapshot only.",
+      "The API may revise historical values; no real-time data vintage was reconstructed.",
+      "Baseline comparison is descriptive and not a general forecasting or causal claim.",
+      "No future observations are used to fit the training mean; persistence uses only the previous year's observed value."
+    ],
+    "method": {
+      "baselines": [
+        "previous year's observed value",
+        "fixed mean of training period"
+      ],
+      "metric": "mean absolute error in percentage points",
+      "revision_policy": "one retrieved API snapshot; no vintage archive reconstructed",
+      "split": "train <= 2014; held-out one-step predictions > 2014",
+      "target": "annual real GDP growth (NY.GDP.MKTP.KD.ZG)"
+    },
+    "result": {
+      "country": "USA",
+      "frozen_training_mean": 2.5053281979278825,
+      "indicator": "NY.GDP.MKTP.KD.ZG",
+      "lower_mae_baseline": "training_mean",
+      "persistence_mae_percentage_points": 2.223791188744999,
+      "test_n": 9,
+      "test_predictions": [
+        {
+          "actual": 2.94555045227337,
+          "persistence_prediction": 2.52381981757846,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2015
+        },
+        {
+          "actual": 1.81945147909089,
+          "persistence_prediction": 2.94555045227337,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2016
+        },
+        {
+          "actual": 2.45762230126449,
+          "persistence_prediction": 1.81945147909089,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2017
+        },
+        {
+          "actual": 2.96650506701943,
+          "persistence_prediction": 2.45762230126449,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2018
+        },
+        {
+          "actual": 2.58382533052225,
+          "persistence_prediction": 2.96650506701943,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2019
+        },
+        {
+          "actual": -2.081375977796,
+          "persistence_prediction": 2.58382533052225,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2020
+        },
+        {
+          "actual": 6.15202247867526,
+          "persistence_prediction": -2.081375977796,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2021
+        },
+        {
+          "actual": 2.52421385073222,
+          "persistence_prediction": 6.15202247867526,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2022
+        },
+        {
+          "actual": 2.93436322440155,
+          "persistence_prediction": 2.52421385073222,
+          "train_mean_prediction": 2.5053281979278825,
+          "year": 2023
+        }
+      ],
+      "test_years": [
+        2015,
+        2023
+      ],
+      "train_n": 25,
+      "train_years": [
+        1990,
+        2014
+      ],
+      "training_mean_mae_percentage_points": 1.1549775563645615
+    },
+    "retrieved_at_utc": "2026-10-22T18:00:29.288249+00:00",
+    "schema_version": 1,
+    "source": {
+      "endpoint": "https://api.worldbank.org/v2/country/USA/indicator/NY.GDP.MKTP.KD.ZG?date=1990:2023&format=json&per_page=100",
+      "max_response_bytes": 500000,
+      "name": "World Bank Indicators API",
+      "response_sha256": "741be49110e5ce7f7bd038c1a89a7cac30b26da4128c6a4e5cd7c96497889560"
+    },
+    "status": "BACKTEST_COMPLETE"
+  },
+  "source_raw_response_archived": false,
+  "provenance_scope": "One 2026-10-22 retrieved World Bank Indicators API snapshot, not a historical vintage. Exact 2015–2023 heldout annual series; no general forecast or causality established.",
+  "license_context": {
+    "world_bank_dataset_terms": "https://www.worldbank.org/ext/en/legal/terms-conditions/datasets",
+    "default_terms": "CC BY 4.0 absent dataset-specific exceptions; further indicator-provider metadata review required",
+    "attribution": "World Bank, GDP growth (annual %) indicator NY.GDP.MKTP.KD.ZG, USA. The retrieved data were used to calculate two baseline errors.",
+    "third_party_indicator_exception_review": "REQUIRED_BEFORE_REDISTRIBUTING_DATA"
+  }
+}

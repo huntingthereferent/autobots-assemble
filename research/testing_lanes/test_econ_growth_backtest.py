@@ -40,6 +40,38 @@ class EconGrowthBacktestTests(unittest.TestCase):
         self.assertIn(result["lower_mae_baseline"], {"persistence", "training_mean", "tie"})
         self.assertEqual(len(result["test_predictions"]), result["test_n"])
 
+    def test_pinned_live_receipt_recalculates_both_scored_baselines(self):
+        import json
+        from pathlib import Path
+        path = (Path(__file__).parent / "observations" /
+                "2026-10-22-ECON-GROWTH-BACKTEST-001-run-39827537491.json")
+        archived = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(archived["run_id"], 39827537491)
+        self.assertEqual(archived["source_code_commit"],
+                         "d5b514f9056ff1a543ec7884aeb53ca6c6c48f82")
+        self.assertFalse(archived["source_raw_response_archived"])
+        r = archived["observation"]
+        self.assertEqual(r["status"], "BACKTEST_COMPLETE")
+        self.assertRegex(r["source"]["response_sha256"], r"^[0-9a-f]{64}$")
+        scored = r["result"]
+        observations = scored["test_predictions"]
+        self.assertEqual(scored["train_years"], [1990, 2014])
+        self.assertEqual(scored["test_years"], [2015, 2023])
+        self.assertEqual(scored["test_n"], 9)
+        self.assertEqual([x["year"] for x in observations], list(range(2015, 2024)))
+        def mae(key):
+            return sum(abs(x["actual"] - x[key]) for x in observations) / len(observations)
+        self.assertAlmostEqual(mae("persistence_prediction"),
+                               scored["persistence_mae_percentage_points"], places=12)
+        self.assertAlmostEqual(mae("train_mean_prediction"),
+                               scored["training_mean_mae_percentage_points"], places=12)
+        self.assertLess(scored["training_mean_mae_percentage_points"],
+                        scored["persistence_mae_percentage_points"])
+        self.assertEqual(scored["lower_mae_baseline"], "training_mean")
+        self.assertEqual(archived["license_context"]["third_party_indicator_exception_review"],
+                         "REQUIRED_BEFORE_REDISTRIBUTING_DATA")
+
+
 
 if __name__ == "__main__":
     unittest.main()
