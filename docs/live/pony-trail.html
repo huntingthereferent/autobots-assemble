@@ -257,44 +257,97 @@ function sky(s){
   ctx.save();ctx.globalAlpha=1-sceneFade;landscape(s,scene);ctx.restore();
  }else landscape(s,scene);
 }
-function horseArt(){const c=horses[horse];const bounce=mode==="running"&&jumpY===0?Math.sin(t*13)*3:0;const legSwing=mode==="running"&&jumpY===0?Math.sin(t*18)*13:0;
- ctx.save();ctx.translate(horsex,ground-56+jumpY+bounce);if(invulnerable>0&&Math.floor(t*13)%2===0)ctx.globalAlpha=.55;
- ellipse(0,62-jumpY-bounce,73,9,"#3b44562e");
- // tail and mane
- line(-57,-12,-96,-34,c.mane,17);line(-93,-35,-104,-14,c.mane,10);
- // animated legs behind torso
- line(-32,15,-45+legSwing,53,c.body,16);line(21,13,35-legSwing,55,c.body,16);
- line(-44+legSwing,52,-49+legSwing,58,"#57424b",10);line(35-legSwing,54,43-legSwing,59,"#57424b",10);
- ellipse(-9,-12,65,35,c.body);ellipse(-37,-17,18,28,c.body);
- // neck and face
- polygon([[22,-24],[44,-75],[67,-74],[49,-5]],c.body);
- ellipse(57,-72,19,30,c.body);ellipse(76,-61,27,18,c.muzzle);
- polygon([[49,-98],[55,-126],[67,-101]],c.body);polygon([[66,-95],[78,-119],[84,-91]],c.body);
- line(40,-72,43,-100,c.mane,13);line(35,-48,36,-79,c.mane,13);
- ellipse(69,-78,4.5,5,"#392c40");ellipse(70.5,-80,1.5,1.5,"#ffffff");
- ellipse(93,-59,3,2.5,"#76525f");line(78,-49,90,-46,"#985765",2);
- // saddle and rider
- ellipse(-10,-35,36,13,c.saddle);round(-24,-44,39,10,4,"#8f5f81");
- line(2,-45,17,-64,"#5f416f",10);line(17,-63,11,-91,"#6d5aa5",18);
- ellipse(11,-110,14,15,"#ffc9a3");ellipse(9,-124,17,8,horse==="moon"?"#9984c3":"#a45498");
- round(-2,-132,22,7,5,horse==="moon"?"#897dbd":"#8f4b96");
- line(14,-83,40,-78,"#ffc9a3",7);line(17,-62,3,-20,"#65476d",8);line(3,-20,21,-19,"#553a58",8);
- // reins
- ctx.strokeStyle="#87596f";ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(37,-78);ctx.quadraticCurveTo(60,-29,90,-50);ctx.stroke();
- ctx.restore();}
+function ponyOval(x,y,rx,ry,fill,edge="#76566b",width=2.3){
+ ctx.fillStyle=fill;ctx.strokeStyle=edge;ctx.lineWidth=width;
+ ctx.beginPath();ctx.ellipse(x,y,rx,ry,0,0,Math.PI*2);ctx.fill();ctx.stroke();
+}
+function horseArt(){
+ const c=horses[horse],running=mode==="running",gallop=running&&jumpY===0;
+ const bounce=gallop?Math.sin(t*13)*2.7:0,swing=gallop?Math.sin(t*18)*11:0;
+ const tailWave=running?Math.sin(t*9)*9:Math.sin(t*1.6)*3;
+ ctx.save();ctx.translate(horsex,ground-56+jumpY+bounce);
+ if(invulnerable>0&&Math.floor(t*13)%2===0)ctx.globalAlpha=.55;
+ ellipse(0,61-jumpY-bounce,73,7,"#4e536536");
+ // Tail, with a flowing point instead of a rectangular stroke.
+ line(-60,-26,-84,-36+tailWave*.25,c.mane,17);
+ line(-84,-36+tailWave*.25,-110,-18+tailWave,c.mane,13);
+ line(-87,-34+tailWave*.3,-103,-22+tailWave,"#ffffff3b",3);
+ // Two rear legs and hooves, drawn behind the body.
+ line(-35,0,-44+swing*.55,39,c.body,18);
+ line(-44+swing*.55,39,-48+swing,53,c.body,12);
+ line(-48+swing,52,-59+swing,55,"#51404b",11);
+ line(19,2,30-swing*.65,37,c.body,18);
+ line(30-swing*.65,37,38-swing,52,c.body,12);
+ line(38-swing,53,48-swing,56,"#51404b",11);
+ // Coat silhouette has a darker contour, light on top, and tailored dapples.
+ ponyOval(-10,-20,63,36,c.body,"#865d6a",2.5);
+ ellipse(-23,-32,43,17,"#ffffff22");
+ ponyOval(-42,-18,21,29,c.body,"#865d6a",2.4);
+ if(horse==="cocoa"){
+  ellipse(-34,-8,17,11,"#d9aa7a");ellipse(-19,-39,14,5,"#e2ad85");
+ }else if(horse==="blossom"){
+  ellipse(-33,-14,18,8,"#fff1e8");ellipse(12,-11,9,5,"#f5c7d8");ellipse(-18,-35,15,5,"#f6d7e1");
+ }else{
+  ellipse(-38,-17,21,11,"#fcffef");ellipse(8,-32,19,10,"#fffaf7");ellipse(-4,-10,10,5,"#f2d8e9");
+ }
+ // Curved neck, tapered face and separate muzzle keep a recognizable horse profile.
+ polygon([[16,-34],[38,-83],[57,-82],[50,-14],[30,2]],"#865d6a");
+ polygon([[20,-33],[42,-80],[62,-77],[49,-10],[28,0]],c.body);
+ ellipse(42,-55,8,29,"#ffffff24");
+ ponyOval(58,-79,18,29,c.body,"#865d6a");
+ ponyOval(80,-65,27,18,c.muzzle,"#946c77",2);
+ polygon([[46,-103],[50,-129],[63,-108]],"#865d6a");
+ polygon([[49,-106],[52,-122],[57,-108]],c.muzzle);
+ polygon([[67,-101],[79,-123],[84,-97]],"#865d6a");
+ polygon([[70,-103],[78,-115],[80,-101]],c.muzzle);
+ line(43,-85,43,-104,c.mane,9);line(38,-66,36,-92,c.mane,11);
+ line(39,-70,34,-48,c.mane,9);
+ // Face: lively eye, subtle eyelid and a small smile.
+ ellipse(70,-83,5.5,6,"#f6eddc");ellipse(71,-83,3.2,4.5,"#433746");
+ ellipse(72,-85,1.35,1.5,"#ffffff");
+ line(65,-91,74,-92,"#51404d",2);
+ ellipse(96,-68,3.4,2.8,"#7b5664");line(85,-56,97,-57,"#8c5d66",2);
+ // Saddle cloth, stirrup and a single stitched badge.
+ ponyOval(-11,-41,35,14,c.saddle,"#785b73",2);
+ round(-31,-49,49,9,4,horse==="moon"?"#8972a0":"#745468");
+ line(-28,-39,-27,-12,"#b58b72",3);
+ round(-34,-12,14,4,2,"#866774");
+ ellipse(-13,-41,4,4,"#fff0cc");
+ // Rider with a cap that matches the selected pony's tack.
+ line(-3,-43,10,-62,"#65475d",10);
+ line(11,-64,7,-91,horse==="cocoa"?"#816c98":horse==="blossom"?"#9a6b87":"#667e99",19);
+ ellipse(7,-111,13,15,"#edbe9f");
+ ellipse(5,-123,18,8,c.mane);
+ round(-6,-135,24,9,4,horse==="moon"?"#786e9b":"#8a547d");
+ line(13,-82,39,-80,"#f4c4a5",7);
+ line(11,-63,2,-21,"#694e65",9);
+ line(1,-21,22,-18,"#533d52",8);
+ ctx.strokeStyle="#94677c";ctx.lineWidth=2.5;ctx.beginPath();ctx.moveTo(37,-83);ctx.quadraticCurveTo(60,-31,92,-54);ctx.stroke();
+ ctx.restore();
+}
 function carrot(x,y){ctx.save();ctx.translate(x,y);polygon([[0,17],[-11,-12],[11,-12]],"#ff9953");line(-1,-13,-8,-24,"#65ad69",5);line(1,-13,9,-25,"#72bb76",5);line(0,-14,0,-28,"#5f9b66",4);ctx.restore();}
 function star(x,y){ctx.save();ctx.translate(x,y);ctx.rotate(Math.sin(t*3)*.13);const pts=[];for(let k=0;k<10;k++){const a=k*Math.PI/5-Math.PI/2,rad=k%2?10:20;pts.push([Math.cos(a)*rad,Math.sin(a)*rad]);}polygon(pts,"#ffe06b");ellipse(-3,-5,3,3,"#fffac1");ctx.restore();}
 function obstacles(){for(const i of items){if(i.type==="fence"){round(i.x,ground-48,9,49,3,"#fff4df");round(i.x+38,ground-48,9,49,3,"#fff4df");round(i.x-2,ground-43,52,13,4,"#cb9477");round(i.x-2,ground-18,52,11,4,"#cb9477");}
  else if(i.type==="puddle"){ellipse(i.x+35,ground-3,37,10,"#8bcbec");ellipse(i.x+31,ground-5,25,6,"#c3eeff");}
  else if(i.type==="carrot")carrot(i.x,ground-57+Math.sin(t*4+i.phase)*5);
  else star(i.x,ground-132+Math.sin(t*3+i.phase)*7);}}
-function overlay(title,desc){round(200,105,560,172,24,"#fff9fff0");ctx.textAlign="center";ctx.fillStyle="#85499b";ctx.font="bold 41px Trebuchet MS, sans-serif";ctx.fillText(title,480,173);ctx.fillStyle="#624767";ctx.font="20px Trebuchet MS, sans-serif";ctx.fillText(desc,480,214);ctx.font="bold 17px Trebuchet MS, sans-serif";ctx.fillText("Press Start or tap JUMP to ride",480,249);ctx.textAlign="left";}
+function overlay(title,desc){
+ ctx.save();
+ round(245,116,470,146,12,scene==="night"?"#292c50ed":"#fff8e8ef");
+ ctx.strokeStyle=scene==="night"?"#b8aecf":"#8d7380";ctx.lineWidth=2;ctx.strokeRect(250,121,460,136);
+ ctx.textAlign="center";ctx.fillStyle=scene==="night"?"#f5e9ed":"#694d65";
+ ctx.font="bold 33px Georgia, serif";ctx.fillText(title,480,170);
+ ctx.font="16px Trebuchet MS, sans-serif";ctx.fillText(desc,480,207);
+ ctx.fillStyle=scene==="night"?"#dfb8cc":"#a27080";
+ ctx.font="bold 12px Trebuchet MS, sans-serif";ctx.fillText("SPACE / TAP JUMP TO RIDE",480,240);
+ ctx.restore();
+}
 function drawTrailPlate(){
  ctx.save();round(20,18,246,43,7,scene==="night"?"#292e55d8":"#fff9e2e6");
  ctx.fillStyle=scene==="night"?"#f7eedc":"#5d5161";ctx.font="bold 12px Trebuchet MS, sans-serif";ctx.letterSpacing="1px";
  ctx.fillText(trailNames[scene],35,44);ctx.restore();
 }
-function draw(){sky(scenes[scene]);obstacles();horseArt();flyingObjects(scene);drawTrailPlate();if(mode==="ready")overlay("Ready, rider? 🐴","A happy pony adventure awaits!");if(mode==="paused")overlay("Rest stop 🌸","Press Resume when you're ready.");if(mode==="over")overlay("Great ride! ⭐","You rode "+Math.floor(distance)+" meters and found "+carrots+" carrots!");}
+function draw(){sky(scenes[scene]);obstacles();horseArt();flyingObjects(scene);drawTrailPlate();if(mode==="ready")overlay("Ready when you are","Choose your pony and start riding.");if(mode==="paused")overlay("Rest stop 🌸","Press Resume when you're ready.");if(mode==="over")overlay("Lovely ride!","You rode "+Math.floor(distance)+" meters and found "+carrots+" carrots!");}
 function frame(ts){const dt=last?Math.min(.04,(ts-last)/1000):0;last=ts;update(dt);if(sceneFade>0)sceneFade=Math.max(0,sceneFade-dt*2);draw();requestAnimationFrame(frame);}
 document.querySelectorAll("[data-horse]").forEach(btn=>btn.addEventListener("click",()=>{horse=btn.dataset.horse;document.querySelectorAll("[data-horse]").forEach(b=>{const yes=b===btn;b.classList.toggle("active",yes);b.setAttribute("aria-pressed",String(yes));});message("Meet "+btn.textContent.trim()+"! 🐴");}));
 $("trail").addEventListener("change",e=>{const next=e.target.value;if(next===scene)return;lastScene=scene;scene=next;sceneFade=1;document.documentElement.dataset.scene=scene;$("trail-hint").textContent=trailNames[scene]+" — "+trailDescriptions[scene];message("Now riding the "+trailNames[scene].toLowerCase()+". Watch the scenery change!");});
