@@ -95,7 +95,7 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
         self.assertFalse(result["execution_started"])
         self.assertFalse(result["native_checkpoint_pass"])
 
-    def test_restart_restores_bindings_and_still_verifies_existing_observation(self):
+    def test_restart_restores_bindings_and_rechecks_observation(self):
         advance(self.cluster_dir, execute=True)
         row = replayed_rows(self.journal)[0]
         movement = next(m for m in row["movements"] if m["kind"] == "BRANCH")
@@ -113,7 +113,8 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
             worker_editions=self.workers,
         )
         inspected = restarted_harness.inspect()
-        self.assertEqual(inspected["proposals"], [])
+        self.assertEqual(len(inspected["proposals"]), 1)
+        self.assertEqual(inspected["proposals"][0]["kind"], "BIRTH")
         self.assertEqual(restarted_verifier.path_to_lane, {movement["from"]: "root"})
         self.assertFalse(inspected["execution_started"])
 
