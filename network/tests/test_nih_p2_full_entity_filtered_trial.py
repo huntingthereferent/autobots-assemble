@@ -86,5 +86,25 @@ class FullSourceEntityRankingTests(unittest.TestCase):
                 "candidate_universe_count":9,
                 "other_known_gold_excluded_from_filtered_rank":0}],10)
 
+
+    def test_train_only_predicate_tail_frequency_baseline_with_gold_filter(self):
+        from collections import defaultdict
+        train=[("a","T","b"),("c","T","b"),("x","T","d")]
+        universe=["a","b","c","d"]
+        known=defaultdict(set)
+        known[("h","T")]={"d","b"}
+        r=trial.per_relation_frequency_baseline(
+            train,universe,[("h","T","b")],known)
+        self.assertEqual(r["n"],1)
+        self.assertEqual(r["hits_at_1"],1)
+        self.assertFalse(r["test_valid_edges_used_for_training"])
+        self.assertEqual(r["individual_case_diagnostics"][0]["other_known_positives_excluded"],1)
+
+    def test_frequency_baseline_cannot_use_gold_missing_from_source_universe(self):
+        from collections import defaultdict
+        with self.assertRaisesRegex(ValueError,"missing"):
+            trial.per_relation_frequency_baseline(
+                [("a","T","b")],["a","b"],[("a","T","absent")],defaultdict(set))
+
 if __name__=="__main__":
     unittest.main()
