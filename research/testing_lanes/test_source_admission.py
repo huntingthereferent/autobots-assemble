@@ -27,9 +27,11 @@ class FakeOpener:
     def __init__(self, payload):
         self.payload = payload
         self.calls = []
+        self.requests = []
 
     def open(self, request, timeout=None):
         self.calls.append((request.full_url, timeout))
+        self.requests.append(request)
         return Response(self.payload)
 
 
@@ -102,6 +104,26 @@ class SourceAdmissionTests(unittest.TestCase):
     def test_pubchem_cid_is_explicit(self):
         good = {"PropertyTable": {"Properties": [{"CID": 962, "MolecularFormula": "H2O"}]}}
         self.assertTrue(inspect_shape("pubchem", json.dumps(good).encode(), "json")["semantic_record_verified"])
+
+    def test_gwosc_fixed_endpoint_uses_json_and_one_result(self):
+        source = self.cards["gwosc"]
+        self.assertEqual(source["probe"]["expected_format"], "json")
+        self.assertTrue(source["probe"]["url"].endswith("?format=json&pagesize=1"))
+        transport = FakeOpener(json.dumps({
+            "results": [{"shortName": "GW150914-v3"}],
+            "results_count": 1, "results_per_page": 1,
+        }).encode())
+        receipt = probe_one("gwosc", self.cards, opener=transport)
+        self.assertEqual(receipt["state"], "METADATA_OBSERVED")
+        self.assertEqual(transport.requests[0].get_header("Accept"), "application/json")
+        self.assertFalse(receipt["scientific_claim_verified"])
+
+    def test_gwosc_browsable_html_cannot_be_admitted_as_json(self):
+        receipt = probe_one("gwosc", self.cards,
+                            opener=FakeOpener(b"<html>GWOSC browsable API</html>"))
+        self.assertEqual(receipt["state"], "SOURCE_WALL")
+        self.assertEqual(receipt["error_class"], "JSONDecodeError")
+        self.assertNotIn("body_sha256", receipt)
 
     def test_gwosc_v2_event_catalog_is_distinct_from_waveform(self):
         outcome = inspect_shape("gwosc", json.dumps({"results": [], "results_count": 0}).encode(), "json")
