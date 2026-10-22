@@ -120,6 +120,19 @@ The separately measured exclusion region is the visible upper field `x=24..39,y=
 
 **Scope:** original SDK source observation and exact frame-index-aligned comparisons only; no inference of fluid mechanics, private objective, timing equivalence, or general upper-bar irrelevance. This does not substitute for the separately queued [same-game repeated ACTION5 trial #39768996710](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710), whose live outcome must be checked before claiming it.
 
+## Verified same-game original SDK repeated pours and exact returned frames
+
+[Authentic native run #39768996710](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710) **passed** (12 independently reset original SDK games; six frozen right-bar LEFT1/LEFT2 × same-game pour count1/2/3 × original A/B entrance witnesses). [Complete original raw JSON/NPZ artifact #12422021789](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710/artifacts/12422021789), ZIP SHA256 `0ea3addf36bf716e8e9d006df32ec0b165d3b65aa61b97e9e4a9cf32a1c7ab2f`; internal JSON `d4c59df2a07d476edb215c21ec2eee14bb5ef98d8c9c661d45f5b82c070ad44c`, NPZ `5582db5ac26205a0f888450a90ac568d6d4f9177bd0deb8ade0db6e050335376`. Raw source independently downloaded and SHA256-verified. Original native reset count12; all genuine ACTION5 receipts **level4→4 `NOT_FINISHED`**, zero level5/WIN.
+
+Frozen first pour has original visual four-cup timing (RIGHT LEFT1 lateral13,top-left25,top-middle21,top-right21; RIGHT LEFT2 lateral13,top-left25,top-middle23,top-right19), repeated unchanged across each subsequent native ACTION5. **All genuine native ACTION5 returned 34-frame stacks**. Subsequent pours after the first change no pixels in original rows0..62 at ANY animation frame, compared with the first pour's stack at matching frame indices. The original first pour changes 81 real selection pixels between pre-action source and terminal frame (36 upper selection9→8, 45 right bar8→9), plus a single bottom-row `14→0` pixel. All extra pours only change one bottom-row source pixel or none:
+
+| Verified source setting | First terminal row63 change | Second native pour terminal change | Third native pour terminal change |
+| --- | --- | --- | --- |
+| Right LEFT1 | x10,y63 14→0 | x11,y63 14→0 | none |
+| Right LEFT2 | x11,y63 14→0 | none | x12,y63 14→0 |
+
+Every independent A/B original entrance agrees. Original source artifact retains full native frames and action receipts; a further independently computed machine-readable frame audit SHA256 is `9d7d83de6d30f5722ab9d7dfdedcbe649bf1e83b4a7eb25f7b36e38047cb8df2` (local output, **not** independently uploaded to a persistent repository). Source limit: changing y63 does **not** establish a decoded private counter or hidden-state equality. Identical visible frame stack for original rows0..62 and unchanged official level mean this specific no-movement repeated-pour approach yielded no new measured playable-looking board response. GitHub Actions configured retention 90 days; separate durable raw copy not verified. Branch remains unmerged.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
