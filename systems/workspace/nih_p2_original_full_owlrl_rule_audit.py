@@ -141,9 +141,17 @@ def examine(graph):
     DeductiveClosure(OWLRL_Semantics, rdfs_closure=True).expand(derived)
     if len(derived)>MAX_MATERIALIZED_TRIPLES:
         raise ValueError("OWL RL complete-graph materialization exceeded capacity")
+    # The OWL RL prp-inv rule materializes inverse PROPERTY ASSERTIONS
+    # but does not necessarily emit a symmetric owl:inverseOf axiom triple.
+    # Keep the original logical symmetry candidates in a separate negative
+    # coverage receipt; do not call them materialized and do not waive any
+    # unexpected missing property/data inference.
     missing=[t for t in expected if t not in derived]
-    if missing:
-        raise ValueError("full original OWL RL closure misses "+str(len(missing))+" candidate rules: "+repr([{"triple":list(map(str,t)),"rule":expected[t][0]} for t in missing[:5]]))
+    unexpectedly_missing=[t for t in missing if expected[t][0]!="inverse_axiom_reverse"]
+    if unexpectedly_missing:
+        raise ValueError("full original OWL RL closure misses "+str(len(unexpectedly_missing))+" engine-supported candidates: "+repr([{"triple":list(map(str,t)),"rule":expected[t][0]} for t in unexpectedly_missing[:5]]))
+    inverse_axiom_mirror_gaps=[t for t in missing
+                                if expected[t][0]=="inverse_axiom_reverse"]
     property_edges=earlier.original_property_graph(graph)
     paths=earlier.shortest_witnesses(property_edges)
     implied=earlier.original_nonasserted(paths,property_edges)
@@ -159,7 +167,7 @@ def examine(graph):
     errors=sorted((str(s),str(o)) for s,p,o in derived
                   if p==RDF.type and str(o).endswith("#ErrorMessage"))
     rules=Counter(rule for rule,_ in expected.values())
-    samples=sorted(expected,key=lambda t:(
+    samples=sorted((t for t in expected if t in derived),key=lambda t:(
         sha256(("|".join(map(str,t))+"|nih-p2-full-owlrl").encode()).hexdigest(),
         tuple(map(str,t))))[:PREVIEW]
     proofs=[]
@@ -182,9 +190,18 @@ def examine(graph):
         "full_source_owlrl_materialized_rdf_triples":len(derived),
         "materialized_nonasserted_rdf_triples":len(new),
         "scope":"entire original ontology, OWL RL semantics with RDFS closure",
-        "independent_local_rule_derived_nonasserted":len(expected),
+        "independent_local_rule_candidate_nonasserted":len(expected),
         "independent_local_rule_classes":dict(sorted(rules.items())),
-        "all_local_rule_consequences_present_in_full_owlrl":True,
+        "engine_supported_rule_consequences_all_materialized":True,
+        "all_candidate_rule_triples_materialized":len(missing)==0,
+        "inverse_axiom_mirror_candidates_not_explicitly_materialized":
+            len(inverse_axiom_mirror_gaps),
+        "inverse_axiom_mirror_gap_receipts":[
+            {"missing_schema_triple":list(map(str,t)),
+             "original_explicit_premise":list(map(str,expected[t][1][0]))}
+            for t in inverse_axiom_mirror_gaps[:24]
+        ],
+        "inverse_axiom_mirror_gaps_do_not_invalidate_inverse_assertion_rule":True,
         "original_source_nonasserted_subproperty_transitivity":len(implied),
         "entire_source_OWL_RL_agrees_on_subproperty_closure":True,
         "owlrl_reported_error_messages":len(errors),
@@ -225,7 +242,8 @@ def main():
         "new_materialized":result["materialized_nonasserted_rdf_triples"],
         "original_inverse_axioms":result["source_rule_inventory"]["original_explicit_inverseOf_named_pairs"],
         "original_equivalence_axioms":result["source_rule_inventory"]["original_explicit_equivalentProperty_named_pairs"],
-        "independent_rule_consequences":result["independent_local_rule_derived_nonasserted"],
+        "independent_rule_candidates":result["independent_local_rule_candidate_nonasserted"],
+        "inverse_axiom_mirror_gaps":result["inverse_axiom_mirror_candidates_not_explicitly_materialized"],
         "owlrl_error_signals":result["owlrl_reported_error_messages"],
         "NIH_completed":False,
     },sort_keys=True))
