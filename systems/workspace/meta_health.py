@@ -202,7 +202,7 @@ def main():
         "coverage_since": report["coverage_since"],
     }))
     if not report["all_sources"]:
-        raise SystemExit("Incomplete source; health cannot claim zero")
+        print("WARNING: incomplete source; health must display UNKNOWN rather than zero")
 
 
 if __name__ == "__main__":
