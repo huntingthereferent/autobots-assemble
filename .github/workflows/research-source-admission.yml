@@ -2,8 +2,14 @@ name: research-source-admission
 
 on:
   pull_request:
+    # Only changes to the shared 18-source/21-lane runtime need a live
+    # 13-provider probe and 21 downstream preflights. Child source families
+    # have independently owned workflows; archive/test changes continue
+    # through research-testing-lanes-contract.yml without live re-probing.
     paths:
-      - "research/testing_lanes/**"
+      - "research/testing_lanes/registry.json"
+      - "research/testing_lanes/sources/**"
+      - "research/testing_lanes/*.py"
       - ".github/workflows/research-source-admission.yml"
   workflow_dispatch:
 
