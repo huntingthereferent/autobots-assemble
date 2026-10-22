@@ -92,6 +92,14 @@ jobs:
           mvn --batch-mode -q -f systems/workspace/nih_p2_jena_cross_engine/pom.xml compile exec:java \
             -Dexec.mainClass=org.research.nih.p2.BgeeCrossEngine \
             -Dexec.args="$RUNNER_TEMP/bgee-jena/whole-original-combined.nt $RUNNER_TEMP/bgee-jena/jena-two-source-rules.nt"
+      - name: Ablate both source premises independently in Jena on read-only original graph copies
+        run: |
+          set -euo pipefail
+          for mode in omit-subproperty omit-inverse; do
+            mvn --batch-mode -q -f systems/workspace/nih_p2_jena_cross_engine/pom.xml compile exec:java \
+              -Dexec.mainClass=org.research.nih.p2.BgeeCrossEngine \
+            -Dexec.args="$RUNNER_TEMP/bgee-jena/whole-original-combined.nt $RUNNER_TEMP/bgee-jena/jena-$mode.nt $mode"
+          done
       - name: Compare entire Jena rule output with independently computed complete source SQL and SPARQL
         run: |
           set -euo pipefail
@@ -104,6 +112,8 @@ jobs:
             --ro-base "$RUNNER_TEMP/ro-original/ro-base.owl" \
             --core "$RUNNER_TEMP/ro-original/core.owl" \
             --jena-nt "$RUNNER_TEMP/bgee-jena/jena-two-source-rules.nt" \
+            --omitted-subproperty-nt "$RUNNER_TEMP/bgee-jena/jena-omit-subproperty.nt" \
+            --omitted-inverse-nt "$RUNNER_TEMP/bgee-jena/jena-omit-inverse.nt" \
             --output "$RUNNER_TEMP/bgee-jena-evidence/independent-whole-input-reasoner.json"
           python - <<'PY'
           import json,os
@@ -124,6 +134,13 @@ jobs:
           assert r["Apache_Jena_missing_source_consequences"]==0
           assert r["Apache_Jena_unexpected_source_consequences"]==0
           assert r["Jena_rule_consequences_sha256"]==r["independent_source_rule_consequences_sha256"]
+          assert r["control_removed_original_GenEx_subproperty_in_memory"] is True
+          assert r["ablation_without_subproperty_inferred_triples"]==0
+          assert r["ablation_without_inverse_expected_forward"]==25027
+          assert r["ablation_without_inverse_forward_triples"]==25027
+          assert r["ablation_without_inverse_reverse_triples"]==0
+          assert r["ablation_preserves_unmodified_original_owner_source_files"] is True
+          assert r["ablation_is_alternative_rule_premise_test_not_biomedical_claim"] is True
           assert r["entire_original_source_input_rules_agree_with_independent_Python_SPARQL"] is True
           assert r["full_RO_OWL_RL_ontology_materialization"] is False
           assert r["entire_RO_GenEx_Bgee_general_OWL_RL_reasoner_comparison"] is False
