@@ -1,0 +1,45 @@
+name: research-nist-public-species-identity
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/nist_public/**"
+      - ".github/workflows/research-nist-public-species-identity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Eleven species-identity negative and structural controls
+        run: python -m unittest discover -s research/testing_lanes/nist_public -p "test_*.py" -v
+      - name: Assert default offline no contact
+        run: python research/testing_lanes/nist_public/species_identity.py
+
+  single-public-species:
+    needs: offline-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read one fixed public species identity, no thermochemical data
+        run: python research/testing_lanes/nist_public/species_identity.py --live --output nist-water-source-receipt.json
+      - name: Retain hash and exact result, never NIST compilation or spectra
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nist-webbook-water-srd69-identity
+          path: nist-water-source-receipt.json
+          if-no-files-found: warn
+          retention-days: 30
