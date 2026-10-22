@@ -1,11 +1,11 @@
-# State Layer
+# State — preserved routing records
 
-\`current.json\` is a **routing pointer**, not the historical ledger.
+`current.json` currently contains a **historical** Continuity/live-feed routing record (`status: historical`). It is retained to explain an earlier source-specific context and its recorded next movement. **It is not an active repository-wide queue, a present project selection, or an instruction for a new session to continue that feed.**
 
-It should contain only enough state to let a new AI/session recover the present referent and the next admissible movement.
+The active problem is determined by the explicit request in the current conversation, following [ENTRY.md](../ENTRY.md) and [SCOPE.md](../SCOPE.md). A project's own source may separately record its current or last-verified experimental state. The two must not be silently conflated.
 
-Historical evidence belongs in relations, commits, work records, or the evidence layer.
+## Preservation rule
 
-## Update rule
+Keep past routing and provenance recoverable. If a future specifically authorized workflow requires a new current pointer, record its source, scope, date and status without rewriting the historical state to pretend it never existed. Historical evidence belongs with its source records, commits or the [evidence layer](../evidence/README.md).
 
-When the user explicitly changes the referent, update the current pointer. Preserve the previous state through Git history or an append-only movement record; do not overwrite historical evidence to make the present look cleaner.
+For human-facing project descriptions, use [PROJECTS.md](../PROJECTS.md), not this historical JSON pointer.

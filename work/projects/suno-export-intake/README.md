@@ -58,9 +58,11 @@ python -m unittest -v network.tests.test_audio_motion_workstation
 
 The example is an opt-in action. `--copy-source` and `--execute` are required; it never reads the user’s Suno account, launches autonomous tasks, or moves unrelated research lanes. Audio beyond the first 8192 frames stays out of this bounded pass and is not falsely counted as processed. Browser WAV/MP3 playback and MIDI inspection remain separate capabilities; the native source worker currently accepts only finite PCM16 mono WAV. It is one operation toward a musical workstation, **not** a full replacement for generative composition.
 
-## Next interface (not yet implemented)
+## Connection to Meow Lab 2 — implemented browser import, separate native evidence
 
-Add explicit sample-import support to the existing **Meow Machine** cat keyboard, keyed to exported PCM16 clips and their associated source manifests. Do not couple this lane to ARC, WORLD, NIH or workstation execution evidence. The cat keyboard is in PR #325 as of construction; this lane can be reviewed independently.
+[Meow Lab 2](../cat-keyboard/README.md) already supports user-selected browser audio import and local musical editing. Its browser import is **not** evidence that an audio intake output was executed and independently reverified by the private native workstation.
+
+The next integration question is narrower: define and test an **explicit** handoff for an exported PCM16 clip and its source manifest into a selected, version-pinned local worker edition. Keep browser decoding, user-file rights, native verification and project source provenance separate. No automatic job admission or coupling to ARC, WORLD or NIH is implied.
 
 ## Tests
 

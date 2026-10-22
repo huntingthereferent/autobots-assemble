@@ -1,32 +1,23 @@
-# Money / Jobs Lane
+# Money — products and external opportunities
 
-This lane is for work whose primary goal is external economic value: jobs, bounties, contracts, submissions, deliverables, acceptance, and payment.
+This directory records work directed at a specific external economic goal, including product candidates, prize challenges, proposals and delivery requirements. It is **not** the definition of all work in the repository, and a research result does not become a paid product automatically.
 
-The existing [`/jobs`](../jobs/) directory remains the canonical job ledger during migration so its links/history are not broken.
+## What exists here
 
-## Products
+- [Products](products/README.md) — reusable product records, implementation evidence and prospective variants.
+- [Challenges](challenges/INDEX.md) — externally judged challenge research, submission requirements and evidence where recorded.
 
-Reusable product builds live under [`money/products/`](products/).
+The former root-level `jobs/` listing and income scoreboards were retired. They are available through Git history but **are not a current directory, active ledger or instructions to regenerate listings**. See [SCOPE.md](../SCOPE.md). A specific client engagement, acceptance record, award or payment should be documented in its actual source record; neither an idea nor a benchmark result establishes income.
 
-A product record preserves the reusable product shape. A client-specific sale or delivery may create a separate job record that points back to the product it instantiates.
+## Moving between research and external work
 
-## Boundary from research
+A new opportunity may use findings from research when its actual requirements justify that connection. Record:
 
-A research result is not a job automatically.
+1. the named opportunity or delivery goal;
+2. the evidence that is relevant and the limits on its reuse;
+3. the required deliverables, acceptance criteria and any external authority;
+4. what still needs validation, authorization, or submission.
 
-To move something from research into this lane, create an explicit handoff that names:
+Research stays research when there is no such admitted opportunity. A paid deliverable may generate a new research question without turning the payment into scientific validation.
 
-- the external opportunity/problem;
-- why the research result is relevant;
-- the new acceptance/payment goal;
-- which evidence carries across;
-- what must be revalidated.
-
-Likewise, a completed job can produce a research candidate without making the paid result itself a theory claim.
-
-
-## Prize challenges
-
-Hard externally judged prize work lives under [`money/challenges/`](challenges/) when compensation is the primary active goal.
-
-Active: [GEMS-001](challenges/GEMS-001_hidden-fault-mapping/GEMS.md).
+For the broader repository structure, see the [project guide](../PROJECTS.md).

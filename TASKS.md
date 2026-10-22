@@ -1,4 +1,6 @@
-# TASKS — Current Work
+# TASKS — selected work notes
+
+**Reading note (October 22, 2026):** This is a preserved **selected** work register, not a complete live queue and not a replacement for the [current project guide](PROJECTS.md). Some recorded next movements and infrastructure assumptions may have been superseded by later source-specific experiments. Verify the original project evidence and latest dated records before acting. A status in this file does not mean the associated private worker is currently running.
 
 ## Active ALL WORK
 

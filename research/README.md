@@ -1,54 +1,23 @@
-# Research / Theory Lane
+# Research — investigations and saved evidence
 
-This lane is for curiosity, theory, academia, experiments, papers, domain exploration, and things that are simply interesting.
+This area is for investigating mathematical, scientific, technical and conceptual questions, including exploratory questions without a settled hypothesis. Its purpose is to retain the actual question, sources, observations, methods, disagreements and return points.
 
-It is deliberately separated from the money/jobs lane.
+An exploratory research dive can begin with a paper, an equation, a field, an unexpected observation or a question worth checking. It does not need to be disguised as paid work or a finished theory.
 
-## Random academia is allowed
+## Research records
 
-A research dive does **not** need to begin with a formal hypothesis.
+Saved investigations live under [research/dives/](dives/). A structured dive can retain:
 
-Valid entry referents include:
+- `dive.json` — its source-owned structured state;
+- `DIVE.md` — a readable account of the question and observations;
+- source/provenance references, limits, counterexamples and possible next inquiries.
 
-- a field: “topology”
-- a paper
-- a weird result
-- a concept mentioned in conversation
-- a connection between two fields
-- a figure/equation you want to understand
-- “show me something interesting in biology”
-- a completely random academic rabbit hole
+An old record may remain paused or historical indefinitely. A suggested next question is **not** evidence that a worker currently executes it.
 
-The initial goal may simply be:
+[Research question records](questions/README.md) also preserve exact questions for dated checkpoint passes. A checkpoint's recorded ANSWERED, PARTIAL or UNKNOWN fields must be read with that checkpoint's scope and original evidence; a public board view does not decide mathematical truth.
 
-> explore this area and preserve anything worth returning to.
+## Boundaries
 
-The dive protocol then turns that broad entry into bounded source movements without pretending the whole field is one solved question.
+Research findings do not automatically become products, external opportunities or admitted tasks. See [Money](../money/README.md) for the explicit external-goal boundary and [the project guide](../PROJECTS.md) for current source locations.
 
-## Durable outputs
-
-Exploratory sessions that are worth keeping belong under [`research/dives/`](dives/).
-
-A saved dive has:
-
-- a canonical `dive.json` state record;
-- a human-readable `DIVE.md` output;
-- source/provenance references;
-- interesting findings and connections;
-- unresolved questions;
-- possible next branches.
-
-A dive can be paused indefinitely and resumed later.
-
-## Boundary
-
-Research outputs do not enter `jobs/` merely because they look useful. Crossing into money/jobs requires an explicit handoff.
-
-## Research questions and checkpoint board
-
-[Research question records](questions/README.md) freeze the questions of a
-specific research pass. The site displays the registered checkpoint as a
-read-only research board. Subsequent reconciliations append a new checkpoint
-with witnessed ANSWERED/PARTIAL/UNKNOWN outcomes, preserve old questions and
-source locators, and derive next questions from actual findings. The display
-is not the authority that decides a mathematical relationship.
+Research source and evidence do not need to share a folder or be duplicated in this area: ARC native code remains under `work/arc3/`, finite mathematics under `work/arc_like_maze/`, and NIH source-specific work under `systems/workspace/`. This directory retains research-facing records without pretending to own every implementation.
