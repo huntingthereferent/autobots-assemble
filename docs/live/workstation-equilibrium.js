@@ -27,10 +27,10 @@
     if(samples.length&&t<=samples[samples.length-1].t)return;
     const runs=snapshot.latestPage;
     const known=new Map(runs.map(r=>[r.id,r]));
-    const waiting=complete?totals.queued:runs.filter(r=>status(r)==="queued").length;
     const totals=snapshot.liveTotals;
     const complete=totals&&Number.isSafeInteger(totals.queued)&&totals.queued>=0&&
       Number.isSafeInteger(totals.running)&&totals.running>=0;
+    const waiting=complete?totals.queued:runs.filter(r=>status(r)==="queued").length;
     const working=complete?totals.running:runs.filter(r=>status(r)==="running").length;
     // Only count arrivals that we actually see, since an individual completed
     // run might be dropped from a latest-100 API page before the next poll.
