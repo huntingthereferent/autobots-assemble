@@ -11,7 +11,7 @@ def fixture():
         "first_four_simultaneously_full": 25,
     }
     record = {
-        "case": "positive",
+        "case": "sameparent_positive",
         "original_native_action_word": "6@34,21 3 5",
         "source_observations": obs,
         "original_sdk_action_receipts": [{
@@ -22,12 +22,12 @@ def fixture():
     }
     a = dict(record, native_witness="A")
     b = dict(record, native_witness="B")
-    negative = dict(record, case="negative", source_observations={
+    negative = dict(record, case="sameparent_negative", source_observations={
         "first_new6_outside_cups": {"row5": {"frame": 18, "x": [26, 27]}, "row8": None},
         "first_four_simultaneously_full": None,
     })
     proposal = {
-        "case": "positive", "contrast_case": "negative", "source_contact_row": "row5",
+        "case": "sameparent_positive", "contrast_case": "sameparent_negative", "source_contact_row": "row5",
         "contact_frame": 19, "contact_x": 14,
         "source_click_xy": [34, 21], "native_action": 3,
     }
