@@ -55,7 +55,8 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
             rows = replayed_rows(self.journal)
             for row in rows:
                 for collision in row["movements"]:
-                    if collision["kind"] != "CONNECTION" or not collision["existing_word"]:
+                    if (collision["kind"] != "CONNECTION" or not collision["existing_word"]
+                            or collision["from"] == collision["existing_word"]):
                         continue
                     prior_row = next((candidate for candidate in rows
                                       if any(m["kind"] == "BRANCH"
@@ -77,13 +78,16 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
         row, collision, prior_row, prior = selected
         left_lane = "path-" + collision["from"]
         right_lane = "path-" + collision["existing_word"]
+        self.assertNotEqual(left_lane, right_lane)
         self.harness.seed_lane(left_lane, "A/B trajectory " + collision["from"])
         self.harness.seed_lane(right_lane, "A/B trajectory " + collision["existing_word"])
         relation = "state:" + ",".join(map(str, collision["to"]))
+        left_ref = movement_ref(row["entry_hash"], collision)
+        right_ref = movement_ref(prior_row["entry_hash"], prior)
         self.harness.observe(lane_id=left_lane, kind="RELATION", relation=relation,
-                             witness_ref=movement_ref(row["entry_hash"], collision))
+                             witness_ref=left_ref)
         self.harness.observe(lane_id=right_lane, kind="RELATION", relation=relation,
-                             witness_ref=movement_ref(prior_row["entry_hash"], prior))
+                             witness_ref=right_ref)
         result = self.harness.tick()
         self.assertEqual(len(result["born_coordination_lanes"]), 1)
         joined = self.harness._runtime().get(result["born_coordination_lanes"][0])
