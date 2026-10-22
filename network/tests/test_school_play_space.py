@@ -28,8 +28,8 @@ class SchoolPlaySpaceTests(unittest.TestCase):
         self.assertNotIn('fetch(', js)
         self.assertTrue((LIVE / "pony-trail.html").is_file())
         self.assertTrue((LIVE / "cat-keyboard.html").is_file())
-        defined = set(re.findall(r'\\bid="([^"]+)"', html))
-        referenced = set(re.findall(r'\\$\\("([^"]+)"\\)', js))
+        defined = set(re.findall(r'\bid="([^"]+)"', html))
+        referenced = set(re.findall(r'\$\("([^"]+)"\)', js))
         self.assertFalse(referenced - defined, "JS refers to missing HTML IDs: " + repr(referenced - defined))
 
     @unittest.skipUnless(shutil.which("node"), "Node needed for browser-script smoke tests")
@@ -60,13 +60,13 @@ class E {
  focus(){}
  querySelectorAll(q){return q===".pattern-beat"?this.children.filter(x=>x.className.includes("pattern-beat")):[]}
 }
-const ids=[...html.matchAll(/\\bid="([^"]+)"/g)].map(x=>x[1]);
+const ids=[...html.matchAll(/\bid="([^"]+)"/g)].map(x=>x[1]);
 const els=Object.fromEntries(ids.map(id=>[id,new E(id)]));
 for(const [id,v] of Object.entries({
  "practice-mode":"numbers","practice-level":"starter","passage":"seed",
  "text-size":"1","investigation":"shadow","creation-kind":"story","task-subject":"Math"
 }))els[id].value=v;
-const panels=[...html.matchAll(/\\bid="(panel-[^"]+)"/g)].map(x=>els[x[1]]);
+const panels=[...html.matchAll(/\bid="(panel-[^"]+)"/g)].map(x=>els[x[1]]);
 const pages=[...html.matchAll(/<button[^>]*data-page="([^"]+)"[^>]*>/g)].map(m=>{const e=new E("page");e.dataset.page=m[1];return e});
 const opens=[...html.matchAll(/<button[^>]*data-open="([^"]+)"[^>]*>/g)].map(m=>{const e=new E("open");e.dataset.open=m[1];e.dataset.kind=m[0].match(/data-kind="([^"]+)"/)?.[1];return e});
 const document={
@@ -108,7 +108,7 @@ const state=()=>JSON.parse(mem.get("online-school-browser-v1"));
  els.tried.value="Folded paper";els.observed.value="It held an eraser";
  await els["science-note"].fire("submit");
  assert.equal(state().creations[3].kind,"experiment");
- const match=els.question.textContent.match(/(\\d+)\\s*([+−×])\\s*(\\d+)\\s*=\\s*\\?/);
+ const match=els.question.textContent.match(/(\d+)\s*([+−×])\s*(\d+)\s*=\s*\?/);
  assert(match,"Expected a math problem");
  const a=+match[1],b=+match[3],value=match[2]==="+"?a+b:match[2]==="×"?a*b:a-b;
  els.answer.value=String(value);
@@ -121,7 +121,7 @@ const state=()=>JSON.parse(mem.get("online-school-browser-v1"));
  els["import-data"].files=[{size:1000,text:async()=>JSON.stringify(backup)}];
  await els["import-data"].fire("change");
  assert.equal(state().creations.length,4,"All creations survive an export/import round trip");
- process.stdout.write("Play-first browser behavior passed\\n");
+ process.stdout.write("Play-first browser behavior passed\n");
 })().catch(err=>{console.error(err);process.exitCode=1});
 """
         result = subprocess.run(
