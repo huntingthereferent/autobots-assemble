@@ -46,6 +46,24 @@ class SunoIntakeTests(unittest.TestCase):
         self.assertNotIn('localStorage', html)
         self.assertNotIn('<iframe', html)
 
+    def test_direction_desk_controls_are_local_and_editable(self):
+        html = PAGE.read_text(encoding='utf8')
+        for control in ('id="direction"', 'id="d-title"', 'id="d-goal"',
+                        'id="d-style"', 'id="d-groove"', 'id="d-voice"',
+                        'id="arranger"', 'id="add-section"', 'id="tap-bpm"',
+                        'id="copy-brief"', 'id="export-direction"',
+                        'id="brief-preview"', 'data-bars="4"', 'data-bars="8"'):
+            self.assertIn(control, html)
+        self.assertIn("schema:'ab-audio-direction/v1'", html)
+        self.assertIn("manual-creative-brief", html)
+        self.assertIn("source:a?", html)
+        self.assertIn("not detected", html)
+        self.assertIn("renderArrangement();renderDirection()", html)
+        # Creative direction must not be confused with observed source material.
+        self.assertIn("local-origin-preserving-export", html)
+        self.assertNotIn("fetch(", html)
+        self.assertNotIn("localStorage", html)
+
     @unittest.skipUnless(shutil.which('node'), 'Requires Node')
     def test_javascript_program_parses(self):
         p = InlineScripts()
