@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s);
 const templateFields=$("#template-fields"), editor=$("#question-editor"), list=$("#worksheet-items"), answers=$("#answer-items"), error=$("#worksheet-error"), library=$("#worksheet-library");
-let worksheet=null;
+let worksheet=null, generationSerial=0;
+function editStatus(text){const node=$("#worksheet-edit-status");if(node)node.textContent=text}
 
 const fieldSets={
  arithmetic:`<label>Describe the math worksheet<textarea id="math-prompt" rows="3" placeholder="Addition within 20, derivatives, matrices, probability, trig…"></textarea></label><div class="form-grid"><label>Grade / bound<select id="grade"><option value="auto">Auto</option><option value="K">Kindergarten</option><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option><option value="5">5th</option><option value="6">6th</option><option value="7">7th</option><option value="8">8th</option><option value="9">9th</option><option value="10">10th</option><option value="11">11th</option><option value="12">12th</option><option value="adult">Adult / unbounded</option></select></label><label>Classic topic<select id="math-topic"><option value="auto">Auto</option><option value="addition">Addition</option><option value="subtraction">Subtraction</option><option value="multiplication">Multiplication</option><option value="division">Division</option><option value="mixed">Mixed arithmetic</option><option value="fractions">Fractions</option><option value="decimals">Decimals</option><option value="percent">Percent</option><option value="algebra">Algebra</option><option value="geometry">Geometry</option><option value="time">Time</option><option value="money">Money</option><option value="measurement">Measurement</option><option value="place-value">Place value</option><option value="comparison">Comparison</option><option value="patterns">Patterns</option><option value="word-problems">Word problems</option></select></label></div><div class="form-grid"><label>Math form<select id="math-family"><option value="">Auto</option><option value="transform">Transform</option><option value="solve">Solve</option><option value="compare">Compare</option><option value="represent">Represent</option><option value="measure">Measure</option><option value="infer">Infer</option></select></label><label>Math domain<select id="math-domain"><option value="">Auto</option><option value="number">Number</option><option value="number-theory">Number theory</option><option value="algebra">Algebra</option><option value="functions">Functions</option><option value="sequences">Sequences & series</option><option value="exponents-logarithms">Exponents & logarithms</option><option value="geometry">Geometry</option><option value="analytic-geometry">Analytic geometry</option><option value="trigonometry">Trigonometry</option><option value="vectors">Vectors</option><option value="complex-numbers">Complex numbers</option><option value="linear-algebra">Linear algebra</option><option value="sets-logic">Sets & logic</option><option value="combinatorics">Combinatorics</option><option value="probability">Probability</option><option value="statistics">Statistics</option><option value="calculus">Calculus</option><option value="differential-equations">Differential equations</option><option value="financial-math">Financial math</option></select></label></div><div class="form-grid"><label>Question type<select id="question-type"><option value="short-answer">Short answer</option><option value="single-choice">Single choice</option><option value="fill-blank">Fill blank</option><option value="mixed">Mixed</option></select></label><label>Questions<input id="count" type="number" min="1" max="60" value="10"></label></div><label>Language<select id="language"><option value="English">English</option></select></label>`,
@@ -17,11 +18,18 @@ function payload(){
  return {template:$("#template").value,level:$("#level").value,variant:$("#variant").value,title:$("#ws-title").value,knowledge_goal:$("#knowledge-goal").value,learner:$("#learner").value,subject:$("#subject").value,instructions:$("#instructions").value,page_size:$("#page-size").value,columns:Number($("#columns").value),seed:Number($("#seed").value||1),include_answer_key:$("#answer-key-toggle").checked,operation:get("#operation"),math_prompt:get("#math-prompt"),math_topic:get("#math-topic"),math_family:get("#math-family"),math_domain:get("#math-domain"),grade:get("#grade"),question_type:get("#question-type"),language:get("#language"),count:Number(get("#count")||0),words:get("#words"),terms:get("#terms"),passage:get("#passage"),copy_text:get("#copy-text"),custom_items:get("#custom-items"),response_lines:Number(get("#response-lines")||2)};
 }
 async function generate(){
- error.hidden=true;
- const r=await fetch("/api/worksheets/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload())});
- const data=await r.json().catch(()=>({}));
- if(!r.ok){error.textContent=data.error||"Could not generate worksheet";error.hidden=false;return}
- worksheet=data; renderAll();
+ const serial=++generationSerial;
+ error.hidden=true;editStatus("Making a new worksheet…");
+ try{
+  const r=await fetch("/api/worksheets/generate",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload())});
+  const data=await r.json().catch(()=>({}));
+  if(serial!==generationSerial)return;
+  if(!r.ok){error.textContent=data.error||"Could not generate worksheet";error.hidden=false;editStatus("Generation failed; your saved worksheets remain available.");return}
+  worksheet=data; renderAll();editStatus("New draft ready. Edit questions, then save.");
+ }catch(err){
+  if(serial!==generationSerial)return;
+  error.textContent=err.message;error.hidden=false;editStatus("Could not generate this page.");
+ }
 }
 function renderAll(){
  if(!worksheet)return;
@@ -52,8 +60,8 @@ function renderEditor(){
   row.innerHTML=`<div class="question-row-head"><strong>Question ${i+1}</strong><button class="danger" type="button">Remove</button></div><textarea rows="3"></textarea><input placeholder="Answer / key"><label>Response lines <input type="number" min="1" max="12"></label>`;
   const ta=row.querySelector("textarea"),ans=row.querySelector('input[placeholder]'),ln=row.querySelector('input[type="number"]');
   ta.value=item.prompt;ans.value=item.answer;ln.value=item.lines||1;
-  ta.oninput=()=>{item.prompt=ta.value;renderAllPreviewOnly()};ans.oninput=()=>{item.answer=ans.value;renderAllPreviewOnly()};ln.oninput=()=>{item.lines=Math.max(1,Number(ln.value||1));renderAllPreviewOnly()};
-  row.querySelector(".danger").onclick=()=>{worksheet.items.splice(i,1);renderAll()};editor.append(row);
+  ta.oninput=()=>{item.prompt=ta.value;renderAllPreviewOnly();editStatus("Unsaved question edits.")};ans.oninput=()=>{item.answer=ans.value;renderAllPreviewOnly();editStatus("Unsaved answer edits.")};ln.oninput=()=>{item.lines=Math.max(1,Number(ln.value||1));renderAllPreviewOnly();editStatus("Unsaved response-line edits.")};
+  row.querySelector(".danger").onclick=()=>{worksheet.items.splice(i,1);renderAll();editStatus("Unsaved question removal.")};editor.append(row);
  });
 }
 function renderAllPreviewOnly(){
@@ -68,7 +76,7 @@ function renderAllPreviewOnly(){
 async function save(){
  if(!worksheet)return;
  worksheet.title=$("#ws-title").value||worksheet.title;worksheet.knowledge_goal=$("#knowledge-goal").value;worksheet.instructions=$("#instructions").value;worksheet.learner=$("#learner").value;worksheet.subject=$("#subject").value;worksheet.page_size=$("#page-size").value;worksheet.columns=Number($("#columns").value);worksheet.include_answer_key=$("#answer-key-toggle").checked;worksheet.variant=$("#variant").value;
- const r=await fetch("/api/worksheets",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(worksheet)});const data=await r.json();if(r.ok){worksheet=data;renderAll();loadLibrary()}else alert(data.error||"Could not save")}
+ const r=await fetch("/api/worksheets",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(worksheet)});const data=await r.json();if(r.ok){worksheet=data;renderAll();editStatus("Saved to the worksheet library.");loadLibrary()}else {editStatus("Save failed.");alert(data.error||"Could not save")}}
 async function loadLibrary(){
  const r=await fetch("/api/worksheets");
  if(!r.ok)throw Error("Could not load worksheet library");
@@ -84,13 +92,13 @@ async function loadLibrary(){
   detail.textContent=(ws.template||"custom")+" · "+(ws.level||"standard")+
    " · "+(Array.isArray(ws.items)?ws.items.length:0)+" items";
   b.append(title,detail);
-  b.onclick=()=>{worksheet=ws;hydrate();renderAll()};
+  b.onclick=()=>{generationSerial++;worksheet=ws;hydrate();renderAll();editStatus("Saved worksheet loaded. Edits will need saving.")};
   library.append(b);
  });
 }
 function hydrate(){if(!worksheet)return;$("#template").value=worksheet.template||"custom";renderFields();$("#level").value=worksheet.level||"standard";$("#variant").value=worksheet.variant||"A";$("#ws-title").value=worksheet.title||"";$("#knowledge-goal").value=worksheet.knowledge_goal||"";$("#learner").value=worksheet.learner||"";$("#subject").value=worksheet.subject||"";$("#instructions").value=worksheet.instructions||"";$("#page-size").value=worksheet.page_size||"letter";$("#columns").value=String(worksheet.columns||1);$("#seed").value=worksheet.seed||1;$("#answer-key-toggle").checked=worksheet.include_answer_key!==false}
 $("#template").onchange=renderFields;$("#generate-worksheet").onclick=generate;$("#save-worksheet").onclick=save;$("#print-worksheet").onclick=()=>window.print();$("#answer-key-toggle").onchange=()=>{if(worksheet){worksheet.include_answer_key=$("#answer-key-toggle").checked;renderAll()}};$("#columns").onchange=()=>{if(worksheet){worksheet.columns=Number($("#columns").value);renderAll()}};$("#page-size").onchange=()=>{if(worksheet){worksheet.page_size=$("#page-size").value;renderAll()}};
-$("#add-question").onclick=()=>{if(!worksheet)worksheet={...payload(),items:[],title:$("#ws-title").value||"Untitled Worksheet",worksheet_id:""};worksheet.items.push({prompt:"New question",answer:"",kind:"response",lines:2});renderAll()};
+$("#add-question").onclick=()=>{if(!worksheet)worksheet={...payload(),items:[],title:$("#ws-title").value||"Untitled Worksheet",worksheet_id:""};worksheet.items.push({prompt:"New question",answer:"",kind:"response",lines:2});renderAll();editStatus("Unsaved question added.")};
 renderFields();
 const worksheetParams=new URLSearchParams(window.location.search);
 const learnerParam=worksheetParams.get("learner");
