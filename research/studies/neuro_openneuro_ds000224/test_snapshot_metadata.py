@@ -93,6 +93,23 @@ class MetadataTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             parse_metadata(b"[]")
 
+    def test_archived_observation_is_public_metadata_not_participant_data(self):
+        from pathlib import Path
+        stored = json.loads((Path(__file__).parent / "observations" /
+                             "2026-10-22-run-39786532333.json").read_text(encoding="utf-8"))
+        r = stored["result"]
+        self.assertEqual(stored["run_id"], 39786532333)
+        self.assertEqual(r["state"], "PUBLIC_SNAPSHOT_METADATA_OBSERVED")
+        self.assertEqual(r["metadata"]["doi"], "10.18112/openneuro.ds000224.v1.0.1")
+        self.assertEqual(r["metadata"]["snapshot"], "1.0.1")
+        self.assertEqual(r["source_sha256"],
+                         "a7783177c3abf9d68dc9ff718bb86ee1ac9d6bb03e6fc0f282571ff7dc0c5b49")
+        self.assertEqual(r["downloaded_dataset_files"], 0)
+        self.assertEqual(r["scientific_experiments_run"], 0)
+        self.assertEqual(r["rights_privacy_review_status"],
+                         "REQUIRED_BEFORE_DATASET_ADMISSION")
+
+
 
 if __name__ == "__main__":
     unittest.main()
