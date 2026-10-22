@@ -1,0 +1,65 @@
+name: ARC4 lane B paired source-pinned native movement
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/arc4-paired-source-followup.yml'
+      - 'work/arc3/native_sp80_stage4_paired_followup.py'
+      - 'work/arc3/arc4_intervention_gate.py'
+      - 'work/arc3/lanes/approved-arc4-upper-left1-down1.json'
+      - 'work/arc3/lanes/arc4-proposal-upper-down1.json'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-sdk-paired:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Contract tests and syntax
+        run: |
+          python -m unittest network.tests.test_arc4_intervention_gate -v
+          python -m compileall -q work/arc3/arc4_intervention_gate.py work/arc3/native_sp80_stage4_paired_followup.py
+      - name: Download fixed original lane A source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: arc4-source-owned-event-order
+          run-id: 39729756294
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/arc4/source-a
+      - name: Authenticate original source and regenerate admitted plan
+        run: |
+          echo '4e86e54d862d2c0c84d39c52a83ad161f0ad36196d031711fad33b3d89c9a070  runtime/data/arc4/source-a/arc4-event-order-audit.json' | sha256sum -c -
+          python -m work.arc3.arc4_intervention_gate \
+            --audit runtime/data/arc4/source-a/arc4-event-order-audit.json \
+            --proposal work/arc3/lanes/arc4-proposal-upper-down1.json \
+            --out runtime/data/arc4/regenerated-source-admitted-plan.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          actual=json.loads(Path("runtime/data/arc4/regenerated-source-admitted-plan.json").read_text())
+          frozen=json.loads(Path("work/arc3/lanes/approved-arc4-upper-left1-down1.json").read_text())
+          assert actual==frozen, "Source-derived plan does not match the frozen reviewed action word"
+          print("ARC4_PLAN_EXACT_SOURCE_REGENERATION_MATCH", actual["case"], actual["new_native_action"])
+          PY
+      - name: Run original SDK control versus one added real upper-bar movement
+        run: |
+          python -m work.arc3.native_sp80_stage4_paired_followup \
+            --plan runtime/data/arc4/regenerated-source-admitted-plan.json \
+            --out runtime/data/arc4/arc4-paired-source-native.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-native-paired-source-followup
+          path: |
+            runtime/data/arc4/arc4-paired-source-native.*
+            runtime/data/arc4/regenerated-source-admitted-plan.json
+          retention-days: 90
+          if-no-files-found: error
