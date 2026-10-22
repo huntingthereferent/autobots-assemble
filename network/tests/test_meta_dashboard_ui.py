@@ -36,7 +36,7 @@ class MetaDashboardTests(unittest.TestCase):
         self.assertIn('class="flow-level"',page)
         self.assertIn('function updateMetric(id,value,available=true)',page)
         self.assertIn('12 visual markers maximum',page)
-        self.assertIn('.metrics .metric.followup',style)
+        self.assertIn('.metrics .metric.current[data-open="no"]',style)
         self.assertIn('prefers-reduced-motion:reduce',style)
 
     def test_real_source_counts_not_demo_animation(self):
