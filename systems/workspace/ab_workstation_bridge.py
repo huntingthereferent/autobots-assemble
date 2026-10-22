@@ -104,17 +104,22 @@ class ABClusterWitnessVerifier:
         if self.workstation_data_dir is None:
             raise ValueError("workstation data directory required for durable lane binding")
         runtime = self._runtime()
+        # Accept either the durable logical lane_id or the handoff ID returned
+        # by tick()/seed_lane(); normalize to the logical identity used by observations.
         matches = [h for h in runtime._handoffs.values()
                    if h.metadata.get("source_system") == _LANE_SOURCE
-                   and h.metadata.get("lane_id") == lane_id]
+                   and (h.metadata.get("lane_id") == lane_id or h.handoff_id == lane_id)]
         if len(matches) != 1:
             raise ValueError("bind trajectory only after its workstation lane is seeded")
         handoff = matches[0]
+        logical_lane_id = handoff.metadata.get("lane_id")
+        if not isinstance(logical_lane_id, str) or not logical_lane_id:
+            raise ValueError("workstation lane has no logical identity")
         self._restore_bindings()
         existing = self.path_to_lane.get(path)
-        if existing == lane_id:
+        if existing == logical_lane_id:
             return
-        if existing is not None or lane_id in self.lane_to_path:
+        if existing is not None or logical_lane_id in self.lane_to_path:
             raise ValueError("trajectory/lane identity binding conflicts")
         state = runtime.state(handoff.handoff_id)
         runtime.event_store.append(HandoffEvent.create(
@@ -124,7 +129,7 @@ class ABClusterWitnessVerifier:
             data={"trajectory_path": path},
             parents=(state.last_event_id,) if state.last_event_id else (),
         ))
-        self._apply_binding(path, lane_id)
+        self._apply_binding(path, logical_lane_id)
 
     def _lane_matches(self, path: str, lane_id: str) -> bool:
         return self.path_to_lane.get(path) == lane_id and self.lane_to_path.get(lane_id) == path
