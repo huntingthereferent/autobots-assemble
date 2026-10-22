@@ -165,5 +165,31 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
         self.assertEqual(r["top_named_class_URI_counts"],[])
         self.assertTrue(r["anonymous_blank_node_labels_not_persistent_identifiers"])
 
+
+    def test_e23_source_owned_anonymous_class_and_inferred_only_separate(self):
+        from rdflib.namespace import OWL
+        owned=BNode("original-restriction")
+        invented=BNode("inferred-only")
+        graph=Graph()
+        graph.add((owned,RDF.type,OWL.Restriction))
+        graph.add((owned,OWL.onProperty,P))
+        residual={(GENE,RDF.type,owned),(TARGET,RDF.type,owned),
+                  (GENE,RDF.type,invented)}
+        result=e20.original_anonymous_class_premise_census(
+            graph,set(),residual,set())
+        self.assertEqual(result["anonymous_class_terms_total"],2)
+        self.assertEqual(result["anonymous_class_terms_present_in_original_owner_graph"],1)
+        self.assertEqual(result["anonymous_class_terms_absent_from_original_owner_graph"],1)
+        self.assertEqual(result["direct_source_owl_restriction_class_terms"],1)
+        self.assertEqual(result["direct_source_owl_onProperty_class_terms"],1)
+        self.assertEqual(sum(x["residual_original_node_type_statements"]
+                             for x in result["structural_groups"]),3)
+        self.assertFalse(result["blank_node_labels_exported"])
+
+    def test_e23_cannot_promote_missing_restricted_type_witness(self):
+        with self.assertRaisesRegex(ValueError,"not contained"):
+            e20.original_anonymous_class_premise_census(
+                Graph(),set(),set(),{(GENE,RDF.type,V)})
+
 if __name__=="__main__":
     unittest.main()
