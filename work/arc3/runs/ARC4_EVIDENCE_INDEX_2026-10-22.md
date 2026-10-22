@@ -51,6 +51,12 @@ For each of the four three-movement detours compared against direct LEFT1, both 
 
 **Boundary:** this is a visible native screen correlate of source movement history, not demonstrated semantics of that row, an objective condition, or a hidden action counter. Both artifacts are configured for 90-day GitHub Actions retention; independent durable copy **NOT VERIFIED**.
 
+## Cross-object native row63 source controls
+
+[Original SDK source run #39759703369](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39759703369), [source artifact #12417692024](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39759703369/artifacts/12417692024), ZIP SHA256 `acc0db18a0605ac5af2e8e7199dba83f395e4fa4a54cb0ed659773976f1b2cea`, configured 90-day retention; durable independent copy **NOT VERIFIED**.
+
+Ten actual original SDK resets with independent A/B entrances. Holding lower geometry and final upper LEFT1 constant, adding only a native source right-bar re-click changed the first palette14 in row y63 before pour x10→x11, whereas an extra right-bar click and reversible movement pair changed it x10→x12; original native interior rows0–62 and measured four-cup first-full frames remained identical across all frozen conditions. All ten original games remained official level4 NOT_FINISHED; no level5/WIN. **No demonstrated hidden-counter mechanism or game objective effect.**
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
