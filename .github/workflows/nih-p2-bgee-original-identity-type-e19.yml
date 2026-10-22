@@ -1,0 +1,125 @@
+name: NIH P2 Lane C E19 original referent identity and RDF type audit
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_bgee_original_identity_type_audit.py'
+      - 'network/tests/test_nih_p2_bgee_original_identity_type_audit.py'
+      - '.github/workflows/nih-p2-bgee-original-identity-type-e19.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  whole-original-general-profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install general OWL RL and independent RDFLib baseline
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Download immutable complete original author sources under whole-file integrity checks
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-c-bgee" "$RUNNER_TEMP/nih-c-ro" lane-c-e19-evidence
+          python - <<'PY'
+          from systems.workspace import nih_p2_author_genex_bgee_ro_mapping_gate as b
+          from systems.workspace import nih_p2_original_bgee_real_expression_join as trial
+          from systems.workspace import nih_phase2_external_obo_graph_trial as ro
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          from hashlib import sha256
+          import os
+          header={"User-Agent":"NIH-P2-LaneC-FullProfile/1.0"}
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-c-bgee"
+          for filename,pin in b.FILES.items():
+              url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/obda/"+filename
+              with urlopen(Request(url,headers=header),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("author source URL differed")
+                  raw=response.read(1_000_001)
+              if len(raw)>1_000_000 or b.git_blob(raw)!=pin:
+                  raise ValueError("author Git blob integrity changed")
+              (out/filename).write_bytes(raw)
+          url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/data/postgresql.zip"
+          with urlopen(Request(url,headers=header),timeout=90) as response:
+              if response.status!=200 or response.geturl()!=url:
+                  raise ValueError("author Bgee archive URL differed")
+              raw=response.read(30_000_001)
+          if b.git_blob(raw)!=trial.ZIP_BLOB:
+              raise ValueError("author Bgee archive Git blob changed")
+          (out/"postgresql.zip").write_bytes(raw)
+          dest=Path(os.environ["RUNNER_TEMP"])/"nih-c-ro"
+          for filename in ro.SOURCE_FILES:
+              url=ro.SOURCE_URL+filename
+              with urlopen(Request(url,headers=header),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("original RO owner URL changed")
+                  raw=response.read(5_000_001)
+              if sha256(raw).hexdigest()!=ro.PINNED_WHOLE_SOURCE_SHA256[filename]:
+                  raise ValueError("original RO complete SHA256 changed")
+              (dest/filename).write_bytes(raw)
+          print("original complete Bgee+GenEx+RO owner-source hashes verified")
+          PY
+      - name: Run separate synthetic negative controls
+        run: python -m unittest -v network.tests.test_nih_p2_bgee_original_identity_type_audit
+      - name: Audit reflexive versus nonreflexive owl:sameAs and source node rdf:type under full OWL RL
+        run: |
+          set -euo pipefail
+          ulimit -v 6291456
+          set +e
+          /usr/bin/time -v -o lane-c-e19-evidence/resource-statistics.txt \
+            timeout --signal=TERM --kill-after=30s 12m \
+            python -m systems.workspace.nih_p2_bgee_original_identity_type_audit \
+              --archive "$RUNNER_TEMP/nih-c-bgee/postgresql.zip" \
+              --obda "$RUNNER_TEMP/nih-c-bgee/bgee_v14_genex.obda" \
+              --owl "$RUNNER_TEMP/nih-c-bgee/bgee_v14_genex.owl" \
+              --r2rml "$RUNNER_TEMP/nih-c-bgee/bgee_v14_genex.r2rml" \
+              --ro-base "$RUNNER_TEMP/nih-c-ro/ro-base.owl" \
+              --core "$RUNNER_TEMP/nih-c-ro/core.owl" \
+              --output lane-c-e19-evidence/original-referent-identity-type.json
+          code=$?
+          set -e
+          printf 'experiment_exit_code=%s\n124=timeout\n137=forced_termination_possible\n' "$code" > lane-c-e19-evidence/process-exit.txt
+          if [ "$code" -ne 0 ]; then
+            echo "NOT VERIFIED: preserve failure or difference in derived evidence"
+            exit "$code"
+          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("lane-c-e19-evidence/original-referent-identity-type.json").read_text())
+          assert r["schema"]=="nih-p2-e19-original-bgee-referent-type-and-sameas-audit-v1"
+          assert r["status"] in ("E19_SOURCE_NODE_IDENTITY_ONLY_REFLEXIVE",
+                                 "E19_NONREFLEXIVE_OR_MISSING_SELF_IDENTITY_CANDIDATES")
+          assert r["original_source_graph_triples"]==34181
+          assert r["full_materialized_RDF_graph_triples"]<=1800000
+          assert r["source_owner_all_original_files_authenticated"] is True
+          assert r["original_referent_nodes_total"]==r["original_gene_nodes"]+r["original_target_nodes"]
+          assert r["original_referent_nodes_total"]==1993
+          assert r["whole_closure_sameAs_triples_touching_original_nodes"]==1993
+          assert r["full_profile_rdf_type_touching_original_nodes"]==27257
+          assert r["source_native_type_and_identity_scan_equals_declarative_SPARQL"] is True
+          assert r["identity_scope_sha256_native"]==r["identity_scope_sha256_sparql"]
+          assert r["whole_closure_sameAs_triples_touching_original_nodes"]==(r["whole_closure_reflexive_sameAs"]+r["whole_closure_nonreflexive_sameAs"])
+          assert r["original_identity_type_triples"]<=r["whole_closure_identity_type_triples"]
+          assert sum(r["full_profile_type_endpoints"].values())==r["full_profile_rdf_type_touching_original_nodes"]
+          assert sum(r["full_profile_added_type_endpoints"].values())==r["full_profile_inferred_rdf_type_touching_original_nodes"]
+          assert r["original_raw_rows_or_full_closure_redistributed"] is False
+          assert r["rdf_type_statements_are_ontology_consequences_not_new_biological_observations"] is True
+          assert r["global_OWL_consistency_proven"] is False
+          assert r["independent_complete_general_OWL_RL_engine_run"] is False
+          assert r["official_NIH_benchmark"] is False
+          assert r["original_W13_or_other_NIH_lanes_modified"] is False
+          PY
+      - name: Retain derived counts, disagreement hashes, resource and failure receipts only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-lane-c-e19-original-referent-identity-type
+          path: lane-c-e19-evidence/
+          if-no-files-found: warn
+          retention-days: 30
