@@ -202,6 +202,46 @@ class MeowLabBrowserTests(unittest.TestCase):
             finally:
                 browser.close()
 
+
+    def test_retro_stage_notes_travel_and_reduce_motion(self):
+        """Idle notes visibly move; performance animates faster; reduced motion stays still."""
+        with sync_playwright() as p:
+            browser=p.chromium.launch(headless=True,args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])
+            try:
+                page=browser.new_page()
+                errors=[]
+                page.on("pageerror",lambda error: errors.append(str(error)))
+                page.goto(PAGE.as_uri(),wait_until="domcontentloaded")
+                self.assertEqual(page.locator("#cat-stage .note").count(),3)
+                self.assertEqual(page.locator("#cat-stage .pixel-spark").count(),8)
+                self.assertEqual(page.locator("#cat-stage .stage-beat i").count(),8)
+                note=page.locator("#cat-stage .note.a")
+                self.assertEqual(note.evaluate("(e)=>getComputedStyle(e).animationName"),"retro-note-flight-a")
+                first=note.evaluate("(e)=>getComputedStyle(e).transform")
+                page.wait_for_timeout(420)
+                second=note.evaluate("(e)=>getComputedStyle(e).transform")
+                self.assertNotEqual(first,second)
+                original=note.evaluate("(e)=>getComputedStyle(e).animationDuration")
+                page.keyboard.down("a")
+                self.assertTrue(page.locator("#cat-stage").evaluate("(e)=>e.classList.contains('singing')"))
+                self.assertNotEqual(original,note.evaluate("(e)=>getComputedStyle(e).animationDuration"))
+                page.keyboard.up("a")
+                self.assertFalse(page.locator("#cat-stage").evaluate("(e)=>e.classList.contains('singing')"))
+                self.assertFalse(errors, errors)
+                reduced=browser.new_page(reduced_motion="reduce")
+                reduced.goto(PAGE.as_uri(),wait_until="domcontentloaded")
+                self.assertEqual(
+                    reduced.locator("#cat-stage .note.a").evaluate("(e)=>getComputedStyle(e).animationName"),
+                    "none")
+                self.assertEqual(
+                    reduced.locator("#cat-stage .pixel-spark").first.evaluate("(e)=>getComputedStyle(e).animationName"),
+                    "none")
+                self.assertEqual(
+                    reduced.locator("#cat-stage .cat-svg").evaluate("(e)=>getComputedStyle(e).animationName"),
+                    "none")
+            finally:
+                browser.close()
+
     def test_mobile_layout_and_sounds(self):
         with sync_playwright() as p:
             browser=p.chromium.launch(headless=True,args=["--no-sandbox","--autoplay-policy=no-user-gesture-required"])

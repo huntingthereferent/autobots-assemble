@@ -33,7 +33,7 @@
     "surface": "Flat midnight-plum ink, cream, peach, mint and lilac; small grid, hard offset shadows, cassette/arcade labels. No stock imagery, glossy AI gradient cards or branded assets.",
     "typography": "Friendly heavyweight display lettering for personality; high-contrast monospace for musical state and evidence data.",
     "illustration": "Original hand-built cat DJ with headphones, star badge and waveform-ready animation, plus four CSS-drawn miniature face marks; colors track selected voice.",
-    "motion": "Brief singing response to notes; static, comprehensible state under prefers-reduced-motion.",
+    "motion": "Independent looping stage motion: notes travel across and upward through the scene, eight hand-drawn pixel sparks orbit on offset routes, and a scrolling retro grid slowly moves at idle. Live held notes trigger quicker flights, a dancing cat, and animated equalizer bars. Reduced-motion preference removes movement without hiding instrument state.",
     "evidence": "Imported browser audio shows local-file receipt and remains unverified; only native workstation handoff can produce independent execution evidence."
   },
   "avoid": [
@@ -52,10 +52,11 @@
     "Draw the cat characters locally; do not import emoji illustrations, stock mascots, trademarks or proprietary sound assets.",
     "Expose song-state and selected cat states in text and aria attributes, not solely through color.",
     "Honor narrow mobile layouts and reduced motion.",
-    "Keep visual verification provisional until screenshot review and Chromium interaction checks pass."
+    "Keep visual verification provisional until screenshot review and Chromium interaction checks pass.",
+    "Stage particles must remain decoration only (pointer-events none, aria-hidden); performance state uses existing held-note lifecycle, with no added audio workers or background polling."
   ],
   "review": {
     "confidence": "medium",
-    "notes": "Code-level and visual-contract audit completed on 2026-10-21. Candidate awaiting rendered screenshot review; no claim of external style-source observation or approved native result."
+    "notes": "Source-level motion update 2026-10-21 with separate reduced-motion and Chromium travel assertions; final screenshot sign-off remains a candidate pending visual review."
   }
 }
