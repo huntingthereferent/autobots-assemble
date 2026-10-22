@@ -57,6 +57,12 @@ For each of the four three-movement detours compared against direct LEFT1, both 
 
 Ten actual original SDK resets with independent A/B entrances. Holding lower geometry and final upper LEFT1 constant, adding only a native source right-bar re-click changed the first palette14 in row y63 before pour x10→x11, whereas an extra right-bar click and reversible movement pair changed it x10→x12; original native interior rows0–62 and measured four-cup first-full frames remained identical across all frozen conditions. All ten original games remained official level4 NOT_FINISHED; no level5/WIN. **No demonstrated hidden-counter mechanism or game objective effect.**
 
+## Native source click-only controls for row63
+
+[Original SDK run #39760058838](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39760058838); [raw JSON+NPZ artifact #12416998822](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39760058838/artifacts/12416998822), ZIP SHA256 `12951757474f724765a8f00ec0edc2d484398382a7f00b6585f221775a960acc`. Retention configured 90 days, independent durable copy **NOT VERIFIED**.
+
+14 original SDK resets from seven fixed no-extra-movement click-only conditions, independently witnessed A/B. With the lower board arrangement and final upper LEFT1→ACTION5 frozen, extra original SDK source ACTION6 clicks at (46,33), (34,21), or background coordinate (5,16) produce first row63 palette14 x10→x11 after exactly one extra click and x10→x12 after two, independent of which of the tested source click targets were used. Native pre-pour rows y0..62 and measured four-cup fill times were identical; all original games remained official level4 NOT_FINISHED (zero level5/WIN). Row63's internal meaning, connection to official objective, and possible hidden game-state dependence remain UNKNOWN.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
