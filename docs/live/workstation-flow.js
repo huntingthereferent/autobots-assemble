@@ -210,7 +210,8 @@
     const passed=finished.filter(r=>r.conclusion==="success");
     const failed=finished.filter(r=>["failure","timed_out","action_required"].includes(r.conclusion));
     const cancelled=finished.filter(r=>r.conclusion==="cancelled");
-    const followups=followingPasses(source);
+    // Follow-up summary spans the available source index, not only the latest 100 current-state runs.
+    const followups=followingPasses(runs);
     const arrivalsHour=source.filter(r=>{const t=validTime(r.created);return t!==null&&t>=now-3600000&&t<=now;});
     const clearance=todays.length?Math.round(finished.length/todays.length*100):null;
     setStat("queued",queue.length,fresh);
