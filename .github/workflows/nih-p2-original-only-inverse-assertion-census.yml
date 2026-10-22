@@ -68,7 +68,10 @@ jobs:
           assert x["source_named_inverse_axiom_declarations"]==123
           assert x["independent_original_source_inverse_predictions"]==x["independent_original_only_SPARQL_CONSTRUCT_predictions"]
           assert x["whole_original_OWL_RL_agrees_on_source_inverse_predictions"] is True
-          assert x["input_contains_no_injected_synthetic_assertions"] is True
+          assert x["audit_injected_no_additional_assertions"] is True
+          assert x["original_input_authenticated_by_whole_file_SHA256"] is True
+          assert x["original_source_inverse_comparison_has_positive_cases"] == (x["independent_original_source_inverse_predictions"]>0)
+          assert x["source_only_inverse_inference_agreement_is_vacuous"] == (x["independent_original_source_inverse_predictions"]==0)
           assert x["original_patient_level_records_used"] is False
           assert x["original_W13_modified"] is False
           assert x["official_NIH_benchmark"] is False
