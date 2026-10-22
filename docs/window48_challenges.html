@@ -3,132 +3,242 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>WORLD48 · Rooted collision challenges</title>
+<title>WORLD48 / Collision Laboratory — Source Challenges</title>
 <style>
-:root{color-scheme:dark;font:15px system-ui,-apple-system,Segoe UI,Arial,sans-serif;color:#e8f0f7;background:#0e151d}
+
+:root{color-scheme:dark;--bg:#070910;--base:#0d1020;--panel:#111729;--panel-raised:#141c30;--line:#26334c;--line-strong:#3a4b65;--text:#eef4ff;--muted:#9aabc2;--subtle:#7388a5;--cyan:#59ebf3;--violet:#a793ff;--pink:#ff5ec7;--amber:#ffc67b;--mint:#72f0b5;font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
 *{box-sizing:border-box}
-body{margin:0;background:#0e151d}
-main{max-width:1030px;margin:auto;padding:27px 18px 55px}
-a{color:#9fd3ff}
-h1{font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-.04em;margin:6px 0 9px}
-h2{font-size:1.12rem;margin:0 0 10px}
-p{line-height:1.52;color:#adbed0}
-small,.dim{color:#a1b4c7}
-.kicker{font-weight:700;font-size:.74rem;letter-spacing:.13em;text-transform:uppercase;color:#8facc7}
-.panel{background:#182431;border:1px solid #405267;border-radius:12px;padding:17px}
-header{margin-bottom:22px}
-.top{display:grid;grid-template-columns:1.2fr .8fr;gap:13px}
-label{display:block;font-size:.84rem;color:#bdcddd}
-select,input,button{font:inherit;color:#f0f6fc;border:1px solid #60738b;border-radius:8px}
-select,input{background:#0d1824;padding:10px;width:100%;margin-top:7px}
-button{background:#28394b;padding:10px 14px;cursor:pointer}
-button:disabled{opacity:.4;cursor:not-allowed}
-button:not(:disabled):hover{background:#36536e}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #a1d3ff;outline-offset:2px}
-button.primary{background:#265a85;border-color:#75b2de;font-weight:700}
-button.positive{background:#246554;border-color:#82baa8}
-#task{font-size:.91rem;color:#d8e8f5;margin:9px 0 0}
-#progress{font-size:.88rem;color:#b9cadc;margin-top:14px}
-.tag{color:#d8e5f0;font:600 .82rem ui-monospace,monospace}
-.trials{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-top:13px}
-.trial{border:1px solid #3d5065;background:#111d29;border-radius:9px;padding:13px}
-.trial.ready{border-color:#64b4aa}
-.trial strong{display:block;margin-bottom:5px}
-.path{font:700 1.2rem ui-monospace,monospace;color:#d6e6c4;overflow-wrap:anywhere}
-.worlds{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:15px 0}
-.worldtitle{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
-.state{font:700 1rem ui-monospace,monospace;color:#b5dffb;margin:11px 0}
-.nodes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.slice{min-width:0;padding:8px 6px 7px;background:#111d29;border:1px solid #35495d;border-radius:8px}
-.slice-label{font:700 .7rem ui-monospace,monospace;color:#d1e6f5;margin-bottom:8px;text-align:center}
-.layer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
-.world-navigation{font:.78rem/1.5 ui-monospace,monospace;color:#cedde9;display:grid;gap:3px;margin-top:12px}
-.step-a{color:#ebc890}.step-b{color:#d9b6f2}
-.projection{font-size:.77rem;color:#9eb1c4;margin:10px 0 0}
-.node{aspect-ratio:1;min-width:0;border-radius:5px;background:#0f1824;border:1px solid #314151;display:flex;justify-content:center;align-items:center;font:600 clamp(.57rem,.85vw,.72rem) ui-monospace,monospace;color:#93a9c0}
-.node.marked{border-color:#648e70}.node.nextA{box-shadow:inset 0 0 0 1px #c79f61}
-.node.nextB{outline:1px dashed #b38bd1;outline-offset:-3px}
-.node.current{background:#245b7d;border:2px solid #8ecbf8;color:#fff}
-.node.inspected{outline:2px solid #f5d998;outline-offset:1px}
-.node.inspected::before{content:"●";position:absolute;left:1px;top:-7px;color:#f5d998;font-size:12px;text-shadow:0 0 2px #0d1824}
-.node{position:relative}
-.node.compare-one{border-color:#e1c786}
-.node.compare-two{box-shadow:inset 0 0 0 2px #c2a1e5}
-.node.compare-one.compare-two{background:#3d465d}
-.node.cross-one{border:2px solid #f3bf73}
-.node.cross-two{box-shadow:inset 0 0 0 2px #b2e5c1}
-.node.cross-one.cross-two{background:#2b534e}
-.cross-depth{margin:13px 0}
-.cross-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin:13px 0}
-.cross-grid label{display:block;min-width:0}
-.cross-grid input{width:100%}
-.cross-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
-.cross-readout{background:#101b27;border:1px solid #405267;border-radius:8px;padding:11px;line-height:1.65;margin:10px 0;font:.85rem ui-monospace,monospace}
-.cross-readout.ready{border-color:#78baa0}
-.import-obs{margin:13px 0}
-.import-obs .buttons{margin:10px 0}
-.import-obs p{margin:8px 0}
-#import-observation-result{font:.86rem/1.6 ui-monospace,monospace;background:#101b27;border:1px solid #41576b;border-radius:8px;padding:11px;white-space:pre-wrap;overflow-wrap:anywhere}
-#import-observation-result.verified{border-color:#78baa0}
-#import-observation-result.rejected{border-color:#b18a63}
-#cross-status,#cross-count{color:#c8dae9;font-size:.86rem}
-@media(max-width:650px){.cross-grid{grid-template-columns:1fr}}
-.paired{margin:13px 0}
-.paired-controls{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin:12px 0}
-.paired-controls label{flex:1;min-width:175px}
-.paired-controls input{width:100%}
-.paired-states{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
-.paired-states>div{border:1px solid #405267;border-radius:7px;background:#101b27;padding:12px}
-.paired-states strong{font-size:.86rem}
-.paired-state{font:600 .82rem/1.6 ui-monospace,monospace;overflow-wrap:anywhere}
-.paired-summary{font-size:.85rem;color:#bcd0df;line-height:1.6}
-@media(max-width:650px){.paired-states{grid-template-columns:1fr}}
-.inspector{margin:13px 0}
-.inspector-controls{display:grid;grid-template-columns:1fr 2fr auto auto;gap:10px;align-items:end;margin:12px 0}
-.inspector-controls label{display:block;min-width:0}
-.inspector-controls select,.inspector-controls input{width:100%}
-.inspector-controls input[type=range]{cursor:pointer}
+html{scroll-behavior:smooth}
+body{min-width:280px;margin:0;min-height:100vh;background:radial-gradient(ellipse 65% 40% at 100% 0%,#35164b65,transparent 68%),radial-gradient(ellipse 70% 35% at 0% 22%,#0937496b,transparent 70%),var(--bg);color:var(--text)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(#6ac5ff08 1px,transparent 1px),linear-gradient(90deg,#6ac5ff08 1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(to bottom,#0009,transparent 90%)}
+::selection{background:#56dce653;color:#fff}
+main{isolation:isolate;position:relative;max-width:1370px;margin:auto;padding:24px clamp(14px,3vw,44px) 78px}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:4px}
+h1,h2,h3,p{margin-top:0}
+h1{font-size:clamp(2.6rem,6vw,5.3rem);line-height:1.02;letter-spacing:-.065em;margin:13px 0 19px;font-weight:830}
+h2{font-size:1.1rem;letter-spacing:-.028em;margin:0 0 11px;color:#f4f7ff;font-weight:750}
+p{color:var(--muted);line-height:1.63}
+strong{color:var(--text)}
+small,.dim{color:var(--muted)}
+.kicker,.eyebrow{font:750 .7rem/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:.15em;text-transform:uppercase;color:var(--cyan)}
+.eyebrow{display:block}
+.hero{border:1px solid #39405a;background:linear-gradient(125deg,#141725f2 0%,#11182bfa 58%,#211328f0 100%);box-shadow:0 25px 85px #0006;overflow:hidden;border-radius:22px;position:relative;margin-bottom:23px}
+.hero::after{content:"";position:absolute;right:-125px;top:85px;width:360px;height:360px;border:1px solid #ff5ec72b;border-radius:50%;box-shadow:0 0 0 40px #ff5ec707,0 0 0 90px #59ebf308;pointer-events:none}
+.sitebar{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1px solid #384053;padding:17px clamp(20px,3vw,35px);position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand-icon{font:800 .9rem ui-monospace,monospace;background:#061a27;border:1px solid #5bd6f265;padding:8px 10px;border-radius:7px;box-shadow:inset 0 0 15px #59ebf310;color:var(--cyan)}
+.brand-name{font:720 .76rem ui-monospace,monospace;letter-spacing:.12em;color:#d4e5f6}
+.nav-links{display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+.nav-links a{font:700 .74rem ui-monospace,monospace;letter-spacing:.02em;border:1px solid #3c4760;background:#ffffff07;color:#c8d9ea;padding:8px 13px;border-radius:8px;transition:background .17s,border-color .17s}
+.nav-links a:hover{background:#59ebf315;border-color:#59ebf37f;text-decoration:none;color:#fff}
+.nav-links a:first-child{color:var(--cyan)}
+.hero-content{padding:clamp(28px,4.2vw,58px) clamp(20px,4.3vw,57px) 34px;position:relative;z-index:1;max-width:910px}
+.hero h1 em{font-style:normal;color:var(--cyan);text-shadow:0 0 42px #29ebed31}
+.hero-content>p{max-width:770px;font-size:1.04rem;line-height:1.75;color:#c2cee0;margin:0 0 29px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:9px}
+.hero-meta span{font:720 .69rem ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;color:#cdd9ee;border:1px solid #3a4559;background:#0a1324ac;padding:8px 11px;border-radius:6px}
+.hero-meta span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:2px;background:var(--cyan);vertical-align:2px;margin-right:8px;box-shadow:0 0 12px #59ebf39f}
+.hero-meta span:nth-child(2)::before{background:var(--pink);box-shadow:0 0 12px #ff5ec77a}
+.hero-meta span:nth-child(3)::before{background:var(--mint);box-shadow:0 0 12px #72f0b580}
+.panel{min-width:0;background:linear-gradient(155deg,#171f31 0%,#101727 100%);border:1px solid var(--line);border-radius:16px;padding:clamp(17px,2vw,24px);box-shadow:0 14px 30px #0003;position:relative}
+.panel p:last-child{margin-bottom:0}
+.top{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:15px;margin-bottom:31px}
+.top>.panel:first-child{border-top:2px solid var(--cyan)}
+.top>.panel:nth-child(2){border-top:2px solid var(--pink)}
+.top>.panel:nth-child(2) p{margin-bottom:9px}
+.top>.panel:nth-child(2) strong{color:#e9f7ff}
+.top>.panel:nth-child(2) .dim{font-size:.86rem}
+label{display:block;font-weight:650;font-size:.82rem;letter-spacing:.015em;color:#cddbeb}
+select,input,button{font:inherit;color:var(--text);border:1px solid var(--line-strong);border-radius:9px}
+select,input{background:#090f1e;width:100%;margin-top:8px;padding:11px 13px;min-height:44px}
+select{cursor:pointer}
+input::placeholder{color:#677e99}
+button{background:#1c2941;padding:10px 15px;min-height:42px;font-weight:700;font-size:.84rem;cursor:pointer;transition:border-color .17s,background .17s,transform .17s,box-shadow .17s}
+button:hover:not(:disabled){background:#2a3c58;border-color:#7489ab;transform:translateY(-1px)}
+button:active:not(:disabled){transform:translateY(0)}
+button:disabled{opacity:.43;cursor:not-allowed}
+:where(button,input,select,summary,a):focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+input[type=range]{accent-color:var(--cyan);padding:0;border:0;min-height:30px;background:transparent}
+#task{font-size:.94rem;color:#d3e3f4;margin:13px 0 11px}
+#progress{font:650 .78rem/1.5 ui-monospace,monospace;letter-spacing:.03em;color:#adbed7;margin:10px 0}
+.meter{height:7px;overflow:hidden;border-radius:20px;border:1px solid #354761;background:#070d18;margin-top:13px}
+.meter span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--cyan),var(--pink));box-shadow:0 0 20px #59ebf380;transition:width .25s}
+.section-heading{display:flex;align-items:end;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0 0 15px;padding:0 2px}
+.section-heading h2{font-size:clamp(1.4rem,2.6vw,2rem);margin:4px 0 0;letter-spacing:-.05em}
+.section-side{font:650 .7rem ui-monospace,monospace;color:#93a9c1;letter-spacing:.06em;text-transform:uppercase}
+.worlds{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:0}
+.world-panel{overflow:hidden}
+.world-panel::before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--cyan),transparent 74%)}
+.right-world::before{background:linear-gradient(90deg,var(--pink),transparent 74%)}
+.worldtitle{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px 12px;padding-bottom:13px;border-bottom:1px solid #304057}
+.worldtitle h2{margin:0;font-size:1.23rem}
+.left-world .worldtitle h2::before,.right-world .worldtitle h2::before{font:750 .7rem ui-monospace,monospace;margin-right:10px;color:var(--cyan);content:"01 /"}
+.right-world .worldtitle h2::before{content:"02 /";color:var(--pink)}
+.tag{font:700 .73rem ui-monospace,monospace;color:#a5bcd7;overflow-wrap:anywhere}
+.state{display:inline-flex;align-items:center;margin:14px 0;background:#080f1e;border:1px solid #324660;border-radius:7px;padding:5px 12px;color:#c3f8ff;font:750 1rem ui-monospace,monospace;letter-spacing:.045em}
+.state::before{content:"●";font-size:.56rem;color:var(--cyan);margin-right:11px;text-shadow:0 0 14px var(--cyan)}
+.right-world .state::before{color:var(--pink);text-shadow:0 0 14px var(--pink)}
+.nodes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.slice{min-width:0;background:#090f1e;border:1px solid #2b3b55;border-radius:10px;padding:10px 8px 9px}
+.slice-label{text-align:center;font:750 .7rem ui-monospace,monospace;color:#b9c8dd;letter-spacing:.07em;margin-bottom:9px}
+.layer-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.node{position:relative;min-width:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;border:1px solid #344359;background:#101b2d;border-radius:5px;color:#98afc9;font:680 clamp(.55rem,.78vw,.74rem) ui-monospace,monospace;transition:background .15s,border-color .15s}
+.node.marked{border-color:#42785c}
+.node.nextA{box-shadow:inset 0 0 0 2px #f0b86e}
+.node.nextB{outline:2px dashed #b48cff;outline-offset:-4px}
+.node.current{color:#041521!important;background:var(--cyan);border:2px solid #baffff;box-shadow:0 0 20px #59ebf362;font-weight:850}
+.right-world .node.current{background:#ff83d2;border-color:#ffbceb;box-shadow:0 0 20px #ff5ec758;color:#2a0820!important}
+.node.inspected{outline:2px solid #ffe198;outline-offset:2px}
+.node.inspected::before{content:"●";position:absolute;left:1px;top:-8px;color:#ffe198;font-size:12px;text-shadow:0 0 3px #070a11}
+.node.reference::after{content:"1";position:absolute;right:-3px;top:-6px;min-width:14px;height:14px;border-radius:20px;background:#ffe08f;color:#19202e;font:800 10px/14px ui-monospace,monospace;text-align:center}
+.node.compare-one{border-color:#ffda8b}
+.node.compare-two{box-shadow:inset 0 0 0 2px #ad94f7}
+.node.compare-one.compare-two{background:#424263}
+.node.cross-one{border:2px solid #f3b96e}
+.node.cross-two{box-shadow:inset 0 0 0 2px #84e8b0}
+.node.cross-one.cross-two{background:#295550}
+.world-navigation{display:grid;gap:6px;margin-top:16px;border-top:1px solid #293b52;padding-top:12px;color:#cbd8eb;font:.79rem/1.55 ui-monospace,monospace;overflow-wrap:anywhere}
+.step-a{color:var(--amber)}.step-b{color:#cdb0ff}
+.projection{font-size:.8rem;line-height:1.65;color:#a7bad0;background:#0e1726;border:1px solid #2c3b50;border-left:3px solid var(--cyan);border-radius:7px;padding:12px 16px;margin:13px 0 23px}
+.console{border-color:#36506d;border-top:2px solid var(--cyan);margin-bottom:31px;background:linear-gradient(150deg,#142135,#101627 70%)}
+.console-bar{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;border-bottom:1px solid #2c3c52;padding-bottom:16px;margin-bottom:15px}
+.console-bar h2{font-size:1.35rem;margin:4px 0 0}
+.keyboard-hint{font:700 .69rem ui-monospace,monospace;letter-spacing:.05em;color:#8198b1}
+#phase{color:var(--cyan);margin-bottom:8px}
+.actions,.buttons{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0}
+.actions button{flex:0 1 auto}
+button.primary{min-width:116px;border-color:#35c1d6;background:#0e455b;color:#b9fbff;box-shadow:inset 0 0 15px #53dced1b}
+button.primary:hover:not(:disabled){background:#155f73;box-shadow:0 0 19px #3be8f130}
+#b.primary{border-color:#db57af;background:#4b204b;color:#ffd7ef}
+#b.primary:hover:not(:disabled){background:#66305f}
+button.positive,#check{border-color:#50ba92;background:#165045;color:#c0ffe0}
+button.positive:hover:not(:disabled),#check:hover:not(:disabled){background:#1b6653}
+#next{border-color:#b17fe9;background:#40305c}
+#clear-progress{color:#d1acbf;border-color:#68485b;background:#2e1c2d}
+.wordentry{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin:17px 0}
+.wordentry label{flex:1 1 240px}
+.wordentry input{font-family:ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase}
+.wordentry #run{flex:0 0 auto}
+#status{color:#bddef2;min-height:24px;font-size:.86rem;margin:16px 0 10px}
+#verdict{min-height:56px;background:#091827;border:1px solid #39506b;border-radius:9px;color:#d3e5f4;padding:14px 15px;line-height:1.6}
+#record{max-height:200px;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;background:#070f1d;border:1px solid #293950;border-radius:10px;padding:16px;color:#b6d2e7;font:12px/1.75 ui-monospace,monospace}
+.trials{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin:0 0 15px}
+.trial{min-width:0;border:1px solid #30415a;background:#121c2d;border-radius:12px;padding:18px 20px;position:relative}
+.trial::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:#6f80a2;border-radius:12px 0 0 12px}
+.trial.ready{border-color:#467d75;background:linear-gradient(130deg,#112a2e,#121b2b)}
+.trial.ready::before{background:var(--mint)}
+.trial strong{display:block;font:.76rem ui-monospace,monospace;color:#bdcde1;letter-spacing:.04em;text-transform:uppercase;margin-bottom:11px}
+.path{display:block;color:#ddf7ff;font:750 clamp(1.04rem,1.7vw,1.38rem) ui-monospace,monospace;overflow-wrap:anywhere;line-height:1.4}
+.trial p{font:.77rem ui-monospace,monospace;margin:11px 0 0}
+.relation{margin:0 0 30px}
+.relation>h2{font-size:1.18rem}
+.relation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.relation-metric{border:1px solid #334159;border-radius:10px;background:#0c1424;min-width:0;padding:14px}
+.relation-label{display:block;margin-bottom:10px;color:#a6b9cd;font-size:.76rem}
+.relation-value{display:block;font:750 .84rem/1.6 ui-monospace,monospace;color:#d6e6f2;overflow-wrap:anywhere}
+.relation-metric.match{border-color:#3b9f80;background:#0d2926}
+.relation-metric.match .relation-value{color:#9bf0c9}
+.relation-metric.miss{border-color:#82614f}
+.relation-metric.miss .relation-value{color:#ffd3b4}
+#live-relation[data-ready=true]{border-color:#4ba788}
+#relation-status{font-size:.85rem;margin-bottom:0}
+.research-suite{border:1px solid #30415b;background:#0e1524;border-radius:16px;overflow:hidden;margin-top:4px}
+.research-suite>summary{list-style:none;display:flex;gap:15px;align-items:center;justify-content:space-between;padding:20px 24px;cursor:pointer;background:linear-gradient(100deg,#16223a,#131526);user-select:none}
+.research-suite>summary::-webkit-details-marker{display:none}
+.research-suite>summary strong{display:block;font-size:1.22rem;letter-spacing:-.03em;margin-top:4px}
+.research-suite>summary::after{content:"⌄";font-size:1.9rem;color:var(--cyan);line-height:1;transition:transform .16s}
+.research-suite[open]>summary::after{transform:rotate(180deg)}
+.research-suite>summary:hover{background:#1c2940}
+.research-subtitle{display:block;font-size:.81rem;color:#96abc3;margin:5px 0 0}
+.research-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:17px}
+.research-grid>.panel{align-self:start;background:#121b2b}
+.inspector-note,.paired-summary,#cross-status,#cross-count{font-size:.82rem;line-height:1.65;color:#9fb5cb}
+.inspector-controls{display:grid;grid-template-columns:minmax(135px,.8fr) minmax(150px,1.4fr) auto auto;align-items:end;gap:10px;margin:15px 0}
+.inspector-controls label{min-width:0}
 .inspector-controls button{white-space:nowrap}
-.inspector-status{margin:6px 0;color:#dbe9f5;font:600 .86rem/1.55 ui-monospace,monospace}
-.inspector-note{font-size:.81rem;color:#a9bdd0;margin:5px 0 0}
-@media(max-width:700px){.inspector-controls{grid-template-columns:1fr 1fr}.inspector-controls label:nth-child(2){grid-column:span 1}}
-.node.reference{position:relative}
-.node.reference::after{content:"1";position:absolute;right:-2px;top:-4px;min-width:12px;height:12px;border-radius:8px;background:#e8ca75;color:#182431;font:700 9px/12px ui-monospace,monospace;text-align:center}
-.relation{margin-top:14px}
-.relation-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin:10px 0 3px}
-.relation-metric{background:#101b27;border:1px solid #354a61;border-radius:8px;padding:11px;min-width:0}
-.relation-label{display:block;font-size:.78rem;color:#b8cee1;margin-bottom:5px}
-.relation-value{display:block;font:700 .84rem/1.55 ui-monospace,monospace;overflow-wrap:anywhere}
-.relation-metric.match{border-color:#78baa0}
-.relation-metric.miss{border-color:#b18a63}
-#relation-status{margin:10px 0 0;color:#b2c9dc;font-size:.86rem}
-@media(max-width:650px){.relation-grid{grid-template-columns:1fr}}
-.actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-.wordentry{display:flex;flex-wrap:wrap;gap:10px;align-items:end}
-.wordentry label{flex:1;min-width:180px}
-#status{min-height:24px;color:#cce4f3;margin-bottom:3px}
-#verdict{background:#0f1b26;border:1px solid #3a5167;padding:14px;border-radius:8px;color:#d9e6f0;line-height:1.55;min-height:49px}
-.result{font-weight:700}
-.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-#record{white-space:pre-wrap;overflow-wrap:anywhere;max-height:160px;overflow:auto;background:#0d1823;border:1px solid #32475a;border-radius:7px;padding:12px;font:12px/1.6 ui-monospace,monospace}
-.note{border-left:3px solid #516f8c;padding-left:12px;font-size:.85rem;margin-top:24px}
-@media(max-width:700px){.top,.worlds,.trials{grid-template-columns:1fr}main{padding:20px 12px}.panel{padding:14px}}
+.inspector-status{font:680 .8rem/1.6 ui-monospace,monospace;color:#d0e5f4;margin:11px 0}
+.paired-controls{display:flex;flex-wrap:wrap;align-items:end;gap:9px;margin:13px 0}
+.paired-controls label{flex:1 1 160px}
+.paired-states{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:12px 0}
+.paired-states>div{border:1px solid #303f55;background:#0a1423;border-radius:8px;padding:12px;min-width:0}
+.paired-states strong{font-size:.78rem}
+.paired-state{font:650 .77rem/1.65 ui-monospace,monospace;color:#c4d8e7;overflow-wrap:anywhere}
+.cross-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:12px 0}
+.cross-grid label{min-width:0}
+.cross-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.cross-readout,#import-observation-result{background:#0b1422;border:1px solid #31425a;border-radius:9px;padding:14px;font:.79rem/1.75 ui-monospace,monospace;color:#bdcedd;overflow-wrap:anywhere;white-space:pre-wrap}
+.cross-readout.ready,#import-observation-result.verified{border-color:#45b58e}
+#import-observation-result.rejected{border-color:#c28d61}
+.note{font-size:.8rem;line-height:1.75;color:#7f96ae;border-left:3px solid #374a68;margin:32px 0 0;padding:9px 0 9px 17px}
+code{font:inherit;color:#c7e9ff}
+@media(max-width:1070px){
+ .inspector-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .research-grid{grid-template-columns:1fr}
+}
+@media(max-width:780px){
+ main{padding:13px 13px 52px}
+ .hero{border-radius:14px}
+ .hero::after{opacity:.4}
+ .top,.worlds{grid-template-columns:1fr}
+ .nav-links a{padding:7px 10px}
+ .section-heading{margin-top:3px}
+ .nodes{gap:10px}
+ .node{font-size:.83rem}
+ .trial{padding:16px}
+}
+@media(max-width:560px){
+ .sitebar{align-items:flex-start}
+ .brand-name{font-size:.66rem}
+ .nav-links{width:100%}
+ .hero-content{padding:26px 20px 28px}
+ .hero h1{font-size:clamp(2.55rem,11vw,4.3rem)}
+ .hero-content>p{font-size:.93rem}
+ .hero-meta{gap:6px}
+ .hero-meta span{font-size:.62rem}
+ .nodes{grid-template-columns:1fr}
+ .slice{display:grid;grid-template-columns:50px 1fr;align-items:center;gap:10px}
+ .slice-label{margin:0}
+ .layer-grid{gap:7px}
+ .node{max-height:67px;aspect-ratio:auto;height:clamp(34px,12vw,58px);font-size:.78rem}
+ .trials,.relation-grid,.cross-grid,.paired-states{grid-template-columns:1fr}
+ .worldtitle{align-items:flex-start}
+ .top{margin-bottom:25px}
+ .actions button{flex:1 1 calc(50% - 9px)}
+ .keyboard-hint{font-size:.61rem}
+ .wordentry #run{width:100%}
+ .console .buttons button{flex:1 1 calc(50% - 9px)}
+ .inspector-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .research-suite>summary{padding:18px}
+ .research-grid{padding:10px}
+ .panel{padding:17px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+
 </style>
 </head>
 <body>
 <main>
-<header>
-<div class="kicker">WORLD48 / original rooted A·B finite worlds</div>
-<h1>Collision laboratory</h1>
-<p>Complete 48 finite source-defined challenges: 16 original rooted classes viewed through three source-defined charts (c=0, 1, 2). For each pair of worlds, discover two action paths from the marked origin that arrive at the <strong>same left-world state</strong> but <strong>different right-world states</strong>. The win condition is a mathematical rooted witness, not an invented maze goal.</p>
-<p><a href="window48_world.html">Free exploration</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/work/arc_like_maze/WINDOW_COMBINED.md">Original source proof</a></p>
+<header class="hero">
+<nav class="sitebar" aria-label="World48 page navigation">
+<div class="brand"><span class="brand-icon" aria-hidden="true">W/48</span><span class="brand-name">WORLD48 / SOURCE LAB</span></div>
+<div class="nav-links"><a href="window48_world.html">↗ Free exploration</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/work/arc_like_maze/WINDOW_COMBINED.md">Source proof ↗</a></div>
+</nav>
+<div class="hero-content">
+<span class="eyebrow">FINITE WORLDS / ROOTED A·B CHALLENGES</span>
+<h1>Collision <em>laboratory.</em></h1>
+<p>Two paths. Two finite worlds. One exact separation. Build distinct A/B action words from the same marked origin until their <strong>left endpoints coincide</strong> and their <strong>right endpoints split</strong>. All 48 challenges use the original source-defined transition laws—not simulated maze goals.</p>
+<div class="hero-meta"><span>48 source challenges</span><span>16 rooted classes × 3 charts</span><span>F₃ finite states</span></div>
+</div>
 </header>
 <div class="top">
 <section class="panel">
 <label for="mission">Choose source challenge
 <select id="mission" disabled></select></label>
 <p id="task">Loading source-derived challenges…</p>
-<p id="progress">0 of 48 witnessed</p>
+<p id="progress">0 of 48 witnessed</p><div id="witness-meter" class="meter" role="progressbar" aria-label="Source-replayed challenges saved" aria-valuemin="0" aria-valuemax="48" aria-valuenow="0"><span id="witness-meter-fill"></span></div>
 </section>
 <section class="panel">
 <h2>Win condition</h2>
@@ -138,10 +248,62 @@ button.positive{background:#246554;border-color:#82baa8}
 <p class="dim">Only source-verified transitions count. A path may be empty.</p>
 </section>
 </div>
+
+<div class="section-heading"><div><span class="eyebrow">01 / LIVE SOURCE SPACE</span><h2>Coordinate worlds</h2></div><span class="section-side">3 planes / 27 states per world</span></div>
+<div class="worlds">
+<section class="panel world-panel left-world">
+<div class="worldtitle"><h2>Left world</h2><span class="tag" id="left-law"></span></div>
+<div id="left-state" class="state">(0,0,0)</div>
+<div id="left-nodes" class="nodes" role="img" aria-label="27 left-world states in three z-coordinate planes"></div>
+<div id="left-next" class="world-navigation" aria-live="off"></div>
+</section>
+<section class="panel world-panel right-world">
+<div class="worldtitle"><h2>Right world</h2><span class="tag" id="right-law"></span></div>
+<div id="right-state" class="state">(0,0,0)</div>
+<div id="right-nodes" class="nodes" role="img" aria-label="27 right-world states in three z-coordinate planes"></div>
+<div id="right-next" class="world-navigation" aria-live="off"></div>
+</section>
+</div>
+
+<p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Yellow '1' markers show the locked first path's endpoint while you build the second path. Only A/B actions move the state; this is not a physical 3D simulation.</p>
+
+<section class="panel console">
+<div class="console-bar"><div><span class="eyebrow">ACTION INPUT / ROOT (0,0,0)</span><h2>Movement console</h2></div><span class="keyboard-hint">KEYBOARD: A · B · BACKSPACE</span></div>
+<div class="kicker" id="phase">Path 1 · build your first witness</div>
+<div class="actions">
+<button id="a" class="primary" disabled>Apply A</button>
+<button id="b" class="primary" disabled>Apply B</button>
+<button id="undo" disabled>Undo</button>
+<button id="reset" disabled>Reset current path</button>
+</div>
+<div class="wordentry">
+<label for="word">Apply an A/B word (up to 64 actions per entry)
+<input id="word" maxlength="64" spellcheck="false" autocomplete="off" placeholder="e.g. AABAB"></label>
+<button id="run" disabled>Apply word</button>
+</div>
+<div class="buttons">
+<button id="lock" class="positive" disabled>Lock path 1</button>
+<button id="retry" disabled>Retry challenge</button>
+<button id="check" disabled>Check the two paths</button>
+<button id="next" disabled>Next challenge</button>
+<button id="hint" disabled>Reveal source example</button>
+<button id="export" disabled>Export verified certificate</button>
+<button id="import" disabled>Import witness JSON</button>
+<input id="import-file" type="file" accept=".json,application/json" aria-label="Choose previously exported WORLD48 witness" hidden>
+<button id="clear-progress" disabled>Clear saved progress</button>
+</div>
+<p id="status" role="status" aria-live="polite">Waiting for source data.</p>
+<div id="verdict">No rooted witness has been submitted.</div>
+<p class="kicker" style="margin-top:18px">Current path · exact finite transition log</p>
+<pre id="record">No actions yet.</pre>
+</section>
+
+<div class="section-heading"><div><span class="eyebrow">02 / WITNESS EVIDENCE</span><h2>Recorded paths</h2></div><span class="section-side">Compare exact endpoints</span></div>
 <div class="trials">
 <div id="trial-a" class="trial"><strong>Path 1 · not locked</strong><span id="path-a" class="path">—</span><p id="final-a" class="dim">Not yet recorded</p></div>
 <div id="trial-b" class="trial"><strong>Path 2 · not locked</strong><span id="path-b" class="path">—</span><p id="final-b" class="dim">Not yet recorded</p></div>
 </div>
+
 <section id="live-relation" class="panel relation" aria-label="Live rooted witness comparison">
 <h2>Live A/B witness comparison</h2>
 <p id="relation-status">Lock Path 1 to compare both paths from the original source root.</p>
@@ -151,20 +313,8 @@ button.positive{background:#246554;border-color:#82baa8}
 <div id="relation-distinct" class="relation-metric"><span class="relation-label">Action words · must differ</span><span class="relation-value">Awaiting Path 1</span></div>
 </div>
 </section>
-<div class="worlds">
-<section class="panel">
-<div class="worldtitle"><h2>Left world</h2><span class="tag" id="left-law"></span></div>
-<div id="left-state" class="state">(0,0,0)</div>
-<div id="left-nodes" class="nodes" role="img" aria-label="27 left-world states in three z-coordinate planes"></div>
-<div id="left-next" class="world-navigation" aria-live="off"></div>
-</section>
-<section class="panel">
-<div class="worldtitle"><h2>Right world</h2><span class="tag" id="right-law"></span></div>
-<div id="right-state" class="state">(0,0,0)</div>
-<div id="right-nodes" class="nodes" role="img" aria-label="27 right-world states in three z-coordinate planes"></div>
-<div id="right-next" class="world-navigation" aria-live="off"></div>
-</section>
-</div>
+
+<details class="research-suite" open><summary><span><span class="eyebrow">03 / SOURCE AUDIT</span><strong>Research instruments</strong><span class="research-subtitle">Locked-path replay, paired histories, cross-depth observations and JSON inspection</span></span></summary><div class="research-grid">
 <section id="path-inspector" class="panel inspector" aria-label="Inspect locked original-source path">
 <h2>Inspect recorded movement</h2>
 <p class="inspector-note">Replays a locked A/B path one source transition at a time from (0,0,0). The gold marker shows the inspected recorded state. Blue still marks the active game state; inspection cannot edit actions, scores, or certificates.</p>
@@ -222,37 +372,10 @@ button.positive{background:#246554;border-color:#82baa8}
 </div>
 <div id="import-observation-result" role="status" aria-live="polite">No imported research observation.</div>
 </section>
-<p class="projection">Each world shows three z-planes of the finite F₃ coordinate system. Rows are u, columns are v; each cell is one (u,v,z) state. Blue marks the current state, green border the marked origin, amber next A, dashed purple next B. Yellow '1' markers show the locked first path's endpoint while you build the second path. Only A/B actions move the state; this is not a physical 3D simulation.</p>
-<section class="panel">
-<div class="kicker" id="phase">Path 1 · build your first witness</div>
-<div class="actions">
-<button id="a" class="primary" disabled>Apply A</button>
-<button id="b" class="primary" disabled>Apply B</button>
-<button id="undo" disabled>Undo</button>
-<button id="reset" disabled>Reset current path</button>
-</div>
-<div class="wordentry">
-<label for="word">Apply an A/B word (up to 64 actions per entry)
-<input id="word" maxlength="64" spellcheck="false" autocomplete="off" placeholder="e.g. AABAB"></label>
-<button id="run" disabled>Apply word</button>
-</div>
-<div class="buttons">
-<button id="lock" class="positive" disabled>Lock path 1</button>
-<button id="retry" disabled>Retry challenge</button>
-<button id="check" disabled>Check the two paths</button>
-<button id="next" disabled>Next challenge</button>
-<button id="hint" disabled>Reveal source example</button>
-<button id="export" disabled>Export verified certificate</button>
-<button id="import" disabled>Import witness JSON</button>
-<input id="import-file" type="file" accept=".json,application/json" aria-label="Choose previously exported WORLD48 witness" hidden>
-<button id="clear-progress" disabled>Clear saved progress</button>
-</div>
-<p id="status" role="status" aria-live="polite">Waiting for source data.</p>
-<div id="verdict">No rooted witness has been submitted.</div>
-<p class="kicker" style="margin-top:18px">Current path · exact finite transition log</p>
-<pre id="record">No actions yet.</pre>
-</section>
+
+</div></details>
 <p class="note">The source gives 48 concrete depth-three F₃ laws; 16 rooted classes remain separate even where full-state classes coincide. The 48 missions cover all 48 concrete laws, organized as three views of 16 rooted classes; they are not 48 independent rooted classes. Existing first-16 witness certificates retain their exact IDs and law pairs. This laboratory uses the original transitions and rooted-collision witnesses. It does <strong>not</strong> imitate the native ARC-AGI-3 game, prove a correspondence between native controls and A/B, or claim an external competition result. Downloaded certificates can be freshly replayed by the original Python source verifier.</p>
+
 </main>
 <script>
 'use strict';
@@ -728,6 +851,8 @@ function reRender(message){
    result.events.map((e,i)=>String(i+1).padStart(3,'0')+' '+e.action+'  '+stateName(e.before[0])+' → '+stateName(e.after[0])+'  |  '+stateName(e.before[1])+' → '+stateName(e.after[1])).join('\n'):
    'Marked origin in both source worlds.';
  $('progress').textContent=solved.size+' of '+roster.challenges.length+' source-replayed witnesses saved in this browser';
+ $('witness-meter').setAttribute('aria-valuenow',String(solved.size));
+ $('witness-meter-fill').style.width=(100*solved.size/roster.challenges.length)+'%';
  $('undo').disabled=phase===2||!word;
  $('reset').disabled=phase===2||!word;
  $('a').disabled=phase===2||word.length>=128;
