@@ -18,13 +18,16 @@ class WorkstationFlowTests(unittest.TestCase):
         css = STYLES.read_text(encoding="utf-8")
         self.assertIn('src="workstation-flow.js"', page)
         self.assertIn('href="workstation-flow.css"', page)
-        for name in ("queued", "running", "passed", "failed"):
+        for name in ("queued", "running", "passed", "indexed"):
             self.assertIn(f'data-stat="{name}"', page)
         for period in ("day", "month", "year", "all"):
             self.assertIn(f'data-journal-mode="{period}"', page)
         self.assertIn('id="journal-today"', page)
         self.assertIn("window.WorkstationFlow.matches(r)", page)
         self.assertIn('app.runs.length+" indexed"', page)
+        self.assertIn("RUNS INDEXED", page)
+        self.assertNotIn("NOT PASSED / TODAY", page)
+        self.assertIn('setStat("indexed",source.length)', flow)
         self.assertIn("latestPage", flow)
         self.assertIn("archiveComplete", flow)
         self.assertIn("runs created today", page.lower())
@@ -76,7 +79,7 @@ class Element{
  closest(){return {querySelector:()=>new Element()};}
 }
 const byId=new Map(),stats=new Map();
-for(const name of ["queued","running","passed","failed"])stats.set(name,new Element());
+for(const name of ["queued","running","passed","indexed"])stats.set(name,new Element());
 const modes=["day","month","year","all"].map(mode=>{const e=new Element();e.dataset.journalMode=mode;return e;});
 global.document={
  getElementById(id){if(!byId.has(id))byId.set(id,new Element());return byId.get(id);},
