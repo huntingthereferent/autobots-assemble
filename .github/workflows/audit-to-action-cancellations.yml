@@ -1,4 +1,4 @@
-name: audit-to-action cancellation observer
+name: Inspector Gadget
 
 on:
   workflow_run:
@@ -13,7 +13,7 @@ permissions:
   contents: read
 
 jobs:
-  capture-cancellation:
+  inspector-gadget:
     if: ${{ github.event.workflow_run.conclusion == 'cancelled' }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
