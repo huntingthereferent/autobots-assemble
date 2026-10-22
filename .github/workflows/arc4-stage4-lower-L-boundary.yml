@@ -1,0 +1,31 @@
+name: ARC4 lane B original lower-L left-boundary contrast
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_lower_L_boundary.py'
+      - '.github/workflows/arc4-stage4-lower-L-boundary.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-sdk-l-placement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original SP80 SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile bounded genuine source trial
+        run: python -m compileall -q work/arc3/native_sp80_stage4_lower_L_boundary.py
+      - name: Run five predeclared L-placement conditions across both native witnesses
+        run: python -m work.arc3.native_sp80_stage4_lower_L_boundary --out runtime/data/arc4/arc4-original-l-placement-boundary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-l-placement-boundary
+          path: runtime/data/arc4/arc4-original-l-placement-boundary.*
+          if-no-files-found: error
+          retention-days: 90
