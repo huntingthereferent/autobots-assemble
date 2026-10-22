@@ -16,7 +16,7 @@ NS="urn:nih:original-owlrl-control:"
 
 
 class OriginalSourceOwlRlTests(unittest.TestCase):
-    def test_two_actual_edges_require_inferred_nonasserted_third(self):
+    def test_two_explicit_fixture_edges_require_inferred_nonasserted_third(self):
         a,b,c=[NS+x for x in "abc"]
         graph=Graph()
         graph.add((URIRef(a),RDFS.subPropertyOf,URIRef(b)))
