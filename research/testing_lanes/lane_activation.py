@@ -67,8 +67,26 @@ def handoff(lane_id: str, receipts: dict[str, dict], *, root: Path = ROOT) -> di
             status = "NO_OBSERVATION"
         else:
             status = "SOURCE_UNVERIFIED"
-        sources.append({"source_id": sid, "source_state": status,
-                        "observation_receipt_present": receipt is not None})
+        source_record = {
+            "source_id": sid,
+            "source_state": status,
+            "observation_receipt_present": receipt is not None,
+        }
+        # Preserve the exact accepted observation across the source -> lane
+        # boundary. A downstream consumer can verify which receipt was used;
+        # this is provenance, not scientific validation.
+        if status == "METADATA_AVAILABLE":
+            canonical = json.dumps(
+                receipt, sort_keys=True, separators=(",", ":"), ensure_ascii=False
+            ).encode("utf-8")
+            source_record["accepted_observation"] = {
+                "source_url": receipt["source_url"],
+                "observed_at_utc": receipt["observed_at_utc"],
+                "response_status": receipt["response_status"],
+                "body_sha256": receipt["body_sha256"],
+                "receipt_sha256": __import__("hashlib").sha256(canonical).hexdigest(),
+            }
+        sources.append(source_record)
     return {
         "schema_version": 1,
         "lane_id": lane_id,
