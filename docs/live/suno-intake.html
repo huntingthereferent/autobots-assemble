@@ -460,7 +460,7 @@ const validHash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const sessionMessage=(message,error=false)=>{$('session-feedback').textContent=message;$('session-feedback').style.color=error?'#ffc0be':'#a7d6c5';};
 function renderSessionSource(){
  const a=current();
- $('session-source').textContent=a?(a.kind.toUpperCase()+' · '+a.name+' · '+(validHash(a.hash)?'SHA-256 VERIFIED':'HASH UNAVAILABLE; LOCAL MATCH ONLY')):'NO LOCAL SOURCE · Direction can be saved without audio';
+ $('session-source').textContent=a?(a.kind.toUpperCase()+' · '+a.name+' · '+(validHash(a.hash)?'SOURCE SHA-256 RECORDED':'HASH UNAVAILABLE; LOCAL MATCH ONLY')):'NO LOCAL SOURCE · Direction can be saved without audio';
  $('add-moment').disabled=!(a&&a.kind==='audio');
 }
 function momentMatches(m,a){
@@ -588,7 +588,7 @@ function publicMoment(m){
 }
 function sourceRef(a){
  return a?{fileName:a.name,bytes:a.size,sha256:validHash(a.hash)?a.hash:null,
-   kind:a.kind,sha256Verified:validHash(a.hash)}:null;
+   kind:a.kind,sha256Recorded:validHash(a.hash)}:null;
 }
 function exportSession(){
  try{
