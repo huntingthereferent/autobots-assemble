@@ -121,7 +121,7 @@ jobs:
           import json,os
           from pathlib import Path
           r=json.loads((Path(os.environ["RUNNER_TEMP"])/"bgee-jena-evidence/independent-four-rule-jena.json").read_text())
-          assert r["schema"]=="nih-p2-original-bgee-jena-three-authenticated-rules-v1"
+          assert r["schema"]=="nih-p2-original-bgee-jena-four-authenticated-rules-v1"
           assert r["original_Bgee_author_zip_Git_blob"]=="234c79cc9e1eca2b6493fc6ee34b8270f2508861"
           assert r["original_source_positive_gene_expression_rows"]==19804
           assert r["original_original_source_edges"]==25027
