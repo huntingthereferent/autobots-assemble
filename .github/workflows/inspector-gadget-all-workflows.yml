@@ -4,6 +4,16 @@ on:
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/inspector-gadget-all-workflows.yml'
+      - '.github/workflows/audit-to-action-cancellations.yml'
+      - 'systems/workspace/inspector_gadget_adapter.py'
+      - 'systems/workspace/inspector_gadget_scan.py'
+      - 'systems/workspace/inspections.py'
+      - 'systems/workspace/monitor.py'
+      - 'network/tests/test_inspector_gadget_adapter.py'
+      - 'network/tests/test_inspector_gadget_scan.py'
 
 permissions:
   actions: read
@@ -14,7 +24,25 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  adapter-contract:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify native Inspector Gadget adapters
+        run: |
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
+          python -m unittest discover -s network/tests -p 'test_audit_to_action.py' -v
+
   inspect:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     outputs:
