@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="visual-template" content="education_workspace_v1">
+  <meta name="visual-template" content="education_workspace_v2">
   <title>Online School</title>
   <meta name="description" content="A kid-first learning workspace.">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./school-refresh.css">
 </head>
 <body>
   <section id="welcome" class="welcome-screen" hidden>
@@ -62,6 +63,8 @@
         <a href="#home" class="active">Home</a>
         <a href="#today">Today</a>
         <a href="#my-work">My work</a>
+        <a href="./practice.html">Practice Lab ↗</a>
+        <a href="./family.html">Family Desk ↗</a>
       </nav>
       <div class="header-right">
         <label class="date-pill"><span>📅</span><input id="day" type="date"></label>
@@ -74,9 +77,18 @@
         <div>
           <p id="day-greeting" class="eyebrow">Your space</p>
           <h1 id="hello-name">Hey!</h1>
-          <p class="hello-copy">Here’s what’s around you today.</p>
+          <p class="hello-copy">Real things to learn. Real things to make. Pick your own next move.</p>
         </div>
         <div id="learner-tabs" class="learner-switcher"></div>
+      </section>
+
+      <section class="mission-strip" aria-label="Saved school-day progress">
+        <div class="mission-copy">
+          <span class="mission-icon" aria-hidden="true">↗</span>
+          <div><p class="eyebrow">YOUR DAY / LIVE TASK RECORD</p><h2 id="progress-label">Your progress today</h2><p id="progress-next">Open a task, practice something, or make a page.</p></div>
+        </div>
+        <div class="mission-meter"><span id="progress-value">0 / 0 tasks</span><div id="progress-bar" class="progress-bar" role="progressbar" aria-label="Tasks marked done" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-fill"></span></div><span id="progress-percent">0% marked done</span></div>
+        <div class="mission-actions"><a id="practice-link" href="./practice.html" class="mission-primary">Open Practice Lab <span aria-hidden="true">↗</span></a><a id="family-link" href="./family.html" class="mission-secondary">Family Desk →</a></div>
       </section>
 
       <section class="desk-grid">
@@ -100,7 +112,7 @@
 
         <aside class="jump-card">
           <div class="jump-head">
-            <span>Jump into</span>
+            <span>Explore your desk</span>
             <span class="squiggle">〰</span>
           </div>
           <div class="jump-grid">
@@ -109,6 +121,7 @@
             <button class="jump-tile tile-science" data-jump="Science" type="button"><span>🔬</span><strong>Explore</strong><small>science & questions</small></button>
             <a class="jump-tile tile-make" id="studio-link" href="./worksheet.html"><span>🎨</span><strong>Make</strong><small>create something</small></a>
           </div>
+          <a class="jump-lab-link" href="./practice.html">Try a question in the Practice Lab <span>↗</span></a>
         </aside>
       </section>
 
@@ -139,7 +152,7 @@
         <div class="section-title">
           <div>
             <p class="eyebrow">Today</p>
-            <h2>Your things</h2>
+            <h2>Today’s missions</h2>
           </div>
           <span id="today-summary" class="section-count"></span>
         </div>
@@ -175,13 +188,13 @@
       </section>
 
       <details class="grownup-drawer">
-        <summary><span>⚙️</span> Grown-up stuff</summary>
+        <summary><span>⚙️</span> Grown-up controls & learning records</summary>
         <div class="grownup-grid">
           <section>
             <div class="section-title tight">
               <div><p class="eyebrow">Records</p><h2>Learner record</h2></div>
             </div>
-            <div class="boundary-list">Progress records and Missouri comparison are kept outside the teaching loop.</div>
+            <div class="boundary-list">Keep the records separate from learning. <a class="grownup-inline-link" href="./family.html">Open the weekly Family Desk ↗</a></div>
           </section>
           <section>
             <div class="section-title tight">
