@@ -16,6 +16,55 @@ SCHEMA = "nih-p2-original-historical-version-publication-admission-v1"
 ALLOWED_VERSIONS = (259, 260)
 
 
+def independently_replay_reported_clock(report):
+    """Read-only source date ordering oracle; never authenticate first-public time."""
+    from datetime import date
+    if type(report) is not dict:
+        raise ValueError("source clock report missing")
+    rows=report.get("original_source_version_observations")
+    tests=report.get("conditional_registry_publication_queries")
+    if (type(rows) is not list or len(rows)!=2 or
+        type(tests) is not list or len(tests)!=len(parent.CUTOFFS)):
+        raise ValueError("original source cutoff series missing")
+    if [r.get("source_version") for r in rows]!=list(ALLOWED_VERSIONS):
+        raise ValueError("source version order changed")
+    dates=[]
+    for row in rows:
+        raw=row.get("source_reported_posted_date")
+        if not isinstance(raw,str) or date.fromisoformat(raw).isoformat()!=raw:
+            raise ValueError("noncanonical source reported posting date")
+        dates.append(raw)
+        if not row.get("observed_recorded_status"):
+            raise ValueError("missing original source version status")
+    if dates!=sorted(dates):
+        raise ValueError("source reported version dates reversed")
+    for cutoff,case in zip(parent.CUTOFFS,tests):
+        visible=[r for r in rows if r["source_reported_posted_date"]<=cutoff]
+        chosen=visible[-1] if visible else None
+        withheld=[r["source_version"] for r in rows if r not in visible]
+        expected={
+            "source_reported_cutoff":cutoff,
+            "conditional_visible_registry_version":chosen["source_version"] if chosen else None,
+            "conditional_recorded_status":chosen["observed_recorded_status"] if chosen else "UNAVAILABLE",
+            "source_versions_withheld_under_assumption":withheld,
+            "static_latest_source_version":260,
+            "static_latest_record_status":rows[-1]["observed_recorded_status"],
+            "static_latest_leaks_future_source_version":260 in withheld,
+            "original_version_first_public_authentication":"UNAVAILABLE",
+            "clinical_valid_at":"UNAVAILABLE",
+        }
+        if type(case) is not dict or any(case.get(key)!=value for key,value in expected.items()):
+            raise ValueError("original reported clock query diverges from independent date oracle")
+        if case.get("static_union_contains_both_record_statuses") is not True:
+            raise ValueError("source static-version boundary altered")
+    return {
+        "independent_source_reported_clock_cutoffs_verified":len(tests),
+        "source_reported_cutoff_mismatch_count":0,
+        "first_public_transaction_independently_observed":False,
+        "reported_clock_is_not_clinical_validity":True,
+    }
+
+
 def inspect_source_clock(report, *, independent_release_evidence=None):
     if type(report) is not dict or report.get("schema") != parent.SCHEMA:
         raise ValueError("only exact independently source-authenticated predecessor")
@@ -49,7 +98,9 @@ def inspect_source_clock(report, *, independent_release_evidence=None):
             any(c.get("original_archive_is_time_authority") is not False
                 for c in controls)):
         raise ValueError("archive extraction date promoted to independent first-public evidence")
+    source_clock_check=independently_replay_reported_clock(report)
     return {
+        **source_clock_check,
         "schema": SCHEMA,
         "source_predecessor_schema": parent.SCHEMA,
         "original_record_versions": [r["source_version"] for r in rows],
