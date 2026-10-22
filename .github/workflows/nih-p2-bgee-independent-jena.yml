@@ -1,0 +1,142 @@
+name: NIH P2 whole Bgee graph independent Apache Jena source rules
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_bgee_cross_engine_jena.py'
+      - 'systems/workspace/nih_p2_jena_cross_engine/**'
+      - 'network/tests/test_nih_p2_bgee_cross_engine_jena.py'
+      - '.github/workflows/nih-p2-bgee-independent-jena.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-bgee-jena-cross-engine-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  original-whole-input-alternative-Jena-reasoner:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install independent Python RDFLib oracle; Maven obtains pinned Apache Jena
+        run: python -m pip install 'rdflib>=7,<8'
+      - name: Retrieve immutable author archive, mappings and independent RO source with exact source integrity
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/bgee-original" "$RUNNER_TEMP/ro-original" "$RUNNER_TEMP/bgee-jena" "$RUNNER_TEMP/bgee-jena-evidence"
+          python - <<'PY'
+          from systems.workspace import nih_p2_author_genex_bgee_ro_mapping_gate as b
+          from systems.workspace import nih_p2_original_bgee_real_expression_join as trial
+          from systems.workspace import nih_phase2_external_obo_graph_trial as ro
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from hashlib import sha256
+          import os
+          header={"User-Agent":"NIH-P2-Verified-Bgee-Original-Relation-Join/1.0"}
+          output=Path(os.environ["RUNNER_TEMP"])/"bgee-original"
+          for filename,pin in b.FILES.items():
+              url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/obda/"+filename
+              with urlopen(Request(url,headers=header),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("author original RDF map source URL differed")
+                  raw=response.read(1_000_001)
+              if len(raw)>1_000_000 or b.git_blob(raw)!=pin:
+                  raise ValueError("author original R2RML/GenEx source Git hash differed")
+              (output/filename).write_bytes(raw)
+          url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/data/postgresql.zip"
+          with urlopen(Request(url,headers=header),timeout=90) as response:
+              if response.status!=200 or response.geturl()!=url:
+                  raise ValueError("owner original Bgee SQL source URL differs")
+              raw=response.read(30_000_001)
+          if b.git_blob(raw)!=trial.ZIP_BLOB:
+              raise ValueError("original complete owner Bgee data Git blob mismatch")
+          (output/"postgresql.zip").write_bytes(raw)
+          dest=Path(os.environ["RUNNER_TEMP"])/"ro-original"
+          for filename in ro.SOURCE_FILES:
+              url=ro.SOURCE_URL+filename
+              with urlopen(Request(url,headers=header),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("independent original RO source URL differs")
+                  raw=response.read(5_000_001)
+              if sha256(raw).hexdigest()!=ro.PINNED_WHOLE_SOURCE_SHA256[filename]:
+                  raise ValueError("independent original RO whole-file SHA-256 mismatched")
+              (dest/filename).write_bytes(raw)
+          print("Original archive, original author mappings, and independent RO raw sources hash-pinned")
+          PY
+      - name: Test independent comparator negative boundaries
+        run: python -m unittest -v network.tests.test_nih_p2_bgee_cross_engine_jena
+      - name: Construct full combined original RO, GenEx, Bgee RDF input from immutable sources
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_bgee_cross_engine_jena \
+            --mode prepare \
+            --archive "$RUNNER_TEMP/bgee-original/postgresql.zip" \
+            --obda "$RUNNER_TEMP/bgee-original/bgee_v14_genex.obda" \
+            --owl "$RUNNER_TEMP/bgee-original/bgee_v14_genex.owl" \
+            --r2rml "$RUNNER_TEMP/bgee-original/bgee_v14_genex.r2rml" \
+            --ro-base "$RUNNER_TEMP/ro-original/ro-base.owl" \
+            --core "$RUNNER_TEMP/ro-original/core.owl" \
+            --input-nt "$RUNNER_TEMP/bgee-jena/whole-original-combined.nt"
+      - name: Run independent Apache Jena forward RDF rule engine on entire original input
+        run: |
+          set -euo pipefail
+          mvn --batch-mode -q -f systems/workspace/nih_p2_jena_cross_engine/pom.xml compile exec:java \
+            -Dexec.mainClass=org.research.nih.p2.BgeeCrossEngine \
+            -Dexec.args="$RUNNER_TEMP/bgee-jena/whole-original-combined.nt $RUNNER_TEMP/bgee-jena/jena-two-source-rules.nt"
+      - name: Compare entire Jena rule output with independently computed complete source SQL and SPARQL
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_bgee_cross_engine_jena \
+            --mode verify \
+            --archive "$RUNNER_TEMP/bgee-original/postgresql.zip" \
+            --obda "$RUNNER_TEMP/bgee-original/bgee_v14_genex.obda" \
+            --owl "$RUNNER_TEMP/bgee-original/bgee_v14_genex.owl" \
+            --r2rml "$RUNNER_TEMP/bgee-original/bgee_v14_genex.r2rml" \
+            --ro-base "$RUNNER_TEMP/ro-original/ro-base.owl" \
+            --core "$RUNNER_TEMP/ro-original/core.owl" \
+            --jena-nt "$RUNNER_TEMP/bgee-jena/jena-two-source-rules.nt" \
+            --output "$RUNNER_TEMP/bgee-jena-evidence/independent-whole-input-reasoner.json"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"bgee-jena-evidence/independent-whole-input-reasoner.json").read_text())
+          assert r["schema"]=="nih-p2-cross-engine-jena-original-bgee-full-input-v1"
+          assert r["original_author_data_Git_blob"]=="234c79cc9e1eca2b6493fc6ee34b8270f2508861"
+          assert r["original_source_positive_expression_calls"]==19804
+          assert r["original_joined_expression_calls"]==19804
+          assert r["original_missing_genes"]==0 and r["original_missing_conditions"]==0
+          assert r["original_gene_anatomy_edges"]==5223
+          assert r["original_gene_condition_edges"]==19804
+          assert r["all_genuine_source_mapped_relationships"]==25027
+          assert r["original_owner_mapping_count"]==2
+          assert r["full_original_RO_and_GenEx_and_Bgee_input_used"] is True
+          assert r["independent_SPARQL_expected_consequences"]==50054
+          assert r["Apache_Jena_entire_original_input_rule_consequences"]==50054
+          assert r["Apache_Jena_missing_source_consequences"]==0
+          assert r["Apache_Jena_unexpected_source_consequences"]==0
+          assert r["Jena_rule_consequences_sha256"]==r["independent_source_rule_consequences_sha256"]
+          assert r["entire_original_source_input_rules_agree_with_independent_Python_SPARQL"] is True
+          assert r["full_RO_OWL_RL_ontology_materialization"] is False
+          assert r["entire_RO_GenEx_Bgee_general_OWL_RL_reasoner_comparison"] is False
+          assert r["independent_equal_rule_capability_not_model_lift"] is True
+          assert r["original_W13_modified"] is False
+          assert r["official_NIH_benchmark"] is False
+          PY
+          (cd "$RUNNER_TEMP/bgee-jena-evidence" && sha256sum independent-whole-input-reasoner.json > sha256.txt)
+      - name: Retain only aggregate original-source cross-engine digests, never input or consequence RDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-bgee-jena-cross-engine-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/bgee-jena-evidence/
+          if-no-files-found: warn
+          retention-days: 30
