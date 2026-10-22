@@ -131,5 +131,21 @@ The **actual successful stage3 terminal frame hash** is `fa8fd32d3bfd2c8b3ff7765
 
 **Bounded conclusion:** exact `180 → 0` clearing occurs in both real official progression and real official nonprogress, so visible palette clearing is **not sufficient to identify failure or success**. The original four-cup level4 transient does not independently satisfy the stage4 SDK success condition. Frame lengths and before/after source screen geometry differ, but the private completion rule remains unknown. Do not manufacture an objective from these comparisons; preserve native statuses and source arrays.
 
+## Stage-specific native cup masks — source archive comparison
+
+Source held constant: [original SDK success/nonadvance run #39762841397](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397) and [raw artifact #12418353014](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397/artifacts/12418353014), ZIP SHA256 `67bd82eb42be10f4b53a16a5cd37ed47c453cab2cf8cd1c0065c2dd0d4f03c40`; JSON SHA256 `d13dc2f2bdfce9a019a245d1853da82de22bfb066921387bde0f1622bd846830`, NPZ SHA256 `0be84942f119108b65ce0971fc6342ec049c07528052dfaf322b1c371e8a5d30`. These source bytes were independently inspected; the standalone CI verifier [cross-stage source mask workflow](https://github.com/huntingthereferent/autobots-assemble/actions/workflows/arc4-stage3-stage4-cup-mask-contrast.yml) is a separate verification gate, not automatically green merely because a source result is recorded.
+
+Actual original pre-ACTION5 palette11 region inventory contains **four connected 45-pixel cups** in both stages. These are different level-specific coordinate sets: stage3 bboxes `[8,53,16,58]`, `[26,53,34,58]`, `[38,53,46,58]`, `[50,53,58,58]`; stage4 bboxes `[5,35,10,43]`, `[17,5,25,10]`, `[35,5,43,10]`, `[47,5,55,10]`. Each mask was derived from that level's actual pre-pour frame, not transferred from the other stage.
+
+| Actual original SDK ACTION5 | Four source cups concurrently full | Final source cup color13 | Official level |
+| --- | --- | --- | --- |
+| Stage3 → 4 | frames27–28 of 30 | all 0 at frame29 | advances 3→4 |
+| Stage4 original lower-L | frames25–32 of 34 | all 0 at frame33 | remains 4 |
+| Stage4 moved-L negative | never | all 0 at terminal frame | remains 4 |
+
+This independently checked original archive refutes **four simultaneously full 45-pixel cups** as a sufficient universal indicator of an SDK level transition, even when stage4 holds its four filled cup windows longer. It does not establish a shared hidden completion rule across the different source-level layouts. All official progress claims continue to depend on original SDK levels/states.
+
+**Next frozen native test:** [right-bar horizontal timing workflow](https://github.com/huntingthereferent/autobots-assemble/actions/workflows/arc4-stage4-right-bar-timing.yml), keeping middle, lower and upper sources unchanged. Four predeclared native right-bar horizontal placements × two independent SDK witnesses. Distinguish official stage5 from image-only cup arrival differences; no claim until real SDK results are returned.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
