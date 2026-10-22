@@ -63,7 +63,13 @@ class HealthTests(unittest.TestCase):
                         events = [run(4,"failure",workflow_id=101,at="2026-10-22T17:00:00Z")]
                     return {"total_count":len(events),"workflow_runs":events}
                 if "/actions/runs/" in path:
-                    return run(4,"failure",workflow_id=101,at="2026-10-22T17:00:00Z")
+                    rid = int(path.rsplit("/", 1)[-1])
+                    return {
+                        1: run(1,"failure",workflow_id=101,at="2026-10-22T15:00:00Z"),
+                        2: run(2,"success",workflow_id=101,at="2026-10-22T16:00:00Z"),
+                        3: run(3,"failure",workflow_id=102,at="2026-10-22T16:00:00Z"),
+                        4: run(4,"failure",workflow_id=101,at="2026-10-22T17:00:00Z"),
+                    }[rid]
                 raise ValueError(path)
             result = collect(None, f, now=NOW, getter=getter)
             self.assertTrue(result["all_sources"])
