@@ -28,6 +28,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python systems/workspace/inspector_gadget_scan.py
+      - name: Publish inspection summary
+        run: |
+          python - <<'PY'
+          import json, os
+          r=json.load(open('inspector-gadget-report.json', encoding='utf-8'))
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
+              f.write('# Inspector Gadget — source-owned observations\\n\\n')
+              f.write(f"Scanned {r['scanned']} completed runs; {len(r['findings'])} grouped signals.\\n\\n")
+              f.write('| Lane | Event | Count | Source |\\n|---|---|---:|---|\\n')
+              for item in r['findings']:
+                  url=next((u for u in item['sources'] if u), '')
+                  label=item['lane'].replace('|','/')
+                  f.write(f"| {label} | {item['event']} | {item['count']} | [Run]({url}) |\\n")
+              f.write('\\nAll findings are candidates pending source verification, not diagnosed defects.\\n')
+          PY
       - name: Verify scanner contracts
         run: python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
       - name: Retain scan receipt
