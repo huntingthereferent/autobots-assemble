@@ -25,6 +25,20 @@ class MetaDashboardTests(unittest.TestCase):
         self.assertNotIn("Dessy", page)
         self.assertNotIn("DESSY", page)
 
+    def test_visual_parity_with_work_without_fabricating_source_counts(self):
+        page=self.page
+        style=(ROOT / "docs/live/meta-work-parity.css").read_text(encoding="utf-8")
+        self.assertIn('href="meta-work-parity.css"',page)
+        self.assertIn('class="hero overview"',page)
+        self.assertIn('GITHUB OBSERVATION / COMBINED',page)
+        self.assertIn('href="work.html#executions"',page)
+        self.assertIn('class="metric-top"',page)
+        self.assertIn('class="flow-level"',page)
+        self.assertIn('function updateMetric(id,value,available=true)',page)
+        self.assertIn('12 visual markers maximum',page)
+        self.assertIn('.metrics .metric.followup',style)
+        self.assertIn('prefers-reduced-motion:reduce',style)
+
     def test_real_source_counts_not_demo_animation(self):
         page = self.page
         self.assertIn('ROOT="https://api.github.com/repos/"', page)
