@@ -2,7 +2,7 @@
 
 **Reading note (October 22, 2026):** This is a preserved **selected** work register, not a complete live queue and not a replacement for the [current project guide](PROJECTS.md). Some recorded next movements and infrastructure assumptions may have been superseded by later source-specific experiments. Verify the original project evidence and latest dated records before acting. A status in this file does not mean the associated private worker is currently running.
 
-## Selected work entries (recorded at their original state)
+## Active ALL WORK
 
 | Work | Lane | State | Next movement |
 |---|---|---|---|
@@ -12,7 +12,7 @@
 | [Online School](companies/online-school/COMPANY.md) | Company / education operation | MOVE | First delivery surface exists as a local HTTP task monitor. It is now also a concrete witness for the shared handoff runtime; future school tasks should route through the common carrier rather than growing a separate orchestration model. |
 | [Program Foundation](foundation/PROGRAM_FOUNDATION.md) | Capability evidence / Programs | FROZEN / EVIDENCE | Preserve as the first broad capability proof. Reopen only if a real problem exposes a program relation the current foundation cannot carry. |
 
-## Historical pins and resumable questions
+## Pinned / resumable
 
 | Work | Lane | State | Resume from |
 |---|---|---|---|
