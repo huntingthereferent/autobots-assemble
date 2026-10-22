@@ -1,11 +1,18 @@
 """Auditable, paired WORLD48 runner trials; no inference beyond the declared laws."""
 import unittest
 
-from work.arc3.window48_challenges import check_rooted_paths
+from work.arc3.window48_challenges import check_rooted_paths, rooted_roster
 from work.arc_like_maze.runner_comparison import compare_runners, run_runner
 
 
 class FiniteRunnerComparisonTests(unittest.TestCase):
+    def test_challenge_pairs_match_source_roster_without_loading_examples(self):
+        for challenge in rooted_roster():
+            trial = run_runner(challenge["id"], "breadth", budget=0)
+            self.assertEqual(trial["law_ids"], challenge["law_ids"])
+            self.assertEqual(trial["status"], "BUDGET_WALL")
+            self.assertIsNone(trial["witness_words"])
+
     def test_breadth_runner_finds_and_replays_original_rooted_split(self):
         result = run_runner(0, "breadth", budget=100, depth_bound=8)
         self.assertEqual(result["status"], "VERIFIED_ROOTED_SPLIT")
