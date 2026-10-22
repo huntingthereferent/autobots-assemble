@@ -1,0 +1,38 @@
+name: A-B meta workstation observations
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/meta-workstation-observations.yml"
+      - "systems/workspace/meta_collect.py"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ab-meta-observation-history
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read isolated observation branch
+        run: |
+          git fetch origin meta-observations
+          git worktree add --detach "$RUNNER_TEMP/ab-meta-observations" FETCH_HEAD
+      - name: Capture source-owned job counts
+        run: python3 systems/workspace/meta_collect.py --history-path "$RUNNER_TEMP/ab-meta-observations/history.json"
+      - name: Save recorded observations
+        run: |
+          cd "$RUNNER_TEMP/ab-meta-observations"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add history.json
+          git commit -m "Record source-owned A B status counts"
+          git push origin HEAD:meta-observations
