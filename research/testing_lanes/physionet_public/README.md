@@ -1,5 +1,12 @@
 # PhysioNet / public MIT-BIH catalog identity
 
+## Public source receipt — October 22, 2026
+
+[Source run 39803971022](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39803971022) completed both independent CI jobs successfully. PhysioNet returned HTTP 200, 102,993 HTML bytes; all five publisher identity checks matched. The exact source response was not stored; its SHA-256 was `3b276e71309b95d91ac2a66f41980ab9c1e91bced4c5fc7fe2d0c0c6b93c655f`. The derived-only [witness record](observations/2026-10-22-run-39803971022.json) preserves version, DOI, published access and license labels, UTC observation time, and explicit no-clinical-data limits.
+
+**Still prohibited by this check:** claims that any ECG reading was examined, a clinical or neuroscience study was replicated, or that the entire dataset's use rights were evaluated. The official page's open-access label is a source attribute, not a substitute for record-specific ethics/attribution review.
+
+
 This sublane examines **only the public source catalog record**, not physiological recordings, beat annotations, personal information, or published conclusions. The [PhysioNet MIT-BIH Arrhythmia Database](https://physionet.org/content/mitdb/1.0.0/) identifies dataset slug `mitdb`, version `1.0.0`, version DOI `10.13026/C2F305`, access policy **Open Access**, and published file license **Open Data Commons Attribution License v1.0**.
 
 The provider distinguishes **open**, **restricted**, and **credentialed** access policies. The public catalog contains human-origin ECG recordings, but this query intentionally requests neither an individual recording nor a file list API: it reads only the fixed publisher page and validates five catalog identity signals. This is not consent, an ethics ruling, or confirmation that use of individual recordings complies with licensing terms. A later scientific test would require explicit record selection, license attribution, clinical-data handling safeguards, a frozen protocol, negative controls, and careful avoidance of subject overlap between train and test splits.
