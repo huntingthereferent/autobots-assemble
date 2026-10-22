@@ -1,6 +1,7 @@
 """Synthetic PhysioNet source admissions; the test suite does not use the network."""
 import json
 import unittest
+from pathlib import Path
 
 from catalog_identity import (
     PAGE, SLUG, VERSION, DOI, LICENSE, MAX_BYTES, classify, observe
@@ -91,6 +92,22 @@ class PhysioNetMetadataTests(unittest.TestCase):
         result = observe(opener=Transport(b"x" * (MAX_BYTES + 1)))
         self.assertEqual(result["state"], "SOURCE_WALL")
         self.assertNotIn("body_sha256", result)
+
+    def test_archived_live_identity_is_not_a_clinical_experiment(self):
+        path = Path(__file__).parent / "observations" / "2026-10-22-run-39803971022.json"
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(doc["github_run_id"], 39803971022)
+        self.assertEqual(doc["observation"]["public_catalog_url"], PAGE)
+        self.assertEqual(doc["observation"]["state"], "PUBLIC_CATALOG_METADATA_OBSERVED")
+        self.assertEqual(doc["observation"]["body_sha256"],
+                         "3b276e71309b95d91ac2a66f41980ab9c1e91bced4c5fc7fe2d0c0c6b93c655f")
+        self.assertEqual(doc["observation"]["identity"]["version_doi"], DOI)
+        self.assertEqual(doc["observation"]["identity"]["published_license_label"], LICENSE)
+        self.assertEqual(doc["dataset_file_rights_review"], "REQUIRED")
+        self.assertEqual(doc["scientific_status"], "NOT_TESTED")
+        self.assertEqual(doc["source_recordings_used"], 0)
+        self.assertFalse(doc["observation"]["recordings_fetched"])
+        self.assertFalse(doc["raw_response_retained"])
 
     def test_non_utf8_is_a_wall(self):
         result = observe(opener=Transport(b"\xff\xfe"))
