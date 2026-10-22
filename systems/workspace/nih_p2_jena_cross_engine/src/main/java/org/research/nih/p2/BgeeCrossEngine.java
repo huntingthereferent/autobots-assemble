@@ -74,14 +74,38 @@ public final class BgeeCrossEngine {
     }
 
     public static void main(String[] args) throws IOException {
-        if (args.length != 2) {
+        if (args.length != 2 && args.length != 3) {
             throw new IllegalArgumentException(
-                "Usage: BgeeCrossEngine <whole-authenticated-original.nt> <target-rule-output.nt>");
+                "Usage: BgeeCrossEngine <whole-authenticated-original.nt> <target-rule-output.nt> [full|omit-subproperty|omit-inverse]");
+        }
+        String mode = args.length == 3 ? args[2] : "full";
+        if (!mode.equals("full") && !mode.equals("omit-subproperty") && !mode.equals("omit-inverse")) {
+            throw new IllegalArgumentException("only predeclared original premise-ablation modes permitted");
         }
         Model complete=ModelFactory.createDefaultModel();
         RDFDataMgr.read(complete,args[0],Lang.NTRIPLES);
         if (complete.size() < 25027 || complete.size() > MAX_INPUT) {
             throw new IllegalArgumentException("original entire input graph size outside bound");
+        }
+        // Apply only the declared ablations to an in-memory copy of the
+        // authenticated original graph. Original downloaded files remain intact.
+        if (mode.equals("omit-subproperty")) {
+            boolean present = complete.contains(complete.createResource(GENEX),
+                                                complete.createProperty(SUB),
+                                                complete.createResource(RO_EXPRESSION));
+            if (!present) throw new IllegalArgumentException("original source premise already absent");
+            complete.remove(complete.createResource(GENEX),
+                            complete.createProperty(SUB),
+                            complete.createResource(RO_EXPRESSION));
+        }
+        if (mode.equals("omit-inverse")) {
+            boolean present = complete.contains(complete.createResource(RO_EXPRESSION),
+                                                complete.createProperty(INVERSE),
+                                                complete.createResource(RO_EXPRESSES));
+            if (!present) throw new IllegalArgumentException("original inverse premise already absent");
+            complete.remove(complete.createResource(RO_EXPRESSION),
+                            complete.createProperty(INVERSE),
+                            complete.createResource(RO_EXPRESSES));
         }
         List<Rule> sourceRules=Rule.parseRules(sourceRuleDefinitions());
         if (sourceRules.size()!=2) {
@@ -116,7 +140,8 @@ public final class BgeeCrossEngine {
         try (FileOutputStream output=new FileOutputStream(args[1])) {
             RDFDataMgr.write(output,target,Lang.NTRIPLES);
         }
-        System.out.println("JENA_WHOLE_ORIGINAL_INPUT_TRIPLES="+complete.size());
+        System.out.println("JENA_ABLATION_MODE="+mode);
+        System.out.println("JENA_IN_MEMORY_GRAPH_AFTER_DECLARED_ABLATION_TRIPLES="+complete.size());
         System.out.println("JENA_OWNED_RULES="+sourceRules.size());
         System.out.println("JENA_TARGET_INFERENCE_TRIPLES="+target.size());
         System.out.println("JENA_FULL_GENERAL_OWL_RL=false");
