@@ -1,0 +1,167 @@
+"""Exact full-entity PharmKG evaluation negative tests and original-source gate."""
+from __future__ import annotations
+import os
+from pathlib import Path
+import unittest
+
+from systems.workspace import nih_p2_full_entity_filtered_trial as trial
+
+TRAIN=os.environ.get("PHARMKG_ORIGINAL_TRAIN")
+TEST=os.environ.get("PHARMKG_ORIGINAL_TEST")
+VALID=os.environ.get("PHARMKG_ORIGINAL_VALID")
+
+
+class FullSourceEntityRankingTests(unittest.TestCase):
+    def test_independent_source_paths_are_scored_once(self):
+        graph={
+            "forward":{"a":[("I","mid"),("GG","x")],
+                       "mid":[("GG","candidate"),("GG","a")]},
+            "triples":{("a","I","mid"),("a","GG","x"),
+                       ("mid","GG","candidate"),("mid","GG","a")},
+        }
+        out=trial.ab_scores_for_head(graph,"a",(("I","GG"),),{"candidate","a","x"})
+        self.assertEqual(out,{"candidate":1.0})
+
+    def test_ties_do_not_create_fake_best_rank(self):
+        self.assertEqual(trial.tie_aware_rank(0,[0,0,0]),2)
+        self.assertEqual(trial.tie_aware_rank(1,[1,0,0]),1)
+        self.assertEqual(trial.tie_aware_rank(0,[0,1,0]),2.5)
+        with self.assertRaises(ValueError):
+            trial.tie_aware_rank(1,[0,0])
+
+    def test_full_universe_contains_source_nodes_but_no_fabricated_nodes(self):
+        rows=[("a","GG","b"),("b","GG","c")]
+        universe=trial.original_entity_universe(rows,[("d","T","e")],[])
+        self.assertEqual(universe,["a","b","c","d","e"])
+
+    def test_sample_cap_and_malformed_frozen_rules_rejected(self):
+        with self.assertRaises(ValueError):
+            trial.ab_scores_for_head({"forward":{},"triples":set()},
+                                     "h",(("GG","GG"),),{"tail"})
+        with self.assertRaises(ValueError):
+            trial.original_entity_universe(
+                [(str(i),"GG",str(i+1)) for i in range(trial.MAX_ENTITIES+1)],
+                [],[])
+
+    @unittest.skipUnless(TRAIN and TEST and VALID,"needs all three source-owner original files")
+    def test_real_full_entity_filtered_ranking_with_independent_static_scores(self):
+        r=trial.run(train_file=Path(TRAIN),test_file=Path(TEST),
+                    valid_file=Path(VALID))
+        self.assertEqual(r["schema"],trial.SCHEMA)
+        self.assertEqual(r["A_B_source_label_filtered"]["n"],64)
+        self.assertGreater(r["original_source_entities_from_all_splits"],128)
+        self.assertEqual(r["independent_equal_strength_static_feature_disagreements"],0)
+        self.assertTrue(r["equally_capable_static_scores_identical"])
+        self.assertTrue(r["test_valid_labels_used_only_to_filter_other_known_positives"])
+        self.assertFalse(r["test_valid_labels_used_for_model_or_rule_selection"])
+        self.assertFalse(r["actual_negative_labels_known"])
+        self.assertFalse(r["official_NIH_benchmark"])
+        self.assertFalse(r["original_W13_journal_modified"])
+        for row in r["cases"]:
+            self.assertEqual(row["independent_static_all_candidate_disagreements"],0)
+            self.assertGreaterEqual(row["full_unfiltered_tie_aware_rank"],
+                                    row["full_filtered_tie_aware_rank"])
+
+
+    def test_failure_attribution_counts_uncovered_gold_and_null_ranks(self):
+        def case(relation, score, rank, n=10, excluded=0):
+            return {"relation":relation,"source_path_score":score,
+                    "full_filtered_tie_aware_rank":rank,
+                    "full_unfiltered_tie_aware_rank":rank,
+                    "candidate_universe_count":n,
+                    "other_known_gold_excluded_from_filtered_rank":excluded}
+        r=trial.per_relation_failure_diagnostics(
+            [case("T",0,5.5),case("T",1,2),case("GG",0,5.5)],10)
+        self.assertEqual(r["T"]["gold_without_frozen_training_source_path"],1)
+        self.assertEqual(r["T"]["gold_with_frozen_training_source_path"],1)
+        self.assertAlmostEqual(r["T"]["all_equal_score_null_MRR"],round(1/5.5,6))
+        self.assertEqual(r["GG"]["gold_without_frozen_training_source_path"],1)
+
+    def test_failure_attribution_rejects_invalid_candidate_denominator(self):
+        with self.assertRaisesRegex(ValueError,"candidate denominator"):
+            trial.per_relation_failure_diagnostics([{
+                "relation":"P","source_path_score":0,
+                "full_filtered_tie_aware_rank":4,
+                "full_unfiltered_tie_aware_rank":4,
+                "candidate_universe_count":9,
+                "other_known_gold_excluded_from_filtered_rank":0}],10)
+
+
+    def test_train_only_predicate_tail_frequency_baseline_with_gold_filter(self):
+        from collections import defaultdict
+        train=[("a","T","b"),("c","T","b"),("x","T","d")]
+        universe=["a","b","c","d"]
+        known=defaultdict(set)
+        known[("h","T")]={"d","b"}
+        r=trial.per_relation_frequency_baseline(
+            train,universe,[("h","T","b")],known)
+        self.assertEqual(r["n"],1)
+        self.assertEqual(r["hits_at_1"],1)
+        self.assertFalse(r["test_valid_edges_used_for_training"])
+        self.assertEqual(r["individual_case_diagnostics"][0]["other_known_positives_excluded"],1)
+
+    def test_frequency_baseline_cannot_use_gold_missing_from_source_universe(self):
+        from collections import defaultdict
+        with self.assertRaisesRegex(ValueError,"missing"):
+            trial.per_relation_frequency_baseline(
+                [("a","T","b")],["a","b"],[("a","T","absent")],defaultdict(set))
+
+
+    def test_next_cohort_rejects_unavailable_relation_and_source_reuse(self):
+        # The exact complete source cohort is independently exercised in
+        # source-connected CI. Tiny fixtures must refuse insufficiency.
+        with self.assertRaises(ValueError):
+            trial.choose_d2_heldout([("a","T","b")],[("z","T","q")])
+
+
+    @unittest.skipUnless(TRAIN and TEST and VALID,
+                         "requires pinned source original full split receipts")
+    def test_d2_source_cohort_is_unchanged_and_independent_of_prior_cohorts(self):
+        from systems.workspace import nih_p2_external_pharmkg_heldout_trial as source
+        from systems.workspace import nih_p2_pharmkg_frozen_heterogeneous_trial as mixed
+        from systems.workspace import nih_p2_broad_heldout_trial as broad
+        train,_=source.read_source(Path(TRAIN),"train.tsv")
+        test,_=source.read_source(Path(TEST),"test.tsv")
+        cohort=trial.choose_d2_heldout(test,train)
+        used=(set(train)|set(source.select_test(test,train))|
+              set(mixed.untouched_new_heldout(test,train)[0])|
+              set(broad.choose_new(test,train)))
+        self.assertEqual(len(cohort),64)
+        self.assertEqual(len(set(cohort)),64)
+        self.assertTrue(set(cohort).isdisjoint(used))
+        self.assertEqual(cohort,trial.choose_d2_heldout(test,train))
+
+
+    def test_paired_rank_audit_frequency_path_counts_and_source_coverage(self):
+        cases=[
+            {"relation":"T","other_known_gold_excluded_from_filtered_rank":1,
+             "full_filtered_tie_aware_rank":10,"candidate_universe_count":20,
+             "source_path_score":0},
+            {"relation":"T","other_known_gold_excluded_from_filtered_rank":0,
+             "full_filtered_tie_aware_rank":1,"candidate_universe_count":20,
+             "source_path_score":1},
+        ]
+        baseline={"n":2,"individual_case_diagnostics":[
+            {"relation":"T","other_known_positives_excluded":1,
+             "filtered_tie_aware_rank":2},
+            {"relation":"T","other_known_positives_excluded":0,
+             "filtered_tie_aware_rank":4},
+        ]}
+        r=trial.paired_path_frequency_rank_audit(cases,baseline)
+        self.assertEqual(r["by_original_relation"]["T"]["frequency_better_rank"],1)
+        self.assertEqual(r["by_original_relation"]["T"]["path_better_rank"],1)
+        self.assertEqual(r["by_original_relation"]["T"]["path_source_witness_gold_cases"],1)
+        self.assertTrue(r["same_frozen_original_heldout_queries"])
+
+    def test_paired_rank_audit_refuses_mismatched_filter(self):
+        row={"relation":"GG","other_known_gold_excluded_from_filtered_rank":0,
+             "full_filtered_tie_aware_rank":4,"candidate_universe_count":12,
+             "source_path_score":0}
+        b={"n":1,"individual_case_diagnostics":[
+            {"relation":"GG","other_known_positives_excluded":1,
+             "filtered_tie_aware_rank":2}]}
+        with self.assertRaisesRegex(ValueError,"exact same"):
+            trial.paired_path_frequency_rank_audit([row],b)
+
+if __name__=="__main__":
+    unittest.main()
