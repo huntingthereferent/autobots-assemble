@@ -197,7 +197,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <article class="metric passed"><div class="metric-top"><span>SUCCESSFUL RUNS / TODAY</span><span class="metric-glyph" aria-hidden="true">✦</span></div><b id="passed">—</b><div class="flow-level" aria-hidden="true"></div><small id="passed-note">Reading full-day GitHub totals</small></article>
 <article class="metric current" id="open-check-card"><div class="metric-top"><span>CURRENT ISSUES</span><span class="metric-glyph" aria-hidden="true">◎</span></div><b id="current-open">—</b><div class="flow-level" aria-hidden="true"></div><small id="failed-note">Open workflow checks · clears after a newer pass</small><button type="button" id="inspect-open" class="issues-link">Inspect source checks ↗</button></article>
 </section>
-<details class="outcome-context" aria-label="How daily run outcomes are counted"><summary>Inspect historical outcomes · not unresolved failures</summary><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="failed">HISTORICAL FAILED RUNS / TODAY: —</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></details>
+<details class="outcome-context" aria-label="How daily run outcomes are counted"><summary>Inspect historical outcomes · not unresolved failures</summary><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="historical-failed">HISTORICAL FAILED RUNS / TODAY: —</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></details>
 <section class="flowfield" aria-label="Observed execution stages">
 <div class="flow-heading"><span>Execution flow</span><small>Markers open actual GitHub runs · up to 16 recent runs per stage</small></div>
 <div class="flow-tracks">
@@ -286,7 +286,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   const t=all?r.totals:null;
   const verified=t&&["success","failure","cancelled","skipped","timed_out","action_required","known_outcome_runs_lower_bound"].every(k=>valid(t[k]))&&Number.isFinite(Date.parse(r.observed_at));
   updateMetric("passed",verified?t.success:null,!!verified);
-  $("failed").textContent="HISTORICAL FAILED RUNS / TODAY: "+(verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—");
+  $("historical-failed").textContent="HISTORICAL FAILED RUNS / TODAY: "+(verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—");
   $("cancelled").textContent="Cancelled today: "+(verified?t.cancelled.toLocaleString():"—");
   $("skipped").textContent="Skipped today: "+(verified?t.skipped.toLocaleString():"—");
   $("other-outcomes").textContent="Active/other states: not included in outcome totals";
