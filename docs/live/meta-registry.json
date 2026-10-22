@@ -6,7 +6,7 @@
   "nodes": [
     {
       "id": "A",
-      "label": "Original",
+      "label": "Workstation 01",
       "repo": "huntingthereferent/autobots-assemble",
       "visibility": "public",
       "viewer": "https://huntingthereferent.github.io/autobots-assemble/live/work.html",
@@ -17,7 +17,7 @@
     },
     {
       "id": "B",
-      "label": "AEREN Research & Development",
+      "label": "Workstation 02",
       "repo": "aeren-research/continuum-oscillator",
       "visibility": "public",
       "viewer": "https://aeren-research.github.io/continuum-oscillator/live/work.html",
@@ -32,7 +32,7 @@
       "id": "B-CONTRACT",
       "title": "Independent research source contract",
       "match": [
-        "aeren research · independent research lane contract"
+        "independent research lane contract"
       ],
       "node": "B",
       "admission": "Independent research source contract enabled on the second repository; not proof of scientific replication.",
