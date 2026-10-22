@@ -267,6 +267,9 @@ def main():
                       "entity_candidates":result["original_source_entities_from_all_splits"],
                       "filtered":result["A_B_source_label_filtered"],
                       "unfiltered":result["A_B_raw_unfiltered"],
+                      "train_frequency":{key:value for key,value in
+                        result["original_train_frequency_baseline"].items()
+                        if key!="individual_case_diagnostics"},
                       "NIH_completed":False},sort_keys=True))
 
 if __name__=="__main__":
