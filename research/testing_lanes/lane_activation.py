@@ -6,6 +6,7 @@ remains scientifically UNTESTED. Source availability is not a scientific test.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -84,7 +85,7 @@ def handoff(lane_id: str, receipts: dict[str, dict], *, root: Path = ROOT) -> di
                 "observed_at_utc": receipt["observed_at_utc"],
                 "response_status": receipt["response_status"],
                 "body_sha256": receipt["body_sha256"],
-                "receipt_sha256": __import__("hashlib").sha256(canonical).hexdigest(),
+                "receipt_sha256": hashlib.sha256(canonical).hexdigest(),
             }
         sources.append(source_record)
     return {
