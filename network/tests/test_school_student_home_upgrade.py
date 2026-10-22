@@ -12,9 +12,11 @@ class StudentHomeUpgradeTests(unittest.TestCase):
         html=(ROOT/"index.html").read_text(encoding="utf-8")
         js=(ROOT/"app.js").read_text(encoding="utf-8")
         css=(ROOT/"school-refresh.css").read_text(encoding="utf-8")
-        for path in ("practice.html","family.html"):
+        for path in ("practice.html","family.html","reading.html"):
             self.assertIn(path,html)
         self.assertIn("school-refresh.css",html)
+        self.assertIn('id="reading-link"',html)
+        self.assertIn('$("#reading-link").href',js)
         self.assertIn('role="progressbar"',html)
         self.assertIn('id="progress-fill"',html)
         self.assertIn('id="progress-value"',html)
