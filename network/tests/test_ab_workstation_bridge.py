@@ -9,6 +9,7 @@ from systems.workspace.ab_workstation_bridge import (
     ABClusterWitnessVerifier, movement_ref, replayed_rows,
 )
 from systems.workspace.workstation_continuation import Observation
+from systems.workspace.workstation_harness import WorkstationContinuationHarness
 
 
 class ABWorkstationBridgeTests(unittest.TestCase):
@@ -16,12 +17,21 @@ class ABWorkstationBridgeTests(unittest.TestCase):
         temp = TemporaryDirectory()
         self.addCleanup(temp.cleanup)
         self.data = Path(temp.name)
-        self.journal = self.data / "ab_relational_cluster.jsonl"
-        self.verifier = ABClusterWitnessVerifier(self.journal)
+        self.cluster_dir = self.data / "cluster"
+        self.journal = self.cluster_dir / "ab_relational_cluster.jsonl"
+        self.workstation_dir = self.data / "workstation"
+        self.verifier = ABClusterWitnessVerifier(self.journal, self.workstation_dir)
+        self.harness = WorkstationContinuationHarness(
+            self.workstation_dir,
+            verify_observation=self.verifier.verify_observation,
+            verify_connection=self.verifier.verify_connection,
+            worker_editions={"finite-required-edge-prefilter": "source-edition:v1",
+                             "relation-connector": "source-edition:join-v1"},
+        )
 
     def fill_until_connection(self):
         for _ in range(12):
-            result = advance(self.data, execute=True, workers=3)
+            result = advance(self.cluster_dir, execute=True, workers=3)
             rows = replayed_rows(self.journal)
             for row in rows:
                 for collision in row["movements"]:
@@ -38,10 +48,11 @@ class ABWorkstationBridgeTests(unittest.TestCase):
                 break
         self.fail("finite A/B cluster did not produce a cross-trajectory collision")
 
-    def test_exact_replayed_branch_witness_is_accepted_only_for_bound_parent_lane(self):
-        advance(self.data, execute=True)
+    def test_exact_branch_witness_requires_bound_parent_lane(self):
+        advance(self.cluster_dir, execute=True)
         row = replayed_rows(self.journal)[0]
         movement = next(m for m in row["movements"] if m["kind"] == "BRANCH")
+        self.harness.seed_lane("root", "finite A/B root")
         self.verifier.bind_lane(movement["from"], "root")
         obs = Observation("o1", "root", "BRANCH", movement["word"],
                           movement_ref(row["entry_hash"], movement),
@@ -52,9 +63,10 @@ class ABWorkstationBridgeTests(unittest.TestCase):
         self.assertFalse(self.verifier.verify_observation(wrong_lane))
 
     def test_wrong_relation_and_fabricated_reference_fail_closed(self):
-        advance(self.data, execute=True)
+        advance(self.cluster_dir, execute=True)
         row = replayed_rows(self.journal)[0]
         movement = next(m for m in row["movements"] if m["kind"] == "BRANCH")
+        self.harness.seed_lane("root", "finite A/B root")
         self.verifier.bind_lane(movement["from"], "root")
         ref = movement_ref(row["entry_hash"], movement)
         wrong = Observation("o1", "root", "BRANCH", "not-the-observed-word",
@@ -88,6 +100,8 @@ class ABWorkstationBridgeTests(unittest.TestCase):
                 break
         self.assertIsNotNone(found)
         row, collision, prior_row, prior = found
+        self.harness.seed_lane("lane-left", "A/B trajectory " + collision["from"])
+        self.harness.seed_lane("lane-right", "A/B trajectory " + prior["word"])
         self.verifier.bind_lane(collision["from"], "lane-left")
         self.verifier.bind_lane(prior["word"], "lane-right")
         relation = "state:" + ",".join(map(str, collision["to"]))
@@ -105,10 +119,21 @@ class ABWorkstationBridgeTests(unittest.TestCase):
                                  right.witness_ref, "", 4)
         self.assertFalse(self.verifier.verify_connection(left, mismatched))
 
+    def test_binding_survives_verifier_restart_from_native_journal(self):
+        self.harness.seed_lane("root", "finite A/B root")
+        self.verifier.bind_lane("root-path", "root")
+        restarted = ABClusterWitnessVerifier(self.journal, self.workstation_dir)
+        self.assertEqual(restarted.path_to_lane, {"root-path": "root"})
+        self.assertEqual(restarted.lane_to_path, {"root": "root-path"})
+        restarted.bind_lane("root-path", "root")
+        with self.assertRaises(ValueError):
+            restarted.bind_lane("root-path", "other-root")
+
     def test_journal_tamper_invalidates_existing_witness(self):
-        advance(self.data, execute=True)
+        advance(self.cluster_dir, execute=True)
         row = replayed_rows(self.journal)[0]
         movement = next(m for m in row["movements"] if m["kind"] == "BRANCH")
+        self.harness.seed_lane("root", "finite A/B root")
         self.verifier.bind_lane(movement["from"], "root")
         obs = Observation("o1", "root", "BRANCH", movement["word"],
                           movement_ref(row["entry_hash"], movement),
