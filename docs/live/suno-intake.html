@@ -246,7 +246,7 @@ const presets={
 };
 function field(id){return $(id).value.trim();}
 function bpmValue(){const n=Number($('bpm').value);return Number.isFinite(n)&&n>=40&&n<=240?n:120;}
-function timeLabel(sec){if(!Number.isFinite(sec))return '—';const mins=Math.floor(sec/60),s=Math.round(sec%60);return mins+':'+String(s===60?0:s).padStart(2,'0');}
+function timeLabel(sec){if(!Number.isFinite(sec))return '—';const rounded=Math.max(0,Math.round(sec)),mins=Math.floor(rounded/60),secs=rounded%60;return mins+':'+String(secs).padStart(2,'0');}
 function directionData(){
  const a=current(),bpm=bpmValue(),bars=arrangement.reduce((n,s)=>n+s.bars,0);
  let excerpt=null;if(a?.kind==='audio'){try{const {start,end}=selectedRange();excerpt={startSeconds:start,endSeconds:end};}catch{}}
