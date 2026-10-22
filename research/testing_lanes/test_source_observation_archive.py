@@ -75,5 +75,48 @@ class ArchivedSourceObservationsTests(unittest.TestCase):
                              bool(lane["verified_source_ids"]))
 
 
+    def test_second_pass_is_append_only_and_historical_walls_remain(self):
+        second = json.loads((BASE / "observations" /
+                             "2026-10-22-run-39771470448.json").read_text(encoding="utf-8"))
+        self.assertEqual(second["observed_run_id"], 39771470448)
+        self.assertEqual(second["previous_witness"],
+                         "research/testing_lanes/observations/2026-10-22-run-39767929086.json")
+        self.assertEqual(second["source_status_counts"], {
+            "metadata_observed": 12, "source_wall": 1, "manual_not_probed": 5
+        })
+        by_id = {r["source_id"]: r for r in second["observations"]}
+        self.assertEqual(len(by_id), 13)
+        self.assertEqual(by_id["zenodo"]["state"], "METADATA_OBSERVED")
+        self.assertEqual(by_id["gwosc"]["state"], "SOURCE_WALL")
+        old_by_id = {r["source_id"]: r for r in self.observations["observations"]}
+        self.assertEqual(old_by_id["zenodo"]["state"], "SOURCE_WALL")
+        for row in second["observations"]:
+            with self.subTest(source=row["source_id"]):
+                self.assertFalse(row["scientific_claim_verified"])
+                self.assertFalse(row["source_data_archived"])
+                if row["state"] == "METADATA_OBSERVED":
+                    self.assertEqual(row["source_url"],
+                                     self.cards[row["source_id"]]["probe"]["url"])
+                    self.assertRegex(row["body_sha256"], r"^[0-9a-f]{64}$")
+                    self.assertEqual(row["response_status"], 200)
+
+    def test_second_pass_source_handoffs_keep_science_not_tested(self):
+        doc = json.loads((BASE / "observations" /
+                          "2026-10-22-run-39771470448-lanes.json").read_text(encoding="utf-8"))
+        self.assertEqual(doc["source_feed_ready"], 20)
+        self.assertEqual(doc["waiting_source_feed"], 1)
+        self.assertEqual(doc["scientific_experiments_run"], 0)
+        self.assertEqual(len(doc["lanes"]), 21)
+        self.assertEqual({x["lane_id"] for x in doc["lanes"]}, {
+            x["id"] for x in __import__("json").loads((BASE / "registry.json").read_text())["lanes"]
+        })
+        self.assertEqual({x["lane_id"] for x in doc["lanes"] if x["source_state"] == "WAITING_FOR_SOURCES"},
+                         {"NEURO"})
+        for lane in doc["lanes"]:
+            self.assertEqual(lane["scientific_status"], "NOT_TESTED")
+            self.assertEqual(lane["experiment_runs"], 0)
+
+
+
 if __name__ == "__main__":
     unittest.main()
