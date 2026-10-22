@@ -15,16 +15,17 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
         self.data = Path(temp.name)
         self.cluster_dir = self.data / "cluster"
         self.journal = self.cluster_dir / "ab_relational_cluster.jsonl"
-        self.verifier = ABClusterWitnessVerifier(self.journal)
+        self.workstation_dir = self.data / "workstation"
         self.workers = {
             "finite-required-edge-prefilter": "source-edition:finite-prefilter-v1",
             "relation-connector": "source-edition:relation-connector-v1",
         }
+        self.verifier = ABClusterWitnessVerifier(self.journal, self.workstation_dir)
         self.harness = self.make_harness()
 
     def make_harness(self):
         return WorkstationContinuationHarness(
-            self.data / "workstation",
+            self.workstation_dir,
             verify_observation=self.verifier.verify_observation,
             verify_connection=self.verifier.verify_connection,
             worker_editions=self.workers,
@@ -77,26 +78,44 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
                 break
         self.assertIsNotNone(selected)
         row, collision, prior_row, prior = selected
-        left_lane = "path-" + collision["from"]
-        right_lane = "path-" + collision["existing_word"]
-        self.assertNotEqual(left_lane, right_lane)
+        left_lane, right_lane = "path-left", "path-right"
         self.harness.seed_lane(left_lane, "A/B trajectory " + collision["from"])
-        self.harness.seed_lane(right_lane, "A/B trajectory " + collision["existing_word"])
+        self.harness.seed_lane(right_lane, "A/B trajectory " + prior["word"])
         self.verifier.bind_lane(collision["from"], left_lane)
         self.verifier.bind_lane(prior["word"], right_lane)
         relation = "state:" + ",".join(map(str, collision["to"]))
-        left_ref = movement_ref(row["entry_hash"], collision)
-        right_ref = movement_ref(prior_row["entry_hash"], prior)
         self.harness.observe(lane_id=left_lane, kind="RELATION", relation=relation,
-                             witness_ref=left_ref)
+                             witness_ref=movement_ref(row["entry_hash"], collision))
         self.harness.observe(lane_id=right_lane, kind="RELATION", relation=relation,
-                             witness_ref=right_ref)
+                             witness_ref=movement_ref(prior_row["entry_hash"], prior))
         result = self.harness.tick()
         self.assertEqual(len(result["born_coordination_lanes"]), 1)
         joined = self.harness._runtime().get(result["born_coordination_lanes"][0])
         self.assertEqual(joined.metadata["parents"], sorted((left_lane, right_lane)))
         self.assertFalse(result["execution_started"])
         self.assertFalse(result["native_checkpoint_pass"])
+
+    def test_restart_restores_bindings_and_still_verifies_existing_observation(self):
+        advance(self.cluster_dir, execute=True)
+        row = replayed_rows(self.journal)[0]
+        movement = next(m for m in row["movements"] if m["kind"] == "BRANCH")
+        self.harness.seed_lane("root", "finite A/B root")
+        self.verifier.bind_lane(movement["from"], "root")
+        witness = movement_ref(row["entry_hash"], movement)
+        self.harness.observe(lane_id="root", kind="BRANCH", relation=movement["word"],
+                             witness_ref=witness,
+                             capability="finite-required-edge-prefilter")
+        restarted_verifier = ABClusterWitnessVerifier(self.journal, self.workstation_dir)
+        restarted_harness = WorkstationContinuationHarness(
+            self.workstation_dir,
+            verify_observation=restarted_verifier.verify_observation,
+            verify_connection=restarted_verifier.verify_connection,
+            worker_editions=self.workers,
+        )
+        inspected = restarted_harness.inspect()
+        self.assertEqual(inspected["proposals"], [])
+        self.assertEqual(restarted_verifier.path_to_lane, {movement["from"]: "root"})
+        self.assertFalse(inspected["execution_started"])
 
 
 if __name__ == "__main__":
