@@ -1145,8 +1145,12 @@ footer{border-top-color:#253942}
       if(/403|429|rate limit/i.test(e.message))app.rateLimitUntil=Date.now()+15*60*1000;
       $("feed-error").textContent="Could not refresh the execution source: "+e.message+". Displayed results may be stale; no current status inferred.";
       if(!app.runs.length)$("runs").replaceChildren(el("p","No verified execution sample loaded.","no-source"));
-    }finally{app.reading=false;$("check-now").disabled=false}
-    await loadResearch();
+    }finally{
+      // The source observation spans both GitHub runs and the research projection.
+      // Do not release the refresh lock while the second source read is pending.
+      try{await loadResearch();}
+      finally{app.reading=false;$("check-now").disabled=false}
+    }
   }
   $("check-now").addEventListener("click",refresh);
   $("run-filter").addEventListener("change",()=>{app.runVisible=20;renderRuns()});
