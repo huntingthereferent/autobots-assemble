@@ -164,6 +164,51 @@ def per_relation_frequency_baseline(train,universe,questions,known):
     }
 
 
+def paired_path_frequency_rank_audit(cases,frequency):
+    """D3: pair each unchanged source gold question across independent rankers."""
+    rows=frequency.get("individual_case_diagnostics",())
+    if not cases or len(rows)!=len(cases) or frequency.get("n")!=len(cases):
+        raise ValueError("paired comparator denominators not identical")
+    stats={}
+    for src,other in zip(cases,rows):
+        if (src["relation"]!=other["relation"] or
+            src["other_known_gold_excluded_from_filtered_rank"] !=
+            other["other_known_positives_excluded"]):
+            raise ValueError("not the exact same original source question/filter")
+        relation=src["relation"]
+        item=stats.setdefault(relation,{
+            "cases":0,"frequency_better_rank":0,"path_better_rank":0,
+            "equal_rank":0,"frequency_hits_at_10":0,"path_hits_at_10":0,
+            "path_source_witness_gold_cases":0,
+            "frequency_reciprocal_sum":0.0,"path_reciprocal_sum":0.0})
+        a=src["full_filtered_tie_aware_rank"]
+        b=other["filtered_tie_aware_rank"]
+        if not 1 <= a <= src["candidate_universe_count"] or not 1 <= b <= src["candidate_universe_count"]:
+            raise ValueError("invalid paired rank")
+        item["cases"]+=1
+        item["frequency_better_rank"]+=int(b<a)
+        item["path_better_rank"]+=int(a<b)
+        item["equal_rank"]+=int(a==b)
+        item["frequency_hits_at_10"]+=int(b<=10)
+        item["path_hits_at_10"]+=int(a<=10)
+        item["path_source_witness_gold_cases"]+=int(src["source_path_score"]>0)
+        item["frequency_reciprocal_sum"]+=1/b
+        item["path_reciprocal_sum"]+=1/a
+    for val in stats.values():
+        if val["frequency_better_rank"]+val["path_better_rank"]+val["equal_rank"]!=val["cases"]:
+            raise ValueError("paired wins do not reconcile")
+        val["frequency_MRR"]=round(val.pop("frequency_reciprocal_sum")/val["cases"],6)
+        val["path_MRR"]=round(val.pop("path_reciprocal_sum")/val["cases"],6)
+    return {
+        "by_original_relation":dict(sorted(stats.items())),
+        "same_frozen_original_heldout_queries":True,
+        "different_model_family_not_equivalent_static_oracle":True,
+        "original_model_features_unchanged":True,
+        "test_labels_not_used_to_select_rules":True,
+        "official_NIH_benchmark":False,
+    }
+
+
 NEXT_COHORT_SALT="nih-p2-lane-d2-frozen-next-cohort-20261022-v1"
 
 def choose_d2_heldout(test,train):
@@ -268,6 +313,8 @@ def run(*, train_file:Path,test_file:Path,valid_file:Path,selection="original"):
                 "hits_at_10":sum(v<=10 for v in rs),
                 "MRR":round(sum(1/v for v in rs)/len(rs),6),
                 "mean_rank":round(sum(rs)/len(rs),6)}
+    frequency=per_relation_frequency_baseline(train,universe,questions,known)
+    paired=paired_path_frequency_rank_audit(cases,frequency)
     return {
         "schema":SCHEMA,
         "source_owner":original.ORIGIN,
@@ -292,8 +339,8 @@ def run(*, train_file:Path,test_file:Path,valid_file:Path,selection="original"):
         "original_W13_journal_modified":False,
         "official_NIH_benchmark":False,
         "per_relation_frozen_failure_diagnostics":per_relation_failure_diagnostics(cases,len(universe)),
-        "original_train_frequency_baseline":per_relation_frequency_baseline(
-            train,universe,questions,known),
+        "original_train_frequency_baseline":frequency,
+        "frozen_path_vs_train_frequency_paired_audit":paired,
         "cases":cases,
     }
 
