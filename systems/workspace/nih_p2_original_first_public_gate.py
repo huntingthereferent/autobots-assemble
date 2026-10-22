@@ -65,6 +65,39 @@ def independently_replay_reported_clock(report):
     }
 
 
+def attested_archive_reported_post_date_gaps(report):
+    """B3 conditional calendar offsets, NOT an independently witnessed public clock."""
+    from datetime import date
+    rows=report.get("original_source_version_observations")
+    owners=report.get("independent_aact_owner_attested_archive_checks")
+    if type(rows) is not list or type(owners) is not list or len(rows)!=2 or len(owners)!=2:
+        raise ValueError("two original version/archive pairs required")
+    comparisons=[]
+    for record,archive in zip(rows,owners):
+        posted=record.get("source_reported_posted_date")
+        attested=archive.get("owner_attested_collection_day")
+        if not isinstance(posted,str) or not isinstance(attested,str):
+            raise ValueError("original reported/attested date pair missing")
+        delta=(date.fromisoformat(attested)-date.fromisoformat(posted)).days
+        if delta<0:
+            raise ValueError("claimed archive collection precedes source-reported post")
+        if archive.get("original_archive_is_time_authority") is not False:
+            raise ValueError("unverified archive date promoted to temporal authority")
+        comparisons.append({
+            "registry_version":record["source_version"],
+            "source_reported_posted_date":posted,
+            "archive_owner_claimed_collection_day":attested,
+            "claimed_archive_minus_reported_post_days":delta,
+            "first_public_transaction_independently_verified":False,
+        })
+    return {
+        "conditional_owner_claim_calendar_gaps":comparisons,
+        "verified_first_public_date_window": "UNAVAILABLE",
+        "owner_claim_lag_is_not_publication_delay":True,
+        "clinical_valid_time_proven":False,
+    }
+
+
 def inspect_source_clock(report, *, independent_release_evidence=None):
     if type(report) is not dict or report.get("schema") != parent.SCHEMA:
         raise ValueError("only exact independently source-authenticated predecessor")
@@ -99,8 +132,10 @@ def inspect_source_clock(report, *, independent_release_evidence=None):
                 for c in controls)):
         raise ValueError("archive extraction date promoted to independent first-public evidence")
     source_clock_check=independently_replay_reported_clock(report)
+    claim_gaps=attested_archive_reported_post_date_gaps(report)
     return {
         **source_clock_check,
+        **claim_gaps,
         "schema": SCHEMA,
         "source_predecessor_schema": parent.SCHEMA,
         "original_record_versions": [r["source_version"] for r in rows],
