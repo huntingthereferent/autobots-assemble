@@ -247,7 +247,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   const passed=today.filter(isPassed).length,failed=today.filter(isFailed).length;
   $("passed").textContent=passed;$("failed").textContent=failed;
   $("flow-queue").textContent=n.waiting;$("flow-running").textContent=n.running;
-  $("flow-done").textContent=passed+failed;
+  $("flow-done").textContent=today.filter(r=>r.status==="completed").length;
   beads("beads-queue",runs.filter(r=>["queued","pending","waiting"].includes(r.status)),"queue");
   beads("beads-running",runs.filter(r=>r.status==="in_progress"),"running");
   beads("beads-done",today.filter(r=>r.status==="completed"),"done");
