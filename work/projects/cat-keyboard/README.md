@@ -93,3 +93,7 @@ Public context examined:
 This does not contain Suno software, generated Suno audio, model weights, or proprietary secrets. Generated browser cat sources are our own finite procedural sound buffers. Importing a Suno export does not imply rights to redistribute or commercialize it. Neither imported audio nor a local manifest alone is authenticated independent proof of source ownership.
 
 Copyright 2026 James Muneoka. All Rights Reserved. See repository LICENSE.
+
+## Retro stage movement
+
+The modern-retro character stage animates in two modes. At idle, three notes travel along distinct rising trajectories, eight CSS-drawn pixel stars drift in offset loops, and the background grid scrolls at a slow rate. While notes are actively held, the existing `setStage` state speeds up note flight, starts an eight-bar mini equalizer, and changes the main cat from gentle floating to rhythmic bouncing. There is no audio analysis or external asset request behind these motions. Decorative elements use `aria-hidden` and `pointer-events:none`. `prefers-reduced-motion: reduce` disables both idle and performance animations. The Chromium browser suite checks that movement occurs, that playing changes its pace, and that reduced-motion preferences stop it.
