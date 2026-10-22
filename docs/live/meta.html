@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#0a1015">
-<title>Research workstation · Hunting the Referent</title>
+<meta name="theme-color" content="#0a1118">
+<title>Meta workstation · Research operations</title>
 <meta name="description" content="A single observed research workstation surface: queue, execution, outcomes and measured flow.">
 <style>
 :root{color-scheme:dark;--bg:#0a1015;--panel:#101b23;--panel2:#16252e;--line:#33444d;--text:#e9f0f3;--muted:#9eb2bd;--blue:#8ec6d6;--green:#9ce1bc;--yellow:#efca92;--red:#f0aaa7;--font:Inter,"Segoe UI",system-ui,sans-serif;--data:"SFMono-Regular",Consolas,monospace}
@@ -68,45 +68,135 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
 @media(max-width:920px){.work-layout{grid-template-columns:1fr}}
 @media(max-width:660px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.metric{padding:12px;min-height:114px}.metric b{font-size:30px}.flow-tracks{gap:7px}.cells{gap:2px}.cell{width:7px;height:7px}.plot-head{padding:15px 14px 0}#trend{width:calc(100% - 26px);margin:8px 13px 0}.legend{padding-left:14px}.fine{margin:9px 14px 16px}.topbar{padding:12px 16px}.work-controls{padding:12px}.hero{padding-bottom:14px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+
+/* META / PROFESSIONAL OPERATIONS LAYOUT — source-backed values only */
+:root{--bg:#0b1117;--panel:#121e26;--panel2:#18262f;--line:#30414b;--text:#ecf3f5;--muted:#a2b7c1;--blue:#90cfe0;--green:#9ddbb8;--yellow:#edc68b;--red:#e8a5a2}
+html{scroll-behavior:smooth}
+body{background:radial-gradient(ellipse 1100px 320px at 55% -240px,rgba(74,111,132,.18),transparent 76%),var(--bg);font-family:Inter,"Segoe UI",-apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+.topbar{position:sticky;top:0;z-index:10;min-height:62px;background:rgba(11,19,26,.97);border-bottom:1px solid #293b46;backdrop-filter:blur(10px)}
+.topbar .brand{font-size:11.5px;font-weight:700;letter-spacing:.095em}
+.topbar nav{gap:3px}
+.topbar nav a{color:var(--muted);padding:10px 13px;border-radius:6px;font-size:11px;transition:background .15s,color .15s}
+.topbar nav a[aria-current="page"]{color:#f4fafb;background:#213642}
+.topbar nav a:hover{color:#f4fafb;background:#20313b;text-decoration:none}
+main{max-width:1400px;padding:32px clamp(18px,3vw,36px) 74px}
+.hero{align-items:end;gap:26px;padding:2px 0 27px}
+.hero h1{margin:8px 0 7px;font-size:clamp(29px,3.15vw,41px);font-weight:650;letter-spacing:-.038em}
+.hero p{font-size:13px;line-height:1.65;max-width:645px;color:#b6c7d0}
+.eyebrow{color:#95c9d8;font-size:10px}
+.refresh{display:flex;align-items:center;gap:10px}
+.source{font-size:10px;color:#a7bbc6}
+#refresh{background:#244250;border:1px solid #4b7b8c;color:#e7f7fd;font-weight:620;padding:10px 15px}
+#refresh:hover{background:#2e5160;border-color:#8ebdc9}
+#refresh:disabled{opacity:.6;cursor:wait}
+.strip-label{margin:0 0 11px;color:#c5dce3;letter-spacing:.095em;font-size:10px}
+.strip-label::before{width:5px;height:15px;background:#8bcddd;border-radius:1px;box-shadow:none}
+.strip-secondary{font-size:10px;color:#8eabb8;letter-spacing:0;font-weight:500;margin-left:auto}
+.metrics{grid-template-columns:1.15fr 1.15fr .85fr .85fr;gap:10px}
+.metric{border-radius:7px;border:1px solid #304550;border-top:2px solid #618497;padding:18px 19px 16px;background:linear-gradient(155deg,#14232c,#0e1921);min-height:133px}
+.metric b{font-size:clamp(32px,3.3vw,45px);font-weight:550;letter-spacing:-.055em;line-height:1.2}
+.metric span{margin-top:13px;font-size:10px;letter-spacing:.065em;color:#c0d0d8}
+.metric small{color:#8da4af;margin-top:3px;font-size:10px}
+.metric.passed,.metric.notpassed{background:#101a22}
+.metric.passed b,.metric.notpassed b{font-size:clamp(27px,2.8vw,37px);margin-top:6px}
+.flowfield{padding:17px 20px;margin-top:11px;background:#111d25;border:1px solid #2c424d;border-radius:7px}
+.flow-heading{font-family:Inter,"Segoe UI",system-ui,sans-serif;color:#e4eef2;font-size:12px;letter-spacing:0;font-weight:650}
+.flow-heading small{font:10px/1.5 var(--data);letter-spacing:0;color:#91aebb}
+.flow-tracks{gap:22px;margin-top:17px}
+.track{border-left:2px solid #37505b;padding-left:13px}
+.track-head{margin-bottom:9px}
+.track-head span{text-transform:uppercase;letter-spacing:.06em;font:10px var(--data);color:#a7bdc7}
+.track-head strong{font:600 19px/1.2 var(--data)}
+.cells{min-height:25px;display:flex;align-items:center;flex-wrap:wrap;gap:7px}
+.cells a.cell{display:inline-block;flex:none;width:11px;height:11px;transform:rotate(45deg);border:1px solid #649bad;border-radius:1px;background:#47899d;transition:transform .12s,box-shadow .12s}
+.cells a.cell.on-queue{background:#d3aa6e;border-color:#d3aa6e}
+.cells a.cell.on-running{background:#79c7d6;border-color:#79c7d6}
+.cells a.cell.on-done{background:#82c9a3;border-color:#82c9a3}
+.cells a.cell:hover,.cells a.cell:focus-visible{transform:rotate(45deg) scale(1.35);box-shadow:0 0 0 5px rgba(114,182,201,.14)}
+.flow-empty{font:10px var(--data);color:#7e98a5}
+.track-note{font:10px/1.4 var(--data);color:#87a0ac;margin:10px 0 0}
+.section-top{margin:30px 0 14px;border-bottom:1px solid #2d404a;padding-bottom:13px}
+.section-top h2{font-size:22px;font-weight:630}
+.subtitle{color:#98aeb9}
+.panel{background:#101b23;border-color:#30434e;border-radius:8px}
+.plot-head{padding:19px 22px 0}
+.plot-head strong{font-size:13px}
+.plot-head p{font-size:11px}
+#trend{width:calc(100% - 44px);max-height:330px;margin:15px 22px 0;background:#0c1820;border:1px solid #293e49;border-radius:5px}
+.legend{padding:13px 22px 0;gap:22px}
+.fine{margin:10px 22px 18px;color:#91a8b5}
+.journal{margin-top:0}
+.panel-title{padding:15px 19px;background:#17252f;border-color:#30444f;font-size:12px}
+.work-controls{padding:14px 19px;gap:10px}
+.work-controls input{flex:1 1 300px;min-width:180px}
+.work-controls select{flex:0 1 205px}
+.runlist{max-height:760px;overflow-y:auto}
+.run{padding:13px 20px;min-height:64px;align-items:center}
+.run:hover{background:#162630}
+.run h3{font-size:13px;font-weight:600}
+.run h3 a:hover{color:#aee4f3}
+.run small{font-size:10.5px}
+.state{border-radius:4px;font-size:9.5px}
+.journal-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:13px 19px;border-top:1px solid #2a404a;background:#131f28;color:#98b0bb;font:10px/1.5 var(--data)}
+.journal-foot button{min-height:35px;padding:7px 12px;font-size:11px;background:#1c3542}
+.details.more,details.more{margin-top:16px;background:#101920;border-color:#2d414b;border-radius:7px}
+details.more summary{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;color:#c3d8e2;list-style:none}
+details.more summary::-webkit-details-marker{display:none}
+.summary-chevron{font-size:18px;transition:transform .2s;color:#92b3c1}
+details[open] .summary-chevron{transform:rotate(180deg)}
+.more-content{padding:19px 21px}
+.detail-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.detail-grid section{border-left:2px solid #365160;padding-left:13px}
+.detail-grid h3{margin:0 0 7px;color:#dceaf1;font-size:12px}
+.detail-grid p{margin:0;font-size:11px;line-height:1.7}
+.detail-links{display:flex;gap:18px;flex-wrap:wrap;padding:13px 0}
+footer{max-width:1400px;margin:auto;color:#8ea5b1}
+.visually-hidden{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
+@media(max-width:900px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-tracks{gap:10px}.detail-grid{grid-template-columns:1fr}.refresh{align-items:center}}
+@media(max-width:640px){main{padding:20px 15px 58px}.topbar{position:relative;padding:12px 15px}.topbar nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.topbar nav a{white-space:nowrap}.hero{padding-bottom:20px}.refresh{width:100%;justify-content:space-between}.metrics{gap:8px}.metric{padding:13px;min-height:113px}.metric b{font-size:33px}.metric.passed b,.metric.notpassed b{font-size:29px}.flowfield{padding:14px}.flow-tracks{grid-template-columns:1fr;gap:16px}.track{padding-left:11px}.section-top{margin-top:25px}.section-top h2{font-size:21px}#trend{width:calc(100% - 24px);margin:12px 12px 0;max-height:290px}.legend{padding:12px 13px 0}.fine{margin:10px 13px 16px}.work-controls{padding:12px}.work-controls input{min-width:100%}.work-controls select{flex:1}.run{padding:12px 13px}.journal-foot{padding:12px 14px}.strip-secondary{display:none}.detail-grid{gap:15px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.cells a.cell{transition:none!important}}
 </style>
 </head>
 <body>
 <header class="topbar"><div class="brand">HUNTING THE REFERENT <b>/ WORKSTATION</b></div>
-<nav aria-label="Workstation navigation"><a href="work.html">SOURCE VIEW</a><a href="research-sources.html">RESEARCH</a><a href="audit.html">AUDIT</a><a href="https://github.com/huntingthereferent">GITHUB ↗</a></nav></header>
+<nav aria-label="Workstation navigation"><a href="meta.html" aria-current="page">OVERVIEW</a><a href="work.html">EXECUTIONS</a><a href="research-sources.html">RESEARCH</a><a href="audit.html">AUDIT</a><a href="https://github.com/huntingthereferent">GITHUB ↗</a></nav></header>
 <main>
-<section class="hero"><div><span class="eyebrow">Observed execution / live work</span><h1>Research workstation</h1><p>One view of work moving through the pipeline. Actual GitHub executions, recorded outcomes, and measured flow.</p></div>
-<div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><button id="refresh" type="button">Refresh ↻</button></div></section>
-<div class="strip-label">CONTROL DECK / ACTUAL WORK</div>
+<section class="hero"><div><span class="eyebrow">Operations / source-observed</span><h1>Research workstation</h1><p>Execution, queue movement and measured history in one place. Every run resolves to its original GitHub record.</p></div>
+<div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><span class="tag" id="source-state">CHECKING</span><button id="refresh" type="button">Refresh data ↻</button></div></section>
+<div class="strip-label">CURRENT WORKLOAD <span class="strip-secondary">GitHub Actions · combined view</span></div>
 <section class="metrics" aria-label="Combined source-observed workflow counts">
 <article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
 <article class="metric running"><b id="running">—</b><span>IN MOTION / NOW</span><small>Executing workflow runs</small></article>
 <article class="metric passed"><b id="passed">—</b><span>PASSED / TODAY*</span><small>Retrieved sample only</small></article>
 <article class="metric notpassed"><b id="failed">—</b><span>NOT PASSED / TODAY*</span><small>Retrieved sample only</small></article>
 </section>
-<section class="flowfield" aria-label="Actual workflow state visualization">
-<div class="flow-heading"><span>FLOW FIELD / OBSERVED EXECUTIONS</span><small>Up to 16 indicators per state · measured workflow-run counts</small></div>
-<div class="flow-tracks"><div class="track"><div class="track-head"><span>01 / WAITING</span><strong id="flow-queue">—</strong></div><div class="cells" id="beads-queue"></div></div>
-<div class="track"><div class="track-head"><span>02 / EXECUTING</span><strong id="flow-running">—</strong></div><div class="cells" id="beads-running"></div></div>
-<div class="track"><div class="track-head"><span>03 / RESOLVED*</span><strong id="flow-done">—</strong></div><div class="cells" id="beads-done"></div></div></div></section>
-<div class="section-top"><div><span class="eyebrow">Measurement / observed history</span><h2>Equilibrium</h2><p class="subtitle">Source-sampled running and waiting counts, together over time.</p></div>
+<section class="flowfield" aria-label="Observed execution stages">
+<div class="flow-heading"><span>Execution flow</span><small>Markers open actual GitHub runs · up to 16 recent runs per stage</small></div>
+<div class="flow-tracks">
+<div class="track"><div class="track-head"><span>Waiting</span><strong id="flow-queue">—</strong></div><div class="cells" id="beads-queue" aria-label="Recent waiting runs"></div><p class="track-note">Awaiting execution</p></div>
+<div class="track"><div class="track-head"><span>Running</span><strong id="flow-running">—</strong></div><div class="cells" id="beads-running" aria-label="Recent running runs"></div><p class="track-note">In progress</p></div>
+<div class="track"><div class="track-head"><span>Resolved today*</span><strong id="flow-done">—</strong></div><div class="cells" id="beads-done" aria-label="Recent resolved runs created today"></div><p class="track-note">In the retrieved sample</p></div>
+</div></section>
+<div class="section-top"><div><span class="eyebrow">Measured history</span><h2>Equilibrium</h2><p class="subtitle">Running and waiting workflows over time, based only on recorded samples.</p></div>
 <div class="options" id="ranges" aria-label="Journal time range"><button data-range="today" aria-pressed="true">Today</button><button data-range="7d">7 days</button><button data-range="30d">Month</button><button data-range="365d">Year</button></div></div>
 <section class="panel" aria-label="Combined workload trend">
 <div class="plot-head"><div><strong id="trend-state">Loading measured history</strong><p id="trend-note">No inferred history or fabricated executions.</p></div><span id="points" class="tag">MEASURED SAMPLES</span></div>
 <svg id="trend" viewBox="0 0 940 220" role="img" aria-label="Observed total running and queued workflow runs over time"><text x="30" y="110" fill="#9eb2bd" font-size="13">Reading observations…</text></svg>
 <div class="legend"><span><i class="r"></i> RUNNING</span><span><i class="q"></i> WAITING</span><span id="last-point">Awaiting measurements</span></div>
 <p class="fine">The historical journal records real GitHub workflow-run samples, normally every 30 minutes. A blank interval is missing evidence, not zero activity.</p></section>
-<div class="section-top"><div><span class="eyebrow">Executions / source journal</span><h2>Recent work</h2><p class="subtitle">Follow a real run to its original GitHub jobs and verification steps.</p></div><span id="count-note" class="source">Reading latest executions</span></div>
-<div class="work-layout"><section class="panel"><div class="panel-title"><strong>Workflow journal</strong><span class="tag">SOURCE-LINKED</span></div>
-<div class="work-controls"><input id="search" type="search" placeholder="Find a workflow…" aria-label="Find workflow"><select id="status" aria-label="Filter workflow status"><option value="all">All results</option><option value="active">Active</option><option value="passed">Passed</option><option value="failed">Not passed</option></select></div>
-<div id="runs" class="runlist"><p class="empty">Checking source work…</p></div></section>
-<aside class="panel"><div class="panel-title"><strong>Observation notes</strong><span id="source-state" class="tag">CHECKING</span></div><div class="side-body">
-<div class="journal-line"><b>Live execution</b><p id="status-note">Counting current source-owned running and waiting workflows.</p></div>
-<div class="journal-line"><b>Continuity</b><p id="routing-note">Reading recorded pipeline guidance.</p></div>
-<div class="journal-line"><b>Research evidence</b><p>A completed workflow is an execution result, not a scientific conclusion. Inspect the original source and native test evidence.</p></div>
-<a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Observation journal ↗</a></div></aside></div>
-<details class="more"><summary>Pipeline records &amp; source references</summary><div class="more-content">
-<p>Work placement, repository identities, admission rules and cross-window handoffs are recorded by the pipeline. They do not need a separate set of cards on the viewer.</p>
-<p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Lane registry ↗</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Verified transfers ↗</a></p>
+<div class="section-top"><div><span class="eyebrow">Source-linked executions</span><h2>Recent work</h2><p class="subtitle">Inspect real workflow runs, timestamps and original verification records.</p></div><span id="count-note" class="source">Reading latest executions</span></div>
+<section class="panel journal" aria-label="Workflow journal">
+<div class="panel-title"><strong>Execution log</strong><span class="tag">LATEST SOURCE RECORDS</span></div>
+<div class="work-controls"><label class="visually-hidden" for="search">Find a workflow</label><input id="search" type="search" placeholder="Search workflow or run ID…" autocomplete="off" aria-label="Search workflow or run ID"><label class="visually-hidden" for="status">Filter workflow state</label><select id="status" aria-label="Filter workflow state"><option value="all">All states</option><option value="active">Running or waiting</option><option value="passed">Passed</option><option value="failed">Not passed</option></select></div>
+<div id="runs" class="runlist" aria-live="polite"><p class="empty">Checking source work…</p></div>
+<div class="journal-foot"><span id="list-range">Showing latest retrieved runs</span><button id="show-more" type="button" hidden>Show 25 more</button></div>
+</section>
+<details class="more"><summary>Source notes, limitations and routing references <span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="more-content">
+<div class="detail-grid"><section><h3>Live source</h3><p id="status-note">Counting verified GitHub workflow runs. Missing sources are unknown, not zero.</p></section>
+<section><h3>Routing</h3><p id="routing-note">Reading recorded pipeline guidance.</p></section>
+<section><h3>Research verification</h3><p>A successful workflow is an execution result, not a scientific conclusion. Inspect the underlying source and native test evidence.</p></section></div>
+<p class="detail-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Measurement history ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Pipeline registry ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Recorded transfers ↗</a></p>
+<p>Placement belongs to the pipeline, not the viewing layer. The viewer does not start jobs, infer absent results or redirect another ChatGPT window.</p>
 </div></details>
 </main>
 <footer>Execution counts are observations, not capacity claims. *Today's results cover retrieved recent runs and may undercount the full day. The viewer never starts jobs or assigns research lanes.</footer>
@@ -120,7 +210,7 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
  const localTime=s=>{const v=new Date(s);return Number.isFinite(+v)?v.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"Unknown time"};
  const valid=n=>Number.isSafeInteger(n)&&n>=0;
  const statuses=["in_progress","queued","pending","waiting"];
- let observed=[],runs=[],range="today",busy=false,allReady=false;
+ let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30;
  async function get(url){const r=await fetch(url,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
  async function readRegistry(){
   let registry;
@@ -134,7 +224,7 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
  }
  async function node(repo){
   const root=ROOT+repo+"/actions/runs";
-  const response=await Promise.all([...statuses.map(s=>get(root+"?status="+s+"&per_page=1")),get(root+"?per_page=65")]);
+  const response=await Promise.all([...statuses.map(s=>get(root+"?status="+s+"&per_page=1")),get(root+"?per_page=100")]);
   const counts=response.slice(0,4).map(r=>r.total_count);
   if(counts.some(c=>!valid(c))||!Array.isArray(response[4].workflow_runs))throw Error("Invalid source");
   const entries=response[4].workflow_runs.filter(r=>Number.isSafeInteger(r.id)&&r.id>0).map(r=>({id:r.id,repo,name:String(r.name||"Unnamed workflow"),status:r.status,conclusion:r.conclusion,created:r.created_at,url:"https://github.com/"+repo+"/actions/runs/"+r.id}));
@@ -145,7 +235,12 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
  const isPassed=r=>r.status==="completed"&&r.conclusion==="success";
  function badge(r){if(isActive(r))return{label:r.status==="in_progress"?"RUNNING":"WAITING",cls:"running"};if(isPassed(r))return{label:"PASSED",cls:"good"};if(isFailed(r))return{label:r.conclusion?.toUpperCase()||"NOT PASSED",cls:"bad"};return{label:String(r.conclusion||r.status||"UNKNOWN").toUpperCase(),cls:""}}
  function isToday(ts){const d=new Date(ts),n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate()}
- function beads(id,count,css){const el=$(id);el.replaceChildren();for(let i=0;i<16;i++){const span=document.createElement("i");span.className="cell"+(i<Math.min(16,count)?" on-"+css:"");el.append(span)}}
+ function beads(id,records,css){
+  const el=$(id);el.replaceChildren();
+  const sample=records.slice(0,16);
+  if(!sample.length){const empty=document.createElement("span");empty.className="flow-empty";empty.textContent="No recent matching runs";el.append(empty);return}
+  for(const r of sample){const a=document.createElement("a");a.className="cell on-"+css;a.href=r.url;a.target="_blank";a.rel="noopener noreferrer";a.title=r.name+" · run "+r.id;a.setAttribute("aria-label","Open "+r.name+" run "+r.id);el.append(a)}
+ }
  function renderMetrics(n){
   $("queued").textContent=n.waiting;$("running").textContent=n.running;
   const today=runs.filter(r=>isToday(r.created));
@@ -153,21 +248,25 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
   $("passed").textContent=passed;$("failed").textContent=failed;
   $("flow-queue").textContent=n.waiting;$("flow-running").textContent=n.running;
   $("flow-done").textContent=passed+failed;
-  beads("beads-queue",n.waiting,"queue");beads("beads-running",n.running,"running");beads("beads-done",passed+failed,"done");
-  $("count-note").textContent=runs.length+" most recent retrieved runs · "+today.length+" created today";
+  beads("beads-queue",runs.filter(r=>["queued","pending","waiting"].includes(r.status)),"queue");
+  beads("beads-running",runs.filter(r=>r.status==="in_progress"),"running");
+  beads("beads-done",today.filter(r=>r.status==="completed"),"done");
+  $("count-note").textContent=runs.length+" latest indexed runs · "+today.length+" created today*";
  }
  function renderRuns(){
   const text=$("search").value.trim().toLowerCase(),filter=$("status").value;
-  const subset=runs.filter(r=>r.name.toLowerCase().includes(text)&&(filter==="all"||filter==="active"&&isActive(r)||filter==="passed"&&isPassed(r)||filter==="failed"&&isFailed(r)));
+  const subset=runs.filter(r=>(r.name.toLowerCase().includes(text)||String(r.id).includes(text))&&(filter==="all"||filter==="active"&&isActive(r)||filter==="passed"&&isPassed(r)||filter==="failed"&&isFailed(r)));
   const area=$("runs");area.replaceChildren();
-  if(!subset.length){area.innerHTML='<p class="empty">No matching runs in this retrieved sample; older jobs may exist.</p>';return}
-  for(const r of subset.slice(0,65)){
+  if(!subset.length){area.innerHTML='<p class="empty">No matching runs in this retrieved sample. Older jobs may exist.</p>';$("list-range").textContent="0 matching recent runs";$("show-more").hidden=true;return}
+  for(const r of subset.slice(0,showLimit)){
    const b=badge(r),line=document.createElement("div");line.className="run";
    const body=document.createElement("div"),title=document.createElement("h3"),a=document.createElement("a");a.textContent=r.name;a.href=r.url;a.rel="noopener noreferrer";a.target="_blank";title.append(a);body.append(title);
    const small=document.createElement("small");small.textContent=localTime(r.created)+" · RUN "+r.id;body.append(small);
    const tag=document.createElement("span");tag.className="state "+b.cls;tag.textContent=b.label;
    line.append(body,tag);area.append(line);
   }
+  $("list-range").textContent="Showing "+Math.min(showLimit,subset.length)+" of "+subset.length+" matching recent runs · source-limited sample";
+  $("show-more").hidden=subset.length<=showLimit;
  }
  function measured(x){
   if(!x||typeof x!=="object")return null;const a=x.nodes?.A,b=x.nodes?.B;
@@ -221,25 +320,26 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
   }catch(e){$("routing-note").textContent="Routing journal unavailable. Work assignments remain unchanged."}
  }
  async function refresh(){
-  if(busy)return;busy=true;$("refresh").disabled=true;$("stamp").textContent="Checking current executions…";$("source-state").textContent="READING";
+  if(busy)return;busy=true;$("refresh").disabled=true;$("stamp").textContent="Checking current executions…";$("source-state").textContent="CHECKING";
   const settled=await Promise.allSettled(REPOS.map(node));
   const good=settled.filter(x=>x.status==="fulfilled").map(x=>x.value);
   allReady=good.length===REPOS.length;
   runs=good.flatMap(x=>x.entries).sort((a,b)=>Date.parse(b.created)-Date.parse(a.created));
+  showLimit=30;
   if(allReady){
    const total=good.reduce((a,n)=>({running:a.running+n.running,waiting:a.waiting+n.waiting}),{running:0,waiting:0});
-   renderMetrics(total);$("stamp").textContent="Checked "+localTime(new Date());$("dot").className="dot ok";$("source-state").textContent="LIVE";
+   renderMetrics(total);$("stamp").textContent="Checked "+localTime(new Date());$("dot").className="dot ok";$("source-state").textContent="CHECKED";
    $("status-note").textContent="Both source journals read successfully. Counts include currently waiting and executing workflow runs.";
   }else{
    for(const id of["queued","running","passed","failed","flow-queue","flow-running","flow-done"])$(id).textContent="—";
-   for(const id of["beads-queue","beads-running","beads-done"])beads(id,0,"none");
+   for(const id of["beads-queue","beads-running","beads-done"])beads(id,[],"none");
    $("stamp").textContent="Partial source / try refresh";$("dot").className="dot warn";$("source-state").textContent="PARTIAL";
    $("status-note").textContent="A GitHub source was unavailable; unknown work is not zero. Accessible runs remain linked below.";
    $("count-note").textContent=runs.length+" retrieved runs · incomplete current source";
   }
   renderRuns();$("refresh").disabled=false;busy=false;
  }
- $("refresh").addEventListener("click",refresh);$("search").addEventListener("input",renderRuns);$("status").addEventListener("change",renderRuns);
+ $("refresh").addEventListener("click",refresh);$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
  document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));chart()}));
  (async()=>{
   try{await readRegistry()}
