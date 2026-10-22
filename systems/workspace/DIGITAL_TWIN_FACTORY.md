@@ -35,7 +35,7 @@ A twin is NOT the next slot in a loop of automatic account creation. Only existi
 - `observe`: authenticated REST account-owner enumeration and totals for `in_progress` and `queued` in ALL repositories owned by that account, not the latest hundred runs of one repo. Reads `FACTORY_SOURCE_TOKEN` from environment; verifies the authenticated GitHub user.
 - `decide`: read-only, three-sample admission requiring time separation, consistent owner and cap, saturated running jobs, and a nonempty queue.
 - `birth`: exact-target-confirmed new repo provisioning via `gh` logged in as target owner; checks the pinned main SHA, disables target Actions, pushes all branches and tags with reachable history, re-reads destination main SHA. It refuses an existing target.
-- `network/tests/test_digital_twin_factory.py`: no-network tests of saturation and fail-closed behavior.
+- `systems/workspace/digital_twin_controller.py`: connected one-shot cycle: observe, append a persistent sample, qualify, obtain source pin, birth exactly one authorized twin, write a local registry receipt, and refuse further births until aggregate multi-account capacity/readiness is implemented.\n- `network/tests/test_digital_twin_factory.py`: no-network tests of saturation, stale evidence, controller idempotence and fail-closed behavior.
 
 ```sh
 # From the repo root; token belongs to the observed SOURCE GitHub user.
@@ -55,12 +55,12 @@ python -m systems.workspace.digital_twin_factory birth \
 
 Provisioning does not move secrets, GitHub Actions run history, issue metadata, branch protection, or repository/Pages settings. `git clone --bare` copies all accessible branches, tags and the history reachable from them. Disabling Actions prevents accidental storm-triggering; enabling selected workflows is a separate audited operation.
 
-## Activation and limits still to build
+## Run one connected cycle\n\nOn an authorized persistent host (not the read-only viewer), invoke this at intervals of at least one minute. `gh` must authenticate as `aeren-research`; the source read credential belongs to `huntingthereferent`. The first two calls only observe; a third saturated sample spanning at least two minutes may produce one twin. The registry prevents repeating that birth.\n\n```sh\npython -m systems.workspace.digital_twin_controller \\\n  --history runtime/data/factory-capacity.jsonl \\\n  --registry runtime/data/factory-twins.json \\\n  --confirm aeren-research/autobots-assemble-twin-01\n```\n\nNo scheduler has been connected and no new Desi destination exists yet. The provisioned twin deliberately starts with all Actions disabled.\n\n## Activation and limits still to build
 
-- An authenticated controller scheduler that persists observations, applies `decide`, selects a previously authorized/unused target and invokes `birth` exactly once.
+- A scheduled invocation on an authorized persistent host, and a process lock for multiple competing controllers. The connected one-shot cycle and local persistence are implemented; the host/scheduler is not.
 - Parent-child registry with independently verified twin readiness, assigned lanes, and work receipts. Each twin reports its own native results; the controller must verify returned refs rather than adopt claims.
 - A minimal safe workflow allowlist for an initial worker lane; never enable hundreds of copied workflows by default.
 - Account billing/usage clearance; private repositories may consume included minutes and require quota checks. Public standard GitHub-hosted actions minutes are free but still subject to concurrency limits.
 - Repository creation uses `gh`, because the currently connected GitHub tool surface does **not** expose a create-repository action. Authentication and provisioning must be executed with authorized target-account credentials.
 
-These items are explicitly **not yet live**. This branch contains a source-pinned provisioning mechanism and fail-closed capacity logic, not a running autonomous twin network.
+These items are explicitly **not yet live**. This branch contains a source-pinned provisioning mechanism and a connected single-twin cycle, not an activated autonomous twin network.
