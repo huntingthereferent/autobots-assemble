@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'work/arc3/native_sp80_stage4_same_position_histories.py'
+      - 'work/arc3/audit_arc4_same_position_pixel_diff.py'
       - '.github/workflows/arc4-stage4-same-position-histories.yml'
   workflow_dispatch:
 permissions:
@@ -22,10 +23,18 @@ jobs:
         run: python -m compileall -q work/arc3/native_sp80_stage4_same_position_histories.py
       - name: Execute five frozen histories with two native entrance witnesses
         run: python -m work.arc3.native_sp80_stage4_same_position_histories --out runtime/data/arc4/arc4-same-position-source-histories.json
+      - name: Recompute every source-pixel difference on both actual native witnesses
+        run: |
+          python -m work.arc3.audit_arc4_same_position_pixel_diff \
+            --json runtime/data/arc4/arc4-same-position-source-histories.json \
+            --npz runtime/data/arc4/arc4-same-position-source-histories.npz \
+            --out runtime/data/arc4/arc4-same-position-pixel-diff-audit.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: arc4-original-same-position-native-histories
-          path: runtime/data/arc4/arc4-same-position-source-histories.*
+          path: |
+            runtime/data/arc4/arc4-same-position-source-histories.*
+            runtime/data/arc4/arc4-same-position-pixel-diff-audit.json
           if-no-files-found: error
           retention-days: 90
