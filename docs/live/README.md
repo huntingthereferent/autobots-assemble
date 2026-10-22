@@ -54,6 +54,8 @@ Choose a project such as ARC, WORLD, World48, NIH, A/B, W13 or Workstation. An e
 
 An audit assessment is made by the **human reviewer**, not by this source browser. Assessments and notes can be exported as JSON with the source commit, file's Git blob identity, and test name/line or data-record key. They are not silently saved, treated as passed tests, or submitted to GitHub. A declared assertion is not an observed execution result. Dynamically generated, parametrized and differently named tests may require manually opening original code; the index is not proof that a project's entire test coverage has been discovered.
 
+When a workflow run is opened, its original GitHub job records are inspected on demand. If those records include valid `created_at`, `started_at`, and `completed_at` fields, the viewer reports job created-to-start wait and started-to-finished duration, plus arithmetic means over the jobs returned. Missing, invalid, or decreasing timestamps are omitted rather than counted as zero. These timings characterize the selected observed run; they are not global runner utilization or proof of available capacity.
+
 The existing periodically committed research projection appears as a **separate** data source, with its original recorded movements, boundaries and paths. An apparent match between a test path and research source is organizational, not proof one executed the other. Actual job and step outcomes remain in the Workstation's **Executions** section rather than being misrepresented as data audit results.
 
 ## Source provenance diagram
