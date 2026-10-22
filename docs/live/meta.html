@@ -222,8 +222,9 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <details class="more" id="source-details"><summary>Source notes, limitations and routing references <span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="more-content">
 <section id="current-checks" class="current-checks"><h3>Current source checks needing attention</h3><p id="health-context">Reading current active workflow outcomes.</p><div id="health-list"></div></section><div class="detail-grid"><section><h3>Live source</h3><p id="status-note">Counting verified GitHub workflow runs. Missing sources are unknown, not zero.</p></section>
 <section><h3>Routing</h3><p id="routing-note">Reading recorded pipeline guidance.</p></section>
+<section><h3>Transfer receipts</h3><p id="transfer-note">Reading source departures and receiver acknowledgements. Unavailable records are unknown, not delivered.</p></section>
 <section><h3>Research verification</h3><p>A successful workflow is an execution result, not a scientific conclusion. Inspect the underlying source and native test evidence.</p></section></div>
-<p class="detail-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Measurement history ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Pipeline registry ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Recorded transfers ↗</a></p>
+<p class="detail-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Measurement history ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Pipeline registry ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Recorded transfers ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/handoffs.json">Transfer delivery journal ↗</a></p>
 <p>Placement belongs to the pipeline, not the viewing layer. The viewer does not start jobs, infer absent results or redirect another ChatGPT window.</p>
 </div></details>
 </main>
@@ -331,6 +332,27 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   }
   if(open>80){const p=document.createElement("p");p.className="fine";p.textContent=
     "Showing 80 of "+open+" current source checks. Open individual GitHub journals for details.";area.append(p)}
+ }
+ async function loadTransfers(){
+  const el=$("transfer-note");
+  try{
+   const data=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/handoffs.json");
+   if(data.schema!=="meta-workstation/transfer-health-v1"||!Array.isArray(data.transfers))throw Error("Invalid transfer record");
+   const checked=Date.parse(data.observed_at);
+   if(!Number.isFinite(checked)||checked>Date.now()+60000||Date.now()-checked>90*60000){
+    el.textContent="Transfer journal stale. Delivery is unconfirmed until source and receiver records can be checked again.";
+    return;
+   }
+   const confirmed=data.transfers.filter(x=>x.delivery==="RECEIVED_VERIFIED").length;
+   const blocked=data.transfers.filter(x=>x.delivery==="NOT_SENT").length;
+   const outstanding=data.transfers.filter(x=>x.attention&&x.delivery!=="NOT_SENT").length;
+   el.textContent=(data.complete?"Both repositories checked. ":"Receiver observation incomplete. ")+
+     blocked+" blocked before departure; "+outstanding+" unresolved or unknown transfers; "+
+     confirmed+" confirmed byte-matched receipts. "+
+     (data.complete?"Only matching sender and receiver evidence clears a handoff.":"No missing destination response is treated as a completed transfer.");
+  }catch(e){
+   el.textContent="Transfer journal unavailable. Check the source handoff registry; delivery is not confirmed.";
+  }
  }
  async function loadHealth(){
   try{
@@ -478,16 +500,16 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   renderRuns();$("refresh").disabled=false;busy=false;
  }
  $("inspect-open").addEventListener("click",()=>{$("source-details").open=true;$("current-checks").scrollIntoView({behavior:"smooth",block:"center"})});
- $("refresh").addEventListener("click",()=>{refresh();loadDaily();loadHealth()});$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
+ $("refresh").addEventListener("click",()=>{refresh();loadDaily();loadHealth();loadTransfers()});$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
  document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));chart()}));
  (async()=>{
   try{await readRegistry()}
   catch(e){$("stamp").textContent="Pipeline registry unavailable";$("source-state").textContent="SOURCE UNKNOWN";$("status-note").textContent="Check the canonical registry; no account is inferred from a stale label.";return}
-  await Promise.all([history(),routing(),refresh(),loadDaily(),loadHealth()]);
+  await Promise.all([history(),routing(),refresh(),loadDaily(),loadHealth(),loadTransfers()]);
  })();
  setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
  setInterval(()=>{if(document.visibilityState==="visible"){history();routing()}},300000);
-  setInterval(()=>{if(document.visibilityState==="visible"){loadDaily();loadHealth()}},300000);
+  setInterval(()=>{if(document.visibilityState==="visible"){loadDaily();loadHealth();loadTransfers()}},300000);
 })();
 </script>
 </body></html>
