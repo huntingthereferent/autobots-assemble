@@ -88,7 +88,7 @@ jobs:
           python - <<'PY'
           import os,json
           from pathlib import Path
-          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"bgee-real-evidence/real-source-join.json").read_text())
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"bgee-real-evidence/full-source-sharded-entailment.json").read_text())
           assert x["schema"]=="nih-p2-original-bgee-exhaustive-sharded-owlrl-v1"
           assert x["original_Bgee_zip_Git_blob_sha1"]=="234c79cc9e1eca2b6493fc6ee34b8270f2508861"
           assert x["original_source_positive_expression_rows"]==19804
@@ -111,7 +111,7 @@ jobs:
           assert sum(s["source_edge_count"] for s in x["shards"])==25027
           assert sum(s["forward_and_inverse_entailed"] for s in x["shards"])==50054
           PY
-          (cd "$RUNNER_TEMP/bgee-real-evidence" && sha256sum real-source-join.json > sha256.txt)
+          (cd "$RUNNER_TEMP/bgee-real-evidence" && sha256sum full-source-sharded-entailment.json > sha256.txt)
       - name: Retain only aggregate counts and hashed real-source relationship proof receipts
         if: always()
         uses: actions/upload-artifact@v4
