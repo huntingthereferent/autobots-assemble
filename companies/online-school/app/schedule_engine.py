@@ -224,6 +224,17 @@ def validate_task(payload: dict):
         if minutes < 0 or minutes > 24 * 60:
             raise ValueError("planned_minutes must be between 0 and 1440")
 
+    actual = payload.get("actual_minutes")
+    if actual is not None:
+        if isinstance(actual, (bool, float)) or (isinstance(actual, str) and not actual.strip()):
+            raise ValueError("actual_minutes must be a whole number between 0 and 1440")
+        try:
+            actual = int(actual)
+        except (ValueError, TypeError):
+            raise ValueError("actual_minutes must be a whole number between 0 and 1440") from None
+        if actual < 0 or actual > 1440:
+            raise ValueError("actual_minutes must be between 0 and 1440")
+
     learners = payload.get("learner_ids", [])
     if not isinstance(learners, list):
         raise ValueError("learner_ids must be a list")
@@ -237,6 +248,7 @@ def validate_task(payload: dict):
         "scope": str(payload.get("scope") or "custom"),
         "learner_ids": [str(x) for x in learners],
         "planned_minutes": minutes,
+        "actual_minutes": actual,
         "status": str(payload.get("status") or "todo"),
         "source": str(payload.get("source") or "manual"),
         "notes": str(payload.get("notes") or ""),
