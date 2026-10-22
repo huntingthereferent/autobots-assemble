@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Research sources · Hunting the Referent</title>
+<meta name="description" content="Read-only source admission catalog and independent scientific testing contexts.">
+<style>
+:root{color-scheme:dark;--bg:#06090c;--panel:#0c1319;--pane:#101b23;--line:#2a3b45;--text:#eaf2f4;--muted:#a4b7bf;--blue:#8bd6dd;--amber:#e7c58a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse 70% 370px at 50% -270px,rgba(43,94,107,.32),transparent 82%),var(--bg);color:var(--text);font:14px/1.6 Aptos,Inter,"Segoe UI",system-ui,sans-serif}
+a{color:#a8e6eb;text-underline-offset:3px}a:hover{color:white}
+header{min-height:67px;display:flex;align-items:center;justify-content:space-between;gap:22px;padding:13px clamp(16px,2.5vw,40px);border-bottom:1px solid var(--line);background:#070c10}
+header strong{font-size:11px;letter-spacing:.13em}
+header nav{display:flex;flex-wrap:wrap;gap:7px}
+header nav a{font-size:11px;font-weight:650;text-decoration:none;letter-spacing:.065em;color:var(--muted);padding:7px 10px;border:1px solid transparent;border-radius:5px}
+header nav a:hover,header nav a[aria-current]{color:var(--text);border-color:#344f5a;background:#17262d}
+main{max-width:1470px;margin:0 auto;padding:30px clamp(15px,3vw,40px) 70px}
+.hero{padding:clamp(20px,3vw,35px);background:linear-gradient(120deg,#101d25,#0b1217 70%);border:1px solid #34515b;border-radius:11px}
+.eyebrow{font:650 10px/1.4 Consolas,monospace;letter-spacing:.17em;color:var(--blue);margin:0 0 9px}
+h1{font-size:clamp(28px,4vw,48px);line-height:1.12;letter-spacing:-.047em;margin:0;font-weight:670}
+h2{font-size:20px;letter-spacing:-.025em;margin:0}
+h3{font-size:14px;margin:0;line-height:1.4}
+.hero p:last-of-type{max-width:790px;color:#b7cbd2;line-height:1.75}
+.meta{display:flex;align-items:center;flex-wrap:wrap;gap:10px 25px;margin-top:20px;padding-top:16px;border-top:1px solid #30444e;font:12px/1.5 Consolas,monospace}
+.meta strong{font-size:20px;display:block;color:var(--text);line-height:1.35}
+.meta span{color:var(--muted)}.meta .status{margin-left:auto;color:var(--amber);font-size:11px}
+.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(290px,.83fr);gap:22px;margin-top:28px;align-items:start}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:15px;padding-bottom:11px;border-bottom:1px solid var(--line)}
+.section-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+input{width:100%;border-radius:6px;border:1px solid #3a525c;background:#0a151b;color:var(--text);padding:11px 12px;font:inherit;min-height:43px}
+input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.catalog,.lanes{display:grid;gap:9px}
+.item,.lane{background:var(--panel);border:1px solid var(--line);border-radius:7px;min-width:0}
+.item{padding:14px 15px}.item:hover,.lane:hover{border-color:#44636d}
+.item-header{display:flex;justify-content:space-between;align-items:start;gap:14px}
+.item h3{font-weight:660}.id{color:var(--blue);font:600 10px/1.5 Consolas,monospace;letter-spacing:.09em}
+.class{font:10px/1.5 Consolas,monospace;color:var(--amber);white-space:nowrap}
+.kind{color:var(--muted);font-size:12px;margin:5px 0 10px}
+.links{display:flex;gap:14px;flex-wrap:wrap;font-size:11px}
+.lane{width:100%;padding:14px;text-align:left;color:var(--text);cursor:pointer;font:inherit;background:var(--panel)}
+.lane[aria-pressed="true"]{border-color:var(--blue);box-shadow:inset 3px 0 var(--blue);background:#102129}
+.lane h3{margin:3px 0 7px}.lane p{font-size:11.5px;color:var(--muted);margin:6px 0 0}
+.pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.pills span{font:10px/1.4 Consolas,monospace;color:#b9cdd4;background:#152630;border:1px solid #2d4955;border-radius:4px;padding:3px 6px}
+.controls{display:flex;gap:9px;align-items:center;margin-bottom:10px}
+button{border:1px solid #3a505b;background:#13232d;border-radius:6px;color:var(--text);padding:8px 12px;cursor:pointer;font:12px/1.3 inherit}
+button:hover{border-color:var(--blue);background:#1c333c}
+.small{font-size:11px;color:var(--muted)}
+.empty{padding:20px;background:var(--panel);color:var(--muted);border:1px dashed #38515b;border-radius:7px}
+.notice{margin:22px 0 0;padding:14px 17px;background:#0d171d;border-left:2px solid var(--amber);color:#beced5;font-size:12px}
+footer{margin-top:38px;border-top:1px solid var(--line);padding-top:16px;font-size:11px;color:var(--muted)}
+[hidden]{display:none!important}
+@media(max-width:870px){.layout{grid-template-columns:1fr}.meta .status{margin-left:0;width:100%}}
+@media(max-width:550px){header{align-items:start;flex-direction:column;gap:8px}.item-header{flex-wrap:wrap}.class{white-space:normal}.meta{gap:15px}main{padding-top:18px}}
+</style>
+</head>
+<body>
+<header><strong>HUNTING THE REFERENT <span style="color:#8bd6dd">/ SOURCES</span></strong>
+<nav aria-label="Workstation navigation">
+<a href="work.html">WORKSTATION</a>
+<a href="research-sources.html" aria-current="page">SOURCES</a>
+<a href="work.html#research">RESEARCH</a>
+<a href="work.html#audit">AUDIT</a>
+<a href="https://github.com/huntingthereferent">MAIN GITHUB ↗</a>
+</nav></header>
+<main>
+<section class="hero" aria-labelledby="page-title">
+<p class="eyebrow">RESEARCH / SOURCE ADMISSION</p>
+<h1 id="page-title">Sources before experiments.</h1>
+<p>The original provider, what it can actually support, how to access it, and where its evidence stops. Select a test context to inspect its candidate sources. No catalog entry is itself a reproduced study.</p>
+<div class="meta">
+<div><span>DOCUMENTED SOURCES</span><strong id="source-count">—</strong></div>
+<div><span>TEST CONTEXTS</span><strong id="lane-count">—</strong></div>
+<div><span>MANUAL ACCESS GATES</span><strong id="gate-count">—</strong></div>
+<div id="source-state" class="status" role="status" aria-live="polite">READING VERSIONED REGISTRY</div>
+</div>
+</section>
+<div class="layout">
+<section aria-labelledby="sources-title" id="sources">
+<div class="section-head"><div><h2 id="sources-title">Source records</h2><p>Each provider is admitted separately; full data and research conclusions require additional checks.</p></div></div>
+<div class="controls"><input id="search" type="search" placeholder="Filter source, domain, or description" aria-label="Filter research sources"></div>
+<p class="small" id="current-filter">Showing all documented source families</p>
+<div class="catalog" id="catalog"><div class="empty">Reading GitHub source registry. Nothing inferred while unavailable.</div></div>
+</section>
+<section aria-labelledby="lanes-title">
+<div class="section-head"><div><h2 id="lanes-title">Research contexts</h2><p>These are candidate tests, not running scientific experiments.</p></div></div>
+<div class="controls"><button id="show-all" type="button">All sources</button><span class="small" id="selection">Select a lane to inspect dependencies</span></div>
+<div class="lanes" id="lanes"><div class="empty">Lane definitions are read from the same source revision.</div></div>
+</section>
+</div>
+<p class="notice">Evidence boundary: documentation reviewed ≠ provider response observed ≠ study admitted ≠ experiment reproduced. Each public metadata probe produces its own GitHub Actions receipt. Credentialed, restricted, or record-specific sources keep their access gates.</p>
+<footer><a href="https://github.com/huntingthereferent/autobots-assemble/tree/main/research/testing_lanes/sources">Original source contracts ↗</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/actions/workflows/research-source-admission.yml">Source-admission runs ↗</a> · <a href="work.html">Return to workstation ↗</a></footer>
+</main>
+<script>
+"use strict";
+const root="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/registry.json?ref=main";
+const repo="https://github.com/huntingthereferent/autobots-assemble/blob/main/research/testing_lanes/sources/";
+const manual=new Set(["physionet","openneuro","nist","noaa","oecd"]);
+let registry=null, selected=null;
+const get=id=>document.getElementById(id);
+function element(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
+function anchor(text,url){const a=element("a",null,text);a.href=url;a.target="_blank";a.rel="noopener noreferrer";return a}
+function draw(){
+ if(!registry)return;
+ const query=get("search").value.trim().toLowerCase();
+ const filterSources=selected?registry.lanes.find(l=>l.id===selected)?.source_ids:null;
+ const sources=registry.sources.filter(s=>(!filterSources||filterSources.includes(s.id))&&
+  [s.id,s.name,s.kind,s.boundary].join(" ").toLowerCase().includes(query));
+ const catalog=get("catalog");catalog.replaceChildren();
+ for(const s of sources){
+  const card=element("article","item");
+  const title=element("div","item-header");
+  const left=element("div");left.append(element("div","id",s.id.toUpperCase()),element("h3",null,s.name));
+  title.append(left,element("div","class",manual.has(s.id)?"MANUAL GATE":"DOCUMENTED / UNOBSERVED"));
+  card.append(title,element("p","kind",s.kind+" — "+s.boundary));
+  const links=element("div","links");
+  links.append(anchor("Provider documentation ↗",s.doc_url),anchor("Source contract ↗",repo+encodeURIComponent(s.id)+".json"));
+  card.append(links);catalog.append(card);
+ }
+ if(!sources.length)catalog.append(element("div","empty","No source records match this filter. No absence claim is implied."));
+ get("current-filter").textContent=selected?"Showing dependencies for "+selected+" · "+sources.length+" source records":"Showing "+sources.length+" documented sources";
+ const lanes=get("lanes");lanes.replaceChildren();
+ for(const lane of registry.lanes){
+  const item=element("button","lane");item.type="button";
+  item.setAttribute("aria-pressed",selected===lane.id?"true":"false");
+  item.append(element("div","id",lane.id),element("h3",null,lane.name),element("p",null,lane.question));
+  const pills=element("div","pills");
+  for(const id of lane.source_ids)pills.append(element("span",null,id));
+  item.append(pills);
+  item.addEventListener("click",()=>{selected=selected===lane.id?null:lane.id;get("selection").textContent=selected?"Lane "+selected+" · source selection only":"Select a lane to inspect dependencies";draw();get("sources").scrollIntoView({block:"start",behavior:"smooth"})});
+  lanes.append(item);
+ }
+}
+get("search").addEventListener("input",draw);
+get("show-all").addEventListener("click",()=>{selected=null;get("search").value="";get("selection").textContent="Select a lane to inspect dependencies";draw()});
+async function load(){
+ try{
+  const response=await fetch(root,{headers:{"Accept":"application/vnd.github+json"},cache:"no-store"});
+  if(!response.ok)throw new Error("GitHub source response "+response.status);
+  const envelope=await response.json();
+  if(!envelope.content||envelope.encoding!=="base64")throw new Error("Registry source encoding unavailable");
+  const b64=envelope.content.replace(/\s/g,"");
+  const bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+  const data=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(bytes));
+  if(data.schema_version!==1||!Array.isArray(data.sources)||!Array.isArray(data.lanes))throw new Error("Unsupported research registry schema");
+  registry=data;
+  get("source-count").textContent=String(data.sources.length);
+  get("lane-count").textContent=String(data.lanes.length);
+  get("gate-count").textContent=String(data.sources.filter(s=>manual.has(s.id)).length);
+  get("source-state").textContent="REGISTRY SOURCE VERIFIED · "+String(envelope.sha||"").slice(0,12);
+  draw();
+ }catch(err){
+  get("source-state").textContent="SOURCE NOT AVAILABLE · NO COUNTS INFERRED";
+  get("catalog").replaceChildren(element("div","empty","Cannot read the current source registry. Open the original source contracts using the footer link."));
+  get("lanes").replaceChildren(element("div","empty","Cannot load research contexts from the verified source. "+String(err.message)));
+ }
+}
+load();
+</script>
+</body>
+</html>
