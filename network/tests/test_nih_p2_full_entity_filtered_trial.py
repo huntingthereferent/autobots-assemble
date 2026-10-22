@@ -113,5 +113,23 @@ class FullSourceEntityRankingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             trial.choose_d2_heldout([("a","T","b")],[("z","T","q")])
 
+
+    @unittest.skipUnless(TRAIN and TEST and VALID,
+                         "requires pinned source original full split receipts")
+    def test_d2_source_cohort_is_unchanged_and_independent_of_prior_cohorts(self):
+        from systems.workspace import nih_p2_external_pharmkg_heldout_trial as source
+        from systems.workspace import nih_p2_pharmkg_frozen_heterogeneous_trial as mixed
+        from systems.workspace import nih_p2_broad_heldout_trial as broad
+        train,_=source.read_source(Path(TRAIN),"train.tsv")
+        test,_=source.read_source(Path(TEST),"test.tsv")
+        cohort=trial.choose_d2_heldout(test,train)
+        used=(set(train)|set(source.select_test(test,train))|
+              set(mixed.untouched_new_heldout(test,train)[0])|
+              set(broad.choose_new(test,train)))
+        self.assertEqual(len(cohort),64)
+        self.assertEqual(len(set(cohort)),64)
+        self.assertTrue(set(cohort).isdisjoint(used))
+        self.assertEqual(cohort,trial.choose_d2_heldout(test,train))
+
 if __name__=="__main__":
     unittest.main()
