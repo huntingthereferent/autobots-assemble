@@ -1,5 +1,11 @@
 # Neuroscience / OpenNeuro public dataset identity probe
 
+## Observed public source identity (October 22, 2026)
+
+[Actual CI run 39782507005](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39782507005) passed both independent jobs: offline synthetic controls and one fixed, live public metadata query. The unmodified official OpenNeuro dataset/snapshot identity returned as `ds000224:1.0.1`, DOI `10.18112/openneuro.ds000224.v1.0.1`. The complete reply was 294 bytes and was recorded only through its SHA-256 hash `1cfc7ea2a470186ac613ebd8887ed6578bf0f1d83647a3979d3f500715f1f875`.
+
+The append-only [verified public identity receipt](observations/2026-10-22-run-39782507005.json) preserves the exact URL, UTC observation time, source code revision, evidence boundaries and whether access succeeded. This does **not** establish rights for subject recordings, agreement of original findings, or permission to treat actual neuroimaging measurements as science evidence. This lane is now **PUBLIC_SNAPSHOT_METADATA_OBSERVED**; the parent NEURO lane still requires a separate per-study data/ethics gate.
+
 The existing **NEURO** research lane remains behind the `openneuro` and `physionet` dataset-specific access and rights review gates. This independent sublane proposes a narrower question: **Can OpenNeuro's public GraphQL service resolve the dataset and exact, previously documented frozen snapshot identity?**
 
 Source: [OpenNeuro official GraphQL API examples](https://docs.openneuro.org/api.html). Their example uses dataset `ds000224`, snapshot tag `1.0.1` and DOI `10.18112/openneuro.ds000224.v1.0.1`.
