@@ -36,5 +36,30 @@ class PonyTrailUiTests(unittest.TestCase):
         for trail in ('value="meadow"', 'value="sunset"', 'value="night"'):
             self.assertIn(trail, self.page)
 
+
+    def test_trail_change_is_the_centerpiece(self):
+        """Every original trail remains distinct, switchable and named."""
+        for trail in ('value="meadow"', 'value="sunset"', 'value="night"'):
+            self.assertIn(trail, self.page)
+        for name in ("WILDFLOWER MEADOW", "GOLDEN HOUR RIDGE", "MOONLIT WOODS"):
+            self.assertIn(name, self.page)
+        for token in ('id="trail-hint"', 'lastScene=scene;scene=next',
+                      'sceneFade=1', 'document.documentElement.dataset.scene=scene'):
+            self.assertIn(token, self.page)
+
+    def test_animated_background_tracks_riding_speed(self):
+        """Parallax uses actual travel instead of unrelated wall-clock motion."""
+        for token in ('scroll+=speed*dt;', 'hillBand(', 'tree(', 'flower(',
+                      'flyingObjects(scene)', 'scroll*.035', 'scroll*.57',
+                      'scroll*1.08', 'function landscape(s,kind)'):
+            with self.subTest(token=token):
+                self.assertIn(token, self.page)
+
+    def test_no_imported_or_generated_art_dependencies(self):
+        for token in ('<img', '<video', '<link rel="stylesheet"',
+                      '<script src=', 'fetch(', 'XMLHttpRequest', 'WebSocket'):
+            with self.subTest(token=token):
+                self.assertNotIn(token, self.page)
+
 if __name__ == "__main__":
     unittest.main()
