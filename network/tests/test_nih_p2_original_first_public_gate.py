@@ -21,13 +21,13 @@ def observed_clock():
         "original_W13_journal_modified":False,
         "conditional_assumption":"source-reported-last-update-posted-only",
         "original_source_version_observations":[{
-            "source_version":259,"first_public_version_at":"UNAVAILABLE",
+            "source_version":259,"observed_recorded_status":"RECRUITING","first_public_version_at":"UNAVAILABLE",
             "clinical_valid_at":"UNAVAILABLE",
             "source_reported_posted_date":"2022-10-27",
             "original_version_source_url":"https://clinicaltrials.gov/example/259",
             "source_retrieved_utc":"2026-10-20T00:00:00Z",
         },{
-            "source_version":260,"first_public_version_at":"UNAVAILABLE",
+            "source_version":260,"observed_recorded_status":"COMPLETED","first_public_version_at":"UNAVAILABLE",
             "clinical_valid_at":"UNAVAILABLE",
             "source_reported_posted_date":"2022-11-07",
             "original_version_source_url":"https://clinicaltrials.gov/example/260",
@@ -37,7 +37,14 @@ def observed_clock():
             {"original_archive_is_time_authority":False},
             {"original_archive_is_time_authority":False},
         ],
-        "conditional_registry_publication_queries":[{},{}],
+        "conditional_registry_publication_queries": [
+            parent.conditional_source_status([
+                {"version":259,"observed_overall_status":"RECRUITING",
+                 "observed_version_local_last_update_posted":"2022-10-27"},
+                {"version":260,"observed_overall_status":"COMPLETED",
+                 "observed_version_local_last_update_posted":"2022-11-07"},
+            ],cutoff) for cutoff in parent.CUTOFFS
+        ],
     }
 
 
@@ -91,6 +98,24 @@ class HistoricalFirstPublicGateTests(unittest.TestCase):
                          "REFUSED_MISSING_INDEPENDENT_WITNESS")
         self.assertFalse(result["original_W13_modified"])
         self.assertFalse(result["official_NIH_benchmark"])
+
+
+    def test_conditional_clock_independent_date_oracle_rejects_fabricated_visibility(self):
+        report=observed_clock()
+        self.assertEqual(
+            gate.independently_replay_reported_clock(report)["independent_source_reported_clock_cutoffs_verified"],
+            len(parent.CUTOFFS))
+        changed=deepcopy(report)
+        changed["conditional_registry_publication_queries"][0]["conditional_visible_registry_version"]=260
+        with self.assertRaisesRegex(ValueError,"diverges"):
+            gate.independently_replay_reported_clock(changed)
+
+    def test_source_reported_date_order_cannot_be_reversed(self):
+        changed=observed_clock()
+        changed["original_source_version_observations"][0]["source_reported_posted_date"]="2023-01-01"
+        with self.assertRaisesRegex(ValueError,"reversed"):
+            gate.independently_replay_reported_clock(changed)
+
 
 if __name__=="__main__":
     unittest.main()
