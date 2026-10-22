@@ -1,0 +1,31 @@
+name: ARC4 lane B original successful versus nonadvancing native pours
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_success_failure_comparison.py'
+      - '.github/workflows/arc4-stage3-success-stage4-nonadvance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-native-transition-contrast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile verified native transition comparisons
+        run: python -m compileall -q work/arc3/native_sp80_stage4_success_failure_comparison.py
+      - name: Execute actual SDK success and nonadvance transitions with both entry witnesses
+        run: python -m work.arc3.native_sp80_stage4_success_failure_comparison --out runtime/data/arc4/arc4-official-success-versus-nonadvance.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-success-versus-nonadvance
+          path: runtime/data/arc4/arc4-official-success-versus-nonadvance.*
+          retention-days: 90
+          if-no-files-found: error
