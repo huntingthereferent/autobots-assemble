@@ -135,5 +135,23 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
                                              original,{GENE},{TARGET})
 
 
+
+    def test_e22_class_type_inventory_partitions_every_residual(self):
+        owl=URIRef("http://www.w3.org/2002/07/owl#Thing")
+        obo=URIRef("http://purl.obolibrary.org/obo/RO_0000001")
+        original={(GENE,RDF.type,V)}
+        full=original|{(GENE,RDF.type,owl),(TARGET,RDF.type,owl),
+                       (GENE,RDF.type,obo)}
+        result=e20.residual_type_class_inventory(original,full,original)
+        self.assertEqual(result["original_full_profile_limited_oracle_residual_count"],3)
+        self.assertEqual(result["source_class_namespace_counts"]["OWL_vocabulary"],2)
+        self.assertEqual(result["source_class_namespace_counts"]["source_OBO_URI"],1)
+        self.assertTrue(result["class_namespace_is_not_inference_rule_provenance"])
+
+    def test_e22_missing_independent_source_type_not_reported_as_residual(self):
+        with self.assertRaisesRegex(ValueError,"missing"):
+            e20.residual_type_class_inventory(
+                {(GENE,RDF.type,V)},set(),{(GENE,RDF.type,V)})
+
 if __name__=="__main__":
     unittest.main()
