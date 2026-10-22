@@ -51,7 +51,7 @@ class GameW13ContinuationVerifier:
                 return False
             desk = ProcessWorkstation(self.data_dir / "workstation")
             return GameW13NativeBridge(runtime=runtime, workstation=desk).reverify(job_id)
-        except (KeyError, ValueError, TypeError, OSError):
+        except (AttributeError, KeyError, ValueError, TypeError, OSError):
             return False
 
     def verify_connection(self, left: Observation, right: Observation) -> bool:
