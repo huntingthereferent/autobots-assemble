@@ -62,7 +62,7 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
   </div>
   <svg id="balance-chart" viewBox="0 0 900 230" role="img" aria-label="Observed A plus B running and waiting workflow counts over selected period"><text x="24" y="110" fill="#9cb2bf" font-size="13">Collecting verified observations…</text></svg>
   <div class="chart-legend"><span><i class="key-r"></i> A + B running</span><span><i class="key-q"></i> A + B waiting</span><span id="sample-count">— observations</span></div>
-  <p class="balance-foot">Observation history is collected independently every 30 minutes on GitHub. While this page is open it also samples directly; readings are not interpolated into evidence. A queue is not a license to manufacture jobs. Samples may be missing if GitHub throttles or the collector fails.</p>
+  <p class="balance-foot">Observation history is collected independently every 30 minutes on GitHub. Direct API status checks run on entry, on manual refresh, and at most every 20 minutes while visible to protect GitHub's public API allowance. Readings are not interpolated. A queue is not a license to manufacture jobs. Samples may be missing if GitHub throttles or the collector fails.</p>
 </section>
 <div class="section-heading"><div><div class="micro">01 / allocation ledger</div><h2>Who owns what?</h2><p>Recorded assignments, not a scheduler. A lane stays on A until a real B execution is admitted.</p></div><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Open source registry ↗</a></div>
 <div class="panel"><div class="table-wrap"><table><thead><tr><th>Research lane</th><th>Node</th><th>Placement / admission</th></tr></thead><tbody id="lane-rows"><tr><td colspan="3">Reading declared lane registry…</td></tr></tbody></table></div></div>
@@ -226,8 +226,8 @@ $("lane-filter").addEventListener("change",e=>{laneFilter=e.target.value;renderR
 document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(v=>v.setAttribute("aria-pressed",String(v===b)));renderChart()}));
 $("refresh").addEventListener("click",refresh);
 (async()=>{try{await readMetadata()}catch(e){$("registry-date").textContent="Placement registry unavailable: "+String(e.message||e)}await Promise.all([readHistory(),refresh()])})();
-setInterval(()=>{if(document.visibilityState==="visible")refresh()},120000);
-setInterval(()=>{if(document.visibilityState==="visible")readHistory()},900000);
+setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
+setInterval(()=>{if(document.visibilityState==="visible")readHistory()},300000);
 })();
 </script>
 </body></html>
