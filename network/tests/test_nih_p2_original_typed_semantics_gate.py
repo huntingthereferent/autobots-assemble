@@ -52,5 +52,23 @@ class OriginalTypedEvidenceBoundary(unittest.TestCase):
         self.assertTrue(all(d["training_only_relation_code_profile"][c]
                             ["training_source_edges"]>0 for c in audit.CODES))
 
+
+    def test_cross_relation_roles_not_semantic_entity_types(self):
+        rows=[("a","GG","b"),("b","GG","c"),
+              ("x","T","d"),("a","P","d"),("x","I","a")]
+        s=audit.cross_relation_role_overlap(rows)
+        counts=s["directed_relation_role_overlap_counts"]
+        self.assertEqual(counts["P:tail|T:tail"],1)
+        self.assertEqual(counts["GG:head|I:tail"],1)
+        self.assertEqual(counts["T:head|I:head"],1)
+        self.assertFalse(s["authenticated_entity_class_labels_from_roles"])
+        self.assertFalse(s["valid_or_test_labels_used"])
+
+    def test_cross_relation_unknown_code_or_malformed_id_refused(self):
+        for rows in ([("a","invented","b")],[("","GG","b")],[]):
+            with self.assertRaises(ValueError):
+                audit.cross_relation_role_overlap(rows)
+
+
 if __name__=="__main__":
     unittest.main()
