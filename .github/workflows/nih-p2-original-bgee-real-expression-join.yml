@@ -1,0 +1,113 @@
+name: NIH P2 genuine original Bgee expression inference
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_original_bgee_real_expression_join.py'
+      - 'network/tests/test_nih_p2_original_bgee_real_expression_join.py'
+      - '.github/workflows/nih-p2-original-bgee-real-expression-join.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-owner-real-bgee-expression-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  original-data-equal-capability-source-oracles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 26
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install RDFLib source parser and independent OWL RL engine
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Retrieve immutable author archive, mappings and independent RO source with exact source integrity
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/bgee-original" "$RUNNER_TEMP/ro-original" "$RUNNER_TEMP/bgee-real-evidence"
+          python - <<'PY'
+          from systems.workspace import nih_p2_author_genex_bgee_ro_mapping_gate as b
+          from systems.workspace import nih_p2_original_bgee_real_expression_join as trial
+          from systems.workspace import nih_phase2_external_obo_graph_trial as ro
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from hashlib import sha256
+          import os
+          header={"User-Agent":"NIH-P2-Verified-Bgee-Original-Relation-Join/1.0"}
+          output=Path(os.environ["RUNNER_TEMP"])/"bgee-original"
+          for filename,pin in b.FILES.items():
+              url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/obda/"+filename
+              with urlopen(Request(url,headers=header),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("author original RDF map source URL differed")
+                  raw=response.read(1_000_001)
+              if len(raw)>1_000_000 or b.git_blob(raw)!=pin:
+                  raise ValueError("author original R2RML/GenEx source Git hash differed")
+              (output/filename).write_bytes(raw)
+          url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/data/postgresql.zip"
+          with urlopen(Request(url,headers=header),timeout=90) as response:
+              if response.status!=200 or response.geturl()!=url:
+                  raise ValueError("owner original Bgee SQL source URL differs")
+              raw=response.read(30_000_001)
+          if b.git_blob(raw)!=trial.ZIP_BLOB:
+              raise ValueError("original complete owner Bgee data Git blob mismatch")
+          (output/"postgresql.zip").write_bytes(raw)
+          dest=Path(os.environ["RUNNER_TEMP"])/"ro-original"
+          for filename in ro.SOURCE_FILES:
+              url=ro.SOURCE_URL+filename
+              with urlopen(Request(url,headers=header),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("independent original RO source URL differs")
+                  raw=response.read(5_000_001)
+              if sha256(raw).hexdigest()!=ro.PINNED_WHOLE_SOURCE_SHA256[filename]:
+                  raise ValueError("independent original RO whole-file SHA-256 mismatched")
+              (dest/filename).write_bytes(raw)
+          print("Original archive, original author mappings, and independent RO raw sources hash-pinned")
+          PY
+      - name: Test direct source join, independent SQLite and bounded real-data OWL RL
+        env:
+          NIH_ORIGINAL_BGEE_SOURCE_DIR: ${{ runner.temp }}/bgee-original
+          NIH_ORIGINAL_BGEE_POSTGRES_ZIP: ${{ runner.temp }}/bgee-original/postgresql.zip
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/ro-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/ro-original/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_original_bgee_real_expression_join
+      - name: Materialize actual author-mapped original Bgee relationships with equal-capability SQL and OWL RL
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_original_bgee_real_expression_join \
+            --archive "$RUNNER_TEMP/bgee-original/postgresql.zip" \
+            --obda "$RUNNER_TEMP/bgee-original/bgee_v14_genex.obda" \
+            --owl "$RUNNER_TEMP/bgee-original/bgee_v14_genex.owl" \
+            --r2rml "$RUNNER_TEMP/bgee-original/bgee_v14_genex.r2rml" \
+            --ro-base "$RUNNER_TEMP/ro-original/ro-base.owl" \
+            --core "$RUNNER_TEMP/ro-original/core.owl" \
+            --output "$RUNNER_TEMP/bgee-real-evidence/real-source-join.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"bgee-real-evidence/real-source-join.json").read_text())
+          assert x["schema"]=="nih-p2-original-bgee-real-gene-expression-inference-v1"
+          assert x["authenticated_original_bgee_zip_blob"]=="234c79cc9e1eca2b6493fc6ee34b8270f2508861"
+          assert x["original_positive_expression_call_rows"]==19804
+          assert x["original_owner_source_mapping_rules"]==2
+          assert x["original_complete_source_key_join_matches_independent_SQL"] is True
+          assert x["real_source_ground_OWL_RL_edges_tested"]==48
+          assert x["genuine_source_biomedical_relation_inferences_reproduced"]==48
+          assert x["actual_source_relationships_not_trial_synthetic"] is True
+          assert x["Bgee_expression_observations_do_not_prove_treatment_efficacy"] is True
+          assert x["complete_dataset_full_OWL_RL_materialization"] is False
+          assert x["official_NIH_benchmark"] is False
+          assert x["original_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/bgee-real-evidence" && sha256sum real-source-join.json > sha256.txt)
+      - name: Retain only aggregate counts and hashed real-source relationship proof receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-authentic-bgee-join-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/bgee-real-evidence/
+          if-no-files-found: warn
+          retention-days: 30
