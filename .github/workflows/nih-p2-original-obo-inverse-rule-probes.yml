@@ -1,0 +1,86 @@
+name: NIH P2 original OBO inverse rule source probes
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_ro_inverse_rule_original_source_probe.py'
+      - 'network/tests/test_nih_p2_ro_inverse_rule_original_source_probe.py'
+      - '.github/workflows/nih-p2-original-obo-inverse-rule-probes.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-authenticated-inverse-probes-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  original-inverse-rule-probe-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install RDFLib SPARQL oracle and OWL RL rule engine
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Download and hash-verify immutable original OBO ontology
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/obo-original" "$RUNNER_TEMP/obo-inverse-derived"
+          python - <<'PY'
+          from systems.workspace import nih_phase2_external_obo_graph_trial as s
+          from urllib.request import urlopen, Request
+          from pathlib import Path
+          import hashlib, os
+          original=Path(os.environ["RUNNER_TEMP"])/"obo-original"
+          for file in s.SOURCE_FILES:
+              url=s.SOURCE_URL+file
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Original-RO-Inverse-Probe/1.0"}),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("wrong original external owner or source SHA ref")
+                  raw=response.read(5_000_001)
+              if hashlib.sha256(raw).hexdigest()!=s.PINNED_WHOLE_SOURCE_SHA256[file]:
+                  raise ValueError("original ontology file failed frozen source SHA256")
+              (original/file).write_bytes(raw)
+          PY
+      - name: Test source premise integrity, missing premises, and independent oracle
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_ro_inverse_rule_original_source_probe
+      - name: Run complete source-owner inverse axiom operational challenge
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_ro_inverse_rule_original_source_probe \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/obo-inverse-derived/source-inverse-fixture.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"obo-inverse-derived/source-inverse-fixture.json").read_text())
+          assert r["schema"]=="nih-p2-original-ro-inverse-rule-source-fixture-v1"
+          assert r["original_source_rdf_triples"]==8319
+          assert r["original_named_inverse_axioms"]==123
+          assert r["unique_injected_synthetic_test_assertions"]==123
+          assert r["independent_SPARQL_CONSTRUCT_source_join_predictions"]==123
+          assert r["OWL_RL_correct_inverse_assertions"]==123
+          assert r["OWL_RL_missing_inverse_assertions"]==0
+          assert r["synthetic_probe_results_are_original_biomedical_data"] is False
+          assert r["equal_capability_static_oracle_is_not_A_B_advantage"] is True
+          assert r["original_W13_modified"] is False
+          assert r["official_NIH_benchmark"] is False
+          PY
+          (cd "$RUNNER_TEMP/obo-inverse-derived" && sha256sum source-inverse-fixture.json > sha256.txt)
+      - name: Retain derived fixture report only, no original source file bodies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-original-inverse-rule-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/obo-inverse-derived/
+          retention-days: 30
+          if-no-files-found: warn

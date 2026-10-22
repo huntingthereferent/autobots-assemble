@@ -1,0 +1,109 @@
+"""Full-data three-source-rule Jena-vs-RDFLib oracle exact-set boundary."""
+from __future__ import annotations
+
+import unittest
+from rdflib import Graph,URIRef,RDFS,OWL
+from systems.workspace import nih_p2_bgee_jena_four_rule_source_comparison as trial
+from systems.workspace import nih_p2_author_genex_bgee_ro_mapping_gate as owner
+
+GENE=URIRef("http://omabrowser.org/ontology/oma#GENE_SYNTHETIC_ONLY")
+TGT=URIRef("http://purl.obolibrary.org/obo/UBERON_0000955")
+
+
+def fixture():
+    combined=Graph()
+    a=(owner.GENEX.isExpressedIn,RDFS.subPropertyOf,owner.RO_EXPRESSED)
+    b=(owner.RO_EXPRESSED,RDFS.subPropertyOf,trial.GENOMIC)
+    c=(owner.RO_EXPRESSED,OWL.inverseOf,owner.RO_EXPRESSES)
+    d=(owner.RO_EXPRESSES,RDFS.subPropertyOf,trial.GENOMIC)
+    for t in (a,b,c,d):
+        combined.add(t)
+    raw={(GENE,owner.GENEX.isExpressedIn,TGT)}
+    for t in raw:
+        combined.add(t)
+    return {"full_combined":combined,"source_edges":raw,
+            "independent":{(GENE,owner.RO_EXPRESSED,TGT),
+                           (TGT,owner.RO_EXPRESSES,GENE)}},(a,b,c,d)
+
+
+class JenaFourRuleExactSourceTests(unittest.TestCase):
+    def test_original_rule_premises_not_assumed_from_words(self):
+        orig,premises=fixture()
+        for index in range(4):
+            bad,_=fixture()
+            bad["full_combined"].remove(premises[index])
+            with self.assertRaises(ValueError):
+                trial.original_four_source_axioms(bad)
+
+    def test_full_source_oracle_requires_actual_frozen_inventory(self):
+        data,_=fixture()
+        with self.assertRaises(ValueError):
+            trial.original_four_source_axioms(data)
+
+    def test_three_expected_predicate_directions_are_distinct(self):
+        data,_=fixture()
+        raw=next(iter(data["source_edges"]))
+        expected={(raw[0],owner.RO_EXPRESSED,raw[2]),
+                  (raw[0],trial.GENOMIC,raw[2]),
+                  (raw[2],owner.RO_EXPRESSES,raw[0]),
+                  (raw[2],trial.GENOMIC,raw[0])}
+        self.assertEqual(len(expected),4)
+        self.assertEqual(set(data["full_combined"].query(trial.CONSTRUCT).graph),expected)
+
+    def test_missing_original_genomic_axiom_abolishes_whole_four_rule_oracle(self):
+        original,premises=fixture()
+        original["full_combined"].remove(premises[1])
+        self.assertEqual(set(original["full_combined"].query(trial.CONSTRUCT).graph),set())
+
+    def test_each_single_original_rule_removal_has_distinct_static_consequence_set(self):
+        example,triples=fixture()
+        expected={
+            "omit-genex":{"forward":0,"genomic":0,"inverse":0,"inverse_genomic":0},
+            "omit-genomic":{"forward":1,"genomic":0,"inverse":1,"inverse_genomic":1},
+            "omit-inverse":{"forward":1,"genomic":1,"inverse":0,"inverse_genomic":0},
+            "omit-inverse-genomic":{"forward":1,"genomic":1,"inverse":1,"inverse_genomic":0},
+        }
+        for mode in trial.PREMISE_MODES:
+            entailed,counts=trial.independently_infer_with_removed_premise(
+                example["full_combined"],triples,mode)
+            self.assertEqual(counts,expected[mode])
+            self.assertEqual(len(entailed),sum(expected[mode].values()))
+            self.assertEqual(len(example["full_combined"]),5)
+            self.assertTrue(all(t in example["full_combined"] for t in triples))
+
+    def test_source_axiom_deletion_cannot_be_silent_if_source_missing(self):
+        original,triples=fixture()
+        original["full_combined"].remove(triples[1])
+        with self.assertRaisesRegex(ValueError,"premises"):
+            trial.independently_infer_with_removed_premise(
+                original["full_combined"],triples,"omit-inverse")
+
+    def test_unsupported_multiple_or_unknown_source_deletion_refused(self):
+        original,triples=fixture()
+        with self.assertRaises(ValueError):
+            trial.independently_infer_with_removed_premise(
+                original["full_combined"],triples,"omit-unknown")
+        with self.assertRaises(ValueError):
+            trial.independently_infer_with_removed_premise(
+                original["full_combined"],triples[:3],"omit-inverse")
+
+    def test_reverse_genomic_source_parent_is_required_and_directional(self):
+        original,axioms=fixture()
+        source_iri=owner.RO_EXPRESSES
+        self.assertIn((source_iri,RDFS.subPropertyOf,trial.GENOMIC),original["full_combined"])
+        reverse=(TGT,trial.GENOMIC,GENE)
+        source_spql=set(original["full_combined"].query(trial.CONSTRUCT).graph)
+        self.assertIn(reverse,source_spql)
+        original["full_combined"].remove(axioms[3])
+        result=set(original["full_combined"].query(trial.CONSTRUCT).graph)
+        self.assertEqual(result,set())
+        self.assertNotIn(reverse,result)
+
+    def test_real_input_not_a_clinical_outcome_claim(self):
+        self.assertNotEqual(trial.GENOMIC,owner.RO_EXPRESSED)
+        self.assertNotEqual(trial.GENOMIC,owner.RO_EXPRESSES)
+        self.assertEqual(trial.N_TOTAL,4*trial.N_SOURCE)
+
+
+if __name__=="__main__":
+    unittest.main()
