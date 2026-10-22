@@ -1,5 +1,7 @@
 # Hunting the Referent — research records and experiments
 
+**[META WORKSTATION · A ↔ B](https://huntingthereferent.github.io/autobots-assemble/live/meta.html)** · [Cross-window handoff](systems/workspace/META_WORKSTATION_HANDOFF.md) — shared placement, separate GitHub job journals, and Dessy reground.
+
 **[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
 The public work view reads actual GitHub workflow runs and native job/step results, with original workstation research and walls alongside them. Runs only show what GitHub executed; saved research findings are separate historical evidence. The earlier animated source graph remains optional at [trace.html](docs/live/trace.html). Local private process handoffs remain available only through the loopback workstation viewer.
