@@ -25,7 +25,19 @@ The published paper reports 97% significance for original effects and 36% for re
 
 The adjacent [F-test reconstruction](f_statistics.py) is a separate, deeper source analysis. For every row explicitly labeled `F`, it reads `T.Test.value.O/R` and `T.df1/df2.O/R`, calculates the upper-tail probability using SciPy's F distribution, then compares the result against the source's `T.pval.recalc.O/R` and the available binary significance flags. Each side keeps counts for eligible cases, matching and conflicting p-values (tolerance 0.000001), missing reported p-values, and matching/conflicting/missing flags. It does **not** silently treat Student-t, chi-square, correlations, missing statistics, or truncated exports as F tests.
 
-The source inspection identified 92 original-side and 62 replication-side F-statistic candidates; those totals are not a claim that all 154 results match. Their accuracy and discrepancies are checked independently by GitHub Actions, which stores a derived-only, source-hashed witness. Synthetic negative cases cover absent columns, invalid degrees of freedom, missing data, mismatching p-values, unexpected flags, and duplicate rows.
+The source inspection identified 93 original-side F-labeled entries, of which **92 have complete F inputs** and one has missing degrees of freedom. On the replication side, **62 have complete F inputs**. An independent first-pass numerical calculation matches all 92 and 62 source-recalculated p-values at absolute tolerance 0.000001. The script preserves any departures as separate counts and requires an independent GitHub Actions receipt before the lane is treated as CI-validated. Synthetic negative cases cover absent columns, invalid degrees of freedom, missing data, mismatching p-values, unexpected flags, and duplicate rows.
+
+### Three original-side flag disagreements to preserve
+
+Within F rows also carrying a source significance flag, the independent p-value threshold classification matches 62 of 65 originals and 62 of 62 replications. Three named source row IDs are **flagged significant (1)** although their recomputed and source-recalculated p-values exceed 0.05:
+
+| Source row | Original-side F | df1 | df2 | Recomputed/source p (rounded) | Stored flag |
+|---|---:|---:|---:|---:|---:|
+| Row.28 | 4.10 | 1 | 31 | 0.051569634 | 1 |
+| Row.37 | 4.80 | 1 | 11 | 0.050889110 | 1 |
+| Row.129 | 4.17 | 1 | 26 | 0.051411614 | 1 |
+
+These are **classification-rule review candidates**. The archived p-values and flags are both source facts; without following the original authors' exact criteria, they do not establish a scientific error. The F-test reconstruction records the aggregate disagreements instead of overwriting any labels.
 
 The input F statistics and source significance classifications are the study team's reported summaries; this layer recomputes a mathematical probability, **not** the underlying experiment or its measured effect. Small p-value differences can result from rounded source statistics; any disagreement remains in the report.
 
