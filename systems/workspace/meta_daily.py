@@ -93,3 +93,7 @@ def main():
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"date": report["local_date"], "observed_at": report["observed_at"],
                       "all_sources": report["all_sources"], "totals": report["totals"]}))
+
+
+if __name__ == "__main__":
+    main()
