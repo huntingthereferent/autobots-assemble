@@ -1,0 +1,42 @@
+name: osc-2015-aggregate-reanalysis
+
+on:
+  pull_request:
+    paths:
+      - "research/reanalysis/osc_2015/**"
+      - ".github/workflows/osc-2015-aggregate-reanalysis.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-negative-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m unittest discover -s research/reanalysis/osc_2015 -p 'test_*.py' -v
+      - name: Confirm default does not fetch any data
+        run: python research/reanalysis/osc_2015/aggregate.py
+
+  pinned-public-aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Recalculate 2015 significance counts from pinned CSV
+        run: python research/reanalysis/osc_2015/aggregate.py --live --output osc-2015-derived-only.json
+      - name: Archive derived aggregate, not the CSV
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: osc-2015-derived-aggregate
+          path: osc-2015-derived-only.json
+          retention-days: 30
+          if-no-files-found: warn
