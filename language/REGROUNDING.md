@@ -13,6 +13,6 @@ Regrounding means returning to the relationship being investigated after a descr
 
 The language referent and the earlier A/B name identify the same referent and continuing inquiry. A finite mathematical model or software protocol must nevertheless establish its own domain, tests, and verification.
 
-This is a technical explanation, not a transcript or repository of retired personal quotations. A metaphor is not an executable command; silence is not proof of another person's intent. The currently published [writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md) remains separate.
+This is a technical explanation, not a transcript or repository of retired personal quotations. A metaphor is not an executable command; silence is not proof of another person's intent. Retired personal writing is not a current public source.
 
 [Words movement](words/README.md) · [Handoff](handoff/README.md)
