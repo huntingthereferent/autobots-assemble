@@ -8,6 +8,9 @@ on:
     paths:
       - ".github/workflows/meta-workstation-observations.yml"
       - "systems/workspace/meta_collect.py"
+      - "systems/workspace/meta_route.py"
+      - "docs/live/meta-registry.json"
+      - "network/tests/test_meta_route.py"
 
 permissions:
   contents: write
@@ -28,11 +31,19 @@ jobs:
           git worktree add --detach "$RUNNER_TEMP/ab-meta-observations" FETCH_HEAD
       - name: Capture source-owned job counts
         run: python3 systems/workspace/meta_collect.py --history-path "$RUNNER_TEMP/ab-meta-observations/history.json"
+      - name: Test evidence-gated routing contract
+        run: python3 -m unittest -v network.tests.test_meta_route
+      - name: Write routing advice next to immutable observations
+        run: |
+          python3 systems/workspace/meta_route.py \
+            --history "$RUNNER_TEMP/ab-meta-observations/history.json" \
+            --registry docs/live/meta-registry.json \
+            --output "$RUNNER_TEMP/ab-meta-observations/routing.json"
       - name: Save recorded observations
         run: |
           cd "$RUNNER_TEMP/ab-meta-observations"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add history.json
+          git add history.json routing.json
           git commit -m "Record source-owned A B status counts"
           git push origin HEAD:meta-observations

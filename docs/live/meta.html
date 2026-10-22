@@ -41,6 +41,14 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
 .filter-label{font:11px Consolas,monospace;color:var(--muted)}.filter-label select{background:#16252e;color:var(--text);padding:8px;border:1px solid var(--border);border-radius:6px}
 #range-controls button{font:11px Consolas,monospace}#range-controls button[aria-pressed="true"]{background:#244759;border-color:#80c9dd}
 @media(max-width:650px){.balance-panel{padding:12px}.balance-total{width:100%}.balance-total>div{flex:1}}
+.routing-panel{background:#0e1b23;padding:17px 20px;border-color:#40606a}
+.routing-header{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:start}
+.routing-header strong{font-size:16px}.routing-header p{font-size:12px;color:var(--muted)}
+.routing-rows{margin-top:10px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px}
+.route{background:#101f28;border:1px solid #324955;border-radius:7px;padding:12px 14px}
+.route b{display:block;font-size:12px}.route small{display:block;margin-top:5px;font:10px/1.55 Consolas,monospace;color:var(--muted)}
+.route .node-hop{font:700 15px/1.4 Consolas,monospace;color:var(--a)}.route .node-hop.candidate{color:var(--good)}
+.routing-foot{font-size:11px;color:var(--muted);margin-bottom:0}
 </style>
 </head>
 <body>
@@ -54,6 +62,12 @@ footer{border-top:1px solid var(--border);color:var(--muted);padding:22px max(20
   <article class="node"><div class="node-top"><div class="identity"><span class="letter">A</span><div><h2>Original</h2><div class="repo">huntingthereferent/autobots-assemble</div></div></div><span class="tag" id="a-state">PUBLIC</span></div><div class="readings"><div class="reading"><strong id="a-running">—</strong><span>RUNNING</span></div><div class="reading"><strong id="a-queued">—</strong><span>QUEUED</span></div><div class="reading"><strong id="a-recent">—</strong><span>RECENT SAMPLE</span></div></div><p class="node-note" id="a-note">Awaiting GitHub Actions source.</p><div class="node-links"><a href="work.html">A Viewer ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/actions">A Jobs ↗</a></div></article>
   <article class="node b"><div class="node-top"><div class="identity"><span class="letter">B</span><div><h2>Dessy</h2><div class="repo">aeren-research/continuum-oscillator</div></div></div><span class="tag" id="b-state">CONNECTING</span></div><div class="readings"><div class="reading"><strong id="b-running">—</strong><span>RUNNING</span></div><div class="reading"><strong id="b-queued">—</strong><span>QUEUED</span></div><div class="reading"><strong id="b-recent">—</strong><span>RECENT SAMPLE</span></div></div><p class="node-note" id="b-note">Checking Dessy's live GitHub Actions journal.</p><div class="node-links"><a href="https://github.com/aeren-research/continuum-oscillator/actions">B Jobs ↗</a><a href="https://aeren-research.github.io/continuum-oscillator/live/work.html">B Viewer ↗</a></div></article>
 </div>
+<div class="section-heading"><div><div class="micro">00 / between-window coordination</div><h2>Next lane · verified placement</h2><p>The shared journal publishes the current routing signal even with this browser closed. A working ChatGPT window must check it before taking a new batch.</p></div><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json" target="_blank" rel="noopener noreferrer">Routing evidence ↗</a></div>
+<section class="panel routing-panel" aria-label="Evidence-gated routing recommendations">
+  <div class="routing-header"><div><div class="micro">SOURCE / MULTI-WINDOW HANDOFF</div><strong id="routing-signal">Observing both workstations</strong><p id="routing-reason">Waiting for three independent load observations, source verification and eligible lanes.</p></div><span id="routing-age" class="tag">NOT VERIFIED</span></div>
+  <div class="routing-rows" id="routing-rows"><p class="empty">Source-pinned routing guidance will appear here; no assignments will be moved from the page.</p></div>
+  <p class="routing-foot">Route suggestions apply only to the <em>next</em> explicitly admitted task. Existing running jobs remain on their source node. A ChatGPT window cannot read another window's live private state; it must read this shared GitHub record when active.</p>
+</section>
 <div class="section-heading"><div><div class="micro">00 / observed cluster equilibrium</div><h2>One line of sight · two workstations</h2><p>Actual sampled GitHub Actions workload over time. The lines record running and waiting <em>workflow runs</em>, not job slots or proven hardware capacity.</p></div><div class="actionbar" id="range-controls"><button type="button" data-range="day" aria-pressed="true">Today</button><button type="button" data-range="24h" aria-pressed="false">24 hours</button><button type="button" data-range="7d" aria-pressed="false">7 days</button><button type="button" data-range="30d" aria-pressed="false">30 days</button><button type="button" data-range="365d" aria-pressed="false">Year</button></div></div>
 <section class="panel balance-panel" aria-label="Source-observed A and B equilibrium line chart">
   <div class="balance-top">
@@ -183,6 +197,28 @@ function renderChart(){
  $("balance-state").textContent=p.length>1?"Observed balance · "+p.length+" snapshots":"First paired observation recorded";
  $("balance-note").textContent="Last observed "+fmt(new Date(l.t).toISOString())+" · "+l.r+" running / "+l.q+" waiting across A+B.";
 }
+async function readRouting(){
+ try{
+  const doc=await json("https://raw.githubusercontent.com/"+A+"/meta-observations/routing.json");
+  if(doc.schema!=="meta-workstation/routing-advice-v1"||!Array.isArray(doc.lane_advice))throw Error("Unexpected routing journal");
+  const age=Date.now()-Date.parse(doc.generated_at);
+  if(!Number.isFinite(age)||age<0||age>90*60*1000)throw Error("Advice is stale; verify live GitHub before placing work");
+  const signalNames={A_BACKLOG:"A queue growing · review B eligibility",B_BACKLOG:"B queue growing · review A eligibility",NO_CLEAR_PRESSURE:"No clear pressure detected",OBSERVING:"Collecting independent samples",UNKNOWN:"Source unavailable",STALE:"Source stale"};
+  $("routing-signal").textContent=signalNames[doc.signal]||"Verify source state";
+  $("routing-reason").textContent=doc.reason;
+  $("routing-age").textContent=fmt(doc.generated_at)+" · "+doc.sample_count+" spaced checks";
+  const items=doc.lane_advice.filter(x=>x.action!=="KEEP_ASSIGNED");
+  $("routing-rows").innerHTML=items.length?items.map(x=>{
+   const from=safe(x.assigned),to=safe(x.recommended),switching=x.action==="CANDIDATE_SWITCH";
+   return '<div class="route"><b>'+safe(x.id)+'</b><div class="node-hop '+(switching?'candidate':'')+'">'+from+' → '+to+'</div><small>'+safe(switching?"Candidate for next job · reverify and admit":x.action==="NO_ADMITTED_ALTERNATE"?"No enabled alternate; keep lane here":"Verify live source before placing next job")+'</small></div>';
+  }).join(""):'<div class="empty">No newly justified lane switch. Keep existing placements; check current work before admitting another job.</div>';
+ }catch(e){
+  $("routing-signal").textContent="Routing status unavailable";
+  $("routing-reason").textContent="Do not move work from an unavailable or stale routing journal. "+String(e.message||e);
+  $("routing-age").textContent="VERIFY SOURCE";
+  $("routing-rows").innerHTML='<div class="empty">Open the GitHub evidence link or use the connected GitHub account inside the working ChatGPT window.</div>';
+ }
+}
 async function readHistory(){
  try{
   const h=await json("https://raw.githubusercontent.com/"+A+"/meta-observations/history.json");
@@ -225,9 +261,10 @@ async function refresh(){
 $("lane-filter").addEventListener("change",e=>{laneFilter=e.target.value;renderRuns()});
 document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(v=>v.setAttribute("aria-pressed",String(v===b)));renderChart()}));
 $("refresh").addEventListener("click",refresh);
-(async()=>{try{await readMetadata()}catch(e){$("registry-date").textContent="Placement registry unavailable: "+String(e.message||e)}await Promise.all([readHistory(),refresh()])})();
+(async()=>{try{await readMetadata()}catch(e){$("registry-date").textContent="Placement registry unavailable: "+String(e.message||e)}await Promise.all([readHistory(),readRouting(),refresh()])})();
 setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
 setInterval(()=>{if(document.visibilityState==="visible")readHistory()},300000);
+setInterval(()=>{if(document.visibilityState==="visible")readRouting()},300000);
 })();
 </script>
 </body></html>

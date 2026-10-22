@@ -24,7 +24,7 @@
       "journal": "https://github.com/aeren-research/continuum-oscillator/actions",
       "mode": "live-public-api",
       "source_ref": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
-      "scope": "Public workstation code verified as mirror at source snapshot; B workflows remain inactive except isolated historical bootstrap workflow until lane admission."
+      "scope": "Verified code mirror; B independent source-contract tests active; copied research workflows remain inactive pending explicit per-lane admission."
     }
   ],
   "lane_rules": [
@@ -35,7 +35,29 @@
         "dessy · independent research lane contract"
       ],
       "node": "B",
-      "admission": "B's first individually enabled workflow. This runs source-registry and boundary tests; it does not prove research replication."
+      "admission": "B's first individually enabled workflow. This runs source-registry and boundary tests; it does not prove research replication.",
+      "admitted_nodes": [
+        "B"
+      ],
+      "transferable": false
+    },
+    {
+      "id": "SOURCE-CONTRACT",
+      "title": "Source contract / two-node capable",
+      "match": [
+        "research-testing-lanes-contract"
+      ],
+      "node": "A",
+      "admitted_nodes": [
+        "A",
+        "B"
+      ],
+      "transferable": true,
+      "workflow_by_node": {
+        "A": ".github/workflows/research-testing-lanes-contract.yml",
+        "B": ".github/workflows/research-testing-lanes-contract.yml"
+      },
+      "admission": "An equivalent bounded source-contract suite exists as an active workflow on A and B. Only a future explicitly admitted job can switch; original jobs remain where launched."
     },
     {
       "id": "ARC",
@@ -45,7 +67,11 @@
         "arc-"
       ],
       "node": "A",
-      "admission": "Observed original workflows; B has no active ARC workflow"
+      "admission": "Observed original workflows; B has no active ARC workflow",
+      "admitted_nodes": [
+        "A"
+      ],
+      "transferable": false
     },
     {
       "id": "WORLD",
@@ -56,7 +82,11 @@
         "world-"
       ],
       "node": "A",
-      "admission": "Observed original workflows; B has no active WORLD workflow"
+      "admission": "Observed original workflows; B has no active WORLD workflow",
+      "admitted_nodes": [
+        "A"
+      ],
+      "transferable": false
     },
     {
       "id": "NIH",
@@ -65,7 +95,11 @@
         "nih-"
       ],
       "node": "A",
-      "admission": "Observed original workflows; B has no active NIH workflow"
+      "admission": "Observed original workflows; B has no active NIH workflow",
+      "admitted_nodes": [
+        "A"
+      ],
+      "transferable": false
     },
     {
       "id": "SOURCES",
@@ -77,7 +111,11 @@
         "applied-"
       ],
       "node": "A",
-      "admission": "Observed original workflows; candidate B transfer not admitted"
+      "admission": "Observed original workflows; candidate B transfer not admitted",
+      "admitted_nodes": [
+        "A"
+      ],
+      "transferable": false
     },
     {
       "id": "WORKSTATION",
@@ -88,7 +126,11 @@
         "ab-relational-"
       ],
       "node": "A",
-      "admission": "Existing original coordination and workstation workflows"
+      "admission": "Existing original coordination and workstation workflows",
+      "admitted_nodes": [
+        "A"
+      ],
+      "transferable": false
     },
     {
       "id": "BOOTSTRAP",
@@ -99,17 +141,30 @@
         "bootstrap original workstation"
       ],
       "node": "B",
-      "admission": "Only observed B bootstrap activity; not a research lane"
+      "admission": "Only observed B bootstrap activity; not a research lane",
+      "admitted_nodes": [
+        "B"
+      ],
+      "transferable": false
     }
   ],
   "handoff": {
     "authority": "GitHub records for each repository; this index records placement, not permission to start jobs",
-    "routing": "Only actual enabled Actions workflows can execute. A nominal lane owner is not a current running job; B is idle for original research until explicitly admitted.",
+    "routing": "A/B routing hints are computed from independent GitHub observation snapshots. Before every next batch, read routing.json and verify exact Actions/workflow eligibility. Never auto-dispatch; never transfer an unadmitted lane; do not infer slowdown from one count.",
     "oscillation": "Record source and target revision, lane, job URL, result, provenance and explicit acceptance before transferring state",
     "b_privacy": "B is currently public. Its GitHub Actions API can be read without login; public source does not prove that B's independent research workflows are activated. If B is made private again, the meta viewer must mark it unavailable rather than displaying zero.",
     "recovery": "Open the shared meta dashboard first. Read both repos' handoff files and GitHub Actions journals. Browser displays public job state; ChatGPT may use the linked accounts to handle separate code/actions."
   },
   "dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/meta.html",
   "observation_history": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/history.json",
-  "observation_scope": "Public GitHub Actions workflow-run counts sampled periodically; no inferred total job slots, private data or automatic dispatch."
+  "observation_scope": "Public GitHub Actions workflow-run counts sampled periodically; no inferred total job slots, private data or automatic dispatch.",
+  "routing_advice": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/routing.json",
+  "routing_policy": {
+    "cadence": "On every new lane/batch admission and every ChatGPT window reground, check the newest shared routing advice; verify actual GitHub Actions in both accounts before starting next work.",
+    "max_age_minutes": 90,
+    "minimum_independent_samples": 3,
+    "minimum_minutes_between_samples": 10,
+    "switch": "A candidate switch is allowed only for a separately verified and admitted workflow on the receiving node, without moving existing queued jobs.",
+    "autonomy": "GitHub records signals even when no browser is open; ChatGPT windows do not run in the background or communicate directly."
+  }
 }
