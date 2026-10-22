@@ -236,7 +236,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  const localTime=s=>{const v=new Date(s);return Number.isFinite(+v)?v.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"Unknown time"};
  const valid=n=>Number.isSafeInteger(n)&&n>=0;
  const statuses=["in_progress","queued","pending","waiting"];
- let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30,dailySummary=null;
+ let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30,dailySummary=null,healthSummary=null;
  async function get(url){const r=await fetch(url,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
  async function readRegistry(){
   let registry;
@@ -273,7 +273,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   const t=all?r.totals:null;
   const verified=t&&["created","success","failure","cancelled","skipped","timed_out","action_required","other"].every(k=>valid(t[k]))&&Number.isFinite(Date.parse(r.observed_at));
   $("passed").textContent=verified?t.success.toLocaleString():"—";
-  $("failed").textContent=verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—";
+  $("historical-failed").textContent="Historical failed runs: "+(verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—");
   $("cancelled").textContent="Cancelled today: "+(verified?t.cancelled.toLocaleString():"—");
   $("skipped").textContent="Skipped today: "+(verified?t.skipped.toLocaleString():"—");
   $("other-outcomes").textContent="Other states: "+(verified?t.other.toLocaleString():"—");
@@ -282,12 +282,52 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
    const suffix=age>90*60000?" · STALE SNAPSHOT":"";
    $("day-basis").textContent=t.created.toLocaleString()+" runs created today · America/Chicago · checked "+localTime(r.observed_at)+suffix;
    $("passed-note").textContent="Full-day source totals · "+localTime(r.observed_at);
-   $("failed-note").textContent="Past failures/timeout/action-required · not open issues";
+
   }else{
    $("day-basis").textContent="Full-day GitHub summary unavailable; today's historical totals are unknown.";
    $("passed-note").textContent="Day journal unavailable · not zero";
-   $("failed-note").textContent="Unresolved state unknown · check source";
+
   }
+ }
+ function renderHealth(){
+  const data=healthSummary, checkedAt=Date.parse(data?.observed_at);
+  const trusted=data?.schema==="meta-workstation/current-workflow-health-v1"&&data?.all_sources===true&&
+    data?.summary&&valid(data.summary.open_count)&&typeof data.coverage_since==="string"&&
+    Number.isFinite(checkedAt)&&checkedAt<=Date.now()+60000&&Date.now()-checkedAt<=90*60000&&
+    Array.isArray(data.summary.open);
+  const card=$("open-check-card");
+  if(!trusted){
+    $("failed").textContent="—";$("failed-note").textContent="Current workflow state unavailable · not zero";
+    card.dataset.open="unknown";$("health-context").textContent=
+    "A recent, complete GitHub reading from both repositories is required. Missing coverage never means zero.";
+    $("health-list").replaceChildren();return;
+  }
+  const open=data.summary.open_count;
+  $("failed").textContent=open.toLocaleString();
+  $("failed-note").textContent=open?"Latest active workflow results still need review":"No currently failing workflows in tracked history";
+  card.dataset.open=open?"yes":"no";
+  $("health-context").textContent="Verified "+localTime(data.observed_at)+" · "+
+    data.summary.tracked_workflows+" active workflows tracked since "+localTime(data.coverage_since)+
+    ". A later successful run of the same workflow clears its earlier failed state. This is not individual test-case proof.";
+  const area=$("health-list");area.replaceChildren();
+  if(!open){const el=document.createElement("p");el.className="health-empty";
+    el.textContent="0 currently failing tracked workflows. Historical failures remain in GitHub.";area.append(el);return}
+  for(const entry of data.summary.open.slice(0,80)){
+    const line=document.createElement("div");line.className="health-row";
+    const a=document.createElement("a");a.href=entry.run_url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=entry.name+" ↗";
+    const note=document.createElement("small");note.textContent="Last decisive run: "+entry.conclusion+" · "+localTime(entry.event_at);
+    line.append(a,note);area.append(line);
+  }
+  if(open>80){const p=document.createElement("p");p.className="fine";p.textContent=
+    "Showing 80 of "+open+" current source checks. Open individual GitHub journals for details.";area.append(p)}
+ }
+ async function loadHealth(){
+  try{
+    const data=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/health.json");
+    if(data.schema!=="meta-workstation/current-workflow-health-v1")throw Error("Unexpected health data");
+    healthSummary=data;
+  }catch(e){healthSummary=null}
+  renderHealth();
  }
  async function loadDaily(){
   try{
@@ -422,16 +462,17 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   }
   renderRuns();$("refresh").disabled=false;busy=false;
  }
- $("refresh").addEventListener("click",refresh);$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
+ $("inspect-open").addEventListener("click",()=>{$("source-details").open=true;$("current-checks").scrollIntoView({behavior:"smooth",block:"center"})});
+ $("refresh").addEventListener("click",()=>{refresh();loadDaily();loadHealth()});$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
  document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));chart()}));
  (async()=>{
   try{await readRegistry()}
   catch(e){$("stamp").textContent="Pipeline registry unavailable";$("source-state").textContent="SOURCE UNKNOWN";$("status-note").textContent="Check the canonical registry; no account is inferred from a stale label.";return}
-  await Promise.all([history(),routing(),refresh(),loadDaily()]);
+  await Promise.all([history(),routing(),refresh(),loadDaily(),loadHealth()]);
  })();
  setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
  setInterval(()=>{if(document.visibilityState==="visible"){history();routing()}},300000);
-  setInterval(()=>{if(document.visibilityState==="visible")loadDaily()},300000);
+  setInterval(()=>{if(document.visibilityState==="visible"){loadDaily();loadHealth()}},300000);
 })();
 </script>
 </body></html>
