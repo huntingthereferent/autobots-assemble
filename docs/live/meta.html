@@ -113,7 +113,7 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
 <script>
 "use strict";
 (()=>{
- const REPOS=["huntingthereferent/autobots-assemble","aeren-research/continuum-oscillator"];
+ let REPOS=[];
  const ROOT="https://api.github.com/repos/";
  const $=id=>document.getElementById(id);
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -122,6 +122,16 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
  const statuses=["in_progress","queued","pending","waiting"];
  let observed=[],runs=[],range="today",busy=false,allReady=false;
  async function get(url){const r=await fetch(url,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
+ async function readRegistry(){
+  let registry;
+  const canonical="https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/main/docs/live/meta-registry.json";
+  try{registry=await get(canonical)}catch(e){registry=await get("meta-registry.json")}
+  if(registry?.schema!=="meta-workstation/registry-v1"||!Array.isArray(registry.nodes))throw Error("No verified workstation registry");
+  const identities=new Map(registry.nodes.map(n=>[n.id,n.repo]));
+  const list=["A","B"].map(k=>identities.get(k));
+  if(list.some(r=>typeof r!=="string"||!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(r)))throw Error("Invalid workstation repository identity");
+  REPOS=list;
+ }
  async function node(repo){
   const root=ROOT+repo+"/actions/runs";
   const response=await Promise.all([...statuses.map(s=>get(root+"?status="+s+"&per_page=1")),get(root+"?per_page=65")]);
@@ -175,14 +185,19 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
   const p=filtered(),svg=$("trend");svg.replaceChildren();$("points").textContent=p.length+" OBSERVATIONS";
   const ns="http://www.w3.org/2000/svg";
   const add=(name,attrs,text)=>{const n=document.createElementNS(ns,name);for(const [k,v]of Object.entries(attrs||{}))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=String(text);svg.append(n);return n};
-  if(!p.length){add("text",{x:28,y:95,fill:"#a8bec9","font-size":13},"No paired observations in this window");add("text",{x:28,y:119,fill:"#91a9b5","font-size":11},"Try a longer period. Missing observations are not zero.");$("trend-state").textContent="Collecting measured history";$("trend-note").textContent="No synthetic points or inferred capacity";return}
+  if(!p.length){add("text",{x:28,y:95,fill:"#a8bec9","font-size":13},"No paired observations in this period");add("text",{x:28,y:119,fill:"#91a9b5","font-size":11},"Try a longer period. Missing observations are not zero.");$("trend-state").textContent="Collecting measured history";$("trend-note").textContent="No synthetic points or inferred capacity";return}
   const left=52,right=922,top=15,bottom=193,max=Math.max(1,...p.map(x=>Math.max(x.r,x.q))),first=p[0].t,last=p[p.length-1].t;
   const X=t=>left+(last===first?.5:(t-first)/(last-first))*(right-left);
   const Y=v=>bottom-(v/max)*(bottom-top);
   for(let i=0;i<5;i++){const n=max*i/4,y=Y(n);add("line",{x1:left,y1:y,x2:right,y2:y,stroke:"#30434c","stroke-width":.8});add("text",{x:43,y:y+4,"text-anchor":"end",fill:"#8ea9b6","font-size":10},Math.round(n))}
   for(const [field,color]of[["r","#8ec6d6"],["q","#efca92"]]){
    if(p.length===1)add("circle",{cx:X(first),cy:Y(p[0][field]),r:4,fill:color});
-   else add("polyline",{fill:"none",stroke:color,"stroke-width":2.5,"stroke-linejoin":"round","stroke-linecap":"round",points:p.map(e=>X(e.t).toFixed(2)+","+Y(e[field]).toFixed(2)).join(" ")});
+   else {
+    let segment=[];
+    const emit=()=>{if(segment.length>1)add("polyline",{fill:"none",stroke:color,"stroke-width":2.5,"stroke-linejoin":"round","stroke-linecap":"round",points:segment.join(" ")});else if(segment.length)add("circle",{cx:segment[0].split(",")[0],cy:segment[0].split(",")[1],r:4,fill:color});segment=[]};
+    for(let i=0;i<p.length;i++){if(i>0&&p[i].t-p[i-1].t>90*60000)emit();segment.push(X(p[i].t).toFixed(2)+","+Y(p[i][field]).toFixed(2))}
+    emit();
+   }
   }
   add("text",{x:left,y:213,fill:"#93adba","font-size":10},localTime(new Date(first).toISOString()));
   add("text",{x:right,y:213,fill:"#93adba","font-size":10,"text-anchor":"end"},localTime(new Date(last).toISOString()));
@@ -226,7 +241,11 @@ footer{color:var(--muted);border-top:1px solid var(--line);font-size:11px;paddin
  }
  $("refresh").addEventListener("click",refresh);$("search").addEventListener("input",renderRuns);$("status").addEventListener("change",renderRuns);
  document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));chart()}));
- Promise.all([history(),routing(),refresh()]);
+ (async()=>{
+  try{await readRegistry()}
+  catch(e){$("stamp").textContent="Pipeline registry unavailable";$("source-state").textContent="SOURCE UNKNOWN";$("status-note").textContent="Check the canonical registry; no account is inferred from a stale label.";return}
+  await Promise.all([history(),routing(),refresh()]);
+ })();
  setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
  setInterval(()=>{if(document.visibilityState==="visible"){history();routing()}},300000);
 })();
