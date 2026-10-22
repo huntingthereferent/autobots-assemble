@@ -58,7 +58,7 @@ class OriginalFullOWLRLRuleAuditTests(unittest.TestCase):
         reasoned=Graph()
         reasoned += self.g
         DeductiveClosure(OWLRL_Semantics,rdfs_closure=True).expand(reasoned)
-        self.assertTrue(all(t in reasoned for t in expected))
+        self.assertFalse([{"triple":list(map(str,t)),"rule":expected[t][0]} for t in expected if t not in reasoned])
 
     def test_no_inference_without_exact_original_premises(self):
         graph=Graph()
