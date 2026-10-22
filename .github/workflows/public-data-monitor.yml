@@ -399,21 +399,27 @@ jobs:
           done
           docker compose logs api frontend
           exit 1
-      - name: Seed live browser evidence
+      - name: Seed deterministic browser fixtures (not live-source evidence)
         run: |
-          docker compose exec -T api python - <<'PY'
-          from app.github_source import fetch_repository
-          from app.identity import link_github_repo_to_package
-          from app.identity_store import persist_identity_decision
-          from app.orchestrator import run_source_persisted
-          from app.pypi_source import fetch_project
-
-          github_rows = run_source_persisted("github_api", fetch_repository)
-          package_rows = run_source_persisted("pypi_api", fetch_project)
-          decision = link_github_repo_to_package(github_rows[0], package_rows[0])
-          persist_identity_decision(decision, threshold=100)
-          assert decision.matched
-          PY
+          # The browser job verifies the dashboard rendering and error boundaries.
+          # Acquisition and integration workflows test real source behavior separately.
+          # Use psql to avoid launching an extra API Python process under Docker.
+          docker compose exec -T db psql -v ON_ERROR_STOP=1 -U monitor -d public_data_monitor <<'SQL'
+          INSERT INTO source_runs (source, started_at, finished_at, status, items_seen)
+          VALUES
+            ('github_api', NOW(), NOW(), 'success', 1),
+            ('pypi_api', NOW(), NOW(), 'success', 1);
+          INSERT INTO identity_decision_records
+            (decided_at, left_key, right_key, score, threshold, matched, evidence)
+          VALUES
+            (NOW(), 'github_repo:1362490', 'pypi_package:requests', 100, 100, TRUE,
+             '[{"kind":"fixture","value":"browser-only synthetic identity match","weight":100}]');
+          INSERT INTO lifecycle_records
+            (source, source_id, canonical_key, entity_type, recorded_at, state, transition)
+          VALUES
+            ('github_api', '1362490', 'github_repo:1362490', 'repository', NOW(), 'present', 'new'),
+            ('pypi_api', 'requests', 'pypi_package:requests', 'package', NOW(), 'present', 'new');
+          SQL
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
