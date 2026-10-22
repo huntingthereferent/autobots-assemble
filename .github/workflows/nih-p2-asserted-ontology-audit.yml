@@ -1,0 +1,80 @@
+name: NIH P2 original OBO asserted disjointness audit
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_asserted_ontology_disjoint_audit.py'
+      - 'network/tests/test_nih_p2_asserted_ontology_disjoint_audit.py'
+      - '.github/workflows/nih-p2-asserted-ontology-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-obo-asserted-disjoint-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  exact-original-source-asserted-axioms:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'rdflib>=7,<8'
+      - name: Independently retrieve SHA-256 pinned original OBO ontology
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/obo-original" "$RUNNER_TEMP/obo-report"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          import os,hashlib
+          from systems.workspace import nih_phase2_external_obo_graph_trial as s
+          folder=Path(os.environ["RUNNER_TEMP"])/"obo-original"
+          for name in s.SOURCE_FILES:
+              url=s.SOURCE_URL+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Disjointness-Audit/1.0"}),timeout=45) as r:
+                  if r.status!=200 or r.geturl()!=url:
+                      raise ValueError("unexpected source owner redirect")
+                  raw=r.read(5_000_001)
+              if hashlib.sha256(raw).hexdigest()!=s.PINNED_WHOLE_SOURCE_SHA256[name]:
+                  raise ValueError("unverified original external OWL source")
+              (folder/name).write_bytes(raw)
+          PY
+      - name: Execute independent asserted conflict tests and actual source scan
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_asserted_ontology_disjoint_audit
+      - name: Retain small original asserted conflict report and limitations
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_asserted_ontology_disjoint_audit \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/obo-report/verified-asserted-disjointness.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"obo-report/verified-asserted-disjointness.json").read_text())
+          assert x["schema"]=="nih-p2-obo-asserted-disjointness-boundary-v1"
+          assert x["original_graph_triple_count"]==8319
+          assert x["separate_synthetic_control_conflicts"]==1
+          assert x["synthetic_control_in_original_graph"] is False
+          assert x["unsatisfiable_class_count"]=="NOT_MEASURED"
+          assert x["complete_owl_dl_consistency_checked"] is False
+          assert x["original_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/obo-report" && sha256sum verified-asserted-disjointness.json > sha256.txt)
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-asserted-ontology-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/obo-report/
+          if-no-files-found: warn
+          retention-days: 30
