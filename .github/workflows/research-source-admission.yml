@@ -67,3 +67,39 @@ jobs:
           path: source_receipts/*.json
           if-no-files-found: warn
           retention-days: 30
+
+  lane-source-handoff:
+    needs: [offline-source-contract, metadata-probe-one-source-at-a-time]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read source observations from this exact workflow run
+        uses: actions/download-artifact@v4
+        with:
+          name: research-source-2026-10-22-admission-receipts
+          path: source_receipts
+      - name: Produce one separate source-backed readiness record per research lane
+        run: python research/testing_lanes/lane_activation.py all --receipts source_receipts --output-dir lane_receipts
+      - name: Summarize all 21 lane gates without claiming scientific experiments
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          print("### Research lane source gates (not experiment outcomes)")
+          print("| Lane | Source feed | Real research experiment |")
+          print("|---|---|---|")
+          for path in sorted(Path("lane_receipts").glob("*.json")):
+              r = json.loads(path.read_text())
+              print(f'| {r["lane_id"]} | {r["source_feed_status"]} | {r["scientific_status"]} |')
+          PY
+      - name: Preserve separate source-backed lane receipts
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-21-lane-source-handoffs
+          path: lane_receipts/*.json
+          if-no-files-found: error
+          retention-days: 30
