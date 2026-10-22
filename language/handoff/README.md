@@ -33,4 +33,4 @@ For human attribution, carry an exact quotation and mark AI-authored interpretat
 The packet doesn't establish the receiver's understanding, actor identity, or consent. Validate actual evidence and authorization within the target system.
 
 
-**Source withdrawal boundary:** Do not republish, reconstruct, or attribute quotations removed from the current [writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md). Retain the distinction between an authorized quote, a technical example, and an AI paraphrase.
+**Source withdrawal boundary:** Do not republish, reconstruct, or attribute quotations removed from the current withdrawn public writing. Retain the distinction between an authorized quote, a technical example, and an AI paraphrase.
