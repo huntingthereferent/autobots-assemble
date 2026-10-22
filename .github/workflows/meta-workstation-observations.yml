@@ -15,6 +15,9 @@ on:
       - "systems/workspace/meta_route.py"
       - "docs/live/meta-registry.json"
       - "network/tests/test_meta_route.py"
+      - "systems/workspace/meta_transfer.py"
+      - "network/tests/test_meta_transfer.py"
+      - "docs/live/meta-handoffs.json"
 
 permissions:
   contents: write
@@ -64,11 +67,20 @@ jobs:
             --history "$RUNNER_TEMP/ab-meta-observations/history.json" \
             --registry docs/live/meta-registry.json \
             --output "$RUNNER_TEMP/ab-meta-observations/routing.json"
+      - name: Verify departure and incoming-receipt evidence
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 -m unittest -v network.tests.test_meta_transfer
+          python3 systems/workspace/meta_transfer.py \
+            --registry docs/live/meta-registry.json \
+            --source docs/live/meta-handoffs.json \
+            --output "$RUNNER_TEMP/ab-meta-observations/handoffs.json"
       - name: Save recorded observations
         run: |
           cd "$RUNNER_TEMP/ab-meta-observations"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add history.json routing.json daily.json health.json
+          git add history.json routing.json daily.json health.json handoffs.json
           git commit -m "Record source-owned A B status counts"
           git push origin HEAD:meta-observations
