@@ -131,6 +131,8 @@ def inspect_shape(source_id: str, raw: bytes, expected_format: str) -> dict:
         matched = isinstance(data, dict) and isinstance(data.get("data"), list)
     elif source_id == "earthdata":
         matched = isinstance(data, dict) and isinstance(data.get("feed"), dict)
+    elif source_id == "gwosc":
+        matched = isinstance(data, dict) and isinstance(data.get("results"), list)
     elif source_id == "nvd":
         matched = isinstance(data, dict) and isinstance(data.get("vulnerabilities"), list)
     else:
