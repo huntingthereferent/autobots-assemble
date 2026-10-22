@@ -129,6 +129,12 @@ class ABClusterWitnessVerifier:
     def _lane_matches(self, path: str, lane_id: str) -> bool:
         return self.path_to_lane.get(path) == lane_id and self.lane_to_path.get(lane_id) == path
 
+    @staticmethod
+    def _trajectory_for(movement: dict[str, Any]) -> str:
+        # A branch's resulting word names the child trajectory; a collision's
+        # "from" names the trajectory whose attempted edge collided.
+        return movement["word"] if movement["kind"] == "BRANCH" else movement["from"]
+
     def verify_observation(self, observation: Observation) -> bool:
         try:
             _, movement = _resolve_ref(self.journal_path, observation.witness_ref)
@@ -141,9 +147,8 @@ class ABClusterWitnessVerifier:
         if observation.kind == "RELATION":
             if movement["kind"] not in ("BRANCH", "CONNECTION"):
                 return False
-            trajectory = movement["word"] if movement["kind"] == "BRANCH" else movement["from"]
             return (observation.relation == "state:" + ",".join(map(str, movement["to"]))
-                    and self._lane_matches(trajectory, observation.lane_id))
+                    and self._lane_matches(self._trajectory_for(movement), observation.lane_id))
         return False
 
     def verify_connection(self, left: Observation, right: Observation) -> bool:
@@ -154,11 +159,13 @@ class ABClusterWitnessVerifier:
             _, b = _resolve_ref(self.journal_path, right.witness_ref)
         except (ValueError, OSError, KeyError, TypeError):
             return False
+        if a["kind"] not in ("BRANCH", "CONNECTION") or b["kind"] not in ("BRANCH", "CONNECTION"):
+            return False
         return (a["word"] != b["word"] and a["to"] == b["to"]
                 and left.relation == right.relation
                 and left.relation == "state:" + ",".join(map(str, a["to"]))
-                and a["kind"] in ("BRANCH", "CONNECTION")
-                and b["kind"] in ("BRANCH", "CONNECTION"))
+                and self._lane_matches(self._trajectory_for(a), left.lane_id)
+                and self._lane_matches(self._trajectory_for(b), right.lane_id))
 
 
 def movement_ref(entry_hash: str, movement: dict[str, Any]) -> str:
