@@ -19,6 +19,16 @@ This index identifies original GitHub sources; it does **not** imply that remote
 - ZIP SHA-256 in workflow log: `d8234acc6fe50a270847a4333bd590fdbd6863e2f9db773702dc2de70eb3c5ba`, artifact ID `12404730856`, reported upload size `48075` bytes, configured retention **90 days**.
 - Durable copy location: **NOT VERIFIED**; this draft branch is not merged.
 
+## New source-pinned Lane B native control, unmerged
+
+[Lane B PR #408](https://github.com/huntingthereferent/autobots-assemble/pull/408), [actual native run #39731621139](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139), [raw artifact #12405441391](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139/artifacts/12405441391). Exact experimental tested head `cdeb0890040f459eacdac0de5f28fdbd9de6ebbe`.
+
+- Four genuine SDK resets; two independent stage4 entrance witnesses across each of two frozen conditions; 4/4 remained official level4 `NOT_FINISHED`, zero level5/WIN.
+- Reviewed original source-derived plan regenerated exactly from actual Lane A source artifact. The top bar was already selected after native LEFT1, so the only added action was **ACTION2/DOWN1** before ACTION5. No additional source selection click was inserted.
+- Original source selected bbox `[26,20,37,22]` versus one-movement bbox `[26,23,37,25]`, with different pre-pour and final-frame hashes. Both conditions nevertheless had identical recorded first-full cup times `13,21,21,21`, first top/right border events at frame21, and off-cup row8/frame19 and row5/frame20 x11–13.
+- ZIP SHA-256 `a88075b03d5a0b22d9e55bc5797beadf0a138e683af1d790483e2b8e0a38700c`, artifact ID `12405441391`, size `26118` bytes, configured retention **90 days**. Durable independent archive: **NOT VERIFIED**.
+- This establishes an **observed nonadvancing one-step movement**; it does not decode the game objective or support untested movement generalization.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
