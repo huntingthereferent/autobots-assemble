@@ -1,6 +1,7 @@
 const $ = sel => document.querySelector(sel);
 let record = null;
 let comparison = null;
+let recordReadSerial = 0;
 
 function statusMeta(status){
   return {
@@ -41,13 +42,22 @@ async function loadLearners(){
 }
 
 async function loadRecord(learnerId){
-  const recordResponse=await fetch("/api/record?learner="+encodeURIComponent(learnerId),{cache:"no-store"});
-  const comparisonResponse=await fetch("/api/comparison?learner="+encodeURIComponent(learnerId),{cache:"no-store"});
-  if(!recordResponse.ok) throw new Error("Could not load learner record");
-  if(!comparisonResponse.ok) throw new Error("Could not load Missouri comparison");
-  record=await recordResponse.json();
-  comparison=await comparisonResponse.json();
-  render();
+  const serial=++recordReadSerial;
+  try {
+    const recordResponse=await fetch("/api/record?learner="+encodeURIComponent(learnerId),{cache:"no-store"});
+    const comparisonResponse=await fetch("/api/comparison?learner="+encodeURIComponent(learnerId),{cache:"no-store"});
+    if(!recordResponse.ok) throw new Error("Could not load learner record");
+    if(!comparisonResponse.ok) throw new Error("Could not load Missouri comparison");
+    const nextRecord=await recordResponse.json();
+    const nextComparison=await comparisonResponse.json();
+    if(serial!==recordReadSerial||$("#learner-select").value!==learnerId)return;
+    record=nextRecord;
+    comparison=nextComparison;
+    render();
+  } catch(err) {
+    if(serial!==recordReadSerial)return;
+    throw err;
+  }
 }
 
 function renderStandards(){
@@ -189,7 +199,11 @@ $("#learner-select").onchange=event=>{
   const url=new URL(location.href);
   url.searchParams.set("learner",event.target.value);
   history.replaceState(null,"",url);
-  loadRecord(event.target.value);
+  loadRecord(event.target.value).catch(err=>{
+    if($("#learner-select").value===event.target.value){
+      $("#learner-meta").textContent="Record unavailable: "+(err.message||String(err));
+    }
+  });
 };
 $("#print-record").onclick=()=>window.print();
 
@@ -219,5 +233,8 @@ $("#note-form").addEventListener("submit",async event=>{
 });
 
 loadLearners().catch(err=>{
-  document.body.innerHTML="<p style='padding:24px'>"+err.message+"</p>";
+  const message=document.createElement("p");
+  message.style.padding="24px";
+  message.textContent=err.message||"Learner records unavailable";
+  document.body.replaceChildren(message);
 });
