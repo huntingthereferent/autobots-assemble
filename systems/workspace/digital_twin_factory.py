@@ -112,7 +112,8 @@ def birth_decision(samples: list[dict], *, minimum_samples: int = 3,
         if any(t.tzinfo is None for t in times):
             raise ValueError("Naive timestamp")
         spacing = [(b-a).total_seconds() for a,b in zip(times, times[1:])]
-        duration = (times[-1] - times[0]).total_seconds()\n        valid = all(x > 0 for x in spacing) and min_elapsed_seconds <= duration <= 900
+        duration = (times[-1] - times[0]).total_seconds()
+        valid = all(x > 0 for x in spacing) and min_elapsed_seconds <= duration <= 900
         saturation = all(type(s.get("running")) is int and type(s.get("queued")) is int
                          and type(s.get("concurrency_ceiling")) is int
                          and s["running"] >= s["concurrency_ceiling"]
