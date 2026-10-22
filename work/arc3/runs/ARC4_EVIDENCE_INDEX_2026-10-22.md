@@ -63,6 +63,14 @@ Ten actual original SDK resets with independent A/B entrances. Holding lower geo
 
 14 original SDK resets from seven fixed no-extra-movement click-only conditions, independently witnessed A/B. With the lower board arrangement and final upper LEFT1→ACTION5 frozen, extra original SDK source ACTION6 clicks at (46,33), (34,21), or background coordinate (5,16) produce first row63 palette14 x10→x11 after exactly one extra click and x10→x12 after two, independent of which of the tested source click targets were used. Native pre-pour rows y0..62 and measured four-cup fill times were identical; all original games remained official level4 NOT_FINISHED (zero level5/WIN). Row63's internal meaning, connection to official objective, and possible hidden game-state dependence remain UNKNOWN.
 
+## Lane B: verified original lower-L placement source contrast
+
+[Original SDK run #39761014684](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761014684), [complete raw JSON/NPZ artifact #12417598191](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761014684/artifacts/12417598191), ZIP SHA-256 `c6723c5bf7a0f4d379601ab5e263c61c95cb5fd75ded172e6475ed8250286`. Internal original JSON SHA-256 `d00f410f8d1caf4f5d61eea169f521803d5c86c5649d04020cd353a1e93fb494`, source full-frame NPZ SHA-256 `efeeb4c333ffc889eae9a767c0c5cd4553ae50d6f928fb3b032aa20dbd3998ae`.
+
+**10 genuine original SDK resets** (five frozen native lower L positions × independently verified A/B entrances), all official level4 `NOT_FINISHED`, zero level5/WIN. Actual selected L source `x23..28,y35..40` before added one-step tests. Original L yields all four 45-pixel source cups simultaneously palette13 at animation frame25; changing L position by UP1, DOWN1, LEFT1 or RIGHT1 makes the lateral cup fail to reach 45, so no four-cup frame. All tested source moved L bboxes are verified directly from genuine selected object frames. None shows change in the measured left wall `x2..4,y2..61`, although the wider `x0..5` source strip does have animation events. No tested arrangement advances officially.
+
+An internal inspection of authentic full frames for original L case found all four source cup windows full at animation frames 25..32, returning to zero palette13 at final frame33. An independent artifact-authenticated CI audit of those exact frames is registered in [lane B](https://github.com/huntingthereferent/autobots-assemble/pull/408); do not promote its analysis to a fully independently verified conclusion until that audit passes. Intermediate cup observations are not an official progression predicate. Original artifact retention configured 90 days; independent durable archive **NOT VERIFIED**.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
