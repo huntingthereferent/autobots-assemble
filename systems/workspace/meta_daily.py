@@ -31,7 +31,7 @@ def day_window(now):
     return local_day.isoformat(), utc(start_local), utc(end_local - dt.timedelta(seconds=1))
 
 
-def github_count(repo, date_query, status=None, getter=api):
+def github_count(repo, date_query, status=None, getter=api, split_threshold=1000):
     path = f"/repos/{repo}/actions/runs?created={quote(date_query, safe='')}&per_page=1"
     if status:
         path += "&status=" + status
@@ -39,6 +39,19 @@ def github_count(repo, date_query, status=None, getter=api):
     count = response.get("total_count")
     if type(count) is not int or count < 0:
         raise ValueError("Missing actual GitHub total_count")
+    # GitHub may cap total_count on very busy repositories. Split the query
+    # into nonoverlapping time ranges before trusting a near-limit count.
+    if count >= split_threshold:
+        start_str, end_str = date_query.split("..", 1)
+        start = dt.datetime.fromisoformat(start_str.replace("Z", "+00:00"))
+        end = dt.datetime.fromisoformat(end_str.replace("Z", "+00:00"))
+        if (end - start).total_seconds() >= 2:
+            midpoint = start + dt.timedelta(seconds=int((end - start).total_seconds() // 2))
+            next_start = midpoint + dt.timedelta(seconds=1)
+            def fmt(value):
+                return value.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            return (github_count(repo, fmt(start)+".."+fmt(midpoint), status, getter, split_threshold)
+                    + github_count(repo, fmt(next_start)+".."+fmt(end), status, getter, split_threshold))
     return count
 
 
@@ -53,19 +66,19 @@ def collect(repos, now=None, getter=api):
         "start_utc": start,
         "end_utc": end,
         "observed_at": now.astimezone(dt.timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
-        "basis": "GitHub Actions workflow runs created during today's America/Chicago calendar day; all-matching-source total_count, not last-100 samples.",
-        "limitations": "Failed and cancelled runs are historical outcomes, NOT unresolved tests. Later runs can pass the same workflow. A run is not a single test.",
+        "basis": "GitHub Actions workflow runs created during today's America/Chicago calendar day; source-counted conclusions split at high throughput, not last-100 samples.",
+        "limitations": "Failed and cancelled runs are historical outcomes, NOT unresolved tests. Later runs can pass the same workflow. Active/other states are not measured in this summary. A run is not a single test.",
         "nodes": {},
     }
     for node, repo in repos.items():
         counts = {"repo": repo, "observed": False}
         try:
-            counts["created"] = github_count(repo, period, getter=getter)
             for status in CONCLUSIONS:
                 counts[status] = github_count(repo, period, status=status, getter=getter)
-            if sum(counts[s] for s in CONCLUSIONS) > counts["created"]:
-                raise ValueError("Inconsistent GitHub date-filtered total_count")
-            counts["other"] = counts["created"] - sum(counts[s] for s in CONCLUSIONS)
+            # GitHub's unfiltered total_count can be lower than the actual
+            # status outcome sum. Never infer an 'other' state from that cap.
+            counts["known_outcome_runs_lower_bound"] = sum(counts[s] for s in CONCLUSIONS)
+            counts["other"] = None
             counts["observed"] = True
         except Exception as error:
             counts = {"repo": repo, "observed": False, "error": type(error).__name__ + ": " + str(error)}
@@ -76,7 +89,7 @@ def collect(repos, now=None, getter=api):
     if result["all_sources"]:
         result["totals"] = {
             field: sum(node[field] for node in result["nodes"].values())
-            for field in ("created", *CONCLUSIONS, "other")
+            for field in (*CONCLUSIONS, "known_outcome_runs_lower_bound")
         }
     else:
         result["totals"] = None
