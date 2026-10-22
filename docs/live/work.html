@@ -86,8 +86,8 @@ h3 { font-size:14px; font-weight:620; line-height:1.5; }
 .metric small { display:block; color:var(--muted); font:600 10px/1.45 var(--data-font); letter-spacing:.04em; margin-top:10px; }
 .metric-running { border-top-color:var(--blue); }
 .metric-running strong { color:var(--blue); }
-.metric-failed { border-top-color:var(--red); }
-.metric-failed strong { color:var(--red); }
+.metric-indexed { border-top-color:#7b9daa; }
+.metric-indexed strong { color:#aecbd4; }
 .metric-passed { border-top-color:var(--green); }
 .overview .fine { margin:12px 0 0; }
 .section-top {
@@ -262,7 +262,7 @@ h1 { font-size:clamp(29px,3.1vw,39px); letter-spacing:-.034em; }
 .metric strong { font:500 25px/1.1 var(--data-font); color:var(--text); }
 .metric small { margin-top:6px; font-size:9px; }
 .metric-running strong { color:var(--blue); }
-.metric-failed strong { color:var(--red); }
+.metric-indexed strong { color:#aecbd4; }
 .overview .fine { margin:7px 0 0; font-size:10.5px; }
 .source-ledger { display:flex; flex-wrap:wrap; align-items:center; gap:7px 22px; margin:9px 0 8px; padding:8px 5px; font:11px/1.5 var(--data-font); color:var(--muted); border-bottom:1px solid #2d3f47; }
 .source-ledger b { color:var(--blue); font-weight:600; }
@@ -563,12 +563,13 @@ footer{border-top-color:#253942}
   </div>
   <div id="feed-error" class="notice" hidden></div>
   <div class="flow-kicker"><span>CONTROL DECK / GITHUB ACTIONS</span><small id="flow-source">AWAITING VERIFIED SOURCE</small></div>
-  <div class="metrics" aria-label="Actual queued and running workflows, and outcomes for today's created runs">
+  <div class="metrics" aria-label="Observed queued and running workflows, successful runs created today, and retrieved run records">
     <article class="metric metric-queued"><div class="metric-top"><span>IN QUEUE / NOW</span><span class="metric-glyph" aria-hidden="true">◇</span></div><strong data-stat="queued">—</strong><div class="flow-level" aria-hidden="true"></div><small>Queued at the latest observation</small></article>
     <article class="metric metric-running"><div class="metric-top"><span>IN MOTION / NOW</span><span class="metric-glyph" aria-hidden="true">↗</span></div><strong data-stat="running">—</strong><div class="flow-level" aria-hidden="true"></div><small>Workflow executions in progress</small></article>
     <article class="metric metric-passed"><div class="metric-top"><span>PASSED / TODAY</span><span class="metric-glyph" aria-hidden="true">✦</span></div><strong data-stat="passed">—</strong><div class="flow-level" aria-hidden="true"></div><small>Runs created today, now successful</small></article>
-    <article class="metric metric-failed"><div class="metric-top"><span>NOT PASSED / TODAY</span><span class="metric-glyph" aria-hidden="true">×</span></div><strong data-stat="failed">—</strong><div class="flow-level" aria-hidden="true"></div><small>Today-created failed / cancelled / timed out</small></article>
+    <article class="metric metric-indexed"><div class="metric-top"><span>RUNS INDEXED</span><span class="metric-glyph" aria-hidden="true">▤</span></div><strong data-stat="indexed">—</strong><div class="flow-level" aria-hidden="true"></div><small>All retrieved run records · full archive or sample</small></article>
   </div>
+  <p class="fine">Historical failed, cancelled, and timed-out attempts remain in the execution journal below; these are not a count of unresolved work. Runs indexed is the number of records actually retrieved, not the repository total unless the full archive is available.</p>
   <div class="flow-snapshots" aria-label="Flow and clearance readings for runs created today">
     <div><span>CREATED TODAY</span><strong id="flow-created">—</strong></div>
     <div><span>RESOLVED TODAY*</span><strong id="flow-cleared">—</strong></div>
@@ -894,7 +895,7 @@ footer{border-top-color:#253942}
   }
   function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
-    else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
+    return c;},{running:0,queued:0,passed:0,indexed:app.runs.length})}
   function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked,liveAvailable:app.liveAvailable});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
   function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();
     const live=app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000;
