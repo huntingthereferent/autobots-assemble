@@ -110,5 +110,30 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
         self.assertEqual(len(schema[str(RDFS.range)]),1)
 
 
+    def test_e21_partition_source_role_and_residual_accounting(self):
+        original={(GENE,RDF.type,V)}
+        full=original|{(GENE,RDF.type,X),(TARGET,RDF.type,Y),(TARGET,RDF.type,X)}
+        oracle=original|{(GENE,RDF.type,X),(TARGET,RDF.type,Y)}
+        result=e20.original_role_type_partition(original,full,oracle,{GENE},{TARGET})
+        genes=result["role_partition"]["original_gene_role"]
+        targets=result["role_partition"]["original_target_role"]
+        self.assertEqual((genes["full_profile_inferred_type_statements"],
+                          genes["limited_RDFS_supported_inferred"],
+                          genes["remaining_not_explained_by_limited_RDFS"]), (1,1,0))
+        self.assertEqual((targets["full_profile_inferred_type_statements"],
+                          targets["limited_RDFS_supported_inferred"],
+                          targets["remaining_not_explained_by_limited_RDFS"]), (2,1,1))
+        self.assertFalse(result["new_biological_type_annotations_inferred"])
+
+    def test_e21_rejects_overlapping_roles_and_unmapped_original_node(self):
+        original={(GENE,RDF.type,V)}
+        with self.assertRaisesRegex(ValueError,"overlap"):
+            e20.original_role_type_partition(original,original,original,{GENE},{GENE})
+        with self.assertRaisesRegex(ValueError,"unmapped"):
+            e20.original_role_type_partition(original|{(OTHER,RDF.type,X)},
+                                             original|{(OTHER,RDF.type,X)},
+                                             original,{GENE},{TARGET})
+
+
 if __name__=="__main__":
     unittest.main()
