@@ -1,0 +1,69 @@
+name: research-source-admission
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/sources/**"
+      - "research/testing_lanes/source_admission.py"
+      - "research/testing_lanes/test_source_admission.py"
+      - ".github/workflows/research-source-admission.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-source-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate all source files and access boundaries
+        run: python research/testing_lanes/source_admission.py check
+      - name: Run offline negative tests (no external data)
+        run: python -m unittest discover -s research/testing_lanes -p "test_*.py" -v
+
+  metadata-probe-one-source-at-a-time:
+    needs: offline-source-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Observe thirteen separate public source entry points sequentially
+        shell: bash
+        run: |
+          mkdir -p source_receipts
+          for source in openalex crossref osf zenodo openml hf pubmed ctgov pubchem earthdata gwosc worldbank nvd; do
+            echo "::group::Source: ${source}"
+            python research/testing_lanes/source_admission.py probe "${source}" --output "source_receipts/${source}.json" || echo "::warning::${source}: see retained source wall receipt"
+            echo "::endgroup::"
+          done
+      - name: Report each source separately; unavailable services are not scientific failures
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          print("### Source-by-source metadata observations")
+          print("| Source | Actual source state | Science tested |")
+          print("|---|---|---|")
+          for path in sorted(Path("source_receipts").glob("*.json")):
+              r = json.loads(path.read_text())
+              print(f'| {r["source_id"]} | {r["state"]} | No |')
+          print()
+          print("5 additional sources require manual access/query/rights gates; no requests attempted.")
+          PY
+      - name: Save source hashes and observations, never response bodies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: research-source-2026-10-22-admission-receipts
+          path: source_receipts/*.json
+          if-no-files-found: warn
+          retention-days: 30
