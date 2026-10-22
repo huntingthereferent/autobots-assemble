@@ -3,7 +3,10 @@ import json
 import pathlib
 import sys
 
-from audit_to_action import process
+try:
+    from .audit_to_action import process
+except ImportError:  # direct script invocation
+    from audit_to_action import process
 
 
 def cancellation_receipt(event):
