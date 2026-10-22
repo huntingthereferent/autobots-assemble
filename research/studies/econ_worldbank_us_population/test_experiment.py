@@ -130,6 +130,26 @@ class WDIStudyTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "incomplete"):
             measure(values)
 
+    def test_archived_source_witness_preserves_unfavorable_years(self):
+        from pathlib import Path
+        witness = json.loads((Path(__file__).parent / "observations" /
+                              "2026-10-22-run-39785188011.json").read_text(encoding="utf-8"))
+        r = witness["result"]
+        self.assertEqual(witness["run_id"], 39785188011)
+        self.assertEqual(r["state"], "MEASURED_REVISED_SNAPSHOT")
+        self.assertEqual(r["source_sha256"],
+                         "39dbc6b900f4a4f44fd42001346d71be15df08b605e44463329265fbfdc5bdbc")
+        measured = r["measured"]
+        self.assertEqual(measured["n_backtest"], 10)
+        self.assertEqual(measured["persistence_mae_persons"], 2002877.0)
+        self.assertEqual(measured["drift_mae_persons"], 546083.24)
+        ledger = measured["per_year_error_ledger"]
+        self.assertEqual([x["year"] for x in ledger], list(range(2014, 2024)))
+        unfavorable = [x for x in ledger if x["drift_absolute_error"] > x["persistence_absolute_error"]]
+        self.assertGreater(len(unfavorable), 0)
+        self.assertIn(2021, [x["year"] for x in unfavorable])
+
+
 
 if __name__ == "__main__":
     unittest.main()
