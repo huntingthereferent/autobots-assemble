@@ -15,6 +15,7 @@ import argparse
 import datetime as dt
 import json
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import quote
 
 try:
@@ -61,11 +62,11 @@ def workflows(repo, getter):
 
 
 def events(repo, start, end, getter):
-    result = []
-    for lo, hi in windows(start, end):
-        # One-hour partitions keep individual GitHub Actions filtered searches
-        # below the 1,000-result search cap for this workstation.
+    """Read bounded hourly GitHub slices with limited concurrent network I/O."""
+    def fetch_hour(pair):
+        lo, hi = pair
         period = quote(utcstr(lo) + ".." + utcstr(hi - dt.timedelta(seconds=1)), safe="")
+        hourly = []
         for page in range(1, 12):
             response = getter(f"/repos/{repo}/actions/runs?created={period}&per_page=100&page={page}")
             rows = response.get("workflow_runs")
@@ -74,13 +75,16 @@ def events(repo, start, end, getter):
                 raise ValueError("Missing Actions pagination")
             if total > 1000:
                 raise RuntimeError("Dense hour exceeded safe query limit; no trusted count")
-            result.extend(rows)
+            hourly.extend(rows)
             if len(rows) < 100:
-                break
-        else:
-            raise RuntimeError("Run window pagination exceeded safe source bound")
+                return hourly
+        raise RuntimeError("Run window pagination exceeded safe source bound")
+    result = []
+    with ThreadPoolExecutor(max_workers=6) as executor:
+        pending = [executor.submit(fetch_hour, interval) for interval in windows(start, end)]
+        for future in as_completed(pending):
+            result.extend(future.result())
     return result
-
 
 def update_status(previous, run, repo):
     if run.get("status") != "completed" or run.get("conclusion") not in BAD | OK:
