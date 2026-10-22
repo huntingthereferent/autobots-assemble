@@ -30,6 +30,7 @@
 <script>
 "use strict";
 const $ = s => document.querySelector(s);
+let refreshSerial=0, pendingMutations=0;
 async function api(path, options){
   const resp=await fetch(path,{cache:"no-store",headers:{"Content-Type":"application/json"},...options});
   const data=await resp.json().catch(()=>({}));
@@ -53,25 +54,42 @@ function row(task){
   body.append(meta);li.append(cb,body);
   cb.addEventListener("change",async()=>{
     cb.disabled=true;
-    try{await api("/api/daily-checklist/"+encodeURIComponent(task.id)+"/check",{method:"POST",body:JSON.stringify({checked:cb.checked})});await refresh();}
-    catch(e){cb.checked=task.checked;cb.disabled=false;alertError(e);}
+    pendingMutations++;refreshSerial++;
+    try{await api("/api/daily-checklist/"+encodeURIComponent(task.id)+"/check",{method:"POST",body:JSON.stringify({checked:cb.checked})});}
+    catch(e){cb.checked=task.checked;alertError(e);}
+    finally{
+      pendingMutations--;
+      if(!pendingMutations)await refresh();
+    }
   });
   return li;
 }
 async function refresh(){
+  const serial=++refreshSerial;
+  if(pendingMutations)return;
   try{
     const data=await api("/api/daily-checklist");
+    if(serial!==refreshSerial||pendingMutations)return;
+    $("#daily-error").hidden=true;
     $("#daily-stats").textContent=data.pending+" open · "+data.checked_today+" checked today · "+data.local_date;
     $("#daily-list").replaceChildren(...data.items.map(row));
     if(!data.items.length){const li=document.createElement("li");li.textContent="No unfinished tasks.";$("#daily-list").append(li);}
     $("#daily-form").hidden=false;
-  }catch(e){$("#daily-form").hidden=true;alertError(e);}
+  }catch(e){
+    if(serial!==refreshSerial||pendingMutations)return;
+    $("#daily-form").hidden=true;alertError(e);
+  }
 }
 $("#daily-form").addEventListener("submit",async e=>{
  e.preventDefault();const form=e.currentTarget;const title=String(new FormData(form).get("title")||"").trim();
  if(!title)return;
- try{await api("/api/daily-checklist",{method:"POST",body:JSON.stringify({title})});form.reset();await refresh();}
+ pendingMutations++;refreshSerial++;
+ try{await api("/api/daily-checklist",{method:"POST",body:JSON.stringify({title})});form.reset();}
  catch(err){alertError(err);}
+ finally{
+   pendingMutations--;
+   if(!pendingMutations)await refresh();
+ }
 });
 refresh();setInterval(refresh,60000);
 document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh();});
