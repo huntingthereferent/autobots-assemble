@@ -93,5 +93,23 @@ Seven prospectively frozen source `ACTION6` click sequences, two independent ori
 
 The source-only result suggests a rendered input-history correlate, but does **not** prove what row63 internally represents (an action counter, timer, HUD, resource display, or other mechanism) or that it is irrelevant to actual native WIN logic. No objective conclusion or inferred hidden-state equivalence is licensed. Further work requires an independent source contrast tied to the game's official `levels_completed`, not more unrestricted row63 counting.
 
+## Native lower-L one-step placement contrast — verified October 22
+
+[Original SDK run #39761014684](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761014684), [raw SDK JSON/NPZ artifact #12417598191](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761014684/artifacts/12417598191), ZIP SHA-256 `c6723c5bf7a0f4d379601ab5e263c61c95cb5fd75ded172e6475ed8250286`. Raw internal JSON SHA-256 `d00f410f8d1caf4f5d61eea169f521803d5c86c5649d04020cd353a1e93fb494`; NPZ SHA-256 `efeeb4c333ffc889eae9a767c0c5cd4553ae50d6f928fb3b032aa20dbd3998ae`. Configured Actions retention 90 days; independent durable archive not verified.
+
+Hold genuine D3 lower parent, native selected lower-L location `x23..28,y35..40`, upper source LEFT1 and original ACTION5 fixed. Five predeclared genuine source conditions × two independent original SDK entries = **10 native resets**, all official level4 NOT_FINISHED, **zero level5/WIN**.
+
+| Actual original lower-L movement | Verified native selected bbox | First four source cup windows simultaneously 45/45 | First measured left x2..4,y2..61 change |
+| --- | --- | --- | --- |
+| Original | [23,35,28,40] | frame25 | none |
+| Up 1 | [23,32,28,37] | none | none |
+| Down 1 | [23,38,28,43] | none | none |
+| Left 1 | [20,35,25,40] | none | none |
+| Right 1 | [26,35,31,40] | none | none |
+
+The original lower-L position uniquely retains the **four-cup transient visual observation among these five tested locations**. Every moved-L source case loses complete filling of the lateral cup (45/45 never observed); top-left timing can change. The complete first six screen columns **do** show source events in these conditions; this is distinct from the unchanging measured x2..4 left wall window. No assumption that any visual strip is part of official success.
+
+An archived original SDK frame inspection also showed the **original** case with all four cup masks full on frames 25..32, then all four reset by the last returned frame33, while official SDK remains level4. This is not yet a separately CI-reproduced inference; `audit_native_sp80_stage4_cup_persistence.py` and its artifact-verified workflow independently recheck those exact native bytes. Do not equate first-full cup animation with a stable end condition or native progress.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
