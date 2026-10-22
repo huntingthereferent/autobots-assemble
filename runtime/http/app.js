@@ -29,17 +29,29 @@ function showError(err) {
   showError.timer = setTimeout(() => { errorBox.hidden = true; }, 5000);
 }
 
+function cardChip(className, text) {
+  const chip = document.createElement("span");
+  chip.className = className;
+  chip.textContent = String(text ?? "");
+  return chip;
+}
+function statusClass(value) {
+  return String(value ?? "unknown").toLowerCase().replace(/[^a-z0-9_-]/g, "-").slice(0,64);
+}
 function item(title, meta, extra) {
   const el = document.createElement("div");
   el.className = "item";
-  el.innerHTML =
-    '<div class="item-head">' +
-      '<div class="item-title"></div>' +
-      (extra || "") +
-    '</div>' +
-    '<div class="meta"></div>';
-  el.querySelector(".item-title").textContent = title;
-  el.querySelector(".meta").textContent = meta || "";
+  const head = document.createElement("div");
+  head.className = "item-head";
+  const heading = document.createElement("div");
+  heading.className = "item-title";
+  heading.textContent = title;
+  head.append(heading);
+  if (extra) head.append(...(Array.isArray(extra) ? extra : [extra]));
+  const sub = document.createElement("div");
+  sub.className = "meta";
+  sub.textContent = meta || "";
+  el.append(head, sub);
   return el;
 }
 
@@ -144,7 +156,7 @@ async function refreshCalendar() {
     return item(
       e.title,
       when + (anchor ? " · " + anchor : "") + " · " + e.referent,
-      anchor ? '<span class="movement-anchor">' + anchor + '</span>' : ""
+      anchor ? cardChip("movement-anchor", anchor) : null
     );
   }));
 }
@@ -162,11 +174,18 @@ async function refreshTasks() {
   $("#tasks").replaceChildren(...data.tasks.map(function(t) {
     const admitted = Boolean(t.admitted_handoff_id);
     const result = t.result && t.result.status;
-    const extra = admitted
-      ? '<span class="status ' + String(result || "ready").toLowerCase() + '">' + (result || "ADMITTED") + "</span>"
-      : '<button class="admit" data-id="' + t.task_id + '">Admit</button>';
+    let extra, button = null;
+    if (admitted) {
+      extra = cardChip("status " + statusClass(result || "ready"), result || "ADMITTED");
+    } else {
+      button = document.createElement("button");
+      button.type = "button";
+      button.className = "admit";
+      button.dataset.id = String(t.task_id);
+      button.textContent = "Admit";
+      extra = button;
+    }
     const el = item(t.title, t.assignee + " · " + t.referent, extra);
-    const button = el.querySelector(".admit");
     if (button) {
       button.addEventListener("click", async function() {
         try {
@@ -182,7 +201,6 @@ async function refreshTasks() {
     return el;
   }));
 }
-
 
 let liveFeedState = {items: [], sources: [], fetched_at: ""};
 let liveFeedFilter = "balanced";
@@ -768,7 +786,8 @@ async function refreshHandoffs() {
     const el = item(
       title,
       h.to_actor + " · " + h.status + " · " + source,
-      '<span class="source-chip">' + source + '</span><span class="status ' + h.status.toLowerCase() + '">' + h.status + "</span>"
+      [cardChip("source-chip", source),
+       cardChip("status " + statusClass(h.status), h.status)]
     );
     el.classList.add("movement-entry");
     return el;
@@ -784,7 +803,7 @@ function renderAttention(result) {
     return item(
       x.title,
       x.status + " · " + x.referent,
-      '<span class="status ' + x.status.toLowerCase() + '">' + x.status + "</span>"
+      cardChip("status " + statusClass(x.status), x.status)
     );
   }));
 
@@ -794,18 +813,19 @@ function renderAttention(result) {
     return item(
       x.title,
       when + (anchor ? " · " + anchor : "") + " · " + x.referent,
-      anchor ? '<span class="movement-anchor">' + anchor + '</span>' : ""
+      anchor ? cardChip("movement-anchor", anchor) : null
     );
   }));
 
   $("#attention-reminders").replaceChildren(...reminders.map(function(x) {
     const when = x.local_time || x.cadence || "reminder";
-    const el = item(
-      x.text,
-      when + " · " + x.referent,
-      '<button class="ack-reminder" data-id="' + x.id + '">Done today</button>'
-    );
-    el.querySelector(".ack-reminder").addEventListener("click", async function() {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "ack-reminder";
+    button.dataset.id = String(x.id);
+    button.textContent = "Done today";
+    const el = item(x.text, when + " · " + x.referent, button);
+    button.addEventListener("click", async function() {
       try {
         await api("/api/reminders/" + encodeURIComponent(x.id) + "/ack", {
           method: "POST",
