@@ -10,5 +10,17 @@ The gate verifies the most recent original `ACTION6` click and its SDK receipts,
 
 The new separate manual GitHub Actions workflow refuses absent/noncanonical plans; the PR workflow itself only tests and compiles the gate. Both original native entry witnesses and full 64x64 returned frames are mandatory. Only official SDK level >=5 / WIN is game progress.
 
+## First source-pinned paired native test — verified October 22
+
+[Native run #39731621139](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139) passed its original artifact SHA-256 check, regenerated source admission, reviewed-plan equality, contract tests, original SDK paired run, and artifact upload. [Raw original JSON/NPZ artifact #12405441391](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139/artifacts/12405441391), ZIP SHA-256 `a88075b03d5a0b22d9e55bc5797beadf0a138e683af1d790483e2b8e0a38700c`, configured retention 90 days.
+
+- Frozen matched comparison: original top-bar LEFT1 control versus identical word with one extra **ACTION2/DOWN1**, with no additional click.
+- Actual original source selected-bar bbox moved from `[26,20,37,22]` to `[26,23,37,25]`. Original pre-pour and final source-frame hashes changed; the intervention was not a no-op.
+- Both independent native stage4 A/B entrances agreed in each condition. Across all 4 genuine original SDK resets, official outcome remained **level4 / NOT_FINISHED**; **zero level5/WIN**.
+- Despite the native geometry and final-frame changes, each of the four measured cup regions was first full at original animation frames `lateral=13`, `top_left=21`, `top_middle=21`, `top_right=21`. First top/right boundary change stayed at frame21; left/bottom remained unchanged in the measured source windows. First off-cup source6 row8/frame19 and row5/frame20 at x11–13 also remained unchanged.
+- This **refutes this particular one-movement candidate as a stage5 solution**. It does not prove a private causal rule, nor that other vertical interventions cannot matter.
+
+The audited, unmerged result is available to lane C as source-pinned evidence. No further candidate is automatically selected from the failed movement.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
