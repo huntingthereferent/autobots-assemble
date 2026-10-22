@@ -123,25 +123,42 @@ def parse_iris_arff(raw: bytes) -> list[tuple[tuple[float, ...], str]]:
     labels = Counter(cls for _, cls in data)
     if len(labels) != 3 or sorted(labels.values()) != [CLASS_SIZE] * 3:
         raise ValueError("unexpected class balance")
-    if len({tuple(vec) + (cls,) for vec, cls in data}) != REQUIRED_N:
-        raise ValueError("repeated complete example row")
     return data
 
 
 def split_indices(rows: list[tuple[tuple[float, ...], str]]) -> tuple[list[int], list[int]]:
+    # Group repeated feature vectors BEFORE splitting to prevent exact leakage
+    # between training and held-out data. The Iris source has a repeated row.
+    groups = {}
+    for i, (vector, label) in enumerate(rows):
+        item = groups.setdefault(vector, {"label": label, "indexes": []})
+        if item["label"] != label:
+            raise ValueError("identical features carry contradictory labels")
+        item["indexes"].append(i)
     by_class = {}
-    for i, (_, cls) in enumerate(rows):
-        by_class.setdefault(cls, []).append(i)
+    for vector, item in groups.items():
+        by_class.setdefault(item["label"], []).append((vector, item["indexes"]))
     train, test = [], []
-    for label, indexes in sorted(by_class.items()):
-        def order(i):
-            key = (SPLIT_SEED + "|" + str(i) + "|" + label).encode("utf-8")
+    for label, group_list in sorted(by_class.items()):
+        def order(item):
+            vector, _ = item
+            key = (SPLIT_SEED + "|" + label + "|" +
+                   ",".join(format(v, ".17g") for v in vector)).encode("utf-8")
             return hashlib.sha256(key).hexdigest()
-        ordered = sorted(indexes, key=order)
-        test.extend(ordered[:HOLDOUT_PER_CLASS])
-        train.extend(ordered[HOLDOUT_PER_CLASS:])
-    if len(train) != 120 or len(test) != 30 or set(train) & set(test):
-        raise ValueError("stratified split is not disjoint")
+        picked, chosen_groups = 0, set()
+        for vector, indexes in sorted(group_list, key=order):
+            if picked + len(indexes) <= HOLDOUT_PER_CLASS:
+                chosen_groups.add(vector)
+                picked += len(indexes)
+            if picked == HOLDOUT_PER_CLASS:
+                break
+        if picked != HOLDOUT_PER_CLASS:
+            raise ValueError("group-stratified holdout cannot reach exact target")
+        for vector, indexes in group_list:
+            (test if vector in chosen_groups else train).extend(indexes)
+    if (len(train) != 120 or len(test) != 30 or set(train) & set(test) or
+            {rows[i][0] for i in train} & {rows[i][0] for i in test}):
+        raise ValueError("group-stratified split has leakage")
     return sorted(train), sorted(test)
 
 
@@ -176,7 +193,8 @@ def measure(rows: list[tuple[tuple[float, ...], str]]) -> dict:
         "n_total": len(rows), "n_train": len(train), "n_held_out": len(held_out),
         "holdout_per_class": HOLDOUT_PER_CLASS, "n_features": FEATURE_COUNT,
         "split_seed": SPLIT_SEED, "holdout_index_sha256": split_hash,
-        "split_is_stratified": True, "train_only_scaler": True,
+        "split_is_stratified": True, "duplicate_feature_groups_kept_intact": True,
+        "train_only_scaler": True,
         "majority_correct": baseline_correct, "majority_accuracy": baseline_correct / len(held_out),
         "centroid_correct": model_correct, "centroid_accuracy": model_correct / len(held_out),
         "delta_accuracy": (model_correct - baseline_correct) / len(held_out),
