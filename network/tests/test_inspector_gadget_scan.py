@@ -17,6 +17,14 @@ class InspectorGadgetScanTests(unittest.TestCase):
         self.assertEqual(result["findings"][0]["count"], 2)
         self.assertEqual(result["findings"][0]["kind"], "candidate")
 
+    def test_recently_cancelled_old_run_is_included(self):
+        runs = [{"id": 9, "workflow_id": 4, "name": "WORLD", "conclusion": "cancelled",
+                 "created_at": "2026-10-20T00:00:00Z",
+                 "updated_at": "2026-10-22T20:00:00Z"}]
+        result = build_report(runs, "2026-10-22T19:00:00Z")
+        self.assertEqual(result["findings"][0]["run_ids"], [9])
+        self.assertEqual(result["findings"][0]["dispatch_state"], "awaiting_source_verification")
+
     def test_old_runs_excluded(self):
         runs = [{"id": 1, "workflow_id": 7, "name": "ARC", "conclusion": "failure",
                  "created_at": "2026-10-21T00:00:00Z"}]
