@@ -65,6 +65,18 @@ class CompleteSourceBgeeEntailmentTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             trial.source_axioms(g,ro)
 
+    def test_crossed_author_mapping_categories_cannot_be_substituted(self):
+        src,_=join.keyed_join(fixture_rows(2))
+        anatomy_item=next(iter(src["anatomy"]))
+        condition_item=next(iter(src["expression_condition"]))
+        src["anatomy"].add(condition_item)
+        with self.assertRaisesRegex(ValueError,"category"):
+            trial.original_join_graph(src)
+        src["anatomy"].remove(condition_item)
+        src["expression_condition"].add(anatomy_item)
+        with self.assertRaisesRegex(ValueError,"category"):
+            trial.original_join_graph(src)
+
     def test_full_sql_independent_source_join_matches_hypothetical_controls(self):
         a,events=join.keyed_join(fixture_rows(4))
         b,count=join.independent_sqlite_join(fixture_rows(4))
@@ -85,6 +97,8 @@ class CompleteSourceBgeeEntailmentTests(unittest.TestCase):
         self.assertEqual(report["missing_OWL_RL_consequences"],0)
         self.assertFalse(report["full_unpartitioned_RO_OWL_RL_closure_measured"])
         self.assertFalse(report["official_NIH_benchmark"])
+        self.assertFalse(report["source_owner_original_whole_files_authenticated"])
+        self.assertEqual(report["source_ground_inputs_not_synthetic"],"UNVERIFIED_IN_RAW_EVALUATE")
 
     @unittest.skipUnless(HAS_OWLRL,"dedicated source inference CI installs independent OWL RL")
     def test_predeclared_source_chunk_upper_bound_enforced(self):
@@ -115,6 +129,8 @@ class CompleteSourceBgeeEntailmentTests(unittest.TestCase):
         self.assertEqual(result["missing_OWL_RL_consequences"],0)
         self.assertFalse(result["full_unpartitioned_Bgee_plus_RO_OWL_RL_closure_measured"])
         self.assertTrue(result["equal_capacity_SQL_static_reasoning_is_comparator_not_lift"])
+        self.assertTrue(result["source_owner_original_whole_files_authenticated"])
+        self.assertTrue(result["source_ground_inputs_not_synthetic"])
         self.assertFalse(result["official_NIH_benchmark"])
         self.assertFalse(result["original_W13_modified"])
 
