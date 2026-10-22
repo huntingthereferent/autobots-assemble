@@ -147,5 +147,22 @@ This independently checked original archive refutes **four simultaneously full 4
 
 **Next frozen native test:** [right-bar horizontal timing workflow](https://github.com/huntingthereferent/autobots-assemble/actions/workflows/arc4-stage4-right-bar-timing.yml), keeping middle, lower and upper sources unchanged. Four predeclared native right-bar horizontal placements × two independent SDK witnesses. Distinguish official stage5 from image-only cup arrival differences; no claim until real SDK results are returned.
 
+## Verified stage-specific cup masks and right-bar arrival control
+
+**Pass 1 — independently verified original source masks.** [Source audit #39764626858](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626858) passed, with [audited JSON artifact #12418334984](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626858/artifacts/12418334984), ZIP SHA256 `9a3ff705ce2e62ce149cba0756d53e8a6fa17b33e36a7c3752835e66a65b6c68`. Original source JSON/NPZ hashes were checked before reading, and the original SDK A/B entrance witnesses agreed. Actual level3 successful source cup boxes [8,53,16,58], [26,53,34,58], [38,53,46,58], [50,53,58,58] fill together only frames27–28; official SDK transitions **3→4**. Actual level4 source cup boxes [17,5,25,10], [35,5,43,10], [47,5,55,10], [5,35,10,43] fill together at frames25–32 but official SDK remains **4→4**. The negative original lower-L control does not fill all four. Both actual level3-success and level4-nonadvance terminal cup masks clear; therefore these screen appearances **cannot independently determine SDK progression**.
+
+**Pass 2 — native right-bar horizontal timing.** [Original SDK run #39764626974](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626974), [full original-source JSON/NPZ artifact #12418974951](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626974/artifacts/12418974951), ZIP SHA256 `0f9b5b16c7de7350c7cc7ec22e12efca92769255d457dfc4fd5ffd3f5a8d5f27`. Four prospectively frozen right-bar positions × independent original A/B entrances: **8/8 genuine native SDK resets, all official level4 NOT_FINISHED, zero level5/WIN**. Middle placement, lower-L placement and final upper LEFT1→ACTION5 were fixed. Native selected right source bboxes and cup first-full frames:
+
+| Frozen right-bar movement | Actual selected bbox | Lateral cup | Top-left | Top-middle | Top-right | Four concurrent cups |
+| --- | --- | ---: | ---: | ---: | ---: | --- |
+| Re-click only | [41,32,55,34] | 13 | never | 19 | never | no |
+| LEFT1 | [38,32,52,34] | 13 | 25 | 21 | 21 | frames25..32 |
+| LEFT2 | [35,32,49,34] | 13 | 25 | 23 | 19 | frames25..32 |
+| RIGHT1 | [44,32,58,34] | 13 | never | 19 | never | no |
+
+**Bound:** the additional left movement changes opposite top-middle and top-right fill timing without native advancement. Animation frame indices are not physical time or engine causality. No rule about level4 completion may be inferred from this shift.
+
+**Next original source question:** does a true successful transition produce a visible final-screen border redraw only on its terminal frame while native level4 nonadvances do not? Existing archive comparison suggests so, but the separate SHA-authenticated source workflow `arc4-stage3-stage4-screen-transition.yml` must finish before the result is promoted. Screen redraws can be **effects** of progression, not evidence for what triggers it.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
