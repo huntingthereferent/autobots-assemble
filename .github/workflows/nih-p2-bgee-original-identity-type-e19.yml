@@ -101,7 +101,13 @@ jobs:
           assert r["original_referent_nodes_total"]==r["original_gene_nodes"]+r["original_target_nodes"]
           assert r["original_referent_nodes_total"]==1993
           assert r["whole_closure_sameAs_triples_touching_original_nodes"]==1993
-          assert r["full_profile_rdf_type_touching_original_nodes"]==27257
+          # E18 measured 27,257 *additional* inferred types; E19 includes
+          # two original-source-authored rdf:type assertions in the total.
+          assert r["source_original_rdf_type"]==2
+          assert r["full_profile_inferred_rdf_type_touching_original_nodes"]==27257
+          assert r["full_profile_rdf_type_touching_original_nodes"]==27259
+          assert r["full_profile_rdf_type_touching_original_nodes"]==(
+              r["source_original_rdf_type"]+r["full_profile_inferred_rdf_type_touching_original_nodes"])
           assert r["source_native_type_and_identity_scan_equals_declarative_SPARQL"] is True
           assert r["identity_scope_sha256_native"]==r["identity_scope_sha256_sparql"]
           assert r["whole_closure_sameAs_triples_touching_original_nodes"]==(r["whole_closure_reflexive_sameAs"]+r["whole_closure_nonreflexive_sameAs"])
