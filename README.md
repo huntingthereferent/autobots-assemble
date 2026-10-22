@@ -1,57 +1,44 @@
-# Hunting the Referent — research records and experiments
+# Hunting the Referent — research, software, and evidence
 
-**[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
+[**Research Workstation**](https://huntingthereferent.github.io/autobots-assemble/live/) · [**Play WORLD48**](https://huntingthereferent.github.io/autobots-assemble/game/) · [**Project guide**](PROJECTS.md) · [**Source and data audit**](docs/live/audit.html) · [GitHub Actions](https://github.com/huntingthereferent/autobots-assemble/actions)
 
-The public work view reads actual GitHub workflow runs and native job/step results, with original workstation research and walls alongside them. Runs only show what GitHub executed; saved research findings are separate historical evidence. The earlier animated source graph remains optional at [trace.html](docs/live/trace.html). Local private process handoffs remain available only through the loopback workstation viewer.
+James Muneoka's independent research and software work, with its source code, mathematical constructions, experiments, tests, prototypes and unfinished questions. Different projects investigate different problems; a result from one does not automatically apply to the others.
 
-**James Muneoka · Independent research · Human problem-solving**
+## Why this work exists
 
-**Why this repository exists:** [The Human Wall](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/THE_HUMAN_WALL.md) is the question at the root of James's work. He is investigating whether the vastness of what humans learn about reality can spill into local problems as disproportionate uncertainty, imagined possibilities, and explanations that drift from observation — and whether that relationship can become normal across different layers. This is a working research question, not an established universal cause of human behavior.
+[The Human Wall](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/THE_HUMAN_WALL.md) records the question behind this work: whether knowledge and increasingly elaborate explanations can introduce uncertainty or drift when following an immediate problem, and how a relationship can be kept in view as the context changes. It is an ongoing question, not an established general explanation of human behavior.
 
-The mathematics, ARC and world experiments, AI-assisted software, workers, and verification harnesses are **ways to investigate and retain evidence**, not competing purposes or a claim that one method explains the universe. [Start with James's account](https://github.com/huntingthereferent/huntingthereferent#the-human-wall).
+The [Language Referent](LANGUAGE_REFERENT.md), previously called A/B, names the continuing inquiry. Mathematics is a human formal language within that inquiry. The repository's particular finite operators, programs, games and data experiments have their own definitions and evidence limits; none is presented as a universal proof of the inquiry.
 
-An inspectable collection of code, mathematical experiments, system prototypes, and test records. The projects address different questions; they are not parts of a claimed universal theory or one finished platform.
+## What is here
 
-## Selected work
+| Area | Purpose | Inspect |
+| --- | --- | --- |
+| **Finite mathematics** | Construct and challenge exact finite transformation systems, inverse relations and correspondences. | [Mathematical work](work/arc_like_maze/README.md) |
+| **Finite Correspondence Research** | Test how a specified correspondence survives source changes and explicit task requirements. | [Checkpoints](work/arc_like_maze/chatbot/README.md) · [process and worker roles](work/arc_like_maze/chatbot/PROCESS.md) |
+| **ARC-AGI-3** | Observe the original ARC games and test bounded predictions against native action histories. | [ARC investigation](work/arc3/README.md) · [saved native routes](research/arc_native_runs/README.md) |
+| **A/B WORLD and WORLD48** | Test bounded world relations and make the original 48-law mathematical challenges inspectable and playable. | [WORLD evidence](work/ab_world/GENERAL_CONSTRUCTION.md) · [WORLD48](docs/game/index.html) |
+| **NIH and public data** | Compare source histories, identities, recorded differences and the limits of temporal inference. | [NIH source comparison](systems/workspace/NIH_P2_TWO_AACT_SNAPSHOT_BOUNDARY.md) · [data monitor](work/projects/public-data-monitor/README.md) |
+| **Workstation and handoffs** | Preserve independent lanes, source versions, explicitly admitted jobs, results and return points. | [Workspace](systems/workspace/README.md) · [runtime](runtime/README.md) |
+| **Software and creative projects** | Build and test applications including Meow Lab 2, audio intake and Pony Trail. | [Project guide](PROJECTS.md#public-interfaces-and-creative-projects) |
+| **Foundation and methods** | Preserve implemented capability evidence, artifacts, visual design provenance and research protocols. | [Foundation](foundation/README.md) · [visual provenance](design/visual-provenance/README.md) |
 
-| Area | What to inspect |
-| --- | --- |
-| **Finite-state mathematics** | [Constructed transformation systems](work/arc_like_maze/README.md) — finite-field models, inverse construction, correspondence tests, and counterexamples |
-| **Finite correspondence research** | [Checkpoint research](work/arc_like_maze/chatbot/README.md) — witnessed correspondences, selected routes, source-change propagation, task requirements, and bounded evidence verification |
-| **Finite Correspondence Process** | [Executable process and worker role](work/arc_like_maze/chatbot/PROCESS.md) — distinguishes the bounded process from research and its potential workstation assignment; not a general AI agent |
-| **Interactive environments** | [Play WORLD48 rooted challenges](docs/game/index.html) · [Explore all 48 original mathematical worlds](docs/window48_world.html) · [ARC-AGI-3 evidence](research/arc_native_runs/README.md) · [Frame observer](runtime/arc_native_observer.py) — native observations, saved action routes, and limits on claims of autonomous solving |
-| **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
-| **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
-| **CP automation** | [One-window CP frontier](systems/workspace/CP_AUTOMATION.md) — declared dependencies over the existing workstation; native worker evidence remains authoritative |
-| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Process Workstation](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no implicit task admission; one explicitly authorized finite prefilter work handoff is demonstrated |
+The [full project guide](PROJECTS.md) gives each area's actual purpose, public entry point and current evidence boundary. It distinguishes preserved source, tested implementation, browser demonstration, private local work and historical records.
 
-**First bounded worker connection:** [Correspondence Worker handoff](systems/workspace/CORRESPONDENCE_HANDOFF.md) — explicitly selected source edition, child-process finite prefilter, independent native replay, and durable HandoffRuntime result. Not a general AI agent or full owner-backed process.
+## How to inspect results
 
-## What the records show
+The [public Workstation](https://huntingthereferent.github.io/autobots-assemble/live/) separates GitHub Actions executions from saved research findings. A successful workflow documents only its own checks. The [source and data audit](docs/live/audit.html) lets a reviewer inspect tracked tests and JSON records; source declarations are not execution results. The private local Process Workstation and its editable source editions are **not** exposed by GitHub Pages.
 
-Experiments are kept with their source, stated assumptions, tests, outputs, and known limits where those materials exist. A runnable example, a locally reported result, a simulated system, and a deployed application are different forms of evidence.
+For a technical starting point, see [ENTRY.md](ENTRY.md), [the architecture](ARCHITECTURE.md), [evidence/provenance rules](protocols/core/provenance.md), [the project list](PROJECTS.md) and [plain-language terminology](docs/READING_GUIDE.md). Each experiment's reproduction instructions and exact limits belong beside its source.
 
-The research includes exploratory code, completed bounded experiments, failed approaches, and ideas that were not continued. Their presence in Git history is **a record of work**, not a claim that every branch remains an active project.
+Unsuccessful trials, counterexamples and superseded explanations remain available as evidence. A historical pin or the old [state pointer](state/README.md) is not an instruction to run the next task. [TASKS.md](TASKS.md) is a selected register, not a complete live queue.
 
-Mathematical symbols in individual experiments refer to those experiments' **explicitly defined operators and domains**. A result demonstrated in one model is not automatically a result about other models or the physical world.
+## History, attribution and rights
 
-## Navigate and reproduce
+The repository was previously named `language-network`. Earlier interfaces and source experiments are retained where useful as history; neither the former nor current repository name defines every project.
 
-- [ENTRY.md](ENTRY.md) — research protocols and technical entry
-- [Language Referent](LANGUAGE_REFERENT.md) — canonical reader-facing name for the inquiry historically called A/B
-- [Language Referent — Evidence Contract](LANGUAGE_REFERENT_CONTRACT.md) — scoped evidence, correction, and proof boundaries
-- [Historical A/B ground record](AB_Ground_Record_Current_Note_2026-10-11.md) — preserved October 11 wording and observations
-- [Evidence and provenance rules](protocols/core/provenance.md)
-- [Continuous Handoff — observational determination](language/handoff/CONTINUOUS_HANDOFF.md) · [runnable read-only reference](runtime/examples/continuous_handoff/README.md)
-- [Complete-stack experiments](COMPLETE_STACK.md)
-- [Language area — regrounding, conversation, pragmatic meaning and handoffs](language/README.md)
-- [Human Drift — James's dated language and corrections, September–October](language/HUMAN_DRIFT.md)
-- [Regrounding — bringing acquired observations back into relation](language/REGROUNDING.md)
+Generative AI assisted portions of the software and formal documentation. Claims must be evaluated against the recorded source, tests and independent checks rather than authorship descriptions.
 
-Each technical project contains its own reproduction details where available. The software and formal notation were developed with generative-AI assistance; source availability and tests should be evaluated at their documented scope.
+Personal first-person material belongs in the [current writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md); withdrawn quotations are not republished here. Original material is [All Rights Reserved](LICENSE), subject to the scope and third-party exceptions stated in that license.
 
-## Historical context
-
-This repository was previously named `language-network` and is now `autobots-assemble`. The former name came from an earlier language experiment; neither name defines the scope of every project here. An experimental web frontage and external-feed integrations were also built to investigate what could be connected. Those experiments are retained as history, **not presented as a current product**.
-
-[Previous detailed front page](https://github.com/huntingthereferent/autobots-assemble/blob/4eae9ee936b4f3bf1efa21bf591d5574605b8a15/README.md) · [James's public project index](https://github.com/huntingthereferent/huntingthereferent)
+[James's public project index](https://github.com/huntingthereferent/huntingthereferent)
