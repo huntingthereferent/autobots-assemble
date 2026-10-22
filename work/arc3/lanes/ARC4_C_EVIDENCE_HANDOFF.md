@@ -20,6 +20,10 @@ The latest [draft PR #398](https://github.com/huntingthereferent/autobots-assemb
 
 The separate [lane A native run #39729756294](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294) passed its 10 original SDK resets. In all three visual-positive source conditions, the **first measured top and right boundary changes occurred at frame21** despite no observed left/bottom boundary changes. This reinforces that "clean lateral" meant a *specific left-side observation*, not that all boundaries were quiet. The frozen lane A events are indexed [here](../runs/ARC4_EVIDENCE_INDEX_2026-10-22.md). The run has zero official level5/WIN.
 
+## First Lane B original SDK intervention result
+
+Lane B's [source-pinned native run #39731621139](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139) compared the exact same level4 source arrangement with and without one additional upper-bar DOWN1 action, preserving its existing selection. The native original selected-bar position and returned full-frame hashes changed, while four-cup timing, first measured top/right boundary timing, off-cup first arrivals, and all four official `levels_completed=4, NOT_FINISHED` outcomes remained unchanged. Source [artifact #12405441391](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139/artifacts/12405441391). This is a **negative, bounded one-factor result**, not an objective inference.
+
 ## Independent lanes, no silent data promotion
 
 - **A — original-frame event order:** [PR #407: contract and original-native audit](https://github.com/huntingthereferent/autobots-assemble/pull/407) (separate experimental branch). Freeze three source-positive conditions and matched controls. Independently measure first original source-frame events at all four boundaries and outside cup windows. Preserve complete JSON/NPZ.
