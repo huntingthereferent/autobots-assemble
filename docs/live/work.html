@@ -1133,7 +1133,7 @@ footer{border-top-color:#253942}
     const retained=archived?"Published archive collected "+safeDate(app.archiveAt)+". ":
       available?"Previously verified run records remain inspectable. ":"No execution records are currently accessible. ";
     $("feed-error").textContent="Live GitHub check failed"+(app.liveError?": "+app.liveError:"")+". "+
-      retained+"Queued and running counts are unknown until a successful API check. Archived statuses are historical, not live.";
+      retained+"Queued and running counts are unknown until a successful API check. Archived statuses are historical, not live; no current status inferred.";
     renderMetrics();
   }
 
