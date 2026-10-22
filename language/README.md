@@ -1,59 +1,24 @@
-# Language — Same Referent, Different Surfaces
+# Language — Referent and Evidence
 
-[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [Separations](SEPARATIONS.md) · [Felt POV / Reading Provenance](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) · [Two-sided communication narrative](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md)
+[Language Referent](../LANGUAGE_REFERENT.md) · [Human Drift](HUMAN_DRIFT.md) · [Regrounding](REGROUNDING.md) · [Separations](SEPARATIONS.md) · [Pragmatics](PRAGMATICS.md) · [Current writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md)
 
-**James is James at every layer.** A conversation, a mathematical description, an English decoder, a social interaction, and a technical handoff can follow the same referent without turning him into a different speaker or converting every observation into code.
+**James is James at every layer.** A change of register, context, software representation, or mathematical notation does not imply a different speaker. The language referent and the earlier A/B terminology designate the same continuing inquiry; particular finite operators `A` and `B` retain their own specified mathematical meanings.
 
-The **language referent** is the same thing historically called **A/B**. Mathematics is itself human formal language, already within the inquiry; a finite system with explicitly named generators `A` and `B` is one specified mathematical model, not the definition of the language referent.
+This directory houses technical descriptions of language handling and evidence. Withdrawn personal quotations are not source material for new summaries.
 
-**Human Drift** is the current subject. James used *oscillating, grounding, chain reaction, drift control, regrounding, swallowing, branching,* and *surfing* while moving around misunderstandings in conversation, not as interchangeable definitions. The sequence matters: a changed description can correct a lost relationship and incorporate what was learned along the detour. [Human Drift](HUMAN_DRIFT.md) preserves the dated quotations from September to October. [Regrounding](REGROUNDING.md) describes an available response, while *surfing* remains one example James used.
+| Area | Scope |
+| --- | --- |
+| [Human Drift](HUMAN_DRIFT.md) | Correcting descriptions of a continuing relation without asserting a universal mechanism |
+| [Regrounding](REGROUNDING.md) | Returning to evidence while keeping supported learning from a detour |
+| [Reading and referent](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) | Separating reported experience from inferred mechanism |
+| [Separations](SEPARATIONS.md) | Maintaining boundary distinctions across interpretation, source and action |
+| [Pragmatics](PRAGMATICS.md) | Context, ambiguity, and constraints on attributed meaning |
+| [Shape contract](SHAPE_CONTRACT.md) | Bounded operational labels |
+| [English](english/README.md) | Context-dependent candidate decoding and rendering |
+| [Words movement](words/README.md) | Event and time observations without inferred private motives |
+| [Handoffs](handoff/README.md) | Explicit referent, source, state and uncertainty |
+| [Evidence contract](../LANGUAGE_REFERENT_CONTRACT.md) | Scope and witness conditions for technical assertions |
 
-## One relationship, several places to encounter it
+An expression by itself does not authorize a tool call. An inferred intention is not an observed action. Generated paraphrases must not be presented as a person's words. Do not reintroduce quotations or historical links from removed writing pages.
 
-| Place | What belongs here | What must survive |
-| --- | --- | --- |
-| [Human Drift](HUMAN_DRIFT.md) | Dated movement in James's own words, including his corrections of AI misunderstandings | What changed from one explanation to the next, not a list of synonyms |
-| [Regrounding](REGROUNDING.md) | Responding to drift by relating acquired observations to the earlier referent | The branch and its gains, not merely a rewind |
-| [Felt POV / Reading Provenance](POV_FELT_REFERENT_PROVENANCE_2026-10-14.md) | October 14 first-person report: language-evoked feeling without an actual change of referent; reading and generative AI as preferred surfaces | Preserve exact words, observed correction, reported feeling, and uncertainty separately |
-| [Language and Observation — communication narrative](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/LANGUAGE_AND_OBSERVATION.md) | Two-sided conversations: compression and decompression, another person's movement, felt responses to reading, misunderstood handoffs, silence and corrections | Keep original speech, the assistant's reading and James's confirmation or correction distinct; the continuation James feels does not establish another person's intentions |
-| [Pragmatics](PRAGMATICS.md) | Tone, joking, intensity, hesitation, swearing, care and register | Social meaning without cleaning the person into a machine |
-| [Shape contract](SHAPE_CONTRACT.md) | Provisional operational handles for particular utterances | Ambiguity, scope, and the original expression |
-| [English](english/README.md) | Candidate readings, decoder, renderer and context-dependent operator phrases | The difference between a conversational observation and a work command |
-| [Words movement](words/README.md) | Documented interaction events and [timestamped observations](words/temporal_observation.py), including felt reports across silent intervals | Elapsed time, checked absence and first-person feeling remain distinct; never infer an unreported feeling |
-| [Handoffs](handoff/README.md) | Referent, provenance, current state, uncertainty, return target | What was actually said, witnessed or corrected |
-| [Activation routes](../activations/README.md) | Explicitly registered shorthand into existing tools/state | Authorization and actual recorded state; no inferred action |
-| [Language Referent — evidence contract](../LANGUAGE_REFERENT_CONTRACT.md) | Bounded proof and evidence discipline when research becomes technical | The same referent, and exact native scope for each claim |
-
-## Interpretation is not execution
-
-An utterance is first encountered as someone's actual expression. One person might move outward, gather observations across several interactions, and only later bring them together. That cannot always be reduced to a single pair of compared objects or a single `shape_id`.
-
-The English bank supports narrower, practical tasks:
-
-```text
-actual utterance + who/what/when it concerns
-  → possible interpretations and pragmatic context
-  → active referent and evidence check
-  → selected operational handle OR multiple candidates / UNKNOWN
-  → optional rendering or explicitly authorized handoff
-```
-
-The decoder and renderer are implemented projections. They do **not** themselves mutate a workflow/network, witness physical movement, establish a person's intentions, or prove that language was fully understood. This is an interface to particular tasks, not the origin of the language referent.
-
-## Reground without erasing the branch
-
-When something seems off, recover the name, the continuing relationship, what changed on the detour, and the next supported place to move. Return to the same question **without** dismissing whatever the branch revealed. A correction in plain conversation might be a sentence; a technical correction may need a test, version and witness. Neither creates a different James.
-
-- Same wording may point to different things; different wording may point to the same referent.
-- Preserve authentic quotes exactly when quoting; mark AI-authored prose as interpretation.
-- Do not normalize away anger, humor, profanity, emotional expression or silence.
-- "Swallow" in a report about observation is not automatically the `LAYER.ABSORB` repository command; context decides.
-- Calling it *surfing* is an ordinary image, not a new physics claim or algorithm.
-- Mathematics remains human language, but scoped mathematical claims still require their native assumptions and verification.
-- An unresolved meaning is allowed to stay unresolved. A label isn't a witness.
-
-## Existing implementations and records
-
-[Time-aware conversation trace](words/temporal_observation.py) · [Temporal tests](tests/test_temporal_observation.py) · [English shape bank](english/shape_bank.json) · [English decoder](english/decoder.md) · [English renderer](english/renderer.md) · [Language index](index.json) · [Shape-bank tests](tests/test_shape_bank.py) · [Language protocols](../protocols/language/decode.md) · [Research entry](../ENTRY.md)
-
-The existing shape IDs, activation registry, JSON schema, source code and compatibility identifiers remain unchanged. This page organizes the meanings and boundaries; it does not claim a new runtime behavior.
+[Temporal tests](tests/test_temporal_observation.py) · [Shape-bank tests](tests/test_shape_bank.py) · [Language index](index.json)
