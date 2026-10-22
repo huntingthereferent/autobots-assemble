@@ -1,5 +1,12 @@
 # NIST Chemistry WebBook · public species identity
 
+## First source observation — October 22, 2026
+
+[GitHub Actions 39829436886](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39829436886) passed the offline identity controls and the one bounded live NIST publisher observation. NIST returned HTTP 200 and 23,224 HTML bytes. The derived receipt is [archived](observations/2026-10-22-run-39829436886.json), including source URL, UTC time, five true identity checks, and SHA-256 `8023fe6471994151e2a0cdf1716f1dba0c3bb872f953882b8c55ef968774843d`.
+
+Two independent negative-control findings were resolved during implementation: a prefix match incorrectly admitted `H2O2` as `H2O`; and concatenating NIST's separate page headings made the correct Water page appear mismatched. Both are covered by current offline tests. This does not license or validate NIST property tables, measured constants, spectra, or simulation results.
+
+
 A **separate source-contract sublane** to validate only the identity of a named chemical in the original [NIST Chemistry WebBook SRD 69](https://webbook.nist.gov/cgi/cbook.cgi?ID=C7732185&Units=SI). It is deliberately NOT an extraction of NIST thermodynamic measurements, spectra, constants, compiled data tables, or a chemistry experiment.
 
 ## Fixed referent
