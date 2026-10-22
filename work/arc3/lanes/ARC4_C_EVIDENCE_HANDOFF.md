@@ -14,7 +14,7 @@ Original `arc_agi.Arcade(OperationMode.NORMAL)` stage3→4 advancement was first
 
 The latest [draft PR #398](https://github.com/huntingthereferent/autobots-assemble/pull/398), [original run #39726675675](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39726675675), executed 20 genuine original SDK games (five upper-bar settings, two independently held lower arrangements, two entrance witnesses). All 20 remained `levels_completed=4, NOT_FINISHED`. Six original game resets (three condition pairs) had all four measured cup regions full simultaneously **without measured left-border change**. Both witnesses agreed case by case. The native, ARC-direct-continuity and repository protocol workflows passed on the draft PR's exact head. The PR was **not merged** at the evidence cutoff.
 
-**These are pixel events, not an official WIN rule.** Top, right, and bottom early source transitions still require an event-order audit. Reversible post-pour tests in [draft #392](https://github.com/huntingthereferent/autobots-assemble/pull/392) returned 24/24 official level4 results and did not establish a movement-history cause.
+**These are pixel events, not an official WIN rule.** The subsequent original-SDK lane A event-order audit is complete for its specified source windows; the unmeasured or broader boundary regions and private game objective remain unproven. Reversible post-pour tests in [draft #392](https://github.com/huntingthereferent/autobots-assemble/pull/392) returned 24/24 official level4 results and did not establish a movement-history cause.
 
 ## New independently replayed source-event finding
 
@@ -23,6 +23,12 @@ The separate [lane A native run #39729756294](https://github.com/huntingtherefer
 ## First Lane B original SDK intervention result
 
 Lane B's [source-pinned native run #39731621139](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139) compared the exact same level4 source arrangement with and without one additional upper-bar DOWN1 action, preserving its existing selection. The native original selected-bar position and returned full-frame hashes changed, while four-cup timing, first measured top/right boundary timing, off-cup first arrivals, and all four official `levels_completed=4, NOT_FINISHED` outcomes remained unchanged. Source [artifact #12405441391](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139/artifacts/12405441391). This is a **negative, bounded one-factor result**, not an objective inference.
+
+## Distinguishing actual original success from level4 visual nonprogress
+
+**Current controlled SDK comparison (2026-10-22):** [original run #39762841397](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397) verified four independent original-SDK resets: two predeclared level4 pour conditions, each with A/B independent entrances. Every session authentically advanced **stage3→4** on SDK ACTION5, then stayed **stage4→4** on a later native ACTION5. The successful stage3 returned source palette13 `180→0` over its last two frames while advancing; the four-cup level4 nonadvance also returned `180→0` without advancing. The three-cup control returned `135→0` without advancing. Genuine stage3 winning terminal root hash `fa8fd32d3bfd2c8b3ff7765aec373512` is the independently reproduced stage4 entry. Full original JSON+NPZ [artifact #12418353014](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397/artifacts/12418353014), ZIP SHA-256 `67bd82eb42be10f4b53a16a5cd37ed47c453cab2cf8cd1c0065c2dd0d4f03c40`.
+
+**Do not resume by inferring the stage4 success rule from cup fill, terminal clearing, or row63.** All have native counterexamples. The remaining wall is to identify a reproducible original-source contrast specific to a *genuinely advancing* action, or state explicitly that level4 advancement remains unobserved. Continue from the exact source evidence index and preserve A/B source/action receipts and artifact retention.
 
 ## Independent lanes, no silent data promotion
 
