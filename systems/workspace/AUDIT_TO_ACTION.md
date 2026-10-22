@@ -1,6 +1,6 @@
-# Audit-to-Action worker lane
+# Inspector Gadget — Audit-to-Action worker lane
 
-Purpose: turn neutral audit observations into retained, typed records and independently actionable follow-ups. This is a **pipeline**, not a new research verdict or a requirement to change working results.
+**Worker name:** Inspector Gadget.\n\nPurpose: turn neutral audit observations into retained, typed records and independently actionable follow-ups. This is a **pipeline**, not a new research verdict or a requirement to change working results.
 
 ## Contract
 
