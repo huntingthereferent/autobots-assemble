@@ -1,6 +1,14 @@
 # Lane C E19 — authentic Bgee referent type and identity claims
 
-**Status: E19 original-source experiment completed; first CI report gate failed and is being independently rerun. No final-head success yet.**
+**Verified E19 authentic-source run — October 22, 2026:** [identity/type run #39850456329](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39850456329) **SUCCESS, 9/9 focused tests**. Entire original 34,181-triple source graph independently hash-authenticated and materialized under OWL RL; native RDFLib scan and a separate SPARQL declarative scan matched all identity/type RDF statements touching original gene/target nodes.
+
+**Observed:** 1,993 original gene/target referents; **1,993 reflexive** `owl:sameAs` and **zero nonreflexive** cross-resource `owl:sameAs` statements in this node universe. The full closure contains **27,259** `rdf:type` statements touching original nodes: **2 original source-authored** and **27,257 additional inferred**. These are formal type/identity statements, not 27,257 new phenotypes or 1,993 independently verified molecular aliases. Source type/inference partitions and hashes are retained, not original RDF statements.
+
+The corrected report gate now independently checks `source_original_rdf_type==2`, `full_profile_inferred_rdf_type_touching_original_nodes==27257`, and `full_profile_rdf_type_touching_original_nodes==27259`, including their exact reconciliation. A ninth synthetic negative/positive control tests the original-versus-inferred partition. Verified derived-only artifact `nih-p2-lane-c-e19-original-referent-identity-type`, ID `12457387417`, ZIP SHA-256 `4a6ddcef85350ef08bf1e1db8e6f7b8b07b2621a7d42366739711751756ee15a`. No original source rows or RDF output were uploaded.
+
+**Strict boundary:** no nonreflexive identity observed within the defined original referent population; this does not rule out aliases outside the sample, prove global OWL consistency, clinical identities, complete independent OWL RL agreement, treatment efficacy or an official NIH score. E19, W13, and other NIH lanes remain separate; PR #404 draft and unmerged.
+
+---
 
 [First original-source E19 run #39846804280](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39846804280) completed its complete original-file-authenticated OWL RL computation, eight synthetic positive/negative tests, and independent native/SPARQL comparison. Its measured report recorded **1,993 original source referent nodes, 1,993 reflexive self-identity triples, zero nonreflexive sameAs triples, and 27,259 total rdf:type triples** touching native nodes. The GitHub workflow still **FAILED** because it wrongly asserted **27,257 as the total type count**.
 
