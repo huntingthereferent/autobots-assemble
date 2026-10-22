@@ -1,6 +1,6 @@
 {
   "schema": "meta-workstation/registry-v1",
-  "description": "Cross-node coordination index. Job state comes from each node's owned GitHub Actions journal; it is not evidence of scientific results.",
+  "description": "Source-owned operational navigation and lane placement for the two live public GitHub workstations. Meta is the default viewer; native research evidence remains in each originating repo.",
   "source_of_truth": "huntingthereferent/autobots-assemble",
   "updated_at": "2026-10-22",
   "nodes": [
@@ -19,15 +19,24 @@
       "id": "B",
       "label": "Dessy",
       "repo": "aeren-research/continuum-oscillator",
-      "visibility": "private",
-      "viewer": "https://github.com/aeren-research/continuum-oscillator/blob/main/docs/live/work.html",
+      "visibility": "public",
+      "viewer": "https://aeren-research.github.io/continuum-oscillator/live/work.html",
       "journal": "https://github.com/aeren-research/continuum-oscillator/actions",
-      "mode": "private-journal",
+      "mode": "live-public-api",
       "source_ref": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
-      "scope": "Verified source mirror; 241 workflow definitions in inactive library; assignments require explicit admission"
+      "scope": "Public workstation code verified as mirror at source snapshot; B workflows remain inactive except isolated historical bootstrap workflow until lane admission."
     }
   ],
   "lane_rules": [
+    {
+      "id": "B-CONTRACT",
+      "title": "B / Research source contract",
+      "match": [
+        "dessy · independent research lane contract"
+      ],
+      "node": "B",
+      "admission": "B's first individually enabled workflow. This runs source-registry and boundary tests; it does not prove research replication."
+    },
     {
       "id": "ARC",
       "title": "ARC",
@@ -95,9 +104,12 @@
   ],
   "handoff": {
     "authority": "GitHub records for each repository; this index records placement, not permission to start jobs",
-    "routing": "Unassigned lanes remain unassigned; do not duplicate work just because a twin exists",
+    "routing": "Only actual enabled Actions workflows can execute. A nominal lane owner is not a current running job; B is idle for original research until explicitly admitted.",
     "oscillation": "Record source and target revision, lane, job URL, result, provenance and explicit acceptance before transferring state",
-    "b_privacy": "B is private. Public Pages cannot fetch B's protected jobs; no B counters may be inferred as zero.",
-    "recovery": "Read this registry and both repository meta-workstation handoff files when regrounding in any ChatGPT window."
-  }
+    "b_privacy": "B is currently public. Its GitHub Actions API can be read without login; public source does not prove that B's independent research workflows are activated. If B is made private again, the meta viewer must mark it unavailable rather than displaying zero.",
+    "recovery": "Open the shared meta dashboard first. Read both repos' handoff files and GitHub Actions journals. Browser displays public job state; ChatGPT may use the linked accounts to handle separate code/actions."
+  },
+  "dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/meta.html",
+  "observation_history": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/history.json",
+  "observation_scope": "Public GitHub Actions workflow-run counts sampled periodically; no inferred total job slots, private data or automatic dispatch."
 }
