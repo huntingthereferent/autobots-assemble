@@ -1,6 +1,8 @@
 # Inspector Gadget — Audit-to-Action worker lane
 
-**Worker name:** Inspector Gadget.\n\nPurpose: turn neutral audit observations into retained, typed records and independently actionable follow-ups. This is a **pipeline**, not a new research verdict or a requirement to change working results.
+**Worker name:** Inspector Gadget.
+
+Purpose: turn neutral audit observations into retained, typed records and independently actionable follow-ups. This is a **pipeline**, not a new research verdict or a requirement to change working results.
 
 ## Contract
 
@@ -31,6 +33,13 @@ These are observations from the GitHub account audit, **not yet authenticated by
 | A2A-007 | Research | verified_result | Independent source adapters, observations and tests exist across scientific lanes | Verify each source receipt independently |
 
 Do not infer a failure from an untested item. Do not collapse independently verified results into a global pass/fail score.
+
+## Automatic observation
+
+- `.github/workflows/audit-to-action-cancellations.yml` responds to cancellations in four explicitly listed workflows.
+- `.github/workflows/inspector-gadget-all-workflows.yml` performs a repository-wide scan hourly (and via manual dispatch), retaining a grouped incident report as an Actions artifact.
+- The scanner currently examines at most the newest 300 completed workflow runs and filters a two-hour window. At high volume, older runs in that window may be missed; a durable cursor/pagination expansion is still needed.
+- These are CI observations, **not** a complete observer for browser interaction, source-level mathematical errors, or every workstation layer. No automatic repair dispatch exists yet.
 
 ## Next implementation boundary
 
