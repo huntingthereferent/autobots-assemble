@@ -10,7 +10,12 @@ class DailyOutcomeUI(unittest.TestCase):
         self.assertIn("meta-observations/daily.json",HTML)
         self.assertIn("meta-workstation/daily-runs-v1",HTML)
         self.assertIn("SUCCESSFUL RUNS / TODAY",HTML)
-        self.assertIn("HISTORICAL FAILED RUNS",HTML)
+        self.assertIn("CURRENT ISSUES",HTML)
+        self.assertIn('id="historical-failed"',HTML)
+        self.assertIn("meta-observations/health.json",HTML)
+        self.assertIn('id="health-list"',HTML)
+        self.assertIn('id="inspect-open"',HTML)
+        self.assertIn('data?.all_sources===true',HTML)
         self.assertIn("America/Chicago",HTML)
         self.assertIn('r?.all_sources===true',HTML)
         self.assertIn('renderDaily()',HTML)
@@ -31,6 +36,7 @@ class DailyOutcomeUI(unittest.TestCase):
         self.assertIn("r.laterSuccess",HTML)
         self.assertIn("later.href=r.laterSuccess.url",HTML)
         self.assertIn("not proof",HTML.lower())
+        self.assertIn("clears its earlier failed state",HTML)
 
 if __name__=="__main__":
     unittest.main()
