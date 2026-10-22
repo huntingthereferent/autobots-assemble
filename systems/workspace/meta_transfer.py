@@ -23,10 +23,10 @@ except ImportError:
 
 SCHEMA = "meta-workstation/transfer-health-v1"
 LEDGER_SCHEMA = "meta-workstation/handoffs-v1"
-ID = re.compile(r"[A-Z0-9][A-Z0-9-]{2,79}\\Z")
-HASH = re.compile(r"[0-9a-f]{64}\\Z")
-SHA = re.compile(r"[0-9a-f]{40}\\Z")
-SAFE_PATH = re.compile(r"[a-zA-Z0-9._/-]{1,240}\\Z")
+ID = re.compile(r"[A-Z0-9][A-Z0-9-]{2,79}\Z")
+HASH = re.compile(r"[0-9a-f]{64}\Z")
+SHA = re.compile(r"[0-9a-f]{40}\Z")
+SAFE_PATH = re.compile(r"[a-zA-Z0-9._/-]{1,240}\Z")
 UTC = dt.timezone.utc
 MAX_RECORDS = 200
 MAX_CONTENT = 32_768
