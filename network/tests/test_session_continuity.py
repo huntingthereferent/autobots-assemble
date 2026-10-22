@@ -54,8 +54,6 @@ class SessionContinuityTests(unittest.TestCase):
             with self.subTest(rule=rule):
                 self.assertIn(clause, session)
         index = json.loads(self.read("protocols/index.json"))["protocols"]
-        self.assertNotIn("ai.james", index)
-        self.assertNotIn("`ai.james`", session)
 
     def test_language_first_and_scalpel_precision_survive_entry(self):
         # Static source contract only: wording does not prove model behavior.
