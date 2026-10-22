@@ -6,8 +6,8 @@ The research goal is expandable source-backed investigation across scientific an
 
 ## What was confirmed at this entry
 
-- GitHub has two connected account identities available to the ChatGPT session, but **this repository does not contain or use ChatGPT session credentials**.
-- The original public repository and the separate account's `continuum-oscillator` repository have historical workflow records. Historical activity is not proof that both systems are currently interoperating as one factory.
+- Multiple GitHub execution identities may be observed through authorized, private connectors, but **this repository does not contain or use ChatGPT session credentials**.
+- The original public repository has historical workflow records. Any additional private repository observations stay in private operator-held receipts. Historical activity is not proof that multiple systems currently interoperate as one factory.
 - The source registry currently offers 21 candidate test contexts and 18 provider families. Those entries are **research opportunities**, not 21 completed studies or 18 imported datasets.
 - The [A/B relational-cluster experiment](AB_RELATIONAL_CLUSTER.md) witnesses local, mathematical, relation-led expansion; it does not produce remote GitHub nodes.
 - The [B1 workstation continuation](workstation_continuation.py) proposes source-witnessed lane births and connections; the receiving native worker controls evidence and admission. It does not automatically provision accounts or execute a global factory.
