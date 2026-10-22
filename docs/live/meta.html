@@ -169,6 +169,16 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 .outcome-facts span:first-child{color:#c8dce5;font-weight:700}
 .outcome-context p{margin:6px 0 0;color:#a8bcc7;font-size:11px;line-height:1.65}
 .outcome-context strong{color:#e0edf1;font-weight:650}
+.metric.current{border-top-color:#657988}.metric.current b{color:#c0d0d7}
+.metric.current[data-open="yes"]{border-top-color:#d78886}.metric.current[data-open="yes"] b{color:#e6aba9}
+.metric.current[data-open="no"]{border-top-color:#83c4a4}.metric.current[data-open="no"] b{color:#9cdbb7}
+.issues-link{margin-top:10px;padding:0;min-height:0;border:0;background:none;color:#a6c7d4;font:650 10px/1.5 Inter,"Segoe UI",system-ui,sans-serif;text-align:left;text-decoration:underline;text-underline-offset:2px}
+.issues-link:hover{background:none;color:#e0eef5}
+.current-checks{padding:5px 0 17px;border-bottom:1px solid #304451;margin-bottom:17px}
+.current-checks h3{margin-bottom:7px;font-size:13px}.current-checks p{font-size:11px;max-width:850px}
+.health-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px 17px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #293d47}
+.health-row a{font-size:12px;font-weight:630;color:#dbedf5}.health-row small{font:10px/1.5 var(--data);color:#a8bec9}
+.health-empty{color:#9cdbb7}
 </style>
 </head>
 <body>
@@ -182,7 +192,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
 <article class="metric running"><b id="running">—</b><span>IN MOTION / NOW</span><small>Executing workflow runs</small></article>
 <article class="metric passed"><b id="passed">—</b><span>SUCCESSFUL RUNS / TODAY</span><small id="passed-note">Reading full-day GitHub totals</small></article>
-<article class="metric followup"><b id="followup-count">—</b><span>LATER PASSES / RECENT</span><small id="followup-note">Matching workflows · recent source sample</small></article>
+<article class="metric followup current" id="open-check-card"><b id="current-open">—</b><span>CURRENT ISSUES</span><small id="failed-note">Open workflow checks · clears after a newer pass</small><button type="button" id="inspect-open" class="issues-link">Inspect source checks ↗</button></article>
 </section>
 <div class="outcome-context" aria-label="How daily run outcomes are counted"><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="failed">HISTORICAL FAILED RUNS / TODAY: —</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></div>
 <section class="flowfield" aria-label="Observed execution stages">
@@ -206,8 +216,8 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <div id="runs" class="runlist" aria-live="polite"><p class="empty">Checking source work…</p></div>
 <div class="journal-foot"><span id="list-range">Showing latest retrieved runs</span><button id="show-more" type="button" hidden>Show 25 more</button></div>
 </section>
-<details class="more"><summary>Source notes, limitations and routing references <span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="more-content">
-<div class="detail-grid"><section><h3>Live source</h3><p id="status-note">Counting verified GitHub workflow runs. Missing sources are unknown, not zero.</p></section>
+<details class="more" id="source-details"><summary>Source notes, limitations and routing references <span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="more-content">
+<section id="current-checks" class="current-checks"><h3>Current source checks needing attention</h3><p id="health-context">Reading current active workflow outcomes.</p><div id="health-list"></div></section><div class="detail-grid"><section><h3>Live source</h3><p id="status-note">Counting verified GitHub workflow runs. Missing sources are unknown, not zero.</p></section>
 <section><h3>Routing</h3><p id="routing-note">Reading recorded pipeline guidance.</p></section>
 <section><h3>Research verification</h3><p>A successful workflow is an execution result, not a scientific conclusion. Inspect the underlying source and native test evidence.</p></section></div>
 <p class="detail-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Measurement history ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Pipeline registry ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Recorded transfers ↗</a></p>
@@ -225,7 +235,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  const localTime=s=>{const v=new Date(s);return Number.isFinite(+v)?v.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"Unknown time"};
  const valid=n=>Number.isSafeInteger(n)&&n>=0;
  const statuses=["in_progress","queued","pending","waiting"];
- let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30,dailySummary=null;
+ let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30,dailySummary=null,healthSummary=null;
  async function get(url){const r=await fetch(url,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
  async function readRegistry(){
   let registry;
@@ -276,6 +286,46 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
    $("passed-note").textContent="Day journal unavailable · not zero";
   }
  }
+ function renderHealth(){
+  const data=healthSummary, checkedAt=Date.parse(data?.observed_at);
+  const trusted=data?.schema==="meta-workstation/current-workflow-health-v1"&&data?.all_sources===true&&
+    data?.summary&&valid(data.summary.open_count)&&typeof data.coverage_since==="string"&&
+    Number.isFinite(checkedAt)&&checkedAt<=Date.now()+60000&&Date.now()-checkedAt<=90*60000&&
+    Array.isArray(data.summary.open);
+  const card=$("open-check-card");
+  if(!trusted){
+    $("current-open").textContent="—";$("failed-note").textContent="Current workflow state unavailable · not zero";
+    card.dataset.open="unknown";$("health-context").textContent=
+    "A recent, complete GitHub reading from both repositories is required. Missing coverage never means zero.";
+    $("health-list").replaceChildren();return;
+  }
+  const open=data.summary.open_count;
+  $("current-open").textContent=open.toLocaleString();
+  $("failed-note").textContent=open?"Latest active workflow results still need review":"No currently failing workflows in tracked history";
+  card.dataset.open=open?"yes":"no";
+  $("health-context").textContent="Verified "+localTime(data.observed_at)+" · "+
+    data.summary.tracked_workflows+" active workflows tracked since "+localTime(data.coverage_since)+
+    ". A later successful run of the same workflow clears its earlier failed state. This is not individual test-case proof.";
+  const area=$("health-list");area.replaceChildren();
+  if(!open){const el=document.createElement("p");el.className="health-empty";
+    el.textContent="0 currently failing tracked workflows. Historical failures remain in GitHub.";area.append(el);return}
+  for(const entry of data.summary.open.slice(0,80)){
+    const line=document.createElement("div");line.className="health-row";
+    const a=document.createElement("a");a.href=entry.run_url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=entry.name+" ↗";
+    const note=document.createElement("small");note.textContent="Last decisive run: "+entry.conclusion+" · "+localTime(entry.event_at);
+    line.append(a,note);area.append(line);
+  }
+  if(open>80){const p=document.createElement("p");p.className="fine";p.textContent=
+    "Showing 80 of "+open+" current source checks. Open individual GitHub journals for details.";area.append(p)}
+ }
+ async function loadHealth(){
+  try{
+    const data=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/health.json");
+    if(data.schema!=="meta-workstation/current-workflow-health-v1")throw Error("Unexpected health data");
+    healthSummary=data;
+  }catch(e){healthSummary=null}
+  renderHealth();
+ }
  async function loadDaily(){
   try{
    const d=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/daily.json");
@@ -315,8 +365,6 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
     if(Date.parse(success.created)>Date.parse(r.created)){r.laterSuccess=success;matched.add(key)}
    }
   }
-  $("followup-count").textContent=allReady?matched.size.toLocaleString():"—";
-  $("followup-note").textContent=allReady?"Matching workflow + branch · latest 100/source":"Incomplete sources · follow-up count unknown";
   $("followups").textContent=allReady?"Later successful runs after an earlier failure (recent matching workflows): "+matched.size:"Later matching passes: unknown (source incomplete)";
  }
  function renderRuns(){
@@ -414,16 +462,17 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   }
   renderRuns();$("refresh").disabled=false;busy=false;
  }
- $("refresh").addEventListener("click",refresh);$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
+ $("inspect-open").addEventListener("click",()=>{$("source-details").open=true;$("current-checks").scrollIntoView({behavior:"smooth",block:"center"})});
+ $("refresh").addEventListener("click",()=>{refresh();loadDaily();loadHealth()});$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
  document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));chart()}));
  (async()=>{
   try{await readRegistry()}
   catch(e){$("stamp").textContent="Pipeline registry unavailable";$("source-state").textContent="SOURCE UNKNOWN";$("status-note").textContent="Check the canonical registry; no account is inferred from a stale label.";return}
-  await Promise.all([history(),routing(),refresh(),loadDaily()]);
+  await Promise.all([history(),routing(),refresh(),loadDaily(),loadHealth()]);
  })();
  setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
  setInterval(()=>{if(document.visibilityState==="visible"){history();routing()}},300000);
-  setInterval(()=>{if(document.visibilityState==="visible")loadDaily()},300000);
+  setInterval(()=>{if(document.visibilityState==="visible"){loadDaily();loadHealth()}},300000);
 })();
 </script>
 </body></html>

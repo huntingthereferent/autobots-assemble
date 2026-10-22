@@ -9,6 +9,8 @@ on:
       - ".github/workflows/meta-workstation-observations.yml"
       - "systems/workspace/meta_collect.py"
       - "systems/workspace/meta_daily.py"
+      - "systems/workspace/meta_health.py"
+      - "network/tests/test_meta_health.py"
       - "network/tests/test_meta_daily.py"
       - "systems/workspace/meta_route.py"
       - "docs/live/meta-registry.json"
@@ -44,6 +46,16 @@ jobs:
             --output "$RUNNER_TEMP/ab-meta-observations/daily.json"
       - name: Test daily outcome contract
         run: python3 -m unittest -v network.tests.test_meta_daily
+      - name: Record current unresolved workflow checks
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          python3 systems/workspace/meta_health.py \
+            --registry docs/live/meta-registry.json \
+            --previous "$RUNNER_TEMP/ab-meta-observations/health.json"
+      - name: Test current-check contract
+        run: python3 -m unittest -v network.tests.test_meta_health
+
       - name: Test evidence-gated routing contract
         run: python3 -m unittest -v network.tests.test_meta_route
       - name: Write routing advice next to immutable observations
@@ -57,6 +69,6 @@ jobs:
           cd "$RUNNER_TEMP/ab-meta-observations"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add history.json routing.json daily.json
+          git add history.json routing.json daily.json health.json
           git commit -m "Record source-owned A B status counts"
           git push origin HEAD:meta-observations
