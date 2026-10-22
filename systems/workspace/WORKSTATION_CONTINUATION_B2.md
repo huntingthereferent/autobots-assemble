@@ -64,6 +64,50 @@ unrestricted worker is silently invented by this code. Worker edition labels
 are candidate routing data; an actual source-owned admission still has to
 happen through `branch_help` and native controls.
 
+## Finite A/B bridge — tested integration boundary
+
+The finite relational cluster now has a dedicated adapter at
+`systems/workspace/ab_workstation_bridge.py`. It is an explicit bridge between
+two existing pieces of machinery, not a general-purpose discovery engine:
+
+1. Run a finite A/B wave explicitly with `advance(cluster_dir, execute=True)`.
+   The cluster independently checks each worker transition and appends its
+   replayable, hash-chained row.
+2. Create `ABClusterWitnessVerifier(cluster_journal, workstation_data_dir)`
+   and pass its `verify_observation` and `verify_connection` methods to the
+   existing `WorkstationContinuationHarness`.
+3. Seed a workstation lane, then bind the exact A/B trajectory identity to that
+   lane with `bind_lane(trajectory_path, lane_id)`. The mapping is stored as
+   an event in the workstation's existing `runtime.jsonl`, and is reconstructed
+   from that journal after restart.
+4. Convert a concrete movement to a witness reference with
+   `movement_ref(entry_hash, movement)`. The verifier replays the A/B journal
+   before accepting a reference. Branch evidence must match its bound parent
+   trajectory; relation evidence must match the exact destination; a connection
+   requires two distinct lane-bound histories reaching that same destination.
+5. Let the normal harness `inspect()` or `tick()` policy decide what to
+   propose. A resulting lane is still a READY coordination lane—not proof that
+   an AI worker was launched, that code ran, or that a native checkpoint passed.
+
+The adapter deliberately keeps A/B's path/state semantics at the source
+boundary. It does not treat a hash as proof of truth, infer a connection from a
+shared label, or claim that a finite mathematical collision proves a relation
+between arbitrary domains. The A/B worker's process ID is not used as durable
+trajectory identity.
+
+### Bridge regression commands
+
+```bash
+python -m unittest -v network.tests.test_ab_workstation_bridge
+python -m unittest -v network.tests.test_ab_workstation_harness_bridge
+python -m unittest discover -s network/tests -p "test_*.py"
+```
+
+On review-branch commit `ee5f4de`, the focused bridge and harness integration
+jobs passed (5 and 3 tests), and the full `network/tests` discovery passed
+2,242 tests. These are results for that exact commit; later edits require new
+CI results. See [draft PR #389](https://github.com/huntingthereferent/autobots-assemble/pull/389).
+
 ## Verified and unverified boundaries
 
 - **Locally reproducible in CI:** shared `RuntimeJournal` projection,
