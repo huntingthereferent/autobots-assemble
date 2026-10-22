@@ -43,6 +43,32 @@ Do not infer a failure from an untested item. Do not collapse independently veri
 - Each real follow-up uses `systems/workspace/inspector_gadget_adapter.py` and the existing `HandoffRuntime` (CREATED → STARTED → RESULT). It independently queries the exact GitHub run and retains `inspector-gadget-handoff.json` and `inspector-gadget-runtime.jsonl` as Actions artifacts. `systems/workspace/inspections.py` renders those records with the registered `inspector-gadget-github-run-v1` adapter when its journal is loaded into the local workstation viewer.
 - These are CI observations, **not** a complete observer for browser interaction, source-level mathematical errors, or every workstation layer. The observer activates source verification, not the owning research worker or automatic repair. A source-matched `COMPLETE` means only that the Inspector's source observation completed.
 
+## Calendar continuation — persistent unfinished workflow walls
+
+GitHub Actions already supplies the calendar: `.github/workflows/inspector-gadget-all-workflows.yml`
+runs on its hourly cron, independently of any open ChatGPT window.
+
+On each calendar tick, the schedule:
+
+1. Reads the existing source-observed `meta-observations/health.json` journal
+   (maintained by the half-hour meta-observation workflow) from GitHub.
+2. Refuses stale, missing or unverifiable primary-node observations rather than
+   reporting an invented empty queue. It reads only the authorized original
+   workstation A; other nodes retain independent admission gates.
+3. Merges every persisted `needs_attention` workflow into the current scanner's
+   independent Inspector Gadget handoff matrix, even if the failure occurred
+   outside the two-hour live scan window.
+4. Schedules one real Inspector source/wall investigation per eligible workflow,
+   up to the documented per-tick capacity, retaining overflow explicitly.
+5. Stops re-admitting an older failure when a newer conclusive PASS closes the
+   recorded workflow health wall. Cancelled/skipped runs do not clear it.
+
+This **activates existing source-observation lanes**, not the native research
+experiments themselves. Workflow-level PASS is not proof of research validity.
+The 21 candidate research study contexts and any privately authorized W13
+operations remain behind their separate source and authorization gates.
+An intentionally idle source owner is not automatically resumed by a timer.
+
 ## The actual wall — backward chase
 
 The target is not a red counter or just a failed workflow. The wall is a concrete
