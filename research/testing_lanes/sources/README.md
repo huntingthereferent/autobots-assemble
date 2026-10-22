@@ -27,6 +27,12 @@ Every source starts `DOCUMENTED_NOT_OBSERVED`. This means **official public docu
 | OECD SDMX | structured statistics | select dataset-specific flow/query first |
 | NVD | published CVE metadata | one exact CVE advisory query |
 
+## Verified source-observation history
+
+- [First observed provider pass](../observations/2026-10-22-run-39767929086.json) — run `39767929086`: 11 public metadata observations, 2 original HTTP walls (Zenodo, GWOSC), 5 manual gates; historical [21-lane source snapshot](../observations/2026-10-22-source-handoffs.json) had 18 source-ready lanes.
+- [Second observed provider pass](../observations/2026-10-22-run-39771470448.json) — run `39771470448`: 12 public metadata observations (Zenodo now available), 1 remaining GWOSC source wall, 5 manual gates; [21 independent source gates](../observations/2026-10-22-run-39771470448-lanes.json) now have 20 source-ready contexts, with only Neuroscience awaiting an appropriate selected source.
+- Both versions are preserved. Each source record is stamped with its observed endpoint, exact UTC retrieval time and response digest. No metadata success is a scientific replication; **all 21 contexts retain `NOT_TESTED`**.
+
 ## One source per movement
 
 Offline preflight (no network, no external subjects):

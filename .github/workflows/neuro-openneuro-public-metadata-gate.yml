@@ -1,0 +1,73 @@
+name: neuro-openneuro-public-metadata-gate
+
+on:
+  pull_request:
+    paths:
+      - "research/studies/neuro_openneuro_ds000224/**"
+      - ".github/workflows/neuro-openneuro-public-metadata-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  neuro-source-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run metadata identity, source and privacy negative controls without network
+        run: python -m unittest discover -s research/studies/neuro_openneuro_ds000224 -p 'test_*.py' -v
+      - name: Default CLI preserves the source gate
+        run: |
+          python research/studies/neuro_openneuro_ds000224/snapshot_metadata.py --output unobserved.json
+          python - <<'PY'
+          import json
+          r = json.load(open("unobserved.json"))
+          assert r["state"] == "UNOBSERVED" and r["scientific_experiments_run"] == 0
+          PY
+
+  neuro-one-public-source:
+    needs: neuro-source-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Request exactly one versioned public snapshot metadata record
+        run: python research/studies/neuro_openneuro_ds000224/snapshot_metadata.py --live --output neuro-metadata-derived.json
+      - name: Summarize source-only outcome and manual-gate boundary
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          print("### NEURO — public snapshot metadata only")
+          p = Path("neuro-metadata-derived.json")
+          if not p.exists():
+              print("Source was not observed.")
+          else:
+              d = json.loads(p.read_text())
+              print("State: " + d["state"])
+              if d["state"] == "PUBLIC_SNAPSHOT_METADATA_OBSERVED":
+                  print("DOI: " + d["metadata"]["doi"])
+                  print("Response SHA-256: " + d["source_sha256"])
+              else:
+                  print("The source was unavailable or failed its exact identity check.")
+              print("Scientific experiments: " + str(d["scientific_experiments_run"]))
+              print("Human-data access and rights remain manually gated.")
+          PY
+      - name: Save only public metadata receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: neuro-openneuro-ds000224-source-only-receipt
+          path: neuro-metadata-derived.json
+          retention-days: 30
+          if-no-files-found: warn

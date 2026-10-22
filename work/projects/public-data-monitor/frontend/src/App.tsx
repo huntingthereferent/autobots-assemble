@@ -32,6 +32,61 @@ type IdentityDecision = {
 
 type LoadState = "loading" | "ready" | "error";
 
+type Health = { status: string };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+const isHealth = (value: unknown): value is Health =>
+  isRecord(value) && typeof value.status === "string";
+
+const isSourceRuns = (value: unknown): value is SourceRun[] =>
+  Array.isArray(value) && value.every((run) =>
+    isRecord(run) &&
+    typeof run.id === "number" &&
+    typeof run.source === "string" &&
+    typeof run.status === "string" &&
+    typeof run.items_seen === "number" &&
+    (run.finished_at === null || typeof run.finished_at === "string")
+  );
+
+const isIdentities = (value: unknown): value is IdentityDecision[] =>
+  Array.isArray(value) && value.every((decision) =>
+    isRecord(decision) &&
+    typeof decision.id === "number" &&
+    typeof decision.left_key === "string" &&
+    typeof decision.right_key === "string" &&
+    typeof decision.score === "number" &&
+    typeof decision.threshold === "number" &&
+    typeof decision.matched === "boolean" &&
+    Array.isArray(decision.evidence) &&
+    decision.evidence.every((item: unknown) =>
+      isRecord(item) &&
+      typeof item.kind === "string" &&
+      typeof item.value === "string" &&
+      typeof item.weight === "number"
+    )
+  );
+
+const isLifecycle = (value: unknown): value is LifecycleState[] =>
+  Array.isArray(value) && value.every((item) =>
+    isRecord(item) &&
+    typeof item.id === "number" &&
+    typeof item.canonical_key === "string" &&
+    typeof item.source === "string" &&
+    typeof item.state === "string" &&
+    typeof item.transition === "string"
+  );
+
+async function readApi<T>(path: string, valid: (value: unknown) => value is T): Promise<T> {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error("HTTP response unavailable");
+  const payload: unknown = await response.json();
+  if (!valid(payload)) throw new Error("Invalid API response shape");
+  return payload;
+}
+
 const time = (value: string | null) => {
   if (!value) return "—";
   return new Intl.DateTimeFormat(undefined, {
@@ -43,33 +98,36 @@ const time = (value: string | null) => {
 
 function App() {
   const [health, setHealth] = useState("checking");
-  const [runs, setRuns] = useState<SourceRun[]>([]);
-  const [identities, setIdentities] = useState<IdentityDecision[]>([]);
-  const [lifecycle, setLifecycle] = useState<LifecycleState[]>([]);
+  const [runs, setRuns] = useState<SourceRun[] | null>(null);
+  const [identities, setIdentities] = useState<IdentityDecision[] | null>(null);
+  const [lifecycle, setLifecycle] = useState<LifecycleState[] | null>(null);
   const [loadState, setLoadState] = useState<LoadState>("loading");
+  const [unavailable, setUnavailable] = useState<string[]>([]);
 
   useEffect(() => {
     let active = true;
 
-    Promise.all([
-      fetch("/api/health").then((response) => response.json()),
-      fetch("/api/ops/source-runs?limit=12").then((response) => response.json()),
-      fetch("/api/identity/decisions?limit=8").then((response) => response.json()),
-      fetch("/api/lifecycle?limit=12").then((response) => response.json()),
-    ])
-      .then(([healthPayload, runPayload, identityPayload, lifecyclePayload]) => {
-        if (!active) return;
-        setHealth(healthPayload.status ?? "unknown");
-        setRuns(runPayload);
-        setIdentities(identityPayload);
-        setLifecycle(lifecyclePayload);
-        setLoadState("ready");
-      })
-      .catch(() => {
-        if (!active) return;
-        setHealth("unreachable");
-        setLoadState("error");
-      });
+    void Promise.allSettled([
+      readApi("/api/health", isHealth),
+      readApi("/api/ops/source-runs?limit=12", isSourceRuns),
+      readApi("/api/identity/decisions?limit=8", isIdentities),
+      readApi("/api/lifecycle?limit=12", isLifecycle),
+    ]).then(([healthResult, runsResult, identitiesResult, lifecycleResult]) => {
+      if (!active) return;
+      setHealth(healthResult.status === "fulfilled" ? healthResult.value.status : "unreachable");
+      setRuns(runsResult.status === "fulfilled" ? runsResult.value : null);
+      setIdentities(identitiesResult.status === "fulfilled" ? identitiesResult.value : null);
+      setLifecycle(lifecycleResult.status === "fulfilled" ? lifecycleResult.value : null);
+      setUnavailable([
+        ...(healthResult.status === "rejected" ? ["API health"] : []),
+        ...(runsResult.status === "rejected" ? ["Source runs"] : []),
+        ...(identitiesResult.status === "rejected" ? ["Identity decisions"] : []),
+        ...(lifecycleResult.status === "rejected" ? ["Lifecycle"] : []),
+      ]);
+      const hasRecords = [runsResult, identitiesResult, lifecycleResult]
+        .some((result) => result.status === "fulfilled");
+      setLoadState(hasRecords ? "ready" : "error");
+    });
 
     return () => {
       active = false;
@@ -77,15 +135,15 @@ function App() {
   }, []);
 
   const failedRuns = useMemo(
-    () => runs.filter((run) => run.status === "failed").length,
+    () => runs === null ? null : runs.filter((run) => run.status === "failed").length,
     [runs],
   );
   const matchedIdentities = useMemo(
-    () => identities.filter((decision) => decision.matched).length,
+    () => identities === null ? null : identities.filter((decision) => decision.matched).length,
     [identities],
   );
   const disappearedIdentities = useMemo(
-    () => lifecycle.filter((item) => item.state === "disappeared").length,
+    () => lifecycle === null ? null : lifecycle.filter((item) => item.state === "disappeared").length,
     [lifecycle],
   );
 
@@ -106,6 +164,12 @@ function App() {
         </div>
       </header>
 
+      {unavailable.length > 0 && (
+        <p className="empty" role="status">
+          Unavailable: {unavailable.join(", ")}. Missing evidence is not zero.
+        </p>
+      )}
+
       <section className="stats" aria-label="Platform summary">
         <article className="stat">
           <span>Runtime</span>
@@ -114,22 +178,22 @@ function App() {
         </article>
         <article className="stat">
           <span>Recent source runs</span>
-          <strong>{runs.length}</strong>
+          <strong>{runs === null ? "—" : runs.length}</strong>
           <small>Persisted operational evidence</small>
         </article>
         <article className="stat">
           <span>Recent failures</span>
-          <strong>{failedRuns}</strong>
+          <strong>{failedRuns === null ? "—" : failedRuns}</strong>
           <small>Explicit, queryable failure state</small>
         </article>
         <article className="stat">
           <span>Identity matches</span>
-          <strong>{matchedIdentities}</strong>
+          <strong>{matchedIdentities === null ? "—" : matchedIdentities}</strong>
           <small>Evidence-backed cross-system links</small>
         </article>
         <article className="stat">
           <span>Disappeared identities</span>
-          <strong>{disappearedIdentities}</strong>
+          <strong>{disappearedIdentities === null ? "—" : disappearedIdentities}</strong>
           <small>Durable lifecycle state</small>
         </article>
       </section>
@@ -151,7 +215,9 @@ function App() {
               <span>Items</span>
               <span>Finished</span>
             </div>
-            {runs.length === 0 ? (
+            {runs === null ? (
+              <div className="empty">Source runs unavailable.</div>
+            ) : runs.length === 0 ? (
               <div className="empty">No source-run evidence yet.</div>
             ) : (
               runs.map((run) => (
@@ -177,7 +243,9 @@ function App() {
           </div>
 
           <div className="identity-list">
-            {identities.length === 0 ? (
+            {identities === null ? (
+              <div className="empty">Identity decisions unavailable.</div>
+            ) : identities.length === 0 ? (
               <div className="empty">No persisted identity decisions yet.</div>
             ) : (
               identities.map((decision) => (
@@ -221,7 +289,9 @@ function App() {
               <span>State</span>
               <span>Transition</span>
             </div>
-            {lifecycle.length === 0 ? (
+            {lifecycle === null ? (
+              <div className="empty">Lifecycle unavailable.</div>
+            ) : lifecycle.length === 0 ? (
               <div className="empty">No lifecycle evidence yet.</div>
             ) : (
               lifecycle.map((item) => (

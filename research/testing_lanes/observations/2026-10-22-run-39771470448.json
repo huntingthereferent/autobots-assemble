@@ -3,9 +3,11 @@
   "observation_kind": "PUBLIC_METADATA_SOURCE_ADMISSION",
   "observed_run_id": 39771470448,
   "observed_run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39771470448",
+  "workflow_job_id": 119807370409,
   "source_code_commit": "8fa80de0dbf3f4aaa55d74d2390e45c1b0192a59",
-  "observation_date_utc": "2026-10-22",
-  "boundary": "Metadata endpoints and structural checks only. No experiment, dataset, scientific reproduction, or rights authorization.",
+  "observed_utc_date": "2026-10-22",
+  "previous_witness": "research/testing_lanes/observations/2026-10-22-run-39767929086.json",
+  "scope": "Exact public source URL, observation time, response SHA-256 and structure; no full-body archived, no study results validated.",
   "source_status_counts": {
     "metadata_observed": 12,
     "source_wall": 1,
@@ -208,14 +210,10 @@
     "noaa",
     "oecd"
   ],
-  "independent_lane_ci": {
-    "jobs_total": 21,
-    "jobs_success": 21,
-    "scientific_tests_run": 0
-  },
+  "scientific_experiments_run": 0,
+  "dataset_files_downloaded": false,
   "unresolved_source_walls": [
     "gwosc"
   ],
-  "source_data_archived": false,
-  "previous_observations_preserved": true
+  "previous_results_never_overwritten": true
 }
