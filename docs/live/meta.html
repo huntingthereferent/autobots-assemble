@@ -158,17 +158,6 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 .plot-scroll{overflow:hidden}
 @media(max-width:650px){.plot-scroll{overflow-x:auto;overflow-y:hidden;scrollbar-color:#496875 #101b23;scrollbar-width:thin}#trend{min-width:680px;width:680px;max-height:none;margin:12px 12px 0}}
 
-/* The kids launcher is a shortcut, not an execution dashboard section. */
-.kids-access{display:flex;align-items:center;justify-content:space-between;gap:13px 22px;flex-wrap:wrap;padding:14px 18px;margin:0 0 25px;border:1px solid #43505d;border-left:3px solid #d3b4db;background:linear-gradient(100deg,#242337,#19212d 65%,#15242b);border-radius:8px}
-.kids-access-text{display:flex;align-items:baseline;gap:13px;flex-wrap:wrap}
-.kids-kicker{font:750 11px/1.5 Inter,"Segoe UI",system-ui,sans-serif;color:#edd3f3;letter-spacing:.085em}
-.kids-access-text p{margin:0;color:#c1cbd4;font-size:12px}
-.kids-access-links{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-.kids-access-links a{display:inline-flex;align-items:center;justify-content:center;min-height:38px;border:1px solid #556574;padding:7px 11px;background:#24303b;border-radius:6px;font-size:12px;font-weight:650;color:#dceaf0}
-.kids-access-links a:hover{background:#314352;border-color:#b4c8d3;text-decoration:none}
-.kids-access-links .kids-main-link{color:#251d31;background:#ebd0e8;border-color:#ebd0e8;font-weight:770}
-.kids-access-links .kids-main-link:hover{background:#f7e0f1;border-color:#f7e0f1}
-@media(max-width:640px){.kids-access{padding:13px 14px;margin-bottom:21px}.kids-access-text{gap:3px}.kids-access-text p{font-size:11px}.kids-access-links{width:100%}.kids-access-links a{flex:1 1 auto}.kids-access-links .kids-main-link{flex:1 1 100%}}
 </style>
 </head>
 <body>
@@ -177,10 +166,6 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <main>
 <section class="hero"><div><span class="eyebrow">Operations / source-observed</span><h1>Research workstation</h1><p>Execution, queue movement and measured history in one place. Every run resolves to its original GitHub record.</p></div>
 <div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><span class="tag" id="source-state">CHECKING</span><button id="refresh" type="button">Refresh data ↻</button></div></section>
-<section class="kids-access" id="kids" aria-label="Kids' projects">
-  <div class="kids-access-text"><span class="kids-kicker">KIDS' PROJECTS</span><p>Music, games and Pony Trail—easy to find.</p></div>
-  <div class="kids-access-links"><a class="kids-main-link" href="kids.html">Open Kids' Area ↗</a><a href="cat-keyboard.html">Meow Lab 2</a><a href="pony-trail.html">Pony Trail</a></div>
-</section>
 <div class="strip-label">CURRENT WORKLOAD <span class="strip-secondary">GitHub Actions · combined view</span></div>
 <section class="metrics" aria-label="Combined source-observed workflow counts">
 <article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
