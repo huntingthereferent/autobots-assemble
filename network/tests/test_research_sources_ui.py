@@ -1,5 +1,8 @@
 """Research source browser is read-only, source-loaded and properly linked."""
 import unittest
+import shutil
+import subprocess
+from tempfile import TemporaryDirectory
 from pathlib import Path
 from html.parser import HTMLParser
 
@@ -67,6 +70,17 @@ class ResearchSourceUiTests(unittest.TestCase):
         parser.feed(self.page)
         self.assertEqual(len(parser.scripts), 1)
         self.assertIn("async function load()", parser.scripts[0])
+
+
+    @unittest.skipUnless(shutil.which("node"), "Node is needed for inline JS syntax check")
+    def test_source_browser_javascript_parses(self):
+        parsed = ScriptParser()
+        parsed.feed(self.page)
+        with TemporaryDirectory() as folder:
+            path = Path(folder) / "research-source-viewer.js"
+            path.write_text(parsed.scripts[0], encoding="utf-8")
+            result = subprocess.run(["node", "--check", str(path)], capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
 
 
 if __name__ == "__main__":
