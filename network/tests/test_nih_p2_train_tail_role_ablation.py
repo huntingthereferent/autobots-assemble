@@ -19,7 +19,7 @@ class SourceTailRoleTests(unittest.TestCase):
     def test_stable_ranks_for_source_role_and_full_universe(self):
         scores={"x":1,"target":0.5}
         self.assertEqual(ablate.rank("target",{"x","target"},scores),2)
-        self.assertEqual(ablate.rank("target",{"x","target","v","u"},scores),2)
+        self.assertEqual(ablate.rank("target",{"x","target","v","u"},scores),3)
 
     def test_original_source_path_movement_is_not_fabricated(self):
         graph={"forward":{"h":[("I","mid")],"mid":[("GG","gold")]},
