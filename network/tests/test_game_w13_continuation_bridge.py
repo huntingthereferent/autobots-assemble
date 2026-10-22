@@ -12,7 +12,7 @@ from systems.workspace.game_w13_continuation_bridge import (
     CAPABILITY, RELATION, WITNESS_PREFIX, GameW13ContinuationVerifier,
 )
 from systems.workspace.game_w13_native import validate_game_request
-from systems.workspace.game_w13_native_bridge import GameW13NativeBridge, WORKER_ID, copy_game_source
+from systems.workspace.game_w13_native_bridge import GameW13NativeBridge, copy_game_source
 from systems.workspace.workstation import ProcessWorkstation
 from systems.workspace.controls import run_job
 from systems.workspace.workstation_harness import WorkstationContinuationHarness
@@ -83,9 +83,13 @@ class GameW13ContinuationBridgeTests(unittest.TestCase):
         ))
 
     def test_two_native_runs_are_not_automatically_a_join_witness(self):
-        left, right = self.observation(), self.observation()
-        right.id = "second-observation"
-        right.lane_id = "another-lane"
+        from systems.workspace.workstation_continuation import Observation
+        left = self.observation()
+        right = Observation(
+            id="second-observation", lane_id="another-lane", kind="BRANCH",
+            relation=RELATION, witness_ref=WITNESS_PREFIX + self.job_id,
+            capability=CAPABILITY, sequence=1,
+        )
         self.assertFalse(self.verifier.verify_connection(left, right))
 
 
