@@ -1,0 +1,38 @@
+name: Inspector Gadget - All Workflows
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: inspector-gadget-repository-scan
+  cancel-in-progress: false
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect all repository workflows
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python systems/workspace/inspector_gadget_scan.py
+      - name: Verify scanner contracts
+        run: python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
+      - name: Retain scan receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: inspector-gadget-${{ github.run_id }}
+          path: inspector-gadget-report.json
+          retention-days: 90
