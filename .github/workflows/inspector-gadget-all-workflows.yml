@@ -100,6 +100,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: inspector-gadget-movement-${{ matrix.run_id }}
-          path: inspector-gadget-handoff.json
+          path: |
+            inspector-gadget-handoff.json
+            inspector-gadget-runtime.jsonl
           if-no-files-found: warn
           retention-days: 90
