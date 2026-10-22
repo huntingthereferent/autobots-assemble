@@ -38,7 +38,12 @@ class GateTests(unittest.TestCase):
     def test_admits_exact_dual_source_receipts(self):
         audit, proposal = fixture()
         plan = make_plan(audit, proposal)
-        self.assertEqual(plan["intervention_native_action_word"], "6@34,21 3 6@34,21 3 5")
+        self.assertEqual(plan["intervention_native_action_word"], "6@34,21 3 3 5")
+    def test_does_not_insert_confounding_reclick(self):
+        audit, proposal = fixture()
+        plan = make_plan(audit, proposal)
+        self.assertTrue(plan["preserves_existing_native_selection_without_extra_click"])
+        self.assertEqual(plan["intervention_native_action_word"].count("6@"), 1)
     def test_rejects_fabricated_contact(self):
         audit, proposal = fixture()
         proposal["contact_x"] = 16
