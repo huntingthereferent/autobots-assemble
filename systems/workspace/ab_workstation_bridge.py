@@ -109,10 +109,13 @@ class ABClusterWitnessVerifier:
         runtime = self._runtime()
         # Accept either the durable logical lane_id or the handoff ID returned
         # by tick()/seed_lane(); normalize to the logical identity used by observations.
-        matches = [runtime.get(handoff_id) for handoff_id in runtime.snapshot()
-                   if runtime.get(handoff_id).metadata.get("source_system") == _LANE_SOURCE
-                   and (runtime.get(handoff_id).metadata.get("lane_id") == lane_id
-                        or handoff_id == lane_id)]
+        matches = []
+        for handoff_id in runtime.snapshot():
+            handoff = runtime.get(handoff_id)
+            if (handoff.metadata.get("source_system") == _LANE_SOURCE
+                    and (handoff.metadata.get("lane_id") == lane_id
+                         or handoff_id == lane_id)):
+                matches.append(handoff)
         if len(matches) != 1:
             raise ValueError("bind trajectory only after its workstation lane is seeded")
         handoff = matches[0]
