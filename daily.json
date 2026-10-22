@@ -4,20 +4,20 @@
   "local_date": "2026-10-22",
   "start_utc": "2026-10-22T05:00:00Z",
   "end_utc": "2026-10-23T04:59:59Z",
-  "observed_at": "2026-10-22T21:53:08Z",
+  "observed_at": "2026-10-22T22:10:46Z",
   "basis": "GitHub Actions workflow runs created during today's America/Chicago calendar day; source-counted conclusions split at high throughput, not last-100 samples.",
   "limitations": "Failed and cancelled runs are historical outcomes, NOT unresolved tests. Later runs can pass the same workflow. Active/other states are not measured in this summary. A run is not a single test.",
   "nodes": {
     "A": {
       "repo": "huntingthereferent/autobots-assemble",
       "observed": true,
-      "success": 2282,
-      "failure": 309,
-      "cancelled": 850,
-      "skipped": 73,
+      "success": 2286,
+      "failure": 311,
+      "cancelled": 851,
+      "skipped": 77,
       "timed_out": 0,
       "action_required": 0,
-      "known_outcome_runs_lower_bound": 3514,
+      "known_outcome_runs_lower_bound": 3525,
       "other": null
     },
     "B": {
@@ -35,12 +35,12 @@
   },
   "all_sources": true,
   "totals": {
-    "success": 2323,
-    "failure": 324,
-    "cancelled": 850,
-    "skipped": 73,
+    "success": 2327,
+    "failure": 326,
+    "cancelled": 851,
+    "skipped": 77,
     "timed_out": 0,
     "action_required": 0,
-    "known_outcome_runs_lower_bound": 3570
+    "known_outcome_runs_lower_bound": 3581
   }
 }
