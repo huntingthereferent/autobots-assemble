@@ -1,0 +1,72 @@
+name: NIH P2 original first-public source evidence gate
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_original_first_public_gate.py'
+      - 'network/tests/test_nih_p2_original_first_public_gate.py'
+      - '.github/workflows/nih-p2-first-public-evidence-gate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: nih-p2-first-public-gate-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  historical-release-evidence-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Download byte-pinned official version history receipt
+        uses: actions/download-artifact@v4
+        with:
+          name: nih-p2-adjacent-status-receipt
+          run-id: 39421372666
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/registry
+      - name: Download byte-pinned independent deposited AACT source comparison
+        uses: actions/download-artifact@v4
+        with:
+          name: nih-independent-aact-v259-v260-39424382213-1
+          run-id: 39424382213
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/aact
+      - name: Re-verify exact original archived JSON and reject unsupported time promotions
+        env:
+          NIH_P2_ORIGINAL_REGISTRY_JSON: ${{ runner.temp }}/registry/original-status-contrast.json
+          NIH_P2_ORIGINAL_AACT_JSON: ${{ runner.temp }}/aact/independent-aact-original-version-corroboration.json
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-first-public"
+          python -m unittest -v network.tests.test_nih_p2_original_first_public_gate
+          python -m systems.workspace.nih_p2_original_first_public_gate \
+            --registry "$NIH_P2_ORIGINAL_REGISTRY_JSON" \
+            --aact "$NIH_P2_ORIGINAL_AACT_JSON" \
+            --output "$RUNNER_TEMP/nih-first-public/first-public-admission.json"
+          python - <<'PY'
+          from pathlib import Path
+          import os,json
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"nih-first-public/first-public-admission.json").read_text())
+          assert x["source_reported_posted_dates"]==["2022-10-27","2022-11-07"]
+          assert x["real_historical_as_known_at_admission"]=="REFUSED_MISSING_INDEPENDENT_WITNESS"
+          assert x["independent_exact_version_first_public_at"]=="UNAVAILABLE"
+          assert x["actual_clinical_valid_at"]=="UNAVAILABLE"
+          assert x["original_W13_modified"] is False
+          assert x["official_NIH_benchmark"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-first-public" && sha256sum first-public-admission.json > sha256.txt)
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-first-public-gate-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-first-public/
+          retention-days: 30
+          if-no-files-found: warn
