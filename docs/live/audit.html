@@ -159,6 +159,7 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
       dest.append(b);
     }
   }
+  let fileReadSerial=0;
   function renderFiles(){
     const dest=$('test-files');dest.replaceChildren();
     $('file-heading').textContent=state.mode==='data'?'Recorded data files':'Source test files';
@@ -173,16 +174,17 @@ html.embedded .top{display:none}html.embedded .shell{padding:7px 1px 30px}
     }
   }
   async function openFile(path){
+    const serial=++fileReadSerial,head=state.head,mode=state.mode;
     state.selected=path;state.cases=[];state.source='';state.position=0;
     renderFiles();$('test-position').textContent=path;$('case-source').replaceChildren(elem('p','Reading exact source at '+state.head.slice(0,12)+'…','muted'));
     try{
       const text=await sourceText(path);
-      if(state.selected!==path)return;
+      if(serial!==fileReadSerial||state.selected!==path||state.head!==head||state.mode!==mode)return;
       state.source=text;
       try{state.cases=state.mode==='data'?parseData(text):parseCases(text)}
       catch(e){$('case-source').replaceChildren(elem('p','Data parse failed: '+e.message+'. Inspect original source; no entries were inferred.','notice'));return}
       renderCase();
-    }catch(e){if(state.selected===path)$('case-source').replaceChildren(elem('p','Source unavailable: '+e.message+'. Nothing inferred.','notice'));}
+    }catch(e){if(serial===fileReadSerial&&state.selected===path&&state.head===head&&state.mode===mode)$('case-source').replaceChildren(elem('p','Source unavailable: '+e.message+'. Nothing inferred.','notice'));}
   }
   function advance(step){
     const next=state.position+step;
