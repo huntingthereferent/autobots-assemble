@@ -39,7 +39,7 @@ public final class BgeeFourRules {
                "[originalRONamedGenomicParent: (<"+EXPRESS+"> <"+SUB+"> <"+GENOMIC+">) "+
                "(?gene <"+EXPRESS+"> ?place) -> (?gene <"+GENOMIC+"> ?place)]\n"+
                "[originalROInverse: (<"+EXPRESS+"> <"+INV+"> <"+INVERSE+">) "+
-               "(?gene <"+EXPRESS+"> ?place) -> (?place <"+INVERSE+"> ?gene)]\\n"+
+               "(?gene <"+EXPRESS+"> ?place) -> (?place <"+INVERSE+"> ?gene)]\n"+
                "[originalROInverseNamedGenomicParent: (<"+INVERSE+"> <"+SUB+"> <"+GENOMIC+">) "+
                "(?place <"+INVERSE+"> ?gene) -> (?place <"+GENOMIC+"> ?gene)]";
     }
