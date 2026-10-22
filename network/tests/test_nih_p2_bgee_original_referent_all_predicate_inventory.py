@@ -42,9 +42,6 @@ class E18OriginalReferentAllPredicateTests(unittest.TestCase):
 
     def test_full_profile_extra_schema_metadata_not_mislabeled_biological(self):
         graph=fixture()
-        base=e18.graph_scope_native(Graph(),ORIGINAL)
-        for original in ORIGINAL:
-            pass
         base=ORIGINAL
         full=e18.graph_scope_native(graph,ORIGINAL)
         with patch.object(e18,"FOUR_RULE_TOTAL",4):
