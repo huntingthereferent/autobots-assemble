@@ -1,0 +1,46 @@
+name: ARC4 lane B original SDK terminal screen transition audit
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/audit_native_sp80_stage3_4_screen_transition.py'
+      - '.github/workflows/arc4-stage3-stage4-screen-transition.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-owned-transition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install raw native source reader
+        run: python -m pip install numpy
+      - name: Download verified genuine original SDK success/nonadvance source
+        uses: actions/download-artifact@v4
+        with:
+          name: arc4-original-success-versus-nonadvance
+          run-id: 39762841397
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/arc4/screen-transition-source
+      - name: Verify frozen original native JSON/NPZ SHA256
+        run: |
+          echo 'd13dc2f2bdfce9a019a245d1853da82de22bfb066921387bde0f1622bd846830  runtime/data/arc4/screen-transition-source/arc4-official-success-versus-nonadvance.json' | sha256sum -c -
+          echo '0be84942f119108b65ce0971fc6342ec049c07528052dfaf322b1c371e8a5d30  runtime/data/arc4/screen-transition-source/arc4-official-success-versus-nonadvance.npz' | sha256sum -c -
+      - name: Audit all actual returned SDK border windows frame by frame
+        run: |
+          python -m work.arc3.audit_native_sp80_stage3_4_screen_transition \
+            --json runtime/data/arc4/screen-transition-source/arc4-official-success-versus-nonadvance.json \
+            --npz runtime/data/arc4/screen-transition-source/arc4-official-success-versus-nonadvance.npz \
+            --out runtime/data/arc4/arc4-screen-transition-observed.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-screen-transition-comparison
+          path: runtime/data/arc4/arc4-screen-transition-observed.json
+          retention-days: 90
+          if-no-files-found: error
