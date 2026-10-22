@@ -204,6 +204,17 @@ function renderToday(item) {
 
   const left = own.filter(x => x.status !== "done").length;
   $("#today-summary").textContent = left ? `${left} left` : own.length ? "all done ✓" : "open";
+  const completed = own.length - left;
+  const percentage = own.length ? Math.round(100 * completed / own.length) : 0;
+  $("#progress-label").textContent = item.display_name + "’s day";
+  $("#progress-value").textContent = completed + " / " + own.length + " tasks";
+  $("#progress-fill").style.width = percentage + "%";
+  $("#progress-bar").setAttribute("aria-valuenow", String(percentage));
+  $("#progress-percent").textContent = percentage + "% marked done";
+  $("#progress-next").textContent = !own.length
+    ? "Nothing assigned today yet. You can still practice or create."
+    : left === 0 ? "All assigned tasks are marked done. Keep exploring."
+    : left + " task" + (left === 1 ? "" : "s") + " waiting. Pick the next move.";
 }
 
 function renderNotice(item) {
@@ -344,6 +355,8 @@ function render() {
   renderGrownup(item);
   renderSwitchList();
 
+  $("#practice-link").href = "./practice.html?learner=" + encodeURIComponent(item.id);
+  $("#family-link").href = "./family.html?learner=" + encodeURIComponent(item.id);
   const learnerName = encodeURIComponent(item.display_name || item.id);
   const adultMode = item.adult ? "&mode=adult" : "";
   $("#studio-link").href = `./worksheet.html?learner=${learnerName}${adultMode}`;
