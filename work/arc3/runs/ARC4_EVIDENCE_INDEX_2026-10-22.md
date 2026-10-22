@@ -87,6 +87,14 @@ The original level3 and level4 frames each have four source palette11 connected 
 
 **Result/limit:** simultaneous filled source cups and animation terminal clearing do not establish official progression. Different stage geometries prevent treating this as one common hidden objective or inferred native rule. [Lane B original SDK right-bar timing experiment](https://github.com/huntingthereferent/autobots-assemble/actions/workflows/arc4-stage4-right-bar-timing.yml) is a separately frozen source test; do not claim success before its exact native workflow returns. Archive retention 90 days; independent durable copy unverified.
 
+## Independently verified cross-stage cups and native right-bar test
+
+[Authenticated original source cup audit #39764626858](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626858) **passed**; [independent source JSON artifact #12418334984](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626858/artifacts/12418334984), ZIP SHA256 `9a3ff705ce2e62ce149cba0756d53e8a6fa17b33e36a7c3752835e66a65b6c68`. Four true original SDK sessions, both independent A/B native entry witnesses, stage3 success four source cup windows concurrently full frames27–28 and official **3→4**, contrasted with native stage4 nonadvance four different cup masks full frames25–32 but official **4→4**. The separate stage4 three-cup negative never has all four concurrently full. Matching source appearance is not a decoded game objective.
+
+[Authentic right-bar horizontal native experiment #39764626974](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626974) **passed**, [full native original frame JSON/NPZ artifact #12418974951](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626974/artifacts/12418974951), ZIP SHA256 `0f9b5b16c7de7350c7cc7ec22e12efca92769255d457dfc4fd5ffd3f5a8d5f27`. Eight original SDK resets (four frozen right-bar positions × independent A/B native witnesses), zero official level5/WIN. Upper/middle/lower arrangement fixed. Right-bar LEFT1: actual bbox [38,32,52,34], top-middle and top-right source cup first full frame21, top-left25; LEFT2: actual bbox [35,32,49,34], top-middle23, top-right19, top-left25. Both show four simultaneously full at frames25–32. Re-click without displacement, and RIGHT1, do not fill top-left/right. All official level4 NOT_FINISHED.
+
+**Boundary:** frame-ordinal changes do not by themselves establish real clock time, a private objective, or native success. Each Actions artifact has configured 90-day retention; durable independent copies not verified. An independently sourced comparison of successful terminal screen transitions and nonadvancing returned screens is registered in separate Lane B workflow and remains **unverified until that source audit completes**.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
