@@ -43,11 +43,11 @@ Do not infer a failure from an untested item. Do not collapse independently veri
 - Each real follow-up uses `systems/workspace/inspector_gadget_adapter.py` and the existing `HandoffRuntime` (CREATED → STARTED → RESULT). It independently queries the exact GitHub run and retains `inspector-gadget-handoff.json` and `inspector-gadget-runtime.jsonl` as Actions artifacts. `systems/workspace/inspections.py` renders those records with the registered `inspector-gadget-github-run-v1` adapter when its journal is loaded into the local workstation viewer.
 - These are CI observations, **not** a complete observer for browser interaction, source-level mathematical errors, or every workstation layer. The observer activates source verification, not the owning research worker or automatic repair. A source-matched `COMPLETE` means only that the Inspector's source observation completed.
 
-## Inspector Gadget as the native-worker continuation clock
+## Native Lane Continuation — scheduled execution of registered workers
 
-The existing hourly Inspector Gadget workflow now has an independent `whip`
-job. Its job is equivalent to pressing **continue** for already registered
-source-owned GitHub Actions workers. It is a dispatcher, not a new research
+The existing hourly Inspector Gadget workflow now includes a **Native Lane
+Continuation** job. It schedules eligible registered, source-owned GitHub
+Actions workers without replacing their implementations. It is a dispatcher, not a new research
 worker, new comparison prompt, or claim that another ChatGPT window ran.
 
 - `systems/workspace/inspector_gadget_workers.json` lists the verified existing
@@ -59,7 +59,7 @@ worker, new comparison prompt, or claim that another ChatGPT window ran.
   duplicate active jobs, honors each existing worker's minimum cadence
   and starts up to four due workers using GitHub's native
   `workflow_dispatch` API with Actions write permission scoped to the
-  `whip` job. Remaining due lanes are eligible at later ticks.
+  `native-lane-continuation` job. Remaining due lanes are eligible at later ticks.
 - A machine-readable artifact records SELECTED, ALREADY_RUNNING, COOLDOWN,
   DISABLED and CAPACITY_WAIT states, plus confirmed dispatch acceptances or
   failures. Receipt is not scientific proof or a completed worker result.

@@ -12,9 +12,9 @@ on:
       - 'systems/workspace/inspector_gadget_scan.py'
       - 'systems/workspace/inspector_gadget_wall.py'
       - 'systems/workspace/inspector_gadget_calendar.py'
-      - 'systems/workspace/inspector_gadget_whip.py'
+      - 'systems/workspace/inspector_gadget_continuation.py'
       - 'systems/workspace/inspector_gadget_workers.json'
-      - 'network/tests/test_inspector_gadget_whip.py'
+      - 'network/tests/test_inspector_gadget_continuation.py'
       - '.github/workflows/nih-p2-synthetic-benchmark.yml'
       - 'network/tests/test_inspector_gadget_calendar.py'
       - 'network/tests/test_inspector_gadget_wall.py'
@@ -49,7 +49,7 @@ jobs:
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_calendar.py' -v
-          python -m unittest discover -s network/tests -p 'test_inspector_gadget_whip.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
           python -m unittest discover -s network/tests -p 'test_audit_to_action.py' -v
 
   inspect:
@@ -107,7 +107,7 @@ jobs:
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_calendar.py' -v
-          python -m unittest discover -s network/tests -p 'test_inspector_gadget_whip.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
       - name: Retain scan and movement plan
         uses: actions/upload-artifact@v4
         with:
@@ -118,8 +118,8 @@ jobs:
           retention-days: 90
 
 
-  whip:
-    # Existing native workers perform the work; Inspector just presses continue.
+  native-lane-continuation:
+    # Schedule existing independently owned native worker workflows.
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 9
@@ -134,17 +134,17 @@ jobs:
         with:
           python-version: '3.12'
       - name: Verify registered native worker entry points and cadence
-        run: python -m unittest discover -s network/tests -p 'test_inspector_gadget_whip.py' -v
-      - name: Calendar pulse - continue source-owned worker lanes
+        run: python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
+      - name: Calendar continuation - dispatch eligible native worker lanes
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: python -m systems.workspace.inspector_gadget_whip dispatch
+        run: python -m systems.workspace.inspector_gadget_continuation dispatch
       - name: Preserve which native workers actually accepted dispatch
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: inspector-gadget-native-whip-${{ github.run_id }}
-          path: inspector-gadget-native-dispatch.json
+          name: inspector-gadget-native-continuation-${{ github.run_id }}
+          path: inspector-gadget-native-continuation.json
           retention-days: 30
           if-no-files-found: warn
 

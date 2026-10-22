@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from systems.workspace.inspector_gadget_whip import ROSTER, assess, run, validate
+from systems.workspace.inspector_gadget_continuation import ROSTER, assess, run, validate
 
 NOW = dt.datetime(2026, 10, 22, 23, 30, tzinfo=dt.timezone.utc)
 REPO = "huntingthereferent/autobots-assemble"
@@ -33,7 +33,7 @@ def native_run(minutes_ago, *, status="completed", conclusion="success"):
     return {"created_at": clock, "status": status, "conclusion": conclusion}
 
 
-class NativeWhipTests(unittest.TestCase):
+class NativeLaneContinuationTests(unittest.TestCase):
     def setUp(self):
         self.sandbox = TemporaryDirectory()
         self.addCleanup(self.sandbox.cleanup)

@@ -1,4 +1,4 @@
-"""Inspector Gadget = calendar-driven "c" for ALREADY EXISTING GitHub workers.
+"""Calendar-driven continuation controller for existing GitHub worker lanes.
 
 The native worker is its source workflow; this module only selects eligible
 registered workers and dispatches their existing entry points. It cannot
@@ -76,7 +76,7 @@ def _api(repo, token, method, endpoint, payload=None):
     headers = {"Authorization": "Bearer " + token,
                "Accept": "application/vnd.github+json",
                "X-GitHub-Api-Version": "2022-11-28",
-               "User-Agent": "inspector-gadget-native-whip"}
+               "User-Agent": "inspector-gadget-native-lane-continuation"}
     data = json.dumps(payload).encode("utf-8") if payload is not None else None
     if data is not None:
         headers["Content-Type"] = "application/json"
@@ -193,7 +193,7 @@ def run(roster, health, *, repo, token, reader=read_runs, sender=None, root=ROOT
 
 def main(argv):
     if len(argv) != 2 or argv[1] != "dispatch":
-        raise SystemExit("usage: python -m systems.workspace.inspector_gadget_whip dispatch")
+        raise SystemExit("usage: python -m systems.workspace.inspector_gadget_continuation dispatch")
     roster = json.loads(ROSTER.read_text(encoding="utf8"))
     repo = os.environ.get("GITHUB_REPOSITORY", "")
     token = os.environ.get("GITHUB_TOKEN", "")
@@ -203,7 +203,7 @@ def main(argv):
         report = run(roster, health, repo=repo, token=token)
     finally:
         if report is not None:
-            Path("inspector-gadget-native-dispatch.json").write_text(
+            Path("inspector-gadget-native-continuation.json").write_text(
                 json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf8")
     if report["dispatch_failures"]:
         raise RuntimeError("native workflow dispatch failed for: " + ", ".join(report["dispatch_failures"]))
