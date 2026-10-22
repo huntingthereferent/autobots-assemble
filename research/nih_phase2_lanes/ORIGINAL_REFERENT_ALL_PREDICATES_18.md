@@ -1,6 +1,12 @@
 # Lane C E18 — every predicate touching an original Bgee referent
 
-**Status: PROTOCOL IMPLEMENTED; owner-authenticated E18 outcome pending dedicated CI.**
+**Verified owner-authenticated E18:** [full all-predicate original Bgee referent census #39845798218](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39845798218) **SUCCESS, 8/8 focused tests**. Original full 34,181-triple source graph materialized to **183,287 RDF triples** with general Python OWL RL in **64.588 seconds**. Among original source referents (129 distinct source genes + 1,864 distinct original mapped targets), the full closure has **154,445** touching RDF statements; the original graph has **25,062** touching source-node statements, and the previously independently verified four-rule set has **100,108**. There are exactly **29,275 additional statements outside both sets**: **27,257 `rdf:type`**, **1,993 `owl:sameAs`**, and **25 other RDFS/OWL class/schema statements** (4 `rdfs:domain`, 10 `rdfs:range`, 9 `rdfs:subClassOf`, 2 `owl:equivalentClass`). The additional statements under the *same three RO gene-expression predicates* are **zero**, corroborating E16's boundary. Independently implemented native RDFLib graph traversal and declarative SPARQL scans agreed by exact RDF triple identity. The 1,993 identity statements are not yet individually checked for reflexivity; their count alone does not establish aliases.
+
+Derived-only evidence `nih-p2-lane-c-e18-all-referent-predicate-inventory`, ID **12454333892**, ZIP SHA-256 `6157f94aeea92da8285f0ca7dd11390f761fd3cc7ead404de1876b50850f3952`; retained JSON has only aggregated predicate/orientation counts and SHA-256 receipts without raw original IDs or RDF triples. These are **ontology-derived logical metadata**, not 29,275 observed genes, gene-expression events, disease mechanisms, or clinical outcomes.
+
+---
+
+Historical preflight status: protocol was implemented before verification; superseded above.
 
 ## Separate question
 
