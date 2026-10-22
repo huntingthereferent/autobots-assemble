@@ -9,7 +9,7 @@ Purpose: turn neutral audit observations into retained, typed records and indepe
 1. **Ingest** a neutral audit as JSON findings with unique `id`, `lane`, `observation`, `source`, and `kind`.
 2. **Classify without rewriting the observation**: `verified_result` → preserve; `defect` → investigate; `candidate` → verify; `unknown` → observe; `external_boundary` → record boundary.
 3. **Keep source ownership**: a source locator is not source authentication. The output marks it `unverified_locator` until another worker checks the exact revision and witness.
-4. **Dispatch later, only after evidence checks**: owner, test, repair, and viewer receipt belong to the existing lane infrastructure. The current implementation **does not automatically spawn jobs, edit source projects, or claim fixes**.
+4. **Activation = movement**: the scheduled scan converts candidate workflow incidents into bounded per-incident `HandoffRuntime` source-observation jobs; four named workflows also have immediate cancellation-triggered movement. These jobs independently read the pinned GitHub run and preserve a native runtime journal. They **do not automatically edit sources, rerun research, or repair an owning lane**.
 5. **Close the loop**: after independent verification, retain the original observation, test receipt, outcome, and next source-owned continuation. Do not silently delete negative findings or convert successes into problems.
 
 ## Current intake
@@ -38,9 +38,11 @@ Do not infer a failure from an untested item. Do not collapse independently veri
 
 - `.github/workflows/audit-to-action-cancellations.yml` responds to cancellations in four explicitly listed workflows.
 - `.github/workflows/inspector-gadget-all-workflows.yml` performs a repository-wide scan hourly (and via manual dispatch), retaining a grouped incident report as an Actions artifact.
-- The scanner currently examines at most the newest 300 completed workflow runs and filters a two-hour window. At high volume, older runs in that window may be missed; a durable cursor/pagination expansion is still needed.
-- These are CI observations, **not** a complete observer for browser interaction, source-level mathematical errors, or every workstation layer. No automatic repair dispatch exists yet.
+- The scanner currently examines at most the newest 1,000 completed workflow runs and filters a two-hour window. At high volume, older runs in that window may be missed; a durable cursor/pagination expansion is still needed.
+- An explicit activation plan admits up to 200 source-observation jobs per scan, with a recorded overflow count; outstanding signals are **not** represented as already processed. Inspector's own runs do not recursively activate more Inspector jobs.
+- Each real follow-up uses `systems/workspace/inspector_gadget_adapter.py` and the existing `HandoffRuntime` (CREATED → STARTED → RESULT). It independently queries the exact GitHub run and retains `inspector-gadget-handoff.json` and `inspector-gadget-runtime.jsonl` as Actions artifacts. `systems/workspace/inspections.py` renders those records with the registered `inspector-gadget-github-run-v1` adapter when its journal is loaded into the local workstation viewer.
+- These are CI observations, **not** a complete observer for browser interaction, source-level mathematical errors, or every workstation layer. The observer activates source verification, not the owning research worker or automatic repair. A source-matched `COMPLETE` means only that the Inspector's source observation completed.
 
 ## Next implementation boundary
 
-Connect this intake to the existing lane journal and audit viewer, add a source-authentication worker and receipt schema, and measure whether a proposed repair actually improved the original observation. Keep the original audit snapshot immutable.
+Next: durable pagination with a time cursor; an owning-lane registry for verified issue→follow-up-worker dispatch; capture native research and browser failures independently of CI; ingest retained Inspector runtime journals into the deployed audit viewer; and link verified later fixes back to source incidents. Keep the original audit snapshot immutable.
