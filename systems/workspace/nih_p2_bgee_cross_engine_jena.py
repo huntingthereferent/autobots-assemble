@@ -84,6 +84,19 @@ def write_input(original,output):
     }
 
 
+def independent_rule_set_comparison(observed,oracle):
+    lost=oracle-observed
+    extras=observed-oracle
+    if lost or extras:
+        raise ValueError("independent Jena RDF rules and original source static comparator disagree: "
+                        +json.dumps({
+                            "missing":len(lost),"unexpected":len(extras),
+                            "missing_preview":[list(map(str,t)) for t in sorted(lost,key=baseline.source_sort_key)[:3]],
+                            "unexpected_preview":[list(map(str,t)) for t in sorted(extras,key=baseline.source_sort_key)[:3]],
+                        },sort_keys=True))
+    return baseline.digest_set(observed)
+
+
 def verify(original,jena_nt):
     """Strict exact equality with the full independent source-only oracle."""
     if not Path(jena_nt).exists() or Path(jena_nt).stat().st_size>MAX_JENA_OUTPUT_LINES*350:
@@ -96,15 +109,7 @@ def verify(original,jena_nt):
     oracle=original["independent"]
     # Keep *unexpected* conclusions as counterexamples rather than
     # silently filtering or treating them as model superiority.
-    lost=oracle-observed
-    extras=observed-oracle
-    if lost or extras:
-        raise ValueError("independent Jena RDF rules and original source static comparator disagree: "
-                        +json.dumps({
-                            "missing":len(lost),"unexpected":len(extras),
-                            "missing_preview":[list(map(str,t)) for t in sorted(lost,key=baseline.source_sort_key)[:3]],
-                            "unexpected_preview":[list(map(str,t)) for t in sorted(extras,key=baseline.source_sort_key)[:3]],
-                        },sort_keys=True))
+    jena_digest=independent_rule_set_comparison(observed,oracle)
     edges=original["source_edges"]
     if len(edges)!=ORIGINAL_EDGES or len(observed)!=RULE_CONSEQUENCES:
         raise ValueError("original source baseline unexpected count")
@@ -133,7 +138,7 @@ def verify(original,jena_nt):
         "Apache_Jena_unexpected_source_consequences":0,
         "entire_original_source_input_rules_agree_with_independent_Python_SPARQL":True,
         "independent_source_rule_consequences_sha256":baseline.digest_set(oracle),
-        "Jena_rule_consequences_sha256":baseline.digest_set(observed),
+        "Jena_rule_consequences_sha256":jena_digest,
         "preview_consequence_SHA256_only":hashes,
         "Jena_rule_engine": "Apache Jena GenericRuleReasoner forward rule engine; only two pinned source-owned rules",
         "full_RO_OWL_RL_ontology_materialization":False,
