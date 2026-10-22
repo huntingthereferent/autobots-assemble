@@ -23,8 +23,8 @@ MAX_ARCHIVE_BYTES=30_000_000
 MAX_MEMBER_BYTES=35_000_000
 MAX_TOTAL_DECOMPRESSED=50_000_000
 MAX_MEMBERS=16
-TABLE_COPY=re.compile(r'^COPY\\s+([^ (]+)\\s*\\(([^)]*)\\)\\s+FROM\\s+stdin;\\s*$',re.I)
-INSERT=re.compile(r'^INSERT\\s+INTO\\s+([^ (]+)',re.I)
+TABLE_COPY=re.compile(r'^COPY\s+([^ (]+)\s*\(([^)]*)\)\s+FROM\s+stdin;\s*$',re.I)
+INSERT=re.compile(r'^INSERT\s+INTO\s+([^ (]+)',re.I)
 
 
 def canonical_table(ref):
@@ -42,7 +42,7 @@ def sql_census(raw):
     headers={}
     for line in lines:
         if active is not None:
-            if line=="\\.":
+            if line=="\.":
                 active=None
                 continue
             counts[active]+=1
