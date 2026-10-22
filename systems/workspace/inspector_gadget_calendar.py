@@ -79,7 +79,30 @@ def combine(scan, health, *, repo, now=None):
     if (not isinstance(node, dict) or node.get("repo") != repo
             or node.get("observed") is not True or not isinstance(node.get("open"), list)):
         raise ValueError("current workstation health is not source-observed")
-    findings = list(scan["findings"])
+    # A newer conclusive PASS in the durable ledger closes older scanner
+    # failure signals. A newer failed run beyond that pass remains visible.
+    recorded = node.get("workflows") or {}
+    if not isinstance(recorded, dict):
+        raise ValueError("persistent workflow status map invalid")
+    findings = []
+    cleared_scanner_items = 0
+    for finding in scan["findings"]:
+        if not isinstance(finding, dict):
+            raise ValueError("invalid scanner finding")
+        identifier = str(finding.get("id", ""))
+        parts = identifier.split("-")
+        wid = parts[1] if len(parts) >= 4 else ""
+        known = recorded.get(wid) if isinstance(recorded.get(wid), dict) else {}
+        source_run_ids = finding.get("run_ids") or []
+        # Run ids are source identities, not timestamps; the clear record
+        # must be newer than all incidents in this source group.
+        if (known.get("state") == "clear"
+                and type(known.get("run_id")) is int
+                and source_run_ids
+                and all(type(rid) is int and rid <= known["run_id"] for rid in source_run_ids)):
+            cleared_scanner_items += 1
+            continue
+        findings.append(finding)
     seen = {rid for finding in findings if isinstance(finding, dict)
             for rid in finding.get("run_ids", []) if type(rid) is int}
     appended, open_ids = [], set()
@@ -121,6 +144,7 @@ def combine(scan, health, *, repo, now=None):
             "current_source_open": len(node["open"]),
             "open_workflow_ids": sorted(open_ids),
             "persisted_walls_added": len(appended),
+            "cleared_scanner_groups": cleared_scanner_items,
             "condition": "start_inspection_lanes" if findings else "no_incidents",
             "dispatch_scope": "source-observation-only",
             "resolution_rule": "a later conclusive source run clears the persistent health wall",
