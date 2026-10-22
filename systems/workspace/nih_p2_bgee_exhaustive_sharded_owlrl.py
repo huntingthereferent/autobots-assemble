@@ -57,6 +57,12 @@ def source_axioms(author,ro):
 def original_join_graph(by_kind):
     if set(by_kind)!={"anatomy","expression_condition"}:
         raise ValueError("both independent Bgee original source mapping branches required")
+    for s,p,o in by_kind["anatomy"]:
+        if not isinstance(o,str) or not o.startswith("http://purl.obolibrary.org/obo/"):
+            raise ValueError("original anatomy owner mapping category and object template disagree")
+    for s,p,o in by_kind["expression_condition"]:
+        if not isinstance(o,str) or not o.startswith("http://bgee.org/#EXPRESSION_CONDITION_"):
+            raise ValueError("original condition owner mapping category and object template disagree")
     tuples=by_kind["anatomy"] | by_kind["expression_condition"]
     if not tuples or len(tuples)>SOURCE_EDGE_LIMIT:
         raise ValueError("empty source rows or source-owned finite bound exceeded")
@@ -184,7 +190,8 @@ def evaluate(rows,author,ro,*,chunk_size=CHUNK_SIZE):
         "shard_limit":chunk_size,
         "actual_shard_count":len(shards),
         "shards":shards,
-        "source_ground_samples_are_not_synthetic":True,
+        "source_owner_original_whole_files_authenticated":False,
+        "source_ground_inputs_not_synthetic":"UNVERIFIED_IN_RAW_EVALUATE",
         "all_mapped_edges_covered_by_partitioned_reasoning":True,
         "full_unpartitioned_RO_OWL_RL_closure_measured":False,
         "full_unpartitioned_Bgee_plus_RO_OWL_RL_closure_measured":False,
@@ -216,6 +223,8 @@ def execute(archive,author_files,ro_files):
         "original_author_commit":bridge.COMMIT,
         "original_RO_source_commit":bridge.source.COMMIT,
         "original_author_mapping_rules":len(gate["author_R2RML_mappings"]),
+        "source_owner_original_whole_files_authenticated":True,
+        "source_ground_inputs_not_synthetic":True,
         "original_source_file_sha256":{name:receipt["sha256"]
                    for name,receipt in gate["independent_original_RO_whole_file_receipts"].items()},
     })
