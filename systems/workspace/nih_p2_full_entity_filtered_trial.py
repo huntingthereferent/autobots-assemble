@@ -70,6 +70,51 @@ def tie_aware_rank(target_score, candidate_scores):
     return 1 + better + (tied-1)/2
 
 
+def per_relation_failure_diagnostics(cases, entity_count):
+    """Frozen heldout error diagnosis; no new model, rules, or negative labels."""
+    if not cases or entity_count < 2:
+        raise ValueError("missing source heldout cohort or candidate count")
+    categories = sorted({c["relation"] for c in cases})
+    result = {}
+    for rel in categories:
+        rows = [c for c in cases if c["relation"] == rel]
+        if not rows:
+            raise ValueError("empty original source relation cohort")
+        null_reciprocal = 0.0
+        scored = 0
+        rank_deltas = []
+        for c in rows:
+            n = c["candidate_universe_count"]
+            excluded = c["other_known_gold_excluded_from_filtered_rank"]
+            if n != entity_count or type(excluded) is not int or not 0 <= excluded < n:
+                raise ValueError("candidate denominator or positive-filter count changed")
+            if c["full_filtered_tie_aware_rank"] > c["full_unfiltered_tie_aware_rank"]:
+                raise ValueError("known-positive filter worsened ranking")
+            if not 1 <= c["full_filtered_tie_aware_rank"] <= n-excluded:
+                raise ValueError("filtered rank outside original eligible candidates")
+            if c["source_path_score"] < 0:
+                raise ValueError("negative original source witness score")
+            scored += c["source_path_score"] > 0
+            rank_deltas.append(c["full_unfiltered_tie_aware_rank"] -
+                               c["full_filtered_tie_aware_rank"])
+            # Independently declared all-constant-score baseline: every
+            # eligible tail tied, no test labels used as model features.
+            null_reciprocal += 2/(n-excluded+1)
+        result[rel] = {
+            "heldout_original_gold_cases": len(rows),
+            "gold_with_frozen_training_source_path": scored,
+            "gold_without_frozen_training_source_path": len(rows)-scored,
+            "filtered_hits_at_10": sum(c["full_filtered_tie_aware_rank"]<=10 for c in rows),
+            "filtered_MRR": round(sum(1/c["full_filtered_tie_aware_rank"] for c in rows)/len(rows),6),
+            "all_equal_score_null_MRR": round(null_reciprocal/len(rows),6),
+            "mean_known_positive_filter_rank_reduction": round(sum(rank_deltas)/len(rows),6),
+            "unknown_alternatives_are_not_confirmed_negatives": True,
+        }
+    if sum(x["heldout_original_gold_cases"] for x in result.values())!=len(cases):
+        raise ValueError("per-relation case aggregation mismatch")
+    return result
+
+
 def run(*, train_file:Path,test_file:Path,valid_file:Path):
     train,trid=original.read_source(train_file,"train.tsv")
     test,teid=original.read_source(test_file,"test.tsv")
@@ -154,6 +199,7 @@ def run(*, train_file:Path,test_file:Path,valid_file:Path):
         "clinical_effectiveness_inferred":False,
         "original_W13_journal_modified":False,
         "official_NIH_benchmark":False,
+        "per_relation_frozen_failure_diagnostics":per_relation_failure_diagnostics(cases,len(universe)),
         "cases":cases,
     }
 
