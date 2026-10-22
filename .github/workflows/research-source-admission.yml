@@ -9,7 +9,9 @@ on:
     paths:
       - "research/testing_lanes/registry.json"
       - "research/testing_lanes/sources/**"
-      - "research/testing_lanes/*.py"
+      - "research/testing_lanes/source_admission.py"
+      - "research/testing_lanes/lane_activation.py"
+      - "research/testing_lanes/lane_registry.py"
       - ".github/workflows/research-source-admission.yml"
   workflow_dispatch:
 
