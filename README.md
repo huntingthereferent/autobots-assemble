@@ -16,7 +16,7 @@ The repository records a developing general-purpose research and construction en
 
 **Current reviewed evidence:** [Research register — October 21, 2026](https://github.com/huntingthereferent/huntingthereferent/blob/main/RESEARCH_REGISTER.md) · [Historical provenance and limits](https://github.com/huntingthereferent/huntingthereferent/blob/main/PROVENANCE.md) · [Research method](https://github.com/huntingthereferent/huntingthereferent/blob/main/docs/RESEARCH_METHOD.md) · [System expansion report](https://github.com/huntingthereferent/huntingthereferent).
 
-**Research background:** [The Human Wall](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/THE_HUMAN_WALL.md) is retained in the writing archive as historical context, not presented as an experimental finding. The existing tests do not establish a universal theory, a physically validated system, or a fully autonomous production platform.
+**Evidence boundary:** The existing tests do not establish a universal theory, a physically validated system, or a fully autonomous production platform.
 
 ## Selected work
 
