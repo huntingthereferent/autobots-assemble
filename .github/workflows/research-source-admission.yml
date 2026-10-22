@@ -3,9 +3,7 @@ name: research-source-admission
 on:
   pull_request:
     paths:
-      - "research/testing_lanes/sources/**"
-      - "research/testing_lanes/source_admission.py"
-      - "research/testing_lanes/test_source_admission.py"
+      - "research/testing_lanes/**"
       - ".github/workflows/research-source-admission.yml"
   workflow_dispatch:
 
