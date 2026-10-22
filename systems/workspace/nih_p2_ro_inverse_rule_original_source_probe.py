@@ -79,7 +79,7 @@ def oracle_sparql_source_join(original,probes):
     g=Graph()
     g += original
     g += probes
-    return set(g.query(QUERY).graph) if False else set(g.query(QUERY))
+    return set(g.query(QUERY).graph)
 
 
 def examine(original,*,require_123=False):
@@ -167,7 +167,7 @@ def main():
     print(json.dumps({
         "exact_source_inverse_axioms":r["original_named_inverse_axioms"],
         "synthetic_probes":r["unique_injected_synthetic_test_assertions"],
-        "original_source_SPARRQL_oracle":r["independent_SPARQL_CONSTRUCT_source_join_predictions"],
+        "original_source_SPARQL_oracle":r["independent_SPARQL_CONSTRUCT_source_join_predictions"],
         "owlrl_correct_operational_inferences":r["OWL_RL_correct_inverse_assertions"],
         "source_data_promoted_to_biomedical_claim":False,
         "NIH_complete":False
