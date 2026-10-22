@@ -1,0 +1,85 @@
+{
+  "schema": "ab-studio-wav-intake/v1",
+  "sample_rate": 16000,
+  "bpm": 120,
+  "duration_ticks": 960,
+  "sources": [
+    {
+      "id": "meow",
+      "path": "meow.wav"
+    }
+  ],
+  "tracks": [
+    {
+      "id": "sample-track",
+      "gain": 800,
+      "pan": -180,
+      "mute": false,
+      "solo": false,
+      "automation": [
+        {
+          "tick": 480,
+          "gain": 450
+        },
+        {
+          "tick": 960,
+          "gain": 800
+        }
+      ],
+      "clips": [
+        {
+          "kind": "audio",
+          "id": "meow-clip",
+          "source": "meow",
+          "start": 0,
+          "length": 960,
+          "offset": 0,
+          "rate_num": 1,
+          "rate_den": 1
+        }
+      ]
+    },
+    {
+      "id": "melody-track",
+      "gain": 350,
+      "pan": 180,
+      "mute": false,
+      "solo": false,
+      "automation": [],
+      "clips": [
+        {
+          "kind": "midi",
+          "id": "simple-melody",
+          "start": 0,
+          "length": 960,
+          "notes": [
+            {
+              "pitch": 60,
+              "start": 0,
+              "length": 240,
+              "velocity": 70
+            },
+            {
+              "pitch": 64,
+              "start": 240,
+              "length": 240,
+              "velocity": 70
+            },
+            {
+              "pitch": 67,
+              "start": 480,
+              "length": 240,
+              "velocity": 70
+            },
+            {
+              "pitch": 72,
+              "start": 720,
+              "length": 240,
+              "velocity": 70
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
