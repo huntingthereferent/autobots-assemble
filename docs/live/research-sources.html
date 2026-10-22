@@ -97,8 +97,10 @@ footer{margin-top:38px;border-top:1px solid var(--line);padding-top:16px;font-si
 "use strict";
 const root="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/registry.json?ref=main";
 const repo="https://github.com/huntingthereferent/autobots-assemble/blob/main/research/testing_lanes/sources/";
+const firstObservation="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/observations/2026-10-22-run-39767929086.json?ref=main";
+const firstRun="https://github.com/huntingthereferent/autobots-assemble/actions/runs/39767929086";
 const manual=new Set(["physionet","openneuro","nist","noaa","oecd"]);
-let registry=null, selected=null;
+let registry=null, selected=null, observationRecords=new Map(), receiptStatus="NOT_LOADED";
 const get=id=>document.getElementById(id);
 function element(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
 function anchor(text,url){const a=element("a",null,text);a.href=url;a.target="_blank";a.rel="noopener noreferrer";return a}
@@ -113,10 +115,25 @@ function draw(){
   const card=element("article","item");
   const title=element("div","item-header");
   const left=element("div");left.append(element("div","id",s.id.toUpperCase()),element("h3",null,s.name));
-  title.append(left,element("div","class",manual.has(s.id)?"MANUAL GATE":"DOCUMENTED / UNOBSERVED"));
+  const observation=observationRecords.get(s.id);
+  let state="NO VERIFIED OBSERVATION LOADED";
+  if(manual.has(s.id))state="MANUAL ACCESS GATE";
+  else if(observation&&observation.state==="METADATA_OBSERVED"&&/^[0-9a-f]{64}$/.test(observation.body_sha256||""))
+    state="METADATA OBSERVED · 2026-10-22";
+  else if(observation&&observation.state==="SOURCE_WALL")
+    state="HISTORICAL ACCESS WALL · 2026-10-22";
+  title.append(left,element("div","class",state));
   card.append(title,element("p","kind",s.kind+" — "+s.boundary));
   const links=element("div","links");
   links.append(anchor("Provider documentation ↗",s.doc_url),anchor("Source contract ↗",repo+encodeURIComponent(s.id)+".json"));
+  if(observation){
+    links.append(anchor("Observed run ↗",firstRun));
+    const detail=element("p","small",
+      observation.state==="METADATA_OBSERVED"
+       ? "Exact public metadata receipt · "+String(observation.observed_at_utc||"unknown UTC")+" · SHA-256 "+String(observation.body_sha256||"").slice(0,12)+"…"
+       : "Prior attempted endpoint · "+String(observation.error_class||"source access unavailable")+" · Later revisions require a separate check");
+    card.append(detail);
+  }
   card.append(links);catalog.append(card);
  }
  if(!sources.length)catalog.append(element("div","empty","No source records match this filter. No absence claim is implied."));
@@ -151,6 +168,29 @@ async function load(){
   get("gate-count").textContent=String(data.sources.filter(s=>manual.has(s.id)).length);
   get("source-state").textContent="REGISTRY SOURCE VERIFIED · "+String(envelope.sha||"").slice(0,12);
   draw();
+  try{
+    const observedResponse=await fetch(firstObservation,{headers:{"Accept":"application/vnd.github+json"},cache:"no-store"});
+    if(!observedResponse.ok)throw new Error("Observations unavailable");
+    const observedEnvelope=await observedResponse.json();
+    if(observedEnvelope.encoding!=="base64"||!observedEnvelope.content)throw new Error("Observation bytes unavailable");
+    const observedBytes=Uint8Array.from(atob(observedEnvelope.content.replace(/\s/g,"")),c=>c.charCodeAt(0));
+    const observation=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(observedBytes));
+    if(observation.schema_version!==1||observation.observed_run_id!==39767929086||!Array.isArray(observation.observations))
+      throw new Error("Unexpected source receipt schema");
+    observationRecords=new Map();
+    for(const receipt of observation.observations){
+      if(typeof receipt.source_id!=="string"||!data.sources.some(source=>source.id===receipt.source_id))
+        throw new Error("Unknown observation source identity");
+      observationRecords.set(receipt.source_id,receipt);
+    }
+    receiptStatus="HISTORICAL_RECEIPTS_LOADED";
+    get("source-state").textContent="VERSIONED REGISTRY · FIRST SOURCE RUN: "+observation.source_status_counts.metadata_observed+" OBSERVED / "+observation.source_status_counts.source_wall+" WALLS";
+    draw();
+  }catch{
+    receiptStatus="RECEIPTS_UNAVAILABLE";
+    get("source-state").textContent="REGISTRY LOADED · SOURCE RECEIPTS UNAVAILABLE";
+    draw();
+  }
  }catch(err){
   get("source-state").textContent="SOURCE NOT AVAILABLE · NO COUNTS INFERRED";
   get("catalog").replaceChildren(element("div","empty","Cannot read the current source registry. Open the original source contracts using the footer link."));
