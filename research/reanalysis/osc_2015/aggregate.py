@@ -64,7 +64,10 @@ def inspect_bytes(raw, check_source=True):
     sha = hashlib.sha1(b"blob " + str(len(raw)).encode() + b"\x00" + raw).hexdigest()
     if check_source and (len(raw) != BYTES or sha != BLOB_SHA):
         raise ValueError("unrecognized source snapshot")
-    counts = summarize(raw.decode("utf-8-sig"))
+    # The upstream pinned CSV includes non-UTF-8 bytes in free-text columns.
+    # ISO-8859-1 is a lossless byte-to-codepoint transport for CSV parsing;
+    # only ASCII numeric flags and record identifiers participate in this test.
+    counts = summarize(raw.decode("latin-1"))
     difference = {k: {"expected": v, "observed": counts[k]}
                   for k, v in PUBLISHED.items() if counts[k] != v}
     return {
