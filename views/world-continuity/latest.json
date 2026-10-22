@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-22T17:16:01.606259+00:00",
-  "content_sha256": "9ae69e8ea29d4cc7085e7eab56cac5d03edd0eff098e49adb00d5f0fbd9bc2cd",
+  "checked_at": "2026-10-22T21:41:54.959128+00:00",
+  "content_sha256": "a069ac27108949cad197a7128b4d699bc9b49a6996a698e95f290f5dd1df7ffb",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 4,
-      "max_magnitude": 1.97,
+      "count": 8,
+      "max_magnitude": 1.6,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,86 +22,154 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026uyhwjq",
-        "observed_at": "2026-10-22T17:16:01.185004Z",
-        "source_updated_at": "2026-10-22T16:43:12.198000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uyhwjq",
+        "source_id": "aka2026uyqpqt",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:06:34.714000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uyqpqt",
         "entity_type": "event",
-        "canonical_key": "event:aka2026uyhwjq",
+        "canonical_key": "event:aka2026uyqpqt",
+        "payload": {
+          "magnitude": 1.6,
+          "place": "11 km SW of Manley Hot Springs, Alaska",
+          "longitude": -150.841,
+          "latitude": 64.939,
+          "depth_km": 5.0,
+          "occurred_at": "2026-10-22T21:04:41.440000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "aka2026uyqtgr",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:10:03.281000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026uyqtgr",
+        "entity_type": "event",
+        "canonical_key": "event:aka2026uyqtgr",
+        "payload": {
+          "magnitude": 0.8,
+          "place": "18 km NNW of Fox, Alaska",
+          "longitude": -147.796,
+          "latitude": 65.107,
+          "depth_km": 14.6,
+          "occurred_at": "2026-10-22T21:08:50.966000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "ci41350727",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:34:33.797000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41350727",
+        "entity_type": "event",
+        "canonical_key": "event:ci41350727",
+        "payload": {
+          "magnitude": 1.42,
+          "place": "13 km SE of Ocotillo Wells, CA",
+          "longitude": -116.0355,
+          "latitude": 33.0578333333333,
+          "depth_km": 9.48,
+          "occurred_at": "2026-10-22T21:31:00.810000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "ci41350735",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:37:50.316000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41350735",
+        "entity_type": "event",
+        "canonical_key": "event:ci41350735",
+        "payload": {
+          "magnitude": 1.09,
+          "place": "8 km NNE of Beaumont, CA",
+          "longitude": -116.937833333333,
+          "latitude": 33.9953333333333,
+          "depth_km": 13.35,
+          "occurred_at": "2026-10-22T21:34:27.030000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "nc75453576",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:32:23.145000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75453576",
+        "entity_type": "event",
+        "canonical_key": "event:nc75453576",
+        "payload": {
+          "magnitude": 1.52,
+          "place": "5 km NNW of Pacifica, CA",
+          "longitude": -122.513664245605,
+          "latitude": 37.6518325805664,
+          "depth_km": 6.88000011444092,
+          "occurred_at": "2026-10-22T21:09:03.420000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "nc75453586",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:13:14.493000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75453586",
+        "entity_type": "event",
+        "canonical_key": "event:nc75453586",
         "payload": {
           "magnitude": 0.4,
-          "place": "81 km NW of Ninilchik, Alaska",
-          "longitude": -152.872,
-          "latitude": 60.466,
-          "depth_km": 5.0,
-          "occurred_at": "2026-10-22T16:42:34.165000+00:00"
+          "place": "7 km WNW of Cobb, CA",
+          "longitude": -122.804168701172,
+          "latitude": 38.839168548584,
+          "depth_km": 9.10999965667725,
+          "occurred_at": "2026-10-22T21:11:37.290000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "ci41350543",
-        "observed_at": "2026-10-22T17:16:01.185004Z",
-        "source_updated_at": "2026-10-22T17:14:03.042000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41350543",
+        "source_id": "nc75453591",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:41:11.240000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75453591",
         "entity_type": "event",
-        "canonical_key": "event:ci41350543",
+        "canonical_key": "event:nc75453591",
         "payload": {
-          "magnitude": 0.94,
-          "place": "22 km ESE of Little Lake, CA",
-          "longitude": -117.6815,
-          "latitude": 35.864,
-          "depth_km": 13.11,
-          "occurred_at": "2026-10-22T16:36:03.340000+00:00"
+          "magnitude": 1.59,
+          "place": "8 km W of Cobb, CA",
+          "longitude": -122.80899810791,
+          "latitude": 38.8338317871094,
+          "depth_km": 2.22000002861023,
+          "occurred_at": "2026-10-22T21:39:31.740000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "hv75062266",
-        "observed_at": "2026-10-22T17:16:01.185004Z",
-        "source_updated_at": "2026-10-22T17:01:09.860000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75062266",
+        "source_id": "uw714124432",
+        "observed_at": "2026-10-22T21:41:54.595056Z",
+        "source_updated_at": "2026-10-22T21:15:49.220000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/uw714124432",
         "entity_type": "event",
-        "canonical_key": "event:hv75062266",
+        "canonical_key": "event:uw714124432",
         "payload": {
-          "magnitude": 1.71,
-          "place": "5 km SSE of Pāhala, Hawaii",
-          "longitude": -155.454162597656,
-          "latitude": 19.1571674346924,
-          "depth_km": 34.8499984741211,
-          "occurred_at": "2026-10-22T16:57:41.360000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "pr71537463",
-        "observed_at": "2026-10-22T17:16:01.185004Z",
-        "source_updated_at": "2026-10-22T16:49:56.850000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71537463",
-        "entity_type": "event",
-        "canonical_key": "event:pr71537463",
-        "payload": {
-          "magnitude": 1.97,
-          "place": "4 km WSW of Guánica, Puerto Rico",
-          "longitude": -66.9463333333333,
-          "latitude": 17.9623333333333,
-          "depth_km": 6.33,
-          "occurred_at": "2026-10-22T16:32:25.160000+00:00"
+          "magnitude": 0.41,
+          "place": "16 km NNE of Amboy, Washington",
+          "longitude": -122.367166666667,
+          "latitude": 46.0491666666667,
+          "depth_km": 17.72,
+          "occurred_at": "2026-10-22T20:47:56.470000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-22T17:16:01.274966Z",
-      "source_updated_at": "2026-10-22T16:02:44Z",
+      "observed_at": "2026-10-22T21:41:54.684863Z",
+      "source_updated_at": "2026-10-22T21:15:41Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54603,
-        "forks_count": 12913,
+        "stargazers_count": 54612,
+        "forks_count": 12910,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -110,7 +178,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-22T17:16:01.562737Z",
+      "observed_at": "2026-10-22T21:41:54.904310Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
