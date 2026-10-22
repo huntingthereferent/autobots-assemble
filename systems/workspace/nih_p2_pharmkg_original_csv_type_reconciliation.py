@@ -61,6 +61,9 @@ def reconcile(reader, train):
     clean_pairs={(h,t) for h,r,t in train}
     raw_id_intersection=set()
     raw_relation_counts=Counter()
+    raw_author_type_pairs=Counter()
+    raw_author_relation_type_pairs=Counter()
+    raw_unknown_type_rows=0
     clean_relation_counts=Counter(r for h,r,t in train)
     raw_pairs_matching_clean=0
     class_by_id=defaultdict(set)
@@ -71,6 +74,16 @@ def reconcile(reader, train):
         if source_rows>MAX_ROWS:raise ValueError("source row limit exceeded")
         t=tuple(row.get(k, "") for k in core)
         raw_relation_counts[t[1]]+=1
+        if all(types):
+            left=(row.get(types[0]) or "").strip()
+            right=(row.get(types[1]) or "").strip()
+            if left and right:
+                raw_author_type_pairs[(left,right)]+=1
+                raw_author_relation_type_pairs[(t[1],left,right)]+=1
+            else:
+                raw_unknown_type_rows+=1
+        else:
+            raw_unknown_type_rows+=1
         raw_id_intersection.update(node for node in (t[0],t[2]) if node in clean_ids)
         raw_pairs_matching_clean += (t[0],t[2]) in clean_pairs
         if t not in train_set:
@@ -90,6 +103,18 @@ def reconcile(reader, train):
         "source_original_csv_header_names":list(cols),
         "source_original_csv_rows":source_rows,
         "original_raw_relation_code_counts":dict(sorted(raw_relation_counts.items())),
+        "raw_author_relation_and_type_pair_counts":[
+            {"raw_source_relation_code":rel,"source_head_type":head,"source_tail_type":tail,
+             "source_raw_row_count":count}
+            for (rel,head,tail),count in sorted(raw_author_relation_type_pairs.items())
+        ],
+        "raw_author_type_pair_counts":[
+            {"source_head_type":head,"source_tail_type":tail,"source_raw_row_count":count}
+            for (head,tail),count in sorted(raw_author_type_pairs.items())
+        ],
+        "raw_author_rows_without_both_type_fields":raw_unknown_type_rows,
+        "raw_author_type_pairs_are_not_cleaned_8k_semantics":True,
+        "no_clean_train_id_type_mapping_inferred":True,
         "original_clean_train_relation_code_counts":dict(sorted(clean_relation_counts.items())),
         "original_raw_entity_identifiers_seen_in_clean_train":len(raw_id_intersection),
         "original_raw_subject_object_pairs_matching_clean_train":raw_pairs_matching_clean,
