@@ -198,6 +198,47 @@ def original_role_type_partition(original_types, full_types, oracle, gene_nodes,
     }
 
 
+def residual_type_class_inventory(original_types,full_types,restricted_oracle):
+    """E22 original-node OWL-RL residual class census; not proof of rule origin.
+
+    Differentiate OWL/RDFS vocabulary metadata from source named ontology
+    classes. Every residual statement is counted once under its class URI.
+    """
+    if not original_types <= full_types or not restricted_oracle <= full_types:
+        raise ValueError("original or independently supported type missing from full profile")
+    residue=(full_types-original_types)-restricted_oracle
+    byclass=Counter(str(c) for s,p,c in residue if p==RDF.type)
+    if sum(byclass.values())!=len(residue):
+        raise ValueError("residual contains non-RDF-type statement")
+    families=Counter()
+    for cl,count in byclass.items():
+        if cl.startswith("http://www.w3.org/2002/07/owl#"):
+            name="OWL_vocabulary"
+        elif cl.startswith("http://www.w3.org/2000/01/rdf-schema#") or cl.startswith("http://www.w3.org/1999/02/22-rdf-syntax-ns#"):
+            name="RDF_RDFS_vocabulary"
+        elif "purl.obolibrary.org/obo/" in cl:
+            name="source_OBO_URI"
+        elif "w3.org/" in cl:
+            name="other_W3C_URI"
+        else:
+            name="other_source_or_inferred_URI"
+        families[name]+=count
+    if sum(families.values())!=len(residue):
+        raise ValueError("type family census incomplete")
+    top=sorted(byclass.items(),key=lambda kv:(-kv[1],kv[0]))[:20]
+    return {
+        "original_full_profile_limited_oracle_residual_count":len(residue),
+        "distinct_residual_class_URIs":len(byclass),
+        "source_class_namespace_counts":dict(sorted(families.items())),
+        "top_20_residual_class_URI_counts":[{"class_URI":name,"count":n} for name,n in top],
+        "exhaustive_residual_class_count_sha256":sha256(
+            "\n".join(f"{k}\t{v}" for k,v in sorted(byclass.items())).encode()).hexdigest(),
+        "class_namespace_is_not_inference_rule_provenance":True,
+        "no_new_biological_observation":True,
+        "NIH_scored":False,
+    }
+
+
 def execute(archive,owner_files,ro_files):
     original=source.verified_owner_input(archive,owner_files,ro_files)
     four.original_four_source_axioms(original)
@@ -228,6 +269,8 @@ def execute(archive,owner_files,ro_files):
     result=compare_types(source_types,all_types,witness,support,provenance)
     result["E21_original_subject_role_partition"] = original_role_type_partition(
         source_types,all_types,witness,genes,targets)
+    result["E22_residual_type_class_inventory"] = residual_type_class_inventory(
+        source_types,all_types,witness)
     result.update({
         "schema":SCHEMA,
         "status":"COMPLETED_SOURCE_RDFS_TYPE_WITNESS_PARTITION",
