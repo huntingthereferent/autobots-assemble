@@ -256,6 +256,61 @@ def residual_type_class_inventory(original_types,full_types,restricted_oracle):
 
 
 
+def original_anonymous_class_premise_census(owner_graph, original_types, full_types, restricted_oracle):
+    """E23: locate each residual anonymous class term in original source premises.
+
+    This is a source-presence and OWL schema-shape audit, not a complete rule
+    provenance proof. BNode identifiers are never emitted.
+    """
+    from rdflib.namespace import OWL
+    if not original_types.issubset(full_types) or not restricted_oracle.issubset(full_types):
+        raise ValueError("source premise sets not contained in full inference")
+    residual = (full_types-original_types)-restricted_oracle
+    byclass=Counter(c for s,p,c in residual if p == RDF.type and isinstance(c,BNode))
+    groups=Counter()
+    original_present=0
+    source_typed_restriction=0
+    source_on_property=0
+    inferred_only=0
+    for term,count in byclass.items():
+        outgoing=list(owner_graph.triples((term,None,None)))
+        incoming=list(owner_graph.triples((None,None,term)))
+        has_source=bool(outgoing or incoming)
+        if has_source:original_present+=1
+        else:inferred_only+=1
+        restriction=(term,RDF.type,OWL.Restriction) in owner_graph
+        on_property=any(owner_graph.triples((term,OWL.onProperty,None)))
+        if restriction:source_typed_restriction+=1
+        if on_property:source_on_property+=1
+        shape=(
+            "original_source_present" if has_source else "not_in_original_source",
+            "direct_source_restriction" if restriction else "not_direct_source_restriction",
+            "direct_source_onProperty" if on_property else "no_direct_source_onProperty",
+        )
+        groups[shape]+=count
+    if sum(groups.values())!=sum(byclass.values()):
+        raise ValueError("source anonymous class provenance census mismatch")
+    return {
+        "anonymous_class_terms_total":len(byclass),
+        "anonymous_residual_type_statements_total":sum(byclass.values()),
+        "anonymous_class_terms_present_in_original_owner_graph":original_present,
+        "anonymous_class_terms_absent_from_original_owner_graph":inferred_only,
+        "direct_source_owl_restriction_class_terms":source_typed_restriction,
+        "direct_source_owl_onProperty_class_terms":source_on_property,
+        "structural_groups":[
+            {"original_source_presence":shape[0],
+             "owl_restriction_declaration":shape[1],
+             "owl_onProperty_declaration":shape[2],
+             "residual_original_node_type_statements":groups[shape]}
+            for shape in sorted(groups)
+        ],
+        "blank_node_labels_exported":False,
+        "not_a_complete_OWL_inference_rule_proof":True,
+        "source_biological_validation":False,
+        "official_NIH_scored":False,
+    }
+
+
 def execute(archive,owner_files,ro_files):
     original=source.verified_owner_input(archive,owner_files,ro_files)
     four.original_four_source_axioms(original)
@@ -288,6 +343,8 @@ def execute(archive,owner_files,ro_files):
         source_types,all_types,witness,genes,targets)
     result["E22_residual_type_class_inventory"] = residual_type_class_inventory(
         source_types,all_types,witness)
+    result["E23_original_anonymous_class_premises"] = original_anonymous_class_premise_census(
+        src,source_types,all_types,witness)
     result.update({
         "schema":SCHEMA,
         "status":"COMPLETED_SOURCE_RDFS_TYPE_WITNESS_PARTITION",
