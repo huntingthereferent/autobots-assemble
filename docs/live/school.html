@@ -92,7 +92,7 @@
             <h3>Make a new thing</h3>
             <div class="spark-machine" aria-label="Story idea generator"><span class="eyebrow">STORY SPARKS</span><div class="spark-parts"><div><small>CHARACTER</small><strong id="spark-character">A curious pony</strong></div><div><small>PLACE</small><strong id="spark-place">A floating garden</strong></div><div><small>TWIST</small><strong id="spark-twist">A mysterious song</strong></div></div><button id="shuffle-story" type="button">Shuffle the sparks ↻</button><button id="use-story" type="button">Use these in my story ↓</button></div>
             <form id="creation-form" class="stack">
-              <label for="creation-kind">What are you making?<select id="creation-kind"><option value="story">A story</option><option value="trail">A trail idea</option><option value="music">A song idea</option><option value="experiment">An experiment</option><option value="other">Something else!</option></select></label>
+              <label for="creation-kind">What are you making?<select id="creation-kind"><option value="story">A story</option><option value="trail">A trail idea</option><option value="music">A song idea</option><option value="experiment">An experiment</option><option value="reading">A reading thought</option><option value="other">Something else!</option></select></label>
               <label for="creation-title">Give it a name<input id="creation-title" maxlength="100" placeholder="The secret bridge…" required></label>
               <label for="creation-body">Tell us about it<textarea id="creation-body" rows="7" maxlength="5000" placeholder="Once upon a time… or draw first and write your idea later." required></textarea></label>
               <div class="action-row"><button class="primary" type="submit" id="save-creation">Save to my collection ✦</button><button id="cancel-creation-edit" type="button" hidden>Stop editing</button></div>
@@ -110,6 +110,7 @@
         <div class="surface pattern-room">
           <div class="pattern-explain"><strong>1 pattern = 8 beats</strong><span>Tap to cycle: rest · low · middle · high · sparkle. You can change any beat.</span></div>
           <div id="pattern-beats" class="pattern-beats" role="group" aria-label="Eight adjustable musical beats"></div>
+          <label class="pattern-name" for="pattern-name">Name your beat (optional)<input id="pattern-name" maxlength="100" placeholder="The pony parade beat…"></label>
           <div class="pattern-controls"><button id="pattern-play" class="primary" type="button">▶ Play my pattern</button><button id="pattern-stop" type="button">■ Stop</button><button id="pattern-random" type="button">Surprise me ✦</button><button id="pattern-clear" type="button">Start over</button><button id="pattern-save" type="button">Keep this pattern ☆</button></div>
           <p id="pattern-feedback" class="feedback" role="status" aria-live="polite">Change a beat, then press Play.</p>
           <p class="fine">Sound uses your browser, if available. Your saved eight-beat pattern can be replayed here. For more instruments and melodies, try <a href="cat-keyboard.html">Meow Lab 2 ↗</a>.</p>
