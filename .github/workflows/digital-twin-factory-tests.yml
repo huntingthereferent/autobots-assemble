@@ -1,0 +1,26 @@
+name: Digital Twin Factory isolated tests
+
+on:
+  push:
+    branches:
+      - factory/digital-twin-v1-20261022
+    paths:
+      - 'systems/workspace/digital_twin_factory.py'
+      - 'network/tests/test_digital_twin_factory.py'
+      - '.github/workflows/digital-twin-factory-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify factory observer and birth gates offline
+        run: python -m unittest network.tests.test_digital_twin_factory -v
