@@ -196,11 +196,12 @@ function render(){
 }
 
 $("#learner-select").onchange=event=>{
+  const selected=event.target.value;
   const url=new URL(location.href);
-  url.searchParams.set("learner",event.target.value);
+  url.searchParams.set("learner",selected);
   history.replaceState(null,"",url);
-  loadRecord(event.target.value).catch(err=>{
-    if($("#learner-select").value===event.target.value){
+  loadRecord(selected).catch(err=>{
+    if($("#learner-select").value===selected){
       $("#learner-meta").textContent="Record unavailable: "+(err.message||String(err));
     }
   });
