@@ -89,6 +89,12 @@ def inspect_bytes(raw, check_source=True):
     }
 
 
+def fetch_source():
+    """One fixed, size-capped source read; the caller validates the pinned Git blob."""
+    raw, observed = fetch_source()
+    return raw, observed
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--live", action="store_true")
