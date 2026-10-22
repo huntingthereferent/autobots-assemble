@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#11152e"><title>Practice Lab · Online School</title>
+<meta name="description" content="Real number and word practice with explicit learner-owned observations.">
+<link rel="stylesheet" href="./practice.css"></head>
+<body>
+<header class="bar"><a class="back" href="./">← School Home</a><span class="brand">✦ ONLINE SCHOOL <b>/ PRACTICE LAB</b></span><a href="./worksheet.html">Print Studio ↗</a></header>
+<main class="shell">
+<section class="intro"><div><p class="eyebrow">PLAY · PRACTICE · NOTICE</p><h1>Try something.<br><em>Figure something out.</em></h1><p>Choose your path, give it a try, and change your answer when you need to. There is no timer, grade, or pretend score.</p></div><div class="orb" aria-hidden="true"><span>1+2</span><span>abc</span><span>✦</span></div></section>
+<div class="workspace">
+<aside class="settings"><h2>Your practice desk</h2><label for="learner">Who is learning?</label><select id="learner"><option value="">Reading learner records…</option></select>
+<div class="mode-label">Choose an activity</div><div class="modes" role="group" aria-label="Activity"><button class="chosen" type="button" data-track="numbers">➕ Number Lab</button><button type="button" data-track="words">🔤 Word Lab</button></div>
+<label for="level" id="level-label">Numbers to explore</label><select id="level"><option value="starter">Starter · within 10</option><option value="builder">Builder · within 30</option><option value="explorer">Explorer · mix + − ×</option></select>
+<div class="session"><span>ATTEMPTS</span><strong id="attempts">0</strong><span>FIRST TRY</span><strong id="first-try">0</strong></div>
+<button id="restart" class="quiet" type="button">↺ New practice session</button><p class="small">First-try counts show this session only. They do not establish mastery or change placement.</p></aside>
+<section class="play"><div class="play-top"><span id="activity-tag">NUMBER LAB</span><span id="question-number">Question 1</span></div>
+<div class="prompt-zone"><p id="question-prompt">Ready to try?</p><h2 id="question-detail">…</h2></div>
+<form id="response-form"><label for="response">Your answer</label><div class="answer-row"><input id="response" autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="Type what you think"><button id="check" type="submit">Check ↗</button></div></form>
+<p id="feedback" class="feedback" role="status" aria-live="polite">Try it your way.</p>
+<div class="play-actions"><button id="hint" class="quiet" type="button">✧ Give me a hint</button><button id="next" class="next" type="button" disabled>Next question →</button></div>
+</section>
+</div>
+<section class="reflection"><div><p class="eyebrow">KEEP WHAT YOU NOTICED</p><h2>Practice becomes evidence only when you save what happened.</h2><p>Saving is optional. Your actual attempts and your note can be recorded in the learner’s observations, not marked as automatic mastery.</p></div><form id="save-form"><label for="session-note">What did you notice or figure out?</label><textarea id="session-note" rows="3" maxlength="1200" placeholder="I used counting-on. I want to work on…"></textarea><button id="save-session" type="submit" disabled>Save this observation</button><p id="save-status" role="status" aria-live="polite"></p></form></section>
+</main><script src="./practice-core.js"></script><script src="./practice.js"></script></body></html>
