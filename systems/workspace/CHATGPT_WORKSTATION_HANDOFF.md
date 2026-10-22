@@ -20,23 +20,25 @@ For each new ChatGPT window or return after a detour:
 4. Before choosing the next experiment, inspect the private workstation handoff below if the owner has supplied a fresh snapshot. If no fresh snapshot is available, say that live coordinator state is **unobserved** and proceed only from the identified GitHub lane.
 5. End each work session with a compact return point: referent, exact changed files/PR/commit, workflow run and artifact IDs, result, what survived, unresolved wall, and one next movement. Do not claim the private workstation changed unless its native journal confirms it.
 
-## Obtain a fresh private status snapshot
+## Obtain a fresh GitHub-visible snapshot (no local computer required)
 
-Run from the repository root on the authorized workstation. These commands are read-only status/reverification operations; they do not execute a READY job.
+The workflow `.github/workflows/workstation-handoff.yml` produces a downloadable `workstation-handoff.json` artifact when triggered by a scheduled run, a qualifying push/PR after the workflow is present on the base branch, or manual `workflow_dispatch`.
+
+From ChatGPT, inspect the latest run and download/read its artifact through the GitHub connection. This is the preferred path for the owner when no workstation computer is available. The report collects open ARC/workstation PRs and their GitHub Actions runs.
+
+**Hard boundary:** GitHub-hosted Actions cannot see the private machine's `runtime/data/` directory. Its report deliberately labels live coordinator state `NOT_OBSERVED`; it must never imply the private journal was read or reverified. This is a source-aware GitHub return point, not a remote-control tunnel to the workstation.
+
+The first run of this workflow requires the workflow to be merged into the repository's base branch (or otherwise installed on a branch where GitHub can run it). Until then, continue to use existing PR checks and artifacts; do not claim this new snapshot has run.
+
+## Optional private status snapshot (only if the authorized machine becomes available)
+
+From the repository root on the authorized workstation, the owner can run the read-only status/reverification command:
 
 ```powershell
 python -m systems.workspace.cp_motion --data-dir runtime/data handoff --markdown --reverify
 ```
 
-If the task is not represented in the CP coordinator, inspect the existing read-only workstation view instead:
-
-```powershell
-python -m systems.workspace.view_server --data-dir runtime/data --port 8051
-```
-
-Then open `http://127.0.0.1:8051/workstation.html` on that same machine. Do not expose the private viewer publicly.
-
-Share only the relevant status section or a deliberately redacted export in the ChatGPT window. Do **not** upload the complete `runtime/data` directory, credentials, private source archives, or unrelated personal records to a public repository.
+It does not execute a READY job. Share only the relevant redacted status section. Never upload the complete `runtime/data` directory, credentials, private source archives, or unrelated personal records to a public repository.
 
 ## Handoff template
 
