@@ -115,5 +115,21 @@ An archived original SDK frame inspection also showed the **original** case with
 
 **Independent cup persistence audit passed:** [source-authenticated run #39761902892](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761902892), [recomputed source JSON artifact #12418776390](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761902892/artifacts/12418776390), ZIP SHA-256 `b14df9738695d1c11e4b8181b743414d8c0ab304cb13fe1609d5237ba68f36f6`. The original SDK source files passed the frozen SHA-256 checks first. All 10 independently reset genuine SDK cases passed A/B exact agreement. In the original lower-L placement all four 45/45 cup masks were simultaneously full for original animation frames **25..32**, then **0/45** in every cup at terminal frame33; original SDK `levels_completed=4, NOT_FINISHED`. In four moved-L cases only three cup masks were full in the penultimate frame, all zero at terminal. **This verifies temporary animated filling, not an official completion rule.**
 
+## Original SDK success-versus-nonadvance transition comparison — source-verified
+
+[Native source run #39762841397](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397), [unaltered SDK full-frame artifact #12418353014](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397/artifacts/12418353014), ZIP SHA-256 `67bd82eb42be10f4b53a16a5cd37ed47c453cab2cf8cd1c0065c2dd0d4f03c40`. Configured retention 90 days; **separate durable archive NOT VERIFIED**. Exact original code `work/arc3/native_sp80_stage4_success_failure_comparison.py` and the dedicated GitHub Actions workflow are in this isolated draft branch.
+
+**Four authentic independently reset original SP80 SDK games**: two frozen stage4 conditions (original lower-L four-cup visual transient and moved-L three-cup negative), each with independent A/B original stage1→level4 entrance witnesses. Every session includes the **same actually successful stage3→4 ACTION5** and a later unsuccessful stage4→5 ACTION5, with genuine original SDK before/after levels/states recorded.
+
+| Genuine SDK transition | Penultimate → final whole-screen palette13 pixels | Original returned frames | Official result |
+| --- | --- | ---: | --- |
+| Stage3 successful ACTION5 | `180 → 0` | 30 | `levels_completed: 3 → 4` |
+| Stage4 four-cup visual transient | `180 → 0` | 34 | `levels_completed: 4 → 4` |
+| Stage4 three-cup negative | `135 → 0` | 30 | `levels_completed: 4 → 4` |
+
+The **actual successful stage3 terminal frame hash** is `fa8fd32d3bfd2c8b3ff7765aec373512`; this is independently verified to be the identical genuine stage4 initial root in both sessions. The failed four-cup source terminal hash is `6368d5185062bd3dbd25816bb7ef5887`, and the three-cup control terminal hash is `fc05051865ba1a38a75ef0a258d9da72`. Both independent SDK witnesses agree on original receipts, all frame signatures, four source cup masks, and official statuses.
+
+**Bounded conclusion:** exact `180 → 0` clearing occurs in both real official progression and real official nonprogress, so visible palette clearing is **not sufficient to identify failure or success**. The original four-cup level4 transient does not independently satisfy the stage4 SDK success condition. Frame lengths and before/after source screen geometry differ, but the private completion rule remains unknown. Do not manufacture an objective from these comparisons; preserve native statuses and source arrays.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
