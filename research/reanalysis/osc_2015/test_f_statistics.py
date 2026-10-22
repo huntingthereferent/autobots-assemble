@@ -74,6 +74,24 @@ class FRecalculationTests(unittest.TestCase):
         a = analyze(csv_rows(r))["side_results"]["original"]
         self.assertEqual(a["eligible_f_tests"], 0)
 
+    def test_incomplete_f_statistic_is_explicit_unknown(self):
+        r = a_record()
+        r["T.df1.O"] = "NA"
+        observed = analyze(csv_rows(r))["side_results"]["original"]
+        self.assertEqual(observed["f_rows_seen"], 1)
+        self.assertEqual(observed["missing_f_inputs"], 1)
+        self.assertEqual(observed["eligible_f_tests"], 0)
+
+    def test_threshold_disagreement_near_005_kept(self):
+        r = a_record()
+        r["T.Test.value.O"] = "4.1"
+        r["T.df2.O"] = "31"
+        r["T.pval.recalc.O"] = "0.051569634"
+        r["T.sign.O.131"] = "1"
+        observed = analyze(csv_rows(r))["side_results"]["original"]
+        self.assertEqual(observed["reported_p_agree"], 1)
+        self.assertEqual(observed["flags_disagree"], 1)
+
     def test_bad_df_rejected(self):
         r = a_record()
         r["T.df1.O"] = "0"
