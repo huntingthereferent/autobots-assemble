@@ -30,7 +30,14 @@ class GameW13ContinuationVerifier:
         return HandoffRuntime(event_store=RuntimeJournal(self.data_dir / "runtime.jsonl"))
 
     def verify_observation(self, observation: Observation) -> bool:
-        if (not isinstance(observation.witness_ref, str)
+        # This is a public verifier callback: reject malformed objects and
+        # field types before dereferencing or interpolating untrusted values.
+        if not isinstance(observation, Observation):
+            return False
+        if (not isinstance(observation.lane_id, str)
+                or not observation.lane_id
+                or len(observation.lane_id) > 80
+                or not isinstance(observation.witness_ref, str)
                 or observation.kind != "BRANCH"
                 or observation.capability != CAPABILITY
                 or observation.relation != RELATION
