@@ -51,7 +51,7 @@ assert.deepEqual(core.summary(-1,-3),{attempts:0,firstTry:0});
         self.assertIn('fetch("/api/observations"', js)
         self.assertIn("learner_id:owner", js)
         self.assertIn("provenance:[", js)
-        self.assertIn("does not", html.lower())
+        self.assertIn("not marked as automatic mastery", html.lower())
 
 
 if __name__ == "__main__":
