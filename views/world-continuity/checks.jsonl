@@ -19,3 +19,4 @@
 {"checked_at": "2026-10-21T17:21:10.340345+00:00", "digest": "ca4120bc4eb1be7bace4b312b3f5c35833763a47e3a5505b565430219c450e1b", "github_change": "changed", "pypi_change": "unchanged", "url_matched": true, "usgs_count": 7}
 {"checked_at": "2026-10-21T21:47:09.794213+00:00", "digest": "ea352a6dc41366cfb5a588fa0af2abdc0964eadd7b7c4d1b0ea1173f890a5e79", "github_change": "changed", "pypi_change": "unchanged", "url_matched": true, "usgs_count": 6}
 {"checked_at": "2026-10-22T04:57:15.636942+00:00", "digest": "a85e1a9df300c9f9430d477f1a398d7cbdd3ea07b9af9132d0ab3c1b2d2e6d71", "github_change": "changed", "pypi_change": "unchanged", "url_matched": true, "usgs_count": 10}
+{"checked_at": "2026-10-22T12:10:18.717236+00:00", "digest": "f70da4bb8bae992be0dfac72d708a0160f60c09bddae10821071cb41a827c3ac", "github_change": "changed", "pypi_change": "unchanged", "url_matched": true, "usgs_count": 8}
