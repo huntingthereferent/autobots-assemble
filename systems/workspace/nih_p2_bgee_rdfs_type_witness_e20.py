@@ -386,6 +386,8 @@ def original_union_membership_premise_audit(owner_graph, original_types, full_ty
                         and any(owner_graph.triples((cls,OWL.unionOf,None))))
     witnessed=0
     absent=0
+    direct_schema_alternative=0
+    no_direct_schema_alternative=0
     memberships=[]
     for cls,count in union_terms.items():
         heads=list(owner_graph.objects(cls,OWL.unionOf))
@@ -406,13 +408,28 @@ def original_union_membership_premise_audit(owner_graph, original_types, full_ty
             cursor=rest[0]
         if not members:
             raise ValueError("original unionOf list is empty")
-        matched=sum(
-            bool((by_subject[sub] & set(members)) - {cls})
-            for sub,pred,target in residual if pred==RDF.type and target==cls)
+        member_set=set(members)
+        direct_schema_classes=(
+            set(owner_graph.subjects(RDFS.subClassOf,cls)) |
+            set(owner_graph.subjects(OWL.equivalentClass,cls)) |
+            set(owner_graph.objects(cls,OWL.equivalentClass))
+        )-{cls}
+        matched=0
+        source_schema_alternative=0
+        for sub,pred,target in residual:
+            if pred!=RDF.type or target!=cls:
+                continue
+            if (by_subject[sub] & member_set)-{cls}:
+                matched+=1
+            elif by_subject[sub] & direct_schema_classes:
+                source_schema_alternative+=1
         witnessed+=matched
         absent+=count-matched
-        memberships.append((len(members),count,matched))
-    if witnessed+absent!=sum(union_terms.values()):
+        direct_schema_alternative+=source_schema_alternative
+        no_direct_schema_alternative+=count-matched-source_schema_alternative
+        memberships.append((len(members),count,matched,source_schema_alternative))
+    if (witnessed+absent!=sum(union_terms.values()) or
+        absent!=direct_schema_alternative+no_direct_schema_alternative):
         raise ValueError("unionOf antecedent witnesses do not reconcile")
     from hashlib import sha256 as local_sha
     fingerprint=local_sha(repr(sorted(memberships)).encode()).hexdigest()
@@ -421,6 +438,10 @@ def original_union_membership_premise_audit(owner_graph, original_types, full_ty
         "original_union_residual_type_statements":sum(union_terms.values()),
         "types_with_materialized_union_member_type_antecedent":witnessed,
         "types_without_materialized_union_member_type_antecedent":absent,
+        "types_without_union_member_but_with_direct_owner_class_edge":direct_schema_alternative,
+        "types_without_union_member_or_direct_owner_class_edge":no_direct_schema_alternative,
+        "original_schema_edges_considered_only_if_authored":True,
+        "closure_type_antecedents_are_not_independently_proven":True,
         "union_source_list_length_and_evidence_counts_sha256":fingerprint,
         "source_list_structure_from_authenticated_owner_RDF":True,
         "antecedent_types_from_full_OWL_closure_not_independent_solver":True,
