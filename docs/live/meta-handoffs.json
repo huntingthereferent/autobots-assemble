@@ -25,8 +25,24 @@
       "source_commit": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
       "description": "All 241 original workflow definitions matched as inactive library files on B. This does not imply 241 active B workflows.",
       "evidence_url": "https://github.com/aeren-research/continuum-oscillator/actions/runs/39828502339"
+    },
+    {
+      "id": "AB-20261022-003",
+      "date": "2026-10-22",
+      "kind": "TRANSFER_PREFLIGHT",
+      "from": "A",
+      "to": "B",
+      "lane": "WORKSTATION",
+      "status": "BLOCKED_PRE_DEPARTURE",
+      "source_commit": "23542b444fd609890d114e3062274035024ced40",
+      "source_repo": "huntingthereferent/autobots-assemble",
+      "destination_repo": "aeren-research/continuum-oscillator",
+      "description": "Receiver unavailable: secondary account returned HTTP 403 account-suspended response; original repository API returned 404. No payload was sent. No EXPECTED or RECEIVED evidence was written at the destination. Do not infer the secondary source contains this new transfer contract.",
+      "evidence_url": "https://github.com/aeren-research/continuum-oscillator",
+      "admission": "NOT_SENT",
+      "expected_content": "A future explicit, source-pinned transfer envelope only after receiver access is restored."
     }
   ],
-  "next_admission": "B research execution lanes remain unassigned until selected and independently verified.",
+  "next_admission": "Restore independent source access to Workstation 02; record a DEPARTED event on sender before transport, EXPECTED at receiver, and acknowledge only byte-verified arrival. Do not assume work transfers because a workflow exists.",
   "privacy": "No private GitHub run contents embedded in public records."
 }
