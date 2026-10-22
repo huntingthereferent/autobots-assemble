@@ -1,0 +1,35 @@
+name: audit-to-action cancellation observer
+
+on:
+  workflow_run:
+    workflows:
+      - protocol-tests
+      - pages build and deployment
+      - Publish source-bound research for the live trace surface
+      - ARC3 direct observation lane
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  capture-cancellation:
+    if: ${{ github.event.workflow_run.conclusion == 'cancelled' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Capture source-owned cancellation observation
+        env:
+          EVENT_JSON: ${{ github.event_path }}
+        run: |
+          python systems/workspace/audit_cancelled_run.py "$EVENT_JSON" audit-cancellation.json
+          python -m unittest discover -s network/tests -p 'test_audit_cancelled_run.py' -v
+      - name: Retain immutable audit receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-cancelled-${{ github.event.workflow_run.id }}-${{ github.event.workflow_run.run_attempt }}
+          path: audit-cancellation.json
+          retention-days: 90
