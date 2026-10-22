@@ -8,6 +8,7 @@ def fixture():
             "row5": {"frame": 19, "x": [14, 15]},
             "row8": None,
         },
+        "first_four_simultaneously_full": 25,
     }
     record = {
         "case": "positive",
@@ -21,13 +22,17 @@ def fixture():
     }
     a = dict(record, native_witness="A")
     b = dict(record, native_witness="B")
+    negative = dict(record, case="negative", source_observations={
+        "first_new6_outside_cups": {"row5": {"frame": 18, "x": [26, 27]}, "row8": None},
+        "first_four_simultaneously_full": None,
+    })
     proposal = {
-        "case": "positive", "source_contact_row": "row5",
+        "case": "positive", "contrast_case": "negative", "source_contact_row": "row5",
         "contact_frame": 19, "contact_x": 14,
         "source_click_xy": [34, 21], "native_action": 3,
     }
     return {"kind": "ARC4_SOURCE_OWNED_EVENT_ORDER_AUDIT",
-            "original_native_records": [a, b]}, proposal
+            "original_native_records": [a, b, dict(negative, native_witness="A"), dict(negative, native_witness="B")]}, proposal
 
 class GateTests(unittest.TestCase):
     def test_admits_exact_dual_source_receipts(self):
@@ -52,6 +57,17 @@ class GateTests(unittest.TestCase):
     def test_rejects_color_as_action(self):
         audit, proposal = fixture()
         proposal["native_action"] = 5
+        with self.assertRaises(ValueError):
+            make_plan(audit, proposal)
+    def test_rejects_nondiscriminating_first_arrival(self):
+        audit, proposal = fixture()
+        audit["original_native_records"][2]["source_observations"] = audit["original_native_records"][0]["source_observations"]
+        audit["original_native_records"][3]["source_observations"] = audit["original_native_records"][0]["source_observations"]
+        with self.assertRaises(ValueError):
+            make_plan(audit, proposal)
+    def test_rejects_unmatched_parent(self):
+        audit, proposal = fixture()
+        proposal["contrast_case"] = "other_parent_negative"
         with self.assertRaises(ValueError):
             make_plan(audit, proposal)
     def test_rejects_witness_disagreement(self):
