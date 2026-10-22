@@ -13,7 +13,7 @@ def openalex(doi=f"https://doi.org/{DOI}", title="Estimating the reproducibility
     return json.dumps({"doi": doi, "title": title}).encode()
 
 
-def pubmed(doi=DOI, title="Estimating the reproducibility of psychological science.", pmid=PMID):
+def pubmed(doi=DOI, title="PSYCHOLOGY. Estimating the reproducibility of psychological science.", pmid=PMID):
     return (
         "<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>" + pmid +
         "</PMID><Article><ArticleTitle>" + title +
@@ -33,6 +33,20 @@ class LitIdentityProbeTests(unittest.TestCase):
         self.assertFalse(receipt["full_text_fetched"])
         for source in receipt["sources"].values():
             self.assertEqual(len(source["response_sha256"]), 64)
+
+    def test_pubmed_section_prefix_is_preserved_but_not_mistaken_for_title_conflict(self):
+        receipt = inspect_payloads({
+            "crossref": crossref(), "openalex": openalex(), "pubmed": pubmed()
+        })
+        self.assertEqual(receipt["state"], "IDENTITY_MATCH")
+        self.assertEqual(
+            receipt["sources"]["pubmed"]["title"],
+            "PSYCHOLOGY. Estimating the reproducibility of psychological science.",
+        )
+        self.assertEqual(
+            receipt["sources"]["pubmed"]["normalized_title"],
+            receipt["sources"]["crossref"]["normalized_title"],
+        )
 
     def test_wrong_doi_is_a_wall_not_a_match(self):
         receipt = inspect_payloads({
