@@ -721,6 +721,9 @@ footer{border-top-color:#253942}
     const previous=new Map(app.runs.map(r=>[r.id,r]));
     for(const r of incoming){
       const old=previous.get(r.id);
+      const oldTime=Date.parse(old?.updated||""),incomingTime=Date.parse(r.updated||"");
+      // A three-hour archive must never roll back a newer source observation.
+      if(old&&Number.isFinite(oldTime)&&(!Number.isFinite(incomingTime)||oldTime>incomingTime))continue;
       if(old&&(old.updated!==r.updated||old.status!==r.status||old.conclusion!==r.conclusion))
         app.jobCache.delete(r.id);
       previous.set(r.id,r);
@@ -898,6 +901,11 @@ footer{border-top-color:#253942}
     const liveIds=new Set(live?app.latestPage.map(r=>r.id):[]);
     return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&liveIds.has(r.id)&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
+    if(app.selection!==null&&!subset.some(r=>r.id===app.selection)){
+      app.selection=null;app.selectedUpdated=null;
+      $("details-scope").textContent="Select a run in this journal view";
+      $("detail").replaceChildren(el("p","Choose a run from the current journal period and filters to inspect its original GitHub evidence.","no-source"));
+    }
     $("runs-scope").textContent=window.WorkstationFlow.scopeLabel(subset.length,Math.min(subset.length,app.runVisible))+" · "+app.runs.length+" indexed";
     for(const r of subset.slice(0,app.runVisible)){const btn=el("button",undefined,"run"+(app.selection===r.id?" selected":""));
       btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
