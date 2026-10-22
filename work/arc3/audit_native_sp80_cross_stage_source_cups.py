@@ -51,7 +51,6 @@ def inspect(original_root,frames):
     if frames.ndim!=3 or frames.shape[1:]!=(64,64) or len(frames)<2:
         raise AssertionError("Original native SDK returned 64x64 source stack required")
     regions=native_masks(original_root)
-    counts=[[int(np.count_nonzero(f==13 & o["mask"])) for o in regions] for f in []] # no inference
     counts=[
         [int(np.count_nonzero((frame==13)&obj["mask"])) for obj in regions]
         for frame in frames
@@ -93,8 +92,6 @@ def main():
             frames3=archive[name+"_"+w+"_entry3_34"]
             before4=archive[name+"_"+w+"_stage4_"+str(n-1)][-1]
             frames4=archive[name+"_"+w+"_stage4_"+str(n)]
-            if not np.array_equal(frames3[-1],archive[name+"_"+w+"_stage4_1"][0]) and False:
-                raise AssertionError("No cross-phase clock assumption")
             receipt3=row["genuine_stage3_success"]["original_action_receipt"]
             receipt4=row["genuine_stage4_nonadvance"]["original_action_receipt"]
             if (receipt3["sdk_level_before"],receipt3["sdk_level_after"],receipt3["genuine_original_action"])!=(3,4,5):
@@ -104,8 +101,8 @@ def main():
             transition3=inspect(before3,frames3)
             transition4=inspect(before4,frames4)
             stage4_root=archive[name+"_"+w+"_entry3_34"][-1]
-            if not np.array_equal(stage4_root,archive[name+"_"+w+"_entry3_34"][-1]):
-                raise AssertionError("Inconsistent SDK stage4 entry")
+            if not np.array_equal(stage4_root,frames3[-1]):
+                raise AssertionError("Successful returned final frame did not match original stage4 root")
             if transition3["source_last_two_total_palette13"]!=row["genuine_stage3_success"]["last_two_palette13"]:
                 raise AssertionError("SDK stage3 source summary mismatch")
             if transition4["source_last_two_total_palette13"]!=row["genuine_stage4_nonadvance"]["last_two_palette13"]:
