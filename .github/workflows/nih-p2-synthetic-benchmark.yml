@@ -1,5 +1,6 @@
 name: NIH P2 source-owned temporal static benchmark
 on:
+  workflow_dispatch:
   pull_request:
     paths:
       - 'systems/workspace/nih_benchmark_*.py'

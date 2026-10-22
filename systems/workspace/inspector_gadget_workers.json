@@ -1,0 +1,85 @@
+{
+  "schema": "inspector-gadget/native-worker-calendar/v1",
+  "scope": "Existing source-owned GitHub Actions workers, not ChatGPT conversations. Green executions are rechecks, not automatically new research advances.",
+  "ref": "main",
+  "max_dispatch_per_tick": 4,
+  "workers": [
+    {
+      "id": "arc-native",
+      "filename": "arc3-native-sp80-recheck.yml",
+      "min_interval_minutes": 360,
+      "enabled": true,
+      "description": "ARC native SP80 observation"
+    },
+    {
+      "id": "nih-p2",
+      "filename": "nih-p2-synthetic-benchmark.yml",
+      "min_interval_minutes": 1440,
+      "enabled": true,
+      "description": "NIH source-owned synthetic temporal benchmark"
+    },
+    {
+      "id": "world",
+      "filename": "ab-world-general-construction.yml",
+      "min_interval_minutes": 360,
+      "enabled": true,
+      "description": "WORLD construction witness"
+    },
+    {
+      "id": "workstation",
+      "filename": "workstation-cycle-b7.yml",
+      "min_interval_minutes": 360,
+      "enabled": true,
+      "description": "B7 bounded native continuation tests"
+    },
+    {
+      "id": "math",
+      "filename": "math-engine-one.yml",
+      "min_interval_minutes": 720,
+      "enabled": true,
+      "description": "Engine One mathematical native witnesses"
+    },
+    {
+      "id": "cp30",
+      "filename": "finite-correspondence-integrated.yml",
+      "min_interval_minutes": 1440,
+      "enabled": true,
+      "description": "CP30 finite native witness reconstruction"
+    },
+    {
+      "id": "meow-lab",
+      "filename": "meow-lab-v2-browser.yml",
+      "min_interval_minutes": 360,
+      "enabled": true,
+      "description": "Meow Lab actual browser checks"
+    },
+    {
+      "id": "pony-trail",
+      "filename": "pony-trail-browser.yml",
+      "min_interval_minutes": 360,
+      "enabled": true,
+      "description": "Pony Trail actual browser checks"
+    },
+    {
+      "id": "suno",
+      "filename": "suno-intake-browser.yml",
+      "min_interval_minutes": 360,
+      "enabled": true,
+      "description": "Suno intake actual browser checks"
+    },
+    {
+      "id": "research-sources",
+      "filename": "research-source-admission.yml",
+      "min_interval_minutes": 1440,
+      "enabled": true,
+      "description": "Research source metadata and 21 isolated lane preflights"
+    },
+    {
+      "id": "arc-observe",
+      "filename": "arc3-direct-observation.yml",
+      "min_interval_minutes": 720,
+      "enabled": true,
+      "description": "ARC observation lane native transcript checks"
+    }
+  ]
+}
