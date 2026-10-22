@@ -78,6 +78,105 @@ def full_static_source_rule_oracle(original):
     return manual,extra
 
 
+SOURCE_RULE_QUERIES={
+    "forward":"""PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        CONSTRUCT { ?gene <http://purl.obolibrary.org/obo/RO_0002206> ?place }
+        WHERE {
+          <http://purl.org/genex#isExpressedIn>
+             rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0002206> .
+          ?gene <http://purl.org/genex#isExpressedIn> ?place .
+          FILTER(isIRI(?gene) && isIRI(?place))
+        }""",
+    "genomic":"""PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        CONSTRUCT { ?gene <http://purl.obolibrary.org/obo/RO_0002330> ?place }
+        WHERE {
+          <http://purl.org/genex#isExpressedIn>
+             rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0002206> .
+          <http://purl.obolibrary.org/obo/RO_0002206>
+             rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0002330> .
+          ?gene <http://purl.org/genex#isExpressedIn> ?place .
+          FILTER(isIRI(?gene) && isIRI(?place))
+        }""",
+    "inverse":"""PREFIX owl: <http://www.w3.org/2002/07/owl#>
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        CONSTRUCT { ?place <http://purl.obolibrary.org/obo/RO_0002292> ?gene }
+        WHERE {
+          <http://purl.org/genex#isExpressedIn>
+             rdfs:subPropertyOf <http://purl.obolibrary.org/obo/RO_0002206> .
+          <http://purl.obolibrary.org/obo/RO_0002206>
+             owl:inverseOf <http://purl.obolibrary.org/obo/RO_0002292> .
+          ?gene <http://purl.org/genex#isExpressedIn> ?place .
+          FILTER(isIRI(?gene) && isIRI(?place))
+        }"""
+}
+PREMISE_MODES={
+    "omit-genex":0,
+    "omit-genomic":1,
+    "omit-inverse":2,
+}
+EXPECTED_ABLATION_COUNTS={
+    "omit-genex":{"forward":0,"genomic":0,"inverse":0},
+    "omit-genomic":{"forward":N_SOURCE,"genomic":0,"inverse":N_SOURCE},
+    "omit-inverse":{"forward":N_SOURCE,"genomic":N_SOURCE,"inverse":0},
+}
+
+
+def independently_infer_with_removed_premise(original_graph,source_axioms,mode):
+    """Independent RDFLib CONSTRUCT oracle; no Jena internals or OWL RL."""
+    if mode not in PREMISE_MODES:
+        raise ValueError("only one of three original named owner premise removals is allowed")
+    if len(source_axioms)!=3 or any(a not in original_graph for a in source_axioms):
+        raise ValueError("all three authenticated premises must exist before ablation")
+    graph=Graph()
+    graph+=original_graph
+    graph.remove(source_axioms[PREMISE_MODES[mode]])
+    infer={}
+    for category,q in SOURCE_RULE_QUERIES.items():
+        infer[category]=set(graph.query(q).graph)
+    results=set().union(*infer.values())
+    if len(results)!=sum(len(v) for v in infer.values()):
+        raise ValueError("original-source oracle premise controls overlap unexpectedly")
+    return results,{k:len(v) for k,v in infer.items()}
+
+
+def verify_single_premise_removals(original,files):
+    """All three Jena controls must agree with independent static SPARQL."""
+    from .nih_p2_bgee_cross_engine_jena import inspect_jena_nt
+    axioms=original_three_source_axioms(original)
+    if set(files)!=set(PREMISE_MODES):
+        raise ValueError("all three independent source-premise deletion results are necessary")
+    counts={}
+    digests={}
+    original_triples=tuple(sorted(original["full_combined"],key=lambda t:tuple(map(str,t))))
+    baseline_digest=prior.digest_set(original_triples)
+    for mode in PREMISE_MODES:
+        actual=inspect_jena_nt(files[mode])
+        expected,by_rule=independently_infer_with_removed_premise(
+            original["full_combined"],axioms,mode)
+        if by_rule!=EXPECTED_ABLATION_COUNTS[mode]:
+            raise ValueError("authenticated source-rule premise control altered: "+
+                             json.dumps({"mode":mode,"actual":by_rule}))
+        missing=expected-actual
+        extra=actual-expected
+        if missing or extra:
+            raise ValueError("full-original-source Java Jena axiom ablation disagrees: "+
+                             json.dumps({"mode":mode,"missing":len(missing),
+                                         "unexpected":len(extra)}))
+        counts[mode]={"independent_source_oracle_counts":by_rule,
+                      "expected":len(expected),"Jena_verified":len(actual),
+                      "missing":0,"unexpected":0}
+        digests[mode]=prior.digest_set(actual)
+    if prior.digest_set(original["full_combined"])!=baseline_digest:
+        raise ValueError("source graph altered by an in-memory ablation control")
+    return {
+        "exact_original_owner_premise_ablations_verified":True,
+        "original_whole_input_not_mutated_by_ablation_tests":True,
+        "source_premise_ablations":counts,
+        "source_premise_ablation_output_sha256":digests,
+        "premise_removals_are_counterfactual_not_independent_biomedical_data":True,
+    }
+
+
 def verify_combined(original,output_file, *, expected=N_TOTAL):
     required=original_three_source_axioms(original)
     oracle,genomic=full_static_source_rule_oracle(original)
@@ -135,6 +234,8 @@ def main():
         p.add_argument("--"+n,required=True,type=Path)
     p.add_argument("--input-nt",type=Path)
     p.add_argument("--jena-nt",type=Path)
+    for mode in PREMISE_MODES:
+        p.add_argument("--"+mode+"-nt",type=Path)
     p.add_argument("--output",type=Path)
     a=p.parse_args()
     authors={"bgee_v14_genex."+k:getattr(a,k) for k in ("obda","owl","r2rml")}
@@ -148,6 +249,13 @@ def main():
         if a.jena_nt is None or a.output is None:
             raise ValueError("Jena RDF output and derived report path required")
         result=verify_combined(original,a.jena_nt)
+        ablation_files={mode:getattr(a,mode.replace("-","_")+"_nt")
+                        for mode in PREMISE_MODES}
+        present={mode:path for mode,path in ablation_files.items() if path is not None}
+        if present:
+            if set(present)!=set(PREMISE_MODES):
+                raise ValueError("source-gated comparison requires all three ablation modes")
+            result.update(verify_single_premise_removals(original,present))
         a.output.parent.mkdir(parents=True,exist_ok=True)
         a.output.write_text(json.dumps(result,sort_keys=True,indent=2)+chr(10))
         print(json.dumps({"source_edges":result["original_original_source_edges"],
