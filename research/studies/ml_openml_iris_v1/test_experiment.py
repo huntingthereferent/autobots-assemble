@@ -153,6 +153,22 @@ class OpenMLExperimentTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "incomplete dataset"):
             measure([])
 
+    def test_saved_live_witness_is_one_bound_result(self):
+        from pathlib import Path
+        witness = json.loads((Path(__file__).parent / "observations" /
+                              "2026-10-22-run-39784341501.json").read_text(encoding="utf-8"))
+        r = witness["result"]
+        self.assertEqual(witness["run_id"], 39784341501)
+        self.assertEqual(r["status"], "MEASURED_ON_EXACT_SOURCE_BYTES")
+        self.assertEqual(r["source_data_sha256"],
+                         "38110f3fd3cef003ca4909038a4d6b235f36a85d036dc7eedeff67c5925e826c")
+        self.assertTrue(r["md5_matched_declared_source"])
+        self.assertEqual(r["comparison"]["n_held_out"], 30)
+        self.assertEqual(r["comparison"]["centroid_correct"], 28)
+        self.assertEqual(r["comparison"]["majority_correct"], 10)
+        self.assertTrue(r["comparison"]["duplicate_feature_groups_kept_intact"])
+
+
 
 if __name__ == "__main__":
     unittest.main()
