@@ -8,7 +8,7 @@ Use the actual `arc_agi.Arcade(OperationMode.NORMAL)` SP80 environment with both
 ## Scope
 Freeze the native movement words. Inspect first cup completion, first original source-palette-6 outside cup windows on rows 5 and 8, first changes and color1→14 episodes at **each** top/right/bottom/left boundary, and actual temporal order. Preserve the complete action receipts, official SDK status, and actual 64×64 original frames (JSON/NPZ). Include two matched controls. Refuse A/B disagreement.
 
-## Handoff to lane B
+## Handoff to [lane B — PR #408](https://github.com/huntingthereferent/autobots-assemble/pull/408)
 Only hand off a specific event coordinate, authentic first-arrival frame, its preceding original source frame, and exact candidate native click/action receipts. Absence of a uniquely grounded relationship is **UNKNOWN**, not permission to fabricate an intervention.
 
 ## Evidence and acceptance
