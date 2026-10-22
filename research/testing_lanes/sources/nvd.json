@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "nvd",
+  "name": "NIST National Vulnerability Database",
+  "documentation_url": "https://nvd.nist.gov/developers/vulnerabilities",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "public CVE advisory metadata",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": "GET",
+    "url": "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2021-44228",
+    "mode": "explicit_opt_in",
+    "expected_format": "json",
+    "scope": "Single well-known published CVE metadata only",
+    "max_bytes": 300000,
+    "redirects": "deny",
+    "timeout_seconds": 15
+  },
+  "access": "public_limited",
+  "boundary": "Security advisory metadata is not exploitability proof; throttle API, keep analysis local and authorized.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}
