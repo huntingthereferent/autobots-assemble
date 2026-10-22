@@ -160,3 +160,17 @@ Every source pre-final-pour pixel in board rows **y0..62** is identical within e
 3. Amend this index only from verified logs/artifacts. Nothing in this index changes the official SDK progress counter or claims a general solver.
 
 Ownership and All Rights Reserved scope remain unchanged.
+
+## Cross-lane cup-transition timeline audit — 2026-10-22
+
+Source-owned lane A event-order audit: [native run #39729756294](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294), raw artifact [#12404730856](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294/artifacts/12404730856). Its 10/10 genuine original SDK resets remained level4 NOT_FINISHED. On visual-positive routes, new palette6 appeared outside cup windows at row8/frame19 and row5/frame20, x11–13; top and right boundaries first changed at frame21 (top 171 pixels, right 9 pixels). Left/bottom boundary changes were not observed. The UP1 negative control instead showed those new palette6 rows at x26–28, with first top/right boundary changes at frame20. Both independent A/B witnesses agreed. This is source observation, not a decoded engine rule.
+
+Independent follow-up timeline: [PR #450](https://github.com/huntingthereferent/autobots-assemble/pull/450), original native run [#39827860639](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39827860639), artifact discoverable from that run's artifacts endpoint. Eight fresh original SDK resets, four frozen conditions × two witnesses, all official level4 NOT_FINISHED; zero level5/WIN. Protocol run #39827860430 and ARC direct-observation run #39827860549 both concluded success. Cup-window source pixels reached 45/45 per cup; first simultaneous four-cup frame was 25 for D3L2/L3U2 + upper LEFT1, 21 for D4L2/L4U2 + upper LEFT1, and 21 for D4L2/L4U2 + upper LEFT2. D3L2/L3U2 + upper LEFT2 never reached four simultaneous full cup windows.
+
+### Cross-lane interpretation and next-test boundary
+
+The cross-lane observations establish that (1) off-cup palette6 appears before the top/right boundary transition in the positive LEFT1 cases, (2) the boundary transition can precede four-cup completion (frame21 versus frame25 on the D3 arrangement), and (3) on the D4 arrangement, four-cup completion coincides with the first measured top/right boundary change at frame21, yet neither condition advances the official level. Thus cup completion and top/right boundary changes are individually insufficient as observed success predicates. The x11–13 versus x26–28 off-cup arrival is a useful differentiating observable, but it is not itself evidence of causal relevance.
+
+Next experiment should not repeat cup-fill or same-game pour tests already exhausted. Before authorizing a new native intervention, lane B should cite the exact lane-A source receipt and select one controlled manipulation that changes the off-cup first-arrival location while holding the lower arrangement and source entry fixed, with an explicit negative control and original A/B witnesses. If no intervention can be grounded to a genuine selectable object/action receipt, stop at source analysis rather than inventing a move. Only official original SDK level >=5 or WIN counts as progress.
+
+Retention note: the lane-A workflow states a 90-day artifact retention setting; this is not a verified durable archive. The PR #450 raw artifact's durable external copy is not established by its successful upload alone. All experimental PRs remain separate and unmerged.
