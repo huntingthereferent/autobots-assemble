@@ -94,15 +94,21 @@ public final class BgeeCrossEngine {
         Model target=ModelFactory.createDefaultModel();
         Property forward=target.createProperty(RO_EXPRESSION);
         Property inverse=target.createProperty(RO_EXPRESSES);
-        try (StmtIterator statements=reasoned.listStatements(null,forward,(RDFNode)null)) {
+        StmtIterator statements=reasoned.listStatements(null,forward,(RDFNode)null);
+        try {
             while (statements.hasNext()) {
                 admitTarget(target,statements.nextStatement(),true);
             }
+        } finally {
+            statements.close();
         }
-        try (StmtIterator statements=reasoned.listStatements(null,inverse,(RDFNode)null)) {
+        statements=reasoned.listStatements(null,inverse,(RDFNode)null);
+        try {
             while (statements.hasNext()) {
                 admitTarget(target,statements.nextStatement(),false);
             }
+        } finally {
+            statements.close();
         }
         if (target.size()>MAX_OUTPUT) {
             throw new IllegalArgumentException("alternative rule engine output exceeded finite size bound");
