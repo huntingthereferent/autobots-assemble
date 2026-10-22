@@ -47,5 +47,25 @@ Precise difference of each longer history against direct LEFT1, verified on both
 
 The original "bottom border" audit used only rows `y59..62`, excluding the last row `y63`. The earlier claim is restricted to that measured slice, not the full image bottom edge. Thus **the original visible interior animation is identical for these five observed movement histories, while a bottom-row pixel is different**. That is not proof of hidden game-state equivalence or a general movement law.
 
+## Frozen same-position history lengths and individual native action timeline
+
+[Original SDK run #39757263041](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757263041), [raw JSON/NPZ artifact #12415838204](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757263041/artifacts/12415838204), ZIP SHA-256 `aed9ae4f2cf04344159d92dcb9ef726659c7ee5067af93df06d2839fb6fc0406`. Seven source-frozen upper-bar histories with lengths 1,3,5,7 (two independent horizontal/vertical paths each at 3,5,7), each independently re-entered from original SDK witnesses A/B: **14 genuine games, all official level4 NOT_FINISHED, zero level5/WIN**. Every selected upper-bar pre-pour bbox remains `[26,20,37,22]`. All differences in recorded native pour animation frames relative to direct LEFT1 are **confined to row y63**, with zero differing values in y0–62. Cup first-full frames remain lateral13, top-left25, top-middle/right21 across all histories.
+
+First source palette14 pixel in y63 just before the native ACTION5, by number of upper-bar movements: **1→x10, 3→x12, 5→x13, 7→x14**. Just after the native pour: 1→x11, 3→x12, 5→x13, 7→x15. Original SDK source raw files SHA-256: JSON `d393610b2f8e553343b2322dc8eaa5b9ff8e2dd49f608c3fb01693c127bb79df`; NPZ `da58e6c1896884095ab394d0736947ff8ad3cdb9997a3f5578fcfd5592b69288`.
+
+The **independent source-timeline audit** `work/arc3/audit_native_sp80_stage4_row63_timeline.py` downloaded and authenticated both original run files, read the actual screen after **each** SDK movement (not only the pour), and verified A/B agreement and equality across all paths containing that action ordinal. [Successful source audit run #39757748694](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757748694), [timeline artifact #12417295064](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757748694/artifacts/12417295064), ZIP SHA-256 `6d75b8af562c6a4e39be9d82c288528808a2af743366ac6c2a86e7115f207c97`.
+
+| Upper-bar movement number | First palette14 x in native row63 | Independent original SDK source records |
+| --- | ---: | ---: |
+| 1 | 10 | 14 |
+| 2 | 11 | 12 |
+| 3 | 12 | 12 |
+| 4 | 12 | 8 |
+| 5 | 13 | 8 |
+| 6 | 13 | 4 |
+| 7 | 14 | 4 |
+
+This is **a native rendered row63 correlate of movement history under the tested sources**, not evidence for what the row represents internally. It does not establish an action counter, a hidden objective, or hidden-state equivalence. The y63 source differences make prior `bottom unchanged` statements valid only for their explicitly tested `y59..62` strip. Both new artifacts have configurable 90-day retention, not verified independent durable archival copies.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
