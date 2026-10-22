@@ -1,0 +1,45 @@
+name: research-ml-openml-iris
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/ml_iris_v1.py"
+      - "research/testing_lanes/test_ml_iris_v1.py"
+      - ".github/workflows/research-ml-openml-iris.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run offline split, shape, and negative controls
+        run: python -m unittest discover -s research/testing_lanes -p "test_ml_iris_v1.py" -v
+
+  bounded-benchmark:
+    needs: offline-controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run one pinned OpenML Iris v1 benchmark
+        run: |
+          mkdir -p ml_receipt
+          python research/testing_lanes/ml_iris_v1.py --live --output ml_receipt/ML-OPENML-IRIS-001.json
+      - name: Preserve data hash and metrics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ML-OPENML-IRIS-001-receipt
+          path: ml_receipt/*.json
+          if-no-files-found: warn
+          retention-days: 30
