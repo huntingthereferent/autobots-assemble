@@ -169,6 +169,17 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 .outcome-facts span:first-child{color:#c8dce5;font-weight:700}
 .outcome-context p{margin:6px 0 0;color:#a8bcc7;font-size:11px;line-height:1.65}
 .outcome-context strong{color:#e0edf1;font-weight:650}
+
+.metric.notpassed{border-top-color:#657988}.metric.notpassed b{color:#c0d0d7}
+.metric.notpassed[data-open="yes"]{border-top-color:#d78886}.metric.notpassed[data-open="yes"] b{color:#e6aba9}
+.metric.notpassed[data-open="no"]{border-top-color:#83c4a4}.metric.notpassed[data-open="no"] b{color:#9cdbb7}
+.issues-link{margin-top:10px;padding:0;min-height:0;border:0;background:none;color:#a6c7d4;font:650 10px/1.5 Inter,"Segoe UI",system-ui,sans-serif;text-align:left;text-decoration:underline;text-underline-offset:2px}
+.issues-link:hover{background:none;color:#e0eef5}
+.current-checks{padding:5px 0 17px;border-bottom:1px solid #304451;margin-bottom:17px}
+.current-checks h3{margin-bottom:7px;font-size:13px}.current-checks p{font-size:11px;max-width:850px}
+.health-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px 17px;flex-wrap:wrap;padding:10px 0;border-bottom:1px solid #293d47}
+.health-row a{font-size:12px;font-weight:630;color:#dbedf5}.health-row small{font:10px/1.5 var(--data);color:#a8bec9}
+.health-empty{color:#9cdbb7}
 </style>
 </head>
 <body>
@@ -182,9 +193,9 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
 <article class="metric running"><b id="running">—</b><span>IN MOTION / NOW</span><small>Executing workflow runs</small></article>
 <article class="metric passed"><b id="passed">—</b><span>SUCCESSFUL RUNS / TODAY</span><small id="passed-note">Reading full-day GitHub totals</small></article>
-<article class="metric notpassed"><b id="failed">—</b><span>HISTORICAL FAILED RUNS</span><small id="failed-note">Not an unresolved-test count</small></article>
+<article class="metric notpassed" id="open-check-card"><b id="failed">—</b><span>CURRENT ISSUES</span><small id="failed-note">Open workflow checks · clears after a newer pass</small><button type="button" id="inspect-open" class="issues-link">Inspect source checks ↗</button></article>
 </section>
-<div class="outcome-context" aria-label="How daily run outcomes are counted"><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></div>
+<div class="outcome-context" aria-label="How daily run outcomes are counted"><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="historical-failed">Historical failed runs: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></div>
 <section class="flowfield" aria-label="Observed execution stages">
 <div class="flow-heading"><span>Execution flow</span><small>Markers open actual GitHub runs · up to 16 recent runs per stage</small></div>
 <div class="flow-tracks">
@@ -206,8 +217,8 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <div id="runs" class="runlist" aria-live="polite"><p class="empty">Checking source work…</p></div>
 <div class="journal-foot"><span id="list-range">Showing latest retrieved runs</span><button id="show-more" type="button" hidden>Show 25 more</button></div>
 </section>
-<details class="more"><summary>Source notes, limitations and routing references <span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="more-content">
-<div class="detail-grid"><section><h3>Live source</h3><p id="status-note">Counting verified GitHub workflow runs. Missing sources are unknown, not zero.</p></section>
+<details class="more" id="source-details"><summary>Source notes, limitations and routing references <span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="more-content">
+<section id="current-checks" class="current-checks"><h3>Current source checks needing attention</h3><p id="health-context">Reading current active workflow outcomes.</p><div id="health-list"></div></section><div class="detail-grid"><section><h3>Live source</h3><p id="status-note">Counting verified GitHub workflow runs. Missing sources are unknown, not zero.</p></section>
 <section><h3>Routing</h3><p id="routing-note">Reading recorded pipeline guidance.</p></section>
 <section><h3>Research verification</h3><p>A successful workflow is an execution result, not a scientific conclusion. Inspect the underlying source and native test evidence.</p></section></div>
 <p class="detail-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Measurement history ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Pipeline registry ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Recorded transfers ↗</a></p>
