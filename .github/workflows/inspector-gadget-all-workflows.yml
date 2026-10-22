@@ -10,6 +10,8 @@ on:
       - '.github/workflows/audit-to-action-cancellations.yml'
       - 'systems/workspace/inspector_gadget_adapter.py'
       - 'systems/workspace/inspector_gadget_scan.py'
+      - 'systems/workspace/inspector_gadget_wall.py'
+      - 'network/tests/test_inspector_gadget_wall.py'
       - 'systems/workspace/inspections.py'
       - 'systems/workspace/monitor.py'
       - 'network/tests/test_inspector_gadget_adapter.py'
@@ -39,6 +41,7 @@ jobs:
         run: |
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
           python -m unittest discover -s network/tests -p 'test_audit_to_action.py' -v
 
   inspect:
@@ -91,6 +94,7 @@ jobs:
         run: |
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
       - name: Retain scan and movement plan
         uses: actions/upload-artifact@v4
         with:

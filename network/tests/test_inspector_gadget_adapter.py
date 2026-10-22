@@ -57,6 +57,24 @@ class InspectorGadgetAdapterTests(unittest.TestCase):
             self.assertEqual(result["handoff"]["metadata"]["native_evidence_verifier"],
                              "inspector-gadget-github-run-v1")
 
+    def test_source_observation_chases_a_concrete_wall(self):
+        selection = plan(scan([entry(62, "NIH source", "failure", 19)]))["matrix"]["include"][0]
+        invoked = []
+        def wall_chaser(source_run, *, repo, token):
+            invoked.append((source_run["id"], repo))
+            return {"schema": "inspector-gadget/wall/v1",
+                    "wall_state": "chasing", "kind": "failed_step",
+                    "failed_step": "Source-owner witness",
+                    "next_movement": "recheck_after_new_owner_run",
+                    "owner_validation_required": True}
+        result = activate(selection, repo="o/r", token="x",
+                          fetcher=lambda *args: source(selection),
+                          wall_chaser=wall_chaser)
+        self.assertEqual(invoked, [(62, "o/r")])
+        self.assertEqual(result["state"]["output"]["wall"]["failed_step"], "Source-owner witness")
+        self.assertEqual(result["state"]["output"]["wall"]["wall_state"], "chasing")
+        self.assertFalse(result["state"]["output"]["repair_dispatched"])
+
     def test_completed_movement_is_in_native_workstation_inspection_panel(self):
         selection = plan(scan([entry(58, "NIH", "failure", 55)]))["matrix"]["include"][0]
         with TemporaryDirectory() as tmp:

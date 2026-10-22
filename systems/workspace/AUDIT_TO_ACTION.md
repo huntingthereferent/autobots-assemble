@@ -43,6 +43,27 @@ Do not infer a failure from an untested item. Do not collapse independently veri
 - Each real follow-up uses `systems/workspace/inspector_gadget_adapter.py` and the existing `HandoffRuntime` (CREATED → STARTED → RESULT). It independently queries the exact GitHub run and retains `inspector-gadget-handoff.json` and `inspector-gadget-runtime.jsonl` as Actions artifacts. `systems/workspace/inspections.py` renders those records with the registered `inspector-gadget-github-run-v1` adapter when its journal is loaded into the local workstation viewer.
 - These are CI observations, **not** a complete observer for browser interaction, source-level mathematical errors, or every workstation layer. The observer activates source verification, not the owning research worker or automatic repair. A source-matched `COMPLETE` means only that the Inspector's source observation completed.
 
+## The actual wall — backward chase
+
+The target is not a red counter or just a failed workflow. The wall is a concrete
+**owning-workflow obligation**:
+
+- Locate the original run, failing job and failed step when GitHub provides them.
+  A cancellation is a separate supersession question, not a defect.
+- Work backward from a potential exit: a later run of the *same workflow, branch
+  and event* must execute the **same named job and step** successfully.
+  An unrelated green run never clears the wall.
+- Every real source-observation handoff uses `inspector_gadget_wall.py` to
+  read failed job evidence, recent workflow history and, where present, the
+  matching later passing job. The handoff saves its wall and next movement.
+- The viewer shows the wall and failed step. A matched later step becomes
+  `obligation_pass_observed`, **not** an automatic research verdict or repair.
+  Independent verification by the owning lane remains required.
+- The newest 100 workflow runs and 100 jobs bound each observation; this
+  is not a complete history. The hourly scan has not yet gained a durable
+  multi-day wall backlog after its discovery window expires. No automatic
+  retry, source edits or authentication of external owner evidence occurs.
+
 ## Next implementation boundary
 
-Next: durable pagination with a time cursor; an owning-lane registry for verified issue→follow-up-worker dispatch; capture native research and browser failures independently of CI; ingest retained Inspector runtime journals into the deployed audit viewer; and link verified later fixes back to source incidents. Keep the original audit snapshot immutable.
+Next: persist and resume wall cases across scan cycles after the discovery window, with retry budgets and evidence-bound closure; durable pagination with a time cursor; an owning-lane registry for verified issue→follow-up-worker dispatch; capture native research and browser failures independently of CI; ingest retained Inspector runtime journals into the deployed audit viewer; and link verified later fixes back to source incidents. Keep the original audit snapshot immutable.
