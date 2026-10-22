@@ -1,0 +1,45 @@
+name: research-lit-identity
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/lit_identity_probe.py"
+      - "research/testing_lanes/test_lit_identity_probe.py"
+      - ".github/workflows/research-lit-identity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run offline positive and negative controls
+        run: python -m unittest discover -s research/testing_lanes -p "test_lit_identity_probe.py" -v
+
+  one-record-identity:
+    needs: offline-controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query one fixed public record in three indexes
+        run: |
+          mkdir -p lit_receipt
+          python research/testing_lanes/lit_identity_probe.py --live --output lit_receipt/LIT-DOI-001.json
+      - name: Preserve metadata hashes and identity outcome, not source bodies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LIT-DOI-001-identity-receipt
+          path: lit_receipt/*.json
+          if-no-files-found: warn
+          retention-days: 30
