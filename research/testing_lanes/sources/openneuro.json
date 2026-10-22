@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "openneuro",
+  "name": "OpenNeuro",
+  "documentation_url": "https://docs.openneuro.org/api.html",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "neuroimaging dataset snapshots",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": null,
+    "url": null,
+    "mode": "manual_review_required",
+    "expected_format": null,
+    "scope": "GraphQL Dataset/Snapshot query must be frozen and vetted before probe",
+    "max_bytes": null,
+    "redirects": "deny",
+    "timeout_seconds": null
+  },
+  "access": "manual_api_review",
+  "boundary": "GraphQL queries and snapshots have distinct scopes. Avoid personal imaging downloads; review access and dataset deidentification.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}
