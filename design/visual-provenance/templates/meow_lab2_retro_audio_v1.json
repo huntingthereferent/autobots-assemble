@@ -27,9 +27,9 @@
   ],
   "grammar": {
     "layout": "Single strong instrument headline and animated illustration, then sound bank, cat selection/keyboard, recording, melody and arrangement tools; mobile stacks without hiding capabilities.",
-    "hierarchy": "Play and sample selection are immediately legible. Advanced sixteen-bar editing stays accessible below the performance surface.",
+    "hierarchy": "Simple musician flow: make a groove, select four chords repeated across 16 bars, then draw one of 8 looping melody bars; detailed per-bar forms are behind optional disclosures.",
     "density": "Expressive poster-like top section; compact, labeled workstation controls where editing requires precision.",
-    "controls": "Hardware-like square buttons and visible active states; readable keyboard note markers, cat voice buttons, file import, waveform and clear source status.",
+    "controls": "Clear four-chord preview and explicit song-level apply; independent groove control and tempo; audible pink ▶ NOW melody versus mint EDIT melody; 16-bar selection and playhead remain separate. Optional per-bar cadence, layers and backups.",
     "surface": "Flat midnight-plum ink, cream, peach, mint and lilac; small grid, hard offset shadows, cassette/arcade labels. No stock imagery, glossy AI gradient cards or branded assets.",
     "typography": "Friendly heavyweight display lettering for personality; high-contrast monospace for musical state and evidence data.",
     "illustration": "Original hand-built cat DJ with headphones, star badge and waveform-ready animation, plus four CSS-drawn miniature face marks; colors track selected voice.",
@@ -53,10 +53,12 @@
     "Expose song-state and selected cat states in text and aria attributes, not solely through color.",
     "Honor narrow mobile layouts and reduced motion.",
     "Keep visual verification provisional until screenshot review and Chromium interaction checks pass.",
-    "Stage particles must remain decoration only (pointer-events none, aria-hidden); performance state uses existing held-note lifecycle, with no added audio workers or background polling."
+    "Stage particles must remain decoration only (pointer-events none, aria-hidden); performance state uses existing held-note lifecycle, with no added audio workers or background polling.",
+    "Preserve separate state for playingBar/loopLast, selected chord bar and pinned melodyEditIndex, with accurate audible and edit labels.",
+    "Changing chord loop/key only previews until explicit apply, and applying changes only chord values, never grooves, melody or cadence."
   ],
   "review": {
     "confidence": "medium",
-    "notes": "Source-level motion update 2026-10-21 with separate reduced-motion and Chromium travel assertions; final screenshot sign-off remains a candidate pending visual review."
+    "notes": "Beat-first source audit and Chromium regression tests added October 22, 2026; no new audio capabilities claimed. Visual sign-off remains candidate pending screenshot review."
   }
 }

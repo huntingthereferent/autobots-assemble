@@ -99,7 +99,7 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 </head>
 <body>
 <div class="shell">
-<header class="top"><a href="cat-keyboard.html" class="logo">meow<span>lab 2</span><span aria-hidden="true"> ✳</span></a><div class="nav"><span class="live">OFFLINE INSTRUMENT</span><a href="#soundbank">SOUNDS</a><a href="#play">PLAY</a><a href="#studio">STUDIO</a><a href="#harmony">CHORDS</a><a href="roseys-cat-keyboard.html">ROSEY’S KEYS</a><a href="work.html">← WORKSTATION</a></div></header>
+<header class="top"><a href="cat-keyboard.html" class="logo">meow<span>lab 2</span><span aria-hidden="true"> ✳</span></a><div class="nav"><span class="live">OFFLINE INSTRUMENT</span><a href="#soundbank">SOUNDS</a><a href="#play">PLAY</a><a href="#beat">BEAT</a><a href="#harmony">CHORDS</a><a href="#studio">MELODY</a><a href="roseys-cat-keyboard.html">ROSEY’S KEYS</a><a href="work.html">← WORKSTATION</a></div></header>
 <main>
 <section class="hero" aria-labelledby="hero-title"><div><div class="eyebrow">YOUR POCKET CAT STUDIO</div><h1 id="hero-title">TUNE<br><em>MEOWS.</em><br>MAKE MUSIC.</h1><p>A real playable sound bank. Four cat voices, thirteen keys, your own samples, waveform motion, and a path into the native A/B workstation.</p><div class="hero-tags"><span class="tag">⌨ TYPE TO PLAY</span><span class="tag">☞ TAP FRIENDLY</span><span class="tag">♫ NO SAMPLES NEEDED</span></div></div>
 <div class="stage" id="cat-stage" aria-label="Retro cat music illustration that reacts while notes play"><div class="stage-caption">MEOW FM / CHANNEL 02</div><div class="stage-particles" aria-hidden="true">
@@ -170,22 +170,21 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 <div class="keyboard-rail"><div class="piano" id="piano" role="group" aria-label="Chromatic meow keyboard, C through C one octave higher"></div></div>
 <div class="display-bar"><strong id="now-playing" aria-live="polite">♪ READY TO MEOW</strong><span id="audio-status" role="status">Tap a key to enable sound</span></div><p class="hint"><strong>Computer keys:</strong> A W S E D F T G Y H U J K &nbsp;·&nbsp; Touch and drag across the piano &nbsp;·&nbsp; Multiple notes at once</p>
 </section>
-<section class="studio" id="studio" aria-label="Cat music studio"><div class="card"><h2>Little tape recorder <span aria-hidden="true">⏺</span></h2><p>Record your actual performance, replay it, or save the notes to bring back later.</p><div class="action-row"><button type="button" class="action" id="rec" aria-pressed="false"><span id="rec-led" class="record-led"></span> Record</button><button type="button" class="action alt" id="play-tape">▶ Replay</button><button type="button" class="action alt" id="stop-tape">■ Stop</button></div><div class="tape"><div id="tape-clock" class="counter">00:00</div><small id="tape-label">A blank tape, waiting for your masterpiece.</small><div class="tape-dots" id="tape-dots" aria-hidden="true"></div></div><div class="action-row"><button type="button" class="small-btn" id="export">↓ Save song</button><button type="button" class="small-btn" id="import">↑ Load song</button><button type="button" class="small-btn" id="clear-tape">Clear tape</button><input class="file-input" type="file" id="song-file" accept="application/json,.json"></div><p class="small-note">Saved songs are small JSON note scores, not audio files. Everything runs locally in your browser; no accounts, uploads or tracking.</p></div>
-<div class="card"><h2>8-bar melody loop <span aria-hidden="true">✳</span></h2><p>Write eight melody bars, looping twice across sixteen chord and layer bars. Editing melody at bar 9 edits melody bar 1, and so on.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play arrangement</button><button type="button" class="action alt" id="loop-clear">Clear bar</button><button type="button" class="action alt" id="preset">Pattern for bar</button></div><div class="grid-controls"><label for="tempo" class="control-label">BPM</label><input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output><span class="control-label">· 16 STEPS × 8 MELODY BARS</span></div>
-<div class="melody-editor-bar" id="melody-editor-bar">
-<div class="melody-editor-top"><strong>MELODY EDIT PINS · 1–8</strong><button type="button" class="small-btn pin-button" id="pin-melody" aria-pressed="false">📌 Pin this melody</button></div>
-<div id="melody-pins" class="melody-pins" role="group" aria-label="Eight melody edit slots"></div>
-<div class="melody-editor-actions"><button type="button" class="small-btn" id="melody-back">← Melody</button><button type="button" class="small-btn" id="melody-forward">Melody →</button><button type="button" class="small-btn" id="melody-undo">↶ Undo melody edit</button><button type="button" class="small-btn" id="melody-copy">Copy previous melody</button></div>
-<p class="melody-editor-note" id="pin-status">Unpinned: playback may move your editor when Follow playback is on. Select a melody above to pin it while the chords keep moving.</p>
-</div>
-<p class="small-note" id="melody-location">EDITING MELODY 1 / 8 · ARRANGEMENT BAR 1 / 16</p><div class="seq-wrap"><div class="seq-numbers" id="seq-numbers"></div><div class="seq" id="seq" role="group" aria-label="16 step pattern editor"></div></div><div class="notice" role="status" id="studio-status">STUDIO IS READY.</div></div></section>
+<section class="beat-starter card" id="beat" aria-labelledby="beat-title">
+<div class="beat-header"><div><span class="eyebrow">SONG WORKBENCH / SIMPLE MODE</span><h2 id="beat-title">1 · Make a beat</h2><p>Pick a groove, put four chords underneath it, then draw a melody.</p></div><button type="button" class="action mint" id="beat-play">▶ Play song</button></div>
+<div class="beat-controls"><label for="tempo">TEMPO / BPM<input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output></label><label for="groove-preset">BEAT FEEL<select id="groove-preset"><option value="pop">Pop · steady bounce</option><option value="club">Dance · four on the floor</option><option value="rap">Half-time · laid back</option><option value="rnb">R&B · loose pocket</option><option value="indie">Indie · offbeat</option></select></label><button type="button" class="small-btn" id="apply-groove">Use groove for all 16 bars</button><div class="beat-help">Kick → snare → bass → texture. Changing the groove leaves chords and melody alone.</div></div>
+<div class="transport-readout"><div id="beat-now" class="transport-now" aria-live="off">NOT PLAYING · Press Play song</div><div id="edit-now" class="transport-edit">EDITING · BAR 01 · MELODY M1</div></div>
+<p class="beat-links"><a href="#harmony">2 · Choose four chords ↓</a><a href="#studio">3 · Draw a melody ↓</a></p></section>
 <section class="harmony card" id="harmony" aria-labelledby="harmony-title">
-<h2 id="harmony-title">16 arrangement bars · modern layer structures ♫</h2><p>Sixteen bars carry different chords and production layers beneath your repeating 8-bar melody. New original structural presets are informed by current pop, dance, R&B, country-pop and indie trends rather than copies of specific songs.</p>
-<div class="harmony-controls"><label for="progression-template">MODERN PROGRESSION<select id="progression-template"></select></label><label for="progression-key">KEY<select id="progression-key"></select></label><button type="button" class="action mint" id="generate-progression">♫ Fill selected four bars</button></div>
+<h2 id="harmony-title">2 · Pick four chords</h2><p>Start with C · G · Am · F. Four chords repeat across all sixteen bars while your groove and melody stay intact.</p>
+<div class="harmony-controls"><label for="progression-template">CHORD LOOP<select id="progression-template"></select></label><label for="progression-key">KEY<select id="progression-key"></select></label><button type="button" class="action mint" id="generate-progression">Use these four chords · all 16 bars</button></div>
 
+<div class="chord-preview-wrap"><strong>PREVIEW · FOUR CHORDS</strong><div id="four-chord-preview" class="four-chord-preview" aria-label="Proposed four chord loop"></div><span id="progression-preview-help">Choose a loop and key, then press Use these four chords.</span></div><p class="chord-timeline-help">SONG TIMELINE · Pink ▶ shows the bar playing. Mint marks the chord bar selected for editing. Melodies M1–M8 repeat twice.</p>
 <div class="branch-panel">
 <div class="bar-actions"><button type="button" class="small-btn" id="bar-prev">← Previous</button><strong id="bar-number">BAR 01 / 16</strong><button type="button" class="small-btn" id="bar-next">Next →</button><button type="button" class="small-btn" id="play-from-bar">▶ Play from here</button><label class="toggle"><input type="checkbox" id="follow-bar" checked> Follow playback</label><label class="toggle"><input type="checkbox" id="repeat-arrangement" checked> Loop 16 bars</label></div>
 <div id="chord-list" class="chord-list" role="group" aria-label="Sixteen navigable arrangement bars"></div>
+</div>
+<details id="advanced-bars" class="advanced-tool"><summary>Fine tune a bar · chords, hits &amp; layers</summary>
 <div class="bar-actions"><label for="bar-chord">SELECTED BAR CHORD<input type="text" id="bar-chord" maxlength="8" placeholder="Am7 / blank = rest"></label><button class="small-btn" id="set-bar-chord" type="button">Set chord</button><button class="small-btn" id="copy-previous-bar" type="button">Copy previous bar</button></div>
 <p class="small-note">Melody 1–8 repeats during arrangement bars 9–16. Chord, cadence, and layer settings remain independent for all sixteen bars.</p>
 <div class="cadence-panel" aria-labelledby="cadence-title">
@@ -195,19 +194,27 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 <div class="cadence-steps" id="cadence-grid" role="group" aria-label="Chord retrigger rhythm for selected arrangement bar"></div>
 <p class="small-note">Tap each step to retrigger the current bar's chord. Each bar can use a different rhythmic cadence; these edits save with arrangement branches.</p>
 </div>
-</div>
 <div class="layer-board" id="layer-board"><h3>Production layers · selected bar</h3><p>These are original timing structures, not song stems. Fill a four-bar section to choose its groove, then independently enable pulse, percussion, bass and atmosphere in any bar.</p><div id="layer-profile">BRIGHT POP · BAR 1</div>
 <div class="layer-toggle-row"><label><input id="layer-toggle-0" type="checkbox"> Pulse</label><label><input id="layer-toggle-1" type="checkbox"> Percussion</label><label><input id="layer-toggle-2" type="checkbox"> Bass</label><label><input id="layer-toggle-3" type="checkbox"> Atmosphere</label></div>
-<div id="layer-preview" class="layer-grid" role="img" aria-label="Four original rhythmic layer patterns"></div></div>
-<div class="branch-panel"><h3>Save arrangement branches</h3><p class="small-note">Each branch preserves sixteen chord/layer bars, the looping eight-bar melody, and tempo. Save a new branch to try an alternative without replacing the original.</p>
+<div id="layer-preview" class="layer-grid" role="img" aria-label="Four original rhythmic layer patterns"></div></div><button type="button" class="small-btn" id="apply-section-progression">Use preview in these four bars only</button></details>
+<details id="song-versions" class="advanced-tool"><summary>Saved arrangements · optional</summary><div class="branch-panel"><h3>Save arrangement branches</h3><p class="small-note">Each branch preserves sixteen chord/layer bars, the looping eight-bar melody, and tempo. Save a new branch to try an alternative without replacing the original.</p>
 <div class="branch-fields"><label for="branch-name">NEW BRANCH NAME<input type="text" id="branch-name" maxlength="48" placeholder="Verse · different chorus"></label><label for="branch-select">SAVED BRANCHES<select id="branch-select"><option value="">Choose a saved branch…</option></select></label></div>
 <div class="branch-actions"><button type="button" class="small-btn" id="branch-save-new">Save as new branch</button><button type="button" class="small-btn" id="branch-update">Update selected</button><button type="button" class="small-btn" id="branch-load">Load selected</button><button type="button" class="small-btn" id="branch-delete">Delete selected</button><button type="button" class="small-btn" id="branch-export">↓ Back up branches</button><button type="button" class="small-btn" id="branch-import">↑ Restore branches</button><input class="file-input" type="file" id="branch-file" accept="application/json,.json"></div>
-<div id="branch-status" class="branch-status" aria-live="polite" role="status">WORKING ARRANGEMENT · NOT YET SAVED</div></div>
-<div class="custom-harmony"><label for="progression-name">TEMPLATE NAME<input type="text" id="progression-name" maxlength="48" placeholder="My cat ballad"></label><label for="progression-chords">FOUR CHORDS<input type="text" id="progression-chords" maxlength="64" placeholder="Am F C G" aria-describedby="chord-format"></label><button type="button" id="save-progression" class="small-btn">Save template</button><button type="button" id="delete-progression" class="small-btn">Delete custom</button></div>
+<div id="branch-status" class="branch-status" aria-live="polite" role="status">WORKING ARRANGEMENT · NOT YET SAVED</div></div></details>
+<details id="custom-chords" class="advanced-tool"><summary>Make your own chord loop · optional</summary><div class="custom-harmony"><label for="progression-name">TEMPLATE NAME<input type="text" id="progression-name" maxlength="48" placeholder="My cat ballad"></label><label for="progression-chords">FOUR CHORDS<input type="text" id="progression-chords" maxlength="64" placeholder="Am F C G" aria-describedby="chord-format"></label><button type="button" id="save-progression" class="small-btn">Save template</button><button type="button" id="delete-progression" class="small-btn">Delete custom</button></div>
 <p class="small-note" id="chord-format">Use four standard chord names separated by spaces or commas, e.g. C G Am F or Dm7 G7 Cmaj7 Am7. Supports major, minor, 7, maj7, m7, dim, aug and sus chords. Saved templates stay in this browser and transpose with the key selector.</p>
 <div class="action-row"><button type="button" class="small-btn" id="export-progressions">↓ Back up templates</button><button type="button" class="small-btn" id="import-progressions">↑ Restore templates</button><input class="file-input" type="file" id="progression-file" accept="application/json,.json"></div>
-<div id="harmony-status" role="status" aria-live="polite">REAL PROGRESSIONS · NO RANDOM CHORD PICKS</div>
+</details><div id="harmony-status" role="status" aria-live="polite">FOUR CHORDS · NO RANDOM PICKS</div>
 </section>
+<section class="studio" id="studio" aria-label="Cat music studio"><div class="card"><h2>Little tape recorder <span aria-hidden="true">⏺</span></h2><p>Record your actual performance, replay it, or save the notes to bring back later.</p><div class="action-row"><button type="button" class="action" id="rec" aria-pressed="false"><span id="rec-led" class="record-led"></span> Record</button><button type="button" class="action alt" id="play-tape">▶ Replay</button><button type="button" class="action alt" id="stop-tape">■ Stop</button></div><div class="tape"><div id="tape-clock" class="counter">00:00</div><small id="tape-label">A blank tape, waiting for your masterpiece.</small><div class="tape-dots" id="tape-dots" aria-hidden="true"></div></div><div class="action-row"><button type="button" class="small-btn" id="export">↓ Save song</button><button type="button" class="small-btn" id="import">↑ Load song</button><button type="button" class="small-btn" id="clear-tape">Clear tape</button><input class="file-input" type="file" id="song-file" accept="application/json,.json"></div><p class="small-note">Saved songs are small JSON note scores, not audio files. Everything runs locally in your browser; no accounts, uploads or tracking.</p></div>
+<div class="card"><h2>3 · Draw the eight-bar melody <span aria-hidden="true">✳</span></h2><p>Pink ▶ shows the melody you hear. Mint EDIT is the melody opened in your grid. Eight melodies play twice as the chords move across sixteen bars.</p><div class="action-row"><button type="button" class="action mint" id="loop-play" aria-pressed="false">▶ Play arrangement</button><button type="button" class="action alt" id="loop-clear">Clear bar</button><button type="button" class="action alt" id="preset">Pattern for bar</button></div><div class="grid-controls"><span class="control-label">16 STEPS × 8 MELODY BARS · TEMPO IN BEAT WORKBENCH ↑</span></div>
+<div class="melody-editor-bar" id="melody-editor-bar">
+<div class="melody-editor-top"><strong>MELODY PICKER · HEAR vs EDIT</strong><button type="button" class="small-btn pin-button" id="pin-melody" aria-pressed="false">📌 Pin this melody</button></div>
+<div id="melody-pins" class="melody-pins" role="group" aria-label="Eight melody edit slots"></div>
+<div class="melody-editor-actions"><button type="button" class="small-btn" id="melody-back">← Melody</button><button type="button" class="small-btn" id="melody-forward">Melody →</button><button type="button" class="small-btn" id="melody-undo">↶ Undo melody edit</button><button type="button" class="small-btn" id="melody-copy">Copy previous melody</button></div>
+<p class="melody-editor-note" id="pin-status">Tap a melody to keep it open while the song plays. Pink ▶ follows the sound; mint EDIT stays on your chosen melody.</p>
+</div>
+<p class="small-note" id="melody-location">EDITING MELODY 1/8 · PLAYS IN BARS 1 AND 9</p><div class="seq-wrap"><div class="seq-numbers" id="seq-numbers"></div><div class="seq" id="seq" role="group" aria-label="16 step pattern editor"></div></div><div class="notice" role="status" id="studio-status">STUDIO IS READY.</div></div></section>
 </main><footer class="footer"><span>MEOW LAB 2 · ORIGINAL SOUNDS + USER IMPORTS · NATIVE WORKSTATION HANDOFF</span><span><a href="work.html">Return to workstation ↗</a></span></footer></div>
 <script>
 (()=>{'use strict';
@@ -246,15 +253,15 @@ const CHORD_SUFFIX={maj:'',min:'m',dom7:'7',maj7:'maj7',min7:'m7',dim:'dim',aug:
 // Each progression stores scale-relative chord roots and actual chord qualities, not random notes.
 
 const CHORD_LIBRARY=[
- {id:'pop-lift',name:'Current pop · bright I–V–vi–IV',profile:'pop',steps:[[0,'maj'],[7,'maj'],[9,'min'],[5,'maj']]},
- {id:'heartbreak',name:'Vocal pop · vi–IV–I–V',profile:'vocal',steps:[[9,'min'],[5,'maj'],[0,'maj'],[7,'maj']]},
- {id:'dark-pop',name:'Alt-pop · i–VI–III–VII',profile:'alt',steps:[[0,'min'],[8,'maj'],[3,'maj'],[10,'maj']]},
- {id:'club-drive',name:'Dance-pop · i–VII–VI–VII',profile:'club',steps:[[0,'min'],[10,'maj'],[8,'maj'],[10,'maj']]},
- {id:'rnb-space',name:'Contemporary R&B · Imaj7–iii7–vi7–IVmaj7',profile:'rnb',steps:[[0,'maj7'],[4,'min7'],[9,'min7'],[5,'maj7']]},
- {id:'rap-minor',name:'Melodic rap · i–VII–VI–v',profile:'rap',steps:[[0,'min'],[10,'maj'],[8,'maj'],[7,'min']]},
- {id:'country-pop',name:'Country-pop · I–IV–vi–V',profile:'country',steps:[[0,'maj'],[5,'maj'],[9,'min'],[7,'maj']]},
- {id:'synth-glow',name:'Synth-pop · Imaj7–V–vi7–IVmaj7',profile:'synth',steps:[[0,'maj7'],[7,'maj'],[9,'min7'],[5,'maj7']]},
- {id:'indie-turn',name:'Indie pop · IV–I–V–vi',profile:'indie',steps:[[5,'maj'],[0,'maj'],[7,'maj'],[9,'min']]}
+ {id:'pop-lift',name:'Bright pop · C G Am F',profile:'pop',steps:[[0,'maj'],[7,'maj'],[9,'min'],[5,'maj']]},
+ {id:'heartbreak',name:'Soft pop · Am F C G',profile:'vocal',steps:[[9,'min'],[5,'maj'],[0,'maj'],[7,'maj']]},
+ {id:'dark-pop',name:'Moody · Am F C G',profile:'alt',steps:[[0,'min'],[8,'maj'],[3,'maj'],[10,'maj']]},
+ {id:'club-drive',name:'Dance · Am G F G',profile:'club',steps:[[0,'min'],[10,'maj'],[8,'maj'],[10,'maj']]},
+ {id:'rnb-space',name:'Smooth R&B · seventh chords',profile:'rnb',steps:[[0,'maj7'],[4,'min7'],[9,'min7'],[5,'maj7']]},
+ {id:'rap-minor',name:'Laid-back minor',profile:'rap',steps:[[0,'min'],[10,'maj'],[8,'maj'],[7,'min']]},
+ {id:'country-pop',name:'Country pop · C F Am G',profile:'country',steps:[[0,'maj'],[5,'maj'],[9,'min'],[7,'maj']]},
+ {id:'synth-glow',name:'Dreamy synth',profile:'synth',steps:[[0,'maj7'],[7,'maj'],[9,'min7'],[5,'maj7']]},
+ {id:'indie-turn',name:'Indie turn · F C G Am',profile:'indie',steps:[[5,'maj'],[0,'maj'],[7,'maj'],[9,'min']]}
 ];
 // Original archetypal timing/layer structures, not transcribed chart recordings.
 const LAYER_NAMES=['PULSE','PERCUSSION','BASS','ATMOSPHERE'];
@@ -272,7 +279,7 @@ const MODERN_PROFILES={
 function modernLayerState(profile,bar){
  // Four distinct sections: opening pocket → build → full hook → spacious return.
  const section=Math.floor(bar/4);
- return [true,section===1||section===2,true,section===2||section===3];
+ return [true,true,true,section===2];
 }
 function melodyIndexFor(bar){return bar%MELODY_BARS}
 
@@ -383,7 +390,7 @@ const $=id=>document.getElementById(id);
 let cat='miso',octave=4,volume=.68,echo=false,audio=null,master=null,echoInput=null,purrNodes=null;
 const active=new Map(),keys=new Map();let pressedPointer=new Map();let noteSerial=0,recording=false,recordStart=0,events=[],tapeTime=0,tapePlaying=false,scheduled=[],recTimer=0;
 let loopPlaying=false,loopTimer=null,loopTick=0,loopIndex=0,loopLast=-1,playingBar=-1,loopNotes=new Map(),presetIndex=0;
-let bars=defaultBars(),selectedBar=0,grid=bars[0].notes,arrangementDirty=false,editorPinned=false,melodyUndo=[];
+let bars=defaultBars(),selectedBar=0,melodyEditIndex=0,grid=bars[0].notes,arrangementDirty=false,editorPinned=false,melodyUndo=[];
 let savedBranches=[],activeBranchId=null;
 const BRANCH_STORAGE_KEY='meow-machine/arrangement-branches-v1';
 const TEMPLATE_STORAGE_KEY='meow-machine/chord-templates-v1';
@@ -580,28 +587,34 @@ function paintMelodyPins(){
   list.replaceChildren();
   for(let i=0;i<MELODY_BARS;i++){
    const btn=document.createElement('button');btn.type='button';btn.className='melody-pin';
-   btn.addEventListener('click',()=>{editorPinned=true;selectBar(i);updatePinButton()});
+   btn.addEventListener('click',()=>{editorPinned=true;melodyEditIndex=i;grid=bars[i].notes;paintGrid();updatePinButton();paintTransport()});
    list.append(btn);
   }
  }
  for(let i=0;i<MELODY_BARS;i++){
-  const btn=list.children[i];btn.textContent='M'+(i+1);
-  btn.classList.toggle('is-selected',melodyIndexFor(selectedBar)===i);
-  btn.classList.toggle('is-playing',loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===i);
-  btn.setAttribute('aria-pressed',String(melodyIndexFor(selectedBar)===i));
-  btn.setAttribute('aria-label','Edit and pin melody bar '+(i+1));
+  const btn=list.children[i],editing=melodyEditIndex===i,playing=loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===i;
+  btn.replaceChildren(document.createTextNode('M'+(i+1)));
+  if(editing||playing){const tag=document.createElement('small');tag.className='melody-pin-state';tag.textContent=(playing?'▶ NOW ':'')+(editing?'EDIT':'');btn.append(tag)}
+  btn.classList.toggle('is-selected',editing);
+  btn.classList.toggle('is-playing',playing);
+  btn.setAttribute('aria-pressed',String(editing));
+  btn.setAttribute('aria-label','Melody '+(i+1)+(playing?', now playing':'')+(editing?', opened for editing':''));
+  if(playing)btn.setAttribute('aria-current','true');else btn.removeAttribute('aria-current');
  }
+}
+function paintMelodyLocation(){
+ $('melody-location').textContent='EDITING MELODY '+(melodyEditIndex+1)+'/8 · PLAYS IN ARRANGEMENT BARS '+(melodyEditIndex+1)+' AND '+(melodyEditIndex+9);
+ $('seq').setAttribute('aria-label','16 step editor for looping melody bar '+(melodyEditIndex+1));
 }
 function updatePinButton(){
  $('pin-melody').setAttribute('aria-pressed',String(editorPinned));
- $('pin-melody').textContent=editorPinned?'📌 Pinned · unpin':'📌 Pin this melody';
+ $('pin-melody').textContent=editorPinned?'📌 M'+(melodyEditIndex+1)+' stays open · unpin':'📌 Keep melody open';
  $('pin-status').textContent=editorPinned?
-  'Pinned to melody '+(melodyIndexFor(selectedBar)+1)+'/8. Playhead and chords move without shifting these notes.':
-  'Unpinned: Follow playback moves the editor. Click an M1–M8 slot to pin it.';
- paintMelodyPins();
+  'Editing M'+(melodyEditIndex+1)+' stays put while chords and the audible playhead move. Pink ▶ marks the melody sounding now.':
+  'Follow mode: selecting a chord bar opens its corresponding melody. Choose M1–M8 to pin a melody.';
+ paintMelodyLocation();paintMelodyPins();
 }
-function recordMelodyUndo(){
- const index=melodyIndexFor(selectedBar);
+function recordMelodyUndo(index=melodyEditIndex){
  melodyUndo.push({index,notes:bars[index].notes.map(row=>row.slice())});
  if(melodyUndo.length>24)melodyUndo.shift();
  $('melody-undo').disabled=false;
@@ -609,14 +622,14 @@ function recordMelodyUndo(){
 function undoMelodyEdit(){
  const last=melodyUndo.pop();if(!last)return;
  bars[last.index].notes=last.notes.map(row=>row.slice());
- grid=bars[melodyIndexFor(selectedBar)].notes;
+ grid=bars[melodyEditIndex].notes;
  dirtyBars();paintGrid();paintHarmony();
  $('melody-undo').disabled=melodyUndo.length===0;
  studioStatus('RESTORED PREVIOUS EDIT IN MELODY '+(last.index+1));
 }
 function moveMelody(delta){
- editorPinned=true;const next=Math.max(0,Math.min(MELODY_BARS-1,melodyIndexFor(selectedBar)+delta));
- selectBar(next);updatePinButton();
+ editorPinned=true;melodyEditIndex=Math.max(0,Math.min(MELODY_BARS-1,melodyEditIndex+delta));
+ grid=bars[melodyEditIndex].notes;paintGrid();updatePinButton();paintTransport();
 }
 function paintCadence(){
  const bar=bars[selectedBar],grid=$('cadence-grid');
@@ -648,7 +661,7 @@ function initializeMelodyAndCadence(){
  $('melody-back').addEventListener('click',()=>moveMelody(-1));
  $('melody-forward').addEventListener('click',()=>moveMelody(1));
  $('melody-copy').addEventListener('click',()=>{
-  const idx=melodyIndexFor(selectedBar);
+  const idx=melodyEditIndex;
   if(idx===0)return;recordMelodyUndo();
   bars[idx].notes=bars[idx-1].notes.map(row=>row.slice());grid=bars[idx].notes;
   dirtyBars();paintGrid();paintHarmony();
@@ -666,38 +679,48 @@ function initializeMelodyAndCadence(){
  });
 }
 
+function paintTransport(){
+ const editing=realizeBar(bars[selectedBar].chord).name;
+ $('edit-now').textContent='EDITING · BAR '+String(selectedBar+1).padStart(2,'0')+'/16 ('+editing+') · MELODY M'+(melodyEditIndex+1)+(editorPinned?' PINNED':' FOLLOW');
+ $('beat-now').textContent=loopPlaying&&playingBar>=0?
+  '▶ HEARING · BAR '+String(playingBar+1).padStart(2,'0')+'/16 · '+realizeBar(bars[playingBar].chord).name+' · M'+(melodyIndexFor(playingBar)+1)+' · STEP '+String(loopLast+1).padStart(2,'0')+'/16':
+  'NOT PLAYING · Start at bar '+String(selectedBar+1).padStart(2,'0');
+ $('beat-play').textContent=loopPlaying?'■ Stop song':'▶ Play song';
+ $('beat-play').setAttribute('aria-pressed',String(loopPlaying));
+}
 function paintHarmony(){
  const list=$('chord-list');
  if(list.childElementCount!==BAR_COUNT){
   list.replaceChildren();
   for(let i=0;i<BAR_COUNT;i++){
    const btn=document.createElement('button');btn.type='button';btn.className='bar-tile';
-   btn.setAttribute('aria-label','Select bar '+(i+1));
+   btn.setAttribute('aria-label','Select chord bar '+(i+1));
    for(const tag of ['small','strong','small'])btn.append(document.createElement(tag));
    btn.addEventListener('click',()=>selectBar(i));list.append(btn);
   }
  }
  for(let i=0;i<BAR_COUNT;i++){
-  const b=list.children[i],chord=realizeBar(bars[i].chord);
+  const b=list.children[i],chord=realizeBar(bars[i].chord),playing=loopPlaying&&playingBar===i;
   b.children[0].textContent='BAR '+String(i+1).padStart(2,'0');
   b.children[1].textContent=chord.name;
-  b.children[2].textContent='M'+(melodyIndexFor(i)+1)+' · '+bars[i].cadence.filter(Boolean).length+' HITS';
+  b.children[2].textContent='MELODY M'+(melodyIndexFor(i)+1);
   b.classList.toggle('selected',i===selectedBar);
-  b.classList.toggle('playing',loopPlaying&&playingBar===i);
+  b.classList.toggle('playing',playing);
   b.setAttribute('aria-pressed',String(i===selectedBar));
+  b.style.setProperty('--bar-progress',playing?((loopLast+1)/STEPS_PER_BAR*100)+'%':'0%');
+  if(playing)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');
  }
+ paintTransport();
 }
 function selectBar(index){
  if(!Number.isInteger(index)||index<0||index>=BAR_COUNT)return;
- selectedBar=index;grid=bars[melodyIndexFor(index)].notes;
- paintMelodyPins();
+ selectedBar=index;
+ if(!editorPinned)melodyEditIndex=melodyIndexFor(index);
+ grid=bars[melodyEditIndex].notes;
  $('bar-number').textContent='BAR '+String(index+1).padStart(2,'0')+' / 16';
  $('bar-chord').value=bars[index].chord?realizeBar(bars[index].chord).name:'';
  $('copy-previous-bar').disabled=index===0;
- $('melody-location').textContent='EDITING MELODY '+(melodyIndexFor(index)+1)+'/8 · ARRANGEMENT BAR '+(index+1)+'/16'+(index>=8?' · SHARED WITH BAR '+(melodyIndexFor(index)+1):'');
- paintLayers();
- $('seq').setAttribute('aria-label','16 step editor for looping melody bar '+(melodyIndexFor(index)+1));
- paintCadence();paintGrid();paintHarmony();updatePinButton();
+ paintLayers();paintCadence();paintGrid();paintHarmony();updatePinButton();
 }
 function dirtyBars(){arrangementDirty=true;$('branch-status').textContent='UNSAVED CHANGES · Save a new branch or update selected';paintHarmony()}
 function setBarChord(){
@@ -710,25 +733,45 @@ function copyPreviousBar(){
  if(selectedBar===0)return;
  const from=bars[selectedBar-1],into=bars[selectedBar];
  into.chord=from.chord?from.chord.slice():null;into.layers=from.layers.slice();into.profile=from.profile;
- if(selectedBar<MELODY_BARS){recordMelodyUndo();into.notes=from.notes.map(row=>row.slice())}
+ if(selectedBar<MELODY_BARS){recordMelodyUndo(selectedBar);into.notes=from.notes.map(row=>row.slice())}
  into.cadence=from.cadence.slice();
  dirtyBars();selectBar(selectedBar);
  harmonyStatus('Copied previous chord/layers'+(selectedBar<MELODY_BARS?' and melody':'')+' to bar '+(selectedBar+1));
 }
-function applyProgression(){
+function previewProgression(){
  selectedTemplate=$('progression-template').value;selectedKey=Number($('progression-key').value);
  const t=allProgressions().find(v=>v.id===selectedTemplate),real=realizeProgression(t,selectedKey);
- if(!real){harmonyStatus('Select a valid progression and key');return}
- const start=Math.floor(selectedBar/4)*4;
- for(let i=0;i<4;i++){
-  const bar=bars[start+i];bar.chord=[(selectedKey+t.steps[i][0])%12,t.steps[i][1]];
-  if(t.profile&&MODERN_PROFILES[t.profile]){bar.profile=t.profile;bar.layers=modernLayerState(t.profile,start+i);bar.cadence=cadenceFromPreset(defaultCadenceForProfile(t.profile))}
+ const view=$('four-chord-preview');view.replaceChildren();
+ if(!real)return;
+ for(let i=0;i<real.length;i++){
+  const tile=document.createElement('span');tile.className='loop-chord';
+  const num=document.createElement('small');num.textContent=String(i+1)+' / 4';
+  const chord=document.createElement('strong');chord.textContent=real[i].name;
+  tile.append(num,chord);view.append(tile);
  }
  $('delete-progression').disabled=!selectedTemplate.startsWith('custom-');
- dirtyBars();selectBar(selectedBar);
- harmonyStatus('Filled bars '+(start+1)+'–'+(start+4)+' with chords'+(t.profile?' + cadence + structural layers':'')+' · melody unchanged');
+ $('progression-preview-help').textContent='Preview only · '+real.map(c=>c.name).join(' → ')+' · apply to hear these across the song.';
 }
-
+function applyProgression(scope='song'){
+ previewProgression();
+ const t=allProgressions().find(v=>v.id===selectedTemplate),real=realizeProgression(t,selectedKey);
+ if(!real){harmonyStatus('Choose a valid four-chord loop');return}
+ const start=scope==='section'?Math.floor(selectedBar/4)*4:0,limit=scope==='section'?start+4:BAR_COUNT;
+ for(let i=start;i<limit;i++)bars[i].chord=[(selectedKey+t.steps[i%4][0])%12,t.steps[i%4][1]];
+ // Chords are harmony, not groove. Never reset melody, layers or cadence here.
+ dirtyBars();selectBar(selectedBar);
+ harmonyStatus('Chords updated in bars '+(start+1)+'–'+limit+' · beat and melody unchanged');
+}
+function applyGroove(){
+ const profile=$('groove-preset').value;
+ if(!Object.hasOwn(MODERN_PROFILES,profile)){harmonyStatus('Choose a groove');return}
+ for(let i=0;i<BAR_COUNT;i++){
+  bars[i].profile=profile;
+  bars[i].layers=[true,true,true,i>=8&&i<12];
+ }
+ dirtyBars();selectBar(selectedBar);
+ harmonyStatus('Groove updated in all 16 bars · chords, chord hits and melody unchanged');
+}
 function saveProgression(){
  const name=$('progression-name').value.trim(),steps=progressionFromSymbols($('progression-chords').value,selectedKey);
  if(!name||name.length>48||!steps){harmonyStatus('Enter a template name and four valid chords, e.g. Am F C G');return}
@@ -741,7 +784,7 @@ function saveProgression(){
 function deleteProgression(){
  if(!selectedTemplate.startsWith('custom-'))return;
  customProgressions=customProgressions.filter(t=>t.id!==selectedTemplate);selectedTemplate='pop-lift';
- storeTemplates();fillTemplateSelector();applyProgression();harmonyStatus('Custom progression deleted');
+ storeTemplates();fillTemplateSelector();previewProgression();harmonyStatus('Custom progression deleted · song unchanged');
 }
 function downloadJson(data,filename){
  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
@@ -765,7 +808,7 @@ async function importProgressions(file){
    if(index>=0)merged[index]=t;else merged.push(t);
   }
   if(!validUserTemplates(merged))throw Error('Too many templates (max 24)');
-  customProgressions=merged;storeTemplates();fillTemplateSelector();applyProgression();
+  customProgressions=merged;storeTemplates();fillTemplateSelector();previewProgression();
   harmonyStatus(entries.length+' custom templates restored locally');
  }catch(err){harmonyStatus('Could not load chord templates: '+err.message)}
  finally{$('progression-file').value=''}
@@ -774,10 +817,12 @@ function initializeHarmony(){
  customProgressions=storedTemplates();
  const keys=$('progression-key');
  for(let pc=0;pc<12;pc++){const option=document.createElement('option');option.value=String(pc);option.textContent=PITCH_CLASSES[pc];keys.append(option)}
- keys.value=String(selectedKey);fillTemplateSelector();applyProgression();
- $('progression-template').addEventListener('change',applyProgression);
- $('progression-key').addEventListener('change',applyProgression);
- $('generate-progression').addEventListener('click',applyProgression);
+ keys.value=String(selectedKey);fillTemplateSelector();previewProgression();
+ $('progression-template').addEventListener('change',previewProgression);
+ $('progression-key').addEventListener('change',previewProgression);
+ $('generate-progression').addEventListener('click',()=>applyProgression());
+ $('apply-section-progression').addEventListener('click',()=>applyProgression('section'));
+ $('apply-groove').addEventListener('click',applyGroove);
  $('save-progression').addEventListener('click',saveProgression);
  $('delete-progression').addEventListener('click',deleteProgression);
  $('export-progressions').addEventListener('click',exportProgressions);
@@ -815,7 +860,7 @@ function updateBranch(){
 function loadBranch(){
  const b=savedBranches.find(v=>v.id===$('branch-select').value);
  if(!b){$('branch-status').textContent='Choose a saved branch to load';return}
- stopLoop();bars=cloneBars(b.bars);melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=b.id;arrangementDirty=false;
+ stopLoop();editorPinned=false;melodyEditIndex=0;bars=cloneBars(b.bars);melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=b.id;arrangementDirty=false;
  $('tempo').value=b.tempo;$('tempo-read').textContent=b.tempo;selectBar(0);
  $('branch-status').textContent='Loaded '+b.name+' · move through bars 1–16';
 }
@@ -847,7 +892,7 @@ async function importBranches(file){
   }
   if(!validBranches(combined))throw Error('Invalid combined branches');
   savedBranches=combined;storeBranches();refreshBranchSelector();
-  if(clean){stopLoop();bars=clean;melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=null;arrangementDirty=true;selectedBar=0;grid=bars[0].notes;
+  if(clean){stopLoop();editorPinned=false;melodyEditIndex=0;bars=clean;melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=null;arrangementDirty=true;selectedBar=0;grid=bars[0].notes;
    $('tempo').value=draft.tempo;$('tempo-read').textContent=draft.tempo;selectBar(0);}
   $('branch-status').textContent='Restored '+imported.length+' branches'+(clean?' and working bars':'');
  }catch(e){$('branch-status').textContent='Restore rejected: '+e.message}
@@ -926,7 +971,7 @@ function paintGrid(){
  for(const b of $('seq').querySelectorAll('.step')){
   const r=+b.dataset.row,c=+b.dataset.col;
   b.classList.toggle('on',grid[r][c]);
-  b.classList.toggle('playing',loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===melodyIndexFor(selectedBar)&&c===loopLast);
+  b.classList.toggle('playing',loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===melodyEditIndex&&c===loopLast);
   b.setAttribute('aria-pressed',String(grid[r][c]));
  }
 }
@@ -964,13 +1009,13 @@ function stopLoop(){
  for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();
  for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();
  playingBar=-1;loopLast=-1;paintGrid();paintHarmony();paintCadence();paintMelodyPins();
- $('loop-play').textContent='▶ Play arrangement';$('loop-play').setAttribute('aria-pressed','false');
+ $('loop-play').textContent='▶ Play arrangement';$('loop-play').setAttribute('aria-pressed','false');paintTransport();
  studioStatus('STUDIO IS READY.');
 }
 function startLoop(){
  stopRecording();stopTape();if(!unlockAudio())return;
  loopPlaying=true;loopIndex=selectedBar*STEPS_PER_BAR;playingBar=-1;loopLast=-1;
- $('loop-play').textContent='■ Stop playback';$('loop-play').setAttribute('aria-pressed','true');
+ $('loop-play').textContent='■ Stop playback';$('loop-play').setAttribute('aria-pressed','true');paintTransport();
  studioStatus('PLAYING FROM BAR '+(selectedBar+1));scheduleLoop();
 }
 
@@ -1142,7 +1187,7 @@ function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeH
  document.addEventListener('keyup',e=>{if(!SHORTCUTS.includes(e.code))return;releaseSound('key'+e.code)});
  window.addEventListener('blur',()=>{stopLoop();stopTape();releaseAll();togglePurr(false);$('purr').checked=false});document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseAll();stopLoop();stopTape();togglePurr(false);$('purr').checked=false}});
  $('rec').addEventListener('click',()=>recording?stopRecording():startRecording());$('play-tape').addEventListener('click',playTape);$('stop-tape').addEventListener('click',()=>{stopRecording();stopTape()});$('clear-tape').addEventListener('click',()=>{stopRecording();stopTape();events=[];tapeTime=0;recIds.clear();updateTape();$('tape-label').textContent='A blank tape, waiting for your masterpiece.'});$('export').addEventListener('click',saveSong);$('import').addEventListener('click',()=>$('song-file').click());$('song-file').addEventListener('change',e=>loadSong(e.target.files?.[0]));
- $('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{recordMelodyUndo();bars[melodyIndexFor(selectedBar)].notes=Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false));grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('CLEARED BAR '+(selectedBar+1))});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;recordMelodyUndo();bars[melodyIndexFor(selectedBar)].notes=patternPreset(presetIndex);grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('PATTERN FOR BAR '+(selectedBar+1)+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');}
+ $('beat-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{recordMelodyUndo();bars[melodyEditIndex].notes=Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false));grid=bars[melodyEditIndex].notes;dirtyBars();paintGrid();studioStatus('CLEARED MELODY '+(melodyEditIndex+1))});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;recordMelodyUndo();bars[melodyEditIndex].notes=patternPreset(presetIndex);grid=bars[melodyEditIndex].notes;dirtyBars();paintGrid();studioStatus('PATTERN FOR MELODY '+(melodyEditIndex+1)+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');paintTransport();}
 bind();
 })();
 </script>

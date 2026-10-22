@@ -38,7 +38,7 @@ class CatKeyboardTests(unittest.TestCase):
         for marker in ("MEOW LAB 2 · Workstation sound keyboard", "window.AudioContext",
                        "pointerdown", "prefers-reduced-motion",
                        "meow-machine/score-v1", "stopRecording",
-                       "patternPreset", "8-bar melody loop", "id=\"sound-file\"", "function importSound()",
+                       "patternPreset", "eight-bar melody", "id=\"sound-file\"", "function importSound()",
                        "function playBankSample(", "function handoffSample()",
                        "function tunedVoice(", "function renderTunedPreview(",
                        "if(soundSlots[voiceName]?.origin===\'local-file\'",
