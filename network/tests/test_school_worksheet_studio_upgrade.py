@@ -18,6 +18,8 @@ function field(id){if(!fields.has(id))fields.set(id,{id,value:"",textContent:"",
  if(id==="template")fields.get("columns").value=this.value==="arithmetic"?"2":"1";
  }});return fields.get(id)}
 let generated=0;
+// The real worksheet editor renders the columns control before starter kits run.
+field("columns");
 field("generate-worksheet").click=()=>generated++;
 for(const [kit,name] of [["math","Math warm-up"],["words","Word practice"],["reflection","Think & write"]]){
  const b={dataset:{kit},attrs:{},handler:null,querySelector:()=>({textContent:name}),
