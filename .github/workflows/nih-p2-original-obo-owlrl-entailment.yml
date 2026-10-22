@@ -1,0 +1,85 @@
+name: NIH P2 original OBO OWL RL source entailment
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_obo_owlrl_source_entailment.py'
+      - 'network/tests/test_nih_p2_obo_owlrl_source_entailment.py'
+      - '.github/workflows/nih-p2-original-obo-owlrl-entailment.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-original-owlrl-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-owned-owlrl-entailment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install independent RDFLib and OWL RL reasoner
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Authenticate complete original OBO source-owner ontology files
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-owlrl-original" "$RUNNER_TEMP/nih-owlrl-derived"
+          python - <<'PY'
+          from urllib.request import urlopen,Request
+          from pathlib import Path
+          import os,hashlib
+          from systems.workspace import nih_phase2_external_obo_graph_trial as s
+          target=Path(os.environ["RUNNER_TEMP"])/"nih-owlrl-original"
+          for name in s.SOURCE_FILES:
+              url=s.SOURCE_URL+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Source-OWL-RL-ReadOnly/1.0"}),timeout=50) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("original OBO source origin or immutable version differs")
+                  raw=response.read(5_000_001)
+              if hashlib.sha256(raw).hexdigest()!=s.PINNED_WHOLE_SOURCE_SHA256[name]:
+                  raise ValueError("pinned complete original OBO source SHA-256 mismatch")
+              (target/name).write_bytes(raw)
+          PY
+      - name: Compare source-owned inferred axioms to independent reasoner and negative controls
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-owlrl-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-owlrl-original/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_obo_owlrl_source_entailment
+      - name: Run frozen source-only nonasserted schema entailment trial
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-owlrl-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-owlrl-original/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_obo_owlrl_source_entailment \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/nih-owlrl-derived/original-schema-entailment.json"
+          python - <<'PY'
+          from pathlib import Path
+          import os,json
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"nih-owlrl-derived/original-schema-entailment.json").read_text())
+          assert x["schema"]=="nih-p2-original-obo-owlrl-subproperty-entailment-v1"
+          assert x["original_source_rdf_triples"]==8319
+          assert x["nonasserted_subproperty_triples_entailed_by_transitivity"]>0
+          assert x["selected_source_owned_nonasserted_entailments"]==24
+          assert x["original_source_all_selected_OWL_RL_entailments_verified"] is True
+          assert x["independent_full_source_RDFLib_property_closure_agreement"] is True
+          assert x["full_ontology_OWL_RL_closure_executed"] is False
+          assert x["original_ontology_is_consistent"]=="NOT_MEASURED"
+          assert x["official_NIH_benchmark"] is False
+          assert x["original_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-owlrl-derived" && sha256sum original-schema-entailment.json > sha256.txt)
+      - name: Retain derived schema inference evidence, without original OWL file copies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-original-owlrl-entailment-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-owlrl-derived/
+          if-no-files-found: warn
+          retention-days: 30
