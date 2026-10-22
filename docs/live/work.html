@@ -895,7 +895,7 @@ footer{border-top-color:#253942}
   }
   function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
-    else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
+    return c;},{running:0,queued:0,passed:0,indexed:app.runs.length})}
   function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked,liveAvailable:app.liveAvailable});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
   function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();
     const live=app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000;
