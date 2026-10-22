@@ -125,8 +125,10 @@ class TransferReceiptTests(unittest.TestCase):
         self.assertEqual(result["transfers"][0]["delivery"],"ACKNOWLEDGEMENT_MISMATCH")
 
     def test_orphan_incoming_expectation_is_observable(self):
+        unexpected=receiver(record())
+        unexpected["expectations"][0]["id"]="AB-20261022-ORPHAN-001"
         result=self.evaluate(record("BLOCKED_PRE_DEPARTURE"),
-                              fake_getter(receiver(record())))
+                              fake_getter(unexpected))
         self.assertTrue(any(t["delivery"]=="ORPHAN_EXPECTATION"
                             for t in result["transfers"]))
 
