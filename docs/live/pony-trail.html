@@ -7,61 +7,76 @@
 <title>Pony Trail · Horse Riding Game</title>
 <meta name="description" content="A cozy, free-to-play horse riding and jumping game. No login or downloads needed.">
 <style>
-:root{font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:#493852;background:#fff8ff}
+:root{font-family:"Trebuchet MS",Verdana,sans-serif;color:#453d43;background:#f8f1e7;--accent:#7f647f;--accent-soft:#f4dde9;--paper:#fff9ed;--ink:#514454}
+:root[data-scene="sunset"]{--accent:#a65d58;--accent-soft:#ffe4cd}
+:root[data-scene="night"]{--accent:#66648f;--accent-soft:#e7e4f4}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at 15% 0%,#f7d4f4,transparent 40%),radial-gradient(circle at 95% 20%,#dbf9ef,transparent 40%),#fff9fe}
-a{color:#6b457f}button,select{font:inherit}
-header,.wrap,footer{max-width:1080px;margin:auto}
-header{padding:21px 20px 7px;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
-.brand{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:800}
-.back{font-size:13px;font-weight:700;background:#fff;border:2px solid #ead0ef;border-radius:100px;padding:10px 15px;text-decoration:none}
-.wrap{padding:12px 20px 35px}
-.hero{text-align:center}
-h1{font-size:clamp(36px,6vw,60px);margin:0;color:#803d8f;letter-spacing:-.05em}
-.subtitle{font-size:16px;color:#71597a;margin:2px auto 21px;max-width:600px}
-.card{background:rgba(255,255,255,.94);border:2px solid #e9cee9;box-shadow:0 18px 35px #a973a021;border-radius:24px;padding:16px}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 8% 8%,#f4e3da 0,transparent 45%),radial-gradient(ellipse at 93% 15%,#e1ebdf 0,transparent 40%),#f8f1e7}
+a{color:#695271}
+button,select{font:inherit}
+.site-head,.wrap,footer{max-width:1120px;margin:auto}
+.site-head{padding:23px 24px 8px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.brand{display:inline-flex;gap:10px;align-items:center;font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#6c5d60}
+.brand-mark{display:grid;place-items:center;background:#e4d0dc;border:2px solid #825c79;width:33px;height:33px;border-radius:10px;transform:rotate(-8deg);font:700 22px Georgia,serif}
+.back{font-size:12px;letter-spacing:.03em;font-weight:900;color:#69566a;background:#fff9ef;border:1.5px solid #cdbdbd;border-radius:9px;padding:10px 14px;text-decoration:none;box-shadow:2px 3px 0 #d5c4c0}
+.wrap{padding:8px 24px 37px}
+.hero{text-align:center;margin:8px auto 20px}
+.eyebrow{display:block;color:#988077;font:800 11px "Trebuchet MS",sans-serif;letter-spacing:.23em;text-transform:uppercase;margin-bottom:7px}
+h1{font:700 clamp(43px,6vw,75px)/1 Georgia,"Times New Roman",serif;margin:0;color:#69496b;letter-spacing:-.045em;text-shadow:2px 3px 0 #f2dfe0}
+.subtitle{font-size:14px;color:#74676d;margin:10px auto 0;max-width:660px}
+.card{background:#fffaf1;border:2px solid #bba6aa;box-shadow:7px 9px 0 #e5d7d1;border-radius:15px;padding:17px}
 .selectors,.actions,.stats,.info{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.selectors{justify-content:space-between;margin-bottom:13px}
+.selectors{justify-content:space-between;align-items:stretch;margin-bottom:13px;gap:14px}
 .group{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.group b{font-size:13px;color:#74517f}
-button,select{min-height:43px;border:2px solid #e2cbe7;border-radius:14px;background:#fff;color:#65446e;padding:9px 13px;font-weight:750;cursor:pointer}
-button:hover{background:#fdf0ff}button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #9153b1;outline-offset:3px}
-.picker.active{background:#f4d5f9;border-color:#a875c3}
-select{padding:10px 14px;background:#fcf7ff}
-.play-field{position:relative;overflow:hidden;border:3px solid #eedaf2;border-radius:20px;background:#d5f0fc}
+.group b,.control-title{font-size:10px;font-weight:900;color:#80676f;letter-spacing:.14em}
+.pony-group{flex:1 1 380px}
+.trail-group{justify-content:flex-end;flex:1 1 260px}
+button,select{min-height:40px;border:1.5px solid #c9b7b9;border-radius:8px;background:#fffdfa;color:#635267;padding:8px 12px;font-weight:800;cursor:pointer;box-shadow:2px 3px 0 #e3d4d0;transition:background .15s,border-color .15s}
+button:hover{background:#f7e9eb}
+button:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #9976bc;outline-offset:3px}
+.picker{font-size:12px}
+.picker.active{background:var(--accent-soft);border-color:var(--accent);color:#574058;box-shadow:inset 0 0 0 1px var(--accent)}
+select{max-width:240px;background:#fffdfa;accent-color:var(--accent);font-size:13px}
+.trail-note{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 10px;padding:10px 13px;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:5px;font-size:12px;color:#63525b;transition:background .35s}
+.trail-note strong{color:#4e414d;font-weight:900}
+.trail-note span:last-child{font-size:11px;opacity:.8}
+.play-field{position:relative;overflow:hidden;border:3px solid #705d70;border-radius:8px;background:#c4e6ea;box-shadow:inset 0 0 0 2px #fff4e4}
+.play-field:after{content:"";pointer-events:none;position:absolute;inset:0;border:5px solid #ffffff22;border-radius:5px}
 canvas{display:block;width:100%;height:auto;aspect-ratio:960/460;touch-action:manipulation}
-.stats{justify-content:center;gap:8px;margin:13px 0}
-.stat{display:inline-flex;gap:6px;align-items:center;border-radius:999px;background:#f9edfb;padding:8px 13px;font-size:13px;font-weight:800;color:#6c4476}
-.stat strong{color:#88409e;font-variant-numeric:tabular-nums}
+.stats{justify-content:center;gap:8px;margin:15px 0 13px}
+.stat{display:inline-flex;gap:6px;align-items:center;border-radius:7px;background:#f5eadc;border:1px solid #e6d7cb;padding:8px 12px;font-size:12px;font-weight:800;color:#765c60}
+.stat strong{color:#584557;font-variant-numeric:tabular-nums;font-size:13px}
 .actions{justify-content:center}
-.primary{background:#85479c;border-color:#85479c;color:white;padding-inline:22px}
-.primary:hover{background:#6d3088}
-.bigjump{background:#ffdf99;border-color:#ffbf57;color:#6b431e;min-width:155px}
-.info{justify-content:center;text-align:center;font-size:13px;color:#806b87;margin-top:14px}
-kbd{border:1px solid #c7afcf;border-bottom-width:3px;border-radius:6px;padding:2px 6px;background:white;font:700 12px monospace;color:#674671}
-#status{min-height:24px;text-align:center;font-size:13px;color:#6f4f7a;margin:12px 0 0}
-footer{padding:0 20px 32px;color:#886f8e;text-align:center;font-size:12px}
-@media(max-width:620px){header{padding-top:12px}.wrap{padding:10px}.card{padding:9px}.selectors{gap:8px;justify-content:center}.group{justify-content:center}.picker{padding:7px 10px}.stat{font-size:12px;padding:7px 10px}.actions button{flex:1 1 120px}.bigjump{min-height:58px;flex:2!important}.subtitle{font-size:14px}}
-@media(prefers-reduced-motion:reduce){button{transition:none}}
+.primary{background:#725879;border-color:#654d6c;color:#fffaf0;padding-inline:24px;box-shadow:2px 3px 0 #c4b5c0}
+.primary:hover{background:#5d4564}
+.bigjump{background:#f3d6a5;border-color:#af855a;color:#654b37;min-width:160px}
+.bigjump:hover{background:#f8e0b9}
+.info{justify-content:center;text-align:center;font-size:12px;color:#806f73;margin-top:14px}
+kbd{border:1px solid #c7b9b6;border-bottom-width:3px;border-radius:5px;padding:2px 6px;background:#fff;font:700 11px monospace;color:#684e63}
+#status{min-height:25px;text-align:center;font-size:13px;color:#695363;margin:12px 0 0}
+footer{padding:0 20px 32px;color:#887778;text-align:center;font-size:11px;max-width:1120px}
+@media(max-width:690px){.site-head{padding:13px 13px 5px}.wrap{padding:8px 12px 30px}.card{padding:10px;box-shadow:4px 5px 0 #e5d7d1}.hero{margin:10px 0 17px}.subtitle{font-size:13px}.selectors{gap:10px}.pony-group,.trail-group{flex-basis:100%;justify-content:center}.group b{width:100%;text-align:center}.picker{padding:7px 9px;flex:1}.trail-group select{flex:1;max-width:none}.trail-note span:last-child{display:none}.stat{font-size:11px;padding:7px 9px}.actions button{flex:1 1 120px}.bigjump{min-height:55px;flex:2!important}h1{font-size:47px}}
+@media(prefers-reduced-motion:reduce){button,select,.trail-note{transition:none}}
 </style>
 </head>
 <body>
-<header><div class="brand">🐴 Little games / Workstation</div><a class="back" href="work.html">← Back to Dad's workstation</a></header>
+<header class="site-head"><div class="brand"><span class="brand-mark" aria-hidden="true">P</span> LITTLE GAMES <span aria-hidden="true">/</span> WORKSTATION</div><a class="back" href="work.html">← Dad's workstation</a></header>
 <main class="wrap">
-  <div class="hero"><h1>✨ Pony Trail ✨</h1><p class="subtitle">Pick your pony, gallop through the meadow, collect carrots and hop over fences!</p></div>
+  <div class="hero"><span class="eyebrow">A LITTLE HORSEBACK ADVENTURE</span><h1>Pony Trail</h1><p class="subtitle">Find your favorite pony, choose a path, and ride into a changing little world.</p></div>
   <section class="card" aria-label="Pony Trail game">
     <div class="selectors">
-      <div class="group" aria-label="Choose a horse"><b>YOUR PONY</b><button type="button" class="picker active" data-horse="cocoa" aria-pressed="true">🤎 Cocoa</button><button type="button" class="picker" data-horse="blossom" aria-pressed="false">💗 Blossom</button><button type="button" class="picker" data-horse="moon" aria-pressed="false">🤍 Moonbeam</button></div>
-      <div class="group"><label for="trail"><b>TRAIL</b></label><select id="trail"><option value="meadow">🌼 Sunny Meadow</option><option value="sunset">🌅 Sunset Ride</option><option value="night">🌙 Moonlight Trail</option></select></div>
+      <div class="group pony-group" aria-label="Choose a horse"><b>CHOOSE YOUR PONY</b><button type="button" class="picker active" data-horse="cocoa" aria-pressed="true">Cocoa · 🤎</button><button type="button" class="picker" data-horse="blossom" aria-pressed="false">Blossom · 🌸</button><button type="button" class="picker" data-horse="moon" aria-pressed="false">Moonbeam · ✦</button></div>
+      <div class="group trail-group"><label for="trail"><b>CHANGE THE TRAIL</b></label><select id="trail"><option value="meadow">Wildflower Meadow</option><option value="sunset">Golden Hour Ridge</option><option value="night">Moonlit Woods</option></select></div>
     </div>
-    <div class="play-field"><canvas id="game" width="960" height="460" role="img" aria-label="Side scrolling pony riding game. Press Space or the Jump button to jump over fences and collect carrots."></canvas></div>
-    <div class="stats" aria-label="Game scores"><span class="stat">❤️ Lives <strong id="lives">3</strong></span><span class="stat">🥕 Carrots <strong id="carrots">0</strong></span><span class="stat">🐾 Distance <strong id="distance">0 m</strong></span><span class="stat">🏆 Best <strong id="best">0 m</strong></span></div>
-    <div class="actions"><button class="primary" id="start" type="button">▶ Start riding</button><button class="bigjump" id="jump" type="button">🐎 JUMP!</button><button id="pause" type="button">⏸ Pause</button><button id="sound" type="button" aria-pressed="false">🔇 Sound off</button></div>
-    <p id="status" role="status" aria-live="polite">Choose your pony, then press Start riding!</p>
-    <div class="info"><span>Keyboard: <kbd>Space</kbd> / <kbd>↑</kbd> jump</span><span><kbd>←</kbd> easy pace, <kbd>→</kbd> gallop</span><span><kbd>P</kbd> pause, <kbd>R</kbd> restart</span></div>
+    <div class="trail-note" aria-live="polite"><strong id="trail-hint">WILDFLOWER MEADOW — daisies, little birds and a blue sky.</strong><span>Switch trails whenever you like ↗</span></div>
+    <div class="play-field"><canvas id="game" width="960" height="460" role="img" aria-label="Side-scrolling pony riding game. Change the trail scenery at any time, and press Space or Jump to hop over fences and collect carrots."></canvas></div>
+    <div class="stats" aria-label="Game scores"><span class="stat">♥ Hearts <strong id="lives">3</strong></span><span class="stat">🥕 Carrots <strong id="carrots">0</strong></span><span class="stat">Distance <strong id="distance">0 m</strong></span><span class="stat">Best ride <strong id="best">0 m</strong></span></div>
+    <div class="actions"><button class="primary" id="start" type="button">▶ Start riding</button><button class="bigjump" id="jump" type="button">↑ Jump!</button><button id="pause" type="button">Ⅱ Pause</button><button id="sound" type="button" aria-pressed="false">♫ Sound off</button></div>
+    <p id="status" role="status" aria-live="polite">Choose your pony, pick a trail, then start riding.</p>
+    <div class="info"><span><kbd>Space</kbd> / <kbd>↑</kbd> jump</span><span><kbd>←</kbd> slow down, <kbd>→</kbd> gallop</span><span><kbd>P</kbd> pause, <kbd>R</kbd> restart</span></div>
   </section>
 </main>
-<footer>Made for little riders. Works offline after saving this page; no account, ads, chat, tracking, or external assets. A browser game, not a native workstation test.</footer>
+<footer>Original hand-drawn browser adventure. Plays offline — no login, tracking, ads or external artwork. Not a research experiment.</footer>
 <script>
 (function(){
 "use strict";
