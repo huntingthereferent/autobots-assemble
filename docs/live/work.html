@@ -903,7 +903,7 @@ footer{border-top-color:#253942}
       btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
       const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
       btn.append(el("p",r.branch+" · "+r.head.slice(0,10)+" · "+safeDate(r.created)));
-      if(["queued","in_progress"].includes(statusOf(r))&&!app.latestPage.some(x=>x.id===r.id))btn.append(el("small","Historical state — not verified live","fine"));
+      if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.latestPage.some(x=>x.id===r.id)))btn.append(el("small","Last recorded state — not verified current","fine"));
       btn.addEventListener("click",()=>selectRun(r.id,true));area.append(btn);
     }
     $("show-more-runs").hidden=subset.length<=app.runVisible;
@@ -991,7 +991,7 @@ footer{border-top-color:#253942}
     const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
     header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
     header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
-    if(["queued","in_progress"].includes(statusOf(r))&&!app.latestPage.some(x=>x.id===r.id))header.append(el("p","Archived status: this run is not included in the latest live API sample.","fine"));
+    if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.latestPage.some(x=>x.id===r.id)))header.append(el("p","Recorded status, not a verified current execution. See the live source indicator.","fine"));
     if(plausible(r.url,"run"))header.append(link("Open original workflow run ↗",r.url));
     header.append(el("p","Source jobs and steps below are read from GitHub. A successful workflow proves only its declared checks.","fine"));
     area.append(header);$("details-scope").textContent="Run "+r.id+" · "+r.head.slice(0,10);
