@@ -1,0 +1,556 @@
+{
+  "schema_version": 1,
+  "created_utc_date": "2026-10-22",
+  "purpose": "Source-discovery and research-testing candidate lanes, not evidence of completed studies.",
+  "axis": "test context / research question",
+  "status_meanings": {
+    "candidate": "Source family and test contract defined; no external record admitted or test run.",
+    "active": "A particular study/dataset with frozen provenance admitted.",
+    "tested": "A reproducible experiment and actual witness attached; not necessarily confirmed."
+  },
+  "default_admission": "manual-per-record",
+  "default_fetch": "disabled",
+  "global_boundaries": [
+    "No bulk imports of all research; choose a testable question then freeze a bounded source snapshot.",
+    "Every claim requires source ID, DOI/record ID when present, version, retrieved_at UTC, rights review, data transformation, and witness pointer.",
+    "Separate paper, preregistration, dataset, simulation and observed result; one is not proof of another.",
+    "Do not ingest credentialed/identifiable human data or start human-subject experiments without separate authority and consent.",
+    "No unapproved network crawling, third-party vulnerability testing, clinical interventions, or executable dataset scripts.",
+    "Original researchers' conclusions are hypotheses to examine, not workstation-validated findings.",
+    "Preserve UNKNOWN and conflicting results; no inferred cross-domain generality."
+  ],
+  "sources": [
+    {
+      "id": "openalex",
+      "name": "OpenAlex",
+      "doc_url": "https://help.openalex.org/api/",
+      "kind": "scholarly-index",
+      "access": "review_per_record",
+      "boundary": "Public scholarly metadata search; access terms and quotas apply."
+    },
+    {
+      "id": "crossref",
+      "name": "Crossref",
+      "doc_url": "https://www.crossref.org/documentation/retrieve-metadata/rest-api/",
+      "kind": "doi-metadata",
+      "access": "review_per_record",
+      "boundary": "Publisher-deposited metadata; abstracts and full text may have separate rights."
+    },
+    {
+      "id": "osf",
+      "name": "Open Science Framework",
+      "doc_url": "https://developer.osf.io/",
+      "kind": "study-registry",
+      "access": "review_per_record",
+      "boundary": "Public registrations, materials and metadata; individual project file rights vary."
+    },
+    {
+      "id": "zenodo",
+      "name": "Zenodo",
+      "doc_url": "https://developers.zenodo.org/",
+      "kind": "research-archive",
+      "access": "review_per_record",
+      "boundary": "Record metadata and linked files; check each record's license and version."
+    },
+    {
+      "id": "openml",
+      "name": "OpenML",
+      "doc_url": "https://docs.openml.org/concepts/tasks/",
+      "kind": "benchmark-registry",
+      "access": "review_per_record",
+      "boundary": "Datasets, tasks, evaluation design and runs; verify each dataset's terms."
+    },
+    {
+      "id": "hf",
+      "name": "Hugging Face Datasets",
+      "doc_url": "https://huggingface.co/docs/datasets/index",
+      "kind": "dataset-hub",
+      "access": "review_per_record",
+      "boundary": "Per-dataset licenses, privacy and dataset cards must be checked."
+    },
+    {
+      "id": "pubmed",
+      "name": "NCBI E-utilities / PubMed",
+      "doc_url": "https://www.ncbi.nlm.nih.gov/books/NBK25500/",
+      "kind": "literature-index",
+      "access": "review_per_record",
+      "boundary": "Bibliographic indexing is not evidence of causal validity or full-text reuse rights."
+    },
+    {
+      "id": "ctgov",
+      "name": "ClinicalTrials.gov API v2",
+      "doc_url": "https://clinicaltrials.gov/data-api/api",
+      "kind": "clinical-registry",
+      "access": "review_per_record",
+      "boundary": "Study records can be registered/reported but are not verified treatment outcomes."
+    },
+    {
+      "id": "physionet",
+      "name": "PhysioNet",
+      "doc_url": "https://physionet.org/about/database/",
+      "kind": "physiological-data",
+      "access": "review_per_record",
+      "boundary": "Some datasets are credentialed or restricted; never automatically download them."
+    },
+    {
+      "id": "openneuro",
+      "name": "OpenNeuro",
+      "doc_url": "https://docs.openneuro.org/",
+      "kind": "neuroimaging-data",
+      "access": "review_per_record",
+      "boundary": "Check deidentification, dataset status, subject conditions and download scope."
+    },
+    {
+      "id": "pubchem",
+      "name": "PubChem PUG REST",
+      "doc_url": "https://pubchem.ncbi.nlm.nih.gov/docs/pug-rest-tutorial",
+      "kind": "chemical-properties",
+      "access": "review_per_record",
+      "boundary": "Compound records contain distinct computed and observed property sources."
+    },
+    {
+      "id": "nist",
+      "name": "NIST Chemistry WebBook",
+      "doc_url": "https://webbook.nist.gov/chemistry/",
+      "kind": "reference-chemistry",
+      "access": "review_per_record",
+      "boundary": "Standard reference values require unit and condition matching; check reuse terms."
+    },
+    {
+      "id": "earthdata",
+      "name": "NASA Earthdata CMR",
+      "doc_url": "https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html",
+      "kind": "earth-observation",
+      "access": "review_per_record",
+      "boundary": "Catalog metadata and imagery are different artifacts; granule rights and access vary."
+    },
+    {
+      "id": "noaa",
+      "name": "NOAA NCEI CDO",
+      "doc_url": "https://www.ncei.noaa.gov/cdo-web/webservices/v2",
+      "kind": "climate-series",
+      "access": "review_per_record",
+      "boundary": "API token required; define spatial, temporal and station comparability."
+    },
+    {
+      "id": "gwosc",
+      "name": "GWOSC",
+      "doc_url": "https://gwosc.org/api/",
+      "kind": "gravitational-wave-events",
+      "access": "review_per_record",
+      "boundary": "Event catalogs and strain series have different evidence and analysis requirements."
+    },
+    {
+      "id": "worldbank",
+      "name": "World Bank Indicators",
+      "doc_url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392",
+      "kind": "development-indicators",
+      "access": "review_per_record",
+      "boundary": "Series revisions and operational definitions must be pinned before comparison."
+    },
+    {
+      "id": "oecd",
+      "name": "OECD SDMX data",
+      "doc_url": "https://www.oecd.org/en/data/insights/data-explainers/2024/09/api.html",
+      "kind": "social-economics",
+      "access": "review_per_record",
+      "boundary": "Terms and rate limits apply; check revisions and comparability."
+    },
+    {
+      "id": "nvd",
+      "name": "NIST NVD",
+      "doc_url": "https://nvd.nist.gov/developers/products",
+      "kind": "security-metadata",
+      "access": "review_per_record",
+      "boundary": "Advisories and applicability records are not proof that a target is exploitable."
+    }
+  ],
+  "lanes": [
+    {
+      "id": "LIT",
+      "name": "Research discovery and evidence synthesis",
+      "status": "candidate",
+      "source_ids": [
+        "openalex",
+        "crossref",
+        "pubmed"
+      ],
+      "question": "Can independent metadata indexes resolve the same DOI and update history?",
+      "test_contract": {
+        "kind": "metadata-comparison",
+        "measurement": "DOI/title match and source update fields",
+        "counterexample": "Mismatch, missing record or conflicting publication metadata"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "META",
+      "name": "Methods, preregistration and reproducibility",
+      "status": "candidate",
+      "source_ids": [
+        "osf",
+        "zenodo",
+        "crossref"
+      ],
+      "question": "Is a frozen protocol distinguishable from a later outcome claim?",
+      "test_contract": {
+        "kind": "evidence-lineage",
+        "measurement": "registration timestamp, version and linked outputs",
+        "counterexample": "No preregistration or outcome link; retain UNKNOWN"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "MATH",
+      "name": "Mathematics and formal proof studies",
+      "status": "candidate",
+      "source_ids": [
+        "openalex",
+        "zenodo"
+      ],
+      "question": "Can a stated result be reconstructed from stated assumptions?",
+      "test_contract": {
+        "kind": "formal-reconstruction",
+        "measurement": "Exact finite examples, counterexamples and versioned formal inputs",
+        "counterexample": "Failure beyond tested domain or unproved generalization"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "COMP",
+      "name": "Algorithms and computer systems",
+      "status": "candidate",
+      "source_ids": [
+        "openml",
+        "zenodo",
+        "crossref"
+      ],
+      "question": "Does a reported algorithm improve a declared baseline under the same inputs?",
+      "test_contract": {
+        "kind": "benchmark-comparison",
+        "measurement": "Frozen data split, runtime and measured output",
+        "counterexample": "Reproducibility or complexity mismatch"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "ML",
+      "name": "Machine learning and ARC-like tasks",
+      "status": "candidate",
+      "source_ids": [
+        "openml",
+        "hf"
+      ],
+      "question": "Does a model's behavior generalize to held-out examples and tasks?",
+      "test_contract": {
+        "kind": "heldout-evaluation",
+        "measurement": "Seeded split, leakage audit and performance by task",
+        "counterexample": "Training-test leakage or performance collapse"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "ROB",
+      "name": "Robotics, controls and autonomy",
+      "status": "candidate",
+      "source_ids": [
+        "zenodo",
+        "osf"
+      ],
+      "question": "Does a finite controller preserve its stated safety and tracking bounds?",
+      "test_contract": {
+        "kind": "simulation-and-control",
+        "measurement": "Trajectory, control constraints and disturbances",
+        "counterexample": "Violation in any recorded trial; simulation not hardware"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "PHY",
+      "name": "Physics and dynamical systems",
+      "status": "candidate",
+      "source_ids": [
+        "gwosc",
+        "zenodo"
+      ],
+      "question": "Do two candidate dynamical descriptions agree on independently observed signals?",
+      "test_contract": {
+        "kind": "physics-model-check",
+        "measurement": "Time-aligned measured traces and residuals",
+        "counterexample": "Bound exceeded or observation model mismatch"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "CHEM",
+      "name": "Chemistry, thermodynamics and materials",
+      "status": "candidate",
+      "source_ids": [
+        "nist",
+        "pubchem"
+      ],
+      "question": "Do predicted properties match reference data under identical conditions?",
+      "test_contract": {
+        "kind": "reference-property-comparison",
+        "measurement": "Units, temperature, pressure, species identity and uncertainty",
+        "counterexample": "Unmatched physical conditions or uncertainty excess"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "BIO",
+      "name": "Molecular biology and structural data",
+      "status": "candidate",
+      "source_ids": [
+        "pubchem",
+        "zenodo",
+        "openalex"
+      ],
+      "question": "Does an external dataset support a stated molecular relation without species or assay mismatch?",
+      "test_contract": {
+        "kind": "data-reanalysis",
+        "measurement": "Dataset version, assay/structure identity and effect direction",
+        "counterexample": "Confounding conditions or mismatched assay"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "CLIN",
+      "name": "Clinical research and trial records",
+      "status": "candidate",
+      "source_ids": [
+        "ctgov",
+        "pubmed",
+        "physionet"
+      ],
+      "question": "Can registry history and published outcomes be reconciled without conflating clocks?",
+      "test_contract": {
+        "kind": "registry-audit",
+        "measurement": "Record identifiers, change timestamps and public aggregate fields",
+        "counterexample": "Source chronology ambiguous or restricted records"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "NEURO",
+      "name": "Neuroscience and physiological signals",
+      "status": "candidate",
+      "source_ids": [
+        "openneuro",
+        "physionet"
+      ],
+      "question": "Can a predeclared signal processing pipeline replicate a published feature?",
+      "test_contract": {
+        "kind": "signal-replay",
+        "measurement": "Dataset snapshot, preprocessing, segmentation and confidence interval",
+        "counterexample": "Pipeline drift or non-reproducible result"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "PSY",
+      "name": "Psychology, cognition and behavior",
+      "status": "candidate",
+      "source_ids": [
+        "osf",
+        "openalex"
+      ],
+      "question": "Does a preregistered effect hold under public-study recomputation?",
+      "test_contract": {
+        "kind": "preregistered-reanalysis",
+        "measurement": "Design, exclusions, effect size and uncertainty",
+        "counterexample": "Missing preregistration or sensitivity to exclusions"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "EARTH",
+      "name": "Earth systems and climate",
+      "status": "candidate",
+      "source_ids": [
+        "earthdata",
+        "noaa"
+      ],
+      "question": "Can independent observations be compared on the same spatial and temporal grid?",
+      "test_contract": {
+        "kind": "spatiotemporal-comparison",
+        "measurement": "Geospatial coordinates, units, time span and missing-data policy",
+        "counterexample": "Grid/unit mismatch or station selection bias"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "SPACE",
+      "name": "Astronomy and gravitational wave events",
+      "status": "candidate",
+      "source_ids": [
+        "gwosc",
+        "zenodo"
+      ],
+      "question": "Can a published event feature be reproduced from a pinned public event version?",
+      "test_contract": {
+        "kind": "event-reproduction",
+        "measurement": "Event version, signal parameters, error bars and processing",
+        "counterexample": "Event-version change or unmodeled observation error"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "ECON",
+      "name": "Economics and economic forecasting",
+      "status": "candidate",
+      "source_ids": [
+        "worldbank",
+        "oecd"
+      ],
+      "question": "Does a forecast beat a naive baseline on held-out historical intervals?",
+      "test_contract": {
+        "kind": "historical-backtest",
+        "measurement": "Release vintages, horizon, errors and baselines",
+        "counterexample": "Lookahead leakage or revised series hidden"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "SOC",
+      "name": "Social science and demographics",
+      "status": "candidate",
+      "source_ids": [
+        "worldbank",
+        "oecd",
+        "osf"
+      ],
+      "question": "Are demographic associations robust to definition, period and country coverage?",
+      "test_contract": {
+        "kind": "observational-comparison",
+        "measurement": "Indicator metadata, cohort units and effect robustness",
+        "counterexample": "Aggregate-to-individual inference or group definition drift"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "EDU",
+      "name": "Education and learning research",
+      "status": "candidate",
+      "source_ids": [
+        "osf",
+        "openalex",
+        "crossref"
+      ],
+      "question": "Can reported learning outcomes be reproduced from a study's public analysis?",
+      "test_contract": {
+        "kind": "study-reanalysis",
+        "measurement": "Study design, scoring and subgroup uncertainty",
+        "counterexample": "Outcome selection or missing denominator"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "AUDIO",
+      "name": "Audio, music and perception",
+      "status": "candidate",
+      "source_ids": [
+        "hf",
+        "zenodo"
+      ],
+      "question": "Can a measurable audio feature survive encoding and playback transformations?",
+      "test_contract": {
+        "kind": "signal-transformation",
+        "measurement": "Sample rate, feature method and reference clip version",
+        "counterexample": "Non-reproducible feature or license incompatibility"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "WORLD",
+      "name": "Games, virtual worlds and agent interaction",
+      "status": "candidate",
+      "source_ids": [
+        "openml",
+        "zenodo",
+        "hf"
+      ],
+      "question": "Does the same policy yield the same trace under controlled resets?",
+      "test_contract": {
+        "kind": "native-trace",
+        "measurement": "Reset seed, state-action sequence, event trace and held-out cases",
+        "counterexample": "Divergent trace, hidden-state dependence or benchmark leakage"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "SEC",
+      "name": "Software security and robustness",
+      "status": "candidate",
+      "source_ids": [
+        "nvd",
+        "zenodo"
+      ],
+      "question": "Does a bounded local test reproduce a documented failure without touching third parties?",
+      "test_contract": {
+        "kind": "isolated-regression",
+        "measurement": "CVE version, local sandbox, negative control and fix condition",
+        "counterexample": "Non-reproduction or unsafe/external targeting"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    },
+    {
+      "id": "HCI",
+      "name": "Human factors and interface design",
+      "status": "candidate",
+      "source_ids": [
+        "osf",
+        "zenodo"
+      ],
+      "question": "Do changes improve a measured interaction task without suppressing accessibility?",
+      "test_contract": {
+        "kind": "comparative-usability",
+        "measurement": "Task definition, usability metric, accessibility checks",
+        "counterexample": "Accessibility regression or inconsistent task conditions"
+      },
+      "reached_depth": "researched",
+      "witnesses": [],
+      "last_run": null
+    }
+  ]
+}
