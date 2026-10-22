@@ -156,7 +156,7 @@ def assess(roster, health, histories, *, repo, now=None, root=ROOT):
     outcomes.extend([{**r, "state": "SELECTED"} for r in dispatched])
     outcomes.extend([{**r, "state": "CAPACITY_WAIT"} for r in ready[cap:]])
     return {"schema": "inspector-gadget/native-worker-plan/v1",
-            "calender_source": "meta-observations/health.json",
+            "calendar_source": "meta-observations/health.json",
             "observed_at": health["observed_at"],
             "eligible_count": len(ready),
             "selected_count": len(dispatched),
