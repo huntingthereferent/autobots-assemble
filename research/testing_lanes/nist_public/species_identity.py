@@ -70,7 +70,7 @@ def classify(raw: bytes) -> dict:
         "publisher_webbook": "NIST Chemistry WebBook" in rendered,
         "species_name": heading == NAME,
         "cas_id": bool(re.search(r"\bCAS Registry Number\s*:\s*7732-18-5\b", rendered, re.I)),
-        "formula": bool(re.search(r"\bFormula\s*:\s*H\s*2\s*O\b", rendered, re.I)),
+        "formula": bool(re.search(r"\bFormula\s*:\s*H\s*2\s*O(?=\s*(?:Molecular weight|IUPAC Standard|CAS Registry Number|$))", rendered, re.I)),
         "inchi_key": INCHI_KEY in rendered,
     }
     if not all(checks.values()):
