@@ -67,5 +67,21 @@ The **independent source-timeline audit** `work/arc3/audit_native_sp80_stage4_ro
 
 This is **a native rendered row63 correlate of movement history under the tested sources**, not evidence for what the row represents internally. It does not establish an action counter, a hidden objective, or hidden-state equivalence. The y63 source differences make prior `bottom unchanged` statements valid only for their explicitly tested `y59..62` strip. Both new artifacts have configurable 90-day retention, not verified independent durable archival copies.
 
+## Cross-object native selection and reversible movement controls — source-verified
+
+[Original SDK run #39759703369](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39759703369), [source JSON/NPZ artifact #12417692024](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39759703369/artifacts/12417692024), ZIP SHA256 `acc0db18a0605ac5af2e8e7199dba83f395e4fa4a54cb0ed659773976f1b2cea`, configured artifact retention 90 days (no independent durable archive verified).
+
+The frozen original D3 lower arrangement and final upper LEFT1→ACTION5 were unchanged. Five predeclared native conditions × two independent authentic SDK entrance witnesses = **10/10 real original-SDK resets, all level4 NOT_FINISHED and no level5/WIN**. The extra native `ACTION6` selected a source-observed right bar at (46,33); an extra re-click alone, or right-bar reversible LEFT→RIGHT, UP→DOWN, RIGHT→LEFT actions were run before re-selecting the upper bar. All conditions returned exactly the same **pre-pour board pixels in rows y0..62**, and all measured cup first-full times (lateral13, top-left25, top-middle/right21) remained unchanged.
+
+| Added right-bar actions | Pre-pour row63 first palette14 x | Post-pour first palette14 x |
+| --- | ---: | ---: |
+| None | 10 | 11 |
+| Extra right-bar source click only | 11 | 12 |
+| Extra click, then LEFT/RIGHT | 12 | 13 |
+| Extra click, then UP/DOWN | 12 | 13 |
+| Extra click, then RIGHT/LEFT | 12 | 13 |
+
+**Measured limit:** native row63 responds to additional selection actions **even with no added movement**. These results do not support an upper-bar-specific movement signal. They do not establish the actual semantics of row63, a general input counter, or whether it participates in the source game's official objective. The next narrowly frozen experiment compares source-authenticated background/object/upper selections without any extra movement.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
