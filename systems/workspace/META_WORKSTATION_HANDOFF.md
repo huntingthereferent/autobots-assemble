@@ -1,4 +1,4 @@
-# Meta workstation — A / B handoff
+# Meta workstation — cross-repository handoff
 
 This file is installed in **both** workstations. It is the cross-window reground point for the meta workstation, not a new research lane.
 
@@ -10,17 +10,17 @@ This file is installed in **both** workstations. It is the cross-window reground
 
 | Node | Source repository | Owned journal | Source-backed viewer |
 | --- | --- | --- | --- |
-| A / Workstation 01 | [huntingthereferent/autobots-assemble](https://github.com/huntingthereferent/autobots-assemble) | [A GitHub Actions](https://github.com/huntingthereferent/autobots-assemble/actions) | [A work viewer](https://huntingthereferent.github.io/autobots-assemble/live/work.html) |
-| B / Workstation 02 | [aeren-research/continuum-oscillator](https://github.com/aeren-research/continuum-oscillator) (public as of this check) | [B GitHub Actions](https://github.com/aeren-research/continuum-oscillator/actions) | [B work viewer](https://aeren-research.github.io/continuum-oscillator/live/work.html) (requires Pages enabled) |
+| Primary workstation | [huntingthereferent/autobots-assemble](https://github.com/huntingthereferent/autobots-assemble) | [Primary GitHub Actions](https://github.com/huntingthereferent/autobots-assemble/actions) | [Primary work viewer](https://huntingthereferent.github.io/autobots-assemble/live/work.html) |
+| Secondary workstation | [aeren-research/continuum-oscillator](https://github.com/aeren-research/continuum-oscillator) (public as of this check) | [Secondary GitHub Actions](https://github.com/aeren-research/continuum-oscillator/actions) | [Secondary work viewer](https://aeren-research.github.io/continuum-oscillator/live/work.html) (requires Pages enabled) |
 
 The October 22 verified A source snapshot is `ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9`. All 2,183 blobs were matched on B: 1,942 source files retain their original paths, while 241 workflow definitions are saved without activation under `.ab-cluster/workflow-library/`. B's pre-migration source is preserved on `archive/pre-workstation-sync-2026-10-22`. These are source-copy facts, not evidence that B executes A's existing research lanes.
 
-## On every reground / new ChatGPT window
+## On each operational handoff
 
-1. Read the **current** A canonical `docs/live/meta-registry.json`, then B's local copy. Use the A record for declared lane allocation; report any divergence. Do not replace a newer registry with an older copy.
+1. Read the **current** primary workstation's canonical `docs/live/meta-registry.json`, then B's local copy. Use the A record for declared lane allocation; report any divergence. Do not replace a newer registry with an older copy.
 2. Read recent Actions runs directly from **both linked GitHub accounts** and use the shared meta viewer for the two public feeds. Treat unavailable API responses as unknown, not zero.
 3. For each lane, separate **assigned node**, **eligible workflow**, **running job**, **queued job**, **finished workflow**, **native research evidence**, and **accepted handoff**. A workflow definition sitting in B's inactive library is not a running B lane.
-4. When shifting work A ↔ B, record lane ID, source repo/ref, destination repo/ref, actual run URL, observation/witness, decision, and open limits. Do not overwrite prior source versions; do not automatically duplicate research.
+4. When shifting work between workstations, record lane ID, source repo/ref, destination repo/ref, actual run URL, observation/witness, decision, and open limits. Do not overwrite prior source versions; do not automatically duplicate research.
 5. Use the shared meta viewer as the public, navigation-grade display. Each repository's GitHub Actions journal remains its authoritative execution source. Never copy private logs or credentials into public records without explicit authorization.
 
 ## Current execution boundary
