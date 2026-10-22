@@ -35,6 +35,7 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
         row = replayed_rows(self.journal)[0]
         movement = next(m for m in row["movements"] if m["kind"] == "BRANCH")
         self.harness.seed_lane("root", "finite A/B root")
+        self.verifier.bind_lane(movement["from"], "root")
         self.harness.observe(
             lane_id="root", kind="BRANCH", relation=movement["word"],
             witness_ref=movement_ref(row["entry_hash"], movement),
@@ -81,6 +82,8 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
         self.assertNotEqual(left_lane, right_lane)
         self.harness.seed_lane(left_lane, "A/B trajectory " + collision["from"])
         self.harness.seed_lane(right_lane, "A/B trajectory " + collision["existing_word"])
+        self.verifier.bind_lane(collision["from"], left_lane)
+        self.verifier.bind_lane(prior["word"], right_lane)
         relation = "state:" + ",".join(map(str, collision["to"]))
         left_ref = movement_ref(row["entry_hash"], collision)
         right_ref = movement_ref(prior_row["entry_hash"], prior)
