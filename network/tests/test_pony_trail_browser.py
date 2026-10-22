@@ -12,7 +12,7 @@ PAGE = Path(__file__).resolve().parents[2] / "docs/live/pony-trail.html"
 
 
 def distance(text):
-    return int(re.search(r"\\d+", text).group())
+    return int(re.search(r"\d+", text).group())
 
 
 @unittest.skipUnless(sync_playwright, "Playwright required for browser checks")
