@@ -43,6 +43,14 @@ Five real upper-bar action histories × independently witnessed original SDK A/B
 
 For each of the four three-movement detours compared against direct LEFT1, both original SDK witnesses record exactly two differences just before pour: `(10,63)` and `(11,63)` each palette14→0, and exactly one difference `(11,63)` palette14→0 for **every one of 34 native animation frames**, with **zero differences across rows0–62**. The prior left/bottom boundary scan excluded row63. The exact observed bottom-row difference is not interpreted as game mechanics or objective logic. Configured retention 90 days; durable independent copies of these two GitHub artifacts **NOT VERIFIED**.
 
+## Lane B: history-length source result and stepwise row63 audit
+
+[Original SDK run #39757263041](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757263041), [JSON+NPZ artifact #12415838204](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757263041/artifacts/12415838204), ZIP SHA-256 `aed9ae4f2cf04344159d92dcb9ef726659c7ee5067af93df06d2839fb6fc0406` (source file hashes: JSON `d393610b2f8e553343b2322dc8eaa5b9ff8e2dd49f608c3fb01693c127bb79df`, NPZ `da58e6c1896884095ab394d0736947ff8ad3cdb9997a3f5578fcfd5592b69288`). Fourteen original SDK resets with seven frozen histories, all `levels_completed=4, NOT_FINISHED`. Both original entrance witnesses agree, upper-bar source bbox `[26,20,37,22]` and cup frame timings unchanged. All animation-frame differences from the direct LEFT1 comparator are confined to the last screen row y63.
+
+[Stepwise source audit #39757748694](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757748694), [audited JSON #12417295064](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757748694/artifacts/12417295064), ZIP SHA-256 `6d75b8af562c6a4e39be9d82c288528808a2af743366ac6c2a86e7115f207c97`. Original source JSON and NPZ validated by SHA-256 inside Actions before independent parsing. First palette14 x coordinate in source row63 after each movement number 1..7 is **10, 11, 12, 12, 13, 13, 14** respectively, identical for every independent native source record that reached the respective action ordinal. Source pre/post pour first palette14 x at history lengths 1:10→11, 3:12→12, 5:13→13, 7:14→15.
+
+**Boundary:** this is a visible native screen correlate of source movement history, not demonstrated semantics of that row, an objective condition, or a hidden action counter. Both artifacts are configured for 90-day GitHub Actions retention; independent durable copy **NOT VERIFIED**.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
