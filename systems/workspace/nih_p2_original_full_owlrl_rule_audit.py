@@ -143,7 +143,7 @@ def examine(graph):
         raise ValueError("OWL RL complete-graph materialization exceeded capacity")
     missing=[t for t in expected if t not in derived]
     if missing:
-        raise ValueError("full original OWL RL closure omits independent sound rule instance")
+        raise ValueError("full original OWL RL closure misses "+str(len(missing))+" candidate rules: "+repr([{"triple":list(map(str,t)),"rule":expected[t][0]} for t in missing[:5]]))
     property_edges=earlier.original_property_graph(graph)
     paths=earlier.shortest_witnesses(property_edges)
     implied=earlier.original_nonasserted(paths,property_edges)
