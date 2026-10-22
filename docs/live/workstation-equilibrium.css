@@ -1,0 +1,27 @@
+/* Source-derived observation intervals; never simulate workload. */
+.equilibrium-station{margin-top:13px;background:linear-gradient(133deg,#101a20,#0a1319 62%,#12242a);border:1px solid #35545e;border-radius:10px;padding:20px 19px;box-shadow:inset 0 1px rgba(167,237,229,.06)}
+.equilibrium-header{display:flex;gap:20px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.equilibrium-header h2{color:#e0f2f2;font-size:21px;line-height:1.25;letter-spacing:-.025em}
+.equilibrium-label{display:block;color:#92ccd1;font:700 10px/1.6 var(--data-font);letter-spacing:.13em;margin-bottom:3px}
+.equilibrium-header>strong{font:650 11px/1.4 var(--data-font);color:#afede0;border:1px solid #3e7169;padding:6px 12px;border-radius:3px;letter-spacing:.08em;white-space:nowrap;background:#18322e}
+.equilibrium-intro{font:11px/1.75 var(--data-font);color:#a4bdc4;margin:10px 0 17px;max-width:900px}
+.equilibrium-readings{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.equilibrium-readings>div{min-width:0;padding:13px 12px 12px;background:#0b1920;border:1px solid #2a444c;border-radius:6px}
+.equilibrium-readings span{color:#98bfc9;font:700 9px/1.5 var(--data-font);letter-spacing:.06em}
+.equilibrium-readings b{display:block;color:#d7f7f1;font:650 clamp(24px,2.45vw,33px)/1.35 var(--data-font);font-variant-numeric:tabular-nums;margin:4px 0}
+.equilibrium-readings small{display:block;color:#88a4ae;font:10px/1.55 var(--data-font)}
+.equilibrium-graph-heading{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;margin:20px 0 8px;font:700 10px/1.5 var(--data-font);letter-spacing:.08em;color:#bdd6df}
+.equilibrium-graph-heading small{font:500 10px/1.5 var(--data-font);letter-spacing:0;color:#9bb2bc}
+.equilibrium-graph{display:flex;align-items:end;gap:4px;height:75px;border-bottom:1px solid #38535c;background:repeating-linear-gradient(to top,transparent 0,transparent 22px,#20333a 23px,transparent 24px)}
+.eq-graph-col{flex:1;min-width:2px;height:100%;display:flex;gap:2px;align-items:end;justify-content:center}
+.eq-graph-col span{display:block;min-width:1px;flex:1;max-width:11px;border-radius:2px 2px 0 0;transition:height .5s}
+.eq-graph-col .eq-work{background:#78d9de;box-shadow:0 0 6px rgba(120,217,222,.28)}
+.eq-graph-col .eq-wait{background:#f0bb76;box-shadow:0 0 6px rgba(240,187,118,.19)}
+.equilibrium-legend{display:flex;gap:18px;margin-top:9px}
+.equilibrium-legend span{display:flex;align-items:center;gap:7px;font:700 9px/1.6 var(--data-font);color:#9cb2bc;letter-spacing:.05em}
+.equilibrium-legend i{display:block;width:9px;height:9px;border-radius:2px}
+.eq-legend-running{background:#78d9de}.eq-legend-queued{background:#f0bb76}
+.equilibrium-boundary{margin:14px 0 0!important;color:#879da8!important;font:10px/1.65 var(--data-font)!important}
+@media(max-width:1100px){.equilibrium-readings{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:580px){.equilibrium-station{padding:13px}.equilibrium-readings{grid-template-columns:repeat(2,minmax(0,1fr))}.equilibrium-readings b{font-size:26px}}
+@media(prefers-reduced-motion:reduce){.eq-graph-col span{transition:none}}

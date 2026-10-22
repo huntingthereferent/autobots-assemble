@@ -541,6 +541,7 @@ footer{border-top-color:#253942}
 @media(prefers-reduced-motion:reduce){.prov-node{transition:none}.prov-node:hover{transform:none}}
 </style>
 <link rel="stylesheet" href="workstation-flow.css">
+<link rel="stylesheet" href="workstation-equilibrium.css">
 </head>
 <body>
 <header>
@@ -586,6 +587,25 @@ footer{border-top-color:#253942}
       <div><div class="flow-activity-heading"><b>STATUS CHANGES / THIS VISIT</b><small>Detected between successful source checks</small></div><div class="flow-changes" id="flow-changes" aria-live="polite"><div class="flow-change">Waiting for two observations</div></div></div>
     </div>
     <p class="flow-notice">* “Resolved today” means runs <b>created today</b> that are now completed; it is not the number of completions occurring today. Clearance = completed / created today, not a capacity, speed, or efficiency guarantee. Sources refresh approximately every two minutes. Animated lights do not generate jobs.</p>
+  </div>
+  <div class="equilibrium-station" aria-label="Observed workflow balance and throughput">
+    <div class="equilibrium-header">
+      <div><span class="equilibrium-label">LOAD / EQUILIBRIUM WATCH</span><h2>Find the steady-flow point</h2></div>
+      <strong id="eq-state">OBSERVING</strong>
+    </div>
+    <p class="equilibrium-intro" id="eq-description">Need at least five successful checks over eight minutes to compare flow.</p>
+    <div class="equilibrium-readings">
+      <div><span>AVERAGE RUNNING</span><b id="eq-avg-running">—</b><small>Observed workflow-run count</small></div>
+      <div><span>PEAK RUNNING</span><b id="eq-peak-running">—</b><small>Observed, not capacity</small></div>
+      <div><span>AVERAGE QUEUED</span><b id="eq-avg-waiting">—</b><small>Sampled backlog</small></div>
+      <div><span>QUEUE CHANGE</span><b id="eq-queue-drift">—</b><small>Since opening page</small></div>
+      <div><span>NEW ARRIVALS</span><b id="eq-in">—</b><small>Detected per hour</small></div>
+      <div><span>FINISHED RUNS</span><b id="eq-out">—</b><small>Detected per hour</small></div>
+    </div>
+    <div class="equilibrium-graph-heading"><span>OBSERVED WORKLOAD / CHECK BY CHECK</span><small id="eq-samples">Waiting for observations</small></div>
+    <div id="equilibrium-graph" class="equilibrium-graph" aria-label="Observed queued and running workflow counts over source checks"></div>
+    <div class="equilibrium-legend"><span><i class="eq-legend-running"></i> RUNNING</span><span><i class="eq-legend-queued"></i> WAITING</span></div>
+    <p id="eq-boundary" class="equilibrium-boundary">Equilibrium monitor uses actual GitHub source checks, not a capacity simulation.</p>
   </div>
 </section>
 
@@ -664,6 +684,7 @@ footer{border-top-color:#253942}
 </section>
 <footer>Read-only / evidence-first. Public runs poll periodically; recorded research updates when its committed source projection changes. The source records, not this screen, determine what has been verified.</footer>
 <script src="workstation-flow.js"></script>
+<script src="workstation-equilibrium.js"></script>
 <script>
 "use strict";
 (() => {
@@ -872,7 +893,7 @@ footer{border-top-color:#253942}
   function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
-  function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
+  function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
   function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
     $("runs-scope").textContent=window.WorkstationFlow.scopeLabel(subset.length,Math.min(subset.length,app.runVisible))+" · "+app.runs.length+" indexed";

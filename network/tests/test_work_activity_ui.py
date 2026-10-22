@@ -40,7 +40,7 @@ class WorkInvestigationPageTests(unittest.TestCase):
         work=WORK.read_text(encoding="utf-8")
         self.assertIn('href="work.html"',entry)
         self.assertIn('url=work.html',entry)
-        self.assertIn('<title>Workstation · Hunting the Referent</title>',work)
+        self.assertIn('<title>Work / Source provenance · Hunting the Referent</title>',work)
         self.assertIn('<h1 id="title">Research workstation</h1>',work)
         self.assertIn('<h2>Workflow executions</h2>',work)
         self.assertIn('<h2 id="research-title">Research records</h2>',work)
@@ -234,12 +234,19 @@ assert.equal(revisionLink("research/foo", "invalid-sha"),null);
     def test_inline_program_valid_javascript(self):
         p=Extract()
         p.feed(WORK.read_text(encoding="utf-8"))
-        self.assertEqual(len(p.scripts),1)
+        page=WORK.read_text(encoding="utf-8")
+        self.assertIn('<script src="workstation-flow.js"></script>',page)
+        programs=[code for code in p.scripts if code.strip()]
+        self.assertEqual(len(programs),1,"Expected one inline executable after the external flow script")
         with TemporaryDirectory() as d:
-            file=Path(d)/"work.js"
-            file.write_text(p.scripts[0],encoding="utf-8")
-            result=subprocess.run(["node","--check",str(file)],capture_output=True,text=True,timeout=15)
-        self.assertEqual(result.returncode,0,result.stderr)
+            for name,code in (
+                ("work.js",programs[0]),
+                ("workstation-flow.js",(WORK.parent/"workstation-flow.js").read_text(encoding="utf-8")),
+            ):
+                file=Path(d)/name
+                file.write_text(code,encoding="utf-8")
+                result=subprocess.run(["node","--check",str(file)],capture_output=True,text=True,timeout=15)
+                self.assertEqual(result.returncode,0,result.stderr)
 
 
 if __name__=="__main__":
