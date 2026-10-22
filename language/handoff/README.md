@@ -31,3 +31,6 @@ The [language referent](../../LANGUAGE_REFERENT.md) survives a change of speaker
 For human attribution, carry an exact quotation and mark AI-authored interpretation separately; changing tone or technical register cannot silently rewrite the speaker. James's playfulness, frustration, swearing, care and mathematical questions are not separate authored identities. See [Regrounding](../REGROUNDING.md).
 
 The packet doesn't establish the receiver's understanding, actor identity, or consent. Validate actual evidence and authorization within the target system.
+
+
+**Source withdrawal boundary:** Do not republish, reconstruct, or attribute quotations removed from the current [writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md). Retain the distinction between an authorized quote, a technical example, and an AI paraphrase.

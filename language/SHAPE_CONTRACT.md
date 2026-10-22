@@ -53,3 +53,6 @@ James's conversational "swallowing" means taking observations in across settings
 ## Scope of closure
 
 Re-entry applies to the **shape contract** when its declared requirements are met. It is not proof that a conversation has come back to the same meaning, that an unresolved relationship was preserved, or that the same wording remains correct forever. Reground against the active referent and any new correction before continuing.
+
+
+**Source withdrawal boundary:** Do not republish, reconstruct, or attribute quotations removed from the current [writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md). Retain the distinction between an authorized quote, a technical example, and an AI paraphrase.
