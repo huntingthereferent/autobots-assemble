@@ -21,7 +21,7 @@ The October 22 verified A source snapshot is `ef00d95d2c2335f9f63ef2b83c8bfa5152
 2. Read recent Actions runs directly from **both linked GitHub accounts** and use the shared meta viewer for the two public feeds. Treat unavailable API responses as unknown, not zero.
 3. For each lane, separate **assigned node**, **eligible workflow**, **running job**, **queued job**, **finished workflow**, **native research evidence**, and **accepted handoff**. A workflow definition sitting in B's inactive library is not a running B lane.
 4. When shifting work A ↔ B, record lane ID, source repo/ref, destination repo/ref, actual run URL, observation/witness, decision, and open limits. Do not overwrite prior source versions; do not automatically duplicate research.
-5. Use the shared meta viewer as the public, navigation-grade display. The private B GitHub Actions journal remains the authoritative source for B. Never copy private logs or credentials into A's public repository without explicit authorization.
+5. Use the shared meta viewer as the public, navigation-grade display. Each repository's GitHub Actions journal remains its authoritative execution source. Never copy private logs or credentials into public records without explicit authorization.
 
 ## Current execution boundary
 
