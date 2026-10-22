@@ -181,5 +181,22 @@ This independently checked original archive refutes **four simultaneously full 4
 
 All six native source cases retain the same visual four-cup full frames, no measured left x2..4,y2..61 change, and no official advancement. An upper-bar one-step vertical displacement is not a differentiating native cup event in these particular configurations. Preserve actual source pixels and no hidden-state equivalence claim. Independent durable archive **NOT VERIFIED**.
 
+## Same-game repeated native ACTION5: verified exact source audit
+
+**Original SDK source run passed:** [native Actions #39768996710](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710), [complete original JSON and returned-frame NPZ artifact #12422021789](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710/artifacts/12422021789), ZIP SHA-256 `0ea3addf36bf716e8e9d006df32ec0b165d3b65aa61b97e9e4a9cf32a1c7ab2f`, embedded JSON SHA-256 `d4c59df2a07d476edb215c21ec2eee14bb5ef98d8c9c661d45f5b82c070ad44c`, original NPZ SHA-256 `5582db5ac26205a0f888450a90ac568d6d4f9177bd0deb8ade0db6e050335376`. Configured artifact retention 90 days; independently durable archive not verified.
+
+**Original native design:** right-bar LEFT1 and LEFT2, same frozen middle/L/upper positions, **1, 2 or 3 actual ACTION5 pours without movement between pours** in the SAME original SDK game. Six source cases × independent original A/B entrances = **12 genuine game resets**; every SDK ACTION5 yielded `levels_completed 4→4`, `NOT_FINISHED`. All 12 original sessions preserve genuine 34-frame ACTION5 stacks with identical four-cup visual timing for the matching right-bar configuration. **Zero level5/WIN.**
+
+An independent read-only pixel audit of the downloaded original artifact checked every animation frame and every first/second/third native pour for both witnesses:
+
+| Original source right setting | First pour terminal changes | Second pour terminal changes | Third pour terminal changes |
+| --- | --- | --- | --- |
+| LEFT1 | 82 = 36 pixels 9→8 (old selected upper), 45 pixels 8→9 (new selected right), and `(10,63) 14→0` | only `(11,63) 14→0` | 0 |
+| LEFT2 | 82 = same 36/45 selection transfer and `(11,63) 14→0` | 0 | only `(12,63) 14→0` |
+
+The second and third native pours have **exactly the same pixel values across all 34 returned animation frames for rows y0..62** as the first pour in the same fixed arrangement. Where full frames differ, the only difference is one pixel at **y63** for each of the 34 animation indices (LEFT1 pour2/3 at x11; LEFT2 pour3 at x12). Original A/B source witnesses agree exactly. The SHA-authenticated full-frame source comparison was also exported as a separate local, machine-readable audit; GitHub source records remain the authoritative provenance.
+
+**Research limit:** no new measurable board-region response from repeated pours without new movement, and no official advancement. Bottom-row change does not decode any private SDK counter/hidden state, and exact visible-frame equality does not prove equivalence of internal state. This is distinct from earlier stage4 second-pour studies because these original right LEFT1/LEFT2 clean four-cup parents and exact no-movement temporal controls were frozen separately.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
