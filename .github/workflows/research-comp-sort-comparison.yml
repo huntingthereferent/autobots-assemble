@@ -1,0 +1,44 @@
+name: research-comp-sort-comparison
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/comp_sort_comparison.py"
+      - "research/testing_lanes/test_comp_sort_comparison.py"
+      - ".github/workflows/research-comp-sort-comparison.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run comparison and negative controls
+        run: python -m unittest discover -s research/testing_lanes -p "test_comp_sort_comparison.py" -v
+
+  bounded-comparison:
+    needs: offline-controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Produce deterministic comparison-count receipt
+        run: |
+          mkdir -p comp_receipt
+          python research/testing_lanes/comp_sort_comparison.py --output comp_receipt/COMP-SORT-COMPARISON-001.json
+      - name: Preserve bounded receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: COMP-SORT-COMPARISON-001-receipt
+          path: comp_receipt/*.json
+          if-no-files-found: error
+          retention-days: 30
