@@ -18,6 +18,17 @@ This lane is an *intake of user-provided musical material*, **not a copy of Suno
 - A user-selected range can be heard, pitch-resampled, exported as a maximum 45-second WAV, or documented as a JSON manifest that explicitly identifies manual settings and claims. JSON does not contain the music.
 - Input MIDI is parsed for notes and tempo events, and MIDI note observations can be exported as JSON. This is not audio-to-MIDI or stem separation.
 
+## Browser direction desk (October 22, 2026)
+
+The Audio Intake page now has a separate **manual creative-direction desk**, alongside the existing source-measurement controls.
+
+- Four editable production starting points (Drive, Float, Cut, Lift); style, mood, groove, texture, vocal direction, energy, and density are user choices.
+- An ordered arrangement builder supports repeat sections, bar-length changes, section movement, and up to 18 sections.
+- The bar ruler uses a **manual or tapped BPM** and an explicitly assumed 4/4 meter. Four- and eight-bar buttons convert that *planning choice* into a seconds-based local WAV slice, capped by the existing 45-second export limit and available source length. It is not automatic BPM analysis.
+- The waveform can be dragged to choose source times, in addition to the accessible numeric controls.
+- The live brief can be copied as text or saved as `ab-audio-direction/v1` JSON. Its source file name, SHA-256 (where available), and selected time range are identity/observation references, not proof of rights or automatic musical inference.
+- The independent `ab-audio-intake/v1` source manifest is preserved; creative instructions remain distinctly labeled. No network calls, account authorization, third-party APIs, persistent browser storage, generative service, or automatic exports are added. Links to Suno and Meow Lab 2 are navigation, not integrations.
+
 ## Native workstation movement (source-owned)
 
 The browser page is only the **intake and preview**. The actual workstation motion path is now:
