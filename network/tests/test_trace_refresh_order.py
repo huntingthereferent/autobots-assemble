@@ -19,6 +19,11 @@ const end=page.indexOf('  $("refresh").addEventListener',start);
 assert(start>=0&&end>start,"Missing exact source refresh handler");
 const nodes={refresh:{disabled:false},freshness:{textContent:""},"status-text":{textContent:""},"research-stamp":{textContent:""}};
 const requests=[],notifications=[],rendered=[];
+const tick=()=>new Promise(resolve=>setImmediate(resolve));
+async function waitRequests(count){
+ for(let i=0;i<16 && requests.length<count;i++)await tick();
+ assert.equal(requests.length,count,"Timed out awaiting "+count+" observed requests");
+}
 const state={commits:[],runs:[],edges:[],last:0};
 const ctx={
   $:id=>nodes[id],
@@ -40,8 +45,7 @@ vm.runInContext(page.slice(start,end),ctx);
  assert.equal(nodes.refresh.disabled,true);
  requests[1].resolve([{id:1,status:"completed"}]);
  requests[0].resolve([{id:"old-source"}]);
- await Promise.resolve();await Promise.resolve();
- assert.equal(requests.length,3,"Research projection request follows source snapshot");
+ await waitRequests(3);
  const blocked=ctx.refresh();
  assert.equal(requests.length,3,"Refresh button must remain guarded through research projection");
  requests[2].resolve({records:[]});
@@ -52,8 +56,7 @@ vm.runInContext(page.slice(start,end),ctx);
  assert.equal(requests.length,5,"Next observation is permitted after completion");
  requests[3].resolve([{id:"latest-source"}]);
  requests[4].resolve([]);
- await Promise.resolve();await Promise.resolve();
- assert.equal(requests.length,6);
+ await waitRequests(6);
  requests[5].resolve({records:[]});
  await next;
  assert.deepEqual(rendered,["old-source","latest-source"]);
@@ -61,7 +64,7 @@ vm.runInContext(page.slice(start,end),ctx);
  const failed=ctx.refresh();
  requests[6].reject(new Error("network down"));
  requests[7].resolve([]);
- await Promise.resolve();await Promise.resolve();
+ await waitRequests(9);
  requests[8].resolve({});
  await failed;
  assert.equal(nodes.refresh.disabled,false);
