@@ -46,6 +46,24 @@ class CalendarTests(unittest.TestCase):
                          {"ARC", "NIH", "WORLD", "Meow Lab"})
         self.assertEqual(plan["calendar"]["condition"], "start_inspection_lanes")
 
+    def test_subsequent_source_pass_closes_old_scanner_wall(self):
+        row = {"id": "inspector-7-failure-123", "lane": "ARC", "event": "failure",
+               "kind": "candidate", "run_ids": [123],
+               "sources": [f"https://github.com/{REPO}/actions/runs/123"],
+               "head_shas": []}
+        h = health([])
+        h["nodes"]["A"]["workflows"] = {
+            "7": {"state": "clear", "run_id": 124, "conclusion": "success"}}
+        p = calendar_plan(scan([row]), h, repo=REPO, now=NOW)
+        self.assertEqual(p["selected"], 0)
+        self.assertEqual(p["calendar"]["cleared_scanner_groups"], 1)
+        # New failure after the latest success remains actionable.
+        row["run_ids"] = [125]
+        row["sources"] = [f"https://github.com/{REPO}/actions/runs/125"]
+        row["id"] = "inspector-7-failure-125"
+        p = calendar_plan(scan([row]), h, repo=REPO, now=NOW)
+        self.assertEqual(p["selected"], 1)
+
     def test_no_pending_does_not_spawn(self):
         p = calendar_plan(scan(), health([]), repo=REPO, now=NOW)
         self.assertEqual(p["selected"], 0)
