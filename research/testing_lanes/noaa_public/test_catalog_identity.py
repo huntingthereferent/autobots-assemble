@@ -1,5 +1,7 @@
 """Synthetic NOAA NCEI catalog checks, no network."""
 import unittest
+import json
+from pathlib import Path
 from catalog_identity import URL, TITLE, ID, DSI, LIMIT, classify, observe
 
 
@@ -84,6 +86,23 @@ class NOAAIdentityTests(unittest.TestCase):
         self.assertEqual(result["state"], "SOURCE_WALL")
         self.assertEqual(result["error_class"], "ValueError")
         self.assertNotIn("response_sha256", result)
+
+    def test_historical_source_receipt_not_a_weather_observation(self):
+        record = Path(__file__).parent / "observations" / "2026-10-22-run-39830318184.json"
+        archive = json.loads(record.read_text(encoding="utf-8"))
+        receipt = archive["observation"]
+        self.assertEqual(archive["github_run_id"], 39830318184)
+        self.assertEqual(archive["source_code_commit"], "2ec0c0cd3d6eb370766c92dbf499ebf4b24e882d")
+        self.assertEqual(receipt["state"], "PUBLIC_DATASET_METADATA_OBSERVED")
+        self.assertEqual(receipt["source_url"], URL)
+        self.assertEqual(receipt["response_sha256"],
+                         "4ed866a8fbbfbe08ddfeb4ee0fc2dbeb6accc8f978d284a847b891fb192fdd51")
+        self.assertTrue(all(receipt["identity"]["identity_checks"].values()))
+        self.assertEqual(receipt["identity"]["station_records_downloaded"], 0)
+        self.assertFalse(receipt["observations_downloaded"])
+        self.assertFalse(receipt["raw_html_archived"])
+        self.assertEqual(archive["rights_review"], "REQUIRED_PER_RECORD")
+        self.assertEqual(archive["scientific_status"], "NOT_TESTED")
 
     def test_invalid_utf8_is_source_wall(self):
         result = observe(opener=Transport(b"\xff"))

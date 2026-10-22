@@ -1,5 +1,12 @@
 # NOAA NCEI SSOD Version 2 · public dataset identity
 
+## First verified public source observation · October 22, 2026
+
+[Source-only CI run 39830318184](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39830318184) passed all 12 offline checks and the single publisher dataset-identity request. NCEI returned HTTP 200, a 47,645-byte HTML page and six true dataset/version/publisher/lineage predicates. The response was discarded after hashing; SHA-256 `4ed866a8fbbfbe08ddfeb4ee0fc2dbeb6accc8f978d284a847b891fb192fdd51`. The immutable [metadata witness](observations/2026-10-22-run-39830318184.json) documents the actual UTC time and zero weather rows or station files downloaded.
+
+The record verifies the *catalog identity* for SSODv2 only. It does not license weather data use or validate any climate result. The legacy NOAA CDO token/rights gate remains in place.
+
+
 A **separate source-only test** of NOAA's official [Synoptic Summary of the Day (SSOD), Version 2 dataset overview](https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C01690/html). The NCEI catalog identifies `gov.noaa.ncdc:C01690` and `NCEI DSI 2076_02`. SSODv2 succeeds the earlier **GSOD** publication, which NOAA labels superseded for primary data use.
 
 This sublane verifies only publisher, exact versioned dataset title, both identifiers, SSODv2 label and source lineage. It does **not** query weather measurements, station IDs, participant data, historical weather files, time series, CDO token-authenticated APIs, or observations.
