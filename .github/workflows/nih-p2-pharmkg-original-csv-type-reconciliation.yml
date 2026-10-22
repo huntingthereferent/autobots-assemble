@@ -30,7 +30,8 @@ jobs:
           from pathlib import Path
           import os
           pin=(("PharmKG.csv","data/PharmKG.csv",audit.ORIGINAL_RAW_GIT_BLOB,audit.MAX_BYTES),
-               ("train.tsv","data/PharmKG-8k/train.tsv",source.SOURCE_FILES["train.tsv"],15000000))
+               ("train.tsv","data/PharmKG-8k/train.tsv",source.SOURCE_FILES["train.tsv"],15000000),
+               ("preprocess.py","data/preprocess.py",audit.ORIGINAL_OWNER_PREPROCESS_BLOB,20000))
           for filename,relative,blob,limit in pin:
               url="https://raw.githubusercontent.com/"+source.ORIGIN+"/"+source.COMMIT+"/"+relative
               with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Author-CSV-Audit/1.0"}),timeout=90) as r:
@@ -45,12 +46,23 @@ jobs:
         env:
           PHARMKG_AUTHOR_RAW: ${{ runner.temp }}/nih-a2/PharmKG.csv
           PHARMKG_ORIGINAL_TRAIN: ${{ runner.temp }}/nih-a2/train.tsv
+          PHARMKG_OWNER_PREPROCESS: ${{ runner.temp }}/nih-a2/preprocess.py
         run: |
           set -euo pipefail
           python -m unittest -v network.tests.test_nih_p2_pharmkg_original_csv_type_reconciliation
           python -m systems.workspace.nih_p2_pharmkg_original_csv_type_reconciliation \
             --raw "$PHARMKG_AUTHOR_RAW" --train "$PHARMKG_ORIGINAL_TRAIN" \
+            --preprocess "$PHARMKG_OWNER_PREPROCESS" \
             --output lane-a2-receipts/source-train-id-type-reconciliation.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path("lane-a2-receipts/source-train-id-type-reconciliation.json").read_text())
+          assert r["author_original_preprocessing_contract"]["author_pipeline_source_proven"]
+          assert not r["author_original_preprocessing_contract"]["published_clean_split_lineage_proven"]
+          assert not r["author_original_preprocessing_contract"]["raw_ID_crosswalk_documented_in_author_pipeline"]
+          assert not r["typed_biomedical_path_rule_admitted"]
+          PY
           (cd lane-a2-receipts && sha256sum source-train-id-type-reconciliation.json > sha256.txt)
       - name: Preserve derived counts only, not source rows or type-ID map
         if: always()
