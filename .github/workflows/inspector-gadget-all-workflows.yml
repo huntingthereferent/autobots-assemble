@@ -11,6 +11,8 @@ on:
       - 'systems/workspace/inspector_gadget_adapter.py'
       - 'systems/workspace/inspector_gadget_scan.py'
       - 'systems/workspace/inspector_gadget_wall.py'
+      - 'systems/workspace/inspector_gadget_calendar.py'
+      - 'network/tests/test_inspector_gadget_calendar.py'
       - 'network/tests/test_inspector_gadget_wall.py'
       - 'systems/workspace/inspections.py'
       - 'systems/workspace/monitor.py'
@@ -42,6 +44,7 @@ jobs:
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_calendar.py' -v
           python -m unittest discover -s network/tests -p 'test_audit_to_action.py' -v
 
   inspect:
@@ -62,10 +65,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python systems/workspace/inspector_gadget_scan.py
-      - name: Build bounded adapter movement plan
+      - name: Read persistent open walls and activate every eligible lane
         id: plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python systems/workspace/inspector_gadget_adapter.py matrix inspector-gadget-report.json inspector-gadget-activation.json
+          python systems/workspace/inspector_gadget_calendar.py plan inspector-gadget-report.json inspector-gadget-activation.json
           python - <<'PY'
           import json, os
           plan = json.load(open('inspector-gadget-activation.json', encoding='utf-8'))
@@ -82,7 +87,8 @@ jobs:
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
               f.write('# Inspector Gadget — observation and movement\n\n')
               f.write(f"Retrieved {r['scanned']} completed runs; {len(r['findings'])} grouped incident signals.\n\n")
-              f.write(f"Native source follow-ups activated: {p['selected']}; overflow awaiting admission: {p['overflow_count']}.\n\n")
+              f.write(f"Native source follow-ups selected: {p['selected']}; overflow awaiting admission: {p['overflow_count']}.\n\n")
+              f.write(f"Persistently unresolved owning lanes: {p['calendar']['current_source_open']}; older walls re-admitted: {p['calendar']['persisted_walls_added']}.\n\n")
               f.write('| Owning workflow | Event | Count | Source |\n|---|---|---:|---|\n')
               for item in r['findings']:
                   url=next((u for u in item['sources'] if u), '')
@@ -95,6 +101,7 @@ jobs:
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_calendar.py' -v
       - name: Retain scan and movement plan
         uses: actions/upload-artifact@v4
         with:
