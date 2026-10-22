@@ -366,6 +366,70 @@ def original_anonymous_constructor_fingerprint(owner_graph, original_types, full
     }
 
 
+def original_union_membership_premise_audit(owner_graph, original_types, full_types, restricted_oracle):
+    """E25 authored unionOf list and independently inspectable closure premises.
+
+    Full closure supplies member-type antecedents. This is NOT an independent
+    recomputation of OWL RL inference or a rule-by-rule causal explanation.
+    """
+    from rdflib.namespace import OWL
+    if not original_types <= full_types or not restricted_oracle <= full_types:
+        raise ValueError("original owner and limited oracle type sets changed")
+    by_subject=defaultdict(set)
+    for sub,pred,cls in full_types:
+        if pred!=RDF.type:
+            raise ValueError("full type set contains non-type statement")
+        by_subject[sub].add(cls)
+    residual=(full_types-original_types)-restricted_oracle
+    union_terms=Counter(cls for subj,pred,cls in residual
+                        if pred==RDF.type and isinstance(cls,BNode)
+                        and any(owner_graph.triples((cls,OWL.unionOf,None))))
+    witnessed=0
+    absent=0
+    memberships=[]
+    for cls,count in union_terms.items():
+        heads=list(owner_graph.objects(cls,OWL.unionOf))
+        if len(heads)!=1:
+            raise ValueError("source union class does not have exactly one original list")
+        cursor=heads[0]
+        seen=set()
+        members=[]
+        while cursor!=RDF.nil:
+            if cursor in seen or len(seen)>=64:
+                raise ValueError("source unionOf RDF list is cyclic or exceeds finite bound")
+            seen.add(cursor)
+            first=list(owner_graph.objects(cursor,RDF.first))
+            rest=list(owner_graph.objects(cursor,RDF.rest))
+            if len(first)!=1 or len(rest)!=1:
+                raise ValueError("original owner RDF list does not have single first/rest")
+            members.append(first[0])
+            cursor=rest[0]
+        if not members:
+            raise ValueError("original unionOf list is empty")
+        matched=sum(
+            bool((by_subject[sub] & set(members)) - {cls})
+            for sub,pred,target in residual if pred==RDF.type and target==cls)
+        witnessed+=matched
+        absent+=count-matched
+        memberships.append((len(members),count,matched))
+    if witnessed+absent!=sum(union_terms.values()):
+        raise ValueError("unionOf antecedent witnesses do not reconcile")
+    from hashlib import sha256 as local_sha
+    fingerprint=local_sha(repr(sorted(memberships)).encode()).hexdigest()
+    return {
+        "original_union_class_terms":len(union_terms),
+        "original_union_residual_type_statements":sum(union_terms.values()),
+        "types_with_materialized_union_member_type_antecedent":witnessed,
+        "types_without_materialized_union_member_type_antecedent":absent,
+        "union_source_list_length_and_evidence_counts_sha256":fingerprint,
+        "source_list_structure_from_authenticated_owner_RDF":True,
+        "antecedent_types_from_full_OWL_closure_not_independent_solver":True,
+        "member_antecedent_does_not_prove_specific_derivation":True,
+        "source_blank_node_ids_exported":False,
+        "NIH_scored":False,
+    }
+
+
 def execute(archive,owner_files,ro_files):
     original=source.verified_owner_input(archive,owner_files,ro_files)
     four.original_four_source_axioms(original)
@@ -401,6 +465,8 @@ def execute(archive,owner_files,ro_files):
     result["E23_original_anonymous_class_premises"] = original_anonymous_class_premise_census(
         src,source_types,all_types,witness)
     result["E24_anonymous_constructor_fingerprint"] = original_anonymous_constructor_fingerprint(
+        src,source_types,all_types,witness)
+    result["E25_original_union_membership_premises"] = original_union_membership_premise_audit(
         src,source_types,all_types,witness)
     result.update({
         "schema":SCHEMA,
