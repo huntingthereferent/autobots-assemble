@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "noaa",
+  "name": "NOAA NCEI Climate Data Online",
+  "documentation_url": "https://www.ncei.noaa.gov/cdo-web/webservices/v2",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "climate series and station metadata",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": null,
+    "url": null,
+    "mode": "manual_review_required",
+    "expected_format": null,
+    "scope": "CDO v2 API token required; no anonymous source probing",
+    "max_bytes": null,
+    "redirects": "deny",
+    "timeout_seconds": null
+  },
+  "access": "token_required",
+  "boundary": "Register NOAA token outside Git. Station/date/unit comparisons must be specified before time-series ingest.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}
