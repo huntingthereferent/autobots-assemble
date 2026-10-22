@@ -4,27 +4,71 @@ on:
   push:
     branches: [main, english-shape-bank-v1]
   pull_request:
+  workflow_dispatch:
+
+# A newer update to the same PR supersedes its previous protocol test run.
+# A main-branch push is independent of PR validation and is never canceled here.
+concurrency:
+  group: protocol-tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Determine fast vs full validation
+        id: scope
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if [[ "${{ github.event_name }}" != "pull_request" ]]; then
+            echo "full=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          # Conservative: only writing/ and the live viewer have dedicated fast checks.
+          # Unknown paths, empty diffs, workflows and source code receive the full suite.
+          changed="$(git diff --no-renames --name-only "$BASE_SHA" "$HEAD_SHA")"
+          if [[ -z "$changed" ]]; then
+            echo "full=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          while IFS= read -r path; do
+            case "$path" in
+              writing/*|docs/live/*) ;;
+              *) echo "full=true" >> "$GITHUB_OUTPUT"; exit 0 ;;
+            esac
+          done <<< "$changed"
+          echo "full=false" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Fast workstation viewer contracts
+        run: python -m unittest discover -s network/tests -p "test_*workstation*.py" -v
       - name: Install protocol test dependencies
+        if: steps.scope.outputs.full == 'true'
         run: python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'numpy>=2,<3' 'arc-agi>=0.9.6,<1'
       - name: Verify session continuity contract
+        if: steps.scope.outputs.full == 'true'
         run: python -m unittest discover -s network/tests -p "test_session_continuity.py" -v
       - name: Verify agent birth, transport, closure and recovery
+        if: steps.scope.outputs.full == 'true'
         run: |
           python -m unittest discover -s network/tests -p "test_agent_lineage.py" -v
           python -m unittest discover -s network/tests -p "test_agent_service.py" -v
           python -m unittest discover -s network/tests -p "test_ohayo_agents.py" -v
           python -m unittest discover -s network/tests -p "test_repository_connections.py" -v
           python -m unittest discover -s network/tests -p "test_agent_monitor.py" -v
-      - run: python -m unittest discover -s network/tests -p "test_*.py"
+      - name: Full network protocol suite
+        if: steps.scope.outputs.full == 'true'
+        run: python -m unittest discover -s network/tests -p "test_*.py"
       - name: Verify Continuous Handoff read-only reference
+        if: steps.scope.outputs.full == 'true'
         run: python -m unittest discover -s runtime/examples/continuous_handoff -p "test_reference.py" -v
-      - run: python -m unittest discover -s language/tests -p "test_*.py"
+      - name: Full language suite
+        if: steps.scope.outputs.full == 'true'
+        run: python -m unittest discover -s language/tests -p "test_*.py"
