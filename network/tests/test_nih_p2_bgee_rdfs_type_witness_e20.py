@@ -253,5 +253,23 @@ class OriginalSourceRDFSTypeWitnessTests(unittest.TestCase):
             e20.original_union_membership_premise_audit(
                 g,set(),{(GENE,RDF.type,union)},set())
 
+
+    def test_e26_missing_union_member_can_have_separate_owner_subclass_witness(self):
+        from rdflib.namespace import OWL
+        union=BNode("union-only")
+        node=BNode("list")
+        g=Graph()
+        for tr in [(union,OWL.unionOf,node),(node,RDF.first,X),
+                   (node,RDF.rest,RDF.nil),(V,RDFS.subClassOf,union)]:
+            g.add(tr)
+        asserted={(GENE,RDF.type,V)}
+        full=asserted|{(GENE,RDF.type,union),(TARGET,RDF.type,union)}
+        r=e20.original_union_membership_premise_audit(g,asserted,full,asserted)
+        self.assertEqual(r["types_with_materialized_union_member_type_antecedent"],0)
+        self.assertEqual(r["types_without_materialized_union_member_type_antecedent"],2)
+        self.assertEqual(r["types_without_union_member_but_with_direct_owner_class_edge"],1)
+        self.assertEqual(r["types_without_union_member_or_direct_owner_class_edge"],1)
+        self.assertTrue(r["closure_type_antecedents_are_not_independently_proven"])
+
 if __name__=="__main__":
     unittest.main()
