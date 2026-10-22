@@ -739,20 +739,40 @@ function copyPreviousBar(){
  dirtyBars();selectBar(selectedBar);
  harmonyStatus('Copied previous chord/layers'+(selectedBar<MELODY_BARS?' and melody':'')+' to bar '+(selectedBar+1));
 }
-function applyProgression(){
+function previewProgression(){
  selectedTemplate=$('progression-template').value;selectedKey=Number($('progression-key').value);
  const t=allProgressions().find(v=>v.id===selectedTemplate),real=realizeProgression(t,selectedKey);
- if(!real){harmonyStatus('Select a valid progression and key');return}
- const start=Math.floor(selectedBar/4)*4;
- for(let i=0;i<4;i++){
-  const bar=bars[start+i];bar.chord=[(selectedKey+t.steps[i][0])%12,t.steps[i][1]];
-  if(t.profile&&MODERN_PROFILES[t.profile]){bar.profile=t.profile;bar.layers=modernLayerState(t.profile,start+i);bar.cadence=cadenceFromPreset(defaultCadenceForProfile(t.profile))}
+ const view=$('four-chord-preview');view.replaceChildren();
+ if(!real)return;
+ for(let i=0;i<real.length;i++){
+  const tile=document.createElement('span');tile.className='loop-chord';
+  const num=document.createElement('small');num.textContent=String(i+1)+' / 4';
+  const chord=document.createElement('strong');chord.textContent=real[i].name;
+  tile.append(num,chord);view.append(tile);
  }
  $('delete-progression').disabled=!selectedTemplate.startsWith('custom-');
- dirtyBars();selectBar(selectedBar);
- harmonyStatus('Filled bars '+(start+1)+'–'+(start+4)+' with chords'+(t.profile?' + cadence + structural layers':'')+' · melody unchanged');
+ $('progression-preview-help').textContent='Preview only · '+real.map(c=>c.name).join(' → ')+' · apply to hear these across the song.';
 }
-
+function applyProgression(scope='song'){
+ previewProgression();
+ const t=allProgressions().find(v=>v.id===selectedTemplate),real=realizeProgression(t,selectedKey);
+ if(!real){harmonyStatus('Choose a valid four-chord loop');return}
+ const start=scope==='section'?Math.floor(selectedBar/4)*4:0,limit=scope==='section'?start+4:BAR_COUNT;
+ for(let i=start;i<limit;i++)bars[i].chord=[(selectedKey+t.steps[i%4][0])%12,t.steps[i%4][1]];
+ // Chords are harmony, not groove. Never reset melody, layers or cadence here.
+ dirtyBars();selectBar(selectedBar);
+ harmonyStatus('Chords updated in bars '+(start+1)+'–'+limit+' · beat and melody unchanged');
+}
+function applyGroove(){
+ const profile=$('groove-preset').value;
+ if(!Object.hasOwn(MODERN_PROFILES,profile)){harmonyStatus('Choose a groove');return}
+ for(let i=0;i<BAR_COUNT;i++){
+  bars[i].profile=profile;
+  bars[i].layers=[true,true,true,i>=8&&i<12];
+ }
+ dirtyBars();selectBar(selectedBar);
+ harmonyStatus('Groove updated in all 16 bars · chords, chord hits and melody unchanged');
+}
 function saveProgression(){
  const name=$('progression-name').value.trim(),steps=progressionFromSymbols($('progression-chords').value,selectedKey);
  if(!name||name.length>48||!steps){harmonyStatus('Enter a template name and four valid chords, e.g. Am F C G');return}
@@ -798,10 +818,12 @@ function initializeHarmony(){
  customProgressions=storedTemplates();
  const keys=$('progression-key');
  for(let pc=0;pc<12;pc++){const option=document.createElement('option');option.value=String(pc);option.textContent=PITCH_CLASSES[pc];keys.append(option)}
- keys.value=String(selectedKey);fillTemplateSelector();applyProgression();
- $('progression-template').addEventListener('change',applyProgression);
- $('progression-key').addEventListener('change',applyProgression);
- $('generate-progression').addEventListener('click',applyProgression);
+ keys.value=String(selectedKey);fillTemplateSelector();previewProgression();
+ $('progression-template').addEventListener('change',previewProgression);
+ $('progression-key').addEventListener('change',previewProgression);
+ $('generate-progression').addEventListener('click',()=>applyProgression());
+ $('apply-section-progression').addEventListener('click',()=>applyProgression('section'));
+ $('apply-groove').addEventListener('click',applyGroove);
  $('save-progression').addEventListener('click',saveProgression);
  $('delete-progression').addEventListener('click',deleteProgression);
  $('export-progressions').addEventListener('click',exportProgressions);
@@ -839,7 +861,7 @@ function updateBranch(){
 function loadBranch(){
  const b=savedBranches.find(v=>v.id===$('branch-select').value);
  if(!b){$('branch-status').textContent='Choose a saved branch to load';return}
- stopLoop();bars=cloneBars(b.bars);melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=b.id;arrangementDirty=false;
+ stopLoop();editorPinned=false;melodyEditIndex=0;bars=cloneBars(b.bars);melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=b.id;arrangementDirty=false;
  $('tempo').value=b.tempo;$('tempo-read').textContent=b.tempo;selectBar(0);
  $('branch-status').textContent='Loaded '+b.name+' · move through bars 1–16';
 }
@@ -871,7 +893,7 @@ async function importBranches(file){
   }
   if(!validBranches(combined))throw Error('Invalid combined branches');
   savedBranches=combined;storeBranches();refreshBranchSelector();
-  if(clean){stopLoop();bars=clean;melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=null;arrangementDirty=true;selectedBar=0;grid=bars[0].notes;
+  if(clean){stopLoop();editorPinned=false;melodyEditIndex=0;bars=clean;melodyUndo=[];$('melody-undo').disabled=true;activeBranchId=null;arrangementDirty=true;selectedBar=0;grid=bars[0].notes;
    $('tempo').value=draft.tempo;$('tempo-read').textContent=draft.tempo;selectBar(0);}
   $('branch-status').textContent='Restored '+imported.length+' branches'+(clean?' and working bars':'');
  }catch(e){$('branch-status').textContent='Restore rejected: '+e.message}
@@ -988,13 +1010,13 @@ function stopLoop(){
  for(const id of harmonyNotes)releaseSound(id,false);harmonyNotes.clear();
  for(const id of loopNotes.keys())releaseSound(id,false);loopNotes.clear();
  playingBar=-1;loopLast=-1;paintGrid();paintHarmony();paintCadence();paintMelodyPins();
- $('loop-play').textContent='▶ Play arrangement';$('loop-play').setAttribute('aria-pressed','false');
+ $('loop-play').textContent='▶ Play arrangement';$('loop-play').setAttribute('aria-pressed','false');paintTransport();
  studioStatus('STUDIO IS READY.');
 }
 function startLoop(){
  stopRecording();stopTape();if(!unlockAudio())return;
  loopPlaying=true;loopIndex=selectedBar*STEPS_PER_BAR;playingBar=-1;loopLast=-1;
- $('loop-play').textContent='■ Stop playback';$('loop-play').setAttribute('aria-pressed','true');
+ $('loop-play').textContent='■ Stop playback';$('loop-play').setAttribute('aria-pressed','true');paintTransport();
  studioStatus('PLAYING FROM BAR '+(selectedBar+1));scheduleLoop();
 }
 
@@ -1166,7 +1188,7 @@ function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeH
  document.addEventListener('keyup',e=>{if(!SHORTCUTS.includes(e.code))return;releaseSound('key'+e.code)});
  window.addEventListener('blur',()=>{stopLoop();stopTape();releaseAll();togglePurr(false);$('purr').checked=false});document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseAll();stopLoop();stopTape();togglePurr(false);$('purr').checked=false}});
  $('rec').addEventListener('click',()=>recording?stopRecording():startRecording());$('play-tape').addEventListener('click',playTape);$('stop-tape').addEventListener('click',()=>{stopRecording();stopTape()});$('clear-tape').addEventListener('click',()=>{stopRecording();stopTape();events=[];tapeTime=0;recIds.clear();updateTape();$('tape-label').textContent='A blank tape, waiting for your masterpiece.'});$('export').addEventListener('click',saveSong);$('import').addEventListener('click',()=>$('song-file').click());$('song-file').addEventListener('change',e=>loadSong(e.target.files?.[0]));
- $('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{recordMelodyUndo();bars[melodyIndexFor(selectedBar)].notes=Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false));grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('CLEARED BAR '+(selectedBar+1))});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;recordMelodyUndo();bars[melodyIndexFor(selectedBar)].notes=patternPreset(presetIndex);grid=bars[melodyIndexFor(selectedBar)].notes;dirtyBars();paintGrid();studioStatus('PATTERN FOR BAR '+(selectedBar+1)+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');}
+ $('beat-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-play').addEventListener('click',()=>loopPlaying?stopLoop():startLoop());$('loop-clear').addEventListener('click',()=>{recordMelodyUndo();bars[melodyEditIndex].notes=Array.from({length:5},()=>Array(STEPS_PER_BAR).fill(false));grid=bars[melodyEditIndex].notes;dirtyBars();paintGrid();studioStatus('CLEARED MELODY '+(melodyEditIndex+1))});$('preset').addEventListener('click',()=>{presetIndex=(presetIndex+1)%3;recordMelodyUndo();bars[melodyEditIndex].notes=patternPreset(presetIndex);grid=bars[melodyEditIndex].notes;dirtyBars();paintGrid();studioStatus('PATTERN FOR MELODY '+(melodyEditIndex+1)+' · LOADED')});$('tempo').addEventListener('input',e=>$('tempo-read').textContent=e.target.value);if(!window.AudioContext&&!window.webkitAudioContext)status('Audio unavailable · the visual keyboard still works');paintTransport();}
 bind();
 })();
 </script>
