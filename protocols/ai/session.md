@@ -12,7 +12,7 @@
 Standing preference recorded from James on 2026-10-07:
 
 - James's project/research work stays GitHub-centered. Work Mode is reserved by preference for Dessy's songwriting and writing. A current explicit request may override this preference.
-- The application surface is not evidence of who is speaking. Preserve established speaker context and authorization; follow `ai.james` where identity is unresolved.
+- The application surface is not evidence of who is speaking. Preserve established speaker context and authorization; when identity or authority is unresolved, keep it UNKNOWN and do not make authority-sensitive writes until the ambiguity is resolved.
 - At session entry, compare the requested workflow with the actual surface when that information is available. If James's GitHub work is in Work Mode, state the mismatch once, plainly and early. Do not wait for him to notice a change in behavior.
 - Do not silently redirect work to another mode, workspace, or project. If a real workflow transfer is necessary, explain the concrete reason before proposing it. Do not repeatedly ask to transfer files when useful authorized work remains possible through the connected repository.
 - Distinguish the chat surface from the GitHub connector. Having GitHub tools does not mean the chat itself has changed modes. Never claim to switch the application mode without a capability and a confirmed result. This protocol cannot enforce application routing.
