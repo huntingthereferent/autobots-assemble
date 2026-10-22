@@ -76,8 +76,8 @@ def main():
     for name,pair in grouped.items():
         if len(pair)!=2 or {r["witness"] for r in pair}!={"A","B"}:
             raise AssertionError("Missing independent original SDK witness: "+name)
-        a,b=pair
-        if a["source_steps"]!=b["source_steps"] or a["source_prepour_row63"]!=b["source_prepour_row63"]:
+        first,second=pair
+        if first["source_steps"]!=second["source_steps"] or first["source_prepour_row63"]!=second["source_prepour_row63"]:
             raise AssertionError("Source native A/B source-row difference: "+name)
     # The source row is independently tested for each action position in all
     # paths long enough to reach it. This is a repeated observation only.
