@@ -62,5 +62,29 @@ class FullSourceEntityRankingTests(unittest.TestCase):
             self.assertGreaterEqual(row["full_unfiltered_tie_aware_rank"],
                                     row["full_filtered_tie_aware_rank"])
 
+
+    def test_failure_attribution_counts_uncovered_gold_and_null_ranks(self):
+        def case(relation, score, rank, n=10, excluded=0):
+            return {"relation":relation,"source_path_score":score,
+                    "full_filtered_tie_aware_rank":rank,
+                    "full_unfiltered_tie_aware_rank":rank,
+                    "candidate_universe_count":n,
+                    "other_known_gold_excluded_from_filtered_rank":excluded}
+        r=trial.per_relation_failure_diagnostics(
+            [case("T",0,5.5),case("T",1,2),case("GG",0,5.5)],10)
+        self.assertEqual(r["T"]["gold_without_frozen_training_source_path"],1)
+        self.assertEqual(r["T"]["gold_with_frozen_training_source_path"],1)
+        self.assertAlmostEqual(r["T"]["all_equal_score_null_MRR"],round(1/5.5,6))
+        self.assertEqual(r["GG"]["gold_without_frozen_training_source_path"],1)
+
+    def test_failure_attribution_rejects_invalid_candidate_denominator(self):
+        with self.assertRaisesRegex(ValueError,"candidate denominator"):
+            trial.per_relation_failure_diagnostics([{
+                "relation":"P","source_path_score":0,
+                "full_filtered_tie_aware_rank":4,
+                "full_unfiltered_tie_aware_rank":4,
+                "candidate_universe_count":9,
+                "other_known_gold_excluded_from_filtered_rank":0}],10)
+
 if __name__=="__main__":
     unittest.main()
