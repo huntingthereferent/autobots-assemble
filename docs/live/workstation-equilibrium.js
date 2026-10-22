@@ -125,6 +125,7 @@
       }
     }
     toText("eq-state",state);
+    const stateBadge=$("eq-state");if(stateBadge)stateBadge.dataset.equilibrium=state.toLowerCase().replaceAll(" ","-");
     toText("eq-description",explanation);
     toText("eq-samples",rows.length+" / "+totalSamples+" session checks · "+numeric(seconds/60)+" min window");
     toText("eq-avg-running",avgBusy===null?"—":numeric(avgBusy));
