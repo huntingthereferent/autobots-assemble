@@ -164,5 +164,22 @@ This independently checked original archive refutes **four simultaneously full 4
 
 **Next original source question:** does a true successful transition produce a visible final-screen border redraw only on its terminal frame while native level4 nonadvances do not? Existing archive comparison suggests so, but the separate SHA-authenticated source workflow `arc4-stage3-stage4-screen-transition.yml` must finish before the result is promoted. Screen redraws can be **effects** of progression, not evidence for what triggers it.
 
+## Verified terminal-screen and right-by-upper intervention result
+
+**Authenticated successful-transition screen audit:** [original source audit run #39765735502](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39765735502), [source JSON artifact #12420678378](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39765735502/artifacts/12420678378), ZIP SHA-256 `7a542368640bcb51ec4de78669688e3ea488886c6b20dd6ebb599de23a64bc41`, configured 90-day retention. The original paired SDK JSON/NPZ source files were authenticated before the independent audit. Four actual native SDK sessions (A/B entrances × two frozen stage4 nonadvance conditions) all agree: the real successful level3→4 transition first changes the measured left wall x2..4,y2..61 **only on terminal frame29** (171 pixels), with **1,262 total changed terminal pixels** versus its pre-ACTION5 source. The unsuccessful stage4→4 four-cup pour causes **no measured left-wall changes**, with 82 total pre-vs-terminal changed screen pixels in that condition. This is evidence of a returned-screen transition consequence, **not a causal win rule**.
+
+**Genuine two-factor native intervention:** [original SDK run #39766706911](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911), [complete original JSON and full-frame NPZ #12421295935](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911/artifacts/12421295935), artifact ZIP SHA-256 `ac607d630c259fb8840a47842c3da9bc8478c8a940c95f804f91574d2feccc04`. Six prospectively fixed source interventions, two independent original SDK entrance witnesses each: **12 original games, all official `levels_completed=4, NOT_FINISHED`; no level5 or WIN**. The middle/L placements were held fixed; native right-bar LEFT1/LEFT2 were crossed against upper LEFT1, LEFT1+UP1, LEFT1+DOWN1.
+
+| Source right bar | Source upper bbox after movement | Cup first-full (lateral,top-left,middle,right) | Four simultaneous source cup frames | Official SDK |
+| --- | --- | --- | --- | --- |
+| LEFT1 bbox [38,32,52,34] | LEFT1 [26,20,37,22] | (13,25,21,21) | 25..32 | level4 |
+| LEFT1 | LEFT1+UP1 [26,17,37,19] | (13,25,21,21) | 25..32 | level4 |
+| LEFT1 | LEFT1+DOWN1 [26,23,37,25] | (13,25,21,21) | 25..32 | level4 |
+| LEFT2 bbox [35,32,49,34] | LEFT1 [26,20,37,22] | (13,25,23,19) | 25..32 | level4 |
+| LEFT2 | LEFT1+UP1 [26,17,37,19] | (13,25,23,19) | 25..32 | level4 |
+| LEFT2 | LEFT1+DOWN1 [26,23,37,25] | (13,25,23,19) | 25..32 | level4 |
+
+All six native source cases retain the same visual four-cup full frames, no measured left x2..4,y2..61 change, and no official advancement. An upper-bar one-step vertical displacement is not a differentiating native cup event in these particular configurations. Preserve actual source pixels and no hidden-state equivalence claim. Independent durable archive **NOT VERIFIED**.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
