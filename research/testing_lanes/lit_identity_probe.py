@@ -9,8 +9,6 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import re
-import sys
 import unicodedata
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
@@ -48,7 +46,7 @@ def parse_crossref(raw: bytes) -> dict:
     title = message.get("title")
     if doi != DOI or not isinstance(title, list) or not title or not isinstance(title[0], str):
         raise ValueError("Crossref DOI/title did not match pinned record")
-    return {"doi": doi, "title": title[0]}
+    return {"doi": doi, "title": title[0], "comparison_title": title[0]}
 
 
 def parse_openalex(raw: bytes) -> dict:
@@ -59,7 +57,7 @@ def parse_openalex(raw: bytes) -> dict:
     title = payload.get("title")
     if doi != DOI or not isinstance(title, str) or not title.strip():
         raise ValueError("OpenAlex DOI/title did not match pinned record")
-    return {"doi": doi, "title": title}
+    return {"doi": doi, "title": title, "comparison_title": title}
 
 
 def parse_pubmed(raw: bytes) -> dict:
@@ -80,7 +78,15 @@ def parse_pubmed(raw: bytes) -> dict:
             break
     if doi != DOI or not title:
         raise ValueError("PubMed DOI/title did not match pinned record")
-    return {"pmid": pmid, "doi": doi, "title": title}
+    # PubMed may prefix an article with a section label, e.g. "PSYCHOLOGY."
+    # Preserve the original title but remove that label only for cross-index comparison.
+    comparison_title = title
+    if "." in title:
+        prefix, remainder = title.split(".", 1)
+        letters = [ch for ch in prefix if ch.isalpha()]
+        if letters and len(prefix) <= 40 and all(ch.isupper() for ch in letters) and remainder.strip():
+            comparison_title = remainder.strip()
+    return {"pmid": pmid, "doi": doi, "title": title, "comparison_title": comparison_title}
 
 
 PARSERS = {"crossref": parse_crossref, "openalex": parse_openalex, "pubmed": parse_pubmed}
@@ -116,7 +122,7 @@ def inspect_payloads(payloads: dict[str, bytes]) -> dict:
                 "response_sha256": hashlib.sha256(raw).hexdigest(),
                 "doi": data["doi"],
                 "title": data["title"],
-                "normalized_title": normalize_title(data["title"]),
+                "normalized_title": normalize_title(data.get("comparison_title", data["title"])),
                 **({"pmid": data["pmid"]} if "pmid" in data else {}),
             }
         except (ValueError, KeyError, TypeError, ET.ParseError, UnicodeError, json.JSONDecodeError) as exc:
@@ -129,7 +135,7 @@ def inspect_payloads(payloads: dict[str, bytes]) -> dict:
     if len(parsed) != len(PARSERS):
         receipt["state"] = "SOURCE_WALL"
         return receipt
-    titles = {normalize_title(item["title"]) for item in parsed.values()}
+    titles = {normalize_title(item.get("comparison_title", item["title"])) for item in parsed.values()}
     dois = {item["doi"].lower() for item in parsed.values()}
     if len(titles) != 1 or dois != {DOI}:
         receipt["state"] = "IDENTITY_CONFLICT"
