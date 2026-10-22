@@ -1,0 +1,102 @@
+{
+  "schema": "meta-workstation/routing-advice-v1",
+  "generated_at": "2026-10-22T19:24:33Z",
+  "last_paired_observation": "2026-10-22T19:24:29Z",
+  "signal": "OBSERVING",
+  "reason": "Need three distinct paired observations spaced at least 10 minutes apart.",
+  "latest_nodes": {
+    "A": {
+      "running": 22,
+      "waiting": 1
+    },
+    "B": {
+      "running": 0,
+      "waiting": 0
+    }
+  },
+  "sample_count": 2,
+  "lane_advice": [
+    {
+      "id": "B-CONTRACT",
+      "assigned": "B",
+      "admitted_nodes": [
+        "B"
+      ],
+      "recommended": "B",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    },
+    {
+      "id": "SOURCE-CONTRACT",
+      "assigned": "A",
+      "admitted_nodes": [
+        "A",
+        "B"
+      ],
+      "recommended": "A",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    },
+    {
+      "id": "ARC",
+      "assigned": "A",
+      "admitted_nodes": [
+        "A"
+      ],
+      "recommended": "A",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    },
+    {
+      "id": "WORLD",
+      "assigned": "A",
+      "admitted_nodes": [
+        "A"
+      ],
+      "recommended": "A",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    },
+    {
+      "id": "NIH",
+      "assigned": "A",
+      "admitted_nodes": [
+        "A"
+      ],
+      "recommended": "A",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    },
+    {
+      "id": "SOURCES",
+      "assigned": "A",
+      "admitted_nodes": [
+        "A"
+      ],
+      "recommended": "A",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    },
+    {
+      "id": "WORKSTATION",
+      "assigned": "A",
+      "admitted_nodes": [
+        "A"
+      ],
+      "recommended": "A",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    },
+    {
+      "id": "BOOTSTRAP",
+      "assigned": "B",
+      "admitted_nodes": [
+        "B"
+      ],
+      "recommended": "B",
+      "action": "VERIFY_SOURCE",
+      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+    }
+  ],
+  "boundary": "Advisory only. GitHub's workflow-run backlog is not a proven slowdown or job-slot capacity. A ChatGPT window must read and revalidate the current source before moving work."
+}
