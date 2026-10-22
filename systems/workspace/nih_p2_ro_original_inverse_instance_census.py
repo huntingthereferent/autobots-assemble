@@ -97,7 +97,8 @@ def examine(original, *, expected_original_count=None):
     for consequence,(inverse_axiom,assertion) in proofs.items():
         if inverse_axiom not in original or assertion not in original:
             raise ValueError("original-only source inverse witness was fabricated")
-        if consequence[0]==URIRef(previous.PROBE_BASE):
+        if any(isinstance(node,URIRef) and str(node).startswith(previous.PROBE_BASE)
+               for node in (consequence[0],consequence[2])):
             raise ValueError("synthetic data leaked into an original-only census")
     from owlrl import DeductiveClosure, OWLRL_Semantics
     full=Graph()
@@ -127,14 +128,19 @@ def examine(original, *, expected_original_count=None):
         "source_named_inverse_axiom_declarations":len(pairs),
         "original_source_predicate_assertions_using_either_inverse_side":len(matches),
         "original_source_named_subject_object_assertions":kind["named_original_subject_object"],
-        "original_source_non_named_assertion_counts":dict(sorted(kind.items())),
+        "original_source_non_named_assertion_counts":{
+            key:count for key,count in sorted(kind.items())
+            if key!="named_original_subject_object"},
         "independent_original_source_inverse_predictions":len(inferred),
         "independent_original_only_SPARQL_CONSTRUCT_predictions":len(static),
         "new_nonasserted_inverse_relationships_from_original_sources":len(new),
         "whole_original_OWL_RL_agrees_on_source_inverse_predictions":True,
+        "original_source_inverse_comparison_has_positive_cases":bool(inferred),
+        "source_only_inverse_inference_agreement_is_vacuous":not bool(inferred),
         "whole_original_OWL_RL_total_triples":len(full),
         "inverse_predictions_only_tested_on_original_assertions":True,
-        "input_contains_no_injected_synthetic_assertions":True,
+        "audit_injected_no_additional_assertions":True,
+        "original_input_authenticated_by_whole_file_SHA256":False,
         "absence_of_ground_instance_assertions_is_not_an_absence_of_applications":True,
         "static_oracle_also_has_full_source_axioms":True,
         "medical_treatment_efficacy_inferred":False,
@@ -155,6 +161,7 @@ def execute(files):
     x["original_external_owner"]=source.OWNER
     x["original_source_commit"]=source.COMMIT
     x["whole_source_SHA256"]=source_receipts
+    x["original_input_authenticated_by_whole_file_SHA256"]=True
     return x
 
 
