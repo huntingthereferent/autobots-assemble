@@ -95,6 +95,14 @@ The original level3 and level4 frames each have four source palette11 connected 
 
 **Boundary:** frame-ordinal changes do not by themselves establish real clock time, a private objective, or native success. Each Actions artifact has configured 90-day retention; durable independent copies not verified. An independently sourced comparison of successful terminal screen transitions and nonadvancing returned screens is registered in separate Lane B workflow and remains **unverified until that source audit completes**.
 
+## Verified screen-transition and right-by-upper source controls
+
+[Native original SDK screen-transition audit #39765735502](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39765735502), [source JSON artifact #12420678378](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39765735502/artifacts/12420678378), ZIP SHA-256 `7a542368640bcb51ec4de78669688e3ea488886c6b20dd6ebb599de23a64bc41`: independently authenticated full frames from four original SDK sessions; true stage3→4 official progress has **1,262 terminal screen pixels** different from pre-pour, including **171 in measured left x2..4,y2..61**, which first change at terminal frame29; stage4→4 four-cup nonadvance has **82 terminal screen pixels** different, **zero** left measured wall changes. These are screen effects, not a decoded completion predicate.
+
+[Native original right-by-upper interaction #39766706911](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911), [raw JSON+NPZ #12421295935](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911/artifacts/12421295935), ZIP SHA-256 `ac607d630c259fb8840a47842c3da9bc8478c8a940c95f804f91574d2feccc04`: **12 actual original-SDK resets** (six frozen cases × A/B native independent entry witnesses), **zero level5 or WIN, all official level4 NOT_FINISHED**. The right-bar LEFT1 cases yield cup first-full frames lateral13,top-left25,top-middle21,top-right21; right-bar LEFT2 yields 13,25,23,19. With both right placements, upper LEFT1, LEFT1+UP1 and LEFT1+DOWN1 each retain their respective cup timing and all four concurrent full frames25..32. Actual upper-bar selected bboxes [26,20,37,22], [26,17,37,19], [26,23,37,25] distinguish authentic interventions. Measured left screen x2..4,y2..61 unchanged in all. This is a bounded negative **upper vertical factor** result, not a universal engine invariance or causal proof.
+
+Configured original Actions artifact retention 90 days; separate durable copy **NOT VERIFIED**. No cross-branch merging or status promotion.
+
 ## Explicit artifact metadata for current heldout
 
 - Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
