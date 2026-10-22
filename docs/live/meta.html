@@ -182,21 +182,22 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 .health-row a{font-size:12px;font-weight:630;color:#dbedf5}.health-row small{font:10px/1.5 var(--data);color:#a8bec9}
 .health-empty{color:#9cdbb7}
 </style>
+<link rel="stylesheet" href="meta-work-parity.css">
 </head>
 <body>
-<header class="topbar"><div class="brand">HUNTING THE REFERENT <b>/ WORKSTATION</b></div>
-<nav aria-label="Workstation navigation"><a href="meta.html" aria-current="page">OVERVIEW</a><a href="kids.html">KIDS</a><a href="work.html">EXECUTIONS</a><a href="research-sources.html">RESEARCH</a><a href="audit.html">AUDIT</a><a href="https://github.com/huntingthereferent">GITHUB ↗</a></nav></header>
+<header class="topbar"><div class="brand">HUNTING THE REFERENT <b>/ META</b></div>
+<nav aria-label="Workstation navigation"><a href="work.html">WORK</a><a href="meta.html" aria-current="page">META</a><a href="kids.html">KIDS</a><a href="work.html#executions">EXECUTIONS</a><a href="work.html#research">RESEARCH</a><a href="research-sources.html">SOURCES</a><a href="work.html#audit">AUDIT</a><a href="https://github.com/huntingthereferent">MAIN GITHUB ↗</a></nav></header>
 <main>
-<section class="hero"><div><span class="eyebrow">Operations / source-observed</span><h1>Research workstation</h1><p>Execution, queue movement and measured history in one place. Every run resolves to its original GitHub record.</p></div>
-<div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><span class="tag" id="source-state">CHECKING</span><button id="refresh" type="button">Refresh data ↻</button></div></section>
-<div class="strip-label">CURRENT WORKLOAD <span class="strip-secondary">GitHub Actions · combined view</span></div>
+<section class="hero overview" aria-label="Combined workstation source overview"><div class="hero-layout"><div class="hero-copy"><span class="eyebrow">SOURCE-BACKED / META WORKSTATION</span><h1>Research workstation</h1><p>Observe combined execution, queue movement and measured history. Each result links to its GitHub source; workflow outcomes are not scientific conclusions.</p></div>
+<div class="feed-panel"><span class="feed-label">GITHUB OBSERVATION / COMBINED</span><div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><span class="tag" id="source-state">CHECKING</span><button id="refresh" type="button">Refresh source ↻</button></div></div></div></section>
+<div class="strip-label">CONTROL DECK / GITHUB ACTIONS <span class="strip-secondary">Both registered sources · current observations</span></div>
 <section class="metrics" aria-label="Combined source-observed workflow counts">
-<article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
-<article class="metric running"><b id="running">—</b><span>IN MOTION / NOW</span><small>Executing workflow runs</small></article>
-<article class="metric passed"><b id="passed">—</b><span>SUCCESSFUL RUNS / TODAY</span><small id="passed-note">Reading full-day GitHub totals</small></article>
-<article class="metric followup current" id="open-check-card"><b id="current-open">—</b><span>CURRENT ISSUES</span><small id="failed-note">Open workflow checks · clears after a newer pass</small><button type="button" id="inspect-open" class="issues-link">Inspect source checks ↗</button></article>
+<article class="metric queue"><div class="metric-top"><span>IN QUEUE / NOW</span><span class="metric-glyph" aria-hidden="true">◇</span></div><b id="queued">—</b><div class="flow-level" aria-hidden="true"></div><small>Waiting workflow runs</small></article>
+<article class="metric running"><div class="metric-top"><span>IN MOTION / NOW</span><span class="metric-glyph" aria-hidden="true">↗</span></div><b id="running">—</b><div class="flow-level" aria-hidden="true"></div><small>Executing workflow runs</small></article>
+<article class="metric passed"><div class="metric-top"><span>SUCCESSFUL RUNS / TODAY</span><span class="metric-glyph" aria-hidden="true">✦</span></div><b id="passed">—</b><div class="flow-level" aria-hidden="true"></div><small id="passed-note">Reading full-day GitHub totals</small></article>
+<article class="metric current" id="open-check-card"><div class="metric-top"><span>CURRENT ISSUES</span><span class="metric-glyph" aria-hidden="true">◎</span></div><b id="current-open">—</b><div class="flow-level" aria-hidden="true"></div><small id="failed-note">Open workflow checks · clears after a newer pass</small><button type="button" id="inspect-open" class="issues-link">Inspect source checks ↗</button></article>
 </section>
-<details class="outcome-context" aria-label="How daily run outcomes are counted"><summary>Inspect historical outcomes · not unresolved failures</summary><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="failed">HISTORICAL FAILED RUNS / TODAY: —</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></details>
+<details class="outcome-context" aria-label="How daily run outcomes are counted"><summary>Inspect historical outcomes · not unresolved failures</summary><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="historical-failed">HISTORICAL FAILED RUNS / TODAY: —</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></details>
 <section class="flowfield" aria-label="Observed execution stages">
 <div class="flow-heading"><span>Execution flow</span><small>Markers open actual GitHub runs · up to 16 recent runs per stage</small></div>
 <div class="flow-tracks">
@@ -236,6 +237,17 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
  const localTime=s=>{const v=new Date(s);return Number.isFinite(+v)?v.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"Unknown time"};
  const valid=n=>Number.isSafeInteger(n)&&n>=0;
+ // Lights reflect a source-confirmed count (12 indicators maximum), not runner capacity.
+ function updateMetric(id,value,available=true){
+   const target=$(id),printed=available&&valid(value)?value.toLocaleString():"—";
+   if(target.textContent!==printed){target.textContent=printed;target.classList.remove("flow-changed");void target.offsetWidth;target.classList.add("flow-changed")}
+   const level=target.closest(".metric")?.querySelector(".flow-level");
+   if(level){
+     level.replaceChildren();
+     for(let i=0;i<12;i++){const led=document.createElement("i");if(available&&valid(value)&&i<Math.min(12,value))led.className="on";level.append(led)}
+     level.title=available&&valid(value)?printed+" source-observed · 12 visual markers maximum":"Current count unavailable";
+   }
+ }
  const statuses=["in_progress","queued","pending","waiting"];
  let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30,dailySummary=null,healthSummary=null;
  async function get(url){const r=await fetch(url,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
@@ -273,8 +285,8 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   const all=r?.schema==="meta-workstation/daily-runs-v1"&&r?.all_sources===true&&r?.timezone==="America/Chicago"&&r?.local_date===chicagoDay(new Date())&&r?.totals;
   const t=all?r.totals:null;
   const verified=t&&["success","failure","cancelled","skipped","timed_out","action_required","known_outcome_runs_lower_bound"].every(k=>valid(t[k]))&&Number.isFinite(Date.parse(r.observed_at));
-  $("passed").textContent=verified?t.success.toLocaleString():"—";
-  $("failed").textContent="HISTORICAL FAILED RUNS / TODAY: "+(verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—");
+  updateMetric("passed",verified?t.success:null,!!verified);
+  $("historical-failed").textContent="HISTORICAL FAILED RUNS / TODAY: "+(verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—");
   $("cancelled").textContent="Cancelled today: "+(verified?t.cancelled.toLocaleString():"—");
   $("skipped").textContent="Skipped today: "+(verified?t.skipped.toLocaleString():"—");
   $("other-outcomes").textContent="Active/other states: not included in outcome totals";
@@ -296,13 +308,13 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
     Array.isArray(data.summary.open);
   const card=$("open-check-card");
   if(!trusted){
-    $("current-open").textContent="—";$("failed-note").textContent="Current workflow state unavailable · not zero";
+    updateMetric("current-open",null,false);$("failed-note").textContent="Current workflow state unavailable · not zero";
     card.dataset.open="unknown";$("health-context").textContent=
     "A recent, complete GitHub reading from both repositories is required. Missing coverage never means zero.";
     $("health-list").replaceChildren();return;
   }
   const open=data.summary.open_count;
-  $("current-open").textContent=open.toLocaleString();
+  updateMetric("current-open",open,true);
   $("failed-note").textContent=open?"Latest active workflow results still need review":"No currently failing workflows in tracked history";
   card.dataset.open=open?"yes":"no";
   $("health-context").textContent="Verified "+localTime(data.observed_at)+" · "+
@@ -344,7 +356,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   for(const r of sample){const a=document.createElement("a");a.className="cell on-"+css;a.href=r.url;a.target="_blank";a.rel="noopener noreferrer";a.title=r.name+" · run "+r.id;a.setAttribute("aria-label","Open "+r.name+" run "+r.id);el.append(a)}
  }
  function renderMetrics(n){
-  $("queued").textContent=n.waiting;$("running").textContent=n.running;
+  updateMetric("queued",n.waiting);updateMetric("running",n.running);
   const today=runs.filter(r=>isToday(r.created));
   renderDaily();
   $("flow-queue").textContent=n.waiting;$("flow-running").textContent=n.running;
@@ -456,7 +468,8 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
    renderMetrics(total);$("stamp").textContent="Checked "+localTime(new Date());$("dot").className="dot ok";$("source-state").textContent="CHECKED";
    $("status-note").textContent="Both source journals read successfully. Counts include currently waiting and executing workflow runs.";
   }else{
-   for(const id of["queued","running","flow-queue","flow-running","flow-done"])$(id).textContent="—";renderDaily();
+   for(const id of["queued","running"])updateMetric(id,null,false);
+    for(const id of["flow-queue","flow-running","flow-done"])$(id).textContent="—";renderDaily();
    for(const id of["beads-queue","beads-running","beads-done"])beads(id,[],"none");
    $("stamp").textContent="Partial source / try refresh";$("dot").className="dot warn";$("source-state").textContent="PARTIAL";
    $("status-note").textContent="A GitHub source was unavailable; unknown work is not zero. Accessible runs remain linked below.";

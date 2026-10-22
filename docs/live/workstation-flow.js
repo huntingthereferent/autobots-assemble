@@ -19,6 +19,22 @@
     return "other";
   };
   const number=n=>Number(n).toLocaleString();
+  // A later passing workflow on the same branch is limited follow-up evidence,
+  // not proof that each original failing test case is repaired.
+  function followingPasses(records){
+    const latestPass=new Map(),matched=new Map();
+    const ordered=[...records].sort((a,b)=>(validTime(b.created)??0)-(validTime(a.created)??0)||b.id-a.id);
+    for(const r of ordered){
+      if(!r.branch||!(r.workflowId||r.name)||r.status!=="completed")continue;
+      const key=(r.workflowId?"id:"+r.workflowId:"name:"+r.name)+"|"+r.branch;
+      if(r.conclusion==="success"&&!latestPass.has(key))latestPass.set(key,r);
+      if(["failure","timed_out","action_required"].includes(r.conclusion)){
+        const pass=latestPass.get(key);
+        if(pass&&(validTime(pass.created)??0)>(validTime(r.created)??0))matched.set(r.id,pass);
+      }
+    }
+    return matched;
+  }
   const clock=t=>new Date(t).toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",hour12:true});
   function periodBounds(){
     synchronizeToday();
@@ -192,13 +208,19 @@
     const active=fresh?latestPage.filter(r=>status(r)==="running"):[];
     const finished=todays.filter(r=>status(r)==="finished");
     const passed=finished.filter(r=>r.conclusion==="success");
+    const failed=finished.filter(r=>["failure","timed_out","action_required"].includes(r.conclusion));
+    const cancelled=finished.filter(r=>r.conclusion==="cancelled");
+    // Follow-up summary spans the available source index, not only the latest 100 current-state runs.
+    const followups=followingPasses(runs);
     const arrivalsHour=source.filter(r=>{const t=validTime(r.created);return t!==null&&t>=now-3600000&&t<=now;});
     const clearance=todays.length?Math.round(finished.length/todays.length*100):null;
     setStat("queued",queue.length,fresh);
     setStat("running",active.length,fresh);
     setStat("passed",passed.length);
-    setStat("indexed",source.length);
+    setStat("followups",followups.size);
+    setStat("failed",failed.length);
     const show=v=>state.loaded?number(v):"—";
+    setText("cancelled-today",show(cancelled.length));
     setText("flow-created",show(todays.length));
     setText("flow-cleared",show(finished.length));
     setText("flow-clearance",state.loaded?(clearance===null?"—":clearance+"%"):"—");
@@ -240,5 +262,5 @@
       state.view==="month"?"Run activity by day":"Run activity by two-hour window",
       label:periodName(),bins};
   }
-  window.WorkstationFlow={install,matches,scopeLabel,render,clock,tick,historyBins};
+  window.WorkstationFlow={install,matches,scopeLabel,render,clock,tick,historyBins,followingPasses};
 })();
