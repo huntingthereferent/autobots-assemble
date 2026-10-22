@@ -38,6 +38,20 @@ class E19SourceIdentityTypeTests(unittest.TestCase):
         self.assertEqual(result["full_profile_inferred_rdf_type_touching_original_nodes"],2)
         self.assertFalse(result["independent_complete_general_OWL_RL_engine_run"])
 
+    def test_source_authored_and_inferred_type_totals_reconcile(self):
+        original={(G,RDF.type,CLASS),(A,RDF.type,CLASS)}
+        new_class=URIRef("urn:synthetic:e19:inferred-only-class")
+        inferred={(G,RDF.type,new_class),(A,RDF.type,new_class)}
+        materialized=original|inferred|SAME
+        result=e19.compare_identity_type(original,materialized,materialized,SOURCE)
+        self.assertEqual(result["source_original_rdf_type"],2)
+        self.assertEqual(result["full_profile_inferred_rdf_type_touching_original_nodes"],2)
+        self.assertEqual(result["full_profile_rdf_type_touching_original_nodes"],4)
+        self.assertEqual(result["full_profile_rdf_type_touching_original_nodes"],
+                         result["source_original_rdf_type"]+
+                         result["full_profile_inferred_rdf_type_touching_original_nodes"])
+        self.assertEqual(sum(result["full_profile_added_type_endpoints"].values()),2)
+
     def test_nonreflexive_identity_alias_is_not_hidden(self):
         cross=(G,OWL.sameAs,A)
         results=SAME|TYPES|{cross}
