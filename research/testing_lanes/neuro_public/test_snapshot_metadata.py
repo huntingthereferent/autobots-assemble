@@ -1,6 +1,7 @@
 """Offline control tests for one public OpenNeuro GraphQL snapshot."""
 import json
 import unittest
+from pathlib import Path
 
 from snapshot_metadata import DATASET, DOI, ENDPOINT, QUERY, SNAPSHOT, classify, probe
 
@@ -97,6 +98,20 @@ class NeuroMetadataTests(unittest.TestCase):
         self.assertEqual(r["state"], "SOURCE_WALL")
         self.assertEqual(r["error_class"], "ValueError")
         self.assertFalse(r["human_imaging_fetched"])
+
+    def test_archived_public_receipt_never_promotes_science(self):
+        path = Path(__file__).parent / "observations" / "2026-10-22-run-39782507005.json"
+        evidence = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(evidence["run_id"], 39782507005)
+        self.assertEqual(evidence["observation"]["state"], "PUBLIC_SNAPSHOT_METADATA_OBSERVED")
+        self.assertEqual(evidence["observation"]["identity"]["snapshot_tag"], "1.0.1")
+        self.assertEqual(evidence["observation"]["identity"]["doi"], DOI)
+        self.assertEqual(evidence["observation"]["raw_response_sha256"],
+                         "1cfc7ea2a470186ac613ebd8887ed6578bf0f1d83647a3979d3f500715f1f875")
+        self.assertEqual(evidence["neuro_parent_lane_scientific_state"], "NOT_TESTED")
+        self.assertEqual(evidence["neuro_parent_lane_dataset_admission"], "REQUIRED")
+        self.assertFalse(evidence["observation"]["source_data_archived"])
+        self.assertFalse(evidence["observation"]["human_imaging_fetched"])
 
     def test_no_user_supplied_ids_or_data_fetch(self):
         self.assertEqual(ENDPOINT, "https://openneuro.org/crn/graphql")
