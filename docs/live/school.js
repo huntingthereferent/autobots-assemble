@@ -126,10 +126,10 @@
     const open=node("button",item.kind==="pattern"?"Play again ♫":"Continue ✎");
     open.type="button";open.addEventListener("click",()=>{
       if(item.kind==="pattern"&&Array.isArray(item.tones)&&item.tones.length===8&&item.tones.every(v=>Number.isInteger(v)&&v>=0&&v<TONE_NAMES.length)){
-        pattern=item.tones.slice();renderPattern();show("pattern");
+        pattern=item.tones.slice();$("pattern-name").value=item.title;renderPattern();show("pattern");
       }else{
         editingCreationId=item.id;
-        $("creation-kind").value=Object.hasOwn(KIND_LABELS,item.kind)&&item.kind!=="pattern"&&item.kind!=="reading"?item.kind:"other";
+        $("creation-kind").value=Object.hasOwn(KIND_LABELS,item.kind)&&item.kind!=="pattern"?item.kind:"other";
         $("creation-title").value=item.title;$("creation-body").value=item.body||"";
         $("save-creation").textContent="Save changes ✦";$("cancel-creation-edit").hidden=false;
         show("create");$("creation-title").focus();
@@ -349,7 +349,7 @@
     state.learners.push(record);state.selected=record.id;$("nickname").value="";
     persist();practiceProblem=null;render();show("play");
   });
-  $("learner").addEventListener("change",()=>{state.selected=$("learner").value;persist();practiceProblem=null;render();});
+  $("learner").addEventListener("change",()=>{state.selected=$("learner").value;resetCreationForm();stopPattern();pattern=Array(8).fill(0);$("pattern-name").value="";renderPattern();persist();practiceProblem=null;render();});
   $("school-date").addEventListener("change",()=>{
     if(!parseDay($("school-date").value)){$("school-date").value=localDay();}
     weekAnchor=monday($("school-date").value);render();
@@ -357,7 +357,7 @@
   document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));
   document.querySelectorAll("[data-open]").forEach(button=>button.addEventListener("click",()=>{
     const target=button.dataset.open;
-    if(button.dataset.kind&&$("creation-kind"))$("creation-kind").value=button.dataset.kind;
+    if(target==="create"){resetCreationForm();if(button.dataset.kind)$("creation-kind").value=button.dataset.kind;}
     show(target);
   }));
   $("spark-next").addEventListener("click",()=>{sparkIndex=(sparkIndex+1)%IDEAS.length;renderIdea();});
@@ -402,7 +402,8 @@
   $("pattern-save").addEventListener("click",()=>{
     if(!ready())return;
     const body="Eight beats: "+pattern.map(x=>TONE_NAMES[x]).join(" · ");
-    const saved=saveCreation("pattern","My eight-beat music",body,{tones:pattern.slice()});
+    const title=$("pattern-name").value.trim()||"My eight-beat music";
+    const saved=saveCreation("pattern",title,body,{tones:pattern.slice()});
     feedback("pattern-feedback",saved?"Kept in My Creations. Come back and replay it anytime!":"Browser storage was unavailable.");
   });
   $("new-task").addEventListener("submit",event=>{
