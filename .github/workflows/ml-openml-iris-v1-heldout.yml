@@ -1,0 +1,77 @@
+name: ml-openml-iris-v1-heldout
+
+on:
+  pull_request:
+    paths:
+      - "research/studies/ml_openml_iris_v1/**"
+      - ".github/workflows/ml-openml-iris-v1-heldout.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ml-iris-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Reproduce synthetic source failures, no-network split and model controls
+        run: python -m unittest discover -s research/studies/ml_openml_iris_v1 -p 'test_*.py' -v
+      - name: Verify opt-in boundary remains unobserved by default
+        run: |
+          python research/studies/ml_openml_iris_v1/experiment.py --output unobserved.json
+          python - <<'PY'
+          import json
+          d = json.load(open("unobserved.json", encoding="utf-8"))
+          assert d["status"] == "UNOBSERVED"
+          assert d["scientific_experiments_run"] == 0
+          PY
+
+  ml-iris-one-source-measurement:
+    needs: ml-iris-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run bounded, source-verified data holdout experiment
+        shell: bash
+        run: |
+          python research/studies/ml_openml_iris_v1/experiment.py --live --output openml-iris-derived.json
+      - name: Summarize measured source and narrow finding, or precise access wall
+        if: always()
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          from pathlib import Path
+          print("### ML Iris v1 — exact source and held-out comparison")
+          path = Path("openml-iris-derived.json")
+          if not path.exists():
+              print("No source receipt written; job did not reach a measured state.")
+          else:
+              r = json.loads(path.read_text())
+              print("Source result: " + r["status"])
+              print("Lane: " + r["lane_id"])
+              if r["status"] == "MEASURED_ON_EXACT_SOURCE_BYTES":
+                  c = r["comparison"]
+                  print("ARFF SHA-256: " + r["source_data_sha256"])
+                  print(f'Holdout (N={c["n_held_out"]}), nearest centroid {c["centroid_correct"]}, majority {c["majority_correct"]}')
+                  print("Identical feature duplicates cannot cross splits. One experiment; no global ML proof.")
+              else:
+                  print("The source was unavailable or failed a source integrity condition; no scientific result.")
+          PY
+      - name: Preserve a derived-only immutable run witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ml-iris-v1-source-and-derived-witness
+          path: openml-iris-derived.json
+          retention-days: 30
+          if-no-files-found: warn
