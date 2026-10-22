@@ -56,13 +56,13 @@ const when=n=>new Date(start+n*60000).toISOString();
 const queued={id:1,name:"A",status:"queued",created:when(0)};
 a.sample({checked:start,latestPage:[queued]});
 a.sample({checked:start,latestPage:[queued]}); // duplicate must not count
-assert.equal(nodes.get("eq-samples").textContent.startsWith("1 checks"),true);
+assert.match(nodes.get("eq-samples").textContent, /^1 \/ 1 session checks · 0 min window$/);
 const running={...queued,status:"in_progress"};
 a.sample({checked:start+120000,latestPage:[running]});
 a.sample({checked:start+240000,latestPage:[{...running,status:"completed",conclusion:"success"}]});
 assert.equal(nodes.get("eq-peak-running").textContent,"1");
 assert.equal(nodes.get("eq-queue-drift").textContent,"-1");
-assert.equal(nodes.get("eq-samples").textContent.startsWith("3 checks"),true);
+assert.match(nodes.get("eq-samples").textContent, /^3 \/ 3 session checks · 4 min window$/);
 assert.ok(nodes.get("eq-out").textContent.includes("/h"));
 assert.equal(nodes.get("equilibrium-graph").children.length,3);
 '''
