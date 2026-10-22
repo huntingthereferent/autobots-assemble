@@ -92,6 +92,14 @@ jobs:
           mvn --batch-mode -q -f systems/workspace/nih_p2_jena_cross_engine/pom.xml compile exec:java \
             -Dexec.mainClass=org.research.nih.p2.BgeeThreeRules \
             -Dexec.args="$RUNNER_TEMP/bgee-jena/whole-original-combined.nt $RUNNER_TEMP/bgee-jena/jena-three-owner-rules.nt"
+      - name: Verify necessity of each original owner property axiom in independent Jena
+        run: |
+          set -euo pipefail
+          for mode in omit-genex omit-genomic omit-inverse; do
+            mvn --batch-mode -q -f systems/workspace/nih_p2_jena_cross_engine/pom.xml compile exec:java \
+              -Dexec.mainClass=org.research.nih.p2.BgeeThreeRules \
+              -Dexec.args="$RUNNER_TEMP/bgee-jena/whole-original-combined.nt $RUNNER_TEMP/bgee-jena/jena-$mode.nt $mode"
+          done
       - name: Compare full original three-rule Jena output to independent complete SPARQL oracle
         run: |
           set -euo pipefail
@@ -104,6 +112,9 @@ jobs:
             --ro-base "$RUNNER_TEMP/ro-original/ro-base.owl" \
             --core "$RUNNER_TEMP/ro-original/core.owl" \
             --jena-nt "$RUNNER_TEMP/bgee-jena/jena-three-owner-rules.nt" \
+            --omit-genex-nt "$RUNNER_TEMP/bgee-jena/jena-omit-genex.nt" \
+            --omit-genomic-nt "$RUNNER_TEMP/bgee-jena/jena-omit-genomic.nt" \
+            --omit-inverse-nt "$RUNNER_TEMP/bgee-jena/jena-omit-inverse.nt" \
             --output "$RUNNER_TEMP/bgee-jena-evidence/independent-three-rule-jena.json"
           python - <<'PY'
           import json,os
@@ -124,6 +135,13 @@ jobs:
           assert r["Jena_missing_consequences"]==0
           assert r["Jena_unexpected_consequences"]==0
           assert r["source_three_rule_actual_digest_sha256"]==r["independent_three_rule_static_digest_sha256"]
+          assert r["exact_original_owner_premise_ablations_verified"] is True
+          assert r["original_whole_input_not_mutated_by_ablation_tests"] is True
+          assert r["source_premise_ablations"]["omit-genex"]["Jena_verified"]==0
+          assert r["source_premise_ablations"]["omit-genomic"]["Jena_verified"]==50054
+          assert r["source_premise_ablations"]["omit-inverse"]["Jena_verified"]==50054
+          assert all(v["missing"]==0 and v["unexpected"]==0 for v in r["source_premise_ablations"].values())
+          assert r["premise_removals_are_counterfactual_not_independent_biomedical_data"] is True
           assert r["full_OWL_RL_profile_executed"] is False
           assert r["independent_RDFS_and_inverse_subset_not_global_consistency"] is True
           assert r["source_observation_is_not_independent_biological_validation"] is True
