@@ -38,3 +38,15 @@ A and B exchange reproducible source observations; any expansion to C starts fro
 Original's observation worker in `.github/workflows/meta-workstation-observations.yml` captures real A and B queued/running workflow-run counts every 30 minutes when GitHub Actions scheduling executes. It writes only to the `meta-observations` branch (`history.json`), avoiding commits and CI loops on `main`. The meta page shows that historical line plus live browser checks. Data gaps mean unavailable evidence; they are not interpolated. The chart reports workflow-run counts, not concurrent job slots or an engineered capacity guarantee. This is the default dashboard; each original viewer remains an inspection drilldown.
 
 **Settings user action:** Enable GitHub Pages on Dessy's public repository (`main`/`docs`), if not already enabled. Check that Original's repository allows its Actions `GITHUB_TOKEN` to write to its `meta-observations` branch; no personal access token needs to be pasted into a chat or public source.
+
+## During an active ChatGPT window — route before the next batch
+
+Before admitting each new lane task, read the current `meta-observations/routing.json` on Original and the canonical `docs/live/meta-registry.json`. The observer runs on GitHub without needing the Meta viewer open. Its latest `signal` is calculated from three independently spaced A/B workload observations (at least ten minutes apart), rather than an assumed GitHub capacity. A routing record older than 90 minutes is stale.
+
+If `lane_advice` marks `CANDIDATE_SWITCH`, inspect the target node's actual enabled workflow and current GitHub run state, preserve the source SHA, then place **only the next eligible task** there. Never interrupt or duplicate already-running work; never activate an inactive Dessy workflow just because A is queued. If advice is unavailable, uncertain, or no workflow is admitted on the other account, stay on the assigned node.
+
+A ChatGPT window reads this source when invoked or prompted; different ChatGPT windows cannot wake each other or see one another's unsent work automatically. Coordination happens by writing and checking GitHub branches, Actions evidence, and recorded handoffs.
+
+Routing source: https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json
+
+The Meta viewer projects the same source. The observer and its recommendations run independently of any phone or computer browser tab.
