@@ -1,0 +1,84 @@
+name: NIH P2 full original OBO OWL RL rule audit
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_original_full_owlrl_rule_audit.py'
+      - 'network/tests/test_nih_p2_original_full_owlrl_rule_audit.py'
+      - '.github/workflows/nih-p2-original-full-owlrl-rule-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-full-owlrl-original-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  original-source-entire-owlrl-graph:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Pin independent graph and OWL RL libraries
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Retrieve immutable original RO release and verify whole-source SHA256
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-obo-original" "$RUNNER_TEMP/nih-owlrl-rule-evidence"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          import os,hashlib
+          from systems.workspace import nih_phase2_external_obo_graph_trial as orig
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-obo-original"
+          for name in orig.SOURCE_FILES:
+              url=orig.SOURCE_URL+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-Full-Original-OWL-RL/1.0"}),timeout=50) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("external original source host/ref mismatch")
+                  raw=response.read(5_000_001)
+              if hashlib.sha256(raw).hexdigest()!=orig.PINNED_WHOLE_SOURCE_SHA256[name]:
+                  raise ValueError("entire original OWL source failed SHA256 pin")
+              (out/name).write_bytes(raw)
+          PY
+      - name: Test independent property-rule premises and full-source OWL RL
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-obo-original/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_original_full_owlrl_rule_audit
+      - name: Materialize whole original ontology and preserve exact finite rule receipts
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-obo-original/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_original_full_owlrl_rule_audit \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/nih-owlrl-rule-evidence/original-owlrl-rule-audit.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"nih-owlrl-rule-evidence/original-owlrl-rule-audit.json").read_text())
+          assert r["schema"]=="nih-p2-original-obo-full-owlrl-finite-rule-audit-v1"
+          assert r["original_rdf_triples"]==8319
+          assert r["full_source_owlrl_materialized_rdf_triples"]>8319
+          assert r["all_local_rule_consequences_present_in_full_owlrl"] is True
+          assert r["entire_source_OWL_RL_agrees_on_subproperty_closure"] is True
+          assert r["whole_original_consistency_established"] is False
+          assert r["OWL_DL_consistency_and_unsatisfiable_class_search"]=="NOT_MEASURED"
+          assert r["official_NIH_Phase2_benchmark"] is False
+          assert r["original_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-owlrl-rule-evidence" && sha256sum original-owlrl-rule-audit.json > sha256.txt)
+      - name: Retain only derived source-owned rule evidence, never original file copies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-full-original-owlrl-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-owlrl-rule-evidence/
+          if-no-files-found: warn
+          retention-days: 30
