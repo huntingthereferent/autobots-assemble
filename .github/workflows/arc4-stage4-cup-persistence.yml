@@ -1,0 +1,46 @@
+name: ARC4 lane B original SDK cup persistence audit
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/audit_native_sp80_stage4_cup_persistence.py'
+      - '.github/workflows/arc4-stage4-cup-persistence.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  authenticated-cup-persistence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install native source frame reader
+        run: python -m pip install numpy
+      - name: Download exact original SDK L-placement frames
+        uses: actions/download-artifact@v4
+        with:
+          name: arc4-original-l-placement-boundary
+          run-id: 39761014684
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/arc4/authenticated-l-source
+      - name: Authenticate original raw SDK JSON and NPZ
+        run: |
+          echo 'd00f410f8d1caf4f5d61eea169f521803d5c86c5649d04020cd353a1e93fb494  runtime/data/arc4/authenticated-l-source/arc4-original-l-placement-boundary.json' | sha256sum -c -
+          echo 'efeeb4c333ffc889eae9a767c0c5cd4553ae50d6f928fb3b032aa20dbd3998ae  runtime/data/arc4/authenticated-l-source/arc4-original-l-placement-boundary.npz' | sha256sum -c -
+      - name: Independently compute every cup full/last frame for A/B
+        run: |
+          python -m work.arc3.audit_native_sp80_stage4_cup_persistence \
+            --json runtime/data/arc4/authenticated-l-source/arc4-original-l-placement-boundary.json \
+            --npz runtime/data/arc4/authenticated-l-source/arc4-original-l-placement-boundary.npz \
+            --out runtime/data/arc4/arc4-source-owned-cup-persistence.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-authenticated-source-cup-persistence
+          path: runtime/data/arc4/arc4-source-owned-cup-persistence.json
+          retention-days: 90
+          if-no-files-found: error
