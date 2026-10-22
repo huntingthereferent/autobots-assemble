@@ -1,6 +1,16 @@
 # Lane C E16 — unrestricted original-node source-predicate boundary
 
-**Status: IMPLEMENTED; no E16 original-source result claimed until dedicated CI passes.**
+**SOURCE-CONNECTED E16 VERIFIED — [GitHub Actions #39830955536](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39830955536): SUCCESS, 8/8 focused tests.**
+
+The complete owner-authenticated Bgee/GenEx/RO original input again materialized **183,287 RDF triples** under the general Python OWL RL engine. The expanded scope covers **all RO:0002206 / RO:0002292 / RO:0002330 relationships with at least one endpoint in the original mapped gene or target node universe**, including unanticipated target pairings and directions. The unrestricted native RDFLib scan and separately authored SPARQL `VALUES` scan gave **100,108 exact same triples**, with **0 missing** relative to the independently source-authenticated four-rule baseline and **0 additional source-predicate triples**. Exact triple-set equality was checked, not merely matching counts. The status was `ORIGINAL_NODE_PREDICATE_SET_EQUALS_FOUR_RULES`.
+
+The read-only immutable source inputs and previously frozen four-rule baseline were preserved. This closes the E16 *original-node, three-predicate* coverage question; it does **not** validate the remaining non-scoped full-profile triples or all possible ontology consequences. The independent scan strategies use the **same OWL RL closure**, so their agreement is not a second complete OWL RL implementation. No new biological observations, treatment inferences, patient outcomes, first-public timestamps, official NIH scores or comparative model advantage are claimed.
+
+Derived-only evidence artifact `nih-p2-lane-c-e16-original-node-predicate-audit`, ID **12448872359**, ZIP SHA-256 `b427ba8372ff625d8b9fc7d33e7785040892f257307b123efc937fe9d9fcd28a`. Retained evidence contains aggregate original-source metrics, candidate digests, runner resources and process exit receipts, not original Bgee SQL or raw RDF source.
+
+---
+
+
 
 E15 successfully materialized the entire authenticated 34,181-triple Bgee+GenEx+RO graph with the general Python OWL RL implementation: 183,287 final RDF triples, 100,108 exact-four-rule scoped original gene/target statements, 0 missing/extra against Jena and RDFLib SPARQL within that predeclared mapped-pair universe.
 
