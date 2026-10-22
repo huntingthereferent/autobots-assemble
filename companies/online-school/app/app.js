@@ -359,6 +359,7 @@ function render() {
   renderSwitchList();
 
   $("#reading-link").href = "./reading.html?learner=" + encodeURIComponent(item.id);
+  $("#science-link").href = "./science.html?learner=" + encodeURIComponent(item.id);
   $("#practice-link").href = "./practice.html?learner=" + encodeURIComponent(item.id);
   $("#family-link").href = "./family.html?learner=" + encodeURIComponent(item.id);
   const learnerName = encodeURIComponent(item.display_name || item.id);
