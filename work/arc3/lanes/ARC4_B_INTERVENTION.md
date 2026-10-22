@@ -198,5 +198,20 @@ The second and third native pours have **exactly the same pixel values across al
 
 **Research limit:** no new measurable board-region response from repeated pours without new movement, and no official advancement. Bottom-row change does not decode any private SDK counter/hidden state, and exact visible-frame equality does not prove equivalence of internal state. This is distinct from earlier stage4 second-pour studies because these original right LEFT1/LEFT2 clean four-cup parents and exact no-movement temporal controls were frozen separately.
 
+## Original post-pour movement-order comparison — verified native SDK
+
+[Independent original SDK run #39775056684](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775056684) succeeded with **8/8 independently reset original SP80 games** (four predeclared arms × two authentic A/B entrance histories). [Original full native JSON/NPZ artifact #12423663752](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775056684/artifacts/12423663752), ZIP SHA256 `7b46395f958143d6e469e9a9b1ae3c63d605afce17b925e0a35dd3019ecee1a4`. Internal authentic JSON SHA256 `ef8bf268e6ebcf044f3c60e3b58cf344f940d65b3b19bd7bfb3428540ae28d4b`, full original NPZ SHA256 `598acbfceca76eb25836b884d038ce07310af9b13f69afebe4270a221f83c43a` (independently rehashed and checked). Artifact configured 90-day retention; separately durable archive not confirmed. Native original level4 source root `fa8fd32d3bfd2c8b3ff7765aec373512`.
+
+**Controlled original SDK action-history comparison.** Direct placement RIGHT LEFT1 or LEFT2 + fixed middle D3L2, lower L3U2, upper LEFT1, then genuine ACTION5, versus **after a failed four-cup ACTION5**, the SDK-selected right bar moved once toward the other verified placement, upper bar explicitly reselected with a source click, then a second native ACTION5. All source SDK positions were checked from actual palette9 selected bboxes, not assumed. Original right selected bbox [38,32,52,34] moves to [35,32,49,34] with post-pour LEFT1; the reverse post-pour RIGHT1 moves [35,32,49,34] back to [38,32,52,34]. Actual upper reselected bbox [26,20,37,22] in both. Independently verified SDK witnesses agree.
+
+| Comparison | Authentic post-first-pour source action word suffix | Original pre-final-pour image differences | Aligned 34-frame final-pour image differences | Official outcome |
+| --- | --- | --- | --- | --- |
+| Direct RIGHT LEFT2 vs RIGHT LEFT1 → pour → right LEFT1 → reselect upper → pour | `5 3 6@34,21 5` | **0 on y0..62**, 1 on y63 (x11) | **0 on y0..62**, 34 changed pixels total, all row63 | Both level4 NOT_FINISHED |
+| Direct RIGHT LEFT1 vs RIGHT LEFT2 → pour → right RIGHT1 → reselect upper → pour | `5 4 6@34,21 5` | **0 on y0..62**, 3 on row63 (x10..12) | **0 on y0..62**, 68 changed pixels total, all row63 | Both level4 NOT_FINISHED |
+
+Source-native palette6 and palette13 masks match at **all 34 aligned frames** for each paired final ACTION5, with no changed frame pixels anywhere in y0..62. Both actual SDK witnesses repeat these exact source results and no level5 or WIN occurs in the eight games. This directly constrains the role of an earlier failed pour **within these precise native histories**, but does not prove hidden SDK state equivalence, generic action commutativity, or any inferred WIN condition. Avoid repeating these history arrangements as if their visible response had changed.
+
+**CI note:** every ARC-specific workflow on the immediately previous Lane B head passed. The broader network `protocol-tests` failed separately on `test_workstation_equilibrium_ui.EquilibriumObserverTests.test_observer_counts_transitions_not_page_refreshes` (workstation/UI), not on the native ARC logic; this PR is not fully green on that head. Do not turn that failure into an ARC gameplay claim.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
