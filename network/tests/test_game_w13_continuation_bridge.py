@@ -82,6 +82,14 @@ class GameW13ContinuationBridgeTests(unittest.TestCase):
             self.observation(witness_ref=WITNESS_PREFIX + "not-a-real-job")
         ))
 
+    def test_malformed_witness_reference_fails_closed(self):
+        from systems.workspace.workstation_continuation import Observation
+        malformed = Observation(
+            id="malformed-observation", lane_id=self.lane_id, kind="BRANCH",
+            relation=RELATION, witness_ref=None, capability=CAPABILITY, sequence=0,
+        )
+        self.assertFalse(self.verifier.verify_observation(malformed))
+
     def test_two_native_runs_are_not_automatically_a_join_witness(self):
         from systems.workspace.workstation_continuation import Observation
         left = self.observation()
