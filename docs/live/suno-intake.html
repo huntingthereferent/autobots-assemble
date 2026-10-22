@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#050608"><title>A/B Audio Intake · Workstation</title>
-<meta name="description" content="Local source-grounded WAV, MP3 and MIDI intake. Independently analyze, audition, and export short audio clips with provenance.">
+<meta name="theme-color" content="#050608"><title>Audio Intake · Production Desk · Workstation</title>
+<meta name="description" content="Local audio production desk: inspect WAV, MP3 and MIDI; bookmark source passages; compare creative directions; export and restore a portable production session.">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
 
@@ -169,12 +169,71 @@ a{color:var(--mint)} .top{position:sticky;top:0;z-index:50;padding:13px max(20px
 @media(max-width:490px){.shell{padding:13px 11px 55px}.hero-main{padding:24px 20px}.hero-aside{padding:22px 19px}.dir-field-grid{grid-template-columns:1fr}.faders{gap:12px}.arranger-row{grid-template-columns:18px minmax(78px,1fr) 60px 22px 22px 22px;gap:3px;padding:6px 4px}.arranger-row select{font-size:10px;padding:5px 2px}.arranger-row button{width:22px}.preset-strip{grid-template-columns:repeat(2,1fr)}.direction-label{width:100%}.jumpbar{gap:0}.jumpbar a{font-size:9px}.direction-metrics strong{font-size:16px}#brief-preview{padding:16px 13px}}
 @media(prefers-reduced-motion:reduce){.visualizer i{animation:none}}
 
+
+/* Session desk: crisp production workflow, separate source evidence from creative choices. */
+.session-shell{margin-top:29px;scroll-margin-top:84px}
+.session-heading{display:flex;justify-content:space-between;align-items:end;gap:18px;flex-wrap:wrap;margin-bottom:15px}
+.session-heading h2{font:750 clamp(32px,4vw,48px)/1.08 var(--sans);letter-spacing:-.055em;margin:6px 0 9px}
+.session-heading p{color:#aebdca;font-size:13px;max-width:690px;margin:0;line-height:1.7}
+.session-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.session-actions>button,.session-import{font:700 11px var(--mono);padding:11px 13px;min-height:42px}
+.session-import{display:inline-flex;align-items:center;justify-content:center;cursor:pointer;position:relative;overflow:hidden;color:#ecf2f4;background:#172330;border:1px solid #526478;border-radius:6px}
+.session-import:hover{background:#29394b}.session-import input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;max-width:none}
+.session-import:focus-within{outline:2px solid #b3ecda;outline-offset:3px}
+.session-statusline{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;background:#131d28;border:1px solid #364656;border-radius:8px;padding:11px 15px;margin-bottom:13px;font:10px/1.6 var(--mono);color:#b4c5d2}
+.signal-dot{width:8px;height:8px;border-radius:50%;background:#95d9b9;flex:none}
+#session-source{color:#dceae5;font-weight:650}#session-feedback{margin-left:auto;flex:1 1 300px;text-align:right;color:#a2b5c6}
+.session-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.session-panel{background:linear-gradient(153deg,#151d2a,#0e141d);border:1px solid #354557;border-radius:12px;padding:23px;min-width:0}
+.session-panel-head{display:flex;justify-content:space-between;gap:14px;align-items:start;margin-bottom:20px}
+.session-panel-head h3{font:750 24px/1.14 var(--sans);color:#eef2f6;letter-spacing:-.035em;margin:5px 0 9px}
+.session-panel-head p{font:12px/1.7 var(--sans);color:#a8baca;max-width:480px;margin:0}
+.mini-index{font:700 10px/1.5 var(--mono);letter-spacing:.11em;color:#aee1cc}
+.tiny-count{white-space:nowrap;font:700 10px var(--mono);border:1px solid #506473;color:#cce0d9;border-radius:4px;padding:6px 8px}
+.moment-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.moment-form label{display:grid;gap:6px;font:650 10px var(--mono);color:#aabecb;letter-spacing:.03em;min-width:0}
+.moment-form input,.moment-form select,.moment-form textarea{width:100%;border:1px solid #46596c;background:#1a2735;border-radius:6px;color:#ecf3f7;min-height:41px;padding:10px 12px;font:12px var(--sans);resize:vertical}
+.moment-form label.wide{grid-column:1/-1}.moment-form button{grid-column:1/-1;justify-self:start;font:700 11px var(--mono)}
+.moment-list{display:grid;gap:8px;margin-top:19px}
+.session-empty{margin:0;color:#9eb1c2;font:12px/1.75 var(--sans);background:#141e29;border:1px dashed #3b4b5b;border-radius:7px;padding:15px}
+.moment-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:11px;background:#1a2532;border:1px solid #425267;border-left:3px solid #9cddc5;padding:12px 14px;border-radius:7px}
+.moment-row strong{color:#eff7f5;font-size:13px;display:block;overflow-wrap:anywhere}
+.moment-row small{font:10px/1.7 var(--mono);color:#acd0c6;display:block;margin-top:4px}
+.moment-row p{color:#c2cdda;font:11px/1.65 var(--sans);margin:5px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.moment-row .moment-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:start;justify-content:flex-end}
+.moment-actions button{font:700 10px var(--mono);padding:8px 9px;min-height:34px}
+.moment-actions button:disabled{opacity:.3}
+.session-footnote{font:10px/1.8 var(--mono);color:#90a4b4;margin:14px 0 0}
+.takes-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.take-slot{position:relative;min-width:0;padding:16px;background:#1c2633;border:1px solid #425469;border-radius:9px;display:grid;gap:7px;align-content:start}
+.take-slot[data-filled=true]{border-color:#89b8a8;background:#192c32}
+.take-letter{font:750 30px/1 var(--mono);color:#f7d1dc;letter-spacing:-.055em}
+.take-slot strong{font:700 13px var(--sans);color:#edf2f5}
+.take-slot p{font:11px/1.5 var(--mono);color:#a8bbc8;min-height:38px;overflow-wrap:anywhere;margin:0}
+.take-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}
+.take-actions button{font:750 10px var(--mono);padding:8px;min-height:35px;flex:1 1 65px}
+.comparison-box{border:1px solid #405064;border-radius:8px;margin-top:15px;overflow:hidden}
+.comparison-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px;padding:12px 14px;background:#1a2837}
+.comparison-head strong{font:750 10px var(--mono);color:#e8d6db}.comparison-head small{font:10px var(--mono);color:#a0b1c0}
+.comparison-columns,.comparison-row{display:grid;grid-template-columns:27% 36.5% 36.5%;gap:0;align-items:start}
+.comparison-columns{background:#121c26;color:#95a6b9;font:750 9px var(--mono);letter-spacing:.06em}
+.comparison-columns span,.comparison-row span{padding:9px 10px;min-width:0;overflow-wrap:anywhere}
+.comparison-row{font:11px/1.55 var(--sans);border-top:1px solid #2c3b4d}
+.comparison-row:nth-child(even){background:#141e29}.comparison-row .is-different{color:#ffd0b0}
+.comparison-row span:first-child{font:700 10px var(--mono);color:#aabecb}
+.session-help{border-left:2px solid #87cdb5;padding:8px 0 8px 12px;margin-top:18px}
+.session-help strong{font:700 11px var(--mono);color:#c7eddd}
+.session-help p{font:11px/1.7 var(--sans);color:#9eb3c2;margin:6px 0 0}
+@media(max-width:1060px){.session-grid{grid-template-columns:1fr}#session-feedback{text-align:left}}
+@media(max-width:540px){.session-panel{padding:17px}.session-actions{width:100%}.session-actions>*{flex:1;text-align:center}.moment-form{grid-template-columns:1fr}.moment-form label.wide{grid-column:1}.moment-row{grid-template-columns:1fr}.moment-row .moment-actions{justify-content:flex-start}.takes-grid{gap:6px}.take-slot{padding:11px}.comparison-columns,.comparison-row{grid-template-columns:30% 35% 35%}.comparison-columns span,.comparison-row span{padding:8px 6px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.session-shell *{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
-<header class="top"><a class="sitebrand" href="work.html" aria-label="Return to workstation"><span class="mark">A<span>/</span>B</span><span class="brandwords">WORKSTATION<small> / SOUND LAB</small></span></a><nav aria-label="Page navigation"><a href="#source">SOURCE</a><a href="#listen">LISTEN</a><a class="nav-feature" href="#direction">DIRECTION <span aria-hidden="true">↗</span></a><a href="#playbench">SAMPLER</a><a href="#provenance">RECORD</a><a href="cat-keyboard.html">MEOW LAB 2 ↗</a></nav></header>
+<header class="top"><a class="sitebrand" href="work.html" aria-label="Return to workstation"><span class="mark">A<span>/</span>B</span><span class="brandwords">WORKSTATION<small> / SOUND LAB</small></span></a><nav aria-label="Page navigation"><a href="#source">SOURCE</a><a href="#listen">LISTEN</a><a class="nav-feature" href="#direction">DIRECTION <span aria-hidden="true">↗</span></a><a href="#session">SESSION DESK</a><a href="#playbench">SAMPLER</a><a href="#provenance">RECORD</a><a href="cat-keyboard.html">MEOW LAB 2 ↗</a></nav></header>
 <main class="shell">
-<section class="hero" aria-labelledby="page-title"><div class="hero-main"><div class="eyebrow"><span class="pulse-dot"></span> AUDIO / SOURCE INTAKE <span class="version">INDEPENDENT · LOCAL FIRST</span></div><h1 id="page-title">Hear the detail.<br><em>Build the direction.</em></h1><p class="desc">A listening and production desk for your own WAV, MP3 and MIDI exports. Inspect the signal, select a useful passage, shape an arrangement, and leave with a clear direction brief—not just another waveform.</p><div class="hero-links"><a class="hero-cta" href="#direction">OPEN DIRECTION DESK <span>↘</span></a><a class="hero-link" href="#source">Start with a source →</a></div></div><aside class="hero-aside" aria-label="Three-step workflow"><div class="visualizer" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="aside-label">YOUR SESSION PATH</p><div class="hero-step"><b>01</b><span><strong>IMPORT</strong><small>Read the source, locally</small></span></div><div class="hero-step"><b>02</b><span><strong>LISTEN + DIRECT</strong><small>Mark the moment and decide what changes</small></span></div><div class="hero-step"><b>03</b><span><strong>TAKE IT FORWARD</strong><small>Copy a creative brief or export a source record</small></span></div><div class="safe-note">NO ACCOUNT LINK · NO UPLOADS · NO GENERATED AUDIO</div></aside></section><div class="jumpbar"><span>SESSION /</span><a href="#source">01 IMPORT</a><a href="#listen">02 INSPECT</a><a href="#direction">03 DIRECT</a><a href="#playbench">04 PLAY</a><a href="#provenance">05 DOCUMENT</a></div>
+<section class="hero" aria-labelledby="page-title"><div class="hero-main"><div class="eyebrow"><span class="pulse-dot"></span> AUDIO / SOURCE INTAKE <span class="version">INDEPENDENT · LOCAL FIRST</span></div><h1 id="page-title">Find the moment.<br><em>Make the next move.</em></h1><p class="desc">A working desk for audio you already have. Hear the source, keep the moments worth revisiting, try two production directions, and carry your decisions into the next session.</p><div class="hero-links"><a class="hero-cta" href="#direction">OPEN DIRECTION DESK <span>↘</span></a><a class="hero-link" href="#source">Start with a source →</a></div></div><aside class="hero-aside" aria-label="Three-step workflow"><div class="visualizer" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="aside-label">YOUR SESSION PATH</p><div class="hero-step"><b>01</b><span><strong>IMPORT</strong><small>Read the source, locally</small></span></div><div class="hero-step"><b>02</b><span><strong>LISTEN + DIRECT</strong><small>Mark the moment and decide what changes</small></span></div><div class="hero-step"><b>03</b><span><strong>KEEP THE SESSION</strong><small>Compare A/B versions, export and pick up later</small></span></div><div class="safe-note">NO ACCOUNT LINK · NO UPLOADS · NO GENERATED AUDIO</div></aside></section><div class="jumpbar"><span>SESSION /</span><a href="#source">01 IMPORT</a><a href="#listen">02 INSPECT</a><a href="#direction">03 DIRECT</a><a href="#session">04 KEEP & COMPARE</a><a href="#playbench">05 PLAY</a><a href="#provenance">06 DOCUMENT</a></div>
 <div class="layout"><section class="panel" id="source"><h2>01 / Source intake</h2><p class="sub">Export from Suno via its built-in Download or Studio workflow; then choose your local files. Each file receives an independent SHA-256 when supported.</p><div class="picker" id="drop"><strong>Drop authorized audio or MIDI here</strong><input id="files" type="file" accept=".wav,.mp3,.mid,.midi,audio/wav,audio/mpeg,audio/midi" multiple aria-label="Choose WAV MP3 or MIDI files"><p class="micro tip">Up to 12 files · 50 MB each · tracks stay in this browser session</p></div><div id="files-list" class="files" aria-label="Imported files"><p class="micro">No source material selected.</p></div><p class="fineprint">Use material you have permission to use. Suno's terms govern Suno-generated exports; this tool does not grant new rights.</p><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h3>Source metadata</h3><div id="source-info" class="micro" style="margin-top:9px;overflow-wrap:anywhere">No decoded file.</div></section>
 <section class="panel" id="listen"><h2>02 / Inspect & isolate</h2><p class="sub">This waveform is computed from decoded audio. Drag across the wave to isolate a passage; use the manual beat ruler below to audition four- or eight-bar ideas.</p><div class="caps"><span id="duration">DURATION —</span><span id="peak">PEAK —</span><span id="rms">RMS —</span><span id="sample-rate">RATE —</span></div><div class="wave-frame"><canvas id="wave" aria-label="Waveform of selected file" role="img"></canvas><div class="wave-note" id="wave-note">Load WAV or MP3 to visualize</div></div><div class="fields block"><label>START · seconds<input id="start" type="number" step="0.01" min="0" value="0" disabled></label><label>END · seconds<input id="end" type="number" step="0.01" min="0" value="0" disabled></label><label>SPEED · audition rate<input id="rate" type="range" min="0.5" max="2" step="0.01" value="1" disabled><span class="mono" id="rate-text">1.00×</span></label><label>PROJECT TEMPO · manual BPM<input id="bpm" type="number" min="40" max="240" step="1" value="120"></label></div><div class="beat-tools"><div><strong>BAR RULER</strong><span>Assume 4/4 at your chosen BPM · not tempo detection</span></div><button type="button" id="tap-bpm">TAP BPM</button><button type="button" data-bars="4">4 BARS</button><button type="button" data-bars="8">8 BARS</button><span id="bar-duration" class="micro">4 bars = 8.0 s</span></div><div class="toolbar"><button id="play" class="primary" disabled>▶ Play slice</button><button id="stop" disabled>■ Stop</button><button id="export" disabled>↓ Export WAV slice</button></div><p class="fineprint">One bounded WAV slice: 0.01–45 seconds. Bar lengths are planning aids; export is still measured in real seconds. Original files remain unchanged.</p><p id="status" class="status" role="status" aria-live="polite">Ready. Choose an exported audio or MIDI file.</p></section></div>
 
@@ -195,8 +254,42 @@ a{color:var(--mint)} .top{position:sticky;top:0;z-index:50;padding:13px max(20px
 <div class="next-steps"><h3>What to do next</h3><p id="direction-next">Choose a direction and copy the brief. Import a local file if you want a source-linked audition or manifest.</p><div class="next-links"><a href="https://suno.com/" target="_blank" rel="noopener noreferrer">OPEN SUNO ↗</a><a href="cat-keyboard.html">MEOW LAB 2 ↗</a><a href="#listen">REVISIT SOURCE ↑</a></div></div>
 <p class="brief-boundary">The brief describes <strong>your requested direction</strong>, not properties automatically inferred from an audio file. No prompt, file or project is uploaded by this page. Suno is a separate service.</p></aside>
 </div></section>
-<div class="bottom"><section class="panel" id="playbench"><h2>04 / Play the extracted sound</h2><p class="sub">Thirteen pitches, driven by one local audio slice. Resampling is a measured playback-rate change, not Suno generation or pitch-preserving time stretch.</p><div class="fields"><label>ROOT NOTE · MIDI<input type="number" id="root" value="60" min="24" max="96" step="1"></label><label>NOTE LENGTH · seconds<input type="number" id="length" value="0.45" min="0.05" max="3" step="0.05"></label></div><div id="keys" class="keys" aria-label="Playable audio sample keyboard"></div><p class="micro" style="margin-top:12px">Click / touch a key, or type <strong>A W S E D F T G Y H U J K</strong>. Each note starts a bounded sample from the selected source. Select an audio clip first.</p></section>
-<section class="panel" id="provenance"><h2>05 / Source record</h2><p class="sub">Visible boundaries remain with every export. The JSON file is a record, not the audio itself or a claim of Suno source ownership.</p><div class="toolbar"><button id="manifest">↓ Export source JSON</button><button id="midi-notes" disabled>↓ Export MIDI note list</button></div><h3>Native observations</h3><ul id="observations" class="eventlist"><li><span>Waiting for source</span><span>—</span></li></ul><p class="fineprint">MIDI is parsed locally with recorded note timing and tempo changes. No AI transcription or stem extraction is claimed.</p></section></div>
+
+<section class="session-shell" id="session" aria-labelledby="session-title">
+  <div class="session-heading">
+    <div><span class="kicker">04 / REMEMBER WHAT WORKED</span><h2 id="session-title">Session desk<span class="title-period">.</span></h2><p>Keep the useful bit, try two directions, and export a self-contained decision record. Your audio stays on your device.</p></div>
+    <div class="session-actions"><button type="button" class="primary" id="export-session">↓ SAVE SESSION</button><label class="session-import" for="import-session">↑ RESTORE SESSION<input type="file" id="import-session" accept=".json,application/json" aria-label="Restore exported audio intake session JSON"></label></div>
+  </div>
+  <div class="session-statusline"><span class="signal-dot" aria-hidden="true"></span><span id="session-source">NO LOCAL SOURCE · Direction can be saved without audio</span><span id="session-feedback" role="status" aria-live="polite">Sessions export as JSON with notes and references only, never audio files.</span></div>
+  <div class="session-grid">
+    <section class="session-panel" aria-labelledby="moments-title">
+      <div class="session-panel-head"><div><span class="mini-index">A · SOURCE</span><h3 id="moments-title">Keep a moment</h3><p>Mark a passage you want to revisit. The marker stays tied to its original source.</p></div><span class="tiny-count" id="moment-count">0 MARKERS</span></div>
+      <div class="moment-form">
+        <label for="moment-title">NAME THIS MOMENT<input id="moment-title" type="text" maxlength="90" placeholder="The chorus that opens up"></label>
+        <label for="moment-purpose">WHY IT MATTERS<select id="moment-purpose"><option>Hook</option><option>Groove</option><option>Vocal</option><option>Transition</option><option>Sound design</option><option>Reference</option><option>Other</option></select></label>
+        <label class="wide" for="moment-note">WHAT TO KEEP OR CHANGE<textarea id="moment-note" maxlength="300" rows="2" placeholder="Keep the cadence; less percussion under this line…"></textarea></label>
+        <button type="button" id="add-moment" class="primary" disabled>+ KEEP SELECTED PASSAGE</button>
+      </div>
+      <div id="moment-list" class="moment-list" aria-live="polite"><p class="session-empty">Import an audio file, isolate a passage above, then keep it here.</p></div>
+      <p class="session-footnote">Markers from a restored session remain unavailable until you import their exact matching source. When secure hashing is unavailable, markers are usable only with the source already loaded in this session.</p>
+    </section>
+    <section class="session-panel" aria-labelledby="takes-title">
+      <div class="session-panel-head"><div><span class="mini-index">B · DECISIONS</span><h3 id="takes-title">Compare two directions</h3><p>Save the current Direction Desk choices as A or B, then reload either to keep editing.</p></div></div>
+      <div class="takes-grid">
+        <div class="take-slot" id="take-a"><span class="take-letter">A</span><strong>First direction</strong><p id="take-a-state">Not saved yet</p><div class="take-actions"><button type="button" id="save-a">SAVE A</button><button type="button" id="load-a" disabled>RESTORE A</button></div></div>
+        <div class="take-slot" id="take-b"><span class="take-letter">B</span><strong>Alternate direction</strong><p id="take-b-state">Not saved yet</p><div class="take-actions"><button type="button" id="save-b">SAVE B</button><button type="button" id="load-b" disabled>RESTORE B</button></div></div>
+      </div>
+      <div class="comparison-box" aria-label="Comparison of saved directions">
+        <div class="comparison-head"><strong>AT A GLANCE</strong><small>Only saved choices are compared</small></div>
+        <div class="comparison-columns"><span>ATTRIBUTE</span><span>A / FIRST</span><span>B / SECOND</span></div>
+        <div id="take-comparison" class="comparison-rows"><p class="session-empty">Save A and B to see what changes.</p></div>
+      </div>
+      <div class="session-help"><strong>How this works</strong><p>Use the Direction Desk above to make an idea. Save A. Change the groove, energy or arrangement. Save B. Compare and restore either one. Use “Save Session” to take both away.</p></div>
+    </section>
+  </div>
+</section>
+<div class="bottom"><section class="panel" id="playbench"><h2>05 / Play the extracted sound</h2><p class="sub">Thirteen pitches, driven by one local audio slice. Resampling is a measured playback-rate change, not Suno generation or pitch-preserving time stretch.</p><div class="fields"><label>ROOT NOTE · MIDI<input type="number" id="root" value="60" min="24" max="96" step="1"></label><label>NOTE LENGTH · seconds<input type="number" id="length" value="0.45" min="0.05" max="3" step="0.05"></label></div><div id="keys" class="keys" aria-label="Playable audio sample keyboard"></div><p class="micro" style="margin-top:12px">Click / touch a key, or type <strong>A W S E D F T G Y H U J K</strong>. Each note starts a bounded sample from the selected source. Select an audio clip first.</p></section>
+<section class="panel" id="provenance"><h2>06 / Source record</h2><p class="sub">Visible boundaries remain with every export. The JSON file is a record, not the audio itself or a claim of Suno source ownership.</p><div class="toolbar"><button id="manifest">↓ Export source JSON</button><button id="midi-notes" disabled>↓ Export MIDI note list</button></div><h3>Native observations</h3><ul id="observations" class="eventlist"><li><span>Waiting for source</span><span>—</span></li></ul><p class="fineprint">MIDI is parsed locally with recorded note timing and tempo changes. No AI transcription or stem extraction is claimed.</p></section></div>
 <footer class="disclaimer">INDEPENDENT WORKSTATION TOOL — not affiliated with Suno. Source compatibility follows Suno's documented WAV/MP3, stem, and MIDI export paths. The tool neither retrieves songs from Suno nor reproduces Suno's model, account systems, or proprietary implementation. Third-party audio rights and terms remain with their respective owners.<br><a href="https://help.suno.com/en/articles/13925249" target="_blank" rel="noopener noreferrer">Suno export guide</a> · <a href="https://suno.com/terms" target="_blank" rel="noopener noreferrer">Suno terms</a> · <a href="work.html">Return to workstation</a></footer>
 </main>
 <script src="audio-intake-core.js"></script>
