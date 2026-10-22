@@ -29,6 +29,15 @@
   ],
   "lane_rules": [
     {
+      "id": "B-CONTRACT",
+      "title": "B / Research source contract",
+      "match": [
+        "dessy · independent research lane contract"
+      ],
+      "node": "B",
+      "admission": "B's first individually enabled workflow. This runs source-registry and boundary tests; it does not prove research replication."
+    },
+    {
       "id": "ARC",
       "title": "ARC",
       "match": [
