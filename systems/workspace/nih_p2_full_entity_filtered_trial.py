@@ -115,6 +115,55 @@ def per_relation_failure_diagnostics(cases, entity_count):
     return result
 
 
+def frozen_train_relation_tail_frequency(train):
+    """TRAIN-only per-predicate tail count; zero source inference assumptions."""
+    counts=defaultdict(int)
+    for head,relation,tail in train:
+        counts[(relation,tail)] += 1
+    if not counts:
+        raise ValueError("original TRAIN frequency source empty")
+    return counts
+
+
+def per_relation_frequency_baseline(train,universe,questions,known):
+    """Score exactly the frozen 64 heldout questions on the original entity universe.
+
+    TEST/VALID edges filter other known positive candidates only; they are
+    never counted as TRAIN frequencies. This is a separate, weaker family of
+    ranking models, not an equal-strength path reasoner.
+    """
+    freq=frozen_train_relation_tail_frequency(train)
+    eligible=set(universe)
+    results=[]
+    for head,relation,gold in questions:
+        if gold not in eligible:
+            raise ValueError("gold missing from original candidate universe")
+        other=known[(head,relation)]-{gold}
+        scores=[freq.get((relation,tail),0) for tail in universe if tail not in other]
+        gold_score=freq.get((relation,gold),0)
+        rank=tie_aware_rank(gold_score,scores)
+        if rank<1 or rank>len(scores):
+            raise ValueError("source-only frequency rank out of bounds")
+        results.append({"relation":relation,
+                        "source_train_tail_frequency":gold_score,
+                        "other_known_positives_excluded":len(other&eligible),
+                        "filtered_tie_aware_rank":rank})
+    ranks=[x["filtered_tie_aware_rank"] for x in results]
+    return {
+        "source":"original_train_only_relation_specific_tail_frequency",
+        "n":len(ranks),
+        "hits_at_1":sum(x<=1 for x in ranks),
+        "hits_at_3":sum(x<=3 for x in ranks),
+        "hits_at_10":sum(x<=10 for x in ranks),
+        "MRR":round(sum(1/x for x in ranks)/len(ranks),6),
+        "mean_rank":round(sum(ranks)/len(ranks),6),
+        "test_valid_edges_used_for_training":False,
+        "questions_or_frozen_rules_changed":False,
+        "actual_negative_labels_known":False,
+        "individual_case_diagnostics":results,
+    }
+
+
 def run(*, train_file:Path,test_file:Path,valid_file:Path):
     train,trid=original.read_source(train_file,"train.tsv")
     test,teid=original.read_source(test_file,"test.tsv")
@@ -200,6 +249,8 @@ def run(*, train_file:Path,test_file:Path,valid_file:Path):
         "original_W13_journal_modified":False,
         "official_NIH_benchmark":False,
         "per_relation_frozen_failure_diagnostics":per_relation_failure_diagnostics(cases,len(universe)),
+        "original_train_frequency_baseline":per_relation_frequency_baseline(
+            train,universe,questions,known),
         "cases":cases,
     }
 
