@@ -192,13 +192,12 @@
     const active=fresh?latestPage.filter(r=>status(r)==="running"):[];
     const finished=todays.filter(r=>status(r)==="finished");
     const passed=finished.filter(r=>r.conclusion==="success");
-    const failed=finished.filter(r=>["failure","cancelled","timed_out"].includes(r.conclusion));
     const arrivalsHour=source.filter(r=>{const t=validTime(r.created);return t!==null&&t>=now-3600000&&t<=now;});
     const clearance=todays.length?Math.round(finished.length/todays.length*100):null;
     setStat("queued",queue.length,fresh);
     setStat("running",active.length,fresh);
     setStat("passed",passed.length);
-    setStat("failed",failed.length);
+    setStat("indexed",source.length);
     const show=v=>state.loaded?number(v):"—";
     setText("flow-created",show(todays.length));
     setText("flow-cleared",show(finished.length));
