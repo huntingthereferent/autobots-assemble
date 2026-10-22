@@ -9,6 +9,8 @@
   const samples=[];
   let previous=null;
   let firstAt=null;
+  let firstWaiting=null;
+  let totalSamples=0;
   let arrivals=0;
   let observedFinishes=0;
   const WINDOW=180;
@@ -43,7 +45,8 @@
         }
       }
     }
-    if(firstAt===null)firstAt=t;
+    if(firstAt===null){firstAt=t;firstWaiting=waiting;}
+    totalSamples++;
     previous=known;
     samples.push({t,waiting,working});
     if(samples.length>WINDOW)samples.shift();
@@ -71,7 +74,7 @@
     const count=samples.length;
     if(!count)return;
     const first=samples[0],latest=samples[count-1];
-    const seconds=(latest.t-first.t)/1000;
+    const seconds=(latest.t-firstAt)/1000;
     let weight=0,weightedBusy=0,weightedWait=0;
     for(let i=1;i<count;i++){
       const dt=samples[i].t-samples[i-1].t;
@@ -85,7 +88,7 @@
     const avgBusy=weight?weightedBusy/weight:null;
     const avgQueue=weight?weightedWait/weight:null;
     const peak=Math.max(...samples.map(s=>s.working));
-    const queueDelta=latest.waiting-first.waiting;
+    const queueDelta=latest.waiting-firstWaiting;
     const hours=seconds/3600;
     const arrivalsPerHour=hours>0?arrivals/hours:null;
     const finishesPerHour=hours>0?observedFinishes/hours:null;
@@ -93,9 +96,9 @@
     let state="OBSERVING";
     let explanation="Need at least five successful checks over eight minutes to compare flow.";
     if(enough){
-      if(latest.waiting>first.waiting+1&&arrivalsPerHour>finishesPerHour*1.15){
+      if(latest.waiting>firstWaiting+1&&arrivalsPerHour>finishesPerHour*1.15){
         state="BACKLOG GROWING";explanation="Queue is rising and newly observed arrival rate exceeds completion detection.";
-      }else if(latest.waiting<first.waiting-1){
+      }else if(latest.waiting<firstWaiting-1){
         state="BACKLOG DRAINING";explanation="Observed queue is shrinking across this session.";
       }else if(latest.waiting>0&&Math.abs(arrivalsPerHour-finishesPerHour)<=Math.max(1,Math.max(arrivalsPerHour,finishesPerHour)*.2)){
         state="STEADY CANDIDATE";explanation="Observed arrival/completion rates are close; queue has not grown materially. Keep measuring.";
@@ -109,7 +112,7 @@
     }
     toText("eq-state",state);
     toText("eq-description",explanation);
-    toText("eq-samples",count+" checks · "+numeric(seconds/60)+" observed min");
+    toText("eq-samples",totalSamples+" checks · "+numeric(seconds/60)+" session min");
     toText("eq-avg-running",avgBusy===null?"—":numeric(avgBusy));
     toText("eq-peak-running",numeric(peak));
     toText("eq-avg-waiting",avgQueue===null?"—":numeric(avgQueue));
