@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "LIT_CROSS_INDEX_IDENTITY_RECONCILIATION",
+  "experiment_id": "LIT-DOI-001",
+  "lane_id": "LIT",
+  "run_id": 39813851587,
+  "run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39813851587",
+  "source_code_commit": "93ceb36fb3ac8125788b145e981a79ffd0fe6366",
+  "observed_at_utc": "2026-10-22T16:25:14.015102+00:00",
+  "pinned_record": {
+    "doi": "10.1126/science.aac4716",
+    "pmid": "26315443",
+    "title": "Estimating the reproducibility of psychological science"
+  },
+  "sources": {
+    "crossref": {
+      "endpoint": "https://api.crossref.org/works/10.1126/science.aac4716",
+      "http_status": 200,
+      "response_bytes": 8014,
+      "response_sha256": "ee986ba9347bbdaba3c92d18f16391e2e5bcbb11a2ec41d3690bf1818190a99d",
+      "state": "IDENTITY_OBSERVED",
+      "doi": "10.1126/science.aac4716",
+      "title": "Estimating the reproducibility of psychological science",
+      "normalized_title": "estimatingthereproducibilityofpsychologicalscience"
+    },
+    "openalex": {
+      "endpoint": "https://api.openalex.org/works/https://doi.org/10.1126/science.aac4716",
+      "http_status": 200,
+      "response_bytes": 61560,
+      "response_sha256": "2197780b3baf5f3f00f63a462c5a42563c45463ca05e24b4607ed6595fba2e21",
+      "state": "IDENTITY_OBSERVED",
+      "doi": "10.1126/science.aac4716",
+      "title": "Estimating the reproducibility of psychological science",
+      "normalized_title": "estimatingthereproducibilityofpsychologicalscience"
+    },
+    "pubmed": {
+      "endpoint": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=26315443&retmode=xml",
+      "http_status": 200,
+      "response_bytes": 38328,
+      "response_sha256": "84f3f35ea3a9a699b8c4673261e7eeff301c771ba7fb23ada4b428eeae57fbfa",
+      "state": "IDENTITY_OBSERVED",
+      "pmid": "26315443",
+      "doi": "10.1126/science.aac4716",
+      "title": "PSYCHOLOGY. Estimating the reproducibility of psychological science.",
+      "comparison_note": "The source's uppercase section prefix is retained in title and stripped only for normalized cross-index comparison.",
+      "normalized_title": "estimatingthereproducibilityofpsychologicalscience"
+    }
+  },
+  "result": {
+    "state": "IDENTITY_MATCH",
+    "matched_fields": [
+      "DOI",
+      "normalized title"
+    ]
+  },
+  "boundaries": {
+    "full_text_fetched": false,
+    "source_body_archived": false,
+    "scientific_claim_tested": false,
+    "rights_review": "metadata only; no full-text reuse"
+  },
+  "provenance": {
+    "retrieval_policy": {
+      "max_bytes_per_source": 250000,
+      "timeout_seconds": 15,
+      "redirects": "denied"
+    },
+    "artifact_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39813851587/artifacts/12441505986"
+  }
+}

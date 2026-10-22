@@ -6,7 +6,7 @@ The catalog is [registry.json](registry.json); [lane_registry.py](lane_registry.
 
 The sibling question is **what test context is needed for the present referent?** A domain tag in this list is not a new foundation/capability or proof of a universal mechanism. When a real question crosses disciplines, the evidence stays attached to the same referent and can link multiple source contexts without duplicating the original witness.
 
-## Why there are separate objects
+## First executed lane witness\n\n- [LIT-DOI-001 cross-index identity receipt](observations/2026-10-22-LIT-DOI-001.json) — run 39813851587 passed one fixed DOI/PMID identity check across Crossref, OpenAlex and PubMed. This confirms identifier/title consistency only; it does not reproduce or validate the cited paper's scientific findings.\n\n## Why there are separate objects
 
 - **Source index / bibliography:** where one might discover relevant research. A catalog listing alone is not evidence.
 - **Study or protocol:** a specific dated record, registered design or published claim, pinned by stable ID and version.
