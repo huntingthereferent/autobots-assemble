@@ -26,6 +26,10 @@ A deliberate *bounded* metadata check (network required):
 
 A dedicated PR workflow runs offline negative-case tests and a single live two-source query with an archived GitHub Actions receipt. It does not commit the live record to the repo. If an API is unavailable, the receipt remains UNKNOWN and the live check fails distinctly; this is an access wall, not scientific refutation.
 
+## Original analysis data: separate admission gate
+
+The original project's [Center for Open Science analysis repository](https://github.com/CenterForOpenScience/rpp) identifies its data and scripts, and links an [OSF dataset](https://osf.io/fgjvw/). A commit-pinned potential source is registered as [OSC-2015-UPSTREAM-CANDIDATE](studies/OSC-2015-UPSTREAM-CANDIDATE.json). Its current status is DISCOVERED_NOT_ADMITTED: data content, rights, privacy, and exact relationship to the published analysis are not yet verified. The listed Git blob SHA does not replace that review.
+
 ## Test contract
 
 | Field | Frozen meaning |
