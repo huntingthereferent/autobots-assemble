@@ -90,6 +90,16 @@ class GameW13ContinuationBridgeTests(unittest.TestCase):
         )
         self.assertFalse(self.verifier.verify_observation(malformed))
 
+    def test_malformed_observation_object_and_lane_fail_closed(self):
+        from systems.workspace.workstation_continuation import Observation
+        self.assertFalse(self.verifier.verify_observation(None))
+        malformed = Observation(
+            id="malformed-lane", lane_id=None, kind="BRANCH",
+            relation=RELATION, witness_ref=WITNESS_PREFIX + self.job_id,
+            capability=CAPABILITY, sequence=0,
+        )
+        self.assertFalse(self.verifier.verify_observation(malformed))
+
     def test_two_native_runs_are_not_automatically_a_join_witness(self):
         from systems.workspace.workstation_continuation import Observation
         left = self.observation()
