@@ -12,6 +12,7 @@ const insightText = document.querySelector("#insight-text");
 const insightSource = document.querySelector("#insight-source");
 
 let currentStep = 0;
+let insightRevision = 0;
 
 function money(value) {
   return new Intl.NumberFormat("en-US", {
@@ -56,6 +57,7 @@ function setText(id, value) {
 }
 
 function renderDashboard(result) {
+  const revision = ++insightRevision;
   const statusLabel = result.status === "green"
     ? "Healthy"
     : result.status === "yellow"
@@ -88,14 +90,14 @@ function renderDashboard(result) {
 
   insightText.textContent = fallbackInsight(result);
   insightSource.textContent = "Local rule-based insight";
-  loadAiInsight(result);
+  void loadAiInsight(result, revision);
 
   formPanel.hidden = true;
   dashboard.hidden = false;
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-async function loadAiInsight(result) {
+async function loadAiInsight(result, revision) {
   try {
     const response = await fetch("/api/insight", {
       method: "POST",
@@ -105,7 +107,8 @@ async function loadAiInsight(result) {
 
     if (!response.ok) return;
     const payload = await response.json();
-    if (payload.insight) {
+    if (revision !== insightRevision || dashboard.hidden) return;
+    if (typeof payload.insight === "string" && payload.insight.trim()) {
       insightText.textContent = payload.insight;
       insightSource.textContent = payload.source === "openai"
         ? "AI suggestion"
@@ -139,6 +142,7 @@ backButton.addEventListener("click", () => {
 });
 
 resetButton.addEventListener("click", () => {
+  insightRevision++;
   form.reset();
   dashboard.hidden = true;
   formPanel.hidden = false;
