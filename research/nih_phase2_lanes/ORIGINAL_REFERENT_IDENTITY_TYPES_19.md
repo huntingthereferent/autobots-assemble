@@ -1,6 +1,14 @@
 # Lane C E19 — authentic Bgee referent type and identity claims
 
-**Status: implemented and source-connected CI queued; not yet independently verified.**
+**Status: E19 original-source experiment completed; first CI report gate failed and is being independently rerun. No final-head success yet.**
+
+[First original-source E19 run #39846804280](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39846804280) completed its complete original-file-authenticated OWL RL computation, eight synthetic positive/negative tests, and independent native/SPARQL comparison. Its measured report recorded **1,993 original source referent nodes, 1,993 reflexive self-identity triples, zero nonreflexive sameAs triples, and 27,259 total rdf:type triples** touching native nodes. The GitHub workflow still **FAILED** because it wrongly asserted **27,257 as the total type count**.
+
+**Count reconciliation:** E18 independently reported **27,257 additional inferred** rdf:type statements *beyond* the original input. E19 counts **27,259 total** rdf:type statements on original referents: **two authenticated original-source rdf:type assertions + 27,257 newly inferred**. This is a total-versus-delta mismatch, not an independently demonstrated source change or cross-engine disagreement. The CI report gate now independently asserts both the source-authored and additional inferred counts and verifies their sum; a ninth fixture test explicitly enforces this distinction. Source bytes, inferred triples and the original graph are unchanged.
+
+The first run's derived-only artifact is `nih-p2-lane-c-e19-original-referent-identity-type`, ID `12456151378`, ZIP SHA-256 `b04f1c7375cb5f70132ccef48b4df30c5bbd95c1aea47416909d5f0d447c8973`. **This is a scientific computation receipt from a failed workflow, not a successful CI receipt.** Re-run [E19 with reconciled gate](https://github.com/huntingthereferent/autobots-assemble/actions/workflows/nih-p2-bgee-original-identity-type-e19.yml) before final acceptance.
+
+---
 
 E18 confirmed the general OWL RL closure has 183,287 RDF triples overall; 154,445 statements touch the original Bgee referent-node universe, with 29,275 additional statements beyond original data and previously corroborated four source-owned inference rules. The 29,275 consist of 27,257 `rdf:type`, 1,993 `owl:sameAs`, and 25 other original referent schema statements. Those counts do **not** mean 27,257 biological phenotypes or 1,993 true new gene aliases.
 
