@@ -2,7 +2,7 @@
 (function(){
   const $ = id => document.getElementById(id);
   const KEY = "online-school-browser-v1";
-  const empty = () => ({version:1,learners:[],tasks:[],notes:[],attempts:[],selected:""});
+  const empty = () => ({version:1,learners:[],tasks:[],notes:[],attempts:[],creations:[],selected:""});
   const safeArray = x => Array.isArray(x) ? x : [];
   function load(){
     try {
@@ -11,11 +11,13 @@
       const data = JSON.parse(raw);
       if (data.version !== 1) throw Error("Unsupported record version");
       return {version:1,learners:safeArray(data.learners),tasks:safeArray(data.tasks),
-        notes:safeArray(data.notes),attempts:safeArray(data.attempts),selected:String(data.selected||"")};
+        notes:safeArray(data.notes),attempts:safeArray(data.attempts),creations:safeArray(data.creations),selected:String(data.selected||"")};
     } catch(err){$("storage-state").textContent="STORAGE NOT READABLE";return empty();}
   }
   let state=load(),storageAvailable=true,view="today";
-  let weekAnchor="",practiceProblem=null,practiceTries=0;
+  let weekAnchor="",practiceProblem=null,practiceTries=0,practiceSolved=false;
+  let editingCreationId=null,pattern=Array(8).fill(0),patternTimer=null,patternAudio=null;
+  let sparkIndex=0,storyParts=["A curious pony","A floating garden","A mysterious song"];
   const WORDS=[
     {word:"cat",sound:"c · a · t",hint:"A small pet that purrs."},
     {word:"sun",sound:"s · u · n",hint:"It lights the sky."},
@@ -36,6 +38,22 @@
     water:{question:"How does one drop of water behave on different surfaces?",materials:"Materials: a little water, a spoon, a towel and two safe surfaces.",method:"Suggested method: Ask an adult before using household surfaces. Place one drop on each surface; observe how it spreads. Dry everything afterward."},
     paper:{question:"Does folding paper change how much a bridge can hold?",materials:"Materials: paper, two books and light objects such as erasers.",method:"Suggested method: Bridge two books with flat paper, then folded paper. Observe the result with only light objects."}
   };
+  const IDEAS=[
+    "What if your pony discovered a tiny floating island?",
+    "Could you build a paper bridge strong enough for an eraser?",
+    "What would a rainstorm sound like if it were made by cats?",
+    "Invent a creature who can only talk by drawing shapes.",
+    "Can you make a musical pattern with four different notes?",
+    "How would you map a secret trail using only pictures?",
+    "Write a message from an explorer on a distant moon."
+  ];
+  const CHARACTERS=["A curious pony","A shy cloud","A singing cat","An inventive fox","A tiny robot","A brave beetle"];
+  const PLACES=["a floating garden","an underground library","a moonlit forest","a musical mountain","a candy-colored planet","a secret treehouse"];
+  const TWISTS=["a mysterious song","a door with no handle","a map written backwards","a bridge made of moonlight","an unexpected new friend","a clock that skips Tuesdays"];
+  const KIND_LABELS={story:"Story",trail:"Trail idea",music:"Music idea",experiment:"Experiment",pattern:"Eight-beat pattern",reading:"Reading thought",other:"New invention"};
+  const TONE_NAMES=["Rest","Low C","Middle E","High G","Sparkle C"];
+  const TONE_MARKS=["·","●","◆","▲","✦"];
+  const TONE_FREQ=[0,261.63,329.63,392,523.25];
   const uid=()=> typeof crypto!=="undefined"&&crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+"-"+String(Math.random()).slice(2);
   function localDay(){
     const n=new Date(),d=new Date(n.getTime()-n.getTimezoneOffset()*60000);
@@ -89,6 +107,111 @@
   }
   function ownToday(){
     return state.tasks.filter(t=>t.learnerId===state.selected&&t.day===$("school-date").value);
+  }
+  function saveCreation(kind,title,body,extra){
+    if(!learner())return false;
+    state.creations.push({id:uid(),learnerId:state.selected,day:$("school-date").value,
+      kind,title:String(title).slice(0,100),body:String(body).slice(0,5000),...(extra||{})});
+    const saved=persist();renderCreations();
+    return saved;
+  }
+  function kindName(kind){return KIND_LABELS[kind]||"Creative idea";}
+  function linkFor(kind){return kind==="trail"?"pony-trail.html":kind==="music"||kind==="pattern"?"cat-keyboard.html":null;}
+  function makeCreationCard(item,compact){
+    const card=node("article",undefined,"creation-card");
+    card.append(node("span",kindName(item.kind)+" · "+dateLabel(item.day||localDay()),"creation-label"));
+    card.append(node("strong",item.title));
+    card.append(node("p",compact?String(item.body||"").slice(0,135)+(String(item.body||"").length>135?"…":""):item.body||""));
+    const actions=node("div",undefined,"creation-actions");
+    const open=node("button",item.kind==="pattern"?"Play again ♫":"Continue ✎");
+    open.type="button";open.addEventListener("click",()=>{
+      if(item.kind==="pattern"&&Array.isArray(item.tones)&&item.tones.length===8&&item.tones.every(v=>Number.isInteger(v)&&v>=0&&v<TONE_NAMES.length)){
+        pattern=item.tones.slice();$("pattern-name").value=item.title;renderPattern();show("pattern");
+      }else{
+        editingCreationId=item.id;
+        $("creation-kind").value=Object.hasOwn(KIND_LABELS,item.kind)&&item.kind!=="pattern"?item.kind:"other";
+        $("creation-title").value=item.title;$("creation-body").value=item.body||"";
+        $("save-creation").textContent="Save changes ✦";$("cancel-creation-edit").hidden=false;
+        show("create");$("creation-title").focus();
+      }
+    });actions.append(open);
+    const href=linkFor(item.kind);
+    if(href){const a=node("a",item.kind==="trail"?"Visit Pony Trail ↗":"Visit Meow Lab ↗");a.href=href;actions.append(a);}
+    if(!compact){
+      const remove=node("button","Remove");remove.type="button";
+      remove.addEventListener("click",()=>{
+        if(!confirm("Remove this creation from this browser?"))return;
+        state.creations=state.creations.filter(x=>x.id!==item.id);
+        if(editingCreationId===item.id)resetCreationForm();
+        persist();renderCreations();
+      });actions.append(remove);
+    }
+    card.append(actions);return card;
+  }
+  function renderCreations(){
+    const items=learner()?safeArray(state.creations).filter(x=>x.learnerId===state.selected).slice().reverse():[];
+    $("creation-count").textContent=String(items.length);
+    const preview=$("play-creations"),library=$("creation-library");
+    preview.replaceChildren();library.replaceChildren();
+    if(!items.length){
+      preview.append(node("p","Nothing saved yet. Make a story, a beat, or a discovery!","creation-empty"));
+      library.append(node("p","Your ideas will live here. Start with something small.","creation-empty"));return;
+    }
+    items.slice(0,3).forEach(item=>preview.append(makeCreationCard(item,true)));
+    items.forEach(item=>library.append(makeCreationCard(item,false)));
+  }
+  function resetCreationForm(){
+    editingCreationId=null;$("creation-form").reset();
+    $("save-creation").textContent="Save to my collection ✦";
+    $("cancel-creation-edit").hidden=true;
+  }
+  function renderIdea(){
+    $("spark-text").textContent=IDEAS[sparkIndex%IDEAS.length];
+  }
+  function renderStorySparks(){
+    $("spark-character").textContent=storyParts[0];
+    $("spark-place").textContent=storyParts[1];
+    $("spark-twist").textContent=storyParts[2];
+  }
+  function stopPattern(){
+    if(patternTimer!==null){clearInterval(patternTimer);patternTimer=null;}
+    document.querySelectorAll(".pattern-beat").forEach(b=>b.classList.remove("is-playing"));
+  }
+  function renderPattern(){
+    const beats=$("pattern-beats");beats.replaceChildren();
+    pattern.forEach((tone,i)=>{
+      const button=node("button",undefined,"pattern-beat");button.type="button";button.dataset.tone=String(tone);
+      button.setAttribute("aria-label","Beat "+(i+1)+": "+TONE_NAMES[tone]+". Tap to change the note.");
+      button.append(node("span",String(i+1)),node("strong",TONE_MARKS[tone]),node("small",TONE_NAMES[tone]));
+      button.addEventListener("click",()=>{stopPattern();pattern[i]=(pattern[i]+1)%TONE_MARKS.length;renderPattern();});
+      beats.append(button);
+    });
+  }
+  async function playPattern(){
+    stopPattern();
+    const Audio=window.AudioContext||window.webkitAudioContext;
+    if(Audio){try{
+      if(!patternAudio)patternAudio=new Audio();
+      if(patternAudio.state==="suspended")await patternAudio.resume();
+    }catch(err){patternAudio=null;}}
+    let index=0;
+    function tick(){
+      const buttons=$("pattern-beats").querySelectorAll(".pattern-beat");
+      buttons.forEach((b,i)=>b.classList.toggle("is-playing",i===index));
+      const freq=TONE_FREQ[pattern[index]];
+      if(freq&&patternAudio){try{
+        const osc=patternAudio.createOscillator(),gain=patternAudio.createGain(),at=patternAudio.currentTime;
+        osc.type="sine";osc.frequency.setValueAtTime(freq,at);
+        gain.gain.setValueAtTime(.0001,at);gain.gain.exponentialRampToValueAtTime(.11,at+.025);
+        gain.gain.exponentialRampToValueAtTime(.0001,at+.24);
+        osc.connect(gain);gain.connect(patternAudio.destination);osc.start(at);osc.stop(at+.26);
+      }catch(err){$("pattern-feedback").textContent="Audio isn't available; the pattern will still light up."}}
+      index++;
+      if(index>=8){clearInterval(patternTimer);patternTimer=null;
+        setTimeout(()=>{buttons.forEach(b=>b.classList.remove("is-playing"));},310);}
+    }
+    $("pattern-feedback").textContent=patternAudio?"Hear your eight little beats!":"Watch your pattern dance — sound isn't available here.";
+    tick();if(index<8)patternTimer=setInterval(tick,360);
   }
   function renderToday(){
     const tasks=learner()?ownToday():[];
@@ -146,7 +269,7 @@
       practiceProblem={track,answer:String(mul?a*b:sub?a-b:a+b),
         detail:a+" "+symbol+" "+b+" = ?",hint:mul?"Try "+b+" groups of "+a+".":sub?"Count backward "+b+" from "+a+".":"Start at "+a+" and count forward "+b+"."};
     }
-    practiceTries=0;
+    practiceTries=0;practiceSolved=false;$("answer").disabled=false;$("check-answer").disabled=false;
     $("question-type").textContent=track==="words"?"BLEND THE SOUNDS":"SOLVE THE QUESTION";
     $("question").textContent=practiceProblem.detail;
     $("question-instruction").textContent=track==="words"?"Say each sound slowly and blend it.":"Take your time and show how you know.";
@@ -209,10 +332,12 @@
       if(b.dataset.page===name)b.setAttribute("aria-current","page");
       else b.removeAttribute("aria-current");
     });
+    document.body.classList.toggle("is-play",name==="play");
+    if(name!=="pattern")stopPattern();
     if(name==="family")renderFamily();
   }
   function render(){
-    renderLearners();renderToday();renderFamily();renderPracticeSummary();
+    renderLearners();renderToday();renderFamily();renderPracticeSummary();renderCreations();
     if(!practiceProblem&&learner())createPractice();
     if(!learner()){$("question").textContent="Choose a learner to begin";}
   }
@@ -222,14 +347,65 @@
     if(name.length<1||name.length>40)return;
     const record={id:uid(),name};
     state.learners.push(record);state.selected=record.id;$("nickname").value="";
-    persist();practiceProblem=null;render();show("today");
+    persist();practiceProblem=null;render();show("play");
   });
-  $("learner").addEventListener("change",()=>{state.selected=$("learner").value;persist();practiceProblem=null;render();});
+  $("learner").addEventListener("change",()=>{state.selected=$("learner").value;resetCreationForm();stopPattern();pattern=Array(8).fill(0);$("pattern-name").value="";renderPattern();persist();practiceProblem=null;render();});
   $("school-date").addEventListener("change",()=>{
     if(!parseDay($("school-date").value)){$("school-date").value=localDay();}
     weekAnchor=monday($("school-date").value);render();
   });
   document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>show(b.dataset.page)));
+  document.querySelectorAll("[data-open]").forEach(button=>button.addEventListener("click",()=>{
+    const target=button.dataset.open;
+    if(target==="create"){resetCreationForm();if(button.dataset.kind)$("creation-kind").value=button.dataset.kind;}
+    show(target);
+  }));
+  $("spark-next").addEventListener("click",()=>{sparkIndex=(sparkIndex+1)%IDEAS.length;renderIdea();});
+  $("spark-use").addEventListener("click",()=>{
+    resetCreationForm();$("creation-kind").value="trail";
+    $("creation-title").value="An unexpected adventure";
+    $("creation-body").value=IDEAS[sparkIndex%IDEAS.length]+"\n\nI wonder what happens next…";
+    show("create");$("creation-body").focus();
+  });
+  $("shuffle-story").addEventListener("click",()=>{
+    storyParts=[CHARACTERS[Math.floor(Math.random()*CHARACTERS.length)],
+      PLACES[Math.floor(Math.random()*PLACES.length)],
+      TWISTS[Math.floor(Math.random()*TWISTS.length)]];
+    renderStorySparks();
+  });
+  $("use-story").addEventListener("click",()=>{
+    resetCreationForm();$("creation-kind").value="story";
+    $("creation-title").value="A very strange day";
+    $("creation-body").value=storyParts[0]+" traveled to "+storyParts[1]+". Then they discovered "+storyParts[2]+".\n\nWhat happened next? ";
+    $("creation-body").focus();
+  });
+  $("creation-form").addEventListener("submit",event=>{
+    event.preventDefault();if(!ready())return;
+    const title=$("creation-title").value.trim(),body=$("creation-body").value.trim(),kind=$("creation-kind").value;
+    if(!title||!body){feedback("creation-feedback","Add a title and some words first.");return;}
+    if(editingCreationId){
+      const found=state.creations.find(x=>x.id===editingCreationId&&x.learnerId===state.selected);
+      if(!found){feedback("creation-feedback","That creation is no longer saved.");resetCreationForm();return;}
+      Object.assign(found,{title:title.slice(0,100),body:body.slice(0,5000),kind});
+      persist();renderCreations();feedback("creation-feedback","Saved your changes in this browser.");
+    }else{
+      const saved=saveCreation(kind,title,body);
+      feedback("creation-feedback",saved?"Saved! You can come back whenever you like.":"Your browser could not save. Export a backup if possible.");
+    }
+    resetCreationForm();
+  });
+  $("cancel-creation-edit").addEventListener("click",()=>{resetCreationForm();feedback("creation-feedback","Ready to make something new.");});
+  $("pattern-play").addEventListener("click",playPattern);
+  $("pattern-stop").addEventListener("click",()=>{stopPattern();feedback("pattern-feedback","Stopped. Change any beat and play again.");});
+  $("pattern-random").addEventListener("click",()=>{stopPattern();pattern=pattern.map(()=>Math.floor(Math.random()*TONE_NAMES.length));renderPattern();feedback("pattern-feedback","Surprise pattern! Tap any beat to change it.");});
+  $("pattern-clear").addEventListener("click",()=>{stopPattern();pattern=Array(8).fill(0);renderPattern();feedback("pattern-feedback","A fresh quiet pattern. Build it your way.");});
+  $("pattern-save").addEventListener("click",()=>{
+    if(!ready())return;
+    const body="Eight beats: "+pattern.map(x=>TONE_NAMES[x]).join(" · ");
+    const title=$("pattern-name").value.trim()||"My eight-beat music";
+    const saved=saveCreation("pattern",title,body,{tones:pattern.slice()});
+    feedback("pattern-feedback",saved?"Kept in My Creations. Come back and replay it anytime!":"Browser storage was unavailable.");
+  });
   $("new-task").addEventListener("submit",event=>{
     event.preventDefault();if(!ready())return;
     const title=$("task-title").value.trim(),raw=$("planned").value.trim();
@@ -244,13 +420,14 @@
   $("next-question").addEventListener("click",createPractice);
   $("hint").addEventListener("click",()=>{if(practiceProblem)feedback("practice-feedback","Hint: "+practiceProblem.hint);});
   $("practice-answer").addEventListener("submit",event=>{
-    event.preventDefault();if(!ready()||!practiceProblem)return;
+    event.preventDefault();if(!ready()||!practiceProblem||practiceSolved)return;
     const answer=$("answer").value.trim();
     if(!answer)return;
     practiceTries++;
     const correct=answer.toLowerCase().replace(/\s+/g," ")===practiceProblem.answer.toLowerCase();
     state.attempts.push({id:uid(),learnerId:state.selected,day:$("school-date").value,
       type:practiceProblem.track,correct,firstTry:correct&&practiceTries===1});
+    if(correct){practiceSolved=true;$("check-answer").disabled=true;$("answer").disabled=true;}
     persist();feedback("practice-feedback",correct?"That works! Try another when ready.":"Not quite. Try again or use a hint.");
     renderPracticeSummary();
   });
@@ -271,7 +448,8 @@
     if(!text)return;
     state.notes.push({id:uid(),learnerId:state.selected,day:$("school-date").value,type:"Reading",
       title:passage.title,text:text.slice(0,1800)});
-    persist();feedback("reading-feedback","Your reading note is recorded in this browser.");
+    persist();saveCreation("reading","Reading: "+passage.title,text);
+    feedback("reading-feedback","Saved to Reading Room notes and My Creations.");
     $("retell").value="";renderFamily();
   });
   $("investigation").addEventListener("change",renderScience);
@@ -282,7 +460,8 @@
     const x=CHALLENGES[$("investigation").value]||CHALLENGES.shadow;
     state.notes.push({id:uid(),learnerId:state.selected,day:$("school-date").value,type:"Science",
       title:x.question,text:("Tried: "+tried+". Observed: "+observed+(prediction?". Predicted: "+prediction:"")).slice(0,4000)});
-    persist();feedback("science-feedback","Actual observation recorded on this device.");
+    persist();saveCreation("experiment",x.question,"Tried: "+tried+"\nObserved: "+observed+(prediction?"\nPredicted: "+prediction:""));
+    feedback("science-feedback","Saved to your notebook and My Creations.");
     $("tried").value="";$("observed").value="";$("prediction").value="";renderFamily();
   });
   $("previous-week").addEventListener("click",()=>{weekAnchor=shift(weekAnchor,-7);renderFamily();});
@@ -301,15 +480,22 @@
     try{
       const data=JSON.parse(await file.text());
       if(!data||data.version!==1||!Array.isArray(data.learners)||!Array.isArray(data.tasks)||
-         !Array.isArray(data.notes)||!Array.isArray(data.attempts)||data.learners.length>100||
+         !Array.isArray(data.notes)||!Array.isArray(data.attempts)||
+          (data.creations!==undefined&&!Array.isArray(data.creations))||data.learners.length>100||
          data.tasks.length>10000||data.notes.length>10000||data.attempts.length>50000||
+          (data.creations||[]).length>2000||
          !data.learners.every(x=>typeof x.id==="string"&&typeof x.name==="string")||
          !data.tasks.every(x=>typeof x.id==="string"&&typeof x.learnerId==="string"&&typeof x.day==="string"&&typeof x.title==="string")||
          !data.notes.every(x=>typeof x.learnerId==="string"&&typeof x.day==="string"&&typeof x.text==="string")||
-         !data.attempts.every(x=>typeof x.learnerId==="string"&&typeof x.day==="string"))
+         !data.attempts.every(x=>typeof x.learnerId==="string"&&typeof x.day==="string")||
+          !(data.creations||[]).every(x=>x&&typeof x.id==="string"&&typeof x.learnerId==="string"&&
+           typeof x.title==="string"&&typeof x.body==="string"&&typeof x.kind==="string"&&
+           x.title.length<=100&&x.body.length<=5000&&
+           (x.tones===undefined||(Array.isArray(x.tones)&&x.tones.length===8&&
+           x.tones.every(t=>Number.isInteger(t)&&t>=0&&t<TONE_NAMES.length)))))
         throw Error("Invalid browser school backup");
       if(!confirm("Replace the browser's existing learner records with this backup?"))return;
-      state={version:1,learners:data.learners,tasks:data.tasks,notes:data.notes,attempts:data.attempts,
+      state={version:1,learners:data.learners,tasks:data.tasks,notes:data.notes,attempts:data.attempts,creations:data.creations||[],
         selected:typeof data.selected==="string"?data.selected:""};
       persist();practiceProblem=null;render();feedback("backup-feedback","Backup restored in this browser.");
     }catch(err){feedback("backup-feedback","Import failed: "+err.message);}
@@ -318,5 +504,5 @@
     if(!confirm("Erase all local Online School browser records on this device? Export a backup first if you need one."))return;
     state=empty();practiceProblem=null;persist();render();feedback("backup-feedback","Local browser records cleared.");
   });
-  renderPassage();renderScience();render();show("today");
+  renderPassage();renderScience();renderIdea();renderStorySparks();renderPattern();render();show("play");
 })();
