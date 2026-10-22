@@ -8,4 +8,4 @@ A first-person report is evidence of what its speaker reported, not an instrumen
 
 The older personal-quotation compilation associated with this path has been withdrawn from the current repository. This path remains solely to prevent older technical links from becoming an invitation to republish or reconstruct that material. No conversational quotations, derived transcript excerpts, or attributed first-person descriptions are maintained here.
 
-For active personal writing consult the [current writing index](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md).
+For the current public research record, consult the [research account](https://github.com/huntingthereferent/huntingthereferent).

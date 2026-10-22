@@ -31,4 +31,4 @@ Retain the person, the active referent and what changed during a detour when re-
 [Regrounding](../../language/REGROUNDING.md) recovers the relationship without deleting the branch. The renderer alone does not prove that a person understood, agreed or intended the returned expression.
 
 
-**Source withdrawal boundary:** Do not republish, reconstruct, or attribute quotations removed from the current [writing archive](https://github.com/huntingthereferent/huntingthereferent/blob/main/writing/README.md). Retain the distinction between an authorized quote, a technical example, and an AI paraphrase.
+**Source withdrawal boundary:** Do not republish, reconstruct, or attribute quotations removed from the current withdrawn public writing. Retain the distinction between an authorized quote, a technical example, and an AI paraphrase.

@@ -33,6 +33,24 @@ class MetaControlDeckTests(unittest.TestCase):
         self.assertTrue("unknown work is not zero" in page or "missing work is unknown" in page)
         self.assertIn("sample", page.lower())
 
+    def test_professional_layout_links_real_work_and_retains_semantics(self):
+        page = VIEW.read_text(encoding="utf-8")
+        self.assertIn('id="beads-queue"', page)
+        self.assertIn('id="beads-running"', page)
+        self.assertIn('id="beads-done"', page)
+        self.assertIn('id="show-more"', page)
+        self.assertIn('id="list-range"', page)
+        self.assertIn('class="panel journal"', page)
+        self.assertIn('id="routing-note"', page)
+        self.assertIn('id="status-note"', page)
+        self.assertIn('get(root+"?per_page=100")', page)
+        self.assertIn('a.href=r.url', page)
+        self.assertIn('a.setAttribute("aria-label"', page)
+        self.assertIn('showLimit+=25', page)
+        self.assertIn('meta-observations/history.json', page)
+        self.assertNotIn('class="work-layout"', page)
+        self.assertNotIn('DESSY', page)
+
     @unittest.skipUnless(shutil.which("node"), "Requires Node.js")
     def test_inline_script_has_valid_javascript(self):
         page = VIEW.read_text(encoding="utf-8")

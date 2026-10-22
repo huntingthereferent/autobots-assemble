@@ -17,6 +17,7 @@ let school = null;
 let state = null;
 let selectedLearnerId = null;
 let workspaceReadSerial = 0;
+let placementReadSerial = 0;
 
 function todayISO() {
   const now = new Date();
@@ -84,6 +85,7 @@ function renderLearners() {
     button.textContent = item.display_name;
     button.onclick = () => {
       selectedLearnerId = item.id;
+      placementReadSerial++;
       render();
     };
     return button;
@@ -322,6 +324,7 @@ function renderSwitchList() {
     button.querySelector("small").textContent = item.id === current.id ? "You’re here now" : "Open this space";
     button.onclick = () => {
       selectedLearnerId = item.id;
+      placementReadSerial++;
       switchDialog.close();
       render();
     };
@@ -442,9 +445,12 @@ welcomeForm.addEventListener("submit", async event => {
 async function openPlacement(subject) {
   const learner = person();
   if (!learner || !subject) return;
+  const serial = ++placementReadSerial;
+  const learnerId = learner.id;
   placementError.hidden = true;
-  const response = await fetch(`/api/placement?learner=${encodeURIComponent(learner.id)}`, {cache:"no-store"});
+  const response = await fetch(`/api/placement?learner=${encodeURIComponent(learnerId)}`, {cache:"no-store"});
   const body = await response.json().catch(() => ({}));
+  if (serial !== placementReadSerial || person()?.id !== learnerId) return;
   if (!response.ok) {
     alert(body.error || "Could not open placement");
     return;
@@ -457,6 +463,7 @@ async function openPlacement(subject) {
   }
 
   placementForm.dataset.subject = subject;
+  placementForm.dataset.learnerId = learnerId;
   $("#placement-title").textContent = section.title;
   $("#placement-intro").textContent = section.description || "";
   const root = $("#placement-items");
@@ -500,13 +507,21 @@ async function openPlacement(subject) {
 $("#focus-start-test").onclick = event => {
   openPlacement(event.currentTarget.dataset.subject || "");
 };
-$("#close-placement").onclick = () => placementDialog.close();
+$("#close-placement").onclick = () => {
+  placementReadSerial++;
+  placementDialog.close();
+};
 
 placementForm.addEventListener("submit", async event => {
   event.preventDefault();
   placementError.hidden = true;
   const learner = person();
   const subject = placementForm.dataset.subject;
+  if (!learner || !subject || learner.id !== placementForm.dataset.learnerId) {
+    placementError.textContent = "Placement learner changed. Reopen the questions for the selected learner.";
+    placementError.hidden = false;
+    return;
+  }
   const data = new FormData(placementForm);
   const responses = {};
   for (const [key, value] of data.entries()) {
