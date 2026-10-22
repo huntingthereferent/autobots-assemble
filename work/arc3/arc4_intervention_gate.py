@@ -17,6 +17,7 @@ def make_plan(audit: dict, proposal: dict) -> dict:
     if audit.get("kind") != KIND:
         raise ValueError("Missing original source-owned event-order audit")
     case = proposal.get("case")
+    contrast_case = proposal.get("contrast_case")
     row = proposal.get("source_contact_row")
     action = proposal.get("native_action")
     click = proposal.get("source_click_xy")
@@ -30,7 +31,16 @@ def make_plan(audit: dict, proposal: dict) -> dict:
         raise ValueError("Native selected-object click must be an exact 64x64 source coordinate")
     if type(x) is not int or type(frame) is not int:
         raise ValueError("Original source contact needs an exact frame and x coordinate")
+    if not isinstance(contrast_case, str) or not contrast_case or contrast_case == case:
+        raise ValueError("A distinct matched source-negative control is required")
+    if case.rsplit("_", 1)[0] != contrast_case.rsplit("_", 1)[0]:
+        raise ValueError("Positive and negative must share the frozen lower arrangement")
     rows = [r for r in audit.get("original_native_records", []) if r.get("case") == case]
+    controls = [r for r in audit.get("original_native_records", []) if r.get("case") == contrast_case]
+    if len(controls) != 2 or {r.get("native_witness") for r in controls} != {"A", "B"}:
+        raise ValueError("Matched source-negative control needs two independent witnesses")
+    if controls[0].get("source_observations") != controls[1].get("source_observations"):
+        raise ValueError("Original source-negative control witnesses disagree")
     if len(rows) != 2 or {r.get("native_witness") for r in rows} != {"A", "B"}:
         raise ValueError("Two different genuine original SDK entry witnesses are required")
     before = rows[0]
@@ -41,6 +51,13 @@ def make_plan(audit: dict, proposal: dict) -> dict:
     observed = before["source_observations"]["first_new6_outside_cups"].get(row)
     if not observed or observed.get("frame") != frame or x not in observed.get("x", []):
         raise ValueError("Proposed first source contact was not observed")
+    if before["source_observations"].get("first_four_simultaneously_full") is None:
+        raise ValueError("Selected source-positive case did not show four simultaneous cup windows")
+    if controls[0]["source_observations"].get("first_four_simultaneously_full") is not None:
+        raise ValueError("Matched source-negative control also has four simultaneous cup windows")
+    other = controls[0]["source_observations"]["first_new6_outside_cups"].get(row)
+    if not other or (other.get("frame"), other.get("x")) == (observed.get("frame"), observed.get("x")):
+        raise ValueError("First-arrival event does not discriminate the positive/negative source cases")
     for record in rows:
         clicks = [
             v for v in record.get("original_sdk_action_receipts", [])
@@ -56,7 +73,9 @@ def make_plan(audit: dict, proposal: dict) -> dict:
     return {
         "kind": "ARC4_SOURCE_PINNED_INTERVENTION_PLAN",
         "source_audit_kind": KIND,
-        "case": case, "source_contact_row": row, "contact_x": x, "contact_frame": frame,
+        "case": case, "contrasting_original_case": contrast_case,
+        "source_negative_first_arrival": other,
+        "source_contact_row": row, "contact_x": x, "contact_frame": frame,
         "verified_native_click_xy_from_receipts": click,
         "new_native_action": action,
         "original_native_action_word": original_word,
