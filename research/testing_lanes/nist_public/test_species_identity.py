@@ -81,6 +81,13 @@ class NistIdentityTests(unittest.TestCase):
     def test_missing_source_identity_is_wall(self):
         self.assertEqual(observe(opener=Transport(b"<html>Forbidden</html>"))["state"], "SOURCE_WALL")
 
+    def test_identity_wall_reports_predicate_names_only(self):
+        response = observe(opener=Transport(page(cas="0000-00-0", key="NOT-THE-KEY")))
+        self.assertEqual(response["state"], "SOURCE_WALL")
+        self.assertEqual(response["failed_identity_checks"], ["cas_id", "inchi_key"])
+        self.assertNotIn("body_sha256", response)
+        self.assertNotIn("raw_page", response)
+
     def test_bounded_size_rejected_without_hash(self):
         x = observe(opener=Transport(b"a" * (MAX_BYTES + 1)))
         self.assertEqual(x["state"], "SOURCE_WALL")
