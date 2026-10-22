@@ -1,0 +1,16 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102c28"><title>Science Notebook · Online School</title>
+<meta name="description" content="Explore questions and record the difference between prediction and observation."><link rel="stylesheet" href="./science.css"></head><body>
+<header class="top"><a href="./">← School Home</a><span>ONLINE SCHOOL / SCIENCE NOTEBOOK</span><a href="./family.html">Family Desk ↗</a></header>
+<main class="shell"><div class="hero"><p class="eyebrow">NOTICE / TEST / RECORD</p><h1>Go find <em>something out.</em></h1><p>Start with a question. Try something safe. Write what you actually noticed. Your observations matter more than guessing the “right” answer.</p><div class="visual" aria-hidden="true"><span>?</span><span>→</span><span>!</span></div></div>
+<div class="columns"><aside class="ideas"><p class="eyebrow">START SOMEWHERE</p><h2>Pick an investigation</h2><div id="challenges"></div><p class="fine">You can use your own question, too. These are suggestions—not evidence that an experiment happened.</p>
+<label for="learner">Who is investigating?</label><select id="learner"><option value="">Reading learner records…</option></select></aside>
+<section class="notebook"><div class="book-top"><span>MY INVESTIGATION</span><span>01 / ACTUAL OBSERVATION</span></div>
+<form id="notebook-form"><label for="question">1. What are you wondering?</label><textarea id="question" rows="2" maxlength="600" required placeholder="Why does…? What happens if…?"></textarea>
+<label for="prediction">2. What do you think might happen? <small>Optional</small></label><textarea id="prediction" rows="2" maxlength="800" placeholder="My guess is…"></textarea>
+<div class="material-card"><strong>Things you might need</strong><p id="materials">Choose an idea, or plan your own safe activity.</p><strong>A suggested way to start</strong><p id="method-tip"></p></div>
+<label for="method">3. What did you actually try?</label><textarea id="method" rows="3" maxlength="1800" required placeholder="I used… I changed… I checked…"></textarea>
+<label for="observed">4. What really happened?</label><textarea id="observed" rows="4" maxlength="1800" required placeholder="I saw… I measured… It was different because…"></textarea>
+<label for="next">5. What would you test next? <small>Optional</small></label><textarea id="next" rows="2" maxlength="1000" placeholder="Next time I would…"></textarea>
+<div class="actions"><button id="save" type="submit">Save my actual observation ↗</button><button id="clear" type="button">Clear notebook</button></div><p id="save-state" role="status" aria-live="polite"></p></form></section></div>
+<section class="boundary"><strong>No pretend data.</strong><p>A prediction is not a result. Opening an idea does not mean you performed it. The only thing saved is the observation you explicitly submit for the selected learner.</p></section>
+</main><script src="./science-core.js"></script><script src="./science.js"></script></body></html>
