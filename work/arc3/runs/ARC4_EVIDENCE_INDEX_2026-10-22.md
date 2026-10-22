@@ -197,3 +197,18 @@ Verification snapshot: on commit `09ace467e92d87cbcaa93b985e3c97f41693cee3`, ARC
 The intervention appended one genuine native ACTION2 movement to the source-attested selected upper object, without a confounding re-click. Four independent original SDK resets (two matched arms × witnesses A/B) all remained official level4 `NOT_FINISHED`; zero level5/WIN. The moved selected bbox changed from `[26,20,37,22]` to `[26,23,37,25]`, but the first off-cup palette6 event remained row8/frame19 and row5/frame20 at x11–13 in both arms. First cup-full timings and first top/right border change remained frame21. Therefore this source-pinned vertical movement did **not** alter the differentiating off-cup first-arrival location and did not yield a new official outcome.
 
 This closes the currently proposed Lane B intervention as a measured negative, rather than leaving it described as merely pending. The separate source-first gate run #39775506844 passed its gate tests but skipped the native execution job, so it is not a second native result. Do not repeat this one-step upper DOWN1 intervention or claim it tested a causal success rule. A future candidate requires a different native action with a grounded receipt that actually changes the targeted first-arrival observable while preserving the lower arrangement and matched A/B controls; absent that receipt, stop at UNKNOWN. Only original SDK level >=5 or WIN counts as progression.
+
+
+## Re-audit of archived upper-bar source contrast: targeted arrival is invariant (2026-10-22 19:27Z)
+
+I downloaded and independently rehashed the existing original SDK source artifact from [run #39754427647](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647), [artifact #12414579575](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647/artifacts/12414579575). Actual downloaded ZIP SHA-256: `4757ad60c0aef5bee60727f659c2c9e1293026ce600fa2eb9e88fa732e2b8f20` (50,889 bytes), matching the prior pinned digest. I measured the complete returned original SDK frame stacks against each condition's own genuine pre-pour frame, excluding the four source cup windows, and compared the same row5/row8 off-cup palette6 arrival observable used by Lane A.
+
+Across six frozen upper histories (`reselect`, `LEFT1`, `LEFT2`, `LEFT1→RIGHT1`, `LEFT1→UP1`, `LEFT1→DOWN1`) × independent native A/B witnesses = 12 original SDK resets:
+- First new palette6 outside the cup windows in row8: **frame 19, x11–13**, in all 12 runs.
+- First new palette6 outside the cup windows in row5: **frame 20, x11–13**, in all 12 runs.
+- Every official result remained level4 `NOT_FINISHED`; zero level5/WIN.
+- Cup observations varied by upper history (including top-left never filling on reselect/LEFT2/LEFT1→RIGHT1), but the target off-cup arrival location and frame did not.
+
+This rules out the already-tested upper-bar horizontal and one-step vertical histories as candidates for changing the specific off-cup first-arrival observable. It does not establish a causal rule or identify what action would change the arrival. **Lane B should not repeat any of these upper-history variants** under a new label. A distinct source object/action would need its own original click receipt and same-parent positive/negative A/B comparison before the gate can admit a native intervention. Until that source receipt exists, no new intervention is authorized; stop at `UNKNOWN` rather than widen the search.
+
+The source audit was retrospective on an existing artifact; it did not execute a new native game or alter the official game status.
