@@ -115,11 +115,11 @@
     }
   }
   function setText(id,s){const el=$(id);if(el)el.textContent=s;}
-  function lane(id,items,note,available=state.loaded){
+  function lane(id,items,note,available=state.loaded,totalCount=items.length){
     const box=$("flow-beads-"+id);
     if(!box)return;
     box.replaceChildren();
-    if(!items.length){const placeholder=document.createElement("span");placeholder.className="flow-empty";placeholder.textContent=available?"No observed runs":"Current state unavailable";box.append(placeholder);}
+    if(!items.length){const placeholder=document.createElement("span");placeholder.className="flow-empty";placeholder.textContent=available?(totalCount?"Run IDs not included in this page":"No observed runs"):"Current state unavailable";box.append(placeholder);}
     for(const [i,r] of items.slice(0,18).entries()){
       const bead=document.createElement("span");
       bead.className="flow-bead";
@@ -128,8 +128,8 @@
       bead.setAttribute("aria-label",bead.title);
       box.append(bead);
     }
-    if(items.length>18){const more=document.createElement("span");more.className="flow-overflow";more.textContent="+"+number(items.length-18);box.append(more);}
-    setText("flow-count-"+id,available?number(items.length):"—");
+    if(totalCount>18){const more=document.createElement("span");more.className="flow-overflow";more.textContent="+"+number(totalCount-18);box.append(more);}
+    setText("flow-count-"+id,available?number(totalCount):"—");
     setText("flow-note-"+id,note);
   }
   function bars(runs,now){
@@ -180,23 +180,26 @@
     }
   }
   function render(snapshot){
-    const {runs=[],latestPage=[],archiveComplete=false,checked=null,liveAvailable=true}=snapshot||{};
+    const {runs=[],latestPage=[],liveActive=[],liveTotals=null,archiveComplete=false,checked=null,liveAvailable=true}=snapshot||{};
     const source=archiveComplete?runs:latestPage;
     state.loaded=archiveComplete||latestPage.length>0;
     const now=Date.now(),today=localDay(new Date(now));
     const fresh=liveAvailable&&Number.isFinite(checked)&&checked<=now+15000&&now-checked<=5*60*1000&&latestPage.length>0;
+    const totalsVerified=fresh&&liveTotals&&
+      Number.isSafeInteger(liveTotals.running)&&liveTotals.running>=0&&
+      Number.isSafeInteger(liveTotals.queued)&&liveTotals.queued>=0;
     const todays=source.filter(r=>{const t=validTime(r.created);return t!==null&&sameDay(new Date(t),today);});
-    // Never count archived queued/running statuses as live. The latest
-    // checked page covers only its returned 100 identities, not all jobs.
-    const queue=fresh?latestPage.filter(r=>status(r)==="queued"):[];
-    const active=fresh?latestPage.filter(r=>status(r)==="running"):[];
+    // Count only status-filtered source totals. Use up to 100 returned IDs per
+    // status for beads; the historical index never supplies current counts.
+    const queue=totalsVerified?liveActive.filter(r=>status(r)==="queued"):[];
+    const active=totalsVerified?liveActive.filter(r=>status(r)==="running"):[];
     const finished=todays.filter(r=>status(r)==="finished");
     const passed=finished.filter(r=>r.conclusion==="success");
     const failed=finished.filter(r=>["failure","cancelled","timed_out"].includes(r.conclusion));
     const arrivalsHour=source.filter(r=>{const t=validTime(r.created);return t!==null&&t>=now-3600000&&t<=now;});
     const clearance=todays.length?Math.round(finished.length/todays.length*100):null;
-    setStat("queued",queue.length,fresh);
-    setStat("running",active.length,fresh);
+    setStat("queued",totalsVerified?liveTotals.queued:0,totalsVerified);
+    setStat("running",totalsVerified?liveTotals.running:0,totalsVerified);
     setStat("passed",passed.length);
     setStat("failed",failed.length);
     const show=v=>state.loaded?number(v):"—";
@@ -204,14 +207,14 @@
     setText("flow-cleared",show(finished.length));
     setText("flow-clearance",state.loaded?(clearance===null?"—":clearance+"%"):"—");
     setText("flow-arrivals",show(arrivalsHour.length));
-    setText("flow-source",fresh?(archiveComplete?"LATEST 100 STATES · FULL HISTORICAL INDEX":"LATEST 100 STATES · PARTIAL HISTORY"):
-      (archiveComplete?"ARCHIVE ONLY · LIVE STATE UNAVAILABLE":"LIVE STATE UNAVAILABLE"));
-    lane("queued",queue,fresh?"Waiting workflows in latest 100 · not capacity":"Live state unavailable · archive does not prove queue",fresh);
-    lane("running",active,fresh?"Executing workflows in latest 100":"Live state unavailable · archive does not prove activity",fresh);
+    setText("flow-source",totalsVerified?(archiveComplete?"FULL STATUS TOTALS · HISTORICAL INDEX":"FULL STATUS TOTALS · PARTIAL HISTORY"):
+      (archiveComplete?"ARCHIVE ONLY · LIVE TOTALS UNAVAILABLE":"LIVE TOTALS UNAVAILABLE"));
+    lane("queued",queue,totalsVerified?"Queued workflow total · up to 100 source IDs shown":"Live status total unavailable",totalsVerified,totalsVerified?liveTotals.queued:0);
+    lane("running",active,totalsVerified?"In-progress workflow total · up to 100 source IDs shown":"Live status total unavailable",totalsVerified,totalsVerified?liveTotals.running:0);
     lane("finished",finished,"Completed runs created today");
     bars(source,now);
     observeChanges(latestPage,checked);
-    setText("flow-last",checked?"Last successful live check "+clock(checked)+(fresh?" · latest 100 sampled":" · STALE / NOT CURRENT"):"No verified live check yet");
+    setText("flow-last",checked?"Last successful live check "+clock(checked)+(totalsVerified?" · complete status totals":" · STALE / NOT CURRENT"):"No verified live check yet");
     nav();
   }
   function historyBins(runs){
