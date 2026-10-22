@@ -164,13 +164,52 @@ def per_relation_frequency_baseline(train,universe,questions,known):
     }
 
 
-def run(*, train_file:Path,test_file:Path,valid_file:Path):
+NEXT_COHORT_SALT="nih-p2-lane-d2-frozen-next-cohort-20261022-v1"
+
+def choose_d2_heldout(test,train):
+    """Prospectively freeze an untouched 64-case cohort before scoring.
+
+    Exclude prior original, mixed, broad/full, and separate A tail-role
+    selections. No model feature depends on TEST answers.
+    """
+    prior_source=set(original.select_test(test,train))
+    prior_mixed=set(previous.untouched_new_heldout(test,train)[0])
+    earlier_full=set(broad.choose_new(test,train))
+    # The independent TRAIN-tail role ablation in NIH A uses this exact
+    # documented frozen source selector. Exclude it without importing A.
+    from hashlib import sha256 as hash_source
+    a_salt="nih-p2-broad-untouched-20261022-v1"
+    prior_roles=set()
+    for rel in mixed.RELATIONS:
+        elig=sorted((t for t in test if t[1]==rel and
+                     t not in prior_source and t not in prior_mixed and
+                     t not in set(train)),
+                    key=lambda t:(hash_source(("\t".join(t)+"|"+a_salt).encode()).hexdigest(),t))
+        prior_roles.update(elig[:16])
+    excluded=prior_source|prior_mixed|earlier_full|prior_roles|set(train)
+    cohort=[]
+    for rel in mixed.RELATIONS:
+        eligible=sorted(
+            {t for t in test if t[1]==rel and t not in excluded},
+            key=lambda t:(hash_source(("\t".join(t)+"|"+NEXT_COHORT_SALT).encode()).hexdigest(),t))
+        if len(eligible)<16:
+            raise ValueError("frozen D2 source heldout underflow")
+        cohort.extend(eligible[:16])
+    if len(cohort)!=64 or len(set(cohort))!=64 or not set(cohort).isdisjoint(excluded):
+        raise ValueError("D2 cohort reused prior measured source questions")
+    return cohort
+
+
+def run(*, train_file:Path,test_file:Path,valid_file:Path,selection="original"):
     train,trid=original.read_source(train_file,"train.tsv")
     test,teid=original.read_source(test_file,"test.tsv")
     valid,vaid=original.read_source(valid_file,"valid.tsv")
     graph=mixed.training_graph(train)
     frozen,calibration=mixed.discover(train,graph)
-    questions=broad.choose_new(test,train)
+    if selection not in ("original","d2_untouched"):
+        raise ValueError("unrecognized heldout selection protocol")
+    questions=(broad.choose_new(test,train) if selection=="original"
+               else choose_d2_heldout(test,train))
     universe=original_entity_universe(train,test,valid)
     if len(questions)!=REQUIRED_CASES or len(universe)*len(questions)>MAX_WORK:
         raise ValueError("predeclared finite full-entity capacity exceeded")
@@ -230,6 +269,7 @@ def run(*, train_file:Path,test_file:Path,valid_file:Path):
         "schema":SCHEMA,
         "source_owner":original.ORIGIN,
         "source_commit":original.COMMIT,
+        "frozen_selection_protocol":selection,
         "source_files":{"train":trid,"test":teid,"valid":vaid},
         "calibration_from_train_only":calibration,
         "selection_sha256":sha256("\n".join("\t".join(t) for t in questions).encode()).hexdigest(),
@@ -259,11 +299,13 @@ def main():
     p=argparse.ArgumentParser()
     for key in ("train","test","valid","output"):
         p.add_argument("--"+key,type=Path,required=True)
+    p.add_argument("--selection",choices=("original","d2_untouched"),default="original")
     args=p.parse_args()
-    result=run(train_file=args.train,test_file=args.test,valid_file=args.valid)
+    result=run(train_file=args.train,test_file=args.test,valid_file=args.valid,selection=args.selection)
     args.output.parent.mkdir(parents=True,exist_ok=True)
     args.output.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
-    print(json.dumps({"n":result["A_B_source_label_filtered"]["n"],
+    print(json.dumps({"selection":result["frozen_selection_protocol"],
+                      "n":result["A_B_source_label_filtered"]["n"],
                       "entity_candidates":result["original_source_entities_from_all_splits"],
                       "filtered":result["A_B_source_label_filtered"],
                       "unfiltered":result["A_B_raw_unfiltered"],
