@@ -9,3 +9,7 @@ The source family is presently recorded as `manual_review_required` in the 18-fa
 Offline: `python -m unittest discover -s research/studies/neuro_openneuro_ds000224 -p 'test_*.py' -v`. Default CLI: `UNOBSERVED`. Opt-in: `python research/studies/neuro_openneuro_ds000224/snapshot_metadata.py --live --output neuro-metadata.json`.
 
 All status outputs set **`scientific_experiments_run=0`**, regardless of source success. Keep this within NEURO source intake until an actual participant-data handling and scientific-method review is complete.
+
+## First verified public metadata witness — October 22, 2026
+
+The [actual metadata-only run 39786532333](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39786532333) passed 12 offline controls and retrieved the exact public dataset snapshot identity and DOI. Its immutable [derived source receipt](observations/2026-10-22-run-39786532333.json) has a GraphQL response SHA-256 of `a7783177c3abf9d68dc9ff718bb86ee1ac9d6bb03e6fc0f282571ff7dc0c5b49`. This verifies **snapshot metadata**, not participant-record permissions, processing correctness or scientific results. The source family's existing manual human-data and ethics/rights gate is unchanged. Zero neuroimaging data files were requested or downloaded.
