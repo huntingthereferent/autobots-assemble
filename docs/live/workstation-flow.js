@@ -180,11 +180,11 @@
     }
   }
   function render(snapshot){
-    const {runs=[],latestPage=[],archiveComplete=false,checked=null}=snapshot||{};
+    const {runs=[],latestPage=[],archiveComplete=false,checked=null,liveAvailable=true}=snapshot||{};
     const source=archiveComplete?runs:latestPage;
     state.loaded=archiveComplete||latestPage.length>0;
     const now=Date.now(),today=localDay(new Date(now));
-    const fresh=Number.isFinite(checked)&&checked<=now+15000&&now-checked<=5*60*1000&&latestPage.length>0;
+    const fresh=liveAvailable&&Number.isFinite(checked)&&checked<=now+15000&&now-checked<=5*60*1000&&latestPage.length>0;
     const todays=source.filter(r=>{const t=validTime(r.created);return t!==null&&sameDay(new Date(t),today);});
     // Never count archived queued/running statuses as live. The latest
     // checked page covers only its returned 100 identities, not all jobs.
