@@ -1,0 +1,49 @@
+name: A/B to workstation bridge preflight
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/ab-workstation-bridge-preflight.yml"
+      - "systems/workspace/ab_relational_cluster.py"
+      - "systems/workspace/workstation_continuation.py"
+      - "systems/workspace/workstation_harness.py"
+      - "work/arc_like_maze/math.py"
+      - "network/tests/test_ab_relational_cluster.py"
+      - "network/tests/test_workstation_harness.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install existing native workstation dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Test finite A/B movement, replay, collisions, and restart
+        run: python -m unittest -v network.tests.test_ab_relational_cluster
+      - name: Test native workstation continuation and admission boundaries
+        run: python -m unittest -v network.tests.test_workstation_harness
+      - name: Exercise the complete finite A/B frontier in isolated storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          scratch="$(mktemp -d)"
+          quiet=0
+          for wave in $(seq 1 24); do
+            result="$(python -m systems.workspace.ab_relational_cluster --execute --workers 3 --data-dir "$scratch")"
+            printf '%s\n' "$result"
+            status="$(printf '%s\n' "$result" | python -c 'import json,sys; print(json.load(sys.stdin)["status"])')"
+            if [ "$status" = "QUIET" ]; then
+              quiet=1
+              break
+            fi
+          done
+          test "$quiet" -eq 1
+          python -m systems.workspace.ab_relational_cluster --inspect --data-dir "$scratch"

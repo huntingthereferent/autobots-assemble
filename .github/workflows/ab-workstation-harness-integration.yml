@@ -1,0 +1,29 @@
+name: A/B workstation harness integration
+
+on:
+  pull_request:
+    paths:
+      - "network/tests/test_ab_workstation_harness_bridge.py"
+      - "systems/workspace/ab_workstation_bridge.py"
+      - "systems/workspace/ab_relational_cluster.py"
+      - "systems/workspace/workstation_harness.py"
+      - "systems/workspace/workstation_continuation.py"
+      - "work/arc_like_maze/math.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  harness-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install existing native workstation dependency
+        run: python -m pip install 'cryptography>=45,<47'
+      - name: Test real A/B evidence through workstation admission policy
+        run: python -m unittest -v network.tests.test_ab_workstation_harness_bridge
