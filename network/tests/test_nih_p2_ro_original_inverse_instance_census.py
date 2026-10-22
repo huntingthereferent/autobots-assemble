@@ -78,7 +78,10 @@ class OriginalInverseInstanceCensus(unittest.TestCase):
         self.assertEqual(r["original_source_named_subject_object_assertions"],1)
         self.assertEqual(r["independent_original_source_inverse_predictions"],1)
         self.assertEqual(r["new_nonasserted_inverse_relationships_from_original_sources"],1)
-        self.assertTrue(r["input_contains_no_injected_synthetic_assertions"])
+        self.assertTrue(r["audit_injected_no_additional_assertions"])
+        self.assertFalse(r["original_input_authenticated_by_whole_file_SHA256"])
+        self.assertTrue(r["original_source_inverse_comparison_has_positive_cases"])
+        self.assertFalse(r["source_only_inverse_inference_agreement_is_vacuous"])
         self.assertFalse(r["medical_treatment_efficacy_inferred"])
 
     @unittest.skipUnless(HAS_OWLRL and RO and CORE,
@@ -93,7 +96,10 @@ class OriginalInverseInstanceCensus(unittest.TestCase):
                          r["independent_original_only_SPARQL_CONSTRUCT_predictions"])
         self.assertLessEqual(r["new_nonasserted_inverse_relationships_from_original_sources"],
                              r["independent_original_source_inverse_predictions"])
-        self.assertTrue(r["input_contains_no_injected_synthetic_assertions"])
+        self.assertTrue(r["audit_injected_no_additional_assertions"])
+        self.assertTrue(r["original_input_authenticated_by_whole_file_SHA256"])
+        self.assertEqual(r["source_only_inverse_inference_agreement_is_vacuous"],
+                         not r["original_source_inverse_comparison_has_positive_cases"])
         self.assertFalse(r["original_patient_level_records_used"])
         self.assertFalse(r["official_NIH_benchmark"])
         self.assertFalse(r["original_W13_modified"])
