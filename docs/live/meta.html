@@ -30,8 +30,8 @@ h2{font-size:20px;font-weight:650;letter-spacing:-.025em;line-height:1.3;margin:
 .metric{position:relative;min-width:0;border:1px solid #354c57;border-top:2px solid #638999;border-radius:9px;background:#101e27;padding:16px 18px;min-height:131px;overflow:hidden}
 .metric b{display:block;font:550 clamp(28px,3.1vw,43px)/1.3 var(--data);letter-spacing:-.06em;font-variant-numeric:tabular-nums}
 .metric span{display:block;font:650 10px/1.5 var(--data);color:var(--muted);letter-spacing:.04em;margin-top:10px}
-.metric small{font-size:10px;color:#8da8b6;display:block;margin-top:3px}.metric.queue{border-top-color:var(--yellow)}.metric.running{border-top-color:var(--blue)}.metric.passed{border-top-color:var(--green)}.metric.notpassed{border-top-color:var(--red)}
-.metric.queue b{color:var(--yellow)}.metric.running b{color:var(--blue)}.metric.passed b{color:var(--green)}.metric.notpassed b{color:var(--red)}
+.metric small{font-size:10px;color:#8da8b6;display:block;margin-top:3px}.metric.queue{border-top-color:var(--yellow)}.metric.running{border-top-color:var(--blue)}.metric.passed{border-top-color:var(--green)}.metric.followup{border-top-color:var(--green)}
+.metric.queue b{color:var(--yellow)}.metric.running b{color:var(--blue)}.metric.passed b{color:var(--green)}.metric.followup b{color:var(--green)}
 .flowfield{margin-top:13px;padding:16px 19px;background:#101c24;border:1px solid #344c57;border-radius:9px}
 .flow-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;font:650 10px var(--data);letter-spacing:.08em;color:#a8d4db}
 .flow-heading small{color:var(--muted);font-size:10px;letter-spacing:0;font-weight:500}
@@ -55,7 +55,7 @@ h2{font-size:20px;font-weight:650;letter-spacing:-.025em;line-height:1.3;margin:
 .work-controls input{flex:1 1 170px;min-width:100px}.work-controls select{flex:0 1 185px;min-width:145px}
 .runlist{max-height:570px;overflow-y:auto}.run{padding:13px 17px;border-bottom:1px solid #293c47;display:flex;align-items:start;justify-content:space-between;gap:10px}
 .run:last-child{border:0}.run h3{font-size:12.5px;font-weight:620;line-height:1.55;margin:0}.run h3 a{color:var(--text)}.run small{display:block;color:var(--muted);font:10px/1.7 var(--data);margin-top:4px}
-.state{font:650 10px/1.5 var(--data);white-space:nowrap;color:#b2c4cf;border:1px solid #4e6570;border-radius:5px;padding:3px 7px}.state.running{color:var(--blue);border-color:#457b8c}.state.good{color:var(--green);border-color:#4b8065}.state.bad{color:var(--red);border-color:#87585d}
+.state{font:650 10px/1.5 var(--data);white-space:nowrap;color:#b2c4cf;border:1px solid #4e6570;border-radius:5px;padding:3px 7px}.state.running{color:var(--blue);border-color:#457b8c}.state.good{color:var(--green);border-color:#4b8065}.state.bad{color:#afc1cb;border-color:#597282}
 .empty{color:var(--muted);font-size:12px;padding:19px}
 .side-body{padding:18px;font-size:12px;color:#b7cbd5}.side-body p{margin:7px 0}.side-body a{font-size:12px}
 .journal-line{padding:12px 0;border-bottom:1px solid #2b404a}.journal-line:last-child{border-bottom:0}
@@ -97,8 +97,8 @@ main{max-width:1400px;padding:32px clamp(18px,3vw,36px) 74px}
 .metric b{font-size:clamp(32px,3.3vw,45px);font-weight:550;letter-spacing:-.055em;line-height:1.2}
 .metric span{margin-top:13px;font-size:10px;letter-spacing:.065em;color:#c0d0d8}
 .metric small{color:#8da4af;margin-top:3px;font-size:10px}
-.metric.passed,.metric.notpassed{background:#101a22}
-.metric.passed b,.metric.notpassed b{font-size:clamp(27px,2.8vw,37px);margin-top:6px}
+.metric.passed,.metric.followup{background:#101a22}
+.metric.passed b,.metric.followup b{font-size:clamp(27px,2.8vw,37px);margin-top:6px}
 .flowfield{padding:17px 20px;margin-top:11px;background:#111d25;border:1px solid #2c424d;border-radius:7px}
 .flow-heading{font-family:Inter,"Segoe UI",system-ui,sans-serif;color:#e4eef2;font-size:12px;letter-spacing:0;font-weight:650}
 .flow-heading small{font:10px/1.5 var(--data);letter-spacing:0;color:#91aebb}
@@ -153,15 +153,15 @@ details[open] .summary-chevron{transform:rotate(180deg)}
 footer{max-width:1400px;margin:auto;color:#8ea5b1}
 .visually-hidden{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 @media(max-width:900px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-tracks{gap:10px}.detail-grid{grid-template-columns:1fr}.refresh{align-items:center}}
-@media(max-width:640px){main{padding:20px 15px 58px}.topbar{position:relative;padding:12px 15px}.topbar nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.topbar nav a{white-space:nowrap}.hero{padding-bottom:20px}.refresh{width:100%;justify-content:space-between}.metrics{gap:8px}.metric{padding:13px;min-height:113px}.metric b{font-size:33px}.metric.passed b,.metric.notpassed b{font-size:29px}.flowfield{padding:14px}.flow-tracks{grid-template-columns:1fr;gap:16px}.track{padding-left:11px}.section-top{margin-top:25px}.section-top h2{font-size:21px}#trend{width:calc(100% - 24px);margin:12px 12px 0;max-height:290px}.legend{padding:12px 13px 0}.fine{margin:10px 13px 16px}.work-controls{padding:12px}.work-controls input{min-width:100%}.work-controls select{flex:1}.run{padding:12px 13px}.journal-foot{padding:12px 14px}.strip-secondary{display:none}.detail-grid{gap:15px}}
+@media(max-width:640px){main{padding:20px 15px 58px}.topbar{position:relative;padding:12px 15px}.topbar nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.topbar nav a{white-space:nowrap}.hero{padding-bottom:20px}.refresh{width:100%;justify-content:space-between}.metrics{gap:8px}.metric{padding:13px;min-height:113px}.metric b{font-size:33px}.metric.passed b,.metric.followup b{font-size:29px}.flowfield{padding:14px}.flow-tracks{grid-template-columns:1fr;gap:16px}.track{padding-left:11px}.section-top{margin-top:25px}.section-top h2{font-size:21px}#trend{width:calc(100% - 24px);margin:12px 12px 0;max-height:290px}.legend{padding:12px 13px 0}.fine{margin:10px 13px 16px}.work-controls{padding:12px}.work-controls input{min-width:100%}.work-controls select{flex:1}.run{padding:12px 13px}.journal-foot{padding:12px 14px}.strip-secondary{display:none}.detail-grid{gap:15px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.cells a.cell{transition:none!important}}
 .plot-scroll{overflow:hidden}
 @media(max-width:650px){.plot-scroll{overflow-x:auto;overflow-y:hidden;scrollbar-color:#496875 #101b23;scrollbar-width:thin}#trend{min-width:680px;width:680px;max-height:none;margin:12px 12px 0}}
 
 
 /* An outcome is a historical GitHub run, not an unresolved research claim. */
-.metric.notpassed{border-top-color:#728997}
-.metric.notpassed b{color:#c1d0d8}
+.metric.followup{border-top-color:#6aa994}
+.metric.followup b{color:var(--green)}
 .state.neutral{border-color:#597282;color:#afc1cb}
 .later-success{display:block;color:#a7dabe;margin-top:5px}.later-success a{color:#a4e1be;text-decoration:underline;text-underline-offset:2px}
 .outcome-context{margin:10px 0 15px;padding:12px 16px;background:#111e26;border:1px solid #304751;border-radius:7px}
@@ -182,9 +182,9 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
 <article class="metric running"><b id="running">—</b><span>IN MOTION / NOW</span><small>Executing workflow runs</small></article>
 <article class="metric passed"><b id="passed">—</b><span>SUCCESSFUL RUNS / TODAY</span><small id="passed-note">Reading full-day GitHub totals</small></article>
-<article class="metric notpassed"><b id="failed">—</b><span>HISTORICAL FAILED RUNS</span><small id="failed-note">Not an unresolved-test count</small></article>
+<article class="metric followup"><b id="followup-count">—</b><span>LATER PASSES / RECENT</span><small id="followup-note">Matching workflows · recent source sample</small></article>
 </section>
-<div class="outcome-context" aria-label="How daily run outcomes are counted"><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></div>
+<div class="outcome-context" aria-label="How daily run outcomes are counted"><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="failed">HISTORICAL FAILED RUNS / TODAY: —</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other states: —</span><span id="followups">Later matching passes in recent log: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></div>
 <section class="flowfield" aria-label="Observed execution stages">
 <div class="flow-heading"><span>Execution flow</span><small>Markers open actual GitHub runs · up to 16 recent runs per stage</small></div>
 <div class="flow-tracks">
@@ -202,7 +202,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <div class="section-top"><div><span class="eyebrow">Source-linked executions</span><h2>Recent work</h2><p class="subtitle">Inspect real workflow runs, timestamps and original verification records.</p></div><span id="count-note" class="source">Reading latest executions</span></div>
 <section class="panel journal" aria-label="Workflow journal">
 <div class="panel-title"><strong>Execution log</strong><span class="tag">LATEST SOURCE RECORDS</span></div>
-<div class="work-controls"><label class="visually-hidden" for="search">Find a workflow</label><input id="search" type="search" placeholder="Search workflow or run ID…" autocomplete="off" aria-label="Search workflow or run ID"><label class="visually-hidden" for="status">Filter workflow state</label><select id="status" aria-label="Filter workflow state"><option value="all">All states</option><option value="active">Running or waiting</option><option value="passed">Passed</option><option value="failed">Failed / timed out</option><option value="cancelled">Cancelled</option></select></div>
+<div class="work-controls"><label class="visually-hidden" for="search">Find a workflow</label><input id="search" type="search" placeholder="Search workflow or run ID…" autocomplete="off" aria-label="Search workflow or run ID"><label class="visually-hidden" for="status">Filter workflow state</label><select id="status" aria-label="Filter workflow state"><option value="all">All states</option><option value="active">Running or waiting</option><option value="passed">Passed</option><option value="failed">Earlier failed attempts</option><option value="cancelled">Cancelled</option></select></div>
 <div id="runs" class="runlist" aria-live="polite"><p class="empty">Checking source work…</p></div>
 <div class="journal-foot"><span id="list-range">Showing latest retrieved runs</span><button id="show-more" type="button" hidden>Show 25 more</button></div>
 </section>
@@ -249,7 +249,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  const isCancelled=r=>r.status==="completed"&&r.conclusion==="cancelled";
  const isActive=r=>["in_progress","queued","pending","waiting","requested"].includes(r.status);
  const isPassed=r=>r.status==="completed"&&r.conclusion==="success";
- function badge(r){if(isActive(r))return{label:r.status==="in_progress"?"RUNNING":"WAITING",cls:"running"};if(isPassed(r))return{label:"PASSED",cls:"good"};if(isFailed(r))return{label:r.conclusion?.toUpperCase()||"FAILED",cls:"bad"};if(isCancelled(r))return{label:"CANCELLED",cls:"neutral"};return{label:String(r.conclusion||r.status||"UNKNOWN").toUpperCase(),cls:"neutral"}}
+ function badge(r){if(isActive(r))return{label:r.status==="in_progress"?"RUNNING":"WAITING",cls:"running"};if(isPassed(r))return{label:"PASSED",cls:"good"};if(isFailed(r))return r.laterSuccess?{label:"LATER PASS",cls:"good"}:{label:"PAST FAILURE",cls:"neutral"};if(isCancelled(r))return{label:"CANCELLED",cls:"neutral"};return{label:String(r.conclusion||r.status||"UNKNOWN").toUpperCase(),cls:"neutral"}}
  function chicagoDay(value){
   const parts=new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(value));
   const obj=Object.fromEntries(parts.map(p=>[p.type,p.value]));
@@ -262,7 +262,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   const t=all?r.totals:null;
   const verified=t&&["success","failure","cancelled","skipped","timed_out","action_required","known_outcome_runs_lower_bound"].every(k=>valid(t[k]))&&Number.isFinite(Date.parse(r.observed_at));
   $("passed").textContent=verified?t.success.toLocaleString():"—";
-  $("failed").textContent=verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—";
+  $("failed").textContent="HISTORICAL FAILED RUNS / TODAY: "+(verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—");
   $("cancelled").textContent="Cancelled today: "+(verified?t.cancelled.toLocaleString():"—");
   $("skipped").textContent="Skipped today: "+(verified?t.skipped.toLocaleString():"—");
   $("other-outcomes").textContent="Active/other states: not included in outcome totals";
@@ -271,11 +271,9 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
    const suffix=age>90*60000?" · STALE SNAPSHOT":"";
    $("day-basis").textContent=t.known_outcome_runs_lower_bound.toLocaleString()+" runs with recorded outcomes today · America/Chicago · checked "+localTime(r.observed_at)+suffix;
    $("passed-note").textContent="Full-day source totals · "+localTime(r.observed_at);
-   $("failed-note").textContent="Past failures/timeout/action-required · not open issues";
   }else{
    $("day-basis").textContent="Full-day GitHub summary unavailable; today's historical totals are unknown.";
    $("passed-note").textContent="Day journal unavailable · not zero";
-   $("failed-note").textContent="Unresolved state unknown · check source";
   }
  }
  async function loadDaily(){
@@ -317,7 +315,9 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
     if(Date.parse(success.created)>Date.parse(r.created)){r.laterSuccess=success;matched.add(key)}
    }
   }
-  $("followups").textContent="Later successful runs after an earlier failure (recent matching workflows): "+matched.size;
+  $("followup-count").textContent=allReady?matched.size.toLocaleString():"—";
+  $("followup-note").textContent=allReady?"Matching workflow + branch · latest 100/source":"Incomplete sources · follow-up count unknown";
+  $("followups").textContent=allReady?"Later successful runs after an earlier failure (recent matching workflows): "+matched.size:"Later matching passes: unknown (source incomplete)";
  }
  function renderRuns(){
   const text=$("search").value.trim().toLowerCase(),filter=$("status").value;
@@ -328,9 +328,12 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
    const b=badge(r),line=document.createElement("div");line.className="run";
    const body=document.createElement("div"),title=document.createElement("h3"),a=document.createElement("a");a.textContent=r.name;a.href=r.url;a.rel="noopener noreferrer";a.target="_blank";title.append(a);body.append(title);
    const small=document.createElement("small");small.textContent=localTime(r.created)+" · RUN "+r.id;body.append(small);
+   if(isFailed(r)){
+    const attempt=document.createElement("small");attempt.textContent="Original attempt: "+String(r.conclusion||"failure").toUpperCase();body.append(attempt);
+   }
    if(r.laterSuccess){
     const note=document.createElement("small");note.className="later-success";
-    note.append(document.createTextNode("A later run of this workflow passed · "));
+    note.append(document.createTextNode("Same workflow and branch passed later (specific test repair not verified) · "));
     const later=document.createElement("a");later.href=r.laterSuccess.url;later.target="_blank";later.rel="noopener noreferrer";later.textContent="View newer run ↗";note.append(later);body.append(note);
    }
    const tag=document.createElement("span");tag.className="state "+b.cls;tag.textContent=b.label;
