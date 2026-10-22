@@ -279,7 +279,7 @@ const MODERN_PROFILES={
 function modernLayerState(profile,bar){
  // Four distinct sections: opening pocket → build → full hook → spacious return.
  const section=Math.floor(bar/4);
- return [true,section===1||section===2,true,section===2||section===3];
+ return [true,true,true,section===2];
 }
 function melodyIndexFor(bar){return bar%MELODY_BARS}
 
@@ -390,7 +390,7 @@ const $=id=>document.getElementById(id);
 let cat='miso',octave=4,volume=.68,echo=false,audio=null,master=null,echoInput=null,purrNodes=null;
 const active=new Map(),keys=new Map();let pressedPointer=new Map();let noteSerial=0,recording=false,recordStart=0,events=[],tapeTime=0,tapePlaying=false,scheduled=[],recTimer=0;
 let loopPlaying=false,loopTimer=null,loopTick=0,loopIndex=0,loopLast=-1,playingBar=-1,loopNotes=new Map(),presetIndex=0;
-let bars=defaultBars(),selectedBar=0,grid=bars[0].notes,arrangementDirty=false,editorPinned=false,melodyUndo=[];
+let bars=defaultBars(),selectedBar=0,melodyEditIndex=0,grid=bars[0].notes,arrangementDirty=false,editorPinned=false,melodyUndo=[];
 let savedBranches=[],activeBranchId=null;
 const BRANCH_STORAGE_KEY='meow-machine/arrangement-branches-v1';
 const TEMPLATE_STORAGE_KEY='meow-machine/chord-templates-v1';
@@ -587,28 +587,35 @@ function paintMelodyPins(){
   list.replaceChildren();
   for(let i=0;i<MELODY_BARS;i++){
    const btn=document.createElement('button');btn.type='button';btn.className='melody-pin';
-   btn.addEventListener('click',()=>{editorPinned=true;selectBar(i);updatePinButton()});
+   btn.addEventListener('click',()=>{editorPinned=true;melodyEditIndex=i;grid=bars[i].notes;paintGrid();updatePinButton();paintTransport()});
    list.append(btn);
   }
  }
  for(let i=0;i<MELODY_BARS;i++){
-  const btn=list.children[i];btn.textContent='M'+(i+1);
-  btn.classList.toggle('is-selected',melodyIndexFor(selectedBar)===i);
-  btn.classList.toggle('is-playing',loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===i);
-  btn.setAttribute('aria-pressed',String(melodyIndexFor(selectedBar)===i));
-  btn.setAttribute('aria-label','Edit and pin melody bar '+(i+1));
+  const btn=list.children[i],editing=melodyEditIndex===i,playing=loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===i;
+  btn.replaceChildren(document.createTextNode('M'+(i+1)));
+  if(editing||playing){const tag=document.createElement('small');tag.className='melody-pin-state';tag.textContent=(playing?'▶ NOW ':'')+(editing?'EDIT':'');btn.append(tag)}
+  btn.classList.toggle('is-selected',editing);
+  btn.classList.toggle('is-playing',playing);
+  btn.setAttribute('aria-pressed',String(editing));
+  btn.setAttribute('aria-label','Melody '+(i+1)+(playing?', now playing':'')+(editing?', opened for editing':''));
+  if(playing)btn.setAttribute('aria-current','true');else btn.removeAttribute('aria-current');
  }
+}
+function paintMelodyLocation(){
+ $('melody-location').textContent='EDITING MELODY '+(melodyEditIndex+1)+'/8 · PLAYS IN ARRANGEMENT BARS '+(melodyEditIndex+1)+' AND '+(melodyEditIndex+9);
+ $('seq').setAttribute('aria-label','16 step editor for looping melody bar '+(melodyEditIndex+1));
 }
 function updatePinButton(){
  $('pin-melody').setAttribute('aria-pressed',String(editorPinned));
- $('pin-melody').textContent=editorPinned?'📌 Pinned · unpin':'📌 Pin this melody';
+ $('pin-melody').textContent=editorPinned?'📌 M'+(melodyEditIndex+1)+' stays open · unpin':'📌 Keep melody open';
  $('pin-status').textContent=editorPinned?
-  'Pinned to melody '+(melodyIndexFor(selectedBar)+1)+'/8. Playhead and chords move without shifting these notes.':
-  'Unpinned: Follow playback moves the editor. Click an M1–M8 slot to pin it.';
- paintMelodyPins();
+  'Editing M'+(melodyEditIndex+1)+' stays put while chords and the audible playhead move. Pink ▶ marks the melody sounding now.':
+  'Follow mode: selecting a chord bar opens its corresponding melody. Choose M1–M8 to pin a melody.';
+ paintMelodyLocation();paintMelodyPins();
 }
 function recordMelodyUndo(){
- const index=melodyIndexFor(selectedBar);
+ const index=melodyEditIndex;
  melodyUndo.push({index,notes:bars[index].notes.map(row=>row.slice())});
  if(melodyUndo.length>24)melodyUndo.shift();
  $('melody-undo').disabled=false;
@@ -616,14 +623,14 @@ function recordMelodyUndo(){
 function undoMelodyEdit(){
  const last=melodyUndo.pop();if(!last)return;
  bars[last.index].notes=last.notes.map(row=>row.slice());
- grid=bars[melodyIndexFor(selectedBar)].notes;
+ grid=bars[melodyEditIndex].notes;
  dirtyBars();paintGrid();paintHarmony();
  $('melody-undo').disabled=melodyUndo.length===0;
  studioStatus('RESTORED PREVIOUS EDIT IN MELODY '+(last.index+1));
 }
 function moveMelody(delta){
- editorPinned=true;const next=Math.max(0,Math.min(MELODY_BARS-1,melodyIndexFor(selectedBar)+delta));
- selectBar(next);updatePinButton();
+ editorPinned=true;melodyEditIndex=Math.max(0,Math.min(MELODY_BARS-1,melodyEditIndex+delta));
+ grid=bars[melodyEditIndex].notes;paintGrid();updatePinButton();paintTransport();
 }
 function paintCadence(){
  const bar=bars[selectedBar],grid=$('cadence-grid');
@@ -655,7 +662,7 @@ function initializeMelodyAndCadence(){
  $('melody-back').addEventListener('click',()=>moveMelody(-1));
  $('melody-forward').addEventListener('click',()=>moveMelody(1));
  $('melody-copy').addEventListener('click',()=>{
-  const idx=melodyIndexFor(selectedBar);
+  const idx=melodyEditIndex;
   if(idx===0)return;recordMelodyUndo();
   bars[idx].notes=bars[idx-1].notes.map(row=>row.slice());grid=bars[idx].notes;
   dirtyBars();paintGrid();paintHarmony();
@@ -673,38 +680,48 @@ function initializeMelodyAndCadence(){
  });
 }
 
+function paintTransport(){
+ const editing=realizeBar(bars[selectedBar].chord).name;
+ $('edit-now').textContent='EDITING · BAR '+String(selectedBar+1).padStart(2,'0')+'/16 ('+editing+') · MELODY M'+(melodyEditIndex+1)+(editorPinned?' PINNED':' FOLLOW');
+ $('beat-now').textContent=loopPlaying&&playingBar>=0?
+  '▶ HEARING · BAR '+String(playingBar+1).padStart(2,'0')+'/16 · '+realizeBar(bars[playingBar].chord).name+' · M'+(melodyIndexFor(playingBar)+1)+' · STEP '+String(loopLast+1).padStart(2,'0')+'/16':
+  'NOT PLAYING · Start at bar '+String(selectedBar+1).padStart(2,'0');
+ $('beat-play').textContent=loopPlaying?'■ Stop song':'▶ Play song';
+ $('beat-play').setAttribute('aria-pressed',String(loopPlaying));
+}
 function paintHarmony(){
  const list=$('chord-list');
  if(list.childElementCount!==BAR_COUNT){
   list.replaceChildren();
   for(let i=0;i<BAR_COUNT;i++){
    const btn=document.createElement('button');btn.type='button';btn.className='bar-tile';
-   btn.setAttribute('aria-label','Select bar '+(i+1));
+   btn.setAttribute('aria-label','Select chord bar '+(i+1));
    for(const tag of ['small','strong','small'])btn.append(document.createElement(tag));
    btn.addEventListener('click',()=>selectBar(i));list.append(btn);
   }
  }
  for(let i=0;i<BAR_COUNT;i++){
-  const b=list.children[i],chord=realizeBar(bars[i].chord);
+  const b=list.children[i],chord=realizeBar(bars[i].chord),playing=loopPlaying&&playingBar===i;
   b.children[0].textContent='BAR '+String(i+1).padStart(2,'0');
   b.children[1].textContent=chord.name;
-  b.children[2].textContent='M'+(melodyIndexFor(i)+1)+' · '+bars[i].cadence.filter(Boolean).length+' HITS';
+  b.children[2].textContent='MELODY M'+(melodyIndexFor(i)+1);
   b.classList.toggle('selected',i===selectedBar);
-  b.classList.toggle('playing',loopPlaying&&playingBar===i);
+  b.classList.toggle('playing',playing);
   b.setAttribute('aria-pressed',String(i===selectedBar));
+  b.style.setProperty('--bar-progress',playing?((loopLast+1)/STEPS_PER_BAR*100)+'%':'0%');
+  if(playing)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');
  }
+ paintTransport();
 }
 function selectBar(index){
  if(!Number.isInteger(index)||index<0||index>=BAR_COUNT)return;
- selectedBar=index;grid=bars[melodyIndexFor(index)].notes;
- paintMelodyPins();
+ selectedBar=index;
+ if(!editorPinned)melodyEditIndex=melodyIndexFor(index);
+ grid=bars[melodyEditIndex].notes;
  $('bar-number').textContent='BAR '+String(index+1).padStart(2,'0')+' / 16';
  $('bar-chord').value=bars[index].chord?realizeBar(bars[index].chord).name:'';
  $('copy-previous-bar').disabled=index===0;
- $('melody-location').textContent='EDITING MELODY '+(melodyIndexFor(index)+1)+'/8 · ARRANGEMENT BAR '+(index+1)+'/16'+(index>=8?' · SHARED WITH BAR '+(melodyIndexFor(index)+1):'');
- paintLayers();
- $('seq').setAttribute('aria-label','16 step editor for looping melody bar '+(melodyIndexFor(index)+1));
- paintCadence();paintGrid();paintHarmony();updatePinButton();
+ paintLayers();paintCadence();paintGrid();paintHarmony();updatePinButton();
 }
 function dirtyBars(){arrangementDirty=true;$('branch-status').textContent='UNSAVED CHANGES · Save a new branch or update selected';paintHarmony()}
 function setBarChord(){
@@ -933,7 +950,7 @@ function paintGrid(){
  for(const b of $('seq').querySelectorAll('.step')){
   const r=+b.dataset.row,c=+b.dataset.col;
   b.classList.toggle('on',grid[r][c]);
-  b.classList.toggle('playing',loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===melodyIndexFor(selectedBar)&&c===loopLast);
+  b.classList.toggle('playing',loopPlaying&&playingBar>=0&&melodyIndexFor(playingBar)===melodyEditIndex&&c===loopLast);
   b.setAttribute('aria-pressed',String(grid[r][c]));
  }
 }
