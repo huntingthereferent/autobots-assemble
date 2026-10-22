@@ -25,6 +25,7 @@ class EquilibriumObserverTests(unittest.TestCase):
             self.assertIn(f'id="{field}"', html)
         self.assertIn("snapshot.latestPage", js)
         self.assertIn("snapshot.checked", js)
+        self.assertIn("snapshot.liveTotals", js)
         self.assertIn("previous=known", js)
         self.assertIn("STEADY CANDIDATE", js)
         self.assertIn("No confirmed concurrency cap", js)
@@ -56,15 +57,20 @@ const when=n=>new Date(start+n*60000).toISOString();
 const queued={id:1,name:"A",status:"queued",created:when(0)};
 a.sample({checked:start,latestPage:[queued]});
 a.sample({checked:start,latestPage:[queued]}); // duplicate must not count
-assert.equal(nodes.get("eq-samples").textContent.startsWith("1 checks"),true);
+assert.equal(nodes.get("eq-samples").textContent.startsWith("1 / 1 session checks"),true);
 const running={...queued,status:"in_progress"};
 a.sample({checked:start+120000,latestPage:[running]});
 a.sample({checked:start+240000,latestPage:[{...running,status:"completed",conclusion:"success"}]});
 assert.equal(nodes.get("eq-peak-running").textContent,"1");
 assert.equal(nodes.get("eq-queue-drift").textContent,"-1");
-assert.equal(nodes.get("eq-samples").textContent.startsWith("3 checks"),true);
+assert.equal(nodes.get("eq-samples").textContent.startsWith("3 / 3 session checks"),true);
 assert.ok(nodes.get("eq-out").textContent.includes("/h"));
 assert.equal(nodes.get("equilibrium-graph").children.length,3);
+a.sample({checked:start+360000,latestPage:[{...running,status:"completed",conclusion:"success"}],
+          liveTotals:{running:20,queued:31}});
+assert.equal(nodes.get("eq-peak-running").textContent,"20");
+assert.equal(nodes.get("eq-avg-waiting").textContent.includes("31"),false); // interval averages, not latest point
+assert.match(nodes.get("eq-boundary").textContent,/status-filtered workflow totals/);
 '''
         result = subprocess.run(
             ["node", "-e", runner, str(SCRIPT)], cwd=ROOT,
