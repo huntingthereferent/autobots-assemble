@@ -1015,8 +1015,10 @@ footer{border-top-color:#253942}
       " · "+(runs.length?readableDuration(avg(runs))+" mean started-to-finished duration across "+runs.length:"no valid duration intervals")+
       ". These do not determine total runner capacity.";
   }
+  let detailRequestSerial=0;
   async function selectRun(id,focus=false){
     if(!Number.isSafeInteger(id)||id<1)return;const r=app.runs.find(x=>x.id===id);if(!r)return;
+    const serial=++detailRequestSerial;
     app.selection=id;app.selectedUpdated=r.updated;renderRuns();
     if($("revision-panel").open)loadRevision(r);
     else $("revision-scope").textContent="Run "+r.id+" · open for exact source paths";
@@ -1033,8 +1035,10 @@ footer{border-top-color:#253942}
     const pane=el("div","Reading exact GitHub job evidence…","no-source");area.append(pane);
     try{
       const json=app.jobCache.has(id)?app.jobCache.get(id):await getJSON(API+"/actions/runs/"+id+"/jobs?per_page=100");
+      const current=app.runs.find(x=>x.id===id);
+      if(serial!==detailRequestSerial||app.selection!==id||!current||current.updated!==r.updated)return;
       if(!json||!Array.isArray(json.jobs))throw Error("Missing job array");
-      app.jobCache.set(id,json);if(app.selection!==id)return;
+      app.jobCache.set(id,json);
       const covered=json.jobs.slice(0,100),timings=jobTimingSummary(covered);
       if(timings)header.append(el("p",timings,"fine"));
       pane.remove();for(const [index,j] of covered.entries()){
@@ -1053,7 +1057,7 @@ footer{border-top-color:#253942}
         b.append(inside);area.append(b);
       }
       if(!json.jobs.length)area.append(el("p","No job evidence returned for this run.","no-source"));
-    }catch(e){if(app.selection===id)pane.textContent="Source evidence unavailable: "+e.message+". No steps inferred."}
+    }catch(e){if(serial===detailRequestSerial&&app.selection===id)pane.textContent="Source evidence unavailable: "+e.message+". No steps inferred."}
   }
   function srcLink(path,line){if(typeof path!=="string"||!(/^[\w./-]+$/.test(path))||path.includes(".."))return null;
     const url="https://github.com/"+REPO+"/blob/main/"+path.split("/").map(encodeURIComponent).join("/")+(Number.isInteger(line)&&line>0?"#L"+line:"");
