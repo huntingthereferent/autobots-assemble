@@ -1,0 +1,100 @@
+name: NIH P2 source authored GenEx Bgee to RO mapping gate
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_author_genex_bgee_ro_mapping_gate.py'
+      - 'network/tests/test_nih_p2_author_genex_bgee_ro_mapping_gate.py'
+      - '.github/workflows/nih-p2-author-genex-bgee-ro-mapping.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-genex-author-bridge-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  author-cross-source-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install independent RDF parsing and SPARQL query engine
+        run: python -m pip install 'rdflib>=7,<8'
+      - name: Authenticate complete original author GenEx and independent original RO files
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-bgee-author" "$RUNNER_TEMP/nih-obo-source" "$RUNNER_TEMP/nih-bgee-bridge-evidence"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from systems.workspace import nih_p2_author_genex_bgee_ro_mapping_gate as b
+          from systems.workspace import nih_phase2_external_obo_graph_trial as ro
+          from hashlib import sha256
+          import os
+          dst=Path(os.environ["RUNNER_TEMP"])/"nih-bgee-author"
+          for name,blob in b.FILES.items():
+              url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/obda/"+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-GenEx-Author-Source/1.0"}),timeout=55) as r:
+                  if r.status!=200 or r.geturl()!=url:raise ValueError("author mapping original URL mismatch")
+                  raw=r.read(1_000_001)
+              if len(raw)>1_000_000 or b.git_blob(raw)!=blob:
+                  raise ValueError("author's exact Git file blob changed: "+name)
+              (dst/name).write_bytes(raw)
+          out=Path(os.environ["RUNNER_TEMP"])/"nih-obo-source"
+          for name in ro.SOURCE_FILES:
+              url=ro.SOURCE_URL+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-GenEx-Original-RO/1.0"}),timeout=55) as r:
+                  if r.status!=200 or r.geturl()!=url:raise ValueError("original RO URL mismatch")
+                  raw=r.read(5_000_001)
+              if sha256(raw).hexdigest()!=ro.PINNED_WHOLE_SOURCE_SHA256[name]:
+                  raise ValueError("source-owned whole original RO SHA256 mismatch")
+              (out/name).write_bytes(raw)
+          PY
+      - name: Test author-owned source mapping boundaries and independent RO
+        env:
+          NIH_ORIGINAL_BGEE_SOURCE_DIR: ${{ runner.temp }}/nih-bgee-author
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-obo-source/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-obo-source/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_author_genex_bgee_ro_mapping_gate
+      - name: Reproduce the source-author mapping graph bridge without any clinical rows
+        env:
+          NIH_ORIGINAL_BGEE_SOURCE_DIR: ${{ runner.temp }}/nih-bgee-author
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/nih-obo-source/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/nih-obo-source/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_author_genex_bgee_ro_mapping_gate \
+            --obda "$NIH_ORIGINAL_BGEE_SOURCE_DIR/bgee_v14_genex.obda" \
+            --owl "$NIH_ORIGINAL_BGEE_SOURCE_DIR/bgee_v14_genex.owl" \
+            --r2rml "$NIH_ORIGINAL_BGEE_SOURCE_DIR/bgee_v14_genex.r2rml" \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/nih-bgee-bridge-evidence/author-genex-source-bridge.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"nih-bgee-bridge-evidence/author-genex-source-bridge.json").read_text())
+          assert r["schema"]=="nih-p2-authored-genex-bgee-ro-predicate-bridge-v1"
+          assert r["independent_original_RO_graph_triples"]==8319
+          assert len(r["author_R2RML_mappings"])==2
+          assert r["author_file_and_independent_RO_inverse_agree"] is True
+          assert r["independent_original_graph_SPARQL_path_agrees"] is True
+          assert r["original_Bgee_SQL_rows_measured"] is False
+          assert r["source_ground_biomedical_relationships_materialized_measured"] is False
+          assert r["additional_patient_or_disease_treatment_claim"] is False
+          assert r["original_W13_modified"] is False
+          assert r["official_NIH_phase2_benchmark"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-bgee-bridge-evidence" && sha256sum author-genex-source-bridge.json > sha256.txt)
+      - name: Retain only provenance summary, no original source data copies
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-bgee-genex-author-bridge-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-bgee-bridge-evidence/
+          retention-days: 30
+          if-no-files-found: warn
