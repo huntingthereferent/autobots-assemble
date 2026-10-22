@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "observation_source": "research/testing_lanes/observations/2026-10-22-run-39779917319.json",
+  "source_run_commit": "40171b6a7df1953097f45ee8ef2e8c0a6add966c",
+  "run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39779917319",
+  "scope": "Metadata source readiness from this exact tested workflow; no scientific experiment performed.",
+  "source_feed_ready": 20,
+  "waiting_source_feed": 1,
+  "scientific_experiments_run": 0,
+  "individual_lane_ci_jobs_passed": 21,
+  "lanes": [
+    {
+      "lane_id": "LIT",
+      "lane_name": "Research discovery and evidence synthesis",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openalex",
+        "crossref",
+        "pubmed"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openalex",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "crossref",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "pubmed",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "META",
+      "lane_name": "Methods, preregistration and reproducibility",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf",
+        "zenodo",
+        "crossref"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "crossref",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "MATH",
+      "lane_name": "Mathematics and formal proof studies",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openalex",
+        "zenodo"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openalex",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "COMP",
+      "lane_name": "Algorithms and computer systems",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openml",
+        "zenodo",
+        "crossref"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openml",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "crossref",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "ML",
+      "lane_name": "Machine learning and ARC-like tasks",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openml",
+        "hf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openml",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "hf",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "ROB",
+      "lane_name": "Robotics, controls and autonomy",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "zenodo",
+        "osf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "osf",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "PHY",
+      "lane_name": "Physics and dynamical systems",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "gwosc",
+        "zenodo"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "gwosc",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "CHEM",
+      "lane_name": "Chemistry, thermodynamics and materials",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "pubchem"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "nist",
+          "source_state": "MANUAL_ACCESS_GATE"
+        },
+        {
+          "source_id": "pubchem",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "BIO",
+      "lane_name": "Molecular biology and structural data",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "pubchem",
+        "zenodo",
+        "openalex"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "pubchem",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "openalex",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "CLIN",
+      "lane_name": "Clinical research and trial records",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "ctgov",
+        "pubmed"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "ctgov",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "pubmed",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "physionet",
+          "source_state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "NEURO",
+      "lane_name": "Neuroscience and physiological signals",
+      "source_feed_status": "WAITING_FOR_SOURCES",
+      "verified_source_ids": [],
+      "source_dependencies": [
+        {
+          "source_id": "openneuro",
+          "source_state": "MANUAL_ACCESS_GATE"
+        },
+        {
+          "source_id": "physionet",
+          "source_state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "PSY",
+      "lane_name": "Psychology, cognition and behavior",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf",
+        "openalex"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "openalex",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "EARTH",
+      "lane_name": "Earth systems and climate",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "earthdata"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "earthdata",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "noaa",
+          "source_state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "SPACE",
+      "lane_name": "Astronomy and gravitational wave events",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "gwosc",
+        "zenodo"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "gwosc",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "ECON",
+      "lane_name": "Economics and economic forecasting",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "worldbank"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "worldbank",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "oecd",
+          "source_state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "SOC",
+      "lane_name": "Social science and demographics",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "worldbank",
+        "osf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "worldbank",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "oecd",
+          "source_state": "MANUAL_ACCESS_GATE"
+        },
+        {
+          "source_id": "osf",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "EDU",
+      "lane_name": "Education and learning research",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf",
+        "openalex",
+        "crossref"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "openalex",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "crossref",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "AUDIO",
+      "lane_name": "Audio, music and perception",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "hf",
+        "zenodo"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "hf",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "WORLD",
+      "lane_name": "Games, virtual worlds and agent interaction",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openml",
+        "zenodo",
+        "hf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openml",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "hf",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "SEC",
+      "lane_name": "Software security and robustness",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "nvd",
+        "zenodo"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "nvd",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "HCI",
+      "lane_name": "Human factors and interface design",
+      "source_feed_status": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf",
+        "zenodo"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "source_state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "source_state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    }
+  ]
+}
