@@ -46,9 +46,36 @@ class ABWorkstationHarnessBridgeTests(unittest.TestCase):
         self.assertEqual(len(result["born_coordination_lanes"]), 1)
         self.assertFalse(result["execution_started"])
         self.assertFalse(result["native_checkpoint_pass"])
-        child = self.harness._runtime().get(result["born_coordination_lanes"][0])
+        child_handoff_id = result["born_coordination_lanes"][0]
+        child = self.harness._runtime().get(child_handoff_id)
         self.assertEqual(child.metadata["parents"], ["root"])
+        self.verifier.bind_lane(movement["word"], child_handoff_id)
         self.assertEqual(self.harness.tick()["born_coordination_lanes"], [])
+
+        # The next mathematical wave can now address the actual coordination lane
+        # created for this path; it does not need a fabricated worker identity.
+        advance(self.cluster_dir, execute=True, workers=3)
+        next_rows = replayed_rows(self.journal)
+        next_movement = next(m for row2 in next_rows for m in row2["movements"]
+                             if m["from"] == movement["word"])
+        self.assertEqual(self.verifier.lane_to_path[child.metadata["lane_id"]],
+                         movement["word"])
+        if next_movement["kind"] == "BRANCH":
+            from systems.workspace.workstation_continuation import Observation
+            obs = Observation("next-branch", child.metadata["lane_id"], "BRANCH",
+                              next_movement["word"],
+                              movement_ref(next(row2 for row2 in next_rows
+                                                if next_movement in row2["movements"])["entry_hash"],
+                                           next_movement),
+                              "finite-required-edge-prefilter", 99)
+        else:
+            from systems.workspace.workstation_continuation import Observation
+            obs = Observation("next-relation", child.metadata["lane_id"], "RELATION",
+                              "state:" + ",".join(map(str, next_movement["to"])),
+                              movement_ref(next(row2 for row2 in next_rows
+                                                if next_movement in row2["movements"])["entry_hash"],
+                                           next_movement), "", 99)
+        self.assertTrue(self.verifier.verify_observation(obs))
 
     def test_real_collision_joins_only_after_both_witnesses_verify(self):
         selected = None
