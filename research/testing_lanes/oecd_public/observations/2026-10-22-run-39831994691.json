@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "evidence_kind": "PUBLIC_OECD_SDMX_DATAFLOW_STRUCTURE_ONLY",
-  "github_run_id": 39831994691,
-  "github_run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39831994691",
+  "evidence_kind": "OECD_PUBLIC_SDMX_DATAFLOW_STRUCTURE_METADATA_ONLY",
+  "source_run_id": 39831994691,
+  "run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39831994691",
   "source_code_commit": "fc77da47fe928b31d555dd5b138dde6e4a5bbaa8",
   "offline_contract": "success",
-  "live_structure_identity": "success",
+  "fixed_source_probe": "success",
   "observation": {
     "data_rows_downloaded": 0,
     "identity": {
@@ -36,9 +36,9 @@
     "source_url": "https://sdmx.oecd.org/public/rest/dataflow/OECD.SDD.TPS/DSD_BOP%40DF_TIS/1.0?references=none",
     "state": "PUBLIC_DATAFLOW_METADATA_OBSERVED"
   },
-  "scientific_status": "NOT_TESTED",
-  "source_rows_used": 0,
-  "raw_response_retained": false,
-  "rights_review": "REQUIRED_PER_RECORD",
-  "scope": "Confirmed published OECD structural dataflow identity, not statistical observations, dataset licensing or economic science claims."
+  "science_status": "NOT_TESTED",
+  "data_use_rights": "REQUIRED_PER_RECORD",
+  "statistical_rows_used": 0,
+  "source_response_archived": false,
+  "boundary": "SDMX public flow identity only. No OECD economic observation, dataset values, derived indicator or scientific experiment."
 }

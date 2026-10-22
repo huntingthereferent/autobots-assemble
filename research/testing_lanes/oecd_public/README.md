@@ -1,5 +1,12 @@
 # OECD SDMX — bounded source dataflow identity
 
+## First independently verified OECD structure · October 22, 2026
+
+[GitHub Actions 39831994691](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39831994691) passed both the synthetic offline source controls and the one fixed public dataflow request. The original OECD endpoint returned HTTP 200 and 7,967 SDMX XML bytes. The observed exact agency, flow and version matched, with all five structural predicates true. The source was discarded after hashing; SHA-256 `c5e17eb631f9eba763e6baf2fec612a7841642be84fd217ecb0ade2687416109`.
+
+The append-only [source witness](observations/2026-10-22-run-39831994691.json) contains the source hash, UTC time and identity checks. It records **zero statistical rows, zero country values and no validated scientific result**. The OECD dataset-specific selection and data-use gate remains manual.
+
+
 ## Observed public dataflow identity, October 22, 2026
 
 [Run 39831994691](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39831994691) completed both offline and public-source identity jobs successfully. The fixed OECD structure endpoint returned HTTP 200 and 7,967 bytes. Five dataflow/structure safety predicates were true; response SHA-256 `c5e17eb631f9eba763e6baf2fec612a7841642be84fd217ecb0ade2687416109`. The original XML was not stored. The verified [receipt](observations/2026-10-22-run-39831994691.json) records UTC time, source identifier, hash and zero statistical rows admitted.

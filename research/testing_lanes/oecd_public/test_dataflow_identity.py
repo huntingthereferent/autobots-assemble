@@ -1,5 +1,7 @@
 """Synthetic OECD dataflow source tests; no network or statistical data."""
 import unittest
+import json
+from pathlib import Path
 from dataflow_identity import URL, AGENCY, FLOW, VERSION, ACCEPT, MAX_BYTES, classify, observe
 
 def xml(*, agency=AGENCY, flow=FLOW, version=VERSION, label="Trade in services", extra="", data=""):
@@ -77,6 +79,21 @@ class OECDSourceTests(unittest.TestCase):
         self.assertFalse(archive["raw_response_retained"])
         self.assertEqual(archive["rights_review"], "REQUIRED_PER_RECORD")
         self.assertEqual(archive["scientific_status"], "NOT_TESTED")
+
+    def test_archived_live_structure_never_claims_statistical_result(self):
+        document = Path(__file__).parent / "observations" / "2026-10-22-run-39831994691.json"
+        archived = json.loads(document.read_text(encoding="utf-8"))
+        observation = archived["observation"]
+        self.assertEqual(archived["source_run_id"], 39831994691)
+        self.assertEqual(archived["source_code_commit"], "fc77da47fe928b31d555dd5b138dde6e4a5bbaa8")
+        self.assertEqual(observation["state"], "PUBLIC_DATAFLOW_METADATA_OBSERVED")
+        self.assertEqual(observation["source_url"], URL)
+        self.assertEqual(observation["response_sha256"],
+                         "c5e17eb631f9eba763e6baf2fec612a7841642be84fd217ecb0ade2687416109")
+        self.assertTrue(all(observation["identity"]["identity_checks"].values()))
+        self.assertEqual(observation["data_rows_downloaded"], 0)
+        self.assertFalse(observation["raw_source_archived"])
+        self.assertEqual(archived["science_status"], "NOT_TESTED")
 
     def test_safe_error_fields(self):
         r = observe(opener=Transport(xml(version="bad", label="")))
