@@ -22,5 +22,15 @@ The new separate manual GitHub Actions workflow refuses absent/noncanonical plan
 
 The audited, unmerged result is available to lane C as source-pinned evidence. No further candidate is automatically selected from the failed movement.
 
+## Upper-bar horizontal source contrast — verified October 22
+
+[Original SDK run #39754427647](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647), [JSON/NPZ artifact #12414579575](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647/artifacts/12414579575), ZIP SHA-256 `4757ad60c0aef5bee60727f659c2c9e1293026ce600fa2eb9e88fa732e2b8f20`, configured retention 90 days.
+
+Six frozen upper-bar source action histories from identical verified D3L2/L3U2 lower arrangement, with two independent original-SDK A/B entrances each: **12/12 native resets remained official level4 NOT_FINISHED, zero level5/WIN**. Source-selected upper bar on `reselect` has bbox `[29,20,40,22]`, `LEFT1` bbox `[26,20,37,22]`, `LEFT2` bbox `[23,20,34,22]`. Source top-left 45-pixel cup was never palette13-filled for reselect/LEFT2/LEFT1→RIGHT1; it first filled at frame25 for LEFT1/LEFT1→UP1/LEFT1→DOWN1. LEFT1's other cups: lateral frame13, top-middle/right frame21. All observed top/right border first changes stayed at frame21.
+
+**Source interpretation:** the tested upper-bar horizontal position admits a narrow positive source observation at LEFT1, not a monotonic claim that more left movement is better. Vertical continuations did not abolish the cup-filling observation in this bounded parent. The original SDK still did not advance. Aligning returned animation frame indices is observational and does not assert a common physical clock.
+
+Next frozen test within this independent lane: different genuine movement histories that **end at the same source-selected upper-bar bounding box**, to determine whether tested cup fill depends only on apparent final placement or also the actual native movement path. Do not infer hidden-engine action rules.
+
 ## Hold conditions
 Unknown source contact, mismatching A/B witnesses, missing prior click receipt, or illegal action => stop at **UNKNOWN**. Do not widen to an uncontrolled search. Keep mathematical ARC-like models, WORLD, NIH, and other workers unchanged. Do not merge without native evidence and all required protocol gates.
