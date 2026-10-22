@@ -1,0 +1,43 @@
+name: public-study-metadata-receipt
+
+on:
+  pull_request:
+    paths:
+      - "research/study_intake/**"
+      - ".github/workflows/public-study-metadata-receipt.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Offline source-admission and negative tests
+        run: python -m unittest discover -s research/study_intake -p 'test_*.py' -v
+      - name: Default run cannot fetch
+        run: python research/study_intake/metadata_probe.py
+
+  bounded-live-source-observation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Exactly one source metadata request per provider
+        run: python research/study_intake/metadata_probe.py --live --output study-metadata-receipt.json
+      - name: Preserve minimal metadata witness (including failures)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: osc-2015-public-metadata-receipt
+          path: study-metadata-receipt.json
+          if-no-files-found: warn
+          retention-days: 30
