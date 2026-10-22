@@ -85,9 +85,11 @@ def cross_relation_role_overlap(rows):
     """
     if not rows or type(rows) is not list:
         raise ValueError("original training triples are required")
-    if any(type(t) is not tuple or len(t)!=3 or t[1] not in CODES
-           or any(type(v) is not str or not v for v in t) for t in rows):
-        raise ValueError("unknown predicate or malformed source role input")
+    if any(type(t) is not tuple or len(t)!=3 or
+           any(type(v) is not str or not v for v in t) for t in rows):
+        raise ValueError("malformed original source role input")
+    all_rows=rows
+    rows=[t for t in all_rows if t[1] in CODES]
     role_sets = {}
     for code in CODES:
         role_sets[(code,"head")]={h for h,r,t in rows if r==code}
@@ -116,6 +118,7 @@ def cross_relation_role_overlap(rows):
                         raise ValueError("independent original TRAIN role scan differs")
                     out[key]=n
     return {
+        "source_train_rows_outside_frozen_four_relation_codes":len(all_rows)-len(rows),
         "original_train_unique_source_identifiers":len(
             {x for h,r,t in rows for x in (h,t)}),
         "directed_relation_role_overlap_counts":out,
