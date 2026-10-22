@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "oecd",
+  "name": "OECD SDMX",
+  "documentation_url": "https://www.oecd.org/en/data/insights/data-explainers/2024/09/api.html",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "OECD social/economic statistical metadata",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": null,
+    "url": null,
+    "mode": "manual_review_required",
+    "expected_format": null,
+    "scope": "Dataset-specific query from OECD Data Explorer needed",
+    "max_bytes": null,
+    "redirects": "deny",
+    "timeout_seconds": null
+  },
+  "access": "manual_query_selection",
+  "boundary": "SDMX dataflow, observation keys and reporting period required. Respect OECD terms and API rate limits; avoid broad all-data downloads.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}
