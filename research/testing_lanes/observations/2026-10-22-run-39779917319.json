@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "observation_kind": "PUBLIC_METADATA_SOURCE_ADMISSION",
+  "observed_run_id": 39779917319,
+  "observed_run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39779917319",
+  "source_code_commit": "40171b6a7df1953097f45ee8ef2e8c0a6add966c",
+  "observation_date_utc": "2026-10-22",
+  "boundary": "Metadata APIs only. This does not establish approved datasets, scientific experiments, publication rights, hypothesis outcomes or human-subject clearance.",
+  "source_status_counts": {
+    "metadata_observed": 13,
+    "source_wall": 0,
+    "manual_not_probed": 5
+  },
+  "observations": [
+    {
+      "body_sha256": "2197780b3baf5f3f00f63a462c5a42563c45463ca05e24b4607ed6595fba2e21",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:38.989288+00:00",
+      "response_bytes": 61560,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "openalex",
+      "source_url": "https://api.openalex.org/works/https://doi.org/10.1126/science.aac4716",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "ee986ba9347bbdaba3c92d18f16391e2e5bcbb11a2ec41d3690bf1818190a99d",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:39.255989+00:00",
+      "response_bytes": 8014,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "crossref",
+      "source_url": "https://api.crossref.org/works/10.1126/science.aac4716",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "156f2cd5ccea8f48f77e72089d2226771a095af033e9cb7d4ff16d399e6f0e11",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:39.948295+00:00",
+      "response_bytes": 5194,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "osf",
+      "source_url": "https://api.osf.io/v2/nodes/?page%5Bsize%5D=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "3bb3c94d6e781ec773bff2b91d5de11d4b81bd39d100fce79428e5e182b8d3a0",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:40.568190+00:00",
+      "response_bytes": 10680,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "zenodo",
+      "source_url": "https://zenodo.org/api/records?q=reproducibility&size=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "7e408fec68984cfcf25f360ca267e706bc5ef27284a17351f78429660c14acd0",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:41.511290+00:00",
+      "response_bytes": 1910,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "openml",
+      "source_url": "https://www.openml.org/api/v1/json/data/61",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "7f672c4a1f41b30f2b398ae778026dca7e0c36a2d1a2cbf36dbf1c1460c2bfbb",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:41.644669+00:00",
+      "response_bytes": 1430,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "hf",
+      "source_url": "https://huggingface.co/api/datasets?limit=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "3058bc9daa0f9a47f2b6a335e6fc6688cc2d3afd8647a0d229bc7861522fec28",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:41.835323+00:00",
+      "response_bytes": 181,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "pubmed",
+      "source_url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=26315443%5Buid%5D&retmode=json",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "a58a04279d7422f346667a3f5148b652fd6d5af63abd02e318249da5ef78aeeb",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:41.977786+00:00",
+      "response_bytes": 7525,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "ctgov",
+      "source_url": "https://clinicaltrials.gov/api/v2/studies?query.term=diabetes&pageSize=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "1e24a6c3db7d4b93b5b52f9c823f419a6d3f96341303bb83c01a13d6d3be19a6",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:42.153672+00:00",
+      "response_bytes": 125,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "pubchem",
+      "source_url": "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/962/property/MolecularFormula/JSON",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "08eca78647cf23672a865188b4b5ec21bf602740b86b67bee4e13f55082d5dd1",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:45.813951+00:00",
+      "response_bytes": 130816,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "earthdata",
+      "source_url": "https://cmr.earthdata.nasa.gov/search/collections.json?short_name=MOD13Q1&page_size=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "aee420900b671bbee49cbb6ad9daa060d4e0e2a30dcdc4d9eee8d2afb9cb5ed4",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:48.304375+00:00",
+      "response_bytes": 461,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "gwosc",
+      "source_url": "https://gwosc.org/api/v2/event-versions?format=json&pagesize=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "b7d97d40e1d86955bac3ca5bbc4fe534f1872c505479392e029e37f99d8e605c",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:48.536287+00:00",
+      "response_bytes": 294,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "worldbank",
+      "source_url": "https://api.worldbank.org/v2/country/US/indicator/SP.POP.TOTL?format=json&per_page=1",
+      "state": "METADATA_OBSERVED"
+    },
+    {
+      "body_sha256": "21f953a26c10c5b1b6bef431569456988c5fb91283141d1bd95e82e99b52fa55",
+      "inspection": {
+        "record_shape": "expected_structure",
+        "semantic_record_verified": true
+      },
+      "observed_at_utc": "2026-10-22T12:44:48.747691+00:00",
+      "response_bytes": 87139,
+      "response_status": 200,
+      "scientific_claim_verified": false,
+      "source_data_archived": false,
+      "source_id": "nvd",
+      "source_url": "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2021-44228",
+      "state": "METADATA_OBSERVED"
+    }
+  ],
+  "manual_gates": [
+    "physionet",
+    "openneuro",
+    "nist",
+    "noaa",
+    "oecd"
+  ],
+  "independent_lane_ci": {
+    "jobs_total": 21,
+    "jobs_success": 21,
+    "scientific_tests_run": 0
+  },
+  "source_data_archived": false,
+  "previous_observations_preserved": true
+}
