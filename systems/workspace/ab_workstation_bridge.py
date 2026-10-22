@@ -79,8 +79,11 @@ class ABClusterWitnessVerifier:
         for event in runtime.event_store.all():
             if event.event_type != _BINDING_EVENT:
                 continue
-            handoff = runtime._handoffs.get(event.handoff_id)
-            if handoff is None or handoff.metadata.get("source_system") != _LANE_SOURCE:
+            try:
+                handoff = runtime.get(event.handoff_id)
+            except KeyError as exc:
+                raise ValueError("trajectory binding references an unknown workstation lane") from exc
+            if handoff.metadata.get("source_system") != _LANE_SOURCE:
                 raise ValueError("trajectory binding references an unknown workstation lane")
             path = event.data.get("trajectory_path")
             lane_id = handoff.metadata.get("lane_id")
@@ -106,9 +109,10 @@ class ABClusterWitnessVerifier:
         runtime = self._runtime()
         # Accept either the durable logical lane_id or the handoff ID returned
         # by tick()/seed_lane(); normalize to the logical identity used by observations.
-        matches = [h for h in runtime._handoffs.values()
-                   if h.metadata.get("source_system") == _LANE_SOURCE
-                   and (h.metadata.get("lane_id") == lane_id or h.handoff_id == lane_id)]
+        matches = [runtime.get(handoff_id) for handoff_id in runtime.snapshot()
+                   if runtime.get(handoff_id).metadata.get("source_system") == _LANE_SOURCE
+                   and (runtime.get(handoff_id).metadata.get("lane_id") == lane_id
+                        or handoff_id == lane_id)]
         if len(matches) != 1:
             raise ValueError("bind trajectory only after its workstation lane is seeded")
         handoff = matches[0]
