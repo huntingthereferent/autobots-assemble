@@ -70,8 +70,12 @@ public final class BgeeThreeRules {
     }
 
     public static void main(String[] args) throws IOException {
-        if(args.length!=2) throw new IllegalArgumentException(
-            "Pass only entire authenticated original source N-Triples input and an ephemeral result path");
+        if(args.length!=2 && args.length!=3) throw new IllegalArgumentException(
+            "Pass authenticated original N-Triples input, ephemeral result path and optional one-premise ablation");
+        String mode=args.length==3 ? args[2] : "full";
+        if(!mode.equals("full") && !mode.equals("omit-genex") &&
+           !mode.equals("omit-genomic") && !mode.equals("omit-inverse"))
+            throw new IllegalArgumentException("unrecognized single-premise source ablation");
         Model original=ModelFactory.createDefaultModel();
         RDFDataMgr.read(original,args[0],Lang.NTRIPLES);
         if(original.size()<25027 || original.size()>90000)
@@ -86,6 +90,18 @@ public final class BgeeThreeRules {
                               original.createProperty(INV),
                               original.createResource(INVERSE))) {
             throw new IllegalArgumentException("all THREE authentic original source property axioms required");
+        }
+        // Remove one original owner axiom only from the in-memory model.
+        // Every control starts from a newly parsed, unmodified source file.
+        if(mode.equals("omit-genex")) {
+            original.remove(original.createResource(GENEX),original.createProperty(SUB),
+                            original.createResource(EXPRESS));
+        } else if(mode.equals("omit-genomic")) {
+            original.remove(original.createResource(EXPRESS),original.createProperty(SUB),
+                            original.createResource(GENOMIC));
+        } else if(mode.equals("omit-inverse")) {
+            original.remove(original.createResource(EXPRESS),original.createProperty(INV),
+                            original.createResource(INVERSE));
         }
         List<Rule> rules=Rule.parseRules(rules());
         if(rules.size()!=3) throw new IllegalArgumentException("exact source rule count changed");
@@ -102,7 +118,8 @@ public final class BgeeThreeRules {
         try(FileOutputStream file=new FileOutputStream(args[1])) {
             RDFDataMgr.write(file,output,Lang.NTRIPLES);
         }
-        System.out.println("JENA_FULL_AUTHENTICATED_ORIGINAL_GRAPH_TRIPLES="+original.size());
+        System.out.println("JENA_IN_MEMORY_ABLATION_MODE="+mode);
+        System.out.println("JENA_WHOLE_ORIGINAL_INPUT_AFTER_IN_MEMORY_ABLATION="+original.size());
         System.out.println("JENA_EXACT_AUTHENTICATED_RULES="+rules.size());
         System.out.println("JENA_COMPLETE_SOURCE_RULE_OUTPUT="+output.size());
         System.out.println("JENA_COMPLETE_OWL_RL_PROFILE=false");
