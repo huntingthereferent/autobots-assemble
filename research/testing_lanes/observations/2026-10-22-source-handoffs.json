@@ -1,0 +1,470 @@
+{
+  "schema_version": 1,
+  "observation_source": "research/testing_lanes/observations/2026-10-22-run-39767929086.json",
+  "run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39767929086",
+  "source_code_commit": "b0ff39f00a109c2a17d1d2aeace3847ac0b3ffad",
+  "scope": "Derived source-only handoff. No scientific execution; metadata availability permits only a study-intake candidate, not a test result.",
+  "source_feed_ready": 18,
+  "waiting_source_feed": 3,
+  "scientific_experiments_run": 0,
+  "lanes": [
+    {
+      "lane_id": "LIT",
+      "question": "Can independent metadata indexes resolve the same DOI and update history?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openalex",
+        "crossref",
+        "pubmed"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openalex",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "crossref",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "pubmed",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "META",
+      "question": "Is a frozen protocol distinguishable from a later outcome claim?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf",
+        "crossref"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        },
+        {
+          "source_id": "crossref",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "MATH",
+      "question": "Can a stated result be reconstructed from stated assumptions?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openalex"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openalex",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "COMP",
+      "question": "Does a reported algorithm improve a declared baseline under the same inputs?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openml",
+        "crossref"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openml",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        },
+        {
+          "source_id": "crossref",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "ML",
+      "question": "Does a model's behavior generalize to held-out examples and tasks?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openml",
+        "hf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openml",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "hf",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "ROB",
+      "question": "Does a finite controller preserve its stated safety and tracking bounds?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        },
+        {
+          "source_id": "osf",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "PHY",
+      "question": "Do two candidate dynamical descriptions agree on independently observed signals?",
+      "source_state": "WAITING_FOR_SOURCES",
+      "verified_source_ids": [],
+      "source_dependencies": [
+        {
+          "source_id": "gwosc",
+          "state": "HISTORICAL_SOURCE_WALL"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "CHEM",
+      "question": "Do predicted properties match reference data under identical conditions?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "pubchem"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "nist",
+          "state": "MANUAL_ACCESS_GATE"
+        },
+        {
+          "source_id": "pubchem",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "BIO",
+      "question": "Does an external dataset support a stated molecular relation without species or assay mismatch?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "pubchem",
+        "openalex"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "pubchem",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        },
+        {
+          "source_id": "openalex",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "CLIN",
+      "question": "Can registry history and published outcomes be reconciled without conflating clocks?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "ctgov",
+        "pubmed"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "ctgov",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "pubmed",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "physionet",
+          "state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "NEURO",
+      "question": "Can a predeclared signal processing pipeline replicate a published feature?",
+      "source_state": "WAITING_FOR_SOURCES",
+      "verified_source_ids": [],
+      "source_dependencies": [
+        {
+          "source_id": "openneuro",
+          "state": "MANUAL_ACCESS_GATE"
+        },
+        {
+          "source_id": "physionet",
+          "state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "PSY",
+      "question": "Does a preregistered effect hold under public-study recomputation?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf",
+        "openalex"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "openalex",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "EARTH",
+      "question": "Can independent observations be compared on the same spatial and temporal grid?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "earthdata"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "earthdata",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "noaa",
+          "state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "SPACE",
+      "question": "Can a published event feature be reproduced from a pinned public event version?",
+      "source_state": "WAITING_FOR_SOURCES",
+      "verified_source_ids": [],
+      "source_dependencies": [
+        {
+          "source_id": "gwosc",
+          "state": "HISTORICAL_SOURCE_WALL"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "ECON",
+      "question": "Does a forecast beat a naive baseline on held-out historical intervals?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "worldbank"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "worldbank",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "oecd",
+          "state": "MANUAL_ACCESS_GATE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "SOC",
+      "question": "Are demographic associations robust to definition, period and country coverage?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "worldbank",
+        "osf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "worldbank",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "oecd",
+          "state": "MANUAL_ACCESS_GATE"
+        },
+        {
+          "source_id": "osf",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "EDU",
+      "question": "Can reported learning outcomes be reproduced from a study's public analysis?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf",
+        "openalex",
+        "crossref"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "openalex",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "crossref",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "AUDIO",
+      "question": "Can a measurable audio feature survive encoding and playback transformations?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "hf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "hf",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "WORLD",
+      "question": "Does the same policy yield the same trace under controlled resets?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "openml",
+        "hf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "openml",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        },
+        {
+          "source_id": "hf",
+          "state": "METADATA_AVAILABLE"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "SEC",
+      "question": "Does a bounded local test reproduce a documented failure without touching third parties?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "nvd"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "nvd",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    },
+    {
+      "lane_id": "HCI",
+      "question": "Do changes improve a measured interaction task without suppressing accessibility?",
+      "source_state": "SOURCE_METADATA_READY",
+      "verified_source_ids": [
+        "osf"
+      ],
+      "source_dependencies": [
+        {
+          "source_id": "osf",
+          "state": "METADATA_AVAILABLE"
+        },
+        {
+          "source_id": "zenodo",
+          "state": "HISTORICAL_SOURCE_WALL"
+        }
+      ],
+      "scientific_status": "NOT_TESTED",
+      "experiment_runs": 0
+    }
+  ]
+}

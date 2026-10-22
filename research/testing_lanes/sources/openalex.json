@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "openalex",
+  "name": "OpenAlex",
+  "documentation_url": "https://help.openalex.org/api/endpoints/",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "scholarly index",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": "GET",
+    "url": "https://api.openalex.org/works/https://doi.org/10.1126/science.aac4716",
+    "mode": "explicit_opt_in",
+    "expected_format": "json",
+    "scope": "Works metadata keyed by DOI",
+    "max_bytes": 300000,
+    "redirects": "deny",
+    "timeout_seconds": 15
+  },
+  "access": "public_limited",
+  "boundary": "No full-text ingestion. Keyless small requests available, free key needed for higher-scale and deep pagination; protect key.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}

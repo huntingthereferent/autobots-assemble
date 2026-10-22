@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "worldbank",
+  "name": "World Bank Indicators API",
+  "documentation_url": "https://datahelpdesk.worldbank.org/knowledgebase/articles/889392",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "historical development indicators",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": "GET",
+    "url": "https://api.worldbank.org/v2/country/US/indicator/SP.POP.TOTL?format=json&per_page=1",
+    "mode": "explicit_opt_in",
+    "expected_format": "json",
+    "scope": "United States total population, bounded one-record metadata/value sample",
+    "max_bytes": 300000,
+    "redirects": "deny",
+    "timeout_seconds": 15
+  },
+  "access": "public_limited",
+  "boundary": "Indicators are time revised; preserve period, source, units, observation status and release vintage.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}

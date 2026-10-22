@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "source_id": "earthdata",
+  "name": "NASA Earthdata CMR",
+  "documentation_url": "https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html",
+  "documentation_checked_on": "2026-10-22",
+  "source_role": "Earth observation collection catalog",
+  "admission_stage": "DOCUMENTED_NOT_OBSERVED",
+  "observation_status": "NOT_RUN",
+  "probe": {
+    "method": "GET",
+    "url": "https://cmr.earthdata.nasa.gov/search/collections.json?short_name=MOD13Q1&page_size=1",
+    "mode": "explicit_opt_in",
+    "expected_format": "json",
+    "scope": "One MOD13Q1 collection metadata entry",
+    "max_bytes": 300000,
+    "redirects": "deny",
+    "timeout_seconds": 15
+  },
+  "access": "public_limited",
+  "boundary": "Collection is not a granule; do not download imagery before spatial/temporal scale and usage rights are frozen.",
+  "identity_required": [
+    "record_id",
+    "source_url",
+    "observed_at_utc",
+    "body_sha256",
+    "response_status"
+  ],
+  "rights_review": "REQUIRED_PER_RECORD",
+  "scientific_outcome": "NOT_TESTED"
+}
