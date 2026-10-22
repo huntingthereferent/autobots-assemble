@@ -1,0 +1,26 @@
+name: A/B workstation bridge tests
+
+on:
+  pull_request:
+    paths:
+      - "systems/workspace/ab_workstation_bridge.py"
+      - "network/tests/test_ab_workstation_bridge.py"
+      - "systems/workspace/ab_relational_cluster.py"
+      - "systems/workspace/workstation_continuation.py"
+      - "work/arc_like_maze/math.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test replay-backed A/B to workstation evidence bridge
+        run: python -m unittest -v network.tests.test_ab_workstation_bridge
