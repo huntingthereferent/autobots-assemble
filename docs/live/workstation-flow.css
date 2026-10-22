@@ -67,3 +67,9 @@
 @media(max-width:900px){.flow-snapshots{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-snapshots>div:nth-child(2){border-right:0}.flow-snapshots>div:nth-child(-n+2){border-bottom:1px solid #2d4750}}
 @media(max-width:680px){.flow-lanes,.flow-below{grid-template-columns:1fr}.flow-lane{padding:10px 12px}.flow-beads{min-height:28px}.flow-snapshots>div{padding:10px}.flow-snapshots span{font-size:9px}.flow-snapshots strong{font-size:18px}.flow-kicker{flex-wrap:wrap}.flow-kicker small{flex-basis:100%;margin-left:17px;text-align:left}.journal-nav{align-items:stretch}.journal-modes{width:100%}.journal-modes button{flex:1}.journal-shift{justify-content:space-between;width:100%}.overview .metric{padding:12px;min-height:147px}.overview .metric strong{font-size:36px}}
 @media(prefers-reduced-motion:reduce){.overview .metric,.overview .metric strong,.flow-lane-running .flow-bead,.flow-spark-col span{animation:none!important;transition:none!important}.overview .metric:hover{transform:none}}
+
+/* The journal has 12 two-hour bins, 28–31 day bins, 12 months, or dated years.
+   Horizontal scroll is intentional on compact screens; never collapse dates. */
+#history-chart.history-chart{overflow-x:auto;overflow-y:hidden;max-width:100%;min-width:0;padding:4px 2px 9px;scrollbar-width:thin}
+#history-chart .hist-day{min-width:29px}
+#history-chart .hist-day strong,#history-chart .hist-day small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:center}
