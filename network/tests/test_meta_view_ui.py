@@ -40,7 +40,7 @@ class MetaControlDeckTests(unittest.TestCase):
         self.assertIn('id="beads-done"', page)
         self.assertIn('id="show-more"', page)
         self.assertIn('id="list-range"', page)
-        self.assertIn('class="journal"', page)
+        self.assertIn('class="panel journal"', page)
         self.assertIn('id="routing-note"', page)
         self.assertIn('id="status-note"', page)
         self.assertIn('get(root+"?per_page=100")', page)
