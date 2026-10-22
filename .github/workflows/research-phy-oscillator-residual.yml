@@ -1,0 +1,44 @@
+name: research-phy-oscillator-residual
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/phy_oscillator_residual.py"
+      - "research/testing_lanes/test_phy_oscillator_residual.py"
+      - ".github/workflows/research-phy-oscillator-residual.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run numerical convergence and negative controls
+        run: python -m unittest discover -s research/testing_lanes -p "test_phy_oscillator_residual.py" -v
+
+  bounded-residual-check:
+    needs: offline-controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Produce bounded numerical residual receipt
+        run: |
+          mkdir -p phy_receipt
+          python research/testing_lanes/phy_oscillator_residual.py --output phy_receipt/PHY-OSCILLATOR-RESIDUAL-001.json
+      - name: Preserve residual receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: PHY-OSCILLATOR-RESIDUAL-001-receipt
+          path: phy_receipt/*.json
+          if-no-files-found: error
+          retention-days: 30
