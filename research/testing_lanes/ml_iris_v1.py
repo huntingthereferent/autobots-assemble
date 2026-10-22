@@ -20,7 +20,7 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 DATASET_ID = 61
 DATASET_VERSION = 1
-SOURCE_URL = "https://api.openml.org/data/v1/download/61/iris.arff"
+SOURCE_URL = "https://www.openml.org/data/v1/download/61/iris.arff"
 MAX_BYTES = 100_000
 TIMEOUT = 15
 SEED = 42
@@ -169,7 +169,11 @@ def run_live(opener=None):
             "metrics": metrics,
             "boundary": "One small fixed dataset and one seeded holdout; not a general ML claim.",
         })
-    except (HTTPError, URLError, ValueError, TimeoutError, OSError, UnicodeError) as exc:
+    except HTTPError as exc:
+        receipt.update({"state": "SOURCE_WALL", "error_class": type(exc).__name__,
+                        "http_status": exc.code,
+                        "redirect_denied": exc.code in {301, 302, 303, 307, 308}})
+    except (URLError, ValueError, TimeoutError, OSError, UnicodeError) as exc:
         receipt.update({"state": "SOURCE_WALL", "error_class": type(exc).__name__})
     return receipt
 
