@@ -61,5 +61,56 @@ assert.match(f.clock(afternoon.getTime()), /5:30.*PM/i);
         self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
 
 
+    @unittest.skipUnless(shutil.which("node"), "Node.js needed for archive/live regression")
+    def test_archived_queue_does_not_become_live_and_journal_bins_change(self):
+        script = r'''
+const assert=require("node:assert/strict");
+const fs=require("node:fs");
+const vm=require("node:vm");
+class Element{
+ constructor(){this.textContent="";this.children=[];this.style={setProperty(){}};this.className="";this.offsetWidth=1;this.attrs={};this.classList={remove(){},add(){}};this.dataset={};}
+ replaceChildren(...xs){this.children=xs;}
+ append(...xs){this.children.push(...xs);}
+ setAttribute(k,v){this.attrs[k]=v;}
+ addEventListener(type,fn){this[type]=fn;}
+ closest(){return {querySelector:()=>new Element()};}
+}
+const byId=new Map(),stats=new Map();
+for(const name of ["queued","running","passed","failed"])stats.set(name,new Element());
+const modes=["day","month","year","all"].map(mode=>{const e=new Element();e.dataset.journalMode=mode;return e;});
+global.document={
+ getElementById(id){if(!byId.has(id))byId.set(id,new Element());return byId.get(id);},
+ createElement(){return new Element();},
+ querySelector(q){return stats.get((q.match(/data-stat="([^"]+)"/)||[])[1]);},
+ querySelectorAll(){return modes;}
+};
+global.window={};
+vm.runInThisContext(fs.readFileSync(process.argv[1],"utf8"));
+const flow=window.WorkstationFlow;
+const now=Date.now();
+const archive={id:1,name:"old still queued",status:"queued",created:new Date(now-4*86400000).toISOString()};
+const live={id:2,name:"recent passed",status:"completed",conclusion:"success",created:new Date(now-10000).toISOString()};
+flow.render({runs:[archive,live],latestPage:[live],archiveComplete:true,checked:now,liveAvailable:true});
+assert.equal(stats.get("queued").textContent,"0"); // archive is historical, not current
+assert.equal(byId.get("flow-count-queued").textContent,"0");
+flow.render({runs:[archive,live],latestPage:[live],archiveComplete:true,checked:now,liveAvailable:false});
+assert.equal(stats.get("queued").textContent,"—"); // refresh failed, fail closed
+assert.equal(byId.get("flow-count-queued").textContent,"—");
+flow.install(()=>{});
+assert.equal(flow.historyBins([live]).bins.length,12); // two-hour day bins
+const month=modes.find(x=>x.dataset.journalMode==="month");
+month.click();
+assert.equal(flow.historyBins([live]).bins.length,new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate());
+modes.find(x=>x.dataset.journalMode==="year").click();
+assert.equal(flow.historyBins([live]).bins.length,12);
+modes.find(x=>x.dataset.journalMode==="all").click();
+assert.ok(flow.historyBins([live]).bins.length>=1);
+'''
+        run = subprocess.run(
+            ["node", "-e", script, str(FLOW)],
+            text=True, capture_output=True, check=False, cwd=ROOT)
+        self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
+
+
 if __name__ == "__main__":
     unittest.main()
