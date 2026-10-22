@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "OFFICIAL_NOAA_SSODV2_CATALOG_METADATA_ONLY",
+  "github_run_id": 39830318184,
+  "run_url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39830318184",
+  "source_code_commit": "2ec0c0cd3d6eb370766c92dbf499ebf4b24e882d",
+  "offline_contract": "success",
+  "live_metadata_identity": "success",
+  "observation": {
+    "identity": {
+      "dataset_id": "gov.noaa.ncdc:C01690",
+      "dataset_title": "Synoptic Summary of the Day (SSOD), Version 2",
+      "edition": "Version 2",
+      "identity_checks": {
+        "canonical_dataset_title": true,
+        "current_version_label": true,
+        "dataset_catalog_id": true,
+        "dataset_series_id": true,
+        "publisher_identity": true,
+        "successor_lineage": true
+      },
+      "observation_rows_read": 0,
+      "raw_data_licensed": false,
+      "rights_and_attribution_review": "REQUIRED_FOR_ACTUAL_DATA",
+      "scientific_results_tested": false,
+      "station_records_downloaded": 0
+    },
+    "observations_downloaded": false,
+    "observed_at_utc": "2026-10-22T18:20:45.016731+00:00",
+    "provider": "NOAA NCEI Geoportal",
+    "raw_html_archived": false,
+    "response_bytes": 47645,
+    "response_sha256": "4ed866a8fbbfbe08ddfeb4ee0fc2dbeb6accc8f978d284a847b891fb192fdd51",
+    "response_status": 200,
+    "rights_review": "REQUIRED_PER_RECORD",
+    "schema_version": 1,
+    "scientific_status": "NOT_TESTED",
+    "source_kind": "dataset_catalog_metadata",
+    "source_url": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ncdc:C01690/html",
+    "state": "PUBLIC_DATASET_METADATA_OBSERVED",
+    "station_files_downloaded": false
+  },
+  "scientific_status": "NOT_TESTED",
+  "rights_review": "REQUIRED_PER_RECORD",
+  "dataset_rows_downloaded": 0,
+  "raw_source_archived": false,
+  "scope": "This is a dated NCEI dataset catalog-identity receipt. No climate/weather inference, current availability, data-use license clearance, or station-day observation is established."
+}
