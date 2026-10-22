@@ -9,10 +9,10 @@
   "observation_status": "NOT_RUN",
   "probe": {
     "method": "GET",
-    "url": "https://gwosc.org/api/v2/events?format=api",
+    "url": "https://gwosc.org/api/v2/event-versions?format=api&pagesize=1",
     "mode": "explicit_opt_in",
     "expected_format": "json",
-    "scope": "One bounded GWOSC v2 event-catalog page, metadata only",
+    "scope": "One versioned gravitational-wave event-catalog record, page size one; no strain files, no full event series",
     "max_bytes": 300000,
     "redirects": "deny",
     "timeout_seconds": 15
@@ -28,5 +28,5 @@
   ],
   "rights_review": "REQUIRED_PER_RECORD",
   "scientific_outcome": "NOT_TESTED",
-  "probe_revision_note": "Use documented GWOSC API v2 event listing JSON instead of the HTML documentation page, which was not an event witness."
+  "probe_revision_note": "Follow documented API v2 event-versions resource and explicit pagesize=1. First 2026-10-22 /api/ source wall remains archived; current revised endpoint is a candidate until independently observed."
 }
