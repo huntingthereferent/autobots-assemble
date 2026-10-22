@@ -1,0 +1,41 @@
+name: research-oecd-public-dataflow-metadata
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/oecd_public/**"
+      - ".github/workflows/research-oecd-public-dataflow-metadata.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test frozen SDMX dataflow identity and negative boundaries
+        run: python -m unittest discover -s research/testing_lanes/oecd_public -p "test_*.py" -v
+      - name: Check offline default
+        run: python research/testing_lanes/oecd_public/dataflow_identity.py
+  publisher-metadata-only:
+    needs: offline-contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: One structure request, no statistical data
+        run: python research/testing_lanes/oecd_public/dataflow_identity.py --live --output oecd-flow-receipt.json
+      - name: Preserve response hash or access wall, never source XML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: oecd-sdmx-bop-tis-flow-metadata
+          path: oecd-flow-receipt.json
+          retention-days: 30
+          if-no-files-found: warn
