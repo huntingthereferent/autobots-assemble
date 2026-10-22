@@ -1,8 +1,12 @@
 # Workstation
 
-[Workstation](work.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
+
+## Pony Trail — horse riding browser game
+
+[Pony Trail](pony-trail.html) is a self-contained, original little horse-jumping game in HTML Canvas, designed for keyboard and touch. Three ponies, three colorful trails, moving obstacles, carrots and golden horseshoes, pause/restart, optional synthesized audio and a local best-distance score are available. The game has no third-party script, network call, sign-in or chat, and can run from a saved HTML file. It is a creative play page linked from the Workstation header. **Playing it is not a native workstation execution, a scientific experiment or audit evidence.** See [project scope](../../work/projects/horse-riding/README.md).
 
 ## Meow Lab 2 — Swallow Sounds keyboard
 
