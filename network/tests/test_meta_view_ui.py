@@ -17,7 +17,7 @@ class MetaControlDeckTests(unittest.TestCase):
         self.assertIn('id="queued"', page)
         self.assertIn('id="trend"', page)
         self.assertIn('id="runs"', page)
-        self.assertIn('<details class="more">', page)
+        self.assertIn('<details class="more" id="source-details">', page)
         self.assertIn('aria-label="Combined source-observed workflow counts"', page)
         self.assertNotIn('class="nodes"', page)
         self.assertNotIn('class="node b"', page)
