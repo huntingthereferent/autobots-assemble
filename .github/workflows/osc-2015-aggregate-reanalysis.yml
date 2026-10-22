@@ -18,6 +18,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Install numerical distribution verifier
+        run: python -m pip install 'scipy>=1.14,<2'
       - run: python -m unittest discover -s research/reanalysis/osc_2015 -p 'test_*.py' -v
       - name: Confirm default does not fetch any data
         run: python research/reanalysis/osc_2015/aggregate.py
@@ -38,5 +40,26 @@ jobs:
         with:
           name: osc-2015-derived-aggregate
           path: osc-2015-derived-only.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  f-distribution-reconstruction:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install independent F survival-function implementation
+        run: python -m pip install 'scipy>=1.14,<2'
+      - name: Independently calculate F-test probabilities and preserve disagreements
+        run: python research/reanalysis/osc_2015/f_statistics.py --live --output osc-2015-f-check.json
+      - name: Store derived F-test statistics only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: osc-2015-f-statistic-reconstruction
+          path: osc-2015-f-check.json
           retention-days: 30
           if-no-files-found: warn
