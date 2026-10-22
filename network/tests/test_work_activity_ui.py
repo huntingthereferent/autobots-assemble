@@ -230,6 +230,26 @@ assert.equal(revisionLink("research/foo", "invalid-sha"),null);
         self.assertIn('subset.slice(0,app.runVisible)',page)
         self.assertIn('API+"/actions/runs?per_page=100&page=1"',page)
 
+    @unittest.skipUnless(shutil.which("node"),"Node.js needed for source timing checks")
+    def test_job_timing_rejects_missing_and_regressive_source_timestamps(self):
+        page=WORK.read_text(encoding="utf-8")
+        functions=page[page.index("  function elapsedBetween("):page.index("  async function selectRun(")]
+        source=functions+"""
+const assert=require("node:assert/strict");
+assert.equal(elapsedBetween("2026-10-22T10:00:00Z","2026-10-22T10:01:30Z"),90000);
+assert.equal(readableDuration(90000),"1m 30s");
+assert.equal(elapsedBetween(null,"2026-10-22T10:01:30Z"),null);
+assert.equal(elapsedBetween("2026-10-22T10:02:00Z","2026-10-22T10:01:00Z"),null);
+assert.equal(jobTimingSummary([{created_at:null,started_at:null,completed_at:null}]),null);
+assert.match(jobTimingSummary([{created_at:"2026-10-22T10:00:00Z",
+ started_at:"2026-10-22T10:01:00Z",completed_at:"2026-10-22T10:02:30Z"}]),/1m 0s mean created-to-start wait/);
+"""
+        with TemporaryDirectory() as d:
+            path=Path(d)/"job-times.js"
+            path.write_text(source,encoding="utf-8")
+            run=subprocess.run(["node",str(path)],capture_output=True,text=True,check=False)
+            self.assertEqual(run.returncode,0,run.stdout+run.stderr)
+
     @unittest.skipUnless(shutil.which("node"),"Node.js needed for syntax check")
     def test_inline_program_valid_javascript(self):
         p=Extract()
