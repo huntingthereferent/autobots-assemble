@@ -1,0 +1,69 @@
+/* Workstation control deck. Presentation reflects observed GitHub state; never simulates work. */
+.flow-kicker{display:flex;align-items:center;gap:9px;margin:23px 1px -15px;font:700 10px/1.5 var(--data-font);letter-spacing:.14em;color:#a7ecf1}
+.flow-kicker:before{content:"";width:7px;height:7px;background:#86e6da;border-radius:2px;box-shadow:0 0 16px #62daca}
+.flow-kicker small{margin-left:auto;font:500 10px/1.5 var(--data-font);letter-spacing:0;color:#99b9c2;text-align:right}
+.overview .metrics{gap:12px;margin:24px 0 12px}
+.overview .metric{position:relative;overflow:hidden;min-height:162px;padding:16px 18px 15px;border:1px solid #344952;border-top:2px solid var(--flow-color,#92d8df);border-radius:10px;background:linear-gradient(145deg,#13252b 0%,#0b151c 72%);isolation:isolate;transition:border-color .25s,transform .25s}
+.overview .metric:hover{transform:translateY(-2px);border-color:var(--flow-color)}
+.overview .metric:before{content:"";pointer-events:none;position:absolute;inset:0;background:radial-gradient(circle at 100% 0%,var(--flow-glow,rgba(105,226,228,.09)),transparent 64%);z-index:-1}
+.overview .metric-running{--flow-color:#71d6e4;--flow-glow:rgba(80,199,219,.15)}
+.overview .metric-queued{--flow-color:#f3c07b;--flow-glow:rgba(241,169,85,.14)}
+.overview .metric-passed{--flow-color:#94e5a9;--flow-glow:rgba(98,222,146,.14)}
+.overview .metric-failed{--flow-color:#ec98ad;--flow-glow:rgba(239,118,140,.12)}
+.metric-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.metric-top span{font:700 10px/1.4 var(--data-font);color:#c6d7dc;letter-spacing:.14em}
+.metric-glyph{font-size:20px;font-weight:400;color:var(--flow-color);opacity:.85}
+.overview .metric strong{color:var(--flow-color);margin:5px 0 3px;font:600 clamp(38px,4vw,55px)/1.15 var(--data-font);letter-spacing:-.05em;text-shadow:0 0 22px var(--flow-glow)}
+.overview .metric strong.flow-changed{animation:flow-number .55s cubic-bezier(.12,.9,.25,1)}
+@keyframes flow-number{0%{transform:translateY(7px);filter:brightness(2)}100%{transform:translateY(0);filter:brightness(1)}}
+.flow-level{display:flex;align-items:center;gap:4px;height:14px;margin-top:5px}
+.flow-level i{display:block;flex:1;min-width:0;height:5px;border-radius:1px;background:#253a43;border:1px solid #36515a;transition:background .5s,box-shadow .5s}
+.flow-level i.on{background:var(--flow-color);border-color:var(--flow-color);box-shadow:0 0 9px var(--flow-glow)}
+.overview .metric small{margin:6px 0 0;color:#9fb6bc;letter-spacing:0;font-size:10px;font-weight:500}
+.flow-snapshots{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid #2d4750;border-radius:8px;overflow:hidden;background:#09141a}
+.flow-snapshots>div{display:flex;align-items:baseline;gap:9px;justify-content:space-between;min-width:0;padding:12px 14px;border-right:1px solid #2d4750}
+.flow-snapshots>div:last-child{border-right:0}
+.flow-snapshots span{font:650 10px/1.3 var(--data-font);color:#a3b6bd;letter-spacing:.07em}
+.flow-snapshots strong{font:600 clamp(17px,2vw,23px)/1.2 var(--data-font);color:#e3f8f6;white-space:nowrap;font-variant-numeric:tabular-nums}
+.flow-station{margin-top:14px;border:1px solid #29434b;border-radius:10px;padding:17px;background:linear-gradient(120deg,#0a141b,#101d23 65%,#0a141b)}
+.flow-station-header{display:flex;gap:12px;justify-content:space-between;align-items:baseline;flex-wrap:wrap;margin-bottom:13px}
+.flow-station-header b{font:700 11px/1.5 var(--data-font);letter-spacing:.13em;color:#e1f4f4}
+.flow-station-header small{font:10px/1.5 var(--data-font);color:#91adb8}
+.flow-lanes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.flow-lane{min-width:0;padding:12px 13px;border:1px solid #29424b;border-radius:6px;background:#0b161d}
+.flow-lane-head{display:flex;align-items:center;gap:8px;justify-content:space-between;margin-bottom:8px}
+.flow-lane-head span{font:700 10px/1.2 var(--data-font);letter-spacing:.1em;color:#bed1d6}
+.flow-lane-head b{font:650 14px/1.3 var(--data-font);color:var(--lane-color)}
+.flow-lane-queued{--lane-color:#f1c17f}
+.flow-lane-running{--lane-color:#85dbe5}
+.flow-lane-finished{--lane-color:#99e7b2}
+.flow-beads{display:flex;gap:5px;flex-wrap:wrap;align-content:start;min-height:36px;padding:8px 0 5px;border-top:1px solid #1e3540}
+.flow-bead{flex:none;width:10px;height:10px;transform:rotate(45deg);border:1px solid var(--lane-color);border-radius:2px;background:color-mix(in srgb,var(--lane-color),transparent 55%);box-shadow:0 0 7px color-mix(in srgb,var(--lane-color),transparent 55%)}
+.flow-lane-running .flow-bead{animation:flow-glint 2.5s ease-in-out infinite;animation-delay:calc(var(--bead-index)*.11s)}
+@keyframes flow-glint{0%,100%{opacity:.55;box-shadow:none}50%{opacity:1;box-shadow:0 0 12px var(--lane-color)}}
+.flow-empty{font:10px/1.7 var(--data-font);color:#6d8792}
+.flow-overflow{margin-left:4px;font:650 11px/1.3 var(--data-font);color:var(--lane-color)}
+.flow-lane-note{display:block;color:#809da7;font:10px/1.6 var(--data-font);margin-top:5px}
+.flow-below{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.8fr);gap:15px;margin-top:17px;padding-top:15px;border-top:1px solid #27434c}
+.flow-activity-heading{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.flow-activity-heading b{font:700 10px/1.4 var(--data-font);color:#bdd9df;letter-spacing:.1em}
+.flow-activity-heading small{font:10px/1.4 var(--data-font);color:#89a9b4}
+.flow-spark{height:74px;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-items:end;gap:5px;margin-top:7px;border-bottom:1px solid #48606a}
+.flow-spark-col{height:100%;display:flex;align-items:end;gap:2px;justify-content:center}
+.flow-spark-col span{display:block;width:100%;max-width:18px;min-height:2px;background:linear-gradient(0deg,#3b8190,#8ce0d7);border-radius:2px 2px 0 0;transition:height .35s}
+.flow-last{margin:12px 0 0;color:#99b8c0;font:10px/1.6 var(--data-font)}
+.flow-changes{display:grid;gap:5px;margin-top:8px;max-height:92px;overflow:auto}
+.flow-change{display:flex;gap:8px;align-items:baseline;justify-content:space-between;font:10px/1.55 var(--data-font);color:#a9c4cc}
+.flow-change span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flow-change b{color:#b6e4dd;white-space:nowrap;font-weight:550}
+.flow-notice{margin:10px 0 0!important;color:#9aadb7!important;font-size:10px!important;line-height:1.6!important}
+.journal-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px;margin:-2px 0 15px;border:1px solid #304750;border-radius:9px;background:#0b171e}
+.journal-modes,.journal-shift{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.journal-nav button{min-height:33px;padding:7px 12px;border:1px solid #33515d;border-radius:5px;background:#12242d;color:#abc9d0;font:650 11px/1.3 var(--data-font)}
+.journal-nav button:hover{background:#1a343e;color:#eff}
+.journal-nav button[aria-pressed="true"]{border-color:#80d3d7;background:#1a3e42;color:#daffff;box-shadow:inset 0 -2px #80d3d7}
+.journal-shift strong{font:700 11px/1.4 var(--data-font);letter-spacing:.1em;min-width:135px;text-align:center;color:#e8f5f8}
+.journal-nav small{flex-basis:100%;font:10px/1.5 var(--data-font);color:#88a9b4}
+@media(max-width:900px){.flow-snapshots{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-snapshots>div:nth-child(2){border-right:0}.flow-snapshots>div:nth-child(-n+2){border-bottom:1px solid #2d4750}}
+@media(max-width:680px){.flow-lanes,.flow-below{grid-template-columns:1fr}.flow-lane{padding:10px 12px}.flow-beads{min-height:28px}.flow-snapshots>div{padding:10px}.flow-snapshots span{font-size:9px}.flow-snapshots strong{font-size:18px}.flow-kicker{flex-wrap:wrap}.flow-kicker small{flex-basis:100%;margin-left:17px;text-align:left}.journal-nav{align-items:stretch}.journal-modes{width:100%}.journal-modes button{flex:1}.journal-shift{justify-content:space-between;width:100%}.overview .metric{padding:12px;min-height:147px}.overview .metric strong{font-size:36px}}
+@media(prefers-reduced-motion:reduce){.overview .metric,.overview .metric strong,.flow-lane-running .flow-bead,.flow-spark-col span{animation:none!important;transition:none!important}.overview .metric:hover{transform:none}}
