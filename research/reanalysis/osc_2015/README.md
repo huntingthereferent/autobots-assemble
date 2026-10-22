@@ -21,6 +21,14 @@ Only records where *both flags* are precisely 0 or 1 participate in the paired c
 
 The published paper reports 97% significance for original effects and 36% for replication effects. The upstream masterscript also explicitly prints 35/97 for jointly significant results conditional on significant originals.
 
+## Independent F-statistic continuation
+
+The adjacent [F-test reconstruction](f_statistics.py) is a separate, deeper source analysis. For every row explicitly labeled `F`, it reads `T.Test.value.O/R` and `T.df1/df2.O/R`, calculates the upper-tail probability using SciPy's F distribution, then compares the result against the source's `T.pval.recalc.O/R` and the available binary significance flags. Each side keeps counts for eligible cases, matching and conflicting p-values (tolerance 0.000001), missing reported p-values, and matching/conflicting/missing flags. It does **not** silently treat Student-t, chi-square, correlations, missing statistics, or truncated exports as F tests.
+
+The source inspection identified 92 original-side and 62 replication-side F-statistic candidates; those totals are not a claim that all 154 results match. Their accuracy and discrepancies are checked independently by GitHub Actions, which stores a derived-only, source-hashed witness. Synthetic negative cases cover absent columns, invalid degrees of freedom, missing data, mismatching p-values, unexpected flags, and duplicate rows.
+
+The input F statistics and source significance classifications are the study team's reported summaries; this layer recomputes a mathematical probability, **not** the underlying experiment or its measured effect. Small p-value differences can result from rounded source statistics; any disagreement remains in the report.
+
 ## Evidence and limits
 
 - This is a reproducible *descriptive aggregation of precomputed binary significance flags*. It does **not** rerun participants or calculate their p-values from raw observations.
