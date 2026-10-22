@@ -48,8 +48,8 @@ class ObserveMoveHarnessTests(unittest.TestCase):
         self.assertTrue(any("fixed word ABABAB" in x for x in result.evidence))
 
     def test_unwitnessed_same_family_pair_stays_unknown(self):
-        source = ConstructedEngine(CouplingTower(((0, 0, 0), (0, 0, 0)), 4), 0)
-        target = ConstructedEngine(CouplingTower(((0, 0, 0), (0, 0, 0)), 4), 1)
+        source = ConstructedEngine(CouplingTower(((0, 1, 2),), 3), 0)
+        target = ConstructedEngine(CouplingTower(((0, 2, 1), (0, 0, 0)), 4), 1)
         result = self.harness.compare(source, target)
         self.assertEqual(result.status, "UNKNOWN")
         self.assertIsNone(result.witness)
