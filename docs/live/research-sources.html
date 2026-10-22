@@ -99,8 +99,9 @@ const root="https://api.github.com/repos/huntingthereferent/autobots-assemble/co
 const repo="https://github.com/huntingthereferent/autobots-assemble/blob/main/research/testing_lanes/sources/";
 const firstObservation="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/observations/2026-10-22-run-39767929086.json?ref=main";
 const firstRun="https://github.com/huntingthereferent/autobots-assemble/actions/runs/39767929086";
+const laneObservation="https://api.github.com/repos/huntingthereferent/autobots-assemble/contents/research/testing_lanes/observations/2026-10-22-source-handoffs.json?ref=main";
 const manual=new Set(["physionet","openneuro","nist","noaa","oecd"]);
-let registry=null, selected=null, observationRecords=new Map(), receiptStatus="NOT_LOADED";
+let registry=null, selected=null, observationRecords=new Map(), laneEvidence=new Map(), receiptStatus="NOT_LOADED";
 const get=id=>document.getElementById(id);
 function element(tag,cls,text){const node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
 function anchor(text,url){const a=element("a",null,text);a.href=url;a.target="_blank";a.rel="noopener noreferrer";return a}
@@ -143,6 +144,12 @@ function draw(){
   const item=element("button","lane");item.type="button";
   item.setAttribute("aria-pressed",selected===lane.id?"true":"false");
   item.append(element("div","id",lane.id),element("h3",null,lane.name),element("p",null,lane.question));
+  const sourceGate=laneEvidence.get(lane.id);
+  item.append(element("p","small",sourceGate
+   ? (sourceGate.source_state==="SOURCE_METADATA_READY"?"SOURCE METADATA READY":"WAITING FOR SOURCE")+
+     " · SCIENTIFIC STATUS "+sourceGate.scientific_status+" · "+
+     String(sourceGate.verified_source_ids.length)+" witnessed source(s)"
+   : "SOURCE READINESS NOT OBSERVED · SCIENCE NOT TESTED"));
   const pills=element("div","pills");
   for(const id of lane.source_ids)pills.append(element("span",null,id));
   item.append(pills);
@@ -189,6 +196,27 @@ async function load(){
   }catch{
     receiptStatus="RECEIPTS_UNAVAILABLE";
     get("source-state").textContent="REGISTRY LOADED · SOURCE RECEIPTS UNAVAILABLE";
+    draw();
+  }
+  try{
+    const response=await fetch(laneObservation,{headers:{"Accept":"application/vnd.github+json"},cache:"no-store"});
+    if(!response.ok)throw new Error("Lane observation unavailable");
+    const packet=await response.json();
+    if(packet.encoding!=="base64"||!packet.content)throw new Error("Missing lane receipt bytes");
+    const raw=Uint8Array.from(atob(packet.content.replace(/\s/g,"")),char=>char.charCodeAt(0));
+    const d=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(raw));
+    if(d.schema_version!==1||!Array.isArray(d.lanes)||d.lanes.length!==data.lanes.length||
+       d.scientific_experiments_run!==0)throw new Error("Unknown lane handoff schema");
+    const map=new Map();
+    for(const lane of d.lanes){
+      if(!data.lanes.some(x=>x.id===lane.lane_id)||lane.scientific_status!=="NOT_TESTED"||
+         lane.experiment_runs!==0||map.has(lane.lane_id))throw new Error("Invalid lane witness");
+      map.set(lane.lane_id,lane);
+    }
+    laneEvidence=map;
+    draw();
+  }catch{
+    laneEvidence=new Map();
     draw();
   }
  }catch(err){
