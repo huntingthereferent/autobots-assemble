@@ -1,0 +1,117 @@
+name: NIH P2 Lane C full OWL RL four original-axiom ablations
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_bgee_full_owlrl_source_axiom_ablations.py'
+      - 'network/tests/test_nih_p2_bgee_full_owlrl_source_axiom_ablations.py'
+      - '.github/workflows/nih-p2-bgee-full-owlrl-four-axiom-ablations.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  whole-source-owlrl-counterfactual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install RDFLib and OWL RL
+        run: python -m pip install 'rdflib>=7,<8' 'owlrl>=7,<8'
+      - name: Authenticate exact immutable author Bgee, GenEx and RO source files
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/e17-author" "$RUNNER_TEMP/e17-ro" lane-c-e17-evidence
+          python - <<'PY'
+          from systems.workspace import nih_p2_author_genex_bgee_ro_mapping_gate as b
+          from systems.workspace import nih_p2_original_bgee_real_expression_join as trial
+          from systems.workspace import nih_phase2_external_obo_graph_trial as ro
+          from pathlib import Path
+          from urllib.request import Request,urlopen
+          from hashlib import sha256
+          import os
+          hdr={"User-Agent":"NIH-P2-Lane-C-E17-Full-Ablation/1.0"}
+          out=Path(os.environ["RUNNER_TEMP"])/"e17-author"
+          for filename,pin in b.FILES.items():
+              url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/obda/"+filename
+              with urlopen(Request(url,headers=hdr),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("original author source URL mismatch")
+                  raw=response.read(1000001)
+              if len(raw)>1000000 or b.git_blob(raw)!=pin:
+                  raise ValueError("original author mapping Git blob changed")
+              (out/filename).write_bytes(raw)
+          url="https://raw.githubusercontent.com/"+b.OWNER+"/"+b.COMMIT+"/data/postgresql.zip"
+          with urlopen(Request(url,headers=hdr),timeout=90) as response:
+              if response.status!=200 or response.geturl()!=url:
+                  raise ValueError("original Bgee data URL mismatch")
+              raw=response.read(30000001)
+          if b.git_blob(raw)!=trial.ZIP_BLOB:
+              raise ValueError("original Bgee data ZIP Git blob changed")
+          (out/"postgresql.zip").write_bytes(raw)
+          ro_out=Path(os.environ["RUNNER_TEMP"])/"e17-ro"
+          for filename in ro.SOURCE_FILES:
+              url=ro.SOURCE_URL+filename
+              with urlopen(Request(url,headers=hdr),timeout=60) as response:
+                  if response.status!=200 or response.geturl()!=url:
+                      raise ValueError("original RO source URL mismatch")
+                  raw=response.read(5000001)
+              if sha256(raw).hexdigest()!=ro.PINNED_WHOLE_SOURCE_SHA256[filename]:
+                  raise ValueError("original RO source complete file SHA256 changed")
+              (ro_out/filename).write_bytes(raw)
+          print("Authenticated original whole-source files under immutable pins")
+          PY
+      - name: Unit-test axiom isolation and negative inference boundaries
+        run: python -m unittest -v network.tests.test_nih_p2_bgee_full_owlrl_source_axiom_ablations
+      - name: Four independent whole-source full OWL RL axiom-removal closures
+        run: |
+          set -euo pipefail
+          ulimit -v 6291456
+          set +e
+          /usr/bin/time -v -o lane-c-e17-evidence/resource-use.txt \
+          timeout --signal=TERM --kill-after=30s 15m \
+          python -m systems.workspace.nih_p2_bgee_full_owlrl_source_axiom_ablations \
+            --archive "$RUNNER_TEMP/e17-author/postgresql.zip" \
+            --obda "$RUNNER_TEMP/e17-author/bgee_v14_genex.obda" \
+            --owl "$RUNNER_TEMP/e17-author/bgee_v14_genex.owl" \
+            --r2rml "$RUNNER_TEMP/e17-author/bgee_v14_genex.r2rml" \
+            --ro-base "$RUNNER_TEMP/e17-ro/ro-base.owl" \
+            --core "$RUNNER_TEMP/e17-ro/core.owl" \
+            --output lane-c-e17-evidence/whole-full-profile-source-ablations.json
+          code=$?
+          set -e
+          printf 'full_profile_process_exit=%s\n124=timeout\n137=possible_forced_termination\n' "$code" > lane-c-e17-evidence/process-exit.txt
+          if [ "$code" -ne 0 ]; then
+            echo "NOT VERIFIED: preserve partial test receipts, resource failure or source mismatch"
+            exit "$code"
+          fi
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          r=json.loads(Path("lane-c-e17-evidence/whole-full-profile-source-ablations.json").read_text())
+          assert r["schema"]=="nih-p2-lane-c-four-full-profile-source-ablations-v1"
+          assert r["all_four_full_profile_modes_measured"] is True
+          assert r["status"] in ("VERIFIED_COMPLETED_ABLATIONS_EQUAL_SCOPED_SETS",
+                                 "VERIFIED_COMPLETED_ABLATIONS_WITH_LOGICAL_DIFFERENCES")
+          assert r["original_source_graph_triples"]==34181
+          assert r["original_source_mapped_edges"]==25027
+          assert set(r["modes"])=={"omit-genex","omit-genomic","omit-inverse","omit-inverse-genomic"}
+          for item in r["modes"].values():
+              assert item["original_source_unchanged"] is True
+              assert item["full_graph_materialized_triples"]>0
+              assert item["missing_selected_rule_consequences"]>=0
+              assert item["additional_full_profile_consequences"]>=0
+          assert r["full_OWL_DL_consistency_proven"] is False
+          assert r["medical_or_NIH_scoring_claim"] is False
+          PY
+      - name: Preserve only aggregated full-profile evidence and resource limits
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-lane-c-e17-full-owlrl-source-axiom-ablations
+          path: lane-c-e17-evidence/
+          if-no-files-found: warn
+          retention-days: 30
