@@ -16,6 +16,7 @@ const placementError = $("#placement-error");
 let school = null;
 let state = null;
 let selectedLearnerId = null;
+let workspaceReadSerial = 0;
 
 function todayISO() {
   const now = new Date();
@@ -353,6 +354,7 @@ function render() {
 }
 
 async function load() {
+  const serial = ++workspaceReadSerial;
   const day = dayInput.value;
   const schoolResponse = await fetch(
     `/api/school?date=${encodeURIComponent(day)}`,
@@ -360,12 +362,16 @@ async function load() {
   );
   const stateResponse = await fetch("/api/state", {cache:"no-store"});
 
+  if (serial !== workspaceReadSerial || dayInput.value !== day) return;
   if (!schoolResponse.ok || !stateResponse.ok) {
     throw new Error("Could not open the workspace");
   }
 
-  school = await schoolResponse.json();
-  state = await stateResponse.json();
+  const nextSchool = await schoolResponse.json();
+  const nextState = await stateResponse.json();
+  if (serial !== workspaceReadSerial || dayInput.value !== day) return;
+  school = nextSchool;
+  state = nextState;
 
   if (!school.learners?.length) {
     selectedLearnerId = null;
