@@ -70,7 +70,6 @@ async function refresh(){
   try{
     const data=await api("/api/daily-checklist");
     if(serial!==refreshSerial||pendingMutations)return;
-    $("#daily-error").hidden=true;
     $("#daily-stats").textContent=data.pending+" open · "+data.checked_today+" checked today · "+data.local_date;
     $("#daily-list").replaceChildren(...data.items.map(row));
     if(!data.items.length){const li=document.createElement("li");li.textContent="No unfinished tasks.";$("#daily-list").append(li);}
