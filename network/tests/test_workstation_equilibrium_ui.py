@@ -25,6 +25,7 @@ class EquilibriumObserverTests(unittest.TestCase):
             self.assertIn(f'id="{field}"', html)
         self.assertIn("snapshot.latestPage", js)
         self.assertIn("snapshot.checked", js)
+        self.assertIn("snapshot.liveTotals", js)
         self.assertIn("previous=known", js)
         self.assertIn("STEADY CANDIDATE", js)
         self.assertIn("No confirmed concurrency cap", js)
@@ -65,6 +66,10 @@ assert.equal(nodes.get("eq-queue-drift").textContent,"-1");
 assert.match(nodes.get("eq-samples").textContent, /^3 \/ 3 session checks · 4 min window$/);
 assert.ok(nodes.get("eq-out").textContent.includes("/h"));
 assert.equal(nodes.get("equilibrium-graph").children.length,3);
+a.sample({checked:start+360000,latestPage:[{...running,status:"completed",conclusion:"success"}],
+          liveTotals:{running:20,queued:31}});
+assert.equal(nodes.get("eq-peak-running").textContent,"20");
+assert.match(nodes.get("eq-boundary").textContent,/status-filtered workflow totals/);
 '''
         result = subprocess.run(
             ["node", "-e", runner, str(SCRIPT)], cwd=ROOT,

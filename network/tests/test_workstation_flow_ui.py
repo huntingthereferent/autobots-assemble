@@ -26,6 +26,9 @@ class WorkstationFlowTests(unittest.TestCase):
         self.assertIn("window.WorkstationFlow.matches(r)", page)
         self.assertIn('app.runs.length+" indexed"', page)
         self.assertIn("latestPage", flow)
+        self.assertIn("liveTotals", flow)
+        self.assertIn("status=in_progress&per_page=100", page)
+        self.assertIn("status=queued&per_page=100", page)
         self.assertIn("archiveComplete", flow)
         self.assertIn("runs created today", page.lower())
         self.assertIn("not a capacity, speed, or efficiency guarantee", page)
@@ -90,9 +93,17 @@ const flow=window.WorkstationFlow;
 const now=Date.now();
 const archive={id:1,name:"old still queued",status:"queued",created:new Date(now-4*86400000).toISOString()};
 const live={id:2,name:"recent passed",status:"completed",conclusion:"success",created:new Date(now-10000).toISOString()};
-flow.render({runs:[archive,live],latestPage:[live],archiveComplete:true,checked:now,liveAvailable:true});
+flow.render({runs:[archive,live],latestPage:[live],liveActive:[],
+             liveTotals:{running:0,queued:0},archiveComplete:true,checked:now,liveAvailable:true});
 assert.equal(stats.get("queued").textContent,"0"); // archive is historical, not current
 assert.equal(byId.get("flow-count-queued").textContent,"0");
+const active={id:3,name:"older active PR",status:"in_progress",created:new Date(now-86400000).toISOString()};
+flow.render({runs:[archive,live],latestPage:[live],liveActive:[active],
+             liveTotals:{running:20,queued:31},archiveComplete:true,checked:now,liveAvailable:true});
+assert.equal(stats.get("queued").textContent,"31"); // server total, no queued ID in latest page
+assert.equal(stats.get("running").textContent,"20"); // server total, not one visible active ID
+assert.equal(byId.get("flow-count-queued").textContent,"31");
+assert.equal(byId.get("flow-count-running").textContent,"20");
 flow.render({runs:[archive,live],latestPage:[live],archiveComplete:true,checked:now,liveAvailable:false});
 assert.equal(stats.get("queued").textContent,"—"); // refresh failed, fail closed
 assert.equal(byId.get("flow-count-queued").textContent,"—");

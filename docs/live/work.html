@@ -693,11 +693,11 @@ footer{border-top-color:#253942}
   const SOURCE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/research-live.json";
   const ARCHIVE="https://raw.githubusercontent.com/"+REPO+"/main/views/traces/workflow-runs-index.json";
   const ARCHIVE_CHECK=15*60*1000; // Source index is published by a scheduled Actions job.
-  const PERIOD=120000; // GitHub API budget: one background source check per two minutes.
+  const PERIOD=300000; // Three status-aware public API requests every five minutes.
   const MAX_CATALOG_PAGE=100;
   const $=id=>document.getElementById(id);
   const app={runs:[],selection:null,jobCache:new Map(),commitCache:new Map(),research:null,reading:false,
-    checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],
+    checked:null,nextPage:2,olderLoading:false,olderExhausted:false,reportedTotal:null,latestPage:[],liveActive:[],liveTotals:null,
     catalog:[],catalogLoaded:false,rateLimitUntil:0,lastAttempt:0,
     archiveLoading:false,archiveComplete:false,archiveAt:null,archiveIndexed:0,archiveError:null,liveAvailable:false,
     runVisible:20,catalogVisible:16,recordVisible:16,movementVisible:18,wallVisible:12,
@@ -895,10 +895,10 @@ footer{border-top-color:#253942}
   function currentStates(){return app.latestPage.reduce((c,r)=>{const s=statusOf(r);if(s==="in_progress")c.running++;
     else if(s==="queued")c.queued++;else if(s==="success")c.passed++;
     else if(s==="failure"||s==="cancelled"||s==="timed_out")c.failed++;return c;},{running:0,queued:0,passed:0,failed:0})}
-  function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,archiveComplete:app.archiveComplete,checked:app.checked,liveAvailable:app.liveAvailable});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
+  function renderMetrics(){if(window.WorkstationFlow){window.WorkstationFlow.render({runs:app.runs,latestPage:app.latestPage,liveActive:app.liveActive,liveTotals:app.liveTotals,archiveComplete:app.archiveComplete,checked:app.checked,liveAvailable:app.liveAvailable});window.WorkstationEquilibrium?.sample({latestPage:app.latestPage,liveTotals:app.liveTotals,checked:app.checked});return;}const n=currentStates();for(const [k,v] of Object.entries(n))document.querySelector('[data-stat="'+k+'"]').textContent=String(v)}
   function filteredRuns(){const f=$("run-filter").value,w=$("workflow-filter").value,q=$("run-search").value.trim().toLowerCase();
     const live=app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000;
-    const liveIds=new Set(live?app.latestPage.map(r=>r.id):[]);
+    const liveIds=new Set(live?app.liveActive.map(r=>r.id):[]);
     return app.runs.filter(r=>window.WorkstationFlow.matches(r)&&(!q||[r.name,r.branch,r.head,String(r.runNumber),String(r.id)].some(x=>String(x||"").toLowerCase().includes(q)))&&(w==="all"||r.name===w)&&(f==="all"||(f==="active"&&liveIds.has(r.id)&&["queued","in_progress"].includes(statusOf(r)))||(f==="failures"&&["failure","cancelled","timed_out"].includes(statusOf(r)))||(f==="success"&&statusOf(r)==="success")))}
   function renderRuns(){const area=$("runs");area.replaceChildren();const subset=filteredRuns();
     if(app.selection!==null&&!subset.some(r=>r.id===app.selection)){
@@ -911,7 +911,7 @@ footer{border-top-color:#253942}
       btn.type="button";btn.setAttribute("aria-pressed",String(app.selection===r.id));
       const head=el("div",undefined,"run-title");head.append(el("h3",r.name),pill(statusOf(r)));btn.append(head);
       btn.append(el("p",r.branch+" · "+r.head.slice(0,10)+" · "+safeDate(r.created)));
-      if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.latestPage.some(x=>x.id===r.id)))btn.append(el("small","Last recorded state — not verified current","fine"));
+      if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.liveActive.some(x=>x.id===r.id)))btn.append(el("small","Last recorded state — not verified current","fine"));
       btn.addEventListener("click",()=>selectRun(r.id,true));area.append(btn);
     }
     $("show-more-runs").hidden=subset.length<=app.runVisible;
@@ -1024,7 +1024,7 @@ footer{border-top-color:#253942}
     const header=el("div",undefined,"detail-body");header.append(el("h3",r.name),pill(statusOf(r)));
     header.append(el("p","Original commit: ","fine"),el("div",r.head,"hash"));
     header.append(el("p","Started: "+safeDate(r.created)+" · Last recorded change: "+safeDate(r.updated),"fine"));
-    if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.latestPage.some(x=>x.id===r.id)))header.append(el("p","Recorded status, not a verified current execution. See the live source indicator.","fine"));
+    if(["queued","in_progress"].includes(statusOf(r))&&!(app.liveAvailable&&app.checked&&Date.now()-app.checked<=5*60*1000&&app.liveActive.some(x=>x.id===r.id)))header.append(el("p","Recorded status, not a verified current execution. See the live source indicator.","fine"));
     if(plausible(r.url,"run"))header.append(link("Open original workflow run ↗",r.url));
     header.append(el("p","Source jobs and steps below are read from GitHub. A successful workflow proves only its declared checks.","fine"));
     area.append(header);$("details-scope").textContent="Run "+r.id+" · "+r.head.slice(0,10);
@@ -1118,12 +1118,24 @@ footer{border-top-color:#253942}
     if($("workstation-main").hidden)return; // Audit tab owns visible source refreshes.
     if(app.reading)return;app.reading=true;app.lastAttempt=Date.now();$("check-now").disabled=true;
     try{
-      const data=await getJSON(API+"/actions/runs?per_page=100&page=1");
+      // Counts come from GitHub's complete status-filtered result totals, not page one.
+      // The 100 most recent IDs remain a separately labeled history/transition sample.
+      const [data,runningData,queuedData]=await Promise.all([
+        getJSON(API+"/actions/runs?per_page=100&page=1"),
+        getJSON(API+"/actions/runs?status=in_progress&per_page=100&page=1"),
+        getJSON(API+"/actions/runs?status=queued&per_page=100&page=1")
+      ]);
       const runs=readRuns(data);if(!runs.length)throw Error("No trustworthy workflow identities supplied");
+      const working=readRuns(runningData),waiting=readRuns(queuedData);
+      if(![runningData.total_count,queuedData.total_count].every(x=>Number.isSafeInteger(x)&&x>=0))
+        throw Error("Status-filtered GitHub totals unavailable");
+      const active=[...new Map([...working,...waiting].map(r=>[r.id,r])).values()];
       app.reportedTotal=Number.isSafeInteger(data.total_count)?data.total_count:app.reportedTotal;
       app.latestPage=runs;
+      app.liveActive=active;
+      app.liveTotals={running:runningData.total_count,queued:queuedData.total_count};
       app.checked=Date.now();app.liveAvailable=true;
-      mergeRuns(runs);
+      mergeRuns([...runs,...active]);
       app.rateLimitUntil=0;
       if(runs.length<100&&app.nextPage===2&&!app.archiveComplete)app.olderExhausted=true;
       renderHistory();
@@ -1141,7 +1153,7 @@ footer{border-top-color:#253942}
     }catch(e){
       $("live-dot").className="indicator error";
       $("feed-state").textContent="Source unavailable";$("feed-error").hidden=false;
-      app.liveAvailable=false;renderMetrics();
+      app.liveAvailable=false;app.liveTotals=null;app.liveActive=[];renderMetrics();
       if(/403|429|rate limit/i.test(e.message))app.rateLimitUntil=Date.now()+15*60*1000;
       $("feed-error").textContent="Could not refresh the execution source: "+e.message+". Displayed results may be stale; no current status inferred.";
       if(!app.runs.length)$("runs").replaceChildren(el("p","No verified execution sample loaded.","no-source"));
