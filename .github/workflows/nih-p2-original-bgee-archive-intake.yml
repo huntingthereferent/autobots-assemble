@@ -1,0 +1,84 @@
+name: NIH P2 author Bgee original SQL archive intake
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_original_bgee_archive_intake.py'
+      - 'network/tests/test_nih_p2_original_bgee_archive_intake.py'
+      - '.github/workflows/nih-p2-original-bgee-archive-intake.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-author-bgee-archive-intake-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-owned-Bgee-read-only-intake:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Original SQL scanner unit tests with rejected tampering and traversal
+        run: python -m unittest -v network.tests.test_nih_p2_original_bgee_archive_intake
+      - name: Fetch original author's single ZIP and corroborate complete Git blob from the owner's API
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/nih-bgee-original" "$RUNNER_TEMP/nih-bgee-sql-evidence"
+          python - <<'PY'
+          from urllib.request import Request,urlopen
+          from pathlib import Path
+          from systems.workspace import nih_p2_original_bgee_archive_intake as intake
+          import json,os
+          owner=intake.bridge.OWNER
+          commit=intake.bridge.COMMIT
+          target="data/postgresql.zip"
+          url="https://raw.githubusercontent.com/"+owner+"/"+commit+"/"+target
+          api="https://api.github.com/repos/"+owner+"/contents/"+target+"?ref="+commit
+          headers={"User-Agent":"NIH-P2-Original-Bgee-SQL-Audit/1.0"}
+          with urlopen(Request(api,headers=headers),timeout=50) as r:
+              if r.status!=200:raise ValueError("cannot authenticate original owner Git blob")
+              info=json.load(r)
+          if info.get("path")!=target or not isinstance(info.get("sha"),str):
+              raise ValueError("original owner contents blob identity unavailable")
+          with urlopen(Request(url,headers=headers),timeout=60) as r:
+              if r.status!=200 or r.geturl()!=url:raise ValueError("original owner ZIP URL changed")
+              raw=r.read(intake.MAX_ARCHIVE_BYTES+1)
+          if intake.bridge.git_blob(raw)!=info["sha"]:
+              raise ValueError("whole original SQL archive SHA1 Git blob mismatch")
+          original=Path(os.environ["RUNNER_TEMP"])/"nih-bgee-original"
+          (original/"postgresql.zip").write_bytes(raw)
+          (original/"owner-git-blob.txt").write_text(info["sha"])
+          print("Verified immutable original author ZIP Git blob "+info["sha"]+"; bytes "+str(len(raw)))
+          PY
+      - name: Inspect source original data archive, no source data uploaded
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_original_bgee_archive_intake \
+            --archive "$RUNNER_TEMP/nih-bgee-original/postgresql.zip" \
+            --expected-blob "$(cat "$RUNNER_TEMP/nih-bgee-original/owner-git-blob.txt")" \
+            --output "$RUNNER_TEMP/nih-bgee-sql-evidence/original-archive-intake.json"
+          python - <<'PY'
+          import os,json
+          from pathlib import Path
+          x=json.loads((Path(os.environ["RUNNER_TEMP"])/"nih-bgee-sql-evidence/original-archive-intake.json").read_text())
+          assert x["schema"]=="nih-p2-original-bgee-postgresql-archive-structure-v1"
+          assert x["source_archive_commit"]=="08820b5589e52b9af846bc7e142e78c99e03d614"
+          assert x["git_blob_already_cross_checked_with_original_owner_api"] is True
+          assert x["original_bgee_join_executed"] is False
+          assert x["original_ontology_reasoning_performed_on_data"] is False
+          assert x["positives_are_not_materialized_gene_anatomy_edges"] is True
+          assert x["official_NIH_benchmark"] is False
+          PY
+          (cd "$RUNNER_TEMP/nih-bgee-sql-evidence" && sha256sum original-archive-intake.json > sha256.txt)
+      - name: Retain schema counts, receipts, and failure evidence only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-original-bgee-sql-intake-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/nih-bgee-sql-evidence/
+          if-no-files-found: warn
+          retention-days: 30
