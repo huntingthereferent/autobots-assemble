@@ -24,7 +24,8 @@
       "journal": "https://github.com/aeren-research/continuum-oscillator/actions",
       "mode": "live-public-api",
       "source_ref": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
-      "scope": "Public independent workstation; source mirror verified. One research contract workflow active; other copied workflow definitions remain inactive pending admission."
+      "scope": "Public independent workstation; source mirror verified. One research contract workflow active; other copied workflow definitions remain inactive pending admission.",
+      "formal_name": "AEREN Research & Development"
     }
   ],
   "lane_rules": [
@@ -32,7 +33,7 @@
       "id": "B-CONTRACT",
       "title": "Independent research source contract",
       "match": [
-        "independent research lane contract"
+        "aeren research · independent research lane contract"
       ],
       "node": "B",
       "admission": "Independent research source contract enabled on the second repository; not proof of scientific replication.",
