@@ -40,7 +40,7 @@ class WorkInvestigationPageTests(unittest.TestCase):
         work=WORK.read_text(encoding="utf-8")
         self.assertIn('href="work.html"',entry)
         self.assertIn('url=work.html',entry)
-        self.assertIn('<title>Workstation · Hunting the Referent</title>',work)
+        self.assertIn('<title>Work / Source provenance · Hunting the Referent</title>',work)
         self.assertIn('<h1 id="title">Research workstation</h1>',work)
         self.assertIn('<h2>Workflow executions</h2>',work)
         self.assertIn('<h2 id="research-title">Research records</h2>',work)
