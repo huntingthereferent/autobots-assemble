@@ -106,5 +106,12 @@ class FullSourceEntityRankingTests(unittest.TestCase):
             trial.per_relation_frequency_baseline(
                 [("a","T","b")],["a","b"],[("a","T","absent")],defaultdict(set))
 
+
+    def test_next_cohort_rejects_unavailable_relation_and_source_reuse(self):
+        # The exact complete source cohort is independently exercised in
+        # source-connected CI. Tiny fixtures must refuse insufficiency.
+        with self.assertRaises(ValueError):
+            trial.choose_d2_heldout([("a","T","b")],[("z","T","q")])
+
 if __name__=="__main__":
     unittest.main()
