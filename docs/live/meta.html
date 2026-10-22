@@ -155,6 +155,8 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 @media(max-width:900px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.flow-tracks{gap:10px}.detail-grid{grid-template-columns:1fr}.refresh{align-items:center}}
 @media(max-width:640px){main{padding:20px 15px 58px}.topbar{position:relative;padding:12px 15px}.topbar nav{width:100%;overflow-x:auto;flex-wrap:nowrap}.topbar nav a{white-space:nowrap}.hero{padding-bottom:20px}.refresh{width:100%;justify-content:space-between}.metrics{gap:8px}.metric{padding:13px;min-height:113px}.metric b{font-size:33px}.metric.passed b,.metric.notpassed b{font-size:29px}.flowfield{padding:14px}.flow-tracks{grid-template-columns:1fr;gap:16px}.track{padding-left:11px}.section-top{margin-top:25px}.section-top h2{font-size:21px}#trend{width:calc(100% - 24px);margin:12px 12px 0;max-height:290px}.legend{padding:12px 13px 0}.fine{margin:10px 13px 16px}.work-controls{padding:12px}.work-controls input{min-width:100%}.work-controls select{flex:1}.run{padding:12px 13px}.journal-foot{padding:12px 14px}.strip-secondary{display:none}.detail-grid{gap:15px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.cells a.cell{transition:none!important}}
+.plot-scroll{overflow:hidden}
+@media(max-width:650px){.plot-scroll{overflow-x:auto;overflow-y:hidden;scrollbar-color:#496875 #101b23;scrollbar-width:thin}#trend{min-width:680px;width:680px;max-height:none;margin:12px 12px 0}}
 </style>
 </head>
 <body>
@@ -181,7 +183,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <div class="options" id="ranges" aria-label="Journal time range"><button data-range="today" aria-pressed="true">Today</button><button data-range="7d">7 days</button><button data-range="30d">Month</button><button data-range="365d">Year</button></div></div>
 <section class="panel" aria-label="Combined workload trend">
 <div class="plot-head"><div><strong id="trend-state">Loading measured history</strong><p id="trend-note">No inferred history or fabricated executions.</p></div><span id="points" class="tag">MEASURED SAMPLES</span></div>
-<svg id="trend" viewBox="0 0 940 220" role="img" aria-label="Observed total running and queued workflow runs over time"><text x="30" y="110" fill="#9eb2bd" font-size="13">Reading observations…</text></svg>
+<div class="plot-scroll" tabindex="0" role="region" aria-label="Scrollable equilibrium chart on small screens"><svg id="trend" viewBox="0 0 940 220" role="img" aria-label="Observed total running and queued workflow runs over time"><text x="30" y="110" fill="#9eb2bd" font-size="13">Reading observations…</text></svg></div>
 <div class="legend"><span><i class="r"></i> RUNNING</span><span><i class="q"></i> WAITING</span><span id="last-point">Awaiting measurements</span></div>
 <p class="fine">The historical journal records real GitHub workflow-run samples, normally every 30 minutes. A blank interval is missing evidence, not zero activity.</p></section>
 <div class="section-top"><div><span class="eyebrow">Source-linked executions</span><h2>Recent work</h2><p class="subtitle">Inspect real workflow runs, timestamps and original verification records.</p></div><span id="count-note" class="source">Reading latest executions</span></div>
