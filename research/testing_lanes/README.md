@@ -29,6 +29,14 @@ Do not infer that a paper's conclusion was reproduced because its metadata was i
 
 Clinical-trial registration does not establish efficacy. A model trained or evaluated on public data does not establish validity in human subjects. Simulated movement is not hardware measurement. Observational correlation is not causation. Security exploration is restricted to authorized local/synthetic targets.
 
+## Source-first admission and per-lane handoff
+
+The [18 individually committed source records](sources/README.md) now supply an explicit admission contract, with 13 opt-in public metadata probes and five manual access/query/rights gates. The [source validator](source_admission.py) checks all 18 source IDs against this registry; each provider retains its own documentation, fixed endpoint where allowed, response cap, rights boundary and status. The [source-admission workflow](../../.github/workflows/research-source-admission.yml) first runs offline contract tests, then observes the allowed public entry points **sequentially**, persisting a separate metadata receipt for each. The presence of a receipt alone is not success.
+
+Only after those receipts are collected does the [source-fed lane handoff](lane_activation.py) produce **21 separate source-readiness records** (one per research context), each preserving exactly which source was observed, unavailable or access-gated. A lane may become `SOURCE_METADATA_READY` with at least one structurally verified source observation, but its scientific status remains `NOT_TESTED` and its experiment count remains zero. It cannot be promoted to a scientific result from a metadata response.
+
+The [workstation source explorer](../../docs/live/research-sources.html) reads the original registry from GitHub, shows all 18 source families and 21 candidate contexts, and filters sources by lane without creating measurements in the browser. It is linked from the existing workstation navigation; on GitHub Pages it becomes accessible after these files reach the default branch and deploy. The UI keeps counts blank if the original source cannot be read.
+
 ## Workstation interface
 
 This is an offline, versioned adapter suitable for workstation handoff; it performs no network requests and never silently populates test outcomes.
