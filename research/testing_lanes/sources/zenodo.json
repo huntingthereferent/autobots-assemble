@@ -9,10 +9,10 @@
   "observation_status": "NOT_RUN",
   "probe": {
     "method": "GET",
-    "url": "https://zenodo.org/api/records/?q=reproducibility&size=1",
+    "url": "https://zenodo.org/api/records?q=reproducibility&size=1",
     "mode": "explicit_opt_in",
     "expected_format": "json",
-    "scope": "Published record/version metadata",
+    "scope": "One bounded published-record search; no attached files",
     "max_bytes": 300000,
     "redirects": "deny",
     "timeout_seconds": 15
@@ -27,5 +27,6 @@
     "response_status"
   ],
   "rights_review": "REQUIRED_PER_RECORD",
-  "scientific_outcome": "NOT_TESTED"
+  "scientific_outcome": "NOT_TESTED",
+  "probe_revision_note": "Use documented no-trailing-slash endpoint. Previous source observation returned HTTPError; do not erase wall evidence."
 }
