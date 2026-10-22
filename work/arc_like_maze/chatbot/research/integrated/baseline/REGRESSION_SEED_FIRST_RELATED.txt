@@ -1,2 +1,0 @@
-test_ab_chatbot_extension_portfolio: PASS (10 tests)
-test_ab_chatbot_path_union: INTERRUPTED (timeout, not counted)

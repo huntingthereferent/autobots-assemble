@@ -1,0 +1,9 @@
+{
+  "schema": "ab-meta-observations/v1",
+  "source": "github-actions-api",
+  "nodes": [
+    "A",
+    "B"
+  ],
+  "samples": []
+}
