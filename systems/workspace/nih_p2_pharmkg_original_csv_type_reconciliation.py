@@ -5,7 +5,7 @@ No TRAIN/TEST labels enter rules or link prediction. No raw rows distributed.
 """
 from __future__ import annotations
 import argparse, csv, json, re
-from collections import defaultdict
+from collections import defaultdict, Counter
 from hashlib import sha1, sha256
 from pathlib import Path
 from . import nih_p2_external_pharmkg_heldout_trial as source
@@ -28,6 +28,12 @@ def reconcile(reader, train):
     if len(train_set)!=len(train):
         raise ValueError("original TRAIN contains repeated source triples")
     matched=set()
+    clean_ids={node for h,r,t in train for node in (h,t)}
+    clean_pairs={(h,t) for h,r,t in train}
+    raw_id_intersection=set()
+    raw_relation_counts=Counter()
+    clean_relation_counts=Counter(r for h,r,t in train)
+    raw_pairs_matching_clean=0
     class_by_id=defaultdict(set)
     source_rows=0
     source_matched_rows=0
@@ -35,6 +41,9 @@ def reconcile(reader, train):
         source_rows+=1
         if source_rows>MAX_ROWS:raise ValueError("source row limit exceeded")
         t=tuple(row.get(k, "") for k in core)
+        raw_relation_counts[t[1]]+=1
+        raw_id_intersection.update(node for node in (t[0],t[2]) if node in clean_ids)
+        raw_pairs_matching_clean += (t[0],t[2]) in clean_pairs
         if t not in train_set:
             continue
         source_matched_rows+=1
@@ -51,6 +60,10 @@ def reconcile(reader, train):
     return {
         "source_original_csv_header_names":list(cols),
         "source_original_csv_rows":source_rows,
+        "original_raw_relation_code_counts":dict(sorted(raw_relation_counts.items())),
+        "original_clean_train_relation_code_counts":dict(sorted(clean_relation_counts.items())),
+        "original_raw_entity_identifiers_seen_in_clean_train":len(raw_id_intersection),
+        "original_raw_subject_object_pairs_matching_clean_train":raw_pairs_matching_clean,
         "source_original_rows_matching_train":source_matched_rows,
         "distinct_authored_raw_triples_matching_original_train":len(matched),
         "original_train_triples":len(train_set),
@@ -92,6 +105,8 @@ def main():
     print(json.dumps({k:result[k] for k in
           ("source_original_csv_rows","original_train_triples",
            "distinct_authored_raw_triples_matching_original_train",
+           "original_raw_entity_identifiers_seen_in_clean_train",
+           "original_raw_subject_object_pairs_matching_clean_train",
            "original_raw_entity_type_columns_present",
            "original_train_entity_ids_with_one_raw_type",
            "original_train_entity_ids_with_conflicting_raw_types",
