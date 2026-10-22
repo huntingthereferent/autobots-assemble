@@ -18,6 +18,7 @@ from runtime.engine import HandoffRuntime
 from runtime.journal import RuntimeJournal
 from runtime.handoff import EvidenceRecord, ExecutionResult, Handoff
 from systems.workspace.audit_to_action import process
+from systems.workspace.inspector_gadget_wall import chase as chase_wall
 
 VERIFIER = "inspector-gadget-github-run-v1"
 RELATION = "verify source-owned workflow incident"
@@ -118,8 +119,9 @@ def fetch_run(repo, run_id, token):
 
 
 class SourceObservationWorker:
-    def __init__(self, handoff_id, repo, token, fetcher):
+    def __init__(self, handoff_id, repo, token, fetcher, wall_chaser=None):
         self.handoff_id, self.repo, self.token, self.fetcher = handoff_id, repo, token, fetcher
+        self.wall_chaser = wall_chaser
         self.actor_id = "inspector-gadget:source-observer"
 
     def can_execute(self, handoff):
@@ -151,6 +153,13 @@ class SourceObservationWorker:
         if not matching:
             return ExecutionResult(status="PARTIAL", output=output,
                                    note="source record does not match the pinned scan")
+        # Work backwards from the desired same-step success. The chase reads
+        # concrete failed jobs and later workflow evidence; it never repairs.
+        output["wall"] = (self.wall_chaser(run, repo=self.repo, token=self.token)
+                          if self.wall_chaser is not None else
+                          {"schema": "inspector-gadget/wall/v1", "wall_state": "not_checked",
+                           "next_movement": "chase_live_workflow_evidence",
+                           "owner_validation_required": True})
         evidence = (EvidenceRecord(condition=WITNESS, kind="source-api-comparison",
                                    source="GitHub Actions", ref=expected["source"],
                                    depth="live-source-read"),)
@@ -170,7 +179,7 @@ def _verify_result(handoff, result):
         raise ValueError("Inspector Gadget source observation evidence rejected")
 
 
-def activate(selection, *, repo, token, fetcher=fetch_run, journal_path=None):
+def activate(selection, *, repo, token, fetcher=fetch_run, journal_path=None, wall_chaser=None):
     """Execute one REAL source-observation worker in the owning workflow context."""
     # Reapply the exact scanner validation to untrusted matrix/event inputs.
     row = _selection({"id": selection.get("finding_id"), "kind": "candidate",
@@ -211,7 +220,10 @@ def activate(selection, *, repo, token, fetcher=fetch_run, journal_path=None):
     runtime = HandoffRuntime(event_store=RuntimeJournal(journal_path) if journal_path else None)
     runtime.register_evidence_verifier(VERIFIER, _verify_result)
     runtime.submit(handoff)
-    state = runtime.run(job_id, SourceObservationWorker(job_id, repo, token, fetcher))
+    # The real GitHub worker always chases the source wall. Fixture readers
+    # deliberately do not turn a mocked run into a claimed live investigation.
+    observer = wall_chaser if wall_chaser is not None else (chase_wall if fetcher is fetch_run else None)
+    state = runtime.run(job_id, SourceObservationWorker(job_id, repo, token, fetcher, observer))
     return {"schema": "inspector-gadget/handoff-result/v1",
             "audit": finding, "handoff": asdict(handoff),
             "state": asdict(state),
