@@ -1,0 +1,81 @@
+name: NIH P2 original OBO inherited RDFS disjointness
+on:
+  pull_request:
+    paths:
+      - 'systems/workspace/nih_p2_obo_inherited_rdfs_audit.py'
+      - 'network/tests/test_nih_p2_obo_inherited_rdfs_audit.py'
+      - '.github/workflows/nih-p2-obo-inherited-rdfs-audit.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: nih-p2-obo-rdfs-source-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  original-source-rdfs-inheritance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install independent RDF library
+        run: python -m pip install 'rdflib>=7,<8'
+      - name: Retrieve and verify two immutable original OBO sources
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/obo-original" "$RUNNER_TEMP/obo-rdfs-result"
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlopen,Request
+          import os,hashlib
+          from systems.workspace import nih_phase2_external_obo_graph_trial as orig
+          folder=Path(os.environ["RUNNER_TEMP"])/"obo-original"
+          for name in orig.SOURCE_FILES:
+              url=orig.SOURCE_URL+name
+              with urlopen(Request(url,headers={"User-Agent":"NIH-P2-RDFS-Original-ReadOnly/1.0"}),timeout=45) as res:
+                  if res.status!=200 or res.geturl()!=url:
+                      raise ValueError("external origin/ref mismatch")
+                  raw=res.read(5_000_001)
+              if hashlib.sha256(raw).hexdigest()!=orig.PINNED_WHOLE_SOURCE_SHA256[name]:
+                  raise ValueError("whole original ontology source checksum mismatch")
+              (folder/name).write_bytes(raw)
+          PY
+      - name: Test subclass directions and inherited disjointness original evidence
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: python -m unittest -v network.tests.test_nih_p2_obo_inherited_rdfs_audit
+      - name: Execute exact original ontology RDFS inherited type comparison
+        env:
+          NIH_ORIGINAL_RO_BASE_OWL: ${{ runner.temp }}/obo-original/ro-base.owl
+          NIH_ORIGINAL_RO_CORE_OWL: ${{ runner.temp }}/obo-original/core.owl
+        run: |
+          set -euo pipefail
+          python -m systems.workspace.nih_p2_obo_inherited_rdfs_audit \
+            --ro-base "$NIH_ORIGINAL_RO_BASE_OWL" \
+            --core "$NIH_ORIGINAL_RO_CORE_OWL" \
+            --output "$RUNNER_TEMP/obo-rdfs-result/inherited-disjointness.json"
+          python - <<'PY'
+          from pathlib import Path
+          import json,os
+          r=json.loads((Path(os.environ["RUNNER_TEMP"])/"obo-rdfs-result/inherited-disjointness.json").read_text())
+          assert r["schema"]=="nih-p2-obo-original-inherited-rdfs-disjointness/v1"
+          assert r["source_rdf_triples"]==8319
+          assert r["independent_RDFLib_subclass_oracle_agreement"] is True
+          assert r["source_inherited_rdfs_disjointness_conflicts"]>=r["direct_only_asserted_disjointness_conflicts"]
+          assert r["unsatisfiable_class_count"]=="NOT_MEASURED"
+          assert r["full_OWL_DL_consistency_verified"] is False
+          assert r["original_W13_modified"] is False
+          PY
+          (cd "$RUNNER_TEMP/obo-rdfs-result" && sha256sum inherited-disjointness.json > sha256.txt)
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nih-p2-obo-rdfs-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/obo-rdfs-result/
+          retention-days: 30
+          if-no-files-found: warn
