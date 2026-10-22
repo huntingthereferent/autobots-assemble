@@ -1,0 +1,30 @@
+{
+  "kind": "ARC4_SOURCE_PINNED_INTERVENTION_PLAN",
+  "source_audit_kind": "ARC4_SOURCE_OWNED_EVENT_ORDER_AUDIT",
+  "case": "D4L2_L4U2_left1",
+  "contrasting_original_case": "D4L2_L4U2_up1",
+  "source_negative_first_arrival": {
+    "frame": 19,
+    "x": [
+      26,
+      27,
+      28
+    ]
+  },
+  "source_contact_row": "row5",
+  "contact_x": 11,
+  "contact_frame": 20,
+  "verified_native_click_xy_from_receipts": [
+    34,
+    21
+  ],
+  "new_native_action": 2,
+  "preserves_existing_native_selection_without_extra_click": true,
+  "original_native_action_word": "6@46,33 3 6@24,33 2 2 2 2 3 3 6@34,42 3 3 3 3 1 1 6@34,21 3 5",
+  "intervention_native_action_word": "6@46,33 3 6@24,33 2 2 2 2 3 3 6@34,42 3 3 3 3 1 1 6@34,21 3 2 5",
+  "paired_original_sdk_witnesses": [
+    "A",
+    "B"
+  ],
+  "limits": "The existing selected object is source-receipt-attested; one movement is appended without re-clicking. All effects are untested. Only native SDK status counts as progression."
+}
