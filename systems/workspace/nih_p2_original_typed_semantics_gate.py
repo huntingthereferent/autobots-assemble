@@ -92,6 +92,15 @@ def cross_relation_role_overlap(rows):
     for code in CODES:
         role_sets[(code,"head")]={h for h,r,t in rows if r==code}
         role_sets[(code,"tail")]={t for h,r,t in rows if r==code}
+    # Independently encode role membership as per-identifier bit flags,
+    # not quadratic pairs of source rows.
+    from collections import defaultdict
+    membership=defaultdict(int)
+    code_bits={r:1 << (2*i) for i,r in enumerate(CODES)}
+    for head,relation,tail in rows:
+        bit=code_bits[relation]
+        membership[head] |= bit
+        membership[tail] |= bit << 1
     out={}
     for code_a in CODES:
         for role_a in ("head","tail"):
@@ -99,14 +108,10 @@ def cross_relation_role_overlap(rows):
                 for role_b in ("head","tail"):
                     key=f"{code_a}:{role_a}|{code_b}:{role_b}"
                     n=len(role_sets[(code_a,role_a)] & role_sets[(code_b,role_b)])
-                    independent = len({
-                        item_a[0 if role_a=="head" else 2]
-                        for item_a in rows if item_a[1]==code_a
-                        if any(item_b[1]==code_b and
-                               item_a[0 if role_a=="head" else 2] ==
-                               item_b[0 if role_b=="head" else 2]
-                               for item_b in rows)
-                    })
+                    bit_a=code_bits[code_a] << (role_a=="tail")
+                    bit_b=code_bits[code_b] << (role_b=="tail")
+                    independent=sum(bool(flags & bit_a) and bool(flags & bit_b)
+                                    for flags in membership.values())
                     if n!=independent:
                         raise ValueError("independent original TRAIN role scan differs")
                     out[key]=n
