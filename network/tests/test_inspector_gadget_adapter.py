@@ -1,5 +1,10 @@
 """Inspector Gadget: native movement, pinning and negative-boundary regressions."""
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from runtime.engine import HandoffRuntime
+from runtime.journal import RuntimeJournal
+from systems.workspace.monitor import workstation_snapshot
 from systems.workspace.inspector_gadget_adapter import (
     activate, from_cancel_event, plan,
 )
@@ -51,6 +56,23 @@ class InspectorGadgetAdapterTests(unittest.TestCase):
                              "workspace-lane:" + selection["lane"])
             self.assertEqual(result["handoff"]["metadata"]["native_evidence_verifier"],
                              "inspector-gadget-github-run-v1")
+
+    def test_completed_movement_is_in_native_workstation_inspection_panel(self):
+        selection = plan(scan([entry(58, "NIH", "failure", 55)]))["matrix"]["include"][0]
+        with TemporaryDirectory() as tmp:
+            journal = Path(tmp) / "inspector-gadget-runtime.jsonl"
+            activate(selection, repo="o/r", token="x",
+                     fetcher=lambda *args: source(selection), journal_path=journal)
+            restored = HandoffRuntime(event_store=RuntimeJournal(journal))
+            view = workstation_snapshot(root=Path(tmp) / "editions", runtime=restored)
+            self.assertEqual(view["counts"]["jobs"], 1)
+            job = view["jobs"][0]
+            self.assertEqual(job["status"], "COMPLETE")
+            self.assertEqual(job["realization"], "source-observation")
+            self.assertEqual(job["source_state"], "GITHUB_RUN_OBSERVED")
+            self.assertEqual(job["inspection"]["kind"], "inspector-gadget-source-observation")
+            self.assertEqual(job["verification"], "recorded-not-reverified")
+            self.assertEqual(job["lane_refs"], ["NIH"])
 
     def test_changed_source_is_partial_not_repaired(self):
         selection = plan(scan([entry()]))["matrix"]["include"][0]
