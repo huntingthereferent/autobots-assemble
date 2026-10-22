@@ -158,6 +158,15 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 .plot-scroll{overflow:hidden}
 @media(max-width:650px){.plot-scroll{overflow-x:auto;overflow-y:hidden;scrollbar-color:#496875 #101b23;scrollbar-width:thin}#trend{min-width:680px;width:680px;max-height:none;margin:12px 12px 0}}
 
+
+/* An outcome is a historical GitHub run, not an unresolved research claim. */
+.metric.notpassed{border-top-color:#728997}
+.metric.notpassed b{color:#c1d0d8}
+.outcome-context{margin:10px 0 15px;padding:12px 16px;background:#111e26;border:1px solid #304751;border-radius:7px}
+.outcome-facts{display:flex;gap:7px 21px;flex-wrap:wrap;align-items:center;color:#afc1cb;font:10px/1.6 var(--data)}
+.outcome-facts span:first-child{color:#c8dce5;font-weight:700}
+.outcome-context p{margin:6px 0 0;color:#a8bcc7;font-size:11px;line-height:1.65}
+.outcome-context strong{color:#e0edf1;font-weight:650}
 </style>
 </head>
 <body>
@@ -170,9 +179,10 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <section class="metrics" aria-label="Combined source-observed workflow counts">
 <article class="metric queue"><b id="queued">—</b><span>IN QUEUE / NOW</span><small>Waiting workflow runs</small></article>
 <article class="metric running"><b id="running">—</b><span>IN MOTION / NOW</span><small>Executing workflow runs</small></article>
-<article class="metric passed"><b id="passed">—</b><span>PASSED / TODAY*</span><small>Retrieved sample only</small></article>
-<article class="metric notpassed"><b id="failed">—</b><span>NOT PASSED / TODAY*</span><small>Retrieved sample only</small></article>
+<article class="metric passed"><b id="passed">—</b><span>SUCCESSFUL RUNS / TODAY</span><small id="passed-note">Reading full-day GitHub totals</small></article>
+<article class="metric notpassed"><b id="failed">—</b><span>HISTORICAL FAILED RUNS</span><small id="failed-note">Not an unresolved-test count</small></article>
 </section>
+<div class="outcome-context" aria-label="How daily run outcomes are counted"><div class="outcome-facts"><span id="day-basis">Waiting for the complete day-window journal…</span><span id="cancelled">Cancelled today: —</span><span id="skipped">Skipped today: —</span><span id="other-outcomes">Other outcomes: —</span></div><p>Failed runs are historical attempts, <strong>not outstanding tests</strong>. A later successful run may validate a fix, but an unrelated green run does not prove every earlier failure was resolved. Cancelled and skipped work is not classified as failed.</p></div>
 <section class="flowfield" aria-label="Observed execution stages">
 <div class="flow-heading"><span>Execution flow</span><small>Markers open actual GitHub runs · up to 16 recent runs per stage</small></div>
 <div class="flow-tracks">
@@ -202,7 +212,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <p>Placement belongs to the pipeline, not the viewing layer. The viewer does not start jobs, infer absent results or redirect another ChatGPT window.</p>
 </div></details>
 </main>
-<footer>Execution counts are observations, not capacity claims. *Today's results cover retrieved recent runs and may undercount the full day. The viewer never starts jobs or assigns research lanes.</footer>
+<footer>Execution counts are observations, not capacity claims. Today's passed and historical failed counts come from GitHub's entire date-filtered source totals; the run list and flow markers remain a recent sample. The viewer never starts jobs or assigns research lanes.</footer>
 <script>
 "use strict";
 (()=>{
@@ -213,7 +223,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  const localTime=s=>{const v=new Date(s);return Number.isFinite(+v)?v.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",hour12:true}):"Unknown time"};
  const valid=n=>Number.isSafeInteger(n)&&n>=0;
  const statuses=["in_progress","queued","pending","waiting"];
- let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30;
+ let observed=[],runs=[],range="today",busy=false,allReady=false,showLimit=30,dailySummary=null;
  async function get(url){const r=await fetch(url,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}
  async function readRegistry(){
   let registry;
@@ -237,7 +247,43 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  const isActive=r=>["in_progress","queued","pending","waiting","requested"].includes(r.status);
  const isPassed=r=>r.status==="completed"&&r.conclusion==="success";
  function badge(r){if(isActive(r))return{label:r.status==="in_progress"?"RUNNING":"WAITING",cls:"running"};if(isPassed(r))return{label:"PASSED",cls:"good"};if(isFailed(r))return{label:r.conclusion?.toUpperCase()||"NOT PASSED",cls:"bad"};return{label:String(r.conclusion||r.status||"UNKNOWN").toUpperCase(),cls:""}}
- function isToday(ts){const d=new Date(ts),n=new Date();return d.getFullYear()===n.getFullYear()&&d.getMonth()===n.getMonth()&&d.getDate()===n.getDate()}
+ function chicagoDay(value){
+  const parts=new Intl.DateTimeFormat("en-US",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(value));
+  const obj=Object.fromEntries(parts.map(p=>[p.type,p.value]));
+  return obj.year+"-"+obj.month+"-"+obj.day;
+ }
+ function isToday(ts){return Number.isFinite(Date.parse(ts))&&chicagoDay(ts)===chicagoDay(new Date())}
+ function renderDaily(){
+  const r=dailySummary,now=Date.now();
+  const all=r?.schema==="meta-workstation/daily-runs-v1"&&r?.all_sources===true&&r?.timezone==="America/Chicago"&&r?.local_date===chicagoDay(new Date())&&r?.totals;
+  const t=all?r.totals:null;
+  const verified=t&&["created","success","failure","cancelled","skipped","timed_out","action_required","other"].every(k=>valid(t[k]))&&Number.isFinite(Date.parse(r.observed_at));
+  $("passed").textContent=verified?t.success.toLocaleString():"—";
+  $("failed").textContent=verified?(t.failure+t.timed_out+t.action_required).toLocaleString():"—";
+  $("cancelled").textContent="Cancelled today: "+(verified?t.cancelled.toLocaleString():"—");
+  $("skipped").textContent="Skipped today: "+(verified?t.skipped.toLocaleString():"—");
+  $("other-outcomes").textContent="Other states: "+(verified?t.other.toLocaleString():"—");
+  if(verified){
+   const age=Math.max(0,now-Date.parse(r.observed_at));
+   const suffix=age>90*60000?" · STALE SNAPSHOT":"";
+   $("day-basis").textContent=t.created.toLocaleString()+" runs created today · America/Chicago · checked "+localTime(r.observed_at)+suffix;
+   $("passed-note").textContent="Full-day source totals · "+localTime(r.observed_at);
+   $("failed-note").textContent="Past failures/timeout/action-required · not open issues";
+  }else{
+   $("day-basis").textContent="Full-day GitHub summary unavailable; today's historical totals are unknown.";
+   $("passed-note").textContent="Day journal unavailable · not zero";
+   $("failed-note").textContent="Unresolved state unknown · check source";
+  }
+ }
+ async function loadDaily(){
+  try{
+   const d=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/daily.json");
+   if(d.schema!=="meta-workstation/daily-runs-v1")throw Error("Unexpected daily journal");
+   dailySummary=d;
+  }catch(e){dailySummary=null}
+  renderDaily();
+ }
+
  function beads(id,records,css){
   const el=$(id);el.replaceChildren();
   const sample=records.slice(0,16);
@@ -247,8 +293,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  function renderMetrics(n){
   $("queued").textContent=n.waiting;$("running").textContent=n.running;
   const today=runs.filter(r=>isToday(r.created));
-  const passed=today.filter(isPassed).length,failed=today.filter(isFailed).length;
-  $("passed").textContent=passed;$("failed").textContent=failed;
+  renderDaily();
   $("flow-queue").textContent=n.waiting;$("flow-running").textContent=n.running;
   $("flow-done").textContent=today.filter(r=>r.status==="completed").length;
   beads("beads-queue",runs.filter(r=>["queued","pending","waiting"].includes(r.status)),"queue");
@@ -347,10 +392,11 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  (async()=>{
   try{await readRegistry()}
   catch(e){$("stamp").textContent="Pipeline registry unavailable";$("source-state").textContent="SOURCE UNKNOWN";$("status-note").textContent="Check the canonical registry; no account is inferred from a stale label.";return}
-  await Promise.all([history(),routing(),refresh()]);
+  await Promise.all([history(),routing(),refresh(),loadDaily()]);
  })();
  setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
  setInterval(()=>{if(document.visibilityState==="visible"){history();routing()}},300000);
+  setInterval(()=>{if(document.visibilityState==="visible")loadDaily()},300000);
 })();
 </script>
 </body></html>
