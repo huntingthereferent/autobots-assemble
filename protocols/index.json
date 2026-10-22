@@ -38,10 +38,6 @@
       "layer": "ai",
       "path": "protocols/ai/purge.md"
     },
-    "ai.james": {
-      "layer": "ai",
-      "path": "protocols/ai/james.md"
-    },
     "work.bounded-problem": {
       "layer": "work",
       "path": "protocols/work/bounded-problem.md"

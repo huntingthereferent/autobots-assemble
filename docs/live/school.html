@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f7fb">
+  <meta name="description" content="Online School: a browser-based learner desk for practice, reading, science, and a family week record.">
+  <title>Online School · Learner Desk</title>
+  <link rel="stylesheet" href="school.css">
+  <script defer src="school.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to lessons</a>
+  <header class="mast">
+    <a class="mark" href="school.html" aria-label="Online School home"><span class="mark-glyph">✳</span><span>ONLINE <b>SCHOOL</b></span></a>
+    <nav aria-label="Site"><a href="kids.html">Kids' Projects ↗</a><a href="meta.html">Workstation ↗</a></nav>
+  </header>
+  <div class="layout">
+    <aside class="rail" aria-label="Learning sections">
+      <div class="rail-intro"><div class="little-mark">O<span>●</span></div><strong>A place to learn.</strong><small>One little step at a time.</small></div>
+      <nav class="sections" aria-label="School pages">
+        <button data-page="today" aria-current="page" type="button"><span>◫</span> My day</button>
+        <button data-page="practice" type="button"><span>✦</span> Practice Lab</button>
+        <button data-page="reading" type="button"><span>▤</span> Reading Room</button>
+        <button data-page="science" type="button"><span>⚗</span> Science Notebook</button>
+        <button data-page="family" type="button"><span>▦</span> Family week</button>
+      </nav>
+      <p class="rail-note">Browser edition. Nothing here automatically marks a grade, lesson hour or mastery.</p>
+    </aside>
+    <main id="main">
+      <div class="top-line"><span class="eyebrow">LEARNER DESK / BROWSER EDITION</span><span id="storage-state" class="storage-state">LOCAL TO THIS DEVICE</span></div>
+      <div class="hero">
+        <div><h1>Make room for <em>curiosity.</em></h1><p>See what’s planned, try something new, and keep the work that actually happened.</p></div>
+        <div class="hero-art" aria-hidden="true"><span class="sun">✺</span><span class="planet">◕</span><span class="orbit"></span><span class="mini-star">✦</span></div>
+      </div>
+      <div class="learner-strip">
+        <label for="learner">Learning space
+          <select id="learner" aria-label="Choose learning space"></select>
+        </label>
+        <form id="new-learner"><label for="nickname">Add a space (use a nickname)</label><div class="inline-input"><input id="nickname" type="text" maxlength="40" autocomplete="off" placeholder="e.g. Explorer One" required><button type="submit">Add</button></div></form>
+        <label for="school-date">School day<input id="school-date" type="date"></label>
+      </div>
+      <p id="setup-note" class="setup-note" role="status">Add a learning-space nickname to begin. Do not enter private identifying details on a public or shared device.</p>
+      <section class="panel" id="panel-today" aria-labelledby="today-title">
+        <div class="section-heading"><div><p class="eyebrow">01 / TODAY</p><h2 id="today-title">Your learning day</h2><p>Progress means tasks you checked off, not a score or a grade.</p></div><div class="count-bubble"><strong id="task-ratio">0 / 0</strong><span>tasks marked done</span></div></div>
+        <div class="progress-track" role="progressbar" id="progress-track" aria-label="Tasks marked done today" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="progress-fill"></div></div>
+        <div class="split">
+          <div class="surface">
+            <h3>Things on your desk</h3>
+            <div id="task-list" class="task-list"></div>
+            <p id="task-empty" class="empty">No saved tasks for this day. Make the first one below.</p>
+          </div>
+          <div class="surface soft">
+            <h3>Add a task</h3>
+            <form id="new-task" class="stack">
+              <label for="task-title">What are you learning?<input id="task-title" maxlength="120" placeholder="Read a chapter, practice fractions…" required></label>
+              <label for="task-subject">Subject<select id="task-subject"><option>Reading</option><option>Writing</option><option>Math</option><option>Science</option><option>History</option><option>Art</option><option>Movement</option><option>Other</option></select></label>
+              <label for="planned">Planned minutes (optional)<input id="planned" type="number" min="0" max="1440" step="1" placeholder="Not entered"></label>
+              <button class="primary" type="submit">Add to my day →</button>
+            </form>
+            <p class="fine">Actual minutes are logged separately on a task after learning happens.</p>
+          </div>
+        </div>
+      </section>
+      <section class="panel" id="panel-practice" aria-labelledby="practice-title" hidden>
+        <div class="section-heading"><div><p class="eyebrow">02 / TRY & REVISE</p><h2 id="practice-title">Practice Lab</h2><p>Numbers or sounding out words. Hints and another try are always okay.</p></div><div class="symbol lavender">✳</div></div>
+        <div class="surface practice-box">
+          <div class="controls"><label for="practice-mode">Choose a path<select id="practice-mode"><option value="numbers">Numbers</option><option value="words">Word blending</option></select></label><label for="practice-level">Numbers level<select id="practice-level"><option value="starter">Starter · within 10</option><option value="builder">Builder · within 30</option><option value="explorer">Explorer · mixed operations</option></select></label></div>
+          <div id="practice-prompt" class="question-card"><small id="question-type">YOUR QUESTION</small><h3 id="question">Choose a learner to begin</h3><p id="question-instruction">Try a question when you're ready.</p></div>
+          <form id="practice-answer" class="answer-line"><label for="answer">Your answer<input id="answer" autocomplete="off" maxlength="80" placeholder="What do you think?"></label><button class="primary" type="submit">Check answer</button></form>
+          <p id="practice-feedback" class="feedback" role="status">Trying is part of learning.</p>
+          <div class="action-row"><button id="hint" type="button">Give me a hint</button><button id="next-question" type="button">New question ↗</button></div>
+          <p id="practice-summary" class="fine">Attempts are counted from what you actually submit. They do not certify mastery.</p>
+        </div>
+      </section>
+      <section class="panel" id="panel-reading" aria-labelledby="reading-title" hidden>
+        <div class="section-heading"><div><p class="eyebrow">03 / STORIES & WORDS</p><h2 id="reading-title">Reading Room</h2><p>Read a little, read aloud, or listen. Then tell what you noticed.</p></div><div class="symbol coral">Aa</div></div>
+        <div class="surface">
+          <div class="controls"><label for="passage">Choose a story<select id="passage"><option value="seed">The Little Seed · starting words</option><option value="bridge">The Bridge of Stones · growing reader</option><option value="sky">The Shape of a Shadow · curious reader</option></select></label><label for="text-size">Text size<select id="text-size"><option value="1">Normal</option><option value="1.25">Large</option><option value="1.55">Extra large</option></select></label></div>
+          <article class="reading-paper"><p class="eyebrow">LET’S READ</p><h3 id="story-title"></h3><p id="story-text"></p><button id="read-aloud" type="button">▶ Read it aloud</button><p class="fine">Read-aloud depends on your browser. No audio is uploaded.</p></article>
+          <form id="reading-note" class="stack"><label id="reading-question" for="retell">What happened in the story?</label><textarea id="retell" rows="3" maxlength="1800" placeholder="Use your own words…" required></textarea><button class="primary" type="submit">Save my reading note</button></form>
+          <p id="reading-feedback" class="feedback" role="status"></p>
+        </div>
+      </section>
+      <section class="panel" id="panel-science" aria-labelledby="science-title" hidden>
+        <div class="section-heading"><div><p class="eyebrow">04 / QUESTIONS & EVIDENCE</p><h2 id="science-title">Science Notebook</h2><p>Make a prediction, try something safely, then record what you really saw.</p></div><div class="symbol mint">⚗</div></div>
+        <div class="surface">
+          <label for="investigation">Pick a starting question<select id="investigation"><option value="shadow">Where does a shadow go?</option><option value="water">Which surface holds a drop?</option><option value="paper">Can paper make a bridge?</option></select></label>
+          <article class="investigation"><h3 id="science-question"></h3><p id="materials"></p><p id="method"></p></article>
+          <form id="science-note" class="stack">
+            <label for="prediction">My prediction (optional)<textarea id="prediction" rows="2" maxlength="1000" placeholder="I think…"></textarea></label>
+            <label for="tried">What I actually tried<textarea id="tried" rows="2" maxlength="1800" required></textarea></label>
+            <label for="observed">What I actually observed<textarea id="observed" rows="3" maxlength="1800" required></textarea></label>
+            <button class="primary" type="submit">Save observation</button>
+          </form>
+          <p id="science-feedback" class="feedback" role="status"></p>
+        </div>
+      </section>
+      <section class="panel" id="panel-family" aria-labelledby="family-title" hidden>
+        <div class="section-heading"><div><p class="eyebrow">05 / FAMILY DESK</p><h2 id="family-title">Your week at a glance</h2><p>Separate your plans, marked tasks, and minutes someone actually logged.</p></div><div class="symbol blue">▦</div></div>
+        <div class="surface">
+          <div class="family-top"><button id="previous-week" type="button" aria-label="Previous week">← Earlier</button><h3 id="week-heading"></h3><button id="next-week" type="button" aria-label="Next week">Later →</button></div>
+          <div class="stats"><div><strong id="week-tasks">0</strong><span>saved tasks</span></div><div><strong id="week-done">0</strong><span>marked done</span></div><div><strong id="week-planned">—</strong><span>minutes planned</span></div><div><strong id="week-actual">—</strong><span>minutes actually logged</span></div></div>
+          <div id="week-list" class="week-list"></div>
+          <h3>Learning notes</h3><div id="notes-list" class="notes-list"></div>
+        </div>
+        <div class="surface tools">
+          <h3>Keep a copy</h3><p>Your browser records do not sync with the Python school app or other devices. You can export or restore your own local copy.</p>
+          <div class="action-row"><button id="export-data" type="button">Export browser records ↓</button><label class="file-button" for="import-data">Import a backup<input id="import-data" type="file" accept="application/json,.json"></label><button id="print-week" type="button">Print week</button><button id="clear-data" type="button">Clear this browser</button></div>
+          <p id="backup-feedback" class="feedback" role="status"></p>
+        </div>
+      </section>
+      <footer class="site-foot"><p><b>Privacy:</b> this static page makes no account and sends no school data to a server. Browser storage is device-specific and may be erased by browser settings. Avoid identifying information on a shared device.</p><p>For the full private school server, worksheets, and existing learner records, see the <a href="https://github.com/huntingthereferent/autobots-assemble/tree/main/companies/online-school/app">local school application ↗</a>. This browser edition is not a transcript or an accredited school.</p></footer>
+    </main>
+  </div>
+</body>
+</html>
