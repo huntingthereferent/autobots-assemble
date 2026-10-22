@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("dashboard renders live platform state", async ({ page }) => {
+test("dashboard renders persisted browser fixture state", async ({ page }) => {
   await page.goto("/");
 
   await expect(
