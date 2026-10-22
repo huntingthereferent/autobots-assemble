@@ -38,6 +38,14 @@ The movement/change list is session-only and shows status transitions **detected
 
 The run journal starts on **Today**, with period selectors for **Day**, **Month**, **Year**, and **All**, plus previous/next navigation. Local calendar ranges filter original timestamped run IDs without modifying the source archive. Listed execution timestamps use a 12-hour clock; the seven-day observation chart uses matching local calendar boundaries. Older source history may be incomplete if the published archive cannot be verified.
 
+## Equilibrium watch — live observation, not automatic load
+
+The control deck now also shows a **per-browser-session equilibrium watch**. It records successful public-GitHub workflow-run checks and displays observed average running count, peak running count, average waiting count, total queue change since the session baseline, and observed arrival/completion detection rates per hour. A paired chart shows sampled queued/running states. No new GitHub jobs are scheduled, no capacity limit is inferred from workflow counts, and no sample is fabricated between checks.
+
+The monitor calls the state a **steady candidate** only after multiple real checks across at least eight minutes, with approximately balanced detected flow and no substantial queue increase. It may instead describe backlog building, draining, no visible backlog, idling, or insufficient evidence. Results are lower-bound workflow-run **detections**, because the latest public API page contains at most 100 workflow runs and may miss fast runs between polls. A workflow run can contain multiple jobs, so neither peak running workflows nor session averages establish account job concurrency/utilization. Session-level equilibrium readings are not persisted into the historical daily/monthly/yearly source journal; only the source-run history has that durable indexing.
+
+This monitor does not automatically fill the queue: introducing enough work to reach steady useful throughput requires a separate authorized source-owned scheduler, job-level capacity verification, and cost/latency/failure boundaries. Saturating a queue alone is not evidence of efficiency.
+
 ## Data audit in the Workstation
 
 The public /live/ entrance still opens the Workstation. The embedded [Referent audit](work.html#audit) is **not** the executions panel and does **not** show run counts, poll GitHub Actions, or use a tickserver. The audit reads a source-pinned Git tree only when opened or manually reloaded.
