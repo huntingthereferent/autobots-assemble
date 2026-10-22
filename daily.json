@@ -4,28 +4,43 @@
   "local_date": "2026-10-22",
   "start_utc": "2026-10-22T05:00:00Z",
   "end_utc": "2026-10-23T04:59:59Z",
-  "observed_at": "2026-10-22T21:49:58Z",
-  "basis": "GitHub Actions workflow runs created during today's America/Chicago calendar day; all-matching-source total_count, not last-100 samples.",
-  "limitations": "Failed and cancelled runs are historical outcomes, NOT unresolved tests. Later runs can pass the same workflow. A run is not a single test.",
+  "observed_at": "2026-10-22T21:53:08Z",
+  "basis": "GitHub Actions workflow runs created during today's America/Chicago calendar day; source-counted conclusions split at high throughput, not last-100 samples.",
+  "limitations": "Failed and cancelled runs are historical outcomes, NOT unresolved tests. Later runs can pass the same workflow. Active/other states are not measured in this summary. A run is not a single test.",
   "nodes": {
     "A": {
       "repo": "huntingthereferent/autobots-assemble",
-      "observed": false,
-      "error": "ValueError: Inconsistent GitHub date-filtered total_count"
+      "observed": true,
+      "success": 2282,
+      "failure": 309,
+      "cancelled": 850,
+      "skipped": 73,
+      "timed_out": 0,
+      "action_required": 0,
+      "known_outcome_runs_lower_bound": 3514,
+      "other": null
     },
     "B": {
       "repo": "aeren-research/continuum-oscillator",
       "observed": true,
-      "created": 56,
       "success": 41,
       "failure": 15,
       "cancelled": 0,
       "skipped": 0,
       "timed_out": 0,
       "action_required": 0,
-      "other": 0
+      "known_outcome_runs_lower_bound": 56,
+      "other": null
     }
   },
-  "all_sources": false,
-  "totals": null
+  "all_sources": true,
+  "totals": {
+    "success": 2323,
+    "failure": 324,
+    "cancelled": 850,
+    "skipped": 73,
+    "timed_out": 0,
+    "action_required": 0,
+    "known_outcome_runs_lower_bound": 3570
+  }
 }

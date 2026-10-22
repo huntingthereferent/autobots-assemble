@@ -1,13 +1,13 @@
 {
   "schema": "meta-workstation/routing-advice-v1",
-  "generated_at": "2026-10-22T21:50:02Z",
-  "last_paired_observation": "2026-10-22T21:49:56Z",
+  "generated_at": "2026-10-22T21:53:12Z",
+  "last_paired_observation": "2026-10-22T21:53:05Z",
   "signal": "NO_CLEAR_PRESSURE",
   "reason": "No independently supported node-switch signal in the sampled waiting-run counts.",
   "latest_nodes": {
     "A": {
-      "running": 7,
-      "waiting": 1
+      "running": 4,
+      "waiting": 2
     },
     "B": {
       "running": 0,
