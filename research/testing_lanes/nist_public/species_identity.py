@@ -25,6 +25,14 @@ INCHI_KEY = "XLYOFNOQVPJJNP-UHFFFAOYSA-N"
 MAX_BYTES = 400000
 
 
+class IdentityMismatch(ValueError):
+    """Only names of failed local identity predicates, never publisher text."""
+
+    def __init__(self, missing):
+        self.missing = sorted(missing)
+        super().__init__("source species identity mismatch")
+
+
 class NoRedirect(HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
@@ -74,7 +82,7 @@ def classify(raw: bytes) -> dict:
         "inchi_key": INCHI_KEY in rendered,
     }
     if not all(checks.values()):
-        raise ValueError("species identity does not satisfy fixed NIST contract")
+        raise IdentityMismatch([key for key, passed in checks.items() if not passed])
     # Molecular weight appears in the document, but isn't admitted as a
     # reference measurement or used as a pass criterion.
     return {
@@ -125,6 +133,8 @@ def observe(opener=None) -> dict:
         })
     except (HTTPError, URLError, ValueError, TimeoutError, UnicodeError, OSError) as error:
         result.update({"state": "SOURCE_WALL", "error_class": type(error).__name__})
+        if isinstance(error, IdentityMismatch):
+            result["failed_identity_checks"] = error.missing
     return result
 
 
