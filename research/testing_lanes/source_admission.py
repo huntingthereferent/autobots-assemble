@@ -173,7 +173,8 @@ def probe_one(source_id: str, cards: dict[str, dict], opener=None) -> dict:
             "observed_at_utc": timestamp, "response_status": 200,
             "body_sha256": hashlib.sha256(raw).hexdigest(),
             "response_bytes": len(raw), "inspection": shape,
-            "state": "METADATA_OBSERVED" if shape["semantic_record_verified"] else "STRUCTURE_WALL",
+            "state": ("DOCUMENTATION_OBSERVED" if probe["expected_format"] == "html" else
+                      "METADATA_OBSERVED" if shape["semantic_record_verified"] else "STRUCTURE_WALL"),
         })
     except (HTTPError, URLError, ValueError, TimeoutError, OSError, UnicodeError, json.JSONDecodeError) as exc:
         receipt.update({"state": "SOURCE_WALL", "error_class": type(exc).__name__})
@@ -203,7 +204,7 @@ def main() -> int:
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(display, encoding="utf-8")
     print(display)
-    return 0 if args.command != "probe" or output["state"] == "METADATA_OBSERVED" else 2
+    return 0 if args.command != "probe" or output["state"] in ("METADATA_OBSERVED", "DOCUMENTATION_OBSERVED") else 2
 
 
 if __name__ == "__main__":
