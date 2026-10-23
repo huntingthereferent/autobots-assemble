@@ -1,0 +1,44 @@
+name: research-econ-growth-backtest
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/econ_growth_backtest.py"
+      - "research/testing_lanes/test_econ_growth_backtest.py"
+      - ".github/workflows/research-econ-growth-backtest.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run series and leakage controls
+        run: python -m unittest discover -s research/testing_lanes -p "test_econ_growth_backtest.py" -v
+
+  bounded-backtest:
+    needs: offline-controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch one indicator and run frozen baseline comparison
+        run: |
+          mkdir -p econ_receipt
+          python research/testing_lanes/econ_growth_backtest.py --output econ_receipt/ECON-GROWTH-BACKTEST-001.json
+      - name: Preserve backtest receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: ECON-GROWTH-BACKTEST-001-receipt
+          path: econ_receipt/*.json
+          if-no-files-found: error
+          retention-days: 30
