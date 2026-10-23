@@ -61,11 +61,11 @@
       "description": "Pony Trail actual browser checks"
     },
     {
-      "id": "suno",
-      "filename": "suno-intake-browser.yml",
+      "id": "audio-intake",
+      "filename": "audio-intake-browser.yml",
       "min_interval_minutes": 360,
       "enabled": true,
-      "description": "Suno intake actual browser checks"
+      "description": "Audio Intake real browser checks"
     },
     {
       "id": "research-sources",

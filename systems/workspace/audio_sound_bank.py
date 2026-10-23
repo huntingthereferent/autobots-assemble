@@ -1,6 +1,6 @@
 """Meow Lab 2 sound intake: opt-in batch admission from audio files into native workstation movement.
 
-This is a source-owning adapter, not an API bridge to Suno. Each accepted WAV
+This is a source-owning adapter, not an external music service API bridge. Each accepted WAV
 gets a separate actual HandoffRuntime job and independent host PCM verification.
 """
 from __future__ import annotations

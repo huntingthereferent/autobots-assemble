@@ -1,4 +1,4 @@
-"""Browser-level Suno Intake checks over actual local source bytes, not Suno API."""
+"""Browser-level audio intake checks over actual local source bytes."""
 from __future__ import annotations
 
 import io
@@ -14,7 +14,7 @@ try:
 except ImportError:
     sync_playwright = None
 
-PAGE = Path(__file__).resolve().parents[2] / "docs/live/suno-intake.html"
+PAGE = Path(__file__).resolve().parents[2] / "docs/live/audio-intake.html"
 
 
 def sample_wav() -> bytes:
@@ -32,7 +32,7 @@ def sample_wav() -> bytes:
 
 
 @unittest.skipUnless(sync_playwright, "Playwright required for browser checks")
-class SunoIntakeBrowserTests(unittest.TestCase):
+class AudioIntakeBrowserTests(unittest.TestCase):
     def test_source_import_selection_wav_export_and_manifest(self):
         with sync_playwright() as p:
             browser = p.chromium.launch(headless=True, args=["--no-sandbox"])

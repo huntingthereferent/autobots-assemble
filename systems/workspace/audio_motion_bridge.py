@@ -91,7 +91,7 @@ class AudioMotionBridge:
             expected_output={"schema": "ab-audio-motion-result/v1"},
             required_witnesses=(WITNESS,),
             admissible_evidence={WITNESS: ("computation",)},
-            boundaries=("Actual local PCM only; no Suno account, trained model, or API.",
+            boundaries=("Actual local PCM only; no third-party account, trained model, or network API.",
                         "A moved sample is not new AI-generated music.",
                         "Worker code is trusted local Python, not OS-sandboxed."),
             provenance=("workspace-lane:"+LANE_ID, "worker-edition:"+WORKER_ID+":"+version_id,
@@ -161,7 +161,7 @@ class AudioMotionBridge:
             lane = store.open_lane(LANE_ID, label="Creative audio motion",
                                    referent="user-supplied PCM waveform transformations",
                                    actor_id="workstation-operator",
-                                   sources=(SOURCE_LOCATOR, "work/projects/suno-export-intake/README.md"))
+                                   sources=(SOURCE_LOCATOR, "work/projects/audio-intake/README.md"))
         if any("job:"+job_id in evt["data"].get("evidence_refs", []) for evt in store.history(LANE_ID)):
             return report | {"movement_recorded": False, "return_event": lane.latest_event_id}
         new = store.record_movement(

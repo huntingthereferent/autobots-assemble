@@ -29,7 +29,7 @@ These are observations from the GitHub account audit, **not yet authenticated by
 | A2A-003 | CI | candidate | Multiple protocol-test runs were concurrently in progress and Pages/publish runs were cancelled | Measure redundant triggers, useful completions, and queue latency before changing concurrency |
 | A2A-004 | Profile | candidate | Overlapping introductions may confuse navigation | Compare entry pages against a single canonical source map |
 | A2A-005 | Viewer | candidate | Execution counts, verified findings and throughput can be conflated | Compare live counters to source-owned run API and saved evidence |
-| A2A-006 | UI | unknown | Browser usability of Meow Lab, Pony Trail, Suno, school and viewer was not verified in this audit | Run browser tests and direct interaction checks by page |
+| A2A-006 | UI | unknown | Browser usability of Meow Lab, Pony Trail, Audio Intake, school and viewer was not verified in this audit | Run browser tests and direct interaction checks by page |
 | A2A-007 | Research | verified_result | Independent source adapters, observations and tests exist across scientific lanes | Verify each source receipt independently |
 
 Do not infer a failure from an untested item. Do not collapse independently verified results into a global pass/fail score.
@@ -53,7 +53,7 @@ worker, new comparison prompt, or claim that another ChatGPT window ran.
 - `systems/workspace/inspector_gadget_workers.json` lists the verified existing
   workflow entry points: ARC native, NIH P2 synthetic benchmark, WORLD
   construction, workstation B7, mathematical Engine 1, finite CP30, Meow
-  Lab, Pony Trail, Suno, research-source preflights and ARC source observation.
+  Lab, Pony Trail, Audio Intake, research-source preflights and ARC source observation.
 - At each calendar tick it reads
   each registered native workflow's own GitHub run history, refuses to
   duplicate active jobs, honors each existing worker's minimum cadence
