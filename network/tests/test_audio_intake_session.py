@@ -44,6 +44,9 @@ class AudioIntakeSessionSourceTests(unittest.TestCase):
             "const SESSION_SCHEMA='ab-audio-session/v1';",
             'sourceSha256', 'sourceBytes',
             'No audio bytes', 'function safeMoment(',
+            'id="loop-slice"', 'id="transport-state"', 'id="transport-time"',
+            'id="cancel-moment-edit"', 'function playRange(',
+            'function auditionMoment(', 'function exportMoment(',
         ):
             with self.subTest(marker=marker):
                 self.assertIn(marker, html)
@@ -103,13 +106,39 @@ class AudioIntakeSessionBrowserTests(unittest.TestCase):
                 self.assertIn("1 MARKER", page.locator("#moment-count").inner_text())
                 self.assertEqual(page.locator("#moment-list .moment-row").count(), 1)
 
+                # Hear a saved range, repeat it, and stop without inventing an audio render.
+                page.locator("#loop-slice").check()
+                page.locator("#moment-list .moment-actions button").nth(0).click()
+                self.assertEqual(page.locator("#transport-state").inner_text(), "LOOPING SOURCE")
+                self.assertEqual(page.locator("#transport-state").get_attribute("data-playing"), "true")
+                self.assertIn("0:00.5", page.locator("#transport-time").inner_text())
+                page.locator("#stop").click()
+                self.assertEqual(page.locator("#transport-state").get_attribute("data-playing"), "false")
+
+                # Export exactly this bookmark as a real PCM WAV, not a JSON promise.
+                with page.expect_download() as clip:
+                    page.locator("#moment-list .moment-actions button").nth(2).click()
+                clip_data = clip.value.path().read_bytes()
+                self.assertEqual(clip_data[:4], b"RIFF")
+                self.assertEqual(clip_data[8:12], b"WAVE")
+                self.assertGreater(len(clip_data), 44)
+
+                # Revise marker notes without doubling the number of markers.
+                page.locator("#moment-list .moment-actions button").nth(3).click()
+                page.locator("#moment-title").fill("Stronger chorus hook")
+                page.locator("#moment-note").fill("Keep vocal space; reduce drums")
+                page.locator("#add-moment").click()
+                self.assertEqual(page.locator("#moment-list .moment-row").count(), 1)
+                self.assertIn("Stronger chorus hook", page.locator("#moment-list").inner_text())
+
                 with page.expect_download() as downloaded:
                     page.locator("#export-session").click()
                 session = json.loads(downloaded.value.path().read_text(encoding="utf-8"))
                 self.assertEqual(session["schema"], "ab-audio-session/v1")
                 self.assertEqual(session["takes"]["A"]["style"], "Quiet opening")
                 self.assertEqual(session["takes"]["B"]["style"], "Louder chorus")
-                self.assertEqual(session["moments"][0]["title"], "Keep this hook")
+                self.assertEqual(session["moments"][0]["title"], "Stronger chorus hook")
+                self.assertEqual(session["moments"][0]["note"], "Keep vocal space; reduce drums")
                 self.assertNotIn("localAsset", json.dumps(session))
                 self.assertNotIn("audioBytes", json.dumps(session))
                 self.assertEqual(session["moments"][0]["start"], 0.25)
@@ -125,7 +154,15 @@ class AudioIntakeSessionBrowserTests(unittest.TestCase):
                 )
                 self.assertEqual(page.locator("#moment-list .moment-row").count(), 1)
                 self.assertTrue(page.locator("#moment-list .moment-actions button").first.is_disabled())
+                self.assertTrue(page.locator("#moment-list .moment-actions button").nth(2).is_disabled())
                 self.assertEqual(page.locator("#d-style").input_value(), "Quiet opening")
+
+                # Notes remain editable without source; timecodes stay unchanged.
+                page.locator("#moment-list .moment-actions button").nth(3).click()
+                page.locator("#moment-note").fill("Still a keeper")
+                page.locator("#add-moment").click()
+                self.assertEqual(page.locator("#moment-list .moment-row").count(), 1)
+                self.assertIn("Still a keeper", page.locator("#moment-list").inner_text())
 
                 # A matching SHA-256 lets the user reattach the original source.
                 page.locator("#files").set_input_files({
