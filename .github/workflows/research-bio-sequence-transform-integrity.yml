@@ -1,0 +1,45 @@
+name: research-bio-sequence-transform-integrity
+
+on:
+  pull_request:
+    paths:
+      - "research/testing_lanes/bio_sequence_transform_integrity.py"
+      - "research/testing_lanes/test_bio_sequence_transform_integrity.py"
+      - "research/testing_lanes/BIO-SEQUENCE-TRANSFORM-INTEGRITY-001.md"
+      - ".github/workflows/research-bio-sequence-transform-integrity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-controls:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run deterministic transformation and negative controls
+        run: python -m unittest discover -s research/testing_lanes -p "test_bio_sequence_transform_integrity.py" -v
+
+  bounded-reference-check:
+    needs: offline-controls
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Fetch pinned NCBI reference and verify invariants
+        run: |
+          mkdir -p bio_receipt
+          python research/testing_lanes/bio_sequence_transform_integrity.py --output bio_receipt/BIO-SEQUENCE-TRANSFORM-INTEGRITY-001.json
+      - name: Preserve integrity receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: BIO-SEQUENCE-TRANSFORM-INTEGRITY-001-receipt
+          path: bio_receipt/*.json
+          if-no-files-found: error
+          retention-days: 30
