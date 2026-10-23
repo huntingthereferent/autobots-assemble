@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Correspondence · Workstation</title>
+<meta name="description" content="Dated, source-pinned ChatGPT correspondence from the workstation calendar.">
+<style>
+:root {color-scheme:dark;font-family:Inter,"Segoe UI",system-ui,sans-serif;background:#0b151a;color:#eff5f5}
+*{box-sizing:border-box}body{margin:0}
+a{color:#a3cfe8}
+header{border-bottom:1px solid #324047;padding:15px max(18px,calc((100vw - 1150px)/2));display:flex;justify-content:space-between;gap:15px;align-items:center}
+header strong{font-size:12px;letter-spacing:.09em}
+main{max-width:1140px;margin:auto;padding:35px 18px 80px}
+.eyebrow{color:#a5d5d2;text-transform:uppercase;letter-spacing:.14em;font-size:11px;font-weight:700}
+h1{font-size:clamp(29px,4.5vw,46px);letter-spacing:-.035em;line-height:1.2;margin:9px 0 10px}
+p{line-height:1.7;color:#b3c4ca}
+.panel{border:1px solid #344d56;border-radius:12px;background:#122129;padding:22px;margin-top:25px}
+.row{display:flex;gap:15px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.stat{font:12px/1.6 ui-monospace,Consolas,monospace;color:#9fbcc2}
+button{border:1px solid #69888f;border-radius:7px;background:#233c42;color:white;padding:10px 17px;font:600 12px/1.3 inherit;cursor:pointer}
+button:hover{background:#31525b}button:disabled{cursor:not-allowed;opacity:.5}
+pre{background:#0a171d;border:1px solid #2a464f;border-radius:9px;padding:19px;overflow:auto;max-height:65vh;white-space:pre-wrap;overflow-wrap:anywhere;font:12px/1.8 ui-monospace,Consolas,monospace;color:#d3e2e3}
+.note{font-size:12px;color:#9eb6be}
+code{color:#bbdce0}
+</style>
+</head>
+<body>
+<header><strong>WORKSTATION <span style="color:#a3d4cd">/ DAILY CORRESPONDENCE</span></strong>
+<nav><a href="work.html">← Workstation</a> &nbsp; <a href="https://github.com/huntingthereferent/autobots-assemble">Source repository</a></nav></header>
+<main>
+<p class="eyebrow">Calendar · daily REOPEN</p>
+<h1>Daily correspondence</h1>
+<p>One dated prompt for returning to ChatGPT without replacing research referents or inventing work. Calendar controls the day; verified source records control the claims.</p>
+<section class="panel" aria-label="Daily handoff">
+<div class="row"><div><strong id="status">Reading published calendar handoff…</strong><div class="stat" id="source">Public source index · no private workspace journal</div></div>
+<button id="copy" type="button" disabled>Copy ChatGPT prompt</button></div>
+<pre id="prompt" aria-live="polite">Waiting for the first published daily correspondence.</pre>
+<p class="note">The public page is read-only. Copying a prompt does not send it to ChatGPT or initiate a worker. Private lane journals are unavailable unless explicitly supplied through an authorized private runtime. GitHub schedules can be delayed.</p>
+</section>
+</main>
+<script>
+"use strict";
+const dataUrl = "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/main/docs/live/data/daily-correspondence.json";
+const status = document.querySelector("#status");
+const source = document.querySelector("#source");
+const display = document.querySelector("#prompt");
+const button = document.querySelector("#copy");
+let promptText = "";
+function todayChicago() {
+  return new Intl.DateTimeFormat("sv-SE",{timeZone:"America/Chicago",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+}
+async function load() {
+  try {
+    const response = await fetch(dataUrl + "?v=" + Date.now(), {cache:"no-store"});
+    if (!response.ok) throw Error("Daily handoff has not yet been published (" + response.status + ")");
+    const record = await response.json();
+    if (record.schema !== "calendar/daily-correspondence/v1" || !record.prompt || !record.revision)
+      throw Error("Invalid correspondence source schema");
+    const fresh = record.local_date === todayChicago();
+    status.textContent = (fresh ? "Today" : "Last published day") + " · " + record.local_date;
+    source.textContent = "Revision " + record.revision.slice(0,12) +
+      " · Workspace " + record.workspace_state +
+      " · Workflows " + record.workflow_sample.availability;
+    display.textContent = record.prompt;
+    promptText = record.prompt;
+    button.disabled = false;
+  } catch (err) {
+    status.textContent = "No verified daily handoff available";
+    source.textContent = "The calendar publisher must succeed before this page can display evidence";
+    display.textContent = String(err.message || err);
+  }
+}
+button.addEventListener("click", async () => {
+  if (!promptText) return;
+  try {
+    await navigator.clipboard.writeText(promptText);
+    button.textContent = "Copied";
+  } catch {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(display);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    button.textContent = "Select and copy the highlighted prompt";
+  }
+});
+load();
+</script>
+</body>
+</html>
