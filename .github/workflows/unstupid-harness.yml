@@ -1,0 +1,26 @@
+name: Unstupid finite harness
+
+on:
+  push:
+    paths:
+      - 'interfaces/math/**'
+      - 'work/arc_like_maze/math.py'
+      - '.github/workflows/unstupid-harness.yml'
+  pull_request:
+    paths:
+      - 'interfaces/math/**'
+      - 'work/arc_like_maze/math.py'
+      - '.github/workflows/unstupid-harness.yml'
+  workflow_dispatch:
+
+jobs:
+  finite-harness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Execute tests and finite-world harness
+        run: python -m interfaces.math.self_test
