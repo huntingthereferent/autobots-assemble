@@ -1,5 +1,7 @@
 from pathlib import Path
 import unittest
+from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 from runtime import (
     EvidenceRecord,
@@ -11,6 +13,8 @@ from runtime import (
 from runtime.examples.cross_layer import all_examples
 from runtime.examples.tiny_factory import simulate_order
 from runtime.projections import command_projection, job_projection, task_projection
+from runtime.engine import EventStore
+from runtime.handoff import HandoffEvent
 
 
 class HandoffRuntimeTests(unittest.TestCase):
@@ -180,6 +184,34 @@ class HandoffRuntimeTests(unittest.TestCase):
 
         self.assertEqual(after[:len(before)], before)
         self.assertGreater(len(after), len(before))
+
+    def test_event_store_failed_serialization_does_not_advance_memory(self):
+        with TemporaryDirectory() as root:
+            path = Path(root) / "events.jsonl"
+            store = EventStore(path)
+            event = HandoffEvent.create(
+                handoff_id="bad-event",
+                event_type="RESULT",
+                actor_id="worker",
+                data={"unserializable": object()},
+            )
+            with self.assertRaises(TypeError):
+                store.append(event)
+            self.assertEqual(store.all(), ())
+            self.assertFalse(path.exists())
+
+    def test_event_store_failed_write_does_not_advance_memory(self):
+        with TemporaryDirectory() as root:
+            store = EventStore(Path(root) / "events.jsonl")
+            event = HandoffEvent.create(
+                handoff_id="blocked-write",
+                event_type="CREATED",
+                actor_id="worker",
+            )
+            with patch.object(Path, "open", side_effect=OSError("write denied")):
+                with self.assertRaisesRegex(OSError, "write denied"):
+                    store.append(event)
+            self.assertEqual(store.all(), ())
 
     def test_tiny_factory_runs_end_to_end_without_upgrading_simulation(self):
         runtime, trace = simulate_order()
