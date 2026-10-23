@@ -544,14 +544,14 @@ const MOMENT_PURPOSES=new Set(['Hook','Groove','Vocal','Transition','Sound desig
 const GOALS=new Set(['Build a new track','Rework a draft','Extend an idea','Build a contrasting version']);
 const DESTINATIONS=new Set(['Production brief for Suno','Arrangement notes for Meow Lab 2','Notes for a DAW / collaborator']);
 const VOCALS=new Set(['Intimate lead vocal','Bright layered pop vocal','Breathy restrained vocal','Spoken / rhythmic vocal','Instrumental / no vocal','Undecided']);
-let sessionMoments=[];
+let sessionMoments=[],editingMomentId=null;
 let takes={A:null,B:null};
 const validHash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const sessionMessage=(message,error=false)=>{$('session-feedback').textContent=message;$('session-feedback').style.color=error?'#ffc0be':'#a7d6c5';};
 function renderSessionSource(){
  const a=current();
  $('session-source').textContent=a?(a.kind.toUpperCase()+' · '+a.name+' · '+(validHash(a.hash)?'SOURCE SHA-256 RECORDED':'HASH UNAVAILABLE; LOCAL MATCH ONLY')):'NO LOCAL SOURCE · Direction can be saved without audio';
- $('add-moment').disabled=!(a&&a.kind==='audio');
+ $('add-moment').disabled=!(a&&a.kind==='audio')&&!editingMomentId;
 }
 function momentMatches(m,a){
  if(!a||a.kind!=='audio')return false;
@@ -578,10 +578,34 @@ function momentView(m){
    plot();renderDirection();
    sessionMessage('Selected '+m.title+' · '+m.start.toFixed(2)+'–'+m.end.toFixed(2)+' s. Use Play Slice to audition.');
  });
+ const listen=document.createElement('button');listen.type='button';listen.textContent='▶ AUDITION';
+ listen.title=linked?'Hear this bookmark; respects the Loop switch':'Matching audio required';
+ listen.disabled=!linked;listen.className='primary-mini';
+ listen.addEventListener('click',()=>auditionMoment(m));
+ const wav=document.createElement('button');wav.type='button';wav.textContent='↓ WAV';
+ wav.title=(m.end-m.start>45)?'WAV clips are limited to 45 seconds':linked?'Export this passage as WAV':'Matching audio required';
+ wav.disabled=!linked||(m.end-m.start)>45;
+ wav.addEventListener('click',()=>exportMoment(m));
+ const edit=document.createElement('button');edit.type='button';edit.textContent='EDIT';
+ edit.setAttribute('aria-label','Edit notes for '+m.title);
+ edit.addEventListener('click',()=>{
+   editingMomentId=m.id;
+   $('moment-title').value=m.title;$('moment-purpose').value=m.purpose;$('moment-note').value=m.note;
+   if(momentMatches(m,current())&&m.end<=current().stats.duration+.001){
+     stop();$('start').value=m.start.toFixed(3);$('end').value=m.end.toFixed(3);plot();renderDirection();
+   }
+   renderSessionSource();$('add-moment').textContent='SAVE MOMENT CHANGES';
+   $('cancel-moment-edit').hidden=false;$('moment-title').focus();
+   sessionMessage('Editing '+m.title+'. Update its notes and save. Timing can change only when its source is linked.');
+ });
  const remove=document.createElement('button');remove.type='button';remove.textContent='REMOVE';
  remove.setAttribute('aria-label','Remove moment '+m.title);
- remove.addEventListener('click',()=>{sessionMoments=sessionMoments.filter(x=>x.id!==m.id);renderMoments();sessionMessage('Moment removed from this session.');});
- actions.append(go,remove);row.append(actions);return row;
+ remove.addEventListener('click',()=>{
+   sessionMoments=sessionMoments.filter(x=>x.id!==m.id);
+   if(editingMomentId===m.id)clearMomentEdit();
+   renderMoments();sessionMessage('Moment removed from this session.');
+ });
+ actions.append(listen,go,wav,edit,remove);row.append(actions);return row;
 }
 function renderMoments(){
  const list=$('moment-list');list.replaceChildren();
@@ -593,22 +617,37 @@ function renderMoments(){
  }
  for(const m of sessionMoments)list.append(momentView(m));
 }
-function addMoment(){
- try{
-   if(sessionMoments.length>=MAX_MOMENTS)throw Error('Moment limit reached (32). Export this session before starting another.');
-   const {a,start,end}=selectedRange();
-   const title=field('moment-title')||'Moment '+String(sessionMoments.length+1).padStart(2,'0');
-   const purpose=field('moment-purpose'),note=field('moment-note');
-   if(!MOMENT_PURPOSES.has(purpose))throw Error('Choose a valid moment purpose.');
-   if(!C.finite(start,0,600)||!C.finite(end,start+.01,600.01))throw Error('Select a valid source range.');
-   sessionMoments.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),
-     title:title.slice(0,90),purpose,note:note.slice(0,300),start,end,
-     sourceName:a.name,sourceBytes:a.size,sourceSha256:validHash(a.hash)?a.hash:'',
-     localAsset:a});
+function clearMomentEdit(){
+   editingMomentId=null;
    $('moment-title').value='';$('moment-note').value='';
-   renderMoments();sessionMessage('Saved '+title+' as a source-bound moment.');
- }catch(e){sessionMessage(e.message,true);}
-}
+   $('add-moment').textContent='+ KEEP SELECTED PASSAGE';
+   $('cancel-moment-edit').hidden=true;renderSessionSource();
+ }
+ function addMoment(){
+   try{
+     const title=(field('moment-title')||'Moment '+String(sessionMoments.length+1).padStart(2,'0')).slice(0,90);
+     const purpose=field('moment-purpose'),note=field('moment-note').slice(0,300);
+     if(!MOMENT_PURPOSES.has(purpose))throw Error('Choose a valid moment purpose.');
+     if(editingMomentId){
+       const marker=sessionMoments.find(x=>x.id===editingMomentId);
+       if(!marker)throw Error('Moment no longer exists; start a new bookmark.');
+       const linked=momentMatches(marker,current());
+       let nextRange=null;
+       if(linked)nextRange=selectedRange();
+       Object.assign(marker,{title,purpose,note,...(nextRange?{start:nextRange.start,end:nextRange.end}:{})});
+       clearMomentEdit();renderMoments();
+       sessionMessage('Updated '+title+'. Export your session to keep the change.');return;
+     }
+     if(sessionMoments.length>=MAX_MOMENTS)throw Error('Moment limit reached (32). Export this session before starting another.');
+     const {a,start,end}=selectedRange();
+     if(!C.finite(start,0,600)||!C.finite(end,start+.01,600.01))throw Error('Select a valid source range.');
+     sessionMoments.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),
+       title,purpose,note,start,end,sourceName:a.name,sourceBytes:a.size,
+       sourceSha256:validHash(a.hash)?a.hash:'',localAsset:a});
+     clearMomentEdit();renderMoments();
+     sessionMessage('Saved '+title+'. Audition, edit or export it from the collection.');
+   }catch(e){sessionMessage(e.message,true);}
+ }
 function safeDirection(d){
  if(!d||typeof d!=='object'||Array.isArray(d))throw Error('Invalid direction record');
  const string=(key,max)=>{const v=d[key];if(typeof v!=='string'||v.length>max)throw Error('Invalid direction field: '+key);return v;};
@@ -715,7 +754,7 @@ async function importSession(file){
    const imported=parsed.moments.map(safeMoment);
    if(new Set(imported.map(x=>x.id)).size!==imported.length)throw Error('Duplicate moment identifiers');
    // The exact source audio is NEVER reconstructed or invented by loading a session.
-   sessionMoments=imported;takes={A:slotA,B:slotB};
+   sessionMoments=imported;takes={A:slotA,B:slotB};clearMomentEdit();
    applyDirection(direction);renderComparison();renderMoments();renderSessionSource();
    const linked=imported.filter(m=>momentMatches(m,current())).length;
    sessionMessage('Restored direction, A/B versions and '+imported.length+' marker(s). '+linked+' matched to the current source. Reimport original audio for any unavailable markers.');
@@ -723,6 +762,7 @@ async function importSession(file){
 }
 function initSession(){
  $('add-moment').addEventListener('click',addMoment);
+  $('cancel-moment-edit').addEventListener('click',()=>{clearMomentEdit();sessionMessage('Moment editing cancelled.');});
  for(const key of ['a','b']){
    $('save-'+key).addEventListener('click',()=>saveTake(key.toUpperCase()));
    $('load-'+key).addEventListener('click',()=>restoreTake(key.toUpperCase()));
