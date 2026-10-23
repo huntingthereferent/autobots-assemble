@@ -1,0 +1,97 @@
+name: Calendar — Daily ChatGPT Correspondence
+
+on:
+  schedule:
+    # Daily morning in America/Chicago (09:20 CDT / 08:20 CST).
+    - cron: '20 14 * * *'
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'systems/calendar/daily_correspondence.py'
+      - 'network/tests/test_daily_correspondence.py'
+      - '.github/workflows/daily-correspondence.yml'
+      - 'docs/live/daily-correspondence.html'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: daily-correspondence-calendar
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check calendar correspondence boundaries
+        run: python -m unittest -v network.tests.test_daily_correspondence network.tests.test_day_to_day network.tests.test_workspace_continuity
+
+  publish:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Read public latest workflow runs (optional observation only)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if ! curl -fsSL --retry 1 --max-time 30 \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H 'Accept: application/vnd.github+json' \
+            'https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/runs?per_page=100&page=1' \
+            -o /tmp/daily-correspondence-runs.json; then
+            rm -f /tmp/daily-correspondence-runs.json
+            echo 'GitHub workflow sample unavailable; continuing with explicit wall.'
+          fi
+      - name: Render today's source-pinned ChatGPT prompt
+        shell: bash
+        run: |
+          python -m systems.calendar.daily_correspondence \
+            --revision "$GITHUB_SHA" \
+            --runs-json /tmp/daily-correspondence-runs.json \
+            --output docs/live/data/daily-correspondence.json
+      - name: Publish only the daily read-only handoff
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add docs/live/data/daily-correspondence.json
+          if git diff --cached --quiet; then
+            echo 'Same correspondence snapshot already published'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Calendar: publish dated read-only correspondence'
+          git fetch origin main
+          test "$(git rev-parse HEAD^)" = "$(git rev-parse origin/main)" || {
+            echo 'Repository changed during correspondence generation; fail closed'
+            exit 1
+          }
+          git push origin HEAD:main
+      - name: Preserve handoff in the workflow run
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-correspondence-${{ github.run_id }}
+          path: docs/live/data/daily-correspondence.json
+          retention-days: 90
+          if-no-files-found: warn
