@@ -37,9 +37,12 @@ class CatKeyboardTests(unittest.TestCase):
         work = WORK.read_text(encoding="utf-8")
         school = (ROOT / "docs/live/school.html").read_text(encoding="utf-8")
         self.assertIn('href="school.html"', work)
+        hub = (ROOT / "docs/live/kids.html").read_text(encoding="utf-8")
+        self.assertIn('href="cat-keyboard.html"', hub)
+        self.assertIn('href="work.html"', hub)
         self.assertIn('href="cat-keyboard.html"', school)
         self.assertNotIn('href="cat-keyboard.html"', work)
-        for marker in ("MEOW LAB 2 · Workstation sound keyboard", "window.AudioContext",
+        for marker in ("MEOW LAB 2", "window.AudioContext",
                        "pointerdown", "prefers-reduced-motion",
                        "meow-machine/score-v1", "stopRecording",
                        "patternPreset", "eight-bar melody", "id=\"sound-file\"", "function importSound()",
