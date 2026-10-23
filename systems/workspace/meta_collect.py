@@ -1,4 +1,4 @@
-"""Observe GitHub Actions for A and B without scheduling or running research jobs.
+"""Observe source-registered GitHub Actions without scheduling research jobs.
 
 Only real status counts from both public repository Actions APIs are recorded.
 Writes are deliberately isolated to the meta-observations Git branch.
@@ -12,10 +12,7 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-REPOS = {
-    "A": "huntingthereferent/autobots-assemble",
-    "B": "aeren-research/continuum-oscillator",
-}
+REPOS = {"A": "huntingthereferent/autobots-assemble"}
 STATUSES = ("in_progress", "queued", "pending", "waiting")
 
 
@@ -25,8 +22,8 @@ def repositories(registry_file):
     if doc.get("schema") != "meta-workstation/registry-v1":
         raise ValueError("Invalid meta registry")
     nodes = {n.get("id"): n.get("repo") for n in doc.get("nodes", [])}
-    if set(nodes) != {"A", "B"}:
-        raise ValueError("Expected exactly two admitted workstations")
+    if set(nodes) not in ({"A"}, {"A", "B"}):
+        raise ValueError("Expected registered primary and optional historical secondary")
     if any(not isinstance(v, str) or not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", v)
            for v in nodes.values()):
         raise ValueError("Invalid repository identifier")
