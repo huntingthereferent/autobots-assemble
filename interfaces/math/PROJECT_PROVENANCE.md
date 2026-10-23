@@ -1,8 +1,9 @@
-# Mathematical Reference Interface — frozen project provenance
+# Unstupid — frozen project provenance
 
 **Recorded:** 2026-10-23
 **Status:** Design baseline, not an implemented connector
-**Working name:** MATH (placeholder; product name undecided)
+**Product name:** Unstupid (confirmed 2026-10-23)
+**Technical namespace:** `math`
 **Origin:** James's proposal to give AI tools a mathematical reference they can return to across conversations, clients and research lanes. This document freezes the design discussed before implementation.
 
 ## Intent
@@ -67,5 +68,9 @@ Have independent AI clients propose actions and interpretations against the same
 - This document freezes a **proposal**, not proof of successful multi-client continuity.
 - The mathematics is a source of defined relationships; AI-generated code and workflows are not automatically consequences of it.
 - Do not start with a dashboard; prove command-line behavior and replay first.
-- Product name is intentionally unresolved. Keep the technical directory `interfaces/math/` stable regardless of branding.
+- Product name is **Unstupid**. Keep the technical directory `interfaces/math/` and `math` operation namespace stable.
 - Subsequent design changes should be recorded as amendments rather than silently rewriting this initial baseline.
+
+## Naming amendment — 2026-10-23
+
+James selected **Unstupid** as the product name. This naming amendment does not change the frozen architecture, scope, or acceptance criteria.
