@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, replace
 from pathlib import Path
+import os
 from typing import Callable, Iterable
 import json
 
@@ -39,6 +40,8 @@ class EventStore:
             self.path.parent.mkdir(parents=True, exist_ok=True)
             with self.path.open("a", encoding="utf-8") as handle:
                 handle.write(serialized + "\n")
+                handle.flush()
+                os.fsync(handle.fileno())
         # Failed serialization or persistence must not advance live state.
         self._events.append(event)
         return event
