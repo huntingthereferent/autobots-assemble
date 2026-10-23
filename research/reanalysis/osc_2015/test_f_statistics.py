@@ -140,7 +140,7 @@ class FRecalculationTests(unittest.TestCase):
         malformed=text.rstrip("\r\n") + ",unexpected\n"
         with self.assertRaisesRegex(ValueError, "unverified width recovery"):
             analyze(malformed)
-        with self.assertRaisesRegex(ValueError, "width recovery profile"):
+        with self.assertRaisesRegex(ValueError, "source analytic suffix changed"):
             analyze(malformed, pinned_source=True)
 
     def test_pinned_flag_never_establishes_publication_or_experiment(self):
