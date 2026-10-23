@@ -33,7 +33,7 @@ def adjudicate(world: World, challenges: tuple[Challenge, ...]) -> tuple[Verdict
         if any(action not in "AB" for action in challenge.actions):
             raise ValueError("invalid action")
         observed = world.apply(challenge.actions)
-        outcome = "SUPPORTED" if challenge.predicted == observed else "REFUTED"
+        outcome = "SUPPORTED" if challenge.predicted == observed else "CORRECTED"
         verdicts.append(Verdict(challenge.agent, challenge.motive,
                                 challenge.actions, challenge.predicted,
                                 observed, outcome))
@@ -44,6 +44,6 @@ def scoreboard(verdicts: tuple[Verdict, ...]) -> dict:
     return {
         "agents_entered": len({v.agent for v in verdicts}),
         "challenges": len(verdicts),
-        "bodycount": sum(v.outcome == "REFUTED" for v in verdicts),
+        "corrected": sum(v.outcome == "CORRECTED" for v in verdicts),
         "supported": sum(v.outcome == "SUPPORTED" for v in verdicts),
     }
