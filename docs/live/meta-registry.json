@@ -1,6 +1,6 @@
 {
   "schema": "meta-workstation/registry-v1",
-  "description": "GitHub source registry for the combined workstation pipeline. Node identity, placement, and cross-account routing are operational details, not visible dashboard categories.",
+  "description": "Active single-workstation GitHub source registry. Historical second-workstation copies are archived, not queried or dispatched.",
   "source_of_truth": "huntingthereferent/autobots-assemble",
   "updated_at": "2026-10-22",
   "nodes": [
@@ -14,35 +14,9 @@
       "mode": "live-public-api",
       "source_ref": "main",
       "scope": "Current original workstation; existing workflow definitions active where GitHub triggers admit work"
-    },
-    {
-      "id": "B",
-      "label": "Workstation 02",
-      "repo": "aeren-research/continuum-oscillator",
-      "visibility": "public",
-      "viewer": "https://aeren-research.github.io/continuum-oscillator/live/work.html",
-      "journal": "https://github.com/aeren-research/continuum-oscillator/actions",
-      "mode": "live-public-api",
-      "source_ref": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
-      "scope": "Public independent workstation; source mirror verified. One research contract workflow active; other copied workflow definitions remain inactive pending admission.",
-      "formal_name": "Hunting the Referent — Workstation 02"
     }
   ],
   "lane_rules": [
-    {
-      "id": "B-CONTRACT",
-      "title": "Independent research source contract",
-      "match": [
-        "independent research lane contract",
-        "aeren research · independent research lane contract"
-      ],
-      "node": "B",
-      "admission": "Independent research source contract enabled on the second repository; not proof of scientific replication.",
-      "admitted_nodes": [
-        "B"
-      ],
-      "transferable": false
-    },
     {
       "id": "SOURCE-CONTRACT",
       "title": "Source contract / two-node capable",
@@ -51,15 +25,13 @@
       ],
       "node": "A",
       "admitted_nodes": [
-        "A",
-        "B"
+        "A"
       ],
-      "transferable": true,
+      "transferable": false,
       "workflow_by_node": {
-        "A": ".github/workflows/research-testing-lanes-contract.yml",
-        "B": ".github/workflows/research-testing-lanes-contract.yml"
+        "A": ".github/workflows/research-testing-lanes-contract.yml"
       },
-      "admission": "An equivalent bounded source-contract suite exists as an active workflow on A and B. Only a future explicitly admitted job can switch; original jobs remain where launched."
+      "admission": "Source contract runs only on primary active repository; secondary workflow copies are historical."
     },
     {
       "id": "ARC",
@@ -133,6 +105,54 @@
         "A"
       ],
       "transferable": false
+    }
+  ],
+  "handoff": {
+    "authority": "Primary GitHub Actions journal and repository source pins. Historical second-workstation records remain archived.",
+    "routing": "Single active repository; do not switch accounts or dispatch to archived destinations.",
+    "oscillation": "Inactive for cross-account transfer; preserve historical evidence only.",
+    "recovery": "Read primary live work viewer and its GitHub Actions journal."
+  },
+  "dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/meta.html",
+  "observation_history": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/history.json",
+  "observation_scope": "Observed primary GitHub workflow-run counts. Earlier two-source journal entries are retained historical measurements, never current second-account telemetry.",
+  "routing_advice": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/routing.json",
+  "routing_policy": {
+    "cadence": "Observe the current primary source on each new batch.",
+    "switch": "DISABLED_SINGLE_SOURCE",
+    "autonomy": "No cross-account handoffs or second-repository scheduling."
+  },
+  "archived_nodes": [
+    {
+      "id": "B",
+      "label": "Workstation 02",
+      "repo": "aeren-research/continuum-oscillator",
+      "visibility": "public",
+      "viewer": "https://aeren-research.github.io/continuum-oscillator/live/work.html",
+      "journal": "https://github.com/aeren-research/continuum-oscillator/actions",
+      "mode": "live-public-api",
+      "source_ref": "ef00d95d2c2335f9f63ef2b83c8bfa5152d94bd9",
+      "scope": "Public independent workstation; source mirror verified. One research contract workflow active; other copied workflow definitions remain inactive pending admission.",
+      "formal_name": "Hunting the Referent — Workstation 02",
+      "retired_on": "2026-10-22",
+      "status": "INACTIVE_ACCOUNT_UNAVAILABLE",
+      "active": false
+    }
+  ],
+  "archived_lane_rules": [
+    {
+      "id": "B-CONTRACT",
+      "title": "Independent research source contract",
+      "match": [
+        "independent research lane contract",
+        "aeren research · independent research lane contract"
+      ],
+      "node": "B",
+      "admission": "Independent research source contract enabled on the second repository; not proof of scientific replication.",
+      "admitted_nodes": [
+        "B"
+      ],
+      "transferable": false
     },
     {
       "id": "BOOTSTRAP",
@@ -149,24 +169,5 @@
       ],
       "transferable": false
     }
-  ],
-  "handoff": {
-    "authority": "GitHub records for each repository; this index records placement, not permission to start jobs",
-    "routing": "A/B routing hints are computed from independent GitHub observation snapshots. Before every next batch, read routing.json and verify exact Actions/workflow eligibility. Never auto-dispatch; never transfer an unadmitted lane; do not infer slowdown from one count.",
-    "oscillation": "Record source and target revision, lane, job URL, result, provenance and explicit acceptance before transferring state",
-    "b_privacy": "The second repository is currently public and its Actions API is readable. If visibility changes, missing source access must be reported as unknown, never zero.",
-    "recovery": "Open the shared meta dashboard first. Read both repos' handoff files and GitHub Actions journals. Browser displays public job state; ChatGPT may use the linked accounts to handle separate code/actions."
-  },
-  "dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/meta.html",
-  "observation_history": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/history.json",
-  "observation_scope": "Public GitHub Actions workflow-run counts sampled periodically; no inferred total job slots, private data or automatic dispatch.",
-  "routing_advice": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/routing.json",
-  "routing_policy": {
-    "cadence": "On every new lane/batch admission and every ChatGPT window reground, check the newest shared routing advice; verify actual GitHub Actions in both accounts before starting next work.",
-    "max_age_minutes": 90,
-    "minimum_independent_samples": 3,
-    "minimum_minutes_between_samples": 10,
-    "switch": "A candidate switch is allowed only for a separately verified and admitted workflow on the receiving node, without moving existing queued jobs.",
-    "autonomy": "GitHub records signals even when no browser is open; ChatGPT windows do not run in the background or communicate directly."
-  }
+  ]
 }
