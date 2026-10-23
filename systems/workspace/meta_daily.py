@@ -83,7 +83,7 @@ def collect(repos, now=None, getter=api):
         except Exception as error:
             counts = {"repo": repo, "observed": False, "error": type(error).__name__ + ": " + str(error)}
         result["nodes"][node] = counts
-    result["all_sources"] = set(result["nodes"]) == {"A", "B"} and all(
+    result["all_sources"] = bool(result["nodes"]) and all(
         x["observed"] for x in result["nodes"].values()
     )
     if result["all_sources"]:
