@@ -19,6 +19,7 @@ on:
       - 'systems/workspace/inspections.py'
       - 'systems/workspace/monitor.py'
       - 'network/tests/test_inspector_gadget_adapter.py'
+      - 'network/tests/test_inspector_gadget_workflow_entrypoint.py'
       - 'network/tests/test_inspector_gadget_scan.py'
 
 permissions:
@@ -45,6 +46,7 @@ jobs:
         run: |
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_workflow_entrypoint.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
           python -m unittest discover -s network/tests -p 'test_audit_to_action.py' -v
@@ -102,6 +104,7 @@ jobs:
         run: |
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
+          python -m unittest discover -s network/tests -p 'test_inspector_gadget_workflow_entrypoint.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
       - name: Retain scan and movement plan
