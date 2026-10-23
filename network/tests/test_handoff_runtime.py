@@ -213,6 +213,19 @@ class HandoffRuntimeTests(unittest.TestCase):
                     store.append(event)
             self.assertEqual(store.all(), ())
 
+    def test_event_store_failed_sync_does_not_advance_memory(self):
+        with TemporaryDirectory() as root:
+            store = EventStore(Path(root) / "events.jsonl")
+            event = HandoffEvent.create(
+                handoff_id="blocked-sync",
+                event_type="CREATED",
+                actor_id="worker",
+            )
+            with patch("runtime.engine.os.fsync", side_effect=OSError("sync denied")):
+                with self.assertRaisesRegex(OSError, "sync denied"):
+                    store.append(event)
+            self.assertEqual(store.all(), ())
+
     def test_tiny_factory_runs_end_to_end_without_upgrading_simulation(self):
         runtime, trace = simulate_order()
         self.assertEqual(
