@@ -81,6 +81,23 @@ class MetaRouteTests(unittest.TestCase):
         self.assertEqual(result["signal"], "UNKNOWN")
         self.assertIsNone(result["last_paired_observation"])
 
+    def test_single_primary_node_ignores_retired_secondary_and_disables_switches(self):
+        registry={
+            "schema":"meta-workstation/registry-v1",
+            "nodes":[{"id":"A","repo":"huntingthereferent/autobots-assemble"}],
+            "archived_nodes":[{"id":"B","repo":"aeren-research/continuum-oscillator"}],
+            "lane_rules":[{"id":"NIH","node":"A","admitted_nodes":["A"],"transferable":False}]
+        }
+        old=history(sample(40,1,0),sample(20,3,0),
+                    sample(0,6,0,b_seen=False))
+        decision=decide(old,registry,T)
+        self.assertEqual(decision["signal"],"SINGLE_NODE")
+        self.assertEqual(decision["latest_nodes"]["A"]["waiting"],6)
+        self.assertEqual(decision["lane_advice"][0]["recommended"],"A")
+        self.assertEqual(decision["lane_advice"][0]["action"],"KEEP_ASSIGNED")
+        self.assertNotIn("B",decision["latest_nodes"])
+
+
 
 if __name__ == "__main__":
     unittest.main()
