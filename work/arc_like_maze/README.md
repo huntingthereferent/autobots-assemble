@@ -1391,6 +1391,13 @@ gauge family, retaining full-state evidence or a precise break witness.
 [implementation](nondiagonal_transport.py) ·
 [12 focused tests](../../network/tests/test_arc_like_nondiagonal_transport.py)
 
+**Next mathematical step:** [two-predecessor transition schema](TWO_PREDECESSOR_SCHEMA.md) ·
+[table implementation](two_predecessor_schema.py) ·
+[exhaustive finite-state tests](../../network/tests/test_arc_like_two_predecessor_schema.py).
+The added schema allows each B increment to depend on the two immediately preceding
+coordinates, exactly enough to represent the displayed shear family; it is not a
+claim that arbitrary higher-order rules or the general referent are classified.
+
 **Current referent:** The marked finite-stem diagonal system has
 been constructed and its rooted witnesses preserved. Rather
 than repeating the existing diagonal gauges, construct a
