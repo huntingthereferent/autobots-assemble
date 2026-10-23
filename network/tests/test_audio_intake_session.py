@@ -18,7 +18,7 @@ except ImportError:
     sync_playwright = None
 
 ROOT = Path(__file__).resolve().parents[2]
-PAGE = ROOT / "docs/live/suno-intake.html"
+PAGE = ROOT / "docs/live/audio-intake.html"
 
 
 def source_wav() -> bytes:

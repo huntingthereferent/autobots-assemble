@@ -1,4 +1,4 @@
-"""Independent intake: source inspection, bounded MIDI and audio math, not Suno internals."""
+"""Independent local audio intake: source inspection and bounded MIDI and audio math."""
 from html.parser import HTMLParser
 from pathlib import Path
 import shutil
@@ -6,7 +6,7 @@ import subprocess
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-PAGE = ROOT / 'docs/live/suno-intake.html'
+PAGE = ROOT / 'docs/live/audio-intake.html'
 CORE = ROOT / 'docs/live/audio-intake-core.js'
 WORK = ROOT / 'docs/live/work.html'
 
@@ -32,13 +32,13 @@ class InlineScripts(HTMLParser):
             self.active = False
 
 
-class SunoIntakeTests(unittest.TestCase):
+class AudioIntakeTests(unittest.TestCase):
     def test_workstation_link_and_source_boundary(self):
         html = PAGE.read_text(encoding='utf8')
-        self.assertIn('href="suno-intake.html"', WORK.read_text(encoding='utf8'))
+        self.assertIn('href="audio-intake.html"', WORK.read_text(encoding='utf8'))
         for term in ('audio-intake-core.js', 'type="file"', 'canvas id="wave"',
                      'local-origin-preserving-export', 'SHA-256', 'encodeWav',
-                     'parseMidi', 'not affiliated with Suno', 'not the audio itself'):
+                     'parseMidi', 'INDEPENDENT WORKSTATION TOOL', 'not the audio itself'):
             # schema appears in script, not necessarily plain prose
             self.assertIn(term, html)
         self.assertNotIn('EventSource', html)

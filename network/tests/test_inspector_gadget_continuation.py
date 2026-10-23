@@ -42,7 +42,7 @@ class NativeLaneContinuationTests(unittest.TestCase):
         entries = validate(json.loads(ROSTER.read_text(encoding="utf8")))
         self.assertGreaterEqual(len(entries), 10)
         self.assertTrue({"arc-native", "nih-p2", "world", "meow-lab",
-                         "suno", "research-sources"} <= {row["id"] for row in entries})
+                         "audio-intake", "research-sources"} <= {row["id"] for row in entries})
 
     def test_all_eligible_workers_are_selected_up_to_capacity(self):
         registry = mock_registry("arc", "nih", "world", "meow")
