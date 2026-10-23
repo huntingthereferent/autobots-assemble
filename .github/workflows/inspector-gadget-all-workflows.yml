@@ -72,7 +72,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python systems/workspace/inspector_gadget_adapter.py matrix inspector-gadget-report.json inspector-gadget-activation.json
+          python -m systems.workspace.inspector_gadget_adapter matrix inspector-gadget-report.json inspector-gadget-activation.json
           python - <<'PY'
           import json, os
           plan = json.load(open('inspector-gadget-activation.json', encoding='utf-8'))
@@ -166,7 +166,7 @@ jobs:
           INSPECTOR_FINDING_JSON: ${{ toJSON(matrix) }}
         run: |
           printf '%s' "$INSPECTOR_FINDING_JSON" > inspector-selection.json
-          python systems/workspace/inspector_gadget_adapter.py inspect inspector-selection.json inspector-gadget-handoff.json
+          python -m systems.workspace.inspector_gadget_adapter inspect inspector-selection.json inspector-gadget-handoff.json
       - name: Preserve source-observation result
         if: always()
         uses: actions/upload-artifact@v4
