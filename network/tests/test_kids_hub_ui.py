@@ -13,7 +13,8 @@ class KidsHubTests(unittest.TestCase):
         html = HUB.read_text(encoding="utf-8")
         self.assertIn("<h1>Pick something", html)
         self.assertIn("Online School", html)
-        self.assertIn("separate app server", html)
+        self.assertIn("local server", html)
+        self.assertIn("worksheet generator", html)
         for title, href in [
             ("Meow Lab 2", "cat-keyboard.html"),
             ("Rosey's Meow Machine", "roseys-cat-keyboard.html"),
