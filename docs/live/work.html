@@ -543,6 +543,9 @@ footer{border-top-color:#253942}
 /* Combined source observation: a narrow reader in the existing execution surface. */
 
 /* Gentoo compact workstation skin: presentation only; data and execution untouched. */
+/* Linux terminal typography; local font fallbacks avoid external dependencies. */
+:root { --body-font:"DejaVu Sans Mono","Liberation Mono","Noto Sans Mono",ui-monospace,monospace; --data-font:"DejaVu Sans Mono","Liberation Mono","Noto Sans Mono",ui-monospace,monospace; }
+
 :root { --bg:#101018;--panel:#1b1928;--panel2:#252139;--line:#423a59;--text:#f1edf9;--muted:#b7aecb;--blue:#b49af2;--green:#9cddb8;--yellow:#e7c38c;--red:#ec9fa9; }
 body { background:var(--bg);font-size:12px;line-height:1.4; }
 a { color:#c8b3ff; }
