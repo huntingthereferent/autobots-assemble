@@ -189,9 +189,9 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <nav aria-label="Workstation navigation"><a href="work.html">WORK</a><a href="meta.html" aria-current="page">META</a><a href="kids.html">KIDS</a><a href="work.html#executions">EXECUTIONS</a><a href="work.html#research">RESEARCH</a><a href="research-sources.html">SOURCES</a><a href="work.html#audit">AUDIT</a><a href="https://github.com/huntingthereferent">MAIN GITHUB ↗</a></nav></header>
 <main>
 <section class="hero overview" aria-label="Combined workstation source overview"><div class="hero-layout"><div class="hero-copy"><span class="eyebrow">SOURCE-BACKED / META WORKSTATION</span><h1>Research workstation</h1><p>Observe combined execution, queue movement and measured history. Each result links to its GitHub source; workflow outcomes are not scientific conclusions.</p></div>
-<div class="feed-panel"><span class="feed-label">GITHUB OBSERVATION / COMBINED</span><div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><span class="tag" id="source-state">CHECKING</span><button id="refresh" type="button">Refresh source ↻</button></div></div></div></section>
-<div class="strip-label">CONTROL DECK / GITHUB ACTIONS <span class="strip-secondary">Both registered sources · current observations</span></div>
-<section class="metrics" aria-label="Combined source-observed workflow counts">
+<div class="feed-panel"><span class="feed-label">GITHUB OBSERVATION / PRIMARY</span><div class="refresh"><span class="source"><span class="dot" id="dot"></span><span id="stamp">Reading source journals…</span></span><span class="tag" id="source-state">CHECKING</span><button id="refresh" type="button">Refresh source ↻</button></div></div></div></section>
+<div class="strip-label">CONTROL DECK / GITHUB ACTIONS <span class="strip-secondary">Primary GitHub repository · live observations</span></div>
+<section class="metrics" aria-label="Primary source-observed workflow counts">
 <article class="metric queue"><div class="metric-top"><span>IN QUEUE / NOW</span><span class="metric-glyph" aria-hidden="true">◇</span></div><b id="queued">—</b><div class="flow-level" aria-hidden="true"></div><small>Waiting workflow runs</small></article>
 <article class="metric running"><div class="metric-top"><span>IN MOTION / NOW</span><span class="metric-glyph" aria-hidden="true">↗</span></div><b id="running">—</b><div class="flow-level" aria-hidden="true"></div><small>Executing workflow runs</small></article>
 <article class="metric passed"><div class="metric-top"><span>SUCCESSFUL RUNS / TODAY</span><span class="metric-glyph" aria-hidden="true">✦</span></div><b id="passed">—</b><div class="flow-level" aria-hidden="true"></div><small id="passed-note">Reading full-day GitHub totals</small></article>
@@ -222,9 +222,8 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
 <details class="more" id="source-details"><summary>Source notes, limitations and routing references <span class="summary-chevron" aria-hidden="true">⌄</span></summary><div class="more-content">
 <section id="current-checks" class="current-checks"><h3>Current source checks needing attention</h3><p id="health-context">Reading current active workflow outcomes.</p><div id="health-list"></div></section><div class="detail-grid"><section><h3>Live source</h3><p id="status-note">Counting verified GitHub workflow runs. Missing sources are unknown, not zero.</p></section>
 <section><h3>Routing</h3><p id="routing-note">Reading recorded pipeline guidance.</p></section>
-<section><h3>Transfer receipts</h3><p id="transfer-note">Reading source departures and receiver acknowledgements. Unavailable records are unknown, not delivered.</p></section>
 <section><h3>Research verification</h3><p>A successful workflow is an execution result, not a scientific conclusion. Inspect the underlying source and native test evidence.</p></section></div>
-<p class="detail-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Measurement history ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Pipeline registry ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-handoffs.json">Recorded transfers ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/handoffs.json">Transfer delivery journal ↗</a></p>
+<p class="detail-links"><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json">Measurement history ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json">Routing journal ↗</a><a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/docs/live/meta-registry.json">Pipeline registry ↗</a></p>
 <p>Placement belongs to the pipeline, not the viewing layer. The viewer does not start jobs, infer absent results or redirect another ChatGPT window.</p>
 </div></details>
 </main>
@@ -258,7 +257,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   try{registry=await get(canonical)}catch(e){registry=await get("meta-registry.json")}
   if(registry?.schema!=="meta-workstation/registry-v1"||!Array.isArray(registry.nodes))throw Error("No verified workstation registry");
   const identities=new Map(registry.nodes.map(n=>[n.id,n.repo]));
-  const list=["A","B"].map(k=>identities.get(k));
+  const list=[identities.get("A")];
   if(list.some(r=>typeof r!=="string"||!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(r)))throw Error("Invalid workstation repository identity");
   REPOS=list;
  }
@@ -311,7 +310,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   if(!trusted){
     updateMetric("current-open",null,false);$("failed-note").textContent="Current workflow state unavailable · not zero";
     card.dataset.open="unknown";$("health-context").textContent=
-    "A recent, complete GitHub reading from both repositories is required. Missing coverage never means zero.";
+    "A recent, complete primary GitHub reading is required. Missing coverage never means zero.";
     $("health-list").replaceChildren();return;
   }
   const open=data.summary.open_count;
@@ -332,27 +331,6 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   }
   if(open>80){const p=document.createElement("p");p.className="fine";p.textContent=
     "Showing 80 of "+open+" current source checks. Open individual GitHub journals for details.";area.append(p)}
- }
- async function loadTransfers(){
-  const el=$("transfer-note");
-  try{
-   const data=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/handoffs.json");
-   if(data.schema!=="meta-workstation/transfer-health-v1"||!Array.isArray(data.transfers))throw Error("Invalid transfer record");
-   const checked=Date.parse(data.observed_at);
-   if(!Number.isFinite(checked)||checked>Date.now()+60000||Date.now()-checked>90*60000){
-    el.textContent="Transfer journal stale. Delivery is unconfirmed until source and receiver records can be checked again.";
-    return;
-   }
-   const confirmed=data.transfers.filter(x=>x.delivery==="RECEIVED_VERIFIED").length;
-   const blocked=data.transfers.filter(x=>x.delivery==="NOT_SENT").length;
-   const outstanding=data.transfers.filter(x=>x.attention&&x.delivery!=="NOT_SENT").length;
-   el.textContent=(data.complete?"Both repositories checked. ":"Receiver observation incomplete. ")+
-     blocked+" blocked before departure; "+outstanding+" unresolved or unknown transfers; "+
-     confirmed+" confirmed byte-matched receipts. "+
-     (data.complete?"Only matching sender and receiver evidence clears a handoff.":"No missing destination response is treated as a completed transfer.");
-  }catch(e){
-   el.textContent="Transfer journal unavailable. Check the source handoff registry; delivery is not confirmed.";
-  }
  }
  async function loadHealth(){
   try{
@@ -429,9 +407,9 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
  function measured(x){
   if(!x||typeof x!=="object")return null;const a=x.nodes?.A,b=x.nodes?.B;
   const keys=["in_progress","queued","pending","waiting"];
-  if(!a?.observed||!b?.observed||keys.some(k=>!valid(a[k])||!valid(b[k])))return null;
+  if(!a?.observed||keys.some(k=>!valid(a[k])))return null;
   const t=Date.parse(x.ts);if(!Number.isFinite(t))return null;
-  return{t,r:a.in_progress+b.in_progress,q:a.queued+b.queued+a.pending+b.pending+a.waiting+b.waiting};
+  return{t,r:a.in_progress,q:a.queued+a.pending+a.waiting};
  }
  function filtered(){
   const now=Date.now(),d=new Date(),today=new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime();
@@ -442,7 +420,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   const p=filtered(),svg=$("trend");svg.replaceChildren();$("points").textContent=p.length+" OBSERVATIONS";
   const ns="http://www.w3.org/2000/svg";
   const add=(name,attrs,text)=>{const n=document.createElementNS(ns,name);for(const [k,v]of Object.entries(attrs||{}))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=String(text);svg.append(n);return n};
-  if(!p.length){add("text",{x:28,y:95,fill:"#a8bec9","font-size":13},"No paired observations in this period");add("text",{x:28,y:119,fill:"#91a9b5","font-size":11},"Try a longer period. Missing observations are not zero.");$("trend-state").textContent="Collecting measured history";$("trend-note").textContent="No synthetic points or inferred capacity";return}
+  if(!p.length){add("text",{x:28,y:95,fill:"#a8bec9","font-size":13},"No primary source observations in this period");add("text",{x:28,y:119,fill:"#91a9b5","font-size":11},"Try a longer period. Missing observations are not zero.");$("trend-state").textContent="Collecting measured history";$("trend-note").textContent="No synthetic points or inferred capacity";return}
   const left=52,right=922,top=15,bottom=193,max=Math.max(1,...p.map(x=>Math.max(x.r,x.q))),first=p[0].t,last=p[p.length-1].t;
   const X=t=>left+(last===first?.5:(t-first)/(last-first))*(right-left);
   const Y=v=>bottom-(v/max)*(bottom-top);
@@ -474,7 +452,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
    const v=await get("https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/routing.json");
    if(v.schema!=="meta-workstation/routing-advice-v1")throw Error("Unknown routing schema");
    const age=Date.now()-Date.parse(v.generated_at);
-   $("routing-note").textContent=!Number.isFinite(age)||age>90*60*1000?"Last routing advice is stale; verify at next admission.":v.signal==="OBSERVING"?"Still measuring sustained congestion. No routing change warranted yet.":v.signal==="NO_CLEAR_PRESSURE"?"No sustained queue imbalance observed.":v.signal==="A_BACKLOG"||v.signal==="B_BACKLOG"?"A queue imbalance was observed. Eligible new work can be reviewed for rerouting.":"No verified routing change. ";
+   $("routing-note").textContent=!Number.isFinite(age)||age>90*60*1000?"Last routing advice is stale; verify at next admission.":v.signal==="SINGLE_NODE"?"Primary workstation only. Cross-account routing is disabled.":v.signal==="OBSERVING"?"Still measuring sustained congestion. No routing change warranted yet.":v.signal==="NO_CLEAR_PRESSURE"?"No sustained queue imbalance observed.":v.signal==="A_BACKLOG"||v.signal==="B_BACKLOG"?"A queue imbalance was observed. Eligible new work can be reviewed for rerouting.":"No verified routing change. ";
   }catch(e){$("routing-note").textContent="Routing journal unavailable. Work assignments remain unchanged."}
  }
  async function refresh(){
@@ -488,7 +466,7 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   if(allReady){
    const total=good.reduce((a,n)=>({running:a.running+n.running,waiting:a.waiting+n.waiting}),{running:0,waiting:0});
    renderMetrics(total);$("stamp").textContent="Checked "+localTime(new Date());$("dot").className="dot ok";$("source-state").textContent="CHECKED";
-   $("status-note").textContent="Both source journals read successfully. Counts include currently waiting and executing workflow runs.";
+   $("status-note").textContent="Primary GitHub source checked. Counts include currently waiting and executing workflow runs.";
   }else{
    for(const id of["queued","running"])updateMetric(id,null,false);
     for(const id of["flow-queue","flow-running","flow-done"])$(id).textContent="—";renderDaily();
@@ -500,16 +478,16 @@ footer{max-width:1400px;margin:auto;color:#8ea5b1}
   renderRuns();$("refresh").disabled=false;busy=false;
  }
  $("inspect-open").addEventListener("click",()=>{$("source-details").open=true;$("current-checks").scrollIntoView({behavior:"smooth",block:"center"})});
- $("refresh").addEventListener("click",()=>{refresh();loadDaily();loadHealth();loadTransfers()});$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
+ $("refresh").addEventListener("click",()=>{refresh();loadDaily();loadHealth()});$("search").addEventListener("input",()=>{showLimit=30;renderRuns()});$("status").addEventListener("change",()=>{showLimit=30;renderRuns()});$("show-more").addEventListener("click",()=>{showLimit+=25;renderRuns()});
  document.querySelectorAll("[data-range]").forEach(b=>b.addEventListener("click",()=>{range=b.dataset.range;document.querySelectorAll("[data-range]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));chart()}));
  (async()=>{
   try{await readRegistry()}
   catch(e){$("stamp").textContent="Pipeline registry unavailable";$("source-state").textContent="SOURCE UNKNOWN";$("status-note").textContent="Check the canonical registry; no account is inferred from a stale label.";return}
-  await Promise.all([history(),routing(),refresh(),loadDaily(),loadHealth(),loadTransfers()]);
+  await Promise.all([history(),routing(),refresh(),loadDaily(),loadHealth()]);
  })();
  setInterval(()=>{if(document.visibilityState==="visible")refresh()},1200000);
  setInterval(()=>{if(document.visibilityState==="visible"){history();routing()}},300000);
-  setInterval(()=>{if(document.visibilityState==="visible"){loadDaily();loadHealth();loadTransfers()}},300000);
+  setInterval(()=>{if(document.visibilityState==="visible"){loadDaily();loadHealth()}},300000);
 })();
 </script>
 </body></html>
