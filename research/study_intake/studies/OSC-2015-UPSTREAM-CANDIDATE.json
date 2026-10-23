@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "OSC-2015-UPSTREAM-REANALYSIS-CANDIDATE",
+  "parent_study_id": "OSC-2015-REPRODUCIBILITY",
+  "role": "candidate original-analysis data and figure scripts",
+  "source_repository": "https://github.com/CenterForOpenScience/rpp",
+  "source_commit": "a7c5b87f15f60178e6f5d25f983217d39f5ac654",
+  "pinned_tree_file": {
+    "path": "data_allformats/RPPdataConverted.csv",
+    "git_blob_sha": "6c8ce0b93b9a83ac42669745bd1054da7c22a687",
+    "listed_size_bytes": 288855,
+    "source_url": "https://github.com/CenterForOpenScience/rpp/blob/a7c5b87f15f60178e6f5d25f983217d39f5ac654/data_allformats/RPPdataConverted.csv"
+  },
+  "original_project_data_url": "https://osf.io/fgjvw/",
+  "source_readme": "https://github.com/CenterForOpenScience/rpp/blob/a7c5b87f15f60178e6f5d25f983217d39f5ac654/README.md",
+  "status": "DISCOVERED_NOT_ADMITTED",
+  "content_downloaded": false,
+  "license_status": "UNRESOLVED: GitHub repository does not declare a recognized top-level license in observed metadata; inspect OSF record and intended data sharing terms before automated analysis.",
+  "privacy_review": "NOT_PERFORMED; only the file listing, claimed project provenance and file locator were inspected.",
+  "scientific_result": "NOT_REPRODUCED",
+  "warning": "Blob SHA pins a Git blob in this repository, not a verification that the OSF file or publication calculations are identical.",
+  "test_question": "Can one explicitly selected published summary statistic be reproduced from a rights-reviewed, frozen and privacy-reviewed source snapshot?",
+  "first_required_gate": "Check data contents, license, de-identification and version relationship to 2015 publication before any ingestion.",
+  "source_status_checked_utc_date": "2026-10-22"
+}
