@@ -68,7 +68,7 @@ class PublishedAggregateTests(unittest.TestCase):
 
 
     def test_unpinned_csv_extra_field_rejected(self):
-        malformed = HEADER + "sample,1,0,unexpected_field\\n"
+        malformed = HEADER + "sample,1,0,unexpected_field\n"
         with self.assertRaisesRegex(ValueError, "no source-pinned recovery"):
             summarize(malformed)
         with self.assertRaisesRegex(ValueError, "width profile"):
