@@ -1,13 +1,13 @@
 {
   "schema": "meta-workstation/routing-advice-v1",
-  "generated_at": "2026-10-23T00:08:34Z",
+  "generated_at": "2026-10-23T00:09:55Z",
   "last_paired_observation": null,
   "signal": "SINGLE_NODE",
   "reason": "Only primary repository is active. Cross-account transfer is disabled.",
   "latest_nodes": {
     "A": {
       "running": 20,
-      "waiting": 10
+      "waiting": 4
     }
   },
   "sample_count": 3,
