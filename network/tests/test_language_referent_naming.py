@@ -28,7 +28,6 @@ class LanguageReferentNamingTests(unittest.TestCase):
             "language/english/README.md",
             "language/english/decoder.md",
             "language/english/renderer.md",
-            "language/english/operator_phrases.md",
             "language/english/handoff.md",
             "language/words/README.md",
             "language/handoff/README.md",

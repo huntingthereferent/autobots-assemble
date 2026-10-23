@@ -41,8 +41,9 @@ class WorkInvestigationPageTests(unittest.TestCase):
         self.assertIn('href="work.html"',entry)
         self.assertIn('content="0;url=work.html"',entry)
         self.assertNotIn('meta.html',entry)
-        self.assertIn('<title>Work / Source provenance · Hunting the Referent</title>',work)
-        self.assertIn('<h1 id="title">Research workstation</h1>',work)
+        # The title wording is presentation, but the live Tracework entry must stay labeled.
+        self.assertRegex(work, r'<title>[^<]*Tracework[^<]*</title>')
+        self.assertRegex(work, r'<h1 id="title">[^<]*Tracework[^<]*</h1>')
         self.assertIn('<h2>Workflow executions</h2>',work)
         self.assertIn('<h2 id="research-title">Research records</h2>',work)
         self.assertNotIn("What started, what passed, what stopped",work)

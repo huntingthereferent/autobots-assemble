@@ -36,7 +36,7 @@ jobs:
           EVENT_JSON: ${{ github.event_path }}
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python systems/workspace/inspector_gadget_adapter.py event "$EVENT_JSON" inspector-gadget-handoff.json
+          python -m systems.workspace.inspector_gadget_adapter event "$EVENT_JSON" inspector-gadget-handoff.json
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
       - name: Retain immutable incident and movement receipts
         if: always()

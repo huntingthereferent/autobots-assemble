@@ -14,6 +14,8 @@ Current registers:
 - **caveman** — the user-facing name for deliberately telegraphic English; internally this is treated as `telegraphic`
 - **technical** — explicit protocol/machine-adjacent wording
 
+Before interpreting an ambiguous term as a new concept, check the continuing [Regrounding](../REGROUNDING.md) relation.
+
 The same expression can map differently in context. Example: **“send it”** can mean `MOVE.CONTINUE` or `WORK.SUBMIT`. The bank therefore supplies candidates, not a context-free dictionary.
 
 See:
