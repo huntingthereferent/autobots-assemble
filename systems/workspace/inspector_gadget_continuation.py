@@ -17,8 +17,6 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
-from systems.workspace.inspector_gadget_calendar import load_health
-
 ROOT = Path(__file__).resolve().parents[2]
 ROSTER = Path(__file__).with_name("inspector_gadget_workers.json")
 SCHEMA = "inspector-gadget/native-worker-calendar/v1"
@@ -103,20 +101,17 @@ def read_runs(repo, filename, token):
     return body["workflow_runs"]
 
 
-def assess(roster, health, histories, *, repo, now=None, root=ROOT):
+def assess(roster, histories, *, repo, now=None, root=ROOT):
     """Select existing independently owned workers, never synthesize tasks."""
     entries = validate(roster, root=root)
     now = now or dt.datetime.now(dt.timezone.utc)
     if now.tzinfo is None:
         raise ValueError("scheduler clock missing timezone")
     now = now.astimezone(dt.timezone.utc)
-    node = health.get("nodes", {}).get("A") if isinstance(health, dict) else None
-    if (health.get("schema") != "meta-workstation/current-workflow-health-v1"
-            or not isinstance(node, dict) or node.get("repo") != repo
-            or node.get("observed") is not True):
-        raise ValueError("primary workstation health is not authenticated")
-    if now - _timestamp(health.get("observed_at")) > dt.timedelta(hours=3):
-        raise ValueError("workstation health is stale")
+    # Per-worker GitHub Actions source histories now gate dispatch directly.
+    # No cross-account observation ledger or Meta scheduler participates.
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", repo):
+        raise ValueError("owning GitHub repository required")
     ready, outcomes = [], []
     for worker in entries:
         key = worker["id"]
@@ -156,8 +151,8 @@ def assess(roster, health, histories, *, repo, now=None, root=ROOT):
     outcomes.extend([{**r, "state": "SELECTED"} for r in dispatched])
     outcomes.extend([{**r, "state": "CAPACITY_WAIT"} for r in ready[cap:]])
     return {"schema": "inspector-gadget/native-worker-plan/v1",
-            "calendar_source": "meta-observations/health.json",
-            "observed_at": health["observed_at"],
+            "calendar_source": "owning GitHub Actions workflow history",
+            "observed_at": now.isoformat(),
             "eligible_count": len(ready),
             "selected_count": len(dispatched),
             "capacity_wait": max(0, len(ready) - cap),
@@ -165,11 +160,11 @@ def assess(roster, health, histories, *, repo, now=None, root=ROOT):
             "boundary": "Dispatches existing source-owned workflows only; not ChatGPT turns, research novelty or external authorization"}
 
 
-def run(roster, health, *, repo, token, reader=read_runs, sender=None, root=ROOT):
+def run(roster, *, repo, token, reader=read_runs, sender=None, root=ROOT):
     entries = validate(roster, root=root)
     histories = {w["id"]: reader(repo, w["filename"], token) for w in entries if w["enabled"]}
     histories.update({w["id"]: [] for w in entries if not w["enabled"]})
-    plan = assess(roster, health, histories, repo=repo, root=root)
+    plan = assess(roster, histories, repo=repo, root=root)
     dispatch = sender or (lambda filename: _api(
         repo, token, "POST",
         "actions/workflows/" + urllib.parse.quote(filename, safe="") + "/dispatches",
@@ -199,8 +194,7 @@ def main(argv):
     token = os.environ.get("GITHUB_TOKEN", "")
     report = None
     try:
-        health = load_health(repo, token)
-        report = run(roster, health, repo=repo, token=token)
+        report = run(roster, repo=repo, token=token)
     finally:
         if report is not None:
             Path("inspector-gadget-native-continuation.json").write_text(
