@@ -87,6 +87,25 @@ class HealthTests(unittest.TestCase):
             self.assertFalse(result["all_sources"])
             self.assertIsNone(result["summary"])
 
+    def test_single_registered_primary_is_complete_not_missing_secondary(self):
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/"registry.json"
+            path.write_text('{"schema":"meta-workstation/registry-v1",'
+                            '"nodes":[{"id":"A","repo":"one/workstation"}]}')
+            def getter(path):
+                if "/actions/workflows?" in path:
+                    return {"workflows":[{"id":101,"state":"active"}]}
+                if "/actions/runs?created=" in path:
+                    return {"total_count":0,"workflow_runs":[]}
+                raise ValueError(path)
+            r=collect(None,path,NOW,getter=getter)
+            self.assertTrue(r["all_sources"])
+            self.assertEqual(set(r["nodes"]),{"A"})
+            self.assertEqual(r["summary"]["open_count"],0)
+
+
 
 if __name__ == "__main__":
     unittest.main()
