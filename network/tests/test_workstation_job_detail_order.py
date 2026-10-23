@@ -32,13 +32,13 @@ const nodes={detail,"revision-panel":panel,"revision-scope":new Node("p"),"detai
 const $=key=>{assert(key in nodes,key);return nodes[key]};
 const run={id:7,name:"source-run",head:"a".repeat(40),updated:"2026-10-22T19:00:00Z",
  created:"2026-10-22T18:50:00Z",status:"completed",conclusion:"success"};
-const app={runs:[run],selection:null,selectedUpdated:null,jobCache:new Map(),
+const app={runs:[run],selection:null,selectedUpdated:null,jobCache:new Map(),followups:new Map(),
  checked:null,liveAvailable:false,latestPage:[]};
 const pending=[];
 const ctx={app,$,Date,Number,Set,Math,
  window:{matchMedia:()=>({matches:false})},
  el:(tag,txt,cls)=>new Node(tag,txt,cls),
- pill:text=>new Node("pill",text),statusOf:v=>v.status,
+ pill:text=>new Node("pill",text),runBadge:()=> "success",statusOf:v=>v.status,
  safeDate:v=>String(v||"none"),plausible:()=>false,
  link:(label)=>new Node("a",label),
  renderRuns:()=>{},loadRevision:()=>{},
