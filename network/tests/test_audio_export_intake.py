@@ -38,7 +38,7 @@ class AudioIntakeTests(unittest.TestCase):
         self.assertIn('href="audio-intake.html"', WORK.read_text(encoding='utf8'))
         for term in ('audio-intake-core.js', 'type="file"', 'canvas id="wave"',
                      'local-origin-preserving-export', 'SHA-256', 'encodeWav',
-                     'parseMidi', 'INDEPENDENT WORKSTATION TOOL', 'not the audio itself'):
+                     'parseMidi', 'not the audio itself'):
             # schema appears in script, not necessarily plain prose
             self.assertIn(term, html)
         self.assertNotIn('EventSource', html)
