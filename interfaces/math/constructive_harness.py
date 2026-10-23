@@ -6,7 +6,6 @@ are proposed from discrepancies but never silently promoted to world rules.
 from dataclasses import dataclass
 from work.arc_like_maze.math import World, inverse_candidates
 from interfaces.math.arena import Challenge, adjudicate, scoreboard
-from interfaces.math.closed_loop import run, finite_world_executor
 
 
 @dataclass(frozen=True)
