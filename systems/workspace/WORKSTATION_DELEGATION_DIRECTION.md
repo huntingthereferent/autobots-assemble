@@ -1,4 +1,6 @@
-# Workstation purpose and bounded delegation — stable continuation reference
+# Tracework delegation — historical continuity design
+> **Historical naming note:** this development record belongs to what is now called Tracework. The B2–B4 next-step wording is historical context, not the live task queue. Existing code identifiers are unchanged. [Current scope](../../TRACEWORK.md).
+
 
 **Why this exists:** James and ChatGPT are building several connected things at once. Language Referent / A/B is the ongoing inquiry into relationships, not a task manager or worker scheduler. The workstation is a support tool: allow the assistant to remain in conversation with James while bounded helpers execute source-owned jobs. Preserve the links among work rather than turning every session into an audit of the harness.
 

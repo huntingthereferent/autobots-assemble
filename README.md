@@ -1,6 +1,6 @@
 # Hunting the Referent — research records and experiments
 
-**[WORKSTATION EXECUTIONS](https://huntingthereferent.github.io/autobots-assemble/live/work.html)** — direct GitHub Actions executions, source-owned research evidence, and the workstation's own observations.
+**[TRACEWORK · LIVE EXECUTIONS](https://huntingthereferent.github.io/autobots-assemble/live/work.html)** — direct GitHub Actions executions, source-owned research evidence, and Tracework's recorded observations.
 
 **[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
@@ -11,6 +11,8 @@ The public work view reads actual GitHub workflow runs and native job/step resul
 **Start with the [account research report](https://github.com/huntingthereferent/huntingthereferent)** for the referent, mathematical constructions, relationship between lanes, and dated evidence. This repository is the implementation and execution record; its pages should be read through their specific tests and witnesses, not as unrelated products.
 
 ## Research system and evidence
+**Tracework** names this repository's existing continuity and evidence environment; the mathematical research remains separate. Stable Python names, file paths, journal schemas and historical witnesses are not renamed. [Tracework overview and naming boundary](TRACEWORK.md).
+
 
 The repository records a developing general-purpose research and construction environment: finite mathematics, language and referent investigations, interactive worlds, software foundations, bounded workers, handoffs, and audit records. Each investigation retains its own evidence and test boundary; a result in one domain is not automatically established in another.
 
@@ -29,7 +31,7 @@ The repository records a developing general-purpose research and construction en
 | **Software foundations** | [Program foundation](foundation/PROGRAM_FOUNDATION.md) · [Capability records](capabilities/README.md) — composition, state, interfaces, tests, and reuse across different program structures |
 | **Data and systems** | [Multi-source reconciliation](work/projects/public-data-monitor/README.md) · [System integration records](systems/README.md) — changing sources, state reconciliation, handoffs, and provenance |
 | **CP automation** | [One-window CP frontier](systems/workspace/CP_AUTOMATION.md) — declared dependencies over the existing workstation; native worker evidence remains authoritative |
-| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Process Workstation](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no implicit task admission; one explicitly authorized finite prefilter work handoff is demonstrated |
+| **Workspace continuity** | [Resumable lanes](systems/workspace/README.md) · [Tracework source-edition subsystem](systems/workspace/WORKSTATION.md) — independent work threads, private editable worker copies, source ancestry, and branching; no implicit task admission; one explicitly authorized finite prefilter work handoff is demonstrated |
 
 **First bounded worker connection:** [Correspondence Worker handoff](systems/workspace/CORRESPONDENCE_HANDOFF.md) — explicitly selected source edition, child-process finite prefilter, independent native replay, and durable HandoffRuntime result. Not a general AI agent or full owner-backed process.
 

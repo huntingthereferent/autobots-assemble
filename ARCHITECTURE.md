@@ -1,4 +1,6 @@
 # Architecture — Complete Stack
+> **Tracework:** this is the system architecture underlying the current Tracework environment. The mathematical language referent is separate; older `ProcessWorkstation` and `workstation-*` interfaces remain stable. [Tracework scope](TRACEWORK.md).
+
 
 The architecture exists to preserve movement through a problem's **entire required dependency stack**.
 

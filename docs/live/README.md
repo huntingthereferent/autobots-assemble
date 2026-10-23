@@ -1,8 +1,10 @@
-# Workstation
+# Tracework — live research and execution
+Tracework is the public name for the existing evidence and execution viewer. Paths such as `work.html` and `workstation-flow.js` remain stable compatibility interfaces. [Naming boundary](../../TRACEWORK.md).
 
-[Workstation](work.html) · [Research sources](research-sources.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](audio-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
-The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
+[Tracework](work.html) · [Research sources](research-sources.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](audio-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+
+The GitHub Pages entrance under `/live/` now redirects to **Tracework**, not the source provenance graph.
 
 ## Research sources and testing contexts
 
@@ -26,7 +28,7 @@ These creative audio operations are not ARC/NIH/WORLD research evidence. The Git
 
 ## Evidence boundaries
 
-The Workstation reads the latest 100 **public GitHub Actions workflow runs** on opening and approximately every two minutes while visible. A separately published source-owned run index supplies the accessible historical archive; if it is unavailable, the viewer explicitly identifies the latest-page sample as incomplete. Exact GitHub execution IDs, revisions, jobs, and step results remain available for inspection. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
+Tracework reads the latest 100 **public GitHub Actions workflow runs** on opening and approximately every two minutes while visible. A separately published source-owned run index supplies the accessible historical archive; if it is unavailable, the viewer explicitly identifies the latest-page sample as incomplete. Exact GitHub execution IDs, revisions, jobs, and step results remain available for inspection. A workflow pass is evidence only for the checks it ran; it is not proof an unrelated research question was solved.
 
 The research section loads `views/traces/research-live.json`, projected from native research checkpoints, ARC experiments, pinned statuses and explicit walls. Original `next` and `boundary` fields are preserved when recorded. These are **historical source states**, not a claim that all their workers are currently executing. Nothing is invented from a file name or decorative animation.
 
@@ -36,7 +38,7 @@ Source failure is visible and **does not turn missing data into zeros or imply a
 
 ## Flow control deck and calendar journal
 
-The public Workstation's control deck is a read-only, source-bound visualization of GitHub Actions. Queue and in-motion counts use **only a successful, fresh latest-100 GitHub run sample**, never archived queued/running states. After a failed or stale live check those live counters show unavailable, while the historical archive remains accessible. The daily passed/not-passed values are **outcomes for runs created today in the browser's local calendar**, not completions that necessarily happened today. The daily clearance ratio is today's created runs currently marked completed, divided by all runs created today; it is not measured execution efficiency, a dispatch guarantee, or an estimate of GitHub capacity. The last-hour intake and 12-hour bar strip use actual workflow creation timestamps. A 12-marker light row represents up to twelve observed records and is not a capacity bar. Animated running indicators illustrate the same retained status, never synthesize progress.
+The public Tracework view's control deck is a read-only, source-bound visualization of GitHub Actions. Queue and in-motion counts use **only a successful, fresh latest-100 GitHub run sample**, never archived queued/running states. After a failed or stale live check those live counters show unavailable, while the historical archive remains accessible. The daily passed/not-passed values are **outcomes for runs created today in the browser's local calendar**, not completions that necessarily happened today. The daily clearance ratio is today's created runs currently marked completed, divided by all runs created today; it is not measured execution efficiency, a dispatch guarantee, or an estimate of GitHub capacity. The last-hour intake and 12-hour bar strip use actual workflow creation timestamps. A 12-marker light row represents up to twelve observed records and is not a capacity bar. Animated running indicators illustrate the same retained status, never synthesize progress.
 
 The movement/change list is session-only and shows status transitions **detected between successful source checks**, not precise execution event times. On first opening, it establishes a baseline rather than inventing transition history. Public source errors leave the UI explicitly stale.
 
@@ -50,9 +52,9 @@ The monitor calls the state a **steady candidate** only after multiple real chec
 
 This monitor does not automatically fill the queue: introducing enough work to reach steady useful throughput requires a separate authorized source-owned scheduler, job-level capacity verification, and cost/latency/failure boundaries. Saturating a queue alone is not evidence of efficiency.
 
-## Data audit in the Workstation
+## Data audit in Tracework
 
-The public /live/ entrance still opens the Workstation. The embedded [Referent audit](work.html#audit) is **not** the executions panel and does **not** show run counts, poll GitHub Actions, or use a tickserver. The audit reads a source-pinned Git tree only when opened or manually reloaded.
+The public /live/ entrance still opens Tracework. The embedded [Referent audit](work.html#audit) is **not** the executions panel and does **not** show run counts, poll GitHub Actions, or use a tickserver. The audit reads a source-pinned Git tree only when opened or manually reloaded.
 
 Choose a project such as ARC, WORLD, World48, NIH, A/B, W13 or Workstation. An explicit file-path classifier collects tracked Python test-like files and recorded JSON data files; unmatched sources remain **Unassigned** and the full index is available. Test mode opens the original source at the pinned commit and walks individual `test_*` methods/functions, showing source lines, recognized assertions and the complete test block. Data mode opens an original JSON record and walks its top-level fields and individual array entries, without treating successful JSON parsing as evidence that the recorded measurements are correct. Previous/next navigation advances through entries and then files.
 
@@ -60,7 +62,7 @@ An audit assessment is made by the **human reviewer**, not by this source browse
 
 When a workflow run is opened, its original GitHub job records are inspected on demand. If those records include valid `created_at`, `started_at`, and `completed_at` fields, the viewer reports job created-to-start wait and started-to-finished duration, plus arithmetic means over the jobs returned. Missing, invalid, or decreasing timestamps are omitted rather than counted as zero. These timings characterize the selected observed run; they are not global runner utilization or proof of available capacity.
 
-The existing periodically committed research projection appears as a **separate** data source, with its original recorded movements, boundaries and paths. An apparent match between a test path and research source is organizational, not proof one executed the other. Actual job and step outcomes remain in the Workstation's **Executions** section rather than being misrepresented as data audit results.
+The existing periodically committed research projection appears as a **separate** data source, with its original recorded movements, boundaries and paths. An apparent match between a test path and research source is organizational, not proof one executed the other. Actual job and step outcomes remain in Tracework's **Executions** section rather than being misrepresented as data audit results.
 
 ## Source provenance diagram
 

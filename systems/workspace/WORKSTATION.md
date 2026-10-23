@@ -1,4 +1,6 @@
-# Process Workstation — private copies and branching
+# Tracework source editions — private copies and branching
+> **Tracework component:** `ProcessWorkstation` is the historical and still-supported code name for source copies/branching. This module is one part of Tracework, not a separate public product. [Current scope](../../TRACEWORK.md).
+
 
 The workstation belongs to the reusable [Workspace Continuity system](README.md), not to any one research project, finite process, factory, or future implementation. It is a place to **copy, alter, inspect, and branch** worker *source implementations* while preserving the canonical origin.
 
