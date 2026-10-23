@@ -67,6 +67,16 @@ class DailySourceTests(unittest.TestCase):
                       getter=lambda path:{"total_count":"67"})
         self.assertIsNone(result["totals"])
 
+    def test_primary_only_source_counts_are_valid_without_secondary(self):
+        r=collect({"A":"owner/repo"},
+                  dt.datetime(2026,10,22,17,tzinfo=UTC),
+                  getter=lambda path:{"total_count":2})
+        self.assertTrue(r["all_sources"])
+        self.assertEqual(set(r["nodes"]),{"A"})
+        self.assertEqual(r["totals"]["success"],2)
+        self.assertEqual(r["totals"]["known_outcome_runs_lower_bound"],2*len(CONCLUSIONS))
+
+
 
 if __name__ == "__main__":
     unittest.main()
