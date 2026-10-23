@@ -45,3 +45,26 @@ def gravity(world: World, proposals: tuple[Move, ...]) -> dict:
                 "operation": m.operation, "required_for": m.required_for}
     return {"decision": "retain_wall", "referent": world.referent,
             "walls": list(world.walls), "retained": list(world.retained)}
+
+
+def anchored_dispatch(world: World, proposals: tuple[Move, ...], *,
+                      internal_handlers: dict[str, object],
+                      external_handler=None) -> dict:
+    """Invoke an authorized handler only after the finite-world gravity decision.
+
+    An external operation is never invoked without an explicit handler.
+    The handler owns native authorization, execution, and evidence validation.
+    """
+    decision = gravity(world, proposals)
+    if decision["decision"] == "continue_inside":
+        handler = internal_handlers.get(decision["operation"])
+        if not callable(handler):
+            return {**decision, "state": "UNSTAFFED", "executed": False}
+        return {**decision, "state": "DISPATCHED", "result": handler(),
+                "executed": True}
+    if decision["decision"] == "external_dependency":
+        if not callable(external_handler):
+            return {**decision, "state": "UNSTAFFED", "executed": False}
+        return {**decision, "state": "DISPATCHED", "result": external_handler(decision),
+                "executed": True}
+    return {**decision, "state": "RETAINED", "executed": False}
