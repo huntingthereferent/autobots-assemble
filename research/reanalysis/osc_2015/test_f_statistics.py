@@ -137,7 +137,7 @@ class FRecalculationTests(unittest.TestCase):
 
     def test_unpinned_f_row_with_extra_csv_column_rejected(self):
         text=csv_rows(a_record())
-        malformed=text.rstrip("\\r\\n") + ",unexpected\\n"
+        malformed=text.rstrip("\r\n") + ",unexpected\n"
         with self.assertRaisesRegex(ValueError, "unverified width recovery"):
             analyze(malformed)
         with self.assertRaisesRegex(ValueError, "width recovery profile"):
