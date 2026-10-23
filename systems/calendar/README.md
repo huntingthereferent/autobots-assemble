@@ -42,3 +42,17 @@ Day-to-Day / pipes = decide whether and how to project it
 ```
 
 The calendar does not infer that the movement occurred and does not convert an anchor into an obligation. A pipe may use the anchor to simulate or route expected movement while preserving the calendar as time truth.
+
+
+## Daily ChatGPT correspondence (read-only Calendar REOPEN)
+
+[Daily Correspondence](../../docs/live/daily-correspondence.html) projects one dated, source-pinned handoff prompt from the existing recurring Calendar relation into the workstation. The source adapter is [daily_correspondence.py](daily_correspondence.py) and its independent schedule is [.github/workflows/daily-correspondence.yml](../../.github/workflows/daily-correspondence.yml).
+
+- Calendar owns **when**: daily `REOPEN` is an attention trigger, not permission to start workers.
+- Workspace owns **lane return points**: optional private journal may be read only by an authorized local run; the public scheduled renderer deliberately does not have it.
+- Research sources own **what is known**: the published historical index is explicitly labeled historical until reverified. Daily differences are differences between published index snapshots, never inferred completions.
+- Public workflow status is a separately labeled newest-100 GitHub Actions observation, not the full execution state or scientific evidence.
+- The result is a dated, copyable ChatGPT prompt. GitHub cannot inject a message into a personal ChatGPT conversation; the user must bring the prompt into a conversation, or a separately authorized ChatGPT schedule must run its own source checks.
+- The read-only public file is `docs/live/data/daily-correspondence.json`; the scheduled workflow only writes this data file and preserves an Actions artifact. Failed publication does not silently advance the day.
+
+Local reproduction: `python -m unittest -v network.tests.test_daily_correspondence`. With a known full source revision, invoke `python -m systems.calendar.daily_correspondence --revision <sha> --output /private/daily-correspondence.json`. A private workspace journal can be provided explicitly with `--workspace-journal`, but it must never be published to the public page.
