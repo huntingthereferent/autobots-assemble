@@ -51,11 +51,11 @@ jobs:
           python-version: '3.12'
       - name: Read public latest workflow runs (optional observation only)
         env:
-          GH_TOKEN: $\{{ github.token }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           if ! curl -fsSL --retry 1 --max-time 30 \
-            -H "Authorization: Bearer $\{GH_TOKEN}" \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
             -H 'Accept: application/vnd.github+json' \
             'https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/runs?per_page=100&page=1' \
             -o /tmp/daily-correspondence-runs.json; then
@@ -91,7 +91,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: daily-correspondence-$\{{ github.run_id }}
+          name: daily-correspondence-${{ github.run_id }}
           path: docs/live/data/daily-correspondence.json
           retention-days: 90
           if-no-files-found: warn
