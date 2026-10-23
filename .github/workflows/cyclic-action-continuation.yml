@@ -8,6 +8,11 @@ on:
       - 'work/arc_like_maze/continuity_handoff.py'
       - 'work/arc_like_maze/engine_one.py'
       - 'work/arc_like_maze/window_two.py'
+      - 'work/arc_like_maze/window_combined.py'
+      - 'work/arc_like_maze/third_coupling.py'
+      - 'network/tests/test_arc_like_engine_one.py'
+      - 'network/tests/test_arc_like_window_combined.py'
+      - 'network/tests/test_arc_like_third_coupling.py'
       - 'runtime/handoff.py'
       - 'runtime/engine.py'
       - 'runtime/journal.py'
@@ -40,3 +45,15 @@ jobs:
         run: python -m unittest network.tests.test_arc_like_cyclic_action_continuation network.tests.test_arc_like_continuity_handoff network.tests.test_continuity_unlike_systems network.tests.test_factory_source_admission -v
       - name: Check existing handoff, recovery and orchestration regressions
         run: python -m unittest network.tests.test_handoff_runtime network.tests.test_recovery network.tests.test_orchestrator -v
+
+  finite-construction-math:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify mathematical constructors independently of native ARC gameplay
+        run: |
+          python -m unittest network.tests.test_arc_like_engine_one network.tests.test_arc_like_window_combined network.tests.test_arc_like_third_coupling -v
