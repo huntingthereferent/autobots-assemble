@@ -35,9 +35,9 @@ def _positive_float(value: str, name: str, *, allow_zero=False) -> float:
     return number
 
 
-def analyze(csv_text: str) -> dict:
-    rows = csv.DictReader(io.StringIO(csv_text))
-    columns = rows.fieldnames
+def analyze(csv_text: str, *, pinned_source=False) -> dict:
+    reader = csv.reader(io.StringIO(csv_text))
+    columns = next(reader, None)
     if not columns or len(set(columns)) != len(columns):
         raise ValueError("missing or duplicate source columns")
     expected = {"Local.ID"}
@@ -68,10 +68,29 @@ def analyze(csv_text: str) -> dict:
         }
         for side in SIDES
     }
+    # Six rows in the authenticated original-owner export include unquoted
+    # free-text commas before the trailing statistical columns. Only after
+    # the exact Git-blob/length check may those trailing fields be right-aligned.
+    # Synthetic or changed malformed data must still be rejected.
+    indexed = {key: columns.index(key) for key in expected}
+    if pinned_source and any(index < 103 for key, index in indexed.items() if key != "Local.ID"):
+        raise ValueError("original source analytic suffix changed")
     seen = set()
     n_rows = 0
-    for row in rows:
-        if None in row or not row.get("Local.ID") or row["Local.ID"] in seen:
+    source_width_variant_rows = 0
+    width_profile = {}
+    for values in reader:
+        extra = len(values) - len(columns)
+        if extra < 0:
+            raise ValueError("malformed or repeated study row")
+        if extra:
+            if not pinned_source or extra > 6:
+                raise ValueError("malformed original-owner source row; unverified width recovery")
+            source_width_variant_rows += 1
+            width_profile[extra] = width_profile.get(extra, 0) + 1
+        row = {key: values[0] if key == "Local.ID" else values[index + extra]
+               for key, index in indexed.items()}
+        if not row.get("Local.ID") or row["Local.ID"] in seen:
             raise ValueError("malformed or repeated study row")
         seen.add(row["Local.ID"])
         n_rows += 1
@@ -114,6 +133,8 @@ def analyze(csv_text: str) -> dict:
                 raise ValueError("unexpected source significance flag")
     if not n_rows:
         raise ValueError("empty source data")
+    if pinned_source and width_profile != {1: 4, 2: 1, 6: 1}:
+        raise ValueError("pinned original-source width recovery profile changed")
     for slot in results.values():
         if (slot["reported_p_available"] + slot["reported_p_missing"] != slot["eligible_f_tests"]
                 or slot["flags_available"] + slot["flags_missing"] != slot["eligible_f_tests"]
@@ -121,6 +142,8 @@ def analyze(csv_text: str) -> dict:
             raise ValueError("incomplete F-test ledger")
     return {
         "total_source_rows": n_rows,
+        "source_width_variant_rows": source_width_variant_rows,
+        "right_aligned_analytic_suffix_only_after_pinning": pinned_source,
         "only_test_family": "F",
         "method": "SciPy F survival function: scipy.stats.f.sf(statistic, df1, df2)",
         "absolute_p_tolerance": TOLERANCE,
@@ -140,7 +163,7 @@ def main() -> int:
     raw, seen = fetch_source()
     base = inspect_bytes(raw)
     # Lossless one-byte transport for ASCII stats in mixed-encoding CSV.
-    result = analyze(raw.decode("latin-1"))
+    result = analyze(raw.decode("latin-1"), pinned_source=True)
     out = {
         "schema_version": 1,
         "status": "MEASURED",
