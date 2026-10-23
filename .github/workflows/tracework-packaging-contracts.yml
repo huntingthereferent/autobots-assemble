@@ -1,0 +1,28 @@
+name: Tracework packaging comparison contracts
+
+on:
+  push:
+    branches: [tracework-general-packaging-harness]
+    paths:
+      - 'systems/workspace/packaging_*.py'
+      - 'tests/test_*packaging*.py'
+      - '.github/workflows/tracework-packaging-contracts.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/packaging_*.py'
+      - 'tests/test_*packaging*.py'
+      - '.github/workflows/tracework-packaging-contracts.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Execute packaging comparison tests
+        run: |
+          python -m unittest discover -s tests -p 'test_*packaging*.py' -v
