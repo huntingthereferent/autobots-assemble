@@ -135,5 +135,19 @@ class FRecalculationTests(unittest.TestCase):
             analyze(csv_rows())
 
 
+    def test_unpinned_f_row_with_extra_csv_column_rejected(self):
+        text=csv_rows(a_record())
+        malformed=text.rstrip("\\r\\n") + ",unexpected\\n"
+        with self.assertRaisesRegex(ValueError, "unverified width recovery"):
+            analyze(malformed)
+        with self.assertRaisesRegex(ValueError, "width recovery profile"):
+            analyze(malformed, pinned_source=True)
+
+    def test_pinned_flag_never_establishes_publication_or_experiment(self):
+        report=analyze(csv_rows(a_record()))
+        self.assertEqual(report["source_width_variant_rows"],0)
+        self.assertFalse(report["right_aligned_analytic_suffix_only_after_pinning"])
+
+
 if __name__ == "__main__":
     unittest.main()
