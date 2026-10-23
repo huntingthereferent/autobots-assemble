@@ -34,7 +34,9 @@ class Script(HTMLParser):
 class CatKeyboardTests(unittest.TestCase):
     def test_standalone_entry_and_no_executive_claim(self):
         page = PAGE.read_text(encoding="utf-8")
-        self.assertIn('href="cat-keyboard.html"', WORK.read_text(encoding="utf-8"))
+        hub = (ROOT / "docs/live/kids.html").read_text(encoding="utf-8")
+        self.assertIn('href="cat-keyboard.html"', hub)
+        self.assertIn('href="work.html"', hub)
         for marker in ("MEOW LAB 2 · Workstation sound keyboard", "window.AudioContext",
                        "pointerdown", "prefers-reduced-motion",
                        "meow-machine/score-v1", "stopRecording",
