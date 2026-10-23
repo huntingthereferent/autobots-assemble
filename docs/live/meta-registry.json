@@ -113,7 +113,7 @@
     "oscillation": "Inactive for cross-account transfer; preserve historical evidence only.",
     "recovery": "Read primary live work viewer and its GitHub Actions journal."
   },
-  "dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/meta.html",
+  "dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/work.html",
   "observation_history": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/history.json",
   "observation_scope": "Observed primary GitHub workflow-run counts. Earlier two-source journal entries are retained historical measurements, never current second-account telemetry.",
   "routing_advice": "https://raw.githubusercontent.com/huntingthereferent/autobots-assemble/meta-observations/routing.json",

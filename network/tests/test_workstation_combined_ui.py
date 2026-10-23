@@ -15,7 +15,11 @@ class CombinedWorkstationViewerTests(unittest.TestCase):
         html = PAGE.read_text(encoding="utf-8")
         js = SOURCE.read_text(encoding="utf-8")
         landing = LANDING.read_text(encoding="utf-8")
-        self.assertNotIn('href="meta.html" title="Shared workstation summary and source journals"', html)
+        self.assertNotIn('href="meta.html"', html)
+        self.assertFalse((ROOT / "docs/live/meta.html").exists())
+        self.assertFalse((ROOT / "docs/live/meta-work-parity.css").exists())
+        self.assertIn('"dashboard": "https://huntingthereferent.github.io/autobots-assemble/live/work.html"',
+                      (ROOT / "docs/live/meta-registry.json").read_text(encoding="utf-8"))
         self.assertIn('src="workstation-combined.js"', html)
         self.assertIn("window.WorkstationCombined.start()", html)
         for element in ("combined-status", "combined-running", "combined-waiting",
