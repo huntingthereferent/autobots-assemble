@@ -34,7 +34,11 @@ class Script(HTMLParser):
 class CatKeyboardTests(unittest.TestCase):
     def test_standalone_entry_and_no_executive_claim(self):
         page = PAGE.read_text(encoding="utf-8")
-        self.assertIn('href="cat-keyboard.html"', WORK.read_text(encoding="utf-8"))
+        work = WORK.read_text(encoding="utf-8")
+        school = (ROOT / "docs/live/school.html").read_text(encoding="utf-8")
+        self.assertIn('href="school.html"', work)
+        self.assertIn('href="cat-keyboard.html"', school)
+        self.assertNotIn('href="cat-keyboard.html"', work)
         for marker in ("MEOW LAB 2 · Workstation sound keyboard", "window.AudioContext",
                        "pointerdown", "prefers-reduced-motion",
                        "meow-machine/score-v1", "stopRecording",
