@@ -228,14 +228,34 @@ a{color:var(--mint)} .top{position:sticky;top:0;z-index:50;padding:13px max(20px
 @media(max-width:540px){.session-panel{padding:17px}.session-actions{width:100%}.session-actions>*{flex:1;text-align:center}.moment-form{grid-template-columns:1fr}.moment-form label.wide{grid-column:1}.moment-row{grid-template-columns:1fr}.moment-row .moment-actions{justify-content:flex-start}.takes-grid{gap:6px}.take-slot{padding:11px}.comparison-columns,.comparison-row{grid-template-columns:30% 35% 35%}.comparison-columns span,.comparison-row span{padding:8px 6px;font-size:10px}}
 @media(prefers-reduced-motion:reduce){.session-shell *{animation:none!important;transition:none!important}}
 
+
+/* Production listening and clip workflow: source-bound transport, no pretend waveform. */
+.transport-controls{display:flex;align-items:stretch;gap:9px;flex-wrap:wrap;margin-top:11px}
+.loop-toggle{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid #456274;background:#14222d;border-radius:7px;padding:11px 14px;cursor:pointer;flex:1 1 215px}
+.loop-toggle input{accent-color:#a8e9d3;width:18px;height:18px;min-width:18px;min-height:18px;margin:0}
+.loop-toggle strong{font:750 10px/1.5 var(--mono);letter-spacing:.055em;color:#deecf3}
+.loop-toggle span{color:#91b4c3;font:10px/1.4 var(--mono);width:100%;padding-left:28px}
+.transport-indicator{display:grid;gap:5px;align-content:center;text-align:right;border:1px solid #354b5b;border-radius:7px;padding:10px 13px;min-width:180px}
+#transport-state{font:750 10px/1.5 var(--mono);color:#96b8cb}
+#transport-state[data-playing="true"]{color:#aef5c5}
+#transport-time{font:750 15px/1.25 var(--mono);color:#e2edf5;font-variant-numeric:tabular-nums}
+.moment-form-actions{grid-column:1/-1;display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.moment-form .moment-form-actions button{grid-column:auto}
+.moment-form-actions #cancel-moment-edit[hidden]{display:none}
+.moment-row{align-items:start}
+.moment-actions button{min-width:66px}
+.moment-actions button.primary-mini{background:#afe8d3;color:#09221d;border-color:#afe8d3}
+.moment-actions button:focus-visible,.transport-controls input:focus-visible{outline:2px solid #b7e9d7;outline-offset:3px}
+@media(max-width:620px){.transport-indicator{text-align:left;flex:1 1 150px}.moment-actions button{flex:1 1 70px}}
+
 </style>
 </head>
 <body>
-<header class="top"><a class="sitebrand" href="work.html" aria-label="Return to workstation"><span class="mark">A<span>/</span>B</span><span class="brandwords">WORKSTATION<small> / SOUND LAB</small></span></a><nav aria-label="Page navigation"><a href="#source">SOURCE</a><a href="#listen">LISTEN</a><a class="nav-feature" href="#direction">DIRECTION <span aria-hidden="true">↗</span></a><a href="#session">SESSION DESK</a><a href="#playbench">SAMPLER</a><a href="#provenance">RECORD</a><a href="cat-keyboard.html">MEOW LAB 2 ↗</a></nav></header>
+<header class="top"><a class="sitebrand" href="work.html" aria-label="Return to workstation"><span class="mark">A<span>/</span>B</span><span class="brandwords">WORKSTATION<small> / AUDIO INTAKE</small></span></a><nav aria-label="Page navigation"><a href="#source">SOURCE</a><a href="#listen">LISTEN</a><a class="nav-feature" href="#direction">DIRECTION <span aria-hidden="true">↗</span></a><a href="#session">SESSION DESK</a><a href="#playbench">SAMPLER</a><a href="#provenance">RECORD</a><a href="cat-keyboard.html">MEOW LAB 2 ↗</a></nav></header>
 <main class="shell">
 <section class="hero" aria-labelledby="page-title"><div class="hero-main"><div class="eyebrow"><span class="pulse-dot"></span> AUDIO / SOURCE INTAKE <span class="version">INDEPENDENT · LOCAL FIRST</span></div><h1 id="page-title">Find the moment.<br><em>Make the next move.</em></h1><p class="desc">A working desk for audio you already have. Hear the source, keep the moments worth revisiting, try two production directions, and carry your decisions into the next session.</p><div class="hero-links"><a class="hero-cta" href="#direction">OPEN DIRECTION DESK <span>↘</span></a><a class="hero-link" href="#source">Start with a source →</a></div></div><aside class="hero-aside" aria-label="Three-step workflow"><div class="visualizer" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p class="aside-label">YOUR SESSION PATH</p><div class="hero-step"><b>01</b><span><strong>IMPORT</strong><small>Read the source, locally</small></span></div><div class="hero-step"><b>02</b><span><strong>LISTEN + DIRECT</strong><small>Mark the moment and decide what changes</small></span></div><div class="hero-step"><b>03</b><span><strong>KEEP THE SESSION</strong><small>Compare A/B versions, export and pick up later</small></span></div><div class="safe-note">NO ACCOUNT LINK · NO UPLOADS · NO GENERATED AUDIO</div></aside></section><div class="jumpbar"><span>SESSION /</span><a href="#source">01 IMPORT</a><a href="#listen">02 INSPECT</a><a href="#direction">03 DIRECT</a><a href="#session">04 KEEP & COMPARE</a><a href="#playbench">05 PLAY</a><a href="#provenance">06 DOCUMENT</a></div>
 <div class="layout"><section class="panel" id="source"><h2>01 / Source intake</h2><p class="sub">Export from Suno via its built-in Download or Studio workflow; then choose your local files. Each file receives an independent SHA-256 when supported.</p><div class="picker" id="drop"><strong>Drop authorized audio or MIDI here</strong><input id="files" type="file" accept=".wav,.mp3,.mid,.midi,audio/wav,audio/mpeg,audio/midi" multiple aria-label="Choose WAV MP3 or MIDI files"><p class="micro tip">Up to 12 files · 50 MB each · tracks stay in this browser session</p></div><div id="files-list" class="files" aria-label="Imported files"><p class="micro">No source material selected.</p></div><p class="fineprint">Use material you have permission to use. Suno's terms govern Suno-generated exports; this tool does not grant new rights.</p><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h3>Source metadata</h3><div id="source-info" class="micro" style="margin-top:9px;overflow-wrap:anywhere">No decoded file.</div></section>
-<section class="panel" id="listen"><h2>02 / Inspect & isolate</h2><p class="sub">This waveform is computed from decoded audio. Drag across the wave to isolate a passage; use the manual beat ruler below to audition four- or eight-bar ideas.</p><div class="caps"><span id="duration">DURATION —</span><span id="peak">PEAK —</span><span id="rms">RMS —</span><span id="sample-rate">RATE —</span></div><div class="wave-frame"><canvas id="wave" aria-label="Waveform of selected file" role="img"></canvas><div class="wave-note" id="wave-note">Load WAV or MP3 to visualize</div></div><div class="fields block"><label>START · seconds<input id="start" type="number" step="0.01" min="0" value="0" disabled></label><label>END · seconds<input id="end" type="number" step="0.01" min="0" value="0" disabled></label><label>SPEED · audition rate<input id="rate" type="range" min="0.5" max="2" step="0.01" value="1" disabled><span class="mono" id="rate-text">1.00×</span></label><label>PROJECT TEMPO · manual BPM<input id="bpm" type="number" min="40" max="240" step="1" value="120"></label></div><div class="beat-tools"><div><strong>BAR RULER</strong><span>Assume 4/4 at your chosen BPM · not tempo detection</span></div><button type="button" id="tap-bpm">TAP BPM</button><button type="button" data-bars="4">4 BARS</button><button type="button" data-bars="8">8 BARS</button><span id="bar-duration" class="micro">4 bars = 8.0 s</span></div><div class="toolbar"><button id="play" class="primary" disabled>▶ Play slice</button><button id="stop" disabled>■ Stop</button><button id="export" disabled>↓ Export WAV slice</button></div><p class="fineprint">One bounded WAV slice: 0.01–45 seconds. Bar lengths are planning aids; export is still measured in real seconds. Original files remain unchanged.</p><p id="status" class="status" role="status" aria-live="polite">Ready. Choose an exported audio or MIDI file.</p></section></div>
+<section class="panel" id="listen"><h2>02 / Inspect & isolate</h2><p class="sub">This waveform is computed from decoded audio. Drag across the wave to isolate a passage; use the manual beat ruler below to audition four- or eight-bar ideas.</p><div class="caps"><span id="duration">DURATION —</span><span id="peak">PEAK —</span><span id="rms">RMS —</span><span id="sample-rate">RATE —</span></div><div class="wave-frame"><canvas id="wave" aria-label="Waveform of selected file" role="img"></canvas><div class="wave-note" id="wave-note">Load WAV or MP3 to visualize</div></div><div class="fields block"><label>START · seconds<input id="start" type="number" step="0.01" min="0" value="0" disabled></label><label>END · seconds<input id="end" type="number" step="0.01" min="0" value="0" disabled></label><label>SPEED · audition rate<input id="rate" type="range" min="0.5" max="2" step="0.01" value="1" disabled><span class="mono" id="rate-text">1.00×</span></label><label>PROJECT TEMPO · manual BPM<input id="bpm" type="number" min="40" max="240" step="1" value="120"></label></div><div class="beat-tools"><div><strong>BAR RULER</strong><span>Assume 4/4 at your chosen BPM · not tempo detection</span></div><button type="button" id="tap-bpm">TAP BPM</button><button type="button" data-bars="4">4 BARS</button><button type="button" data-bars="8">8 BARS</button><span id="bar-duration" class="micro">4 bars = 8.0 s</span></div><div class="toolbar"><button id="play" class="primary" disabled>▶ Play slice</button><button id="stop" disabled>■ Stop</button><button id="export" disabled>↓ Export WAV slice</button></div><div class="transport-controls"><label class="loop-toggle" for="loop-slice"><input type="checkbox" id="loop-slice"> <strong>LOOP THE SELECTION</strong><span>Hear the passage repeat until Stop</span></label><div class="transport-indicator" role="group" aria-label="Playback state"><span id="transport-state" role="status">TRANSPORT READY</span><output id="transport-time" aria-live="off">0:00.0 / 0:00.0</output></div></div><p class="fineprint">One bounded WAV slice: 0.01–45 seconds. Bar lengths are planning aids; export is still measured in real seconds. Original files remain unchanged.</p><p id="status" class="status" role="status" aria-live="polite">Ready. Choose an exported audio or MIDI file.</p></section></div>
 
 <section class="direction-shell" id="direction" aria-labelledby="direction-title">
 <div class="direction-heading"><div><span class="kicker">03 / CREATIVE CONTROL</span><h2 id="direction-title">Direction desk<span class="title-period">.</span></h2><p>Listen, decide, arrange. These are <strong>manual production choices</strong>—not claims of audio-to-genre, key, tempo or lyric analysis.</p></div><div class="direction-label">FROM SOURCE → TO DECISION <span>↗</span></div></div>
@@ -268,10 +288,10 @@ a{color:var(--mint)} .top{position:sticky;top:0;z-index:50;padding:13px max(20px
         <label for="moment-title">NAME THIS MOMENT<input id="moment-title" type="text" maxlength="90" placeholder="The chorus that opens up"></label>
         <label for="moment-purpose">WHY IT MATTERS<select id="moment-purpose"><option>Hook</option><option>Groove</option><option>Vocal</option><option>Transition</option><option>Sound design</option><option>Reference</option><option>Other</option></select></label>
         <label class="wide" for="moment-note">WHAT TO KEEP OR CHANGE<textarea id="moment-note" maxlength="300" rows="2" placeholder="Keep the cadence; less percussion under this line…"></textarea></label>
-        <button type="button" id="add-moment" class="primary" disabled>+ KEEP SELECTED PASSAGE</button>
+        <div class="moment-form-actions"><button type="button" id="add-moment" class="primary" disabled>+ KEEP SELECTED PASSAGE</button><button type="button" id="cancel-moment-edit" hidden>CANCEL EDIT</button></div>
       </div>
       <div id="moment-list" class="moment-list" aria-live="polite"><p class="session-empty">Import an audio file, isolate a passage above, then keep it here.</p></div>
-      <p class="session-footnote">Markers from a restored session remain unavailable until you import their exact matching source. When secure hashing is unavailable, markers are usable only with the source already loaded in this session.</p>
+      <p class="session-footnote">Play or loop a saved moment directly. Export a selected bookmark as a WAV clip (maximum 45 seconds), or edit its title and production notes. Markers from a restored session remain unavailable until you import their exact matching source. When secure hashing is unavailable, markers are usable only with the source already loaded in this session.</p>
     </section>
     <section class="session-panel" aria-labelledby="takes-title">
       <div class="session-panel-head"><div><span class="mini-index">B · DECISIONS</span><h3 id="takes-title">Compare two directions</h3><p>Save the current Direction Desk choices as A or B, then reload either to keep editing.</p></div></div>
@@ -296,6 +316,7 @@ a{color:var(--mint)} .top{position:sticky;top:0;z-index:50;padding:13px max(20px
 <script>
 (()=>{'use strict';
 const C=window.ABAudioCore,$=id=>document.getElementById(id),MAX_FILES=12,MAX_BYTES=50*1024*1024,assets=[];let selected=-1,ctx=null,active=[],activeKeys=new Set();
+ let transportSource=null,transportFrame=0,transportStartedAt=0,transportStart=0,transportEnd=0,transportRate=1,transportLoop=false;
 const SHORTCUTS='awsedftgyhujk',BLACK=new Set([1,3,6,8,10]);
 const status=(text,error=false)=>{$('status').textContent=text;$('status').classList.toggle('error',!!error);};
 const audio=()=>{if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('Web Audio is not supported in this browser');ctx=new AC();}if(ctx.state==='suspended')ctx.resume();return ctx;};
@@ -304,7 +325,26 @@ const sanitize=name=>name.replace(/[^a-zA-Z0-9._-]/g,'_').slice(0,96)||'source';
 function download(data,type,name){const blob=data instanceof Blob?data:new Blob([data],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200);}
 function bytes(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':(n/1024).toFixed(1)+' KB';}
 async function digest(ab){if(!window.crypto?.subtle)return 'unavailable (requires secure context)';const hash=await crypto.subtle.digest('SHA-256',ab);return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');}
-function stop(){for(const o of active){try{o.stop()}catch{}}active=[];}
+function clockTransport(s){
+   const n=Math.max(0,Number.isFinite(s)?s:0);
+   return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')+'.'+Math.floor((n%1)*10);
+ }
+ function stop(){
+   const source=transportSource;transportSource=null;
+   if(transportFrame){cancelAnimationFrame(transportFrame);transportFrame=0;}
+   for(const o of active){try{o.stop()}catch{}}active=[];
+   $('transport-state').textContent='TRANSPORT STOPPED';
+   $('transport-state').dataset.playing='false';
+   if(source)$('transport-time').textContent=clockTransport(0)+' / '+clockTransport(transportEnd-transportStart);
+ }
+ function updateTransport(){
+   if(!transportSource||!ctx){transportFrame=0;return;}
+   const duration=transportEnd-transportStart;
+   const elapsed=Math.max(0,(ctx.currentTime-transportStartedAt)*transportRate);
+   const position=transportLoop?elapsed%duration:Math.min(duration,elapsed);
+   $('transport-time').textContent=clockTransport(position)+' / '+clockTransport(duration);
+   transportFrame=requestAnimationFrame(updateTransport);
+ }
 function setEnabled(on){for(const k of ['start','end','rate','play','stop','export'])$(k).disabled=!on;}
 function noteRow(label,value){const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('span');a.textContent=label;b.textContent=String(value);li.append(a,b);return li;}
 function refreshObservations(){const el=$('observations');el.replaceChildren();const asset=current();if(!asset){el.append(noteRow('No local import','—'));return;}el.append(noteRow('Input',asset.kind.toUpperCase()));el.append(noteRow('SHA-256',asset.hash.slice(0,18)+'…'));el.append(noteRow('Bytes',asset.size));if(asset.kind==='audio'){el.append(noteRow('Decoded channels',asset.stats.channels),noteRow('Sample rate',asset.stats.sampleRate+' Hz'),noteRow('Measured RMS',asset.stats.rms.toFixed(4)),noteRow('Source length',asset.stats.duration.toFixed(2)+' s'));}else{el.append(noteRow('MIDI notes',asset.midi.notes.length),noteRow('Tracks',asset.midi.tracks),noteRow('PPQN',asset.midi.ppqn),noteRow('Tempo events',asset.midi.tempoEvents));}}
@@ -321,7 +361,57 @@ async function handle(files){let accepted=0;for(const file of Array.from(files).
     assets.push(item);accepted++;renderList();choose(assets.length-1);
   }catch(e){status(name+': '+e.message,true);}
 }if(!accepted&&assets.length===0)renderList();$('files').value='';}
-function play(){try{const {a,start,end}=selectedRange();stop();const ac=audio(),source=ac.createBufferSource(),gain=ac.createGain(),rate=Number($('rate').value);if(!C.finite(rate,.5,2))throw Error('Invalid play rate');source.buffer=a.buffer;source.playbackRate.value=rate;source.connect(gain).connect(ac.destination);gain.gain.value=.8;source.onended=()=>{active=active.filter(x=>x!==source);};source.start(0,start,end-start);active.push(source);status('Auditioning '+(end-start).toFixed(2)+' s at '+rate.toFixed(2)+'×.');}catch(e){status(e.message,true);}}
+function playRange({a,start,end}){
+   if(a!==current()||a.kind!=='audio'||!C.finite(start,0,a.stats.duration)||
+       !C.finite(end,start+.01,a.stats.duration+.001))throw Error('Audio source or selection changed.');
+   const rate=Number($('rate').value);
+   if(!C.finite(rate,.5,2))throw Error('Invalid audition rate.');
+   stop();
+   const ac=audio(),source=ac.createBufferSource(),gain=ac.createGain(),loop=$('loop-slice').checked;
+   source.buffer=a.buffer;source.playbackRate.value=rate;
+   source.connect(gain).connect(ac.destination);gain.gain.value=.8;
+   source.loop=loop;if(loop){source.loopStart=start;source.loopEnd=end;}
+   transportSource=source;transportStartedAt=ac.currentTime;transportStart=start;transportEnd=end;
+   transportRate=rate;transportLoop=loop;
+   source.onended=()=>{
+     active=active.filter(x=>x!==source);
+     if(transportSource!==source)return;
+     transportSource=null;
+     if(transportFrame){cancelAnimationFrame(transportFrame);transportFrame=0;}
+     $('transport-state').textContent='PLAYBACK ENDED';
+     $('transport-state').dataset.playing='false';
+     $('transport-time').textContent=clockTransport(end-start)+' / '+clockTransport(end-start);
+   };
+   try{if(loop)source.start(0,start);else source.start(0,start,end-start);}
+   catch(e){transportSource=null;throw e;}
+   active.push(source);
+   $('transport-state').textContent=loop?'LOOPING SOURCE':'AUDITIONING SOURCE';
+   $('transport-state').dataset.playing='true';
+   $('transport-time').textContent=clockTransport(0)+' / '+clockTransport(end-start);
+   transportFrame=requestAnimationFrame(updateTransport);
+   status((loop?'Looping ':'Auditioning ')+(end-start).toFixed(2)+' s at '+rate.toFixed(2)+'×. Source audio unchanged.');
+ }
+ function play(){try{playRange(selectedRange());}catch(e){status(e.message,true);}}
+ function auditionMoment(m){
+   const a=current();
+   if(!momentMatches(m,a)||m.end>a.stats.duration+.001){
+     sessionMessage('Reimport the exact matching audio source to play this moment.',true);return;
+   }
+   try{
+     $('start').value=m.start.toFixed(3);$('end').value=m.end.toFixed(3);
+     plot();renderDirection();playRange({a,start:m.start,end:m.end});
+     sessionMessage(($('loop-slice').checked?'Looping ':'Playing ')+m.title+' · '+m.start.toFixed(2)+'–'+m.end.toFixed(2)+' s.');
+   }catch(e){sessionMessage(e.message,true);}
+ }
+ function exportMoment(m){
+   const a=current();
+   if(!momentMatches(m,a)||m.end>a.stats.duration+.001){sessionMessage('Reimport the matching source to export this marker.',true);return;}
+   try{
+     const wav=C.encodeWav(a.buffer,m.start,m.end);
+     download(wav,'audio/wav',sanitize(a.name.replace(/\.[^.]+$/,'')+'_'+m.title)+'_'+m.start.toFixed(2)+'-'+m.end.toFixed(2)+'.wav');
+     sessionMessage('Exported '+m.title+' as a source-bound PCM16 WAV clip. Original unchanged.');
+   }catch(e){sessionMessage('WAV export unavailable: '+e.message,true);}
+ }
 function keyNote(index){const key=$('keys').children[index];if(!key)return;key.classList.add('on');setTimeout(()=>key.classList.remove('on'),125);try{const {a,start,end}=selectedRange();const ac=audio(),source=ac.createBufferSource(),gain=ac.createGain(),note=60+index,root=Number($('root').value),length=Number($('length').value);if(!Number.isInteger(root)||root<24||root>96||!C.finite(length,.05,3))throw Error('Invalid root or length');let sec=Math.min(end-start,length);source.buffer=a.buffer;source.playbackRate.value=C.pitchRate(note,root);source.connect(gain).connect(ac.destination);const now=ac.currentTime,actual=Math.min(3,sec/source.playbackRate.value);gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(.72,now+.009);gain.gain.setValueAtTime(.72,now+Math.max(.01,actual-.04));gain.gain.linearRampToValueAtTime(0,now+actual);source.onended=()=>{active=active.filter(x=>x!==source);};source.start(now,start,sec);active.push(source);}catch(e){status(e.message,true);}}
 function showKeyboard(){const root=$('keys');for(let i=0;i<13;i++){const b=document.createElement('button');b.type='button';b.className=BLACK.has(i)?'black':'';b.setAttribute('aria-label','Play semitone '+i);b.innerHTML='<span>'+'C C# D D# E F F# G G# A A# B C'.split(' ')[i]+'</span><small>'+SHORTCUTS[i].toUpperCase()+'</small>';b.addEventListener('pointerdown',e=>{e.preventDefault();keyNote(i);});root.append(b);}}
 function record(){const {a,start,end}=selectedRange(),audioData=C.encodeWav(a.buffer,start,end);download(audioData,'audio/wav',sanitize(a.name.replace(/\.[^.]+$/,''))+'_'+start.toFixed(2)+'-'+end.toFixed(2)+'.wav');status('Exported PCM16 WAV clip · original source unchanged.');}
@@ -454,14 +544,14 @@ const MOMENT_PURPOSES=new Set(['Hook','Groove','Vocal','Transition','Sound desig
 const GOALS=new Set(['Build a new track','Rework a draft','Extend an idea','Build a contrasting version']);
 const DESTINATIONS=new Set(['Production brief for Suno','Arrangement notes for Meow Lab 2','Notes for a DAW / collaborator']);
 const VOCALS=new Set(['Intimate lead vocal','Bright layered pop vocal','Breathy restrained vocal','Spoken / rhythmic vocal','Instrumental / no vocal','Undecided']);
-let sessionMoments=[];
+let sessionMoments=[],editingMomentId=null;
 let takes={A:null,B:null};
 const validHash=x=>typeof x==='string'&&/^[a-f0-9]{64}$/.test(x);
 const sessionMessage=(message,error=false)=>{$('session-feedback').textContent=message;$('session-feedback').style.color=error?'#ffc0be':'#a7d6c5';};
 function renderSessionSource(){
  const a=current();
  $('session-source').textContent=a?(a.kind.toUpperCase()+' · '+a.name+' · '+(validHash(a.hash)?'SOURCE SHA-256 RECORDED':'HASH UNAVAILABLE; LOCAL MATCH ONLY')):'NO LOCAL SOURCE · Direction can be saved without audio';
- $('add-moment').disabled=!(a&&a.kind==='audio');
+ $('add-moment').disabled=!(a&&a.kind==='audio')&&!editingMomentId;
 }
 function momentMatches(m,a){
  if(!a||a.kind!=='audio')return false;
@@ -488,10 +578,34 @@ function momentView(m){
    plot();renderDirection();
    sessionMessage('Selected '+m.title+' · '+m.start.toFixed(2)+'–'+m.end.toFixed(2)+' s. Use Play Slice to audition.');
  });
+ const listen=document.createElement('button');listen.type='button';listen.textContent='▶ AUDITION';
+ listen.title=linked?'Hear this bookmark; respects the Loop switch':'Matching audio required';
+ listen.disabled=!linked;listen.className='primary-mini';
+ listen.addEventListener('click',()=>auditionMoment(m));
+ const wav=document.createElement('button');wav.type='button';wav.textContent='↓ WAV';
+ wav.title=(m.end-m.start>45)?'WAV clips are limited to 45 seconds':linked?'Export this passage as WAV':'Matching audio required';
+ wav.disabled=!linked||(m.end-m.start)>45;
+ wav.addEventListener('click',()=>exportMoment(m));
+ const edit=document.createElement('button');edit.type='button';edit.textContent='EDIT';
+ edit.setAttribute('aria-label','Edit notes for '+m.title);
+ edit.addEventListener('click',()=>{
+   editingMomentId=m.id;
+   $('moment-title').value=m.title;$('moment-purpose').value=m.purpose;$('moment-note').value=m.note;
+   if(momentMatches(m,current())&&m.end<=current().stats.duration+.001){
+     stop();$('start').value=m.start.toFixed(3);$('end').value=m.end.toFixed(3);plot();renderDirection();
+   }
+   renderSessionSource();$('add-moment').textContent='SAVE MOMENT CHANGES';
+   $('cancel-moment-edit').hidden=false;$('moment-title').focus();
+   sessionMessage('Editing '+m.title+'. Update its notes and save. Timing can change only when its source is linked.');
+ });
  const remove=document.createElement('button');remove.type='button';remove.textContent='REMOVE';
  remove.setAttribute('aria-label','Remove moment '+m.title);
- remove.addEventListener('click',()=>{sessionMoments=sessionMoments.filter(x=>x.id!==m.id);renderMoments();sessionMessage('Moment removed from this session.');});
- actions.append(go,remove);row.append(actions);return row;
+ remove.addEventListener('click',()=>{
+   sessionMoments=sessionMoments.filter(x=>x.id!==m.id);
+   if(editingMomentId===m.id)clearMomentEdit();
+   renderMoments();sessionMessage('Moment removed from this session.');
+ });
+ actions.append(listen,go,wav,edit,remove);row.append(actions);return row;
 }
 function renderMoments(){
  const list=$('moment-list');list.replaceChildren();
@@ -503,22 +617,37 @@ function renderMoments(){
  }
  for(const m of sessionMoments)list.append(momentView(m));
 }
-function addMoment(){
- try{
-   if(sessionMoments.length>=MAX_MOMENTS)throw Error('Moment limit reached (32). Export this session before starting another.');
-   const {a,start,end}=selectedRange();
-   const title=field('moment-title')||'Moment '+String(sessionMoments.length+1).padStart(2,'0');
-   const purpose=field('moment-purpose'),note=field('moment-note');
-   if(!MOMENT_PURPOSES.has(purpose))throw Error('Choose a valid moment purpose.');
-   if(!C.finite(start,0,600)||!C.finite(end,start+.01,600.01))throw Error('Select a valid source range.');
-   sessionMoments.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),
-     title:title.slice(0,90),purpose,note:note.slice(0,300),start,end,
-     sourceName:a.name,sourceBytes:a.size,sourceSha256:validHash(a.hash)?a.hash:'',
-     localAsset:a});
+function clearMomentEdit(){
+   editingMomentId=null;
    $('moment-title').value='';$('moment-note').value='';
-   renderMoments();sessionMessage('Saved '+title+' as a source-bound moment.');
- }catch(e){sessionMessage(e.message,true);}
-}
+   $('add-moment').textContent='+ KEEP SELECTED PASSAGE';
+   $('cancel-moment-edit').hidden=true;renderSessionSource();
+ }
+ function addMoment(){
+   try{
+     const title=(field('moment-title')||'Moment '+String(sessionMoments.length+1).padStart(2,'0')).slice(0,90);
+     const purpose=field('moment-purpose'),note=field('moment-note').slice(0,300);
+     if(!MOMENT_PURPOSES.has(purpose))throw Error('Choose a valid moment purpose.');
+     if(editingMomentId){
+       const marker=sessionMoments.find(x=>x.id===editingMomentId);
+       if(!marker)throw Error('Moment no longer exists; start a new bookmark.');
+       const linked=momentMatches(marker,current());
+       let nextRange=null;
+       if(linked)nextRange=selectedRange();
+       Object.assign(marker,{title,purpose,note,...(nextRange?{start:nextRange.start,end:nextRange.end}:{})});
+       clearMomentEdit();renderMoments();
+       sessionMessage('Updated '+title+'. Export your session to keep the change.');return;
+     }
+     if(sessionMoments.length>=MAX_MOMENTS)throw Error('Moment limit reached (32). Export this session before starting another.');
+     const {a,start,end}=selectedRange();
+     if(!C.finite(start,0,600)||!C.finite(end,start+.01,600.01))throw Error('Select a valid source range.');
+     sessionMoments.push({id:String(Date.now())+'-'+Math.random().toString(36).slice(2,8),
+       title,purpose,note,start,end,sourceName:a.name,sourceBytes:a.size,
+       sourceSha256:validHash(a.hash)?a.hash:'',localAsset:a});
+     clearMomentEdit();renderMoments();
+     sessionMessage('Saved '+title+'. Audition, edit or export it from the collection.');
+   }catch(e){sessionMessage(e.message,true);}
+ }
 function safeDirection(d){
  if(!d||typeof d!=='object'||Array.isArray(d))throw Error('Invalid direction record');
  const string=(key,max)=>{const v=d[key];if(typeof v!=='string'||v.length>max)throw Error('Invalid direction field: '+key);return v;};
@@ -625,7 +754,7 @@ async function importSession(file){
    const imported=parsed.moments.map(safeMoment);
    if(new Set(imported.map(x=>x.id)).size!==imported.length)throw Error('Duplicate moment identifiers');
    // The exact source audio is NEVER reconstructed or invented by loading a session.
-   sessionMoments=imported;takes={A:slotA,B:slotB};
+   sessionMoments=imported;takes={A:slotA,B:slotB};clearMomentEdit();
    applyDirection(direction);renderComparison();renderMoments();renderSessionSource();
    const linked=imported.filter(m=>momentMatches(m,current())).length;
    sessionMessage('Restored direction, A/B versions and '+imported.length+' marker(s). '+linked+' matched to the current source. Reimport original audio for any unavailable markers.');
@@ -633,6 +762,7 @@ async function importSession(file){
 }
 function initSession(){
  $('add-moment').addEventListener('click',addMoment);
+  $('cancel-moment-edit').addEventListener('click',()=>{clearMomentEdit();sessionMessage('Moment editing cancelled.');});
  for(const key of ['a','b']){
    $('save-'+key).addEventListener('click',()=>saveTake(key.toUpperCase()));
    $('load-'+key).addEventListener('click',()=>restoreTake(key.toUpperCase()));
@@ -647,7 +777,7 @@ function initSession(){
 function midiNotes(){const a=current();if(!a||a.kind!=='midi')return;download(JSON.stringify({schema:'ab-midi-observation/v1',sourceSha256:a.hash,ppqn:a.midi.ppqn,notes:a.midi.notes,tempoEvents:a.midi.tempoEvents},null,2),'application/json',sanitize(a.name)+'.notes.json');status('Exported parsed MIDI note list; original MIDI unchanged.');}
 $('files').addEventListener('change',e=>handle(e.target.files));const drop=$('drop');drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('drag')});drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('drag');handle(e.dataTransfer.files)});
 for(const id of ['start','end'])$(id).addEventListener('input',plot);$('rate').addEventListener('input',()=>{$('rate-text').textContent=Number($('rate').value).toFixed(2)+'×'});
-$('play').addEventListener('click',play);$('stop').addEventListener('click',()=>{stop();status('Playback stopped.')});$('export').addEventListener('click',()=>{try{record()}catch(e){status(e.message,true)}});$('manifest').addEventListener('click',manifest);$('midi-notes').addEventListener('click',midiNotes);
+$('play').addEventListener('click',play);$('loop-slice').addEventListener('change',()=>{if(transportSource)play();});$('stop').addEventListener('click',()=>{stop();status('Playback stopped.')});$('export').addEventListener('click',()=>{try{record()}catch(e){status(e.message,true)}});$('manifest').addEventListener('click',manifest);$('midi-notes').addEventListener('click',midiNotes);
 window.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName))return;const index=SHORTCUTS.indexOf(e.key.toLowerCase());if(index>=0&&!activeKeys.has(e.code)){e.preventDefault();activeKeys.add(e.code);keyNote(index);}});window.addEventListener('keyup',e=>activeKeys.delete(e.code));window.addEventListener('blur',()=>{activeKeys.clear();stop()});window.addEventListener('resize',plot);showKeyboard();plot();initDirection();initSession();
 })();
 </script>
