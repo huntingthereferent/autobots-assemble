@@ -10,6 +10,7 @@ on:
       - '.github/workflows/audit-to-action-cancellations.yml'
       - 'systems/workspace/inspector_gadget_adapter.py'
       - 'systems/workspace/inspector_gadget_scan.py'
+      - 'network/tests/test_inspector_gadget_calendar.py'
       - 'systems/workspace/inspector_gadget_wall.py'
       - 'systems/workspace/inspector_gadget_calendar.py'
       - 'systems/workspace/inspector_gadget_continuation.py'
@@ -75,7 +76,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
-          python systems/workspace/inspector_gadget_calendar.py plan inspector-gadget-report.json inspector-gadget-activation.json
+          python -m systems.workspace.inspector_gadget_calendar plan inspector-gadget-report.json inspector-gadget-activation.json
           python - <<'PY'
           import json, os
           plan = json.load(open('inspector-gadget-activation.json', encoding='utf-8'))
@@ -170,7 +171,7 @@ jobs:
           INSPECTOR_FINDING_JSON: ${{ toJSON(matrix) }}
         run: |
           printf '%s' "$INSPECTOR_FINDING_JSON" > inspector-selection.json
-          python systems/workspace/inspector_gadget_adapter.py inspect inspector-selection.json inspector-gadget-handoff.json
+          python -m systems.workspace.inspector_gadget_adapter inspect inspector-selection.json inspector-gadget-handoff.json
       - name: Preserve source-observation result
         if: always()
         uses: actions/upload-artifact@v4
