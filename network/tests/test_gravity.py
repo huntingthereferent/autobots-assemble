@@ -27,5 +27,36 @@ class GravityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             gravity(World("", ("test",)), ())
 
+
+    def test_dispatch_runs_internal_handler(self):
+        from systems.workspace.gravity import anchored_dispatch
+        called = []
+        world = World("rea", ("build", "witness"))
+        result = anchored_dispatch(world, (
+            Move("fetch", "outside", required_for="witness"),
+            Move("build", "inside")), internal_handlers={
+                "build": lambda: called.append("build") or "done"})
+        self.assertEqual(called, ["build"])
+        self.assertEqual(result["state"], "DISPATCHED")
+
+    def test_missing_handler_does_not_execute(self):
+        from systems.workspace.gravity import anchored_dispatch
+        world = World("rea", ("build",))
+        result = anchored_dispatch(world, (Move("build", "inside"),),
+                                   internal_handlers={})
+        self.assertEqual(result["state"], "UNSTAFFED")
+        self.assertFalse(result["executed"])
+
+    def test_external_handler_not_called_when_inside_available(self):
+        from systems.workspace.gravity import anchored_dispatch
+        called = []
+        world = World("rea", ("build", "witness"))
+        result = anchored_dispatch(world, (
+            Move("fetch", "outside", required_for="witness"),
+            Move("build", "inside")), internal_handlers={"build": lambda: "ok"},
+            external_handler=lambda _: called.append("external"))
+        self.assertEqual(result["operation"], "build")
+        self.assertEqual(called, [])
+
 if __name__ == "__main__":
     unittest.main()
