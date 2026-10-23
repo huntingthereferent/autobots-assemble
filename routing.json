@@ -1,41 +1,26 @@
 {
   "schema": "meta-workstation/routing-advice-v1",
-  "generated_at": "2026-10-22T23:59:24Z",
-  "last_paired_observation": "2026-10-22T22:48:42Z",
-  "signal": "NO_CLEAR_PRESSURE",
-  "reason": "No independently supported node-switch signal in the sampled waiting-run counts.",
+  "generated_at": "2026-10-23T00:06:33Z",
+  "last_paired_observation": null,
+  "signal": "SINGLE_NODE",
+  "reason": "Only primary repository is active. Cross-account transfer is disabled.",
   "latest_nodes": {
     "A": {
-      "running": 12,
+      "running": 18,
       "waiting": 3
-    },
-    "B": {
-      "running": 0,
-      "waiting": 0
     }
   },
   "sample_count": 3,
   "lane_advice": [
     {
-      "id": "B-CONTRACT",
-      "assigned": "B",
-      "admitted_nodes": [
-        "B"
-      ],
-      "recommended": "B",
-      "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
-    },
-    {
       "id": "SOURCE-CONTRACT",
       "assigned": "A",
       "admitted_nodes": [
-        "A",
-        "B"
+        "A"
       ],
       "recommended": "A",
       "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+      "requires": "Verify primary GitHub workflow and source pin. No second-account fallback."
     },
     {
       "id": "ARC",
@@ -45,7 +30,7 @@
       ],
       "recommended": "A",
       "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+      "requires": "Verify primary GitHub workflow and source pin. No second-account fallback."
     },
     {
       "id": "WORLD",
@@ -55,7 +40,7 @@
       ],
       "recommended": "A",
       "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+      "requires": "Verify primary GitHub workflow and source pin. No second-account fallback."
     },
     {
       "id": "NIH",
@@ -65,7 +50,7 @@
       ],
       "recommended": "A",
       "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+      "requires": "Verify primary GitHub workflow and source pin. No second-account fallback."
     },
     {
       "id": "SOURCES",
@@ -75,7 +60,7 @@
       ],
       "recommended": "A",
       "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+      "requires": "Verify primary GitHub workflow and source pin. No second-account fallback."
     },
     {
       "id": "WORKSTATION",
@@ -85,18 +70,8 @@
       ],
       "recommended": "A",
       "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
-    },
-    {
-      "id": "BOOTSTRAP",
-      "assigned": "B",
-      "admitted_nodes": [
-        "B"
-      ],
-      "recommended": "B",
-      "action": "KEEP_ASSIGNED",
-      "requires": "Re-read live workflow eligibility, preserve source SHA, and explicitly admit the next job. No automatic dispatch."
+      "requires": "Verify primary GitHub workflow and source pin. No second-account fallback."
     }
   ],
-  "boundary": "Advisory only. GitHub's workflow-run backlog is not a proven slowdown or job-slot capacity. A ChatGPT window must read and revalidate the current source before moving work."
+  "boundary": "Advisory only; historical second-account observations are not current routing evidence."
 }
