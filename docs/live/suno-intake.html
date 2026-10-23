@@ -316,6 +316,7 @@ a{color:var(--mint)} .top{position:sticky;top:0;z-index:50;padding:13px max(20px
 <script>
 (()=>{'use strict';
 const C=window.ABAudioCore,$=id=>document.getElementById(id),MAX_FILES=12,MAX_BYTES=50*1024*1024,assets=[];let selected=-1,ctx=null,active=[],activeKeys=new Set();
+ let transportSource=null,transportFrame=0,transportStartedAt=0,transportStart=0,transportEnd=0,transportRate=1,transportLoop=false;
 const SHORTCUTS='awsedftgyhujk',BLACK=new Set([1,3,6,8,10]);
 const status=(text,error=false)=>{$('status').textContent=text;$('status').classList.toggle('error',!!error);};
 const audio=()=>{if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)throw Error('Web Audio is not supported in this browser');ctx=new AC();}if(ctx.state==='suspended')ctx.resume();return ctx;};
@@ -324,7 +325,26 @@ const sanitize=name=>name.replace(/[^a-zA-Z0-9._-]/g,'_').slice(0,96)||'source';
 function download(data,type,name){const blob=data instanceof Blob?data:new Blob([data],{type});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1200);}
 function bytes(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':(n/1024).toFixed(1)+' KB';}
 async function digest(ab){if(!window.crypto?.subtle)return 'unavailable (requires secure context)';const hash=await crypto.subtle.digest('SHA-256',ab);return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');}
-function stop(){for(const o of active){try{o.stop()}catch{}}active=[];}
+function clockTransport(s){
+   const n=Math.max(0,Number.isFinite(s)?s:0);
+   return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0')+'.'+Math.floor((n%1)*10);
+ }
+ function stop(){
+   const source=transportSource;transportSource=null;
+   if(transportFrame){cancelAnimationFrame(transportFrame);transportFrame=0;}
+   for(const o of active){try{o.stop()}catch{}}active=[];
+   $('transport-state').textContent='TRANSPORT STOPPED';
+   $('transport-state').dataset.playing='false';
+   if(source)$('transport-time').textContent=clockTransport(0)+' / '+clockTransport(transportEnd-transportStart);
+ }
+ function updateTransport(){
+   if(!transportSource||!ctx){transportFrame=0;return;}
+   const duration=transportEnd-transportStart;
+   const elapsed=Math.max(0,(ctx.currentTime-transportStartedAt)*transportRate);
+   const position=transportLoop?elapsed%duration:Math.min(duration,elapsed);
+   $('transport-time').textContent=clockTransport(position)+' / '+clockTransport(duration);
+   transportFrame=requestAnimationFrame(updateTransport);
+ }
 function setEnabled(on){for(const k of ['start','end','rate','play','stop','export'])$(k).disabled=!on;}
 function noteRow(label,value){const li=document.createElement('li'),a=document.createElement('span'),b=document.createElement('span');a.textContent=label;b.textContent=String(value);li.append(a,b);return li;}
 function refreshObservations(){const el=$('observations');el.replaceChildren();const asset=current();if(!asset){el.append(noteRow('No local import','—'));return;}el.append(noteRow('Input',asset.kind.toUpperCase()));el.append(noteRow('SHA-256',asset.hash.slice(0,18)+'…'));el.append(noteRow('Bytes',asset.size));if(asset.kind==='audio'){el.append(noteRow('Decoded channels',asset.stats.channels),noteRow('Sample rate',asset.stats.sampleRate+' Hz'),noteRow('Measured RMS',asset.stats.rms.toFixed(4)),noteRow('Source length',asset.stats.duration.toFixed(2)+' s'));}else{el.append(noteRow('MIDI notes',asset.midi.notes.length),noteRow('Tracks',asset.midi.tracks),noteRow('PPQN',asset.midi.ppqn),noteRow('Tempo events',asset.midi.tempoEvents));}}
@@ -341,7 +361,57 @@ async function handle(files){let accepted=0;for(const file of Array.from(files).
     assets.push(item);accepted++;renderList();choose(assets.length-1);
   }catch(e){status(name+': '+e.message,true);}
 }if(!accepted&&assets.length===0)renderList();$('files').value='';}
-function play(){try{const {a,start,end}=selectedRange();stop();const ac=audio(),source=ac.createBufferSource(),gain=ac.createGain(),rate=Number($('rate').value);if(!C.finite(rate,.5,2))throw Error('Invalid play rate');source.buffer=a.buffer;source.playbackRate.value=rate;source.connect(gain).connect(ac.destination);gain.gain.value=.8;source.onended=()=>{active=active.filter(x=>x!==source);};source.start(0,start,end-start);active.push(source);status('Auditioning '+(end-start).toFixed(2)+' s at '+rate.toFixed(2)+'×.');}catch(e){status(e.message,true);}}
+function playRange({a,start,end}){
+   if(a!==current()||a.kind!=='audio'||!C.finite(start,0,a.stats.duration)||
+       !C.finite(end,start+.01,a.stats.duration+.001))throw Error('Audio source or selection changed.');
+   const rate=Number($('rate').value);
+   if(!C.finite(rate,.5,2))throw Error('Invalid audition rate.');
+   stop();
+   const ac=audio(),source=ac.createBufferSource(),gain=ac.createGain(),loop=$('loop-slice').checked;
+   source.buffer=a.buffer;source.playbackRate.value=rate;
+   source.connect(gain).connect(ac.destination);gain.gain.value=.8;
+   source.loop=loop;if(loop){source.loopStart=start;source.loopEnd=end;}
+   transportSource=source;transportStartedAt=ac.currentTime;transportStart=start;transportEnd=end;
+   transportRate=rate;transportLoop=loop;
+   source.onended=()=>{
+     active=active.filter(x=>x!==source);
+     if(transportSource!==source)return;
+     transportSource=null;
+     if(transportFrame){cancelAnimationFrame(transportFrame);transportFrame=0;}
+     $('transport-state').textContent='PLAYBACK ENDED';
+     $('transport-state').dataset.playing='false';
+     $('transport-time').textContent=clockTransport(end-start)+' / '+clockTransport(end-start);
+   };
+   try{if(loop)source.start(0,start);else source.start(0,start,end-start);}
+   catch(e){transportSource=null;throw e;}
+   active.push(source);
+   $('transport-state').textContent=loop?'LOOPING SOURCE':'AUDITIONING SOURCE';
+   $('transport-state').dataset.playing='true';
+   $('transport-time').textContent=clockTransport(0)+' / '+clockTransport(end-start);
+   transportFrame=requestAnimationFrame(updateTransport);
+   status((loop?'Looping ':'Auditioning ')+(end-start).toFixed(2)+' s at '+rate.toFixed(2)+'×. Source audio unchanged.');
+ }
+ function play(){try{playRange(selectedRange());}catch(e){status(e.message,true);}}
+ function auditionMoment(m){
+   const a=current();
+   if(!momentMatches(m,a)||m.end>a.stats.duration+.001){
+     sessionMessage('Reimport the exact matching audio source to play this moment.',true);return;
+   }
+   try{
+     $('start').value=m.start.toFixed(3);$('end').value=m.end.toFixed(3);
+     plot();renderDirection();playRange({a,start:m.start,end:m.end});
+     sessionMessage(($('loop-slice').checked?'Looping ':'Playing ')+m.title+' · '+m.start.toFixed(2)+'–'+m.end.toFixed(2)+' s.');
+   }catch(e){sessionMessage(e.message,true);}
+ }
+ function exportMoment(m){
+   const a=current();
+   if(!momentMatches(m,a)||m.end>a.stats.duration+.001){sessionMessage('Reimport the matching source to export this marker.',true);return;}
+   try{
+     const wav=C.encodeWav(a.buffer,m.start,m.end);
+     download(wav,'audio/wav',sanitize(a.name.replace(/\.[^.]+$/,'')+'_'+m.title)+'_'+m.start.toFixed(2)+'-'+m.end.toFixed(2)+'.wav');
+     sessionMessage('Exported '+m.title+' as a source-bound PCM16 WAV clip. Original unchanged.');
+   }catch(e){sessionMessage('WAV export unavailable: '+e.message,true);}
+ }
 function keyNote(index){const key=$('keys').children[index];if(!key)return;key.classList.add('on');setTimeout(()=>key.classList.remove('on'),125);try{const {a,start,end}=selectedRange();const ac=audio(),source=ac.createBufferSource(),gain=ac.createGain(),note=60+index,root=Number($('root').value),length=Number($('length').value);if(!Number.isInteger(root)||root<24||root>96||!C.finite(length,.05,3))throw Error('Invalid root or length');let sec=Math.min(end-start,length);source.buffer=a.buffer;source.playbackRate.value=C.pitchRate(note,root);source.connect(gain).connect(ac.destination);const now=ac.currentTime,actual=Math.min(3,sec/source.playbackRate.value);gain.gain.setValueAtTime(0,now);gain.gain.linearRampToValueAtTime(.72,now+.009);gain.gain.setValueAtTime(.72,now+Math.max(.01,actual-.04));gain.gain.linearRampToValueAtTime(0,now+actual);source.onended=()=>{active=active.filter(x=>x!==source);};source.start(now,start,sec);active.push(source);}catch(e){status(e.message,true);}}
 function showKeyboard(){const root=$('keys');for(let i=0;i<13;i++){const b=document.createElement('button');b.type='button';b.className=BLACK.has(i)?'black':'';b.setAttribute('aria-label','Play semitone '+i);b.innerHTML='<span>'+'C C# D D# E F F# G G# A A# B C'.split(' ')[i]+'</span><small>'+SHORTCUTS[i].toUpperCase()+'</small>';b.addEventListener('pointerdown',e=>{e.preventDefault();keyNote(i);});root.append(b);}}
 function record(){const {a,start,end}=selectedRange(),audioData=C.encodeWav(a.buffer,start,end);download(audioData,'audio/wav',sanitize(a.name.replace(/\.[^.]+$/,''))+'_'+start.toFixed(2)+'-'+end.toFixed(2)+'.wav');status('Exported PCM16 WAV clip · original source unchanged.');}
@@ -667,7 +737,7 @@ function initSession(){
 function midiNotes(){const a=current();if(!a||a.kind!=='midi')return;download(JSON.stringify({schema:'ab-midi-observation/v1',sourceSha256:a.hash,ppqn:a.midi.ppqn,notes:a.midi.notes,tempoEvents:a.midi.tempoEvents},null,2),'application/json',sanitize(a.name)+'.notes.json');status('Exported parsed MIDI note list; original MIDI unchanged.');}
 $('files').addEventListener('change',e=>handle(e.target.files));const drop=$('drop');drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('drag')});drop.addEventListener('dragleave',()=>drop.classList.remove('drag'));drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('drag');handle(e.dataTransfer.files)});
 for(const id of ['start','end'])$(id).addEventListener('input',plot);$('rate').addEventListener('input',()=>{$('rate-text').textContent=Number($('rate').value).toFixed(2)+'×'});
-$('play').addEventListener('click',play);$('stop').addEventListener('click',()=>{stop();status('Playback stopped.')});$('export').addEventListener('click',()=>{try{record()}catch(e){status(e.message,true)}});$('manifest').addEventListener('click',manifest);$('midi-notes').addEventListener('click',midiNotes);
+$('play').addEventListener('click',play);$('loop-slice').addEventListener('change',()=>{if(transportSource)play();});$('stop').addEventListener('click',()=>{stop();status('Playback stopped.')});$('export').addEventListener('click',()=>{try{record()}catch(e){status(e.message,true)}});$('manifest').addEventListener('click',manifest);$('midi-notes').addEventListener('click',midiNotes);
 window.addEventListener('keydown',e=>{if(e.repeat||e.ctrlKey||e.metaKey||e.altKey||/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName))return;const index=SHORTCUTS.indexOf(e.key.toLowerCase());if(index>=0&&!activeKeys.has(e.code)){e.preventDefault();activeKeys.add(e.code);keyNote(index);}});window.addEventListener('keyup',e=>activeKeys.delete(e.code));window.addEventListener('blur',()=>{activeKeys.clear();stop()});window.addEventListener('resize',plot);showKeyboard();plot();initDirection();initSession();
 })();
 </script>
