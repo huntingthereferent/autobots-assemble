@@ -541,22 +541,6 @@ footer{border-top-color:#253942}
 @media(prefers-reduced-motion:reduce){.prov-node{transition:none}.prov-node:hover{transform:none}}
 
 /* Combined source observation: a narrow reader in the existing execution surface. */
-.combined-strip{margin:15px 0 19px;padding:13px 16px;border:1px solid #2d454e;border-radius:8px;background:#0a151a}
-.combined-strip-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.combined-strip-head strong{font:650 11px/1.4 var(--data-font);letter-spacing:.09em;color:#bfe0e7}
-.combined-strip-head small{font:10px/1.5 var(--data-font);color:#8fb1bd}
-.combined-values{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
-.combined-values>div{padding:9px 12px;min-width:0;border-left:2px solid #365964;background:#101e25}
-.combined-values span{display:block;font:600 10px/1.4 var(--data-font);letter-spacing:.05em;color:#9fbac4}
-.combined-values b{display:block;font:650 clamp(20px,2.2vw,28px)/1.4 var(--data-font);color:#e5f2f4;overflow-wrap:anywhere}
-.combined-strip p{margin:4px 0;font:10px/1.6 var(--data-font);color:#9bb2bd}
-.combined-strip details{margin-top:10px;padding-top:8px;border-top:1px solid #2d4049}
-.combined-strip summary{cursor:pointer;font:600 11px/1.5 var(--data-font);color:#b3dce3}
-.combined-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 22px;margin-top:10px;font-size:11px;color:#b3c7d0}
-.combined-detail-grid a{color:#9bdbe6}
-.combined-issue{padding:5px 0;border-bottom:1px solid #253c46}
-#combined-issues{margin-top:5px}
-@media(max-width:700px){.combined-values{grid-template-columns:repeat(2,minmax(0,1fr))}.combined-detail-grid{grid-template-columns:1fr}}
 </style>
 <link rel="stylesheet" href="workstation-flow.css">
 <link rel="stylesheet" href="workstation-equilibrium.css">
@@ -588,25 +572,7 @@ footer{border-top-color:#253942}
     <article class="metric metric-followups"><div class="metric-top"><span>LATER PASSES / INDEX</span><span class="metric-glyph" aria-hidden="true">↺</span></div><strong data-stat="followups">—</strong><div class="flow-level" aria-hidden="true"></div><small>Earlier failures followed by matching passing runs</small></article>
   </div>
   <div class="outcome-ledger" aria-label="Historical run outcomes"><span>RECORDED OUTCOMES · TODAY</span><span><b data-stat="failed">—</b> failed / timed out / action required</span><span><b id="cancelled-today">—</b> cancelled</span><small>Earlier attempts, not unresolved tests. Follow-ups match workflow and branch in the retrieved index.</small></div>
-  <section class="combined-strip" aria-label="Combined source observations from both workstations">
-    <div class="combined-strip-head"><strong>PIPELINE / BOTH WORKSTATIONS</strong><small id="combined-status" role="status">CHECKING SOURCES</small></div>
-    <div class="combined-values">
-      <div><span>RUNNING / OBSERVED</span><b id="combined-running">—</b></div>
-      <div><span>WAITING / OBSERVED</span><b id="combined-waiting">—</b></div>
-      <div><span>SUCCESSFUL RUNS / TODAY</span><b id="combined-passed">—</b></div>
-      <div><span>WORKFLOWS TO REVIEW</span><b id="combined-review">—</b></div>
-    </div>
-    <p id="combined-source-note">Reading the last paired source measurement…</p>
-    <details>
-      <summary>Combined journals, routing and workflow evidence</summary>
-      <div class="combined-detail-grid">
-        <div><strong>Today's combined outcomes</strong><p id="combined-daily-note">Checking source…</p><p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/daily.json" target="_blank" rel="noopener noreferrer">Full-day journal ↗</a></p></div>
-        <div><strong>Current workflow health</strong><p id="combined-review-note">Checking source…</p><div id="combined-issues">Checking source…</div><p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/health.json" target="_blank" rel="noopener noreferrer">Workflow-health journal ↗</a></p></div>
-        <div><strong>Routing observation</strong><p id="combined-routing">Checking source…</p><p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/routing.json" target="_blank" rel="noopener noreferrer">Routing journal ↗</a></p></div>
-        <div><strong>Measured workload</strong><p>Combined counts are the last paired source observation, not a live browser-sampled slot limit.</p><p><a href="https://github.com/huntingthereferent/autobots-assemble/blob/meta-observations/history.json" target="_blank" rel="noopener noreferrer">Observation history ↗</a></p></div>
-      </div>
-    </details>
-  </section>
+  
    <div class="flow-snapshots" aria-label="Flow and clearance readings for runs created today">
     <div><span>CREATED TODAY</span><strong id="flow-created">—</strong></div>
     <div><span>RESOLVED TODAY*</span><strong id="flow-cleared">—</strong></div>
@@ -723,7 +689,7 @@ footer{border-top-color:#253942}
 <footer>Read-only / evidence-first. Public runs poll periodically; recorded research updates when its committed source projection changes. The source records, not this screen, determine what has been verified.</footer>
 <script src="workstation-flow.js"></script>
 <script src="workstation-equilibrium.js"></script>
-<script src="workstation-combined.js"></script>
+
 <script>
 "use strict";
 (() => {
@@ -1283,7 +1249,7 @@ footer{border-top-color:#253942}
   selectWorkstationView();
   loadCatalog();
   refresh();
-  window.WorkstationCombined.start();
+
   loadRunArchive();
   setInterval(()=>{if(!document.hidden&&!$("workstation-main").hidden)loadRunArchive()},ARCHIVE_CHECK);
 })();

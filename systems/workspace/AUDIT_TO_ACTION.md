@@ -54,7 +54,7 @@ worker, new comparison prompt, or claim that another ChatGPT window ran.
   workflow entry points: ARC native, NIH P2 synthetic benchmark, WORLD
   construction, workstation B7, mathematical Engine 1, finite CP30, Meow
   Lab, Pony Trail, Suno, research-source preflights and ARC source observation.
-- At each calendar tick it verifies the current health snapshot, reads
+- At each calendar tick it reads
   each registered native workflow's own GitHub run history, refuses to
   duplicate active jobs, honors each existing worker's minimum cadence
   and starts up to four due workers using GitHub's native
@@ -75,31 +75,15 @@ revalidation, not a new scientific hypothesis. Genuine research continuation
 requires each source-owning worker to emit a concrete next admissible job
 or frontier; Inspector only fires the registered executable entry point.
 
-## Calendar continuation — persistent unfinished workflow walls
+## Calendar observations — direct GitHub sources
 
-GitHub Actions already supplies the calendar: `.github/workflows/inspector-gadget-all-workflows.yml`
-runs on its hourly cron, independently of any open ChatGPT window.
+GitHub Actions runs `.github/workflows/inspector-gadget-all-workflows.yml` hourly, without requiring a ChatGPT window.
 
-On each calendar tick, the schedule:
-
-1. Reads the existing source-observed `meta-observations/health.json` journal
-   (maintained by the half-hour meta-observation workflow) from GitHub.
-2. Refuses stale, missing or unverifiable primary-node observations rather than
-   reporting an invented empty queue. It reads only the authorized original
-   workstation A; other nodes retain independent admission gates.
-3. Merges every persisted `needs_attention` workflow into the current scanner's
-   independent Inspector Gadget handoff matrix, even if the failure occurred
-   outside the two-hour live scan window.
-4. Schedules one real Inspector source/wall investigation per eligible workflow,
-   up to the documented per-tick capacity, retaining overflow explicitly.
-5. Stops re-admitting an older failure when a newer conclusive PASS closes the
-   recorded workflow health wall. Cancelled/skipped runs do not clear it.
-
-This **activates existing source-observation lanes**, not the native research
-experiments themselves. Workflow-level PASS is not proof of research validity.
-The 21 candidate research study contexts and any privately authorized W13
-operations remain behind their separate source and authorization gates.
-An intentionally idle source owner is not automatically resumed by a timer.
+- The Inspector scanner reads the original repository's GitHub Actions run API directly and records source-linked findings.
+- Its bounded scan covers up to the newest 1,000 completed runs and applies a two-hour discovery window. It does **not** recover historical unresolved walls outside that window without a separate source investigation.
+- `inspector_gadget_adapter.py matrix` turns the visible findings into independently verified HandoffRuntime source checks. Inaccessible source data is not interpreted as proof that no failures occurred.
+- Registered native worker dispatches use each owner's own GitHub Actions run history to prevent duplicate active work and enforce cadence. They do not depend on the former cross-repository Meta observation collector.
+- Artifacts and owning research evidence remain separate from the status of the GitHub workflow itself.
 
 ## The actual wall — backward chase
 
@@ -118,8 +102,7 @@ The target is not a red counter or just a failed workflow. The wall is a concret
   `obligation_pass_observed`, **not** an automatic research verdict or repair.
   Independent verification by the owning lane remains required.
 - The newest 100 workflow runs and 100 jobs bound each observation; this
-  is not a complete history. The hourly scan has not yet gained a durable
-  multi-day wall backlog after its discovery window expires. No automatic
+  is not a complete history. The hourly scan does not retain a multi-day backlog after its discovery window expires. No automatic
   retry, source edits or authentication of external owner evidence occurs.
 
 ## Next implementation boundary

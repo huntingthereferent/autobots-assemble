@@ -11,12 +11,6 @@ NOW = dt.datetime(2026, 10, 22, 23, 30, tzinfo=dt.timezone.utc)
 REPO = "huntingthereferent/autobots-assemble"
 
 
-def health():
-    return {"schema": "meta-workstation/current-workflow-health-v1",
-            "observed_at": "2026-10-22T23:00:00Z",
-            "nodes": {"A": {"repo": REPO, "observed": True, "open": []}}}
-
-
 def record(name, *, cooldown=360, enabled=True):
     return {"id": name, "filename": f"{name}.yml",
             "min_interval_minutes": cooldown, "enabled": enabled}
@@ -53,7 +47,7 @@ class NativeLaneContinuationTests(unittest.TestCase):
     def test_all_eligible_workers_are_selected_up_to_capacity(self):
         registry = mock_registry("arc", "nih", "world", "meow")
         histories = {name: [] for name in ("arc", "nih", "world", "meow")}
-        result = assess(registry, health(), histories, repo=REPO, now=NOW, root=self.root)
+        result = assess(registry, histories, repo=REPO, now=NOW, root=self.root)
         self.assertEqual(result["selected_count"], 4)
         self.assertEqual({row["id"] for row in result["selected"]},
                          {"arc", "nih", "world", "meow"})
@@ -62,7 +56,7 @@ class NativeLaneContinuationTests(unittest.TestCase):
         registry = mock_registry("arc", "nih", "world")
         histories = {"arc": [native_run(15)], "nih": [native_run(500, status="in_progress")],
                      "world": [native_run(500)]}
-        result = assess(registry, health(), histories, repo=REPO, now=NOW, root=self.root)
+        result = assess(registry, histories, repo=REPO, now=NOW, root=self.root)
         self.assertEqual([r["id"] for r in result["selected"]], ["world"])
         states = {r["id"]: r["state"] for r in result["workers"]}
         self.assertEqual(states["arc"], "COOLDOWN")
@@ -77,7 +71,7 @@ class NativeLaneContinuationTests(unittest.TestCase):
         def sender(filename):
             events.append(("dispatch", filename))
             return {"accepted": True}
-        result = run(registry, health(), repo=REPO, token="fake",
+        result = run(registry, repo=REPO, token="fake",
                      reader=reader, sender=sender, root=self.root)
         self.assertEqual(result["selected_count"], 2)
         self.assertEqual([e for e in events if e[0] == "dispatch"],
@@ -85,7 +79,7 @@ class NativeLaneContinuationTests(unittest.TestCase):
         self.assertTrue(all(r["result"] == "DISPATCH_ACCEPTED" for r in result["receipts"]))
 
     def test_failed_dispatch_is_not_claimed_as_movement(self):
-        result = run(mock_registry("arc"), health(), repo=REPO,
+        result = run(mock_registry("arc"), repo=REPO,
                      token="fake", reader=lambda *a: [],
                      sender=lambda *a: {"accepted": False}, root=self.root)
         self.assertEqual(result["dispatch_failures"], ["arc"])
@@ -93,8 +87,7 @@ class NativeLaneContinuationTests(unittest.TestCase):
 
     def test_budget_defers_not_discards_other_lanes(self):
         registry = mock_registry("arc", "nih", "world", "meow", cap=2)
-        result = assess(registry, health(),
-                        {name: [] for name in ("arc", "nih", "world", "meow")},
+        result = assess(registry, {name: [] for name in ("arc", "nih", "world", "meow")},
                         repo=REPO, now=NOW, root=self.root)
         self.assertEqual(result["selected_count"], 2)
         self.assertEqual(result["capacity_wait"], 2)
@@ -107,16 +100,19 @@ class NativeLaneContinuationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "no workflow_dispatch"):
             validate(registry, self.root)
 
-    def test_stale_health_blocks_all_dispatch(self):
-        h = health()
-        h["observed_at"] = "2026-10-21T20:00:00Z"
-        with self.assertRaisesRegex(ValueError, "stale"):
-            assess(mock_registry("arc"), h, {"arc": []}, repo=REPO, now=NOW, root=self.root)
+    def test_missing_worker_history_blocks_all_dispatch(self):
+        with self.assertRaisesRegex(ValueError, "history missing"):
+            assess(mock_registry("arc"), {}, repo=REPO, now=NOW, root=self.root)
+
+    def test_invalid_owning_repository_blocks_all_dispatch(self):
+        with self.assertRaisesRegex(ValueError, "owning GitHub repository"):
+            assess(mock_registry("arc"), {"arc": []},
+                   repo="unapproved", now=NOW, root=self.root)
 
     def test_empty_or_disabled_workflows_are_not_dispatched(self):
         registry = mock_registry("arc")
         registry["workers"][0]["enabled"] = False
-        result = run(registry, health(), repo=REPO, token="fake",
+        result = run(registry, repo=REPO, token="fake",
                      reader=lambda *args: self.fail("must not fetch a disabled worker"),
                      sender=lambda *args: self.fail("must not dispatch"),
                      root=self.root)
