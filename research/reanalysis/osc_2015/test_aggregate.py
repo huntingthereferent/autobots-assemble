@@ -67,5 +67,37 @@ class PublishedAggregateTests(unittest.TestCase):
         self.assertEqual(BLOB_SHA, "6c8ce0b93b9a83ac42669745bd1054da7c22a687")
 
 
+    def test_unpinned_csv_extra_field_rejected(self):
+        malformed = HEADER + "sample,1,0,unexpected_field\\n"
+        with self.assertRaisesRegex(ValueError, "no source-pinned recovery"):
+            summarize(malformed)
+        with self.assertRaisesRegex(ValueError, "width profile"):
+            summarize(malformed, allow_original_width_variants=True)
+        with self.assertRaisesRegex(ValueError, "no source-pinned recovery"):
+            inspect_bytes(malformed.encode(), check_source=False)
+
+    def test_fetch_source_is_single_bounded_read_not_recursive(self):
+        import io
+        from unittest.mock import patch
+        from aggregate import URL, fetch_source
+        calls=[]
+        def getter(url, timeout):
+            calls.append((url,timeout))
+            return io.BytesIO(b"short")
+        with patch("aggregate.urlopen", side_effect=getter):
+            data,observed=fetch_source()
+        self.assertEqual(data,b"short")
+        self.assertIn("T",observed)
+        self.assertEqual(calls,[(URL,20)])
+
+    def test_source_fetch_refuses_oversized_response(self):
+        import io
+        from unittest.mock import patch
+        from aggregate import fetch_source
+        with patch("aggregate.urlopen",return_value=io.BytesIO(b"z"*400001)):
+            with self.assertRaisesRegex(ValueError,"size exceeds"):
+                fetch_source()
+
+
 if __name__ == "__main__":
     unittest.main()
