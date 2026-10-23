@@ -11,9 +11,9 @@ class ArenaTests(unittest.TestCase):
             Challenge("tracer", "predict transition", "A", (1, 0, 0)),
         )
         verdicts = adjudicate(world, cases)
-        self.assertEqual(tuple(v.outcome for v in verdicts), ("REFUTED", "SUPPORTED"))
+        self.assertEqual(tuple(v.outcome for v in verdicts), ("CORRECTED", "SUPPORTED"))
         self.assertEqual(scoreboard(verdicts), {
-            "agents_entered": 2, "challenges": 2, "bodycount": 1, "supported": 1
+            "agents_entered": 2, "challenges": 2, "corrected": 1, "supported": 1
         })
 
     def test_language_motive_does_not_change_verdict(self):
@@ -22,7 +22,7 @@ class ArenaTests(unittest.TestCase):
             Challenge("a", "I insist this is correct", "A", (0, 0, 0)),
             Challenge("b", "I disagree", "A", (0, 0, 0)),
         ))
-        self.assertTrue(all(v.outcome == "REFUTED" for v in verdicts))
+        self.assertTrue(all(v.outcome == "CORRECTED" for v in verdicts))
 
     def test_correct_counterexample_is_supported(self):
         world = World(3, (0, 2, 1))
