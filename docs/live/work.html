@@ -541,6 +541,63 @@ footer{border-top-color:#253942}
 @media(prefers-reduced-motion:reduce){.prov-node{transition:none}.prov-node:hover{transform:none}}
 
 /* Combined source observation: a narrow reader in the existing execution surface. */
+
+/* Gentoo compact workstation skin: presentation only; data and execution untouched. */
+:root { --bg:#101018;--panel:#1b1928;--panel2:#252139;--line:#423a59;--text:#f1edf9;--muted:#b7aecb;--blue:#b49af2;--green:#9cddb8;--yellow:#e7c38c;--red:#ec9fa9; }
+body { background:var(--bg);font-size:12px;line-height:1.4; }
+a { color:#c8b3ff; }
+body > header { min-height:43px;padding-inline:clamp(9px,1.4vw,22px);gap:10px;background:rgba(20,17,31,.97);border-color:var(--line); }
+body > header nav { gap:0;flex-wrap:wrap; }
+body > header nav a { padding:5px 8px;font-size:10px;border-radius:4px; }
+body > header nav a:hover,body > header nav a[aria-current=page] { background:#352a50; }
+main { max-width:none;padding:12px clamp(9px,1.3vw,22px) 35px; }
+section[id] { scroll-margin-top:55px; }
+.overview { padding:13px;border-radius:7px;background:#1a1727;border-color:var(--line); }
+.hero-layout { gap:13px;grid-template-columns:minmax(0,1fr) minmax(210px,270px); }
+h1 { font-size:clamp(22px,2.6vw,32px);line-height:1.12; }
+h2 { font-size:clamp(16px,1.7vw,21px); }
+h3 { font-size:12px; }
+.intro { margin-top:6px;font-size:12px;line-height:1.45; }
+.feed-panel { padding:9px;border-radius:6px;background:#211c32;border-color:var(--line); }
+.feed-label { margin-bottom:5px; }
+.status-line { gap:4px 7px; }
+.status-line button { margin-top:4px; }
+.metrics { gap:6px;margin:12px 0 7px; }
+.metric { padding:9px 10px;border-radius:5px;background:#211d30;border-color:var(--line);border-top-width:2px; }
+.metric strong { font-size:clamp(19px,2vw,27px); }
+.metric small { margin-top:3px;font-size:9px; }
+.section-top { margin:19px 0 9px;padding-bottom:7px;gap:8px; }
+.subtitle { margin-top:3px;font-size:11px;line-height:1.4; }
+.tools,.source-controls { gap:6px; }
+button,select,input { padding:6px 8px;min-height:30px;font-size:11px;border-radius:5px;background:#29223d;border-color:#54446e; }
+button:hover { background:#392b56;border-color:#b49af2; }
+.workspace { gap:9px;grid-template-columns:minmax(0,1fr) minmax(0,1.35fr); }
+.pane { border-radius:6px; }
+.pane > header { padding:8px 10px;background:#29233a;border-color:var(--line); }
+.pane-content { max-height:540px;min-height:130px; }
+.run { padding:8px 10px;border-color:var(--line); }
+.run:hover,.run.selected { background:#312747; }
+.run-title { gap:7px; }
+.run h3 { font-size:11px; }
+.run p { margin-top:3px;font-size:10px;line-height:1.35; }
+.state { padding:2px 5px;font-size:9px;border-radius:3px; }
+.detail-body { padding:11px;font-size:11px;line-height:1.5; }
+.detail-body h3 { font-size:13px; }
+.detail-body .subhead { margin-top:12px; }
+.steps li { padding:5px 7px;gap:7px;font-size:11px; }
+.steps small { margin-top:2px; }
+.movement-summary { padding:9px 11px;background:#29233a; }
+.movement-list { max-height:290px; }
+.research-grid { gap:9px;margin-top:9px; }
+.record { padding:9px 11px; }
+.record p { margin:4px 0;line-height:1.45; }
+.wall { padding:8px 11px; }
+.wall p { line-height:1.45; }
+.revision-pane { margin-top:9px; }
+.notice { padding:8px 10px;margin-top:7px; }
+footer { max-width:none;padding:12px 15px 20px; }
+@media(max-width:980px) { .workspace,.research-grid { grid-template-columns:1fr; } .pane-content { max-height:360px; } }
+@media(max-width:620px) { body > header { gap:5px;padding:6px 9px; } body > header nav a { padding:4px 6px;font-size:9px; } main { padding:9px 8px 25px; } .hero-layout { grid-template-columns:1fr;gap:7px; } .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .metric { padding:8px; } .section-top { align-items:start; } }
 </style>
 <link rel="stylesheet" href="workstation-flow.css">
 <link rel="stylesheet" href="workstation-equilibrium.css">
