@@ -73,6 +73,43 @@ def decide(history, registry, now=None, max_age_minutes=90):
     if registry.get("schema") != "meta-workstation/registry-v1":
         raise ValueError("Unexpected routing registry")
 
+    active = {n.get("id"):n.get("repo") for n in registry.get("nodes", [])
+              if isinstance(n,dict)}
+    if set(active)=={"A"}:
+        # Archived node B must not be polled or used to route new work.
+        raw=[]
+        for sample in history.get("samples",[]):
+            moment=stamp(sample.get("ts")) if isinstance(sample,dict) else None
+            a=sample.get("nodes",{}).get("A",{}) if isinstance(sample,dict) else {}
+            if not moment or moment>now or a.get("observed") is not True:
+                continue
+            keys=("queued","pending","waiting","in_progress")
+            if any(type(a.get(k)) is not int or a[k]<0 for k in keys):
+                continue
+            raw.append({"ts":moment,"nodes":{"A":{
+                "running":a["in_progress"],
+                "waiting":sum(a[k] for k in keys[:3]),
+            }}})
+        raw.sort(key=lambda r:r["ts"])
+        last=raw[-1] if raw else None
+        recent=spaced_recent(raw)
+        signal="SINGLE_NODE" if last and (now-last["ts"]).total_seconds()<=max_age_minutes*60 else "STALE"
+        if not last:signal="UNKNOWN"
+        return {
+            "schema":"meta-workstation/routing-advice-v1",
+            "generated_at":now.isoformat(timespec="seconds").replace("+00:00","Z"),
+            "last_paired_observation":None,
+            "signal":signal,
+            "reason":"Only primary repository is active. Cross-account transfer is disabled.",
+            "latest_nodes":last["nodes"] if last else None,
+            "sample_count":len(recent),
+            "lane_advice":[{
+                "id":l["id"],"assigned":"A","admitted_nodes":["A"],
+                "recommended":"A","action":"KEEP_ASSIGNED",
+                "requires":"Verify primary GitHub workflow and source pin. No second-account fallback."
+            } for l in registry.get("lane_rules",[]) if l.get("node")=="A"],
+            "boundary":"Advisory only; historical second-account observations are not current routing evidence.",
+        }
     samples = [s for s in paired_samples(history) if s["ts"] <= now]
     recent = spaced_recent(samples)
     last = samples[-1] if samples else None
