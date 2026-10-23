@@ -1,4 +1,6 @@
 # Workspace Continuity — initial lane journal
+> **Tracework component:** workspace continuity is one part of Tracework. Old workstation-labeled paths and runtime contracts remain valid technical identifiers. [Current system overview](../../TRACEWORK.md).
+
 
 A small operating-state system for returning to different developing threads of work without flattening their source systems. **A lane is not a task, a discipline, or an instruction to become productive.** James can move away from a thread and return without losing its current referent, what changed, what survived, or where to resume. An exploratory thread can exist without any work commitment.
 
