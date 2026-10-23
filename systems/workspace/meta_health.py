@@ -172,7 +172,7 @@ def collect(previous, registry, now=None, getter=api):
                 "error": type(exc).__name__ + ": " + str(exc),
                 "workflows": current,
             }
-    out["all_sources"] = len(out["nodes"]) == 2 and all(v["observed"] for v in out["nodes"].values())
+    out["all_sources"] = bool(repos) and len(out["nodes"]) == len(repos) and all(v["observed"] for v in out["nodes"].values())
     if out["all_sources"]:
         out["last_complete_scan"] = utcstr(now)
         out["summary"] = {
