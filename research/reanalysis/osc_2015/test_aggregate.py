@@ -19,7 +19,10 @@ class PublishedAggregateTests(unittest.TestCase):
         self.assertEqual(counts, {
             "total": 6, "paired": 4, "original": 2, "replication": 2,
             "both": 1, "original_only": 1, "replication_only": 1,
-            "neither": 1, "excluded": 2
+            "neither": 1, "excluded": 2,
+            "source_width_variant_rows": 0,
+            "source_width_variant_paired": 0,
+            "source_width_variant_excluded": 0,
         })
 
     def test_reject_duplicate_identifier(self):
@@ -68,7 +71,8 @@ class PublishedAggregateTests(unittest.TestCase):
 
 
     def test_unpinned_csv_extra_field_rejected(self):
-        malformed = HEADER + "sample,1,0,unexpected_field\n"
+        malformed = ("Local.ID,Free.Text,T.sign.O.131,T.sign.R.132\n"
+                     "sample,unquoted,comma,1,0\n")
         with self.assertRaisesRegex(ValueError, "no source-pinned recovery"):
             summarize(malformed)
         with self.assertRaisesRegex(ValueError, "width profile"):
