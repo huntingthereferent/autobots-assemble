@@ -1,6 +1,6 @@
 """Bounded audio-movement worker source, copied into a private workstation edition.
 
-This executable is isolated from the verifier source. No calls to Suno or the
+This executable is isolated from the verifier source. No calls to external music services or the
 network. Reads one JSON request on stdin, returns one JSON observation on stdout.
 """
 import json

@@ -1,6 +1,6 @@
 """Host-owned PCM16 movement contract and independent native replay.
 
-Movement is from actual finite audio samples, not a Suno generation claim.
+Movement is from actual finite audio samples, not an automatically generated composition claim.
 The host does not import executable code from the private copied worker.
 """
 from __future__ import annotations

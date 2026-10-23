@@ -86,11 +86,11 @@ Public context examined:
 
 ## Verification
 
-- `python -m unittest -v network.tests.test_audio_motion_workstation network.tests.test_audio_sound_bank network.tests.test_suno_export_intake network.tests.test_cat_keyboard_ui`
+- `python -m unittest -v network.tests.test_audio_motion_workstation network.tests.test_audio_sound_bank network.tests.test_audio_export_intake network.tests.test_cat_keyboard_ui`
 - `python -m unittest -v network.tests.test_meow_lab_browser` (with Playwright/Chromium installed).
 - GitHub Actions `audio-motion-native` exercises actual local source editions and host replay; `meow-lab-v2-browser` exercises WAV import, waveform, keyboard, downloads and mobile layout.
 
-This does not contain Suno software, generated Suno audio, model weights, or proprietary secrets. Generated browser cat sources are our own finite procedural sound buffers. Importing a Suno export does not imply rights to redistribute or commercialize it. Neither imported audio nor a local manifest alone is authenticated independent proof of source ownership.
+Generated browser cat sources are original finite procedural sound buffers. Imported audio remains subject to its original rights and licensing; a file or local manifest alone does not authenticate source ownership.
 
 Copyright 2026 James Muneoka. All Rights Reserved. See repository LICENSE.
 
