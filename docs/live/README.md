@@ -1,6 +1,6 @@
 # Workstation
 
-[Workstation](work.html) · [Research sources](research-sources.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](suno-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
+[Workstation](work.html) · [Research sources](research-sources.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](audio-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
 
 The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, not the source provenance graph.
 
@@ -18,11 +18,11 @@ The GitHub Pages entrance under `/live/` now redirects to the **Workstation**, n
 
 The native path is `systems.workspace.audio_sound_bank`, which accepts up to four named, selected PCM16 WAVs (`miso.wav`, `mochi.wav`, `nori.wav`, `bean.wav`), copies an exact source edition, admits separate jobs in the existing runtime journal, executes the reviewed source worker, independently replays each result, writes original lineage and movement events to the existing workspace journal, and exports verified WAVs plus a manifest. A newly imported sound is never implicitly treated as native-verified. The browser WAV-and-JSON handoff export can be fed into the real local worker.
 
-These creative audio operations are not Suno model copies or ARC/NIH/WORLD evidence. The GitHub Pages site is read-only; the native Python runner is opt-in. [Project instructions](../../work/projects/cat-keyboard/README.md).
+These creative audio operations are not ARC/NIH/WORLD research evidence. The GitHub Pages site is read-only; the native Python runner is opt-in. [Project instructions](../../work/projects/cat-keyboard/README.md).
 
-## Native audio intake (Suno export compatibility)
+## Audio Intake — local source-first production desk
 
-[Audio intake](suno-intake.html) is an **independent local, source-first instrument** for user-supplied WAV/MP3 and MIDI files, including files exported through Suno's documented workflows. It provides bounded waveform observation, SHA-256 content identities where supported, audio slicing, playback-rate pitch mapping, PCM16 WAV export, MIDI note/timing inspection, and a provenance manifest. It does **not** connect to Suno accounts, scrape Suno, use private APIs, copy Suno software, or create new generated music. [Scope and evidence](../../work/projects/suno-export-intake/README.md).
+[Audio Intake](audio-intake.html) works with user-selected WAV/MP3 and MIDI files. It offers local decoding, waveform inspection, content SHA-256 when the browser supports it, clip selection, a resampled pitch keyboard, PCM16 WAV exports, MIDI timing inspection, source manifests, creative-direction forms and portable A/B production sessions. Bookmarks support source-matched audition, loops, WAV export and editable notes. It does not upload audio, connect to third-party accounts, automatically detect genres or musical keys, or grant usage rights. [Scope and tests](../../work/projects/audio-intake/README.md).
 
 ## Evidence boundaries
 
