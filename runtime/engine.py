@@ -33,12 +33,14 @@ class EventStore:
                 self._events.append(HandoffEvent(evidence=evidence, **row))
 
     def append(self, event: HandoffEvent) -> HandoffEvent:
-        self._events.append(event)
         if self.path:
-            self.path.parent.mkdir(parents=True, exist_ok=True)
             row = asdict(event)
+            serialized = json.dumps(row, ensure_ascii=False)
+            self.path.parent.mkdir(parents=True, exist_ok=True)
             with self.path.open("a", encoding="utf-8") as handle:
-                handle.write(json.dumps(row, ensure_ascii=False) + "\n")
+                handle.write(serialized + "\n")
+        # Failed serialization or persistence must not advance live state.
+        self._events.append(event)
         return event
 
     def all(self) -> tuple[HandoffEvent, ...]:
