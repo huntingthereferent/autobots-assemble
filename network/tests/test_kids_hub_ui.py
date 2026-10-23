@@ -1,4 +1,4 @@
-"""Kids' hub links and Meta launcher must point to real shipped pages."""
+"""Kids' hub links return to the canonical execution viewer."""
 from pathlib import Path
 import re
 import unittest
@@ -6,7 +6,7 @@ import unittest
 ROOT = Path(__file__).resolve().parents[2]
 LIVE = ROOT / "docs/live"
 HUB = LIVE / "kids.html"
-META = LIVE / "meta.html"
+WORK = LIVE / "work.html"
 
 class KidsHubTests(unittest.TestCase):
     def test_kids_hub_is_shipped_with_real_playable_destinations(self):
@@ -24,16 +24,14 @@ class KidsHubTests(unittest.TestCase):
             self.assertIn(f'href="{href}"', html)
             self.assertTrue((LIVE / href).resolve().is_file(), href)
 
-    def test_meta_has_accessible_kids_entry_without_replacing_workstation(self):
-        html = META.read_text(encoding="utf-8")
-        self.assertIn('href="kids.html">KIDS</a>', html)
-        self.assertNotIn('class="kids-access"', html)
-        self.assertNotIn('class="kids-main-link"', html)
-        self.assertIn('href="kids.html">KIDS</a>', html)
-        self.assertIn('id="queued"', html)
-        self.assertIn('id="running"', html)
-        self.assertIn('id="trend"', html)
-        self.assertIn('id="runs"', html)
+    def test_kids_hub_returns_to_single_execution_viewer(self):
+        kids = HUB.read_text(encoding="utf-8")
+        work = WORK.read_text(encoding="utf-8")
+        self.assertIn('href="work.html"', kids)
+        self.assertNotIn('href="meta.html"', kids)
+        self.assertIn('href="school.html"', kids)
+        self.assertIn('href="school.html">ONLINE SCHOOL</a>', work)
+        self.assertIn('id="executions-tab"', work)
 
 if __name__ == "__main__":
     unittest.main()
