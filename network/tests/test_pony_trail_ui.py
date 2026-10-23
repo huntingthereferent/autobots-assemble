@@ -13,7 +13,9 @@ class PonyTrailUiTests(unittest.TestCase):
         cls.work = WORK.read_text(encoding="utf-8")
 
     def test_workstation_nav_links_to_game(self):
-        self.assertIn('href="pony-trail.html"', self.work)
+        hub = (ROOT / "docs/live/kids.html").read_text(encoding="utf-8")
+        self.assertIn('href="pony-trail.html"', hub)
+        self.assertIn('href="work.html"', hub)
 
     def test_touch_and_keyboard_controls_exist(self):
         for token in ('id="jump"', 'id="start"', 'id="pause"', 'id="sound"',
