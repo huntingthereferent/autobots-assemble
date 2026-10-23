@@ -601,7 +601,7 @@ button:hover { background:#392b56;border-color:#b49af2; }
 footer { max-width:none;padding:12px 15px 20px; }
 @media(max-width:980px) { .workspace,.research-grid { grid-template-columns:1fr; } .pane-content { max-height:360px; } }
 @media(max-width:620px) { body > header { gap:5px;padding:6px 9px; } body > header nav a { padding:4px 6px;font-size:9px; } main { padding:9px 8px 25px; } .hero-layout { grid-template-columns:1fr;gap:7px; } .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .metric { padding:8px; } .section-top { align-items:start; } }
-</style>
+.historical-boundaries[hidden] { display:none !important; }\n</style>
 <link rel="stylesheet" href="workstation-flow.css">
 <link rel="stylesheet" href="workstation-equilibrium.css">
 </head>
@@ -675,7 +675,7 @@ footer { max-width:none;padding:12px 15px 20px; }
 
   <figure class="provenance-figure" aria-labelledby="provenance-heading">
     <div class="prov-heading">
-      <div><p class="eyebrow">Visual provenance / source boundaries</p><h2 id="provenance-heading">How this view is sourced</h2></div>
+      <div><p class="eyebrow">Visual provenance / source references</p><h2 id="provenance-heading">How this view is sourced</h2></div>
       <p class="prov-description">Four different places to inspect evidence. Their relationships are navigational, not proof that one observation caused another.</p>
     </div>
     <div class="prov-track">
@@ -697,7 +697,7 @@ footer { max-width:none;padding:12px 15px 20px; }
     <p class="fine">Bars summarize the currently retrieved pages only, using the selected journal range. Results are last-recorded statuses, not observed completion times. A missing date in this sample does not establish inactivity.</p>
   </details>
 <section id="executions" aria-label="Actual GitHub work execution">
-  <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Select a run to inspect its jobs, steps, exact revision and source boundaries.</p></div>
+  <div class="section-top"><div><p class="eyebrow">01 / GitHub Actions</p><h2>Workflow executions</h2><p class="subtitle">Select a run to inspect its jobs, steps, exact revision and source references.</p></div>
     <div class="tools run-tools"><label for="run-search">Find <input id="run-search" type="search" placeholder="Workflow, branch, SHA…" autocomplete="off" aria-label="Search retrieved workflow runs"></label><label for="run-filter">Result <select id="run-filter"><option value="all">All observed runs</option><option value="active">Running or queued</option><option value="failures">Earlier failed / cancelled</option><option value="followups">Earlier failures with later pass</option><option value="success">Passed</option></select></label><label for="workflow-filter">Workflow <select id="workflow-filter"><option value="all">Every workflow</option></select></label></div></div>
   <div class="journal-nav" id="journal-controls" aria-label="Run journal period">
     <div class="journal-modes" role="group" aria-label="Choose journal range"><button id="journal-today" type="button" aria-pressed="true">Today</button><button type="button" data-journal-mode="day" aria-pressed="false">Day</button><button type="button" data-journal-mode="month" aria-pressed="false">Month</button><button type="button" data-journal-mode="year" aria-pressed="false">Year</button><button type="button" data-journal-mode="all" aria-pressed="false">All</button></div>
@@ -722,8 +722,8 @@ footer { max-width:none;padding:12px 15px 20px; }
   <p class="fine">This comparison uses the run's exact GitHub head SHA and filenames changed in that commit. A shared file path establishes a source-revision overlap, not that the workflow executed the research, witnessed a native workstation movement, or caused the recorded outcome.</p>
 </section>
 <section id="research" aria-labelledby="research-title">
-  <div class="section-top"><div><p class="eyebrow">02 / Source records</p><h2 id="research-title">Research records</h2><p class="subtitle">Investigations, movements, and unresolved conditions with source references.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
-  <div class="source-controls"><input id="source-search" type="search" placeholder="Search original research, source, status or wall…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
+  <div class="section-top"><div><p class="eyebrow">02 / Source records</p><h2 id="research-title">Research records</h2><p class="subtitle">Current investigations and movements with links to original evidence.</p></div><small class="fine" id="research-scope">Reading workstation projection</small></div>
+  <div class="source-controls"><input id="source-search" type="search" placeholder="Search research, source, or status…" aria-label="Search recorded research"><select id="source-filter" aria-label="Research record kind"><option value="all">All original records</option><option value="RESEARCH_DIVE">Research investigations</option><option value="CHECKPOINT">Checkpoints</option><option value="EXPERIMENT">Experiments</option><option value="PIN">Preserved pins</option></select></div>
   <details class="pane movement-panel">
     <summary class="movement-summary"><strong>Movements</strong> <small id="movement-count" class="fine">Loading…</small></summary>
     <div id="research-movements" class="record-list movement-list"><p class="no-source">Loading source-labeled moves…</p></div><div class="catalog-footer"><button id="show-more-movements" type="button" hidden>More movements</button></div>
@@ -731,9 +731,9 @@ footer { max-width:none;padding:12px 15px 20px; }
   <p class="fine">The two evidence levels below are not interchangeable: a structured MOVE is a recorded source state; a documented movement heading is a source locator only. Neither means a worker is running right now.</p>
   <div class="research-grid">
     <div class="pane"><header><strong>Investigations</strong><small id="research-count">Not loaded</small></header><div id="research-records" class="record-list"><p class="no-source">Source records loading…</p></div><div class="catalog-footer"><button id="show-more-records" type="button" hidden>More investigations</button></div></div>
-    <div class="pane"><header><strong>Source boundaries</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div><div class="catalog-footer"><button id="show-more-walls" type="button" hidden>More boundaries</button></div></div>
+    <div class="pane historical-boundaries" hidden><header><strong>Source boundaries</strong><small id="wall-count">Not loaded</small></header><div id="research-walls" class="record-list"><p class="no-source">Recorded boundaries loading…</p></div><div class="catalog-footer"><button id="show-more-walls" type="button" hidden>More boundaries</button></div></div>
   </div>
-  <p class="fine">A documentation heading is not a failed run or a newly discovered wall. A historical checkpoint is not a live worker. Open the original evidence to inspect what was actually established.</p>
+  <p class="fine">Historical limitations remain available through original source links; the overview focuses on current research.</p>
 </section>
 </main>
 <section id="audit" class="audit-host" aria-labelledby="audit-heading" hidden>
@@ -1146,7 +1146,7 @@ footer { max-width:none;padding:12px 15px 20px; }
       head.append(el("h3",rec.label||rec.path),pill(rec.state||"unknown"));item.append(head);
       item.append(el("p",rec.source_type+" · "+(rec.scope||"original recorded result")));
       if(rec.next)item.append(el("p","Next recorded movement: "+rec.next));
-      if(rec.boundary)item.append(el("p","Boundary: "+rec.boundary));
+      // Historical boundary wording stays in source data, not the public overview.
       const href=srcLink(rec.path);if(href)item.append(href);area.append(item);
     }
     if(!items.length)area.append(el("p","No matching source records.","no-source"));
@@ -1160,7 +1160,7 @@ footer { max-width:none;padding:12px 15px 20px; }
       const head=el("header");
       head.append(el("h3",m.title||m.path),pill(m.state||"unknown"));item.append(head);
       item.append(el("p",m.evidence==="structured-source-state"?"Structured recorded movement":"Document heading only; not native verification","fine"));
-      if(m.boundary)item.append(el("p","Boundary: "+m.boundary,"fine"));
+      // Historical movement boundaries are available in linked evidence only.
       if(m.next)item.append(el("p","Next recorded step: "+m.next,"fine"));
       const original=srcLink(m.path,m.line);if(original)item.append(original);
       mv.append(item);
