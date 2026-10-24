@@ -51,8 +51,8 @@
   const PLACES=["a floating garden","an underground library","a moonlit forest","a musical mountain","a candy-colored planet","a secret treehouse"];
   const TWISTS=["a mysterious song","a door with no handle","a map written backwards","a bridge made of moonlight","an unexpected new friend","a clock that skips Tuesdays"];
   const KIND_LABELS={story:"Story",trail:"Trail idea",music:"Music idea",experiment:"Experiment",pattern:"Eight-beat pattern",reading:"Reading thought",other:"New invention"};
-  const TONE_NAMES=["Rest","Low C","Middle E","High G","Sparkle C"];
-  const TONE_MARKS=["·","●","◆","▲","✦"];
+  const TONE_NAMES=["Rest","C4","E4","G4","C5"];
+  const TONE_MARKS=["REST","C4","E4","G4","C5"];
   const TONE_FREQ=[0,261.63,329.63,392,523.25];
   const uid=()=> typeof crypto!=="undefined"&&crypto.randomUUID ? crypto.randomUUID() : String(Date.now())+"-"+String(Math.random()).slice(2);
   function localDay(){
@@ -123,7 +123,7 @@
     card.append(node("strong",item.title));
     card.append(node("p",compact?String(item.body||"").slice(0,135)+(String(item.body||"").length>135?"…":""):item.body||""));
     const actions=node("div",undefined,"creation-actions");
-    const open=node("button",item.kind==="pattern"?"Play again ♫":"Continue ✎");
+    const open=node("button",item.kind==="pattern"?"Replay pattern":"Edit creation");
     open.type="button";open.addEventListener("click",()=>{
       if(item.kind==="pattern"&&Array.isArray(item.tones)&&item.tones.length===8&&item.tones.every(v=>Number.isInteger(v)&&v>=0&&v<TONE_NAMES.length)){
         pattern=item.tones.slice();$("pattern-name").value=item.title;renderPattern();show("pattern");
@@ -131,7 +131,7 @@
         editingCreationId=item.id;
         $("creation-kind").value=Object.hasOwn(KIND_LABELS,item.kind)&&item.kind!=="pattern"?item.kind:"other";
         $("creation-title").value=item.title;$("creation-body").value=item.body||"";
-        $("save-creation").textContent="Save changes ✦";$("cancel-creation-edit").hidden=false;
+        $("save-creation").textContent="Save changes";$("cancel-creation-edit").hidden=false;
         show("create");$("creation-title").focus();
       }
     });actions.append(open);
@@ -162,7 +162,7 @@
   }
   function resetCreationForm(){
     editingCreationId=null;$("creation-form").reset();
-    $("save-creation").textContent="Save to my collection ✦";
+    $("save-creation").textContent="Save creation";
     $("cancel-creation-edit").hidden=true;
   }
   function renderIdea(){
