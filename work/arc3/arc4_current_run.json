@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "id": "ARC4-SP80-UPPER-RIGHT1-2026-10-22",
+  "referent": "Original native ARC-AGI-3 SP80 level-four upper-bar action effect: direct RIGHT1 versus frozen controls",
+  "source": "arc-agi original SDK (OperationMode.NORMAL), fresh independent A/B entry histories",
+  "source_code": "work/arc3/native_sp80_stage4_direct_upper_right1_contrast.py",
+  "prior_state": "Source-linked native SP80 level 4/6, NOT_FINISHED in cited bounded experiments; no verified level-5 or WIN from those runs",
+  "prior_evidence": [
+    {
+      "role": "native-run-pointer",
+      "url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294",
+      "claim": "Original source event-order observations; linked runner and artifact, not reverified in this change"
+    },
+    {
+      "role": "native-run-pointer",
+      "url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/39755328707",
+      "claim": "Original-source same-geometry frame comparison reported by draft evidence index; not reverified in this change"
+    },
+    {
+      "role": "pending-canonical-handoff",
+      "url": "https://github.com/huntingthereferent/autobots-assemble/pull/409",
+      "claim": "Separate draft 4/6 resume handoff, not merged canonical authority"
+    }
+  ],
+  "required_relation": "Does a direct authentic RIGHT1 action after the upper click alter original SDK off-cup new-color-6 first-arrival evidence relative to matched controls?",
+  "frozen_parent": "6@46,33 3 6@24,33 2 2 2 3 3 6@34,42 3 3 3 1 1 6@34,21",
+  "frozen_controls": [
+    [
+      "reselect",
+      ""
+    ],
+    [
+      "right1",
+      "4"
+    ],
+    [
+      "left1",
+      "3"
+    ],
+    [
+      "left2",
+      "3 3"
+    ],
+    [
+      "left_then_right",
+      "3 4"
+    ],
+    [
+      "left_then_up",
+      "3 1"
+    ],
+    [
+      "left_then_down",
+      "3 2"
+    ]
+  ],
+  "resets_per_control": 2,
+  "expected_native_reset_count": 14,
+  "required_witnesses": [
+    "native A/B independent entry history",
+    "complete 64x64 original returned frames",
+    "original SDK action/click receipts",
+    "official levels_completed and GameState",
+    "matched frozen controls and independent native observations",
+    "first original new palette6 arrival outside cup windows at source rows 5 and 8, including explicit negative cases"
+  ],
+  "walls": [
+    "Visual cup-fill, border flash and frame indices do not prove an objective, elapsed time, physics, or level win.",
+    "Only official original SDK levels_completed >=5 or WIN is level progression.",
+    "No substitution of archived route, synthetic game, mathematical F3 proof or earlier stage-two result.",
+    "A changed continuation requires a newly frozen hypothesis and evidence gate; old counterexamples and negatives remain intact."
+  ],
+  "next_if_no_progress": "Retain the original source observations and exact unmatched native relation; choose one new source-discriminating test, do not repeat green runs as movement.",
+  "next_if_progress": "Verify native level >=5 / WIN with a fresh independent source run and preserve full receipts before stronger claims."
+}
