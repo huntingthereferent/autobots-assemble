@@ -1,0 +1,40 @@
+name: ARC4 original SP80 upper endpoint and history discrimination
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_upper_endpoint_history.py'
+      - 'work/arc3/arc4_upper_history_contract.json'
+      - 'work/arc3/arc4_upper_history_gate.py'
+      - 'work/arc3/upper_history_workstation.py'
+      - '.github/workflows/arc4-upper-history-workstation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  workstation-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile frozen original source and workstation
+        run: python -m compileall -q work/arc3/native_sp80_stage4_upper_endpoint_history.py work/arc3/arc4_upper_history_gate.py work/arc3/upper_history_workstation.py
+      - name: Fail-closed native history preflight
+        run: python -m work.arc3.arc4_upper_history_gate pre
+      - name: Execute native ARC4 through original workstation handoff
+        run: python -m work.arc3.upper_history_workstation --execute --data-dir runtime/data/arc4/upper-history/workstation --out runtime/data/arc4/upper-history/original-upper-history.json
+      - name: Independently check frozen action words, original SDK frame archive and status
+        run: python -m work.arc3.arc4_upper_history_gate post --result runtime/data/arc4/upper-history/original-upper-history.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-upper-history-workstation
+          path: |
+            runtime/data/arc4/upper-history/original-upper-history.*
+            runtime/data/arc4/upper-history/workstation/**
+          retention-days: 90
+          if-no-files-found: error
