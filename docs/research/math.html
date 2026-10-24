@@ -24,6 +24,9 @@ q = [u=2 ∧ v&lt;k]
   + t·([u=1 ∧ v=0] - [u=1 ∧ v=1])
   + c·((v+u+1)²-v²)</div><p class="note">Nine base-coordinate cells below display the z increment under B as <b>left / right</b>. Highlighted cells differ.</p><div id="q-table"></div></section>
 </div><div>
+<section class="panel"><h2>Enumerated fixed-word invariants</h2><p>All 27 states in the depth-three F₃ carrier are checked directly in your browser. Fixed state means applying the full word returns precisely the same starting state. Different counts obstruct whole-state labeled conjugacy; matching counts do not prove it.</p>
+<table class="invariant-table"><thead><tr><th>Word</th><th>Left fixed</th><th>Right fixed</th><th>Comparison</th></tr></thead><tbody id="invariant-table"></tbody></table>
+<p class="note">Finite enumerations here are executable checks against the stated 48-law formula. They are not the all-depth algebraic proof or an independent validation of the source implementation.</p></section>
 <section class="panel"><h2>Follow a word from marked origin</h2><p>Actions are applied left-to-right from (0,0,0), with the same word in both worlds. A matching endpoint from this word alone does not prove equivalence.</p>
 <div class="field"><label for="action-word">A/B action word (up to 120 characters)</label><input id="action-word" value="ABABAB" spellcheck="false" style="width:100%"></div>
 <div class="result" id="step-detail"></div><div class="trajectory" id="trajectory"></div>
