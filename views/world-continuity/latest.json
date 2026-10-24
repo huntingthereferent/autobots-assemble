@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-24T16:01:31.924799+00:00",
-  "content_sha256": "0d8814f97a99d1716fe7185f39d306ccde68673c1c6c05a6a2975d3ea6c10614",
+  "checked_at": "2026-10-24T20:55:16.933835+00:00",
+  "content_sha256": "000bef19003ffb6cddf6571b4d2fa08dd2a2866166e131ca0c838feb779651f5",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 7,
-      "max_magnitude": 5.8,
+      "count": 10,
+      "max_magnitude": 5.3,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,137 +22,188 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026vbygsk",
-        "observed_at": "2026-10-24T16:01:31.307285Z",
-        "source_updated_at": "2026-10-24T15:54:31.748000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vbygsk",
+        "source_id": "ci41351895",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:24:32.523000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41351895",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vbygsk",
+        "canonical_key": "event:ci41351895",
         "payload": {
-          "magnitude": 1.5,
-          "place": "47 km WNW of Ninilchik, Alaska",
-          "longitude": -152.411,
-          "latitude": 60.27,
-          "depth_km": 87.3,
-          "occurred_at": "2026-10-24T15:53:13.300000+00:00"
+          "magnitude": 1.03,
+          "place": "5 km N of Cabazon, CA",
+          "longitude": -116.794666666667,
+          "latitude": 33.9641666666667,
+          "depth_km": 13.1,
+          "occurred_at": "2026-10-24T20:21:04.430000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026vbyigb",
-        "observed_at": "2026-10-24T16:01:31.307285Z",
-        "source_updated_at": "2026-10-24T15:58:02.656000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vbyigb",
+        "source_id": "nc75454311",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:47:29.262000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75454311",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vbyigb",
+        "canonical_key": "event:nc75454311",
         "payload": {
-          "magnitude": 2.7,
-          "place": "108 km NNE of Arctic Village, Alaska",
-          "longitude": -144.492,
-          "latitude": 69.02,
-          "depth_km": 1.7,
-          "occurred_at": "2026-10-24T15:54:24.778000+00:00"
+          "magnitude": 1.65,
+          "place": "13 km WSW of Toms Place, CA",
+          "longitude": -118.82250213623,
+          "latitude": 37.5200004577637,
+          "depth_km": 4.71000003814697,
+          "occurred_at": "2026-10-24T20:08:46.290000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "ci41351799",
-        "observed_at": "2026-10-24T16:01:31.307285Z",
-        "source_updated_at": "2026-10-24T15:36:21.466000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41351799",
+        "source_id": "nc75454316",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:42:22.226000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75454316",
         "entity_type": "event",
-        "canonical_key": "event:ci41351799",
+        "canonical_key": "event:nc75454316",
         "payload": {
-          "magnitude": 0.97,
-          "place": "13 km SE of Ocotillo Wells, CA",
-          "longitude": -116.033,
-          "latitude": 33.0585,
-          "depth_km": 9.14,
-          "occurred_at": "2026-10-24T15:33:01.120000+00:00"
+          "magnitude": 1.74,
+          "place": "53 km WSW of Petrolia, CA",
+          "longitude": -124.873001098633,
+          "latitude": 40.1575012207031,
+          "depth_km": 4.15000009536743,
+          "occurred_at": "2026-10-24T20:17:47.640000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "nc75454236",
-        "observed_at": "2026-10-24T16:01:31.307285Z",
-        "source_updated_at": "2026-10-24T15:15:16.560000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75454236",
+        "source_id": "nc75454321",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:47:30.262000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75454321",
         "entity_type": "event",
-        "canonical_key": "event:nc75454236",
+        "canonical_key": "event:nc75454321",
         "payload": {
-          "magnitude": 0.75,
-          "place": "7 km WNW of Cobb, CA",
-          "longitude": -122.799835205078,
-          "latitude": 38.8343315124512,
-          "depth_km": 2.35999989509583,
-          "occurred_at": "2026-10-24T15:13:38.550000+00:00"
+          "magnitude": 2.52,
+          "place": "7 km W of Cobb, CA",
+          "longitude": -122.803169250488,
+          "latitude": 38.8334999084473,
+          "depth_km": 1.99000000953674,
+          "occurred_at": "2026-10-24T20:39:17.770000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "nn00926195",
-        "observed_at": "2026-10-24T16:01:31.307285Z",
-        "source_updated_at": "2026-10-24T15:53:43.261000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00926195",
+        "source_id": "nc75454326",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:52:24.291000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75454326",
         "entity_type": "event",
-        "canonical_key": "event:nn00926195",
+        "canonical_key": "event:nc75454326",
         "payload": {
-          "magnitude": 1.91,
-          "place": "29 km SSE of Mina, Nevada",
-          "longitude": -118.0106,
-          "latitude": 38.133,
-          "depth_km": 6.2644,
-          "occurred_at": "2026-10-24T15:51:11.285000+00:00"
+          "magnitude": 2.28,
+          "place": "7 km W of Cobb, CA",
+          "longitude": -122.804496765137,
+          "latitude": 38.8316650390625,
+          "depth_km": 1.75999999046326,
+          "occurred_at": "2026-10-24T20:39:24.930000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "us6000u4mm",
-        "observed_at": "2026-10-24T16:01:31.307285Z",
-        "source_updated_at": "2026-10-24T15:51:40.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4mm",
+        "source_id": "nc75454341",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:52:16.839000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75454341",
         "entity_type": "event",
-        "canonical_key": "event:us6000u4mm",
+        "canonical_key": "event:nc75454341",
         "payload": {
-          "magnitude": 4.9,
-          "place": "217 km NW of Port-Olry, Vanuatu",
-          "longitude": 165.4608,
-          "latitude": -13.8535,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-24T15:19:25.185000+00:00"
+          "magnitude": 0.73,
+          "place": "7 km W of Cobb, CA",
+          "longitude": -122.805999755859,
+          "latitude": 38.8331680297852,
+          "depth_km": 2.28999996185303,
+          "occurred_at": "2026-10-24T20:50:40.400000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "us6000u4mn",
-        "observed_at": "2026-10-24T16:01:31.307285Z",
-        "source_updated_at": "2026-10-24T15:48:55.797000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4mn",
+        "source_id": "nc75454346",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:54:45.630000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75454346",
         "entity_type": "event",
-        "canonical_key": "event:us6000u4mn",
+        "canonical_key": "event:nc75454346",
         "payload": {
-          "magnitude": 5.8,
-          "place": "Bouvet Island region",
-          "longitude": 7.0149,
-          "latitude": -54.0304,
-          "depth_km": 12.486,
-          "occurred_at": "2026-10-24T15:24:19.882000+00:00"
+          "magnitude": 0.35,
+          "place": "0 km NW of The Geysers, CA",
+          "longitude": -122.759666442871,
+          "latitude": 38.7804985046387,
+          "depth_km": 1.5,
+          "occurred_at": "2026-10-24T20:53:12.490000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "us6000u4pa",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:54:28.040000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us6000u4pa",
+        "entity_type": "event",
+        "canonical_key": "event:us6000u4pa",
+        "payload": {
+          "magnitude": 5.3,
+          "place": "101 km SSE of Vilyuchinsk, Russia",
+          "longitude": 159.1963,
+          "latitude": 52.1565,
+          "depth_km": 70.184,
+          "occurred_at": "2026-10-24T20:35:04.576000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "uw714127412",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:35:05.820000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/uw714127412",
+        "entity_type": "event",
+        "canonical_key": "event:uw714127412",
+        "payload": {
+          "magnitude": 1.33000004,
+          "place": "38 km NNE of Amboy, Washington",
+          "longitude": -122.189666748047,
+          "latitude": 46.2091674804688,
+          "depth_km": 6.53000020980835,
+          "occurred_at": "2026-10-24T20:33:33.970000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "uw714127422",
+        "observed_at": "2026-10-24T20:55:16.519734Z",
+        "source_updated_at": "2026-10-24T20:35:50.810000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/uw714127422",
+        "entity_type": "event",
+        "canonical_key": "event:uw714127422",
+        "payload": {
+          "magnitude": 1.42999995,
+          "place": "38 km NNE of Amboy, Washington",
+          "longitude": -122.192337036133,
+          "latitude": 46.2108345031738,
+          "depth_km": 6.53000020980835,
+          "occurred_at": "2026-10-24T20:34:26+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-24T16:01:31.561868Z",
-      "source_updated_at": "2026-10-24T14:50:23Z",
+      "observed_at": "2026-10-24T20:55:16.631544Z",
+      "source_updated_at": "2026-10-24T20:54:29Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54634,
-        "forks_count": 12744,
+        "stargazers_count": 54638,
+        "forks_count": 12735,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -161,7 +212,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-24T16:01:31.847290Z",
+      "observed_at": "2026-10-24T20:55:16.868960Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
