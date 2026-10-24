@@ -1,0 +1,85 @@
+name: NIH audit - source-backed workstation lanes
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/nih-audit-lanes.yml'
+      - 'research/nih_audit/**'
+permissions:
+  contents: read
+jobs:
+  inventory:
+    name: NIH-01 source inventory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify canonical NIH inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for p in systems/workspace/NIH_P2_STATUS_DIFFERENCE_SEARCH.md systems/workspace/nih_p2_historical_status_difference_search.py systems/workspace/nih_p2_two_aact_snapshot_comparison.py systems/workspace/NIH_P2_CROSS_SOURCE_BOUNDARY.md; do
+            test -f "$p"
+            sha256sum "$p"
+          done
+  replay-contract:
+    name: NIH-02 replay contract
+    needs: inventory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Test original archive comparison implementation
+        run: python -m unittest -v network.tests.test_nih_p2_two_aact_snapshot_comparison
+  discrepancy-contract:
+    name: NIH-03 discrepancy tests
+    needs: inventory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Verify source comparison test exists
+        run: |
+          test -f systems/workspace/nih_p2_historical_status_difference_search.py
+          python -m py_compile systems/workspace/nih_p2_historical_status_difference_search.py
+  provenance:
+    name: NIH-06 provenance boundaries
+    needs: inventory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Verify evidence boundaries
+        run: |
+          test -f systems/workspace/NIH_P2_AACT_OWNER_DATE_LINK.md
+          test -f systems/workspace/NIH_P2_TWO_AACT_SNAPSHOT_BOUNDARY.md
+          test -f research/nih_audit/LANES.md
+  reconcile:
+    name: NIH-07 audit reconciliation
+    needs: [replay-contract, discrepancy-contract, provenance]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report native outcomes
+        env:
+          REPLAY: ${{ needs.replay-contract.result }}
+          DIFF: ${{ needs.discrepancy-contract.result }}
+          PROV: ${{ needs.provenance.result }}
+        run: |
+          echo "## NIH audit lanes" >> "$GITHUB_STEP_SUMMARY"
+          echo "Replay: $REPLAY; discrepancy contract: $DIFF; provenance: $PROV" >> "$GITHUB_STEP_SUMMARY"
+          echo "No fresh full-archive download or clinical inference was performed." >> "$GITHUB_STEP_SUMMARY"
+          test "$REPLAY" = success
+          test "$DIFF" = success
+          test "$PROV" = success
