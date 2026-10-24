@@ -72,6 +72,7 @@ def verify_result(contract, result_path):
             data.get("original_sdk_resets") == len(trials),
             "native reset ledger incomplete")
     successful = 0
+    offcup_receipts = {}
     for name, word_tail in expected:
         rows = [row for row in trials if row.get("control") == name]
         require(len(rows) == 2 and
@@ -89,6 +90,33 @@ def verify_result(contract, result_path):
             require(isinstance(row.get("source_observation"), dict) and
                     row["source_observation"].get("source_frame_count", 0) > 0,
                     "actual source frame observation missing")
+            obs = row["source_observation"]
+            first = obs.get("first_native_new6_outside_cups_by_row")
+            require(isinstance(first, dict) and set(first) == {"5", "8"},
+                    "frozen row-5/row-8 off-cup witness missing")
+            for native_row in (5, 8):
+                item = first[str(native_row)]
+                if item is None:
+                    continue  # Explicit absence in this bounded returned stack.
+                require(isinstance(item, dict) and
+                        isinstance(item.get("frame"), int) and
+                        0 <= item["frame"] < obs["source_frame_count"] and
+                        isinstance(item.get("source_x"), list) and
+                        bool(item["source_x"]) and
+                        item.get("source_pixel_count") == len(item["source_x"]),
+                        "invalid first off-cup source event")
+                for x in item["source_x"]:
+                    require(type(x) is int and 0 <= x < 64 and
+                            not any(y0 <= native_row <= y1 and x0 <= x <= x1
+                                    for x0, y0, x1, y1 in
+                                    ((5,35,10,43), (17,5,25,10),
+                                     (35,5,43,10), (47,5,55,10))),
+                            "off-cup event contains original cup pixel")
+            if name in offcup_receipts:
+                require(offcup_receipts[name] == first,
+                        "A/B source off-cup event divergence for " + name)
+            else:
+                offcup_receipts[name] = first
             # Existing original SDK runner owns the native win classification.
             require(type(row.get("official_level5_or_WIN")) is bool,
                     "native progress flag missing or non-boolean")
@@ -109,6 +137,7 @@ def verify_result(contract, result_path):
         "state": "MOVE_PENDING_INDEPENDENT_VERIFICATION" if successful else "PARTIAL",
         "official_sdk_progress_cases": successful,
         "native_resets_with_receipts": len(trials),
+        "observed_first_new6_outside_cups_by_row": offcup_receipts,
         "original_frame_archive": str(archive),
         "unresolved_walls": contract["walls"],
         "next_movement": (contract["next_if_progress"] if successful

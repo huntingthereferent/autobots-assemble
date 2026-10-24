@@ -73,6 +73,24 @@ def source_report(root, pre, frames):
         ):earliest_left_color13=index
         for name,sl in BORDERS.items():
             if edge[name] is None and np.any(pre[sl]!=frame[sl]):edge[name]=index
+    # First newly observed source palette6 outside all four original cup windows.
+    # Frame indices are indices in the returned SDK animation, not elapsed time.
+    first_offcup = {}
+    for row in (5, 8):
+        outside = np.ones(64, dtype=bool)
+        for x0, y0, x1, y1 in CUPS.values():
+            if y0 <= row <= y1:
+                outside[x0:x1 + 1] = False
+        first = None
+        for frame_index, frame in enumerate(frames):
+            changed = outside & (pre[row] != 6) & (frame[row] == 6)
+            if np.any(changed):
+                xs_new = np.flatnonzero(changed)
+                first = {"frame": int(frame_index),
+                         "source_x": [int(x) for x in xs_new],
+                         "source_pixel_count": int(len(xs_new))}
+                break
+        first_offcup[str(row)] = first
     ys,xs=np.nonzero(pre==9)
     return {
         "root_hash":hash_frame(root), "pre_pour_hash":hash_frame(pre),
@@ -82,6 +100,7 @@ def source_report(root, pre, frames):
         "source_first_four_simultaneous":first_four,
         "source_first_top_left_palette13":earliest_left_color13,
         "source_first_boundary_change":edge,
+        "first_native_new6_outside_cups_by_row":first_offcup,
         "selected_bbox":[int(xs.min()),int(ys.min()),int(xs.max()),int(ys.max())] if len(xs) else None,
     }
 

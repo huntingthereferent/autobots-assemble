@@ -61,7 +61,8 @@
     "complete 64x64 original returned frames",
     "original SDK action/click receipts",
     "official levels_completed and GameState",
-    "matched frozen controls and independent native observations"
+    "matched frozen controls and independent native observations",
+    "first original new palette6 arrival outside cup windows at source rows 5 and 8, including explicit negative cases"
   ],
   "walls": [
     "Visual cup-fill, border flash and frame indices do not prove an objective, elapsed time, physics, or level win.",
