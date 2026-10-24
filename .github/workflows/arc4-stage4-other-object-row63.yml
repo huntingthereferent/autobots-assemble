@@ -1,0 +1,31 @@
+name: ARC4 lane B original SDK other-object row63 contrast
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_other_object_row63.py'
+      - '.github/workflows/arc4-stage4-other-object-row63.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-sdk-other-object:
+    runs-on: ubuntu-latest
+    timeout-minutes: 48
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual ARC original SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile source-owned cross-object trial
+        run: python -m compileall -q work/arc3/native_sp80_stage4_other_object_row63.py
+      - name: Execute five frozen controls on two original SDK entrance witnesses
+        run: python -m work.arc3.native_sp80_stage4_other_object_row63 --out runtime/data/arc4/arc4-other-object-row63.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-other-object-row63-native
+          path: runtime/data/arc4/arc4-other-object-row63.*
+          retention-days: 90
+          if-no-files-found: error

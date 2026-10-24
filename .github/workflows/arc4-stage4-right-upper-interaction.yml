@@ -1,0 +1,31 @@
+name: ARC4 lane B right and upper placement interaction
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_right_upper_interaction.py'
+      - '.github/workflows/arc4-stage4-right-upper-interaction.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-sdk-right-upper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 48
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile bounded original SP80 source test
+        run: python -m compileall -q work/arc3/native_sp80_stage4_right_upper_interaction.py
+      - name: Run six predeclared right x upper source controls on two native entrance witnesses
+        run: python -m work.arc3.native_sp80_stage4_right_upper_interaction --out runtime/data/arc4/arc4-right-upper-interaction.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-right-upper-interaction
+          path: runtime/data/arc4/arc4-right-upper-interaction.*
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,31 @@
+name: ARC4 lane B genuine click-only source controls
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_click_only_row63.py'
+      - '.github/workflows/arc4-stage4-click-only-row63.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-sp80-click-controls:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile genuine SDK click-only source
+        run: python -m compileall -q work/arc3/native_sp80_stage4_click_only_row63.py
+      - name: Execute seven frozen click controls and native A/B entrance witnesses
+        run: python -m work.arc3.native_sp80_stage4_click_only_row63 --out runtime/data/arc4/arc4-click-only-original-row63.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-click-only-original-sdk-source
+          path: runtime/data/arc4/arc4-click-only-original-row63.*
+          if-no-files-found: error
+          retention-days: 90

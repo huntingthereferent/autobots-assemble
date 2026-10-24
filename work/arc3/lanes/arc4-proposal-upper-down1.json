@@ -1,0 +1,13 @@
+{
+  "case": "D4L2_L4U2_left1",
+  "contrast_case": "D4L2_L4U2_up1",
+  "source_contact_row": "row5",
+  "contact_frame": 20,
+  "contact_x": 11,
+  "source_click_xy": [
+    34,
+    21
+  ],
+  "native_action": 2,
+  "reference_run": 39729756294
+}

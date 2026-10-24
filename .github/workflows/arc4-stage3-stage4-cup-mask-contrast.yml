@@ -1,0 +1,46 @@
+name: ARC4 lane B authentic cross-stage cup masks
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/audit_native_sp80_cross_stage_source_cups.py'
+      - '.github/workflows/arc4-stage3-stage4-cup-mask-contrast.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  source-defined-original-cups:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authenticated original source frame reader
+        run: python -m pip install numpy
+      - name: Download exact original SDK success/nonadvance native frames
+        uses: actions/download-artifact@v4
+        with:
+          name: arc4-original-success-versus-nonadvance
+          run-id: 39762841397
+          repository: huntingthereferent/autobots-assemble
+          github-token: ${{ github.token }}
+          path: runtime/data/arc4/source-cross-stage
+      - name: Verify unchanged native JSON and every returned frame NPZ
+        run: |
+          echo 'd13dc2f2bdfce9a019a245d1853da82de22bfb066921387bde0f1622bd846830  runtime/data/arc4/source-cross-stage/arc4-official-success-versus-nonadvance.json' | sha256sum -c -
+          echo '0be84942f119108b65ce0971fc6342ec049c07528052dfaf322b1c371e8a5d30  runtime/data/arc4/source-cross-stage/arc4-official-success-versus-nonadvance.npz' | sha256sum -c -
+      - name: Reconstruct each stage's own original palette11 45-cell cup regions
+        run: |
+          python -m work.arc3.audit_native_sp80_cross_stage_source_cups \
+            --json runtime/data/arc4/source-cross-stage/arc4-official-success-versus-nonadvance.json \
+            --npz runtime/data/arc4/source-cross-stage/arc4-official-success-versus-nonadvance.npz \
+            --out runtime/data/arc4/arc4-source-cups-in-native-success-versus-nonadvance.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-source-cups-cross-stage
+          path: runtime/data/arc4/arc4-source-cups-in-native-success-versus-nonadvance.json
+          retention-days: 90
+          if-no-files-found: error
