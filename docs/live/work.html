@@ -750,6 +750,47 @@ footer { max-width:none;padding:12px 15px 20px; }
   </div>
   <p class="fine">Historical limitations remain available through original source links; the overview focuses on current research.</p>
 </section>
+
+<section id="nih-audit-live" aria-labelledby="nih-audit-live-heading" style="margin-top:30px;border:1px solid var(--line);padding:20px;background:var(--panel)">
+  <div class="eyebrow">NIH / NATIVE WORKFLOW</div>
+  <h2 id="nih-audit-live-heading">NIH audit execution</h2>
+  <p class="subtitle">Observed GitHub Actions runs only. The audit workflow checks existing contracts; a full AACT archive replay is separate.</p>
+  <p id="nih-audit-live-status" role="status">Checking GitHub Actions…</p>
+  <div id="nih-audit-live-runs"></div>
+  <p class="fine"><a href="https://github.com/huntingthereferent/autobots-assemble/actions/workflows/nih-audit-lanes.yml">Open NIH workflow and dispatch manually</a> · <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/research/nih_audit/LANES.md">Audit lane register</a></p>
+</section>
+<script>
+(() => {
+  const status=document.getElementById('nih-audit-live-status');
+  const target=document.getElementById('nih-audit-live-runs');
+  const endpoint='https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/workflows/nih-audit-lanes.yml/runs?per_page=10';
+  async function refreshNih(){
+    try {
+      const response=await fetch(endpoint,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});
+      if(!response.ok)throw Error('GitHub API HTTP '+response.status);
+      const body=await response.json();
+      const runs=Array.isArray(body.workflow_runs)?body.workflow_runs:[];
+      target.replaceChildren();
+      status.textContent=runs.length?'Observed '+runs.length+' NIH audit workflow run(s).':'No NIH audit workflow runs returned. The workflow may be idle; no activity is implied.';
+      for(const run of runs){
+        const line=document.createElement('p');
+        const a=document.createElement('a');
+        a.href=run.html_url;
+        a.textContent='#'+run.run_number+' · '+(run.status||'unknown')+(run.conclusion?' / '+run.conclusion:'');
+        a.rel='noopener noreferrer';
+        line.append(a,document.createTextNode(' · '+(run.created_at||'time unavailable')));
+        target.append(line);
+      }
+    } catch(err){
+      status.textContent='NIH run status unavailable ('+String(err.message||err)+'). No zero-activity claim can be made.';
+      target.replaceChildren();
+    }
+  }
+  refreshNih();
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshNih();});
+})();
+</script>
+
 </main>
 <section id="audit" class="audit-host" aria-labelledby="audit-heading" hidden>
   <div class="section-top">
