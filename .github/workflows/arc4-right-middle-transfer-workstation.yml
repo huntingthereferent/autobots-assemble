@@ -1,0 +1,40 @@
+name: ARC4 original SDK right-middle transfer workstation test
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_right_middle_transfer.py'
+      - 'work/arc3/arc4_right_middle_transfer_contract.json'
+      - 'work/arc3/arc4_right_middle_transfer_gate.py'
+      - 'work/arc3/right_middle_transfer_workstation.py'
+      - '.github/workflows/arc4-right-middle-transfer-workstation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-native-right-middle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile native experiment and independent gate
+        run: python -m compileall -q work/arc3/native_sp80_stage4_right_middle_transfer.py work/arc3/arc4_right_middle_transfer_gate.py work/arc3/right_middle_transfer_workstation.py
+      - name: Check source words and frozen cross-object design
+        run: python -m work.arc3.arc4_right_middle_transfer_gate pre
+      - name: Run actual original SDK through admitted workstation source edition
+        run: python -m work.arc3.right_middle_transfer_workstation --execute --data-dir runtime/data/arc4/right-middle/workstation --out runtime/data/arc4/right-middle/original-right-middle-transfer.json
+      - name: Independently recompute raw source pixels and native response
+        run: python -m work.arc3.arc4_right_middle_transfer_gate post --result runtime/data/arc4/right-middle/original-right-middle-transfer.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-right-middle-transfer-workstation
+          path: |
+            runtime/data/arc4/right-middle/original-right-middle-transfer.*
+            runtime/data/arc4/right-middle/workstation/**
+          retention-days: 90
+          if-no-files-found: error
