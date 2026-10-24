@@ -1,0 +1,47 @@
+name: ARC4 original SDK upper action-order workstation experiment
+on:
+  push:
+    paths:
+      - 'work/arc3/native_sp80_stage4_upper_history_order.py'
+      - 'work/arc3/arc4_order_run.json'
+      - 'work/arc3/arc4_order_gate.py'
+      - 'work/arc3/workstation_native_order.py'
+      - '.github/workflows/arc4-stage4-upper-history-order-workstation.yml'
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_upper_history_order.py'
+      - 'work/arc3/arc4_order_run.json'
+      - 'work/arc3/arc4_order_gate.py'
+      - 'work/arc3/workstation_native_order.py'
+      - '.github/workflows/arc4-stage4-upper-history-order-workstation.yml'
+permissions:
+  contents: read
+jobs:
+  workstation-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK and numerical dependency
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile original native source, drift gate and workstation adapter
+        run: python -m compileall -q work/arc3/native_sp80_stage4_upper_history_order.py work/arc3/arc4_order_gate.py work/arc3/workstation_native_order.py
+      - name: Preflight frozen original SDK action-order contract
+        run: python -m work.arc3.arc4_order_gate pre
+      - name: Run original SDK through private workstation edition and runtime handoff
+        run: python -m work.arc3.workstation_native_order --execute --data-dir runtime/data/arc4/order-workstation --out runtime/data/arc4/arc4-upper-history-order.json
+      - name: Verify actual source A/B returns and frozen-history comparisons
+        run: python -m work.arc3.arc4_order_gate post --result runtime/data/arc4/arc4-upper-history-order.json
+      - name: Upload genuine native frames and ephemeral workstation journals
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-sdk-workstation-upper-order
+          path: |
+            runtime/data/arc4/arc4-upper-history-order.*
+            runtime/data/arc4/order-workstation/**
+          if-no-files-found: error
+          retention-days: 90
