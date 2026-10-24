@@ -1,0 +1,34 @@
+name: ARC4 original SP80 cup transition timeline
+
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_cup_transition_timeline.py'
+      - '.github/workflows/arc4-sp80-stage4-cup-transition-timeline.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  genuine-original-stage4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual original SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile actual timeline trial
+        run: python -m py_compile work/arc3/native_sp80_stage4_cup_transition_timeline.py
+      - name: Execute 8 original SDK cup-transition games
+        run: python -m work.arc3.native_sp80_stage4_cup_transition_timeline --out artifacts/original-sp80-cup-transition-timeline.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-cup-transition-timeline
+          path: |
+            artifacts/original-sp80-cup-transition-timeline.json
+            artifacts/original-sp80-cup-transition-timeline.npz
+          if-no-files-found: error
