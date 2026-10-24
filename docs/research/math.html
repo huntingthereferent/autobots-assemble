@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Finite mathematical referent · Tracework Research</title><meta name="description" content="Source-grounded technical research instruments for finite mathematics, ARC, WORLD, and NIH.">
+<link rel="stylesheet" href="research.css"><script defer src="research.js"></script></head>
+<body data-page="math"><div class="layout"><aside class="sidebar"><a class="brand" href="index.html">TRACEWORK / RESEARCH</a><div class="subbrand">Original referents · native witnesses · experiments</div><nav class="nav" aria-label="Research navigation"><a class="" href="index.html" >Research index</a><a class="current" href="math.html" aria-current="page">Finite mathematics</a><a class="" href="arc.html" >ARC native records</a><a class="" href="world.html" >WORLD investigations</a><a class="" href="nih.html" >NIH source comparisons</a></nav><div class="sidefoot">RESEARCH IS THE WORK.<br>Tools are built to investigate, not to ship products.<p><a href="../live/work.html">Tracework execution viewer</a></p><p><a href="https://github.com/huntingthereferent">GitHub profile</a></p></div></aside>
+<main><div class="eyebrow">MATHEMATICS / TRANSFORMATION LAB</div><h1 class="page-title">Finite mathematical referent</h1><p class="intro">An inspectable 48-law A/B family. Choose two parameterizations, apply a common action word, inspect source-derived transition tables, and distinguish whole-state from origin-preserving relations. This is a bounded F₃ model.</p><div class="tools"><span class="tool-pill">read-only technical instrument</span><span class="tool-pill">baseline: f08368e5f59a</span><a href="../live/work.html">Executions</a><a href="index.html">Research index</a></div>
+<section class="panel">
+<div class="metric-row"><div class="metric"><span>Concrete laws</span><strong>48</strong></div><div class="metric"><span>Full-state classes</span><strong>14</strong></div><div class="metric"><span>Rooted classes</span><strong>16</strong></div><div class="metric"><span>Ordered pairs</span><strong>2,304</strong></div></div>
+<p class="note">Counts are stated in the source record for this declared finite family; they are not findings about every possible two-action mathematical system.</p>
+</section>
+<div class="columns">
+<div>
+<section class="panel"><h2>Declare the two worlds</h2><p>Each parameterization selects <code>k∈{0,1,2,3}; e,t∈{0,1}; c∈{0,1,2}</code>.</p>
+<h3>Left world A</h3><div class="field-row"><div class="field"><label for="a-k">support k</label><select id="a-k"></select></div><div class="field"><label for="a-e">pulse e</label><select id="a-e"></select></div><div class="field"><label for="a-t">balanced t</label><select id="a-t"></select></div><div class="field"><label for="a-c">shear c</label><select id="a-c"></select></div></div>
+<h3>Right world B</h3><div class="field-row"><div class="field"><label for="b-k">support k</label><select id="b-k"></select></div><div class="field"><label for="b-e">pulse e</label><select id="b-e"></select></div><div class="field"><label for="b-t">balanced t</label><select id="b-t"></select></div><div class="field"><label for="b-c">shear c</label><select id="b-c"></select></div></div>
+<button type="button" id="swap-worlds">Swap worlds</button>
+<div class="result"><strong id="relation-kind">–</strong><p id="relation-explain"></p></div>
+<p class="note" id="world-count"></p></section>
+<section class="panel"><h2>Exact declared transformation</h2><div class="readout code">All coordinates mod 3
+A(u,v,z) = (u+1, v, z)
+B(u,v,z) = (u, v+u+1, z+q(u,v))
+q = [u=2 ∧ v&lt;k]
+  + e·[u=0 ∧ v=0]
+  + t·([u=1 ∧ v=0] - [u=1 ∧ v=1])
+  + c·((v+u+1)²-v²)</div><p class="note">Nine base-coordinate cells below display the z increment under B as <b>left / right</b>. Highlighted cells differ.</p><div id="q-table"></div></section>
+</div><div>
+<section class="panel"><h2>Follow a word from marked origin</h2><p>Actions are applied left-to-right from (0,0,0), with the same word in both worlds. A matching endpoint from this word alone does not prove equivalence.</p>
+<div class="field"><label for="action-word">A/B action word (up to 120 characters)</label><input id="action-word" value="ABABAB" spellcheck="false" style="width:100%"></div>
+<div class="result" id="step-detail"></div><div class="trajectory" id="trajectory"></div>
+<h3>Evidence distinction</h3><p>ROOTED_FULL: exact origin-preserving labeled conjugacy in the declared family. FULL_UNROOTED: whole-state alignment exists, but a marked-origin collision obstructs rooted equivalence. FULL_OBSTRUCTED: a fixed-word count witnesses incompatibility. For any unsupported family, no classification is silently extended.</p></section>
+</div></div><section class="panel" id="source-inspector"><div class="field-row" style="justify-content:space-between"><div><div class="eyebrow">REPRODUCIBILITY / ORIGINAL SOURCE</div><h2>Source inspector</h2></div><span class="flag">read-only · immutable source baseline</span></div><p class="note">Select a record, search the original text, and inspect line numbers. Source retrieval may fail if the public raw host is unavailable; original repository links remain available.</p>
+<div class="columns"><div><div class="field"><label for="source-choice">Source document</label><select style="max-width:100%" id="source-choice"></select></div><div class="source-list" id="source-list" style="margin-top:10px"></div></div><div><div class="field"><label for="source-search">Filter source lines</label><input id="source-search" placeholder="Find symbol, term, witness or limit…" style="width:100%"></div><div id="source-meta" class="source-meta" style="margin:10px 0"></div><div class="tools"><button type="button" id="copy-source">Copy loaded source</button><span id="copy-status" class="note"></span><span id="line-count" class="note"></span></div><div class="readout code lines" id="source-body" aria-live="polite">Retrieving source…</div></div></div></section><footer>This viewer separates mathematical calculations, source-reported observations, provenance, and unresolved questions. It does not launch workers, change GitHub data, or claim an experiment has been independently reproduced.</footer></main></div></body></html>
