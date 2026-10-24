@@ -1,0 +1,214 @@
+# ARC4 source-pinned evidence index — 2026-10-22
+
+This index identifies original GitHub sources; it does **not** imply that remote artifacts have been copied into durable repository storage. If source ZIPs are downloaded, verify their SHA-256 against the recorded original (when available), record the copied bytes' location, and preserve their corresponding exact-head script and result JSON/NPZ. Do not declare archival success based on a link.
+
+| Referent | Native run | Archive | Code/PR | Source-grounded result |
+| --- | --- | --- | --- | --- |
+| First official native stage3→4 | [39616395169](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39616395169) | [12352298969](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39616395169/artifacts/12352298969) | [#365](https://github.com/huntingthereferent/autobots-assemble/pull/365), [merged #367](https://github.com/huntingthereferent/autobots-assemble/pull/367) | 2 independent native witnesses, official level4 |
+| Authentic stage4 L selection | [39624132483](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39624132483) | [12355888555](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39624132483/artifacts/12355888555) | [merged #372](https://github.com/huntingthereferent/autobots-assemble/pull/372) | Real palette15 27-pixel selected object |
+| Level4 clean-lateral antecedent | [39633965255](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39633965255) | Revisit run artifacts | [merged #379](https://github.com/huntingthereferent/autobots-assemble/pull/379) | Lateral/top-left coverage tradeoff |
+| Cross-arrangement frozen heldout | [39726675675](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39726675675) | [12403476986](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39726675675/artifacts/12403476986) | [draft #398](https://github.com/huntingthereferent/autobots-assemble/pull/398), `e2669a707abfdac7471df33f187cf65ac3bf9873` | 20 native resets, 0 official level5; 6 four-cup/no-left-border visual witnesses |
+
+## Separate source-event audit, not yet merged
+
+[Lane A draft PR #407](https://github.com/huntingthereferent/autobots-assemble/pull/407), [native run #39729756294](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294), [artifact #12404730856](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294/artifacts/12404730856), exact tested head `85fdfb889ca3f192b9d0805e67a5eb407fd842e0`.
+
+- Original 10/10 genuine SDK resets successful (five frozen words × independent A/B witnesses), 0 official stage5/WIN.
+- Visually positive source arrangements show first top and right boundary changes at source frame **21**. The original left/bottom probes covered left x2..4 and bottom **y59..62**, *not* the complete last native row y63. The measured left/bottom subwindows did not change during their original pour frames; do not generalize this to every border pixel. These are measurements, not a hidden objective interpretation.
+- Earliest new source-color6 outside cup windows in positive cases: row8/frame19 and row5/frame20 at x11–13. A matched native negative control (upper bar UP1) first showed row8/frame18 and row5/frame19 at x26–28. The timing/position contrast is observational only.
+- ZIP SHA-256 in workflow log: `d8234acc6fe50a270847a4333bd590fdbd6863e2f9db773702dc2de70eb3c5ba`, artifact ID `12404730856`, reported upload size `48075` bytes, configured retention **90 days**.
+- Durable copy location: **NOT VERIFIED**; this draft branch is not merged.
+
+## New source-pinned Lane B native control, unmerged
+
+[Lane B PR #408](https://github.com/huntingthereferent/autobots-assemble/pull/408), [actual native run #39731621139](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139), [raw artifact #12405441391](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39731621139/artifacts/12405441391). Exact experimental tested head `cdeb0890040f459eacdac0de5f28fdbd9de6ebbe`.
+
+- Four genuine SDK resets; two independent stage4 entrance witnesses across each of two frozen conditions; 4/4 remained official level4 `NOT_FINISHED`, zero level5/WIN.
+- Reviewed original source-derived plan regenerated exactly from actual Lane A source artifact. The top bar was already selected after native LEFT1, so the only added action was **ACTION2/DOWN1** before ACTION5. No additional source selection click was inserted.
+- Original source selected bbox `[26,20,37,22]` versus one-movement bbox `[26,23,37,25]`, with different pre-pour and final-frame hashes. Both conditions nevertheless had identical recorded first-full cup times `13,21,21,21`, first top/right border events at frame21, and off-cup row8/frame19 and row5/frame20 x11–13.
+- ZIP SHA-256 `a88075b03d5a0b22d9e55bc5797beadf0a138e683af1d790483e2b8e0a38700c`, artifact ID `12405441391`, size `26118` bytes, configured retention **90 days**. Durable independent archive: **NOT VERIFIED**.
+- This establishes an **observed nonadvancing one-step movement**; it does not decode the game objective or support untested movement generalization.
+
+## Verified horizontal source contrast, Lane B draft
+
+[Native run #39754427647](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647); [raw artifact #12414579575](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647/artifacts/12414579575), ZIP SHA256 `4757ad60c0aef5bee60727f659c2c9e1293026ce600fa2eb9e88fa732e2b8f20`. Artifact retention 90 days; durable copy independent of Actions **NOT VERIFIED**.
+
+Twelve original-SDK native resets (six frozen upper-bar words × independently authenticated A/B original entrances), all official stage4, none level5/WIN. With same D3 lower arrangement, observed source top-left 45-pixel cup first fully palette13 at frame25 for upper LEFT1/LEFT1→UP1/LEFT1→DOWN1, not for unchanged, LEFT2, or LEFT1→RIGHT1. Selected native bbox x26–37 for the positive horizontal placement, x29–40 for no horizontal movement or reversed LEFT1→RIGHT1, x23–34 for LEFT2. First measured right/top boundary event frame21 across controls. No hidden mechanical or WIN predicate inference.
+
+## Lane B: same-coordinate native histories and exact pixel audit
+
+[Original same-position run #39754800592](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754800592), [source artifact #12415351323](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754800592/artifacts/12415351323), ZIP SHA256 `3ecfa8fd00ff5fad6b3aa4843c97f1f092fd2b37d394ad8dc5390f4fc18b7414`. Reproduced by [run #39755328707](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39755328707) with a standalone every-pixel verifier and combined [artifact #12415019473](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39755328707/artifacts/12415019473), SHA256 `a64546e50db61ca07a986e6afc142b85eec4b7501f5516ba2c670fcdf58b544a`.
+
+Five real upper-bar action histories × independently witnessed original SDK A/B entrance = **10 native resets, 0 level5/WIN**. All selected native bboxes `[26,20,37,22]`; cup first-full and measured boundary event timings identical; official level4 `NOT_FINISHED`.
+
+For each of the four three-movement detours compared against direct LEFT1, both original SDK witnesses record exactly two differences just before pour: `(10,63)` and `(11,63)` each palette14→0, and exactly one difference `(11,63)` palette14→0 for **every one of 34 native animation frames**, with **zero differences across rows0–62**. The prior left/bottom boundary scan excluded row63. The exact observed bottom-row difference is not interpreted as game mechanics or objective logic. Configured retention 90 days; durable independent copies of these two GitHub artifacts **NOT VERIFIED**.
+
+## Lane B: history-length source result and stepwise row63 audit
+
+[Original SDK run #39757263041](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757263041), [JSON+NPZ artifact #12415838204](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757263041/artifacts/12415838204), ZIP SHA-256 `aed9ae4f2cf04344159d92dcb9ef726659c7ee5067af93df06d2839fb6fc0406` (source file hashes: JSON `d393610b2f8e553343b2322dc8eaa5b9ff8e2dd49f608c3fb01693c127bb79df`, NPZ `da58e6c1896884095ab394d0736947ff8ad3cdb9997a3f5578fcfd5592b69288`). Fourteen original SDK resets with seven frozen histories, all `levels_completed=4, NOT_FINISHED`. Both original entrance witnesses agree, upper-bar source bbox `[26,20,37,22]` and cup frame timings unchanged. All animation-frame differences from the direct LEFT1 comparator are confined to the last screen row y63.
+
+[Stepwise source audit #39757748694](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757748694), [audited JSON #12417295064](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39757748694/artifacts/12417295064), ZIP SHA-256 `6d75b8af562c6a4e39be9d82c288528808a2af743366ac6c2a86e7115f207c97`. Original source JSON and NPZ validated by SHA-256 inside Actions before independent parsing. First palette14 x coordinate in source row63 after each movement number 1..7 is **10, 11, 12, 12, 13, 13, 14** respectively, identical for every independent native source record that reached the respective action ordinal. Source pre/post pour first palette14 x at history lengths 1:10→11, 3:12→12, 5:13→13, 7:14→15.
+
+**Boundary:** this is a visible native screen correlate of source movement history, not demonstrated semantics of that row, an objective condition, or a hidden action counter. Both artifacts are configured for 90-day GitHub Actions retention; independent durable copy **NOT VERIFIED**.
+
+## Cross-object native row63 source controls
+
+[Original SDK source run #39759703369](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39759703369), [source artifact #12417692024](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39759703369/artifacts/12417692024), ZIP SHA256 `acc0db18a0605ac5af2e8e7199dba83f395e4fa4a54cb0ed659773976f1b2cea`, configured 90-day retention; durable independent copy **NOT VERIFIED**.
+
+Ten actual original SDK resets with independent A/B entrances. Holding lower geometry and final upper LEFT1 constant, adding only a native source right-bar re-click changed the first palette14 in row y63 before pour x10→x11, whereas an extra right-bar click and reversible movement pair changed it x10→x12; original native interior rows0–62 and measured four-cup first-full frames remained identical across all frozen conditions. All ten original games remained official level4 NOT_FINISHED; no level5/WIN. **No demonstrated hidden-counter mechanism or game objective effect.**
+
+## Native source click-only controls for row63
+
+[Original SDK run #39760058838](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39760058838); [raw JSON+NPZ artifact #12416998822](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39760058838/artifacts/12416998822), ZIP SHA256 `12951757474f724765a8f00ec0edc2d484398382a7f00b6585f221775a960acc`. Retention configured 90 days, independent durable copy **NOT VERIFIED**.
+
+14 original SDK resets from seven fixed no-extra-movement click-only conditions, independently witnessed A/B. With the lower board arrangement and final upper LEFT1→ACTION5 frozen, extra original SDK source ACTION6 clicks at (46,33), (34,21), or background coordinate (5,16) produce first row63 palette14 x10→x11 after exactly one extra click and x10→x12 after two, independent of which of the tested source click targets were used. Native pre-pour rows y0..62 and measured four-cup fill times were identical; all original games remained official level4 NOT_FINISHED (zero level5/WIN). Row63's internal meaning, connection to official objective, and possible hidden game-state dependence remain UNKNOWN.
+
+## Lane B: verified original lower-L placement source contrast
+
+[Original SDK run #39761014684](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761014684), [complete raw JSON/NPZ artifact #12417598191](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761014684/artifacts/12417598191), ZIP SHA-256 `c6723c5bf7a0f4d379601ab5e263c61c95cb5fd75ded172e6475ed8250286`. Internal original JSON SHA-256 `d00f410f8d1caf4f5d61eea169f521803d5c86c5649d04020cd353a1e93fb494`, source full-frame NPZ SHA-256 `efeeb4c333ffc889eae9a767c0c5cd4553ae50d6f928fb3b032aa20dbd3998ae`.
+
+**10 genuine original SDK resets** (five frozen native lower L positions × independently verified A/B entrances), all official level4 `NOT_FINISHED`, zero level5/WIN. Actual selected L source `x23..28,y35..40` before added one-step tests. Original L yields all four 45-pixel source cups simultaneously palette13 at animation frame25; changing L position by UP1, DOWN1, LEFT1 or RIGHT1 makes the lateral cup fail to reach 45, so no four-cup frame. All tested source moved L bboxes are verified directly from genuine selected object frames. None shows change in the measured left wall `x2..4,y2..61`, although the wider `x0..5` source strip does have animation events. No tested arrangement advances officially.
+
+An internal inspection of authentic full frames for original L case found all four source cup windows full at animation frames 25..32, returning to zero palette13 at final frame33. An independent artifact-authenticated CI audit of those exact frames is registered in [lane B](https://github.com/huntingthereferent/autobots-assemble/pull/408); the source-pinned audit [#39761902892](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761902892) subsequently passed, verifying the exact original source frame sequence. Intermediate cup observations are not an official progression predicate. Original artifact retention configured 90 days; independent durable archive **NOT VERIFIED**.
+
+## Independent terminal cup persistence verification
+
+**Independent cup persistence audit passed:** [source-authenticated run #39761902892](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761902892), [recomputed source JSON artifact #12418776390](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39761902892/artifacts/12418776390), ZIP SHA-256 `b14df9738695d1c11e4b8181b743414d8c0ab304cb13fe1609d5237ba68f36f6`. The original SDK source files passed the frozen SHA-256 checks first. All 10 independently reset genuine SDK cases passed A/B exact agreement. In the original lower-L placement all four 45/45 cup masks were simultaneously full for original animation frames **25..32**, then **0/45** in every cup at terminal frame33; original SDK `levels_completed=4, NOT_FINISHED`. In four moved-L cases only three cup masks were full in the penultimate frame, all zero at terminal. **This verifies temporary animated filling, not an official completion rule.**
+
+## Original stage3 success versus stage4 nonadvance
+
+[Original SDK run #39762841397](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397); [native JSON/NPZ artifact #12418353014](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397/artifacts/12418353014), ZIP SHA256 `67bd82eb42be10f4b53a16a5cd37ed47c453cab2cf8cd1c0065c2dd0d4f03c40`. Four authentic original SDK sessions (four-cup versus three-cup stage4 controls, each A/B witnessed). Each session contains successful stage3 ACTION5 (`levels_completed: 3→4`, 30 frames, penultimate→final palette13 `180→0`), followed by nonadvancing stage4 ACTION5 (`4→4`; four-cup transient: 34 frames, `180→0`; three-cup control: 30 frames, `135→0`). The stage3 winning terminal frame `fa8fd32d3bfd2c8b3ff7765aec373512` equals the original level4 entry board. All four remained official level4 `NOT_FINISHED` at completion; zero level5/WIN. Full native receipts/frames retained. Identical visible palette13 clearing occurs during genuine progression and nonprogress, so **clearing alone is not a decoded SDK success criterion**. Original completion logic remains unknown. Configured retention 90 days; no independently durable artifact copy verified.
+
+## Cross-stage authentic SDK source cup regions (distinct level geometries)
+
+The source-frame comparison is grounded in [true original SDK run #39762841397](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397), [unaltered source artifact #12418353014](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39762841397/artifacts/12418353014). ZIP SHA-256 `67bd82eb42be10f4b53a16a5cd37ed47c453cab2cf8cd1c0065c2dd0d4f03c40`; original JSON `d13dc2f2bdfce9a019a245d1853da82de22bfb066921387bde0f1622bd846830`, NPZ `0be84942f119108b65ce0971fc6342ec049c07528052dfaf322b1c371e8a5d30`.
+
+The original level3 and level4 frames each have four source palette11 connected components of 45 pixels. The level3 components lie at x8..16,26..34,38..46,50..58 and y53..58; the level4 original components are [5,35,10,43], [17,5,25,10], [35,5,43,10], [47,5,55,10]. Independent original A/B native entrance histories agreed. Stage3 successful ACTION5 shows all four level3 cup masks full at animation frames27..28 and SDK `3→4`; level4 nonadvancing four-cup ACTION5 shows all four *different level4 cup masks* full at frames25..32 and SDK `4→4`. The moved lower-L stage4 negative never fills all four. Original terminal cup pixels are zero in both the successful and nonadvancing cases.
+
+**Result/limit:** simultaneous filled source cups and animation terminal clearing do not establish official progression. Different stage geometries prevent treating this as one common hidden objective or inferred native rule. [Lane B original SDK right-bar timing experiment](https://github.com/huntingthereferent/autobots-assemble/actions/workflows/arc4-stage4-right-bar-timing.yml) is a separately frozen source test; do not claim success before its exact native workflow returns. Archive retention 90 days; independent durable copy unverified.
+
+## Independently verified cross-stage cups and native right-bar test
+
+[Authenticated original source cup audit #39764626858](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626858) **passed**; [independent source JSON artifact #12418334984](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626858/artifacts/12418334984), ZIP SHA256 `9a3ff705ce2e62ce149cba0756d53e8a6fa17b33e36a7c3752835e66a65b6c68`. Four true original SDK sessions, both independent A/B native entry witnesses, stage3 success four source cup windows concurrently full frames27–28 and official **3→4**, contrasted with native stage4 nonadvance four different cup masks full frames25–32 but official **4→4**. The separate stage4 three-cup negative never has all four concurrently full. Matching source appearance is not a decoded game objective.
+
+[Authentic right-bar horizontal native experiment #39764626974](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626974) **passed**, [full native original frame JSON/NPZ artifact #12418974951](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39764626974/artifacts/12418974951), ZIP SHA256 `0f9b5b16c7de7350c7cc7ec22e12efca92769255d457dfc4fd5ffd3f5a8d5f27`. Eight original SDK resets (four frozen right-bar positions × independent A/B native witnesses), zero official level5/WIN. Upper/middle/lower arrangement fixed. Right-bar LEFT1: actual bbox [38,32,52,34], top-middle and top-right source cup first full frame21, top-left25; LEFT2: actual bbox [35,32,49,34], top-middle23, top-right19, top-left25. Both show four simultaneously full at frames25–32. Re-click without displacement, and RIGHT1, do not fill top-left/right. All official level4 NOT_FINISHED.
+
+**Boundary:** frame-ordinal changes do not by themselves establish real clock time, a private objective, or native success. Each Actions artifact has configured 90-day retention; durable independent copies not verified. An independently sourced comparison of successful terminal screen transitions and nonadvancing returned screens is registered in separate Lane B workflow and remains **unverified until that source audit completes**.
+
+## Verified screen-transition and right-by-upper source controls
+
+[Native original SDK screen-transition audit #39765735502](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39765735502), [source JSON artifact #12420678378](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39765735502/artifacts/12420678378), ZIP SHA-256 `7a542368640bcb51ec4de78669688e3ea488886c6b20dd6ebb599de23a64bc41`: independently authenticated full frames from four original SDK sessions; true stage3→4 official progress has **1,262 terminal screen pixels** different from pre-pour, including **171 in measured left x2..4,y2..61**, which first change at terminal frame29; stage4→4 four-cup nonadvance has **82 terminal screen pixels** different, **zero** left measured wall changes. These are screen effects, not a decoded completion predicate.
+
+[Native original right-by-upper interaction #39766706911](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911), [raw JSON+NPZ #12421295935](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911/artifacts/12421295935), ZIP SHA-256 `ac607d630c259fb8840a47842c3da9bc8478c8a940c95f804f91574d2feccc04`: **12 actual original-SDK resets** (six frozen cases × A/B native independent entry witnesses), **zero level5 or WIN, all official level4 NOT_FINISHED**. The right-bar LEFT1 cases yield cup first-full frames lateral13,top-left25,top-middle21,top-right21; right-bar LEFT2 yields 13,25,23,19. With both right placements, upper LEFT1, LEFT1+UP1 and LEFT1+DOWN1 each retain their respective cup timing and all four concurrent full frames25..32. Actual upper-bar selected bboxes [26,20,37,22], [26,17,37,19], [26,23,37,25] distinguish authentic interventions. Measured left screen x2..4,y2..61 unchanged in all. This is a bounded negative **upper vertical factor** result, not a universal engine invariance or causal proof.
+
+Configured original Actions artifact retention 90 days; separate durable copy **NOT VERIFIED**. No cross-branch merging or status promotion.
+
+## Native full-frame upper-vertical palette-mask comparison
+
+**Independent exact-frame archive analysis; not a newly executed SDK trial.** Source: [genuine original SDK right × upper run #39766706911](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911), [original JSON + complete NPZ frame artifact #12421295935](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39766706911/artifacts/12421295935). Verified artifact ZIP SHA-256 `ac607d630c259fb8840a47842c3da9bc8478c8a940c95f804f91574d2feccc04`; embedded JSON SHA-256 `14d3309d4f93d5c22f078d65129e2d8c808b3f923e38e0ba47840471befb00c8`, original full-frame NPZ SHA-256 `46824cff5cd113fafe2898ab0cc4c82b071f705f83d444f8ac0ccd0320c4ba7e`.
+
+Comparing entire original returned ACTION5 frame arrays at **all 34 matching animation indices**, for each fixed right-bar condition with upper `LEFT1` versus `LEFT1+UP1` and `LEFT1+DOWN1`, finds **zero pixel differences in the complete palette-13 mask in every comparison**. This is exact per-pixel equality across the native frame stacks, not merely equality of cup-fill timestamps. The original native A and B stage1 entrance witnesses independently produce identical outcomes.
+
+| Native right bar | Upper displacement compared with LEFT1 | Source palette-13 mask differences, all frames | Source palette-6 mask differences, all frames | Palette-6 differences excluding upper field and row63 |
+| --- | --- | ---: | ---: | ---: |
+| LEFT1 | UP1 | 0 | 1,350 | 99 |
+| LEFT1 | DOWN1 | 0 | 1,431 | 105 |
+| LEFT2 | UP1 | 0 | 1,305 | 93 |
+| LEFT2 | DOWN1 | 0 | 1,386 | 99 |
+
+The separately measured exclusion region is the visible upper field `x=24..39,y=15..28` plus row63, so the nonzero outside-region palette-6 differences show that the displacement is **not solely a static change of the drawn selected object or HUD**. These differences occur in source animation frames14–32 depending on condition. However, they do **not** change any palette-13 pixel across the 34-frame comparison, and all twelve original SDK trials remain `levels_completed=4, NOT_FINISHED` (zero level5/WIN).
+
+**Scope:** original SDK source observation and exact frame-index-aligned comparisons only; no inference of fluid mechanics, private objective, timing equivalence, or general upper-bar irrelevance. This does not substitute for the separately queued [same-game repeated ACTION5 trial #39768996710](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710), whose live outcome must be checked before claiming it.
+
+## Verified same-game original SDK repeated pours and exact returned frames
+
+[Authentic native run #39768996710](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710) **passed** (12 independently reset original SDK games; six frozen right-bar LEFT1/LEFT2 × same-game pour count1/2/3 × original A/B entrance witnesses). [Complete original raw JSON/NPZ artifact #12422021789](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39768996710/artifacts/12422021789), ZIP SHA256 `0ea3addf36bf716e8e9d006df32ec0b165d3b65aa61b97e9e4a9cf32a1c7ab2f`; internal JSON `d4c59df2a07d476edb215c21ec2eee14bb5ef98d8c9c661d45f5b82c070ad44c`, NPZ `5582db5ac26205a0f888450a90ac568d6d4f9177bd0deb8ade0db6e050335376`. Raw source independently downloaded and SHA256-verified. Original native reset count12; all genuine ACTION5 receipts **level4→4 `NOT_FINISHED`**, zero level5/WIN.
+
+Frozen first pour has original visual four-cup timing (RIGHT LEFT1 lateral13,top-left25,top-middle21,top-right21; RIGHT LEFT2 lateral13,top-left25,top-middle23,top-right19), repeated unchanged across each subsequent native ACTION5. **All genuine native ACTION5 returned 34-frame stacks**. Subsequent pours after the first change no pixels in original rows0..62 at ANY animation frame, compared with the first pour's stack at matching frame indices. The original first pour changes 81 real selection pixels between pre-action source and terminal frame (36 upper selection9→8, 45 right bar8→9), plus a single bottom-row `14→0` pixel. All extra pours only change one bottom-row source pixel or none:
+
+| Verified source setting | First terminal row63 change | Second native pour terminal change | Third native pour terminal change |
+| --- | --- | --- | --- |
+| Right LEFT1 | x10,y63 14→0 | x11,y63 14→0 | none |
+| Right LEFT2 | x11,y63 14→0 | none | x12,y63 14→0 |
+
+Every independent A/B original entrance agrees. Original source artifact retains full native frames and action receipts; a further independently computed machine-readable frame audit SHA256 is `9d7d83de6d30f5722ab9d7dfdedcbe649bf1e83b4a7eb25f7b36e38047cb8df2` (local output, **not** independently uploaded to a persistent repository). Source limit: changing y63 does **not** establish a decoded private counter or hidden-state equality. Identical visible frame stack for original rows0..62 and unchanged official level mean this specific no-movement repeated-pour approach yielded no new measured playable-looking board response. GitHub Actions configured retention 90 days; separate durable raw copy not verified. Branch remains unmerged.
+
+## Original SDK movement-order after failed four-cup pour
+
+[Verified native run #39775056684](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775056684); complete [original JSON/NPZ raw artifact #12423663752](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775056684/artifacts/12423663752), ZIP SHA256 `7b46395f958143d6e469e9a9b1ae3c63d605afce17b925e0a35dd3019ecee1a4`; original JSON SHA256 `ef8bf268e6ebcf044f3c60e3b58cf344f940d65b3b19bd7bfb3428540ae28d4b`, original NPZ SHA256 `598acbfceca76eb25836b884d038ce07310af9b13f69afebe4270a221f83c43a`. Raw source independently downloaded and 648 returned 64×64 SDK stack arrays checked. 90-day configured retention, independently durable archive NOT VERIFIED.
+
+Eight original SDK resets (4 prospective history arms × original independent A/B entry witnesses). Official outcomes **eight level4 NOT_FINISHED**, zero native level5/WIN. Original level4 root hash `fa8fd32d3bfd2c8b3ff7765aec373512`. A direct RIGHT LEFT2 pre-pour placement and the longer RIGHT LEFT1 → first four-cup pour → genuine post-pour RIGHT MOVE LEFT1 → actual upper-bar reselect → second pour arrive at matching visible board, x35..49 right bar, x26..37 upper selected. Reverse control moves right bar from LEFT2 to LEFT1 **after first four-cup pour**, then reselects upper, matching the direct RIGHT LEFT1 visible placement.
+
+Every source pre-final-pour pixel in board rows **y0..62** is identical within each paired comparison, and the entire subsequent **34-frame returned ACTION5 native animation is pixel-identical in those rows**. Complete palette6 and palette13 source masks also match at every frame. Only y63 differs: 1 pre-pour pixel / 34 per-frame pixels in the direct RIGHT LEFT2 comparison; 3 pre-pour pixels / 68 frame pixels in the direct RIGHT LEFT1 comparison. These are not different playable-looking pouring responses. The authentic original SDK after-first-pour right bar movement actually reached source bboxes [35,32,49,34] and [38,32,52,34]; native upper selection restored to [26,20,37,22]. Both independent original A/B witnesses agreed. Source-native controls still official 4/6.
+
+**Limit:** measured equality of full original frame stacks over y0..62 under these histories does **not** prove equality of private accumulated action state, an invisible SDK completion rule, or general order-independence. The genuine observed no-advance is a negative source result. Original artifact checksum and full receipts retained; no source-unsupported game success. Parent A/B/C research branches remain unmerged.
+
+## Explicit artifact metadata for current heldout
+
+- Name: `original-sp80-stage4-clean-lateral-cross-arrangement`.
+- GitHub artifact ID: `12403476986`.
+- Workflow: `39726675675` (concluded success on exact PR #398 head).
+- Uploaded ZIP SHA-256 from workflow upload log: `3cb1a158c2950b874c6c414916170f4c08c0b7126fdad6c500ffe1bab942a3c1`.
+- ZIP size reported: `101843` bytes.
+- Retention configuration: **14 days**, per the workflow. Do not assume it remains available indefinitely.
+- Durable local/source copy: **NOT VERIFIED** as of this index.
+
+## Evidence intake for the new lanes
+
+1. Lane A must add its exact commit SHA, native run ID, JSON/NPZ archive, digest, and source event-order observations once its native run actually passes.
+2. Lane B must include lane A's exact source record reference and an explicitly reviewed candidate manifest before native execution; record its distinct original SDK result and digest.
+3. Amend this index only from verified logs/artifacts. Nothing in this index changes the official SDK progress counter or claims a general solver.
+
+Ownership and All Rights Reserved scope remain unchanged.
+
+## Cross-lane cup-transition timeline audit — 2026-10-22
+
+Source-owned lane A event-order audit: [native run #39729756294](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294), raw artifact [#12404730856](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39729756294/artifacts/12404730856). Its 10/10 genuine original SDK resets remained level4 NOT_FINISHED. On visual-positive routes, new palette6 appeared outside cup windows at row8/frame19 and row5/frame20, x11–13; top and right boundaries first changed at frame21 (top 171 pixels, right 9 pixels). Left/bottom boundary changes were not observed. The UP1 negative control instead showed those new palette6 rows at x26–28, with first top/right boundary changes at frame20. Both independent A/B witnesses agreed. This is source observation, not a decoded engine rule.
+
+Independent follow-up timeline: [PR #450](https://github.com/huntingthereferent/autobots-assemble/pull/450), original native run [#39827860639](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39827860639), artifact discoverable from that run's artifacts endpoint. Eight fresh original SDK resets, four frozen conditions × two witnesses, all official level4 NOT_FINISHED; zero level5/WIN. Protocol run #39827860430 and ARC direct-observation run #39827860549 both concluded success. Cup-window source pixels reached 45/45 per cup; first simultaneous four-cup frame was 25 for D3L2/L3U2 + upper LEFT1, 21 for D4L2/L4U2 + upper LEFT1, and 21 for D4L2/L4U2 + upper LEFT2. D3L2/L3U2 + upper LEFT2 never reached four simultaneous full cup windows.
+
+### Cross-lane interpretation and next-test boundary
+
+The cross-lane observations establish that (1) off-cup palette6 appears before the top/right boundary transition in the positive LEFT1 cases, (2) the boundary transition can precede four-cup completion (frame21 versus frame25 on the D3 arrangement), and (3) on the D4 arrangement, four-cup completion coincides with the first measured top/right boundary change at frame21, yet neither condition advances the official level. Thus cup completion and top/right boundary changes are individually insufficient as observed success predicates. The x11–13 versus x26–28 off-cup arrival is a useful differentiating observable, but it is not itself evidence of causal relevance.
+
+Next experiment should not repeat cup-fill or same-game pour tests already exhausted. Before authorizing a new native intervention, lane B should cite the exact lane-A source receipt and select one controlled manipulation that changes the off-cup first-arrival location while holding the lower arrangement and source entry fixed, with an explicit negative control and original A/B witnesses. If no intervention can be grounded to a genuine selectable object/action receipt, stop at source analysis rather than inventing a move. Only official original SDK level >=5 or WIN counts as progress.
+
+Retention note: the lane-A workflow states a 90-day artifact retention setting; this is not a verified durable archive. The PR #450 raw artifact's durable external copy is not established by its successful upload alone. All experimental PRs remain separate and unmerged.
+
+
+## Artifact custody and Lane B novelty gate — 2026-10-22 19:20Z
+
+The PR #450 cup-transition run's artifact metadata is now pinned explicitly:
+- Original SDK run: [#39827860639](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39827860639), source commit `54073b79ec17a6f37dc6c18d8561aff35974fb15`.
+- Artifact: [#12446962893](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39827860639/artifacts/12446962893), `original-sp80-cup-transition-timeline`.
+- Uploaded ZIP digest: `sha256:d05f93ff4e7f6f104a2974bc3ee3ba0b5cd3c95a979b1096ee9eb2b6530fd2ac`.
+- Size: 53,747 bytes; configured expiry: 2027-01-20 18:02:15Z. This is a GitHub-hosted artifact with expiry, not a verified durable external archive.
+- Original SDK job completed successfully; 8 fresh resets, four frozen conditions × A/B witnesses, all official level4 `NOT_FINISHED`, zero level5/WIN.
+
+Lane B novelty check against its existing approved intervention: the source-pinned upper-bar DOWN1 comparison has already been run and independently reproduced on earlier heads. It changed the selected bbox but did not change measured cup/border timing or produce official advancement. Therefore it is not a new candidate and must not be relabeled as one. PR #450 provides a new cup-transition comparison, but the visual x11–13 versus x26–28 contrast alone does not identify a causal action. Do not dispatch another native run until the candidate action is tied to a genuine native click/selection receipt and its positive/negative source cases are frozen on the same lower arrangement and original entry state. If no such new candidate is evidenced, record a bounded stop rather than recycle an exhausted intervention.
+
+Verification snapshot: on commit `09ace467e92d87cbcaa93b985e3c97f41693cee3`, ARC direct observation and 48-law mathematical conformance completed successfully. The repository-wide `protocol-tests` job was still running at the last poll; do not report the branch as fully green until that job completes. No PR was merged.
+
+
+## Verified source-pinned one-movement intervention — explicit negative result (2026-10-22)
+
+[Lane B native paired run #39775506738](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775506738) completed successfully at Lane B head `80e773b18d5961e953e1e6cff5a82fb0eb26f6b7`. Its uploaded original-source artifact is [#12423993321](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39775506738/artifacts/12423993321), `arc4-native-paired-source-followup`, 26,118 bytes, uploaded ZIP SHA-256 `ab19f1a5d28e4bdbabbe443d5e03b530f280dd416b302ca7e7548780b9a79de3`; configured 90-day retention, not a durable external archive.
+
+The intervention appended one genuine native ACTION2 movement to the source-attested selected upper object, without a confounding re-click. Four independent original SDK resets (two matched arms × witnesses A/B) all remained official level4 `NOT_FINISHED`; zero level5/WIN. The moved selected bbox changed from `[26,20,37,22]` to `[26,23,37,25]`, but the first off-cup palette6 event remained row8/frame19 and row5/frame20 at x11–13 in both arms. First cup-full timings and first top/right border change remained frame21. Therefore this source-pinned vertical movement did **not** alter the differentiating off-cup first-arrival location and did not yield a new official outcome.
+
+This closes the currently proposed Lane B intervention as a measured negative, rather than leaving it described as merely pending. The separate source-first gate run #39775506844 passed its gate tests but skipped the native execution job, so it is not a second native result. Do not repeat this one-step upper DOWN1 intervention or claim it tested a causal success rule. A future candidate requires a different native action with a grounded receipt that actually changes the targeted first-arrival observable while preserving the lower arrangement and matched A/B controls; absent that receipt, stop at UNKNOWN. Only original SDK level >=5 or WIN counts as progression.
+
+
+## Re-audit of archived upper-bar source contrast: targeted arrival is invariant (2026-10-22 19:27Z)
+
+I downloaded and independently rehashed the existing original SDK source artifact from [run #39754427647](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647), [artifact #12414579575](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39754427647/artifacts/12414579575). Actual downloaded ZIP SHA-256: `4757ad60c0aef5bee60727f659c2c9e1293026ce600fa2eb9e88fa732e2b8f20` (50,889 bytes), matching the prior pinned digest. I measured the complete returned original SDK frame stacks against each condition's own genuine pre-pour frame, excluding the four source cup windows, and compared the same row5/row8 off-cup palette6 arrival observable used by Lane A.
+
+Across six frozen upper histories (`reselect`, `LEFT1`, `LEFT2`, `LEFT1→RIGHT1`, `LEFT1→UP1`, `LEFT1→DOWN1`) × independent native A/B witnesses = 12 original SDK resets:
+- First new palette6 outside the cup windows in row8: **frame 19, x11–13**, in all 12 runs.
+- First new palette6 outside the cup windows in row5: **frame 20, x11–13**, in all 12 runs.
+- Every official result remained level4 `NOT_FINISHED`; zero level5/WIN.
+- Cup observations varied by upper history (including top-left never filling on reselect/LEFT2/LEFT1→RIGHT1), but the target off-cup arrival location and frame did not.
+
+This rules out the already-tested upper-bar horizontal and one-step vertical histories as candidates for changing the specific off-cup first-arrival observable. It does not establish a causal rule or identify what action would change the arrival. **Lane B should not repeat any of these upper-history variants** under a new label. A distinct source object/action would need its own original click receipt and same-parent positive/negative A/B comparison before the gate can admit a native intervention. Until that source receipt exists, no new intervention is authorized; stop at `UNKNOWN` rather than widen the search.
+
+The source audit was retrospective on an existing artifact; it did not execute a new native game or alter the official game status.
