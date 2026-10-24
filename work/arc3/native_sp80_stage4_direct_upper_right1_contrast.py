@@ -81,16 +81,16 @@ def source_report(root, pre, frames):
         for x0, y0, x1, y1 in CUPS.values():
             if y0 <= row <= y1:
                 outside[x0:x1 + 1] = False
-        first = None
+        first_event = None
         for frame_index, frame in enumerate(frames):
             changed = outside & (pre[row] != 6) & (frame[row] == 6)
             if np.any(changed):
                 xs_new = np.flatnonzero(changed)
-                first = {"frame": int(frame_index),
+                first_event = {"frame": int(frame_index),
                          "source_x": [int(x) for x in xs_new],
                          "source_pixel_count": int(len(xs_new))}
                 break
-        first_offcup[str(row)] = first
+        first_offcup[str(row)] = first_event
     ys,xs=np.nonzero(pre==9)
     return {
         "root_hash":hash_frame(root), "pre_pour_hash":hash_frame(pre),
