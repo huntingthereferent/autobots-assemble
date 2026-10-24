@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "id": "ARC4-NATIVE-UPPER-ENDPOINT-HISTORY-2026-10-24",
+  "referent": "Original ARC-AGI-3 SP80 native level-four selected upper-bar endpoint versus movement-history dependence",
+  "source_code": "work/arc3/native_sp80_stage4_upper_endpoint_history.py",
+  "frozen_parent": "6@46,33 3 6@24,33 2 2 2 3 3 6@34,42 3 3 3 1 1 6@34,21",
+  "frozen_controls": [
+    [
+      "reselect",
+      ""
+    ],
+    [
+      "right1",
+      "4"
+    ],
+    [
+      "right2",
+      "4 4"
+    ],
+    [
+      "left1",
+      "3"
+    ],
+    [
+      "left1_right2",
+      "3 4 4"
+    ],
+    [
+      "right1_left1",
+      "4 3"
+    ],
+    [
+      "right1_up1",
+      "4 1"
+    ],
+    [
+      "right1_down1",
+      "4 2"
+    ]
+  ],
+  "frozen_matched_relations": [
+    [
+      "right1",
+      "left1_right2"
+    ],
+    [
+      "reselect",
+      "right1_left1"
+    ],
+    [
+      "right1",
+      "right2"
+    ],
+    [
+      "right1",
+      "right1_up1"
+    ],
+    [
+      "right1",
+      "right1_down1"
+    ],
+    [
+      "reselect",
+      "left1"
+    ]
+  ],
+  "native_resets_per_control": 2,
+  "expected_original_sdk_resets": 16,
+  "source_antecedents": [
+    {
+      "run_id": 40124724989,
+      "claim": "14 authentic original SDK resets all official level4; original cup first fills repaired",
+      "scope": "experimental draft PR #468, not merged canonical"
+    },
+    {
+      "run_id": 40123855347,
+      "claim": "original ARC4 upper RIGHT1 test executed via private workstation and runtime journal",
+      "scope": "experimental draft PR #468, not shared permanent workstation"
+    }
+  ],
+  "prior_official_state": "Original native SP80 4 of 6 levels, official level4 NOT_FINISHED in previous bounded runs; no verified official level5/WIN",
+  "prediction": {
+    "endpoint_only": "For matching selected upper-bar endpoints, native post-pour frames in rows 0..62 and the four cup window events will agree; differences would refute this bounded endpoint-only prediction.",
+    "right_movement": "RIGHT1 relative to reselect was observed to reduce full cup windows 3 to 2; right-neighborhood variants may discriminate a local response boundary.",
+    "scope": "The prediction concerns source-returned visible frames, not full SDK internal state or hidden rules."
+  },
+  "primary_question": "Can equal visible upper-bar final positions reached through distinct action histories produce different original returned SDK frames or official outcomes?",
+  "required_source_witnesses": [
+    "two independent original native entry histories per frozen control",
+    "all 64x64 original SDK returned frames including row63",
+    "exact original SDK click/action ledger",
+    "original first full cup timings and official level/state",
+    "paired upper-bar endpoint bbox and same-frame source comparisons",
+    "raw JSON + NPZ output, fingerprints in workstation event journal"
+  ],
+  "walls": [
+    "No ARC-like simulation, surrogate fluid model or image-only progress classification.",
+    "Only the original SDK levels_completed >=5 or WIN establishes actual game progression.",
+    "No inference that identical rows0..62 prove identical full native state, especially row63.",
+    "No merging with draft ARC4 main-handoff PR #409 or completed experiments without independent evidence review.",
+    "No new trial is launched from the workstation return without another frozen and admitted source question."
+  ],
+  "next_no_progress": "Retain measured source distinctions, counterexamples and official level4 wall; identify the smallest newly observed native relation that discriminates final geometry from action history.",
+  "next_progress": "Independently reproduce any authentic SDK level5/WIN witness with original frames and an exact original action ledger before upgrading status."
+}
