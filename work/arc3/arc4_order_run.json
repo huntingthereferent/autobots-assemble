@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "id": "ARC4-SP80-UPPER-HISTORY-ORDER-2026-10-24",
+  "referent": "Original native ARC SP80 level-four upper-bar action-history dependence under matching final selected bbox",
+  "source": "Original arc-agi SDK OperationMode.NORMAL with independent A/B native stage-four entry witnesses",
+  "source_code": "work/arc3/native_sp80_stage4_upper_history_order.py",
+  "last_verified_state": "Original native SDK level 4/6, NOT_FINISHED; zero level5 or WIN in previous 14 resets",
+  "prior_evidence": [
+    {
+      "url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/40123855347",
+      "scope": "Previous genuine original SDK source trial through ProcessWorkstation; 14/14 original native resets, official level4"
+    },
+    {
+      "url": "https://github.com/huntingthereferent/autobots-assemble/actions/runs/40123855347/artifacts/12571629345",
+      "scope": "Historical raw JSON/NPZ and runtime/workspace journal source artifact; not durable independently archived"
+    },
+    {
+      "url": "https://github.com/huntingthereferent/autobots-assemble/pull/409",
+      "scope": "Separate still-draft canonical ARC 4/6 handoff"
+    }
+  ],
+  "required_relation": "Under matched frozen lower arrangement and identical observed upper selected bounding box, do reversed source action histories differ in authentic SDK cup response or entire returned frames?",
+  "frozen_parent": "6@46,33 3 6@24,33 2 2 2 3 3 6@34,42 3 3 3 1 1 6@34,21",
+  "frozen_controls": [
+    [
+      "reselect",
+      ""
+    ],
+    [
+      "left1",
+      "3"
+    ],
+    [
+      "right1",
+      "4"
+    ],
+    [
+      "left_then_right",
+      "3 4"
+    ],
+    [
+      "right_then_left",
+      "4 3"
+    ],
+    [
+      "right_then_left2",
+      "4 3 3"
+    ],
+    [
+      "left_then_right_then_left",
+      "3 4 3"
+    ]
+  ],
+  "frozen_pairs": [
+    [
+      "reselect",
+      "left_then_right"
+    ],
+    [
+      "reselect",
+      "right_then_left"
+    ],
+    [
+      "left1",
+      "right_then_left2"
+    ],
+    [
+      "left1",
+      "left_then_right_then_left"
+    ],
+    [
+      "right_then_left2",
+      "left_then_right_then_left"
+    ]
+  ],
+  "resets_per_condition": 2,
+  "expected_native_reset_count": 14,
+  "required_witnesses": [
+    "native independent original A/B entries",
+    "identical source SDK stage-four root",
+    "original action click/step ledger",
+    "original full 64x64 returned SDK frames JSON+NPZ",
+    "source per-pair actual pre-pour pixel differences",
+    "original official level and state separate from cup observations"
+  ],
+  "walls": [
+    "Equality of selected-object bounding boxes does not imply identical original SDK state.",
+    "Native off-cup color arrivals and cup fills are observations, not a hidden objective function, physical timing or proof of a win.",
+    "Only original SDK levels_completed >=5 or WIN is official progress.",
+    "Do not mix this experiment with ARC-like synthetic finite math or overwrite earlier native failures and negative controls.",
+    "Unknown history dependence remains an unresolved wall unless independently discriminated with original native source."
+  ],
+  "next_if_no_progress": "Use recorded native same-position counterexamples to isolate one action history or actual frame difference; prefreeze a fresh discriminating prediction and rerun through the same workstation witness gate.",
+  "next_if_progress": "Independently reproduce genuine level5/WIN on fresh original SDK source resets and preserve full frames and exact action transcript."
+}
