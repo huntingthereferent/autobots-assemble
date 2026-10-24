@@ -1,5 +1,8 @@
-# Tracework — live research and execution
-Tracework is the public name for the existing evidence and execution viewer. Paths such as `work.html` and `workstation-flow.js` remain stable compatibility interfaces. [Naming boundary](../../TRACEWORK.md).
+# Tracework — workstation development preview
+
+The GitHub Pages workstation is an **interface prototype and read-only observation preview**, not the standalone Tracework release. Some displays inspect real GitHub Actions and source records; those records do not make every proposed workstation capability executable in the browser. Standalone Rust development is separate from this public viewer. See [development status, roadmap and updates](../../TRACEWORK_DEVELOPMENT.md).
+
+Tracework is the public name for the existing evidence and execution environment. Paths such as `work.html` and `workstation-flow.js` remain stable compatibility interfaces. [Naming boundary](../../TRACEWORK.md).
 
 
 [Tracework](work.html) · [Research sources](research-sources.html) · [Pony Trail](pony-trail.html) · [Meow Lab 2](cat-keyboard.html) · [Audio intake](audio-intake.html) · [Referent audit](work.html#audit) · [Source provenance](trace.html) · [Workstation source observer](../../systems/workspace/research_observatory.py) · [Read-only workstation implementation](../../systems/workspace/README.md)
