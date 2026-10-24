@@ -133,7 +133,9 @@
    const meta=route.locally_reported||{};const pairs=[["Game",route.game||"not recorded"],["Local status",meta.status||"unavailable"],["Local levels",meta.levels??"unavailable"],["Reported actions",meta.actions??"unavailable"],["Source checksum",route.origin_sha256?.slice(0,12)||"unavailable"]];
    pairs.forEach(([label,value])=>{const card=node("div",{class:"metric"});card.append(node("span",{},label),node("strong",{},value));summary.append(card)});
    const groups=route.coordinate_paths_by_level||route.game_action_ids_by_level||route.action_ids_by_level||[];
+   const chosen=Number(level.value)||0;
    clear(level);groups.forEach((g,i)=>level.append(node("option",{value:String(i)},"Level "+(i+1)+" ("+g.length+" entries)")));
+   level.value=String(Math.min(chosen,Math.max(0,groups.length-1)));
    if(!groups.length){steps.append(node("p",{class:"note"},"Route contains no recognized per-level trajectory field. Open original JSON in source inspector."));return;}
    const g=groups[Math.max(0,Number(level.value))]||groups[0];
    const milestones=(route.recorded_milestones||[]).map((n,i)=>"L"+(i+1)+": "+n).join(" · ");
