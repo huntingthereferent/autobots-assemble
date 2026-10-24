@@ -91,6 +91,24 @@ def verify_result(contract, result_path):
                     row["source_observation"].get("source_frame_count", 0) > 0,
                     "actual source frame observation missing")
             obs = row["source_observation"]
+            # A previous run accidentally shadowed the per-cup first-fill
+            # dictionary with a later off-cup local. Reject this malformed
+            # output rather than silently reporting invalid cup timing.
+            cup_first = obs.get("source_first_full_cups")
+            cup_max = obs.get("source_max_filled_cups")
+            expected_cups = {"lateral", "top_left", "top_middle", "top_right"}
+            require(isinstance(cup_first, dict) and set(cup_first) == expected_cups,
+                    "first-full-cup map corrupted or missing")
+            require(isinstance(cup_max, dict) and set(cup_max) == expected_cups,
+                    "original cup maxima missing")
+            for cup in expected_cups:
+                frame = cup_first[cup]
+                require((frame is None or (type(frame) is int and
+                        0 <= frame < obs["source_frame_count"])) and
+                        type(cup_max[cup]) is int and 0 <= cup_max[cup] <= 45,
+                        "invalid original native first-full-cup receipt")
+                require((frame is None) == (cup_max[cup] < 45),
+                        "full-cup event contradicts original source maxima")
             first = obs.get("first_native_new6_outside_cups_by_row")
             require(isinstance(first, dict) and set(first) == {"5", "8"},
                     "frozen row-5/row-8 off-cup witness missing")
