@@ -89,6 +89,15 @@
   const shear=w.c*((v+u+1)**2-v**2);
   return [u,mod(v+u+1),mod(z+support+pulse+balance+shear)];
  }
+ function fixedPoints(w,word){
+  let count=0;
+  for(let u=0;u<3;u++)for(let v=0;v<3;v++)for(let z=0;z<3;z++){
+   const original=[u,v,z];let state=original.slice();
+   for(const action of word)state=next(w,state,action);
+   if(state.every((value,i)=>value===original[i]))count++;
+  }
+  return count;
+ }
  function pairRelation(a,b){
   if(a.k!==b.k)return ["FULL_OBSTRUCTED","Fix(B) differs across support levels; no full-state labeled conjugacy."];
   if(a.e!==b.e)return ["FULL_OBSTRUCTED","Fix(BBB) distinguishes pulse values."];
@@ -106,6 +115,13 @@
   function render(){
    const a=read("a"),b=read("b"),relation=pairRelation(a,b);
    set("relation-kind",relation[0]);set("relation-explain",relation[1]);
+   const invariants=$("#invariant-table");clear(invariants);
+   for(const word of ["B","BBB","AABAB","ABABAB"]){
+    const left=fixedPoints(a,word),right=fixedPoints(b,word);
+    const tr=node("tr");tr.append(node("td",{},word),node("td",{},left),node("td",{},right));
+    const outcome=node("td",{class:left===right?"":"changed"},left===right?"same count":"different");
+    tr.append(outcome);invariants.append(tr);
+   }
    const q=$("#q-table");clear(q);
    for(let u=0;u<3;u++){const row=node("div",{class:"state-grid"});for(let v=0;v<3;v++){
       const qa=next(a,[u,v,0],"B")[2];const qb=next(b,[u,v,0],"B")[2];
