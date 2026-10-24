@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_ROW63_COMMON_FOLLOWUP_20261024",
+  "referent": "Original ARC-AGI-3 SP80 official level4: test whether a source row63 history distinction predicts a difference under identical later native actions",
+  "source_code": "work/arc3/native_sp80_stage4_row63_followup.py",
+  "parent_run_id": 40125152426,
+  "frozen_parent": "6@46,33 3 6@24,33 2 2 2 3 3 6@34,42 3 3 3 1 1 6@34,21",
+  "frozen_controls": [
+    [
+      "zero_click",
+      "",
+      "6@34,21"
+    ],
+    [
+      "roundtrip_click",
+      "4 3",
+      "6@34,21"
+    ],
+    [
+      "right_click",
+      "4",
+      "6@34,21"
+    ],
+    [
+      "detour_click",
+      "3 4 4",
+      "6@34,21"
+    ],
+    [
+      "zero_click_left",
+      "",
+      "6@34,21 3"
+    ],
+    [
+      "roundtrip_click_left",
+      "4 3",
+      "6@34,21 3"
+    ],
+    [
+      "right_click_left",
+      "4",
+      "6@34,21 3"
+    ],
+    [
+      "detour_click_left",
+      "3 4 4",
+      "6@34,21 3"
+    ]
+  ],
+  "frozen_pairs": [
+    [
+      "zero_click",
+      "roundtrip_click"
+    ],
+    [
+      "right_click",
+      "detour_click"
+    ],
+    [
+      "zero_click_left",
+      "roundtrip_click_left"
+    ],
+    [
+      "right_click_left",
+      "detour_click_left"
+    ]
+  ],
+  "resets_per_control": 2,
+  "expected_original_sdk_resets": 16,
+  "hypothesis": "Among two native source histories that already yield matching selected bbox and 64x64 rows0..62 but distinct row63, an identical later genuine ACTION6 re-click, optionally followed by one genuine ACTION3, can be compared for subsequent frame, cup and official outcome differences. No causal claim from row63 alone.",
+  "predeclared_outcome_categories": [
+    "After identical future action, full source frames and returned animation match (row63 distinction no longer observable in selected scope)",
+    "Rows0..62 and native cup timing match, but source row63 continues to differ",
+    "Interior source arrays and/or original official SDK outcomes diverge after identical common native action",
+    "Original source prefix no longer matches previous source evidence; trial fails closed"
+  ],
+  "measurements": [
+    "exact original prechallenge source frames including row63",
+    "source prechallenge shared selected bbox",
+    "genuine original SDK ACTION6 click receipt at 34,21 with actual before pixel",
+    "original postchallenge pre-pour 64x64 frame including row63",
+    "first differing animation frame in row63 and rows0..62",
+    "four authentic cup mask timings and counts",
+    "official original SDK levels_completed and state",
+    "exact raw JSON/NPZ and workstation append-only handoff journal"
+  ],
+  "walls": [
+    "Only official original SDK levels_completed >=5 or WIN establishes actual game progression.",
+    "Row63 visible differences do not establish an internal memory mechanism, physics, or causal explanation.",
+    "Matched visible interior is not equivalent to full SDK state, even when frame comparisons match.",
+    "Prior draft experimental results from PRs #468 and #519 are historical, not overwritten, merged or certified by this continuation.",
+    "No synthetic ARC-like maze, reconstructed private game engine or image-only win."
+  ],
+  "next_no_progress": "Source-compare prechallenge and postchallenge original SDK frames to decide if the row63 difference persists, vanishes or predicts any new interior divergence; only then freeze the next smallest test.",
+  "next_progress": "Independently replicate any official original SDK level >=5 or WIN with a fresh original native reset, exact original action ledger and separate witness review."
+}
