@@ -191,5 +191,18 @@
   const bars=$("#nih-bars");const rows=[["Shared IDs",432597,432983],["Only in 2022-labeled file",386,432983],["Different recorded status values",1345,432597]];
   rows.forEach(([label,v,d])=>{const group=node("div",{class:"barrow"});group.append(node("div",{class:"barlabel"},label+" · "+v.toLocaleString()+" / "+d.toLocaleString()+" ("+(v/d*100).toFixed(3)+"%)"));const track=node("div",{class:"bartrack"}),bar=node("div");bar.style.width=(v/d*100)+"%";if(v/d*100<1)bar.style.minWidth="3px";track.append(bar);group.append(track);bars.append(group);});
  }
- document.addEventListener("DOMContentLoaded",()=>{if(PAGE==="math")initMath();if(PAGE==="arc")initArc();if(PAGE==="world")initWorld();if(PAGE==="nih")initNih();if(paths[PAGE])initSourceReader(PAGE);});
+ // When mounted in Tracework's workstation, the instrument is a panel,
+ // not another website. Report actual document height to its same-origin host.
+ function initEmbedded(){
+  if(!new URLSearchParams(location.search).has("embedded"))return;
+  document.body.classList.add("embedded");
+  const report=()=>parent.postMessage({type:"tracework-research-height",branch:PAGE,height:document.documentElement.scrollHeight},location.origin);
+  let framePending=false;
+  const schedule=()=>{if(framePending)return;framePending=true;requestAnimationFrame(()=>{framePending=false;report()})};
+  if(typeof ResizeObserver!=="undefined")new ResizeObserver(schedule).observe(document.querySelector("main")||document.body);
+  window.addEventListener("load",schedule);
+  window.addEventListener("resize",schedule);
+  schedule();
+ }
+ document.addEventListener("DOMContentLoaded",()=>{initEmbedded();if(PAGE==="math")initMath();if(PAGE==="arc")initArc();if(PAGE==="world")initWorld();if(PAGE==="nih")initNih();if(paths[PAGE])initSourceReader(PAGE);});
 })();
