@@ -199,7 +199,6 @@
       "doc": "research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md",
       "role": "ChatGPT-directed live action loop with append-only transcript once a computer is connected."
     },
-    "execution_pin": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
     "oracle_ledger": "research/dives/ARC3-TRACE-001/oracles/public_solve_ledger.json",
     "solved_cases": [
       {

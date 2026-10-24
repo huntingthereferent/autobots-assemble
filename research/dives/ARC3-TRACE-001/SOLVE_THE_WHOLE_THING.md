@@ -50,14 +50,6 @@ Do not continue architecture work merely because another architecture improvemen
 4. identify where strong agents repeatedly failed before a successful solve;
 5. turn those failure/success boundaries into concrete expectations for the future live run.
 
-### Deferred until computer
-
-The live first-contact run is pinned at:
-
-`state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json`
-
-That dependency does not pause Solve the Whole Thing.
-
 ## Oracle boundary
 
 Public solved traces may be stored as regression/oracle evidence.

@@ -118,15 +118,6 @@
       "scope": "Recorded experiment result; not automatically a workstation MOVE",
       "next": "Run the gate and selector on a replay level boundary with explicit early competing correspondences.",
       "boundary": ""
-    },
-    {
-      "path": "state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json",
-      "label": "📍 ARC3-100 — first-contact discovery-inclusive 100%",
-      "state": "UNCLASSIFIED",
-      "source_type": "PIN",
-      "scope": "Pinned or historical original; not a presently assigned task",
-      "next": "Give ChatGPT an authorized execution surface with Python 3.12, git, internet for initial ARC setup, and the official ARC-AGI-3 starter/runtime.",
-      "boundary": "Kaggle credentials should be placed on the machine by the user, not pasted into chat."
     }
   ],
   "walls": [
@@ -548,8 +539,8 @@
     }
   ],
   "source_totals": {
-    "source_files": 1972,
-    "structured_records": 15,
+    "source_files": 1971,
+    "structured_records": 14,
     "original_wall_entries": 12,
     "documented_wall_headings": 12,
     "documented_movement_headings": 23
