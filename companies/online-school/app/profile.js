@@ -125,7 +125,7 @@ function render(){
   const standards=comparison?.standards||[];
   $("#count-demonstrated").textContent=standards.filter(x=>x.status==="demonstrated").length;
   $("#count-developing").textContent=standards.filter(x=>x.status==="developing").length;
-  $("#recorded-hours").textContent=record.hours?.recorded_completed_hours??0;
+  $("#recorded-hours").textContent=record.hours?.logged_actual_hours??0;
   $("#work-count").textContent=(record.worksheets||[]).length;
 
   renderStandards();
@@ -165,7 +165,7 @@ function render(){
     row(task.date+" · "+task.title,task.status)
   ));
 
-  const categories=record.hours?.completed_by_category_minutes||{};
+  const categories=record.hours?.actual_by_category_minutes||{};
   $("#hours-breakdown").replaceChildren(
     ...Object.entries(categories).map(([category,minutes])=>{
       const el=document.createElement("div");
@@ -181,7 +181,10 @@ function render(){
     String(a.date||"").localeCompare(String(b.date||""))
   ).map(task=>row(
     (task.date||"")+" · "+(task.title||"Activity"),
-    [task.status,task.planned_minutes ? task.planned_minutes+" min" : "",task.source||""].filter(Boolean).join(" · ")
+    [task.status,
+      task.actual_minutes!==null&&task.actual_minutes!==undefined ? task.actual_minutes+" min actual entered" : "actual time unrecorded",
+      task.planned_minutes!==null&&task.planned_minutes!==undefined ? task.planned_minutes+" min planned" : "",
+      task.source||""].filter(Boolean).join(" · ")
   )));
 
   $("#worksheets-list").replaceChildren(...(record.worksheets||[]).map(work=>

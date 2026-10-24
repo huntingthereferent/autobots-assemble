@@ -22,8 +22,10 @@
   }
   const rows=[...unique.values()],done=rows.filter(x=>x.status==="done");
   const minutes=rows.reduce((sum,t)=>sum+(Number.isFinite(Number(t.planned_minutes))?Math.max(0,Number(t.planned_minutes)):0),0);
+  const logged=rows.filter(t=>t.actual_minutes!==null&&t.actual_minutes!==undefined);
+  const actualMinutes=logged.reduce((sum,t)=>sum+Math.max(0,Number(t.actual_minutes)||0),0);
   return{total:rows.length,done:done.length,remaining:rows.length-done.length,
-   plannedMinutes:minutes,rows};
+   plannedMinutes:minutes,actualMinutes,actualEntries:logged.length,rows};
  }
  return{monday,week,forLearner,metrics};
 });

@@ -29,6 +29,8 @@ function refreshView(){
  $("total").textContent=String(m.total);$("done").textContent=String(m.done);
  $("remaining").textContent=String(m.remaining);
  $("planned").textContent=m.plannedMinutes+" min";
+ $("actual").textContent=m.actualMinutes+" min";
+ $("actual-count").textContent=m.actualEntries+" task time entr"+(m.actualEntries===1?"y":"ies");
  $("week-anchor").value=monday;
  $("week-title").textContent=display(week[0])+" — "+display(week[6]);
  const grid=$("week-grid");grid.replaceChildren();
@@ -41,7 +43,8 @@ function refreshView(){
   day.append(header,node("p",rows.length?tally.done+" / "+rows.length+" marked done":"No saved tasks","day-count"));
   if(!rows.length)day.append(node("p","A blank day is not evidence of no learning.","empty"));
   for(const task of rows){
-   const row=node("label",undefined,"task"+(task.status==="done"?" done":""));
+   const row=node("div",undefined,"task"+(task.status==="done"?" done":""));
+   const main=node("label",undefined,"task-main");
    const cb=document.createElement("input");cb.type="checkbox";cb.checked=task.status==="done";
    cb.setAttribute("aria-label","Mark "+task.title+" done");
    const content=node("span",task.title||"Untitled task");
@@ -49,7 +52,21 @@ function refreshView(){
    const detail=node("small",(task.scope==="shared"?"Shared · ":"")+
      (whom.length?whom.join(", ")+" · ":"")+
      (task.planned_minutes?task.planned_minutes+" min planned":"No planned time"));
-   content.append(detail);row.append(cb,content);
+   content.append(detail);
+   const recorded=node("small",task.actual_minutes===null||task.actual_minutes===undefined
+     ?"Actual time not entered":task.actual_minutes+" min actual time entered");
+   content.append(recorded);
+   main.append(cb,content);row.append(main);
+   const log=node("details",undefined,"actual-log");
+   const summary=node("summary","Log actual minutes");
+   const controls=node("div",undefined,"actual-controls");
+   const actualInput=document.createElement("input");
+   actualInput.type="number";actualInput.min="0";actualInput.max="1440";actualInput.step="1";
+   actualInput.value=task.actual_minutes===null||task.actual_minutes===undefined?"":String(task.actual_minutes);
+   actualInput.setAttribute("aria-label","Actual minutes for "+task.title);
+   const saveButton=node("button","Save time");saveButton.type="button";
+   saveButton.addEventListener("click",()=>saveTime(task,actualInput,saveButton));
+   controls.append(actualInput,saveButton);log.append(summary,controls);row.append(log);
    cb.addEventListener("change",()=>patch(task,cb));
    day.append(row);
   }
@@ -76,6 +93,23 @@ async function patch(task,checkbox){
   await loadWeek();
  }catch(err){checkbox.checked=task.status==="done";$("source-state").textContent="Change was not saved: "+err.message}
  finally{busy=false;checkbox.disabled=false}
+}
+async function saveTime(task,input,button){
+ if(busy)return;
+ const raw=input.value.trim();
+ const minutes=raw===""?null:Number(raw);
+ if(raw!==""&&(!Number.isInteger(minutes)||minutes<0||minutes>1440)){
+   $("source-state").textContent="Actual minutes must be a whole number from 0 to 1440.";
+   return;
+ }
+ busy=true;button.disabled=true;
+ try{
+  await json("/api/tasks/"+encodeURIComponent(task.id),{method:"PATCH",
+   headers:{"Content-Type":"application/json"},body:JSON.stringify({actual_minutes:minutes})});
+  await loadWeek();
+  $("source-state").textContent="Actual time updated from an explicit adult entry.";
+ }catch(err){$("source-state").textContent="Actual time was not saved: "+err.message}
+ finally{busy=false;button.disabled=false}
 }
 function shift(days){const next=new Date(Date.parse(monday+"T12:00:00Z")+days*86400000);monday=core.monday(next.toISOString().slice(0,10));loadWeek()}
 $("previous-week").addEventListener("click",()=>shift(-7));

@@ -869,7 +869,7 @@ class Handler(BaseHTTPRequestHandler):
             self.api_error(str(exc))
             return
 
-        allowed = {"title", "category", "kind", "scope", "learner_ids", "planned_minutes", "status", "notes", "meta", "date"}
+        allowed = {"title", "category", "kind", "scope", "learner_ids", "planned_minutes", "actual_minutes", "status", "notes", "meta", "date"}
         patch = {k: v for k, v in patch.items() if k in allowed}
 
         with LOCK:
