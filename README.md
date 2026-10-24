@@ -1,5 +1,7 @@
 # Hunting the Referent — research records and experiments
 
+**[RESEARCH INSTRUMENTS](https://huntingthereferent.github.io/autobots-assemble/research/)** — finite mathematical viewer, ARC native route inspector, WORLD experiment sources and NIH dataset comparisons.
+
 **[TRACEWORK · LIVE EXECUTIONS](https://huntingthereferent.github.io/autobots-assemble/live/work.html)** — direct GitHub Actions executions, source-owned research evidence, and Tracework's recorded observations.
 
 **[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
