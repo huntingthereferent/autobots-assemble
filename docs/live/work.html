@@ -373,6 +373,20 @@ body.audit-active>header{border-bottom-color:#406173}
 body.audit-active nav #audit-tab{color:var(--text);background:#233b48}
 @media(max-width:760px){.audit-host{padding:15px 8px 40px}.audit-frame{border-radius:0}}
 
+
+/* Research tools are first-class panes of the ORIGINAL workstation viewer. */
+.lab-host{max-width:1600px;margin:0 auto;padding:24px clamp(13px,2.6vw,38px) 70px}
+.lab-host .section-top{margin:5px 0 14px;align-items:center}
+.lab-host .subtitle{max-width:920px}
+.lab-back{font:11px/1.5 var(--data-font);white-space:nowrap}
+.lab-switcher{display:flex;gap:7px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:0 0 11px;margin:9px 0 9px}
+.lab-switcher a{padding:9px 15px;color:var(--muted);text-decoration:none;border:1px solid #2d424e;border-radius:5px;font:700 11px/1.4 var(--data-font);letter-spacing:.05em}
+.lab-switcher a:hover,.lab-switcher a[aria-current="page"]{background:#193139;border-color:#68b5b3;color:#d1f5ef}
+.lab-heading-row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:8px 0;color:var(--muted)}
+.lab-frame{display:block;width:100%;height:1100px;min-height:750px;border:1px solid #283d4b;border-radius:8px;background:#0a1117;overflow:auto}
+body.lab-active>header{border-bottom-color:#406173}
+body.lab-active nav #lab-tab{color:var(--text);background:#233b48}
+@media(max-width:760px){.lab-host{padding:15px 8px 35px}.lab-frame{border-radius:2px}.lab-switcher a{padding:8px 10px}}
 .refresh-readout { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:2px 4px 10px; color:var(--muted); font:11px/1.6 var(--data-font); }
 .refresh-readout strong { color:var(--text); font-weight:600; }
 .refresh-readout small { margin-left:auto; color:var(--muted); }
@@ -608,7 +622,7 @@ footer { max-width:none;padding:12px 15px 20px; }
 <body>
 <header>
   <strong>HUNTING THE REFERENT <span class="brand-sub">/ WORK</span></strong>
-  <nav aria-label="Tracework sections"><a href="../game/">GAME · WORLD48</a><a href="#executions" id="executions-tab">EXECUTIONS</a><a href="#research" id="research-tab">RESEARCH</a><a href="../research/">MATH / RESEARCH TOOLS</a><a href="research-sources.html">SOURCES</a><a href="#audit" id="audit-tab">AUDIT</a><a href="audio-intake.html">AUDIO INTAKE</a><a href="school.html">ONLINE SCHOOL</a><a href="trace.html">TRACE</a><a href="daily-correspondence.html">CALENDAR</a><a href="https://github.com/huntingthereferent" title="GitHub profile">MAIN GITHUB ↗</a></nav>
+  <nav aria-label="Tracework sections"><a href="../game/">GAME · WORLD48</a><a href="#executions" id="executions-tab">EXECUTIONS</a><a href="#research" id="research-tab">RESEARCH</a><a href="#math" id="lab-tab">MATHEMATICAL LAB</a><a href="research-sources.html">SOURCES</a><a href="#audit" id="audit-tab">AUDIT</a><a href="audio-intake.html">AUDIO INTAKE</a><a href="school.html">ONLINE SCHOOL</a><a href="trace.html">TRACE</a><a href="daily-correspondence.html">CALENDAR</a><a href="https://github.com/huntingthereferent" title="GitHub profile">MAIN GITHUB ↗</a></nav>
 </header>
 <main id="workstation-main">
 <section class="overview" aria-labelledby="title">
@@ -745,6 +759,27 @@ footer { max-width:none;padding:12px 15px 20px; }
     </div>
   </div>
   <iframe id="audit-frame" class="audit-frame" data-src="audit.html?embedded=1" title="Project data audit: individual test source, assertions and research records" loading="eager"></iframe>
+</section>
+<section id="lab" class="lab-host" aria-labelledby="lab-heading" hidden>
+  <div class="section-top">
+    <div>
+      <p class="eyebrow">03 / Research instruments inside Tracework</p>
+      <h2 id="lab-heading">Mathematical laboratory</h2>
+      <p class="subtitle" id="lab-subtitle">Source-referenced technical exploration of the current finite mathematical referent.</p>
+    </div>
+    <a href="#executions" class="lab-back">← Return to executions</a>
+  </div>
+  <nav class="lab-switcher" aria-label="Choose research instrument">
+    <a href="#math" data-lab-branch="math">MATHEMATICS</a>
+    <a href="#arc" data-lab-branch="arc">ARC</a>
+    <a href="#world" data-lab-branch="world">WORLD</a>
+    <a href="#nih" data-lab-branch="nih">NIH</a>
+  </nav>
+  <div class="lab-heading-row">
+    <span id="lab-mode" class="fine">Loading selected research instrument</span>
+    <span class="fine">Native records, not simulated worker statuses</span>
+  </div>
+  <iframe id="lab-frame" class="lab-frame" title="Source-grounded technical research viewer embedded within Tracework" loading="eager"></iframe>
 </section>
 <footer>Read-only / evidence-first. Public runs poll periodically; recorded research updates when its committed source projection changes. The source records, not this screen, determine what has been verified.</footer>
 <script src="workstation-flow.js"></script>
@@ -1275,27 +1310,53 @@ footer { max-width:none;padding:12px 15px 20px; }
   // so its referent namespace cannot silently join a CI run to research.
   const auditFrame=$("audit-frame");
   const auditHost=$("audit");
+  const labHost=$("lab");
+  const labFrame=$("lab-frame");
   const workstationMain=$("workstation-main");
-  let wasAudit=false;
+  const labNames={
+    math:["Finite mathematics","Actual finite transformation laws, relation witnesses and action-word tests."],
+    arc:["ARC native records","Recorded action sequences, local trial reports and original source histories."],
+    world:["WORLD investigations","Conditional virtual motion, original trial records and mathematical limits."],
+    nih:["NIH source comparisons","Authenticated archive comparisons and unresolved chronology."],
+  };
+  let wasIsolated=false;
   function selectWorkstationView(){
     const isAudit=location.hash==="#audit";
-    workstationMain.hidden=isAudit;
+    const branch=location.hash==="#lab"?"math":location.hash.slice(1);
+    const isLab=Object.prototype.hasOwnProperty.call(labNames,branch);
+    workstationMain.hidden=isAudit||isLab;
     auditHost.hidden=!isAudit;
+    labHost.hidden=!isLab;
     document.body.classList.toggle("audit-active",isAudit);
+    document.body.classList.toggle("lab-active",isLab);
     $("audit-tab").setAttribute("aria-current",isAudit?"page":"false");
-    $("executions-tab").setAttribute("aria-current",!isAudit&&location.hash!=="#research"?"page":"false");
-    $("research-tab").setAttribute("aria-current",!isAudit&&location.hash==="#research"?"page":"false");
+    $("lab-tab").setAttribute("aria-current",isLab?"page":"false");
+    $("executions-tab").setAttribute("aria-current",!isAudit&&!isLab&&location.hash!=="#research"?"page":"false");
+    $("research-tab").setAttribute("aria-current",!isAudit&&!isLab&&location.hash==="#research"?"page":"false");
     if(isAudit){
       if(!auditFrame.hasAttribute("src"))auditFrame.setAttribute("src",auditFrame.dataset.src);
       window.scrollTo(0,0);
-    }else if(wasAudit){
-      // Returning to the execution view reconfirms original data rather
-      // than treating stale records from the hidden view as live.
+    }else if(isLab){
+      const [title,description]=labNames[branch];
+      $("lab-heading").textContent=title;
+      $("lab-subtitle").textContent=description;
+      $("lab-mode").textContent="Instrument / "+branch.toUpperCase();
+      for(const a of labHost.querySelectorAll("[data-lab-branch]")){
+        a.setAttribute("aria-current",a.dataset.labBranch===branch?"page":"false");
+      }
+      if(labFrame.dataset.branch!==branch){
+        labFrame.dataset.branch=branch;
+        labFrame.style.height="1100px";
+        labFrame.src="../research/"+branch+".html?embedded=1";
+      }
+      window.scrollTo(0,0);
+    }else if(wasIsolated){
+      // Returning to executions confirms live GitHub data again.
       refresh();
       const target=location.hash&&document.getElementById(location.hash.slice(1));
       if(target)requestAnimationFrame(()=>target.scrollIntoView());
     }
-    wasAudit=isAudit;
+    wasIsolated=isAudit||isLab;
   }
   window.addEventListener("hashchange",selectWorkstationView);
   window.addEventListener("message",event=>{
@@ -1304,6 +1365,14 @@ footer { max-width:none;padding:12px 15px 20px; }
     const height=event.data.height;
     if(typeof height!=="number"||!Number.isFinite(height)||height<300||height>200000)return;
     auditFrame.style.height=Math.max(940,Math.ceil(height)+12)+"px";
+  });
+  window.addEventListener("message",event=>{
+    if(event.origin!==location.origin||event.source!==labFrame.contentWindow)return;
+    if(!event.data||event.data.type!=="tracework-research-height")return;
+    if(event.data.branch!==labFrame.dataset.branch)return;
+    const height=event.data.height;
+    if(typeof height!=="number"||!Number.isFinite(height)||height<200||height>80000)return;
+    labFrame.style.height=Math.max(750,Math.ceil(height)+22)+"px";
   });
   window.WorkstationFlow.install(()=>{app.runVisible=20;renderRuns();renderHistory();});
   selectWorkstationView();
