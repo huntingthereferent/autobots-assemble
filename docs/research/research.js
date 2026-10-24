@@ -56,7 +56,7 @@
   const select=$("#source-choice"),viewer=$("#source-body"),search=$("#source-search"),meta=$("#source-meta"),list=$("#source-list");
   if(!select||!viewer)return;
   const files=paths[group]||[];
-  files.forEach(([label,path],i)=>{const b=node("button",{type:"button"},label);b.append(node("small",{},path));b.addEventListener("click",()=>select.value=String(i)&&load(i));list.append(b);const opt=node("option",{value:String(i)},label);select.append(opt)});
+  files.forEach(([label,path],i)=>{const b=node("button",{type:"button"},label);b.append(node("small",{},path));b.addEventListener("click",()=>{select.value=String(i);load(i);});list.append(b);const opt=node("option",{value:String(i)},label);select.append(opt)});
   let lines=[],current=0,request=0;
   const render=()=>{const needle=(search.value||"").toLowerCase().trim();clear(viewer);
    let count=0;const frag=document.createDocumentFragment();
