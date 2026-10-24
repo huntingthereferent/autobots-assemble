@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'work/arc3/arc4_cross_archive_audit.py'
+      - 'work/arc3/arc4_row63_action_index_audit.py'
       - '.github/workflows/arc4-cross-archive-audit.yml'
   workflow_dispatch:
 permissions:
@@ -44,10 +45,17 @@ jobs:
           python -m work.arc3.arc4_cross_archive_audit \
             --directory runtime/data/arc4/source-audit/input \
             --out runtime/data/arc4/source-audit/independent-cross-run-audit.json
+      - name: Reconcile source row63 against actual original action indices
+        run: |
+          python -m work.arc3.arc4_row63_action_index_audit \
+            --directory runtime/data/arc4/source-audit/input \
+            --out runtime/data/arc4/source-audit/row63-action-index-audit.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: arc4-original-independent-evidence-audit
-          path: runtime/data/arc4/source-audit/independent-cross-run-audit.json
+          path: |
+            runtime/data/arc4/source-audit/independent-cross-run-audit.json
+            runtime/data/arc4/source-audit/row63-action-index-audit.json
           if-no-files-found: warn
           retention-days: 90
