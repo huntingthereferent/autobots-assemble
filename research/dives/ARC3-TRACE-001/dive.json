@@ -4,7 +4,7 @@
   "title": "ARC-AGI-3 causal reasoning trace",
   "status": "active",
   "protocol": "research.dive",
-  "entry_trigger": "User requested a new target that would be externally impressive to trace after pinning GEMS.",
+  "entry_trigger": "User selected ARC-AGI-3 for a source-grounded research trace.",
   "preferred_referent": "📍 SOLVE THE WHOLE THING — ARC-AGI-3 100%",
   "fields": [
     "artificial intelligence",
@@ -109,12 +109,6 @@
     "Private competition performance remains UNKNOWN until official hidden evaluation.",
     "OpenWorld's public 25/25 and RHAE 100 prove public completion/final-path efficiency, not discovery-inclusive first-contact 100%."
   ],
-  "handoff_from": {
-    "type": "HANDOFF.BOUNDARY",
-    "source": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
-    "source_state": "state/pins/GEMS-001_2026-10-03.json",
-    "reason": "Explicit user-directed referent change. GEMS remains pinned and resumable."
-  },
   "swallowed_evidence": {
     "status": "swallowed",
     "summary": "research/dives/ARC3-TRACE-001/ARC3_SWALLOWED.md",

@@ -29,4 +29,4 @@ Likewise, a completed job can produce a research candidate without making the pa
 
 Hard externally judged prize work lives under [`money/challenges/`](challenges/) when compensation is the primary active goal.
 
-Active: [GEMS-001](challenges/GEMS-001_hidden-fault-mapping/GEMS.md).
+No active prize challenges are currently registered.

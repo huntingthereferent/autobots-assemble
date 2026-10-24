@@ -54,7 +54,7 @@ class OriginalResearchTests(unittest.TestCase):
 
     def test_original_source_tree_is_never_modified(self):
         original=[ROOT/"research/dives/ARC3-TRACE-001/dive.json",
-                  ROOT/"state/pins/GEMS-001_2026-10-03.json"]
+                  ROOT/"state/pins/ARC3_EXECUTION_BRIDGE_2026-10-04.json"]
         before=[x.read_bytes() for x in original]
         research_snapshot()
         self.assertEqual(before,[x.read_bytes() for x in original])

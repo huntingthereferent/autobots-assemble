@@ -123,14 +123,6 @@ For every movement preserve:
 | correction | what changed after failed prediction |
 | provenance | exact frame/action/source supporting the movement |
 
-## Handoff boundary
-
-GEMS remains pinned at:
-
-`state/pins/GEMS-001_2026-10-03.json`
-
-Nothing in ARC3 resolves or replaces the GEMS wall.
-
 ## Next movement
 
 Use the official toolkit to select a currently exposed public environment.

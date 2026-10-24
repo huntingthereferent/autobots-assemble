@@ -127,15 +127,6 @@
       "scope": "Pinned or historical original; not a presently assigned task",
       "next": "Give ChatGPT an authorized execution surface with Python 3.12, git, internet for initial ARC setup, and the official ARC-AGI-3 starter/runtime.",
       "boundary": "Kaggle credentials should be placed on the machine by the user, not pasted into chat."
-    },
-    {
-      "path": "state/pins/GEMS-001_2026-10-03.json",
-      "label": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
-      "state": "MOVE_WITH_WALL",
-      "source_type": "PIN",
-      "scope": "Pinned or historical original; not a presently assigned task",
-      "next": "Verify the exact GEMS-specific competition-data sharing/third-party-service rule; then run the local baseline through the downloaded-data/output contract before changing models.",
-      "boundary": "User explicitly pinned the active GEMS work before moving the current referent to a separate impressive tracing target."
     }
   ],
   "walls": [
@@ -242,12 +233,6 @@
       "line": 35
     },
     {
-      "path": "state/pins/GEMS-001_2026-10-03.json",
-      "text": "Exact GEMS competition-data sharing/third-party-service terms still need direct verification before further gated-data modeling outside the competitor-controlled environment.",
-      "kind": "source-recorded-wall",
-      "index": 0
-    },
-    {
       "path": "systems/factory/README.md",
       "text": "Current wall",
       "kind": "documented-heading-only",
@@ -306,16 +291,6 @@
       "path": "identity/README.md",
       "line": 65,
       "title": "Movement boundary",
-      "state": "DOCUMENTED_MOVEMENT",
-      "evidence": "documented-heading-only",
-      "boundary": "This is a recorded heading, not a native verified execution.",
-      "next": ""
-    },
-    {
-      "id": "heading:money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md#L99",
-      "path": "money/challenges/GEMS-001_hidden-fault-mapping/GEMS.md",
-      "line": 99,
-      "title": "Next movement",
       "state": "DOCUMENTED_MOVEMENT",
       "evidence": "documented-heading-only",
       "boundary": "This is a recorded heading, not a native verified execution.",
@@ -472,16 +447,6 @@
       "next": "Test shared-event movement across the remaining live providers without merging source claims. Preserve each witness separately while asking whether multiple BBC/Reuters/Reddit/Hacker News items point to the same current referent."
     },
     {
-      "id": "structured:state/pins/GEMS-001_2026-10-03.json",
-      "path": "state/pins/GEMS-001_2026-10-03.json",
-      "line": null,
-      "title": "📍 GEMS-001 — DOE GEMS hidden-fault mapping",
-      "state": "MOVE_WITH_WALL",
-      "evidence": "structured-source-state",
-      "boundary": "User explicitly pinned the active GEMS work before moving the current referent to a separate impressive tracing target.",
-      "next": "Verify the exact GEMS-specific competition-data sharing/third-party-service rule; then run the local baseline through the downloaded-data/output contract before changing models."
-    },
-    {
       "id": "heading:state/session-continuity-verification.md#L7",
       "path": "state/session-continuity-verification.md",
       "line": 7,
@@ -583,11 +548,11 @@
     }
   ],
   "source_totals": {
-    "source_files": 1973,
-    "structured_records": 16,
-    "original_wall_entries": 13,
+    "source_files": 1955,
+    "structured_records": 15,
+    "original_wall_entries": 12,
     "documented_wall_headings": 12,
-    "documented_movement_headings": 24
+    "documented_movement_headings": 23
   },
   "boundary": "Research entries are source-owned states; the browser's event roots and ancestry must come from GitHub directly. Presence in one display does not establish a causal relationship."
 }
