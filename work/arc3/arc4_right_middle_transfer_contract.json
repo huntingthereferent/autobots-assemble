@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_ROW63_RIGHT_MIDDLE_TRANSFER_20261024",
+  "referent": "Original ARC-AGI-3 SP80 level4: matched upper histories with different row63, tested under genuine right-middle source selection and opposing movement",
+  "source_code": "work/arc3/native_sp80_stage4_right_middle_transfer.py",
+  "parent_run_id": 40126916793,
+  "frozen_parent": "6@46,33 3 6@24,33 2 2 2 3 3 6@34,42 3 3 3 1 1 6@34,21",
+  "frozen_controls": [
+    [
+      "zero_rightmid_left",
+      "",
+      "6@46,33 3"
+    ],
+    [
+      "roundtrip_rightmid_left",
+      "4 3",
+      "6@46,33 3"
+    ],
+    [
+      "right_rightmid_left",
+      "4",
+      "6@46,33 3"
+    ],
+    [
+      "detour_rightmid_left",
+      "3 4 4",
+      "6@46,33 3"
+    ],
+    [
+      "zero_rightmid_right",
+      "",
+      "6@46,33 4"
+    ],
+    [
+      "roundtrip_rightmid_right",
+      "4 3",
+      "6@46,33 4"
+    ],
+    [
+      "right_rightmid_right",
+      "4",
+      "6@46,33 4"
+    ],
+    [
+      "detour_rightmid_right",
+      "3 4 4",
+      "6@46,33 4"
+    ]
+  ],
+  "frozen_pairs": [
+    [
+      "zero_rightmid_left",
+      "roundtrip_rightmid_left"
+    ],
+    [
+      "right_rightmid_left",
+      "detour_rightmid_left"
+    ],
+    [
+      "zero_rightmid_right",
+      "roundtrip_rightmid_right"
+    ],
+    [
+      "right_rightmid_right",
+      "detour_rightmid_right"
+    ]
+  ],
+  "resets_per_control": 2,
+  "expected_original_sdk_resets": 16,
+  "hypothesis": "For the two original source histories whose selected upper-bar interior and bbox match but row63 differs, transferring selection with genuine original ACTION6@46,33 to the right-middle bar and issuing common LEFT1 or RIGHT1 tests whether the row63 source difference becomes associated with a different SDK source response beyond prior upper-bar re-click tests. It does not assert an internal memory or causal engine rule.",
+  "predeclared_outcome_categories": [
+    "Identical source interior, differing row63 through later original right-middle movement and ACTION5",
+    "Interiors diverge after identical right-middle selection/move, with any associated cup or official SDK change retained without inferring cause",
+    "Official native SDK level >=5 or WIN, requiring fresh independent replication",
+    "Actual original click pixel or prechallenge matched-pair relation differs from frozen source; fail closed"
+  ],
+  "measurements": [
+    "native original upper-matched history (rows0..62 same, row63 different)",
+    "original actual clicked palette at (46,33), source SDK click receipt, and selected bbox after cross-object click",
+    "native source state immediately after common ACTION6 and following genuine ACTION3 or ACTION4",
+    "full 64x64 frame arrays before action, after right-middle movement, and across ACTION5",
+    "first source animation differing frame, cup first-fill and maximum counts",
+    "genuine original SDK levels_completed / state with real per-action ledger",
+    "raw JSON and NPZ hashes, source edition and append-only workstation handoff"
+  ],
+  "walls": [
+    "Only the original SDK levels_completed >=5 or WIN establishes game progression.",
+    "Row63 evidence is a visible source observation; no inferred internal memory, timer or causal effect.",
+    "Original SDK source click at (46,33) must remain actual right-middle transfer in both histories; changing source pixel or selected component is a recorded wall.",
+    "Do not conflate this work with previous matched upper re-click or L-piece studies, and do not rewrite PRs #468, #519 or #520.",
+    "Matching interiors and cup fills after one subsequent action do not prove global state equivalence or solver completion.",
+    "No synthetic ARC-like game, replay of cached result as native execution, automatic worker respawn or unreviewed merge."
+  ],
+  "next_no_progress": "If matched native histories remain equal in rows0..62 under genuine right-middle transfer, retain the tested negative evidence and stop repeating nearby action words; move to source artifact verification or a separately supported hypothesis.",
+  "next_progress": "Independent original SDK replay with full source frames/action ledger is required for any official level5/WIN; isolate and review any reproduced divergence in interiors without upgrading the game status."
+}
