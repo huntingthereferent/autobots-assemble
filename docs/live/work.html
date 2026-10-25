@@ -615,7 +615,8 @@ button:hover { background:#392b56;border-color:#b49af2; }
 footer { max-width:none;padding:12px 15px 20px; }
 @media(max-width:980px) { .workspace,.research-grid { grid-template-columns:1fr; } .pane-content { max-height:360px; } }
 @media(max-width:620px) { body > header { gap:5px;padding:6px 9px; } body > header nav a { padding:4px 6px;font-size:9px; } main { padding:9px 8px 25px; } .hero-layout { grid-template-columns:1fr;gap:7px; } .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); } .metric { padding:8px; } .section-top { align-items:start; } }
-.historical-boundaries[hidden] { display:none !important; }\n</style>
+.historical-boundaries[hidden] { display:none !important; }\n@media(max-width:560px){#finite-world-widget{grid-template-columns:1fr !important;max-width:360px !important}#finite-world-widget iframe{height:220px !important}}
+</style>
 <link rel="stylesheet" href="workstation-flow.css">
 <link rel="stylesheet" href="workstation-equilibrium.css">
 </head>
@@ -821,6 +822,10 @@ footer { max-width:none;padding:12px 15px 20px; }
     <span id="lab-mode" class="fine">Loading selected research instrument</span>
     <span class="fine">Native records, not simulated worker statuses</span>
   </div>
+  <aside id="finite-world-widget" aria-label="Live finite-world trace" style="display:grid;grid-template-columns:minmax(200px,320px) minmax(180px,1fr);gap:14px;align-items:center;margin:12px 0 18px;padding:12px;border:1px solid #30414c;background:#111e27;max-width:760px">
+    <iframe src="../finite-world-live.html" title="Live finite-world trace demonstration" loading="lazy" style="width:100%;height:235px;border:1px solid #30414c;background:#0c1420"></iframe>
+    <div><strong style="font-size:13px">FINITE WORLD / LIVE TRACE</strong><p style="font-size:12px;color:#a8bec9;line-height:1.6">Small, independently running demonstration of bounded state transitions. The displayed steps are generated locally from defined rules; they are not a live research worker or evidence of solving arbitrary problems.</p><a href="../finite-world-live.html" style="font-size:12px">Open full trace</a></div>
+  </aside>
   <iframe id="lab-frame" class="lab-frame" title="Source-grounded technical research viewer embedded within Tracework" loading="eager"></iframe>
 </section>
 <footer>Read-only / evidence-first. Public runs poll periodically; recorded research updates when its committed source projection changes. The source records, not this screen, determine what has been verified.</footer>
