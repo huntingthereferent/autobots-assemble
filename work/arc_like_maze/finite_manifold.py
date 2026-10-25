@@ -58,6 +58,39 @@ class FiniteTorus3:
             raise ValueError("World uses F_3: side must be 3 for this adapter")
         return World(3, phi).step(vertex, action)
 
+    def edges(self) -> frozenset[frozenset[Vertex]]:
+        """Undirected one-step edges of the reference cubical 1-skeleton."""
+        return frozenset(
+            frozenset((v, neighbor))
+            for v in self.vertices()
+            for neighbor in self.neighbors(v)
+        )
+
+    def transported_edges(self, action: str, phi=(0, 1, 2)) -> frozenset[frozenset[Vertex]]:
+        """Push forward the original edge relation along a state permutation.
+
+        A transported edge may not be an edge in the original cubical lattice.
+        This records a transformed relation, not a new smooth manifold.
+        """
+        return frozenset(
+            frozenset(self.transition(v, action, phi) for v in edge)
+            for edge in self.edges()
+        )
+
+    def geometry_comparison(self, action: str, phi=(0, 1, 2)) -> dict:
+        """Compare fixed adjacency with the action-transported adjacency."""
+        original = self.edges()
+        transported = self.transported_edges(action, phi)
+        return {
+            "action": action,
+            "original_edges": len(original),
+            "transported_edges": len(transported),
+            "preserved_edges": len(original & transported),
+            "lost_edges": len(original - transported),
+            "introduced_edges": len(transported - original),
+            "is_graph_automorphism": original == transported,
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
