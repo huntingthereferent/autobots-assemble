@@ -23,7 +23,7 @@ SOURCES = (
  ("original_precommitted_sdk_case","real_native_entry_witness","actual_original_sdk_word",
   "original_sdk_official_final_level","true_original_sdk_action_ledger")),
  ("arc4-clean-lateral-original.zip","original-sp80-stage4-clean-lateral-top",
- "c408f491013da2b000606ee9276ffcb5ecc6da12d080123e6c2a3365d13e3e",
+ "c408f491013da2b000606ee9276ffcb5ecc6da12d080123e6c2a3365d13e3e3e",
  "aa86e920cba4ab7f061a34c5ab50e88cf8aa6a7037e9d80548c8a7fdb06fcc80",
  52,4,"source_full_actual_original_receipts",
  ("prospective_original_source_case","independent_actual_native_witness","true_sdk_stage4_source_word",
