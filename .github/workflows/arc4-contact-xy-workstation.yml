@@ -1,0 +1,39 @@
+name: ARC4 original SDK finite upper source 2D contact discriminator
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-native-level4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine original Arcade SDK source
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile source and independent mathematics gate
+        run: python -m compileall -q work/arc3/native_sp80_stage4_contact_xy.py work/arc3/arc4_contact_xy_gate.py work/arc3/contact_xy_workstation.py
+      - name: Verify pre-registered original Level4 source-action contract
+        run: python -m work.arc3.arc4_contact_xy_gate pre
+      - name: Execute authentic SDK level4 UP1 DOWN1 matched controls in ProcessWorkstation
+        run: |
+          python -m work.arc3.contact_xy_workstation \
+            --execute \
+            --data-dir runtime/data/arc4/contact-xy/workstation \
+            --out runtime/data/arc4/contact-xy/original-contact-xy.json
+      - name: Independently verify original SDK frames clicks coupons and Level4 official progress
+        run: |
+          python -m work.arc3.arc4_contact_xy_gate post \
+            --result runtime/data/arc4/contact-xy/original-contact-xy.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-sdk-contact-xy
+          path: |
+            runtime/data/arc4/contact-xy/original-contact-xy.*
+            runtime/data/arc4/contact-xy/workstation/**
+          if-no-files-found: warn
+          retention-days: 90

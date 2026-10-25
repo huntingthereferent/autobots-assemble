@@ -1,0 +1,61 @@
+name: ARC4 original Level4 U2-U3 contact XY source postflight (read-only)
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/arc4_contact_xy_gate.py'
+      - 'work/arc3/arc4_contact_xy_contract.json'
+      - '.github/workflows/arc4-contact-xy-source-postflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-native-source-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numeric source reader and import-only SDK dependency (no game execution)
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Retrieve immutable 24-reset genuine SDK source from prior actual native run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runtime/data/arc4/contact-xy
+          curl --fail --silent --show-error --location --retry 3 \
+            --header "Authorization: Bearer $GH_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            'https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/artifacts/12588302034/zip' \
+            --output runtime/data/arc4/contact-xy/source-actual-native-40165906446.zip
+          unzip -o -q runtime/data/arc4/contact-xy/source-actual-native-40165906446.zip \
+            -d runtime/data/arc4/contact-xy
+          cd runtime/data/arc4/contact-xy
+          printf '%s  %s\n' \
+            d1779cf85448ead71665619ca7a0f30d31903e527748594b37497b8f1a3f421d original-contact-xy.json \
+            89eef196bfcb306b82eaa7cb5ef659e13e74b89016a1ee8402940a60cf6e2372 original-contact-xy.npz \
+            | sha256sum --check --strict
+          printf '%s  %s\n' \
+            7122068b947b85fe87961fbabda8fcf3f72087e76c3e2da367eff5445a945afb \
+            workstation/selected/native_sp80_stage4_contact_xy.py \
+            | sha256sum --check --strict
+      - name: Run frozen finite Level4 native source preflight
+        run: python -m work.arc3.arc4_contact_xy_gate pre
+      - name: Independently verify genuine SDK NPZ, all 24 original action receipts and 2D source-contact math
+        run: |
+          python -m work.arc3.arc4_contact_xy_gate post \
+            --result runtime/data/arc4/contact-xy/original-contact-xy.json
+      - name: Preserve original source-derived postflight result
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-level4-contact-xy-independent-postflight
+          path: |
+            runtime/data/arc4/contact-xy/original-contact-xy.protocol.json
+            runtime/data/arc4/contact-xy/workstation/runtime.jsonl
+          if-no-files-found: warn
+          retention-days: 90
