@@ -131,6 +131,50 @@ class FiniteTorus3:
             previous = current
         return tuple(records)
 
+    def permutation_signature(self, actions: str, phi=(0, 1, 2)) -> tuple[Vertex, ...]:
+        """Canonical finite signature of the full state permutation."""
+        return tuple(self.apply_word(v, actions, phi) for v in self.vertices())
+
+    def geometry_return_analysis(self, actions: str, phi=(0, 1, 2)) -> dict:
+        """Find first repeated transported graph and first repeated permutation.
+
+        These are distinct return criteria: graph recurrence does not imply
+        the state permutation itself has returned.
+        """
+        initial = self.edges()
+        seen_graph = {initial: 0}
+        initial_perm = self.permutation_signature("", phi)
+        seen_perm = {initial_perm: 0}
+        first_graph_repeat = None
+        first_permutation_repeat = None
+        first_graph_return = None
+        first_permutation_return = None
+        for index in range(1, len(actions) + 1):
+            prefix = actions[:index]
+            graph = self.transported_edges_word(prefix, phi)
+            perm = self.permutation_signature(prefix, phi)
+            if graph in seen_graph and first_graph_repeat is None:
+                first_graph_repeat = (seen_graph[graph], index)
+            else:
+                seen_graph.setdefault(graph, index)
+            if perm in seen_perm and first_permutation_repeat is None:
+                first_permutation_repeat = (seen_perm[perm], index)
+            else:
+                seen_perm.setdefault(perm, index)
+            if graph == initial and first_graph_return is None:
+                first_graph_return = index
+            if perm == initial_perm and first_permutation_return is None:
+                first_permutation_return = index
+        return {
+            "word": actions,
+            "first_graph_repeat": first_graph_repeat,
+            "first_permutation_repeat": first_permutation_repeat,
+            "first_graph_return": first_graph_return,
+            "first_permutation_return": first_permutation_return,
+            "distinct_graphs": len(seen_graph),
+            "distinct_permutations": len(seen_perm),
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
