@@ -1,12 +1,5 @@
 name: ARC4 original SDK Level4 middle height versus upstream overflow
 on:
-  pull_request:
-    paths:
-      - 'work/arc3/native_sp80_stage4_middle_height_spill.py'
-      - 'work/arc3/arc4_middle_height_spill_contract.json'
-      - 'work/arc3/arc4_middle_height_spill_gate.py'
-      - 'work/arc3/middle_height_spill_workstation.py'
-      - '.github/workflows/arc4-middle-height-spill-workstation.yml'
   workflow_dispatch:
 permissions:
   contents: read
