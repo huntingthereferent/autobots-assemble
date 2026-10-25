@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-25T04:50:16.037773+00:00",
-  "content_sha256": "9097ce42aa7e524972696d96b81b3519cb17c25821bf316ff34f1fcf4beed551",
+  "checked_at": "2026-10-25T11:39:51.791706+00:00",
+  "content_sha256": "2981d4a56443db9edbd5603e5142bc664781b94b2bd4073624fd4d719345c06f",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 5,
-      "max_magnitude": 2.0,
+      "count": 2,
+      "max_magnitude": 3.37,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,94 +22,43 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026vcwfrm",
-        "observed_at": "2026-10-25T04:50:15.720733Z",
-        "source_updated_at": "2026-10-25T03:54:01.683000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vcwfrm",
+        "source_id": "ci41352135",
+        "observed_at": "2026-10-25T11:39:51.574910Z",
+        "source_updated_at": "2026-10-25T11:33:32.622000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41352135",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vcwfrm",
+        "canonical_key": "event:ci41352135",
         "payload": {
-          "magnitude": 1.5,
-          "place": "57 km SSW of Skwentna, Alaska",
-          "longitude": -151.955,
-          "latitude": 61.545,
-          "depth_km": 16.5,
-          "occurred_at": "2026-10-25T03:52:03.795000+00:00"
+          "magnitude": 0.11,
+          "place": "4 km WSW of Anza, CA",
+          "longitude": -116.709666666667,
+          "latitude": 33.5396666666667,
+          "depth_km": 6.13,
+          "occurred_at": "2026-10-25T11:30:03.280000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026vcwunc",
-        "observed_at": "2026-10-25T04:50:15.720733Z",
-        "source_updated_at": "2026-10-25T04:11:51.894000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vcwunc",
+        "source_id": "pr71537633",
+        "observed_at": "2026-10-25T11:39:51.574910Z",
+        "source_updated_at": "2026-10-25T11:26:40.040000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/pr71537633",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vcwunc",
+        "canonical_key": "event:pr71537633",
         "payload": {
-          "magnitude": 1.0,
-          "place": "63 km ESE of Knik River, Alaska",
-          "longitude": -147.856,
-          "latitude": 61.207,
-          "depth_km": 32.7,
-          "occurred_at": "2026-10-25T04:08:46.796000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "aka2026vcwvdg",
-        "observed_at": "2026-10-25T04:50:15.720733Z",
-        "source_updated_at": "2026-10-25T04:13:02.232000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vcwvdg",
-        "entity_type": "event",
-        "canonical_key": "event:aka2026vcwvdg",
-        "payload": {
-          "magnitude": 1.7,
-          "place": "20 km WNW of Clam Gulch, Alaska",
-          "longitude": -151.736,
-          "latitude": 60.295,
-          "depth_km": 62.4,
-          "occurred_at": "2026-10-25T04:09:31.200000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "aka2026vcxjir",
-        "observed_at": "2026-10-25T04:50:15.720733Z",
-        "source_updated_at": "2026-10-25T04:27:51.263000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vcxjir",
-        "entity_type": "event",
-        "canonical_key": "event:aka2026vcxjir",
-        "payload": {
-          "magnitude": 1.9,
-          "place": "7 km SE of Skwentna, Alaska",
-          "longitude": -151.275,
-          "latitude": 61.948,
-          "depth_km": 79.2,
-          "occurred_at": "2026-10-25T04:25:53.197000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "aka2026vcxkym",
-        "observed_at": "2026-10-25T04:50:15.720733Z",
-        "source_updated_at": "2026-10-25T04:29:12.339000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vcxkym",
-        "entity_type": "event",
-        "canonical_key": "event:aka2026vcxkym",
-        "payload": {
-          "magnitude": 2.0,
-          "place": "25 km WNW of Chenega, Alaska",
-          "longitude": -148.448,
-          "latitude": 60.127,
-          "depth_km": 18.3,
-          "occurred_at": "2026-10-25T04:27:44.889000+00:00"
+          "magnitude": 3.37,
+          "place": "85 km ENE of Christiansted, U.S. Virgin Islands",
+          "longitude": -63.9966666666667,
+          "latitude": 18.1245,
+          "depth_km": 12.83,
+          "occurred_at": "2026-10-25T10:55:36.700000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-25T04:50:15.812007Z",
+      "observed_at": "2026-10-25T11:39:51.631679Z",
       "source_updated_at": "2026-10-25T01:29:18Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
@@ -118,7 +67,7 @@
         "full_name": "psf/requests",
         "default_branch": "main",
         "stargazers_count": 54645,
-        "forks_count": 12579,
+        "forks_count": 12582,
         "open_issues_count": 244,
         "pushed_at": "2026-09-28T16:55:48Z",
         "archived": false
@@ -127,7 +76,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-25T04:50:15.965517Z",
+      "observed_at": "2026-10-25T11:39:51.771557Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -149,8 +98,7 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count",
-        "stargazers_count"
+        "forks_count"
       ]
     },
     "pypi": {
