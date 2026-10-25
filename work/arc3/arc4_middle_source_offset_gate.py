@@ -105,9 +105,13 @@ def inspect(c,path):
                     previous=frames[-1]
                 mid=arrays[f"{name}_{witness}_stage4_{mid_index}"][-1]
                 bbox=selected_bbox(mid)
-                require(raw["original_native_mid_selected_bbox"]==bbox and
-                        bbox==[expected_x,expected_y,expected_x+8,expected_y+2],
-                        "source selected middle bar did not genuinely move to expected 9x3 position")
+                require(raw["original_native_mid_selected_bbox"]==bbox,
+                        "source-selected middle bar bytes differ from original native ledger")
+                intended=[expected_x,expected_y,expected_x+8,expected_y+2]
+                blocked_left1=(movename=="LEFT1" and
+                               bbox==[14,expected_y,22,expected_y+2])
+                require(bbox==intended or blocked_left1,
+                        "unexpected genuine original bar geometry; fail closed rather than infer motion")
                 after=led[-1]
                 require(raw["official_original_sdk_level"]==after["original_sdk_level_after"]
                         and raw["official_original_sdk_state"]==after["original_sdk_state_after"]
@@ -164,6 +168,9 @@ def inspect(c,path):
                         "source observed upper-left overflow shifted but verifier missed it")
                 witness_records.append({
                     "witness":witness,"middle_bbox":bbox,
+                    "intended_middle_bbox":intended,
+                    "native_selected_middle_genuinely_moved":not blocked_left1 and movename!="HOLD",
+                    "original_native_action_did_not_move_object":blocked_left1,
                     "sdk_level":raw["official_original_sdk_level"],
                     "official_advance":raw["official_original_sdk_level5_or_WIN"],
                     "first_native_source_upper_left_by_column":sites,
@@ -187,6 +194,19 @@ def inspect(c,path):
               or hold.get("original_cup_topmiddle_max13")!=45
               or hold.get("first_simultaneous_four_cups_frame") is None):
             control_drift.append({"case":pname+"_HOLD","actual_original_sdk_source":hold})
+    blocked_left1=[name for name,x in outcomes.items()
+                     if x.get("original_native_action_did_not_move_object")]
+    require(set(blocked_left1)=={p+"_LEFT1" for p,base,l,y in PARENTS},
+            "native blocked LEFT1 must be independently source-observed in both clean parents")
+    for p,base,l,y in PARENTS:
+        hold=outcomes[p+"_HOLD"]
+        blocked=outcomes[p+"_LEFT1"]
+        for field in ("middle_bbox","first_native_source_upper_left_by_column",
+                      "original_cup_topmiddle_max13","original_cup_top_left_max13",
+                      "first_simultaneous_four_cups_frame","native_top_border_frame",
+                      "native_right_border_frame"):
+            require(hold[field]==blocked[field],
+                    "native LEFT1 was blocked but source answer diverged from HOLD")
     comparisons=[{
       "original_lower_parent":pname,
       "measured_left_middle_control":outcomes[pname+"_HOLD"],
@@ -201,8 +221,10 @@ def inspect(c,path):
       "original_sdk_level_histogram":dict(level),
       "original_sdk_official_level5_or_WIN":advances,
       "state":"REPLICATION_REQUIRED" if advances else
-              "WALL_CONTROL_DRIFT" if control_drift else "PARTIAL",
+              "WALL_CONTROL_DRIFT" if control_drift else "PARTIAL_WITH_NATIVE_BLOCKED_LEFT1",
       "native_baseline_control_drift":control_drift,
+      "blocked_genuine_original_middle_LEFT1_cases":blocked_left1,
+      "blocked_native_middle_LEFT1_is_real_nonmovement":len(blocked_left1)==2,
       "finite_original_source_middle_bar_comparisons":comparisons,
       "math_scope":"Source-bound finite neighboring 9x3 object versus original x11..13 rising pixel stream; cannot infer global physics, private state, or formal F3 A/B action map.",
       "next_movement":c["next_if_progress"] if advances else c["next_if_no_progress"],
