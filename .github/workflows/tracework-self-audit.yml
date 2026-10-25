@@ -1,14 +1,7 @@
-name: Tracework self audit - closes when everything passes
+name: Tracework self audit - bounded manual audit
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '41 */6 * * *'
-  workflow_run:
-    workflows:
-      - protocol-tests
-      - Publish source-bound research for the live trace surface
-    types: [completed]
 
 permissions:
   actions: read
@@ -31,6 +24,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Verify finite closure semantics
+        run: python -m unittest -v network.tests.test_tracework_self_audit
       - name: Evaluate actual GitHub runs and update the open audit issue
         env:
           GITHUB_TOKEN: ${{ github.token }}
