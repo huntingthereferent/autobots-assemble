@@ -7,6 +7,9 @@ on:
     paths:
       - '.github/workflows/nih-audit-lanes.yml'
       - 'research/nih_audit/**'
+      - 'systems/workspace/nih_p2_*.py'
+      - 'systems/workspace/nih_aact_*.py'
+      - 'network/tests/test_nih_p2_*.py'
 permissions:
   contents: read
 jobs:
@@ -53,6 +56,7 @@ jobs:
         run: |
           test -f systems/workspace/nih_p2_historical_status_difference_search.py
           python -m py_compile systems/workspace/nih_p2_historical_status_difference_search.py
+          python -m unittest discover -s network/tests -p 'test_nih_p2_*status*.py' -v
   provenance:
     name: NIH-06 provenance boundaries
     needs: inventory
