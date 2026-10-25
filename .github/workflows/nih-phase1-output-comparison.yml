@@ -37,6 +37,8 @@ jobs:
         run: |
           set -uo pipefail
           mkdir -p "$RUNNER_TEMP/nih-compare"
+          printf '%s\\n' "$GITHUB_SHA" > "$RUNNER_TEMP/nih-compare/source-sha.txt"
+          printf '%s\\n' "$GITHUB_RUN_ID" > "$RUNNER_TEMP/nih-compare/run-id.txt"
           for candidate in frontier two_clock source_motion publication_uncertainty; do
             mkdir -p "$RUNNER_TEMP/nih-compare/$candidate"
             python -m systems.workspace.nih_phase1_world_${candidate} \
@@ -46,6 +48,9 @@ jobs:
             code=$?
             printf '%s\n' "$code" > "$RUNNER_TEMP/nih-compare/$candidate/exit-code.txt"
             echo "$candidate exit=$code"
+            if [[ "$code" != "0" ]]; then
+              tail -n 35 "$RUNNER_TEMP/nih-compare/$candidate/execution.log" || true
+            fi
           done
       - name: Compare actual receipt claims without inventing a winner
         if: always()
