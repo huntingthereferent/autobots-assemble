@@ -25,7 +25,9 @@ jobs:
           python-version: '3.12'
       - name: Verify finite closure semantics
         run: python -m unittest -v network.tests.test_tracework_self_audit
-      - name: Evaluate frozen audit and its bounded descendants
+      - name: Evaluate frozen audit and compare admitted runs against GitHub
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: python -m systems.workspace.tracework_self_audit
       - name: Retain immutable audit decision
         if: always()
