@@ -1,0 +1,45 @@
+name: Tracework self audit - closes when everything passes
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '41 */6 * * *'
+  workflow_run:
+    workflows:
+      - protocol-tests
+      - Publish source-bound research for the live trace surface
+    types: [completed]
+
+permissions:
+  actions: read
+  contents: read
+  issues: write
+
+concurrency:
+  group: tracework-self-audit
+  cancel-in-progress: false
+
+jobs:
+  close-audit-loop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Evaluate actual GitHub runs and update the open audit issue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python -m systems.workspace.tracework_self_audit
+      - name: Retain immutable audit decision
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tracework-self-audit-${{ github.run_id }}
+          path: tracework-self-audit.json
+          if-no-files-found: warn
+          retention-days: 90
