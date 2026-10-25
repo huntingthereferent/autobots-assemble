@@ -1,6 +1,12 @@
 name: NIH Phase 1 output comparison - bounded execution
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/nih_phase1_output_compare.py'
+      - 'network/tests/test_nih_phase1_output_compare.py'
+      - '.github/workflows/nih-phase1-output-comparison.yml'
   pull_request:
     paths:
       - 'systems/workspace/nih_phase1_output_compare.py'
