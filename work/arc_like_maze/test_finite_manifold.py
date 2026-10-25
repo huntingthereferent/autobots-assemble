@@ -85,6 +85,23 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertEqual(result["distinct_graphs"], 3)
         self.assertEqual(result["distinct_permutations"], 3)
 
+    def test_mixed_ab_longer_permutation_cycle(self):
+        m = FiniteTorus3()
+        # Every AB block is applied in the same left-to-right order as World.step.
+        word = "AB" * 9
+        trace = [m.geometry_return_analysis("AB" * n) for n in range(1, 10)]
+        self.assertEqual([r["first_graph_return"] for r in trace[:2]], [None, None])
+        self.assertEqual(trace[2]["first_graph_return"], 6)
+        self.assertIsNone(trace[2]["first_permutation_return"])
+        self.assertEqual(trace[-1]["first_permutation_return"], 18)
+        self.assertEqual(m.permutation_signature(word), m.permutation_signature(""))
+        self.assertNotEqual(m.permutation_signature("AB" * 3), m.permutation_signature(""))
+        self.assertEqual(
+            [m.geometry_comparison("B")["preserved_edges"],
+             len(m.edges() & m.transported_edges_word("AB"))],
+            [27, 27],
+        )
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
