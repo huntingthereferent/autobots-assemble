@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_UPPER_CONTACT_BREAKPOINT_20261025",
+  "referent": "Original SP80 Level4 source-grounded upper-right edge x34 versus x31 across observed x32-34 stream, independent native actions",
+  "source_code": "work/arc3/native_sp80_stage4_upper_contact_bracket.py",
+  "parent_native_runs": [
+    40164869118,
+    40154160743
+  ],
+  "parent_native_artifacts": [
+    12587806520,
+    12583637554
+  ],
+  "frozen_level4_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "expected_original_sdk_resets": 32,
+  "factors": {
+    "lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "right_middle_actions": [
+      [
+        "R1",
+        "3"
+      ],
+      [
+        "R2",
+        "3 3"
+      ]
+    ],
+    "upper_actions": [
+      [
+        "U1",
+        "3"
+      ],
+      [
+        "U2",
+        "3 3"
+      ],
+      [
+        "U3",
+        "3 3 3"
+      ],
+      [
+        "U6",
+        "3 3 3 3 3 3"
+      ]
+    ],
+    "original_sdk_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "finite_hypothesis": "With original right-middle LEFT2, native 3-pixel source x32..34 rises past y20..22. The selected upper 12x3 bar rightmost x34 after LEFT2 intersects these columns, while after LEFT3 its rightmost x31 does not. Check original SDK returned top-middle cup13 response, offcup source strands and official status; U1 and U6 are native source controls. R1 is same-family reference.",
+  "source_contact_coordinates": {
+    "real_upstream_source_stream_x": [
+      32,
+      33,
+      34
+    ],
+    "selected_top_U2_right_edge": 34,
+    "selected_top_U3_right_edge": 31,
+    "selected_top_bar_y": [
+      20,
+      21,
+      22
+    ],
+    "top_middle_original_cup_x": [
+      35,
+      43
+    ]
+  },
+  "official_progress": "Only original Arcade.NORMAL SDK levels_completed>=5 or WIN",
+  "walls": [
+    "This is the current genuine original SDK SP80 Level4/6; replaying earlier levels only enters the verified state.",
+    "No general physics or private success condition is inferred from source colors or apparent contact.",
+    "Original native A/B independent entry witnesses are not formal F3 mathematical generators.",
+    "All 32 source-native SDK resets require verified level4 root, complete frame and action receipts, clicked-pixel proof, source-selected bbox and official SDK state.",
+    "The observed U2/U3 edge bracket is a finite observational contact hypothesis, not an operator-translation into F3 A/B.",
+    "Record if native source U1/R1/U6 controls differ from independently observed original previous runs; do not overstate outcomes.",
+    "No visual filled cup or edge absence is official progress; only the original SDK level5/WIN counter is decisive.",
+    "All experimental PR changes remain draft unmerged; keep unrelated lanes untouched."
+  ],
+  "next_no_progress": "Use actual source bracket result to distinguish whether x32..34 stream interception alters top-middle; if it does not, derive next test from a different source contact rather than extend an arbitrary upper sweep.",
+  "next_progress": "Require independent original SDK A/B level5/WIN replays and immutable saved 64x64 frame and legal action receipts before progress declaration."
+}
