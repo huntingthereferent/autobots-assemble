@@ -170,3 +170,61 @@ Observed original SDK public attribute names: `action_input`, `available_actions
 The failed Level4 original SDK action still returned simultaneous 45/45 in **all four native source cup windows** on actual frames23–30; neither the one-pour or two-pour control changed the official level. The public observation object exposed **no separate scalar score, failure_reason, objective-completion flag or event explanation** in this test. The SDK's source `state=NOT_FINISHED` also remained unchanged upon genuine earlier Level3→4 progression: **state alone is not an individual stage advancement signal**. The authoritative original transition is `levels_completed: 3→4`, whereas our Level4 source visual response remains `4→4`. `win_levels=6` confirms the original game has six win levels; it does **not** provide any missing hidden objective rule.
 
 **Interpretation and next action:** public SDK signal comparison is now complete and negative for any accessible failure-reason property. Do not pretend this SDK provides a detailed why-not-advanced explanation. The next useful original test must propose a falsifiable *source-frame boundary/geometry difference* that is not merely four cup pixels, with genuine level5/WIN as the only progression oracle; do not expand source sweeps without such a discriminator. Original 48-law F3 mathematics and canonical agent remain unchanged; PR stays unmerged.
+
+
+## Source-corrected upper-border investigation — new official SDK tests and 334-stack replay
+
+### Corrected comparison to earlier Stage3 winner
+
+An independent read-only re-examination of [genuine official Stage3→4 success archive #12352298969](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39616395169/artifacts/12352298969) found that source palette6 at **x23–25/y5–7 was already present on the original Stage3 pre-pour frame** (nine of nine pixels), and remains present on the first original ACTION5 returned frame. Therefore earlier language suggesting its *arrival during the winning Stage3 pour* was too strong. There is **no established winning x23 arrival law** to transfer across different levels.
+
+By contrast, in the official Level4 four-cup source witness, x26–28/y5–7 was palette12 *before* the pour and became palette6 for the first time in original animation frame19. These are differences in before-state occupancy and returned-frame arrival, not proof of a shared hidden mechanism.
+
+### 14 new original SDK upper timing controls
+
+[Successful native Actions run #40232179104](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40232179104); [full original SDK evidence #12612978672](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40232179104/artifacts/12612978672). **Seven prospective frozen conditions × two independently reset original entry witnesses = 14 genuine SDK games**. All official `levels_completed=4`, `NOT_FINISHED`, zero Level5/WIN.
+
+- Source upper bar LEFT1: simultaneous four source cups first complete **frame21**, top-border palette14 first **frame20**.
+- Upper bar LEFT2 (also LEFT2 UP1 and LEFT2 DOWN1): simultaneous four full cup windows first **frame21**, top-border palette14 first **frame22**, new upper-left x26–28/y5–7 *absent*. This is an independently original SDK observed **four-cup-filled-before-flash configuration**, officially unfinished.
+- Upper LEFT3 (and LEFT3 UP1): simultaneously four full cup windows first **frame21**, border flash **frame22**, source y5–7 first new palette6 at x14–16 frame21.
+- Upper LEFT4: top-left cup not full, no simultaneous four-cup window, first border flash frame21.
+
+Thus **four cups full before the border flash is insufficient** for native advancement in the tested original SDK configurations. The prior proposed timing-only rescue of the objective is falsified.
+
+### 14 new original SDK right-middle controls
+
+[Successful original native Actions run #40232416450](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40232416450); [full original 64×64 frames and native action receipts #12613222382](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40232416450/artifacts/12613222382). Preserved full-four-cup source parent with upper LEFT2, then reselected source-palette8 right-middle bar at actual coordinate **x42,y33**; prospectively fixed HOLD, LEFT1, LEFT2, RIGHT1, RIGHT2, UP1, DOWN1. 7 × 2 original entry witnesses = **14 authentic SDK games**, zero level5/WIN and exact paired source-observation agreement.
+
+| Frozen right-middle movement | First **new** source palette6 at y5–7 | First original top-border palette14 | First all four source cups simultaneously full | Native outcome |
+|---|---:|---:|---:|---|
+| HOLD | frame21 | frame22 | frame21 | level4 |
+| LEFT1 | frame23 | frame24 | frame23 | level4 |
+| LEFT2 | frame19 | frame20 | frame23 | level4 |
+| RIGHT1 | frame21 | frame22 | never | level4 |
+| RIGHT2 | frame19 | frame20 | never | level4 |
+| UP1 | frame21 | frame22 | frame21 | level4 |
+| DOWN1 | frame21 | frame22 | frame21 | level4 |
+
+This target-independent empirical relation survived all 14 controls: top-border source-palette14 first occurs **one SDK-returned frame after the first newly appearing palette6 pixels at top source strip y5–7,x5–58**.
+
+### Read-only cross-artifact replay of original full frames
+
+The earlier 10 downloaded original-GitHub-Actions raw SDK evidence ZIP archives were independently replayed read-only, comparing each source before-pour 64×64 frame with its full authentic ACTION5 returned stack, and the original stage4 entry top-border palette1 mask. Reproducible repo code: [`audit_sp80_original_top_border_timing.py`](../audit_sp80_original_top_border_timing.py). Counts by independent original artifact:
+
+| Original SDK artifact | Source ACTION5 returned stacks | +1 timing relation matched |
+|---|---:|---:|
+| #12611668442 corridor | 24 | 24 |
+| #12593288221 frame8 fork | 64 | 64 |
+| #12355888555 original stage4 inventory | 24 | 24 |
+| #12592626568 paired lower junction | 56 | 56 |
+| #12613222382 right signal | 14 | 14 |
+| #12613920309 public SDK fields | 8 | 8 |
+| #12612646837 upper flash control | 18 | 18 |
+| #12592402624 two-axis | 64 | 64 |
+| #12612978672 upper timing | 14 | 14 |
+| #12591043651 lower upstream | 48 | 48 |
+| **Total** | **334** | **334** |
+
+All 334 independently **archived returned original SDK pour stacks** contained the y5–7 new source-palette6 first event and first top-border palette14 event at **t+1**; zero counterexamples within these archives. BLAKE2b16 of the true original before-pour array concatenated with the actual original returned full stack gave **128 distinct pre-pour/animation byte sequences** (not 334 independent geometries: archives deliberately repeat witnesses, root histories and controls). Distinct source trajectory count is not a sample-based success probability, an engine rule, or a private-physics proof.
+
+**Next bounded hypothesis to falsify**: Does an actual original SDK Level4 configuration have *all four source cup windows filled* yet **no newly appearing palette6 at source y5–7**? The inspected original source archives had no such case. This is more discriminating than simply making cups full before the flash. It may be impossible for tested geometry; do not claim necessity/sufficiency for official Level5 without a verified counterexample or a genuine original level5 transition. No synthetic game, edited level, private engine assumptions or changes to F3-48 math/owner canonical agent. PR remains unmerged.
