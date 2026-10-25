@@ -1,4 +1,4 @@
-"""Original SP80 level4 middle vertical under compensated lower L finite source geometry admitted to workstation (opt-in)."""
+"""Original SP80 Level4 source-native middle-height finite experiment in ProcessWorkstation."""
 from __future__ import annotations
 import argparse
 from hashlib import sha256
@@ -18,7 +18,7 @@ from .arc4_middle_height_spill_gate import context, inspect as verify_result
 SOURCE = Path("work/arc3/native_sp80_stage4_middle_height_spill.py")
 LANE = "arc4-sp80-height-spill-relation-native"
 JOB = "arc4-sp80-height-spill-relation-20261025"
-RELATION = "test bounded native relative middle/L geometry on lateral cup preservation with right-middle heightEFT2 and upper LEFT2 held"
+RELATION = "compare finite original SDK middle UP1/HOLD/DOWN1 source x14..16 spill while preserving compensated L RIGHT1 and four-cup relation"
 VERIFIER = "arc4-middle-height-native-source-verifier-v1"
 
 def sha(path):
