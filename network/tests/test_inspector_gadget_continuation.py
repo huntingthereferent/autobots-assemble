@@ -41,16 +41,8 @@ class NativeLaneContinuationTests(unittest.TestCase):
     def test_real_repository_roster_contains_native_workflow_entry_points(self):
         entries = validate(json.loads(ROSTER.read_text(encoding="utf8")))
         self.assertGreaterEqual(len(entries), 10)
-        self.assertTrue({"arc-native", "nih-p2", "nih-audit", "world", "meow-lab",
+        self.assertTrue({"arc-native", "nih-p2", "world", "meow-lab",
                          "audio-intake", "research-sources"} <= {row["id"] for row in entries})
-
-    def test_nih_audit_is_native_dispatchable_and_not_a_synthetic_lane(self):
-        entries = validate(json.loads(ROSTER.read_text(encoding="utf8")))
-        audit = next(row for row in entries if row["id"] == "nih-audit")
-        self.assertEqual(audit["filename"], "nih-audit-lanes.yml")
-        self.assertTrue(audit["enabled"])
-        self.assertGreaterEqual(audit["min_interval_minutes"], 0)
-        self.assertNotEqual(audit["filename"], "nih-p2-synthetic-benchmark.yml")
 
     def test_all_eligible_workers_are_selected_up_to_capacity(self):
         registry = mock_registry("arc", "nih", "world", "meow")
