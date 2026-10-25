@@ -50,16 +50,26 @@ def compare(receipts):
         path = Path(receipts) / name / filename
         item = {"receipt": str(path), "capabilities": CAPABILITIES[name],
                 "status": "UNKNOWN", "checks": {}, "source": None}
+        exit_path = path.parent / "exit-code.txt"
+        if exit_path.is_file():
+            exit_code = exit_path.read_text(encoding="utf-8").strip()
+            item["exit_code"] = exit_code
+        else:
+            exit_code = None
+            item["exit_code"] = None
         if path.is_file():
             try:
                 doc = json.loads(path.read_text(encoding="utf-8"))
                 item["checks"] = {"schema": doc.get("schema") == schema}
                 item["checks"].update({key: doc.get(key) == value for key, value in checks})
+                item["checks"]["process_exit_zero"] = exit_code == "0"
                 item["status"] = "REPORTED_PASS" if all(item["checks"].values()) else "REPORTED_FAIL"
                 item["source"] = "local-receipt-unverified"
             except (ValueError, OSError) as exc:
                 item["status"] = "INVALID"
                 item["error"] = str(exc)
+        if not path.is_file() and exit_code is not None and exit_code != "0":
+            item["status"] = "EXECUTION_FAILED"
         results[name] = item
     return {"schema": "nih-phase1-output-comparison/v1",
             "referent": "select strongest reproducible Phase 1 output on common tests",
