@@ -1,6 +1,11 @@
 """Original SDK SP80 Level4: upper-bar right-edge contact bracket at measured source x32-34.
 
-Original source run 40164869118 confirmed right-middle LEFT2 shifts a new\ncolor6 column to x32-34 while the top-middle native cup remains 0/45 for\nupper LEFT6-8. Original source right bar edge is at x34 under LEFT2 and at\nx31 under LEFT3. Freeze U1/U2/U3/U6 native upper source contact bracket\nunder right-middle LEFT1 or LEFT2 and two existing clean lower parents.\nNo simulator, inferred physics or F3-to-SDK mathematical action mapping.
+Original source run 40164869118 confirmed right-middle LEFT2 shifts a new
+color6 column to x32-34 while the top-middle native cup remains 0/45 for
+upper LEFT6-8. Original source right bar edge is at x34 under LEFT2 and at
+x31 under LEFT3. Freeze U1/U2/U3/U6 native upper source contact bracket
+under right-middle LEFT1 or LEFT2 and two existing clean lower parents.
+No simulator, inferred physics or F3-to-SDK mathematical action mapping.
 """
 from __future__ import annotations
 import argparse,json
@@ -25,7 +30,7 @@ def native_word(mid,l,right,upper):
 
 FROZEN=tuple((f"{parent}_{rn}_{un}",native_word(mid,l,rword,uword))
  for parent,mid,l in PARENTS for rn,rword in RIGHT for un,uword in UPPER)
-assert len(FROZEN)==12==len({n for n,w in FROZEN})
+assert len(FROZEN)==16==len({n for n,w in FROZEN})
 assert tuple(n for n,_ in STAGE1_WITNESSES)==("A","B")
 assert all(parse_plan(w)[-1][0]==5 and
            sum(a==5 for a,xy in parse_plan(w))==1 and
@@ -115,11 +120,12 @@ def main():
       "actual_official_level5_or_WIN_count":sum(int(x["official_level5_or_WIN"]) for x in cases),
       "official_sdk_levels":dict(Counter(str(x["official_native_level"]) for x in cases)),
       "native_cases":cases,
-      "finite_question":"Does Does moving the selected original upper object's right edge across the observed x32-34 stream (U2 edge x34 vs U3 edge x31) change top-middle cup13 filling under right-middle LEFT2?",
+      "finite_question":"Does moving the selected original upper object's right edge across the observed x32-34 stream (U2 edge x34 vs U3 edge x31) change top-middle cup13 filling under right-middle LEFT2?",
       "math_scope":"Finite native source observational transfer test, not global game law, no formal F3 A/B action homomorphism or inferred private physics."
     }
     args.out.parent.mkdir(parents=True,exist_ok=True)
-    args.out.write_text(json.dumps(out,indent=2)+"\n")
+    args.out.write_text(json.dumps(out,indent=2)+"
+")
     np.savez_compressed(args.out.with_suffix(".npz"),**raw)
     print("ORIGINAL_ARC4_CONTACT_SUMMARY "+json.dumps({
       "original_native_resets":len(cases),"official_advances":out["actual_official_level5_or_WIN_count"],
