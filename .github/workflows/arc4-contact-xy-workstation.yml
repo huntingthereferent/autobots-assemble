@@ -40,7 +40,7 @@ jobs:
         with:
           name: arc4-original-sdk-contact-xy
           path: |
-            runtime/data/arc4/contact-xy/original-joint-upper-vertical.*
+            runtime/data/arc4/contact-xy/original-contact-xy.*
             runtime/data/arc4/contact-xy/workstation/**
           if-no-files-found: warn
           retention-days: 90
