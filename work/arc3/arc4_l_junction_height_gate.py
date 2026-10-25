@@ -226,7 +226,7 @@ def inspect(c,path):
         "blocked_native_L_vertical_actions":block,
         "finite_native_L_junction_relations":relations,
         "math_scope":"finite genuine SDK source first-arrival lower x20 to x14 left fork tested under L vertical junction displacement, independent parent and A/B paths; no decoded physics or F3 map",
-        "next_movement":c["next_progress"] if progress else c["next_no_progress"],
+        "next_movement":c["next_if_progress"] if progress else c["next_if_no_progress"],
         "walls":c["walls"],
     }
 def main():
