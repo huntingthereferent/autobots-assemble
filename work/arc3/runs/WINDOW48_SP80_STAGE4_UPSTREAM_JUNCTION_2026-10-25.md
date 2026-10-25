@@ -148,3 +148,25 @@ Read-only comparison with the earlier genuinely successful Level3→4 ACTION5 fr
 - No equivalence of these source observations to private game victory rules has been established; they are input to hypotheses only, and were not used to forge progression.
 
 **Research decision:** stop repeating wide upper-bar and lower-L position sweeps on these negative source branches. Next require a separately falsifiable original SDK test of the **public observable failure/progress signal** (or another grounded source boundary condition), with Level5/WIN as the only advancement criterion. No changes to the F3-48 mathematics, original-agent implementation, or private engine; PR remains an isolated research branch until reviewed.
+
+
+## Source original SDK public observation contract — six native games
+
+[Verified Actions run #40231273305](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40231273305), [full original SDK NPZ + JSON artifact #12613920309](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40231273305/artifacts/12613920309). Two independent exact genuine SDK entry histories × three prospectively frozen source continuations (untouched Level4 first pour; four-cup visual witness; four-cup witness with second pour) = **six fresh authentic SP80 `Arcade(OperationMode.NORMAL)` resets**. All six independently verified Level3→4 and ended officially **Level4, NOT_FINISHED**; source full-frame stacks and every original action were archived. Both independent entry witnesses agreed exactly on saved public observation and source-pour metrics.
+
+The experiment captured the actual **public original SDK observation object**, before/after the **genuinely successful Level3→4 ACTION5** and the unsuccessful Level4 ACTION5 controls. This used public observation fields only; **no private engine access, guessed objective, proxy game or synthetic action response**.
+
+Observed original SDK public attribute names: `action_input`, `available_actions`, `full_reset`, `game_id`, `guid`, `levels_completed`, `state`, `win_levels`. Public values relevant to completion:
+
+| Official field | Just before source Level3 winner | After original Level3→4 winning ACTION5 | Before Level4 four-cup ACTION5 | After Level4 four-cup ACTION5 |
+|---|---|---|---|---|
+| `levels_completed` | 3 | **4** | 4 | **4** |
+| `state` | NOT_FINISHED | NOT_FINISHED | NOT_FINISHED | NOT_FINISHED |
+| `win_levels` | 6 | 6 | 6 | 6 |
+| `available_actions` | [1,2,3,4,5,6] | [1,2,3,4,5,6] | [1,2,3,4,5,6] | [1,2,3,4,5,6] |
+| `full_reset` | false | false | false | false |
+| `action_input` | public ActionInput object | public ActionInput object | public ActionInput object | public ActionInput object |
+
+The failed Level4 original SDK action still returned simultaneous 45/45 in **all four native source cup windows** on actual frames23–30; neither the one-pour or two-pour control changed the official level. The public observation object exposed **no separate scalar score, failure_reason, objective-completion flag or event explanation** in this test. The SDK's source `state=NOT_FINISHED` also remained unchanged upon genuine earlier Level3→4 progression: **state alone is not an individual stage advancement signal**. The authoritative original transition is `levels_completed: 3→4`, whereas our Level4 source visual response remains `4→4`. `win_levels=6` confirms the original game has six win levels; it does **not** provide any missing hidden objective rule.
+
+**Interpretation and next action:** public SDK signal comparison is now complete and negative for any accessible failure-reason property. Do not pretend this SDK provides a detailed why-not-advanced explanation. The next useful original test must propose a falsifiable *source-frame boundary/geometry difference* that is not merely four cup pixels, with genuine level5/WIN as the only progression oracle; do not expand source sweeps without such a discriminator. Original 48-law F3 mathematics and canonical agent remain unchanged; PR stays unmerged.
