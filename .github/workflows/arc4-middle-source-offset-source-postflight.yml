@@ -1,0 +1,55 @@
+name: ARC4 original Level4 middle-source frozen native source replay
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/arc4_middle_source_offset_gate.py'
+      - 'work/arc3/arc4_middle_source_offset_contract.json'
+      - '.github/workflows/arc4-middle-source-offset-source-postflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-native-read-only-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original SDK import compatibility and NPZ source reader
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Download actual pre-existing authenticated original SDK frames (no games executed)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runtime/data/arc4/mid-source
+          curl --fail --silent --show-error --location --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            'https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/artifacts/12589694180/zip' \
+            --output runtime/data/arc4/mid-source/pinned-successful-original-sdk-40170150937.zip
+          unzip -t runtime/data/arc4/mid-source/pinned-successful-original-sdk-40170150937.zip >/dev/null
+          unzip -o -q runtime/data/arc4/mid-source/pinned-successful-original-sdk-40170150937.zip \
+            -d runtime/data/arc4/mid-source
+          cd runtime/data/arc4/mid-source
+          printf '%s  %s\n' \
+            eaee21c41405c0fc6a74792cd8e54e27b49198899c24aae73cd33a877158ea9a original-mid-source.json \
+            1a00da08061ca4ac4562719c7e59ddfa65d4a7dcbc1aec754897ec13911f7e29 original-mid-source.npz \
+            | sha256sum --check --strict
+      - name: Recheck frozen original Level4 mathematical source admission
+        run: python -m work.arc3.arc4_middle_source_offset_gate pre
+      - name: Independently replay source NPZ, genuine native SDK action hashes and objective, no SDK game run
+        run: |
+          python -m work.arc3.arc4_middle_source_offset_gate post \
+            --result runtime/data/arc4/mid-source/original-mid-source.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-middle-source-original-read-only-postflight
+          path: runtime/data/arc4/mid-source/original-mid-source.protocol.json
+          if-no-files-found: warn
+          retention-days: 90

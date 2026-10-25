@@ -1,0 +1,43 @@
+name: ARC4 original SDK Level4 middle-source contact displacement
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-original-level4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic Arcade SDK and numerical source reader
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile native source, independent verifier and real workstation
+        run: |
+          python -m compileall -q \
+            work/arc3/native_sp80_stage4_middle_source_offset.py \
+            work/arc3/arc4_middle_source_offset_gate.py \
+            work/arc3/middle_source_offset_workstation.py
+      - name: Check frozen original Level4 root and finite source action controls
+        run: python -m work.arc3.arc4_middle_source_offset_gate pre
+      - name: Execute 16 real original SDK native Level4 tests through fingerprinted ProcessWorkstation
+        run: |
+          python -m work.arc3.middle_source_offset_workstation \
+            --execute \
+            --data-dir runtime/data/arc4/mid-source/workstation \
+            --out runtime/data/arc4/mid-source/original-mid-source.json
+      - name: Independently audit full original native SDK source NPZ and action receipts
+        run: |
+          python -m work.arc3.arc4_middle_source_offset_gate post \
+            --result runtime/data/arc4/mid-source/original-mid-source.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-level4-middle-source-offset
+          path: |
+            runtime/data/arc4/mid-source/original-mid-source.*
+            runtime/data/arc4/mid-source/workstation/**
+          if-no-files-found: warn
+          retention-days: 90

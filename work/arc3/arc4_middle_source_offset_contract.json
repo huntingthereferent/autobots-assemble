@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_FINITE_MIDDLE_BAR_SOURCE_ADJACENCY_20261025",
+  "referent": "Original SDK SP80 Level4 source: verified 9x3 left-middle bar x14..22 (y41 or44) immediately right of an ascending x11..13 palette6 stream, while retaining independently proven right-middle LEFT2 and upper LEFT2 top-middle contact",
+  "source_code": "work/arc3/native_sp80_stage4_middle_source_offset.py",
+  "parent_original_run": 40166014281,
+  "parent_original_artifact": 12588047670,
+  "source_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "frozen_original_sdk_resets": 16,
+  "factors": {
+    "clean_lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "right_middle_fixed": "6@46,33 3 3",
+    "upper_fixed": "6@34,21 3 3",
+    "middle_initial_origin_click": "6@24,33",
+    "middle_extra_actions": [
+      [
+        "LEFT1",
+        "3"
+      ],
+      [
+        "HOLD",
+        ""
+      ],
+      [
+        "RIGHT1",
+        "4"
+      ],
+      [
+        "RIGHT2",
+        "4 4"
+      ]
+    ],
+    "independent_original_native_entries": [
+      "A",
+      "B"
+    ]
+  },
+  "finite_math_hypothesis": "At original native Level4, the ascending palette6 stream x11..13 first enters top rows from y44 after moving beside the original selected left-middle 9x3 bar x14..22; test independently witnessed source-3px shifts LEFT1 or RIGHT1/RIGHT2 with upper U2 edge x34 held fixed, to see whether the left offcup x11..13 stream shifts/disappears and all four native cup windows remain simultaneously full.",
+  "actual_native_progress": "Only genuine SDK levels_completed>=5 or WIN",
+  "pre_committed_controls": {
+    "HOLD": "Left-middle source bbox x14..22; original SDK R2+U2 exhibits left offcup x11..13 stream while all four cup windows simultaneously visually full and official level4.",
+    "LEFT1": "Original middle x11..19 shifts left 3px, may relocate stream into x8..10; no predicted native win.",
+    "RIGHT1": "Original middle x17..25 shifts right 3px, hypothesize left stream relocates to x14..16; cup result unknown.",
+    "RIGHT2": "Original middle x20..28 shifts right 6px, hypothesize left stream relocates to x17..19 near top-left cup window; cup and SDK result unknown."
+  },
+  "walls": [
+    "Each actual original SDK reset must reproduce the same Level4 root and official Level4 before the intervention; earlier levels only supply the verified entrance.",
+    "Original source pixel adjacency x11..13 to middle bar x14..22 is a measured bounded referent; no claim of native hidden engine mechanics.",
+    "Record original selected left-middle bar after its final native action and verify legal movement and bbox at y41..43 or y44..46.",
+    "Independently retain and audit every 64x64 genuine source SDK frame stack, before/after hash, clicked source pixel, all actual native action receipts, official SDK state.",
+    "Offcup palette6 at x5..16 is inspected as a broader conservation witness; moving spill from x11..13 to x8..10 is not equivalent to removing excess.",
+    "Actual source simultaneous four cups is a visual observation only; original SDK level5/WIN is the sole progress oracle.",
+    "Independent original SDK entry histories labeled A and B are not finite F3 mathematical generator operators.",
+    "On control drift, source mismatch or nonmovement return WALL; do not silently promote proxy observations.",
+    "Keep work in draft, no automated merge and no unrelated research lane changes."
+  ],
+  "next_if_no_progress": "Use actual original source x5..22 column first-arrival/top-left native cup relation to select a different finite source contact; do not keep moving the same bar without a new falsifiable question.",
+  "next_if_progress": "Confirm native SDK level5/WIN in both genuine independent original SDK entry histories and validate actual source frames/action receipts before reporting progression."
+}
