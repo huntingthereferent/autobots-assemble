@@ -108,3 +108,40 @@ Six original legal actions × two predeclared paths × two independently reset a
 **Structural instruction for all future ARC work:** never identify two genuine native source histories as the same full system state merely because their visible 64×64 grids agree (nor assume a cup-color projection is sufficient). The correct bounded record is **marked entry history + full observed source image + actual action label + full returned successor array + official SDK status**, with tested collision or first discriminating successor labeled explicitly. Apply identical root/word logic to every comparison. The abstract F3 mathematical two-letter A/B rules and their rooted/nonrooted proof remain exact and separate; no native six-action-to-two-generator homomorphism is established.
 
 This is an independently reproduced, exact **projection-level non-Markov counterexample** for the observed image alone, not a claim that the private SP80 engine is nondeterministic. Its complete internal state may distinguish the histories deterministically. No source palette should be elevated to an SDK win, no wide sweeps needed, and the F3-48 proofs/canonical agent are unchanged.
+
+
+## Same visible root, same action count, different rooted histories — new native A/B holdout
+
+**Direct original SDK execution:** [Actions run #40243339558](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40243339558), [full authentic JSON/NPZ artifact #12617806214](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40243339558/artifacts/12617806214), [predeclared executable source](../native_sp80_stage4_rooted_equal_count.py).
+
+The prior candidate that the full visible image plus action-index parity predicted all archived Level4 POUR stacks needed a stronger test: no indexed archived frame returned at **two different action indices of the same parity**, so even-step history extensions had not actually been exercised against the *same complete visible image*.
+
+A new **read-only, full-frame replay** of all the currently retained original SDK evidence ZIP archives indexed **11,054 genuine `stage4_n` returned 64×64 action frames**, representing **394 distinct full visible frame byte hashes**. None of these matched visible images occurred at two distinct even-distance action indices. Many images were repeated across different original action histories at the *same* action index. Original archive replicates and two prior entry witnesses are included; these are not 11,054 independent configurations. The reproducible pure read-only audit is [`audit_sp80_original_visible_root_index.py`](../audit_sp80_original_visible_root_index.py), accepting the original GitHub Actions ZIP artifact files as `--archives`.
+
+Therefore the prior parity result is strictly a **within-sample separator**; it does not show that a one-bit action index is sufficient for all dynamics. A useful matched-root holdout **without guessing a nonexistent two-step same-image loop** is instead to compare different genuinely original SDK histories at the **same number of actions** with an identical entire 64×64 visible source, then apply the same next action.
+
+Three independently observed matching full original native roots were prospectively frozen:
+
+| Matched source root | Distinct same-length original approach words | Native next action labels |
+|---|---|---|
+| `dd0b9861faae399ad607560e9181be42` | LEFT1 versus click same already selected bar again (1 action each) | ACTION1–ACTION5 and ACTION6(click upper) |
+| `e42fc1e7f5256e19b53468c75724fc50` | LEFT LEFT versus RIGHT LEFT (2 actions each) | ACTION3, ACTION5 and ACTION6(click upper) |
+| `e1e7f0020d5afe14ecce1d476491d548` | LEFT LEFT LEFT versus LEFT RIGHT LEFT versus RIGHT LEFT LEFT (3 actions each) | ACTION3, ACTION5 and ACTION6(click upper) |
+
+These rooted suffixes are measured from the same verified original source parent `UP_A`; every source history arrives through its own true Stage0→1→2→3→4 SDK reset. The original script asserts full **pre-action 64×64 image equality and exact expected BLAKE2b16 hashes** prior to evaluating any pair. All action6 clicks are validated against genuine source palette8.
+
+**Outcome:** 54 fresh genuine original SDK games, 15 distinct prospectively frozen root/history/next-action pair conditions × 2 independent true SDK entry witnesses = **30 exact matched A/B comparisons**. **30/30 returned the same complete subsequent native SDK frame array**, including all original 32 returned frames where the continuation was ACTION5; **0 observed native A/B splits**. All genuine SDK level counters remained `levels_completed=4`, `NOT_FINISHED`. The same comparison measurements reproduced under both prior independent entry histories.
+
+This is a bounded source-root **positive collision set** at equal true action counts. It does not conflict with the earlier verified one-pixel y63 split at consecutive different action counts. It also does **not** establish parity as a globally sufficient hidden-state coordinate: no case in the existing archive provides identical entire visible source grids at same parity but *different* counts.
+
+### Correct handoff boundary
+
+Maintain separately:
+- the full original visible source frame;
+- the true Stage4 action index and the **complete marked rooted history**;
+- the complete actual SDK next-action label, including ACTION6 coordinates;
+- the complete original returned frame sequence and official level/state.
+
+For all **tested** conditions, images plus equal action indices predict agreeing next source arrays, while a specific image with adjacent different action indices has a witnessed split. The smallest universal state descriptor is **OPEN**; action-index parity is **CONJECTURAL** beyond these examples. Never eliminate true rooted histories until an exact quotient certificate is available. The mathematical F3-48 rooted-vs-unrooted distinction was recalculated unmodified in the genuine SDK runner, without asserting a native-action-to-F3 homomorphism. No Level5/WIN or inferred private-physics rule has been discovered.
+
+**No wider bar-placement sweeps follow from this:** the next useful attempt is a *new original SDK construction* that produces a true **same full visible frame at different action counts with the same parity**, or a direct counterexample using another SDK-observable state coordinate. Do not declare such a pair before the authentic native arrays confirm it.
