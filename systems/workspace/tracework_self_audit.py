@@ -3,7 +3,7 @@ import argparse
 import json
 import os
 from pathlib import Path
-from systems.workspace.bounded_audit import assess, load
+from systems.workspace.bounded_audit import assess, load, next_handoffs
 from systems.workspace.audit_source import github_run, verify_audit
 
 DEFAULT = Path(__file__).with_name("audits") / "tracework-self-audit-2026-10-25.json"
@@ -16,6 +16,7 @@ def main():
     args = parser.parse_args()
     audit = load(args.audit)
     result = assess(audit)
+    result["next_handoffs"] = next_handoffs(audit)
     repo, token = os.environ.get("GITHUB_REPOSITORY"), os.environ.get("GITHUB_TOKEN")
     if repo and token:
         comparisons = verify_audit(audit, lambda run_id: github_run(repo, token, run_id))
