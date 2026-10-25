@@ -139,5 +139,12 @@
       "A",
       "B"
     ]
-  }
+  },
+  "original_native_saved_artifact_id": 12590981593,
+  "saved_original_source_json_sha256": "a1118ad0f7081148a81b9246e78fb09ee864fd7cae2298ad951eba158177a92e",
+  "saved_original_source_npz_sha256": "095379f6469a0263707ab56446f03cac7394d8eba624d7784c52f814f08c7fe3",
+  "saved_original_source_edition_sha256": "bdf94527a3059e6d7a72e4fa7764b9e995b9274e17c1b4dfd47a67be700e3695",
+  "legacy_saved_native_kind": "ORIGINAL_SP80_LEVEL4_NATIVE_MIDDLE_HEIGHT_SPILL_RELATION",
+  "legacy_saved_native_parent_run": 40171009741,
+  "legacy_source_metadata_wall": "Actual original SDK experiment ran 24 frozen diagonal cases in source edition SHA256 bdf94527..., but inherited a legacy JSON kind and parent-run field from the source template. These labels are not correct descriptions of the new diagonal experiment. Require exact saved artifact SHA256, case matrix, action word receipts and real source arrays. Do not rewrite evidence or infer that source labels describe action conditions."
 }
