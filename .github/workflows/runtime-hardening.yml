@@ -14,4 +14,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: python -m unittest -v network.tests.test_runtime_hardening network.tests.test_handoff_runtime
+      - name: Compile runtime and tests
+        run: python -m compileall -q runtime network/tests
+      - name: Run runtime regressions
+        run: |
+          set -o pipefail
+          python -m unittest -v network.tests.test_runtime_hardening network.tests.test_handoff_runtime 2>&1 | tee runtime-test-results.log
+      - name: Preserve test output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-test-results
+          path: runtime-test-results.log
+          if-no-files-found: ignore
