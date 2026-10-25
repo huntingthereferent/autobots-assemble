@@ -2,7 +2,7 @@
 
 **[MATHEMATICAL LAB IN THE WORKSTATION](https://huntingthereferent.github.io/autobots-assemble/live/work.html#math)** — research instruments integrated into the execution viewer: [Math](https://huntingthereferent.github.io/autobots-assemble/live/work.html#math) · [ARC](https://huntingthereferent.github.io/autobots-assemble/live/work.html#arc) · [WORLD](https://huntingthereferent.github.io/autobots-assemble/live/work.html#world) · [NIH](https://huntingthereferent.github.io/autobots-assemble/live/work.html#nih).
 
-**[TRACEWORK · DEVELOPMENT PREVIEW](https://huntingthereferent.github.io/autobots-assemble/live/work.html)** — workstation interface prototype, source-linked GitHub Actions observations, and research records. [Development status and roadmap](TRACEWORK_DEVELOPMENT.md).
+**[TRACEWORK · FINITE-SYSTEM PROOF OF CONCEPT](https://huntingthereferent.github.io/autobots-assemble/live/work.html)** — public GitHub demonstration of bounded state, relational handoffs, evidence-backed continuation, source-linked Actions observations and research records; not the full standalone Tracework system. [Development status and roadmap](TRACEWORK_DEVELOPMENT.md).
 
 **[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
