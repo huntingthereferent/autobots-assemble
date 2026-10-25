@@ -1,0 +1,55 @@
+name: ARC4 original Level4 middle/L finite source postflight (read-only)
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/arc4_middle_l_compensation_gate.py'
+      - 'work/arc3/arc4_middle_l_compensation_contract.json'
+      - '.github/workflows/arc4-middle-l-compensation-postflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  genuine-original-sdk-source-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original SDK import compatibility and numeric native source reader
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Fetch already-executed original SDK Level4 source frames by pinned artifact ID
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runtime/data/arc4/middle-l
+          curl --fail --silent --show-error --location --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            'https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/artifacts/12588949682/zip' \
+            --output runtime/data/arc4/middle-l/original-sdk-source-40171009741.zip
+          unzip -t runtime/data/arc4/middle-l/original-sdk-source-40171009741.zip >/dev/null
+          unzip -o -q runtime/data/arc4/middle-l/original-sdk-source-40171009741.zip \
+            -d runtime/data/arc4/middle-l
+          cd runtime/data/arc4/middle-l
+          printf '%s  %s\n' \
+            ce56031fea2f2adeba91cd51413f1e0c3136c2de4131b2a76287612ace86bcf6 original-middle-l.json \
+            3b532925fec6bf9f8ea919361c5e76e8a1e6f97709fa97ff95e22c954e957591 original-middle-l.npz \
+            | sha256sum --check --strict
+      - name: Confirm prospectively frozen finite genuine original SDK Level4 source contract
+        run: python -m work.arc3.arc4_middle_l_compensation_gate pre
+      - name: Independently re-evaluate exact native frames, receipts, relative bar geometry and official SDK status without running a game
+        run: |
+          python -m work.arc3.arc4_middle_l_compensation_gate post \
+            --result runtime/data/arc4/middle-l/original-middle-l.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-level4-middle-l-read-only-source-verifier
+          path: runtime/data/arc4/middle-l/original-middle-l.protocol.json
+          if-no-files-found: warn
+          retention-days: 90
