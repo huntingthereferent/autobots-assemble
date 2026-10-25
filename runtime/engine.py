@@ -73,7 +73,8 @@ class HandoffRuntime:
     def submit(self, handoff: Handoff) -> HandoffState:
         if handoff.handoff_id in self._handoffs:
             raise ValueError(f"handoff already exists: {handoff.handoff_id}")
-        self._check_dependencies(handoff)\n        created = HandoffEvent.create(
+        self._check_dependencies(handoff)
+        created = HandoffEvent.create(
             handoff_id=handoff.handoff_id,
             event_type="CREATED",
             actor_id=handoff.from_actor,
@@ -305,4 +306,5 @@ class HandoffRuntime:
         return self.state(handoff_id)
 
     def snapshot(self) -> dict[str, HandoffState]:
-        memo: dict[str, HandoffState] = {}\n        return {handoff_id: self._state(handoff_id, memo, set()) for handoff_id in self._handoffs}
+        memo: dict[str, HandoffState] = {}
+        return {handoff_id: self._state(handoff_id, memo, set()) for handoff_id in self._handoffs}
