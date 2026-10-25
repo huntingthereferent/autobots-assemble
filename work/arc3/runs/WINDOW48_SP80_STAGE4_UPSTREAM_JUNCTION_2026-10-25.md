@@ -83,3 +83,22 @@ The tested first local source palette6 differences between contrasting full-left
 Each of these observed earliest differences spans 18 source pixels at frame8: one alternative has the first additional color6 patch in x20–22/y38–40, the other in x23–25/y35–37. The actual source visual left lateral cup becomes full at frame13 in the lateral case; the top-left cup at frame19 in the top-left case. Upper-middle and upper-right first full at frames23 and21 respectively. **Earliest discriminating location is below the upper bar, not the upper bar.**
 
 **Next read-only discriminator:** compare those two frame8 3-pixel cell patches against selected original source object geometry, then construct a bounded *lower source fork* intervention if independently supported. Avoid repeating exhaustive upper-bar or now-negative two-axis L sweeps. Pixel observations do not prove a hidden fluid engine, objective rule, or native game WIN. Original F3-48 math, canonical agent, and rights remain unmodified.
+
+
+## Native Level4 frame-8 fork/middle lateral test — visual four-cup source witness
+
+**Execution:** [original SDK workflow #40179237019](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40179237019), [raw JSON/NPZ artifact #12593288221](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40179237019/artifacts/12593288221). This ran 64 independent original `Arcade(OperationMode.NORMAL)` games, two native stage-entry histories for each of 32 prospectively frozen words. SDK: **64/64 Level4 NOT_FINISHED, zero Level5/WIN.** Source array ZIP downloaded and SHA256 `eb68992ab4142b77b99de4e4cc81a4d3749914d704fb8e774629bc41f42f7377`; extracted native NPZ SHA256 `97c4d809a0d46a797e5b96d077a89af6fc8d8eb3ed84ee1372c6e43d57915fb1`.
+
+**New original source-only result:** One distinct frozen condition, `B_middown1_VH_left1_Lleft1`, produced **all four native source cup regions simultaneously palette11→13 complete**, 45 of 45 source pixels each. Both independent entry witnesses matched exactly; actual original SDK output contained 32 returned 64×64 frames, with *every one of all four cup windows full at frames 23 through 30 inclusive*. Precommitted native word:
+
+```
+6@46,33 3 6@24,33 2 2 2 2 3 3 6@34,42 3 3 3 3 1 1 6@18,45 2 3 6@24,36 3 5
+```
+
+True original pre-pour source selected L bbox x17..22,y35..40; middle bar actual bbox x11..19,y47..49. The original returned native cup first-complete frames are: lateral11, top-left19, top-right21, top-middle23. Final original SDK status remains `levels_completed=4, NOT_FINISHED`, not a solution or inferred private engine rule. Source full cup pixels are **not** an official objective.
+
+**Action-order counterexample:** The other frozen ordering `B_middown1_HV_left1_Lleft1` retained only top-left45/lateral0; the same two nominal middle displacement actions in reversed order did not produce the four-cup source pattern. The original SDK selected bboxes and source frame actions are preserved so this distinction can be audited as source geometry/history rather than a presumed commutative movement model.
+
+**Boundary control:** Read-only inspection of preserved first pour shows **no left-border source changes** in the four-cup visual witness. The top and right borders do undergo palette1→14 changes starting native frame20, but the same changes occur in numerous native negative configurations. Therefore top/right border flashes cannot be treated as independently diagnosed failure or goal signals.
+
+**Next bounded original SDK trial:** Investigate the new *visually full four-cup* parent without redefining success. Hold its native pre-pour exact word fixed; vary only the last selected bar and optional immediate second/third native ACTION5, with a few same-position movement-history controls. Observe official Level5/WIN, source full stacks, and retained actual action receipts. Never claim a win solely from the four colored windows. Original 48-law F3 mathematics, canonical agent and ownership remain unchanged.
