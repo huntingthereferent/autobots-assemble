@@ -145,3 +145,33 @@ Maintain separately:
 For all **tested** conditions, images plus equal action indices predict agreeing next source arrays, while a specific image with adjacent different action indices has a witnessed split. The smallest universal state descriptor is **OPEN**; action-index parity is **CONJECTURAL** beyond these examples. Never eliminate true rooted histories until an exact quotient certificate is available. The mathematical F3-48 rooted-vs-unrooted distinction was recalculated unmodified in the genuine SDK runner, without asserting a native-action-to-F3 homomorphism. No Level5/WIN or inferred private-physics rule has been discovered.
 
 **No wider bar-placement sweeps follow from this:** the next useful attempt is a *new original SDK construction* that produces a true **same full visible frame at different action counts with the same parity**, or a direct counterexample using another SDK-observable state coordinate. Do not declare such a pair before the authentic native arrays confirm it.
+
+
+## New source-index clock: independent action words, independent reset histories
+
+**Original SDK source extension run:** [successful Actions #40243990606](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40243990606), [original full JSON/NPZ artifact #12618156519](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40243990606/artifacts/12618156519), [frozen runner](../native_sp80_stage4_bottom_clock_holdout.py).
+
+An additional read-only replay of the same **11,054 genuine original SDK Stage4 action-return full 64×64 frames**, previously indexed for rooted source collisions, examined **the entire bottom row y63 rather than only the known single-pixel x10 split**. At *each* observed Stage4 action index **1–32**, **every single archived original action state had exactly the same complete 64-pixel bottom row** regardless of its rooted word or bar geometry (one row configuration per action index). At many adjacent indices this row repeated; then the first palette14 on y63 advanced in a stepwise pattern from x1 early in Stage4 to x20 by index32. This is a directly observed common source-side clock channel, not a reconstructed hidden objective.
+
+The prospective holdout extended this invariance to **Stage4 action indices 33–43** with three independently predeclared action-history words, each through two separate actual original Stage0→4 SDK entry histories (3 × 2 = **six new genuine SDK games**). All three source-history words contain **42** true SDK ACTION6 selection calls on verified original palette8/9 objects, then a genuine ACTION5:
+- upper source repeatedly selected 42 times;
+- alternate middle then upper source 21 times, also ending selected upper;
+- middle source repeatedly selected 42 times.
+
+At **every** index from 0 through 43, all six actual original SDK executions produced **the exact same complete y63 source pixel row**, including the 10 genuinely new indices 33–42 and the final POUR index43. No SOURCE clock row divergence was observed in this holdout. At indices 33 through 42, the first palette14 boundary x positions were: **21, 22, 22, 23, 24, 24, 25, 26, 26, 27**. Neither geometric selection pattern nor independent entrance witness changed these measured indices.
+
+The two word-distinct 42-step histories that both ended with the **upper** bar selected also returned **byte-identical entire visible 64×64 pre-POUR frames**, hash `8544a4426e23c4c0b99de355952fec94`; their next actual complete original SDK 32-frame ACTION5 animations were also identical, hash `0dc9b089b78b8a928fe7a92e5ffca29a`. The middle-only case ended with a different full visible pre-pour image (`13ae391b1a4e600385411226b1794b78`) yet the same bottom row and, incidentally, the same full native POUR animation. Both genuine independent entry histories agreed exactly; SDK official outcome remained **Level4, NOT_FINISHED** in all six games.
+
+### Abstract projection discipline
+
+Write `O(h)` for the **complete authentic last visible native frame** after rooted original SDK action word `h`; `n(h)` is its true Stage4 action index; `Y(h)` is the row y63. The grounded relation over the present tested sample is:
+
+```text
+n(h) = n(g)   =>   Y(h) = Y(g)
+```
+
+The archived/source holdout additionally shows that **`Y(h)` may be equal for two adjacent distinct action counts**. Thus identical visible images do not necessarily identify the elapsed original action index. In selected rooted examples, `O(h)=O(g)`, `n(g)=n(h)+1`, while `O(h a) != O(g a)` for every original SDK action label `a`—at exactly one bottom-row pixel. This refutes a universal native next-frame function of visible image **alone** in those tested original histories. The candidate augmented record `(O(h),n(h),a)` has passed the finite comparisons so far, **not** a proved globally sufficient or minimal native hidden-state description.
+
+Keep separate the rigorous constructed **F3-48 A/B root/full-state theorems**: they were imported and recalculated in the executable native runner without changing the laws or claiming SP80 implements them.
+
+**Next boundary:** infer/test the native y63 indexed row as a *measured finite source clock* with original SDK forward held-outs, and only pursue even-distance identical full-frame rooted collisions when justified by real source evidence (for example, a genuinely observed clock saturation/repetition). Do not convert 11,054 archival returns into independent proof samples or treat y63 as a secret game-win mechanism. Complete native Level5/WIN remains unobserved; branch PR #537 stays isolated.
