@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'systems/workspace/nih_phase1_output_compare.py'
+      - 'research/nih_audit/PHASE1_OUTPUT_LANE.md'
       - 'network/tests/test_nih_phase1_output_compare.py'
       - '.github/workflows/nih-phase1-output-comparison.yml'
   pull_request:
@@ -60,3 +61,16 @@ jobs:
           path: ${{ runner.temp }}/nih-compare
           retention-days: 30
           if-no-files-found: warn
+      - name: Enforce observed execution failures after preserving evidence
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          for candidate in frontier two_clock source_motion publication_uncertainty; do
+            receipt="$RUNNER_TEMP/nih-compare/$candidate/exit-code.txt"
+            if [[ ! -f "$receipt" ]] || [[ "$(cat "$receipt")" != "0" ]]; then
+              echo "::error::$candidate did not finish successfully"
+              exit 1
+            fi
+          done
+          echo "All four native candidate executions exited successfully; source comparison remains separate."
