@@ -1,0 +1,56 @@
+name: ARC4 genuine Level4 lower-L junction source postflight (read-only)
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/arc4_l_junction_height_gate.py'
+      - 'work/arc3/arc4_l_junction_height_contract.json'
+      - '.github/workflows/arc4-l-junction-height-postflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-native-source-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original SDK import compatibility and numerical frames reader, no game execution
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Download exact already-executed authentic SDK Level4 source evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runtime/data/arc4/l-junction
+          curl --fail --silent --show-error --location --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            'https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/artifacts/12590799810/zip' \
+            --output runtime/data/arc4/l-junction/pinned-original-40173638671.zip
+          unzip -t runtime/data/arc4/l-junction/pinned-original-40173638671.zip >/dev/null
+          unzip -o -q runtime/data/arc4/l-junction/pinned-original-40173638671.zip \
+            -d runtime/data/arc4/l-junction
+          cd runtime/data/arc4/l-junction
+          printf '%s  %s\n' \
+            9eedd5e4e804a39bcc1a5ef5e8e21eb5b10e8f6926dc42b323ad61218c0afb9d original-l-junction.json \
+            f3bac9a9fff929a74f8540ac1d91c2a670fae72436b0577e9b8c893b1587a67b original-l-junction.npz \
+            89cbe8229b0f856cf6a09d0f96bbc5f6b1d1d950feae42d23580b89cc211b25e workstation/selected/native_sp80_stage4_l_junction_height.py \
+            | sha256sum --check --strict
+      - name: Check finite original Level4 source question and exact official SDK oracle
+        run: python -m work.arc3.arc4_l_junction_height_gate pre
+      - name: Independently audit original native receipts, junction first-arrival, selected L geometry and level
+        run: |
+          python -m work.arc3.arc4_l_junction_height_gate post \
+            --result runtime/data/arc4/l-junction/original-l-junction.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-L-junction-read-only-source-evidence
+          path: runtime/data/arc4/l-junction/original-l-junction.protocol.json
+          if-no-files-found: warn
+          retention-days: 90

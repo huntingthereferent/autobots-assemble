@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_L_JUNCTION_VERTICAL_20261025",
+  "referent": "Original SP80 Level4 genuine SDK lower-L vertical displacement at middle-bar junction, checked against measured lower source bifurcation and recovered four-cup controls",
+  "source_code": "work/arc3/native_sp80_stage4_l_junction_height.py",
+  "original_parent_run": 40172934437,
+  "original_parent_artifact": 12590867076,
+  "original_level4_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "expected_genuine_sdk_resets": 24,
+  "factors": {
+    "lower_parents": [
+      [
+        "D3L2_L3U2",
+        23,
+        41
+      ],
+      [
+        "D4L2_L4U2",
+        20,
+        44
+      ]
+    ],
+    "right_fixed": "6@46,33 3 3",
+    "upper_fixed": "6@34,21 3 3",
+    "coupling": [
+      [
+        "BASELINE",
+        "",
+        ""
+      ],
+      [
+        "COMPENSATED",
+        "4",
+        "4"
+      ]
+    ],
+    "lower_L_vertical": [
+      [
+        "UP1",
+        "1",
+        -3
+      ],
+      [
+        "HOLD",
+        "",
+        0
+      ],
+      [
+        "DOWN1",
+        "2",
+        3
+      ]
+    ],
+    "native_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "source_evidence_basis": {
+    "original_native_cases": "Both original clean lower roots reproduce compensated middle x17..25, lower L x26..31 or x23..28, upper RIGHT2 at x35..49 and upper LEFT2 x23..34; source top x14..16 first arrival frame19.",
+    "measured_upstream_fork_D3": "On D3 source tile row y44..46 first new color6 appears x20..22 at t4, x17..19 t5, x14..16 t6; rises at x14..16 row y41..43 t7.",
+    "measured_upstream_fork_D4": "On D4 source tile row y47..49 new color6 first appears x20..22 at t3, x17..19 t4, x14..16 t5; rises at x14..16 row y44..46 t6.",
+    "junction_geometry": "Original lower L at y35..40 and the left-middle 9x3 bar at y41..43 (D3) or y44..46 (D4); lowering L to y38..43 changes its source proximity/adjacency at the junction, while raising to y32..37 separates it."
+  },
+  "frozen_original_sdk_question": "With genuine right-middle R2/upper U2 fixed, does authentic lower L UP1/HOLD/DOWN1 change the independently measured native x14..16 offcup source arrival or preserve the recovered four-cup source condition under compensated versus baseline middle/L? Actual 27-pixel selected lower L bbox and original SDK progress must be witnessed.",
+  "native_progress": "Only actual original SDK levels_completed>=5 or WIN",
+  "walls": [
+    "Every actual original SDK reset enters official Level4 with source root BLAKE2b16 fa8fd32d3bfd2c8b3ff7765aec373512.",
+    "Original lower junction stream timing is source-correlated; the data do not prove private fluid mechanics or causal lineage.",
+    "Original independent SDK entry histories A/B are not F3 mathematical A/B operators.",
+    "Each L vertical action must be audited by actual source selected 27px bbox, with blocked moves recorded as nonmovement.",
+    "Preserve actual original per-action legal/click/source-hash receipts and full 64x64 returned animation arrays, not a simulator.",
+    "Top overflow at x14..16 can move to x11..13 or x17..19; all 3px source bands x5..22 and junction rows y44/47 must be compared before claiming disappearance.",
+    "Both BASELINE_HOLD and COMPENSATED_HOLD must reproduce original four-cup native source observation and stream band, or fail as WALL_CONTROL_DRIFT.",
+    "Official game Level5/WIN alone counts as progress; visually full four cup windows are only source observations.",
+    "No invented SDK-to-F3 action mapping and no global fluid rules; unrelated research lanes untouched, PR draft and unmerged."
+  ],
+  "next_if_no_progress": "Keep original finite source junction times and lower-L y movement as measured; find distinct original SDK lower branch or outlet constraint before further repetitive sweeps.",
+  "next_if_progress": "Require both independently reset original SDK entry histories to show level5/WIN, full frame source and official native receipt verification."
+}
