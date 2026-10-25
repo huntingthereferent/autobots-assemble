@@ -65,18 +65,33 @@ def project(runtime: HandoffRuntime) -> dict[str, Any]:
     handoffs = runtime.snapshot()
     events = runtime.event_store.all()
     known_events = {event.event_id for event in events}
-    transitions = tuple(
-        Transition(
+    # Project event-local movement without modifying the journal.
+    # Historical dependency resolution cannot be recovered from event order
+    # alone; mark such states rather than inventing them.
+    last_status: dict[str, str] = {}
+    transitions_list = []
+    for e in events:
+        if e.event_type == "CREATED":
+            status = "DEPENDENCY_DEPENDENT" if runtime.get(e.handoff_id).dependencies else "READY"
+        elif e.event_type == "STARTED":
+            status = "ACTIVE"
+        elif e.event_type == "RESULT":
+            status = str(e.data["status"])
+        elif e.event_type == "REOPENED":
+            status = "DEPENDENCY_DEPENDENT" if runtime.get(e.handoff_id).dependencies else "READY"
+        else:
+            status = last_status.get(e.handoff_id, "UNSPECIFIED")
+        last_status[e.handoff_id] = status
+        transitions_list.append(Transition(
             event_id=e.event_id,
             handoff_id=e.handoff_id,
             event_type=e.event_type,
             actor=e.actor_id,
             occurred_at=e.occurred_at,
             parents=e.parents,
-            status_after=str(e.data.get("status", "UNSPECIFIED")),
-        )
-        for e in events
-    )
+            status_after=status,
+        ))
+    transitions = tuple(transitions_list)
     return {
         "states": {hid: handoffs[hid].status for hid in handoffs},
         "transitions": transitions,
