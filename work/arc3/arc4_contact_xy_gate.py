@@ -230,7 +230,7 @@ def verify_result(contract,out):
         "blocked_vertical_geometry":sorted([list(x) for x in no_motion]),
         "source_predicate_results":results,
         "mathematical_scope":"Finite original SDK U2 right-edge34 versus U3 right-edge31 source overlap; actual native UP1/DOWN1 changes vertical y17/y23, no formal F3 A/B action map",
-        "next_movement":contract["next_if_level5"] if official else contract["next_if_no_level5"],
+        "next_movement":contract["next_if_progress"] if official else contract["next_if_no_progress"],
         "walls":contract["walls"],
     }
 
