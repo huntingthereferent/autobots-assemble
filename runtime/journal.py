@@ -84,7 +84,7 @@ class RuntimeJournal:
     def _validate_event(self, event: HandoffEvent) -> None:
         if any(item.event_id == event.event_id for item in self._events):
             raise ValueError('duplicate runtime event id')
-        if event.event_type not in ('CREATED', 'STARTED', 'RESULT', 'REOPENED'):
+        if event.event_type not in ('CREATED', 'STARTED', 'RESULT', 'REOPENED', 'GAME_BUILD_BROWSER_WITNESS_RETURNED'):
             raise ValueError('invalid runtime event type')
         prior = next((item for item in reversed(self._events)
                       if item.handoff_id == event.handoff_id), None)
