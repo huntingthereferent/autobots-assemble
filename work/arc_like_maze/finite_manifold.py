@@ -330,6 +330,82 @@ class FiniteTorus3:
             ) == translations[(1, 0, 0)],
         }
 
+    def lower_central_structure(self) -> dict:
+        """Exhaustively determine center, commutators and lower central series.
+
+        Permutations act on the left: (f*g)(v) = f(g(v)).
+        No group classification is assumed in the enumeration.
+        """
+        if self.side != 3:
+            raise ValueError("group analysis requires side=3")
+        vertices = self.vertices()
+        index = {v: i for i, v in enumerate(vertices)}
+        identity = tuple(range(len(vertices)))
+        generators = [
+            tuple(index[self.transition(v, a)] for v in vertices)
+            for a in "AB"
+        ]
+        def mul(a, b):
+            return tuple(a[i] for i in b)
+        def inverse(p):
+            out = [0] * len(p)
+            for i, j in enumerate(p):
+                out[j] = i
+            return tuple(out)
+        def closure(gens):
+            seen = {identity}
+            pending = deque([identity])
+            while pending:
+                g = pending.popleft()
+                for h in gens:
+                    gh = mul(g, h)
+                    if gh not in seen:
+                        seen.add(gh)
+                        pending.append(gh)
+            return seen
+        group = closure(generators)
+        inverses = {g: inverse(g) for g in group}
+        def commutator(a, b):
+            return mul(mul(mul(a, b), inverses[a]), inverses[b])
+        center = {
+            g for g in group
+            if all(mul(g, h) == mul(h, g) for h in generators)
+        }
+        derived = closure({
+            commutator(a, b) for a in group for b in group
+        })
+        lower = [group]
+        while lower[-1] != {identity}:
+            nxt = closure({
+                commutator(a, b)
+                for a in lower[-1] for b in generators
+            })
+            if nxt == lower[-1]:
+                break
+            lower.append(nxt)
+        return {
+            "group_order": len(group),
+            "center_order": len(center),
+            "commutator_subgroup_order": len(derived),
+            "lower_central_orders": [len(level) for level in lower],
+            "nilpotency_class": (
+                len(lower) - 1 if lower[-1] == {identity} else None
+            ),
+            "derived_is_abelian": all(
+                mul(a, b) == mul(b, a)
+                for a in derived for b in derived
+            ),
+            "center_elements_are_translations": all(
+                all(
+                    vertices[g[index[v]]] ==
+                    tuple((v[k] + vertices[g[index[(0, 0, 0)]]][k]) % 3
+                          for k in range(3))
+                    for v in vertices
+                )
+                for g in center
+            ),
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
