@@ -156,9 +156,22 @@ def assess(roster, histories, *, repo, now=None, root=ROOT):
 
 def run(roster, *, repo, token, reader=read_runs, sender=None, root=ROOT):
     entries = validate(roster, root=root)
-    histories = {w["id"]: reader(repo, w["filename"], token) for w in entries if w["enabled"]}
-    histories.update({w["id"]: [] for w in entries if not w["enabled"]})
+    histories = {}
+    history_errors = {}
+    for worker in entries:
+        if not worker["enabled"]:
+            histories[worker["id"]] = []
+            continue
+        try:
+            histories[worker["id"]] = reader(repo, worker["filename"], token)
+        except Exception as exc:
+            history_errors[worker["id"]] = str(exc)
+            histories[worker["id"]] = [{"status": "waiting"}]
     plan = assess(roster, histories, repo=repo, root=root)
+    plan["history_errors"] = history_errors
+    for row in plan["workers"]:
+        if row["id"] in history_errors:
+            row["state"] = "HISTORY_UNAVAILABLE"
     dispatch = sender or (lambda filename: _api(
         repo, token, "POST",
         "actions/workflows/" + urllib.parse.quote(filename, safe="") + "/dispatches",
