@@ -20,7 +20,7 @@ class OutputComparisonTests(unittest.TestCase):
             doc = {"schema": CANDIDATES["frontier"][1]}
             doc.update(dict(CANDIDATES["frontier"][2:]))
             path.write_text(json.dumps(doc), encoding="utf-8")
-            (path.parent / "exit-code.txt").write_text("0\\n", encoding="utf-8")
+            (path.parent / "exit-code.txt").write_text("0", encoding="utf-8")
             result = compare(directory)
         self.assertEqual(result["candidates"]["frontier"]["status"], "REPORTED_PASS")
         self.assertEqual(result["selection"], "UNDETERMINED")
