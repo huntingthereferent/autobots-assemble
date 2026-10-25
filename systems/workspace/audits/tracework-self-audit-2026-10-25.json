@@ -1,0 +1,53 @@
+{
+  "schema": "tracework/bounded-audit/v1",
+  "id": "tracework-self-audit-2026-10-25",
+  "referent": "Close the observed Tracework workstation audit mismatches and verify source-bound execution without replacing the originating audit with later main-branch movement.",
+  "state": "open",
+  "opened_from": {
+    "protocol_run": 40206630496,
+    "publishing_run": 40206630482,
+    "inspector_run": 40210484563
+  },
+  "nodes": [
+    {
+      "id": "protocol",
+      "parent": "tracework-self-audit-2026-10-25",
+      "kind": "workflow",
+      "state": "open",
+      "requirement": "Repair or resolve recorded protocol test mismatch; explicitly bind a passing rerun to the corrected source commit.",
+      "evidence": null
+    },
+    {
+      "id": "protocol-ui",
+      "parent": "protocol",
+      "kind": "repair",
+      "state": "open",
+      "requirement": "Resolve title/structure and inline-script assertions against intended UI contract, without weakening real behavior.",
+      "evidence": null
+    },
+    {
+      "id": "publishing",
+      "parent": "tracework-self-audit-2026-10-25",
+      "kind": "workflow",
+      "state": "open",
+      "requirement": "Resolve source-proof failure and verify publishing chain with exact run and commit.",
+      "evidence": null
+    },
+    {
+      "id": "retired-inspector",
+      "parent": "tracework-self-audit-2026-10-25",
+      "kind": "check",
+      "state": "open",
+      "requirement": "Verify Inspector remains disabled as an automatic dispatcher and native worker entry points remain independent.",
+      "evidence": null
+    },
+    {
+      "id": "native-continuation",
+      "parent": "tracework-self-audit-2026-10-25",
+      "kind": "check",
+      "state": "open",
+      "requirement": "Observe at least one independent native lane run, distinguish passing tests from actual continued worker motion.",
+      "evidence": null
+    }
+  ]
+}
