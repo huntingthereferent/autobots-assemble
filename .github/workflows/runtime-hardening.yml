@@ -1,0 +1,17 @@
+name: Runtime hardening
+on:
+  push:
+    paths:
+      - 'runtime/**'
+      - 'network/tests/test_runtime_hardening.py'
+      - '.github/workflows/runtime-hardening.yml'
+  workflow_dispatch:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m unittest -v network.tests.test_runtime_hardening network.tests.test_handoff_runtime
