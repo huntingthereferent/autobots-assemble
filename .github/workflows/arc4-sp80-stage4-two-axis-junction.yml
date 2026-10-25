@@ -1,0 +1,29 @@
+name: ARC4 native two-axis lower-junction contact
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_two_axis_junction.py'
+      - '.github/workflows/arc4-sp80-stage4-two-axis-junction.yml'
+jobs:
+  original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install real ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile original native trial
+        run: python -m compileall -q work/arc3/native_sp80_stage4_two_axis_junction.py
+      - name: Run 64 original SDK two-axis Level4 games
+        run: python -m work.arc3.native_sp80_stage4_two_axis_junction --out runtime/data/arc4/original-sp80-stage4-two-axis-junction.json
+      - name: Preserve original frame stacks and all action receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-two-axis-junction
+          path: runtime/data/arc4/original-sp80-stage4-two-axis-junction.*
+          if-no-files-found: error
+          retention-days: 14
