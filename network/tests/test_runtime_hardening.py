@@ -34,5 +34,20 @@ class RuntimeHardeningTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "duplicate"):
                 restored.event_store.append(event)
 
+    def test_replay_rejects_broken_parent(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "runtime.jsonl"
+            rt = HandoffRuntime(event_store=RuntimeJournal(path))
+            rt.submit(Handoff(handoff_id="one", referent="fixture",
+                              from_actor="a", to_actor="b", required_relation="check"))
+            rt.return_result("one", actor_id="b",
+                             result=ExecutionResult(status="UNKNOWN"))
+            import json
+            rows = [json.loads(line) for line in path.read_text().splitlines()]
+            rows[-1]["event"]["parents"] = ["nonexistent-event"]
+            path.write_text("".join(json.dumps(row) + "\n" for row in rows))
+            with self.assertRaisesRegex(ValueError, "parent"):
+                RuntimeJournal(path)
+
 if __name__ == "__main__":
     unittest.main()
