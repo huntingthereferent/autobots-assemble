@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_FINITE_JOINT_STRAND_VERTICAL_RESCUE_20261024",
+  "referent": "Original SP80 Level4 after independently source-observed two-strand composition: conditional recovery of top-middle source cup",
+  "source_code": "work/arc3/native_sp80_stage4_joint_upper_vertical.py",
+  "gate_code": "work/arc3/arc4_joint_upper_vertical_gate.py",
+  "parent_native_run_id": 40154160743,
+  "parent_native_artifact_id": 12583637554,
+  "parent_source_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "frozen_factors": {
+    "lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "right_middle_moves": [
+      [
+        "R1",
+        "3"
+      ],
+      [
+        "R2",
+        "3 3"
+      ]
+    ],
+    "top_left_moves": "3 3 3 3 3 3",
+    "top_final_vertical": [
+      [
+        "HOLD",
+        ""
+      ],
+      [
+        "UP1",
+        "1"
+      ],
+      [
+        "DOWN1",
+        "2"
+      ]
+    ],
+    "native_independent_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "expected_genuine_sdk_resets": 24,
+  "pre_registered_outcomes": {
+    "R2_HOLD": "Two upper offcup strands suppressed but top-middle original palette13 response was 0/45; official level4 in parent",
+    "R1_HOLD": "Upper left strand suppressed, right strand remained; four full original cups; official level4 in parent",
+    "R2_UP1": "Unobserved joint state under genuine one-step upper vertical perturbation",
+    "R2_DOWN1": "Unobserved joint state under genuine one-step upper vertical perturbation",
+    "R1_UP1": "Native upper vertical control with right-middle LEFT1, same lower parent",
+    "R1_DOWN1": "Native upper vertical control with right-middle LEFT1, same lower parent"
+  },
+  "mathematical_test": "Given source predicates P (no new color6 left x11-13/y5-7), Q (no new color6 right x56-58/y5-7), R (45/45 color13 top-middle cup) and F (all four 45/45 in same frame), test P∧Q∧R and F under one genuine SDK vertical action following the already evidenced R2+U6 double strand suppression; compare against R1+U6 and zero vertical controls.",
+  "official_progress": "Only original SDK levels_completed>=5 or WIN",
+  "walls": [
+    "No Level3 research restart: every genuine source reset must reproduce original Level4 entry hash.",
+    "All 24 genuinely reset native SDK games retain complete legal action receipts and original 64x64 frame stacks.",
+    "Independent SDK A/B entry-witness labels are not formal finite-field A/B operators.",
+    "Source P/Q/R/F may co-vary; none independently defines SDK success.",
+    "Absent source action changes/blocked vertical movements must be measured, not described as successful interventions.",
+    "No inferred private physics, constructed ARC simulator, or unsupported F3-to-ARC action correspondence.",
+    "If parent controls contradict the antecedent, fail as drift rather than promote an outcome.",
+    "Keep experimental branch draft and unmerged; do not manufacture workstation movement."
+  ],
+  "next_if_no_level5": "Preserve finite source counterexample, then choose a new mathematically discriminating coordinate/frame predicate from actual native source receipts, avoiding repeated arbitrary sweeps.",
+  "next_if_level5": "Require separate original SDK independent A/B replay, level5/WIN official receipts, full preserved source frames and verifier before progressing status."
+}

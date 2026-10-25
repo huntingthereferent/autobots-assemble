@@ -1,0 +1,46 @@
+name: ARC4 original SDK joint upper vertical finite discriminator
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_joint_upper_vertical.py'
+      - 'work/arc3/arc4_joint_upper_vertical_contract.json'
+      - 'work/arc3/arc4_joint_upper_vertical_gate.py'
+      - 'work/arc3/joint_upper_vertical_workstation.py'
+      - '.github/workflows/arc4-joint-upper-vertical-workstation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  original-native-level4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine original Arcade SDK source
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile source and independent mathematics gate
+        run: python -m compileall -q work/arc3/native_sp80_stage4_joint_upper_vertical.py work/arc3/arc4_joint_upper_vertical_gate.py work/arc3/joint_upper_vertical_workstation.py
+      - name: Verify pre-registered original Level4 source-action contract
+        run: python -m work.arc3.arc4_joint_upper_vertical_gate pre
+      - name: Execute authentic SDK level4 UP1 DOWN1 matched controls in ProcessWorkstation
+        run: |
+          python -m work.arc3.joint_upper_vertical_workstation \
+            --execute \
+            --data-dir runtime/data/arc4/upper-vertical/workstation \
+            --out runtime/data/arc4/upper-vertical/original-joint-upper-vertical.json
+      - name: Independently verify original SDK frames clicks coupons and Level4 official progress
+        run: |
+          python -m work.arc3.arc4_joint_upper_vertical_gate post \
+            --result runtime/data/arc4/upper-vertical/original-joint-upper-vertical.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-sdk-joint-upper-vertical
+          path: |
+            runtime/data/arc4/upper-vertical/original-joint-upper-vertical.*
+            runtime/data/arc4/upper-vertical/workstation/**
+          if-no-files-found: warn
+          retention-days: 90
