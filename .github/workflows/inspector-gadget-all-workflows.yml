@@ -11,6 +11,7 @@ on:
       - 'systems/workspace/inspector_gadget_workers.json'
       - 'network/tests/test_inspector_gadget_continuation.py'
       - '.github/workflows/inspector-gadget-all-workflows.yml'
+      - 'systems/workspace/handoffs/**'
   pull_request:
     paths:
       - '.github/workflows/inspector-gadget-all-workflows.yml'
