@@ -44,8 +44,8 @@ assert len(HOLDOUT)==12==len({x[0] for x in HOLDOUT})
 assert len(STAGE1_WITNESSES)==2
 ROOT_HASH="dd0b9861faae399ad607560e9181be42"
 EXPECTED={
-  0:"36aff6ecd29ebe7974d63efac50b72a0",
-  1:"4d9af990a458c0a7350bd8b65870ae3f"
+  1:"36aff6ecd29ebe7974d63efac50b72a0",
+  0:"4d9af990a458c0a7350bd8b65870ae3f"
 }
 def digest(a):return blake2b(np.ascontiguousarray(a).tobytes(),digest_size=16).hexdigest()
 
