@@ -51,6 +51,8 @@ def compare(old_report, new_source):
     observations = []
     for nct in IDS:
         a, b = rows_old[nct], rows_new[nct]
+        if type(a) is not dict or type(b) is not dict:
+            raise ValueError("archived study row must be a mapping")
         if a.get("nct_id") != nct or b.get("nct_id") != nct:
             raise ValueError("case source identity cross-wired")
         val_2022 = old_report["selected_study_records"][nct].get("overall_status_2022")
