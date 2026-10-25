@@ -222,6 +222,65 @@ class FiniteTorus3:
             "max_shortest_word_length": max(map(len, seen.values())),
         }
 
+    def subgroup_structure(self, phi=(0, 1, 2)) -> dict:
+        """Classify the reference-graph stabilizer within the generated group.
+
+        The default phi=(0,1,2) yields the full translation group F_3^3.
+        For other phi, report measured properties without asserting that form.
+        """
+        if self.side != 3:
+            raise ValueError("subgroup requires the F_3 adapter")
+        vertices = self.vertices()
+        index = {v: i for i, v in enumerate(vertices)}
+        generators = {
+            action: tuple(index[self.transition(v, action, phi)] for v in vertices)
+            for action in "AB"
+        }
+        identity = tuple(range(len(vertices)))
+        seen = {identity}
+        pending = deque([identity])
+        while pending:
+            permutation = pending.popleft()
+            for generator in generators.values():
+                successor = tuple(generator[i] for i in permutation)
+                if successor not in seen:
+                    seen.add(successor)
+                    pending.append(successor)
+        reference = frozenset(
+            frozenset(index[v] for v in edge) for edge in self.edges()
+        )
+        stabilizer = {
+            permutation for permutation in seen
+            if frozenset(
+                frozenset(permutation[i] for i in edge) for edge in reference
+            ) == reference
+        }
+        translations = {
+            tuple(index[tuple((v[k] + delta[k]) % 3 for k in range(3))]
+                  for v in vertices)
+            for delta in vertices
+        }
+        def compose(left, right):
+            return tuple(left[i] for i in right)
+        return {
+            "full_group_order": len(seen),
+            "stabilizer_order": len(stabilizer),
+            "translation_order": len(translations),
+            "stabilizer_equals_translations": stabilizer == translations,
+            "stabilizer_abelian": all(
+                compose(a, b) == compose(b, a)
+                for a in stabilizer for b in stabilizer
+            ),
+            "stabilizer_normal": all(
+                # Conjugation is tested without needing explicit inverses:
+                # gH = Hg as sets for every g.
+                {compose(g, h) for h in stabilizer}
+                == {compose(h, g) for h in stabilizer}
+                for g in seen
+            ),
+            "index": len(seen) // len(stabilizer),
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
