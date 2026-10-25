@@ -1,13 +1,7 @@
 name: Inspector Gadget
 
 on:
-  workflow_run:
-    workflows:
-      - protocol-tests
-      - pages build and deployment
-      - Publish source-bound research for the live trace surface
-      - ARC3 direct observation lane
-    types: [completed]
+  workflow_dispatch:
 
 permissions:
   actions: read
@@ -15,7 +9,7 @@ permissions:
 
 jobs:
   inspector-gadget:
-    if: ${{ github.event.workflow_run.conclusion == 'cancelled' }}
+    if: false # Retired automatic cancellation observer; retained for historical reference
     runs-on: ubuntu-latest
     timeout-minutes: 6
     steps:
