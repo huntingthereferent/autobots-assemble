@@ -28,3 +28,42 @@ The previously relocated left-middle piece was genuinely clicked at original sou
 **All 48 SDK games remained `levels_completed=4` and `NOT_FINISHED`; zero original level5/WIN.** A source palette change in cup pixels is an observation, not official progression.
 
 The next step is an **offline read-only trajectory comparison of the preserved NPZ animation stacks** across original y41–52, x11–25 for the clean parents, DOWN1 and UP1. This will distinguish a branch shifted to adjacent rows from an actually missing observed source path *without spending another native sweep*. Retain the measured cell provenance and only then predeclare a further *lower-junction* intervention. The original F3-48 finite mathematics, canonical ARC agent, owner rights, native source, and other research lanes remain untouched.
+
+
+## Independent raw NPZ postflight — recovered displaced source track
+
+The source archive from [run #40174413932](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40174413932) was downloaded and the actual preserved original 64x64 frame stacks re-inspected *read-only*, not rerun through synthetic logic. Both independent native SDK entry witnesses produced identical selected-row first-arrival results (20 original original-case/witness comparisons across two clean parents and UP2, UP1, hold, DOWN1, DOWN2).
+
+| Parent | Middle movement | Native arrival y rows | x20–22, then x17–19, then x14–16 (original SDK frames) | Left lateral max11→13 |
+|---|---|---|---|---|
+| A | UP2 | 38–40 | 6,7,8 | 0/45 |
+| A | UP1 | 41–43 | 5,6,7 | 0/45 |
+| A | HOLD | 44–46 | 4,5,6 | 45/45 |
+| A | DOWN1 | 47–49 | 3,4,5 | 45/45 |
+| A | DOWN2 | 50–52 | 2,3,4 | 45/45 |
+| B | UP2 | 41–43 | 5,6,7 | 0/45 |
+| B | UP1 | 44–46 | 4,5,6 | 0/45 |
+| B | HOLD | 47–49 | 3,4,5 | 45/45 |
+| B | DOWN1 | 50–52 | 2,3,4 | 45/45 |
+| B | DOWN2 | 53–55 | 1,2,3 | 45/45 |
+
+The original row-only observation that the branch *disappeared* on downward movement was incomplete: the displaced three-cell arrival is plainly visible lower down. This is a bounded source-frame correlation, not a native engine motion law. Source zip downloaded for review SHA256 `5b38ae2407c98533260eb0eb7a7277e09f311d6a5c07ab53ff639b6f610f9f8a` (this is the downloaded archive ZIP, not a claim about upstream artifact registry verification).
+
+## New genuine source trial — paired middle/L junction
+
+[Native workflow #40177191960](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40177191960), [authentic full original JSON/NPZ artifact #12592626568](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40177191960/artifacts/12592626568).
+
+**56 completed original SDK games** (two clean parents × two middle vertical offsets × seven separate lower-L settings × both earlier source-entry histories), accepted all exact real palette8 middle reselections and genuine palette15 lower-L reselections. Both independent SDK source witnesses exactly agreed. All 56 returned **official `levels_completed=4`, `NOT_FINISHED`**, zero level5/WIN.
+
+New observed lower-junction relation: **the two left cups can exchange visible fill** when the reselected lower L is moved horizontally, while the measured 3-cell upstream arrival times remain the same:
+
+| Pair | Left lateral cup | Top-left cup |
+|---|---:|---:|
+| A middle DOWN1, L held | 45/45 | 0/45 |
+| A middle DOWN1, L RIGHT1 | 0/45 | 45/45 |
+| B middle UP1, L RIGHT1 | 45/45 | 0/45 |
+| B middle UP1, L LEFT1 | 0/45 | 45/45 |
+| B middle DOWN1, L RIGHT1 | 45/45 | 0/45 |
+| B middle DOWN1, L LEFT1 | 0/45 | 45/45 |
+
+Top-middle and top-right reached 45/45 in every one of the 56 cases. Visually changing a cup from 0 to 45 is NOT a native win. Next discriminator: prospectively test **paired lower-L lateral + height nudges**, both move orders, around these source-neighbor states and record *simultaneous* four-cup frames rather than confusing independent maxima with synchronous fill. The upper bars and F3-48 mathematics remain unchanged.
