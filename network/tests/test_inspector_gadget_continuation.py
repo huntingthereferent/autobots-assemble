@@ -75,6 +75,30 @@ class NativeLaneContinuationTests(unittest.TestCase):
         self.assertEqual(states["arc"], "SELECTED")
         self.assertEqual(states["nih"], "ALREADY_RUNNING")
 
+    def test_decision_replays_from_same_observations(self):
+        registry = mock_registry("arc", "nih", "world")
+        observations = {
+            "arc": [native_run(10), native_run(20)],
+            "nih": [native_run(5, status="in_progress")],
+            "world": [],
+        }
+        first = assess(registry, observations, repo=REPO, now=NOW, root=self.root)
+        reordered = {key: list(reversed(value)) for key, value in observations.items()}
+        later = assess(registry, reordered, repo=REPO,
+                       now=NOW + dt.timedelta(hours=2), root=self.root)
+        self.assertEqual(first["decision_digest"], later["decision_digest"])
+        self.assertEqual([r["id"] for r in first["selected"]],
+                         [r["id"] for r in later["selected"]])
+        self.assertNotIn("nih", {r["id"] for r in later["selected"]})
+
+    def test_changed_owner_observation_changes_decision(self):
+        registry = mock_registry("arc")
+        idle = assess(registry, {"arc": []}, repo=REPO, now=NOW, root=self.root)
+        active = assess(registry, {"arc": [native_run(1, status="queued")]},
+                        repo=REPO, now=NOW, root=self.root)
+        self.assertNotEqual(idle["decision_digest"], active["decision_digest"])
+        self.assertEqual(active["selected_count"], 0)
+
     def test_existing_worker_execution_is_really_dispatched(self):
         registry = mock_registry("arc", "nih")
         events = []
