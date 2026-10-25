@@ -1,12 +1,5 @@
 name: ARC4 original SDK finite upper source 2D contact discriminator
 on:
-  pull_request:
-    paths:
-      - 'work/arc3/native_sp80_stage4_contact_xy.py'
-      - 'work/arc3/arc4_contact_xy_contract.json'
-      - 'work/arc3/arc4_contact_xy_gate.py'
-      - 'work/arc3/contact_xy_workstation.py'
-      - '.github/workflows/arc4-contact-xy-workstation.yml'
   workflow_dispatch:
 permissions:
   contents: read
