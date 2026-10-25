@@ -1,12 +1,5 @@
 name: ARC4 original SDK Level4 middle-source contact displacement
 on:
-  pull_request:
-    paths:
-      - 'work/arc3/native_sp80_stage4_middle_source_offset.py'
-      - 'work/arc3/arc4_middle_source_offset_contract.json'
-      - 'work/arc3/arc4_middle_source_offset_gate.py'
-      - 'work/arc3/middle_source_offset_workstation.py'
-      - '.github/workflows/arc4-middle-source-offset-workstation.yml'
   workflow_dispatch:
 permissions:
   contents: read
