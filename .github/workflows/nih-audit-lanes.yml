@@ -1,3 +1,4 @@
+# Native NIH audit activation: push on main starts source-backed audit jobs.
 name: NIH audit - source-backed workstation lanes
 on:
   workflow_dispatch:
