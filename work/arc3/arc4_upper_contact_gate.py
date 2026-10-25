@@ -33,7 +33,7 @@ def context():
             f["right_middle_actions"]==[list(x) for x in RIGHT] and
             f["upper_actions"]==[list(x) for x in UPPER] and
             f["original_sdk_entry_witnesses"]==["A","B"] and
-            len(FROZEN)==16 and len({n for n,word in FROZEN})==12,
+            len(FROZEN)==16 and len({n for n,word in FROZEN})==16,
             "finite source factors drift")
     for case,word in FROZEN:
         commands=parse_plan(word)
