@@ -212,7 +212,9 @@ class FiniteTorus3:
             frozenset(frozenset(permutation[i] for i in edge) for edge in edges) == edges
             for permutation in seen
         )
+        length_distribution = Counter(map(len, seen.values()))
         return {
+            "shortest_word_distribution": dict(sorted(length_distribution.items())),
             "permutations": len(seen),
             "distinct_edge_geometries": len(geometries),
             "reference_graph_stabilizer": stabilizer_size,
