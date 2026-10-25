@@ -59,6 +59,18 @@ class FiniteManifoldTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.apply_word((0, 0, 0), "AC")
 
+    def test_graph_return_is_not_permutation_return(self):
+        m = FiniteTorus3()
+        # A is a nontrivial lattice automorphism, so the graph returns
+        # after one step even though the full state permutation does not.
+        result = m.geometry_return_analysis("AAA")
+        self.assertEqual(result["first_graph_return"], 1)
+        self.assertEqual(result["first_permutation_return"], 3)
+        self.assertEqual(result["first_graph_repeat"], (0, 1))
+        self.assertEqual(result["first_permutation_repeat"], (0, 3))
+        self.assertEqual(result["distinct_graphs"], 1)
+        self.assertEqual(result["distinct_permutations"], 3)
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
