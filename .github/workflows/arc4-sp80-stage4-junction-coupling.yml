@@ -1,0 +1,29 @@
+name: ARC4 native paired lower-junction contact
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_junction_coupling.py'
+      - '.github/workflows/arc4-sp80-stage4-junction-coupling.yml'
+jobs:
+  actual-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile source-only native trial
+        run: python -m compileall -q work/arc3/native_sp80_stage4_junction_coupling.py
+      - name: Run 56 original SDK Level4 paired lower-junction games
+        run: python -m work.arc3.native_sp80_stage4_junction_coupling --out runtime/data/arc4/original-sp80-stage4-junction-coupling.json
+      - name: Archive original SDK receipts and full returned 64x64 frames
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-junction-coupling
+          path: runtime/data/arc4/original-sp80-stage4-junction-coupling.*
+          if-no-files-found: error
+          retention-days: 14
