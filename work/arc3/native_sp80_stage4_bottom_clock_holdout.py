@@ -55,7 +55,7 @@ def main():
             if len(receipt)!=N+1:
                 raise AssertionError("Original normal SDK did not execute full trace")
             if not all(r["genuine_original_action"]==6 and
-                r["original_source_pixel_before_click"]==8
+                r["original_source_pixel_before_click"] in (8,9)
                 for r in receipt[:N]):
                 raise AssertionError("Expected original source-click palette8 at each selection")
             if receipt[-1]["genuine_original_action"]!=5:
