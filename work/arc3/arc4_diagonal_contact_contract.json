@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_DIAGONAL_CONTACT_TRANSFER_20261025",
+  "source_code": "work/arc3/native_sp80_stage4_diagonal_contact.py",
+  "source_parent_run": 40171838520,
+  "source_parent_artifact": 12590876301,
+  "genuine_original_level4_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "expected_genuine_original_sdk_resets": 24,
+  "frozen_arms": [
+    [
+      "C22",
+      2,
+      2
+    ],
+    [
+      "X25",
+      2,
+      5
+    ],
+    [
+      "C33",
+      3,
+      3
+    ],
+    [
+      "C44",
+      4,
+      4
+    ],
+    [
+      "C55",
+      5,
+      5
+    ],
+    [
+      "X52",
+      5,
+      2
+    ]
+  ],
+  "frozen_clean_lower_parents": [
+    "D3L2_L3U2",
+    "D4L2_L4U2"
+  ],
+  "fixed_middle_movement": "RIGHT1",
+  "fixed_lower_L_compensation": "RIGHT1",
+  "independent_original_sdk_entry_histories": [
+    "A",
+    "B"
+  ],
+  "native_source_question": "The original right-middle R2 x35..49 source sends color6 towards top-middle x32..34. Original upper U2 x23..34 receives that stream while the independent left upper x14..16 strand overshoots. Joint matched R3/U3 through R5/U5 translations preserve the measured upper-right-edge-to-right-middle-left relation while shifting upper left edge towards x14..16. Compare X25/R2U5 and X52/R5U2 nonmatched controls. Observe all source frames and SDK official level; do not presume linear stream relocation.",
+  "predeclared_source_bboxes": {
+    "right_middle_initial": [
+      41,
+      32,
+      55,
+      34
+    ],
+    "upper_initial": [
+      29,
+      20,
+      40,
+      22
+    ],
+    "compensated_middle": [
+      17,
+      41,
+      25,
+      43
+    ],
+    "compensated_lower_L_D3": [
+      26,
+      35,
+      31,
+      40
+    ],
+    "compensated_lower_L_D4": [
+      23,
+      35,
+      28,
+      40
+    ]
+  },
+  "native_success": "Only original Arcade SDK levels_completed>=5 or WIN",
+  "walls": [
+    "Use original SDK full Level4 root per genuinely independent reset.",
+    "Actual SDK A/B entry histories are not formal finite F3 generators.",
+    "Every genuine original return needs complete legal-action/click-pixel receipts, source 64x64 frames, selected right/upper/middle/L geometries, actual official SDK level.",
+    "If R3/R4/R5 or U3/U4/U5 commands are blocked, report source nonmovement with measured bbox; never substitute intended pose.",
+    "X25 and X52 are precommitted off-diagonal controls: no inference of operator commutativity or hidden physics.",
+    "Measure source color6 x5..22 and offcup x14..16 event and native 45/45 top-middle/all-four source cups, and border source events independently.",
+    "R2U2 must reproduce four native cups, original x14..16 offcup, official Level4; otherwise return WALL_CONTROL_DRIFT.",
+    "Four visually filled cups do not count as official game success.",
+    "Keep draft, no automatic merge or unrelated lanes."
+  ],
+  "next_no_progress": "Preserve exact source verified finite diagonal-versus-decoupled native correspondence and first failing or recovering source site. Need a new measured contact after that.",
+  "next_progress": "Require genuine SDK level5/WIN in independently reset A/B original runs and independently checked NPZ source receipts before advancing status.",
+  "referent": "Original SP80 Level4 finite source: joint right-middle and upper-bar offsets preserve prior incoming contact while checking remaining compensated left-side overflow",
+  "factors": {
+    "clean_lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "source_right_upper": [
+      [
+        "C22",
+        2,
+        2
+      ],
+      [
+        "X25",
+        2,
+        5
+      ],
+      [
+        "C33",
+        3,
+        3
+      ],
+      [
+        "C44",
+        4,
+        4
+      ],
+      [
+        "C55",
+        5,
+        5
+      ],
+      [
+        "X52",
+        5,
+        2
+      ]
+    ],
+    "lower_compensation": "RIGHT1",
+    "middle_compensation": "RIGHT1",
+    "native_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "original_native_saved_artifact_id": 12590981593,
+  "saved_original_source_json_sha256": "a1118ad0f7081148a81b9246e78fb09ee864fd7cae2298ad951eba158177a92e",
+  "saved_original_source_npz_sha256": "095379f6469a0263707ab56446f03cac7394d8eba624d7784c52f814f08c7fe3",
+  "saved_original_source_edition_sha256": "bdf94527a3059e6d7a72e4fa7764b9e995b9274e17c1b4dfd47a67be700e3695",
+  "legacy_saved_native_kind": "ORIGINAL_SP80_LEVEL4_NATIVE_MIDDLE_HEIGHT_SPILL_RELATION",
+  "legacy_saved_native_parent_run": 40171009741,
+  "legacy_source_metadata_wall": "Actual original SDK experiment ran 24 frozen diagonal cases in source edition SHA256 bdf94527..., but inherited a legacy JSON kind and parent-run field from the source template. These labels are not correct descriptions of the new diagonal experiment. Require exact saved artifact SHA256, case matrix, action word receipts and real source arrays. Do not rewrite evidence or infer that source labels describe action conditions."
+}

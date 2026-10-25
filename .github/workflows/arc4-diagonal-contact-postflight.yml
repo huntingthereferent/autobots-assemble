@@ -1,0 +1,56 @@
+name: ARC4 diagonal Level4 genuine original source postflight (read-only)
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/arc4_diagonal_contact_gate.py'
+      - 'work/arc3/arc4_diagonal_contact_contract.json'
+      - '.github/workflows/arc4-diagonal-contact-postflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  original-native-source-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install import-compatible Arcade SDK and numeric reader without running game
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Download immutable full genuine original 24-reset SDK artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runtime/data/arc4/diagonal-contact
+          curl --fail --silent --show-error --location --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            'https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/artifacts/12590981593/zip' \
+            --output runtime/data/arc4/diagonal-contact/frozen-source-40172774339.zip
+          unzip -t runtime/data/arc4/diagonal-contact/frozen-source-40172774339.zip >/dev/null
+          unzip -o -q runtime/data/arc4/diagonal-contact/frozen-source-40172774339.zip \
+            -d runtime/data/arc4/diagonal-contact
+          cd runtime/data/arc4/diagonal-contact
+          printf '%s  %s\n' \
+            a1118ad0f7081148a81b9246e78fb09ee864fd7cae2298ad951eba158177a92e original-diagonal.json \
+            095379f6469a0263707ab56446f03cac7394d8eba624d7784c52f814f08c7fe3 original-diagonal.npz \
+            bdf94527a3059e6d7a72e4fa7764b9e995b9274e17c1b4dfd47a67be700e3695 workstation/selected/native_sp80_stage4_diagonal_contact.py \
+            | sha256sum --check --strict
+      - name: Preflight frozen source action matrix and genuine official Level4 game objective
+        run: python -m work.arc3.arc4_diagonal_contact_gate pre
+      - name: Independently audit original 64x64 game frame stacks receipts and finite paired contact
+        run: |
+          python -m work.arc3.arc4_diagonal_contact_gate post \
+            --result runtime/data/arc4/diagonal-contact/original-diagonal.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-diagonal-contact-original-read-only-proof
+          path: runtime/data/arc4/diagonal-contact/original-diagonal.protocol.json
+          if-no-files-found: warn
+          retention-days: 90
