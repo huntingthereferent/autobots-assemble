@@ -67,3 +67,19 @@ New observed lower-junction relation: **the two left cups can exchange visible f
 | B middle DOWN1, L LEFT1 | 0/45 | 45/45 |
 
 Top-middle and top-right reached 45/45 in every one of the 56 cases. Visually changing a cup from 0 to 45 is NOT a native win. Next discriminator: prospectively test **paired lower-L lateral + height nudges**, both move orders, around these source-neighbor states and record *simultaneous* four-cup frames rather than confusing independent maxima with synchronous fill. The upper bars and F3-48 mathematics remain unchanged.
+
+
+## Native two-axis junction result — 64 additional SDK games
+
+[Successful original-native Actions run #40177465663](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40177465663), [complete original SDK NPZ and JSON artifact #12592402624](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40177465663/artifacts/12592402624). These are **64 fresh actual original SDK games**, not pixel simulation: 2 clean parents × 2 independently sampled middle heights × 2 lower-L horizontal directions × 2 lower-L heights × 2 action orders × 2 independent original-stage entry witnesses. The authentic native SDK reported **64/64 Level4 NOT_FINISHED**, zero Level5/WIN; all independent witnesses exactly agreed on SDK status, source pixel frames, and original selected-object receipts.
+
+**Synchronous source-cup discriminator:** *zero out of 32 distinct two-axis programs* produced a frame in which the left lateral and top-left cup windows were both source-palette13 full (0/64 native resets). Source left-cup combined concurrent occupancy maxed at **45/90**, even though individual four-cup upper and lateral windows could reach 45/45 in different programs. No all-four-cup simultaneous native source frame was observed. This bounds the tested two-axis neighbors, not the full original engine or every mathematically possible configuration.
+
+The tested first local source palette6 differences between contrasting full-left-cup conditions were also rechecked read-only from the preceding [56-game native NPZ artifact](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40177191960/artifacts/12592626568). For each of the independent A and B original entry witnesses, the *earliest difference in newly source-color6 pixels*, comparing a lateral-filled case against a top-left-filled case, occurs at **ACTION5 frame 8** in original native **x20–25, y35–40**:
+- Parent A, middle DOWN1: L held (lateral45, top-left0) versus L RIGHT1 (lateral0, top-left45)
+- Parent B, middle UP1: L LEFT1 (lateral0, top-left45) versus L RIGHT1 (lateral45, top-left0)
+- Parent B, middle DOWN1: L LEFT1 (lateral0, top-left45) versus L RIGHT1 (lateral45, top-left0)
+
+Each of these observed earliest differences spans 18 source pixels at frame8: one alternative has the first additional color6 patch in x20–22/y38–40, the other in x23–25/y35–37. The actual source visual left lateral cup becomes full at frame13 in the lateral case; the top-left cup at frame19 in the top-left case. Upper-middle and upper-right first full at frames23 and21 respectively. **Earliest discriminating location is below the upper bar, not the upper bar.**
+
+**Next read-only discriminator:** compare those two frame8 3-pixel cell patches against selected original source object geometry, then construct a bounded *lower source fork* intervention if independently supported. Avoid repeating exhaustive upper-bar or now-negative two-axis L sweeps. Pixel observations do not prove a hidden fluid engine, objective rule, or native game WIN. Original F3-48 math, canonical agent, and rights remain unmodified.
