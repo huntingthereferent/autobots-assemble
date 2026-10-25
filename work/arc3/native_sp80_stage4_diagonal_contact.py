@@ -37,7 +37,7 @@ assert all(parse_plan(w)[-1][0]==5 and sum(a==5 for a,xy in parse_plan(w))==1
 
 def selected_bbox(arr):
     ys,xs=np.nonzero(arr==9)
-    if len(xs)!=27:raise ValueError("Expected genuine original selected 27-pixel component")
+    if len(xs) not in (27,36,45):raise ValueError("Expected original selected 27,36 or45-pixel bar")
     return [int(xs.min()),int(ys.min()),int(xs.max()),int(ys.max())]
 
 def observe(root,pre,stack):
@@ -75,7 +75,7 @@ def main():
             prefix=parent+"_"
             if name.startswith(prefix):
                 suffix=name[len(prefix):]
-                mname,lname=suffix.split("_")
+                mname,lname="FIXED",suffix
                 break
         else:raise ValueError("Unrecognized original clean source parent")
         rsteps,usteps=next((r,u) for t,r,u in ARMS if t==lname)
