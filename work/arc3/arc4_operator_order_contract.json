@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_SP80_LEVEL4_FINITE_NATIVE_ORDER_CONTRAST_20261025",
+  "referent": "Original SDK SP80 level4 action-order composition of right-middle and upper-bar displacement, under matched final upper selection",
+  "source_code": "work/arc3/native_sp80_stage4_operator_order.py",
+  "source_gate": "work/arc3/arc4_operator_order_gate.py",
+  "antecedent_native_run": 40158241960,
+  "antecedent_native_artifact": 12585098595,
+  "parent_root_blake2b16": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "expected_original_sdk_resets": 32,
+  "factors": {
+    "clean_lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "right_middle_move": [
+      [
+        "R1",
+        "3"
+      ],
+      [
+        "R2",
+        "3 3"
+      ]
+    ],
+    "upper_move": [
+      [
+        "U1",
+        "3",
+        "6@30,21"
+      ],
+      [
+        "U6",
+        "3 3 3 3 3 3",
+        "6@16,21"
+      ]
+    ],
+    "order": [
+      "RU",
+      "UR"
+    ],
+    "independent_native_entries": [
+      "A",
+      "B"
+    ]
+  },
+  "finite_question": "For state S and two actual native compound action words R=click right+left1/2, U=click upper+left1/6, compare P(S·R·U·C) versus P(S·U·R·C), C=identical final click of the moved upper component. Test final native source frame, projected observation rows0-62, true native pour animations and official level; a counterexample refutes this finite observed commuting square for the tested pair.",
+  "official_progress": "Original Arcade.NORMAL SDK levels_completed>=5 / WIN alone",
+  "walls": [
+    "Only verified original SDK Level4 entry root is admitted; Level3 witness replay is an entry procedure, not a restart of the research.",
+    "Equal original SDK action word length and identical terminal upper-click object allow a controlled observed order comparison but do not imply hidden engine state equivalence.",
+    "Original SDK A/B independently replayed entry histories are not mathematical F3 generators.",
+    "Finite observed right/upper action-order agreement or failure on this sample is not proof of global commutativity or a total action morphism.",
+    "Every original native click/pixel, all full 64x64 SDK arrays and official game status must pass an independent source verifier.",
+    "If real terminal upper select click targets a different object, report WALL_TERMINAL_SELECTION; do not claim a commuting diagram.",
+    "A/B failure, source drift, missing records, or unsuccessful movement must remain explicit.",
+    "Keep branch draft/unmerged and exclude other research lanes."
+  ],
+  "next_if_no_progress": "Preserve observed native action-word commuting/counterexample result; choose a new original level4 source discriminant only where this exact algebraic observation yields a supported distinction.",
+  "next_if_progress": "Reverify original SDK level5/WIN from independent entry paths and native full source evidence before changing the official status."
+}
