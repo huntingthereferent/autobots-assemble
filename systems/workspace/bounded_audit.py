@@ -93,3 +93,27 @@ def load(path):
     audit = json.loads(Path(path).read_text(encoding="utf-8"))
     validate(audit)
     return audit
+
+
+def next_handoffs(audit):
+    """Leaf-first finite handoffs, always carrying the originating referent."""
+    by_id = validate(audit)
+    if audit.get("state") == "closed":
+        return []
+    children = {key: [] for key in by_id}
+    for n in audit["nodes"]:
+        if n["parent"] in children:
+            children[n["parent"]].append(n["id"])
+    status = assess(audit)["nodes"]
+    ready = []
+    for node in audit["nodes"]:
+        if status.get(node["id"]):
+            continue
+        # Parent cannot be verified before unresolved descendants.
+        if any(not status.get(child, False) for child in children[node["id"]]):
+            continue
+        ready.append({"audit_id": audit["id"], "referent": audit["referent"],
+                      "node_id": node["id"], "kind": node["kind"],
+                      "requirement": node["requirement"],
+                      "parent": node["parent"], "state": node["state"]})
+    return ready
