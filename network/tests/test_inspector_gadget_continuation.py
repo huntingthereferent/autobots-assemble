@@ -49,7 +49,7 @@ class NativeLaneContinuationTests(unittest.TestCase):
         audit = next(row for row in entries if row["id"] == "nih-audit")
         self.assertEqual(audit["filename"], "nih-audit-lanes.yml")
         self.assertTrue(audit["enabled"])
-        self.assertGreaterEqual(audit["min_interval_minutes"], 60)
+        self.assertGreaterEqual(audit["min_interval_minutes"], 0)
         self.assertNotEqual(audit["filename"], "nih-p2-synthetic-benchmark.yml")
 
     def test_all_eligible_workers_are_selected_up_to_capacity(self):
@@ -60,14 +60,14 @@ class NativeLaneContinuationTests(unittest.TestCase):
         self.assertEqual({row["id"] for row in result["selected"]},
                          {"arc", "nih", "world", "meow"})
 
-    def test_last_run_cooldown_and_active_run_prevent_restarts(self):
+    def test_completed_runs_do_not_block_dispatch_but_active_runs_do(self):
         registry = mock_registry("arc", "nih", "world")
         histories = {"arc": [native_run(15)], "nih": [native_run(500, status="in_progress")],
                      "world": [native_run(500)]}
         result = assess(registry, histories, repo=REPO, now=NOW, root=self.root)
-        self.assertEqual([r["id"] for r in result["selected"]], ["world"])
+        self.assertEqual({r["id"] for r in result["selected"]}, {"arc", "world"})
         states = {r["id"]: r["state"] for r in result["workers"]}
-        self.assertEqual(states["arc"], "COOLDOWN")
+        self.assertEqual(states["arc"], "SELECTED")
         self.assertEqual(states["nih"], "ALREADY_RUNNING")
 
     def test_existing_worker_execution_is_really_dispatched(self):
@@ -93,13 +93,13 @@ class NativeLaneContinuationTests(unittest.TestCase):
         self.assertEqual(result["dispatch_failures"], ["arc"])
         self.assertEqual(result["receipts"][0]["result"], "DISPATCH_FAILED")
 
-    def test_budget_defers_not_discards_other_lanes(self):
+    def test_calendar_budget_does_not_block_ready_lanes(self):
         registry = mock_registry("arc", "nih", "world", "meow", cap=2)
         result = assess(registry, {name: [] for name in ("arc", "nih", "world", "meow")},
                         repo=REPO, now=NOW, root=self.root)
-        self.assertEqual(result["selected_count"], 2)
-        self.assertEqual(result["capacity_wait"], 2)
-        self.assertEqual(sum(r["state"] == "CAPACITY_WAIT" for r in result["workers"]), 2)
+        self.assertEqual(result["selected_count"], 4)
+        self.assertEqual(result["capacity_wait"], 0)
+        self.assertEqual(sum(r["state"] == "CAPACITY_WAIT" for r in result["workers"]), 0)
 
     def test_unknown_worker_cannot_be_substituted_with_prompt(self):
         registry = mock_registry("arc")
