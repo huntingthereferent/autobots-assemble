@@ -1,7 +1,8 @@
 """Regression: audit referent is finite; children and evidence determine closure."""
 import copy
 import unittest
-from systems.workspace.bounded_audit import assess, add_child, close, validate
+from systems.workspace.bounded_audit import assess, add_child, close, validate, next_handoffs
+from systems.workspace.audit_source import verify_workflow
 
 
 def fixture():
@@ -49,6 +50,29 @@ class FiniteAuditTests(unittest.TestCase):
         a["nodes"][0]["parent"] = "repair"
         with self.assertRaises(ValueError):
             validate(a)
+
+    def test_every_descendant_is_evaluated(self):
+        self.assertEqual(set(assess(fixture())["nodes"]), {"run", "repair"})
+
+    def test_leaf_first_handoff_retains_referent(self):
+        a = fixture()
+        h = next_handoffs(a)
+        self.assertEqual([x["node_id"] for x in h], ["repair"])
+        self.assertEqual(h[0]["referent"], a["referent"])
+
+    def test_source_mismatch_blocks_claimed_success(self):
+        n = fixture()["nodes"][0]
+        n["evidence"] = {"verified": True, "source": "https://github.com/o/r/actions/runs/1",
+                         "run_id": 1, "head_sha": "abc", "conclusion": "success",
+                         "workflow_name": "protocol-tests"}
+        run = {"id": 1, "head_sha": "abc", "conclusion": "failure",
+               "status": "completed", "name": "protocol-tests",
+               "html_url": "https://github.com/o/r/actions/runs/1"}
+        self.assertFalse(verify_workflow(n, run)["matches"])
+        run["conclusion"] = "success"
+        self.assertTrue(verify_workflow(n, run)["matches"])
+        run["name"] = "different-workflow"
+        self.assertFalse(verify_workflow(n, run)["matches"])
 
     def test_original_referent_preserved(self):
         a = fixture()
