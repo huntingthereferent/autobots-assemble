@@ -129,6 +129,14 @@ class PairwiseSourceTests(unittest.TestCase):
         self.assertFalse(row["recorded_last_update_posted_value_equal"])
         self.assertFalse(row["any_intervening_status_revisions_excluded"])
 
+    def test_06_malformed_study_rows_are_rejected_as_source_errors(self):
+        for side in ("old", "new"):
+            a, b = old_report(), new_report()
+            rows = a["selected_study_records"] if side == "old" else b["observed_source_rows"]
+            rows[IDS[0]] = None
+            with self.subTest(side=side), self.assertRaisesRegex(ValueError, "archived study row"):
+                compare(a, b)
+
     def test_05_empty_status_is_not_an_observation(self):
         b = new_report()
         b["observed_source_rows"][IDS[0]]["overall_status"] = ""
