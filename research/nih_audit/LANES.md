@@ -47,3 +47,27 @@ NIH-07: no new reconciliation verdict until fresh execution.
 
 ### Execution requirements
 A worker lane is active only after a real runner/job ID and persisted receipt are attached. Do not claim the markdown register creates workers. Existing documented replay: `python -m unittest -v network.tests.test_nih_p2_two_aact_snapshot_comparison`; then `python -m systems.workspace.nih_p2_two_aact_snapshot_comparison --output-dir /tmp/nih-p2-two-original-archives`. The original archive replay downloads approximately 525 MB. Do not launch it implicitly.
+
+## Referent correction — Phase 1 output selection (2026-10-25)
+
+**Original audit objective:** compare completed NIH Phase 1 output variants under a common, bounded evaluation and select the strongest *verified* version. This supersedes treating Phase 2 archival source discovery as the audit objective. Phase 2 provenance remains a separate research boundary and may supply a constraint, not the selection target.
+
+### Candidate outputs to compare
+- Original NIH Phase 1 packet and native twelve-job W13/NIH execution (baseline; do not overwrite).
+- Original-world Phase 1 frontier (`NIH_PHASE1_WORLD_FRONTIER.md`).
+- Two-clock world (`NIH_PHASE1_WORLD_TWO_CLOCK.md`).
+- Source-motion world (`NIH_PHASE1_WORLD_SOURCE_MOTION.md`).
+- Publication-uncertainty world (`NIH_PHASE1_WORLD_PUBLICATION_UNCERTAINTY.md`).
+
+These are **different scoped extensions**, not yet demonstrated interchangeable versions. First normalize the comparable outputs and label non-comparable features instead of inventing a ranking.
+
+### Finite comparison motion
+1. **Inventory outputs**: collect exact artifact paths, hashes, producing run/commit, source scope, inputs and output schema for every candidate. Missing receipts remain UNKNOWN.
+2. **Define common fixture**: the same original synthetic Phase 1 scope, knowledge and validity queries, expected evidence partitions and fixed execution constraints. Preserve source-owning original program and original journal.
+3. **Replay each candidate**: run existing dedicated tests and actual browser/native experiment as applicable. Record run IDs, source SHA, observations, runtime and failures; unit tests alone are not live execution evidence.
+4. **Compare A/B**: evaluate correctness, withheld-future safety, conflict handling, provenance, reproducibility and capability coverage. Distinguish a new capability from improvement on a shared metric; do not award points for a feature absent from the common test.
+5. **Select and reconcile**: name the strongest verified version **for each common domain** and an overall choice only if one candidate dominates under declared priorities. If no defensible single winner, return a Pareto set and the smallest discriminating experiment.
+6. **Close** only when the decision, supporting receipts and remaining boundaries are retained. A newer commit or more features alone cannot win.
+
+### Execution boundary
+This register is a source-backed plan, not a new runner. The original audit referent is output comparison. Do not silently substitute NIH P2 archival comparisons, synthetic unit tests, or a Phase 1 proposal for executed Phase 1 output candidates.
