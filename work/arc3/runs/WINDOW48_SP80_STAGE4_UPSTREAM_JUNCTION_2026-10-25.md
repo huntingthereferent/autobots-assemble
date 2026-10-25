@@ -228,3 +228,35 @@ The earlier 10 downloaded original-GitHub-Actions raw SDK evidence ZIP archives 
 All 334 independently **archived returned original SDK pour stacks** contained the y5–7 new source-palette6 first event and first top-border palette14 event at **t+1**; zero counterexamples within these archives. BLAKE2b16 of the true original before-pour array concatenated with the actual original returned full stack gave **128 distinct pre-pour/animation byte sequences** (not 334 independent geometries: archives deliberately repeat witnesses, root histories and controls). Distinct source trajectory count is not a sample-based success probability, an engine rule, or a private-physics proof.
 
 **Next bounded hypothesis to falsify**: Does an actual original SDK Level4 configuration have *all four source cup windows filled* yet **no newly appearing palette6 at source y5–7**? The inspected original source archives had no such case. This is more discriminating than simply making cups full before the flash. It may be impossible for tested geometry; do not claim necessity/sufficiency for official Level5 without a verified counterexample or a genuine original level5 transition. No synthetic game, edited level, private engine assumptions or changes to F3-48 math/owner canonical agent. PR remains unmerged.
+
+
+## Native four-cup WITHOUT newly appearing upper palette6 — bounded negative holdouts
+
+### New 52 original-sdk geometry controls
+
+[Successful native original SDK Actions run #40236212016](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40236212016); [full SDK original arrays + action receipts #12614504857](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40236212016/artifacts/12614504857).
+
+Prospectively froze 26 source programs (upper x29–40 source bar shifted LEFT1..LEFT4, right-middle reselected native x42,y33 and shifted LEFT1..LEFT4, four selected movement-order reversals, and six right-middle ±UP1/DOWN1 local controls) × both independently validated earlier original SDK entry histories = **52 genuine independent original NORMAL SP80 games**. All source-click pixels were verified palette8, all root source boards matched the prior source root, both entry histories agreed on source observations. All 52 returned **official Level4 NOT_FINISHED**, zero Level5/WIN.
+
+- Eight of the 26 *unique* frozen source programs produced at least one actual animation frame where all four original SDK cup windows were each palette13-full (45/45).
+- **Zero** of 26 unique programs had no *new* palette6 pixel in the actual original source top y5–7 strip, x5–58. **Zero** combined four-cup completion and absence of the new upper-strip source event.
+- For every original program and both independent SDK witnesses, first original top-border palette14 started exactly one returned frame after the first *new* source palette6 pixel anywhere along the upper strip.
+- Additional right-middle LEFT3/LEFT4 changes shifted first top-strip palette6 arrival as early as native frame17, but eliminated simultaneous four-cup filling. Horizontal controls therefore did not separate four-cup source filling from upper-strip arrival.
+
+### New 48 original-sdk two-cell vertical controls
+
+[Successful native original SDK Actions run #40236427295](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40236427295); [preserved original frames + receipts artifact #12614697915](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40236427295/artifacts/12614697915).
+
+Frozen only four existing proven visual-four-cup horizontal placements (upper LEFT1/LEFT2 × right-middle LEFT1/LEFT2). For each, six additional originally accepted vertical settings were tested: upper bar UP2/DOWN2, right-middle UP2/DOWN2, and simultaneous upper/right UP2 or DOWN2. **24 distinct native words × both authenticated original entry histories = 48 genuine reset original SDK games**, official **Level4 NOT_FINISHED** for all 48.
+
+All 24 distinct settings retained simultaneous full 45/45 source cup windows at some genuine SDK frame, but **all** also exhibited a newly appearing source palette6 cell in y5–7 and the corresponding first top-border palette14 flash one returned frame later. No Level5/WIN or no-new-upper palette6 native case.
+
+Read-only independent cross-artifact raw-array test compared each of the 24 newly observed source animation stacks with its corresponding *horizontal-parent* native frame stack from #12614504857, using matched witness A and the *entire* original returned ACTION5 array. All **24/24 full source frame stacks differed** from their parents (whole-stack differing source-pixel counts ranged from **3,289 to 9,609**). Thus the preserved arrival/border timing is **not** simply identical frames being reported under different action names: original source animations changed, but the source upper-strip event was retained.
+
+### Cross-artifact audit count updated
+
+Replayed actual original frame stacks from **12 distinct archived SDK artifact ZIPs**, adding artifacts #12614504857 and #12614697915 to the earlier 10. Without interpolation, source animation replacement or private engine instrumentation, all **434 genuine returned Level4 ACTION5 frame stacks (334 earlier + 52 + 48)** contained the first new palette6 in y5–7,x5–58 followed on the *next SDK returned frame* by top-border source-palette14. **434/434 observed matches; zero source counterexamples in this archive set**. BLAKE2b16 of actual pre-pour 64×64 source array concatenated with the unmodified full returned SDK frame stack gave **176 distinct source sequence byte hashes**, compared with 128 previously. These are source-file/action-stack counts rather than 434 independent geometry hypotheses or proof of a private rule.
+
+The existing script [`audit_sp80_original_top_border_timing.py`](../audit_sp80_original_top_border_timing.py) can independently reproduce the timing and deduplicated sequence counts from the original artifact ZIPs.
+
+**Neutral boundary:** This series does **not** prove that the new upper-strip source palette6 is *necessary* for four cups to fill, that the top-border flash causes official level failure, or that preventing either would cause native success. It only falsifies the proposed geometric separation within these frozen, bona fide original SDK trials. Do not repeat adjacent broad horizontal/vertical bar sweeps with no fresh discriminator. A subsequent original SDK test must specify another pre-action source-state relationship, a source frame condition, or a new grounded contact before further experimentation. Maintain the original F3-48 maths and canonical agent; research branch remains open and unmerged.
