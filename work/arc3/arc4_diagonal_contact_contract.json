@@ -94,5 +94,50 @@
     "Keep draft, no automatic merge or unrelated lanes."
   ],
   "next_no_progress": "Preserve exact source verified finite diagonal-versus-decoupled native correspondence and first failing or recovering source site. Need a new measured contact after that.",
-  "next_progress": "Require genuine SDK level5/WIN in independently reset A/B original runs and independently checked NPZ source receipts before advancing status."
+  "next_progress": "Require genuine SDK level5/WIN in independently reset A/B original runs and independently checked NPZ source receipts before advancing status.",
+  "referent": "Original SP80 Level4 finite source: joint right-middle and upper-bar offsets preserve prior incoming contact while checking remaining compensated left-side overflow",
+  "factors": {
+    "clean_lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "source_right_upper": [
+      [
+        "C22",
+        2,
+        2
+      ],
+      [
+        "X25",
+        2,
+        5
+      ],
+      [
+        "C33",
+        3,
+        3
+      ],
+      [
+        "C44",
+        4,
+        4
+      ],
+      [
+        "C55",
+        5,
+        5
+      ],
+      [
+        "X52",
+        5,
+        2
+      ]
+    ],
+    "lower_compensation": "RIGHT1",
+    "middle_compensation": "RIGHT1",
+    "native_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  }
 }
