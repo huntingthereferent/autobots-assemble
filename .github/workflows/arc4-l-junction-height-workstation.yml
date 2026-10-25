@@ -1,0 +1,50 @@
+name: ARC4 original Level4 lower-L junction vertical source contact
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_l_junction_height.py'
+      - 'work/arc3/arc4_l_junction_height_contract.json'
+      - 'work/arc3/arc4_l_junction_height_gate.py'
+      - 'work/arc3/l_junction_height_workstation.py'
+      - '.github/workflows/arc4-l-junction-height-workstation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  genuine-original-level4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original Arcade SDK and source arrays
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile source original experiment independent math gate and workstation
+        run: |
+          python -m compileall -q \
+            work/arc3/native_sp80_stage4_l_junction_height.py \
+            work/arc3/arc4_l_junction_height_gate.py \
+            work/arc3/l_junction_height_workstation.py
+      - name: Check genuine original SDK Level4 source entry and frozen finite matrix
+        run: python -m work.arc3.arc4_l_junction_height_gate pre
+      - name: Run 24 actual original SDK source-native Level4 sessions through ProcessWorkstation
+        run: |
+          python -m work.arc3.l_junction_height_workstation \
+            --execute \
+            --data-dir runtime/data/arc4/l-junction/workstation \
+            --out runtime/data/arc4/l-junction/original-l-junction.json
+      - name: Independently audit original 64x64 frames SDK action receipts and lower branch source first arrivals
+        run: |
+          python -m work.arc3.arc4_l_junction_height_gate post \
+            --result runtime/data/arc4/l-junction/original-l-junction.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-sdk-L-junction-height
+          path: |
+            runtime/data/arc4/l-junction/original-l-junction.*
+            runtime/data/arc4/l-junction/workstation/**
+          if-no-files-found: warn
+          retention-days: 90
