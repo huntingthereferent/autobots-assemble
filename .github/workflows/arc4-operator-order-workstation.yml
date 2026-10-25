@@ -1,0 +1,50 @@
+name: ARC4 original SDK Level4 finite action-order native experiment
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_operator_order.py'
+      - 'work/arc3/arc4_operator_order_gate.py'
+      - 'work/arc3/arc4_operator_order_contract.json'
+      - 'work/arc3/operator_order_workstation.py'
+      - '.github/workflows/arc4-operator-order-workstation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-original-level4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK and numeric observation reader
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile finite native experiment, independent source gate and workstation
+        run: |
+          python -m compileall -q \
+            work/arc3/native_sp80_stage4_operator_order.py \
+            work/arc3/arc4_operator_order_gate.py \
+            work/arc3/operator_order_workstation.py
+      - name: Preflight exact Level4 frozen operator words and source contract
+        run: python -m work.arc3.arc4_operator_order_gate pre
+      - name: Execute genuine original SDK RU versus UR via source-owned ProcessWorkstation
+        run: |
+          python -m work.arc3.operator_order_workstation \
+            --execute \
+            --data-dir runtime/data/arc4/order/workstation \
+            --out runtime/data/arc4/order/original-order-native.json
+      - name: Independently audit exact original frame stacks and SDK order square
+        run: |
+          python -m work.arc3.arc4_operator_order_gate post \
+            --result runtime/data/arc4/order/original-order-native.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-native-action-order
+          path: |
+            runtime/data/arc4/order/original-order-native.*
+            runtime/data/arc4/order/workstation/**
+          retention-days: 90
+          if-no-files-found: warn
