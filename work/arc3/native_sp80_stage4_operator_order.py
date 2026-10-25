@@ -30,7 +30,7 @@ ORDERS=("RU","UR")
 def native_word(lower,left,right,upper,terminal,order):
     R="6@46,33 "+right
     U="6@34,21 "+upper
-    return " ".join((lower,left,*(R,U) if order=="RU" else (U,R),terminal,"5"))
+    return " ".join((lower,left,*( (R,U) if order=="RU" else (U,R) ),terminal,"5"))
 
 FROZEN=tuple(
  (f"{parent}_{rn}_{un}_{order}",native_word(lower,left,rword,uword,terminal,order))
