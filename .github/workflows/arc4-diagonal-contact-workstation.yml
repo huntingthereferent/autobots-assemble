@@ -1,12 +1,5 @@
 name: ARC4 Level4 original SDK diagonal upper-right finite source relation
 on:
-  pull_request:
-    paths:
-      - 'work/arc3/native_sp80_stage4_diagonal_contact.py'
-      - 'work/arc3/arc4_diagonal_contact_contract.json'
-      - 'work/arc3/arc4_diagonal_contact_gate.py'
-      - 'work/arc3/diagonal_contact_workstation.py'
-      - '.github/workflows/arc4-diagonal-contact-workstation.yml'
   workflow_dispatch:
 permissions:
   contents: read
