@@ -124,6 +124,18 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertTrue(result["stabilizer_normal"])
         self.assertEqual(result["index"], 3)
 
+    def test_semidirect_product_shear_and_unique_normal_forms(self):
+        result = FiniteTorus3().semidirect_product_structure()
+        self.assertEqual(result["translation_order"], 27)
+        self.assertTrue(result["complement_order_three"])
+        self.assertTrue(result["conjugation_matches_shear"])
+        self.assertEqual(result["shear_matrix_mod_3"],
+                         ((1, 0, 0), (1, 1, 0), (0, 1, 1)))
+        self.assertEqual(result["normal_form_count"], 81)
+        self.assertTrue(result["unique_translation_times_b_power"])
+        self.assertTrue(result["b_powers_intersect_translations_trivially"])
+        self.assertTrue(result["a_is_translation"])
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
