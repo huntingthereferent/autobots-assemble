@@ -86,6 +86,19 @@ class NativeLaneContinuationTests(unittest.TestCase):
                          [("dispatch", "arc.yml"), ("dispatch", "nih.yml")])
         self.assertTrue(all(r["result"] == "DISPATCH_ACCEPTED" for r in result["receipts"]))
 
+    def test_history_failure_does_not_stop_other_native_workers(self):
+        def reader(repo, filename, token):
+            if filename == "arc.yml":
+                raise OSError("GitHub history temporarily unavailable")
+            return []
+        sent = []
+        result = run(mock_registry("arc", "nih"), repo=REPO, token="fake",
+                     reader=reader, sender=lambda filename: (sent.append(filename) or {"accepted": True}),
+                     root=self.root)
+        self.assertEqual(sent, ["nih.yml"])
+        self.assertEqual(result["workers"][0]["state"], "HISTORY_UNAVAILABLE")
+        self.assertIn("arc", result["history_errors"])
+
     def test_failed_dispatch_is_not_claimed_as_movement(self):
         result = run(mock_registry("arc"), repo=REPO,
                      token="fake", reader=lambda *a: [],
