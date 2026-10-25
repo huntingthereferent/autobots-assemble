@@ -114,6 +114,16 @@ class FiniteManifoldTests(unittest.TestCase):
             6: 16, 7: 14, 8: 9, 9: 4, 10: 1,
         })
 
+    def test_graph_stabilizer_is_normal_translation_group(self):
+        result = FiniteTorus3().subgroup_structure()
+        self.assertEqual(result["full_group_order"], 81)
+        self.assertEqual(result["stabilizer_order"], 27)
+        self.assertEqual(result["translation_order"], 27)
+        self.assertTrue(result["stabilizer_equals_translations"])
+        self.assertTrue(result["stabilizer_abelian"])
+        self.assertTrue(result["stabilizer_normal"])
+        self.assertEqual(result["index"], 3)
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
