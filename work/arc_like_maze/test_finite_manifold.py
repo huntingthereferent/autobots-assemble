@@ -45,6 +45,20 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertEqual(b["lost_edges"], b["introduced_edges"])
         self.assertFalse(b["is_graph_automorphism"])
 
+    def test_word_trace_and_return(self):
+        m = FiniteTorus3()
+        self.assertEqual(m.apply_word((0, 0, 0), "AAB"), World(3).apply("AAB"))
+        trace = m.trace_geometry("AABABB")
+        self.assertEqual(len(trace), 7)
+        self.assertEqual(trace[0]["fixed_overlap"], 81)
+        self.assertEqual(trace[1]["fixed_overlap"], 81)
+        self.assertEqual(trace[2]["fixed_overlap"], 81)
+        self.assertEqual(trace[3]["fixed_overlap"], 27)
+        self.assertTrue(all(row["edges"] == 81 for row in trace))
+        self.assertEqual(m.transported_edges_word(""), m.edges())
+        with self.assertRaises(ValueError):
+            m.apply_word((0, 0, 0), "AC")
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
