@@ -52,7 +52,8 @@ def assess(audit):
             return results[key]
         node = by_id[key]
         children = [x["id"] for x in audit["nodes"] if x.get("parent") == key]
-        children_pass = all(visit(c) for c in children)
+        child_results = [visit(c) for c in children]
+        children_pass = all(child_results)
         evidence = node.get("evidence") or {}
         valid = evidence.get("verified") is True and bool(evidence.get("source"))
         if node["kind"] == "workflow":
@@ -62,7 +63,8 @@ def assess(audit):
         results[key] = node["state"] == "passed" and valid and children_pass
         return results[key]
     roots = [x["id"] for x in audit["nodes"] if x.get("parent") == audit["id"]]
-    complete = bool(roots) and all(visit(k) for k in roots)
+    root_results = [visit(k) for k in roots]
+    complete = bool(roots) and all(root_results)
     # Every node must be accounted for, not only the successful branches.
     complete = complete and len(results) == len(by_id)
     return {"audit_id": audit["id"], "referent": audit["referent"],
