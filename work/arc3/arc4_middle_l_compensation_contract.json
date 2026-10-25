@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_SP80_LEVEL4_MIDDLE_LOWER_L_COMPENSATION_20261025",
+  "referent": "Finite original SDK Level4 relation between genuine left-middle and lower-L selected source poses with right-middle LEFT2/upper LEFT2 contact held.",
+  "source_code": "work/arc3/native_sp80_stage4_middle_l_compensation.py",
+  "parent_source_run": 40170150937,
+  "parent_source_artifact": 12589694180,
+  "original_native_level4_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "original_native_resets": 24,
+  "factors": {
+    "lower_parents": [
+      [
+        "D3L2_L3U2",
+        23,
+        41
+      ],
+      [
+        "D4L2_L4U2",
+        20,
+        44
+      ]
+    ],
+    "right_middle_fixed": "6@46,33 3 3",
+    "upper_fixed": "6@34,21 3 3",
+    "middle_move": [
+      [
+        "HOLD",
+        ""
+      ],
+      [
+        "RIGHT1",
+        "4"
+      ]
+    ],
+    "L_move": [
+      [
+        "LEFT1",
+        "3",
+        -3
+      ],
+      [
+        "HOLD",
+        "",
+        0
+      ],
+      [
+        "RIGHT1",
+        "4",
+        3
+      ]
+    ],
+    "native_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "mathematical_hypothesis": "Given real native middle bar moves from x14..22 to x17..25 and observed lateral cup source fill collapses 45->0, test whether small lower L relative displacement x-3/0/+3 restores lateral source cup and simultaneous four native cup windows without changing independently established top-middle contact x34. Native SDK movement blocked by collision must be reported as such.",
+  "native_progress": "Only actual original SDK levels_completed>=5 or WIN",
+  "walls": [
+    "Each original SDK native reset must genuinely enter source-proven official Level4 root; Level3 replay is entrance only.",
+    "Each real L native selected bbox must be measured with 27 pixels and real action/selected click receipts; blocked shifts are not accepted as movements.",
+    "All 24 true SDK resets require preserved original 64x64 source frame arrays, SHA receipts, legal actions, clicked original palette and actual SDK official state.",
+    "Two native A/B SDK entry witnesses are independent game resets, not formal F3 A/B mathematical generators.",
+    "Preserve R2+U2 source top-middle contact as observation and original Level4 success oracle, no guessed private physics.",
+    "Finite source P/Q/cups/edge relationships are not engine WIN or global commutation laws.",
+    "Control source conditions HOLD middle + HOLD L must retain all four native cup windows, and RIGHT1 middle + HOLD L must lose lateral cup, or return WALL_CONTROL_DRIFT.",
+    "No automatic merge and no unrelated research lane modifications."
+  ],
+  "next_no_progress": "Preserve source-native middle/L relative geometry and native lateral cup response; choose a genuinely distinct observed physical contact rather than extending blind action sweeps.",
+  "next_progress": "Only confirm level5 using two native SDK independently reset witnesses and saved original 64x64 frame/action receipts."
+}
