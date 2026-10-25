@@ -38,11 +38,24 @@ class NativeLaneContinuationTests(unittest.TestCase):
             (directory / f"{name}.yml").write_text(
                 "name: owner-worker\non:\n  workflow_dispatch:\njobs:\n  native:\n    runs-on: ubuntu-latest\n    steps: []\n", encoding="utf8")
 
-    def test_real_repository_roster_contains_native_workflow_entry_points(self):
-        entries = validate(json.loads(ROSTER.read_text(encoding="utf8")))
-        self.assertGreaterEqual(len(entries), 10)
-        self.assertTrue({"arc-native", "nih-p2", "world", "meow-lab",
-                         "audio-intake", "research-sources"} <= {row["id"] for row in entries})
+    def test_repository_worker_relations_derive_from_current_roster(self):
+        roster = json.loads(ROSTER.read_text(encoding="utf8"))
+        entries = validate(roster)
+        self.assertEqual(entries, roster["workers"])
+        self.assertEqual(len({row["id"] for row in entries}), len(entries))
+        self.assertEqual(len({row["filename"] for row in entries}), len(entries))
+        self.assertTrue(all(row["enabled"] in (True, False) for row in entries))
+
+    def test_roster_change_does_not_require_hardcoded_worker_names(self):
+        roster = mock_registry("arc", "nih", "world")
+        initial = validate(roster, self.root)
+        roster["workers"] = [row for row in initial if row["id"] != "nih"]
+        self.assertEqual({row["id"] for row in validate(roster, self.root)},
+                         {"arc", "world"})
+        plan = assess(roster, {"arc": [], "world": []},
+                      repo=REPO, now=NOW, root=self.root)
+        self.assertEqual({row["id"] for row in plan["selected"]},
+                         {"arc", "world"})
 
     def test_all_eligible_workers_are_selected_up_to_capacity(self):
         registry = mock_registry("arc", "nih", "world", "meow")
