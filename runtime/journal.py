@@ -115,7 +115,6 @@ class RuntimeJournal:
                 )
             self._validate_event(event)
             self._handoffs[handoff.handoff_id] = handoff
-            self._validate_event(event)
             self._events.append(event)
             return
 
