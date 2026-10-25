@@ -32,3 +32,23 @@ Preserve source record and original fields alongside normalized identifiers: sou
 8. Revisit discovery whenever a new field, mismatch, or gap appears.
 
 Do not assert that a listed provider was accessed, that data was ingested, or that simulations ran unless execution receipts establish it.
+
+
+## Tracework provider connection registry (2026-10-25)
+This is a **source-adapter registry**, not evidence of an authenticated or executing provider connection. An existing Tracework AI/search actor should discover, verify and invoke eligible adapters; no standalone SPORTS scraper or scheduler is authorized by this file.
+
+| Candidate | Base/source | Role | Connection |
+| --- | --- | --- | --- |
+| The Odds API | https://the-odds-api.com/ | Multi-book odds, historical snapshots | API key required; not connected |
+| OpticOdds | https://opticodds.com/ | Odds, movement, props and market feeds | Account/credentials required; not connected |
+| SportsDataIO | https://sportsdata.io/ | Betting lines, statistics, historical data | Account/credentials required; not connected |
+| nflverse | https://github.com/nflverse/nflverse-data | Open football data archive | Public discovery target; retrieval not witnessed |
+| NFL | https://www.nfl.com/stats/ | Official football observations | Public discovery target; retrieval not witnessed |
+
+### Admission and evidence
+- Worker input: matchup, source family, requested observation interval, permitted providers, discovery expansion budget.
+- Worker output: source candidates, access verdicts, native locators, retrieved-at and observed-at timestamps, overlapping provider relationships, gaps, blockers and next-search suggestions.
+- Register a real outward-search AI actor with the existing runtime/swallow-first interface. Do not claim it is registered until a native handoff and search receipt exist.
+- For paid APIs, obtain credentials through authorized secret management; never commit keys, bypass paywalls or infer entitlement.
+- Distinguish a successful public fetch from authenticated live feed access; retain provider origin where multiple vendors repackage the same underlying feed.
+- First acceptance test: two independent retrieved source records for the same matchup, an explicit discrepancy/overlap comparison, and a native Tracework handoff receipt.
