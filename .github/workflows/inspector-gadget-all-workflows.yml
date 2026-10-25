@@ -4,6 +4,13 @@ on:
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/inspector_gadget_continuation.py'
+      - 'systems/workspace/inspector_gadget_workers.json'
+      - 'network/tests/test_inspector_gadget_continuation.py'
+      - '.github/workflows/inspector-gadget-all-workflows.yml'
   pull_request:
     paths:
       - '.github/workflows/inspector-gadget-all-workflows.yml'
@@ -116,7 +123,8 @@ jobs:
 
   native-lane-continuation:
     # Schedule existing independently owned native worker workflows.
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    # Hourly scan is for observation; dispatch is triggered by source changes or operator request.
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 9
     permissions:
