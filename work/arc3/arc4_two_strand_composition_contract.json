@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_ARC4_TWO_OVERFLOW_COMPOSITION_20261024",
+  "referent": "SP80 original SDK current level4, two source-observed overflow strands and their finite compositional intervention",
+  "source_code": "work/arc3/native_sp80_stage4_two_strand_composition.py",
+  "gate_code": "work/arc3/arc4_two_strand_composition_gate.py",
+  "parent_original_runs": [
+    39639320303,
+    39636999616
+  ],
+  "parent_original_artifacts": [
+    12364922294,
+    12363215552
+  ],
+  "parent_root_blake2b16": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "original_sdk_resets": 16,
+  "frozen_factors": {
+    "lower_clean_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "right_middle_actions": [
+      [
+        "R1",
+        "3"
+      ],
+      [
+        "R2",
+        "3 3"
+      ]
+    ],
+    "upper_actions": [
+      [
+        "U1",
+        "3"
+      ],
+      [
+        "U6",
+        "3 3 3 3 3 3"
+      ]
+    ],
+    "independent_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "mathematical_question": "Finite conjunction P=not new source palette6 at x11..13/y5..7 and Q=not new source palette6 at x56..58/y5..7 after a genuine original SDK pour; test if individually observed actions yield P AND Q under joint intervention, while measuring cup and borders.",
+  "pre_registered_control_observations": {
+    "R1_U1": "Four cups visually full in both clean parents; x11 and x56 strand observed",
+    "R2_U1": "Four cups visually full in both clean parents; x56 strand absent, x11 remains",
+    "R1_U6": "Four cups visually full in both clean parents; x11 strand absent, x56 remains",
+    "R2_U6": "Untested composition, no presupposed success or inferred hidden physics"
+  },
+  "success_oracle": "only original SDK levels_completed >=5 or WIN",
+  "walls": [
+    "Original SDK level4 must be verified before each intervention, no return to stage3 search.",
+    "Actual full 64x64 source frames retained with every native action receipt.",
+    "Visible four full cup masks and absence of measured strands or boundaries do not establish level5.",
+    "No constructed simulator or inferred exact fluid mechanics.",
+    "No native ACTION1-6 to formal F3 A/B generators map is claimed.",
+    "If control results fail to reproduce, preserve the contradiction and do not promote the joint case.",
+    "Original A/B stage-entry history labels are independent SDK replays, not formal finite-field generators.",
+    "Results are reviewable in draft, not automatically merged or applied to any other lane."
+  ],
+  "next_no_progress": "Preserve genuinely measured outcome; if P AND Q holds but SDK remains level4, discriminate a newly observed source boundary rather than repeating local movements.",
+  "next_progress": "If original SDK level5/WIN appears, require independent A/B replication and raw frame/receipt source review before promoting progress."
+}
