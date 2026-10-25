@@ -102,3 +102,19 @@ True original pre-pour source selected L bbox x17..22,y35..40; middle bar actual
 **Boundary control:** Read-only inspection of preserved first pour shows **no left-border source changes** in the four-cup visual witness. The top and right borders do undergo palette1→14 changes starting native frame20, but the same changes occur in numerous native negative configurations. Therefore top/right border flashes cannot be treated as independently diagnosed failure or goal signals.
 
 **Next bounded original SDK trial:** Investigate the new *visually full four-cup* parent without redefining success. Hold its native pre-pour exact word fixed; vary only the last selected bar and optional immediate second/third native ACTION5, with a few same-position movement-history controls. Observe official Level5/WIN, source full stacks, and retained actual action receipts. Never claim a win solely from the four colored windows. Original 48-law F3 mathematics, canonical agent and ownership remain unchanged.
+
+
+## Four-cup source parent — genuine official-progression controls (30 reset games)
+
+[Completed original SDK run #40179623943](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40179623943); [complete SDK JSON/NPZ #12594180466](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40179623943/artifacts/12594180466).
+
+From the exact source-verified four-cup parent discovered above, **15 frozen native trials × the two independently verified original stage-entry histories = 30 fresh real SDK games**, all **Level4 NOT_FINISHED, zero Level5/WIN**, original source frame receipts retained. The source root and all A/B heldout measurements matched.
+
+- Exact parent original native ACTION5: four windows simultaneously full at original frames **23–30** and official Level4.
+- **Second and third ACTION5 in the same native game:** the same eight full-four-cup frames 23–30 appear again on each authentic native response, but no official advancement.
+- **Change selected bar before pour** to original middle, right, upper, or reselect the L: each reproduces source full four-cup frames 23–30; none advances.
+- **Return middle to the same native position using RIGHT→LEFT or LEFT→RIGHT before pour**, and reclick L: each reproduces eight frames of full four-cup visuals, all official Level4.
+- **One movement after the first pour:** UP1 or DOWN1 preserved full four-cup frames 23–30 on the second pour, LEFT1 delayed simultaneous full to frames25–32, RIGHT1 eliminated the four-cup visual; all remained official Level4.
+- **Reverse the last L/middle selection order:** source full-four-cup frames 23–30 remained, official Level4.
+
+The former proposed explanations that last selection identity or a missed second pour alone causes the original Level4 failure are **negative in this bounded test**. The actual original native 32-frame four-cup return is real, not a complete native solution or hidden goal predicate. Do not infer physical flow rules from palettes, nor edit F3-48 mathematics/owner canonical agent. Investigate the original SDK objective or distinct boundary relationship using source-negative controls before additional large geometry sweeps.
