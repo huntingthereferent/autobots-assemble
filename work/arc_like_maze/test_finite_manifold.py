@@ -109,6 +109,10 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertEqual(result["reference_graph_stabilizer"], 27)
         self.assertEqual(result["overlap_distribution"], {27: 2, 81: 1})
         self.assertEqual(result["max_shortest_word_length"], 10)
+        self.assertEqual(result["shortest_word_distribution"], {
+            0: 1, 1: 2, 2: 4, 3: 6, 4: 10, 5: 14,
+            6: 16, 7: 14, 8: 9, 9: 4, 10: 1,
+        })
 
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
