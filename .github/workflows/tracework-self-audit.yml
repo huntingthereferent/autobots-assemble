@@ -6,7 +6,6 @@ on:
 permissions:
   actions: read
   contents: read
-  issues: write
 
 concurrency:
   group: tracework-self-audit
@@ -26,9 +25,7 @@ jobs:
           python-version: '3.12'
       - name: Verify finite closure semantics
         run: python -m unittest -v network.tests.test_tracework_self_audit
-      - name: Evaluate actual GitHub runs and update the open audit issue
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Evaluate frozen audit and its bounded descendants
         run: python -m systems.workspace.tracework_self_audit
       - name: Retain immutable audit decision
         if: always()
