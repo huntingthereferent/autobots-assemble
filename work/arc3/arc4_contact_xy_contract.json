@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_SP80_LEVEL4_SOURCE_XY_CONTACT_20261025",
+  "referent": "Original SDK SP80 Level4: observed upper object horizontal source overlap threshold x34/x31 under fixed right-middle LEFT2, now one-step genuine vertical perturbations",
+  "source_code": "work/arc3/native_sp80_stage4_contact_xy.py",
+  "parent_original_run_id": 40165524676,
+  "parent_original_artifact_id": 12588610793,
+  "parent_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "frozen_factors": {
+    "lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "right_middle_fixed": "6@46,33 3 3",
+    "top_left_actions": [
+      [
+        "U2",
+        "3 3"
+      ],
+      [
+        "U3",
+        "3 3 3"
+      ]
+    ],
+    "top_last_vertical": [
+      [
+        "HOLD",
+        ""
+      ],
+      [
+        "UP1",
+        "1"
+      ],
+      [
+        "DOWN1",
+        "2"
+      ]
+    ],
+    "native_original_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "expected_genuine_sdk_resets": 24,
+  "source_question": "Given right-middle LEFT2 color6 stream x32..34, upper U2 right-edge x34 vs upper U3 right-edge x31, compare original full top-middle palette13 cup windows under real UP1/DOWN1 (source upper y17..19 or y23..25) and HOLD (y20..22). Distinguish 2D native contact relation, not inferred private fluid physics.",
+  "pre_registered_controls": {
+    "U2_HOLD": "Observed 45/45 original top-middle palette13 pixels under right-middle LEFT2, verified twice in source run 40165524676",
+    "U3_HOLD": "Observed 0/45 original top-middle palette13 pixels under right-middle LEFT2, verified twice in source run 40165524676",
+    "U2_UP1/U2_DOWN1": "Previously untested at source-selected U2 right-edge34; real source selected geometry must change",
+    "U3_UP1/U3_DOWN1": "Previously untested at source-selected U3 right-edge31; source-selected geometry must change"
+  },
+  "official_progress": "Only original SDK levels_completed>=5 or WIN",
+  "walls": [
+    "Every independent real native source reset must enter genuine Level4 root; earlier-level entry replay does not restart research.",
+    "Original SDK source x32..34 and upper selected right edge x34 versus x31 are observations only, not proven physical contact mechanics.",
+    "Independent native original entry witnesses labeled A/B are not finite mathematical operators A,B in the separate F3 construction.",
+    "All 24 real original game resets preserve full original 64x64 frame stacks, legal action and click-pixel receipts, official SDK levels/states.",
+    "Do not call blocked UP1/DOWN1 movement an intervention: selected original bbox must actually change.",
+    "HOLD U2 and HOLD U3 native original baseline controls must reproduce prior source observation or return WALL_CONTROL_DRIFT.",
+    "Official level>=5/WIN alone counts as Level4 advancement; visual full cups cannot replace the game oracle.",
+    "Keep research PR draft and unmerged, do not change unrelated workstation lanes."
+  ],
+  "next_if_no_progress": "Preserve native 2D-contact original source counterexamples and choose next source-only causal discriminator from actual SDK frame movements, not generic left/right/up/down sweeps.",
+  "next_if_progress": "Require independent original SDK true level5/WIN replay and independently verified native receipt+frame artifact before progress status change."
+}
