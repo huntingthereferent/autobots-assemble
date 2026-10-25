@@ -26,7 +26,7 @@ BORDERS={
     "left":(slice(2,62),slice(2,5)),
     "right":(slice(2,62),slice(59,62)),
     "top":(slice(2,5),slice(2,62)),
-    "bottom":(slice(59,63),slice(2,62)),
+    "bottom":(slice(59,62),slice(2,62)),
 }
 
 def require(ok,message):
