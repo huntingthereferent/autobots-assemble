@@ -281,6 +281,55 @@ class FiniteTorus3:
             "index": len(seen) // len(stabilizer),
         }
 
+    def semidirect_product_structure(self) -> dict:
+        """Verify G = F_3^3 ⋊ C_3 for the default World transitions.
+
+        Composition convention: (f * g)(v) = f(g(v)).
+        Conjugation by B on translation vectors is the linear shear
+        (x,y,z) -> (x, y+x, z+y), all coordinates modulo 3.
+        """
+        if self.side != 3:
+            raise ValueError("semidirect-product analysis requires side=3")
+        vertices = self.vertices()
+        index = {v: i for i, v in enumerate(vertices)}
+        identity = tuple(range(27))
+        def compose(left, right):
+            return tuple(left[i] for i in right)
+        def translation(delta):
+            return tuple(index[tuple((v[k] + delta[k]) % 3 for k in range(3))]
+                         for v in vertices)
+        translations = {delta: translation(delta) for delta in vertices}
+        b = tuple(index[self.transition(v, "B")] for v in vertices)
+        b2 = compose(b, b)
+        powers = (identity, b, b2)
+        def shear(delta):
+            x, y, z = delta
+            return (x, (y + x) % 3, (z + y) % 3)
+        # B inverse is B squared only if B has order exactly three.
+        order_three = compose(b2, b) == identity and b != identity
+        conjugation = all(
+            compose(compose(b, t), b2) == translations[shear(delta)]
+            for delta, t in translations.items()
+        )
+        normal_form = {
+            compose(t, power)
+            for t in translations.values() for power in powers
+        }
+        return {
+            "translation_order": len(translations),
+            "complement_order_three": order_three,
+            "conjugation_matches_shear": conjugation,
+            "shear_matrix_mod_3": ((1, 0, 0), (1, 1, 0), (0, 1, 1)),
+            "normal_form_count": len(normal_form),
+            "unique_translation_times_b_power": len(normal_form) == 81,
+            "b_powers_intersect_translations_trivially": (
+                all(power not in set(translations.values()) for power in powers[1:])
+            ),
+            "a_is_translation": tuple(
+                index[self.transition(v, "A")] for v in vertices
+            ) == translations[(1, 0, 0)],
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
