@@ -1,12 +1,5 @@
 name: ARC4 original Level4 lower-L junction vertical source contact
 on:
-  pull_request:
-    paths:
-      - 'work/arc3/native_sp80_stage4_l_junction_height.py'
-      - 'work/arc3/arc4_l_junction_height_contract.json'
-      - 'work/arc3/arc4_l_junction_height_gate.py'
-      - 'work/arc3/l_junction_height_workstation.py'
-      - '.github/workflows/arc4-l-junction-height-workstation.yml'
   workflow_dispatch:
 permissions:
   contents: read
