@@ -20,6 +20,13 @@ jobs:
         run: |
           set -o pipefail
           python -m unittest -v network.tests.test_runtime_hardening network.tests.test_handoff_runtime 2>&1 | tee runtime-test-results.log
+      - name: Record run summary
+        if: always()
+        run: |
+          echo '## Runtime hardening' >> "$GITHUB_STEP_SUMMARY"
+          echo "Commit: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Run: $GITHUB_RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+          echo 'Compile and regression outcomes are reported in the steps above; retained logs are attached below.' >> "$GITHUB_STEP_SUMMARY"
       - name: Preserve test output
         if: always()
         uses: actions/upload-artifact@v4
