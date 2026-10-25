@@ -33,6 +33,18 @@ class FiniteManifoldTests(unittest.TestCase):
             m.neighbors(m.transition(source, "B")),
         )
 
+    def test_transported_geometry(self):
+        m = FiniteTorus3()
+        a = m.geometry_comparison("A")
+        b = m.geometry_comparison("B")
+        self.assertEqual(a["original_edges"], 81)
+        self.assertEqual(a["lost_edges"], 0)
+        self.assertTrue(a["is_graph_automorphism"])
+        self.assertEqual(b["transported_edges"], 81)
+        self.assertGreater(b["lost_edges"], 0)
+        self.assertEqual(b["lost_edges"], b["introduced_edges"])
+        self.assertFalse(b["is_graph_automorphism"])
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
