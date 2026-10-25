@@ -1,0 +1,54 @@
+name: ARC3 to ARC4 original SDK success-boundary forensic audit
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/arc4_cross_stage_success_boundary.py'
+      - '.github/workflows/arc4-cross-stage-success-boundary.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-source-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install only original frame reader
+        run: python -m pip install numpy
+      - name: Fetch five expiring original native SDK archived results
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runtime/data/arc4/cross-stage/source
+          while read -r artifact filename; do
+            curl --fail --show-error --silent --location --retry 3 \
+              --header "Authorization: Bearer $GH_TOKEN" \
+              --header "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/artifacts/${artifact}/zip" \
+              --output "runtime/data/arc4/cross-stage/source/${filename}"
+            unzip -t "runtime/data/arc4/cross-stage/source/${filename}" >/dev/null
+          done <<'ARTIFACTS'
+          12352298969 arc3-transition-original.zip
+          12360814078 arc4-clean-lateral-original.zip
+          12357519241 arc4-left-boundary-original.zip
+          12357004273 arc4-lower-L-original.zip
+          12363215552 arc4-top-edge-original.zip
+          ARTIFACTS
+      - name: Verify source frames, original official advance, cup/border conditions
+        run: |
+          python -m work.arc3.arc4_cross_stage_success_boundary \
+            --directory runtime/data/arc4/cross-stage/source \
+            --out runtime/data/arc4/cross-stage/native-cross-stage-boundary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-sdk-cross-stage-boundary
+          path: runtime/data/arc4/cross-stage/native-cross-stage-boundary.json
+          retention-days: 90
+          if-no-files-found: warn
