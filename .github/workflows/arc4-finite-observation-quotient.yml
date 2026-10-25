@@ -1,0 +1,57 @@
+name: ARC4 original SDK finite observational quotient math audit
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/arc4_finite_observation_quotient.py'
+      - 'network/tests/test_arc4_finite_observation_quotient.py'
+      - '.github/workflows/arc4-finite-observation-quotient.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  finite-source-mathematical-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numeric source archive reader (not the game SDK)
+        run: python -m pip install numpy
+      - name: Test finite equivalence, counterexample and math domain wall
+        run: python -m unittest network.tests.test_arc4_finite_observation_quotient -v
+      - name: Retrieve verified original native SDK evidence before expiry
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p runtime/data/arc4/mathematical-admission/source
+          while read -r artifact filename; do
+            curl --fail --silent --show-error --location --retry 3 \
+              --header "Authorization: Bearer $GH_TOKEN" \
+              --header "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/huntingthereferent/autobots-assemble/actions/artifacts/${artifact}/zip" \
+              --output "runtime/data/arc4/mathematical-admission/source/${filename}"
+            unzip -t "runtime/data/arc4/mathematical-admission/source/${filename}" >/dev/null
+          done <<'ORIGINAL'
+          12572149238 arc4-468-corrected.zip
+          12572259815 arc4-519.zip
+          12573712772 arc4-520.zip
+          12574210293 arc4-521.zip
+          12352298969 arc3-transition-original.zip
+          ORIGINAL
+      - name: Independently check original SDK finite quotient under the observed native suffixes
+        run: |
+          python -m work.arc3.arc4_finite_observation_quotient \
+            --directory runtime/data/arc4/mathematical-admission/source \
+            --out runtime/data/arc4/mathematical-admission/finite-observation-witness.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-mathematical-native-projection-evidence
+          path: runtime/data/arc4/mathematical-admission/finite-observation-witness.json
+          if-no-files-found: warn
+          retention-days: 90
