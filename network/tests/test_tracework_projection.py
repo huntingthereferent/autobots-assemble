@@ -26,5 +26,25 @@ class ProjectionTests(unittest.TestCase):
         self.assertEqual(project(rt)["states"]["child"], "WAITING")
         self.assertEqual(compare_handoff(rt, "child").blocked_by, ("absent",))
 
+    def test_reopen_is_read_only_and_does_not_reuse_old_result(self):
+        rt = HandoffRuntime()
+        rt.submit(Handoff(handoff_id="parent", referent="fixture",
+                          from_actor="a", to_actor="b", required_relation="check",
+                          expected_output={"value": 2}))
+        rt.submit(Handoff(handoff_id="child", referent="fixture",
+                          from_actor="a", to_actor="b", required_relation="move",
+                          dependencies=("parent",)))
+        rt.return_result("parent", actor_id="b",
+                         result=ExecutionResult(status="COMPLETE", output={"value": 2}))
+        self.assertEqual(project(rt)["states"]["child"], "READY")
+        rt.reopen("parent", actor_id="a", reason="new attempt")
+        before = rt.event_store.all()
+        measured = project(rt)
+        self.assertEqual(measured["states"]["parent"], "READY")
+        self.assertEqual(measured["states"]["child"], "WAITING")
+        self.assertEqual(measured["mismatches"]["parent"].observed, {})
+        self.assertEqual(measured["unresolved_parent_ids"], ())
+        self.assertEqual(rt.event_store.all(), before)
+
 if __name__ == "__main__":
     unittest.main()
