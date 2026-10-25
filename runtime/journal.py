@@ -126,6 +126,7 @@ class RuntimeJournal:
                     f"event line {line_number} references unknown handoff "
                     f"{event.handoff_id}"
                 )
+            self._validate_event(event)
             self._events.append(event)
             return
 
