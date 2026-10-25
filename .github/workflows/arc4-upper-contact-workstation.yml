@@ -44,7 +44,7 @@ jobs:
         with:
           name: arc4-original-native-upper-contact
           path: |
-            runtime/data/arc4/contact/original-upper-plateau.*
+            runtime/data/arc4/contact/original-upper-contact.*
             runtime/data/arc4/contact/workstation/**
           retention-days: 90
           if-no-files-found: warn
