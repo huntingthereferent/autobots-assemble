@@ -91,6 +91,46 @@ class FiniteTorus3:
             "is_graph_automorphism": original == transported,
         }
 
+    def apply_word(self, vertex: Vertex, actions: str, phi=(0, 1, 2)) -> Vertex:
+        """Apply an ordered action word using the original finite World."""
+        if any(action not in "AB" for action in actions):
+            raise ValueError("only A and B are admitted")
+        current = vertex
+        for action in actions:
+            current = self.transition(current, action, phi)
+        return current
+
+    def transported_edges_word(self, actions: str, phi=(0, 1, 2)) -> frozenset[frozenset[Vertex]]:
+        """Transport every original edge through the full action word."""
+        return frozenset(
+            frozenset(self.apply_word(v, actions, phi) for v in edge)
+            for edge in self.edges()
+        )
+
+    def trace_geometry(self, actions: str, phi=(0, 1, 2)) -> tuple[dict, ...]:
+        """Track reference-edge overlap and relative transported-edge changes.
+
+        Transported geometry is always graph-isomorphic to the starting graph
+        when each action is bijective; overlap with the fixed graph may vary.
+        """
+        original = self.edges()
+        previous = original
+        records = []
+        for index in range(len(actions) + 1):
+            word = actions[:index]
+            current = self.transported_edges_word(word, phi)
+            records.append({
+                "step": index,
+                "word": word,
+                "edges": len(current),
+                "fixed_overlap": len(original & current),
+                "fixed_lost": len(original - current),
+                "previous_overlap": len(previous & current),
+                "is_fixed_automorphism": original == current,
+            })
+            previous = current
+        return tuple(records)
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
