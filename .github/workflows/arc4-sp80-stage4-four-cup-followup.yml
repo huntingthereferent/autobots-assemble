@@ -1,0 +1,29 @@
+name: ARC4 official SDK four-cup source followup
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_four_cup_followup.py'
+      - '.github/workflows/arc4-sp80-stage4-four-cup-followup.yml'
+jobs:
+  original-native-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile native source
+        run: python -m compileall -q work/arc3/native_sp80_stage4_four_cup_followup.py
+      - name: Run 30 original SP80 SDK four-cup parent controls
+        run: python -m work.arc3.native_sp80_stage4_four_cup_followup --out runtime/data/arc4/original-sp80-stage4-four-cup-followup.json
+      - name: Archive complete original native evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-four-cup-followup
+          path: runtime/data/arc4/original-sp80-stage4-four-cup-followup.*
+          if-no-files-found: error
+          retention-days: 14
