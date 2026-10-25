@@ -1,0 +1,261 @@
+{
+  "schema": "core-handoff-batch/v1",
+  "subject": "Native workstation dispatch and execution receipt integrity",
+  "source_revision": "5a99b42f7db45ab0cbd1ac4e5359c0e5d8eadc29",
+  "audit_findings": [
+    "Calendar cooldown and four-worker cap were removed in source; live behavior not yet independently verified.",
+    "Dispatch job currently requires push or workflow_dispatch, and scheduled hourly event remains inspection-only.",
+    "read_runs fetches all enabled worker histories before dispatch; a single GitHub API error can prevent unrelated eligible workers from launching.",
+    "Dispatch acceptance does not prove a native worker completed; viewer must use source-owned receipts."
+  ],
+  "handoffs": [
+    {
+      "handoff_id": "PIPE-01",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "scheduler-contract",
+      "required_relation": "Check that completed runs do not block eligible launches and active runs prevent duplicates.",
+      "inputs": {
+        "source": "systems/workspace/inspector_gadget_continuation.py",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "Unit test receipt plus actual Actions dispatch plan"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": "systems/workspace/inspector_gadget_continuation.py"
+      }
+    },
+    {
+      "handoff_id": "PIPE-02",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "trigger-routing",
+      "required_relation": "Verify push/manual dispatch reaches native-lane-continuation while hourly schedule remains inspection-only.",
+      "inputs": {
+        "source": ".github/workflows/inspector-gadget-all-workflows.yml",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "GitHub run ID, event, job status"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": ".github/workflows/inspector-gadget-all-workflows.yml"
+      }
+    },
+    {
+      "handoff_id": "PIPE-03",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "arc-native",
+      "required_relation": "Execute existing ARC source-owned mathematical observation without changing its proof boundary.",
+      "inputs": {
+        "source": "arc3-native-sp80-recheck.yml",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "ARC native workflow receipt and source witness"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": "arc3-native-sp80-recheck.yml"
+      }
+    },
+    {
+      "handoff_id": "PIPE-04",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "nih-audit",
+      "required_relation": "Execute NIH provenance and contract audit without claiming full archive replay.",
+      "inputs": {
+        "source": "nih-audit-lanes.yml",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "NIH audit artifact and test output"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": "nih-audit-lanes.yml"
+      }
+    },
+    {
+      "handoff_id": "PIPE-05",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "world",
+      "required_relation": "Execute bounded WORLD construction witness with original finite rules.",
+      "inputs": {
+        "source": "ab-world-general-construction.yml",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "WORLD native construction artifact"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": "ab-world-general-construction.yml"
+      }
+    },
+    {
+      "handoff_id": "PIPE-06",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "receipt-integrity",
+      "required_relation": "Reconcile selected workers with accepted dispatches, failed dispatches and resulting native run IDs.",
+      "inputs": {
+        "source": "systems/workspace/inspector_gadget_continuation.py",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "Plan JSON and corresponding Actions run URLs"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": "systems/workspace/inspector_gadget_continuation.py"
+      }
+    },
+    {
+      "handoff_id": "PIPE-07",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "failure-isolation",
+      "required_relation": "Test whether one unavailable workflow history blocks unrelated lanes; retain error without inventing success.",
+      "inputs": {
+        "source": "systems/workspace/inspector_gadget_continuation.py",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "Reproducible test and independent lane receipts"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": "systems/workspace/inspector_gadget_continuation.py"
+      }
+    },
+    {
+      "handoff_id": "PIPE-08",
+      "state": "READY",
+      "current_referent": "Existing repository native worker pipeline",
+      "from_actor": "workstation-pipeline-audit",
+      "to_actor": "viewer-provenance",
+      "required_relation": "Compare displayed lane states against native GitHub execution receipts, never inferred green counters.",
+      "inputs": {
+        "source": "docs/live/work.html",
+        "branch": "main"
+      },
+      "expected_output": "Typed result state, evidence and unresolved wall",
+      "required_witnesses": [
+        "Viewer source mapping and exact run IDs"
+      ],
+      "admissible_evidence": [
+        "GitHub Actions run/job/step receipts",
+        "versioned source and tests",
+        "native execution artifacts"
+      ],
+      "dependencies": [],
+      "boundaries": [
+        "No synthetic execution claims",
+        "Do not change mathematical assumptions",
+        "No claim of completion without evidence"
+      ],
+      "provenance": {
+        "repository": "huntingthereferent/autobots-assemble",
+        "source": "docs/live/work.html"
+      }
+    }
+  ]
+}
