@@ -20,6 +20,19 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertTrue(m.verify()["transition_closed"])
         self.assertTrue(m.verify()["transition_bijective"])
 
+    def test_a_preserves_edges_b_does_not(self):
+        m = FiniteTorus3()
+        for vertex in m.vertices():
+            for neighbor in m.neighbors(vertex):
+                self.assertIn(m.transition(neighbor, "A"), m.neighbors(m.transition(vertex, "A")))
+        source = (0, 0, 0)
+        adjacent = (0, 1, 0)
+        self.assertIn(adjacent, m.neighbors(source))
+        self.assertNotIn(
+            m.transition(adjacent, "B"),
+            m.neighbors(m.transition(source, "B")),
+        )
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
