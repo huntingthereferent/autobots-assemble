@@ -61,7 +61,7 @@ def verify_result(contract,out):
     require(record["kind"]=="ORIGINAL_ARC4_UPPER_CONTACT_XY_VERTICAL_BRACKET" and
             record["frozen_stage4_source_words"]==[list(r) for r in FROZEN] and
             record["original_sdk_native_resets"]==24 and
-            record["original_level4_source_root_blake2b16"]==contract["parent_source_root"],
+            record["original_level4_source_root_blake2b16"]==contract["parent_root"],
             "native source identity/protocol does not match frozen factors")
     cases={(r["case"],r["witness"]):r for r in record["original_native_cases"]}
     require(len(cases)==24 and set(cases)=={
@@ -81,7 +81,7 @@ def verify_result(contract,out):
                         "native original SDK action word or receipts changed")
                 root=arrays[name+"_"+witness+"_entry3_34"][-1]
                 require(root.shape==(64,64) and
-                        framehash(root)==contract["parent_source_root"],
+                        framehash(root)==contract["parent_root"],
                         "true native SDK did not enter exact observed Level4")
                 previous=root
                 for index,((aid,xy),entry) in enumerate(zip(actions,ledger),1):
