@@ -71,6 +71,21 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertEqual(result["distinct_graphs"], 1)
         self.assertEqual(result["distinct_permutations"], 3)
 
+    def test_b_has_exact_order_three(self):
+        m = FiniteTorus3()
+        for vertex in m.vertices():
+            self.assertNotEqual(m.apply_word(vertex, "B"), vertex) if vertex[0] != 2 else None
+            self.assertEqual(m.apply_word(vertex, "BBB"), vertex)
+        self.assertEqual(
+            [row["fixed_overlap"] for row in m.trace_geometry("BBBBBB")],
+            [81, 27, 27, 81, 27, 27, 81],
+        )
+        result = m.geometry_return_analysis("BBBBBB")
+        self.assertEqual(result["first_graph_return"], 3)
+        self.assertEqual(result["first_permutation_return"], 3)
+        self.assertEqual(result["distinct_graphs"], 3)
+        self.assertEqual(result["distinct_permutations"], 3)
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
