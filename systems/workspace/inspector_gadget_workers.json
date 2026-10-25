@@ -19,13 +19,6 @@
       "description": "NIH source-owned synthetic temporal benchmark"
     },
     {
-      "id": "nih-audit",
-      "filename": "nih-audit-lanes.yml",
-      "min_interval_minutes": 360,
-      "enabled": true,
-      "description": "NIH Phase 2 source inventory, contract tests and provenance audit; no full archive replay"
-    },
-    {
       "id": "world",
       "filename": "ab-world-general-construction.yml",
       "min_interval_minutes": 360,
