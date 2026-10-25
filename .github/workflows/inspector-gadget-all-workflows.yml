@@ -1,33 +1,7 @@
 name: Inspector Gadget - All Workflows
 
 on:
-  schedule:
-    - cron: '17 * * * *'
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'systems/workspace/inspector_gadget_continuation.py'
-      - 'systems/workspace/inspector_gadget_workers.json'
-      - 'network/tests/test_inspector_gadget_continuation.py'
-      - '.github/workflows/inspector-gadget-all-workflows.yml'
-      - 'systems/workspace/handoffs/**'
-  pull_request:
-    paths:
-      - '.github/workflows/inspector-gadget-all-workflows.yml'
-      - '.github/workflows/audit-to-action-cancellations.yml'
-      - 'systems/workspace/inspector_gadget_adapter.py'
-      - 'systems/workspace/inspector_gadget_scan.py'
-      - 'systems/workspace/inspector_gadget_wall.py'
-      - 'systems/workspace/inspector_gadget_continuation.py'
-      - 'systems/workspace/inspector_gadget_workers.json'
-      - 'network/tests/test_inspector_gadget_continuation.py'
-      - '.github/workflows/nih-p2-synthetic-benchmark.yml'
-      - 'network/tests/test_inspector_gadget_wall.py'
-      - 'systems/workspace/inspections.py'
-      - 'systems/workspace/monitor.py'
-      - 'network/tests/test_inspector_gadget_adapter.py'
-      - 'network/tests/test_inspector_gadget_scan.py'
 
 permissions:
   actions: read
@@ -38,32 +12,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  adapter-contract:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Verify native Inspector Gadget adapters
-        run: |
-          python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
-          python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
-          python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
-          python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
-          python -m unittest discover -s network/tests -p 'test_audit_to_action.py' -v
-
   inspect:
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 12
-    outputs:
-      matrix: ${{ steps.plan.outputs.matrix }}
-      movement_count: ${{ steps.plan.outputs.movement_count }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -75,114 +26,15 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: python systems/workspace/inspector_gadget_scan.py
-      - name: Plan source-backed observation from current GitHub run scan
-        id: plan
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          python systems/workspace/inspector_gadget_adapter.py matrix inspector-gadget-report.json inspector-gadget-activation.json
-          python - <<'PY'
-          import json, os
-          plan = json.load(open('inspector-gadget-activation.json', encoding='utf-8'))
-          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as out:
-              out.write('matrix=' + json.dumps(plan['matrix'], separators=(',', ':')) + '\n')
-              out.write('movement_count=' + str(plan['selected']) + '\n')
-          PY
-      - name: Publish inspection and movement summary
-        run: |
-          python - <<'PY'
-          import json, os
-          r=json.load(open('inspector-gadget-report.json', encoding='utf-8'))
-          p=json.load(open('inspector-gadget-activation.json', encoding='utf-8'))
-          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as f:
-              f.write('# Inspector Gadget — observation and movement\n\n')
-              f.write(f"Retrieved {r['scanned']} completed runs; {len(r['findings'])} grouped incident signals.\n\n")
-              f.write(f"Native source follow-ups selected: {p['selected']}; overflow awaiting admission: {p['overflow_count']}.\n\n")
-              f.write('Only source incidents visible to this bounded scan are included; older incidents need an independent follow-up.\n\n')
-              f.write('| Owning workflow | Event | Count | Source |\n|---|---|---:|---|\n')
-              for item in r['findings']:
-                  url=next((u for u in item['sources'] if u), '')
-                  label=item['lane'].replace('|', '/').replace('\n', ' ')
-                  f.write(f"| {label} | {item['event']} | {item['count']} | [Run]({url}) |\n")
-              f.write('\nMovement means live source observation in an independent HandoffRuntime worker. It is not a repair or research verdict.\n')
-          PY
       - name: Verify scanner and adapter contracts
         run: |
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_scan.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_adapter.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_wall.py' -v
           python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
-      - name: Retain scan and movement plan
+      - name: Retain diagnostic report
         uses: actions/upload-artifact@v4
         with:
-          name: inspector-gadget-${{ github.run_id }}
-          path: |
-            inspector-gadget-report.json
-            inspector-gadget-activation.json
-          retention-days: 90
-
-
-  native-lane-continuation:
-    # Schedule existing independently owned native worker workflows.
-    # Hourly scan is for observation; dispatch is triggered by source changes or operator request.
-    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 9
-    permissions:
-      actions: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Verify registered native worker entry points and cadence
-        run: python -m unittest discover -s network/tests -p 'test_inspector_gadget_continuation.py' -v
-      - name: Calendar continuation - dispatch eligible native worker lanes
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: python -m systems.workspace.inspector_gadget_continuation dispatch
-      - name: Preserve which native workers actually accepted dispatch
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: inspector-gadget-native-continuation-${{ github.run_id }}
-          path: inspector-gadget-native-continuation.json
+          name: inspector-gadget-manual
+          path: inspector-gadget-report.json
           retention-days: 30
-          if-no-files-found: warn
-
-  move:
-    needs: inspect
-    if: needs.inspect.outputs.movement_count != '0'
-    strategy:
-      fail-fast: false
-      max-parallel: 12
-      matrix: ${{ fromJSON(needs.inspect.outputs.matrix) }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Activate source-owning handoff adapter
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-          INSPECTOR_FINDING_JSON: ${{ toJSON(matrix) }}
-        run: |
-          printf '%s' "$INSPECTOR_FINDING_JSON" > inspector-selection.json
-          python systems/workspace/inspector_gadget_adapter.py inspect inspector-selection.json inspector-gadget-handoff.json
-      - name: Preserve source-observation result
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: inspector-gadget-movement-${{ matrix.run_id }}
-          path: |
-            inspector-gadget-handoff.json
-            inspector-gadget-runtime.jsonl
-          if-no-files-found: warn
-          retention-days: 90
