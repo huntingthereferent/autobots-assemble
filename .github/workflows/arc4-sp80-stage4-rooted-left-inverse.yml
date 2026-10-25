@@ -1,0 +1,29 @@
+name: ARC4 rooted A-B invisible-step inverse test
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_rooted_left_inverse.py'
+      - '.github/workflows/arc4-sp80-stage4-rooted-left-inverse.yml'
+jobs:
+  original-normal-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Check frozen action trial syntax
+        run: python -m compileall -q work/arc3/native_sp80_stage4_rooted_left_inverse.py
+      - name: Reproduce 28 true native rooted left/inverse tests
+        run: python -m work.arc3.native_sp80_stage4_rooted_left_inverse --out runtime/data/arc4/original-sp80-stage4-rooted-left-inverse.json
+      - name: Preserve true original frames and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-rooted-left-inverse
+          path: runtime/data/arc4/original-sp80-stage4-rooted-left-inverse.*
+          if-no-files-found: error
+          retention-days: 14
