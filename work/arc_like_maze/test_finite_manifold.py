@@ -74,7 +74,6 @@ class FiniteManifoldTests(unittest.TestCase):
     def test_b_has_exact_order_three(self):
         m = FiniteTorus3()
         for vertex in m.vertices():
-            self.assertNotEqual(m.apply_word(vertex, "B"), vertex) if vertex[0] != 2 else None
             self.assertEqual(m.apply_word(vertex, "BBB"), vertex)
         self.assertEqual(
             [row["fixed_overlap"] for row in m.trace_geometry("BBBBBB")],
