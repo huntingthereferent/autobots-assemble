@@ -1,0 +1,46 @@
+name: ARC4 original SDK two-source composition workstation
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_two_strand_composition.py'
+      - 'work/arc3/arc4_two_strand_composition_gate.py'
+      - 'work/arc3/arc4_two_strand_composition_contract.json'
+      - 'work/arc3/two_strand_composition_workstation.py'
+      - '.github/workflows/arc4-two-strand-composition-workstation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-original-level4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC game SDK and source-array dependency
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile bounded native source and independent verifier
+        run: python -m compileall -q work/arc3/native_sp80_stage4_two_strand_composition.py work/arc3/arc4_two_strand_composition_gate.py work/arc3/two_strand_composition_workstation.py
+      - name: Freeze source operators and confirm original verified Level4 parent
+        run: python -m work.arc3.arc4_two_strand_composition_gate pre
+      - name: Execute genuine original Level4 SDK 2x2x2 composition inside ProcessWorkstation
+        run: |
+          python -m work.arc3.two_strand_composition_workstation \
+            --execute \
+            --data-dir runtime/data/arc4/two-strand/workstation \
+            --out runtime/data/arc4/two-strand/original-two-strand-native.json
+      - name: Independently re-evaluate native NPZ, 16 SDK receipts and composition predicates
+        run: |
+          python -m work.arc3.arc4_two_strand_composition_gate post \
+            --result runtime/data/arc4/two-strand/original-two-strand-native.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: arc4-original-sdk-two-source-composition
+          path: |
+            runtime/data/arc4/two-strand/original-two-strand-native.*
+            runtime/data/arc4/two-strand/workstation/**
+          retention-days: 90
+          if-no-files-found: warn
