@@ -41,7 +41,7 @@ WATCH=("levels_completed","state","game_state","game_id","score",
        "total_score","is_terminal","is_done","done","won","is_win",
        "remaining_time","time_remaining","action_count","actions_taken",
        "available_actions","legal_actions","metadata","info","message",
-       "levels_total","total_levels")
+       "levels_total","total_levels","win_levels","full_reset","action_input")
 def safe_primitive(v):
     if v is None or type(v) in (bool,int,float,str):
         if type(v)==str and len(v)>200:return {"length":len(v),"type":"long string"}
