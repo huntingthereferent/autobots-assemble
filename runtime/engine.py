@@ -73,7 +73,7 @@ class HandoffRuntime:
     def submit(self, handoff: Handoff) -> HandoffState:
         if handoff.handoff_id in self._handoffs:
             raise ValueError(f"handoff already exists: {handoff.handoff_id}")
-        created = HandoffEvent.create(
+        self._check_dependencies(handoff)\n        created = HandoffEvent.create(
             handoff_id=handoff.handoff_id,
             event_type="CREATED",
             actor_id=handoff.from_actor,
@@ -103,45 +103,77 @@ class HandoffRuntime:
         except KeyError as exc:
             raise KeyError(f"unknown handoff: {handoff_id}") from exc
 
+    def _check_dependencies(self, proposed: Handoff) -> None:
+        graph = {key: spec.dependencies for key, spec in self._handoffs.items()}
+        graph[proposed.handoff_id] = proposed.dependencies
+        visiting: set[str] = set()
+        visited: set[str] = set()
+
+        def visit(node: str) -> None:
+            if node in visiting:
+                raise ValueError(f"cyclic handoff dependency: {node}")
+            if node in visited:
+                return
+            visiting.add(node)
+            for dep in graph.get(node, ()):
+                if dep in graph:
+                    visit(dep)
+            visiting.remove(node)
+            visited.add(node)
+
+        for node in graph:
+            visit(node)
+
     def state(self, handoff_id: str) -> HandoffState:
-        handoff = self.get(handoff_id)
-        events = self.event_store.for_handoff(handoff_id)
-        blocked_by = tuple(
-            dep for dep in handoff.dependencies
-            if dep not in self._handoffs or self.state(dep).status != "COMPLETE"
-        )
+        return self._state(handoff_id, {}, set())
 
-        status = "WAITING" if blocked_by else "READY"
-        output = {}
-        evidence: list[EvidenceRecord] = []
-        last_event_id = events[-1].event_id if events else ""
+    def _state(
+        self, handoff_id: str, memo: dict[str, HandoffState], visiting: set[str]
+    ) -> HandoffState:
+        if handoff_id in memo:
+            return memo[handoff_id]
+        if handoff_id in visiting:
+            raise ValueError(f"cyclic handoff dependency: {handoff_id}")
+        visiting.add(handoff_id)
+        try:
+            handoff = self.get(handoff_id)
+            events = self.event_store.for_handoff(handoff_id)
+            blocked_by = tuple(
+                dep for dep in handoff.dependencies
+                if dep not in self._handoffs
+                or self._state(dep, memo, visiting).status != "COMPLETE"
+            )
+            status = "WAITING" if blocked_by else "READY"
+            output = {}
+            evidence: list[EvidenceRecord] = []
+            last_event_id = events[-1].event_id if events else ""
 
-        for event in events:
-            evidence.extend(event.evidence)
-            if event.event_type == "STARTED":
-                status = "ACTIVE"
-            elif event.event_type == "RESULT":
-                status = str(event.data["status"])
-                output = dict(event.data.get("output") or {})
-            elif event.event_type == "REOPENED":
-                status = "WAITING" if blocked_by else "READY"
-                output = {}
+            for event in events:
+                if event.event_type == "STARTED":
+                    status = "ACTIVE"
+                elif event.event_type == "RESULT":
+                    status = str(event.data["status"])
+                    output = dict(event.data.get("output") or {})
+                elif event.event_type == "REOPENED":
+                    status = "WAITING" if blocked_by else "READY"
+                    output = {}
+                    evidence.clear()
+                evidence.extend(event.evidence)
 
-        supported = {item.condition for item in evidence}
-        missing = tuple(
-            condition for condition in handoff.required_witnesses
-            if condition not in supported
-        )
-
-        return HandoffState(
-            handoff_id=handoff_id,
-            status=status,
-            output=output,
-            evidence=tuple(evidence),
-            missing_witnesses=missing,
-            blocked_by=blocked_by,
-            last_event_id=last_event_id,
-        )
+            supported = {item.condition for item in evidence}
+            missing = tuple(
+                condition for condition in handoff.required_witnesses
+                if condition not in supported
+            )
+            result = HandoffState(
+                handoff_id=handoff_id, status=status, output=output,
+                evidence=tuple(evidence), missing_witnesses=missing,
+                blocked_by=blocked_by, last_event_id=last_event_id,
+            )
+            memo[handoff_id] = result
+            return result
+        finally:
+            visiting.remove(handoff_id)
 
     def _validate_complete_evidence(
         self,
@@ -273,4 +305,4 @@ class HandoffRuntime:
         return self.state(handoff_id)
 
     def snapshot(self) -> dict[str, HandoffState]:
-        return {handoff_id: self.state(handoff_id) for handoff_id in self._handoffs}
+        memo: dict[str, HandoffState] = {}\n        return {handoff_id: self._state(handoff_id, memo, set()) for handoff_id in self._handoffs}
