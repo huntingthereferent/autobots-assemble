@@ -84,3 +84,27 @@ Therefore the **visible frame alone is not a sufficient source-state representat
 This is consistent with the mathematical reason the existing 48-world F3 proof distinguishes rooted and nonrooted relations, but **does not prove** that SP80's hidden state belongs to those 48 concrete F3 laws or that palette14→0 represents an F3 coordinate. The prior exact F3 full-state conjugacies and ABABAB obstructions were rerun here unmodified; only the native source-level observed pair relation is newly established.
 
 **Next test should be smaller, not wider:** use the same rooted pair with a different next action to determine whether the bottom-edge split is specific to ACTION5; preserve identical before-action source checks. If the only divergence is a persistent one-pixel boundary effect, do not convert it into invented progress or an all-depth native equivalence proof. Canonical agent/F3-48 mathematics unmodified; branch remains PR #537 pending review.
+
+
+## Every native immediate action preserves the observable-root split
+
+**Complete original source proof-of-observation:** [successful genuine SDK run #40239771729](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40239771729), [full true 64×64 original SDK NPZ and receipts #12616586614](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40239771729/artifacts/12616586614), [frozen six-action protocol](../native_sp80_stage4_rooted_ab_all_actions.py).
+
+To determine whether the bottom-edge split is only an ACTION5 effect, independently rerun the pair **middle-reclick vs middle-reclick+LEFT1** from the exact original native root, with the same 64×64 before-action frame `dd0b9861faae399ad607560e9181be42`, then test each real native source-advertised action exactly once.
+
+Six original legal actions × two predeclared paths × two independently reset and stage-verified prior source witnesses = **24 genuine SDK normal-mode SP80 games**. All 24 stay official `levels_completed=4`, `NOT_FINISHED`; exact source pixel comparison and outcomes repeat for both independent entrance witnesses.
+
+| Real SDK next action | Native returned stack count each history | Exact *only* A/B spatial difference in every returned frame |
+|---|---:|---|
+| ACTION1 UP | 1 | x10,y63: A=14, B=0 |
+| ACTION2 DOWN | 1 | x10,y63: A=14, B=0 |
+| ACTION3 LEFT | 1 | x10,y63: A=14, B=0 |
+| ACTION4 RIGHT | 1 | x10,y63: A=14, B=0 |
+| ACTION5 POUR | 32 | x10,y63: A=14, B=0, every frame0–31 |
+| ACTION6 selected upper source palette8 at x34,y21 | 1 | x10,y63: A=14, B=0 |
+
+**The next-step mismatch is not POUR-specific.** The two full visible root images match byte-for-byte, yet *every* immediately legal label yields a different original SDK returned frame because of exactly one observed bottom-edge source pixel. No other returned spatial pixel differs between these pairs. The source SDK public level did not advance, and there is still no basis to infer a private engine state representation.
+
+**Structural instruction for all future ARC work:** never identify two genuine native source histories as the same full system state merely because their visible 64×64 grids agree (nor assume a cup-color projection is sufficient). The correct bounded record is **marked entry history + full observed source image + actual action label + full returned successor array + official SDK status**, with tested collision or first discriminating successor labeled explicitly. Apply identical root/word logic to every comparison. The abstract F3 mathematical two-letter A/B rules and their rooted/nonrooted proof remain exact and separate; no native six-action-to-two-generator homomorphism is established.
+
+This is an independently reproduced, exact **projection-level non-Markov counterexample** for the observed image alone, not a claim that the private SP80 engine is nondeterministic. Its complete internal state may distinguish the histories deterministically. No source palette should be elevated to an SDK win, no wide sweeps needed, and the F3-48 proofs/canonical agent are unchanged.
