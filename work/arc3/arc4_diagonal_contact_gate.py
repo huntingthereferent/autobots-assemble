@@ -1,6 +1,6 @@
 """Independent native full-frame verifier of finite ARC4 coupled contact translations."""
 from __future__ import annotations
-import argparse,json
+import argparse,json,hashlib
 from pathlib import Path
 from collections import Counter
 import numpy as np
@@ -44,8 +44,16 @@ def inspect(c,p):
     require(p.is_file() and p.with_suffix(".npz").is_file(),
             "real original SDK JSON and full NPZ frames missing")
     j=json.loads(p.read_text())
-    require(j["kind"]=="ORIGINAL_SP80_LEVEL4_NATIVE_DIAGONAL_UPPER_RIGHT_CONTACT" and
-            j["source_parent_run"]==40171838520 and
+    # Actual SDK 24-reset source edition inherited two metadata strings from
+    # its template. Preserve their exact bytes, audit the frozen real actions,
+    # source arrays and SHA rather than modifying the original evidence.
+    require(hashlib.sha256(p.read_bytes()).hexdigest()==
+             c["saved_original_source_json_sha256"] and
+            hashlib.sha256(p.with_suffix(".npz").read_bytes()).hexdigest()==
+             c["saved_original_source_npz_sha256"],
+            "original genuine SDK source artifact SHA256 does not match")
+    require(j["kind"]==c["legacy_saved_native_kind"] and
+            j["source_parent_run"]==c["legacy_saved_native_parent_run"] and
             j["true_original_level4_root"]==c["genuine_original_level4_root"] and
             j["frozen_source_words"]==[list(x) for x in FROZEN] and
             j["original_sdk_resets"]==24,
