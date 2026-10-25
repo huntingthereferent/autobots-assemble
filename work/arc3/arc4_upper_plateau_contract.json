@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "id": "ORIGINAL_SP80_LEVEL4_SOURCE_UPPER_PLATEAU_TRANSFER_20261025",
+  "referent": "SP80 official original SDK Level4 upper-bar LEFT6-8 observed plateau transfer under right-middle LEFT1/2",
+  "source_code": "work/arc3/native_sp80_stage4_upper_plateau_transfer.py",
+  "parent_native_runs": [
+    39639320303,
+    40154160743
+  ],
+  "parent_native_artifacts": [
+    12364922294,
+    12583637554
+  ],
+  "frozen_level4_root": "fa8fd32d3bfd2c8b3ff7765aec373512",
+  "expected_original_sdk_resets": 24,
+  "factors": {
+    "lower_parents": [
+      "D3L2_L3U2",
+      "D4L2_L4U2"
+    ],
+    "right_middle_actions": [
+      [
+        "R1",
+        "3"
+      ],
+      [
+        "R2",
+        "3 3"
+      ]
+    ],
+    "upper_actions": [
+      [
+        "U6",
+        "3 3 3 3 3 3"
+      ],
+      [
+        "U7",
+        "3 3 3 3 3 3 3"
+      ],
+      [
+        "U8",
+        "3 3 3 3 3 3 3 3"
+      ]
+    ],
+    "original_sdk_entry_witnesses": [
+      "A",
+      "B"
+    ]
+  },
+  "finite_source_hypothesis": "U6/7/8 each eliminated first upper-left palette6 x11-13 y5-7 and preserved four visually full cups when right-middle LEFT1. Test if this plateau transfers to right-middle LEFT2, which removes other palette6 x56-58 y5-7 but at U6 also removes top-middle cup entirely.",
+  "official_progress": "Only original SDK levels_completed>=5 or WIN",
+  "walls": [
+    "Use only original SDK levels_completed=4 entrance and verified root; stage0-3 replay is entrance only.",
+    "Run exactly frozen 24 fresh native resets with full original 64x64 arrays.",
+    "Independently rehash actual per-action receipts and independently recalculate source predicates.",
+    "Preserve original A/B SDK entry witnesses distinct from finite-field formal A/B operators.",
+    "Record P and Q off-cup source predicates, source cup top-middle 0..45, simultaneous full-four, top/right/left/bottom source border.",
+    "If source control U6 R1/R2 disagrees with antecedent, record WALL_CONTROL_DRIFT rather than claiming success.",
+    "No source-visible cup or boundary predicate substitutes original SDK level5/WIN.",
+    "No inferred private physics or fabricated F3-to-original SDK homomorphism.",
+    "Retain draft experimental evidence unmerged."
+  ],
+  "next_no_progress": "Preserve tested finite source plateau transfer/contradiction; derive next mechanically distinct hypothesis from observed native source contact rather than longer generic motion sweep.",
+  "next_progress": "Require independent original SDK A/B level5/WIN replication and source frame evidence before changing official progress."
+}
