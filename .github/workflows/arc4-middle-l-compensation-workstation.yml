@@ -1,12 +1,5 @@
 name: ARC4 original SDK Level4 lower L vs middle bar relative contact
 on:
-  pull_request:
-    paths:
-      - 'work/arc3/native_sp80_stage4_middle_l_compensation.py'
-      - 'work/arc3/arc4_middle_l_compensation_contract.json'
-      - 'work/arc3/arc4_middle_l_compensation_gate.py'
-      - 'work/arc3/middle_l_compensation_workstation.py'
-      - '.github/workflows/arc4-middle-l-compensation-workstation.yml'
   workflow_dispatch:
 permissions:
   contents: read
