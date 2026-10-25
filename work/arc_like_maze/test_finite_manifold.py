@@ -102,6 +102,14 @@ class FiniteManifoldTests(unittest.TestCase):
             [27, 27],
         )
 
+    def test_exhaustive_action_closure(self):
+        result = FiniteTorus3().action_closure()
+        self.assertEqual(result["permutations"], 81)
+        self.assertEqual(result["distinct_edge_geometries"], 3)
+        self.assertEqual(result["reference_graph_stabilizer"], 27)
+        self.assertEqual(result["overlap_distribution"], {27: 2, 81: 1})
+        self.assertEqual(result["max_shortest_word_length"], 10)
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
