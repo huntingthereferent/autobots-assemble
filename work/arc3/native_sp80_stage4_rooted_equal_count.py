@@ -153,7 +153,7 @@ def main():
                     }
                     comparison.append(row)
                     print("SP80_ROOTED_SAME_PARITY_AB "+json.dumps(row,sort_keys=True),flush=True)
-    if len(receipts)!=54 or len(entry_roots)!=1 or len(comparison)!=24:
+    if len(receipts)!=54 or len(entry_roots)!=1 or len(comparison)!=30:
         raise AssertionError("Missing original SDK source rooted comparison")
     for group,root,paths,futures in FROZEN_GROUPS:
         for future in futures:
