@@ -20,10 +20,23 @@ class OutputComparisonTests(unittest.TestCase):
             doc = {"schema": CANDIDATES["frontier"][1]}
             doc.update(dict(CANDIDATES["frontier"][2:]))
             path.write_text(json.dumps(doc), encoding="utf-8")
+            (path.parent / "exit-code.txt").write_text("0\\n", encoding="utf-8")
             result = compare(directory)
         self.assertEqual(result["candidates"]["frontier"]["status"], "REPORTED_PASS")
         self.assertEqual(result["selection"], "UNDETERMINED")
         self.assertEqual(result["candidates"]["two_clock"]["status"], "UNKNOWN")
+
+    def test_nonzero_exit_cannot_become_pass(self):
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "frontier" / CANDIDATES["frontier"][0]
+            path.parent.mkdir()
+            doc = {"schema": CANDIDATES["frontier"][1]}
+            doc.update(dict(CANDIDATES["frontier"][2:]))
+            path.write_text(json.dumps(doc), encoding="utf-8")
+            (path.parent / "exit-code.txt").write_text("1", encoding="utf-8")
+            result = compare(directory)
+        self.assertEqual(result["candidates"]["frontier"]["status"], "REPORTED_FAIL")
+        self.assertFalse(result["candidates"]["frontier"]["checks"]["process_exit_zero"])
 
     def test_invalid_claim_is_rejected(self):
         with TemporaryDirectory() as directory:
