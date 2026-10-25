@@ -52,7 +52,7 @@ def validate(roster, root=ROOT):
         if (not isinstance(identity, str) or not _ALLOWED.fullmatch(identity)
                 or identity in seen_ids or not isinstance(filename, str)
                 or not _FILE.fullmatch(filename) or filename in seen_paths
-                or type(interval) is not int or not 60 <= interval <= 10080
+                or type(interval) is not int or not 0 <= interval <= 10080
                 or type(row.get("enabled")) is not bool):
             raise ValueError("invalid/duplicate native worker identity, cadence or switch")
         seen_ids.add(identity)
@@ -129,16 +129,10 @@ def assess(roster, histories, *, repo, now=None, root=ROOT):
         if any(r.get("status") in _ACTIVE for r in runs):
             outcomes.append({**lane, "state": "ALREADY_RUNNING"})
             continue
-        dates = []
-        for r in runs:
-            if r.get("created_at"):
-                dates.append(_timestamp(r["created_at"]))
+        dates = [_timestamp(r["created_at"]) for r in runs if r.get("created_at")]
         last = max(dates) if dates else None
-        interval = dt.timedelta(minutes=worker["min_interval_minutes"])
-        if last is not None and now - last < interval:
-            outcomes.append({**lane, "state": "COOLDOWN",
-                             "next_due": (last + interval).isoformat()})
-            continue
+        # Cadence describes observation/revalidation, not permission to launch.
+        # Only an active owner run prevents duplicate dispatch.
         # Replaying a green fixture is an existing-worker *recheck*, never a
         # claim that a new hypothesis or native research experiment was born.
         due = {**lane, "state": "ELIGIBLE", "last_run_at": last.isoformat() if last else None,
@@ -146,7 +140,7 @@ def assess(roster, histories, *, repo, now=None, root=ROOT):
         ready.append(due)
     # Oldest work first, stable ties; avoid prioritizing one project by name.
     ready.sort(key=lambda r: (r["last_run_at"] is not None, r["last_run_at"] or "", r["id"]))
-    cap = roster["max_dispatch_per_tick"]
+    cap = len(ready)  # No calendar quota on independently runnable lanes.
     dispatched = ready[:cap]
     outcomes.extend([{**r, "state": "SELECTED"} for r in dispatched])
     outcomes.extend([{**r, "state": "CAPACITY_WAIT"} for r in ready[cap:]])
