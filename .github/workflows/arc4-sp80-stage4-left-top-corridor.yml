@@ -1,0 +1,29 @@
+name: ARC4 top-left source corridor
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_left_top_corridor.py'
+      - '.github/workflows/arc4-sp80-stage4-left-top-corridor.yml'
+jobs:
+  source-native-games:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install actual ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile genuine SDK source test
+        run: python -m compileall -q work/arc3/native_sp80_stage4_left_top_corridor.py
+      - name: Test 24 native Level4 x23 upper-left corridor cases
+        run: python -m work.arc3.native_sp80_stage4_left_top_corridor --out runtime/data/arc4/original-sp80-stage4-left-top-corridor.json
+      - name: Preserve source frames and SDK receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-left-top-corridor
+          path: runtime/data/arc4/original-sp80-stage4-left-top-corridor.*
+          if-no-files-found: error
+          retention-days: 14
