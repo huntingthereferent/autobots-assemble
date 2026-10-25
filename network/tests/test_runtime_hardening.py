@@ -49,5 +49,24 @@ class RuntimeHardeningTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "parent"):
                 RuntimeJournal(path)
 
+    def test_reopen_replay_preserves_history_but_resets_current_witnesses(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "runtime.jsonl"
+            rt = HandoffRuntime(event_store=RuntimeJournal(path))
+            rt.submit(Handoff(handoff_id="retry", referent="fixture",
+                              from_actor="a", to_actor="b", required_relation="check",
+                              required_witnesses=("verified",)))
+            rt.return_result("retry", actor_id="b", result=ExecutionResult(
+                status="COMPLETE", evidence=(
+                    EvidenceRecord(condition="verified", kind="test", source="fixture"),
+                )))
+            rt.reopen("retry", actor_id="a", reason="new attempt")
+            restored = HandoffRuntime(event_store=RuntimeJournal(path))
+            state = restored.state("retry")
+            self.assertEqual(state.status, "READY")
+            self.assertEqual(state.evidence, ())
+            self.assertEqual(state.missing_witnesses, ("verified",))
+            self.assertEqual(len(restored.event_store.all()), 3)
+
 if __name__ == "__main__":
     unittest.main()
