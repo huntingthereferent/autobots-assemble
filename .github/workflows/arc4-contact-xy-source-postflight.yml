@@ -18,8 +18,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install numeric original source frame reader, not the game SDK
-        run: python -m pip install numpy
+      - name: Install numeric source reader and import-only SDK dependency (no game execution)
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
       - name: Retrieve immutable 24-reset genuine SDK source from prior actual native run
         env:
           GH_TOKEN: ${{ github.token }}
