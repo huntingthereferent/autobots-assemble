@@ -1,0 +1,25 @@
+name: Finite manifold verification
+
+on:
+  push:
+    paths:
+      - 'work/arc_like_maze/math.py'
+      - 'work/arc_like_maze/finite_manifold.py'
+      - 'work/arc_like_maze/test_finite_manifold.py'
+      - '.github/workflows/finite-manifold-verification.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  finite-manifold:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify finite geometry and original A/B transitions
+        run: python -m unittest -v work.arc_like_maze.test_finite_manifold
