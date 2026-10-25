@@ -8,6 +8,7 @@ bypass private workstation admission. Records every dispatch attempt.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -144,8 +145,26 @@ def assess(roster, histories, *, repo, now=None, root=ROOT):
     dispatched = ready[:cap]
     outcomes.extend([{**r, "state": "SELECTED"} for r in dispatched])
     outcomes.extend([{**r, "state": "CAPACITY_WAIT"} for r in ready[cap:]])
+    # Fingerprint the decision inputs, not the wall clock or network response order.
+    # A repeated observation must reproduce the same selection.
+    evidence = {
+        "workers": [{k: worker[k] for k in ("id", "filename", "enabled")}
+                    for worker in sorted(entries, key=lambda item: item["id"])],
+        "observations": {
+            key: sorted(
+                [{"status": r.get("status"), "created_at": r.get("created_at")}
+                 for r in histories[key]],
+                key=lambda item: (str(item["created_at"]), str(item["status"])))
+            for key in sorted(histories) if key in {w["id"] for w in entries}
+        },
+        "selected": [row["id"] for row in dispatched],
+    }
+    decision_digest = hashlib.sha256(
+        json.dumps(evidence, sort_keys=True, separators=(",", ":")).encode("utf8")
+    ).hexdigest()
     return {"schema": "inspector-gadget/native-worker-plan/v1",
             "calendar_source": "owning GitHub Actions workflow history",
+            "decision_digest": decision_digest,
             "observed_at": now.isoformat(),
             "eligible_count": len(ready),
             "selected_count": len(dispatched),
