@@ -136,6 +136,16 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertTrue(result["b_powers_intersect_translations_trivially"])
         self.assertTrue(result["a_is_translation"])
 
+    def test_lower_central_series_and_center(self):
+        result = FiniteTorus3().lower_central_structure()
+        self.assertEqual(result["group_order"], 81)
+        self.assertEqual(result["center_order"], 3)
+        self.assertEqual(result["commutator_subgroup_order"], 9)
+        self.assertEqual(result["lower_central_orders"], [81, 9, 3, 1])
+        self.assertEqual(result["nilpotency_class"], 3)
+        self.assertTrue(result["derived_is_abelian"])
+        self.assertTrue(result["center_elements_are_translations"])
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
