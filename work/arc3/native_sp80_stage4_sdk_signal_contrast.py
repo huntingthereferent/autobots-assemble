@@ -130,8 +130,8 @@ def run_original(case,witness,stage1,stage4):
                  "official_before":rec["actual_native_before"],
                  "official_after":rec["actual_native_after"],
                  "actual_native_source_cups":observation})
-        if rec["actual_native_after"]["official_levels_completed"]>=5 or
-            rec["actual_native_after"]["official_state"] in ("WIN","GAME_OVER"):
+        if (rec["actual_native_after"]["official_levels_completed"]>=5 or
+            rec["actual_native_after"]["official_state"] in ("WIN","GAME_OVER")):
             break
     result={"predeclared_case":case,"independent_native_entry":witness,
             "original_sdk_stage4_word":stage4,
