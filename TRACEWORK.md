@@ -1,6 +1,14 @@
 # Tracework
 
-**Tracework** is the public name for the existing research continuity, execution, observation and provenance environment developed in this repository. It was formerly described as the *workstation* or *AI-workstation*. The original finite mathematical and language-referent inquiry is separate; Tracework supports and records its experiments without renaming that research.
+**Tracework** is a finite-system environment for carrying problems through defined states, relationships, handoffs, observations and evidence-backed continuation. It connects otherwise different kinds of work without requiring them to share one internal model. It was formerly described as the *workstation* or *AI-workstation*. The original finite mathematical and language-referent inquiry remains distinct; Tracework supports and records its experiments without renaming that research.
+
+**GitHub is the public proof of concept and development preview, not the full standalone Tracework product.** This repository contains implemented runtime and journal components, source-edition tooling, finite examples, tests and source-owned research. The GitHub Pages viewer is a read-only demonstration of visible source records and GitHub execution, not a control surface for every private process. The larger mathematical architecture is a development target; individual formal properties are claimed only where their specific implementation and tests support them.
+
+## Finite-system demonstration
+
+A finite working context specifies the current referent, admitted inputs/actions, relationships and boundaries. A transition yields a return that can be inspected against expectations and required witnesses. Recorded evidence and ancestry determine what may continue. **Finite** describes the explicit scope of a particular working context; it is not a claim that the overall environment or every real-world problem has a globally finite state space.
+
+The current GitHub demonstration exposes pieces of that pattern through the handoff runtime, append-only journal, finite A/B examples, source-linked research and read-only public viewer. Those pieces are connected by evidence contracts, not by a claim that all research lanes share the same mathematical theorem.
 
 ## Operating relationship
 
