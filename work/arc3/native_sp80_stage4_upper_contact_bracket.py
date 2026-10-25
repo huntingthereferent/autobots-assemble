@@ -124,8 +124,7 @@ def main():
       "math_scope":"Finite native source observational transfer test, not global game law, no formal F3 A/B action homomorphism or inferred private physics."
     }
     args.out.parent.mkdir(parents=True,exist_ok=True)
-    args.out.write_text(json.dumps(out,indent=2)+"
-")
+    args.out.write_text(json.dumps(out,indent=2)+"\n")
     np.savez_compressed(args.out.with_suffix(".npz"),**raw)
     print("ORIGINAL_ARC4_CONTACT_SUMMARY "+json.dumps({
       "original_native_resets":len(cases),"official_advances":out["actual_official_level5_or_WIN_count"],
