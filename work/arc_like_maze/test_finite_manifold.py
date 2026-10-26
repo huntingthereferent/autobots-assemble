@@ -199,6 +199,17 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertTrue(result["conjugation_law"])
         self.assertEqual(result["distinct_commutator_values"], 9)
 
+    def test_coordinate_lower_central_series_matches_permutations(self):
+        result = FiniteTorus3().coordinate_lower_central_structure()
+        self.assertEqual(result["center_order"], 3)
+        self.assertEqual(result["derived_order"], 9)
+        self.assertEqual(result["lower_central_orders"], (81, 9, 3, 1))
+        self.assertEqual(result["nilpotency_class"], 3)
+        self.assertTrue(result["matches_permutation_analysis"])
+        self.assertEqual(result["center"], (
+            (0, 0, 0, 0), (0, 0, 1, 0), (0, 0, 2, 0),
+        ))
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
