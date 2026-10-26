@@ -3,7 +3,6 @@
 This does not redefine the A/B World or mutate the source repository.
 """
 from dataclasses import dataclass
-from math import isqrt
 
 
 @dataclass(frozen=True)
@@ -24,8 +23,9 @@ class ToroidalProjection:
     @classmethod
     def from_paths(cls, paths, side=48):
         """Deterministic collision-free row-major layout; no semantic claims."""
-        names = tuple(sorted(set(paths)))
-        if len(names) != len(tuple(paths)):
+        original = tuple(paths)
+        names = tuple(sorted(set(original)))
+        if len(names) != len(original):
             raise ValueError("duplicate source paths")
         size = side
         while size * size < len(names):
