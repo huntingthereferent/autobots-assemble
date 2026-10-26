@@ -1,74 +1,36 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Tracework | Gravitational Trajectory</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>A/B finite traces | 2D 3D 4D</title>
 <style>
-:root{color-scheme:dark;--bg:#080d12;--panel:#0d1720;--line:#30424c;--ink:#e4edf1;--muted:#9eafb9}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
-main{max-width:1450px;margin:auto;padding:24px}header{display:flex;justify-content:space-between;gap:20px;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px}
-a{color:#a9d5e4}.eyebrow{font:11px ui-monospace,monospace;letter-spacing:.13em;color:#91b4c4}h1{font-size:clamp(24px,3vw,36px);letter-spacing:-.035em;margin:22px 0 4px}p{color:var(--muted)}
-.layout{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr);gap:12px;margin-top:20px}
-.panel{border:1px solid var(--line);background:var(--panel);min-width:0}.panel h2{font:12px ui-monospace,monospace;letter-spacing:.08em;margin:14px 16px 3px}
-.sub{font:11px ui-monospace,monospace;color:var(--muted);margin:0 16px 8px}
-canvas{display:block;width:100%;height:340px}.maincanvas{height:520px}
-.stack{display:grid;grid-template-rows:1fr 1fr;gap:12px}.stack canvas{height:192px}
-.readout{border-top:1px solid var(--line);padding:9px 14px;font:11px/1.6 ui-monospace,monospace;color:#b5cbd5}
-.controls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}button{background:#172934;border:1px solid #44606c;color:#e7f3f8;padding:9px 14px;cursor:pointer}button:hover{background:#244250}
-details{border-top:1px solid var(--line);padding-top:12px;color:var(--muted)}code{color:#e7d0a4}
-@media(max-width:900px){.layout{grid-template-columns:1fr}.stack{grid-template-columns:1fr 1fr;grid-template-rows:auto}.maincanvas{height:420px}.stack canvas{height:220px}}
-@media(max-width:600px){main{padding:14px}.stack{grid-template-columns:1fr}.maincanvas{height:340px}}
-</style></head>
-<body><main><header><div><div class="eyebrow">TRACEWORK / COMPUTATIONAL WORLD</div><strong>Gravitational trajectory</strong></div><a href="docs/live/work.html">Workstation</a></header>
-<h1>Motion first. Trace second.</h1>
-<p>One particle, one force law, one integrated trajectory. The geometry below is generated from successive physical states, not sine-wave paths or predefined shapes.</p>
-<div class="layout">
-<section class="panel"><h2>01 / Physical plane</h2><div class="sub">Numerically integrated central attraction · trajectory history</div><canvas id="physical" class="maincanvas"></canvas><div id="physical-status" class="readout"></div></section>
-<div class="stack">
-<section class="panel"><h2>02 / 2D physical orbit</h2><div class="sub">Same integrated positions · no coordinate wrapping</div><canvas id="periodic"></canvas><div id="periodic-status" class="readout"></div></section>
-<section class="panel"><h2>03 / Toroidal projection</h2><div class="sub">Same coordinates embedded on S¹ × S¹</div><canvas id="torus"></canvas><div id="torus-status" class="readout"></div></section>
-</div></div>
-<div class="controls"><button id="pause">Pause</button><button id="step">Step</button><button id="restart">Restart</button><button id="clear">Clear visible trace</button></div>
-<details><summary>Equations and verification</summary>
-<p>State: <code>(x,y,vx,vy)</code>. Acceleration: <code>a(r) = -μr/(|r|² + ε²)^(3/2)</code>. Velocity-Verlet integration uses a fixed timestep. The central mass is fixed at the origin. There is no prescribed triangle, star, oscillation, or camera rotation.</p>
-<p>The physical view shows actual simulated motion. The two 2D views now show the identical physical trajectory at different scales, with no wrapping or discontinuous jumps. The toroidal view is only a periodic projection, not a claim that gravity acts on the torus. Its projected trace breaks at wrap boundaries. A single softened central attraction typically gives a bounded orbit with precession, not necessarily stars. This is a demonstration, not an existing WORLD48 execution trace.</p>
-</details>
-</main>
-<script>
-(()=>{'use strict';
-const TAU=2*Math.PI,mu=650000,soft=17,dt=.025,limit=6500,box=380;
-const canvases={physical:document.getElementById('physical'),periodic:document.getElementById('periodic'),torus:document.getElementById('torus')};
-let x=165,y=0,vx=0,vy=58,t=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,last=0,trail=[],steps=0;
-const wrap=v=>((v/box+.5)%1+1)%1;
-function acc(px,py){const d=px*px+py*py+soft*soft,k=-mu/Math.pow(d,1.5);return [k*px,k*py]}
-function integrate(){let [ax,ay]=acc(x,y);vx+=.5*dt*ax;vy+=.5*dt*ay;x+=dt*vx;y+=dt*vy;[ax,ay]=acc(x,y);vx+=.5*dt*ax;vy+=.5*dt*ay;t+=dt;steps++;trail.push({x,y});if(trail.length>limit)trail.shift()}
-function reset(){x=165;y=0;vx=0;vy=58;t=0;steps=0;trail=[{x,y}];draw()}
-function prepare(canvas){const d=Math.min(devicePixelRatio||1,2),w=canvas.clientWidth,h=canvas.clientHeight;canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);const g=canvas.getContext('2d');g.setTransform(d,0,0,d,0,0);g.fillStyle='#0d1720';g.fillRect(0,0,w,h);return {g,w,h}}
-function line(g,arr,proj,breakWrap=false){if(arr.length<2)return;g.beginPath();let prev=null;for(let i=0;i<arr.length;i++){const p=proj(arr[i]);if(!Number.isFinite(p.x+p.y)){prev=null;continue}const wrapped=breakWrap&&prev&&(Math.abs(p.u-prev.u)>.5||Math.abs(p.v-prev.v)>.5);if(!prev||wrapped)g.moveTo(p.x,p.y);else g.lineTo(p.x,p.y);prev=p}g.strokeStyle='#9bdde6';g.lineWidth=1.05;g.globalAlpha=.85;g.stroke();g.globalAlpha=1}
-function dot(g,p){g.fillStyle='#f5e1ae';g.beginPath();g.arc(p.x,p.y,3,0,TAU);g.fill()}
-function physical(){const {g,w,h}=prepare(canvases.physical),cx=w/2,cy=h/2,scale=Math.min(w,h)/440;g.strokeStyle='#344a57';g.lineWidth=1;g.beginPath();g.arc(cx,cy,190*scale,0,TAU);g.stroke();g.fillStyle='#c7a981';g.beginPath();g.arc(cx,cy,4,0,TAU);g.fill();const proj=p=>({x:cx+p.x*scale,y:cy-p.y*scale});line(g,trail,proj);dot(g,proj({x,y}));const energy=.5*(vx*vx+vy*vy)-mu/Math.sqrt(x*x+y*y+soft*soft);document.getElementById('physical-status').textContent='t='+t.toFixed(2)+'  |  r='+Math.hypot(x,y).toFixed(2)+'  |  E='+energy.toFixed(3)+'  |  steps='+steps}
-function periodic(){
-const {g,w,h}=prepare(canvases.periodic);
-const scale=Math.min(w,h)/440,cx=w/2,cy=h/2;
-g.strokeStyle='#344a57';g.lineWidth=1;
-g.beginPath();g.arc(cx,cy,190*scale,0,TAU);g.stroke();
-g.fillStyle='#c7a981';g.beginPath();g.arc(cx,cy,3,0,TAU);g.fill();
-const proj=p=>({x:cx+p.x*scale,y:cy-p.y*scale});
-line(g,trail,proj);dot(g,proj({x,y}));
-document.getElementById('periodic-status').textContent='x='+x.toFixed(2)+'  |  y='+y.toFixed(2)+'  |  same physical trajectory';
-}
-function torus(){const {g,w,h}=prepare(canvases.torus),scale=Math.min(w/5.5,h/4.8),yaw=.45,pitch=.46;
-function proj(p){const u=wrap(p.x),v=wrap(p.y),a=TAU*u,b=TAU*v,R=1.5,r=.58;
-const X=(R+r*Math.cos(b))*Math.cos(a),Y=(R+r*Math.cos(b))*Math.sin(a),Z=r*Math.sin(b);
-const xx=X*Math.cos(yaw)-Y*Math.sin(yaw),yy=X*Math.sin(yaw)+Y*Math.cos(yaw);
-return {x:w/2+xx*scale,y:h/2-(Z*Math.cos(pitch)+yy*Math.sin(pitch))*scale,u,v}}
-g.strokeStyle='#35505d';g.lineWidth=.6;for(let j=0;j<18;j++){g.beginPath();for(let i=0;i<=96;i++){const p=proj({x:(i/96-.5)*box,y:(j/18-.5)*box});if(i===0)g.moveTo(p.x,p.y);else g.lineTo(p.x,p.y)}g.stroke()}
-for(let j=0;j<14;j++){g.beginPath();for(let i=0;i<=96;i++){const p=proj({x:(j/14-.5)*box,y:(i/96-.5)*box});if(i===0)g.moveTo(p.x,p.y);else g.lineTo(p.x,p.y)}g.stroke()}
-line(g,trail,proj,true);dot(g,proj({x,y}));document.getElementById('torus-status').textContent='Static embedding  |  same physical states'}
-function draw(){physical();periodic();torus()}
-document.getElementById('pause').onclick=()=>{playing=!playing;document.getElementById('pause').textContent=playing?'Pause':'Resume'};
-document.getElementById('step').onclick=()=>{playing=false;document.getElementById('pause').textContent='Resume';for(let i=0;i<12;i++)integrate();draw()};
-document.getElementById('restart').onclick=reset;
-document.getElementById('clear').onclick=()=>{trail=[{x,y}];draw()};
-function frame(now){if(!document.body.contains(canvases.physical))return;if(playing&&now-last>=25){for(let i=0;i<9;i++)integrate();draw();last=now}requestAnimationFrame(frame)}
-addEventListener('resize',draw);reset();requestAnimationFrame(frame);
+:root{color-scheme:dark}*{box-sizing:border-box}body{margin:0;background:#0b1016;color:#dce5eb;font:14px/1.5 system-ui,sans-serif}main{max-width:1440px;margin:auto;padding:24px}a{color:#a9d4e6}header{display:flex;justify-content:space-between;border-bottom:1px solid #38454e;padding-bottom:15px}h1{font-size:clamp(24px,3vw,36px);margin:22px 0 4px}.sub{color:#a4b4be}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:20px}.panel{border:1px solid #35444e;background:#0d1720;min-width:0}.panel h2{font:13px ui-monospace,monospace;margin:13px 14px 2px}.panel .caption{font:11px ui-monospace,monospace;color:#a4b4be;margin:0 14px 8px}.panel svg{display:block;width:100%;height:auto;aspect-ratio:1}.readout{border-top:1px solid #35444e;padding:10px 14px;font:11px/1.6 ui-monospace,monospace;color:#b8cbd6}.controls{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}button{background:#172a35;color:#e8f2f7;border:1px solid #4a6472;padding:9px 14px;cursor:pointer}details{border-top:1px solid #35444e;padding-top:15px;color:#b2c0ca}code{color:#e2d1a6}@media(max-width:980px){.grid{grid-template-columns:1fr}.panel svg{max-height:450px}}
+</style></head><body><main><header><div><small>A/B · FINITE REACHABILITY</small><div>Transition graph construction</div></div><a href="docs/live/work.html">Workstation</a></header>
+<h1>A/B traces in 2D, 3D, and 4D</h1><p class="sub">Start at the origin. Apply A and B. Draw each computed transition exactly once. Stop when no unvisited reachable state remains.</p>
+<div class="grid">
+<section class="panel"><h2>2D</h2><div class="caption">F₃² · direct coordinate plot</div><svg id="view2" viewBox="-210 -210 420 420" aria-label="2D finite A B transition graph"></svg><div class="readout" id="status2"></div></section>
+<section class="panel"><h2>3D</h2><div class="caption">F₃³ · fixed orthographic projection</div><svg id="view3" viewBox="-210 -210 420 420" aria-label="3D finite A B transition graph projection"></svg><div class="readout" id="status3"></div></section>
+<section class="panel"><h2>4D</h2><div class="caption">F₃⁴ · fixed linear 4D → 2D projection</div><svg id="view4" viewBox="-210 -210 420 420" aria-label="4D finite A B transition graph projection"></svg><div class="readout" id="status4"></div></section>
+</div>
+<div class="controls"><button id="replay">Replay construction</button><button id="finish">Complete now</button></div>
+<details><summary>Exact rules, projection, and completion criterion</summary><p>The source is <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/work/arc_like_maze/math.py">work/arc_like_maze/math.py</a>, <code>World.step</code>, using <code>phi=(0,1,2)</code>. A increments the first coordinate modulo 3. B updates the second coordinate by <code>x₀+1</code>, the third by <code>phi[x₁]</code> (when present), and each subsequent coordinate by its preceding coordinate, all modulo 3. The other coordinates remain unchanged. These are candidate finite witness rules, not a general definition of A/B.</p><p>All states are generated by breadth-first exploration from the origin. The two labeled outgoing edges of each discovered state are included, including self-loops. Lines are directed state transitions, not interpolated physical trajectories. 3D and 4D are projections; overlaps in the drawing do not identify distinct states. Completion means the reachable state set and both A/B edges for each state have been exhausted.</p></details>
+</main><script>
+(()=>{'use strict';const NS='http://www.w3.org/2000/svg',dims=[2,3,4],worlds={};
+function key(s){return s.join(',')}
+function step(s,a){const o=s.slice(),n=s.length;if(a==='A')o[0]=(s[0]+1)%3;else{o[1]=(s[1]+s[0]+1)%3;if(n>=3)o[2]=(s[2]+s[1])%3;for(let i=3;i<n;i++)o[i]=(s[i]+s[i-1])%3}return o}
+function construct(n){const origin=Array(n).fill(0),states=[origin],seen=new Set([key(origin)]),edges=[];for(let q=0;q<states.length;q++){const s=states[q];for(const a of ['A','B']){const v=step(s,a);edges.push({from:s,to:v,a});if(!seen.has(key(v))){seen.add(key(v));states.push(v)}}}return {states,edges,n}}
+for(const n of dims)worlds[n]=construct(n);
+function project(s,n){const v=s.map(x=>x-1),axes=n===2?[[1,0],[0,1]]:n===3?[[1,-.52],[0,.84],[.78,.5]]:[[1,0],[0,1],[-.72,.55],[.52,.76]];let x=0,y=0;for(let i=0;i<n;i++){x+=v[i]*axes[i][0];y+=v[i]*axes[i][1]}const scale=n===2?143:n===3?89:73;return [x*scale,-y*scale]}
+function elem(name,attrs){const e=document.createElementNS(NS,name);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,String(v));return e}
+function draw(n,count){const svg=document.getElementById('view'+n),w=worlds[n];svg.replaceChildren();const edges=w.edges.slice(0,count),visible=new Set([key(Array(n).fill(0))]);for(const e of edges){visible.add(key(e.from));visible.add(key(e.to))}
+for(const e of edges){const [x1,y1]=project(e.from,n),[x2,y2]=project(e.to,n),same=x1===x2&&y1===y2;
+if(same){svg.append(elem('circle',{cx:x1+5,cy:y1-5,r:7,fill:'none',stroke:e.a==='A'?'#84c8e1':'#e1ba8e','stroke-width':1,opacity:.8}));continue}
+const dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy)||1,offset=e.a==='A'?4:-4,nx=-dy/len*offset,ny=dx/len*offset;
+svg.append(elem('line',{x1:x1+nx,y1:y1+ny,x2:x2+nx,y2:y2+ny,stroke:e.a==='A'?'#84c8e1':'#e1ba8e','stroke-width':1.1,opacity:.72}));
+const tx=x2+nx-dx/len*11,ty=y2+ny-dy/len*11;svg.append(elem('circle',{cx:tx,cy:ty,r:1.8,fill:e.a==='A'?'#84c8e1':'#e1ba8e'}))}
+for(const s of w.states){if(!visible.has(key(s)))continue;const [x,y]=project(s,n);svg.append(elem('circle',{cx:x,cy:y,r:3.1,fill:key(s)===Array(n).fill(0).join(',')?'#ffffff':'#b4c3cb'}))}
+document.getElementById('status'+n).textContent=visible.size+'/'+w.states.length+' states · '+count+'/'+w.edges.length+' transitions · '+(count===w.edges.length?'COMPLETE':'constructing')}
+let progress=0,done=false;const max=Math.max(...dims.map(n=>worlds[n].edges.length));
+function render(){for(const n of dims)draw(n,Math.min(progress,worlds[n].edges.length))}
+function frame(){if(!document.body.contains(document.getElementById('view2')))return;if(!done){progress=Math.min(max,progress+1);render();if(progress===max)done=true}requestAnimationFrame(frame)}
+document.getElementById('replay').onclick=()=>{progress=0;done=false;render()};
+document.getElementById('finish').onclick=()=>{progress=max;done=true;render()};
+render();requestAnimationFrame(frame);
 })();
 </script></body></html>
