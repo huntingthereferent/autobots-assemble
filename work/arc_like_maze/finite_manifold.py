@@ -406,6 +406,49 @@ class FiniteTorus3:
             ),
         }
 
+    def element_order_structure(self) -> dict:
+        """Enumerate element orders and exponent in the finite A/B group."""
+        if self.side != 3:
+            raise ValueError("element-order analysis requires side=3")
+        vertices = self.vertices()
+        positions = {v: i for i, v in enumerate(vertices)}
+        identity = tuple(range(len(vertices)))
+        generators = [
+            tuple(positions[self.transition(v, a)] for v in vertices)
+            for a in "AB"
+        ]
+        def compose(left, right):
+            return tuple(left[i] for i in right)
+        seen = {identity}
+        pending = deque([identity])
+        while pending:
+            current = pending.popleft()
+            for generator in generators:
+                next_perm = compose(generator, current)
+                if next_perm not in seen:
+                    seen.add(next_perm)
+                    pending.append(next_perm)
+        orders = Counter()
+        for element in seen:
+            power = identity
+            for n in range(1, len(seen) + 1):
+                power = compose(element, power)
+                if power == identity:
+                    orders[n] += 1
+                    break
+            else:
+                raise AssertionError("element order exceeds group order")
+        from math import lcm
+        exponent = lcm(*orders.keys())
+        return {
+            "group_order": len(seen),
+            "order_distribution": dict(sorted(orders.items())),
+            "exponent": exponent,
+            "has_element_order_9": orders[9] > 0,
+            "has_element_order_27": orders[27] > 0,
+            "all_orders_divide_exponent": all(exponent % k == 0 for k in orders),
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
