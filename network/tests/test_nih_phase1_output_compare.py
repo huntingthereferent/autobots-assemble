@@ -12,6 +12,8 @@ class OutputComparisonTests(unittest.TestCase):
         with TemporaryDirectory() as directory:
             result = compare(directory)
         self.assertEqual(result["selection"], "UNDETERMINED")
+        self.assertEqual(result["shared_capabilities"], [])
+        self.assertEqual(result["capability_maximal_candidates_unverified"], [])
         self.assertTrue(all(x["status"] == "UNKNOWN" for x in result["candidates"].values()))
 
     def test_receipt_is_not_independent_verification(self):
@@ -27,6 +29,8 @@ class OutputComparisonTests(unittest.TestCase):
         self.assertEqual(result["candidates"]["frontier"]["receipt_sha256"], sha256(json.dumps(doc).encode("utf-8")).hexdigest())
         self.assertEqual(result["selection"], "UNDETERMINED")
         self.assertEqual(result["candidates"]["two_clock"]["status"], "UNKNOWN")
+        self.assertEqual(result["shared_capabilities"], ["known-time-frontier"])
+        self.assertEqual(result["capability_maximal_candidates_unverified"], ["frontier"])
 
     def test_nonzero_exit_cannot_become_pass(self):
         with TemporaryDirectory() as directory:
