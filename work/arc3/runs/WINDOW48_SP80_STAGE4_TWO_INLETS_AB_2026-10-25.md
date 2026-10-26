@@ -35,3 +35,32 @@ Keep `(true native original Stage4 entry, marked source action history, full ori
 **Next discriminating test:** pick a *source-grounded, currently manipulable* bar that forms or breaks an actual palette6 connection between lower input A and B. Compare exact source paths/cup reachability in one bounded original SDK A/B, rather than blanket search by cup-fill counts. A successful test would either (a) witness **two disconnected inlet components while preserving four full cup windows** or (b) falsify that geometry proposal for the chosen bar. Only a real SDK level>=5/WIN proves advancement. Stop invoking direct ACTION6 at non-movable inlet pixels: their measured source flow effect is null. Time-shifts and repeated four-cup controls have also been ruled out in the previous reports.
 
 No changes to the original F3-48 mathematical laws or canonical agent. PR #537 remains open and unmerged.
+
+
+## Follow-up: actual two-source junction intervention vs ineffective lower-bar motion
+
+**Native source evidence (all genuine normal SDK from verified Stage0→4 entry):**
+- [Successful right-middle gate A/B run #40315154593](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40315154593), [full original 64×64 frame arrays/receipts #12646576816](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40315154593/artifacts/12646576816), [executed source](../native_sp80_stage4_right_gate_connectivity.py).
+- [Successful lower-bridge bar A/B run #40315876524](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40315876524), [actual original frame arrays/receipts #12647041827](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40315876524/artifacts/12647041827), [executed source](../native_sp80_stage4_lower_bridge_cut.py). The first submission #40315695411 failed on an unnecessary `scipy` import before any native SDK game; it was replaced with standard-library/NumPy 4-connected-component traversal, and the frozen actual SDK conditions succeeded unchanged in the second run.
+
+### 18-game right-middle gate test: distinct water geometry, same inlet connection
+
+Fixed original 21-action four-cup source configuration `BASE`, then genuinely select native palette8 right-middle bar at original SDK position x42,y33 and move it one or two steps (UP, DOWN, LEFT, RIGHT, DOWN+LEFT/RIGHT). One baseline and one reselect control. Nine distinct prospectively frozen programs × two independently reset actual original Stage1 entry histories = **18 genuine SDK games**; all stayed `levels_completed=4`, `NOT_FINISHED`, zero Level5.
+
+At original returned ACTION5 frame23 under the ordinary four-cup geometry, the measured source palette6 water band x35..55/y35..37 contained **63 palette6 pixels**. Genuine right-middle bar UP1 produced just **9** palette6 pixels in that band while *still* fully filling all four original cup windows at frames23–30. DOWN1/DOWN2 gave **18** pixels with the same four-cup timing; LEFT1 gave 54 pixels, with four cups full later at frames25–32. RIGHT1 removed four-cup completion. Every observed full-cup frame in each case still had **one 4-neighbor-connected palette6 component containing both original bottom patches**. The two source patches can be disconnected before flow reaches them or in the post-animation cleanup frame; that is not equivalent to two disconnected inlets while all cups are simultaneously full.
+
+A read-only independent graph walk through the archived actual returned frames identified the **alternative lower bridge** that makes the UP1 result unsurprising: after the upper junction band is nearly depleted, native palette6 still traverses **approximately x32–45/y44–46**; both bottom source patches retain a path through this region. Do not call x35..55/y35..37 the only connecting channel.
+
+### 16-game lower-bar alternative-bridge intervention: source water invariant
+
+Using real right-middle gate UP1 as common A/B parent, the source SDK next selected the actual lower palette8 bar at x15,y48 (source component x11..19/y47..49) and froze alternative sequences RIGHT4/RIGHT5/RIGHT6, UP1/UP2 and order reversal. Eight fixed conditions (including gate-only/reselect controls) × two separate genuine original entries = **16 SDK games**, all officially Level4 NOT_FINISHED, zero Level5/WIN.
+
+The original before-POUR source shows the bar genuinely moved onto the proposed lower bypass area: e.g. source selected palette9 component **x26..34/y44..46**, **x29..37/y44..46**, or **x29..37/y41..43**. All eight original flows filled all four cups beginning at returned frame23, and both inlets stayed in one connected source palette6 component at every four-cup-full returned frame. The graph remained separated at early empty stages (frames0–16) and frame31 as normal, which does not count as a four-cup/flow disconnection.
+
+**Important independent raw NPZ audit:** comparing each entire **32×63×64 nonclock** SDK animation to the common gate-UP1 baseline, the lower-bar **reselect-only** case had zero differing pixels; moved-bar cases showed 1,728–1,773 nonclock changed pixels caused by the changed rendered bar positions. However the exact Boolean array `(source_palette == 6)` across **all 32 frames excluding y63** was **bitwise identical** in **all eight lower-bar conditions**, including the attempts overlapping the visible lower bridge. Consequently these lower-bar moves changed **rendered movable geometry** without changing the actual source palette6 flow topology in the tested setting. Do not infer a physical cut from visual overlap with a palette6 stream.
+
+### Mechanism limit / best next action
+
+The only nearby object in these tests **demonstrably changing the original source palette6 water graph** is the genuine right-middle movable bar. Yet UP/DOWN/LEFT controls have not separated both live source inlets while retaining four full cups, and no source observations establish that separating streams is a winning criterion. Avoid another unguided parameter grid to chase disconnection.
+
+A genuine next Level4 candidate must be grounded in a new source feature **that actually affects the returned water mask and predicts official advancement**, not simply pixel-window cup fill, clock timing, direct ACTION6 inlet clicks, or movable bars drawn across a stream without changing its source6 trajectory. Preserve full original SDK returned frames, root and action words, and explicit F3-48 mathematical referent separation. The truthful conclusion is still **Level4 unresolved**.
