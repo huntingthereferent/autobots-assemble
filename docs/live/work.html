@@ -822,7 +822,7 @@ footer { max-width:none;padding:12px 15px 20px; }
     <span id="lab-mode" class="fine">Loading selected research instrument</span>
     <span class="fine">Native records, not simulated worker statuses</span>
   </div>
-  <aside id="finite-world-widget" aria-label="Live finite-world trace" style="display:grid;grid-template-columns:minmax(200px,320px) minmax(180px,1fr);gap:14px;align-items:center;margin:12px 0 18px;padding:12px;border:1px solid #30414c;background:#111e27;max-width:760px">
+  <aside id="finite-world-widget" aria-label="Live finite-world trace" style="display:none;grid-template-columns:minmax(200px,320px) minmax(180px,1fr);gap:14px;align-items:center;margin:12px 0 18px;padding:12px;border:1px solid #30414c;background:#111e27;max-width:760px">
     <iframe src="../finite-world-live.html" title="Live finite-world trace demonstration" loading="lazy" style="width:100%;height:235px;border:1px solid #30414c;background:#0c1420"></iframe>
     <div><strong style="font-size:13px">FINITE WORLD / LIVE TRACE</strong><p style="font-size:12px;color:#a8bec9;line-height:1.6">Small, independently running demonstration of bounded state transitions. The displayed steps are generated locally from defined rules; they are not a live research worker or evidence of solving arbitrary problems.</p><a href="../finite-world-live.html" style="font-size:12px">Open full trace</a></div>
   </aside>
@@ -1388,6 +1388,7 @@ footer { max-width:none;padding:12px 15px 20px; }
       $("lab-heading").textContent=title;
       $("lab-subtitle").textContent=description;
       $("lab-mode").textContent="Instrument / "+branch.toUpperCase();
+      $("finite-world-widget").style.display=branch==="world"?"grid":"none";
       for(const a of labHost.querySelectorAll("[data-lab-branch]")){
         a.setAttribute("aria-current",a.dataset.labBranch===branch?"page":"false");
       }
