@@ -1,0 +1,29 @@
+name: ARC4 native separated middle-cup recovery
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_middle_cup_recover.py'
+      - '.github/workflows/arc4-sp80-stage4-middle-cup-recover.yml'
+jobs:
+  genuine-source-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine native ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile frozen source
+        run: python -m compileall -q work/arc3/native_sp80_stage4_middle_cup_recover.py
+      - name: Run original SDK missing middle cup recovery
+        run: python -m work.arc3.native_sp80_stage4_middle_cup_recover --out runtime/data/arc4/original-sp80-middle-cup-recover.json
+      - name: Preserve real original source frames and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-middle-cup-recover
+          path: runtime/data/arc4/original-sp80-middle-cup-recover.*
+          if-no-files-found: error
+          retention-days: 14
