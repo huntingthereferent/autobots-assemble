@@ -142,7 +142,8 @@ a.equal(copy[5].notes[1][7],true);
 a.equal(m.MELODY_BARS,8);
 a.equal(m.melodyIndexFor(0),0);a.equal(m.melodyIndexFor(7),7);
 a.equal(m.melodyIndexFor(8),0);a.equal(m.melodyIndexFor(15),7);
-a.equal(Object.keys(m.MODERN_PROFILES).length,9);
+a.equal(Object.keys(m.MODERN_PROFILES).length,19);
+for(const id of ['hot','cute','rock','dreamy','spooky','dance','fruit','halloween','moon','electric'])a(Object.hasOwn(m.MODERN_PROFILES,id));
 for(const p of Object.values(m.MODERN_PROFILES)){
  a.equal(p.patterns.length,4);
  a(p.patterns.every(v=>v.every(step=>Number.isInteger(step)&&step>=0&&step<16)));

@@ -172,6 +172,18 @@ body{background:radial-gradient(ellipse 90% 65% at 100% 0%,#1b3743 0,transparent
 </section>
 <section class="beat-starter card" id="beat" aria-labelledby="beat-title">
 <div class="beat-header"><div><span class="eyebrow">SONG WORKBENCH / SIMPLE MODE</span><h2 id="beat-title">1 · Make a beat</h2><p>Pick a groove, put four chords underneath it, then draw a melody.</p></div><button type="button" class="action mint" id="beat-play">▶ Play song</button></div>
+<div class="vibe-studio" id="vibe-studio"><div class="vibe-top"><div><strong>CAT VIBE MODES</strong><p>Tap a vibe to change the beat, backing sounds and tempo, not your melody or chords.</p></div><span id="vibe-status" role="status" aria-live="polite">PICK A VIBE</span></div><div class="vibe-grid" id="vibe-grid" role="group" aria-label="Music vibe modes">
+<button type="button" class="vibe-btn" data-vibe="hot" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">🔥</span><span><strong>Hot</strong><small>Sultry bass bounce</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="cute" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">🍬</span><span><strong>Cute</strong><small>Sparkly sugar-pop</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="rock" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">🎸</span><span><strong>Rock</strong><small>Crunchy garage beat</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="dreamy" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">☁️</span><span><strong>Dreamy</strong><small>Soft cloud pads</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="spooky" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">👻</span><span><strong>Spooky</strong><small>Ghostly shadows</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="dance" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">💃</span><span><strong>Dance</strong><small>Club bass energy</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="fruit" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">🍓</span><span><strong>Fruit</strong><small>Juicy tropical pop</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="halloween" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">🎃</span><span><strong>Halloween</strong><small>Haunted carnival</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="moon" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">🌙</span><span><strong>Moon</strong><small>Quiet lunar drift</small></span></button>
+<button type="button" class="vibe-btn" data-vibe="electric" aria-pressed="false"><span aria-hidden="true" class="vibe-icon">⚡</span><span><strong>Electric</strong><small>Neon synth rush</small></span></button>
+</div><p class="vibe-tip">A vibe applies to all 16 bars. Save an arrangement branch to keep it.</p></div>
 <div class="beat-controls"><label for="tempo">TEMPO / BPM<input type="range" class="tempo" id="tempo" min="65" max="180" step="1" value="112"><output id="tempo-read" for="tempo">112</output></label><label for="groove-preset">BEAT FEEL<select id="groove-preset"><option value="pop">Pop · steady bounce</option><option value="club">Dance · four on the floor</option><option value="rap">Half-time · laid back</option><option value="rnb">R&B · loose pocket</option><option value="indie">Indie · offbeat</option></select></label><button type="button" class="small-btn" id="apply-groove">Use groove for all 16 bars</button><div class="beat-help">Kick → snare → bass → texture. Changing the groove leaves chords and melody alone.</div></div>
 <div class="transport-readout"><div id="beat-now" class="transport-now" aria-live="off">NOT PLAYING · Press Play song</div><div id="edit-now" class="transport-edit">EDITING · BAR 01 · MELODY M1</div></div>
 <p class="beat-links"><a href="#harmony">2 · Choose four chords ↓</a><a href="#studio">3 · Draw a melody ↓</a></p></section>
@@ -274,7 +286,31 @@ const MODERN_PROFILES={
  rap:{label:'Half-time sub pocket',patterns:[[0,7,10],[8,15],[0,6,11,15],[0]]},
  country:{label:'Organic country-pop',patterns:[[0,8],[4,12],[0,4,8,12],[0,8]]},
  synth:{label:'Synth pulse',patterns:[[0,4,8,12],[4,12],[0,3,7,10,14],[0,8,12]]},
- indie:{label:'Indie offbeat',patterns:[[0,6,8,14],[4,12],[0,6,10],[2,10]]}
+ indie:{label:'Indie offbeat',patterns:[[0,6,8,14],[4,12],[0,6,10],[2,10]]},
+ hot:{label:'Hot vibe',patterns:[[0,7,10],[4,11,14],[0,3,7,11,14],[3,9,13]]},
+ cute:{label:'Cute vibe',patterns:[[0,4,8,12],[2,4,6,10,12,14],[0,4,8,12],[0,4,8,12]]},
+ rock:{label:'Rock vibe',patterns:[[0,4,8,12],[4,12],[0,2,4,6,8,10,12,14],[2,6,10,14]]},
+ dreamy:{label:'Dreamy vibe',patterns:[[0,8],[4,12],[0,8],[0,6,12]]},
+ spooky:{label:'Spooky vibe',patterns:[[0,6,11],[5,13],[0,7,10],[3,10,15]]},
+ dance:{label:'Dance vibe',patterns:[[0,4,8,12],[2,4,6,10,12,14],[0,3,6,8,11,14],[2,6,10,14]]},
+ fruit:{label:'Fruit vibe',patterns:[[0,6,8,14],[3,6,10,14],[0,3,7,10,13],[2,5,9,12]]},
+ halloween:{label:'Halloween vibe',patterns:[[0,7,10],[4,11,15],[0,6,10,14],[0,5,9,13]]},
+ moon:{label:'Moon vibe',patterns:[[0,8],[8],[0,10],[0,7,12]]},
+ electric:{label:'Electric vibe',patterns:[[0,4,8,12],[2,4,6,10,12,14],[0,2,5,7,10,12,15],[1,3,5,7,9,11,13,15]]}
+};
+// Original finite beat profiles and sound design. These do not alter user-imported samples.
+const VIBE_MODES={hot:{name:'Hot',bpm:112},cute:{name:'Cute',bpm:140},rock:{name:'Rock',bpm:126},dreamy:{name:'Dreamy',bpm:92},spooky:{name:'Spooky',bpm:86},dance:{name:'Dance',bpm:128},fruit:{name:'Fruit',bpm:118},halloween:{name:'Halloween',bpm:106},moon:{name:'Moon',bpm:80},electric:{name:'Electric',bpm:145}};
+const VIBE_TIMBRES={
+ hot:{waves:["sine","triangle","sine","triangle"],kick:95,bass:-12,air:12,cutoff:1300,gain:1.1},
+ cute:{waves:["sine","triangle","triangle","sine"],kick:175,bass:-12,air:24,cutoff:3100,gain:0.72},
+ rock:{waves:["sine","sawtooth","sawtooth","sawtooth"],kick:122,bass:-12,air:12,cutoff:880,gain:0.68},
+ dreamy:{waves:["sine","sine","sine","sine"],kick:92,bass:-12,air:24,cutoff:1100,gain:0.55},
+ spooky:{waves:["sine","triangle","triangle","sine"],kick:72,bass:-12,air:19,cutoff:720,gain:0.8},
+ dance:{waves:["sine","triangle","sawtooth","triangle"],kick:148,bass:-12,air:12,cutoff:1750,gain:0.85},
+ fruit:{waves:["sine","triangle","triangle","sine"],kick:151,bass:-12,air:24,cutoff:2400,gain:0.85},
+ halloween:{waves:["sine","sawtooth","triangle","triangle"],kick:91,bass:-12,air:19,cutoff:950,gain:0.77},
+ moon:{waves:["sine","sine","sine","sine"],kick:67,bass:-12,air:24,cutoff:600,gain:0.48},
+ electric:{waves:["sine","sawtooth","sawtooth","square"],kick:175,bass:-12,air:12,cutoff:1900,gain:0.72}
 };
 function modernLayerState(profile,bar){
  // Four distinct sections: opening pocket → build → full hook → spacious return.
@@ -720,7 +756,7 @@ function selectBar(index){
  $('bar-number').textContent='BAR '+String(index+1).padStart(2,'0')+' / 16';
  $('bar-chord').value=bars[index].chord?realizeBar(bars[index].chord).name:'';
  $('copy-previous-bar').disabled=index===0;
- paintLayers();paintCadence();paintGrid();paintHarmony();updatePinButton();
+ paintLayers();paintCadence();paintGrid();paintHarmony();updatePinButton();paintVibes();
 }
 function dirtyBars(){arrangementDirty=true;$('branch-status').textContent='UNSAVED CHANGES · Save a new branch or update selected';paintHarmony()}
 function setBarChord(){
@@ -761,6 +797,24 @@ function applyProgression(scope='song'){
  // Chords are harmony, not groove. Never reset melody, layers or cadence here.
  dirtyBars();selectBar(selectedBar);
  harmonyStatus('Chords updated in bars '+(start+1)+'–'+limit+' · beat and melody unchanged');
+}
+function paintVibes(){
+ const id=bars[selectedBar]?.profile;
+ for(const b of document.querySelectorAll('#vibe-grid .vibe-btn'))b.setAttribute('aria-pressed',String(b.dataset.vibe===id));
+ $('vibe-status').textContent=Object.hasOwn(VIBE_MODES,id)?VIBE_MODES[id].name.toUpperCase()+' MODE':'PICK A VIBE';
+}
+function applyVibe(id){
+ const vibe=VIBE_MODES[id];if(!vibe)return;
+ // Preserve every existing chord, melody, chord cadence, imported sample and previously saved branch.
+ for(let i=0;i<BAR_COUNT;i++){bars[i].profile=id;bars[i].layers=[true,true,true,i>=4&&i<12]}
+ $('tempo').value=String(vibe.bpm);$('tempo-read').textContent=String(vibe.bpm);
+ dirtyBars();selectBar(selectedBar);
+ $('vibe-status').textContent=vibe.name.toUpperCase()+' MODE · '+vibe.bpm+' BPM';
+ harmonyStatus(vibe.name+' mode active; notes and chords preserved');
+}
+function initializeVibes(){
+ for(const b of document.querySelectorAll('#vibe-grid .vibe-btn'))b.addEventListener('click',()=>applyVibe(b.dataset.vibe));
+ paintVibes();
 }
 function applyGroove(){
  const profile=$('groove-preset').value;
@@ -938,6 +992,7 @@ function paintLayers(){
 function playModernLayers(bar,step){
  if(!audio)return;
  const p=MODERN_PROFILES[bar.profile]||MODERN_PROFILES.pop;
+ const mood=VIBE_TIMBRES[bar.profile]||null;
  const chord=realizeBar(bar.chord);
  for(let i=0;i<4;i++){
   if(!bar.layers[i]||!p.patterns[i].includes(step)||(i>=2&&!chord.notes.length))continue;
@@ -947,8 +1002,17 @@ function playModernLayers(bar,step){
   else if(i===1){osc.type='triangle';osc.frequency.setValueAtTime(step%4===0?188:580,t);osc.frequency.exponentialRampToValueAtTime(100,t+.075);peak=.025;duration=.09}
   else if(i===2){osc.type='sine';osc.frequency.value=hz(chord.notes[0]-12);peak=.048;duration=.20}
   else{osc.type='sine';osc.frequency.value=hz(chord.notes[0]+12);peak=.012;duration=.42}
+  if(mood){
+   osc.type=mood.waves[i];
+   if(i===0){osc.frequency.setValueAtTime(mood.kick,t);osc.frequency.exponentialRampToValueAtTime(48,t+.09)}
+   if(i===2)osc.frequency.value=hz(chord.notes[0]+mood.bass);
+   if(i===3)osc.frequency.value=hz(chord.notes[0]+mood.air);
+   peak*=mood.gain;if(i===3)duration*=1.35;
+  }
   amp.gain.setValueAtTime(.0001,t);amp.gain.linearRampToValueAtTime(peak,t+.006);amp.gain.exponentialRampToValueAtTime(.0001,t+duration);
-  osc.connect(amp);amp.connect(master);osc.start(t);osc.stop(t+duration+.02);
+  if(mood){const filter=audio.createBiquadFilter();filter.type='lowpass';filter.frequency.value=mood.cutoff;osc.connect(filter);filter.connect(amp)}
+  else osc.connect(amp);
+  amp.connect(master);osc.start(t);osc.stop(t+duration+.02);
  }
 }
 
@@ -1182,7 +1246,7 @@ function bindSoundBank(){
  if(unlockAudio())initializeSoundBank();
 }
 
-function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeHarmony();initializeBranches();initializeMelodyAndCadence();for(const b of document.querySelectorAll('.cat-btn'))b.addEventListener('click',()=>pickCat(b.dataset.cat));$('octave-down').addEventListener('click',()=>changeOctave(-1));$('octave-up').addEventListener('click',()=>changeOctave(1));$('volume').addEventListener('input',e=>{volume=e.target.value/100;if(master)master.gain.setTargetAtTime(volume*.65,audio.currentTime,.02)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>togglePurr(e.target.checked));
+function bind(){bindSoundBank();addKeys();makeGrid();pickCat('miso');initializeHarmony();initializeBranches();initializeMelodyAndCadence();initializeVibes();for(const b of document.querySelectorAll('.cat-btn'))b.addEventListener('click',()=>pickCat(b.dataset.cat));$('octave-down').addEventListener('click',()=>changeOctave(-1));$('octave-up').addEventListener('click',()=>changeOctave(1));$('volume').addEventListener('input',e=>{volume=e.target.value/100;if(master)master.gain.setTargetAtTime(volume*.65,audio.currentTime,.02)});$('echo').addEventListener('change',e=>echo=e.target.checked);$('purr').addEventListener('change',e=>togglePurr(e.target.checked));
  document.addEventListener('keydown',e=>{if(e.repeat||e.altKey||e.ctrlKey||e.metaKey||/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName)||document.activeElement?.isContentEditable)return;const i=SHORTCUTS.indexOf(e.code);if(i<0)return;e.preventDefault();holdSound(midiFor(i,octave),'key'+e.code)});
  document.addEventListener('keyup',e=>{if(!SHORTCUTS.includes(e.code))return;releaseSound('key'+e.code)});
  window.addEventListener('blur',()=>{stopLoop();stopTape();releaseAll();togglePurr(false);$('purr').checked=false});document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseAll();stopLoop();stopTape();togglePurr(false);$('purr').checked=false}});

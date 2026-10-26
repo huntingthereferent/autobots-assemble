@@ -16,6 +16,37 @@ PAGE = Path(__file__).resolve().parents[2] / "docs/live/cat-keyboard.html"
 
 @unittest.skipUnless(sync_playwright, "Playwright required for real browser suite")
 class MeowLabBrowserTests(unittest.TestCase):
+    def test_vibe_modes_keep_melody_and_chords(self):
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True, args=["--no-sandbox", "--autoplay-policy=no-user-gesture-required"])
+            try:
+                page = browser.new_page()
+                errors = []
+                page.on("pageerror", lambda error: errors.append(str(error)))
+                page.goto(PAGE.as_uri(), wait_until="domcontentloaded")
+                self.assertEqual(page.locator("#vibe-grid .vibe-btn").count(), 10)
+                original_chords = page.locator("#chord-list .bar-tile strong").all_inner_texts()
+                page.locator("#seq .step[data-row='1'][data-col='3']").click()
+                for vibe, tempo in [("fruit", "118"), ("halloween", "106"), ("moon", "80"), ("electric", "145"), ("rock", "126"), ("cute", "140")]:
+                    button = page.locator(f'.vibe-btn[data-vibe="{vibe}"]')
+                    button.click()
+                    self.assertEqual(button.get_attribute("aria-pressed"), "true")
+                    self.assertEqual(page.locator("#tempo").input_value(), tempo)
+                    self.assertIn(vibe.upper(), page.locator("#vibe-status").inner_text())
+                    self.assertEqual(page.locator("#seq .step.on").count(), 1)
+                    self.assertEqual(page.locator("#chord-list .bar-tile strong").all_inner_texts(), original_chords)
+                page.locator("#song-versions summary").click()
+                page.locator("#branch-name").fill("Cute mode")
+                page.locator("#branch-save-new").click()
+                page.reload(wait_until="domcontentloaded")
+                page.locator("#song-versions summary").click()
+                page.locator("#branch-select").select_option("branch-1")
+                page.locator("#branch-load").click()
+                self.assertEqual(page.locator('.vibe-btn[data-vibe="cute"]').get_attribute("aria-pressed"), "true")
+                self.assertFalse(errors, errors)
+            finally:
+                browser.close()
+
     def test_desktop_upload_play_and_native_handoff(self):
         with TemporaryDirectory() as root:
             wav_path = Path(root) / "sample-cat.wav"
