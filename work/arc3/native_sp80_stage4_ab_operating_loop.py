@@ -25,6 +25,10 @@ from .native_sp80_stage4_four_cup_followup import BASE,CUPS
 from .native_sp80_multi_select import parse_plan
 from .native_sp80_legal_pairs import hash_frame
 
+# Continue from *our own* archived failed move, not from an external win.
+# Genuine original SDK source run #40393794254 selected this rooted word:
+# 45/45/45/45 -> 0/45/45/45, x26 leak changed to x11.
+OWN_LAST_MISTAKE=BASE+" 6@34,21 3 6@15,48 4 6@31,21 3"
 MAX_AB_ROUNDS=3
 assert len(parse_plan(BASE))==21 and len(STAGE1_WITNESSES)==2
 
@@ -57,19 +61,29 @@ def examine(root,pre,frames,after):
     best_index=max(range(len(counts)),key=lambda n:sum(counts[n].values()))
     best=counts[best_index]
     missing=[name for name,v in best.items() if v<45]
-    first_top=warnings["top"]["first_returned_contact"]
-    first_right=warnings["right"]["first_returned_contact"]
-    if first_top:
-        error={"kind":"actual_top_floor_contact","native_xy":first_top[1:],
-               "first_returned_frame":first_top[0]}
-    elif first_right:
-        error={"kind":"actual_right_floor_contact","native_xy":first_right[1:],
-               "first_returned_frame":first_right[0]}
-    elif missing:
+    # The observed full-border palette14 pulse is a *warning*, not the
+    # location of source-water contact: prior A/B measurement mistook
+    # the warning's first colored pixel (5,2) for the actual leak.
+    # Follow actual palette6 pixels at the source floor-adjacent strip.
+    floor_water=[]
+    for t,frame in enumerate(frames):
+        yy,xx=np.nonzero(frame[5:8,5:59]==6)
+        for y,x in zip(yy,xx):floor_water.append((int(t),int(x)+5,int(y)+5))
+    leak=min(floor_water) if floor_water else None
+    if missing:
         target=missing[0];x0,y0,x1,y1=CUPS[target]
         error={"kind":"observed_unfilled_cup","cup":target,
                "native_xy":[(x0+x1)//2,(y0+y1)//2],
-               "missing_source_pixels":45-best[target]}
+               "missing_source_pixels":45-best[target],
+               "actual_water_at_floor":list(leak) if leak else None}
+    elif warnings["top"]["first_returned_contact"] and leak:
+        error={"kind":"actual_water_near_top_floor",
+               "native_xy":[leak[1],leak[2]],
+               "water_first_returned_frame":leak[0],
+               "floor_warning_first_frame":warnings["top"]["first_returned_contact"][0]}
+    elif warnings["right"]["first_returned_contact"]:
+        error={"kind":"actual_side_floor_warning","native_xy":[59,31],
+               "first_returned_frame":warnings["right"]["first_returned_contact"][0]}
     else:
         error={"kind":"unresolved_native_outcome","native_xy":[32,21]}
     score={
@@ -80,6 +94,7 @@ def examine(root,pre,frames,after):
         "four_native_cup_peak_frame":best_index,
         "floor_lines":warnings,
         "observed_error":error,
+        "observed_first_source6_near_top_floor":list(leak) if leak else None,
         "source6_full_animation_digest":hasharray(frames==6),
         "original_full_animation_digest":hasharray(frames),
     }
@@ -177,17 +192,19 @@ def main():
     p=argparse.ArgumentParser();p.add_argument("--out",type=Path,required=True)
     args=p.parse_args()
     main_witness,main_entry=STAGE1_WITNESSES[0]
-    reference=one("owned_original_wrong_BASE",main_witness,main_entry,BASE+" 5")
+    reference=one("owned_prior_observed_mistake",main_witness,main_entry,OWN_LAST_MISTAKE+" 5")
+    if reference["measure"]["four_native_cup_peak_counts"]["lateral"]!=0:
+        raise AssertionError("Archived original A/B mistake changed: must track exact referent")
     roots={reference.get("native_root")}
     trials=[reference];relations=[];chosen=reference
-    used=[];rooted_prefix=BASE
+    used=[];rooted_prefix=OWN_LAST_MISTAKE
     for round_no in range(MAX_AB_ROUNDS):
         if chosen["measure"]["official_level5_or_WIN"]:break
         bar=target_object(chosen,used)
         used.append(bar["click"])
         x,y=bar["click"]
         mistake=chosen["measure"]["observed_error"]
-        dirs=(3,4) if mistake["kind"] in ("actual_top_floor_contact","actual_right_floor_contact") else (1,2)
+        dirs=(1,2) if mistake["kind"]=="observed_unfilled_cup" else (3,4)
         pair=[]
         for side,action in (("A",dirs[0]),("B",dirs[1])):
             word=f"{rooted_prefix} 6@{x},{y} {action} 5"
@@ -230,7 +247,7 @@ def main():
         saved.append({k:v for k,v in t.items() if k not in ("source","pre","frames")})
     report={
        "kind":"ORIGINAL_SP80_NATIVE_MISTAKE_LED_AB_ACTIVE_CORRECTION",
-       "origin":"owned unsuccessful 21-action BASE, not the external published solution",
+       "origin":"own observed wrong source from run #40393794254, descended from owned BASE; not published solution",
        "operating_protocol":"actual A/B mistakes -> compare original SDK relationships -> use difference for the next action",
        "original_stage4_root_hashes":sorted(x for x in roots if x),
        "actual_sdk_games_run":len(trials),
