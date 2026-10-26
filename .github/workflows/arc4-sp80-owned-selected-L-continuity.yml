@@ -1,0 +1,29 @@
+name: ARC owned A-B selected L continuity
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_ab_selected_L_continuity.py'
+      - '.github/workflows/arc4-sp80-owned-selected-L-continuity.yml'
+jobs:
+  authentic-native-original-SDK:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile the actual selected-L correction
+        run: python -m compileall -q work/arc3/native_sp80_stage4_ab_selected_L_continuity.py
+      - name: Execute native A-B movement after palette representation correction
+        run: python -m work.arc3.native_sp80_stage4_ab_selected_L_continuity --out runtime/data/arc4/owned-sp80-selected-L-continuity.json
+      - name: Keep mistakes, original selected L and full SDK returned frames
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owned-sp80-selected-L-continuity
+          path: runtime/data/arc4/owned-sp80-selected-L-continuity.*
+          if-no-files-found: error
+          retention-days: 14
