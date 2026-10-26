@@ -24,7 +24,7 @@ from collections import Counter
 from pathlib import Path
 from hashlib import blake2b
 import numpy as np
-from scipy.ndimage import label,find_objects
+from collections import deque
 from .native_sp80_stage2_baseline import STAGE1_WITNESSES
 from .native_sp80_stage4_entry_inventory import run_case
 from .native_sp80_stage4_four_cup_followup import BASE,read_pour
@@ -54,17 +54,29 @@ assert all(len(parse_plan(" ".join([BASE,GATE_UP1,suffix,"5"])))<100
 def digest(a):
     return blake2b(np.ascontiguousarray(a).tobytes(),digest_size=16).hexdigest()
 def native_palette8_9_selected_region(frame):
-    result=[]
-    for c in (8,9):
-        marker,count=label(frame==c)
-        for idx,slices in enumerate(find_objects(marker),1):
-            if slices is None:continue
-            y,x=slices
-            n=int(np.count_nonzero(marker[slices]==idx))
-            if n>=9:
-                result.append({"palette":c,"x_min":x.start,"x_max":x.stop-1,
-                               "y_min":y.start,"y_max":y.stop-1,"pixels":n})
-    return result
+    """Pure NumPy + standard-library 4-connected native pixel objects."""
+    found=[]
+    for palette in (8,9):
+        mask=frame==palette
+        seen=np.zeros(mask.shape,dtype=bool)
+        for y,x in np.argwhere(mask):
+            y=int(y);x=int(x)
+            if seen[y,x]:continue
+            q=deque([(y,x)]);seen[y,x]=True
+            pixels=[]
+            while q:
+                yy,xx=q.popleft();pixels.append((yy,xx))
+                for ny,nx in ((yy-1,xx),(yy+1,xx),(yy,xx-1),(yy,xx+1)):
+                    if 0<=ny<64 and 0<=nx<64 and mask[ny,nx] and not seen[ny,nx]:
+                        seen[ny,nx]=True;q.append((ny,nx))
+            if len(pixels)>=9:
+                found.append({"palette":palette,
+                              "x_min":min(x for y,x in pixels),
+                              "x_max":max(x for y,x in pixels),
+                              "y_min":min(y for y,x in pixels),
+                              "y_max":max(y for y,x in pixels),
+                              "pixels":len(pixels)})
+    return found
 def source_inlet_connected(frame):
     comp=source_4_neighbor_components(frame)
     return {
