@@ -1,35 +1,347 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Finite mathematical referent · Tracework Research</title><meta name="description" content="Source-grounded technical research instruments for finite mathematics, ARC, WORLD, and NIH.">
-<link rel="stylesheet" href="research.css"><script defer src="research.js"></script></head>
-<body data-page="math"><div class="layout"><aside class="sidebar"><a class="brand" href="index.html">TRACEWORK / RESEARCH</a><div class="subbrand">Original referents · native witnesses · experiments</div><nav class="nav" aria-label="Research navigation"><a class="" href="index.html" >Research index</a><a class="current" href="math.html" aria-current="page">Finite mathematics</a><a class="" href="arc.html" >ARC native records</a><a class="" href="world.html" >WORLD investigations</a><a class="" href="nih.html" >NIH source comparisons</a></nav><div class="sidefoot">RESEARCH IS THE WORK.<br>Tools are built to investigate, not to ship products.<p><a href="../live/work.html">Tracework execution viewer</a></p><p><a href="https://github.com/huntingthereferent">GitHub profile</a></p></div></aside>
-<main><div class="eyebrow">MATHEMATICS / TRANSFORMATION LAB</div><h1 class="page-title">Finite mathematical referent</h1><p class="intro">An inspectable 48-law A/B family. Choose two parameterizations, apply a common action word, inspect source-derived transition tables, and distinguish whole-state from origin-preserving relations. This is a bounded F₃ model.</p><div class="tools"><span class="tool-pill">read-only technical instrument</span><span class="tool-pill">baseline: f08368e5f59a</span><a href="../live/work.html">Executions</a><a href="index.html">Research index</a></div>
-<section class="panel">
-<div class="metric-row"><div class="metric"><span>Concrete laws</span><strong>48</strong></div><div class="metric"><span>Full-state classes</span><strong>14</strong></div><div class="metric"><span>Rooted classes</span><strong>16</strong></div><div class="metric"><span>Ordered pairs</span><strong>2,304</strong></div></div>
-<p class="note">Counts are stated in the source record for this declared finite family; they are not findings about every possible two-action mathematical system.</p>
-</section>
-<div class="columns">
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finite Mathematics | Tracework Research</title>
+<meta name="description" content="Inspectable A/B transformations, finite-word invariants, and pinned source records.">
+<link rel="stylesheet" href="research.css">
+<script defer src="research.js"></script>
+<style>
+/* Math instrument layout only. Other research pages retain research.css. */
+.math-page { --bg:#080e13; --panel:#0d171e; --panel2:#12212a; --line:#30424c; --ink:#e7f0f2; --dim:#a4b9c2; --teal:#9cdcd3; --warn:#eed09a; font-family:"DejaVu Sans Mono",Consolas,monospace; }
+.math-page .layout { grid-template-columns:205px minmax(0,1fr); }
+.math-page .sidebar { padding:22px 14px; }
+.math-page .brand { font-size:13px; letter-spacing:.06em; }
+.math-page .nav a { border-radius:2px; font-size:12px; }
+.math-page main { max-width:1660px; padding:23px clamp(15px,2.5vw,36px) 45px; }
+.math-page.embedded main { padding:6px 4px 25px; }
+.math-page .m-header { display:flex; flex-wrap:wrap; gap:18px; justify-content:space-between; align-items:start; border-bottom:1px solid var(--line); padding-bottom:17px; margin-bottom:16px; }
+.math-page .m-header h1 { font-size:clamp(23px,2.6vw,32px); line-height:1.2; margin:4px 0 8px; letter-spacing:-.045em; }
+.math-page .m-header p { max-width:690px; font-size:12px; line-height:1.65; color:var(--dim); margin:0; }
+.math-page .m-meta { display:flex; flex-wrap:wrap; align-items:center; gap:7px; justify-content:flex-start; max-width:450px; }
+.math-page .m-token { font-size:10px; border:1px solid #3e525d; padding:6px 9px; color:#c3d7de; white-space:nowrap; }
+.math-page .m-meta a { text-decoration:none; padding:6px 9px; font-size:11px; border:1px solid #405766; }
+.math-page .m-meta a:hover { background:#172d36; }
+.math-page .m-summary { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border:1px solid var(--line); margin-bottom:16px; }
+.math-page .m-stat { padding:11px 15px; min-width:0; border-right:1px solid var(--line); }
+.math-page .m-stat:last-child { border:0; }
+.math-page .m-stat strong { display:block; font-size:21px; font-weight:650; font-variant-numeric:tabular-nums; line-height:1.35; }
+.math-page .m-stat span { display:block; font-size:10px; color:var(--dim); text-transform:uppercase; letter-spacing:.035em; }
+.math-page .m-workbench { display:grid; grid-template-columns:minmax(280px,345px) minmax(0,1fr); gap:14px; align-items:start; }
+.math-page .m-panel { border:1px solid var(--line); background:var(--panel); padding:16px; min-width:0; margin:0 0 14px; }
+.math-page .m-panel h2 { font-size:14px; line-height:1.35; margin:0 0 7px; font-weight:700; letter-spacing:-.01em; }
+.math-page .m-panel h3 { font-size:12px; line-height:1.45; margin:0; color:var(--ink); }
+.math-page .m-panel p { font-size:11px; line-height:1.6; margin:6px 0 10px; color:var(--dim); }
+.math-page .m-panel .eyebrow { margin-bottom:8px; font-size:10px; }
+.math-page .m-panelhead { display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:11px; }
+.math-page .m-muted { color:var(--dim); font-size:10px; line-height:1.6; }
+.math-page .m-fields { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; margin-top:11px; }
+.math-page .m-fields .field { min-width:0; gap:4px; }
+.math-page .m-fields label { color:var(--dim); font-size:10px; }
+.math-page select,.math-page input,.math-page button { border-radius:2px; min-height:35px; }
+.math-page .m-fields select { width:100%; padding:8px 6px; }
+.math-page .m-world { padding:12px 11px 14px; border:1px solid #334c57; background:#101e28; margin-top:10px; }
+.math-page .m-world:nth-of-type(2) { border-color:#526078; background:#121d2b; }
+.math-page .m-worldhead { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.math-page .m-worldhead b { font-size:12px; font-weight:750; }
+.math-page .m-worldhead small { font-size:10px; color:var(--dim); }
+.math-page .m-worldhead .m-dot { width:9px; height:9px; display:inline-block; background:#98d6ce; margin-right:6px; }
+.math-page .m-worldhead .m-dot.b { background:#c0b4e9; }
+.math-page .m-actions { display:flex; flex-wrap:wrap; gap:7px; margin:12px 0 0; }
+.math-page button { font-size:11px; padding:8px 11px; background:#152731; border:1px solid #4a636e; }
+.math-page button:hover { background:#1e3b46; }
+.math-page button:focus-visible,.math-page select:focus-visible,.math-page input:focus-visible,.math-page summary:focus-visible { outline:2px solid var(--teal); outline-offset:2px; }
+.math-page .m-actions button { flex:1 1 auto; }
+.math-page .m-preset { margin-top:12px; }
+.math-page .m-preset label { display:block; margin-bottom:5px; color:var(--dim); font-size:10px; }
+.math-page .m-preset select { width:100%; }
+.math-page .m-result { border-left:3px solid var(--teal); background:#13272b; padding:13px 15px; margin:0; }
+.math-page .m-result strong { font-size:14px; display:block; overflow-wrap:anywhere; }
+.math-page .m-result p { margin:6px 0 0; max-width:830px; color:#bcd2d5; font-size:11px; }
+.math-page .m-comparison { display:grid; grid-template-columns:minmax(0,1fr) minmax(240px,.9fr); gap:14px; }
+.math-page .m-tablewrap { overflow:auto; }
+.math-page .invariant-table { min-width:365px; font-size:11px; }
+.math-page .invariant-table th { font-size:10px; border-bottom:1px solid #52707a; white-space:nowrap; text-transform:uppercase; }
+.math-page .invariant-table td { border-color:#314957; padding:9px 6px; }
+.math-page .invariant-table td:first-child { color:#dbe4e7; font-weight:700; }
+.math-page #q-table { display:grid; gap:5px; margin-top:12px; }
+.math-page #q-table .state-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5px; }
+.math-page #q-table .state-node { min-height:43px; font-size:10px; line-height:1.35; font-variant-numeric:tabular-nums; border-radius:2px; background:#122430; padding:5px 2px; overflow-wrap:anywhere; }
+.math-page #q-table .state-node.active { background:#2a5053; border-color:#98d6ce; color:#fff; }
+.math-page .m-qlegend { display:flex; gap:10px; margin-top:9px; font-size:10px; color:var(--dim); }
+.math-page .m-qlegend i { width:10px; height:10px; display:inline-block; border:1px solid #98d6ce; background:#2a5053; margin-right:5px; vertical-align:middle; }
+.math-page .m-wordbar { display:flex; align-items:end; gap:8px; flex-wrap:wrap; margin-top:12px; }
+.math-page .m-wordbar .field { flex:1 1 240px; min-width:0; }
+.math-page .m-wordbar label { display:block; color:var(--dim); font-size:10px; margin-bottom:6px; }
+.math-page #action-word { width:100%; letter-spacing:.04em; text-transform:uppercase; background:#091922; padding:10px 12px; font-size:13px; }
+.math-page .m-optools { display:flex; flex-wrap:wrap; gap:6px; }
+.math-page .m-optools button { min-width:40px; font-weight:700; }
+.math-page .m-optools button[data-add-op="A"] { color:#a4e5d6; border-color:#4c827d; }
+.math-page .m-optools button[data-add-op="B"] { color:#d5c9f6; border-color:#736491; }
+.math-page .m-stepbar { display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:13px 0 8px; }
+.math-page .m-stepbar output { margin-left:auto; font-size:11px; color:#b9d0d8; white-space:nowrap; }
+.math-page .m-track { height:3px; background:#314651; margin-bottom:9px; }
+.math-page #trace-meter { display:block; height:100%; width:0; background:#98d6ce; transition:width .12s; }
+.math-page #trajectory { display:flex; flex-wrap:nowrap; gap:5px; overflow-x:auto; overflow-y:hidden; max-height:none; padding:2px 2px 12px; overscroll-behavior-inline:contain; scrollbar-width:thin; }
+.math-page #trajectory .chip { flex:0 0 auto; min-height:35px; white-space:nowrap; border-radius:2px; font-size:10px; padding:7px 9px; }
+.math-page #trajectory .chip.active { background:#245057; border-color:#9cdcd3; color:#fff; }
+.math-page #step-detail { margin-top:10px; padding:12px 14px; color:#e4eef0; border-left:2px solid #a1ded0; background:#12252d; font-size:12px; font-variant-numeric:tabular-nums; white-space:normal; overflow-wrap:anywhere; }
+.math-page .m-details { border:1px solid var(--line); margin:0 0 14px; background:#0e1920; }
+.math-page .m-details > summary { list-style:none; cursor:pointer; padding:15px 18px; font-weight:700; font-size:12px; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+.math-page .m-details > summary::-webkit-details-marker { display:none; }
+.math-page .m-details > summary:after { content:"+"; color:var(--teal); font-size:20px; font-weight:400; line-height:1; }
+.math-page .m-details[open] > summary:after { content:"−"; }
+.math-page .m-details[open] > summary { border-bottom:1px solid var(--line); }
+.math-page .m-detailsbody { padding:15px 17px 18px; min-width:0; }
+.math-page .m-detailsbody p { font-size:11px; color:var(--dim); line-height:1.6; }
+.math-page .m-detailsbody .columns { grid-template-columns:minmax(230px,.65fr) minmax(0,1fr); }
+.math-page .m-detailsbody .readout { border-radius:0; min-width:0; max-width:100%; }
+.math-page .m-detailsbody .code { white-space:pre; font-size:11px; }
+.math-page .m-detailsbody #source-body { max-height:520px; }
+.math-page .m-detailsbody .flag { border-radius:2px; }
+.math-page .m-detailsbody .field input,.math-page .m-detailsbody select { width:100%; max-width:100%; }
+.math-page .m-caveat { margin:10px 0 15px; border-top:1px solid #2c414b; padding-top:10px; color:var(--dim); font-size:10px; line-height:1.6; }
+.math-page .m-definitions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+.math-page .m-definition { border-left:2px solid #587480; padding:4px 10px; min-width:0; }
+.math-page .m-definition b { display:block; font-size:10px; overflow-wrap:anywhere; }
+.math-page .m-definition span { display:block; color:var(--dim); font-size:10px; line-height:1.55; margin-top:5px; }
+.math-page .m-inlinecode { display:block; overflow:auto; padding:13px; border:1px solid #39505c; background:#0b1923; white-space:pre; color:#d2e6ec; font-size:11px; line-height:1.65; }
+.math-page .m-footer { border-top:1px solid var(--line); margin-top:18px; padding-top:13px; font-size:10px; color:var(--dim); }
+@media(max-width:1120px) {
+  .math-page .m-workbench { grid-template-columns:minmax(265px,310px) minmax(0,1fr); }
+  .math-page .m-comparison { grid-template-columns:1fr; }
+}
+@media(max-width:830px) {
+  .math-page .layout { display:block; }
+  .math-page .m-workbench { grid-template-columns:1fr; }
+  .math-page .m-summary { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .math-page .m-stat:nth-child(2) { border:0; }
+  .math-page .m-stat:nth-child(-n+2) { border-bottom:1px solid var(--line); }
+  .math-page .m-detailsbody .columns,.math-page .m-definitions { grid-template-columns:1fr; }
+  .math-page main { padding:18px 12px 30px; }
+}
+@media(max-width:480px) {
+  .math-page .m-fields { gap:5px; }
+  .math-page .m-fields select { font-size:12px; min-width:0; }
+  .math-page .m-panel { padding:12px; }
+  .math-page .m-stat strong { font-size:19px; }
+  .math-page .m-header h1 { font-size:24px; }
+}
+@media(prefers-reduced-motion:reduce) { .math-page #trace-meter { transition:none; } }
+</style>
+</head>
+<body data-page="math" class="math-page">
+<div class="layout">
+<aside class="sidebar">
+<a class="brand" href="index.html">TRACEWORK / RESEARCH</a>
+<div class="subbrand">Original source and finite instruments</div>
+<nav class="nav" aria-label="Research navigation">
+<a href="index.html">Research index</a>
+<a href="math.html" class="current" aria-current="page">Finite mathematics</a>
+<a href="arc.html">ARC native records</a>
+<a href="world.html">WORLD investigations</a>
+<a href="nih.html">NIH source comparisons</a>
+</nav>
+<div class="sidefoot"><a href="../live/work.html#math">Workstation mathematics</a><p><a href="https://github.com/huntingthereferent">GitHub profile</a></p></div>
+</aside>
+<main>
+<header class="m-header">
 <div>
-<section class="panel"><h2>Declare the two worlds</h2><p>Each parameterization selects <code>k∈{0,1,2,3}; e,t∈{0,1}; c∈{0,1,2}</code>.</p>
-<h3>Left world A</h3><div class="field-row"><div class="field"><label for="a-k">support k</label><select id="a-k"></select></div><div class="field"><label for="a-e">pulse e</label><select id="a-e"></select></div><div class="field"><label for="a-t">balanced t</label><select id="a-t"></select></div><div class="field"><label for="a-c">shear c</label><select id="a-c"></select></div></div>
-<h3>Right world B</h3><div class="field-row"><div class="field"><label for="b-k">support k</label><select id="b-k"></select></div><div class="field"><label for="b-e">pulse e</label><select id="b-e"></select></div><div class="field"><label for="b-t">balanced t</label><select id="b-t"></select></div><div class="field"><label for="b-c">shear c</label><select id="b-c"></select></div></div>
-<button type="button" id="swap-worlds">Swap worlds</button>
-<div class="result"><strong id="relation-kind">–</strong><p id="relation-explain"></p></div>
-<p class="note" id="world-count"></p></section>
-<section class="panel"><h2>Exact declared transformation</h2><div class="readout code">All coordinates mod 3
+<div class="eyebrow">MATHEMATICS / A–B FINITE TRANSFORMATIONS</div>
+<h1>Finite mathematical workbench</h1>
+<p>Compare two parameterizations of the same declared 48-law family. Edit either side, follow an action word, and inspect exact finite-state differences. The equations and classification rules are unchanged.</p>
+</div>
+<div class="m-meta"><span class="m-token">F₃ / 27 states</span><span class="m-token">read-only computation</span><span class="m-token">source f08368e5f59a</span><a href="index.html">Research index</a></div>
+</header>
+<section class="m-summary" aria-label="Declared source model statistics">
+<div class="m-stat"><strong>48</strong><span>Specified laws</span></div>
+<div class="m-stat"><strong>14</strong><span>Full-state classes</span></div>
+<div class="m-stat"><strong>16</strong><span>Rooted classes</span></div>
+<div class="m-stat"><strong>2,304</strong><span>Ordered pairs</span></div>
+</section>
+<div class="m-workbench">
+<div class="m-controls">
+<section class="m-panel" aria-labelledby="parameters-heading">
+<div class="eyebrow">01 / Parameters</div>
+<h2 id="parameters-heading">Two configurations</h2>
+<p>Adjust k, e, t and c independently. All values belong to the declared finite family; this is not an unrestricted model.</p>
+<div class="m-world">
+<div class="m-worldhead"><b><span class="m-dot"></span>Configuration A</b><small>left</small></div>
+<div class="m-fields">
+<div class="field"><label for="a-k">support k</label><select id="a-k"></select></div>
+<div class="field"><label for="a-e">pulse e</label><select id="a-e"></select></div>
+<div class="field"><label for="a-t">balance t</label><select id="a-t"></select></div>
+<div class="field"><label for="a-c">shear c</label><select id="a-c"></select></div>
+</div></div>
+<div class="m-world">
+<div class="m-worldhead"><b><span class="m-dot b"></span>Configuration B</b><small>right</small></div>
+<div class="m-fields">
+<div class="field"><label for="b-k">support k</label><select id="b-k"></select></div>
+<div class="field"><label for="b-e">pulse e</label><select id="b-e"></select></div>
+<div class="field"><label for="b-t">balance t</label><select id="b-t"></select></div>
+<div class="field"><label for="b-c">shear c</label><select id="b-c"></select></div>
+</div></div>
+<div class="m-actions"><button type="button" id="swap-worlds">Swap A / B</button><button type="button" id="reset-worlds">Restore initial pair</button></div>
+<div class="m-preset"><label for="comparison-preset">Load a comparison</label>
+<select id="comparison-preset" aria-label="Load a declared comparison preset">
+<option value="">Custom / current values</option>
+<option value="unrooted">Whole-state only · origin differs</option>
+<option value="obstructed">Fixed-word obstruction</option>
+<option value="rooted">Rooted alignment by shear</option>
+<option value="identical">Identical configurations</option>
+</select></div>
+<p id="world-count" class="m-muted"></p>
+</section>
+<section class="m-panel" aria-label="How to read results">
+<div class="eyebrow">Reading key</div>
+<h2>What the result means</h2>
+<p>A state is the tuple (u, v, z) mod 3. Capital A and B in an action word denote two shared operations, not the names of the two configurations.</p>
+<p>Different fixed-point counts disprove a full-state labeled conjugacy. Matching counts alone do not establish it.</p>
+</section>
+</div>
+<div class="m-results">
+<section class="m-panel" aria-labelledby="comparison-heading">
+<div class="m-panelhead"><div><div class="eyebrow">02 / Relation</div><h2 id="comparison-heading">Current pair</h2></div><span class="m-token">recomputed on change</span></div>
+<div class="m-result"><strong id="relation-kind">Calculating…</strong><p id="relation-explain"></p></div>
+</section>
+<div class="m-comparison">
+<section class="m-panel" aria-labelledby="invariant-heading">
+<div class="eyebrow">03 / Whole-state checks</div>
+<h2 id="invariant-heading">Fixed-word invariants</h2>
+<p>Each count enumerates all 27 starting states, checking whether the given word returns to its starting state.</p>
+<div class="m-tablewrap"><table class="invariant-table">
+<thead><tr><th>Word</th><th>A fixed</th><th>B fixed</th><th>Result</th></tr></thead>
+<tbody id="invariant-table"></tbody></table></div>
+</section>
+<section class="m-panel" aria-labelledby="increment-heading">
+<div class="eyebrow">04 / Transition comparison</div>
+<h2 id="increment-heading">B-operation z increment</h2>
+<p>Each cell shows (u,v) → A / B. Highlighting indicates unequal increments for the two configurations.</p>
+<div id="q-table" aria-label="Three by three transition increment comparison"></div>
+<div class="m-qlegend"><span><i></i>Different increments</span><span>Rows u=0,1,2 · columns v=0,1,2</span></div>
+</section>
+</div>
+<section class="m-panel" aria-labelledby="trajectory-heading">
+<div class="eyebrow">05 / Shared action trace</div>
+<h2 id="trajectory-heading">Step through one word</h2>
+<p>Actions apply left to right from the marked state (0,0,0), independently in both configurations. Select any computed step to inspect both state tuples.</p>
+<div class="m-wordbar">
+<div class="field"><label for="action-word">Action sequence · A and B · maximum 120</label><input id="action-word" value="ABABAB" maxlength="120" autocomplete="off" spellcheck="false" aria-describedby="word-help"></div>
+<div class="m-optools" aria-label="Edit sequence"><button type="button" data-add-op="A" title="Append action A">+ A</button><button type="button" data-add-op="B" title="Append action B">+ B</button><button type="button" id="word-undo" title="Remove last action">Undo</button><button type="button" id="word-clear" title="Clear sequence">Clear</button></div>
+</div>
+<p class="m-muted" id="word-help">Typing ignores characters other than A and B. Editing the sequence recomputes all displayed steps.</p>
+<div class="m-stepbar"><button id="step-prev" type="button" aria-label="Previous trace step">← Previous</button><button id="step-next" type="button" aria-label="Next trace step">Next →</button><output id="step-position" aria-live="polite">Step 0 of 0</output></div>
+<div class="m-track"><span id="trace-meter"></span></div>
+<div id="trajectory" class="trajectory" aria-label="Computed trace steps" role="group"></div>
+<div id="step-detail" role="status" aria-live="polite">Computing states…</div>
+</section>
+</div>
+</div>
+<details class="m-details">
+<summary>Exact transformation and parameter definitions</summary>
+<div class="m-detailsbody">
+<div class="m-inlinecode">Coordinates mod 3.
 A(u,v,z) = (u+1, v, z)
 B(u,v,z) = (u, v+u+1, z+q(u,v))
-q = [u=2 ∧ v&lt;k]
-  + e·[u=0 ∧ v=0]
-  + t·([u=1 ∧ v=0] - [u=1 ∧ v=1])
-  + c·((v+u+1)²-v²)</div><p class="note">Nine base-coordinate cells below display the z increment under B as <b>left / right</b>. Highlighted cells differ.</p><div id="q-table"></div></section>
-</div><div>
-<section class="panel"><h2>Enumerated fixed-word invariants</h2><p>All 27 states in the depth-three F₃ carrier are checked directly in your browser. Fixed state means applying the full word returns precisely the same starting state. Different counts obstruct whole-state labeled conjugacy; matching counts do not prove it.</p>
-<table class="invariant-table"><thead><tr><th>Word</th><th>Left fixed</th><th>Right fixed</th><th>Comparison</th></tr></thead><tbody id="invariant-table"></tbody></table>
-<p class="note">Finite enumerations here are executable checks against the stated 48-law formula. They are not the all-depth algebraic proof or an independent validation of the source implementation.</p></section>
-<section class="panel"><h2>Follow a word from marked origin</h2><p>Actions are applied left-to-right from (0,0,0), with the same word in both worlds. A matching endpoint from this word alone does not prove equivalence.</p>
-<div class="field"><label for="action-word">A/B action word (up to 120 characters)</label><input id="action-word" value="ABABAB" spellcheck="false" style="width:100%"></div>
-<div class="result" id="step-detail"></div><div class="trajectory" id="trajectory"></div>
-<h3>Evidence distinction</h3><p>ROOTED_FULL: exact origin-preserving labeled conjugacy in the declared family. FULL_UNROOTED: whole-state alignment exists, but a marked-origin collision obstructs rooted equivalence. FULL_OBSTRUCTED: a fixed-word count witnesses incompatibility. For any unsupported family, no classification is silently extended.</p></section>
-</div></div><section class="panel" id="source-inspector"><div class="field-row" style="justify-content:space-between"><div><div class="eyebrow">REPRODUCIBILITY / ORIGINAL SOURCE</div><h2>Source inspector</h2></div><span class="flag">read-only · immutable source baseline</span></div><p class="note">Select a record, search the original text, and inspect line numbers. Source retrieval may fail if the public raw host is unavailable; original repository links remain available.</p>
-<div class="columns"><div><div class="field"><label for="source-choice">Source document</label><select style="max-width:100%" id="source-choice"></select></div><div class="source-list" id="source-list" style="margin-top:10px"></div></div><div><div class="field"><label for="source-search">Filter source lines</label><input id="source-search" placeholder="Find symbol, term, witness or limit…" style="width:100%"></div><div id="source-meta" class="source-meta" style="margin:10px 0"></div><div class="tools"><button type="button" id="copy-source">Copy loaded source</button><span id="copy-status" class="note"></span><span id="line-count" class="note"></span></div><div class="readout code lines" id="source-body" aria-live="polite">Retrieving source…</div></div></div></section><footer>This viewer separates mathematical calculations, source-reported observations, provenance, and unresolved questions. It does not launch workers, change GitHub data, or claim an experiment has been independently reproduced.</footer></main></div></body></html>
+q = [u=2 AND v&lt;k]
+  + e·[u=0 AND v=0]
+  + t·([u=1 AND v=0] - [u=1 AND v=1])
+  + c·((v+u+1)²-v²)</div>
+<p>k ∈ {0,1,2,3}; e,t ∈ {0,1}; c ∈ {0,1,2}. The displayed finite calculation follows this formula rather than an animated or inferred physical trajectory.</p>
+<div class="m-definitions">
+<div class="m-definition"><b>ROOTED_FULL</b><span>Whole-state labeled conjugacy with the marked origin fixed in the declared family.</span></div>
+<div class="m-definition"><b>FULL_UNROOTED</b><span>Whole-state alignment exists, but the marked origin is not preserved.</span></div>
+<div class="m-definition"><b>FULL_OBSTRUCTED</b><span>A fixed-word difference obstructs full-state labeled conjugacy.</span></div>
+</div>
+</div>
+</details>
+<details class="m-details" id="source-inspector">
+<summary>Original source inspector · 9 records at pinned revision</summary>
+<div class="m-detailsbody">
+<p>Source documents are retrieved from pinned commit f08368e5f59a5ca531dd69cd040e43ccf2c2cf12. If retrieval fails, open the linked original file. Source text is not modified by this tool.</p>
+<div class="columns">
+<div>
+<div class="field"><label for="source-choice">Source document</label><select id="source-choice"></select></div>
+<div class="source-list" id="source-list" style="margin-top:10px"></div>
+</div>
+<div>
+<div class="field"><label for="source-search">Find lines in selected source</label><input id="source-search" placeholder="Term or symbol…" spellcheck="false"></div>
+<div id="source-meta" class="source-meta" style="margin:11px 0"></div>
+<div class="m-actions"><button type="button" id="copy-source">Copy loaded source</button><span id="copy-status" class="m-muted"></span><span id="line-count" class="m-muted"></span></div>
+<div class="readout code lines" id="source-body" aria-live="polite">Retrieving pinned record…</div>
+</div>
+</div>
+</div>
+</details>
+<p class="m-caveat">The class totals are source-reported for this finite family. Browser enumerations check the displayed formulas; they are not independent validation of the original implementation or general results for arbitrary A/B systems.</p>
+<footer class="m-footer">TRACEWORK / RESEARCH · Defined mathematics, finite calculations, and pinned source remain distinguishable.</footer>
+</main></div>
+<script>
+/* Local navigation and composition, layered over the unmodified research.js mathematics. */
+(function(){
+"use strict";
+function $(id){return document.getElementById(id);}
+function emit(){ $("action-word").dispatchEvent(new Event("input",{bubbles:true})); }
+function setWord(value){ $("action-word").value=String(value).toUpperCase().replace(/[^AB]/g,"").slice(0,120); emit(); }
+function selectStep(index){
+ const chips=Array.from($("trajectory").querySelectorAll("button.chip"));
+ if(!chips.length)return;
+ const bounded=Math.max(0,Math.min(chips.length-1,index));
+ chips[bounded].click();
+ $("step-position").textContent="Step "+bounded+" of "+(chips.length-1);
+ $("trace-meter").style.width=(chips.length<=1?0:bounded/(chips.length-1)*100)+"%";
+ chips[bounded].scrollIntoView({behavior:"auto",block:"nearest",inline:"nearest"});
+}
+function lastStep(){ requestAnimationFrame(function(){selectStep($("trajectory").querySelectorAll("button.chip").length-1);}); }
+function usePair(a,b){
+ ["k","e","t","c"].forEach(function(name,i){$("a-"+name).value=String(a[i]);$("b-"+name).value=String(b[i]);});
+ $("a-k").dispatchEvent(new Event("change",{bubbles:true}));
+ lastStep();
+}
+document.addEventListener("DOMContentLoaded",function(){
+ const preset=$("comparison-preset");
+ const initialA=[0,1,0,0],initialB=[0,1,1,0];
+ const examples={
+  unrooted:[initialA,initialB],
+  obstructed:[[1,0,0,0],[3,0,0,0]],
+  rooted:[[2,1,0,0],[2,1,0,2]],
+  identical:[[2,1,0,0],[2,1,0,0]]
+ };
+ preset.addEventListener("change",function(){if(examples[preset.value])usePair(examples[preset.value][0],examples[preset.value][1]);});
+ $("reset-worlds").addEventListener("click",function(){preset.value="";usePair(initialA,initialB);setWord("ABABAB");});
+ ["a","b"].forEach(function(side){["k","e","t","c"].forEach(function(name){
+  $(""+side+"-"+name).addEventListener("change",function(){preset.value="";lastStep();});
+ });});
+ $("swap-worlds").addEventListener("click",function(){preset.value="";lastStep();});
+ document.querySelectorAll("[data-add-op]").forEach(function(button){
+  button.addEventListener("click",function(){setWord($("action-word").value+button.dataset.addOp);});
+ });
+ $("word-undo").addEventListener("click",function(){setWord($("action-word").value.slice(0,-1));});
+ $("word-clear").addEventListener("click",function(){setWord("");});
+ $("action-word").addEventListener("input",function(){
+  const clean=this.value.toUpperCase().replace(/[^AB]/g,"").slice(0,120);
+  if(this.value!==clean){const pos=this.selectionStart;this.value=clean;try{this.setSelectionRange(Math.min(pos,clean.length),Math.min(pos,clean.length));}catch(_){}}
+  lastStep();
+ });
+ $("step-prev").addEventListener("click",function(){
+  const current=Array.from($("trajectory").children).findIndex(function(el){return el.classList.contains("active");});
+  selectStep(Math.max(0,current-1));
+ });
+ $("step-next").addEventListener("click",function(){
+  const current=Array.from($("trajectory").children).findIndex(function(el){return el.classList.contains("active");});
+  selectStep(current+1);
+ });
+ $("trajectory").addEventListener("click",function(event){
+  const chip=event.target.closest("button.chip");
+  if(!chip)return;
+  const chips=Array.from($("trajectory").children),idx=chips.indexOf(chip);
+  $("step-position").textContent="Step "+idx+" of "+(chips.length-1);
+  $("trace-meter").style.width=(chips.length<=1?0:idx/(chips.length-1)*100)+"%";
+ });
+ lastStep();
+});
+})();
+</script>
+</body>
+</html>
