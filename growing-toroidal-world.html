@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tracework | Growing Toroidal World</title>
+<style>
+:root{color-scheme:dark;--bg:#050a11;--line:#243a4b;--ink:#e8f2fa;--muted:#92a8b7;--cyan:#65dce9;--amber:#ffbf78}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 10%,#152e40 0%,#060d16 48%,#04080d 100%);color:var(--ink);font:14px/1.55 "Segoe UI",system-ui,sans-serif}
+main{max-width:1420px;margin:auto;padding:26px 28px 60px}header{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid var(--line);padding-bottom:18px}
+a{color:#99e7f2}small,.sub{color:var(--muted)}h1{font-size:clamp(24px,3vw,39px);letter-spacing:-.035em;margin:26px 0 4px}h2{font-size:13px;text-transform:uppercase;letter-spacing:.14em;margin:0 0 13px}
+.eyebrow{color:var(--cyan);font-size:11px;letter-spacing:.18em;font-weight:700}.sub{max-width:860px;margin:0 0 24px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 290px;gap:16px}.stage{position:relative;border:1px solid #2c4c60;background:radial-gradient(circle at 50% 40%,#102535 0%,#070f1a 67%,#04080e 100%);min-height:600px;overflow:hidden}
+.stage:before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 96%,#ffffff05 100%);background-size:100% 5px;pointer-events:none}
+canvas{display:block;width:100%;height:600px}.overlay{position:absolute;left:20px;top:18px;font:11px/1.8 Consolas,monospace;color:#a7d4e3;pointer-events:none}.overlay b{color:#e8fbff}
+.corner{position:absolute;right:20px;bottom:16px;font:10px Consolas,monospace;color:#7b9db0;pointer-events:none}
+aside{border:1px solid var(--line);background:#0b1722;padding:20px;display:flex;flex-direction:column;gap:16px}
+.metric{border-top:1px solid var(--line);padding-top:12px}.metric strong{display:block;font:26px Consolas,monospace;color:#e8f6fa}.metric span{color:var(--muted);font-size:11px;letter-spacing:.08em}
+button{background:#132b3a;color:#ecf8fc;border:1px solid #446779;padding:10px 13px;cursor:pointer;font:12px Consolas,monospace}button:hover{background:#1d4050}button:focus-visible,a:focus-visible{outline:2px solid #9ef0f7;outline-offset:3px}.controls{display:flex;flex-wrap:wrap;gap:8px}.controls button:first-child{border-color:#75cbd7}
+.note{font-size:12px;color:#adc0cc;border-top:1px solid var(--line);padding-top:14px}.formula{font:13px Consolas,monospace;color:#ffd6a7;word-break:break-word}
+footer{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:20px;color:#b5c8d4}footer section{border-top:1px solid var(--line);padding-top:18px}footer p{margin:0 0 12px}
+@media(max-width:920px){.layout{grid-template-columns:1fr}.stage{min-height:430px}canvas{height:430px}aside{display:grid;grid-template-columns:repeat(2,1fr)}aside h2,.controls,.note{grid-column:1/-1}footer{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style></head>
+<body><main><header><div><div class="eyebrow">TRACEWORK / FINITE GEOMETRY / RESEARCH VISUALIZATION</div><small>Growing periodic world · discrete torus</small></div><a href="docs/live/work.html">Return to Tracework</a></header>
+<h1>Continuity under geometric expansion</h1>
+<p class="sub">A rotating toroidal embedding of a finite periodic world. The animated trajectory crosses periodic boundaries; growth embeds the same recorded identities into a larger world. This is an illustrative geometric trace, not a simulation of unobserved source execution.</p>
+<div class="layout"><div class="stage"><canvas id="world" aria-label="Animated three-dimensional toroidal surface with a periodic path and expansion"></canvas>
+<div class="overlay"><div>MODEL <b>W<sub>N</sub> = Z<sub>N</sub> × Z<sub>N</sub></b></div><div>EMBEDDING <b>E<sub>k</sub>(x,y) = (kx,ky) mod kN</b></div><div id="status">PROJECTION READY</div></div><div class="corner">ORTHOGRAPHIC PROJECTION · PERIODIC COORDINATES · NOT EUCLIDEAN DISTANCE EVIDENCE</div></div>
+<aside><h2>Geometric trace controls</h2><div class="metric"><span>WORLD SIDE LENGTH</span><strong id="side">12</strong></div>
+<div class="metric"><span>FINITE WORLD CAPACITY</span><strong id="capacity">144</strong></div>
+<div class="metric"><span>TRAJECTORY POSITION</span><strong id="position">0, 0</strong></div>
+<div class="metric"><span>GROWTH / EMBEDDING</span><strong id="growth">×1</strong></div>
+<div class="controls"><button id="pause">Pause</button><button id="grow">Expand ×2</button><button id="reset">Reset</button><button id="step">Advance trace</button></div>
+<div class="formula">T² = S¹ × S¹<br>u = x / N, v = y / N<br>E₂ : W<sub>N</sub> → W<sub>2N</sub></div>
+<p class="note" id="witness">A coordinate embedding preserves the represented normalized location. A one-cell movement does not remain one cell after expansion: its corresponding displacement scales with the embedding. Recorded source relationships require independent evidence.</p></aside></div>
+<footer><section><h2>What the animation demonstrates</h2><p>The torus is a three-dimensional visualization of a two-dimensional periodic coordinate system. Moving past one boundary returns through the opposite boundary. The trace remains on the surface while the world expands from N to 2N.</p><p>The luminous trajectory represents a deliberately defined example path. It is not a claim that nearby points share meaning, provenance, or native source relations.</p></section>
+<section><h2>Source and limitations</h2><p>The growth rule follows the repository's <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/work/arc_like_maze/toroidal_projection.py">ToroidalProjection.grow</a> and the geometric construction discussed in the <a href="https://github.com/huntingthereferent/autobots-assemble/blob/main/language/SHAPE_CONTRACT.md">Shape Contract</a>.</p><p>This page is a client-side research visualization. It does not read or mutate runtime journals, verify independent source relations, or establish a smooth manifold as the canonical Tracework data structure.</p></section></footer></main>
+<script>
+(()=>{'use strict';
+const canvas=document.getElementById('world'),ctx=canvas.getContext('2d'),el=id=>document.getElementById(id);
+const TAU=Math.PI*2,reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let N=12,scale=1,playing=!reduce,phase=0,rotation=.24,last=0;
+const path=[ [1,2],[2,2],[3,3],[4,4],[5,4],[6,5],[7,6],[8,6],[9,7],[10,8],[11,9],[0,10],[1,11],[2,0],[3,1],[4,2],[5,3],[6,4],[7,5],[8,6] ];
+let progress=0;
+const project=(u,v,w,h)=>{const a=u*TAU+phase*.07,b=v*TAU;const R=1.62,r=.64;const x=(R+r*Math.cos(b))*Math.cos(a),y=(R+r*Math.cos(b))*Math.sin(a),z=r*Math.sin(b);const yaw=rotation,pitch=.37;const xx=x*Math.cos(yaw)-y*Math.sin(yaw),yy=x*Math.sin(yaw)+y*Math.cos(yaw);const zz=z*Math.cos(pitch)+yy*Math.sin(pitch),depth=yy*Math.cos(pitch)-z*Math.sin(pitch);const size=Math.min(w/5.8,h/4.4);return {x:w/2+xx*size,y:h/2-zz*size,d:depth}};
+function stroke(points,color,width,alpha=1){if(points.length<2)return;ctx.beginPath();ctx.moveTo(points[0].x,points[0].y);for(let i=1;i<points.length;i++)ctx.lineTo(points[i].x,points[i].y);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.globalAlpha=alpha;ctx.stroke();ctx.globalAlpha=1}
+function render(){const w=canvas.clientWidth,h=canvas.clientHeight,d=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);ctx.setTransform(d,0,0,d,0,0);ctx.clearRect(0,0,w,h);
+const lines=[];for(let k=0;k<2;k++)for(let j=0;j<28;j++){const points=[];for(let i=0;i<=130;i++){const t=i/130,u=k===0?j/28:t,v=k===0?t:j/28;points.push(project(u,v,w,h))}const avg=points.reduce((s,p)=>s+p.d,0)/points.length;lines.push({points,avg})}
+lines.sort((a,b)=>b.avg-a.avg);for(const l of lines)stroke(l.points,l.avg>0?'#244759':'#477e92',l.avg>0?.20:.42,.9);
+const pts=[];for(let i=0;i<=Math.floor(progress);i++){const a=path[i%path.length];pts.push(project(a[0]/12,a[1]/12,w,h))}const f=progress-Math.floor(progress),i=Math.floor(progress),a=path[i%path.length],b=path[(i+1)%path.length];let du=b[0]-a[0],dv=b[1]-a[1];if(du>6)du-=12;if(du< -6)du+=12;if(dv>6)dv-=12;if(dv< -6)dv+=12;const u=((a[0]+du*f)/12+1)%1,v=((a[1]+dv*f)/12+1)%1;const head=project(u,v,w,h);
+ctx.shadowBlur=16;ctx.shadowColor='#63e6f4';stroke(pts,'#51d5e8',2.5,.85);ctx.shadowBlur=0;
+for(let j=0;j<pts.length;j++){ctx.beginPath();ctx.arc(pts[j].x,pts[j].y,2.1,0,TAU);ctx.fillStyle='#b0faff';ctx.fill()}
+const glow=ctx.createRadialGradient(head.x,head.y,0,head.x,head.y,30);glow.addColorStop(0,'#fff8da');glow.addColorStop(.12,'#ffd18c');glow.addColorStop(.4,'#ffbd7755');glow.addColorStop(1,'#ffbd7700');ctx.fillStyle=glow;ctx.beginPath();ctx.arc(head.x,head.y,30,0,TAU);ctx.fill();ctx.beginPath();ctx.arc(head.x,head.y,4.4,0,TAU);ctx.fillStyle='#fff3d0';ctx.fill();
+el('position').textContent=Math.round(u*N)+', '+Math.round(v*N);el('status').textContent='TRACE '+String(Math.floor(progress)).padStart(2,'0')+' / '+(path.length-1)+' · PERIODIC WORLD';
+}
+function refresh(){el('side').textContent=N;el('capacity').textContent=(N*N).toLocaleString();el('growth').textContent='×'+scale;el('pause').textContent=playing?'Pause':'Resume';render()}
+el('pause').onclick=()=>{playing=!playing;refresh()};
+el('step').onclick=()=>{playing=false;progress=(Math.floor(progress)+1)%(path.length-1);refresh()};
+el('grow').onclick=()=>{if(N>=768){el('witness').textContent='Display growth is capped at N=768 to keep the interactive example bounded.';return}N*=2;scale*=2;el('witness').textContent='Embedding verified by construction: (x,y) → ('+scale+'x,'+scale+'y) mod '+N+'. The normalized position is unchanged; an original unit step corresponds to '+scale+' cells in this expanded representation.';refresh()};
+el('reset').onclick=()=>{N=12;scale=1;progress=0;phase=0;rotation=.24;playing=!reduce;el('witness').textContent='A coordinate embedding preserves normalized location. Source relationships are not inferred from geometric proximity.';refresh()};
+function tick(t){const dt=Math.min(60,t-last||16);last=t;if(playing){progress=(progress+dt*.00048)%(path.length-1);phase+=dt*.00018;rotation+=dt*.00010;render()}requestAnimationFrame(tick)}
+addEventListener('resize',render);refresh();requestAnimationFrame(tick);
+})();
+</script></body></html>
