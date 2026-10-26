@@ -155,6 +155,16 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertFalse(result["has_element_order_27"])
         self.assertTrue(result["all_orders_divide_exponent"])
 
+    def test_group_presentation_relations_and_normal_forms(self):
+        result = FiniteTorus3().group_presentation_verification()
+        self.assertTrue(result["generators_order_three"])
+        self.assertTrue(result["translations_commute"])
+        self.assertTrue(result["conjugation_relations"])
+        self.assertEqual(result["normal_form_count"], 81)
+        self.assertEqual(result["generated_by_a_b_count"], 81)
+        self.assertTrue(result["normal_forms_equal_generated_group"])
+        self.assertTrue(result["a_equals_x"])
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
