@@ -210,6 +210,35 @@ class FiniteManifoldTests(unittest.TestCase):
             (0, 0, 0, 0), (0, 0, 1, 0), (0, 0, 2, 0),
         ))
 
+    def test_audit_independent_coordinate_group_laws(self):
+        m = FiniteTorus3()
+        from itertools import product
+        coordinates = tuple(product(range(3), repeat=4))
+        identity = (0, 0, 0, 0)
+        # All 81^2 products must admit both-sided cancellation.
+        for a in coordinates:
+            inverse = m.coordinate_inverse(a)
+            self.assertEqual(m.coordinate_product(a, inverse), identity)
+            self.assertEqual(m.coordinate_product(inverse, a), identity)
+            for b in coordinates:
+                self.assertEqual(
+                    m.coordinate_product(inverse, m.coordinate_product(a, b)),
+                    b,
+                )
+                self.assertEqual(
+                    m.coordinate_product(m.coordinate_product(b, a), inverse),
+                    b,
+                )
+        # Explicit noncommutativity witness prevents an accidental
+        # abelian implementation from passing the group-law tests.
+        x = (1, 0, 0, 0)
+        b = (0, 0, 0, 1)
+        self.assertNotEqual(
+            m.coordinate_product(x, b),
+            m.coordinate_product(b, x),
+        )
+        self.assertTrue(m.coordinate_algebra_verification()["conjugation_law"])
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
