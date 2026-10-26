@@ -5,6 +5,7 @@ Only real JSON receipts count; absent receipts stay UNKNOWN. No winner by recenc
 """
 import argparse
 import json
+from hashlib import sha256
 from pathlib import Path
 
 CANDIDATES = {
@@ -59,7 +60,9 @@ def compare(receipts):
             item["exit_code"] = None
         if path.is_file():
             try:
-                doc = json.loads(path.read_text(encoding="utf-8"))
+                raw = path.read_bytes()
+                item["receipt_sha256"] = sha256(raw).hexdigest()
+                doc = json.loads(raw)
                 item["checks"] = {"schema": doc.get("schema") == schema}
                 item["checks"].update({key: doc.get(key) == value for key, value in checks})
                 item["checks"]["process_exit_zero"] = exit_code == "0"
