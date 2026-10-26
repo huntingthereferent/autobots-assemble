@@ -1,5 +1,6 @@
 """Phase 1 comparison must never invent a winner from missing receipts."""
 import json
+from hashlib import sha256
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
@@ -23,6 +24,7 @@ class OutputComparisonTests(unittest.TestCase):
             (path.parent / "exit-code.txt").write_text("0", encoding="utf-8")
             result = compare(directory)
         self.assertEqual(result["candidates"]["frontier"]["status"], "REPORTED_PASS")
+        self.assertEqual(result["candidates"]["frontier"]["receipt_sha256"], sha256(json.dumps(doc).encode("utf-8")).hexdigest())
         self.assertEqual(result["selection"], "UNDETERMINED")
         self.assertEqual(result["candidates"]["two_clock"]["status"], "UNKNOWN")
 
