@@ -638,6 +638,64 @@ class FiniteTorus3:
             "commutator_values": tuple(sorted(commutator_values)),
         }
 
+    def coordinate_lower_central_structure(self) -> dict:
+        """Compute center, derived group and lower central series in F_3^4.
+
+        Uses coordinate multiplication only; no 27-state permutations.
+        """
+        if self.side != 3:
+            raise ValueError("coordinate group requires side=3")
+        elements = frozenset(product(range(3), repeat=4))
+        identity = (0, 0, 0, 0)
+        generators = ((1, 0, 0, 0), (0, 0, 0, 1))
+        def subgroup_closure(seed):
+            found = {identity}
+            queue = deque([identity])
+            while queue:
+                current = queue.popleft()
+                for generator in seed:
+                    nxt = self.coordinate_product(current, generator)
+                    if nxt not in found:
+                        found.add(nxt)
+                        queue.append(nxt)
+            return frozenset(found)
+        center = frozenset(
+            a for a in elements
+            if all(
+                self.coordinate_product(a, g) == self.coordinate_product(g, a)
+                for g in generators
+            )
+        )
+        derived = subgroup_closure({
+            self.coordinate_commutator(a, g)
+            for a in elements for g in generators
+        })
+        lower = [elements]
+        while lower[-1] != frozenset((identity,)):
+            commutators = {
+                self.coordinate_commutator(a, g)
+                for a in lower[-1] for g in generators
+            }
+            following = subgroup_closure(commutators)
+            if following == lower[-1]:
+                break
+            lower.append(following)
+        return {
+            "center": tuple(sorted(center)),
+            "center_order": len(center),
+            "derived_order": len(derived),
+            "derived_elements": tuple(sorted(derived)),
+            "lower_central_orders": tuple(map(len, lower)),
+            "nilpotency_class": (
+                len(lower) - 1 if lower[-1] == frozenset((identity,)) else None
+            ),
+            "matches_permutation_analysis": (
+                len(center) == self.lower_central_structure()["center_order"]
+                and len(derived) == self.lower_central_structure()["commutator_subgroup_order"]
+                and list(map(len, lower)) == self.lower_central_structure()["lower_central_orders"]
+            ),
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
