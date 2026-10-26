@@ -165,6 +165,23 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertTrue(result["normal_forms_equal_generated_group"])
         self.assertTrue(result["a_equals_x"])
 
+    def test_four_coordinate_group_multiplication(self):
+        m = FiniteTorus3()
+        result = m.coordinate_group_verification()
+        self.assertEqual(result["coordinate_count"], 81)
+        self.assertTrue(result["faithful"])
+        self.assertTrue(result["multiplication_matches_permutations"])
+        self.assertTrue(result["identity_law"])
+        self.assertTrue(result["closure"])
+        self.assertEqual(
+            m.coordinate_product((0, 0, 0, 1), (1, 0, 0, 0)),
+            (1, 1, 0, 1),
+        )
+        self.assertEqual(
+            m.coordinate_product((0, 0, 0, 2), (1, 0, 0, 0)),
+            (1, 2, 1, 2),
+        )
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
