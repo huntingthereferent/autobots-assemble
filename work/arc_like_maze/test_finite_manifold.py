@@ -182,6 +182,23 @@ class FiniteManifoldTests(unittest.TestCase):
             (1, 2, 1, 2),
         )
 
+    def test_coordinate_inverse_commutator_conjugation(self):
+        m = FiniteTorus3()
+        identity = (0, 0, 0, 0)
+        for element in ((0, 0, 0, 0), (1, 2, 0, 1), (2, 1, 2, 2)):
+            inverse = m.coordinate_inverse(element)
+            self.assertEqual(m.coordinate_product(element, inverse), identity)
+            self.assertEqual(m.coordinate_product(inverse, element), identity)
+        b = (0, 0, 0, 1)
+        x = (1, 0, 0, 0)
+        self.assertEqual(m.coordinate_conjugate(b, x), (1, 1, 0, 0))
+        self.assertEqual(m.coordinate_commutator(b, x), (0, 1, 0, 0))
+        result = m.coordinate_algebra_verification()
+        self.assertTrue(result["inverse_laws"])
+        self.assertTrue(result["commutators_are_translations"])
+        self.assertTrue(result["conjugation_law"])
+        self.assertEqual(result["distinct_commutator_values"], 9)
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
