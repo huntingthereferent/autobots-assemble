@@ -74,7 +74,15 @@ def compare(receipts):
         if not path.is_file() and exit_code is not None and exit_code != "0":
             item["status"] = "EXECUTION_FAILED"
         results[name] = item
+    admitted = [name for name, item in results.items() if item["status"] == "REPORTED_PASS"]
+    shared = sorted(set.intersection(*(set(CAPABILITIES[name]) for name in admitted))) if admitted else []
+    maximal = [name for name in admitted if not any(
+        set(CAPABILITIES[name]) < set(CAPABILITIES[other]) for other in admitted)]
     return {"schema": "nih-phase1-output-comparison/v1",
+            "reported_pass_candidates": admitted,
+            "shared_capabilities": shared,
+            "capability_maximal_candidates_unverified": maximal,
+            "comparison_kind": "capability-coverage-only; not measured head-to-head",
             "referent": "select strongest reproducible Phase 1 output on common tests",
             "candidates": results,
             "shared_baseline": "original 12-job W13/NIH source-owned native program",
