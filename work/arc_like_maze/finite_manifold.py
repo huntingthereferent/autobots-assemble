@@ -573,6 +573,71 @@ class FiniteTorus3:
             ),
         }
 
+    @classmethod
+    def coordinate_inverse(cls, element):
+        """Inverse of (v,l): (-S^(-l)v, -l) in F_3^3 semidirect C_3."""
+        if len(element) != 4:
+            raise ValueError("expected four coordinates")
+        if any(not isinstance(k, int) or k not in range(3) for k in element):
+            raise ValueError("coordinates must lie in F_3")
+        v = element[:3]
+        for _ in range((-element[3]) % 3):
+            x, y, z = v
+            v = (x, (y + x) % 3, (z + y) % 3)
+        return tuple((-k) % 3 for k in v) + ((-element[3]) % 3,)
+
+    @classmethod
+    def coordinate_commutator(cls, a, b):
+        """[a,b] = a*b*a^-1*b^-1."""
+        return cls.coordinate_product(
+            cls.coordinate_product(
+                cls.coordinate_product(a, b), cls.coordinate_inverse(a)
+            ), cls.coordinate_inverse(b)
+        )
+
+    @classmethod
+    def coordinate_conjugate(cls, a, b):
+        """Conjugate b by a: a*b*a^-1."""
+        return cls.coordinate_product(
+            cls.coordinate_product(a, b), cls.coordinate_inverse(a)
+        )
+
+    def coordinate_algebra_verification(self):
+        """Exhaustively compare coordinate inverses, commutators and conjugation."""
+        if self.side != 3:
+            raise ValueError("coordinate algebra requires side=3")
+        coords = tuple(product(range(3), repeat=4))
+        identity = (0, 0, 0, 0)
+        inverse_laws = all(
+            self.coordinate_product(a, self.coordinate_inverse(a)) == identity
+            and self.coordinate_product(self.coordinate_inverse(a), a) == identity
+            for a in coords
+        )
+        # A commutator is in the normal translation subgroup; conjugating
+        # a translation by B applies the prescribed shear.
+        commutators_are_translations = all(
+            self.coordinate_commutator(a, b)[3] == 0
+            for a in coords for b in coords
+        )
+        conjugation_law = all(
+            self.coordinate_conjugate(a, b) ==
+            self.coordinate_product(
+                self.coordinate_product(a, b), self.coordinate_inverse(a)
+            )
+            for a in coords for b in coords
+        )
+        commutator_values = {
+            self.coordinate_commutator(a, b)
+            for a in coords for b in coords
+        }
+        return {
+            "inverse_laws": inverse_laws,
+            "commutators_are_translations": commutators_are_translations,
+            "conjugation_law": conjugation_law,
+            "distinct_commutator_values": len(commutator_values),
+            "commutator_values": tuple(sorted(commutator_values)),
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
