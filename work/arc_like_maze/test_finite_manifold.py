@@ -239,6 +239,26 @@ class FiniteManifoldTests(unittest.TestCase):
         )
         self.assertTrue(m.coordinate_algebra_verification()["conjugation_law"])
 
+    def test_toroidal_projection_growth(self):
+        from work.arc_like_maze.toroidal_projection import ToroidalProjection
+        paths = (f"source/{i:04d}.py" for i in range(2333))
+        original = ToroidalProjection.from_paths(paths, side=48)
+        self.assertEqual(original.side, 96)
+        self.assertEqual(len(original.positions), 2333)
+        self.assertEqual(len({p for _, p in original.positions}), 2333)
+        grown = original.grow()
+        self.assertEqual(grown.side, 192)
+        self.assertTrue(original.validate_growth(grown, 2))
+        self.assertEqual(
+            tuple(grown.displacement("source/0000.py", "source/0001.py")),
+            tuple(2 * d for d in original.displacement(
+                "source/0000.py", "source/0001.py"
+            )),
+        )
+        moved = original.move("source/0000.py", (-1, 0))
+        self.assertEqual(dict(moved.positions)["source/0000.py"], (95, 0))
+        self.assertEqual(len(moved.positions), len(original.positions))
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
