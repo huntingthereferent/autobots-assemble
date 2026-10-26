@@ -175,3 +175,40 @@ The archived/source holdout additionally shows that **`Y(h)` may be equal for tw
 Keep separate the rigorous constructed **F3-48 A/B root/full-state theorems**: they were imported and recalculated in the executable native runner without changing the laws or claiming SP80 implements them.
 
 **Next boundary:** infer/test the native y63 indexed row as a *measured finite source clock* with original SDK forward held-outs, and only pursue even-distance identical full-frame rooted collisions when justified by real source evidence (for example, a genuinely observed clock saturation/repetition). Do not convert 11,054 archival returns into independent proof samples or treat y63 as a secret game-win mechanism. Complete native Level5/WIN remains unobserved; branch PR #537 stays isolated.
+
+
+## New original SDK terminal boundary and finite action-index certificate
+
+**Original source execution:** [native Actions run #40250466381](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40250466381), [complete authentic SDK JSON, late source frames, action ledger #12620253953](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40250466381/artifacts/12620253953). The prospective [native source runner](../native_sp80_stage4_clock_100.py) froze two independent original Stage4 action histories: repeat palette8/9 upper selection, versus alternate middle/upper selection, each programmed for 104 selections plus a POUR; each was tested from both distinct verified original Stage0→4 entry histories = **four genuinely reset normal-mode SDK games**.
+
+All **four actual SDK games stopped at precisely Stage4 action index100** with official state **`GAME_OVER`, `levels_completed=4`**, zero Level5/WIN. No additional action after the terminal return is claimed or simulated. In all four independent source histories the *complete bottom-row source clock* agreed at every common action index and the prospectively hypothesized first palette14 index remained exact all the way from n0 through n100:
+
+```text
+At Stage4 action index n in {0,...,100}:
+    c(n) = floor((64n + 50)/100)
+    native y63 = (palette 0 repeated c(n)) +
+                 (palette 14 repeated [64-c(n)])
+
+At n=0:   c=0  (64 palette14 pixels)
+At n=43:  c=28 (36 palette14 pixels)
+At n=90:  c=58
+At n=98:  c=63 (last palette14 at x63)
+At n=99:  c=63 (same row as 98)
+At n=100: c=64 (all palette0), official GAME_OVER
+```
+
+**Source corroboration:** earlier [43-action true SDK artifact #12618156519](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40243990606/artifacts/12618156519) preserves full bottom-row values 0–43, all matching the exact equation. The native 100-step source holdout returned original full 64×64 frame arrays at indices90–100, and its uninterrupted original action receipts/clock checks found **no first-palette14 index deviations from n0–100** in any of four independent resets. Source full rows at 90–100 match the exact left-zero/right-palette14 form; source outcomes GAME_OVER are directly from original SDK, not inferred from the color boundary.
+
+**Exact finite arithmetic certificate:** [`certify_sp80_stage4_clock.py`](../certify_sp80_stage4_clock.py), [successful GitHub Actions run #40250765241](https://github.com/huntingthereferent/autobots-assemble/actions/runs/40250765241). The proof explicitly enumerates the clock function on n=0..100:
+
+- There are **36 pairs of distinct indices with the same clock row**, all of them **adjacent** `|n-m|=1`; none are separated by two or more actions.
+- Formally, `c(n+2)>c(n)` for every n=0..98: the numerator increases by 128, greater than one 100-unit integer rounding interval. Thus every even-distance pair has **different** clock rows.
+- Therefore, **in the finite displayed-clock system**, equality of the full visible frame *plus equality of index parity* implies **equality of exact action index**. So adding one bit of parity to the full native image would separate the already observed consecutive-index clock collisions, but **this does not establish a transition-complete hidden state or prove all subsequent animation words equal**.
+
+### The earlier "hidden-state" concern is now more precise
+
+The former original A/B counterexamples (byte-identical entire pre-action screenshots, differing returned x10/y63 etc on the same next SDK action) now have a direct visible temporal explanation: **the bottom-row action-budget display is not injective at adjacent source action indices**. On the next genuine action, the clock may advance to a new row and separate the previously identical rendered images, without requiring a speculative spatial/physics mechanism. In the tested examples, *all other successor pixels were exactly the same*.
+
+The SDK termination at n100 prevents extending the usual genuine original game past the full clock's exhaustion to manufacture a same-parity, different-count visible collision. Previous ungrounded suggestions to keep searching for this pair at later clock saturation are **withdrawn** for this verified original game boundary. A proposed alternative future test must first have a valid original-SDK reachable state and a genuine, independently verifiable different-root action-word condition; never synthesize post-GAME_OVER frames.
+
+**Epistemic limits:** the action-index clock/terminal boundary is grounded in original native SP80 Stage4, not proof of an all-games SDK contract, a complete private state model, or an abstract F3-48 realization. The constructed 48-world F3 rooted/nonrooted certificate remains separate and unmodified. Level5 remains unsolved. The canonical agent and other workstreams are untouched; this work remains on open PR #537, not merged.
