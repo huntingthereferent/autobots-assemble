@@ -146,6 +146,15 @@ class FiniteManifoldTests(unittest.TestCase):
         self.assertTrue(result["derived_is_abelian"])
         self.assertTrue(result["center_elements_are_translations"])
 
+    def test_element_orders_and_exponent(self):
+        result = FiniteTorus3().element_order_structure()
+        self.assertEqual(result["group_order"], 81)
+        self.assertEqual(result["order_distribution"], {1: 1, 3: 44, 9: 36})
+        self.assertEqual(result["exponent"], 9)
+        self.assertTrue(result["has_element_order_9"])
+        self.assertFalse(result["has_element_order_27"])
+        self.assertTrue(result["all_orders_divide_exponent"])
+
     def test_periodic_neighborhood(self):
         m = FiniteTorus3()
         self.assertEqual(len(m.neighbors((0, 0, 0))), 6)
