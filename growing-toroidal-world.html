@@ -23,29 +23,38 @@ details{border-top:1px solid var(--line);padding-top:12px;color:var(--muted)}cod
 <div class="layout">
 <section class="panel"><h2>01 / Physical plane</h2><div class="sub">Numerically integrated central attraction · trajectory history</div><canvas id="physical" class="maincanvas"></canvas><div id="physical-status" class="readout"></div></section>
 <div class="stack">
-<section class="panel"><h2>02 / Periodic coordinate map</h2><div class="sub">Same trajectory · wrapped x/y coordinates</div><canvas id="periodic"></canvas><div id="periodic-status" class="readout"></div></section>
+<section class="panel"><h2>02 / 2D physical orbit</h2><div class="sub">Same integrated positions · no coordinate wrapping</div><canvas id="periodic"></canvas><div id="periodic-status" class="readout"></div></section>
 <section class="panel"><h2>03 / Toroidal projection</h2><div class="sub">Same coordinates embedded on S¹ × S¹</div><canvas id="torus"></canvas><div id="torus-status" class="readout"></div></section>
 </div></div>
 <div class="controls"><button id="pause">Pause</button><button id="step">Step</button><button id="restart">Restart</button><button id="clear">Clear visible trace</button></div>
 <details><summary>Equations and verification</summary>
 <p>State: <code>(x,y,vx,vy)</code>. Acceleration: <code>a(r) = -μr/(|r|² + ε²)^(3/2)</code>. Velocity-Verlet integration uses a fixed timestep. The central mass is fixed at the origin. There is no prescribed triangle, star, oscillation, or camera rotation.</p>
-<p>The physical view shows actual simulated motion. The periodic and toroidal views are mathematical coordinate projections of that same trajectory; they do not assert that gravity acts on the torus. The projected lines break at wrap boundaries. A single softened central attraction typically gives a bounded orbit with precession, not necessarily stars. This is a demonstration, not an existing WORLD48 execution trace.</p>
+<p>The physical view shows actual simulated motion. The two 2D views now show the identical physical trajectory at different scales, with no wrapping or discontinuous jumps. The toroidal view is only a periodic projection, not a claim that gravity acts on the torus. Its projected trace breaks at wrap boundaries. A single softened central attraction typically gives a bounded orbit with precession, not necessarily stars. This is a demonstration, not an existing WORLD48 execution trace.</p>
 </details>
 </main>
 <script>
 (()=>{'use strict';
 const TAU=2*Math.PI,mu=650000,soft=17,dt=.025,limit=6500,box=380;
 const canvases={physical:document.getElementById('physical'),periodic:document.getElementById('periodic'),torus:document.getElementById('torus')};
-let x=165,y=0,vx=0,vy=51,t=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,last=0,trail=[],steps=0;
+let x=165,y=0,vx=0,vy=58,t=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,last=0,trail=[],steps=0;
 const wrap=v=>((v/box+.5)%1+1)%1;
 function acc(px,py){const d=px*px+py*py+soft*soft,k=-mu/Math.pow(d,1.5);return [k*px,k*py]}
 function integrate(){let [ax,ay]=acc(x,y);vx+=.5*dt*ax;vy+=.5*dt*ay;x+=dt*vx;y+=dt*vy;[ax,ay]=acc(x,y);vx+=.5*dt*ax;vy+=.5*dt*ay;t+=dt;steps++;trail.push({x,y});if(trail.length>limit)trail.shift()}
-function reset(){x=165;y=0;vx=0;vy=51;t=0;steps=0;trail=[{x,y}];draw()}
+function reset(){x=165;y=0;vx=0;vy=58;t=0;steps=0;trail=[{x,y}];draw()}
 function prepare(canvas){const d=Math.min(devicePixelRatio||1,2),w=canvas.clientWidth,h=canvas.clientHeight;canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);const g=canvas.getContext('2d');g.setTransform(d,0,0,d,0,0);g.fillStyle='#0d1720';g.fillRect(0,0,w,h);return {g,w,h}}
 function line(g,arr,proj,breakWrap=false){if(arr.length<2)return;g.beginPath();let prev=null;for(let i=0;i<arr.length;i++){const p=proj(arr[i]);if(!Number.isFinite(p.x+p.y)){prev=null;continue}const wrapped=breakWrap&&prev&&(Math.abs(p.u-prev.u)>.5||Math.abs(p.v-prev.v)>.5);if(!prev||wrapped)g.moveTo(p.x,p.y);else g.lineTo(p.x,p.y);prev=p}g.strokeStyle='#9bdde6';g.lineWidth=1.05;g.globalAlpha=.85;g.stroke();g.globalAlpha=1}
 function dot(g,p){g.fillStyle='#f5e1ae';g.beginPath();g.arc(p.x,p.y,3,0,TAU);g.fill()}
 function physical(){const {g,w,h}=prepare(canvases.physical),cx=w/2,cy=h/2,scale=Math.min(w,h)/440;g.strokeStyle='#344a57';g.lineWidth=1;g.beginPath();g.arc(cx,cy,190*scale,0,TAU);g.stroke();g.fillStyle='#c7a981';g.beginPath();g.arc(cx,cy,4,0,TAU);g.fill();const proj=p=>({x:cx+p.x*scale,y:cy-p.y*scale});line(g,trail,proj);dot(g,proj({x,y}));const energy=.5*(vx*vx+vy*vy)-mu/Math.sqrt(x*x+y*y+soft*soft);document.getElementById('physical-status').textContent='t='+t.toFixed(2)+'  |  r='+Math.hypot(x,y).toFixed(2)+'  |  E='+energy.toFixed(3)+'  |  steps='+steps}
-function periodic(){const {g,w,h}=prepare(canvases.periodic),size=Math.min(w*.8,h*.78),left=(w-size)/2,top=(h-size)/2;g.strokeStyle='#4c6573';g.strokeRect(left,top,size,size);const proj=p=>{const u=wrap(p.x),v=wrap(p.y);return {x:left+u*size,y:top+(1-v)*size,u,v}};line(g,trail,proj,true);dot(g,proj({x,y}));document.getElementById('periodic-status').textContent='u='+wrap(x).toFixed(4)+'  |  v='+wrap(y).toFixed(4)}
+function periodic(){
+const {g,w,h}=prepare(canvases.periodic);
+const scale=Math.min(w,h)/440,cx=w/2,cy=h/2;
+g.strokeStyle='#344a57';g.lineWidth=1;
+g.beginPath();g.arc(cx,cy,190*scale,0,TAU);g.stroke();
+g.fillStyle='#c7a981';g.beginPath();g.arc(cx,cy,3,0,TAU);g.fill();
+const proj=p=>({x:cx+p.x*scale,y:cy-p.y*scale});
+line(g,trail,proj);dot(g,proj({x,y}));
+document.getElementById('periodic-status').textContent='x='+x.toFixed(2)+'  |  y='+y.toFixed(2)+'  |  same physical trajectory';
+}
 function torus(){const {g,w,h}=prepare(canvases.torus),scale=Math.min(w/5.5,h/4.8),yaw=.45,pitch=.46;
 function proj(p){const u=wrap(p.x),v=wrap(p.y),a=TAU*u,b=TAU*v,R=1.5,r=.58;
 const X=(R+r*Math.cos(b))*Math.cos(a),Y=(R+r*Math.cos(b))*Math.sin(a),Z=r*Math.sin(b);
