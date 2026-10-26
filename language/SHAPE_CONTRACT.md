@@ -4,6 +4,31 @@ A **shape** is a reusable movement/interaction handle recovered from a surface e
 
 It is not a dictionary sense and not a claim that all utterances with similar wording are identical.
 
+## Construction follows movement, not a fixed container
+
+James's current working principle is that a finite representation should adapt
+to the relations and decisions being constructed, rather than forcing those
+decisions to fit an arbitrary fixed representation. This is a **design rule and
+testable hypothesis**, not a proof that every finite construction succeeds.
+
+In the periodic computational-world example, retain the toroidal family
+`W_N = Z_N × Z_N` and allow the resolution `N` to grow as the represented
+objects and relationships require. For integer `k >= 2`, the explicit
+embedding `E_k(x,y) = (kx,ky) mod kN` preserves periodic coordinate
+relationships at the scaled resolution. A one-cell movement becomes a
+`k`-cell movement: the geometry changes scale, and motion must be compared
+through the embedding rather than assumed identical.
+
+The original objects, source identities, decisions and evidence remain
+authoritative. A projection collision is not an identity or a discovered
+relationship. A larger world alone does not prove relation preservation;
+test the projection against the actual relations and trajectories.
+
+Executable bounded example:
+[`work/arc_like_maze/toroidal_projection.py`](../work/arc_like_maze/toroidal_projection.py).
+This is one implementation of the principle, not a definition of the entire
+language referent or James's experience.
+
 ## Shape record
 
 Each shape may carry:
