@@ -1,0 +1,29 @@
+name: ARC4 original native clock 100 boundary
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_clock_100.py'
+      - '.github/workflows/arc4-sp80-stage4-clock-100.yml'
+jobs:
+  genuine-sp80-clock-saturation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile native SDK clock-boundary holdout
+        run: python -m compileall -q work/arc3/native_sp80_stage4_clock_100.py
+      - name: Test true original SDK clock near 100 and rooted A-B relations
+        run: python -m work.arc3.native_sp80_stage4_clock_100 --out runtime/data/arc4/original-sp80-stage4-clock100.json
+      - name: Retain genuine action ledger and every late native source frame
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-clock100
+          path: runtime/data/arc4/original-sp80-stage4-clock100.*
+          retention-days: 14
+          if-no-files-found: error
