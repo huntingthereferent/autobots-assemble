@@ -619,10 +619,28 @@ class FiniteTorus3:
             self.coordinate_commutator(a, b)[3] == 0
             for a in coords for b in coords
         )
+        # Independent reference: act on each of the 27 original World states.
+        # This avoids testing the conjugation helper against its own formula.
+        vertices = self.vertices()
+        positions = {v: i for i, v in enumerate(vertices)}
+        identity_perm = tuple(range(len(vertices)))
+        b_perm = tuple(positions[self.transition(v, "B")] for v in vertices)
+        def perm_compose(left, right):
+            return tuple(left[i] for i in right)
+        b_powers = (identity_perm, b_perm, perm_compose(b_perm, b_perm))
+        def representation(q):
+            shift = q[:3]
+            return tuple(
+                positions[tuple((vertices[b_powers[q[3]][i]][k] + shift[k]) % 3
+                                for k in range(3))]
+                for i in range(len(vertices))
+            )
+        represented = {q: representation(q) for q in coords}
         conjugation_law = all(
-            self.coordinate_conjugate(a, b) ==
-            self.coordinate_product(
-                self.coordinate_product(a, b), self.coordinate_inverse(a)
+            represented[self.coordinate_conjugate(a, b)] ==
+            perm_compose(
+                perm_compose(represented[a], represented[b]),
+                represented[self.coordinate_inverse(a)]
             )
             for a in coords for b in coords
         )
