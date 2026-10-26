@@ -516,6 +516,63 @@ class FiniteTorus3:
             "a_equals_x": tuple(index[self.transition(v, "A")] for v in vertices) == x,
         }
 
+    @staticmethod
+    def coordinate_product(left, right):
+        """Multiply (translation, B exponent) normal forms over F_3.
+
+        (v,l)*(w,m) = (v + S**l w, l+m), where
+        S(x,y,z)=(x,y+x,z+y). Coordinates are modulo three.
+        """
+        v, ell = left[:3], left[3]
+        w, m = right[:3], right[3]
+        if any(not isinstance(k, int) or k not in range(3) for k in (*left, *right)):
+            raise ValueError("coordinates must lie in F_3")
+        for _ in range(ell):
+            x, y, z = w
+            w = (x, (y + x) % 3, (z + y) % 3)
+        return tuple((v[i] + w[i]) % 3 for i in range(3)) + ((ell + m) % 3,)
+
+    def coordinate_group_verification(self) -> dict:
+        """Compare all 81^2 coordinate products to the 27-point action."""
+        if self.side != 3:
+            raise ValueError("coordinate group requires side=3")
+        vertices = self.vertices()
+        positions = {v: i for i, v in enumerate(vertices)}
+        identity = tuple(range(27))
+        b = tuple(positions[self.transition(v, "B")] for v in vertices)
+        def compose(a, c):
+            return tuple(a[i] for i in c)
+        b_powers = [identity, b, compose(b, b)]
+        def permutation(q):
+            v, ell = q[:3], q[3]
+            return tuple(
+                positions[tuple((vertices[b_powers[ell][i]][k] + v[k]) % 3
+                                for k in range(3))]
+                for i in range(27)
+            )
+        coords = tuple(product(range(3), repeat=4))
+        images = {q: permutation(q) for q in coords}
+        faithful = len(set(images.values())) == 81
+        homomorphism = all(
+            images[self.coordinate_product(a, c)] == compose(images[a], images[c])
+            for a in coords for c in coords
+        )
+        unit = (0, 0, 0, 0)
+        identity_law = all(
+            self.coordinate_product(q, unit) == q
+            and self.coordinate_product(unit, q) == q for q in coords
+        )
+        return {
+            "coordinate_count": len(coords),
+            "faithful": faithful,
+            "multiplication_matches_permutations": homomorphism,
+            "identity_law": identity_law,
+            "closure": all(
+                self.coordinate_product(a, c) in images
+                for a in coords for c in coords
+            ),
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
