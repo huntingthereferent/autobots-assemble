@@ -1,0 +1,29 @@
+name: ARC4 native right upper source timing
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_right_top_signal.py'
+      - '.github/workflows/arc4-sp80-stage4-right-top-signal.yml'
+jobs:
+  true-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile original source experiment
+        run: python -m compileall -q work/arc3/native_sp80_stage4_right_top_signal.py
+      - name: Run 14 original native right-boundary tests
+        run: python -m work.arc3.native_sp80_stage4_right_top_signal --out runtime/data/arc4/original-sp80-stage4-right-top-signal.json
+      - name: Preserve genuine original SDK evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-right-top-signal
+          path: runtime/data/arc4/original-sp80-stage4-right-top-signal.*
+          retention-days: 14
+          if-no-files-found: error

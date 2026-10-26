@@ -1,0 +1,19 @@
+name: ARC4 finite bottom-clock certificate
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/certify_sp80_stage4_clock.py'
+      - '.github/workflows/arc4-sp80-stage4-clock-certificate.yml'
+jobs:
+  exact-finite-source-certificate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check source syntax
+        run: python -m compileall -q work/arc3/certify_sp80_stage4_clock.py
+      - name: Prove native observed clock finite index injectivity at fixed parity
+        run: python -m work.arc3.certify_sp80_stage4_clock

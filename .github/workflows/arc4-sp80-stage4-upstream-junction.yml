@@ -1,0 +1,29 @@
+name: ARC4 native lower-upstream junction probe
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_upstream_junction.py'
+      - '.github/workflows/arc4-sp80-stage4-upstream-junction.yml'
+jobs:
+  original-native-level4:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile genuine original source trial
+        run: python -m compileall -q work/arc3/native_sp80_stage4_upstream_junction.py
+      - name: Run 48 fresh native Level4 upstream-junction cases
+        run: python -m work.arc3.native_sp80_stage4_upstream_junction --out runtime/data/arc4/original-sp80-stage4-upstream-junction.json
+      - name: Upload original SDK frames and receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-upstream-junction
+          path: runtime/data/arc4/original-sp80-stage4-upstream-junction.*
+          if-no-files-found: error
+          retention-days: 14

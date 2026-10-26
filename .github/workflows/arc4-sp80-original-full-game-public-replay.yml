@@ -1,0 +1,29 @@
+name: ARC original SDK public full-game final replay
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_full_game_external_replay.py'
+      - '.github/workflows/arc4-sp80-original-full-game-public-replay.yml'
+jobs:
+  original-normal-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install authentic original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile independently written original SDK replay
+        run: python -m compileall -q work/arc3/native_sp80_full_game_external_replay.py
+      - name: Execute full six-level original normal SDK with attributed public final two stages
+        run: python -m work.arc3.native_sp80_full_game_external_replay --out runtime/data/arc4/original-sp80-public-full-game-replay.json
+      - name: Preserve genuine original SDK actions and frames
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-public-full-game-replay
+          path: runtime/data/arc4/original-sp80-public-full-game-replay.*
+          if-no-files-found: error
+          retention-days: 14

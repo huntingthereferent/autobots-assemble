@@ -1,0 +1,29 @@
+name: ARC4 native fixed-geometry action-time A-B
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_time_shift.py'
+      - '.github/workflows/arc4-sp80-stage4-time-shift.yml'
+jobs:
+  actual-original-sdk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine original ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile frozen actual-source experiment
+        run: python -m compileall -q work/arc3/native_sp80_stage4_time_shift.py
+      - name: Test exact Stage3 positive versus delayed fixed-geometry Stage4
+        run: python -m work.arc3.native_sp80_stage4_time_shift --out runtime/data/arc4/original-sp80-stage4-time-shift.json
+      - name: Preserve authentic original SDK A-B state and action data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-time-shift
+          path: runtime/data/arc4/original-sp80-stage4-time-shift.*
+          retention-days: 14
+          if-no-files-found: error

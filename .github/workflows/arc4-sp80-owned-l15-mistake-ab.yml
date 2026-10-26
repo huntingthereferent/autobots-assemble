@@ -1,0 +1,29 @@
+name: ARC owned mistake-led L-piece native A-B
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_ab_l15_error_follow.py'
+      - '.github/workflows/arc4-sp80-owned-l15-mistake-ab.yml'
+jobs:
+  actual-original-A-B:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original native ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile genuine mistake-led A/B trial
+        run: python -m compileall -q work/arc3/native_sp80_stage4_ab_l15_error_follow.py
+      - name: Execute next corrected actual SDK source mistake
+        run: python -m work.arc3.native_sp80_stage4_ab_l15_error_follow --out runtime/data/arc4/owned-sp80-original-l15-error-led-ab.json
+      - name: Preserve all actual returned frames, including worsening mistakes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: owned-sp80-original-l15-error-led-ab
+          path: runtime/data/arc4/owned-sp80-original-l15-error-led-ab.*
+          if-no-files-found: error
+          retention-days: 14

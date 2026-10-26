@@ -1,0 +1,29 @@
+name: ARC4 rooted AB six legal next actions
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_rooted_ab_all_actions.py'
+      - '.github/workflows/arc4-sp80-stage4-rooted-ab-all-actions.yml'
+jobs:
+  genuine-original-action-alphabet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install original native ARC SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile one-step original source action audit
+        run: python -m compileall -q work/arc3/native_sp80_stage4_rooted_ab_all_actions.py
+      - name: Execute true original six-label A-B rooted action comparison
+        run: python -m work.arc3.native_sp80_stage4_rooted_ab_all_actions --out runtime/data/arc4/original-sp80-rooted-ab-all-actions.json
+      - name: Preserve complete SDK evidence and F3 witness
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-rooted-ab-all-actions
+          path: runtime/data/arc4/original-sp80-rooted-ab-all-actions.*
+          if-no-files-found: error
+          retention-days: 14

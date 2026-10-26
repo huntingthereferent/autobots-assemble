@@ -1,0 +1,29 @@
+name: ARC4 native bottom-row clock holdout
+on:
+  pull_request:
+    paths:
+      - 'work/arc3/native_sp80_stage4_bottom_clock_holdout.py'
+      - '.github/workflows/arc4-sp80-stage4-bottom-clock-holdout.yml'
+jobs:
+  original-bottom-row-source-clock:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install genuine original SDK
+        run: python -m pip install 'arc-agi>=0.9.6,<1' numpy
+      - name: Compile genuine SDK clock test
+        run: python -m compileall -q work/arc3/native_sp80_stage4_bottom_clock_holdout.py
+      - name: Run independent original 42-action indexed bottom-row tests
+        run: python -m work.arc3.native_sp80_stage4_bottom_clock_holdout --out runtime/data/arc4/original-sp80-stage4-bottom-clock-holdout.json
+      - name: Retain original SDK clock observations and full native pour frames
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: original-sp80-stage4-bottom-clock-holdout
+          path: runtime/data/arc4/original-sp80-stage4-bottom-clock-holdout.*
+          retention-days: 14
+          if-no-files-found: error
