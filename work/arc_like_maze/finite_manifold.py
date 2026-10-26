@@ -449,6 +449,73 @@ class FiniteTorus3:
             "all_orders_divide_exponent": all(exponent % k == 0 for k in orders),
         }
 
+    def group_presentation_verification(self) -> dict:
+        """Check a finite presentation via the faithful 27-point action.
+
+        Generators x,y,z are unit translations and b is the World B map.
+        Relations: x^3=y^3=z^3=b^3=1; [x,y]=[x,z]=[y,z]=1;
+        b*x*b^-1=x*y, b*y*b^-1=y*z, b*z*b^-1=z.
+        Every word reduces to x^i*y^j*z^k*b^l (i,j,k,l in F_3).
+        """
+        if self.side != 3:
+            raise ValueError("presentation verification requires side=3")
+        vertices = self.vertices()
+        index = {v: i for i, v in enumerate(vertices)}
+        identity = tuple(range(len(vertices)))
+        def compose(a, b):
+            return tuple(a[i] for i in b)
+        def power(g, n):
+            out = identity
+            for _ in range(n):
+                out = compose(out, g)
+            return out
+        def translation(delta):
+            return tuple(
+                index[tuple((v[k] + delta[k]) % 3 for k in range(3))]
+                for v in vertices
+            )
+        x = translation((1, 0, 0))
+        y = translation((0, 1, 0))
+        z = translation((0, 0, 1))
+        b = tuple(index[self.transition(v, "B")] for v in vertices)
+        bi = power(b, 2)
+        gens = (x, y, z, b)
+        order_three = all(power(g, 3) == identity for g in gens)
+        translations_commute = all(
+            compose(a, c) == compose(c, a)
+            for a in (x, y, z) for c in (x, y, z)
+        )
+        conjugation = (
+            compose(compose(b, x), bi) == compose(x, y)
+            and compose(compose(b, y), bi) == compose(y, z)
+            and compose(compose(b, z), bi) == z
+        )
+        normal_forms = {
+            compose(
+                compose(compose(power(x, i), power(y, j)), power(z, k)),
+                power(b, ell),
+            )
+            for i, j, k, ell in product(range(3), repeat=4)
+        }
+        generated = {identity}
+        queue = deque([identity])
+        while queue:
+            g = queue.popleft()
+            for h in (x, b):
+                gh = compose(g, h)
+                if gh not in generated:
+                    generated.add(gh)
+                    queue.append(gh)
+        return {
+            "generators_order_three": order_three,
+            "translations_commute": translations_commute,
+            "conjugation_relations": conjugation,
+            "normal_form_count": len(normal_forms),
+            "generated_by_a_b_count": len(generated),
+            "normal_forms_equal_generated_group": normal_forms == generated,
+            "a_equals_x": tuple(index[self.transition(v, "A")] for v in vertices) == x,
+        }
+
     def verify(self) -> dict:
         counts = self.f_vector()
         return {
