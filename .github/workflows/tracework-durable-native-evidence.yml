@@ -1,6 +1,13 @@
 name: Tracework durable native evidence
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/github_native_evidence_archive.py'
+      - 'network/tests/test_github_native_evidence_archive.py'
+      - 'scripts/tracework_archive_native_evidence.sh'
+      - '.github/workflows/tracework-durable-native-evidence.yml'
   pull_request:
     paths:
       - 'systems/workspace/github_native_evidence_archive.py'
