@@ -38,7 +38,7 @@ The recovery schedule explicitly includes the original run IDs:
 | WORLD31 conditional analytical bound | [39531157339](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39531157339) | November 20, 2026 |
 | W13 independent browser evidence | [39000587000](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39000587000) | November 16, 2026 |
 
-The preservation workflow is **not active until this branch is merged into the default branch**. Immediately after merging, use **Actions → Tracework durable native evidence → Run workflow**, leaving run ID blank to reconcile the four historical runs plus recent approved workflows. Inspect the published Release assets and the Action's source-bound verification result. Daily runs are a second chance, not a reason to delay preserving an artifact about to expire.
+The preservation workflow is **not active until this branch is merged into the default branch**. The initial **push to main automatically starts the recovery pass** over the four historical runs and recent approved workflows. The owner can also use **Actions → Tracework durable native evidence → Run workflow**, leaving run ID blank for reconciliation. Inspect the published Release assets and the Action's source-bound verification result. Daily runs are a second chance, not a reason to delay preserving an artifact about to expire.
 
 ## Admission and limits
 
