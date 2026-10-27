@@ -1,0 +1,37 @@
+name: NIH Phase 1 Tracework comparison evidence
+on:
+  pull_request:
+    paths:
+      - 'research/nih/TRACEWORK_PHASE1_COMPARISON_2026-10-25.md'
+      - '.github/workflows/nih-phase1-tracework-comparison.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  phase1-original-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - run: |
+          python -m pip install 'cryptography>=45,<47' 'rdflib>=7,<8' 'playwright>=1.54,<2'
+          python -m playwright install --with-deps chromium
+      - name: Run existing negative controls
+        run: python -m unittest -v network.tests.test_nih_phase1_world_frontier network.tests.test_nih_phase1_world_two_clock network.tests.test_nih_phase1_world_source_motion network.tests.test_nih_phase1_world_publication_uncertainty
+      - name: Execute existing Phase 1 original-world witness
+        run: |
+          mkdir -p "$RUNNER_TEMP/phase1-original"
+          python -m systems.workspace.nih_phase1_world_frontier --data-dir "$RUNNER_TEMP/phase1-native" --output-dir "$RUNNER_TEMP/phase1-original"
+      - name: Upload original witness for A/B/C comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tracework-phase1-original-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/phase1-original
+          if-no-files-found: warn
+          retention-days: 30
