@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-26T22:44:02.093898+00:00",
-  "content_sha256": "4c25913f6bc188523c70d9142bdb68bfab09e76d05523c819568b8aa4730c4c0",
+  "checked_at": "2026-10-27T05:12:58.884526+00:00",
+  "content_sha256": "34e4a848e21152f4855bede11a4051be28e0f0d458569836bfb27ed04d0a7cbe",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 2,
-      "max_magnitude": 2.4,
+      "count": 4,
+      "max_magnitude": 2.2,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,51 +22,85 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026vgdsgu",
-        "observed_at": "2026-10-26T22:44:01.733112Z",
-        "source_updated_at": "2026-10-26T22:36:12.373000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vgdsgu",
+        "source_id": "aka2026vgpumb",
+        "observed_at": "2026-10-27T05:12:58.477682Z",
+        "source_updated_at": "2026-10-27T04:38:01.738000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vgpumb",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vgdsgu",
+        "canonical_key": "event:aka2026vgpumb",
         "payload": {
-          "magnitude": 2.4,
-          "place": "58 km SE of Chignik, Alaska",
-          "longitude": -157.647,
-          "latitude": 55.98,
-          "depth_km": 38.9,
-          "occurred_at": "2026-10-26T22:35:02.481000+00:00"
+          "magnitude": 0.5,
+          "place": "85 km NNW of Karluk, Alaska",
+          "longitude": -155.117,
+          "latitude": 58.246,
+          "depth_km": 5.0,
+          "occurred_at": "2026-10-27T04:37:25.209000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "ci41353239",
-        "observed_at": "2026-10-26T22:44:01.733112Z",
-        "source_updated_at": "2026-10-26T22:38:37.032000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41353239",
+        "source_id": "aka2026vgpxtq",
+        "observed_at": "2026-10-27T05:12:58.477682Z",
+        "source_updated_at": "2026-10-27T04:45:01.859000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vgpxtq",
         "entity_type": "event",
-        "canonical_key": "event:ci41353239",
+        "canonical_key": "event:aka2026vgpxtq",
         "payload": {
-          "magnitude": 1.66,
-          "place": "9 km SSW of Idyllwild, CA",
-          "longitude": -116.7665,
-          "latitude": 33.6731666666667,
-          "depth_km": 18.62,
-          "occurred_at": "2026-10-26T22:35:01.330000+00:00"
+          "magnitude": 2.2,
+          "place": "57 km ENE of Pedro Bay, Alaska",
+          "longitude": -153.159,
+          "latitude": 59.979,
+          "depth_km": 133.8,
+          "occurred_at": "2026-10-27T04:41:31.477000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "ci41353383",
+        "observed_at": "2026-10-27T05:12:58.477682Z",
+        "source_updated_at": "2026-10-27T05:02:14.489000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41353383",
+        "entity_type": "event",
+        "canonical_key": "event:ci41353383",
+        "payload": {
+          "magnitude": 1.94,
+          "place": "11 km WSW of Delta, B.C., MX",
+          "longitude": -115.2935,
+          "latitude": 32.303,
+          "depth_km": 14.29,
+          "occurred_at": "2026-10-27T04:58:39.510000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "nn00926289",
+        "observed_at": "2026-10-27T05:12:58.477682Z",
+        "source_updated_at": "2026-10-27T05:06:20.351000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nn00926289",
+        "entity_type": "event",
+        "canonical_key": "event:nn00926289",
+        "payload": {
+          "magnitude": 1.8,
+          "place": "8 km E of Gerlach, Nevada",
+          "longitude": -119.2536,
+          "latitude": 40.6581,
+          "depth_km": 9.796,
+          "occurred_at": "2026-10-27T05:03:50.181000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-26T22:44:01.842745Z",
-      "source_updated_at": "2026-10-26T21:28:15Z",
+      "observed_at": "2026-10-27T05:12:58.560371Z",
+      "source_updated_at": "2026-10-27T01:18:55Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54725,
+        "stargazers_count": 54728,
         "forks_count": 12103,
         "open_issues_count": 244,
         "pushed_at": "2026-10-26T17:14:44Z",
@@ -76,7 +110,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-26T22:44:02.067247Z",
+      "observed_at": "2026-10-27T05:12:58.869058Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -98,9 +132,6 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count",
-        "open_issues_count",
-        "pushed_at",
         "stargazers_count"
       ]
     },
