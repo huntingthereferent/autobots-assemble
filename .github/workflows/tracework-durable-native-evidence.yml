@@ -1,0 +1,78 @@
+name: Tracework durable native evidence
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'systems/workspace/github_native_evidence_archive.py'
+      - 'network/tests/test_github_native_evidence_archive.py'
+      - 'scripts/tracework_archive_native_evidence.sh'
+      - '.github/workflows/tracework-durable-native-evidence.yml'
+  pull_request:
+    paths:
+      - 'systems/workspace/github_native_evidence_archive.py'
+      - 'network/tests/test_github_native_evidence_archive.py'
+      - 'scripts/tracework_archive_native_evidence.sh'
+      - '.github/workflows/tracework-durable-native-evidence.yml'
+  workflow_run:
+    workflows:
+      - 'ARC3 original SP80 source right catcher edge contact'
+      - 'ARC4 original SP80 clean lateral plus top-left cup recovery'
+      - 'WORLD 31 first conservative source envelope limit'
+      - 'workstation-w13-independent-witness'
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Exact original workflow run ID (blank means reconcile allowlisted runs)'
+        required: false
+        type: string
+  schedule:
+    - cron: '22 4 * * *'
+
+permissions:
+  contents: read
+
+jobs:
+  evidence-contract-tests:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest -v network.tests.test_github_native_evidence_archive
+
+  archive-and-reverify:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    concurrency:
+      group: tracework-native-evidence-release
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      actions: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      EVENT_KIND: ${{ github.event_name }}
+      COMPLETED_RUN_ID: ${{ github.event.workflow_run.id }}
+      MANUAL_RUN_ID: ${{ inputs.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Enforce native source and negative-result contracts
+        run: python -m unittest -v network.tests.test_github_native_evidence_archive
+      - name: Preserve and compare original artifact bytes
+        shell: bash
+        run: bash scripts/tracework_archive_native_evidence.sh

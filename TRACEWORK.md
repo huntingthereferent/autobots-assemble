@@ -33,6 +33,11 @@ A lane preserves its own referent and source identity. Recorded movement, native
 | Source copying, branching and inspection | [Source edition component](systems/workspace/WORKSTATION.md) |
 | Read-only execution and evidence presentation | [Tracework live](https://huntingthereferent.github.io/autobots-assemble/live/work.html) · [Viewer notes](docs/live/README.md) |
 | Research that produces native witnesses | [Research](research/README.md) · [Repository index](README.md) |
+| Durable public native evidence | [Original Actions artifact archive contract](docs/TRACEWORK_NATIVE_EVIDENCE_ARCHIVE.md) · [archive implementation](systems/workspace/github_native_evidence_archive.py) |
+
+## Public Actions evidence retention
+
+This GitHub version must retain the **original source-owned witness**, not just an expiring Actions URL or a derived summary. The [bounded native evidence archive](docs/TRACEWORK_NATIVE_EVIDENCE_ARCHIVE.md) records an exact original run, source commit, artifact ZIP SHA-256, member hashes, and original success/failure conclusion; it uses non-clobbering, run-specific GitHub Releases and checks the published bytes again. Approved ARC, WORLD31, and W13 workflows are the initial scope. A failed archival attempt is an explicit evidence boundary. The preservation workflow only becomes operational once merged into the default branch; private operator journals must not be published to the public archive.
 
 ## Status and evidence limits
 
