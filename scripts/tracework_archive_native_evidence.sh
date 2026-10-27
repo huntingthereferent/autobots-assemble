@@ -31,7 +31,14 @@ print(matches[0]["id"])
 PY
 )"
     [[ "$artifact_id" =~ ^[1-9][0-9]*$ ]] || return 1
-    gh api "repos/$GH_REPO/actions/artifacts/$artifact_id/zip" > "$root/original.zip"
+    # GitHub API redirects to short-lived ZIP storage; curl saves exact bytes.
+    # Authorization is not forwarded to a different redirect host.
+    curl --fail --silent --show-error --location --retry 3 \
+      --proto '=https' --proto-redir '=https' \
+      --header "Accept: application/vnd.github+json" \
+      --header "Authorization: Bearer $GH_TOKEN" \
+      --output "$root/original.zip" \
+      "https://api.github.com/repos/$GH_REPO/actions/artifacts/$artifact_id/zip"
     python -m systems.workspace.github_native_evidence_archive \
       --run "$root/run.json" --artifacts "$root/artifacts.json" \
       --zip "$root/original.zip" --output "$root/staged"
