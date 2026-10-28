@@ -18,6 +18,10 @@ jobs:
           python-version: '3.11'
       - name: Check chatbot CP About Me and provenance views
         run: python work/arc_like_maze/chatbot/checkpoints/cp_record.py check
+      - name: Reopen real CP evidence without treating next as authority
+        run: |
+          python work/arc_like_maze/chatbot/checkpoints/cp_record.py handoff --referent "recheck current finite correspondence boundary" > "$RUNNER_TEMP/cp-context.json"
+          python -c 'import json,os; c=json.load(open(os.environ["RUNNER_TEMP"]+"/cp-context.json")); assert c["latest_checkpoint"] == "CP-0030" and c["history"][-1]["cp"] == "CP-0030" and c["task_admitted"] is False and c["worker_executed"] is False'
       - name: Exercise CP recording and rejection cases
         run: python -m unittest -q work.arc_like_maze.chatbot.checkpoints.test_cp_record
 

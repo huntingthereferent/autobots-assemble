@@ -21,6 +21,16 @@ class SessionContinuityTests(unittest.TestCase):
         self.assertIn("Load it once per session", entry)
         self.assertTrue((ROOT / session_path).is_file())
 
+    def test_original_cp_context_reached_only_for_relevant_continuation(self):
+        entry = self.read("ENTRY.md")
+        tracework = self.read("TRACEWORK.md")
+        self.assertIn("cp_record.py handoff --referent", entry)
+        self.assertIn("CURRENT EXPLICIT REFERENT", entry)
+        self.assertIn("CP20–CP30", tracework)
+        self.assertIn("not a universal gate over unrelated work", entry)
+        self.assertIn("its archive digest as fresh runtime proof", entry)
+        self.assertIn("not a replacement for CP20–CP30", tracework)
+
     def test_current_referent_and_protocol_remain_resolvable(self):
         state = json.loads(self.read("state/current.json"))
         for field in ("preferred_referent", "goal", "next_movement"):

@@ -119,5 +119,41 @@ class CheckpointHarnessTests(unittest.TestCase):
         with self.assertRaises(cp.CheckpointError):cp.record(self.root,self._input(m))
 
 
+    def test_handoff_carries_original_cp_history_without_automatic_work(self):
+        cp.record(self.root, self._input(self.next_cp()))
+        paths = (self.root/'ABOUT_ME.md', self.root/'PROVENANCE.md',
+                 self.root/'checkpoints'/'CP-0027.json',
+                 self.root/'checkpoints'/'CP-0028.json')
+        before = [p.read_bytes() for p in paths]
+        context = cp.continuation(self.root, 'recheck the same selected route')
+        self.assertEqual(context['current_referent'], 'recheck the same selected route')
+        self.assertEqual(context['latest_checkpoint'], 'CP-0028')
+        self.assertEqual(context['schema'], 'finite-correspondence-cp-continuation/v1')
+        self.assertEqual([x['cp'] for x in context['history']], ['CP-0027','CP-0028'])
+        self.assertEqual(context['history'][0]['preserved'], self.sample['preserved'])
+        self.assertEqual(context['history'][1]['boundary'], self.next_cp()['boundary'])
+        self.assertFalse(context['task_admitted'])
+        self.assertFalse(context['worker_executed'])
+        self.assertEqual(context['current_native_verification'], 'NOT_PERFORMED')
+        self.assertEqual(before, [p.read_bytes() for p in paths])
+
+    def test_handoff_refuses_missing_referent_and_unsynced_views(self):
+        for bad in ('', '  ', None, 'x\ny'):
+            with self.subTest(bad=bad):
+                with self.assertRaises(cp.CheckpointError):
+                    cp.continuation(self.root, bad)
+        (self.root/'ABOUT_ME.md').write_text('stale', encoding='utf-8')
+        with self.assertRaisesRegex(cp.CheckpointError, 'out of sync'):
+            cp.continuation(self.root, 'same current task')
+
+    def test_handoff_does_not_promote_historical_next_to_task(self):
+        request = 'inspect missing source evidence before changing anything'
+        handoff = cp.continuation(self.root, request)
+        self.assertEqual(handoff['current_referent'], request)
+        self.assertNotEqual(handoff['current_referent'], self.sample['next'])
+        self.assertEqual(handoff['next_possible_not_an_assignment'], self.sample['next'])
+        self.assertEqual(handoff['archive_identity']['availability'], 'conversation-local')
+
+
 if __name__=='__main__':
     unittest.main()

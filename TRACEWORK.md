@@ -23,6 +23,22 @@ real problem / original referent
 
 A lane preserves its own referent and source identity. Recorded movement, native task execution, mathematical evidence and successful CI checks are not interchangeable claims. Tracework can support multiple lanes while preserving what changed, what survived, the evidence path, and a return point. Its role in managing AI drift is to keep source and state traceable when conversational language or execution changes; no blanket drift-free claim follows.
 
+## CP data at continuation
+
+For finite correspondence work, the original
+[CP20–CP30 reconstructed sources](work/arc_like_maze/chatbot/research/integrated/README.md)
+and [checkpoint records](work/arc_like_maze/chatbot/PROVENANCE.md) remain the
+source-specific boundary. The [read-only continuation handoff](work/arc_like_maze/chatbot/checkpoints/cp_record.py)
+rechecks the existing recorded CP views and carries observations, preserved
+relationships, walls and exact checkpoint identity into an **explicit current
+referent**. It cannot admit jobs, produce fresh witnesses, or select a task from
+a historical `next` field. For operational entry, follow [ENTRY.md](ENTRY.md).
+
+The separate [CP frontier](systems/workspace/CP_AUTOMATION.md) concerns
+NIH/game checkpoint dependencies. It is not a replacement for CP20–CP30
+research evidence. Neither CP mechanism governs unrelated Tracework lanes
+merely because they share the initials CP.
+
 ## Source-owned implementation
 
 | Responsibility | Reference |
