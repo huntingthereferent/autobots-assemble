@@ -1,4 +1,4 @@
-"""Executable NIH Phase 1 oscillation against actual Traceworks boundaries.
+"""Executable NIH Phase 1 oscillation against actual Tracework boundaries.
 
 Run: python -m unittest -v network.tests.test_nih_traceworks_oscillation
 No native NIH execution is claimed by this test; it challenges the real comparator
