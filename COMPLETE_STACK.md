@@ -18,7 +18,7 @@ The field boundary never becomes an excuse to stop.
 
 ## Language referent
 
-The **language referent** (historically called A/B) concerns observing, describing and continuing relationships in movement; this is the same referent across both names. See [Language Referent](LANGUAGE_REFERENT.md) and the [current naming note](LANGUAGE_REFERENT_GROUND_2026-10-13.md). Mathematics is a human formal language participating in this inquiry. Particular generators labeled A and B and their constructions are scoped models with explicit assumptions and proofs, not the definition of the entire referent. The operational evidence contract below preserves continuity without taking ownership of the referent.
+The **Language Referent** establishes what is being referred to through changes in language and relationships. **A/B** names the relational movement James follows, not conventional A/B testing. Historical documents sometimes used A/B as the name of the wider inquiry; those records remain historical. See [Language Referent](LANGUAGE_REFERENT.md) and the [current naming note](LANGUAGE_REFERENT_GROUND_2026-10-13.md). Mathematics is a human formal language participating in this inquiry. Particular generators labeled A and B and their constructions are scoped models with explicit assumptions and proofs, not the definition of the entire referent. The operational evidence contract below preserves continuity without taking ownership of the referent.
 
 Complete Stack is an application orientation over problems.
 
