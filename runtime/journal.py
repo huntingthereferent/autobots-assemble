@@ -173,7 +173,11 @@ class RuntimeJournal:
             "handoff": handoff_to_dict(handoff),
             "event": event_to_dict(created_event),
         }
+        if not entry_gate(self._handoffs, tuple(self._events), created_event, handoff).admitted:
+            raise ValueError('A/entry gate rejected submission')
         self._validate_event(created_event)
+        if not output_gate({**self._handoffs, handoff.handoff_id: handoff}, tuple(self._events) + (created_event,), created_event).admitted:
+            raise ValueError('B/output gate rejected submission')
         self._append_record(record)
         self._handoffs[handoff.handoff_id] = handoff
         self._events.append(created_event)
