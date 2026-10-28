@@ -4,7 +4,7 @@ October 19, 2026. Public original ARC3 `arc_agi.Arcade(OperationMode.NORMAL)` na
 
 ## Frozen source hypothesis — BEFORE independent native runs
 
-The [earlier full native frame-stack archive](runs/WINDOW48_SP80_ACTION5_SDK_FRAME_STACKS_2026-10-19.md) retained 2,258 actual original SDK-returned 64×64 frames and found **20/20 stage1 ACTION5 responses** in its sampled source contexts had 22 returned frames, a shared original color6 pixel-count ramp, shared top color11 blink, and no original color9 pixels in frames 0–20.
+The [earlier full native frame-stack archive](WINDOW48_SP80_ACTION5_SDK_FRAME_STACKS_2026-10-19.md) retained 2,258 actual original SDK-returned 64×64 frames and found **20/20 stage1 ACTION5 responses** in its sampled source contexts had 22 returned frames, a shared original color6 pixel-count ramp, shared top color11 blink, and no original color9 pixels in frames 0–20.
 
 This new `native_sp80_action5_temporal_holdout.py` froze **four exact falsifiable hypotheses** before new original source actions:
 1. H1: Every stage1 ACTION5 returns exactly **22** native 64×64 images.

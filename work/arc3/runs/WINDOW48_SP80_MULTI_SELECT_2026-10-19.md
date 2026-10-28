@@ -4,7 +4,7 @@ October 19, 2026. Original official `arc_agi.Arcade(OperationMode.NORMAL)` SP80,
 
 ## Predeclared source question
 
-Independent preceding [proper coordinate-bearing original ACTION6 study](runs/WINDOW48_SP80_COORDINATE_ACTION6_2026-10-19.md) found that `env.step(GameAction.ACTION6,data={"x":x,"y":y})` on native stage1 visible color8 regions at (32,25) and (12,17) switches the visible selected color9 highlight onto the clicked 12×4 bar, whereas clicking already-highlighted native color9 or background causes only an original bottom-frontier change. That corrected the historical native worker error: older ACTION6 calls with NO coordinates were real source action events but not intended object-click tests.
+Independent preceding [proper coordinate-bearing original ACTION6 study](WINDOW48_SP80_COORDINATE_ACTION6_2026-10-19.md) found that `env.step(GameAction.ACTION6,data={"x":x,"y":y})` on native stage1 visible color8 regions at (32,25) and (12,17) switches the visible selected color9 highlight onto the clicked 12×4 bar, whereas clicking already-highlighted native color9 or background causes only an original bottom-frontier change. That corrected the historical native worker error: older ACTION6 calls with NO coordinates were real source action events but not intended object-click tests.
 
 This NEW bounded actual SP80 native study fixes **17 multi-selection and matched movement/ACTION5 words before native play**, each on two independently reset, original `454545` stage0→stage1-entered SDK games (34 sessions). Actual coordinate-bearing ACTION6 calls:
 - selectable lower original native color8 `(32,25)`;

@@ -4,7 +4,7 @@ October 19, 2026. Original public `arc_agi.Arcade(OperationMode.NORMAL)` SP80, *
 
 ## Precommitted source experiment
 
-The previous [second source color8 band](runs/WINDOW48_SP80_SECOND_COLOR8_BAND_2026-10-19.md) showed two different genuine histories `11111333` and `33311111` reaching native color9 geometry x8–27,y16–19; genuine ACTION5 changed **80 native cells 9→8 and 48 cells 8→9** in the interior, plus two original y63 native 14→0 boundary cells. Native ACTION6 there changed only the boundary. Both source histories used native legal controls and did not progress to level2.
+The previous [second source color8 band](WINDOW48_SP80_SECOND_COLOR8_BAND_2026-10-19.md) showed two different genuine histories `11111333` and `33311111` reaching native color9 geometry x8–27,y16–19; genuine ACTION5 changed **80 native cells 9→8 and 48 cells 8→9** in the interior, plus two original y63 native 14→0 boundary cells. Native ACTION6 there changed only the boundary. Both source histories used native legal controls and did not progress to level2.
 
 Freeze **18 source action words**, two independent fresh original-game stage1 resets each:
 - Each movement-order basis `11111333`, `33311111`, alone; and each with suffix `5`, `6`, `65`, `56`, `55` (12 words).
