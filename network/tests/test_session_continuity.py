@@ -140,6 +140,26 @@ class SessionContinuityTests(unittest.TestCase):
         self.assertIn("An audit, failed test, or corrected interpretation", referent)
         self.assertIn("[AI session protocol](../ai/session.md)", referent)
 
+    def test_language_referent_witness_and_recursion_wording(self):
+        # These are text-regression checks, not proofs of mathematical or human continuity.
+        language = self.read("LANGUAGE_REFERENT.md")
+        contract = self.read("LANGUAGE_REFERENT_CONTRACT.md")
+        shape = self.read("language/SHAPE_CONTRACT.md")
+        session = self.read("protocols/ai/session.md")
+        drift = self.read("language/HUMAN_DRIFT.md")
+
+        for phrase in ("**Continuity as motion.**", "**Finite witness.**",
+                       "**Recursion test.**"):
+            self.assertIn(phrase, language)
+        self.assertIn("A finite toroidal model is a **witness**, not the referent.", contract)
+        self.assertIn("only when the same contract's evidence", contract)
+        self.assertIn("provenance", shape)
+        self.assertIn("The **recursion test** checks", shape)
+        self.assertEqual(session.count("## Regrounding across human and technical surfaces"), 1)
+        self.assertNotIn("Traceworks is", contract)
+        self.assertNotIn("tree/main/writing", drift)
+        self.assertNotIn("tools/generate_work_views.py", language)
+
     def test_ci_reports_focused_check_before_broad_suite(self):
         workflow = self.read(".github/workflows/tests.yml")
         focused = 'python -m unittest discover -s network/tests -p "test_session_continuity.py" -v'
