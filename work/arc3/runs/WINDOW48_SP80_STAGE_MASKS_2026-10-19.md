@@ -4,7 +4,7 @@ October 19, 2026. Independently executed original public ARC3/SP80 `arc_agi.Arca
 
 ## Prospective exact hypothesis
 
-From the prior original real [stage1 exact-mask holdout](runs/WINDOW48_SP80_EXACT_ACTION4_MASK_2026-10-19.md), separately inspect authentic original stage0/1 frames: stage0 displayed an additional two cumulative ACTION4 movements, plus native row y0 progress; stage1 displayed six movements in rows y36..39, plus native row y63 progress. The previous frames suggested a fixed `(+8,+20)` geometry for corresponding block pixels, but those previous observations are discovery data, not independent validation.
+From the prior original real [stage1 exact-mask holdout](WINDOW48_SP80_EXACT_ACTION4_MASK_2026-10-19.md), separately inspect authentic original stage0/1 frames: stage0 displayed an additional two cumulative ACTION4 movements, plus native row y0 progress; stage1 displayed six movements in rows y36..39, plus native row y63 progress. The previous frames suggested a fixed `(+8,+20)` geometry for corresponding block pixels, but those previous observations are discovery data, not independent validation.
 
 Before a fresh native action was issued, freeze separate **INTERIOR y=1..62** changed-pixel/color dictionary predictions:
 

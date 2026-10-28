@@ -4,7 +4,7 @@ October 19, 2026. Actual public original `arc_agi.Arcade(OperationMode.NORMAL)` 
 
 ## Prerequisite: authentic level2 source entry
 
-The independently verified stage1→stage2 original-native [discovery](runs/WINDOW48_SP80_STAGE1_TO_STAGE2_JOINT_BARS_2026-10-19.md) and [fresh 42-game holdout](runs/WINDOW48_SP80_STAGE2_ENTRY_HOLDOUT_2026-10-19.md) supply an exact legal witness. On each original freshly reset SDK game, issue literal `454545` to witness real level0→level1, then original stage1 `6@24,37 4 4 6@32,25 6@12,17 4 4 4 5`; REQUIRE official `levels_completed=2, GameState.NOT_FINISHED` before any stage2 action. This is an actual native level2 entry, not source screen imitation.
+The independently verified stage1→stage2 original-native [discovery](WINDOW48_SP80_STAGE1_TO_STAGE2_JOINT_BARS_2026-10-19.md) and [fresh 42-game holdout](WINDOW48_SP80_STAGE2_ENTRY_HOLDOUT_2026-10-19.md) supply an exact legal witness. On each original freshly reset SDK game, issue literal `454545` to witness real level0→level1, then original stage1 `6@24,37 4 4 6@32,25 6@12,17 4 4 4 5`; REQUIRE official `levels_completed=2, GameState.NOT_FINISHED` before any stage2 action. This is an actual native level2 entry, not source screen imitation.
 
 The first authentic stage2 last-image original 64×64 SHA256 is `b23d0e2243bc716d36e8602c7d30758a687250f142263510d2bc36432b5f35b4`, identical across all 48 freshly tested SDK starts. The source frame contains four separate selectable-looking colored horizontal bars. The native SDK advertises **ACTION1–ACTION6 (all six)** on this stage2 entry screen.
 
