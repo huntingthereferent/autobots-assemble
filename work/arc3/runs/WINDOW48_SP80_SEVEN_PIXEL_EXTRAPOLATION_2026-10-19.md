@@ -4,7 +4,7 @@ October 19, 2026. This is an actual public original ARC3/SP80 normal-mode native
 
 ## Prospective hypothesis fixed before new source observations
 
-Prior [17-step original-native width run](runs/WINDOW48_SP80_WIDTH_HOLDOUT_2026-10-19.md) found exactly 22 failures of simple previous-width alternation (ALT): 12 paired trials at native pre-action frontier x=10 / step8, and 10 trials at x=17 / step13, each actual width1 where ALT predicted width2. Their seven-pixel separation was **exploratory only**.
+Prior [17-step original-native width run](WINDOW48_SP80_WIDTH_HOLDOUT_2026-10-19.md) found exactly 22 failures of simple previous-width alternation (ALT): 12 paired trials at native pre-action frontier x=10 / step8, and 10 trials at x=17 / step13, each actual width1 where ALT predicted width2. Their seven-pixel separation was **exploratory only**.
 
 This new run fixed a novel-coordinate hypothesis before executing a single new native action:
 

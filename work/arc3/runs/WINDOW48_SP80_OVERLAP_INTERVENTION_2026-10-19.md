@@ -4,7 +4,7 @@ October 19, 2026. Source-backed official `arc_agi.Arcade(OperationMode.NORMAL)` 
 
 ## Original-frame discovery and frozen genuine words
 
-From the preceding [non-restoring native stage1 experiment](runs/WINDOW48_SP80_NONRESTORING_LEVEL2_2026-10-19.md), genuine ACTION1 three times moved the original visible native color9 movable region from x20–39,y36–39 to x20–39,y24–27, intersecting a native color8 region at x28–39,y24–27. The original visible color8 count dropped from **96 to 48**, indicating source-frame color replacement on screen. This did not advance level2.
+From the preceding [non-restoring native stage1 experiment](WINDOW48_SP80_NONRESTORING_LEVEL2_2026-10-19.md), genuine ACTION1 three times moved the original visible native color9 movable region from x20–39,y36–39 to x20–39,y24–27, intersecting a native color8 region at x28–39,y24–27. The original visible color8 count dropped from **96 to 48**, indicating source-frame color replacement on screen. This did not advance level2.
 
 Before executing the next native actions, freeze twelve genuine stage1 original words with two new resets each:
 `111`, `115`, `116`, `1115`, `1116`, `44111`, `441115`, `441116`, `111445`, `111446`, `11154`, `11164`. They separate ACTION5 vs ACTION6 before versus upon visible color8/color9 overlap, with original two-ACTION4 geometry shifts before or after the three upward ACTION1s. Every trial used the actual `454545` stage0→stage1 native prefix, the current SDK-advertised native controls, actual full 64×64 before/after frames, original SDK level state and authentic WIN/GAME_OVER events.
