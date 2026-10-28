@@ -188,7 +188,11 @@ class RuntimeJournal:
             raise ValueError(
                 f"event references unknown handoff: {event.handoff_id}"
             )
+        if not entry_gate(self._handoffs, tuple(self._events), event).admitted:
+            raise ValueError('A/entry gate rejected event')
         self._validate_event(event)
+        if not output_gate(self._handoffs, tuple(self._events) + (event,), event).admitted:
+            raise ValueError('B/output gate rejected event')
         self._append_record(
             {
                 "record_type": "EVENT",
