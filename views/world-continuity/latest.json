@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-28T13:04:00.664209+00:00",
-  "content_sha256": "0a32c471f16e9a35de44e50e5688a4a19de5be8840ca695c584d36d399e55c4c",
+  "checked_at": "2026-10-28T22:39:45.769798+00:00",
+  "content_sha256": "b2d9ebe5a9a46445781953a74d1c2b79f3e03eb930e4059292c06979073c364f",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 9,
-      "max_magnitude": 5.0,
+      "count": 3,
+      "max_magnitude": 5.7,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,171 +22,69 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026vjbvkn",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:38:58.712000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vjbvkn",
+        "source_id": "aka2026vjuwbc",
+        "observed_at": "2026-10-28T22:39:45.457280Z",
+        "source_updated_at": "2026-10-28T22:09:52.261000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vjuwbc",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vjbvkn",
+        "canonical_key": "event:aka2026vjuwbc",
         "payload": {
-          "magnitude": 1.6,
-          "place": "47 km E of Denali National Park, Alaska",
-          "longitude": -150.759,
-          "latitude": 63.558,
-          "depth_km": 2.6,
-          "occurred_at": "2026-10-28T12:37:38.003000+00:00"
+          "magnitude": 1.5,
+          "place": "88 km WNW of Yakutat, Alaska",
+          "longitude": -141.088,
+          "latitude": 59.945,
+          "depth_km": 24.1,
+          "occurred_at": "2026-10-28T22:08:06.369000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026vjcewp",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:50:32.852000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vjcewp",
+        "source_id": "ci41568464",
+        "observed_at": "2026-10-28T22:39:45.457280Z",
+        "source_updated_at": "2026-10-28T22:28:35.143000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41568464",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vjcewp",
+        "canonical_key": "event:ci41568464",
         "payload": {
-          "magnitude": 1.7,
-          "place": "43 km NW of Tatitlek, Alaska",
-          "longitude": -147.21,
-          "latitude": 61.161,
-          "depth_km": 5.0,
-          "occurred_at": "2026-10-28T12:48:32.634000+00:00"
+          "magnitude": 0.94,
+          "place": "3 km SE of Loma Linda, CA",
+          "longitude": -117.241,
+          "latitude": 34.031,
+          "depth_km": 3.27,
+          "occurred_at": "2026-10-28T22:25:11.960000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "hv75064891",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:54:18.350000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75064891",
+        "source_id": "us7000ttua",
+        "observed_at": "2026-10-28T22:39:45.457280Z",
+        "source_updated_at": "2026-10-28T22:24:57.571000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttua",
         "entity_type": "event",
-        "canonical_key": "event:hv75064891",
+        "canonical_key": "event:us7000ttua",
         "payload": {
-          "magnitude": 1.97,
-          "place": "3 km NNE of Pāhala, Hawaii",
-          "longitude": -155.46533203125,
-          "latitude": 19.2345008850098,
-          "depth_km": 32.7599983215332,
-          "occurred_at": "2026-10-28T12:50:50.440000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458912",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:42:23.683000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458912",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458912",
-        "payload": {
-          "magnitude": 1.75,
-          "place": "8 km NNW of Lake Pillsbury, CA",
-          "longitude": -122.984169006348,
-          "latitude": 39.4809989929199,
-          "depth_km": 6.32999992370605,
-          "occurred_at": "2026-10-28T12:11:58.730000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458917",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:47:30.630000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458917",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458917",
-        "payload": {
-          "magnitude": 2.18,
-          "place": "9 km N of Lake Pillsbury, CA",
-          "longitude": -122.950500488281,
-          "latitude": 39.4910011291504,
-          "depth_km": 9.34000015258789,
-          "occurred_at": "2026-10-28T12:12:41.470000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458927",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:30:02.211000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458927",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458927",
-        "payload": {
-          "magnitude": 1.03,
-          "place": "8 km NW of The Geysers, CA",
-          "longitude": -122.818168640137,
-          "latitude": 38.8305015563965,
-          "depth_km": 1.83000004291534,
-          "occurred_at": "2026-10-28T12:28:25.740000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458937",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:50:42.165000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458937",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458937",
-        "payload": {
-          "magnitude": 1.69,
-          "place": "11 km N of Lake Pillsbury, CA",
-          "longitude": -122.943168640137,
-          "latitude": 39.502498626709,
-          "depth_km": 11.2799997329712,
-          "occurred_at": "2026-10-28T12:49:07.390000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us7000ttnt",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T12:56:53.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttnt",
-        "entity_type": "event",
-        "canonical_key": "event:us7000ttnt",
-        "payload": {
-          "magnitude": 4.9,
-          "place": "88 km SE of Hihifo, Tonga",
-          "longitude": -173.2355,
-          "latitude": -16.541,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-28T12:35:23.786000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "us7000ttnz",
-        "observed_at": "2026-10-28T13:04:00.233574Z",
-        "source_updated_at": "2026-10-28T13:02:12.040000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/us7000ttnz",
-        "entity_type": "event",
-        "canonical_key": "event:us7000ttnz",
-        "payload": {
-          "magnitude": 5.0,
-          "place": "Reykjanes Ridge",
-          "longitude": -32.3348,
-          "latitude": 58.2153,
-          "depth_km": 10.0,
-          "occurred_at": "2026-10-28T12:47:08.927000+00:00"
+          "magnitude": 5.7,
+          "place": "276 km WSW of Tual, Indonesia",
+          "longitude": 130.3764,
+          "latitude": -6.3958,
+          "depth_km": 128.068,
+          "occurred_at": "2026-10-28T22:06:44.731000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-28T13:04:00.302207Z",
-      "source_updated_at": "2026-10-27T22:47:58Z",
+      "observed_at": "2026-10-28T22:39:45.530112Z",
+      "source_updated_at": "2026-10-28T21:22:52Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54589,
-        "forks_count": 12106,
+        "stargazers_count": 54594,
+        "forks_count": 12105,
         "open_issues_count": 244,
         "pushed_at": "2026-10-26T17:14:44Z",
         "archived": false
@@ -195,7 +93,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-28T13:04:00.650454Z",
+      "observed_at": "2026-10-28T22:39:45.728044Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
@@ -217,7 +115,8 @@
     "github": {
       "kind": "changed",
       "changed_fields": [
-        "forks_count"
+        "forks_count",
+        "stargazers_count"
       ]
     },
     "pypi": {
