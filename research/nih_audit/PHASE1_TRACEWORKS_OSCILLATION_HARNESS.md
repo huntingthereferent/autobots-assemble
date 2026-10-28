@@ -1,6 +1,8 @@
-# NIH Phase 1 — Traceworks oscillation harness
+# NIH Phase 1 — Tracework oscillation harness
 
-**Purpose:** Refine Traceworks layer separation by repeatedly comparing NIH Phase 1 native evidence against independently produced Traceworks representations. This is a harness specification, not a claim of completed execution.
+*The filename retains the former spelling for existing references.*
+
+**Purpose:** Refine Tracework layer separation by repeatedly comparing NIH Phase 1 native evidence against independently produced Tracework representations. This is a harness specification, not a claim of completed execution.
 
 ## Fixed referent and preserved baseline
 - Preserve the original twelve-job NIH Phase 1 W13/NIH source-owned native execution and its immutable source/run/artifact identities.
@@ -22,8 +24,8 @@ A projection must not promote interpretation to observation, documentation to ex
 ## Oscillation cycle
 1. **Pin** the original baseline and candidate snapshot without rewriting either.
 2. **Run** one bounded Phase 1 candidate through its native entrypoint; capture success *and* failure receipts.
-3. **Project** results through Traceworks, preserving every layer's original identity.
-4. **Compare** the original native records, candidate receipts, Traceworks projection, and rendered claims on the *same shared cases*; separately record feature coverage.
+3. **Project** results through Tracework, preserving every layer's original identity.
+4. **Compare** the original native records, candidate receipts, Tracework projection, and rendered claims on the *same shared cases*; separately record feature coverage.
 5. **Challenge** with one boundary perturbation: future evidence arriving late, source conflict, stale retrieval, contradictory observations, forged relationship, missing artifact, nonzero exit, or presentation-only claim.
 6. **Trace** each discrepancy to the first layer/edge where provenance, time, referent, or status changed. Do not silently repair or discard mistakes.
 7. **Correct** only the implicated transformation or guard; preserve before/after artifacts and regression cases.
@@ -58,7 +60,7 @@ A projection must not promote interpretation to observation, documentation to ex
 - For every check record EXPECTED, OBSERVED, SOURCE, RUN, and FIRST_BROKEN_BOUNDARY.
 - **Zero observed cross-layer promotions** is a test target, not a universal guarantee. Retain failures as regression cases.
 - The existing output comparator's REPORTED_PASS is not an independently verified PASS; its `selection: UNDETERMINED` remains authoritative until source-backed shared-case replay.
-- Do not label this harness complete or Traceworks universally safe without actual native runs and retained evidence.
+- Do not label this harness complete or Tracework universally safe without actual native runs and retained evidence.
 
 ## Next execution step
 Wire an executable boundary-test runner to the existing `.github/workflows/nih-phase1-output-comparison.yml` or a separate explicitly named workflow; have it emit per-iteration machine-readable records and a failing exit code for violated invariants. Verify the Actions run and uploaded artifacts independently before advancing status.
