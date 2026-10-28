@@ -1,0 +1,47 @@
+name: word-alignment-audit
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/audit_word_alignment.py'
+      - '.github/workflows/word-alignment-audit.yml'
+      - 'LANGUAGE_REFERENT.md'
+      - 'LANGUAGE_REFERENT_CONTRACT.md'
+      - 'language/**'
+      - 'foundation/PROGRAM_FOUNDATION.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare-both-repositories:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Tracework (requested PR revision)
+        uses: actions/checkout@v4
+        with:
+          path: tracework
+          persist-credentials: false
+      - name: Checkout public profile
+        uses: actions/checkout@v4
+        with:
+          repository: huntingthereferent/huntingthereferent
+          ref: main
+          path: profile
+          persist-credentials: false
+      - name: Scan all tracked UTF-8 text and link references
+        run: |
+          python tracework/scripts/audit_word_alignment.py \
+            --tracework tracework --profile profile \
+            --output word-alignment-report.md \
+            --json word-alignment-report.json
+      - name: Publish audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: both-repositories-word-audit
+          path: |
+            word-alignment-report.md
+            word-alignment-report.json
+          if-no-files-found: warn
