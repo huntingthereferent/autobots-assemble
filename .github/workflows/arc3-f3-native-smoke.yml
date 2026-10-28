@@ -5,6 +5,8 @@ on:
     paths:
       - "work/arc3/agent/my_agent.py"
       - "work/arc3/native_smoke.py"
+      - "work/arc3/cp_gate.py"
+      - "network/tests/test_arc3_cp_gate.py"
       - ".github/workflows/arc3-f3-native-smoke.yml"
   pull_request:
     paths:
@@ -22,6 +24,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Enforce A/ENTRY on all three original SDK lane sources
+        run: |
+          python -m unittest -v network.tests.test_arc3_cp_gate
+          for game in sk48 ls20 ft09; do
+            python -m work.arc3.cp_gate entry --lane "window48-$game" --receipt "runtime/data/arc3/cp-window48-$game.json"
+          done
       - name: Install official native ARC runtime
         run: python -m pip install --disable-pip-version-check "arc-agi>=0.9.6,<1" python-dotenv numpy
       - name: Prepare official ARC single-file agent harness
@@ -42,11 +50,20 @@ jobs:
         env:
           ARC3_FRAMEWORK: ${{ runner.temp }}/arc3-starter/vendor/ARC-AGI-3-Agents
         run: python -m work.arc3.native_smoke --game ft09 --max-actions 12 --out runtime/data/arc3/window48-ft09.json
+      - name: Enforce B/OUTPUT for each emitted original native response
+        if: always()
+        run: |
+          set -e
+          for game in sk48 ls20 ft09; do
+            python -m work.arc3.cp_gate exit --lane "window48-$game" --receipt "runtime/data/arc3/cp-window48-$game.json"
+          done
       - name: Preserve source-owned raw frames and observations
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: arc3-original-window48-native-observations
-          path: runtime/data/arc3/window48-*.*
+          path: |
+            runtime/data/arc3/window48-*.*
+            runtime/data/arc3/cp-window48-*.json
           if-no-files-found: ignore
           retention-days: 14
