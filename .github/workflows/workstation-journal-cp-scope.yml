@@ -1,0 +1,55 @@
+name: Workstation B9 journal and CP-scope contract
+
+on:
+  pull_request:
+    paths:
+      - 'runtime/journal.py'
+      - 'runtime/ab_journal_gate.py'
+      - 'systems/workspace/workstation_construction.py'
+      - 'systems/workspace/cp_motion.py'
+      - 'systems/workspace/CP_AUTOMATION.md'
+      - 'work/arc3/cp_gate.py'
+      - 'work/arc_like_maze/chatbot/checkpoints/cp_record.py'
+      - 'network/tests/test_workstation_construction*.py'
+      - 'network/tests/test_ab_journal_gate.py'
+      - 'network/tests/test_cp_motion.py'
+      - 'network/tests/test_arc3_cp_gate.py'
+      - '.github/workflows/workstation-journal-cp-scope.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'runtime/journal.py'
+      - 'systems/workspace/workstation_construction.py'
+      - 'systems/workspace/cp_motion.py'
+      - 'network/tests/test_workstation_construction*.py'
+      - 'network/tests/test_ab_journal_gate.py'
+      - '.github/workflows/workstation-journal-cp-scope.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  b9-journal-and-cp:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify durable B9 append, restart, failure and source isolation
+        run: |
+          python -m unittest -v \
+            network.tests.test_ab_journal_gate \
+            network.tests.test_workstation_construction_journal \
+            network.tests.test_workstation_construction \
+            network.tests.test_workstation_construction_frontier \
+            network.tests.test_workstation_construction_route_scope \
+            network.tests.test_workstation_construction_scale
+      - name: Verify distinct CP source scopes remain fail-closed
+        run: |
+          python -m unittest -v \
+            network.tests.test_cp_motion \
+            network.tests.test_arc3_cp_gate \
+            work.arc_like_maze.chatbot.checkpoints.test_cp_record

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from hashlib import sha256
 from pathlib import Path
 import json
 import os
@@ -82,6 +83,86 @@ class RuntimeJournal:
                     ) from exc
                 self._replay(record, line_number=number)
 
+    @staticmethod
+    def _construction_digest(value: object) -> str:
+        """Use the B9 producer's canonical identifier format, not an authority token."""
+        return sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
+                                 ensure_ascii=False, allow_nan=False).encode("utf-8")).hexdigest()
+
+    def _validate_construction_event(self, event: HandoffEvent) -> None:
+        """B9-specific persisted event contract; append AND replay use this gate.
+
+        These events can preserve proposed paths and historical observations.
+        They cannot admit workers or attest currently verified native results.
+        """
+        source = "workstation-candidate-construction/v1"
+        handoff = self._handoffs.get(event.handoff_id)
+        if handoff is None or handoff.metadata.get("source_system") != source:
+            raise ValueError("construction event requires exact B9 source handoff")
+        kind = handoff.metadata.get("node_kind")
+        if kind not in ("GOAL", "CANDIDATE") or event.evidence:
+            raise ValueError("construction event cannot carry native proof")
+        data = event.data
+        if not isinstance(data, dict):
+            raise ValueError("invalid construction event payload")
+        if event.event_type == "WORKSTATION_CONSTRUCTION_LINK_PROPOSED":
+            if (event.actor_id != "workstation-candidate-construction"
+                    or set(data) != {"link_id", "upstream_id", "reason", "relation_state"}
+                    or data.get("relation_state") != "PROPOSED_NOT_OBSERVED"):
+                raise ValueError("invalid proposed construction link")
+            upstream = self._handoffs.get(data.get("upstream_id"))
+            if (upstream is None or upstream.handoff_id == handoff.handoff_id
+                    or upstream.metadata.get("source_system") != source
+                    or upstream.metadata.get("goal_id") != handoff.metadata.get("goal_id")
+                    or not isinstance(data.get("reason"), str) or not data["reason"].strip()):
+                raise ValueError("construction link requires same-goal source ancestry")
+            expected_id = "whlink-" + self._construction_digest(
+                (upstream.handoff_id, handoff.handoff_id, data["reason"]))[:32]
+            if data.get("link_id") != expected_id:
+                raise ValueError("construction link identity mismatch")
+        elif event.event_type == "WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED":
+            if (kind != "CANDIDATE" or event.actor_id != "workstation-candidate-construction"
+                    or set(data) != {"proposal_id", "worker_id", "edition_ref", "source_locator",
+                                     "reason", "source_presence", "capability_fit", "execution_authorized"}
+                    or data.get("source_presence") != "NOT_VERIFIED_HERE"
+                    or data.get("capability_fit") != "UNDETERMINED"
+                    or data.get("execution_authorized") is not False):
+                raise ValueError("source suggestion is not native worker admission")
+            keys = ("worker_id", "edition_ref", "source_locator", "reason")
+            if any(not isinstance(data.get(k), str) or not data[k].strip() for k in keys):
+                raise ValueError("source suggestion requires actual source identifiers")
+            expected_id = "whsource-" + self._construction_digest(
+                (handoff.handoff_id, *(data[k] for k in keys)))[:32]
+            if data.get("proposal_id") != expected_id:
+                raise ValueError("source suggestion identity mismatch")
+        elif event.event_type == "WORKSTATION_CANDIDATE_OBSERVATION_RECORDED":
+            if (kind != "CANDIDATE" or event.actor_id != "workstation-native-observation"
+                    or set(data) != {"observation_id", "candidate_id", "verdict", "witness_ref",
+                                     "native_source", "relation_scope", "source_report_sha256",
+                                     "candidate_spec_sha256", "observation_scope"}
+                    or data.get("candidate_id") != handoff.handoff_id
+                    or data.get("verdict") not in
+                        ("SUPPORTED", "CONTRADICTED", "UNKNOWN", "UNRESOLVED")
+                    or data.get("observation_scope") !=
+                        "candidate-local; not whole-chain admission"):
+                raise ValueError("invalid source-scoped construction observation")
+            keys = ("candidate_id", "verdict", "witness_ref", "native_source", "relation_scope",
+                    "source_report_sha256", "candidate_spec_sha256")
+            if any(not isinstance(data.get(k), str) or not data[k].strip() for k in keys):
+                raise ValueError("construction observation missing source receipt")
+            digest = data["source_report_sha256"]
+            if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
+                raise ValueError("construction observation requires source report digest")
+            spec_sha = self._construction_digest(asdict(handoff))
+            if data["candidate_spec_sha256"] != spec_sha:
+                raise ValueError("construction observation changed candidate identity")
+            expected_id = "whdetermination-" + self._construction_digest(
+                {k: data[k] for k in keys})[:32]
+            if data.get("observation_id") != expected_id:
+                raise ValueError("construction observation receipt identity mismatch")
+        else:
+            raise ValueError("invalid construction event type")
+
     def _validate_event(self, event: HandoffEvent) -> None:
         if any(item.event_id == event.event_id for item in self._events):
             raise ValueError('duplicate runtime event id')
@@ -89,8 +170,16 @@ class RuntimeJournal:
                                     'AGENT_LOOP_CLOSED', 'AGENT_AB_OBSERVED',
                                     'WORKSTATION_MOVEMENT_OBSERVED',
                                     'WORKSTATION_HELP_OPEN',
-                                    'WORKSTATION_NATIVE_HELP_ASSIGNED'):
+                                    'WORKSTATION_NATIVE_HELP_ASSIGNED',
+                                    'WORKSTATION_CONSTRUCTION_LINK_PROPOSED',
+                                    'WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED',
+                                    'WORKSTATION_CANDIDATE_OBSERVATION_RECORDED'):
             raise ValueError('invalid runtime event type')
+        if event.event_type in (
+                'WORKSTATION_CONSTRUCTION_LINK_PROPOSED',
+                'WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED',
+                'WORKSTATION_CANDIDATE_OBSERVATION_RECORDED'):
+            self._validate_construction_event(event)
         prior = next((item for item in reversed(self._events)
                       if item.handoff_id == event.handoff_id), None)
         if event.event_type == 'CREATED':
