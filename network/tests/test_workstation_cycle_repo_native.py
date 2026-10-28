@@ -78,9 +78,13 @@ class RealNativeCycleTests(unittest.TestCase):
         runtime = self.harness._runtime()
         runtime.submit(Handoff("other-domain-handoff", "unrelated", "other", "other", "separate",
                                metadata={"source_system": "external-other-domain"}))
-        runtime.event_store.append(HandoffEvent.create(
-            handoff_id="other-domain-handoff", event_type="WORKSTATION_NATIVE_RESULT_VERIFIED",
-            actor_id="outside-source", data={"job_id": "outside-native-worker"}))
+        before = runtime.event_store.all()
+        with self.assertRaisesRegex(ValueError, "exact continuation lane"):
+            runtime.event_store.append(HandoffEvent.create(
+                handoff_id="other-domain-handoff", event_type="WORKSTATION_NATIVE_RESULT_VERIFIED",
+                actor_id="outside-source", data={"job_id": "outside-native-worker"},
+                parents=(runtime.state("other-domain-handoff").last_event_id,)))
+        self.assertEqual(runtime.event_store.all(), before)
         result = self.cycle.run()
         self.assertEqual(result.awaiting_source_owner, (self.lane_id,))
         self.assertNotIn("other-domain-handoff", result.derived_return_lanes)
