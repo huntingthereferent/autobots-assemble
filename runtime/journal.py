@@ -84,13 +84,27 @@ class RuntimeJournal:
     def _validate_event(self, event: HandoffEvent) -> None:
         if any(item.event_id == event.event_id for item in self._events):
             raise ValueError('duplicate runtime event id')
-        if event.event_type not in ('CREATED', 'STARTED', 'RESULT', 'REOPENED'):
+        if event.event_type not in ('CREATED', 'STARTED', 'RESULT', 'REOPENED',
+                                    'AGENT_LOOP_CLOSED', 'AGENT_AB_OBSERVED'):
             raise ValueError('invalid runtime event type')
         prior = next((item for item in reversed(self._events)
                       if item.handoff_id == event.handoff_id), None)
         if event.event_type == 'CREATED':
             if prior is not None or event.parents:
                 raise ValueError('invalid CREATED event')
+        elif event.event_type == 'AGENT_LOOP_CLOSED':
+            # The ancestor's last event and the descendant's admitted result
+            # are both ancestry, but neither may be invented or reordered.
+            if prior is None or not event.data.get('closed_by') or not event.evidence:
+                raise ValueError('invalid agent closure event')
+            if event.actor_id != event.data['closed_by']:
+                raise ValueError('agent closure actor mismatch')
+            source = next((item for item in reversed(self._events)
+                           if item.handoff_id == event.actor_id), None)
+            if source is None or source.event_type != 'RESULT' or source.data.get('status') != 'COMPLETE':
+                raise ValueError('agent closure requires completed descendant result')
+            if event.parents != (prior.event_id, source.event_id):
+                raise ValueError('invalid agent closure ancestry')
         elif prior is None or event.parents != (prior.event_id,):
             raise ValueError('invalid event parent chain')
         if event.event_type == 'RESULT' and event.data.get('status') not in (
