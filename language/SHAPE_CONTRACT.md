@@ -17,7 +17,7 @@ Three things must be kept separate when checking an implementation:
 - **How it moves:** a specified rule that takes the present position and an admitted action or input to the next position.
 - **How it relates:** which connections are present and how those connections change as movement and observations occur.
 
-The wraparound grid specifies possible positions. **It does not, by itself, specify movement or relationships.** Each worker must define and test those rules.
+The wraparound grid specifies possible positions. **It does not, by itself, specify movement, relationships, or provenance.** To use it as a finite witness, each implementation must define and test movement and relationship updates, retain the original source identity and observations, and check which relations survive each change. Wraparound makes continued representation possible; it does not automatically preserve the referent.
 
 ## Growing the world without inventing continuity
 
@@ -88,7 +88,7 @@ Rendering must not silently strengthen certainty, approval, authority, urgency, 
 
 ## Closure
 
-The decoded output is valid input to the same language-neutral contract on the next interaction. The representation may change; the preserved movement/referent does not have to.
+The **recursion test** checks whether a decoded result is admissible as input to the same language-neutral contract on the next interaction, after the current referent, context, and applicable witnesses are checked. A changed representation does not authorize a changed referent. If the relationship cannot be tracked, preserve UNKNOWN, PARTIAL, or WALL instead of asserting closure.
 
 ## Human language is larger than a shape ID
 
