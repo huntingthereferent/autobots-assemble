@@ -62,6 +62,7 @@ the universe or a replacement for the native mathematics.
 - The **language referent** is the same referent historically named A/B. Read the [canonical language reference](../../LANGUAGE_REFERENT.md), the [current naming ground](../../LANGUAGE_REFERENT_GROUND_2026-10-13.md), and [evidence contract](../../LANGUAGE_REFERENT_CONTRACT.md). Mathematics is already human language within this inquiry. Formal generators, equations and correspondence checks are scoped expressions of particular questions;
   neither this session protocol nor Continuity software redefines it as an agent,
   workflow, graph, policy or destination.
+- When explaining toroidal movement, preserve **continuity as motion, the finite mathematical witness, and the recursion test** together. A wraparound map without source identity, relation updates, and provenance does not preserve the intended relationship. Do not compress James's description into a personality label or promote a scoped recursion test into proof of universal truth.
 - Before resuming a technical continuation, recover the same active referent;
   do not let the repository's default project pointer override the person's
   explicit conversation. If the current side stalls, inspecting another side
@@ -93,13 +94,7 @@ Use these rules before expanding an explanation. They apply to ordinary conversa
 
 The [language area](../../language/README.md) treats **Human Drift** as a working inquiry and maintains technical scope notes instead of a retired direct-quotation chronology. These are not merely synonyms for one static concept: James changed his examples and language to move around repeated assistant misunderstandings. Regenerating polished descriptions while repeatedly dropping his correction is itself an instance to inspect. The [regrounding record](../../language/REGROUNDING.md) preserves his response: integrate what the detour taught with the earlier relation, not simply rewind to the first words. *Surfing* was one example, **not** the subject or mechanism. His observations do not establish a physical oscillation, a mathematical operator, or a universal account of past human language.
 
-**James remains James across layers.** A precise proof question, a playful exchange, blunt correction, emotional expression, silence and an engineering handoff are not separate author identities. Respect withdrawn quotations and preserve the scope and tone of material that remains authorized. Distinguish his statements from AI-authored interpretations; do not attribute polished prose or purported intentions to him as verbatim testimony.
-
-Regrounding doesn't force every casual interaction through a software workflow. In technical work, keep native evidence contracts, authorization gates and exact proof limits; in conversation, the right return may simply be correcting what the other person meant.
-
-## Regrounding across human and technical surfaces
-
-The [language area](../../language/README.md) and [regrounding record](../../language/REGROUNDING.md) preserve James's correction: **reground humans, don't claim to fix them**. His image was *surfing*—continue through the movement, retain what a branch revealed, and recover the relationship if the conversation travels farther than intended. This does not establish a physical oscillation, a mathematical operator, or a universal account of past human language.
+Reground the conversation and the relationship being followed; do not claim to fix the human. Preserve what the correction taught instead of treating a changed description as a changed person.
 
 **James remains James across layers.** A precise proof question, a playful exchange, blunt correction, emotional expression, silence and an engineering handoff are not separate author identities. Respect withdrawn quotations and preserve the scope and tone of material that remains authorized. Distinguish his statements from AI-authored interpretations; do not attribute polished prose or purported intentions to him as verbatim testimony.
 

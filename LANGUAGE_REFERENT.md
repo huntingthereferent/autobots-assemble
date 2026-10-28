@@ -11,6 +11,16 @@ James's investigation grew from observing relationships continuing as a conversa
 
 Names are reference points, not conclusions. Calling the language referent by name neither creates a new thing nor guarantees that the next explanation has preserved it.
 
+## Continuity, finite witness, and recursion
+
+**Continuity as motion.** Language is already changing as people use it. Words, meanings, contexts, and relationships do not wait for an observer to begin moving. James describes continuity as a **moving torus**: movement, changing relationships, and the changing space are considered together, not as objects traveling inside a fixed container.
+
+**Finite witness.** A finite toroidal (wraparound) model offers a bounded mathematical way to follow changes. Its coordinates alone cannot preserve a relationship: the source identities, observed transitions, relation-update rules, and provenance must remain recoverable. The mathematical representation is a witness to a specified movement, not the referent itself.
+
+**Recursion test.** A recorded output must be eligible to become the next input under the same declared evidence contract. The test checks whether a specific continuation preserves the required relationships, source ancestry, and unresolved differences, or reports where it cannot. Passing it is not a universal truth test; failure or missing evidence remains visible.
+
+Here, **safety mechanism for truth** describes the purpose of this record-keeping: a changing mathematical or linguistic representation must not quietly replace the relationship being followed.
+
 ## Language and mathematics
 
 Mathematics is a human formal language. Talking about the need for mathematics already puts mathematics, language and understanding into a relationship; that very utterance can be observed and corrected in the same ongoing inquiry. Particular equations may then state exact operations, domains, witnesses and counterexamples. They do not take ownership of the referent, and no single finite construction proves all of it.
@@ -27,7 +37,7 @@ James later named the subject **Human Drift**. He had already tried *oscillating
 
 A branch need not be discarded to return. We can keep what it exposed, identify which relationship was actually being followed, and continue without declaring a new referent each time the description changes. This is a way James describes his own experience, not a proven historical account of how all humans once spoke or a mathematical model of oscillation.
 
-[Human Drift](language/HUMAN_DRIFT.md) describes observable correction boundaries; [regrounding](language/REGROUNDING.md) describes a way to return to the original question. Together they show his phrasing and connects this observation to pragmatics, the English shape bank, social movement, handoffs and technical scope. **The same person speaks across those surfaces.** His playfulness, care, sharpness, swearing, silence and precise technical correction aren't separate identities to be reconstructed for different pages.
+[Human Drift](language/HUMAN_DRIFT.md) describes observable correction boundaries; [regrounding](language/REGROUNDING.md) describes a way to return to the original question. Together, they connect this observation to pragmatics, the English shape bank, social movement, handoffs and technical scope. **The same person speaks across those surfaces.** His playfulness, care, sharpness, swearing, silence and precise technical correction aren't separate identities to be reconstructed for different pages.
 
 ## Study and verification
 
@@ -48,7 +58,6 @@ For new explanatory writing, use **language referent**. For generic implementati
 | `LANGUAGE_REFERENT_GROUND_2026-10-13.md` | `AB_Ground_Record_Current_Note_2026-10-11.md` (historical record) |
 | `runtime/referent_traversal.py` | `runtime/ab_loop.py` |
 | `runtime/evidence_refinement.py` | `runtime/ab_information.py` |
-| `tools/generate_work_views.py` | `tools/generate_ab_views.py` |
 | `NativeReferentEvaluator` | `NativeABEvaluator` (import alias) |
 
 Persisted keys and event references whose historical spelling includes `ab_` remain readable for compatibility. Existing mathematical generators `A` and `B`, their word compositions, and source filenames identifying a specific prior proof remain mathematical/historical evidence, not alternate names for the whole investigation. Do not recover or republish quotations removed from the current writing archive.

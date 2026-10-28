@@ -8,7 +8,7 @@
 
 A finite working context specifies the current referent, admitted inputs/actions, relationships and boundaries. A transition yields a return that can be inspected against expectations and required witnesses. Recorded evidence and ancestry determine what may continue. **Finite** describes the explicit scope of a particular working context; it is not a claim that the overall environment or every real-world problem has a globally finite state space.
 
-The current GitHub demonstration exposes pieces of that pattern through the handoff runtime, append-only journal, finite A/B examples, source-linked research and read-only public viewer. Those pieces are connected by evidence contracts, not by a claim that all research lanes share the same mathematical theorem.
+The current GitHub demonstration exposes pieces of that pattern through the handoff runtime, append-only journal, finite A/B examples, source-linked research and read-only public viewer. Those pieces are connected by evidence contracts, not by a claim that all research lanes share the same mathematical theorem. Tracework records and checks movement; it does not replace the [Language Referent](LANGUAGE_REFERENT.md), whose continuity, finite-witness and recursion distinctions remain separate from any particular worker.
 
 ## Operating relationship
 
