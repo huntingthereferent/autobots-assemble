@@ -55,7 +55,11 @@ jobs:
             network.tests.test_workstation_construction_scale \
             network.tests.test_branch_help \
             network.tests.test_runtime_hardening \
-            network.tests.test_workstation_cycle_bounds
+            network.tests.test_workstation_cycle_bounds \
+            network.tests.test_workstation_native_feedback_integration \
+            network.tests.test_workstation_return_continuation \
+            network.tests.test_workstation_owner_native_observer \
+            network.tests.test_workstation_owner_source_wall
       - name: Verify distinct CP source scopes remain fail-closed
         run: |
           python -m unittest -v \
