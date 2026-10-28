@@ -56,7 +56,8 @@ class StubReturn:
                    for x in runtime.event_store.for_handoff(lane)):
             runtime.event_store.append(HandoffEvent.create(
                 handoff_id=lane, event_type="WORKSTATION_RETURN_RELATION_ADMITTED",
-                actor_id="fixture", data={"scope": "not a native proof"}))
+                actor_id="fixture", data={"scope": "not a native proof"},
+                parents=(runtime.state(lane).last_event_id,)))
             self.harness.new_child = True
             return {"state": "NEXT_RELATION_RECORDED"}
         return {"state": "ALREADY_RECORDED"}
@@ -84,7 +85,8 @@ class JournalBoundsTests(unittest.TestCase):
     def note_return(self):
         self.h._runtime().event_store.append(HandoffEvent.create(
             handoff_id="a", event_type="WORKSTATION_NATIVE_RESULT_VERIFIED",
-            actor_id="fixture", data={"scope": "unverified test fixture"}))
+            actor_id="fixture", data={"scope": "unverified test fixture"},
+            parents=(self.h._runtime().state("a").last_event_id,)))
 
     def cycle(self, with_b4=False):
         return WorkstationCycle(self.h, return_continuation=self.b4 if with_b4 else None)
@@ -139,7 +141,7 @@ class JournalBoundsTests(unittest.TestCase):
         def mut():
             self.replace_record(lambda rows: rows[-1]["event"]["data"].update({"changed": True}))
         self.h.mutate = mut
-        with self.assertRaisesRegex(ValueError, "rewritten"):
+        with self.assertRaisesRegex(ValueError, "rewritten|fixture event cannot promote"):
             self.cycle().run()
 
     def test_changing_handoff_source_metadata_is_detected(self):
@@ -173,16 +175,21 @@ class JournalBoundsTests(unittest.TestCase):
     def test_no_runtime_execution_even_with_native_assignment_event(self):
         self.h._runtime().event_store.append(HandoffEvent.create(
             handoff_id="a", event_type="WORKSTATION_NATIVE_HELP_ASSIGNED",
-            actor_id="fixture", data={"job_id": "native-ready-but-no-authorization"}))
+            actor_id="fixture", data={"job_id": "native-ready-but-no-authorization"},
+            parents=(self.h._runtime().state("a").last_event_id,)))
         result = self.cycle().run()
         self.assertEqual(result.awaiting_native_execution, ("native-ready-but-no-authorization",))
         self.assertFalse(result.native_worker_executed)
         self.assertEqual(result.status, "WAITING_FOR_EVIDENCE_OR_AUTHORIZATION")
 
     def test_unrelated_native_event_never_creates_continuation_child(self):
-        self.h._runtime().event_store.append(HandoffEvent.create(
-            handoff_id="b", event_type="WORKSTATION_NATIVE_RESULT_VERIFIED",
-            actor_id="fixture", data={"job_id": "unrelated-job"}))
+        before = self.h.path.read_bytes()
+        with self.assertRaisesRegex(ValueError, "exact continuation lane"):
+            self.h._runtime().event_store.append(HandoffEvent.create(
+                handoff_id="b", event_type="WORKSTATION_NATIVE_RESULT_VERIFIED",
+                actor_id="fixture", data={"scope": "unverified test fixture"},
+                parents=(self.h._runtime().state("b").last_event_id,)))
+        self.assertEqual(self.h.path.read_bytes(), before)
         result = self.cycle(True).run()
         self.assertEqual(result.journal_events_added, 0)
         self.assertEqual(self.h._runtime().snapshot().keys(), {"a", "b"})

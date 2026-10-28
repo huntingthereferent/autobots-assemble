@@ -188,3 +188,24 @@ advance `NIH-P1-REASONING` and open `NIH-P1-PACKET` and
 `NIH-P2-PROTOTYPE` to further *work*, not automatically execute them.
 The independent GAME W13 lane and the local Phase 2 test gate do not change.
 This is not production OWL entailment, biomedical correctness, or NIH approval.
+
+## Which CP function belongs at the workstation boundary? (2026-10-28)
+
+Three different source scopes are deliberately preserved:
+
+- `systems/workspace/cp_motion.py:checkpoint_frontier` is the **live workstation
+  CP dependency evaluator**. It reads exact linked native job receipts and cannot
+  treat an unlinked, stale or historical CP30 receipt as fresh job completion.
+- `work/arc_like_maze/chatbot/checkpoints/cp_record.py:continuation` is the
+  **historical finite-correspondence CP20–CP30 reader**, never a workstation
+  admission or NIH/game proof.
+- `work/arc3/cp_gate.py:entry/exit_gate` is the **original native ARC experiment
+  source/report accounting check**; it is not a global checkpoint frontier.
+
+They must not be mechanically merged: that would let one source's historical
+or local proof masquerade as another source's authority. The common carrier is
+the existing `RuntimeJournal` plus source-scoped A/entry and B/output checks.
+Its three B9 construction-event contracts and the two exact CP-help
+assignment/return contracts are now validated on both append and restart, without accepting unknown event types or promoting candidate proposals
+and recorded determinations into native execution. Tests exercise the real
+workstation journal and assert the CP frontiers remain independent.

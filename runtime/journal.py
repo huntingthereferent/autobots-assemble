@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+from hashlib import sha256
 from pathlib import Path
 import json
 import os
@@ -82,6 +83,225 @@ class RuntimeJournal:
                     ) from exc
                 self._replay(record, line_number=number)
 
+    @staticmethod
+    def _construction_digest(value: object) -> str:
+        """Use the B9 producer's canonical identifier format, not an authority token."""
+        return sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
+                                 ensure_ascii=False, allow_nan=False).encode("utf-8")).hexdigest()
+
+    def _validate_construction_event(self, event: HandoffEvent) -> None:
+        """B9-specific persisted event contract; append AND replay use this gate.
+
+        These events can preserve proposed paths and historical observations.
+        They cannot admit workers or attest currently verified native results.
+        """
+        source = "workstation-candidate-construction/v1"
+        handoff = self._handoffs.get(event.handoff_id)
+        if handoff is None or handoff.metadata.get("source_system") != source:
+            raise ValueError("construction event requires exact B9 source handoff")
+        kind = handoff.metadata.get("node_kind")
+        if kind not in ("GOAL", "CANDIDATE") or event.evidence:
+            raise ValueError("construction event cannot carry native proof")
+        data = event.data
+        if not isinstance(data, dict):
+            raise ValueError("invalid construction event payload")
+        if event.event_type == "WORKSTATION_CONSTRUCTION_LINK_PROPOSED":
+            if (event.actor_id != "workstation-candidate-construction"
+                    or set(data) != {"link_id", "upstream_id", "reason", "relation_state"}
+                    or data.get("relation_state") != "PROPOSED_NOT_OBSERVED"):
+                raise ValueError("invalid proposed construction link")
+            upstream = self._handoffs.get(data.get("upstream_id"))
+            if (upstream is None or upstream.handoff_id == handoff.handoff_id
+                    or upstream.metadata.get("source_system") != source
+                    or upstream.metadata.get("goal_id") != handoff.metadata.get("goal_id")
+                    or not isinstance(data.get("reason"), str) or not data["reason"].strip()):
+                raise ValueError("construction link requires same-goal source ancestry")
+            expected_id = "whlink-" + self._construction_digest(
+                (upstream.handoff_id, handoff.handoff_id, data["reason"]))[:32]
+            if data.get("link_id") != expected_id:
+                raise ValueError("construction link identity mismatch")
+        elif event.event_type == "WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED":
+            if (kind != "CANDIDATE" or event.actor_id != "workstation-candidate-construction"
+                    or set(data) != {"proposal_id", "worker_id", "edition_ref", "source_locator",
+                                     "reason", "source_presence", "capability_fit", "execution_authorized"}
+                    or data.get("source_presence") != "NOT_VERIFIED_HERE"
+                    or data.get("capability_fit") != "UNDETERMINED"
+                    or data.get("execution_authorized") is not False):
+                raise ValueError("source suggestion is not native worker admission")
+            keys = ("worker_id", "edition_ref", "source_locator", "reason")
+            if any(not isinstance(data.get(k), str) or not data[k].strip() for k in keys):
+                raise ValueError("source suggestion requires actual source identifiers")
+            expected_id = "whsource-" + self._construction_digest(
+                (handoff.handoff_id, *(data[k] for k in keys)))[:32]
+            if data.get("proposal_id") != expected_id:
+                raise ValueError("source suggestion identity mismatch")
+        elif event.event_type == "WORKSTATION_CANDIDATE_OBSERVATION_RECORDED":
+            if (kind != "CANDIDATE" or event.actor_id != "workstation-native-observation"
+                    or set(data) != {"observation_id", "candidate_id", "verdict", "witness_ref",
+                                     "native_source", "relation_scope", "source_report_sha256",
+                                     "candidate_spec_sha256", "observation_scope"}
+                    or data.get("candidate_id") != handoff.handoff_id
+                    or data.get("verdict") not in
+                        ("SUPPORTED", "CONTRADICTED", "UNKNOWN", "UNRESOLVED")
+                    or data.get("observation_scope") !=
+                        "candidate-local; not whole-chain admission"):
+                raise ValueError("invalid source-scoped construction observation")
+            keys = ("candidate_id", "verdict", "witness_ref", "native_source", "relation_scope",
+                    "source_report_sha256", "candidate_spec_sha256")
+            if any(not isinstance(data.get(k), str) or not data[k].strip() for k in keys):
+                raise ValueError("construction observation missing source receipt")
+            digest = data["source_report_sha256"]
+            if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
+                raise ValueError("construction observation requires source report digest")
+            spec_sha = self._construction_digest(asdict(handoff))
+            if data["candidate_spec_sha256"] != spec_sha:
+                raise ValueError("construction observation changed candidate identity")
+            expected_id = "whdetermination-" + self._construction_digest(
+                {k: data[k] for k in keys})[:32]
+            if data.get("observation_id") != expected_id:
+                raise ValueError("construction observation receipt identity mismatch")
+        else:
+            raise ValueError("invalid construction event type")
+
+    def _validate_helper_event(self, event: HandoffEvent) -> None:
+        """Exact checkpoint-helper bookkeeping; never an authority to execute."""
+        h = self._handoffs.get(event.handoff_id)
+        if (h is None or h.metadata.get("source_system") != "cp-worker-help-opening"
+                or event.evidence):
+            raise ValueError("CP helper event requires exact source-owned opening")
+        d = event.data
+        if not isinstance(d, dict):
+            raise ValueError("invalid CP helper event payload")
+        assignments = [old for old in self._events
+                       if old.handoff_id == event.handoff_id
+                       and old.event_type == "HELP_ASSIGNED"]
+        if event.event_type == "HELP_ASSIGNED":
+            if (event.actor_id not in ("cp-help-coordinator", "workstation-bounded-help")
+                    or assignments
+                    or set(d) != {"job_id", "worker_id", "version_id", "fingerprint", "parent_version"}):
+                raise ValueError("invalid or duplicate CP helper assignment")
+            if any(not isinstance(d[k], str) or not d[k].strip() for k in d):
+                raise ValueError("CP helper assignment missing source")
+            if len(d["fingerprint"]) != 64 or any(c not in "0123456789abcdef" for c in d["fingerprint"]):
+                raise ValueError("CP helper assignment requires exact source fingerprint")
+            native = self._handoffs.get(d["job_id"])
+            if (native is None
+                    or native.metadata.get("worker_id") != d["worker_id"]
+                    or native.metadata.get("worker_version") != d["version_id"]
+                    or native.metadata.get("edition_fingerprint") != d["fingerprint"]
+                    or not d["job_id"].startswith("help-job-")):
+                raise ValueError("CP helper assignment must link exact native job")
+            if (event.actor_id == "cp-help-coordinator"
+                    and d["worker_id"] != "finite-correspondence-process"):
+                raise ValueError("finite helper actor/worker mismatch")
+            if (event.actor_id == "workstation-bounded-help"
+                    and d["worker_id"] != "game-worlds-w13"):
+                raise ValueError("W13 helper actor/worker mismatch")
+        elif event.event_type == "HELP_RETURNED":
+            if (event.actor_id != "cp-help-coordinator"
+                    or set(d) != {"job_id", "native_verifier_confirmed", "claim_scope"}
+                    or d.get("native_verifier_confirmed") is not True
+                    or len(assignments) != 1 or d.get("job_id") != assignments[0].data["job_id"]
+                    or any(old.event_type == "HELP_RETURNED"
+                           and old.handoff_id == event.handoff_id for old in self._events)):
+                raise ValueError("CP helper return requires prior exact assignment")
+            scope = ("exact WORLD W13 two-room native job only"
+                     if assignments[0].data["worker_id"] == "game-worlds-w13"
+                     else "finite prefilter computation only")
+            if d.get("claim_scope") != scope:
+                raise ValueError("CP helper return cannot broaden native proof scope")
+        else:
+            raise ValueError("unknown CP helper event")
+
+    def _validate_native_continuation_event(self, event: HandoffEvent) -> None:
+        """B3/B4/B5/B6 are source-scoped historical journal markers, not CP passes.
+
+        Native re-verification is performed by the source-owning adapters.
+        Fixture markers are accepted only as explicitly labelled non-native data.
+        """
+        h = self._handoffs.get(event.handoff_id)
+        if h is None or h.metadata.get("source_system") != "workstation-continuation-lane/v1" or event.evidence:
+            raise ValueError("native workstation event requires exact continuation lane")
+        d = event.data
+        if not isinstance(d, dict):
+            raise ValueError("malformed workstation native event data")
+        if event.actor_id == "fixture":
+            if (event.event_type == "WORKSTATION_NATIVE_RESULT_VERIFIED"
+                    and d == {"scope": "unverified test fixture"}):
+                return
+            if (event.event_type == "WORKSTATION_RETURN_RELATION_ADMITTED"
+                    and d == {"scope": "not a native proof"}):
+                return
+            raise ValueError("fixture event cannot promote source-native claim")
+        def fields(keys):
+            return set(d) == set(keys)
+        def words(keys):
+            return all(isinstance(d.get(k), str) and bool(d[k].strip()) for k in keys)
+        def digest(k):
+            s = d.get(k)
+            return isinstance(s, str) and len(s) == 64 and all(c in "0123456789abcdef" for c in s)
+        if event.event_type == "WORKSTATION_NATIVE_RESULT_VERIFIED":
+            if (event.actor_id != "workstation-native-feedback"
+                    or not fields(("opening_id", "job_id", "output_sha256", "evidence_sha256",
+                                   "source_fingerprint", "claim_scope", "parent_cp_witnessed"))
+                    or not words(("opening_id", "job_id", "claim_scope"))
+                    or not all(digest(k) for k in ("output_sha256", "evidence_sha256", "source_fingerprint"))
+                    or d.get("parent_cp_witnessed") is not False
+                    or d.get("claim_scope") not in (
+                        "exact WORLD W13 two-room native helper return only",
+                        "source-owned native finite helper return only")
+                    or d["job_id"] not in self._handoffs):
+                raise ValueError("invalid B3 source-owned native feedback")
+        elif event.event_type == "WORKSTATION_RETURN_RELATION_ADMITTED":
+            if (event.actor_id != "workstation-return-continuation"
+                    or not fields(("observation_id", "job_id", "output_sha256", "source_fingerprint",
+                                   "witness_ref", "relation", "capability"))
+                    or not words(("observation_id", "job_id", "witness_ref", "relation", "capability"))
+                    or not all(digest(k) for k in ("output_sha256", "source_fingerprint"))
+                    or not d["witness_ref"].startswith("native-return:")
+                    or not any(x.handoff_id == event.handoff_id
+                               and x.event_type == "WORKSTATION_NATIVE_RESULT_VERIFIED"
+                               and x.data.get("job_id") == d["job_id"] for x in self._events)):
+                raise ValueError("invalid B4 derived relation or missing native return")
+        elif event.event_type == "WORKSTATION_OWNER_NATIVE_LOCAL_TASK_AUDITED":
+            keys = ("job_id", "output_sha256", "source_fingerprint", "candidate_index", "task_name",
+                    "native_route", "route_fingerprint", "local_evidence_sha256",
+                    "native_report_sha256", "claim_scope",
+                    "external_owner_identity_authenticated", "finite_prefilter_edge_proven",
+                    "parent_cp_witnessed")
+            if (event.actor_id != "workstation-native-owner-local-observer" or not fields(keys)
+                    or not words(("job_id", "task_name", "claim_scope"))
+                    or not all(digest(k) for k in ("output_sha256", "source_fingerprint",
+                                                  "route_fingerprint", "local_evidence_sha256",
+                                                  "native_report_sha256"))
+                    or type(d.get("candidate_index")) is not int or d["candidate_index"] < 0
+                    or d["claim_scope"] !=
+                        "native-local CP30 selected task audited, owner-provided candidate binding"
+                    or any(d.get(k) is not False for k in (
+                        "external_owner_identity_authenticated",
+                        "finite_prefilter_edge_proven", "parent_cp_witnessed"))):
+                raise ValueError("native-local CP30 audit cannot certify owner identity or whole chain")
+        elif event.event_type == "WORKSTATION_OWNER_CANDIDATE_BINDING_WALL":
+            keys = ("job_id", "candidate_index", "task_name", "native_audit_sha256",
+                    "missing_relation", "new_lane_admitted", "join_witnessed",
+                    "external_owner_authenticated")
+            if (event.actor_id != "workstation-native-owner-continuation" or not fields(keys)
+                    or not words(("job_id", "task_name"))
+                    or not digest("native_audit_sha256")
+                    or type(d.get("candidate_index")) is not int
+                    or d.get("missing_relation") != "INDEPENDENT_OWNER_CANDIDATE_BINDING_UNAVAILABLE"
+                    or any(d.get(k) is not False for k in (
+                        "new_lane_admitted", "join_witnessed", "external_owner_authenticated"))
+                    or not any(x.handoff_id == event.handoff_id
+                               and x.event_type == "WORKSTATION_OWNER_NATIVE_LOCAL_TASK_AUDITED"
+                               and x.data.get("job_id") == d["job_id"]
+                               and x.data.get("candidate_index") == d["candidate_index"]
+                               and x.data.get("native_report_sha256") == d["native_audit_sha256"]
+                               for x in self._events)):
+                raise ValueError("owner binding wall requires earlier exact CP30 native audit")
+        else:
+            raise ValueError("unknown source-owned native event")
+
     def _validate_event(self, event: HandoffEvent) -> None:
         if any(item.event_id == event.event_id for item in self._events):
             raise ValueError('duplicate runtime event id')
@@ -89,8 +309,29 @@ class RuntimeJournal:
                                     'AGENT_LOOP_CLOSED', 'AGENT_AB_OBSERVED',
                                     'WORKSTATION_MOVEMENT_OBSERVED',
                                     'WORKSTATION_HELP_OPEN',
-                                    'WORKSTATION_NATIVE_HELP_ASSIGNED'):
+                                    'WORKSTATION_NATIVE_HELP_ASSIGNED',
+                                    'WORKSTATION_CONSTRUCTION_LINK_PROPOSED',
+                                    'WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED',
+                                    'WORKSTATION_CANDIDATE_OBSERVATION_RECORDED',
+                                    'HELP_ASSIGNED', 'HELP_RETURNED',
+                                    'WORKSTATION_NATIVE_RESULT_VERIFIED',
+                                    'WORKSTATION_RETURN_RELATION_ADMITTED',
+                                    'WORKSTATION_OWNER_NATIVE_LOCAL_TASK_AUDITED',
+                                    'WORKSTATION_OWNER_CANDIDATE_BINDING_WALL'):
             raise ValueError('invalid runtime event type')
+        if event.event_type in (
+                'WORKSTATION_CONSTRUCTION_LINK_PROPOSED',
+                'WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED',
+                'WORKSTATION_CANDIDATE_OBSERVATION_RECORDED'):
+            self._validate_construction_event(event)
+        if event.event_type in ('HELP_ASSIGNED', 'HELP_RETURNED'):
+            self._validate_helper_event(event)
+        if event.event_type in (
+                'WORKSTATION_NATIVE_RESULT_VERIFIED',
+                'WORKSTATION_RETURN_RELATION_ADMITTED',
+                'WORKSTATION_OWNER_NATIVE_LOCAL_TASK_AUDITED',
+                'WORKSTATION_OWNER_CANDIDATE_BINDING_WALL'):
+            self._validate_native_continuation_event(event)
         prior = next((item for item in reversed(self._events)
                       if item.handoff_id == event.handoff_id), None)
         if event.event_type == 'CREATED':
@@ -191,6 +432,8 @@ class RuntimeJournal:
         return created_event
 
     def append(self, event: HandoffEvent) -> HandoffEvent:
+        if any(item.event_id == event.event_id for item in self._events):
+            raise ValueError("duplicate runtime event id")
         if event.handoff_id not in self._handoffs:
             raise ValueError(
                 f"event references unknown handoff: {event.handoff_id}"

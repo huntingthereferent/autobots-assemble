@@ -177,7 +177,8 @@ class ConstructionFrontierTests(unittest.TestCase):
                                metadata={"source_system": "process-workstation"}))
         runtime.event_store.append(HandoffEvent.create(
             handoff_id="native-job", event_type="RESULT", actor_id="native-worker",
-            data={"status":"COMPLETE", "output": {"not_this_candidate": True}}))
+            data={"status":"COMPLETE", "output": {"not_this_candidate": True}},
+            parents=(runtime.state("native-job").last_event_id,)))
         self.assertEqual(self.handoffs()["construction_handoffs"][0]["candidate_id"], x)
         self.assertFalse(self.handoffs()["execution_authorized"])
 
@@ -263,11 +264,14 @@ class ConstructionFrontierTests(unittest.TestCase):
 
     def test_invalid_persisted_cross_domain_link_fails_closed(self):
         x = self.node("One candidate")
-        self.g._runtime().event_store.append(HandoffEvent.create(
-            handoff_id=x, event_type=LINK, actor_id="malformed-fixture",
-            data={"upstream_id":"unknown", "link_id":"spurious"}))
-        with self.assertRaisesRegex(ValueError, "unavailable source"):
-            self.handoffs()
+        journal = self.g._runtime().event_store
+        before = (self.data / "runtime.jsonl").read_bytes()
+        with self.assertRaisesRegex(ValueError, "invalid proposed construction link"):
+            journal.append(HandoffEvent.create(
+                handoff_id=x, event_type=LINK, actor_id="malformed-fixture",
+                data={"upstream_id":"unknown", "link_id":"spurious"}))
+        self.assertEqual((self.data / "runtime.jsonl").read_bytes(), before)
+        self.assertEqual(self.handoffs()["construction_handoffs"][0]["candidate_id"], x)
 
     def test_frontier_requires_goal_not_child(self):
         x = self.node("One candidate")
