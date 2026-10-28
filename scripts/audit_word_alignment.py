@@ -197,38 +197,27 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--tracework", type=Path, required=True)
     parser.add_argument("--profile", type=Path, required=True)
-    parser.add_argument("--output", type=Path, default=Path("word-alignment-report.md"))
     parser.add_argument("--json", type=Path, default=Path("word-alignment-report.json"))
     args = parser.parse_args()
     result = run({"tracework": args.tracework.resolve(), "profile": args.profile.resolve()})
     args.json.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    lines = ["# Both-repository word alignment audit", "",
-             "This is a lexical and reference scan of tracked UTF-8 text, **not** proof of semantic",
-             "equivalence across every sentence, proof of a physical torus, or verification of every",
-             "runtime. Historical records are retained as evidence and flagged for review, not rewritten.",
-             "", "## Scope", ""]
     for alias, stat in result["stats"].items():
-        lines.append(f"- **{alias}**: {stat['tracked']} tracked files, "
-                     f"{stat['text_read']} UTF-8 text files read, "
-                     f"{stat['markdown_read']} Markdown/plain-text documents, "
-                     f"{stat['binary_skipped']} binary files skipped, "
-                     f"{stat['decode_failed']} unreadable files")
-    lines.extend(["", "## Findings", ""])
-    for code, amount in sorted(result["counts"].items()):
-        lines.append(f"- {code}: {amount}")
-    lines.extend(["", f"**Canonical wording failures:** {result['errors']}", "",
-                  "## Review records", ""])
-    for row in result["findings"]:
-        lines.append(f"- [{row['severity']}] {row['repo']}/{row['path']}:{row['line']} "
-                     f"({row['kind']}, {row['code']}): "
-                     f"{row['text'].replace(chr(10), ' ')}")
-    args.output.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print("\n".join(lines[:24]))
-    print("First review findings:")
-    for row in result["findings"][:75]:
-        print(f"{row['repo']}/{row['path']}:{row['line']} [{row['code']}] "
-              f"{row['text'][:130]}")
-    print(f"Full source-linked findings: {args.output}, {args.json}")
+        print(
+            f"{alias}: {stat['tracked']} tracked, {stat['text_read']} UTF-8 text read, "
+            f"{stat['markdown_read']} prose documents, "
+            f"{stat['binary_skipped']} binary skipped, "
+            f"{stat['decode_failed']} unreadable"
+        )
+    print("Review findings by category:")
+    for category, amount in sorted(result["counts"].items()):
+        print(f"  {category}: {amount}")
+    print(f"Canonical wording failures: {result['errors']}")
+    for finding in result["findings"]:
+        print(
+            f"[{finding['severity']}] {finding['repo']}/{finding['path']}:"
+            f"{finding['line']} [{finding['code']}] {finding['text']}"
+        )
+    print(f"Structured findings: {args.json}")
     return 1 if result["errors"] else 0
 
 
