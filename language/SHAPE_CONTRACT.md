@@ -5,62 +5,52 @@ A **shape** is a reusable movement/interaction handle recovered from a surface e
 It is not a dictionary sense and not a claim that all utterances with similar wording are identical.
 
 
-## Finite toroidal mapping of continuous movement
+## A finite view of a moving world
 
-James describes continuity through moving toroidal geometry. In this repository, finite systems are bounded mathematical and computational representations used to map movement and its changing relationships. A finite map is not the entirety of continuity, and the existence of a toroidal display does not by itself establish that a system's transition rule models the intended relationships.
+James describes continuity using a **moving torus**: movement, changing relationships, and the changing container belong to one unfolding structure. This contract uses small, bounded computational worlds to examine parts of that movement. The model is not the whole of continuity.
 
-For the two-coordinate periodic model, let \(N\) be a positive integer and define
+A finite toroidal world can be pictured as a grid that wraps around. Move past its right edge and you return at the left; move past the top and you return at the bottom. Two coordinates locate each position.
 
-\[
-W_N=(\mathbb{Z}/N\mathbb{Z})\times(\mathbb{Z}/N\mathbb{Z}).
-\]
+Three things must be kept separate when checking an implementation:
 
-Each coordinate is an equivalence class of integers modulo \(N\). A discrete movement is a specified transition \(F_N:W_N\times U_N\to W_N\), where \(U_N\) is the set of admitted inputs or actions. The map \(F_N\) must be given and tested for each implementation; periodic coordinates alone do not define motion or determine which relationships are preserved.
+- **Where something is:** its position in the current representation.
+- **How it moves:** a specified rule that takes the present position and an admitted action or input to the next position.
+- **How it relates:** which connections are present and how those connections change as movement and observations occur.
 
-For an integer \(k\geq 2\), the resolution-changing map
+The wraparound grid specifies possible positions. **It does not, by itself, specify movement or relationships.** Each worker must define and test those rules.
 
-\[
-E_{N,k}:W_N\longrightarrow W_{kN},\qquad E_{N,k}([x]_N,[y]_N)=([kx]_{kN},[ky]_{kN})
-\]
+## Growing the world without inventing continuity
 
-is well-defined and injective. It preserves normalized coordinate locations: \(kx/(kN)=x/N\) and \(ky/(kN)=y/N\) for chosen representatives \(0\leq x,y<N\). It does **not** automatically preserve movement. For specified actions and corresponding inputs, transition compatibility is the separate condition
+A finite representation may need more room as its objects and relationships develop. Growing the grid changes its resolution, not the identity of the source objects.
 
-\[
-E_{N,k}(F_N(w,u))=F_{kN}(E_{N,k}(w),\iota_{N,k}(u)),
-\]
+For example:
 
-where \(\iota_{N,k}:U_N\to U_{kN}\) is an explicitly defined action correspondence. This equality must be checked, not presumed. In particular, a one-cell step at resolution \(N\) does not correspond to a one-cell step at resolution \(kN\) under \(E_{N,k}\).
+1. Start with an **8-by-8 wraparound world**. An object is at position `(3, 5)`.
+2. Double the resolution to a **16-by-16 world**. Keep the same object and place it at `(6, 10)`.
+3. Its proportional location is unchanged. Every old position has one distinct corresponding position in the larger world.
+4. A movement of **one cell** in the original world corresponds to **two cells** in the doubled world. Calling a one-cell move in both worlds "the same movement" would be a mistake.
 
-The smooth two-dimensional torus \(\mathbb{T}^2=S^1\times S^1\) is a distinct mathematical object from the finite set \(W_N\). A toroidal embedding or rendering of finite coordinates is a projection of a chosen model, not proof of a continuous physical process. Other existing finite toroidal constructions, including the cubical three-torus, retain their own dimensions, transition rules, and proof obligations.
+This example works for any positive grid size multiplied by a whole-number growth factor of at least two: multiply both old coordinates by that factor, and enlarge both sides of the grid by the same factor.
 
-A changing relation must be specified separately, for example as \(R_n\subseteq W_N\times W_N\) at step \(n\). Whether the next relation \(R_{n+1}\) is induced by movement, observation, or an explicit update rule is an implementation question that requires a defined rule and evidence. The finite container's represented contents and relationships may change with movement; neither a fixed graph nor a visualization should silently be treated as the source of those changes.
+**The essential movement test:** move in the smaller world and then scale the result. Separately, scale the starting position and apply the explicitly corresponding action in the larger world. The two results must agree. The implementation must say which actions correspond; the scaling rule alone does not decide that.
 
-**Research status:** These are precise definitions and test obligations for finite representations. They do not claim a universal proof of continuity, a completed moving-torus worker, or equivalence between the repository's different finite models.
+Preserving positions is not enough. Before claiming that a relationship or trajectory survived a change in resolution, compare it with the original source identities, decisions, and observed movements. A collision in a projection is not evidence that two things are the same or related.
+
+## Relationships must have an actual update rule
+
+At each step, the world may contain a different set of connections between objects. The next set must come from a defined process: movement, an observation, or an explicit relationship update. Record which process produced the change and what evidence supports it.
+
+Do not silently substitute a fixed graph, a convenient layout, or an attractive visualization for those changing relationships. Nor should the representation force source decisions to fit an arbitrary fixed size.
+
+A finite wraparound grid is not the same mathematical object as a smooth, continuous two-dimensional torus. Other finite toroidal constructions, including three-dimensional ones, have their own coordinates, movement rules, and validation requirements. A torus-shaped display alone proves nothing about physical continuity or about whether a worker follows the intended relationships.
+
+**Research status:** These are definitions and checks for bounded models, not proof of universal continuity, a completed moving-torus worker, or equivalence among different models in this repository.
 
 ## Construction follows movement, not a fixed container
 
-James's current working principle is that a finite representation should adapt
-to the relations and decisions being constructed, rather than forcing those
-decisions to fit an arbitrary fixed representation. This is a **design rule and
-testable hypothesis**, not a proof that every finite construction succeeds.
+James's working principle is to let a finite representation adapt to the relations and decisions being constructed, rather than force those relations into a predetermined container. This remains a **design rule to test**, not a claim that every construction succeeds.
 
-In the periodic computational-world example, retain the toroidal family
-`W_N = Z_N × Z_N` and allow the resolution `N` to grow as the represented
-objects and relationships require. For integer `k >= 2`, the explicit
-embedding `E_k(x,y) = (kx,ky) mod kN` preserves periodic coordinate
-relationships at the scaled resolution. A one-cell movement becomes a
-`k`-cell movement: the geometry changes scale, and motion must be compared
-through the embedding rather than assumed identical.
-
-The original objects, source identities, decisions and evidence remain
-authoritative. A projection collision is not an identity or a discovered
-relationship. A larger world alone does not prove relation preservation;
-test the projection against the actual relations and trajectories.
-
-Executable bounded example:
-[`work/arc_like_maze/toroidal_projection.py`](../work/arc_like_maze/toroidal_projection.py).
-This is one implementation of the principle, not a definition of the entire
-language referent or James's experience.
+The executable example, [`work/arc_like_maze/toroidal_projection.py`](../work/arc_like_maze/toroidal_projection.py), grows a wraparound coordinate layout and checks that source identities and scaled positions remain intact. It does **not** establish that movement rules or source relationships are preserved; those require their own checks. It is one bounded implementation, not the complete language referent or a reproduction of James's experience.
 
 ## Shape record
 
