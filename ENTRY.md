@@ -61,6 +61,31 @@ A substantive AI response or repo mutation should leave recoverable:
 
 If the user gives a new explicit referent, that becomes primary unless it conflicts with an explicit safety or authority boundary.
 
+## Carry original CP data before bounded continuation
+
+When the active request reaches **finite correspondence research**, or a Tracework task
+explicitly depends on its CP20–CP30 evidence, recover the existing source
+before choosing another direction. Read the original
+[checkpoint harness](work/arc_like_maze/chatbot/checkpoints/HARNESS.md) and
+[recovered CP20–CP30 integrated-source record](work/arc_like_maze/chatbot/research/integrated/README.md).
+For an explicit current referent, run this **read-only** handoff from the repository root:
+
+```sh
+python work/arc_like_maze/chatbot/checkpoints/cp_record.py handoff --referent "CURRENT EXPLICIT REFERENT"
+```
+
+It refuses missing/inconsistent CP views and returns the actual latest CP manifest
+identity, observations, what survived, every recorded wall, and a possible next
+movement. Carry those records into the *same* current task; do not treat the
+previous CP's suggested next movement as a new user instruction, its historical
+PASS as current authority, or its archive digest as fresh runtime proof.
+Only admit execution through the existing source-owning worker controls, with
+fresh source checks and the exact task's native witnesses. Missing source,
+mismatched CP identity, or unsupported relation is a **wall**, not permission
+to invent a substitute task. This CP20–CP30 research history is not the
+independent NIH/game checkpoint frontier in `systems/workspace/cp_motion.py`,
+and it is not a universal gate over unrelated work.
+
 ## Finite correspondence checkpoint handoff
 
 When the active referent is finite correspondence research (historically located at `chatbot/`) and a checkpoint is completed, read and apply the [finite correspondence CP output contract](work/arc_like_maze/chatbot/checkpoints/HARNESS.md) before handoff. Record one CP manifest and update the research-specific [About Me](work/arc_like_maze/chatbot/ABOUT_ME.md) and [provenance](work/arc_like_maze/chatbot/PROVENANCE.md) together. Do not change any personal profile, invent observations, or claim automated background execution.

@@ -206,14 +206,55 @@ def record(root, input_path):
     return 'recorded'
 
 
+def continuation(root, current_referent):
+    """Reopen the real research CP records for one explicit current referent.
+
+    This is read-only historical context, not native source verification,
+    task admission or an instruction to follow the last checkpoint's 'next'.
+    """
+    if (not isinstance(current_referent, str) or not current_referent.strip()
+            or len(current_referent) > 1024
+            or any(c in current_referent for c in "\r\n")):
+        raise CheckpointError('explicit current referent required for CP continuation')
+    check(root)
+    history = entries(root)
+    latest = history[-1]
+    manifest = root / 'checkpoints' / f"CP-{latest['cp']:04d}.json"
+    return {
+        'schema': 'finite-correspondence-cp-continuation/v1',
+        'scope': 'finite-correspondence-research',
+        'current_referent': current_referent.strip(),
+        'referent_origin': 'explicit caller request, never checkpoint suggestion',
+        'latest_checkpoint': f"CP-{latest['cp']:04d}",
+        'latest_manifest_sha256': hashlib.sha256(manifest.read_bytes()).hexdigest(),
+        'latest_status': latest['status'],
+        'source_location': 'work/arc_like_maze/chatbot/research/integrated/README.md',
+        'archive_identity': latest['archive'],
+        'history': [
+            {'cp': f"CP-{m['cp']:04d}", 'status': m['status'],
+             'observation': m['observation'], 'preserved': m['preserved'],
+             'boundary': m['boundary'], 'next_possible': m['next']}
+            for m in history
+        ],
+        'next_possible_not_an_assignment': latest['next'],
+        'current_native_verification': 'NOT_PERFORMED',
+        'task_admitted': False,
+        'worker_executed': False,
+        'checkpoint_created': False,
+    }
+
+
 def main(argv=None):
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command',choices=('check','sync','record'))
+    parser.add_argument('command',choices=('check','sync','record','handoff'))
     parser.add_argument('input',nargs='?',help='new CP manifest for record')
     parser.add_argument('--root',type=Path,default=Path(__file__).resolve().parent.parent)
+    parser.add_argument('--referent', help='explicit current research referent for read-only handoff')
     args=parser.parse_args(argv)
     try:
-        if args.command=='check':
+        if args.command=='handoff':
+            print(json.dumps(continuation(args.root, args.referent), ensure_ascii=False, indent=2))
+        elif args.command=='check':
             print(f'{check(args.root)} checkpoint(s) consistent')
         elif args.command=='sync':
             sync(args.root);print('About Me and provenance synced')
