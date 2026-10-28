@@ -2,13 +2,6 @@ name: word-alignment-audit
 
 on:
   pull_request:
-    paths:
-      - 'scripts/audit_word_alignment.py'
-      - '.github/workflows/word-alignment-audit.yml'
-      - 'LANGUAGE_REFERENT.md'
-      - 'LANGUAGE_REFERENT_CONTRACT.md'
-      - 'language/**'
-      - 'foundation/PROGRAM_FOUNDATION.md'
   workflow_dispatch:
 
 permissions:
