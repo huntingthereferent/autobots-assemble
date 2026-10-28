@@ -86,7 +86,10 @@ class RuntimeJournal:
         if any(item.event_id == event.event_id for item in self._events):
             raise ValueError('duplicate runtime event id')
         if event.event_type not in ('CREATED', 'STARTED', 'RESULT', 'REOPENED',
-                                    'AGENT_LOOP_CLOSED', 'AGENT_AB_OBSERVED'):
+                                    'AGENT_LOOP_CLOSED', 'AGENT_AB_OBSERVED',
+                                    'WORKSTATION_MOVEMENT_OBSERVED',
+                                    'WORKSTATION_HELP_OPEN',
+                                    'WORKSTATION_NATIVE_HELP_ASSIGNED'):
             raise ValueError('invalid runtime event type')
         prior = next((item for item in reversed(self._events)
                       if item.handoff_id == event.handoff_id), None)
