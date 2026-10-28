@@ -28,4 +28,4 @@ An audit, failed test, or corrected interpretation does not by itself authorize 
 
 ## Continuation
 
-The selected referent is valid input to this same protocol on the next movement.
+The selected referent can be checked again on the next movement under this same admission contract. A new referent is not admitted without an explicit instruction or supported relation; unresolved selection remains UNKNOWN.
