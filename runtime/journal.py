@@ -147,6 +147,8 @@ class RuntimeJournal:
                 )
             self._validate_event(event)
             self._events.append(event)
+            if not output_gate(self._handoffs, tuple(self._events), event).admitted:
+                raise ValueError('B/output gate rejected event replay')
             return
 
         raise ValueError(
