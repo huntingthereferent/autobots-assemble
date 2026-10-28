@@ -4,6 +4,39 @@ A **shape** is a reusable movement/interaction handle recovered from a surface e
 
 It is not a dictionary sense and not a claim that all utterances with similar wording are identical.
 
+
+## Finite toroidal mapping of continuous movement
+
+James describes continuity through moving toroidal geometry. In this repository, finite systems are bounded mathematical and computational representations used to map movement and its changing relationships. A finite map is not the entirety of continuity, and the existence of a toroidal display does not by itself establish that a system's transition rule models the intended relationships.
+
+For the two-coordinate periodic model, let \(N\) be a positive integer and define
+
+\[
+W_N=(\mathbb{Z}/N\mathbb{Z})\times(\mathbb{Z}/N\mathbb{Z}).
+\]
+
+Each coordinate is an equivalence class of integers modulo \(N\). A discrete movement is a specified transition \(F_N:W_N\times U_N\to W_N\), where \(U_N\) is the set of admitted inputs or actions. The map \(F_N\) must be given and tested for each implementation; periodic coordinates alone do not define motion or determine which relationships are preserved.
+
+For an integer \(k\geq 2\), the resolution-changing map
+
+\[
+E_{N,k}:W_N\longrightarrow W_{kN},\qquad E_{N,k}([x]_N,[y]_N)=([kx]_{kN},[ky]_{kN})
+\]
+
+is well-defined and injective. It preserves normalized coordinate locations: \(kx/(kN)=x/N\) and \(ky/(kN)=y/N\) for chosen representatives \(0\leq x,y<N\). It does **not** automatically preserve movement. For specified actions and corresponding inputs, transition compatibility is the separate condition
+
+\[
+E_{N,k}(F_N(w,u))=F_{kN}(E_{N,k}(w),\iota_{N,k}(u)),
+\]
+
+where \(\iota_{N,k}:U_N\to U_{kN}\) is an explicitly defined action correspondence. This equality must be checked, not presumed. In particular, a one-cell step at resolution \(N\) does not correspond to a one-cell step at resolution \(kN\) under \(E_{N,k}\).
+
+The smooth two-dimensional torus \(\mathbb{T}^2=S^1\times S^1\) is a distinct mathematical object from the finite set \(W_N\). A toroidal embedding or rendering of finite coordinates is a projection of a chosen model, not proof of a continuous physical process. Other existing finite toroidal constructions, including the cubical three-torus, retain their own dimensions, transition rules, and proof obligations.
+
+A changing relation must be specified separately, for example as \(R_n\subseteq W_N\times W_N\) at step \(n\). Whether the next relation \(R_{n+1}\) is induced by movement, observation, or an explicit update rule is an implementation question that requires a defined rule and evidence. The finite container's represented contents and relationships may change with movement; neither a fixed graph nor a visualization should silently be treated as the source of those changes.
+
+**Research status:** These are precise definitions and test obligations for finite representations. They do not claim a universal proof of continuity, a completed moving-torus worker, or equivalence between the repository's different finite models.
+
 ## Construction follows movement, not a fixed container
 
 James's current working principle is that a finite representation should adapt

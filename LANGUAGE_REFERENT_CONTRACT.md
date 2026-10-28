@@ -1,5 +1,14 @@
 # Language Referent — Evidence Contract
 
+
+## Continuity and finite representations
+
+James's current geometric description of continuity is a moving torus: movement and changing relationships are considered together rather than as a static container followed by a separate motion stage. Finite systems in this repository are used to map aspects of that movement. Their coordinates, actions, resolutions, and relation-update rules must be specified for each implementation; no existing finite toroidal demonstration is automatically a complete realization of the referent.
+
+The operational diagram below describes an **evidence and admission boundary**, not the geometry of continuity. Its arrows should not be read as a claim that continuity is a linear pipeline. For a precise finite two-coordinate model, the distinction between \(W_N=(\mathbb{Z}/N\mathbb{Z})^2\), the smooth torus \(\mathbb{T}^2=S^1\times S^1\), and transition compatibility under resolution changes is recorded in [the shape contract](language/SHAPE_CONTRACT.md).
+
+Traceworks is deliberately an incomplete, evolving research and implementation repository. A finite model's unproved correspondence to the wider referent is an open research boundary, not automatically a software defect. Duplicated code, invalid claims, and failed tests remain implementation issues that can and should be corrected. Preserve the difference.
+
 ## What the language referent is
 
 **Name continuity:** "the language referent" and the earlier name "A/B" designate the **same referent** in James's account. The newer name is a communication choice for readers, not a new layer, replacement, or separate thing that later acquires mathematics. Mathematics is human formal language within the continuing investigation. The finite models remain scoped representations with their own proof obligations. See the [research account](https://github.com/huntingthereferent/huntingthereferent) for the current public research record.

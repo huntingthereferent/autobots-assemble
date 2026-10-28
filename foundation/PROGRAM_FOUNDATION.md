@@ -1,5 +1,14 @@
 # Program Foundation
 
+
+## Continuity modeling boundary
+
+The current geometric description used in James's continuity investigation is a moving torus. Finite systems map selected movement and relationships through explicitly defined state spaces, transitions, and observations. The mathematical definition and resolution-compatibility obligations for a two-coordinate periodic example are in [the language-neutral shape contract](../language/SHAPE_CONTRACT.md). That example does not define every realization, and it does not turn the program foundation into the language referent.
+
+The arrow sequence in the foundation contract below is a checklist of required *software relations*, not a chronological equation for continuity or a claim that a fixed container determines movement. Graphs, recurrence, conditional branches, and runtime queues are bounded execution techniques; they must not be identified with toroidal motion without an explicit correspondence and test. A future reusable worker for common tasks, including code changes, must be evaluated against its actual transition and relation-update rules rather than a torus illustration alone.
+
+This repository is correctly described as **work in progress**: it contains verified finite capabilities and unresolved research questions. Missing universal mathematical correspondence is not, by itself, evidence that an existing bounded implementation is defective. Conversely, an open research question does not excuse a broken implementation or an unsupported verification claim.
+
 ## Status — frozen capability evidence
 
 This foundation is the first broad **Programs** capability proof under [Complete Stack](../COMPLETE_STACK.md).
