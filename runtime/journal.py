@@ -131,6 +131,8 @@ class RuntimeJournal:
                 raise ValueError(
                     f"duplicate handoff submission: {handoff.handoff_id}"
                 )
+            if not entry_gate(self._handoffs, tuple(self._events), event, handoff).admitted:
+                raise ValueError("A/entry gate rejected submission replay")
             self._validate_event(event)
             self._handoffs[handoff.handoff_id] = handoff
             self._events.append(event)
@@ -145,6 +147,8 @@ class RuntimeJournal:
                     f"event line {line_number} references unknown handoff "
                     f"{event.handoff_id}"
                 )
+            if not entry_gate(self._handoffs, tuple(self._events), event).admitted:
+                raise ValueError("A/entry gate rejected event replay")
             self._validate_event(event)
             self._events.append(event)
             if not output_gate(self._handoffs, tuple(self._events), event).admitted:
