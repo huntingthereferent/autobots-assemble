@@ -19,6 +19,8 @@ Names are reference points, not conclusions. Calling the language referent by na
 
 **Recursion test.** A recorded output must be eligible to become the next input under the same declared evidence contract. The test checks whether a specific continuation preserves the required relationships, source ancestry, and unresolved differences, or reports where it cannot. Passing it is not a universal truth test; failure or missing evidence remains visible.
 
+Here, **safety mechanism for truth** describes the purpose of this record-keeping: a changing mathematical or linguistic representation must not quietly replace the relationship being followed.
+
 ## Language and mathematics
 
 Mathematics is a human formal language. Talking about the need for mathematics already puts mathematics, language and understanding into a relationship; that very utterance can be observed and corrected in the same ongoing inquiry. Particular equations may then state exact operations, domains, witnesses and counterexamples. They do not take ownership of the referent, and no single finite construction proves all of it.
