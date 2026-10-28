@@ -16,6 +16,8 @@ When asked to continue (including `C` or `c`), resume the active repository task
 
 Preserve the project's mathematical definitions, source identities, witness requirements, and historical evidence. Keep changes bounded and testable; avoid broad renaming or restructuring without an explicit need. Treat each research lane's claims as limited to its own witnessed results.
 
+For language and profile edits, use [the canonical Language Referent description](LANGUAGE_REFERENT.md) and [evidence contract](LANGUAGE_REFERENT_CONTRACT.md): continuity as motion, finite witnesses that retain source relationships, and recursion under the same evidence conditions. Do not replace the three with a convenient shorthand, a fixed-container metaphor, or a universal proof claim. Audit the current source before editing; preserve historical quotations and scoped mathematical results as their own evidence.
+
 Distinguish **committed**, **workflow triggered**, **running**, **passed**, **failed**, and **not verified**. Never imply an active worker or successful test merely because source code or a workflow exists. If a connector cannot start or read a run, state that specific limitation and continue with repository-supported work.
 
 Use branch-based review for risky or broad changes. Do not expose private runtime journals, credentials, or data in public Pages or workflow artifacts. Keep logs and artifacts free of secrets.
