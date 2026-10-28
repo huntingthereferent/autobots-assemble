@@ -27,14 +27,11 @@ jobs:
         run: |
           python tracework/scripts/audit_word_alignment.py \
             --tracework tracework --profile profile \
-            --output word-alignment-report.md \
             --json word-alignment-report.json
-      - name: Publish audit report
+      - name: Preserve structured audit findings
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: both-repositories-word-audit
-          path: |
-            word-alignment-report.md
-            word-alignment-report.json
+          path: word-alignment-report.json
           if-no-files-found: warn
