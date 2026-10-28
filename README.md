@@ -2,7 +2,7 @@
 
 **[MATHEMATICAL LAB IN THE WORKSTATION](https://huntingthereferent.github.io/autobots-assemble/live/work.html#math)** — research instruments integrated into the execution viewer: [Math](https://huntingthereferent.github.io/autobots-assemble/live/work.html#math) · [ARC](https://huntingthereferent.github.io/autobots-assemble/live/work.html#arc) · [WORLD](https://huntingthereferent.github.io/autobots-assemble/live/work.html#world) · [NIH](https://huntingthereferent.github.io/autobots-assemble/live/work.html#nih).
 
-**[TRACEWORK · FINITE-SYSTEM PROOF OF CONCEPT](https://huntingthereferent.github.io/autobots-assemble/live/work.html)** — public GitHub demonstration of bounded state, relational handoffs, evidence-backed continuation, source-linked Actions observations and research records; not the full standalone Tracework system. [Development status and roadmap](TRACEWORK_DEVELOPMENT.md).
+**[TRACEWORK · EARLY-STAGE PROVENANCE AND IMPLEMENTATION](https://huntingthereferent.github.io/autobots-assemble/live/work.html)** — public GitHub demonstration of bounded state, relational handoffs, evidence-backed continuation, source-linked Actions observations and research records; not the full standalone Tracework system. [Development status and roadmap](TRACEWORK_DEVELOPMENT.md).
 
 **[↗ OBSERVE WORK EXECUTIONS AND RESEARCH](https://huntingthereferent.github.io/autobots-assemble/live/)** · **[▶ PLAY ACTIVE WORLD48 GAME](https://huntingthereferent.github.io/autobots-assemble/game/)** · [Inspect work viewer code](docs/live/work.html) · [Original research projection](views/traces/research-live.json)
 
@@ -10,17 +10,17 @@ The public work view reads actual GitHub workflow runs and native job/step resul
 
 **Independent research · finite mathematics · language · computational experiments · research infrastructure**
 
-**Start with the [account research report](https://github.com/huntingthereferent/huntingthereferent)** for the referent, mathematical constructions, relationship between lanes, and dated evidence. This repository is the implementation and execution record; its pages should be read through their specific tests and witnesses, not as unrelated products.
+**Start with the [current About Me](https://github.com/huntingthereferent/huntingthereferent)** for the referent, mathematical constructions, relationship between lanes, and dated evidence. This repository is the implementation and execution record; its pages should be read through their specific tests and witnesses, not as unrelated products.
 
 ## Research system and evidence
-**Tracework** names this repository's existing continuity and evidence environment; the mathematical research remains separate. Stable Python names, file paths, journal schemas and historical witnesses are not renamed. [Tracework overview and naming boundary](TRACEWORK.md).
+**Tracework** began as a way to retain provenance while James directed AI-assisted mathematical and computational investigations across conversations. The recorded work and the mathematics are not independent research histories; the existing artifacts do not establish how much of their results came from the mathematics, AI, or their interaction. Stable Python names, file paths, journal schemas and historical witnesses are not renamed. [Tracework overview and naming boundary](TRACEWORK.md).
 
 
 The repository records a developing general-purpose research and construction environment: finite mathematics, language and referent investigations, interactive worlds, software foundations, bounded workers, handoffs, and audit records. Each investigation retains its own evidence and test boundary; a result in one domain is not automatically established in another.
 
 **Current reviewed evidence:** [Research register — reviewed October 21, 2026](RESEARCH_REGISTER.md) · [Selected work inventory](https://github.com/huntingthereferent/huntingthereferent/blob/main/SELECTED_WORK.md) · [Historical provenance and limits](https://github.com/huntingthereferent/huntingthereferent/blob/main/PROVENANCE.md) · [Research method](https://github.com/huntingthereferent/huntingthereferent/blob/main/docs/RESEARCH_METHOD.md) · [System expansion report](https://github.com/huntingthereferent/huntingthereferent).
 
-**Evidence boundary:** The existing tests do not establish a universal theory, a physically validated system, or a fully autonomous production platform.
+**Evidence boundary:** These records document bounded implementations and observations, not a validated account of continuity. Attribution between mathematical direction, AI-generated work, and their interaction is unresolved; native tests and source records must be assessed individually.
 
 ## Selected work
 

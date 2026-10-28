@@ -1,6 +1,6 @@
 # Tracework — development status
 
-**Status: Development preview.** The public GitHub Pages workstation is an interface prototype and source-linked observation tool, **not a released standalone Tracework application**.
+**Status: Early-stage development preview.** Tracework grew through AI-assisted mathematical and computational work across conversations. The current records cannot reliably attribute outcomes between mathematical direction, AI contributions, and their interaction. The public GitHub Pages workstation is an interface prototype and source-linked observation tool, **not a released standalone Tracework application**.
 
 [Open the public preview](https://huntingthereferent.github.io/autobots-assemble/docs/live/work.html) · [Project scope](TRACEWORK.md) · [Viewer implementation notes](docs/live/README.md) · [Source repository](README.md)
 
