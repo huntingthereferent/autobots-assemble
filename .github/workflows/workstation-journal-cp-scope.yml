@@ -50,7 +50,9 @@ jobs:
             network.tests.test_workstation_construction \
             network.tests.test_workstation_construction_frontier \
             network.tests.test_workstation_construction_route_scope \
-            network.tests.test_workstation_construction_scale             network.tests.test_branch_help             network.tests.test_runtime_hardening
+            network.tests.test_workstation_construction_scale \
+            network.tests.test_branch_help \
+            network.tests.test_runtime_hardening
       - name: Verify distinct CP source scopes remain fail-closed
         run: |
           python -m unittest -v \
