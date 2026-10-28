@@ -6,6 +6,7 @@ import json
 import os
 
 from .handoff import EvidenceRecord, Handoff, HandoffEvent
+from .ab_journal_gate import entry_gate, output_gate
 
 
 def handoff_to_dict(handoff: Handoff) -> dict:
@@ -84,13 +85,30 @@ class RuntimeJournal:
     def _validate_event(self, event: HandoffEvent) -> None:
         if any(item.event_id == event.event_id for item in self._events):
             raise ValueError('duplicate runtime event id')
-        if event.event_type not in ('CREATED', 'STARTED', 'RESULT', 'REOPENED'):
+        if event.event_type not in ('CREATED', 'STARTED', 'RESULT', 'REOPENED',
+                                    'AGENT_LOOP_CLOSED', 'AGENT_AB_OBSERVED',
+                                    'WORKSTATION_MOVEMENT_OBSERVED',
+                                    'WORKSTATION_HELP_OPEN',
+                                    'WORKSTATION_NATIVE_HELP_ASSIGNED'):
             raise ValueError('invalid runtime event type')
         prior = next((item for item in reversed(self._events)
                       if item.handoff_id == event.handoff_id), None)
         if event.event_type == 'CREATED':
             if prior is not None or event.parents:
                 raise ValueError('invalid CREATED event')
+        elif event.event_type == 'AGENT_LOOP_CLOSED':
+            # The ancestor's last event and the descendant's admitted result
+            # are both ancestry, but neither may be invented or reordered.
+            if prior is None or not event.data.get('closed_by') or not event.evidence:
+                raise ValueError('invalid agent closure event')
+            if event.actor_id != event.data['closed_by']:
+                raise ValueError('agent closure actor mismatch')
+            source = next((item for item in reversed(self._events)
+                           if item.handoff_id == event.actor_id), None)
+            if source is None or source.event_type != 'RESULT' or source.data.get('status') != 'COMPLETE':
+                raise ValueError('agent closure requires completed descendant result')
+            if event.parents != (prior.event_id, source.event_id):
+                raise ValueError('invalid agent closure ancestry')
         elif prior is None or event.parents != (prior.event_id,):
             raise ValueError('invalid event parent chain')
         if event.event_type == 'RESULT' and event.data.get('status') not in (
@@ -116,6 +134,8 @@ class RuntimeJournal:
             self._validate_event(event)
             self._handoffs[handoff.handoff_id] = handoff
             self._events.append(event)
+            if not output_gate(self._handoffs, tuple(self._events), event).admitted:
+                raise ValueError('B/output gate rejected replay')
             return
 
         if kind == "EVENT":
@@ -127,6 +147,8 @@ class RuntimeJournal:
                 )
             self._validate_event(event)
             self._events.append(event)
+            if not output_gate(self._handoffs, tuple(self._events), event).admitted:
+                raise ValueError('B/output gate rejected event replay')
             return
 
         raise ValueError(
@@ -158,7 +180,11 @@ class RuntimeJournal:
             "handoff": handoff_to_dict(handoff),
             "event": event_to_dict(created_event),
         }
+        if not entry_gate(self._handoffs, tuple(self._events), created_event, handoff).admitted:
+            raise ValueError('A/entry gate rejected submission')
         self._validate_event(created_event)
+        if not output_gate({**self._handoffs, handoff.handoff_id: handoff}, tuple(self._events) + (created_event,), created_event).admitted:
+            raise ValueError('B/output gate rejected submission')
         self._append_record(record)
         self._handoffs[handoff.handoff_id] = handoff
         self._events.append(created_event)
@@ -169,7 +195,11 @@ class RuntimeJournal:
             raise ValueError(
                 f"event references unknown handoff: {event.handoff_id}"
             )
+        if not entry_gate(self._handoffs, tuple(self._events), event).admitted:
+            raise ValueError('A/entry gate rejected event')
         self._validate_event(event)
+        if not output_gate(self._handoffs, tuple(self._events) + (event,), event).admitted:
+            raise ValueError('B/output gate rejected event')
         self._append_record(
             {
                 "record_type": "EVENT",
