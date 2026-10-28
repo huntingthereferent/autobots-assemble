@@ -1,12 +1,12 @@
 {
   "schema": "public-world-continuity/v1",
-  "checked_at": "2026-10-27T22:20:39.051760+00:00",
-  "content_sha256": "6de8f687617cc4f27dfe2197bd968afb3716713c63166b572db95d5d816dff8d",
+  "checked_at": "2026-10-28T05:50:01.995480+00:00",
+  "content_sha256": "0a7a241d683cc7152b955ee9cc9de30728b50832e380cdd5ade4eee7ebe017b8",
   "sources": {
     "usgs": {
       "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
-      "count": 11,
-      "max_magnitude": 2.25,
+      "count": 6,
+      "max_magnitude": 1.8,
       "window": "rolling past hour"
     },
     "github": {
@@ -22,205 +22,120 @@
     "usgs": [
       {
         "source": "live_json_api",
-        "source_id": "aka2026vhyevz",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:51:41.982000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vhyevz",
+        "source_id": "aka2026vimmhz",
+        "observed_at": "2026-10-28T05:50:01.646749Z",
+        "source_updated_at": "2026-10-28T04:58:31.752000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vimmhz",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vhyevz",
+        "canonical_key": "event:aka2026vimmhz",
+        "payload": {
+          "magnitude": 1.1,
+          "place": "33 km WNW of Clam Gulch, Alaska",
+          "longitude": -151.948,
+          "latitude": 60.341,
+          "depth_km": 29.7,
+          "occurred_at": "2026-10-28T04:57:27.606000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "aka2026vimsxc",
+        "observed_at": "2026-10-28T05:50:01.646749Z",
+        "source_updated_at": "2026-10-28T05:05:42.552000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vimsxc",
+        "entity_type": "event",
+        "canonical_key": "event:aka2026vimsxc",
+        "payload": {
+          "magnitude": 0.5,
+          "place": "64 km ENE of Pedro Bay, Alaska",
+          "longitude": -153.132,
+          "latitude": 60.102,
+          "depth_km": 16.8,
+          "occurred_at": "2026-10-28T05:04:56.051000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "aka2026vimwlf",
+        "observed_at": "2026-10-28T05:50:01.646749Z",
+        "source_updated_at": "2026-10-28T05:11:12.932000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vimwlf",
+        "entity_type": "event",
+        "canonical_key": "event:aka2026vimwlf",
+        "payload": {
+          "magnitude": 1.8,
+          "place": "56 km ENE of Pedro Bay, Alaska",
+          "longitude": -153.132,
+          "latitude": 59.919,
+          "depth_km": 135.9,
+          "occurred_at": "2026-10-28T05:09:13.143000+00:00"
+        }
+      },
+      {
+        "source": "live_json_api",
+        "source_id": "aka2026vimyyy",
+        "observed_at": "2026-10-28T05:50:01.646749Z",
+        "source_updated_at": "2026-10-28T05:12:33.732000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vimyyy",
+        "entity_type": "event",
+        "canonical_key": "event:aka2026vimyyy",
         "payload": {
           "magnitude": 0.9,
-          "place": "89 km SSE of King Salmon, Alaska",
-          "longitude": -155.852,
-          "latitude": 58.005,
+          "place": "70 km WNW of Tyonek, Alaska",
+          "longitude": -152.35,
+          "latitude": 61.303,
           "depth_km": 5.0,
-          "occurred_at": "2026-10-27T21:48:55.729000+00:00"
+          "occurred_at": "2026-10-28T05:11:56.572000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "aka2026vhyqcm",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T22:02:26.951000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vhyqcm",
+        "source_id": "aka2026vinmkc",
+        "observed_at": "2026-10-28T05:50:01.646749Z",
+        "source_updated_at": "2026-10-28T05:28:36.518000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vinmkc",
         "entity_type": "event",
-        "canonical_key": "event:aka2026vhyqcm",
+        "canonical_key": "event:aka2026vinmkc",
         "payload": {
-          "magnitude": 0.9,
-          "place": "86 km NNW of Karluk, Alaska",
-          "longitude": -155.108,
-          "latitude": 58.262,
+          "magnitude": 1.2,
+          "place": "62 km ENE of Healy, Alaska",
+          "longitude": -147.752,
+          "latitude": 64.028,
           "depth_km": 5.0,
-          "occurred_at": "2026-10-27T22:01:54.238000+00:00"
+          "occurred_at": "2026-10-28T05:27:25.394000+00:00"
         }
       },
       {
         "source": "live_json_api",
-        "source_id": "ci41567936",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:30:13.780000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/ci41567936",
+        "source_id": "aka2026vioedw",
+        "observed_at": "2026-10-28T05:50:01.646749Z",
+        "source_updated_at": "2026-10-28T05:49:23.261000Z",
+        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/aka2026vioedw",
         "entity_type": "event",
-        "canonical_key": "event:ci41567936",
+        "canonical_key": "event:aka2026vioedw",
         "payload": {
-          "magnitude": 1.7375143659925,
-          "place": "12 km NNE of Cabazon, CA",
-          "longitude": -116.755996704102,
-          "latitude": 34.023998260498,
-          "depth_km": 17.3899993896484,
-          "occurred_at": "2026-10-27T21:19:50.030000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "hv75064566",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:50:46.100000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/hv75064566",
-        "entity_type": "event",
-        "canonical_key": "event:hv75064566",
-        "payload": {
-          "magnitude": 2.25,
-          "place": "5 km SSW of Pāhala, Hawaii",
-          "longitude": -155.495330810547,
-          "latitude": 19.1591663360596,
-          "depth_km": 31.5900001525879,
-          "occurred_at": "2026-10-27T21:47:21.930000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458692",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:30:19.886000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458692",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458692",
-        "payload": {
-          "magnitude": 0.69,
-          "place": "10 km NW of The Geysers, CA",
-          "longitude": -122.835998535156,
-          "latitude": 38.8408317565918,
-          "depth_km": 1.42999994754791,
-          "occurred_at": "2026-10-27T21:28:41.550000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458697",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:38:49.447000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458697",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458697",
-        "payload": {
-          "magnitude": 0.27,
-          "place": "10 km NW of The Geysers, CA",
-          "longitude": -122.83716583252,
-          "latitude": 38.8411674499512,
-          "depth_km": 1.92999994754791,
-          "occurred_at": "2026-10-27T21:37:13+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458702",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:42:39.539000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458702",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458702",
-        "payload": {
-          "magnitude": 0.72,
-          "place": "10 km NW of The Geysers, CA",
-          "longitude": -122.83683013916,
-          "latitude": 38.8413314819336,
-          "depth_km": 1.76999998092651,
-          "occurred_at": "2026-10-27T21:41:04.680000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458707",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:43:34.385000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458707",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458707",
-        "payload": {
-          "magnitude": 0.63,
-          "place": "10 km NW of The Geysers, CA",
-          "longitude": -122.836334228516,
-          "latitude": 38.8401679992676,
-          "depth_km": 1.72000002861023,
-          "occurred_at": "2026-10-27T21:41:59.260000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458712",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T21:51:29.580000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458712",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458712",
-        "payload": {
-          "magnitude": 0.73,
-          "place": "10 km NW of The Geysers, CA",
-          "longitude": -122.836669921875,
-          "latitude": 38.8418350219727,
-          "depth_km": 1.83000004291534,
-          "occurred_at": "2026-10-27T21:49:50.730000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458727",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T22:00:03.691000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458727",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458727",
-        "payload": {
-          "magnitude": 0.7,
-          "place": "8 km NW of The Geysers, CA",
-          "longitude": -122.81950378418,
-          "latitude": 38.8326683044434,
-          "depth_km": 1.75999999046326,
-          "occurred_at": "2026-10-27T21:58:27.030000+00:00"
-        }
-      },
-      {
-        "source": "live_json_api",
-        "source_id": "nc75458732",
-        "observed_at": "2026-10-27T22:20:38.500259Z",
-        "source_updated_at": "2026-10-27T22:03:50.879000Z",
-        "source_url": "https://earthquake.usgs.gov/earthquakes/eventpage/nc75458732",
-        "entity_type": "event",
-        "canonical_key": "event:nc75458732",
-        "payload": {
-          "magnitude": 1.28,
-          "place": "25 km E of San Ardo, CA",
-          "longitude": -120.63166809082,
-          "latitude": 36.0618324279785,
-          "depth_km": 2.38000011444092,
-          "occurred_at": "2026-10-27T22:02:10.820000+00:00"
+          "magnitude": 1.5,
+          "place": "17 km WNW of Tyonek, Alaska",
+          "longitude": -151.441,
+          "latitude": 61.121,
+          "depth_km": 75.2,
+          "occurred_at": "2026-10-28T05:47:54.412000+00:00"
         }
       }
     ],
     "github": {
       "source": "github_api",
       "source_id": "1362490",
-      "observed_at": "2026-10-27T22:20:38.710464Z",
-      "source_updated_at": "2026-10-27T20:44:26Z",
+      "observed_at": "2026-10-28T05:50:01.778414Z",
+      "source_updated_at": "2026-10-27T22:47:58Z",
       "source_url": "https://github.com/psf/requests",
       "entity_type": "repository",
       "canonical_key": "github_repo:1362490",
       "payload": {
         "full_name": "psf/requests",
         "default_branch": "main",
-        "stargazers_count": 54587,
-        "forks_count": 12105,
+        "stargazers_count": 54589,
+        "forks_count": 12107,
         "open_issues_count": 244,
         "pushed_at": "2026-10-26T17:14:44Z",
         "archived": false
@@ -229,7 +144,7 @@
     "pypi": {
       "source": "pypi_api",
       "source_id": "requests",
-      "observed_at": "2026-10-27T22:20:38.972707Z",
+      "observed_at": "2026-10-28T05:50:01.955921Z",
       "source_updated_at": null,
       "source_url": "https://pypi.org/project/requests/",
       "entity_type": "package",
