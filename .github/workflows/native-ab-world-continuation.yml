@@ -1,0 +1,27 @@
+name: Native A/B mathematical continuation
+on:
+  push:
+    paths:
+      - 'work/arc_like_maze/native_world_continuation.py'
+      - 'network/tests/test_arc_like_native_world_continuation.py'
+      - '.github/workflows/native-ab-world-continuation.yml'
+  pull_request:
+    paths:
+      - 'work/arc_like_maze/native_world_continuation.py'
+      - 'network/tests/test_arc_like_native_world_continuation.py'
+      - '.github/workflows/native-ab-world-continuation.yml'
+  workflow_dispatch:
+jobs:
+  native-source-replay:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Native regression
+        run: python -m unittest -v network.tests.test_arc_like_native_world_continuation
+      - name: Generate and replay source receipt
+        run: |
+          python -m work.arc_like_maze.native_world_continuation --laws 0 1 --word ABBA --repeat 1000 --out /tmp/native-ab.json
+          python -m work.arc_like_maze.native_world_continuation --verify /tmp/native-ab.json
