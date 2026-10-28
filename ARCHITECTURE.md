@@ -1,5 +1,5 @@
 # Architecture — Complete Stack
-> **Tracework:** this is the system architecture underlying the current Tracework environment. The mathematical language referent is separate; older `ProcessWorkstation` and `workstation-*` interfaces remain stable. [Tracework scope](TRACEWORK.md).
+> **Tracework:** this is the system architecture underlying the current Tracework environment. The architecture is not a definition of the Language Referent; older `ProcessWorkstation` and `workstation-*` interfaces remain stable. [Tracework scope](TRACEWORK.md).
 
 
 The architecture exists to preserve movement through a problem's **entire required dependency stack**.
@@ -32,7 +32,7 @@ capability / read-only views
 
 ## Language-referent boundary
 
-The language referent, previously called A/B, is the same continuing inquiry. It is **not defined as a recursively reusable mathematical operation**. Mathematics is human formal language; individual finite generators and witness contracts make particular questions checkable without redefining the referent.
+The Language Referent grounds the continuing inquiry; A/B names the relational movement being followed, not a separate research layer. It is **not defined as a recursively reusable mathematical operation**. Mathematics is human formal language; individual finite generators and witness contracts make particular questions checkable without redefining the referent.
 
 This architecture is not the language referent. It is a repository organization that preserves evidence and supports bounded applications.
 
