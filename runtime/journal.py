@@ -6,6 +6,7 @@ import json
 import os
 
 from .handoff import EvidenceRecord, Handoff, HandoffEvent
+from .ab_journal_gate import entry_gate, output_gate
 
 
 def handoff_to_dict(handoff: Handoff) -> dict:
