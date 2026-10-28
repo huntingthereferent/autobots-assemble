@@ -69,3 +69,20 @@ Gate: no synthetic aggregate 'success' metric; unresolved conflicts remain visib
 
 ## Execution policy
 G may begin with available artifacts. H–O may proceed independently as source evidence permits; P updates only on new evidence. Native execution requires a separate reviewed workflow or existing worker dispatch with explicit budget and cooldown. Do not auto-dispatch from this registry.
+
+## ARC-native CP entry / output boundary (bounded source-owner test)
+
+The original finite-correspondence CP20–CP30 history is not transferable as
+ARC task authority. For the **existing** SP80 stage3 and Window48 smoke
+workflows, `work/arc3/cp_gate.py` now checks an explicit A/entry receipt
+before SDK execution and a B/output receipt after the native source report.
+The entry binds a named lane to current checkout source-file digests,
+`AGENTS.md`/this lane register, preserved prior observations, and an exact
+output destination. Output refuses a changed source, missing raw-frame archive,
+incomplete 16×2 controls, cross-lane substitution, or a promoted win unsupported
+by the original SDK report. Negative trials and walls survive as observations.
+
+**Boundary:** These are source-integrity and report-accounting checks, not an
+independent original SDK replay, a proof of ARC completion, or universal
+worker admission. CI must execute the entry step to enforce the gate.
+Tests: `python -m unittest -v network.tests.test_arc3_cp_gate`.
