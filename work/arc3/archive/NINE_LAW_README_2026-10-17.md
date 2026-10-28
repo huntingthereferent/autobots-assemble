@@ -5,7 +5,7 @@
 
 ## F3 mathematical starting point
 
-[The native F3-first experimental agent](agent/my_agent.py) uses the **actual depth-three transformations** and all nine phi(0)=0 candidate laws from [the original finite mathematical source](../arc_like_maze/math.py). [AGENTS.md](AGENTS.md) records the investigation rules and evidence boundary. The independently tested equations drive candidate endpoint-collision probes; this is not another G0/G2 solver, bot, or orchestration layer.
+[The native F3-first experimental agent](../agent/my_agent.py) uses the **actual depth-three transformations** and all nine phi(0)=0 candidate laws from [the original finite mathematical source](../../arc_like_maze/math.py). [AGENTS.md](../AGENTS.md) records the investigation rules and evidence boundary. The independently tested equations drive candidate endpoint-collision probes; this is not another G0/G2 solver, bot, or orchestration layer.
 
 The current agent tries one **provisional** assignment of two advertised native simple actions to mathematical A/B. It checks visible-frame counterexamples without relabeling colors as F3 values. A surviving candidate remains conditional; a contradiction yields OUTSIDE_DECLARED_F3_FAMILY. The initial policy does **not** infer goals or demonstrate an ARC win. Other native action assignments and richer finite-field grammars remain separate questions.
 
@@ -19,26 +19,26 @@ The F3 prototype has now been executed against native LS20 and has a recorded 0-
 
 ## Current F3/native observation
 
-[LS20 native relational evidence](runs/LS20_F3_NATIVE_RELATIONS_2026-10-17.md) now records the result of using the original F3 laws as a hypothesis against the real game: exact co-transport of native color groups, a separate persistent 2-cell change on every tested action, visible final-frame collisions for native words 34/43 and 23/32, and order-sensitive 12/21. All measurements came from official native action calls, not a synthetic ARC imitation.
+[LS20 native relational evidence](../runs/LS20_F3_NATIVE_RELATIONS_2026-10-17.md) now records the result of using the original F3 laws as a hypothesis against the real game: exact co-transport of native color groups, a separate persistent 2-cell change on every tested action, visible final-frame collisions for native words 34/43 and 23/32, and order-sensitive 12/21. All measurements came from official native action calls, not a synthetic ARC imitation.
 
-The mathematically necessary F3 order-three relation did **not** survive the literal raw-state mapping; the new observed glyph/trace distinction is not yet a justified F3 state representation. The single-file F3 agent remains experimental, and no game win is claimed. [Reproducible native tests](native_mixed_relation_probe.py) and [the direct original-law comparison](f3_native_word_comparison.py) preserve that boundary.
+The mathematically necessary F3 order-three relation did **not** survive the literal raw-state mapping; the new observed glyph/trace distinction is not yet a justified F3 state representation. The single-file F3 agent remains experimental, and no game win is claimed. [Reproducible native tests](../native_mixed_relation_probe.py) and [the direct original-law comparison](../f3_native_word_comparison.py) preserve that boundary.
 
 ## F3 source probe portability — other real ARC environments
 
-[FT09 and SK48 native source-F3 investigation](runs/F3_NATIVE_CROSS_GAME_2026-10-17.md) preserves source-selected F3 equality questions against independently reset real games. SK48 exposed directional native controls; the provisional ACTION1=A/ACTION2=B mapping failed the universal source A³-root return. FT09 exposed coordinate-parametrized ACTION6 rather than native simple controls: a source-only 74-site spatial investigation found eight real click effects, including the independently recorded native coordinates (36,36) and (44,36). Two separate coordinate pairs were tested with **62 further native click actions**, and each gave a visibly equal AB/BA endpoint while failing the source F3 A³ return; neither was idempotent in the tested states.
+[FT09 and SK48 native source-F3 investigation](../runs/F3_NATIVE_CROSS_GAME_2026-10-17.md) preserves source-selected F3 equality questions against independently reset real games. SK48 exposed directional native controls; the provisional ACTION1=A/ACTION2=B mapping failed the universal source A³-root return. FT09 exposed coordinate-parametrized ACTION6 rather than native simple controls: a source-only 74-site spatial investigation found eight real click effects, including the independently recorded native coordinates (36,36) and (44,36). Two separate coordinate pairs were tested with **62 further native click actions**, and each gave a visibly equal AB/BA endpoint while failing the source F3 A³ return; neither was idempotent in the tested states.
 
-These are meaningful native action-interface measurements and **negative results for a direct injective complete-frame identification** with the original F3 worlds. They are not F3 failures as mathematics, hidden-state identity proofs, general ARC solvers or new game wins. The experimental [single-file agent](agent/my_agent.py) should not be represented as having learned to choose native F3 generators, nor should arbitrary ACTION6 center clicks count as tested correspondence.
+These are meaningful native action-interface measurements and **negative results for a direct injective complete-frame identification** with the original F3 worlds. They are not F3 failures as mathematics, hidden-state identity proofs, general ARC solvers or new game wins. The experimental [single-file agent](../agent/my_agent.py) should not be represented as having learned to choose native F3 generators, nor should arbitrary ACTION6 center clicks count as tested correspondence.
 
 ## Existing source, not rewritten
 
-- [Direct-solve objective](../../research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md) — solve the actual games, with discovery actions counted.
-- [Operator shell](../../research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py) — the existing one-action-at-a-time native ARC interface and append-only JSONL observations.
-- [Operator instructions](../../research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md) — exact manual operation.
-- [First-contact runbook](../../research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md) — separates untouched evaluations from tuned replays.
-- [Native observation adapter](../../runtime/ARC_NATIVE_OBSERVATIONS.md) — source-owned before/after frame observation, not an actuator.
-- [Recorded routes](../../research/arc_native_runs/README.md) and [negative autonomous trials](../../research/arc_native_runs/AUTONOMOUS_TRIALS.md) — historical evidence, **not** first-contact wins by this lane.
+- [Direct-solve objective](../../../research/dives/ARC3-TRACE-001/DIRECT_SOLVE.md) — solve the actual games, with discovery actions counted.
+- [Operator shell](../../../research/dives/ARC3-TRACE-001/direct_agent/operator_shell.py) — the existing one-action-at-a-time native ARC interface and append-only JSONL observations.
+- [Operator instructions](../../../research/dives/ARC3-TRACE-001/direct_agent/OPERATOR.md) — exact manual operation.
+- [First-contact runbook](../../../research/dives/ARC3-TRACE-001/direct_agent/RUNBOOK.md) — separates untouched evaluations from tuned replays.
+- [Native observation adapter](../../../runtime/ARC_NATIVE_OBSERVATIONS.md) — source-owned before/after frame observation, not an actuator.
+- [Recorded routes](../../../research/arc_native_runs/README.md) and [negative autonomous trials](../../../research/arc_native_runs/AUTONOMOUS_TRIALS.md) — historical evidence, **not** first-contact wins by this lane.
 
-The independent [mathematical ARC-like experiments](../arc_like_maze/README.md) stay in their own directory. Their finite constructions do not serve as results for this native game lane.
+The independent [mathematical ARC-like experiments](../../arc_like_maze/README.md) stay in their own directory. Their finite constructions do not serve as results for this native game lane.
 
 ## First operating slice
 
@@ -81,12 +81,12 @@ python -m unittest -v network.tests.test_arc3_direct_work_lane
 
 ## Current native F3 suffix witness
 
-[LS20 native suffix experiment and F3 mathematical comparison](runs/LS20_F3_SUFFIX_2026-10-17.md) (120 real environment actions): visible state equalities from native words 34/43 and 23/32 persist under six common suffixes; visibly unequal words 12/21 converge after native suffix 2 and suffix 21. In all nine original F3 laws, the corresponding mathematical states under provisional native ACTION1=A/ACTION2=B remain distinct, since the generators are bijective. This is a **negative result for a literal injective visible-state correspondence**, not a proof that F3 as a wider investigation fails. No game win or new agent was produced.
+[LS20 native suffix experiment and F3 mathematical comparison](../runs/LS20_F3_SUFFIX_2026-10-17.md) (120 real environment actions): visible state equalities from native words 34/43 and 23/32 persist under six common suffixes; visibly unequal words 12/21 converge after native suffix 2 and suffix 21. In all nine original F3 laws, the corresponding mathematical states under provisional native ACTION1=A/ACTION2=B remain distinct, since the generators are bijective. This is a **negative result for a literal injective visible-state correspondence**, not a proof that F3 as a wider investigation fails. No game win or new agent was produced.
 
 ## Native LS20 state predictions
 
-[Source-recorded native frame prediction experiment](runs/LS20_NATIVE_FACTOR_PREDICTION_2026-10-17.md) now contains a reproducible, exact native glyph/trace model: the original free-motion proposal failed 6/34 action predictions, while a geometry-corrected rule predicted **69/69** native full frames, including **35/35** actions across eight separate held-out mixed words. The modeled motion blocks against native static obstacles, while a separate two-cell trace advances with actions. These are local LS20 observations, not F3 mathematics or general ARC wins; the earlier source-grounded F3 counterexamples remain open.
+[Source-recorded native frame prediction experiment](../runs/LS20_NATIVE_FACTOR_PREDICTION_2026-10-17.md) now contains a reproducible, exact native glyph/trace model: the original free-motion proposal failed 6/34 action predictions, while a geometry-corrected rule predicted **69/69** native full frames, including **35/35** actions across eight separate held-out mixed words. The modeled motion blocks against native static obstacles, while a separate two-cell trace advances with actions. These are local LS20 observations, not F3 mathematics or general ARC wins; the earlier source-grounded F3 counterexamples remain open.
 
 ## Latest native F3 mathematical test
 
-[LS20 F3 A-generator macro screening](runs/LS20_F3_ORDER_THREE_MACROS_2026-10-17.md) now tested the original mathematical requirement A³=id with A and A² nontrivial against the independently measured native glyph factor. **5,460** native action words of length <=6, applied at **34 model-reachable offsets**, produced **zero strict period-three cycles** in that model. **57/57** separately executed native LS20 frames matched the model on six repeated macro words. This closes the **bounded short-generator proposal on that measured glyph factor**, not F3 more generally or unknown longer/higher-order native relationships. No game win claimed.
+[LS20 F3 A-generator macro screening](../runs/LS20_F3_ORDER_THREE_MACROS_2026-10-17.md) now tested the original mathematical requirement A³=id with A and A² nontrivial against the independently measured native glyph factor. **5,460** native action words of length <=6, applied at **34 model-reachable offsets**, produced **zero strict period-three cycles** in that model. **57/57** separately executed native LS20 frames matched the model on six repeated macro words. This closes the **bounded short-generator proposal on that measured glyph factor**, not F3 more generally or unknown longer/higher-order native relationships. No game win claimed.
