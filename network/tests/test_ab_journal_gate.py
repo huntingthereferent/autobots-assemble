@@ -68,5 +68,20 @@ class ABJournalGateTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 RuntimeJournal(path)
 
+    def test_replay_rejects_missing_event_identity(self):
+        import json
+        with TemporaryDirectory() as tmp:
+            path = Path(tmp) / "journal.jsonl"
+            journal = RuntimeJournal(path)
+            handoff = Handoff("ab-gate-identity", "referent", "source", "receiver", "compare")
+            created = HandoffEvent.create(handoff_id=handoff.handoff_id,
+                                          event_type="CREATED", actor_id="source")
+            journal.append_submission(handoff, created)
+            record = json.loads(path.read_text(encoding="utf-8").splitlines()[0])
+            record["event"]["actor_id"] = ""
+            path.write_text(json.dumps(record) + "\n", encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, "A/entry gate rejected submission replay"):
+                RuntimeJournal(path)
+
 if __name__ == "__main__":
     unittest.main()
