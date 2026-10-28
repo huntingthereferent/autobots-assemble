@@ -2,7 +2,7 @@
 
 This lane is for work whose primary goal is external economic value: jobs, bounties, contracts, submissions, deliverables, acceptance, and payment.
 
-The existing [`/jobs`](../jobs/) directory remains the canonical job ledger during migration so its links/history are not broken.
+The former `/jobs` ledger was retired from the current repository. It remains historical Git evidence, not an active job queue. The [current work index](../TASKS.md) records ongoing and resumable work; a new external opportunity requires its own explicit source, acceptance conditions, and authorization.
 
 ## Products
 

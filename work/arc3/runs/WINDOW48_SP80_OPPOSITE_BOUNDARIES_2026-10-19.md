@@ -4,7 +4,7 @@ October 19, 2026. This is an official original public ARC3/SP80 native experimen
 
 ## Frozen independent native question
 
-The prior [stage-specific interior mask holdout](runs/WINDOW48_SP80_STAGE_MASKS_2026-10-19.md) recorded stage0 exact native *interior y1–62* masks on 148/148 effects, stage1 exact interior masks on 192/192, and 60/60 valid conditional stage0→stage1 (+8,+20) interior effect translations. Its genuine untouched pre/post frames also exposed a different boundary pattern, which was discovery evidence only.
+The prior [stage-specific interior mask holdout](WINDOW48_SP80_STAGE_MASKS_2026-10-19.md) recorded stage0 exact native *interior y1–62* masks on 148/148 effects, stage1 exact interior masks on 192/192, and 60/60 valid conditional stage0→stage1 (+8,+20) interior effect translations. Its genuine untouched pre/post frames also exposed a different boundary pattern, which was discovery evidence only.
 
 **Before new original-game observations**, freeze:
 

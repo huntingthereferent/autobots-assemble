@@ -4,7 +4,7 @@ October 19, 2026. Genuine public original `arc_agi.Arcade(OperationMode.NORMAL)`
 
 ## Why this experiment was necessary
 
-Earlier original-native trials [matched action age and changed selected-bar geometry](runs/WINDOW48_SP80_MATCHED_GEOMETRY_2026-10-19.md) and established real ACTION5 temporal responses returning 22,23,26,28 frames, but none advanced beyond the original level1. Independently sourced original stage1 screen pixels show three selectable horizontal regions:
+Earlier original-native trials [matched action age and changed selected-bar geometry](WINDOW48_SP80_MATCHED_GEOMETRY_2026-10-19.md) and established real ACTION5 temporal responses returning 22,23,26,28 frames, but none advanced beyond the original level1. Independently sourced original stage1 screen pixels show three selectable horizontal regions:
 - selected native color9 20×4 bar `x20..39,y36..39`;
 - unselected upper native color8 12×4 bar `x8..19,y16..19`;
 - unselected lower native color8 12×4 bar `x28..39,y24..27`.

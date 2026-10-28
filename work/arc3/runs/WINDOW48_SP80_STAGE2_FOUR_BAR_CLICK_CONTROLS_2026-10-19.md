@@ -4,7 +4,7 @@ October 19, 2026. Official original public `arc_agi.Arcade(OperationMode.NORMAL)
 
 ## Prospectively frozen original stage2 click controls
 
-[Parent authentic native level2 boundary and entry experiment](runs/WINDOW48_SP80_STAGE2_BOUNDARY_NATIVE_BASELINE_2026-10-19.md) confirmed original `levels_completed=2` on 28/44 new independent boundary trials, and original stage2 **ACTION1–ACTION6 advertised legal** on 24 further independent original game resets. Its source stage2 screen contains four visible original colored bars rather than three.
+[Parent authentic native level2 boundary and entry experiment](WINDOW48_SP80_STAGE2_BOUNDARY_NATIVE_BASELINE_2026-10-19.md) confirmed original `levels_completed=2` on 28/44 new independent boundary trials, and original stage2 **ACTION1–ACTION6 advertised legal** on 24 further independent original game resets. Its source stage2 screen contains four visible original colored bars rather than three.
 
 This new native test freezes **20 stage2 action programs × two fresh original SP80 resets = 40 independent genuine stage2 games**. Every trial enters stage0→1 via native `454545` then stage1→2 via exact authentic witness A `6@24,37 4 4 6@32,25 6@12,17 4 4 4 5`. The native source stage2 entry root is verified to contain the following actual pixels, before trying any click:
 

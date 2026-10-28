@@ -4,7 +4,7 @@ October 19, 2026. Original native ARC3 SP80, not source F3-48 law or autonomous 
 
 ## Observed defect
 
-The shared `work/arc3/native_sp80_frozen_color_contexts.py:steps_on_real_game` previously treated a **complete native frame** as proof that the game was still active. On authentic stage0/1 runs, the official SDK returned `GameState.GAME_OVER` **alongside that valid terminal frame**. The old worker kept stepping, then labeled a *subsequent* empty/nonstandard frame `UNKNOWN_NONSTANDARD_FRAME`, sometimes describing that later action as the terminal boundary. The independent [official terminal and scorecard audit](runs/WINDOW48_SP80_TERMINAL_SCORECARD_2026-10-19.md) instead witnessed `GAME_OVER` on genuine stage0 context action30, stage1 all-ACTION4 context action45, with valid 64×64 terminal images; six levels required to win, and only 0 or 1 level completed. `GAME_OVER` is **not** `WIN`.
+The shared `work/arc3/native_sp80_frozen_color_contexts.py:steps_on_real_game` previously treated a **complete native frame** as proof that the game was still active. On authentic stage0/1 runs, the official SDK returned `GameState.GAME_OVER` **alongside that valid terminal frame**. The old worker kept stepping, then labeled a *subsequent* empty/nonstandard frame `UNKNOWN_NONSTANDARD_FRAME`, sometimes describing that later action as the terminal boundary. The independent [official terminal and scorecard audit](WINDOW48_SP80_TERMINAL_SCORECARD_2026-10-19.md) instead witnessed `GAME_OVER` on genuine stage0 context action30, stage1 all-ACTION4 context action45, with valid 64×64 terminal images; six levels required to win, and only 0 or 1 level completed. `GAME_OVER` is **not** `WIN`.
 
 ## Bounded repair
 

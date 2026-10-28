@@ -4,7 +4,7 @@ October 19, 2026. Official public native ARC3/SP80 original-game evidence; mathe
 
 ## Predeclared source question
 
-Previous [ACTION4-ordinal saturation run](runs/WINDOW48_SP80_ACTION4_SATURATION_2026-10-19.md) measured **180/180** correct predictions of the COUNT and ROW BAND of original visible pixels changing outside row63: first six cumulative ACTION4 uses each had 32 native changes in original y36..39; later ACTION4 and all ACTION5 had zero changes there. Inspecting original retained native frames then suggested a stronger **exact color+coordinate** source candidate. Those earlier frames were discovery evidence ONLY.
+Previous [ACTION4-ordinal saturation run](WINDOW48_SP80_ACTION4_SATURATION_2026-10-19.md) measured **180/180** correct predictions of the COUNT and ROW BAND of original visible pixels changing outside row63: first six cumulative ACTION4 uses each had 32 native changes in original y36..39; later ACTION4 and all ACTION5 had zero changes there. Inspecting original retained native frames then suggested a stronger **exact color+coordinate** source candidate. Those earlier frames were discovery evidence ONLY.
 
 Before any new observation, freeze the following original native visible changed-pixel/color dictionary for action4 ordinal k:
 

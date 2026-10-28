@@ -4,7 +4,7 @@ October 19, 2026. An official public native ARC3/SP80 experiment, not an F3-48 m
 
 ## Frozen prospective width hypotheses
 
-After [the independently verified 13-step pre-action frontier observation](runs/WINDOW48_SP80_FRONTIER_HOLDOUT_2026-10-19.md) (98/98 minimum native 14→0 and contiguous 1/2-cell row-63 advances), this experiment fixes three candidate **NEXT WIDTH** predictions *before the new original-game execution*:
+After [the independently verified 13-step pre-action frontier observation](WINDOW48_SP80_FRONTIER_HOLDOUT_2026-10-19.md) (98/98 minimum native 14→0 and contiguous 1/2-cell row-63 advances), this experiment fixes three candidate **NEXT WIDTH** predictions *before the new original-game execution*:
 
 - **X3:** first native pre-action row63 nonzero/color-14 frontier at x; predict width 1 if x divisible by 3, otherwise width 2.
 - **ALT:** if a preceding actual native action produced an observed one-pixel advance, predict 2; if it produced a two-pixel advance, predict 1. At an original root with frontier x=0, predict 1. After an interrupted/unknown predecessor, do not predict.

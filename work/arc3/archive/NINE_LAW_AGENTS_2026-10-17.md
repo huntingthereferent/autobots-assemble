@@ -4,16 +4,16 @@ This lane uses **the repository's existing finite-field constructions** to propo
 
 ## Mathematical source
 
-- [Finite F3 worlds](../arc_like_maze/math.py): the exact depth-three A/B maps and nine phi=(0,a,b) candidate laws.
-- [Rooted labeled alignment](../arc_like_maze/alignment.py): full mathematical correspondence and explicit conflicting action words.
-- [Finite relational probe](../arc_like_maze/relation_probe.py): endpoint-equality questions, conditional classifications, and an outsider negative control.
-- [Inverse construction engine](../arc_like_maze/engine_one.py): admissible successors within separate finite grammars. Different mathematical families are not interchangeable.
+- [Finite F3 worlds](../../arc_like_maze/math.py): the exact depth-three A/B maps and nine phi=(0,a,b) candidate laws.
+- [Rooted labeled alignment](../../arc_like_maze/alignment.py): full mathematical correspondence and explicit conflicting action words.
+- [Finite relational probe](../../arc_like_maze/relation_probe.py): endpoint-equality questions, conditional classifications, and an outsider negative control.
+- [Inverse construction engine](../../arc_like_maze/engine_one.py): admissible successors within separate finite grammars. Different mathematical families are not interchangeable.
 
 The finite mathematics is a scoped model within the Language Referent investigation, not the universal definition of A/B or proof that ARC is an F3 world.
 
 ## ARC observation boundary
 
-[The single-file agent](agent/my_agent.py) is directly based on the equations in the original mathematical source. The regression test checks the two transformations against all nine source laws and all 27 states. The official Kaggle starter embeds exactly one my_agent.py file, so the submitted agent must not import work.*, gen1.*, g2.*, or other local research-only modules.
+[The single-file agent](../agent/my_agent.py) is directly based on the equations in the original mathematical source. The regression test checks the two transformations against all nine source laws and all 27 states. The official Kaggle starter embeds exactly one my_agent.py file, so the submitted agent must not import work.*, gen1.*, g2.*, or other local research-only modules.
 
 ARC action IDs do **not** intrinsically designate mathematical A and B. For an initial bounded experiment the agent treats the first two currently advertised simple native actions (ACTION1–ACTION5) as *provisional* A/B roles. It cannot infer the correct pair from the interface alone. Other ordered pair assignments remain untested. Coordinate clicks and undo are not silently promoted to mathematical generators. No real game correspondences are established yet.
 
@@ -33,41 +33,41 @@ No new worker harness, bot ensemble, game simulator, or alternate scheduler is i
 
 ## Native LS20 F3 first experiment (2026-10-17 local)
 
-[Native evidence and reproducible controls](runs/LS20_F3_NATIVE_2026-10-17.md) establish that **all four** advertised single directional controls fail the original F3 A³=root identity on the exact visible LS20 root frame. The F3 single-path agent under provisional ACTION1=A, ACTION2=B likewise exhausted the original nine-law family (0 levels won). Treat this as a **counterexample to direct full-frame generator identification**, not a proof that all native ARC games or other possible state representations cannot carry F3 relations.
+[Native evidence and reproducible controls](../runs/LS20_F3_NATIVE_2026-10-17.md) establish that **all four** advertised single directional controls fail the original F3 A³=root identity on the exact visible LS20 root frame. The F3 single-path agent under provisional ACTION1=A, ACTION2=B likewise exhausted the original nine-law family (0 levels won). Treat this as a **counterexample to direct full-frame generator identification**, not a proof that all native ARC games or other possible state representations cannot carry F3 relations.
 
-Do not retry the same action-ID renaming as a mathematical improvement. A next attempt needs an independently motivated native-to-F3 state correspondence, with preserved action-word predictions and explicit negative controls. Use real native transitions through the [official-run smoke](native_smoke.py) and [root-generator probe](native_f3_generator_probe.py), not stored game scripts or a replacement game engine.
+Do not retry the same action-ID renaming as a mathematical improvement. A next attempt needs an independently motivated native-to-F3 state correspondence, with preserved action-word predictions and explicit negative controls. Use real native transitions through the [official-run smoke](../native_smoke.py) and [root-generator probe](../native_f3_generator_probe.py), not stored game scripts or a replacement game engine.
 
 ## Tested native relations — before adopting F3 coordinates
 
-The [LS20 native relation record](runs/LS20_F3_NATIVE_RELATIONS_2026-10-17.md) is now the return point for the F3 experiment. Native exact-color groups 9 and 12 were observed translating rigidly five pixels per ACTION1/3/4 step; two color-11 cells changed to color 3 per native step independently of the object's apparent movement. A simple color/coordinate modulo-three map is **not** admitted from this evidence.
+The [LS20 native relation record](../runs/LS20_F3_NATIVE_RELATIONS_2026-10-17.md) is now the return point for the F3 experiment. Native exact-color groups 9 and 12 were observed translating rigidly five pixels per ACTION1/3/4 step; two color-11 cells changed to color 3 per native step independently of the object's apparent movement. A simple color/coordinate modulo-three map is **not** admitted from this evidence.
 
 Short **native** rooted words also have context: 34 and 43 have the same visible final full frame; 23 and 32 likewise; 12 and 21 differ. ACTION2 does not move the observed glyph at the initial boundary but moves it downward after ACTION1 has moved it up. Thus the native observation is richer than a single independent "position" coordinate.
 
-The original nine mathematical F3 worlds require A³=id and AB!=BA at the rooted origin. The [source-derived F3/native comparison](f3_native_word_comparison.py) reports qualitative agreement for the 12/21 inequality only; equality of visible native frames never proves hidden state equivalence, and a three-step native F3 cycle has not been witnessed. Do not silently promote this agreement to a solved ARC level or claim the nine-world F3 family now fits LS20.
+The original nine mathematical F3 worlds require A³=id and AB!=BA at the rooted origin. The [source-derived F3/native comparison](../f3_native_word_comparison.py) reports qualitative agreement for the 12/21 inequality only; equality of visible native frames never proves hidden state equivalence, and a three-step native F3 cycle has not been witnessed. Do not silently promote this agreement to a solved ARC level or claim the nine-world F3 family now fits LS20.
 
 Next admitted experiment must state a falsifiable, **predeclared** native-state factorization and demonstrate preserved predictions on newly executed mixed action words, including actual return and boundary cases. If no nontrivial native 3-cycle is witnessed, retain an explicit mathematical WALL rather than renaming a native integer coordinate to F3 by arbitrary modulo.
 
 ## Native suffix evidence and exact F3 obstruction (Oct 17, 2026)
 
-[LS20 suffix experiment](runs/LS20_F3_SUFFIX_2026-10-17.md) is the current return point: 120 actual native actions (36 fresh resets) tested identical suffixes after the previously observed 34/43, 23/32, and 12/21 rooted words. The equal visible prefixes remained equal under all six tested suffixes; the unequal 12/21 prefixes visibly converged after suffix 2 and suffix 21. Equal native frames are **not** proofs of equal hidden native states.
+[LS20 suffix experiment](../runs/LS20_F3_SUFFIX_2026-10-17.md) is the current return point: 120 actual native actions (36 fresh resets) tested identical suffixes after the previously observed 34/43, 23/32, and 12/21 rooted words. The equal visible prefixes remained equal under all six tested suffixes; the unequal 12/21 prefixes visibly converged after suffix 2 and suffix 21. Equal native frames are **not** proofs of equal hidden native states.
 
-[Source-checked F3 mathematics](f3_suffix_permutation_witness.py) independently verifies that the two corresponding F3 endpoints under provisional ACTION1=A, ACTION2=B must **remain mathematically distinct in all nine original worlds** after the common mathematical suffixes. This obstructs an **injective raw-visible-state F3 realization**, not all F3 correspondences. Do not patch the original field operators, select a modulo-three position solely to make a fit, or present this as a game win. The next admitted F3 move needs a predeclared, newly testable state relation with explicit history/trace dependence and independent native frame witnesses.
+[Source-checked F3 mathematics](../f3_suffix_permutation_witness.py) independently verifies that the two corresponding F3 endpoints under provisional ACTION1=A, ACTION2=B must **remain mathematically distinct in all nine original worlds** after the common mathematical suffixes. This obstructs an **injective raw-visible-state F3 realization**, not all F3 correspondences. Do not patch the original field operators, select a modulo-three position solely to make a fit, or present this as a game win. The next admitted F3 move needs a predeclared, newly testable state relation with explicit history/trace dependence and independent native frame witnesses.
 
 ## Current measured LS20 visible-state dynamics
 
-[Native factor prediction and counterexamples](runs/LS20_NATIVE_FACTOR_PREDICTION_2026-10-17.md): independent native initial/root calibration witnessed 25 pixels (15 in native color 9 and 10 in native color 12) that translate rigidly in five-pixel steps, with a separate two-cell trace advancing on each action. The first unbounded motion model failed **6/34** exact full-frame predictions near native walls; trace predictions survived **34/34**. A predeclared static-native-background collision rule repaired those failures and then predicted **35/35 complete native frames** on eight fresh mixed action words not used to identify the wall mechanism (**69/69** total including retests).
+[Native factor prediction and counterexamples](../runs/LS20_NATIVE_FACTOR_PREDICTION_2026-10-17.md): independent native initial/root calibration witnessed 25 pixels (15 in native color 9 and 10 in native color 12) that translate rigidly in five-pixel steps, with a separate two-cell trace advancing on each action. The first unbounded motion model failed **6/34** exact full-frame predictions near native walls; trace predictions survived **34/34**. A predeclared static-native-background collision rule repaired those failures and then predicted **35/35 complete native frames** on eight fresh mixed action words not used to identify the wall mechanism (**69/69** total including retests).
 
 This is **not** an F3 law or general ARC solver. The original F3 nine-law source and its A³ and invertibility obligations are unchanged; raw native blocking and trace changes still defeat a direct F3-state correspondence. The research can now attempt an independently tested mathematical state factorization over the *witnessed* native transitions, not invent a modulo-three map or adopt an ARC heuristic agent. No actual game win or new autonomous worker has been shown.
 
 ## F3 A-generator search boundary — native LS20
 
-[Bounded F3 macro witness](runs/LS20_F3_ORDER_THREE_MACROS_2026-10-17.md) checked all 5,460 nonempty native action words of length <=6 against the **unchanged 69/69 validated native glyph-position model**, across its 34 model-reachable offsets. **No exact nontrivial three-state glyph cycles** were found at the origin or other model offsets. The six predeclared representative words were then repeated in the official native LS20 runtime: **57/57 predicted complete frames matched**, none showed a three-repetition complete-frame return. An extra ACTION3 was used solely for template calibration.
+[Bounded F3 macro witness](../runs/LS20_F3_ORDER_THREE_MACROS_2026-10-17.md) checked all 5,460 nonempty native action words of length <=6 against the **unchanged 69/69 validated native glyph-position model**, across its 34 model-reachable offsets. **No exact nontrivial three-state glyph cycles** were found at the origin or other model offsets. The six predeclared representative words were then repeated in the official native LS20 runtime: **57/57 predicted complete frames matched**, none showed a three-repetition complete-frame return. An extra ACTION3 was used solely for template calibration.
 
 This is a finite falsification boundary for identifying source F3 A with a short native macro on **this particular observed glyph factor**, not a theorem about all F3 representations, native hidden states, or other ARC games. Do not retroactively impose modulo-three coordinates, claim a successful F3 alignment, recycle the excluded short macro candidates without new evidence, or interpret a length-two immediate glyph cancellation as a genuine order-three recurrence. Keep the current F3 agent unchanged until a separately witnessed correspondence is available.
 
 ## Independent native-game F3 correspondence evidence — FT09 / SK48
 
-The next current return point is [FT09 and SK48 native source-word investigation](runs/F3_NATIVE_CROSS_GAME_2026-10-17.md), performed after the measured LS20 glyph factor failed the bounded short source A³ macro test.
+The next current return point is [FT09 and SK48 native source-word investigation](../runs/F3_NATIVE_CROSS_GAME_2026-10-17.md), performed after the measured LS20 glyph factor failed the bounded short source A³ macro test.
 
 - **SK48:** real native reset admits ACTION1/ACTION2, among other controls. Mapping those *provisionally* to F3 A/B failed the source law A³(root)=root on complete native frames. The complete five source-rooted questions were applied without consulting a saved route.
 - **FT09:** native root advertises only coordinate-click ACTION6; the action type alone cannot be declared mathematical A/B. Source-native color components yielded no changed frames at ten initial click sites. A predeclared full 8×8 spatial site check then found eight distinct native click effects in 74 total sites. This is **native spatial measurement**, not an ARC heuristics library or new game model.

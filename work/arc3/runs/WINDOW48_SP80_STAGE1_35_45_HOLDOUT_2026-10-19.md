@@ -4,7 +4,7 @@ October 19, 2026. Native original public ARC3/SP80 `arc_agi.Arcade(OperationMode
 
 ## Exactly frozen prospective research boundary
 
-The previous independent [full-frame stage-specific SP80 holdout](runs/WINDOW48_SP80_QUANTIZED_FULL_FRAME_2026-10-19.md) showed **240/240** complete original stage0 pixel+color changes and **272/272** complete original stage1 changes exact, including **96/96 observations at previously untested steps 27–34**. It used source-frozen ACTION4-ordinal interior 4x4 native color masks and two empirically fitted integer half-up cumulative boundary-clearance rates:
+The previous independent [full-frame stage-specific SP80 holdout](WINDOW48_SP80_QUANTIZED_FULL_FRAME_2026-10-19.md) showed **240/240** complete original stage0 pixel+color changes and **272/272** complete original stage1 changes exact, including **96/96 observations at previously untested steps 27–34**. It used source-frozen ACTION4-ordinal interior 4x4 native color masks and two empirically fitted integer half-up cumulative boundary-clearance rates:
 
 - Stage0 y0, right-to-left: `C0(t)=min(64,floor((128t+30)/60))`, saturating at 30 context actions.
 - Stage1 y63, left-to-right: `C1(t)=min(64,floor((128t+45)/90))`, saturating at 45 context actions.

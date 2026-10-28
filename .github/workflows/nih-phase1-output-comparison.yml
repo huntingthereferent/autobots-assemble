@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
-      - name: Oscillate NIH Phase 1 through real Traceworks comparator and projection boundaries
+      - name: Oscillate NIH Phase 1 through real Tracework comparator and projection boundaries
         run: python -m unittest -v network.tests.test_nih_traceworks_oscillation
       - name: Test finite comparator before executing expensive native work
         run: python -m unittest -v network.tests.test_nih_phase1_output_compare

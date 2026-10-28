@@ -4,7 +4,7 @@ October 19, 2026. Genuine original public ARC3/SP80 game through the official Ar
 
 ## Predeclared bounded real-game test
 
-Prior independent [six-action inventory](runs/WINDOW48_SP80_LEGAL_ACTIONS_2026-10-19.md) established all six original legal controls ACTION1–6. The subsequent [two-action real native experiment](runs/WINDOW48_SP80_NATIVE_LEGAL_PAIRS_2026-10-19.md) showed 12/21,34/43,56/65 restore the entire *interior rows y1–62* relative to the genuine stage1 native starting frame, but leave native row63 different.
+Prior independent [six-action inventory](WINDOW48_SP80_LEGAL_ACTIONS_2026-10-19.md) established all six original legal controls ACTION1–6. The subsequent [two-action real native experiment](WINDOW48_SP80_NATIVE_LEGAL_PAIRS_2026-10-19.md) showed 12/21,34/43,56/65 restore the entire *interior rows y1–62* relative to the genuine stage1 native starting frame, but leave native row63 different.
 
 This experiment froze six NEW four-action mixed-control words `1324,3142,1423,2314,1234,4321`, and six original prior pair controls `12,21,34,43,56,65`. Each word was executed on **two independent fresh SP80 resets**, after witnessing the real `454545` prefix reach native `levels_completed=1`. Actions were issued ONLY while the SDK advertised them. Stop on true SDK WIN/GAME_OVER or level change. Save exact original native before/after changed XY and 0–15 color pairs, native levels/states and root hashes, all original full 64×64 NPZ frames, and separate final interior-versus-root from the native y63 boundary.
 

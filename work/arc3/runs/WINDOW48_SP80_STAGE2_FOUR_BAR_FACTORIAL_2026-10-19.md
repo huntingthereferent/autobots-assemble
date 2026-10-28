@@ -4,7 +4,7 @@ October 19, 2026. All games and frames are from authentic public original `arc_a
 
 ## What was verified before this test
 
-The [original SDK stage2 boundary/entry study](runs/WINDOW48_SP80_STAGE2_BOUNDARY_NATIVE_BASELINE_2026-10-19.md) reproduced 28 genuine SDK level1→2 transitions across 44 source games, plus 24 distinct source level2 entry/probe games, and retained 7,504/7,504 independently audited original SDK frames. A separate [original level2 selected-bar click inventory](runs/WINDOW48_SP80_STAGE2_FOUR_BAR_CLICK_CONTROLS_2026-10-19.md) verified actual coordinate-bearing ACTION6 selection of **four independent source bars**, and all first source ACTION1–ACTION5 controls were accepted with zero level3.
+The [original SDK stage2 boundary/entry study](WINDOW48_SP80_STAGE2_BOUNDARY_NATIVE_BASELINE_2026-10-19.md) reproduced 28 genuine SDK level1→2 transitions across 44 source games, plus 24 distinct source level2 entry/probe games, and retained 7,504/7,504 independently audited original SDK frames. A separate [original level2 selected-bar click inventory](WINDOW48_SP80_STAGE2_FOUR_BAR_CLICK_CONTROLS_2026-10-19.md) verified actual coordinate-bearing ACTION6 selection of **four independent source bars**, and all first source ACTION1–ACTION5 controls were accepted with zero level3.
 
 The original level2 starting bars are:
 - F initially selected native color9 24×4 x36–59,y40–43, move LEFT with ACTION3.

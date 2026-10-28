@@ -4,7 +4,7 @@ October 19, 2026. Authentic original `arc_agi.Arcade(OperationMode.NORMAL)` SP80
 
 ## Actual prior uncertainty
 
-The [prior independent temporal holdout](runs/WINDOW48_SP80_ACTION5_TEMPORAL_HOLDOUT_2026-10-19.md) froze a 22-frame ACTION5 animation signature based on earlier original source frames, then **falsified** its universal validity: 18/24 source ACTION5 events had 22 frames, 2 had 23 frames (after upper→lower object selection and 442 movement), and 4 had 28 frames (after a prior ACTION5 then an ACTION4). True native `levels_completed` remained 1/6. The next source question was to separate selected-object order and prior ACTION5 history from movement ordering, using independently reset real games and original frame stacks.
+The [prior independent temporal holdout](WINDOW48_SP80_ACTION5_TEMPORAL_HOLDOUT_2026-10-19.md) froze a 22-frame ACTION5 animation signature based on earlier original source frames, then **falsified** its universal validity: 18/24 source ACTION5 events had 22 frames, 2 had 23 frames (after upper→lower object selection and 442 movement), and 4 had 28 frames (after a prior ACTION5 then an ACTION4). True native `levels_completed` remained 1/6. The next source question was to separate selected-object order and prior ACTION5 history from movement ordering, using independently reset real games and original frame stacks.
 
 ## Prospectively fixed new native test
 

@@ -1,6 +1,6 @@
 # Original native SP80 — legal two-action compositions and bounded interior restoration
 
-October 19, 2026. Original public `arc_agi.Arcade(OperationMode.NORMAL)` stage1 investigation. Previous independent native [legal-action inventory](runs/WINDOW48_SP80_LEGAL_ACTIONS_2026-10-19.md) established SIX genuinely advertised controls: native ACTION1–ACTION6, not only the earlier ACTION4/ACTION5 pair.
+October 19, 2026. Original public `arc_agi.Arcade(OperationMode.NORMAL)` stage1 investigation. Previous independent native [legal-action inventory](WINDOW48_SP80_LEGAL_ACTIONS_2026-10-19.md) established SIX genuinely advertised controls: native ACTION1–ACTION6, not only the earlier ACTION4/ACTION5 pair.
 
 ## Frozen original-native test
 

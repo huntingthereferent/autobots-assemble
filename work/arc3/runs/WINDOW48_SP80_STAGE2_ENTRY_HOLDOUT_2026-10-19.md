@@ -4,7 +4,7 @@ October 19, 2026. The original public `arc_agi.Arcade(OperationMode.NORMAL)` SDK
 
 ## Native discovery preserved
 
-The parent [first original-native stage1→stage2 evidence](runs/WINDOW48_SP80_STAGE1_TO_STAGE2_JOINT_BARS_2026-10-19.md) authenticated [run #39318735025](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39318735025): 4 true `levels_completed=2` events across 78 independent genuine original SDK stage1 sessions, in two precommitted words each repeated twice; 8,872/8,872 full SDK image transitions independently verified. Literal native successful words A `6@24,37 4 4 6@32,25 6@12,17 4 4 4 5` and B `6@24,37 4 4 6@32,25 4 4 6@12,17 4 4 4 5` after authentic `454545` stage0→stage1 witness.
+The parent [first original-native stage1→stage2 evidence](WINDOW48_SP80_STAGE1_TO_STAGE2_JOINT_BARS_2026-10-19.md) authenticated [run #39318735025](https://github.com/huntingthereferent/autobots-assemble/actions/runs/39318735025): 4 true `levels_completed=2` events across 78 independent genuine original SDK stage1 sessions, in two precommitted words each repeated twice; 8,872/8,872 full SDK image transitions independently verified. Literal native successful words A `6@24,37 4 4 6@32,25 6@12,17 4 4 4 5` and B `6@24,37 4 4 6@32,25 4 4 6@12,17 4 4 4 5` after authentic `454545` stage0→stage1 witness.
 
 ## Fresh independent test
 

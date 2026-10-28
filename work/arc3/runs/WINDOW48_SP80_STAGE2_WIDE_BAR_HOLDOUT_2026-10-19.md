@@ -4,7 +4,7 @@ October 19, 2026. Genuine original public `arc_agi.Arcade(OperationMode.NORMAL)`
 
 ## Frozen independent source-native controls
 
-The previously [verified four-bar short-offset factorial](runs/WINDOW48_SP80_STAGE2_FOUR_BAR_FACTORIAL_2026-10-19.md) included all 16 independent 0/2-step four-bar combinations and eight 1/3-step controls on 48 fresh original games, all SDK level2 without actual level3. It did not cover many larger joint offsets.
+The previously [verified four-bar short-offset factorial](WINDOW48_SP80_STAGE2_FOUR_BAR_FACTORIAL_2026-10-19.md) included all 16 independent 0/2-step four-bar combinations and eight 1/3-step controls on 48 fresh original games, all SDK level2 without actual level3. It did not cover many larger joint offsets.
 
 This new subsequent holdout prospectively freezes 27 source four-bar programs with **native movement steps from (0,3,5)**. Original lower selected F (24×4) moves left via SDK ACTION3, lower unselected L (24×4) moves right via ACTION4, middle M (20×4) moves left via ACTION3, upper U (16×4) moves right via ACTION4. F/L/M range independently over all (3^3=27) combinations and U is a precommitted pair-balanced fourth offset `STEPS[(i+j+k)%3]`; NO outcome-dependent selection. Add nine independently specified extreme and asymmetric four-bar corner controls. This gives **36 frozen original-native action programs × two completely fresh source resets = 72 genuine stage2 games**.
 

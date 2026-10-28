@@ -4,7 +4,7 @@ October 19, 2026. This is a bounded observation of the genuine public native ARC
 
 ## Preregistered hypotheses and actual intervention
 
-Inspecting the original retained 26-step native frame arrays after the previous [width-spacing falsification](runs/WINDOW48_SP80_SEVEN_PIXEL_EXTRAPOLATION_2026-10-19.md) showed that in twelve stage1 histories the first six **actual ACTION4** uses each changed 32 pixels **outside the bottom row**, all confined to original native y=36..39, and subsequent ACTION4s produced zero outside-bottom-row changed pixels. ACTION5 produced zero outside-bottom-row changed pixels at every observed point.
+Inspecting the original retained 26-step native frame arrays after the previous [width-spacing falsification](WINDOW48_SP80_SEVEN_PIXEL_EXTRAPOLATION_2026-10-19.md) showed that in twelve stage1 histories the first six **actual ACTION4** uses each changed 32 pixels **outside the bottom row**, all confined to original native y=36..39, and subsequent ACTION4s produced zero outside-bottom-row changed pixels. ACTION5 produced zero outside-bottom-row changed pixels at every observed point.
 
 **Before new native execution**, freeze three explicitly falsifiable models:
 - **ACTION4_ORDINAL_SATURATION:** real ACTION4 uses numbered 1–6 predict exactly 32 outside-row63 changed native pixels, all in rows 36–39; every subsequent ACTION4 and all ACTION5 predict **zero** changes outside row63.
