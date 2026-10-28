@@ -2,7 +2,7 @@
 
 ## Continuity and finite representations
 
-Language, meanings, and relationships are already changing. James describes their continuity through **toroidal movement**: movement, the relations being followed, and the changing space belong together, rather than a fixed container followed by a separate motion stage.
+Language, meanings, and relationships are already changing. James feels continuity as **toroidal movement**: movement, the relations being followed, and the changing space belong together, rather than a fixed container followed by a separate motion stage.
 
 A finite toroidal model is a **witness**, not the referent. Its bounded wraparound coordinates support tracing a specified movement, but keeping the relationship identifiable also requires source identity, transition and relation-update rules, observations, and provenance. The **recursion test** checks whether the output remains eligible as the next input under the same evidence conditions, with unresolved differences retained. The test concerns the declared model or operation; it does not independently establish universal truth.
 
