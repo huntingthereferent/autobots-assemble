@@ -13,7 +13,7 @@ Names are reference points, not conclusions. Calling the language referent by na
 
 ## Continuity, finite witness, and recursion
 
-**Continuity as motion.** Language is already changing as people use it. Words, meanings, contexts, and relationships do not wait for an observer to begin moving. James describes continuity as a **moving torus**: movement, changing relationships, and the changing space are considered together, not as objects traveling inside a fixed container.
+**Continuity as motion.** Language is already changing as people use it. Words, meanings, contexts, and relationships do not wait for an observer to begin moving. James feels continuity as **toroidal movement** (a moving torus): movement, changing relationships, and the changing space are considered together, not as objects traveling inside a fixed container.
 
 **Finite witness.** A finite toroidal (wraparound) model offers a bounded mathematical way to follow changes. Its coordinates alone cannot preserve a relationship: the source identities, observed transitions, relation-update rules, and provenance must remain recoverable. The mathematical representation is a witness to a specified movement, not the referent itself.
 
