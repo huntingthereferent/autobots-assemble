@@ -18,7 +18,7 @@ Operational layers must respect these invariants:
 
 1. **Current referent is primary.** Older layers are evidence only when the current relation actually reaches them.
 2. **Movement requires a witness/evidence contract.** A relation is not admitted merely because it is convenient or plausible.
-3. **Outputs remain admissible inputs.** A completed movement can be presented to the same contract on the next pass without changing the meaning of the contract.
+3. **Outputs are checked for re-entry.** A completed movement can become input on the next pass only when the same contract's evidence and witness requirements remain satisfied; otherwise preserve the wall or unresolved difference.
 4. **Walls are explicit.** Missing evidence, missing authority, inaccessible tools, unresolved correspondence, or incompatible contracts produce a wall rather than a fabricated bridge.
 5. **UNKNOWN/PARTIAL are preserved.** Lack of evidence is not evidence of absence, and coverage is not automatically preservation.
 6. **Provenance survives movement.** Source, witness, parent relation(s), and the reason for movement remain recoverable.
@@ -45,6 +45,6 @@ The protocol is an application boundary. It is **not A/B's language-level defini
 
 ## Recursion test
 
-A protocol is structurally acceptable only if its output can be used as input to another run of the same protocol shape without inventing a new evidence standard.
+The recursion test asks whether the output of a completed movement can be admitted as input to another run under the same declared evidence and witness conditions, without losing source ancestry or unresolved differences. If not, record the boundary instead of claiming continuity.
 
 That is the practical closure test used throughout this repository.

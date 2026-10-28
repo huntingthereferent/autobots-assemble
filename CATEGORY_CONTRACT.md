@@ -54,7 +54,7 @@ place item at the narrowest supported child
 repeat if another distinction is required
 ```
 
-The output of one categorization remains a valid referent for another categorization.
+The output of one categorization can become a referent for another categorization when the active relation supports that next distinction. Recategorization does not itself prove that the underlying relationship was preserved.
 
 ## Rules
 
