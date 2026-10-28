@@ -12,6 +12,6 @@ Human Drift is a working subject for examining when a continuing conversational 
 - A branch may produce useful observations; those observations still need their own sources and limits.
 - For software or mathematical tests, use native actions, state, conditions, and witnesses.
 
-This technical note does not republish personal conversational excerpts or a retired quotation chronology. The currently published [writing archive](https://github.com/huntingthereferent/huntingthereferent/tree/main/writing) is the public writing index; withdrawn material must not be reconstructed from old citations or historical revisions.
+This technical note does not republish personal conversational excerpts or a retired quotation chronology. The former writing index is no longer published in the profile repository; withdrawn material must not be reconstructed from old citations or historical revisions.
 
 [Language referent](../LANGUAGE_REFERENT.md) · [Pragmatics](PRAGMATICS.md)
