@@ -38,7 +38,7 @@ The shape preserves continuation. The modifiers preserve the social surface inst
 
 ## Attribution and retired sources
 
-A language interpretation is not evidence of a person's private thoughts. Quote only what remains intentionally published in the current writing archive, and distinguish authored material from AI paraphrase. A retired conversation, deleted page, or historical Git revision must not be used to restore quotations that have been withdrawn.
+A language interpretation is not evidence of a person's private thoughts. Quote only material that remains currently published and authorized for attribution, and distinguish authored material from AI paraphrase. A retired conversation, deleted page, or historical Git revision must not be used to restore quotations that have been withdrawn.
 
 [Human Drift](HUMAN_DRIFT.md) records conceptual boundaries rather than an archive of original dialogue. [Regrounding](REGROUNDING.md) records a response to drift.
 
