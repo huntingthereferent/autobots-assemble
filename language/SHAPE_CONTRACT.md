@@ -7,7 +7,7 @@ It is not a dictionary sense and not a claim that all utterances with similar wo
 
 ## A finite view of a moving world
 
-James describes continuity using a **moving torus**: movement, changing relationships, and the changing container belong to one unfolding structure. This contract uses small, bounded computational worlds to examine parts of that movement. The model is not the whole of continuity.
+James feels continuity as **toroidal movement** (a moving torus): movement, changing relationships, and the changing container belong to one unfolding structure. This contract uses small, bounded computational worlds to examine parts of that movement. The model is not the whole of continuity.
 
 A finite toroidal world can be pictured as a grid that wraps around. Move past its right edge and you return at the left; move past the top and you return at the bottom. Two coordinates locate each position.
 
