@@ -183,10 +183,13 @@ class JournalBoundsTests(unittest.TestCase):
         self.assertEqual(result.status, "WAITING_FOR_EVIDENCE_OR_AUTHORIZATION")
 
     def test_unrelated_native_event_never_creates_continuation_child(self):
-        self.h._runtime().event_store.append(HandoffEvent.create(
-            handoff_id="b", event_type="WORKSTATION_NATIVE_RESULT_VERIFIED",
-            actor_id="fixture", data={"scope": "unverified test fixture"},
-            parents=(self.h._runtime().state("b").last_event_id,)))
+        before = self.h.path.read_bytes()
+        with self.assertRaisesRegex(ValueError, "exact continuation lane"):
+            self.h._runtime().event_store.append(HandoffEvent.create(
+                handoff_id="b", event_type="WORKSTATION_NATIVE_RESULT_VERIFIED",
+                actor_id="fixture", data={"scope": "unverified test fixture"},
+                parents=(self.h._runtime().state("b").last_event_id,)))
+        self.assertEqual(self.h.path.read_bytes(), before)
         result = self.cycle(True).run()
         self.assertEqual(result.journal_events_added, 0)
         self.assertEqual(self.h._runtime().snapshot().keys(), {"a", "b"})
