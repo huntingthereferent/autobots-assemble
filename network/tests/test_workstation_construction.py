@@ -305,18 +305,22 @@ class ConstructionTests(unittest.TestCase):
         runtime.submit(Handoff("native-job", "unrelated", "a", "b", "c",
                                metadata={"source_system": "process-workstation"}))
         runtime.event_store.append(HandoffEvent.create(handoff_id="native-job", event_type="RESULT",
-                                                       actor_id="worker", data={"status": "COMPLETE"}))
+                                                       actor_id="worker", data={"status": "COMPLETE"},
+                                                       parents=(runtime.state("native-job").last_event_id,)))
         view = self.graph.inspect(self.goal)
         self.assertEqual(next(x for x in view["nodes"] if x["id"] == node)["historical_verdict"], "UNDETERMINED")
 
     def test_dangling_persisted_link_detected(self):
         node = self.child()
         runtime = self.graph._runtime()
-        runtime.event_store.append(HandoffEvent.create(
-            handoff_id=node, event_type=LINK, actor_id="test-malicious",
-            data={"upstream_id": "nonexistent-link", "link_id": "bad-link"}))
-        with self.assertRaisesRegex(ValueError, "unavailable source"):
-            self.graph.inspect(self.goal)
+        before = (self.data / "runtime.jsonl").read_bytes()
+        with self.assertRaisesRegex(ValueError, "invalid proposed construction link"):
+            runtime.event_store.append(HandoffEvent.create(
+                handoff_id=node, event_type=LINK, actor_id="test-malicious",
+                data={"upstream_id": "nonexistent-link", "link_id": "bad-link"},
+                parents=(runtime.state(node).last_event_id,)))
+        self.assertEqual((self.data / "runtime.jsonl").read_bytes(), before)
+        self.assertEqual(self.graph.inspect(self.goal)["goal_id"], self.goal)
 
     def test_readonly_inspect_does_not_write(self):
         self.child()

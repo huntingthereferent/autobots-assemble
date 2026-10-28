@@ -177,7 +177,8 @@ class ConstructionFrontierTests(unittest.TestCase):
                                metadata={"source_system": "process-workstation"}))
         runtime.event_store.append(HandoffEvent.create(
             handoff_id="native-job", event_type="RESULT", actor_id="native-worker",
-            data={"status":"COMPLETE", "output": {"not_this_candidate": True}}))
+            data={"status":"COMPLETE", "output": {"not_this_candidate": True}},
+            parents=(runtime.state("native-job").last_event_id,)))
         self.assertEqual(self.handoffs()["construction_handoffs"][0]["candidate_id"], x)
         self.assertFalse(self.handoffs()["execution_authorized"])
 

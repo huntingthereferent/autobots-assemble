@@ -163,6 +163,56 @@ class RuntimeJournal:
         else:
             raise ValueError("invalid construction event type")
 
+    def _validate_helper_event(self, event: HandoffEvent) -> None:
+        """Exact checkpoint-helper bookkeeping; never an authority to execute."""
+        h = self._handoffs.get(event.handoff_id)
+        if (h is None or h.metadata.get("source_system") != "cp-worker-help-opening"
+                or event.evidence):
+            raise ValueError("CP helper event requires exact source-owned opening")
+        d = event.data
+        if not isinstance(d, dict):
+            raise ValueError("invalid CP helper event payload")
+        assignments = [old for old in self._events
+                       if old.handoff_id == event.handoff_id
+                       and old.event_type == "HELP_ASSIGNED"]
+        if event.event_type == "HELP_ASSIGNED":
+            if (event.actor_id not in ("cp-help-coordinator", "workstation-bounded-help")
+                    or assignments
+                    or set(d) != {"job_id", "worker_id", "version_id", "fingerprint", "parent_version"}):
+                raise ValueError("invalid or duplicate CP helper assignment")
+            if any(not isinstance(d[k], str) or not d[k].strip() for k in d):
+                raise ValueError("CP helper assignment missing source")
+            if len(d["fingerprint"]) != 64 or any(c not in "0123456789abcdef" for c in d["fingerprint"]):
+                raise ValueError("CP helper assignment requires exact source fingerprint")
+            native = self._handoffs.get(d["job_id"])
+            if (native is None
+                    or native.metadata.get("worker_id") != d["worker_id"]
+                    or native.metadata.get("worker_version") != d["version_id"]
+                    or native.metadata.get("edition_fingerprint") != d["fingerprint"]
+                    or not d["job_id"].startswith("help-job-")):
+                raise ValueError("CP helper assignment must link exact native job")
+            if (event.actor_id == "cp-help-coordinator"
+                    and d["worker_id"] != "finite-correspondence-process"):
+                raise ValueError("finite helper actor/worker mismatch")
+            if (event.actor_id == "workstation-bounded-help"
+                    and d["worker_id"] != "game-worlds-w13"):
+                raise ValueError("W13 helper actor/worker mismatch")
+        elif event.event_type == "HELP_RETURNED":
+            if (event.actor_id != "cp-help-coordinator"
+                    or set(d) != {"job_id", "native_verifier_confirmed", "claim_scope"}
+                    or d.get("native_verifier_confirmed") is not True
+                    or len(assignments) != 1 or d.get("job_id") != assignments[0].data["job_id"]
+                    or any(old.event_type == "HELP_RETURNED"
+                           and old.handoff_id == event.handoff_id for old in self._events)):
+                raise ValueError("CP helper return requires prior exact assignment")
+            scope = ("exact WORLD W13 two-room native job only"
+                     if assignments[0].data["worker_id"] == "game-worlds-w13"
+                     else "finite prefilter computation only")
+            if d.get("claim_scope") != scope:
+                raise ValueError("CP helper return cannot broaden native proof scope")
+        else:
+            raise ValueError("unknown CP helper event")
+
     def _validate_event(self, event: HandoffEvent) -> None:
         if any(item.event_id == event.event_id for item in self._events):
             raise ValueError('duplicate runtime event id')
@@ -173,13 +223,16 @@ class RuntimeJournal:
                                     'WORKSTATION_NATIVE_HELP_ASSIGNED',
                                     'WORKSTATION_CONSTRUCTION_LINK_PROPOSED',
                                     'WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED',
-                                    'WORKSTATION_CANDIDATE_OBSERVATION_RECORDED'):
+                                    'WORKSTATION_CANDIDATE_OBSERVATION_RECORDED',
+                                    'HELP_ASSIGNED', 'HELP_RETURNED'):
             raise ValueError('invalid runtime event type')
         if event.event_type in (
                 'WORKSTATION_CONSTRUCTION_LINK_PROPOSED',
                 'WORKSTATION_CONSTRUCTION_SOURCE_SUGGESTED',
                 'WORKSTATION_CANDIDATE_OBSERVATION_RECORDED'):
             self._validate_construction_event(event)
+        if event.event_type in ('HELP_ASSIGNED', 'HELP_RETURNED'):
+            self._validate_helper_event(event)
         prior = next((item for item in reversed(self._events)
                       if item.handoff_id == event.handoff_id), None)
         if event.event_type == 'CREATED':
@@ -280,6 +333,8 @@ class RuntimeJournal:
         return created_event
 
     def append(self, event: HandoffEvent) -> HandoffEvent:
+        if any(item.event_id == event.event_id for item in self._events):
+            raise ValueError("duplicate runtime event id")
         if event.handoff_id not in self._handoffs:
             raise ValueError(
                 f"event references unknown handoff: {event.handoff_id}"

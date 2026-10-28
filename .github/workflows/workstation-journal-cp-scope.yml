@@ -13,6 +13,8 @@ on:
       - 'network/tests/test_workstation_construction*.py'
       - 'network/tests/test_ab_journal_gate.py'
       - 'network/tests/test_cp_motion.py'
+      - 'network/tests/test_branch_help.py'
+      - 'network/tests/test_runtime_hardening.py'
       - 'network/tests/test_arc3_cp_gate.py'
       - '.github/workflows/workstation-journal-cp-scope.yml'
   push:
@@ -23,6 +25,8 @@ on:
       - 'systems/workspace/cp_motion.py'
       - 'network/tests/test_workstation_construction*.py'
       - 'network/tests/test_ab_journal_gate.py'
+      - 'network/tests/test_branch_help.py'
+      - 'network/tests/test_runtime_hardening.py'
       - '.github/workflows/workstation-journal-cp-scope.yml'
   workflow_dispatch:
 
@@ -46,7 +50,7 @@ jobs:
             network.tests.test_workstation_construction \
             network.tests.test_workstation_construction_frontier \
             network.tests.test_workstation_construction_route_scope \
-            network.tests.test_workstation_construction_scale
+            network.tests.test_workstation_construction_scale             network.tests.test_branch_help             network.tests.test_runtime_hardening
       - name: Verify distinct CP source scopes remain fail-closed
         run: |
           python -m unittest -v \

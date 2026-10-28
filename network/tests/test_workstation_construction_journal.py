@@ -155,6 +155,23 @@ class ConstructionJournalContractTests(unittest.TestCase):
         self.assertFalse(self.graph.inspect(self.goal)["claims_native_completion"])
         self.assertEqual(self.graph._runtime().get(self.a).metadata["source_system"], SOURCE)
 
+    def test_cp_help_return_cannot_skip_assignment_or_change_source(self):
+        rt = self.graph._runtime()
+        rt.submit(Handoff(
+            "cp-help-fixture", "CP assistance", "cp-coordinator", "capability-router",
+            "bounded helper", metadata={"source_system": "cp-worker-help-opening"}))
+        before = self.path.read_bytes()
+        current = rt.state("cp-help-fixture")
+        forged = HandoffEvent.create(
+            handoff_id="cp-help-fixture", event_type="HELP_RETURNED",
+            actor_id="cp-help-coordinator",
+            data={"job_id": "invented-worker", "native_verifier_confirmed": True,
+                  "claim_scope": "all native tasks"},
+            parents=(current.last_event_id,))
+        with self.assertRaisesRegex(ValueError, "prior exact assignment"):
+            rt.event_store.append(forged)
+        self.assertEqual(self.path.read_bytes(), before)
+
     def test_unknown_construction_event_fails_without_file_change(self):
         event = self._event("WORKSTATION_CONSTRUCTION_FAKE_EXECUTED", self.a,
                             {"status": "COMPLETE"})

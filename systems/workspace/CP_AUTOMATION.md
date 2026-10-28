@@ -205,7 +205,7 @@ Three different source scopes are deliberately preserved:
 They must not be mechanically merged: that would let one source's historical
 or local proof masquerade as another source's authority. The common carrier is
 the existing `RuntimeJournal` plus source-scoped A/entry and B/output checks.
-Its three B9 construction-event contracts are now validated on both append and
-restart, without accepting unknown event types or promoting candidate proposals
+Its three B9 construction-event contracts and the two exact CP-help
+assignment/return contracts are now validated on both append and restart, without accepting unknown event types or promoting candidate proposals
 and recorded determinations into native execution. Tests exercise the real
 workstation journal and assert the CP frontiers remain independent.
