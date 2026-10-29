@@ -27,8 +27,6 @@ on:
         description: 'Exact original workflow run ID (blank means reconcile allowlisted runs)'
         required: false
         type: string
-  schedule:
-    - cron: '22 4 * * *'
 
 permissions:
   contents: read
