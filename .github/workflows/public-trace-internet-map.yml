@@ -10,8 +10,6 @@ on:
       - 'views/traces/internet_map.py'
       - 'views/traces/test_internet_map.py'
       - '.github/workflows/public-trace-internet-map.yml'
-  schedule:
-    - cron: '15 */6 * * *'
   workflow_dispatch:
 
 permissions:
