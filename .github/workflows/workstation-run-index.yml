@@ -26,8 +26,6 @@ on:
       - 'views/traces/workflow_history.py'
       - 'network/tests/test_workflow_history.py'
       - '.github/workflows/workstation-run-index.yml'
-  schedule:
-    - cron: '23 */3 * * *'
   workflow_dispatch:
 
 permissions:
