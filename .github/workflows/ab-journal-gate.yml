@@ -5,12 +5,16 @@ on:
       - 'runtime/ab_journal_gate.py'
       - 'runtime/journal.py'
       - 'network/tests/test_ab_journal_gate.py'
+      - 'network/tests/test_agent_service.py'
+      - 'network/tests/test_agent_lineage.py'
       - '.github/workflows/ab-journal-gate.yml'
   pull_request:
     paths:
       - 'runtime/ab_journal_gate.py'
       - 'runtime/journal.py'
       - 'network/tests/test_ab_journal_gate.py'
+      - 'network/tests/test_agent_service.py'
+      - 'network/tests/test_agent_lineage.py'
       - '.github/workflows/ab-journal-gate.yml'
   workflow_dispatch:
 jobs:
