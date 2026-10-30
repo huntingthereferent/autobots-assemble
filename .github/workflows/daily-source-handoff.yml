@@ -1,0 +1,29 @@
+name: tracework-chatgpt-audit-gate
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  capture-and-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Capture real Tracework state and visual provenance
+        run: python -m runtime.daily_scan --out .daily-audit
+      - name: Explicit gate
+        run: |
+          echo "AUDIT_REQUIRED: ChatGPT must inspect captured state, compare selected/current external evidence and produce a validated A/B report before any worker handoff."
+      - name: Preserve captured state
+        uses: actions/upload-artifact@v4
+        with:
+          name: tracework-audit-snapshot
+          path: .daily-audit/snapshot.json
+          retention-days: 30

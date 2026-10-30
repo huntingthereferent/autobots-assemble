@@ -27,8 +27,9 @@ the active referent's protocol, without replacing that referent.
 7. Read the active work/capability/domain record reached by that referent.
 8. At every reached layer, decompress the referent and observed relations into communicable language before choosing or extending formal notation or implementation. Mathematics remains a human formal language. Consult `language/` when register matters; do not mistake surface wording for the referent.
 9. Pull older evidence only when the active relation requires it.
-10. Perform one bounded movement at a time.
-11. Record result, provenance, wall/uncertainty state, and next referent.
+10. ANY pre-movement gate: before explanation, design or implementation, compare the proposed movement to established A/B mathematics and to relevant contemporary production implementations. Identify what is equivalent, analogous, absent or unverified; do not invent correspondence or treat a prototype as production-ready.
+11. Perform one bounded movement at a time.
+12. Record result, provenance, wall/uncertainty state, and next referent.
 
 ## Language shortcut
 
