@@ -47,7 +47,7 @@ merely because they share the initials CP.
 | Handoffs, event history and evidence boundaries | [Runtime](runtime/README.md) · [Provenance](protocols/core/provenance.md) |
 | Independent lane continuity | [Workspace](systems/workspace/README.md) |
 | Source copying, branching and inspection | [Source edition component](systems/workspace/WORKSTATION.md) |
-| Read-only execution and evidence presentation | [Tracework live](https://huntingthereferent.github.io/autobots-assemble/live/work.html) · [Viewer notes](docs/live/README.md) |
+| Read-only execution and evidence presentation | [Tracework live](https://huntingthereferent.github.io/autobots-assemble/docs/live/work.html) · [Viewer notes](docs/live/README.md) |
 | Research that produces native witnesses | [Research](research/README.md) · [Repository index](README.md) |
 | Durable public native evidence | [Original Actions artifact archive contract](docs/TRACEWORK_NATIVE_EVIDENCE_ARCHIVE.md) · [archive implementation](systems/workspace/github_native_evidence_archive.py) |
 
