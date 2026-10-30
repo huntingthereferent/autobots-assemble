@@ -88,4 +88,4 @@ python -m unittest -v network.tests.test_referent_audit_ui network.tests.test_wo
 python -m views.traces.research_live
 ```
 
-The site is deployed at [https://huntingthereferent.github.io/autobots-assemble/live/](https://huntingthereferent.github.io/autobots-assemble/live/), subject to a successful GitHub Pages build after each relevant change.
+The site is deployed at [https://huntingthereferent.github.io/autobots-assemble/docs/live/](https://huntingthereferent.github.io/autobots-assemble/docs/live/), subject to a successful GitHub Pages build after each relevant change.
